@@ -61,10 +61,10 @@ namespace ML.Engine.InventorySystem
                 Type type;
                 if(!this.ItemDict.TryGetValue(id, out type))
                 {
-                    type = GetTypeByName(itemRow.type);
+                    type = GetTypeByName(TypePath + itemRow.type);
                     if (type == null)
                     {
-                        Debug.LogError("没有对应ID为 " + id + " 的Item");
+                        Debug.LogError($"没有对应ID为 {id} Type为 {itemRow.type} 的Item");
                         return null;
                     }
                     this.ItemDict.Add(id, type);
@@ -194,17 +194,12 @@ namespace ML.Engine.InventorySystem
         public struct ItemTabelJsonData
         {
             public string id;
-            public string name;
+            public TextContent.TextContent name;
             public string type;
             public bool bcanstack;
             public int maxamount;
             public string texture2d;
             public string worldobject;
-        }
-        [System.Serializable]
-        private struct ItemTabelJsonDataArray
-        {
-            public ItemTabelJsonData[] table;
         }
 
         public IEnumerator LoadTableData(MonoBehaviour mono)
@@ -223,9 +218,9 @@ namespace ML.Engine.InventorySystem
 
             var request = ab.LoadAssetAsync<TextAsset>(TableName);
             yield return request;
-            ItemTabelJsonDataArray datas = JsonConvert.DeserializeObject<ItemTabelJsonDataArray>((request.asset as TextAsset).text);
+            ItemTabelJsonData[] datas = JsonConvert.DeserializeObject<ItemTabelJsonData[]>((request.asset as TextAsset).text);
 
-            foreach (var data in datas.table)
+            foreach (var data in datas)
             {
                 this.ItemTypeStrDict.Add(data.id, data);
             }

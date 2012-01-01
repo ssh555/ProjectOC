@@ -42,18 +42,17 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         }
 
         [System.Serializable]
-        public struct Formula
-        {
-            public string id;
-            public int num;
-        }
-        [System.Serializable]
         public class CompositionJsonData
         {
             /// <summary>
             /// 合成对象 -> Item | 建筑物 ID 引用
             /// </summary>
             public string id;
+
+            /// <summary>
+            /// 合成物名称
+            /// </summary>
+            public TextContent.TextContent name;
 
             /// <summary>
             /// 标签分级
@@ -80,12 +79,6 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             public List<string> usage;
         }
 
-        [System.Serializable]
-        private struct CompositionJsonDatas
-        {
-            public CompositionJsonData[] table;
-        }
-
         public const string CompositionTableDataABPath = "Json/TableData";
         public const string TableName = "CompositionTableData";
 
@@ -108,9 +101,9 @@ namespace ML.Engine.InventorySystem.CompositeSystem
 
             var request = ab.LoadAssetAsync<TextAsset>(TableName);
             yield return request;
-            CompositionJsonDatas datas = JsonConvert.DeserializeObject<CompositionJsonDatas>((request.asset as TextAsset).text);
+            CompositionJsonData[] datas = JsonConvert.DeserializeObject<CompositionJsonData[]>((request.asset as TextAsset).text);
 
-            foreach (var data in datas.table)
+            foreach (var data in datas)
             {
                 this.CompositeData.Add(data.id, data);
             }
@@ -268,6 +261,13 @@ namespace ML.Engine.InventorySystem.CompositeSystem
                 return null;
             }
             return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+        }
+
+        public string GetCompositonName(string id)
+        {
+            if (!this.CompositeData.ContainsKey(id))
+                return null;
+            return this.CompositeData[id].name;
         }
 
         public Formula[] GetCompositonFomula(string id)

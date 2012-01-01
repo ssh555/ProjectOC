@@ -38,54 +38,13 @@ namespace ML.Engine.BuildingSystem
 
         
         #region KeyTip
-
-        [System.Serializable]
-        private struct KeyTips
-        {
-            public KeyTip[] keytips;
-        }
-
-
         public Dictionary<string, KeyTip> KeyTipDict = new Dictionary<string, KeyTip>();
 
         #endregion
 
         #region Category|Type
-        [System.Serializable]
-        public struct BCategory
-        {
-            public string category;
-            public TextContent.TextContent name;
-
-            public string GetNameText()
-            {
-                return name.GetText();
-            }
-        }
-        [System.Serializable]
-        public struct BType
-        {
-            public string type;
-            public TextContent.TextContent name;
-            public string GetNameText()
-            {
-                return name.GetText();
-            }
-        }
-
-        [System.Serializable]
-        private struct BCategorys
-        {
-            public BCategory[] category;
-        }
-        [System.Serializable]
-        private struct BTypes
-        {
-            public BType[] type;
-        }
-
-        public Dictionary<string, BCategory> CategoryDict = new Dictionary<string, BCategory>();
-        public Dictionary<string, BType> TypeDict = new Dictionary<string, BType>();
+        public Dictionary<string, TextContent.TextTip> CategoryDict = new Dictionary<string, TextContent.TextTip>();
+        public Dictionary<string, TextContent.TextTip> TypeDict = new Dictionary<string, TextContent.TextTip>();
 
         #endregion
 
@@ -110,8 +69,8 @@ namespace ML.Engine.BuildingSystem
             // KeyTip
             var request = ab.LoadAssetAsync<TextAsset>("KeyTip");
             yield return request;
-            KeyTips keyTips = JsonConvert.DeserializeObject<KeyTips>((request.asset as TextAsset).text);
-            foreach(var keytip in keyTips.keytips)
+            KeyTip[] keyTips = JsonConvert.DeserializeObject<KeyTip[]>((request.asset as TextAsset).text);
+            foreach(var keytip in keyTips)
             {
                 this.KeyTipDict.Add(keytip.keyname, keytip);
             }
@@ -119,19 +78,19 @@ namespace ML.Engine.BuildingSystem
             // Category
             request = ab.LoadAssetAsync<TextAsset>("Category");
             yield return request;
-            BCategorys categorys = JsonConvert.DeserializeObject<BCategorys>((request.asset as TextAsset).text);
-            foreach (var category in categorys.category)
+            TextContent.TextTip[] categorys = JsonConvert.DeserializeObject<TextContent.TextTip[]>((request.asset as TextAsset).text);
+            foreach (var category in categorys)
             {
-                this.CategoryDict.Add(category.category, category);
+                this.CategoryDict.Add(category.name, category);
             }
 
             // Type
             request = ab.LoadAssetAsync<TextAsset>("Type");
             yield return request;
-            BTypes btypes = JsonConvert.DeserializeObject<BTypes>((request.asset as TextAsset).text);
-            foreach (var type in btypes.type)
+            TextContent.TextTip[] btypes = JsonConvert.DeserializeObject<TextContent.TextTip[]>((request.asset as TextAsset).text);
+            foreach (var type in btypes)
             {
-                this.TypeDict.Add(type.type, type);
+                this.TypeDict.Add(type.name, type);
             }
             IsInit--;
 #if UNITY_EDITOR
@@ -156,6 +115,7 @@ namespace ML.Engine.BuildingSystem
         /// to-do : to-delete
         /// </summary>
         public BuildingArea.BuildingArea area;
+        public bool IsEnableArea = true;
 
         public T GetPanel<T>() where T : UIBasePanel
         {
@@ -208,6 +168,10 @@ namespace ML.Engine.BuildingSystem
         }
 
         public Dictionary<BuildingPartClassification, IBuildingPart> LoadedBPart = new Dictionary<BuildingPartClassification, IBuildingPart>();
+#if UNITY_EDITOR
+        [LabelText("加载建筑物时是否标记为可用"), SerializeField]
+        private bool IsAddBPartOnRegister = true;
+#endif
         private IEnumerator RegisterBPartPrefab()
         {
 #if UNITY_EDITOR
@@ -233,7 +197,14 @@ namespace ML.Engine.BuildingSystem
                 if (bpart != null)
                 {
                     this.LoadedBPart.Add(bpart.Classification, bpart);
-                    BM.RegisterBPartPrefab(bpart);
+                    // to-do : 仅测试用，后续接入科技树后需注释掉
+#if UNITY_EDITOR
+                    if (IsAddBPartOnRegister) 
+                    {
+                        BM.RegisterBPartPrefab(bpart);
+
+                    }
+#endif
                 }
             }
 
@@ -286,6 +257,8 @@ namespace ML.Engine.BuildingSystem
 #endif
         }
 
+
+
         private IEnumerator AddTestEvent()
         {
             while (BM.Placer == null)
@@ -297,7 +270,10 @@ namespace ML.Engine.BuildingSystem
             {
                 ProjectOC.Input.InputManager.PlayerInput.Player.Crouch.Disable();
                 ProjectOC.Input.InputManager.PlayerInput.Player.Jump.Disable();
-                area.gameObject.SetActive(true);
+
+                // to-delete
+                area.gameObject.SetActive(IsEnableArea);
+
                 this.PushPanel<UI.BSInteractModePanel>();
             };
             BM.Placer.OnBuildingModeExit += () =>

@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2318689643
+CRC: 2180724747
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ac3c19f9c1fd2fae2017d3de0e7ae5bb
+    Hash: 2d3337f20a09f175f05d08ed456127fc
   TypeTreeHash:
     serializedVersion: 2
-    Hash: c54a40b6f58848b9f0957e888fe8191f
+    Hash: 13f78558fb171690bc9f7cd8a8a74ba3
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: ac3c19f9c1fd2fae2017d3de0e7ae5bb
+    Hash: 2d3337f20a09f175f05d08ed456127fc
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -62,8 +62,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 9ea83b1ab433e514bb440b78e1a6f54a, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 5e626c9daacc88545836fc3016b72e0c, type: 3}
 - Class: 114
@@ -118,6 +116,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: fa7155796051b734daa718462081dc5f, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9ea83b1ab433e514bb440b78e1a6f54a, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -146,7 +146,6 @@ Assets:
 - Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/BuidlingSystemTest.unity
 - Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/uipanel
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/animation/character/player/model
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/prefabs/character/player

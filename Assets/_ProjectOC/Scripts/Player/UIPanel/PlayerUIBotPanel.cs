@@ -51,8 +51,8 @@ namespace ProjectOC.Player.UI
             {
                 var panel = GameObject.Instantiate(uITechPointPanel);
                 panel.transform.SetParent(this.transform.parent, false);
-                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
                 panel.inventory = this.player.Inventory;
+                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
             };
 
 
@@ -151,8 +151,8 @@ namespace ProjectOC.Player.UI
 
             var request = ab.LoadAssetAsync<TextAsset>(TextContentName);
             yield return request;
-            TextTips Tips = JsonConvert.DeserializeObject<TextTips>((request.asset as TextAsset).text);
-            foreach (var tip in Tips.tips)
+            ML.Engine.TextContent.TextTip[] Tips = JsonConvert.DeserializeObject<ML.Engine.TextContent.TextTip[]>((request.asset as TextAsset).text);
+            foreach (var tip in Tips)
             {
                 this.TipDict.Add(tip.name, tip);
             }
