@@ -1125,6 +1125,10 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// </summary>
         protected void EnterEditMode()
         {
+            if (!this.SelectedPartInstance.CanEnterEditMode())
+            {
+                return;
+            }
             // Ω˚”√ Input.Build
             this.Mode = BuildingMode.Edit;
             // ∆Ù”√ Input.Edit
@@ -1169,8 +1173,14 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// </summary>
         protected void EnterDestroyMode()
         {
+            if (!this.SelectedPartInstance.CanEnterDestoryMode())
+            {
+                return;
+            }
 
             var tmp = this.SelectedPartInstance;
+
+            tmp.OnBPartDestroy();
 
             this.SelectedPartInstance = null;
 
@@ -1325,9 +1335,10 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 ab = crequest.assetBundle;
             }
 
-            var packages = ab.LoadAllAssets<BSBPartMatPackage>();
+            var packages = ab.LoadAllAssetsAsync<BSBPartMatPackage>();
+            yield return packages;
             _allMatPackages = new Dictionary<BuildingPartClassification, BSBPartMatPackage>();
-            foreach (var package in packages)
+            foreach (BSBPartMatPackage package in packages.allAssets)
             {
                 this._allMatPackages.Add(package.Classification, package);
             }

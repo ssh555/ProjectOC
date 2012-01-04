@@ -140,7 +140,7 @@ namespace ProjectOC.StoreNS
         /// 仓库升级、存入、移出
         /// 参数为当前仓库的<ID, List<StoreData>>
         /// </summary>
-        public event Action<string, List<StoreData>> OnStoreCapacityChanged;
+        //public event Action<string, List<StoreData>> OnStoreCapacityChanged;
 
         public Store()
         {

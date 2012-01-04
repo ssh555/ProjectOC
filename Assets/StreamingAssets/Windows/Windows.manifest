@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 2772300602
+CRC: 1013107326
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -76,3 +76,10 @@ AssetBundleManifest:
     Info_19:
       Name: json/textcontent/player
       Dependencies: {}
+    Info_20:
+      Name: json/textcontent/interactsystem
+      Dependencies: {}
+    Info_21:
+      Name: ui/interactsystem
+      Dependencies:
+        Dependency_0: fonts

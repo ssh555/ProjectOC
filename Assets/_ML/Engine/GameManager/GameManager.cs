@@ -329,12 +329,13 @@ namespace ML.Engine.Manager
         #endregion
         #endregion
 
-
-
         #region Update
         private void Update()
         {
-            // 先更新计时器
+            if (IsPause)
+            {
+                return;
+            }// 先更新计时器
             this.CounterDownTimerManager.Update(Time.deltaTime);
 
             this.TickManager.Tick(Time.deltaTime);
@@ -342,7 +343,10 @@ namespace ML.Engine.Manager
 
         private void FixedUpdate()
         {
-            // 先更新计时器
+            if (IsPause)
+            {
+                return;
+            }// 先更新计时器
             this.CounterDownTimerManager.FixedUpdate(Time.fixedDeltaTime);
 
             this.TickManager.FixedTick(Time.fixedDeltaTime);
@@ -350,13 +354,48 @@ namespace ML.Engine.Manager
 
         private void LateUpdate()
         {
+            if(IsPause)
+            {
+                return;
+            }
             this.CounterDownTimerManager.LateUpdate(Time.deltaTime);
 
             this.TickManager.LateTick(Time.deltaTime);
         }
         #endregion
+        
+        #region GameTimeRate
+        /// <summary>
+        /// 是否全局暂停
+        /// </summary>
+        public bool IsPause { get; private set; } = false;
 
+        /// <summary>
+        /// 设置游戏时速
+        /// 0 为暂停
+        /// </summary>
+        /// <param name="rate"></param>
+        public void SetAllGameTimeRate(float rate)
+        {
+            Time.timeScale = rate;
+            IsPause = rate < float.Epsilon;
+        }
 
-}
+        /// <summary>
+        /// 设置Tick的时间流速
+        /// </summary>
+        /// <param name="rate"></param>
+        public void SetTickTimeRate(float rate)
+        {
+            this.TickManager.TimeScale = rate;
+        }
+
+        public void SetCDTimerRate(float rate)
+        {
+            this.CounterDownTimerManager.TimeScale = rate;
+        }
+
+        #endregion
+    }
 }
 

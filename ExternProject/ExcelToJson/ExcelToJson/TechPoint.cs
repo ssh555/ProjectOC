@@ -22,6 +22,11 @@ namespace ProjectOC.TechTree
         public ML.Engine.InventorySystem.CompositeSystem.Formula[] ItemCost;
         public int TimeCost;
 
+        /// <summary>
+        /// 将Row的一行字符串数组数据转换为此数据对象的实际数据
+        /// </summary>
+        /// <param name="row">Excel表格的一行实际数据</param>
+        /// <returns>是否填充成功</returns>
         public bool GenData(string[] row)
         {
             if (row[0] == null || row[0] == "")

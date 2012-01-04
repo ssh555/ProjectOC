@@ -32,7 +32,18 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             }
             set => canPlaceInPlaceMode = value; 
         }
-        public event IBuildingPart.CheckCanPlaceMode CheckCanInPlaceMode;
+        public event IBuildingPart.CheckMode CheckCanInPlaceMode;
+        public event IBuildingPart.CheckMode CheckCanEdit;
+        public event IBuildingPart.CheckMode CheckCanDestory;
+        public bool CanEnterEditMode()
+        {
+            return CheckCanEdit != null && CheckCanEdit.Invoke(this);
+        }
+
+        public bool CanEnterDestoryMode()
+        {
+            return CheckCanDestory != null && CheckCanDestory.Invoke(this);
+        }
 
         [SerializeField, LabelText("ģʽ")]
         private BuildingMode mode;

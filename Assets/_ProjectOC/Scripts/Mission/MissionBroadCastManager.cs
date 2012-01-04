@@ -54,7 +54,7 @@ namespace ProjectOC.MissionNS
             Worker worker = WorkerManager.Instance.GetCanTransportWorker();
             if (worker != null && store != null)
             {
-                MissionTransport mission = new MissionTransport("", itemID, missionNum, sourceUID, store.UID, source, worldStore.gameObject.transform, worker, true);
+                MissionTransport mission = null;// new MissionTransport("", itemID, missionNum, sourceUID, store.UID, source, worldStore.gameObject.transform, worker, true);
                 // 把 Source 处的实际量更改为预留量, 在生产节点处已经完成了，后续有修改可以在这里更改预留值
                 // 把 Destination 处的实际空余量更改为预留存入量
                 store.ReserveEmptyCapacityToWorker(itemID, missionNum);
@@ -84,7 +84,7 @@ namespace ProjectOC.MissionNS
                 Worker worker = WorkerManager.Instance.GetCanTransportWorker();
                 if (worker != null && store != null)
                 {
-                    MissionTransport mission = new MissionTransport("", itemID, missionNum, store.UID, targetUID, worldStore.gameObject.transform, target, worker, true);
+                    MissionTransport mission = null;// new MissionTransport("", itemID, missionNum, store.UID, targetUID, worldStore.gameObject.transform, target, worker, true);
                     // 把 Destination 处的实际存放量更改为预留存放量
                     store.ReserveStorageCapacityToWorker(itemID, missionNum);
                     results.Add(mission);

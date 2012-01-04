@@ -33,6 +33,8 @@ namespace ProjectOC.Player
         /// </summary>
         protected ProjectOC.Input.PlayerInput.PlayerActions playerInputActions => Input.InputManager.PlayerInput.Player;
 
+        protected ML.Engine.InteractSystem.InteractComponent interactComponent;
+
         #endregion
 
         #region 基础视角和移动参数
@@ -54,7 +56,9 @@ namespace ProjectOC.Player
 
         #region UI
         [FoldoutGroup("UI")]
-        public UI.PlayerUIBotPanel playerUIBotPanel;
+        public RectTransform playerUIBotPanel;
+        [FoldoutGroup("UI")]
+        public UI.PlayerUIPanel playerUIPanel;
         #endregion
 
         #region 背包 to-do : 临时测试使用
@@ -77,6 +81,7 @@ namespace ProjectOC.Player
             this.InternalInit();
         }
 
+        private bool _lastInputEnable = true;
         private void InternalInit()
         {
             this.playerModelStateController = new PlayerModelStateController(0, this.playerModel.GetComponentInChildren<Animator>(), this.GetComponent<Animator>(), this);
@@ -100,12 +105,48 @@ namespace ProjectOC.Player
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterFixedTick(0, this);
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
 
+            // 按下对应按键才会压入栈
             ML.Engine.Manager.GameManager.Instance.UIManager.ChangeBotUIPanel(GameObject.Instantiate(this.playerUIBotPanel.gameObject, GameObject.Find("Canvas").transform, false).GetComponent<ML.Engine.UI.UIBasePanel>());
             (ML.Engine.Manager.GameManager.Instance.UIManager.GetTopUIPanel() as UI.PlayerUIBotPanel).player = this;
 
             this.Inventory = new ML.Engine.InventorySystem.Inventory(65, this.transform);
 
+            this.interactComponent = this.GetComponentInChildren<ML.Engine.InteractSystem.InteractComponent>();
+
+            StartCoroutine(__DelayInit__());
+
             this.enabled = false;
+        }
+
+        private IEnumerator __DelayInit__()
+        {
+            while(ML.Engine.BuildingSystem.BuildingManager.Instance == null || ML.Engine.BuildingSystem.BuildingManager.Instance.Placer == null)
+            {
+                yield return null;
+            }
+            // 进入建造系统要可移动
+            ML.Engine.BuildingSystem.BuildingManager.Instance.Placer.OnBuildingModeEnter += () =>
+            {
+                _lastInputEnable = Input.InputManager.PlayerInput.Player.enabled;
+                Input.InputManager.PlayerInput.Player.Enable();
+                ProjectOC.Input.InputManager.PlayerInput.Player.Crouch.Disable();
+                ProjectOC.Input.InputManager.PlayerInput.Player.Jump.Disable();
+            };
+            ML.Engine.BuildingSystem.BuildingManager.Instance.Placer.OnBuildingModeExit += () =>
+            {
+                ProjectOC.Input.InputManager.PlayerInput.Player.Crouch.Enable();
+                ProjectOC.Input.InputManager.PlayerInput.Player.Jump.Enable();
+                if (!_lastInputEnable)
+                {
+                    Input.InputManager.PlayerInput.Player.Disable();
+                }
+            };
+        }
+
+        private void OnDestroy()
+        {
+            (this.thirdPersonRotateComp as ML.Engine.Timer.ITickComponent).DisposeTick();
+            (this as ML.Engine.Timer.ITickComponent).DisposeTick();
         }
         #endregion
 
@@ -114,6 +155,11 @@ namespace ProjectOC.Player
         {
             this.moveAbility.UpdateJump(deltatime, this.playerInputActions.Jump);
 
+            if(Input.InputManager.PlayerInput.Player.OpenBotUI.WasPressedThisFrame())
+            {
+                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(GameObject.Instantiate(this.playerUIPanel.gameObject, GameObject.Find("Canvas").transform, false).GetComponent<ML.Engine.UI.UIBasePanel>());
+                (ML.Engine.Manager.GameManager.Instance.UIManager.GetTopUIPanel() as UI.PlayerUIPanel).player = this;
+            }
             //// In-Window
             //if (Application.isFocused)
             //{
