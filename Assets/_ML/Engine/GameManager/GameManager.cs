@@ -150,6 +150,49 @@ namespace ML.Engine.Manager
             this.globalManagers.RemoveAll(manager => managers.Contains((T)manager));
             return managers;
         }
+        
+        /// <summary>
+        /// 获取第一个匹配的 GlobalManager
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T GetGlobalManager<T>() where T : class, GlobalManager.IGlobalManager, new()
+        {
+            T manager = null;
+            foreach (var m in this.globalManagers)
+            {
+                // to-do : 可能判断有问题，待确认修改
+                if (m.GetType() == typeof(T))
+                {
+                    manager = (T)m;
+                    break;
+                }
+            }
+            return manager;
+        }
+
+        /// <summary>
+        /// 获取所有匹配的 GlobalManager
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public List<T> GetGlobalManagers<T>() where T : class, GlobalManager.IGlobalManager, new()
+        {
+            List<T> managers = null;
+            foreach (var m in this.globalManagers)
+            {
+                // to-do : 可能判断有问题，待确认修改
+                if (m.GetType() == typeof(T))
+                {
+                    if (managers == null)
+                    {
+                        managers = new List<T>();
+                    }
+                    managers.Add((T)m);
+                }
+            }
+            return managers;
+        }
         #endregion
 
         #region LocalManager
@@ -223,6 +266,49 @@ namespace ML.Engine.Manager
                 }
             }
             this.localManagers.RemoveAll(manager => managers.Contains((T)manager));
+            return managers;
+        }
+
+        /// <summary>
+        /// 获取第一个匹配的 LocalManager
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T GetLocalManager<T>() where T : class, LocalManager.ILocalManager, new()
+        {
+            T manager = null;
+            foreach (var m in this.localManagers)
+            {
+                // to-do : 可能判断有问题，待确认修改
+                if (m.GetType() == typeof(T))
+                {
+                    manager = (T)m;
+                    break;
+                }
+            }
+            return manager;
+        }
+
+        /// <summary>
+        /// 获取所有匹配的 LocalManager
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public List<T> GetLocalManagers<T>() where T : class, LocalManager.ILocalManager, new()
+        {
+            List<T> managers = null;
+            foreach (var m in this.localManagers)
+            {
+                // to-do : 可能判断有问题，待确认修改
+                if (m.GetType() == typeof(T))
+                {
+                    if (managers == null)
+                    {
+                        managers = new List<T>();
+                    }
+                    managers.Add((T)m);
+                }
+            }
             return managers;
         }
 

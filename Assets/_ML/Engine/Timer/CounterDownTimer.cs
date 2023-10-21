@@ -126,6 +126,10 @@ namespace ML.Engine.Timer
                 {
                     Reset(Duration, false);
                 }
+                else
+                {
+                    this.IsStoped = true;
+                }
 
                 this.OnEndEvent?.Invoke();
                 return currentTime;

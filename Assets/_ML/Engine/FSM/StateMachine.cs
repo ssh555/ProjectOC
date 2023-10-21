@@ -59,6 +59,7 @@ namespace ML.Engine.FSM
                 return false;
             }
             this.StateDict.Add(state.Name, state);
+            state.stateMachine = this;
             return true;
         }
     
@@ -88,6 +89,7 @@ namespace ML.Engine.FSM
             
             if(this.StateDict.TryGetValue(stateName, out state))
             {
+                state.stateMachine = null;
                 return state;
             }
             return null;
@@ -111,6 +113,7 @@ namespace ML.Engine.FSM
                 {
                     edge.Remove(stateName);
                 }
+                state.stateMachine = null;
                 return state;
             }
             return null;

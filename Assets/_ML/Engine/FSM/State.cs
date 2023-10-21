@@ -13,6 +13,11 @@ namespace ML.Engine.FSM
         public short priority = 0;
 
         /// <summary>
+        /// 依附的StateMachine
+        /// </summary>
+        public StateMachine stateMachine;
+
+        /// <summary>
         /// 对应的状态机, 上一个状态， 进入的状态
         /// </summary>
         protected Action<StateMachine, State, State> EnterStateAction;

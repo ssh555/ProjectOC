@@ -6,28 +6,37 @@ using UnityEngine;
 namespace ML.Engine.FSM
 {
     [System.Serializable]
-    public class StateController : MonoBehaviour
+    public class StateController : Timer.ITickComponent
     {
         [ShowInInspector, ReadOnly]
         public StateMachine Machine { get; protected set; }
+        public int tickPriority { get; set; }
+        public int fixedTickPriority { get; set; }
+        public int lateTickPriority { get; set; }
 
         protected bool isRunning = true;
+
+        public StateController(int priority)
+        {
+            Manager.GameManager.Instance.TickManager.RegisterTick(priority, this);
+            Manager.GameManager.Instance.TickManager.RegisterLateTick(priority, this);
+        }
 
         public virtual void SetStateMachine(StateMachine stateMachine)
         {
             this.Machine = stateMachine;
         }
 
-        protected virtual void Update()
+        public virtual void Tick(float deltatime)
         {
             if (this.isRunning && this.Machine != null)
             {
-                this.Machine.Update(Time.deltaTime);
+                this.Machine.Update(deltatime);
                 this.Machine.UpdateState(this);
             }
         }
 
-        protected virtual void LateUpdate()
+        public virtual void LateTick(float deltatime)
         {
             if (this.isRunning && this.Machine != null)
             {
