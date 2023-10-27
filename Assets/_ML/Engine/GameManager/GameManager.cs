@@ -35,6 +35,11 @@ namespace ML.Engine.Manager
         /// 内置的 TickManager(对应于unity中的Update
         /// </summary>
         public Timer.TickManager TickManager { get; private set; }
+
+        /// <summary>
+        /// 内置的全局UIManager
+        /// </summary>
+        public UI.UIManager UIManager { get; private set; }
         #endregion
 
         #region 单例管理
@@ -65,6 +70,8 @@ namespace ML.Engine.Manager
             this.ABResourceManager = this.RegisterGlobalManager<ABResources.ABResourceManager>();
             this.LevelSwitchManager = new Level.LevelSwitchManager(this.ABResourceManager);
             this.RegisterGlobalManager(this.LevelSwitchManager);
+
+            this.UIManager = this.RegisterGlobalManager<UI.UIManager>();
         }
         
         private void OnDestroy()
