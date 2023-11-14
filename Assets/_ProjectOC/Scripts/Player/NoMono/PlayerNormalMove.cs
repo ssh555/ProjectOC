@@ -343,7 +343,6 @@ namespace ProjectOC.Player
             moveDir.Normalize();
 
             // 输入速度更新
-            if(!this.IsGrounded)
             // 能移动 && 移动速度率为正 && 有移动方向 && 没有达到最大速度则增加速度
             if (this.moveSetting.bCanMove && _speedRate > float.Epsilon && moveDir.magnitude > float.Epsilon && this.moveSetting.Speed <= this.moveSetting.MaxSpeed * _speedRate)
             {
