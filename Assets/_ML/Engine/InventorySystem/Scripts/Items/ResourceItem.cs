@@ -17,6 +17,7 @@ namespace ML.Engine.InventorySystem
         public override void Init(ItemSpawner.ItemTabelData config)
         {
             this.bCanStack = config.bCanStack;
+
             this.MaxAmount = config.maxAmount;
 
             this.Amount = 1;

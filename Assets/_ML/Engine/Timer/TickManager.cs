@@ -24,6 +24,10 @@ namespace ML.Engine.Timer
             this.tickComponents = new SortedDictionary<int, List<ITickComponent>>();
             this.fixedTickComponents = new SortedDictionary<int, List<ITickComponent>>();
             this.lateTickComponents = new SortedDictionary<int, List<ITickComponent>>();
+
+            this.removeTick = new List<ITickComponent>();
+            this.removeFixedTick = new List<ITickComponent>();
+            this.removeLateTick = new List<ITickComponent>();
         }   
 
         #region Tick

@@ -34,6 +34,11 @@ namespace ML.Engine.UI
         {
             // to-do : 默认实现，移除表示正在选中的边框
         }
+    
+        public virtual void Interact(object Instigator)
+        {
+
+        }
     }
 
     public sealed class UIManager : Manager.GlobalManager.IGlobalManager

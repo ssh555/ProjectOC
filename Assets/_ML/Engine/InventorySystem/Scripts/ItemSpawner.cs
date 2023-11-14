@@ -28,7 +28,7 @@ namespace ML.Engine.InventorySystem
             }
         }
         #endregion
-
+        
         /// <summary>
         /// 根据需求自动添加
         /// </summary>
