@@ -19,7 +19,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// 标签分级
         /// 1级|2级|3级
         /// </summary>
-        public string Tag;
+        public string Tag; // Category
 
         /// <summary>
         /// 合成公式

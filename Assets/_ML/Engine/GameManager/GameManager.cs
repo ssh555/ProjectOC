@@ -20,7 +20,7 @@ namespace ML.Engine.Manager
         /// 内置的AB包资源Manager
         /// </summary>
         public ABResources.ABResourceManager ABResourceManager { get; private set; }
-
+        
         /// <summary>
         /// 内置的Level&Scene Manager
         /// </summary>
@@ -55,12 +55,13 @@ namespace ML.Engine.Manager
             }
             Instance = this;
             DontDestroyOnLoad(this.gameObject);
+            this.Init();
         }
 
         /// <summary>
         /// 单例初始化
         /// </summary>
-        private void Start()
+        private void Init()
         {
             this.globalManagers = new List<GlobalManager.IGlobalManager>();
             this.localManagers = new List<LocalManager.ILocalManager>();

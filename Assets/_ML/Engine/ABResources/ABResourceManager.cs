@@ -14,7 +14,11 @@ namespace ML.Engine.ABResources
         /// 初始化此项时默认载入的Global AB
         /// 用 | 隔开
         /// </summary>
+        #if UNITY_EDITOR
+        private const string DEFAULTAB = "csv|scene|testscene";
+        #else
         private const string DEFAULTAB = "csv|scene";
+        #endif
 
         /// <summary>
         /// Windows 下 AB 包所在路径
@@ -232,6 +236,11 @@ namespace ML.Engine.ABResources
             }
         }
 
+        /// <summary>
+        /// 同步载入 GlobalAB
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public AssetBundle LoadGlobalAB(string name)
         {
             name = name.ToLower();
