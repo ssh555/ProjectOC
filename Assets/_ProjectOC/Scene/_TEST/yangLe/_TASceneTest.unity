@@ -222,7 +222,7 @@ Transform:
   m_GameObject: {fileID: 257821956}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.39, y: 1.38, z: 3.64}
+  m_LocalPosition: {x: -1.038, y: 1.38, z: 3.246}
   m_LocalScale: {x: 2.0341, y: 2.0341, z: 2.0341}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -377,6 +377,75 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6da62ef2a40c0440adb4f3243b15be8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &1308233544
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: ef3fdb5354714bd40b2bfa0ccde2d71b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.193
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ef3fdb5354714bd40b2bfa0ccde2d71b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ef3fdb5354714bd40b2bfa0ccde2d71b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4.199
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ef3fdb5354714bd40b2bfa0ccde2d71b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ef3fdb5354714bd40b2bfa0ccde2d71b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ef3fdb5354714bd40b2bfa0ccde2d71b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ef3fdb5354714bd40b2bfa0ccde2d71b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ef3fdb5354714bd40b2bfa0ccde2d71b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ef3fdb5354714bd40b2bfa0ccde2d71b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ef3fdb5354714bd40b2bfa0ccde2d71b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2656431786303760210, guid: ef3fdb5354714bd40b2bfa0ccde2d71b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ef3fdb5354714bd40b2bfa0ccde2d71b, type: 3}
+      propertyPath: m_Name
+      value: Stable Sword Outward Slash
+      objectReference: {fileID: 0}
+    - target: {fileID: 3853268898807207900, guid: ef3fdb5354714bd40b2bfa0ccde2d71b, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 08f09a321d9c32244bcfd251fa6ad966, type: 2}
+    - target: {fileID: 6148737315974723067, guid: ef3fdb5354714bd40b2bfa0ccde2d71b, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 08f09a321d9c32244bcfd251fa6ad966, type: 2}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ef3fdb5354714bd40b2bfa0ccde2d71b, type: 3}
 --- !u!1 &1459740960
 GameObject:
   m_ObjectHideFlags: 0
@@ -989,3 +1058,4 @@ SceneRoots:
   - {fileID: 1999513127}
   - {fileID: 515944522}
   - {fileID: 257821960}
+  - {fileID: 1308233544}
