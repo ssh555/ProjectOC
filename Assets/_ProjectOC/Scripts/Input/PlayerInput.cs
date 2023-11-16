@@ -137,7 +137,7 @@ namespace ProjectOC.Input
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""InputDirection"",
+                    ""name"": ""KeyBoardInputDirection"",
                     ""id"": ""b2fe77f9-fa2a-4ebb-b296-3d6fd56962bf"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
@@ -184,6 +184,61 @@ namespace ProjectOC.Input
                     ""name"": ""right"",
                     ""id"": ""928439b9-240f-4acd-bd25-d534e6430d51"",
                     ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOXInputDirection"",
+                    ""id"": ""eddac424-a268-4430-b159-f71eaa6fd407"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""e630da2f-5bc2-476f-aec4-4f34bfb59cb1"",
+                    ""path"": ""<XInputController>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""217d31c0-fcac-4eea-8040-f6d095d3964d"",
+                    ""path"": ""<XInputController>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""118b4d7d-dcbe-4e3e-bc0e-1ee7d5508a5a"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""8c109980-f45c-4f72-9da4-5973f44f1a75"",
+                    ""path"": ""<XInputController>/leftStick/right"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

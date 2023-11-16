@@ -40,6 +40,11 @@ namespace ML.Engine.Manager
         /// 内置的全局UIManager
         /// </summary>
         public UI.UIManager UIManager { get; private set; }
+
+        /// <summary>
+        /// 内置的全局InputManager
+        /// </summary>
+        public Input.InputManager InputManager { get; private set; }
         #endregion
 
         #region 单例管理
@@ -73,6 +78,7 @@ namespace ML.Engine.Manager
             this.RegisterGlobalManager(this.LevelSwitchManager);
 
             this.UIManager = this.RegisterGlobalManager<UI.UIManager>();
+            this.InputManager = this.RegisterGlobalManager<Input.InputManager>();
         }
         
         private void OnDestroy()
