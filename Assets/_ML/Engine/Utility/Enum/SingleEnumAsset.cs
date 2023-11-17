@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_EDITOR
 namespace ML.Editor.Utility.Enum
 {
     [CreateAssetMenu(fileName = "SingleEnumAssetScript", menuName = "ML/Enum/SingleEnumAsset", order = 1)]
@@ -79,3 +80,4 @@ namespace ML.Editor.Utility.Enum
     }
 }
 
+#endif

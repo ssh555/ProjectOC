@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ML.Engine.BuildingSystem.BuildingPart;
+using System.Linq;
 
 namespace ML.Engine.BuildingSystem
 {
@@ -29,17 +30,39 @@ namespace ML.Engine.BuildingSystem
         /// <summary>
         /// RootGameObject.Renderer.Mat -> 可以为null
         /// </summary>
-        Material ParentMat;
+        public Material[] ParentMat;
 
         /// <summary>
         /// ChildGameObject.Renderer.Mat
         /// <ChildIndex, Material>
         /// </summary>
-        Dictionary<int, Material> ChildrenMat;
+        public Dictionary<int, Material[]> ChildrenMat;
     }
 
-    public sealed class BuildingManager : Utility.NoMonoSingletonClass<BuildingManager>, Manager.LocalManager.ILocalManager
+    [System.Serializable]
+    public sealed class BuildingManager : Manager.LocalManager.ILocalManager
     {
+        private static BuildingManager instance = null;
+        public static BuildingManager Instance
+        {
+            get
+            {
+                if(instance == null)
+                {
+                    instance = Manager.GameManager.Instance.GetLocalManager<BuildingManager>();
+                }
+                return instance;
+            }
+        }
+
+        ~BuildingManager()
+        {
+            if(instance == this)
+            {
+                instance = null;
+            }
+        }
+
         [HideInInspector, SerializeField]
         private BuildingMode mode = BuildingMode.None;
         /// <summary>
@@ -54,8 +77,18 @@ namespace ML.Engine.BuildingSystem
                 this.OnModeChanged?.Invoke(mode, value);
 
                 mode = value;
+                bool isEnabled = mode != BuildingMode.None;
+                foreach (var socket in this.BuildingSocketList)
+                {
+                    socket.enabled = isEnabled;
+                }
+                foreach (var area in this.BuildingAreaList)
+                {
+                    area.enabled = isEnabled;
+                }
+
 #if UNITY_EDITOR
-                if(UnityEditor.EditorApplication.isPlaying)
+                if (UnityEditor.EditorApplication.isPlaying)
                 {
                     if (mode == BuildingMode.None)
                     {
@@ -107,10 +140,24 @@ namespace ML.Engine.BuildingSystem
         public BuildingPlacer.BuildingPlacer Placer { get; set; }
 
         // to-do : EditMode使用PlaceMode的按键输入 -> PlaceMode全部启用,EditMode禁用: ChangeOutLook|ChangeStyle|SwitchFrame_PreHold|KeyCom
+        private Input.BuildingInput binput = null;
         /// <summary>
         /// 建造系统的统一输入
         /// </summary>
-        public Input.BuildingInput BInput = new Input.BuildingInput();
+        public Input.BuildingInput BInput
+        {
+            get
+            {
+                if(this.binput == null)
+                {
+                    this.binput = new Input.BuildingInput();
+                }
+                return this.binput;
+            }
+        }
+
+        public List<BuildingSocket.BuildingSocket> BuildingSocketList = new List<BuildingSocket.BuildingSocket>();
+        public List<BuildingArea.BuildingArea> BuildingAreaList = new List<BuildingArea.BuildingArea>();
 
         #region BPartPrefab
         /// <summary>
@@ -171,7 +218,7 @@ namespace ML.Engine.BuildingSystem
         {
             if(this.BPartClassificationOnStyle.ContainsKey(Category) && this.BPartClassificationOnStyle[Category].ContainsKey(Type) && this.BPartClassificationOnStyle[Category][Type].Count > 0)
             {
-                return GameObject.Instantiate<GameObject>(BPartClassificationOnStyle[Category][Type][0].PeekFront().gameObject).GetComponent<IBuildingPart>();
+                return GameObject.Instantiate<GameObject>(BPartClassificationOnStyle[Category][Type].First().Value.PeekFront().gameObject).GetComponent<IBuildingPart>();
             }
             return null;
         }
@@ -200,15 +247,30 @@ namespace ML.Engine.BuildingSystem
                 return;
             }
             // 不存在对应队列
-            if (this.GetBPartPeekInstanceOnStyle(BPart) == null)
+            if (!this.BPartClassificationOnStyle.ContainsKey(BPart.Classification.Category) || !this.BPartClassificationOnStyle[BPart.Classification.Category].ContainsKey(BPart.Classification.Type) || !this.BPartClassificationOnStyle[BPart.Classification.Category][BPart.Classification.Type].ContainsKey(BPart.Classification.Style))
             {
                 var onType = new Dictionary<BuildingType, Dictionary<BuildingStyle, Deque<IBuildingPart>>>();
                 var onStyle = new Dictionary<BuildingStyle, Deque<IBuildingPart>>();
                 var Deque = new Deque<IBuildingPart>();
 
-                this.BPartClassificationOnStyle.Add(BPart.Classification.Category, onType);
-                onType.Add(BPart.Classification.Type, onStyle);
-                onStyle.Add(BPart.Classification.Style, Deque);
+                if (this.BPartClassificationOnStyle.TryAdd(BPart.Classification.Category, onType))
+                {
+                    if (onType.TryAdd(BPart.Classification.Type, onStyle))
+                    {
+                        onStyle.TryAdd(BPart.Classification.Style, Deque);
+                    }
+                }
+                else
+                {
+                    if (this.BPartClassificationOnStyle[BPart.Classification.Category].TryAdd(BPart.Classification.Type, onStyle))
+                    {
+                        onStyle.TryAdd(BPart.Classification.Style, Deque);
+                    }
+                    else
+                    {
+                        this.BPartClassificationOnStyle[BPart.Classification.Category][BPart.Classification.Type].TryAdd(BPart.Classification.Style, Deque);
+                    }
+                }
             }
 
             this.BPartClassificationOnStyle[BPart.Classification.Category][BPart.Classification.Type][BPart.Classification.Style].EnqueueBack(BPart);
@@ -307,15 +369,30 @@ namespace ML.Engine.BuildingSystem
                 return;
             }
             // 不存在对应队列
-            if (this.GetBPartPeekInstanceOnHeight(BPart) == null)
+            if (!this.BPartClassificationOnHeight.ContainsKey(BPart.Classification.Category) || !this.BPartClassificationOnHeight[BPart.Classification.Category].ContainsKey(BPart.Classification.Type) || !this.BPartClassificationOnHeight[BPart.Classification.Category][BPart.Classification.Type].ContainsKey(BPart.Classification.Height))
             {
                 var onType = new Dictionary<BuildingType, Dictionary<short, Deque<IBuildingPart>>>();
                 var onHeight = new Dictionary<short, Deque<IBuildingPart>>();
                 var Deque = new Deque<IBuildingPart>();
 
-                this.BPartClassificationOnHeight.Add(BPart.Classification.Category, onType);
-                onType.Add(BPart.Classification.Type, onHeight);
-                onHeight.Add(BPart.Classification.Height, Deque);
+                if(this.BPartClassificationOnHeight.TryAdd(BPart.Classification.Category, onType))
+                {
+                    if(onType.TryAdd(BPart.Classification.Type, onHeight))
+                    {
+                        onHeight.TryAdd(BPart.Classification.Height, Deque);
+                    }
+                }
+                else
+                {
+                    if(this.BPartClassificationOnHeight[BPart.Classification.Category].TryAdd(BPart.Classification.Type, onHeight))
+                    {
+                        onHeight.TryAdd(BPart.Classification.Height, Deque);
+                    }
+                    else
+                    {
+                        this.BPartClassificationOnHeight[BPart.Classification.Category][BPart.Classification.Type].TryAdd(BPart.Classification.Height, Deque);
+                    }
+                }
             }
 
             this.BPartClassificationOnHeight[BPart.Classification.Category][BPart.Classification.Type][BPart.Classification.Height].EnqueueBack(BPart);
@@ -403,11 +480,32 @@ namespace ML.Engine.BuildingSystem
         #endregion
 
         #region Material
+        // to-do :to-change
+        [SerializeField]
+        private const string _ABMatPath = "materials";
+        [SerializeField]
+        private const string _ABMatName = "Transparent";
+
         /// <summary>
         /// 建造模式下所用的Material (Place, Edit, Destroy, Interact)
         /// </summary>
-        [SerializeField]
-        private Material buildingMaterial;
+        [SerializeField, HideInInspector]
+        private Material _buildingMaterial = null;
+        private Material buildingMaterial
+        {
+            get
+            {
+                if(this._buildingMaterial == null)
+                {
+#if UNITY_EDITOR
+                    _buildingMaterial = Manager.GameManager.Instance.ABResourceManager.LoadAsset<Material>(_ABMatPath, _ABMatName, true);
+#else
+                    _buildingMaterial = Manager.GameManager.Instance.ABResourceManager.LoadAsset<Material>(_ABMatPath, _ABMatName);
+#endif
+                }
+                return this._buildingMaterial;
+            }
+        }
 
         /// <summary>
         /// None 返回为 null

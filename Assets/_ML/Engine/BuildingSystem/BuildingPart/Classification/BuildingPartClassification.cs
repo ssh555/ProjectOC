@@ -18,7 +18,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         [LabelText("三级分类-样式")]
         public BuildingStyle Style;
 
-        [LabelText("四级分类-高度"), PropertyTooltip("单位cm, 用整数表示")]
+        [LabelText("四级分类-高度"), PropertyTooltip("单位cm, 用整数表示"), SerializeField]
         public short Height;
 
         public override bool Equals(object obj)
@@ -38,6 +38,11 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         public static bool operator !=(BuildingPartClassification A, BuildingPartClassification B)
         {
             return !(A == B);
+        }
+
+        public override string ToString()
+        {
+            return $"{Category}-{Type}-{Style}-{Height}";
         }
     }
 }

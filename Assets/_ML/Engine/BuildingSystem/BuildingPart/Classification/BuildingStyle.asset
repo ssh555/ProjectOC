@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89cc96c1e7cb84a4f8fb2f7a53cc3a93, type: 3}
+  m_Script: {fileID: 11500000, guid: e04c33259d65b934fa9ee5353f84593e, type: 3}
   m_Name: BuildingStyle
   m_EditorClassIdentifier: 
   serializationData:
@@ -22,9 +22,13 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   enumNamespace: ML.Engine.BuildingSystem.BuildingPart
-  AllName:
-    name: All
-    displayName: All
   NoneName:
     name: None
     displayName: None
+  EnumList:
+  - name: Base
+    displayName: "\u6B63\u65B9\u5F62"
+  - name: Triangle
+    displayName: "\u4E09\u89D2\u5F62"
+  - name: Quagrant
+    displayName: "\u56DB\u5206\u5706\u5F62"

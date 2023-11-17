@@ -21,7 +21,7 @@ namespace ML.Engine.BuildingSystem.BuildingArea
         /// <summary>
         /// 用于包裹基础单位格子的边长，单位为m
         /// </summary>
-        [LabelText("包裹单位格子边长"), PropertyTooltip("单位 m"), Range(0, 2), FoldoutGroup("网格"), ShowInInspector]
+        [LabelText("包裹单位格子边长"), PropertyTooltip("单位 m"), Range(0, 100), FoldoutGroup("网格"), ShowInInspector]
         public static float BoundGridSideLength = 1.00f;
         #endregion
 
@@ -47,17 +47,20 @@ namespace ML.Engine.BuildingSystem.BuildingArea
             // 位于 Bound 内
             if(this.collider.bounds.Contains(point))
             {
+                Vector3 scale = this.transform.localScale;
+                this.transform.localScale = Vector3.one;
+
                 // point 在 Area 坐标系下的表示
                 Vector3 localPoint = this.transform.InverseTransformPoint(point);
 
                 // 最近网格点局部坐标
                 Vector3 localNearestGP = new Vector3(Mathf.RoundToInt(localPoint.x / BaseGridSideLength), localPoint.y, Mathf.RoundToInt(localPoint.z / BaseGridSideLength)) * BaseGridSideLength;
 
-
                 // 不启用网格辅助 && 不在范围内 ? 返回原点 : 返回网格点
                 pos =(!BuildingManager.Instance.Placer.IsEnableGridSupport && Vector3.Distance(localPoint, localNearestGP) > radius) ? point : this.transform.TransformPoint(localNearestGP);
                 // 使用Area.Rotation
                 rot = this.transform.rotation;
+                this.transform.localScale = scale;
                 return true;
             }
 
@@ -95,6 +98,26 @@ namespace ML.Engine.BuildingSystem.BuildingArea
         {
             this.collider = this.GetComponent<Collider>();
             this.collider.isTrigger = true;
+        }
+
+        private void Start()
+        {
+            BuildingManager.Instance.BuildingAreaList.Add(this);
+
+        }
+        private void OnEnable()
+        {
+            this.collider.enabled = true;
+        }
+
+        private void OnDisable()
+        {
+            this.collider.enabled = false;
+        }
+
+        private void OnDestroy()
+        {
+            BuildingManager.Instance.BuildingAreaList.Remove(this);
         }
     }
 }

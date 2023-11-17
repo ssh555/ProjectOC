@@ -2,7 +2,7 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+#if UNITY_EDITOR
 namespace ML.Editor.Utility.Enum
 {
     [CreateAssetMenu(fileName = "SingleEnumAssetWithDisplayNameScript", menuName = "ML/Enum/SingleEnumAssetWithDisplayName", order = 1)]
@@ -88,3 +88,4 @@ namespace ML.Editor.Utility.Enum
     }
 }
 
+#endif

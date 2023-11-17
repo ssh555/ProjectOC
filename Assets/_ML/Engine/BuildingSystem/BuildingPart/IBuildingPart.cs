@@ -15,7 +15,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         /// <summary>
         /// Prefab 层分类 => 分类标识
         /// </summary>
-        public BuildingPartClassification Classification { get; protected set; }
+        public BuildingPartClassification Classification { get; }
 
         /// <summary>
         /// 建筑物实例ID => 建筑物实例ID组成 2023-09-01-13-59-59-999 or 当前秒数时间
@@ -25,19 +25,19 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         /// <summary>
         /// 依附的 GameObject
         /// </summary>
-        public GameObject gameObject { get; set; }
+        public GameObject gameObject { get;  }
 
         /// <summary>
         /// 依附的 Transfrom
         /// </summary>
-        public Transform transform { get; set; }
+        public Transform transform { get; }
         #endregion
 
         #region Mode
         /// <summary>
         /// Trigger 碰撞检测的结果 => 是否能放置
         /// </summary>
-        public bool CanPlaceInPlaceMode { get; protected set; }
+        public bool CanPlaceInPlaceMode { get; set; }
 
         /// <summary>
         /// 当前所处的建造模式
@@ -97,7 +97,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         /// <summary>
         /// 拥有的Socket列表，用于轮换
         /// </summary>
-        protected List<BuildingSocket.BuildingSocket> OwnedSocketList { get; set; }
+        public List<BuildingSocket.BuildingSocket> OwnedSocketList { get; }
 
         /// <summary>
         /// 注册BuildingSocket
@@ -156,21 +156,30 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         /// <summary>
         /// 最近一次检测到的不能放置的帧数 FrameCount
         /// </summary>
-        protected int lastTriggerFrameCount { get; set; }
-        protected void OnTriggerStay(Collider other)
+        public int lastTriggerFrameCount { get; set; }
+        public BuildingMode tmpTriggerMode { get; set; }
+        public void CheckTriggerStay(Collider other)
         {
-            if(this.Mode == BuildingMode.Place)
+            if(this.Mode == BuildingMode.Place || this.Mode == BuildingMode.Destroy || this.Mode == BuildingMode.Edit)
             {
-                if(other is IBuildingPart)
+                if(this.Mode != BuildingMode.Destroy)
                 {
+                    this.tmpTriggerMode = this.Mode;
+                }
+                if (other.GetComponent<IBuildingPart>() != null && this.Mode != BuildingMode.Destroy)
+                {
+                    Debug.Log("QWQ");
                     this.CanPlaceInPlaceMode = false;
+                    this.Mode = BuildingMode.Destroy;
                     lastTriggerFrameCount = Time.frameCount;
                 }
                 // 同一帧检测到不能放置，则此帧就不能更改能否放置值，仅为不能放置
                 else if(lastTriggerFrameCount != Time.frameCount)
                 {
                     this.CanPlaceInPlaceMode = true;
+                    this.Mode = this.tmpTriggerMode;
                 }
+                this.Mode = this.CanPlaceInPlaceMode ? this.tmpTriggerMode : BuildingMode.Destroy;
             }
         }
         #endregion

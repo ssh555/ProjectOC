@@ -2,18 +2,16 @@ using Sirenix.OdinInspector;
 
 namespace ML.Engine.BuildingSystem.BuildingPart
 {
-	[System.Flags, System.Serializable]
+	[System.Serializable]
 	public enum BuildingStyle
 	{
-		[LabelText("All")]
-		All = int.MaxValue,
 		[LabelText("None")]
-		None = 0,
+		None,
 		[LabelText("正方形")]
-		Base = 1 << 0,
+		Base,
 		[LabelText("三角形")]
-		Triangle = 1 << 1,
+		Triangle,
 		[LabelText("四分圆形")]
-		Quagrant = 1 << 2,
+		Quagrant,
 	}
 }

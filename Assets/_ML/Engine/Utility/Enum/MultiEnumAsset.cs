@@ -2,6 +2,8 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+#if UNITY_EDITOR
 using ML.Editor;
 
 namespace ML.Editor.Utility.Enum
@@ -276,3 +278,4 @@ namespace ML.Editor.Utility.Enum
     }
 }
 
+#endif
