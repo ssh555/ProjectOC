@@ -171,7 +171,7 @@ namespace ML.Engine.BuildingSystem
         {
             if(this.BPartClassificationOnStyle.ContainsKey(Category) && this.BPartClassificationOnStyle[Category].ContainsKey(Type) && this.BPartClassificationOnStyle[Category][Type].Count > 0)
             {
-                return GameObject.Instantiate<GameObject>(BPartClassificationOnStyle[Category][Type][0].Peek().gameObject).GetComponent<IBuildingPart>();
+                return GameObject.Instantiate<GameObject>(BPartClassificationOnStyle[Category][Type][0].PeekFront().gameObject).GetComponent<IBuildingPart>();
             }
             return null;
         }
@@ -191,7 +191,7 @@ namespace ML.Engine.BuildingSystem
         /// <summary>
         /// 基于BuildingStyle的三级分类
         /// </summary>
-        private Dictionary<BuildingCategory, Dictionary<BuildingType, Dictionary<BuildingStyle, Queue<IBuildingPart>>>> BPartClassificationOnStyle = new Dictionary<BuildingCategory, Dictionary<BuildingType, Dictionary<BuildingStyle, Queue<IBuildingPart>>>>();
+        private Dictionary<BuildingCategory, Dictionary<BuildingType, Dictionary<BuildingStyle, Deque<IBuildingPart>>>> BPartClassificationOnStyle = new Dictionary<BuildingCategory, Dictionary<BuildingType, Dictionary<BuildingStyle, Deque<IBuildingPart>>>>();
 
         private void AddBPartPrefabOnStyle(IBuildingPart BPart)
         {
@@ -202,16 +202,16 @@ namespace ML.Engine.BuildingSystem
             // 不存在对应队列
             if (this.GetBPartPeekInstanceOnStyle(BPart) == null)
             {
-                var onType = new Dictionary<BuildingType, Dictionary<BuildingStyle, Queue<IBuildingPart>>>();
-                var onStyle = new Dictionary<BuildingStyle, Queue<IBuildingPart>>();
-                var queue = new Queue<IBuildingPart>();
+                var onType = new Dictionary<BuildingType, Dictionary<BuildingStyle, Deque<IBuildingPart>>>();
+                var onStyle = new Dictionary<BuildingStyle, Deque<IBuildingPart>>();
+                var Deque = new Deque<IBuildingPart>();
 
                 this.BPartClassificationOnStyle.Add(BPart.Classification.Category, onType);
                 onType.Add(BPart.Classification.Type, onStyle);
-                onStyle.Add(BPart.Classification.Style, queue);
+                onStyle.Add(BPart.Classification.Style, Deque);
             }
 
-            this.BPartClassificationOnStyle[BPart.Classification.Category][BPart.Classification.Type][BPart.Classification.Style].Enqueue(BPart);
+            this.BPartClassificationOnStyle[BPart.Classification.Category][BPart.Classification.Type][BPart.Classification.Style].EnqueueBack(BPart);
         }
 
         private void RemoveBPartPrefabOnStyle(IBuildingPart BPart)
@@ -220,17 +220,17 @@ namespace ML.Engine.BuildingSystem
             {
                 return;
             }
-            var queue = this.BPartClassificationOnStyle[BPart.Classification.Category][BPart.Classification.Type][BPart.Classification.Style];
-            for (int i = queue.Count; i > 0; --i)
+            var Deque = this.BPartClassificationOnStyle[BPart.Classification.Category][BPart.Classification.Type][BPart.Classification.Style];
+            for (int i = Deque.Count; i > 0; --i)
             {
-                if(queue.Peek().Classification.Height == BPart.Classification.Height)
+                if(Deque.PeekFront().Classification.Height == BPart.Classification.Height)
                 {
-                    queue.Dequeue();
+                    Deque.DequeueFront();
                     break;
                 }
                 else
                 {
-                    queue.Enqueue(queue.Dequeue());
+                    Deque.EnqueueBack(Deque.DequeueFront());
                 }
             }
         }
@@ -246,7 +246,7 @@ namespace ML.Engine.BuildingSystem
         {
             if(this.BPartClassificationOnStyle.ContainsKey(category) && this.BPartClassificationOnStyle[category].ContainsKey(type) && this.BPartClassificationOnStyle[category][type].ContainsKey(style))
             {
-                return GameObject.Instantiate<GameObject>(this.BPartClassificationOnStyle[category][type][style].Peek().gameObject).GetComponent<IBuildingPart>();
+                return GameObject.Instantiate<GameObject>(this.BPartClassificationOnStyle[category][type][style].PeekFront().gameObject).GetComponent<IBuildingPart>();
             }
             return null;
         }
@@ -263,22 +263,33 @@ namespace ML.Engine.BuildingSystem
         /// <param name="type"></param>
         /// <param name="style"></param>
         /// <returns></returns>
-        public IBuildingPart PollingBPartPeekInstanceOnStyle(BuildingCategory category, BuildingType type, BuildingStyle style)
+        public IBuildingPart PollingBPartPeekInstanceOnStyle(BuildingCategory category, BuildingType type, BuildingStyle style, bool isForward)
         {
             if (this.BPartClassificationOnStyle.ContainsKey(category) && this.BPartClassificationOnStyle[category].ContainsKey(type) && this.BPartClassificationOnStyle[category][type].ContainsKey(style))
             {
-                var BPartQueue = this.BPartClassificationOnStyle[category][type][style];
-                var ret = BPartQueue.Peek();
-                BPartQueue.Dequeue();
-                BPartQueue.Enqueue(ret);
-                return GameObject.Instantiate<GameObject>(ret.gameObject).GetComponent<IBuildingPart>();
+                if(isForward)
+                {
+                    var BPartQueue = this.BPartClassificationOnStyle[category][type][style];
+                    var ret = BPartQueue.PeekFront();
+                    BPartQueue.DequeueFront();
+                    BPartQueue.EnqueueBack(ret);
+                    return GameObject.Instantiate<GameObject>(ret.gameObject).GetComponent<IBuildingPart>();
+                }
+                else
+                {
+                    var BPartQueue = this.BPartClassificationOnStyle[category][type][style];
+                    var ret = BPartQueue.PeekBack();
+                    BPartQueue.DequeueBack();
+                    BPartQueue.EnqueueFront(ret);
+                    return GameObject.Instantiate<GameObject>(ret.gameObject).GetComponent<IBuildingPart>();
+                }
             }
             return null;
         }
 
-        public IBuildingPart PollingBPartPeekInstanceOnStyle(IBuildingPart BPart)
+        public IBuildingPart PollingBPartPeekInstanceOnStyle(IBuildingPart BPart, bool isForward)
         {
-            return PollingBPartPeekInstanceOnStyle(BPart.Classification.Category, BPart.Classification.Type, BPart.Classification.Style);
+            return PollingBPartPeekInstanceOnStyle(BPart.Classification.Category, BPart.Classification.Type, BPart.Classification.Style, isForward);
         }
 
         #endregion
@@ -287,7 +298,7 @@ namespace ML.Engine.BuildingSystem
         /// <summary>
         /// 基于BuildingHeight的三级分类
         /// </summary>
-        private Dictionary<BuildingCategory, Dictionary<BuildingType, Dictionary<short, Queue<IBuildingPart>>>> BPartClassificationOnHeight = new Dictionary<BuildingCategory, Dictionary<BuildingType, Dictionary<short, Queue<IBuildingPart>>>>();
+        private Dictionary<BuildingCategory, Dictionary<BuildingType, Dictionary<short, Deque<IBuildingPart>>>> BPartClassificationOnHeight = new Dictionary<BuildingCategory, Dictionary<BuildingType, Dictionary<short, Deque<IBuildingPart>>>>();
 
         private void AddBPartPrefabOnHeight(IBuildingPart BPart)
         {
@@ -298,16 +309,16 @@ namespace ML.Engine.BuildingSystem
             // 不存在对应队列
             if (this.GetBPartPeekInstanceOnHeight(BPart) == null)
             {
-                var onType = new Dictionary<BuildingType, Dictionary<short, Queue<IBuildingPart>>>();
-                var onHeight = new Dictionary<short, Queue<IBuildingPart>>();
-                var queue = new Queue<IBuildingPart>();
+                var onType = new Dictionary<BuildingType, Dictionary<short, Deque<IBuildingPart>>>();
+                var onHeight = new Dictionary<short, Deque<IBuildingPart>>();
+                var Deque = new Deque<IBuildingPart>();
 
                 this.BPartClassificationOnHeight.Add(BPart.Classification.Category, onType);
                 onType.Add(BPart.Classification.Type, onHeight);
-                onHeight.Add(BPart.Classification.Height, queue);
+                onHeight.Add(BPart.Classification.Height, Deque);
             }
 
-            this.BPartClassificationOnHeight[BPart.Classification.Category][BPart.Classification.Type][BPart.Classification.Height].Enqueue(BPart);
+            this.BPartClassificationOnHeight[BPart.Classification.Category][BPart.Classification.Type][BPart.Classification.Height].EnqueueBack(BPart);
         }
 
         private void RemoveBPartPrefabOnHeight(IBuildingPart BPart)
@@ -316,17 +327,17 @@ namespace ML.Engine.BuildingSystem
             {
                 return;
             }
-            var queue = this.BPartClassificationOnHeight[BPart.Classification.Category][BPart.Classification.Type][BPart.Classification.Height];
-            for (int i = queue.Count; i > 0; --i)
+            var Deque = this.BPartClassificationOnHeight[BPart.Classification.Category][BPart.Classification.Type][BPart.Classification.Height];
+            for (int i = Deque.Count; i > 0; --i)
             {
-                if (queue.Peek().Classification.Style == BPart.Classification.Style)
+                if (Deque.PeekFront().Classification.Style == BPart.Classification.Style)
                 {
-                    queue.Dequeue();
+                    Deque.DequeueFront();
                     break;
                 }
                 else
                 {
-                    queue.Enqueue(queue.Dequeue());
+                    Deque.EnqueueBack(Deque.DequeueFront());
                 }
             }
         }
@@ -343,7 +354,7 @@ namespace ML.Engine.BuildingSystem
         {
             if (this.BPartClassificationOnHeight.ContainsKey(category) && this.BPartClassificationOnHeight[category].ContainsKey(type) && this.BPartClassificationOnHeight[category][type].ContainsKey(height))
             {
-                return GameObject.Instantiate<GameObject>(this.BPartClassificationOnHeight[category][type][height].Peek().gameObject).GetComponent<IBuildingPart>();
+                return GameObject.Instantiate<GameObject>(this.BPartClassificationOnHeight[category][type][height].PeekFront().gameObject).GetComponent<IBuildingPart>();
             }
             return null;
         }
@@ -360,22 +371,33 @@ namespace ML.Engine.BuildingSystem
         /// <param name="type"></param>
         /// <param name="style"></param>
         /// <returns></returns>
-        public IBuildingPart PollingBPartPeekInstanceOnHeight(BuildingCategory category, BuildingType type, short height)
+        public IBuildingPart PollingBPartPeekInstanceOnHeight(BuildingCategory category, BuildingType type, short height, bool isForward)
         {
             if (this.BPartClassificationOnHeight.ContainsKey(category) && this.BPartClassificationOnHeight[category].ContainsKey(type) && this.BPartClassificationOnHeight[category][type].ContainsKey(height))
             {
-                var BPartQueue = this.BPartClassificationOnHeight[category][type][height];
-                var ret = BPartQueue.Peek();
-                BPartQueue.Dequeue();
-                BPartQueue.Enqueue(ret);
-                return GameObject.Instantiate<GameObject>(ret.gameObject).GetComponent<IBuildingPart>();
+                if(isForward)
+                {
+                    var BPartQueue = this.BPartClassificationOnHeight[category][type][height];
+                    var ret = BPartQueue.PeekFront();
+                    BPartQueue.DequeueFront();
+                    BPartQueue.EnqueueBack(ret);
+                    return GameObject.Instantiate<GameObject>(ret.gameObject).GetComponent<IBuildingPart>();
+                }
+                else
+                {
+                    var BPartQueue = this.BPartClassificationOnHeight[category][type][height];
+                    var ret = BPartQueue.PeekBack();
+                    BPartQueue.DequeueBack();
+                    BPartQueue.EnqueueFront(ret);
+                    return GameObject.Instantiate<GameObject>(ret.gameObject).GetComponent<IBuildingPart>();
+                }
             }
             return null;
         }
 
-        public IBuildingPart PollingBPartPeekInstanceOnHeight(IBuildingPart BPart)
+        public IBuildingPart PollingBPartPeekInstanceOnHeight(IBuildingPart BPart, bool isForward)
         {
-            return PollingBPartPeekInstanceOnHeight(BPart.Classification.Category, BPart.Classification.Type, BPart.Classification.Height);
+            return PollingBPartPeekInstanceOnHeight(BPart.Classification.Category, BPart.Classification.Type, BPart.Classification.Height, isForward);
         }
 
         #endregion

@@ -37,7 +37,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         /// <summary>
         /// Trigger 碰撞检测的结果 => 是否能放置
         /// </summary>
-        public bool CanPlaceInPlaceMode { get; set; }
+        public bool CanPlaceInPlaceMode { get; protected set; }
 
         /// <summary>
         /// 当前所处的建造模式
@@ -174,6 +174,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             }
         }
         #endregion
+
     }
 }
 

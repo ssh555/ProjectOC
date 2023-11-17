@@ -67,15 +67,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "ExitBuilding",
-                    "type": "Button",
-                    "id": "7f56a5c8-74d1-4ece-9e56-167f88d8d514",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -83,6 +74,17 @@
                     "name": "",
                     "id": "b6b2759c-aff9-47c3-9922-7d68738b472d",
                     "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Acc",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bb08b731-b855-4c96-89e9-b8ff6f748ed3",
+                    "path": "<XInputController>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -103,8 +105,30 @@
                 },
                 {
                     "name": "",
+                    "id": "6b6c1b3d-78de-42cb-9add-5c5c27e5b24e",
+                    "path": "<XInputController>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Crouch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "afb4e924-0e70-421c-98be-48ed13c6d163",
                     "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0eae1f6a-e0ff-463a-b088-33a24d852ad5",
+                    "path": "<XInputController>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -256,6 +280,39 @@
                     "isPartOfComposite": true
                 },
                 {
+                    "name": "XBOX",
+                    "id": "a2129af4-465c-4ed2-8db6-bc90aecd3b40",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseX",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "a70be8e4-394b-4cba-b9a4-983f5e9a2647",
+                    "path": "<XInputController>/rightStick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseX",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "3316047c-9658-4761-bb43-8032f80ecc06",
+                    "path": "<XInputController>/rightStick/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseX",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
                     "name": "MouseY",
                     "id": "f2e79e28-1ad6-4942-ab34-e84ed109e82d",
                     "path": "1DAxis",
@@ -289,6 +346,39 @@
                     "isPartOfComposite": true
                 },
                 {
+                    "name": "XBOX",
+                    "id": "4691265d-7947-46ed-99c5-9063678ec754",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseY",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "c4c28e6b-d899-4e6c-afec-f59c23dcd143",
+                    "path": "<XInputController>/rightStick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseY",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "906f1775-dbc2-49b5-9cdd-c086d5b5e08a",
+                    "path": "<XInputController>/rightStick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseY",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
                     "name": "",
                     "id": "66240ca2-927c-408a-84e0-1e5f585276c7",
                     "path": "<Keyboard>/f",
@@ -301,12 +391,12 @@
                 },
                 {
                     "name": "",
-                    "id": "892a9ee6-da8a-473b-90a9-16e0d6a5ecd4",
-                    "path": "<Keyboard>/escape",
+                    "id": "8924878b-2f38-4a74-a19c-4f09305a0274",
+                    "path": "<XInputController>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ExitBuilding",
+                    "action": "PickUp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
