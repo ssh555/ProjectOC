@@ -55,7 +55,6 @@ namespace ProjectOC.Player
         #region Init
         private void Awake()
         {
-
             this.playerViewer = this.transform.Find("PlayerViewer");
             this.playerModel = this.transform.Find("PlayerModel");
             this.playerTerrainDetect = this.transform.Find("PlayerTerrainDetect");

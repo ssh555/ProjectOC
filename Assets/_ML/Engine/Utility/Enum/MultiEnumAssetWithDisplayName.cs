@@ -2,15 +2,18 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+#if UNITY_EDITOR
 using ML.Editor;
 
-namespace ML.Editor.Utility
+namespace ML.Editor.Utility.Enum
 {
+    [System.Serializable]
     public struct EnumKV
     {
-        [LabelText("枚举名")]
+        [LabelText("枚举名"), SerializeField]
         public string name;
-        [LabelText("显示名")]
+        [LabelText("显示名"), SerializeField]
         public string displayName;
     }
 
@@ -273,7 +276,7 @@ namespace ML.Editor.Utility
             string scriptContents =
                 "using Sirenix.OdinInspector;\n\n" +
                 (isHasNamespace ? $"namespace {this.enumNamespace}\n{{\n" : "") + (isHasNamespace ? "\t" : "") +
-                "[System.Flags]\n" + (isHasNamespace ? "\t" : "") +
+                "[System.Flags, System.Serializable]\n" + (isHasNamespace ? "\t" : "") +
                 $"public enum {System.IO.Path.GetFileNameWithoutExtension(assetPath)}\n" + (isHasNamespace ? "\t" : "") +
                 "{\n" + (isHasNamespace ? "\t" : "") +
                 ((this.AllName.name == null || this.AllName.name == "" || this.AllName.displayName == null || this.AllName.displayName == "") ? "" : ($"\t[LabelText(\"{this.AllName.displayName}\")]\n") + (isHasNamespace ? "\t" : "")) +
@@ -293,3 +296,4 @@ namespace ML.Editor.Utility
     }
 }
 
+#endif

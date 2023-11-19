@@ -91,15 +91,6 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""ExitBuilding"",
-                    ""type"": ""Button"",
-                    ""id"": ""7f56a5c8-74d1-4ece-9e56-167f88d8d514"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -107,6 +98,17 @@ namespace ProjectOC.Input
                     ""name"": """",
                     ""id"": ""b6b2759c-aff9-47c3-9922-7d68738b472d"",
                     ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Acc"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bb08b731-b855-4c96-89e9-b8ff6f748ed3"",
+                    ""path"": ""<XInputController>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -127,6 +129,17 @@ namespace ProjectOC.Input
                 },
                 {
                     ""name"": """",
+                    ""id"": ""6b6c1b3d-78de-42cb-9add-5c5c27e5b24e"",
+                    ""path"": ""<XInputController>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""afb4e924-0e70-421c-98be-48ed13c6d163"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
@@ -137,7 +150,18 @@ namespace ProjectOC.Input
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""InputDirection"",
+                    ""name"": """",
+                    ""id"": ""0eae1f6a-e0ff-463a-b088-33a24d852ad5"",
+                    ""path"": ""<XInputController>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""KeyBoardInputDirection"",
                     ""id"": ""b2fe77f9-fa2a-4ebb-b296-3d6fd56962bf"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
@@ -192,6 +216,61 @@ namespace ProjectOC.Input
                     ""isPartOfComposite"": true
                 },
                 {
+                    ""name"": ""XBOXInputDirection"",
+                    ""id"": ""eddac424-a268-4430-b159-f71eaa6fd407"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""e630da2f-5bc2-476f-aec4-4f34bfb59cb1"",
+                    ""path"": ""<XInputController>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""217d31c0-fcac-4eea-8040-f6d095d3964d"",
+                    ""path"": ""<XInputController>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""118b4d7d-dcbe-4e3e-bc0e-1ee7d5508a5a"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""8c109980-f45c-4f72-9da4-5973f44f1a75"",
+                    ""path"": ""<XInputController>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
                     ""name"": ""MouseX"",
                     ""id"": ""0300f32d-0324-4740-86ff-3065e60b42e9"",
                     ""path"": ""1DAxis"",
@@ -217,6 +296,39 @@ namespace ProjectOC.Input
                     ""name"": ""positive"",
                     ""id"": ""33b623f7-9613-4128-90a4-6e041f7c92be"",
                     ""path"": ""<Mouse>/delta/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseX"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""a2129af4-465c-4ed2-8db6-bc90aecd3b40"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseX"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""a70be8e4-394b-4cba-b9a4-983f5e9a2647"",
+                    ""path"": ""<XInputController>/rightStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseX"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""3316047c-9658-4761-bb43-8032f80ecc06"",
+                    ""path"": ""<XInputController>/rightStick/right"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -258,6 +370,39 @@ namespace ProjectOC.Input
                     ""isPartOfComposite"": true
                 },
                 {
+                    ""name"": ""XBOX"",
+                    ""id"": ""4691265d-7947-46ed-99c5-9063678ec754"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseY"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""c4c28e6b-d899-4e6c-afec-f59c23dcd143"",
+                    ""path"": ""<XInputController>/rightStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseY"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""906f1775-dbc2-49b5-9cdd-c086d5b5e08a"",
+                    ""path"": ""<XInputController>/rightStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseY"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
                     ""name"": """",
                     ""id"": ""66240ca2-927c-408a-84e0-1e5f585276c7"",
                     ""path"": ""<Keyboard>/f"",
@@ -270,12 +415,12 @@ namespace ProjectOC.Input
                 },
                 {
                     ""name"": """",
-                    ""id"": ""892a9ee6-da8a-473b-90a9-16e0d6a5ecd4"",
-                    ""path"": ""<Keyboard>/escape"",
+                    ""id"": ""8924878b-2f38-4a74-a19c-4f09305a0274"",
+                    ""path"": ""<XInputController>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ExitBuilding"",
+                    ""action"": ""PickUp"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -361,7 +506,6 @@ namespace ProjectOC.Input
             m_Player_MouseX = m_Player.FindAction("MouseX", throwIfNotFound: true);
             m_Player_MouseY = m_Player.FindAction("MouseY", throwIfNotFound: true);
             m_Player_PickUp = m_Player.FindAction("PickUp", throwIfNotFound: true);
-            m_Player_ExitBuilding = m_Player.FindAction("ExitBuilding", throwIfNotFound: true);
             // PlayerUI
             m_PlayerUI = asset.FindActionMap("PlayerUI", throwIfNotFound: true);
             m_PlayerUI_OpenUI = m_PlayerUI.FindAction("OpenUI", throwIfNotFound: true);
@@ -435,7 +579,6 @@ namespace ProjectOC.Input
         private readonly InputAction m_Player_MouseX;
         private readonly InputAction m_Player_MouseY;
         private readonly InputAction m_Player_PickUp;
-        private readonly InputAction m_Player_ExitBuilding;
         public struct PlayerActions
         {
             private @PlayerInput m_Wrapper;
@@ -447,7 +590,6 @@ namespace ProjectOC.Input
             public InputAction @MouseX => m_Wrapper.m_Player_MouseX;
             public InputAction @MouseY => m_Wrapper.m_Player_MouseY;
             public InputAction @PickUp => m_Wrapper.m_Player_PickUp;
-            public InputAction @ExitBuilding => m_Wrapper.m_Player_ExitBuilding;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -478,9 +620,6 @@ namespace ProjectOC.Input
                 @PickUp.started += instance.OnPickUp;
                 @PickUp.performed += instance.OnPickUp;
                 @PickUp.canceled += instance.OnPickUp;
-                @ExitBuilding.started += instance.OnExitBuilding;
-                @ExitBuilding.performed += instance.OnExitBuilding;
-                @ExitBuilding.canceled += instance.OnExitBuilding;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -506,9 +645,6 @@ namespace ProjectOC.Input
                 @PickUp.started -= instance.OnPickUp;
                 @PickUp.performed -= instance.OnPickUp;
                 @PickUp.canceled -= instance.OnPickUp;
-                @ExitBuilding.started -= instance.OnExitBuilding;
-                @ExitBuilding.performed -= instance.OnExitBuilding;
-                @ExitBuilding.canceled -= instance.OnExitBuilding;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -597,7 +733,6 @@ namespace ProjectOC.Input
             void OnMouseX(InputAction.CallbackContext context);
             void OnMouseY(InputAction.CallbackContext context);
             void OnPickUp(InputAction.CallbackContext context);
-            void OnExitBuilding(InputAction.CallbackContext context);
         }
         public interface IPlayerUIActions
         {

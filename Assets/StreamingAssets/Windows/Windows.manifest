@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 3481623640
+CRC: 4101266054
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -22,4 +22,9 @@ AssetBundleManifest:
     Info_5:
       Name: testscene
       Dependencies:
-        Dependency_0: prefabs/character/player
+        Dependency_0: animation/character/player/model
+        Dependency_1: prefabs/character/player
+        Dependency_2: materials
+    Info_6:
+      Name: materials
+      Dependencies: {}

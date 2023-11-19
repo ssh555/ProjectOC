@@ -2,9 +2,11 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+#if UNITY_EDITOR
 using ML.Editor;
 
-namespace ML.Editor.Utility
+namespace ML.Editor.Utility.Enum
 {
     [CreateAssetMenu(fileName = "MultiEnumAssetScript", menuName = "ML/Enum/MultiEnumAsset", order = 1)]
     public class MultiEnumAsset : SerializedScriptableObject
@@ -258,7 +260,7 @@ namespace ML.Editor.Utility
             // The contents of the new script
             string scriptContents =
                 (isHasNamespace ? $"namespace {this.enumNamespace}\n{{\n" : "") + (isHasNamespace ? "\t" : "") +
-                "[System.Flags]\n" + (isHasNamespace ? "\t" : "") +
+                "[System.Flags, System.Serializable]\n" + (isHasNamespace ? "\t" : "") +
                 $"public enum {System.IO.Path.GetFileNameWithoutExtension(assetPath)}\n" + (isHasNamespace ? "\t" : "") +
                 "{\n" + (isHasNamespace ? "\t" : "") +
                 $"\t{this.AllName} = int.MaxValue,\n" + (isHasNamespace ? "\t" : "") +
@@ -276,3 +278,4 @@ namespace ML.Editor.Utility
     }
 }
 
+#endif

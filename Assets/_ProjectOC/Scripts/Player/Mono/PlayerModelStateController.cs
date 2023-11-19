@@ -60,7 +60,7 @@ namespace ProjectOC.Player
             // Maybe 可以只值变化时更新一次
             this.modelAnimator.SetInteger(this._moveStateHash, this.GetMoveState);
             this.modelAnimator.SetFloat(this._speedHash, this.moveAbility.moveSetting.Speed + this.moveAbility.moveSetting.ExtraSpeed);
-            this.modelAnimator.SetFloat(this._speedYHash, this.moveAbility.moveSetting.Speed + this.moveAbility.moveSetting.ExtraVelocity.y);
+            this.modelAnimator.SetFloat(this._speedYHash, this.moveAbility.moveSetting.Velocity.y + this.moveAbility.moveSetting.ExtraVelocity.y);
 
             // 再更新状态
             base.LateTick(deltatime);
