@@ -229,6 +229,7 @@ namespace ML.Engine.BuildingSystem
         /// <returns></returns>
         public IBuildingPart GetOneBPartCopyInstance(IBuildingPart BPart)
         {
+            BPart.Mode = BuildingMode.None;
             return GameObject.Instantiate<GameObject>(BPart.gameObject).GetComponent<IBuildingPart>();
         }
         #endregion

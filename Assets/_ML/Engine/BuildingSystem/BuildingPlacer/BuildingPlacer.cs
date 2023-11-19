@@ -1091,6 +1091,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             if (BInput.BuildKeyCom.CopyBuild.WasPressedThisFrame())
             {
                 // 复制当前选中的可交互物进入PlaceMode
+
                 // 复制一份当前选中的BPart(即一级二级分类选择和外观选择的流程)
                 this.SelectedPartInstance = BuildingManager.Instance.GetOneBPartCopyInstance(this.SelectedPartInstance);
 
@@ -1131,8 +1132,8 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             BInput.Build.Enable();
             // 禁用 Input.KeyCom
             BInput.BuildKeyCom.Disable();
-
-            this.OnKeyComExit();
+            Debug.Log("exit");
+            this.OnKeyComExit?.Invoke();
         }
         #endregion
 
