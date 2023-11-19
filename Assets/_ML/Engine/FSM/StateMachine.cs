@@ -8,6 +8,7 @@ namespace ML.Engine.FSM
     [System.Serializable]
     public class StateMachine
     {
+        #region Base
         /// <summary>
         /// 两个状态之间的单向连线 => 是否应该从箭尾进入箭头所指的状态
         /// </summary>
@@ -46,6 +47,8 @@ namespace ML.Engine.FSM
             this.StateGraph = new Dictionary<string, Dictionary<string, IsChangeState>>();
         }
 
+        #endregion
+
         #region 节点及边的加入删除
         /// <summary>
         /// 加入状态节点
@@ -59,6 +62,7 @@ namespace ML.Engine.FSM
                 return false;
             }
             this.StateDict.Add(state.Name, state);
+            state.stateMachine = this;
             return true;
         }
     
@@ -88,6 +92,7 @@ namespace ML.Engine.FSM
             
             if(this.StateDict.TryGetValue(stateName, out state))
             {
+                state.stateMachine = null;
                 return state;
             }
             return null;
@@ -111,6 +116,7 @@ namespace ML.Engine.FSM
                 {
                     edge.Remove(stateName);
                 }
+                state.stateMachine = null;
                 return state;
             }
             return null;

@@ -24,6 +24,10 @@ namespace ML.Engine.Timer
             this.tickComponents = new SortedDictionary<int, List<ITickComponent>>();
             this.fixedTickComponents = new SortedDictionary<int, List<ITickComponent>>();
             this.lateTickComponents = new SortedDictionary<int, List<ITickComponent>>();
+
+            this.removeTick = new List<ITickComponent>();
+            this.removeFixedTick = new List<ITickComponent>();
+            this.removeLateTick = new List<ITickComponent>();
         }   
 
         #region Tick
@@ -41,6 +45,7 @@ namespace ML.Engine.Timer
             {
                 this.tickComponents[tick.tickPriority].Remove(tick);
             }
+            this.removeTick.Clear();
         }
 
         public void FixedTick(float deltatime)
@@ -57,6 +62,7 @@ namespace ML.Engine.Timer
             {
                 this.fixedTickComponents[tick.fixedTickPriority].Remove(tick);
             }
+            this.removeFixedTick.Clear();
         }
 
         public void LateTick(float deltatime)
@@ -72,6 +78,7 @@ namespace ML.Engine.Timer
             {
                 this.lateTickComponents[tick.lateTickPriority].Remove(tick);
             }
+            this.removeLateTick.Clear();
         }
         #endregion
 

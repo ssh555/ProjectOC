@@ -1,0 +1,27 @@
+ManifestFileVersion: 0
+CRC: 3902516643
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 70b751644bf4434a9838a03547f74cc9
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: e8df1f9f82371e82de919a94edcc7dd6
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 70b751644bf4434a9838a03547f74cc9
+HashAppended: 0
+ClassTypes:
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/_ProjectOC/Animation/Player/PlayerMove/AnimCtrl_PlayerMove.controller
+- Assets/_ProjectOC/Animation/Player/PlayerMove/PlayerInAir.anim
+- Assets/_ProjectOC/Animation/Player/PlayerMove/PlayerIdle.anim
+- Assets/_ProjectOC/Animation/Player/PlayerMove/PlayerWalk.anim
+- Assets/_ProjectOC/Animation/Player/PlayerMove/PlayerRun.anim
+- Assets/_ProjectOC/Animation/Player/PlayerMove/PlayerCrouch.anim
+Dependencies: []

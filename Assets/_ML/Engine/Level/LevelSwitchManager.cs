@@ -49,6 +49,9 @@ namespace ML.Engine.Level
 
         public ABResources.ABResourceManager ABRManager;
 
+        /// <summary>
+        /// 当前场景名称
+        /// </summary>
         public string CurSceneName { get; private set; }
 
         public Transform DispatchResourceTarget { get; private set; }
@@ -196,7 +199,8 @@ namespace ML.Engine.Level
         /// </summary>
         private IEnumerator DispatchLevelResources(string pre, string cur)
         {
-            LevelResource resList = this.levelResourcesDict[cur];
+            bool resIsNotNull = this.levelResourcesDict.ContainsKey(cur);
+            LevelResource resList = resIsNotNull ? this.levelResourcesDict[cur] : default;
 
             Queue<AssetBundleCreateRequest> a = new Queue<AssetBundleCreateRequest>();
             Queue<AsyncOperation> b = new Queue<AsyncOperation>();
@@ -207,10 +211,13 @@ namespace ML.Engine.Level
                 foreach(var res in preList.locallResourceList)
                 {
                     bool release = true;
-                    foreach(var r in resList.locallResourceList)
+                    if(resIsNotNull)
                     {
-                        if (r == res)
-                            release = false;
+                        foreach (var r in resList.locallResourceList)
+                        {
+                            if (r == res)
+                                release = false;
+                        }
                     }
                     if (release)
                     {
@@ -222,21 +229,24 @@ namespace ML.Engine.Level
             // 加载当前场景的资源
             AssetBundle ab;
             // Global
-            foreach (var res in resList.globalResourceList)
+            if(resIsNotNull)
             {
-                var t = this.ABRManager.LoadGlobalABAsync(res, null, out ab);
-                if(t != null)
+                foreach (var res in resList.globalResourceList)
                 {
-                    a.Enqueue(t);
+                    var t = this.ABRManager.LoadGlobalABAsync(res, null, out ab);
+                    if (t != null)
+                    {
+                        a.Enqueue(t);
+                    }
                 }
-            }
-            // Local
-            foreach (var res in resList.locallResourceList)
-            {
-                var t = this.ABRManager.LoadLocalABAsync(res, null, out ab);
-                if (t != null)
+                // Local
+                foreach (var res in resList.locallResourceList)
                 {
-                    a.Enqueue(t);
+                    var t = this.ABRManager.LoadLocalABAsync(res, null, out ab);
+                    if (t != null)
+                    {
+                        a.Enqueue(t);
+                    }
                 }
             }
            
