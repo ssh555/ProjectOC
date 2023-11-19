@@ -272,6 +272,82 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6da62ef2a40c0440adb4f3243b15be8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &775822607
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6786122023955630246, guid: ddd2b8b2977d84c45b6baad5696290ac, type: 3}
+      propertyPath: m_Name
+      value: BuildingArea
+      objectReference: {fileID: 0}
+    - target: {fileID: 6786122023955630246, guid: ddd2b8b2977d84c45b6baad5696290ac, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7881602573811273609, guid: ddd2b8b2977d84c45b6baad5696290ac, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7881602573811273609, guid: ddd2b8b2977d84c45b6baad5696290ac, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7881602573811273609, guid: ddd2b8b2977d84c45b6baad5696290ac, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7881602573811273609, guid: ddd2b8b2977d84c45b6baad5696290ac, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7881602573811273609, guid: ddd2b8b2977d84c45b6baad5696290ac, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7881602573811273609, guid: ddd2b8b2977d84c45b6baad5696290ac, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7881602573811273609, guid: ddd2b8b2977d84c45b6baad5696290ac, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7881602573811273609, guid: ddd2b8b2977d84c45b6baad5696290ac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7881602573811273609, guid: ddd2b8b2977d84c45b6baad5696290ac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7881602573811273609, guid: ddd2b8b2977d84c45b6baad5696290ac, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9085524652065547204, guid: ddd2b8b2977d84c45b6baad5696290ac, type: 3}
+      propertyPath: IsCanRotate
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ddd2b8b2977d84c45b6baad5696290ac, type: 3}
+--- !u!114 &1219518272 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9085524652065547204, guid: ddd2b8b2977d84c45b6baad5696290ac, type: 3}
+  m_PrefabInstance: {fileID: 775822607}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88dfd9a1d40070e45bc302b503615a5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1256030781
 GameObject:
   m_ObjectHideFlags: 0
@@ -330,6 +406,7 @@ MonoBehaviour:
   - {fileID: 6034908226997694088, guid: bf7a7ccd01e5ca5439f1c7d9c9a6ee0a, type: 3}
   - {fileID: 5725160569678143863, guid: 4e0324553bd391e4fadeb6062a548750, type: 3}
   - {fileID: 5519476178042306345, guid: 2c3d5c343890c704787741e1fafc5528, type: 3}
+  area: {fileID: 1219518272}
 --- !u!1 &1459740960
 GameObject:
   m_ObjectHideFlags: 0
@@ -884,11 +961,11 @@ MonoBehaviour:
   DisableGridRotRate: 10
   EnableGridRotRate: 15
   camera: {fileID: 0}
-  checkRadius: 5
+  checkRadius: 20
   checkLayer:
     serializedVersion: 2
     m_Bits: 256
-  interactRadius: 5
+  interactRadius: 10
   interactLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -1077,3 +1154,4 @@ SceneRoots:
   - {fileID: 1999513127}
   - {fileID: 515944522}
   - {fileID: 1684741970}
+  - {fileID: 775822607}

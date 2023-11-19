@@ -45,6 +45,7 @@ namespace ML.Engine.Timer
             {
                 this.tickComponents[tick.tickPriority].Remove(tick);
             }
+            this.removeTick.Clear();
         }
 
         public void FixedTick(float deltatime)
@@ -61,6 +62,7 @@ namespace ML.Engine.Timer
             {
                 this.fixedTickComponents[tick.fixedTickPriority].Remove(tick);
             }
+            this.removeFixedTick.Clear();
         }
 
         public void LateTick(float deltatime)
@@ -76,6 +78,7 @@ namespace ML.Engine.Timer
             {
                 this.lateTickComponents[tick.lateTickPriority].Remove(tick);
             }
+            this.removeLateTick.Clear();
         }
         #endregion
 

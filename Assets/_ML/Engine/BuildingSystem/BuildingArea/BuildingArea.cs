@@ -16,20 +16,20 @@ namespace ML.Engine.BuildingSystem.BuildingArea
         /// 用于依附的基础单位格子的边长，单位为m
         /// </summary>
         [LabelText("基础单位格子边长"), PropertyTooltip("单位 m"), Range(0, 1), FoldoutGroup("网格"), ShowInInspector]
-        public static float BaseGridSideLength = 0.20f;
+        public static float BaseGridSideLength = 0.50f;
 
         /// <summary>
         /// 用于包裹基础单位格子的边长，单位为m
         /// </summary>
         [LabelText("包裹单位格子边长"), PropertyTooltip("单位 m"), Range(0, 100), FoldoutGroup("网格"), ShowInInspector]
-        public static float BoundGridSideLength = 1.00f;
+        public static float BoundGridSideLength = 10.00f;
         #endregion
 
         /// <summary>
         /// 放置BPart时是否允许旋转
         /// </summary>
         [LabelText("启用BPart旋转偏移"), PropertyTooltip("放置BPart时是否允许有旋转偏移"), FoldoutGroup("自身属性"), SerializeField]
-        protected bool IsCanRotate = false;
+        public bool IsCanRotate = false;
 
         /// <summary>
         /// 区域碰撞检测Collider

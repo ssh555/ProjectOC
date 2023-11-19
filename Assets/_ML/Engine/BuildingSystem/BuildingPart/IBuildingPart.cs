@@ -168,7 +168,6 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 }
                 if (other.GetComponent<IBuildingPart>() != null && this.Mode != BuildingMode.Destroy)
                 {
-                    Debug.Log("QWQ");
                     this.CanPlaceInPlaceMode = false;
                     this.Mode = BuildingMode.Destroy;
                     lastTriggerFrameCount = Time.frameCount;
