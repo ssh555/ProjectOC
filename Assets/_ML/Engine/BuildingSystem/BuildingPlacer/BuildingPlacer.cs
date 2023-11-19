@@ -334,8 +334,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// <param name="rot"></param>
         protected bool GetPlacePosAndRot(out Vector3 pos, out Quaternion rot)
         {
-            pos = Vector3.negativeInfinity;
-            rot = new Quaternion(float.NaN, float.NaN, float.NaN, float.NaN);
+
 
             if (this.SelectedPartInstance != null)
             {
@@ -362,20 +361,27 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
                 // 旋转 -> 自身
                 rot = this.SelectedPartInstance.BaseRotation * this.SelectedPartInstance.RotOffset;
+
+                Vector3 tmpP;
+                Quaternion tmpR;
                 // 位置&旋转 -> AttachedArea
-                if(this.SelectedPartInstance.AttachedArea)
+                if(this.SelectedPartInstance.ActiveSocket.GetMatchTransformOnArea(pos, out tmpP, out tmpR))
                 {
-                    this.SelectedPartInstance.ActiveSocket.GetMatchTransformOnArea(pos, out pos, out rot);
+                    pos = tmpP;
+                    rot = tmpR;
                 }
                 // 位置&旋转 -> AttachedSocket
-                if (this.SelectedPartInstance.AttachedSocket)
+                if (this.SelectedPartInstance.ActiveSocket.GetMatchTransformOnSocket(out tmpP, out tmpR))
                 {
-                    this.SelectedPartInstance.ActiveSocket.GetMatchTransformOnSocket(out pos, out rot);
+                    pos = tmpP;
+                    rot = tmpR;
                 }
 
                 return true;
             }
 
+            pos = Vector3.negativeInfinity;
+            rot = new Quaternion(float.NaN, float.NaN, float.NaN, float.NaN);
             return false;
         }
 
@@ -386,7 +392,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         {
             if(this.GetPlacePosAndRot(out Vector3 pos, out Quaternion rot))
             {
-                rot.Normalize();
                 Vector3 euler = rot.eulerAngles;
 
                 this.SelectedPartInstance.transform.rotation = Quaternion.identity;
