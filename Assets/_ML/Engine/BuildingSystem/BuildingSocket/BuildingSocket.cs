@@ -83,7 +83,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         {
             if (this.ParentBPart.AttachedSocket != null)
             {
-                pos = this.ParentBPart.AttachedSocket.BPartPosition - this.transform.localPosition;
+                pos = this.ParentBPart.AttachedSocket.BPartPosition - (this.transform.position - this.ParentBPart.transform.position);
                 rot = ParentBPart.BaseRotation * this.ParentBPart.AttachedSocket.BPartRotation * (this.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
 
 
@@ -100,7 +100,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
             if (this.ParentBPart.AttachedArea != null)
             {
                 this.ParentBPart.AttachedArea.GetMatchPointOnArea(TargetPos, AreaCheckRadius, out pos, out rot);
-                rot *= (this.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
+                rot *= (this.ParentBPart.AttachedArea.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
                 return true;
             }
 

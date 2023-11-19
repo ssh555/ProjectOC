@@ -22,26 +22,15 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             set
             {
                 BuildingManager.Instance.Mode = value;
-                if (this.SelectedPartInstance != null)
-                {
-                    this.SelectedPartInstance.Mode = value;
-                }
-                // 不启用
-                if(Mode == BuildingMode.None)
-                {
-                    this.ExitBuildingMode();
-                }
-                // 启用
-                else
-                {
-                    this.EnterBuildingMode();
-                }
             }
         }
 
         protected void EnterBuildingMode()
         {
             Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
+
+            BInput.Build.Enable();
+
             this.OnBuildingModeEnter?.Invoke();
         }
 
@@ -53,7 +42,31 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
             this.SelectedPartInstance = null;
 
+            BInput.Build.Disable();
+            BInput.BuildKeyCom.Disable();
+            BInput.BuildSelection.Disable();
+            BInput.BuildingAppearance.Disable();
+            BInput.BuildPlaceMode.Disable();
+
             this.OnBuildingModeExit?.Invoke();
+        }
+        
+        public void OnModeChanged(BuildingMode pre, BuildingMode cur)
+        {
+            if (this.SelectedPartInstance != null)
+            {
+                this.SelectedPartInstance.Mode = cur;
+            }
+            // 不启用
+            if (cur == BuildingMode.None && pre != BuildingMode.None)
+            {
+                this.ExitBuildingMode();
+            }
+            // 启用
+            else if (pre == BuildingMode.None && cur != BuildingMode.None)
+            {
+                this.EnterBuildingMode();
+            }
         }
         #endregion
 
@@ -309,7 +322,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// <returns></returns>
         protected Ray GetCameraRayEndPointDownRay()
         {
-            return new Ray(Camera.transform.position + Camera.transform.forward * this.checkRadius, Vector3.down);
+            return new Ray(GetCameraRay().GetPoint(this.checkRadius), Vector3.down);
         }
 
         /// <summary>
@@ -326,9 +339,12 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
             if (this.SelectedPartInstance != null)
             {
+                // 归0
+                this.SelectedPartInstance.transform.position = this.SelectedPartInstance.ActiveSocket.transform.position - this.SelectedPartInstance.ActiveSocket.transform.localPosition;
+                this.SelectedPartInstance.transform.rotation = Quaternion.identity;
+
                 // 位置 -> 自身
                 pos = this.transform.position - this.SelectedPartInstance.ActiveSocket.transform.position + this.SelectedPartInstance.transform.position;
-
 
                 // ScreenCenter->ScreenNormal 射线检测
                 // 命中 || 未命中 => 在终点处向下检测
@@ -370,16 +386,21 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         {
             if(this.GetPlacePosAndRot(out Vector3 pos, out Quaternion rot))
             {
+                rot.Normalize();
                 Vector3 euler = rot.eulerAngles;
-                this.SelectedPartInstance.transform.rotation = Quaternion.identity;
-                // Up-Y
-                this.SelectedPartInstance.transform.RotateAround(this.SelectedPartInstance.ActiveSocket.transform.position, Vector3.up, euler.y);
-                // Right-X
-                this.SelectedPartInstance.transform.RotateAround(this.SelectedPartInstance.ActiveSocket.transform.position, Vector3.right, euler.x);
-                // Forward-Z
-                this.SelectedPartInstance.transform.RotateAround(this.SelectedPartInstance.ActiveSocket.transform.position, Vector3.forward, euler.z);
 
+                this.SelectedPartInstance.transform.rotation = Quaternion.identity;
                 this.SelectedPartInstance.transform.position = pos;
+
+                Vector3 rotAroundPoint = this.SelectedPartInstance.ActiveSocket.transform.position;
+
+                // Up-Y
+                this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, Vector3.up, euler.y);
+                // Right-X
+                this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, Vector3.right, euler.x);
+                // Forward-Z
+                this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, Vector3.forward, euler.z);
+
             }
         }
 
@@ -431,9 +452,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             this.enabled = false;
             BuildingManager.Instance.Placer = this;
 
-            Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
-
-
             // 解析interactions字符串来获取hold的总时间值
             var interactions = BInput.Build.KeyCom.interactions.Split(';');
             foreach (var interaction in interactions)
@@ -455,6 +473,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             }
         }
 
+
         #region 必须有，但不能动
         public int tickPriority { get; set; }
         public int fixedTickPriority { get; set; }
@@ -468,7 +487,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         public void Tick(float deltatime)
         {
             // None Mode => 设置时自动退出
-
             if(Mode == BuildingMode.Interact)
             {
                 this.HandleInteractMode(deltatime);
@@ -501,7 +519,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         protected void HandleInteractMode(float deltatime)
         {
             // 使用BInput.Build
-
             // 可交互建筑物检测, 获取可交互列表
             this._curTimer += deltatime;
             if (this._curTimer >= this.interactCheckInterval)
@@ -607,27 +624,27 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 else
                 {
                     // 轮换可交互列表
-                    float t = BInput.Build.ChangeInteractiveActor.ReadValue<float>();
-                    int index = Mathf.Abs(t) < 0.3f ? 0 : (t > 0.3f ? 1 : -1);
-                    if (index != 0)
+                    if (BInput.Build.ChangeInteractiveActor.WasPressedThisFrame())
                     {
-                        index = (this.InteractBPartList.IndexOf(this.SelectedPartInstance) + index) % this.InteractBPartList.Count;
-                        this.SelectedPartInstance = this.InteractBPartList[index];
+                        float t = BInput.Build.ChangeInteractiveActor.ReadValue<float>();
+                        int index = Mathf.Abs(t) < 0.3f ? 0 : (t > 0.3f ? 1 : -1);
+                        if (index != 0)
+                        {
+                            index = (this.InteractBPartList.IndexOf(this.SelectedPartInstance) + index) % this.InteractBPartList.Count;
+                            this.SelectedPartInstance = this.InteractBPartList[index];
+                        }
                     }
-
                 }
 
                 // 按键阻断 => 同一帧只能响应 InteractMode 的一种按键
                 return;
             }
-
             // 切入 Place Mode -> 进入建筑物选择界面
             if (BInput.Build.SelectBuild.WasPressedThisFrame())
             {
                 this.EnterBuildSelection();
             }
         }
-
         #endregion
 
         #region Place
@@ -739,6 +756,8 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 // 取消 -> 回到InteractMode
                 else if (this.backInputAction.WasPressedThisFrame())
                 {
+                    this.ResetBPart();
+
                     this.ExitPlaceMode();
                 }
                 // RotOffset
@@ -746,9 +765,13 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 {
                     this.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.DisableGridRotRate * deltatime * (BInput.BuildPlaceMode.RotateRight.ReadValue<float>() - BInput.BuildPlaceMode.RotateLeft.ReadValue<float>()), this.SelectedPartInstance.transform.up);
                 }
-                else if (this.IsEnableGridSupport && (BInput.BuildPlaceMode.RotateLeft.WasPressedThisFrame() || BInput.BuildPlaceMode.RotateRight.WasPressedThisFrame()))
+                else if (this.IsEnableGridSupport && BInput.BuildPlaceMode.RotateLeft.WasPressedThisFrame())
                 {
-                    this.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.EnableGridRotRate * (BInput.BuildPlaceMode.RotateRight.ReadValue<float>() - BInput.BuildPlaceMode.RotateLeft.ReadValue<float>()), this.SelectedPartInstance.transform.up);
+                    this.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(-this.EnableGridRotRate, this.SelectedPartInstance.transform.up);
+                }
+                else if (this.IsEnableGridSupport && BInput.BuildPlaceMode.RotateRight.WasPressedThisFrame())
+                {
+                    this.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.EnableGridRotRate, this.SelectedPartInstance.transform.up);
                 }
                 // 轮换ActiveSocket
                 else if (BInput.BuildPlaceMode.ChangeActiveSocket.WasPressedThisFrame())
@@ -877,12 +900,20 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 this.ExitEditMode();
             }
             // RotOffset
-            else if(BInput.BuildPlaceMode.RotateLeft.IsPressed() || BInput.BuildPlaceMode.RotateRight.IsPressed())
+            else if (!this.IsEnableGridSupport && (BInput.BuildPlaceMode.RotateLeft.IsPressed() || BInput.BuildPlaceMode.RotateRight.IsPressed()))
             {
-                this.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(((this.IsEnableGridSupport ? this.EnableGridRotRate : this.DisableGridRotRate) * deltatime) * (BInput.BuildPlaceMode.RotateRight.ReadValue<float>() - BInput.BuildPlaceMode.RotateLeft.ReadValue<float>()), this.SelectedPartInstance.transform.up);
+                this.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.DisableGridRotRate * deltatime * (BInput.BuildPlaceMode.RotateRight.ReadValue<float>() - BInput.BuildPlaceMode.RotateLeft.ReadValue<float>()), this.SelectedPartInstance.transform.up);
+            }
+            else if (this.IsEnableGridSupport && BInput.BuildPlaceMode.RotateLeft.WasPressedThisFrame())
+            {
+                this.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(-this.EnableGridRotRate, this.SelectedPartInstance.transform.up);
+            }
+            else if (this.IsEnableGridSupport && BInput.BuildPlaceMode.RotateRight.WasPressedThisFrame())
+            {
+                this.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.EnableGridRotRate, this.SelectedPartInstance.transform.up);
             }
             // 轮换ActiveSocket
-            else if(BInput.BuildPlaceMode.ChangeActiveSocket.IsPressed())
+            else if(BInput.BuildPlaceMode.ChangeActiveSocket.WasPressedThisFrame())
             {
                 this.SelectedPartInstance.AlternativeActiveSocket();
             }
@@ -916,6 +947,8 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             this.Mode = BuildingMode.Interact;
             // 禁用 Input.Edit
             BInput.BuildPlaceMode.Disable();
+
+            this.SelectedPartInstance = null;
 
             this.OnEditModeExit?.Invoke(this.SelectedPartInstance);
         }

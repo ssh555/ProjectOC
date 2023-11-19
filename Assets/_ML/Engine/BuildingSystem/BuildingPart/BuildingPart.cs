@@ -58,9 +58,13 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             }
         }
 
-        public Quaternion BaseRotation { get; private set; } = Quaternion.identity;
+        [SerializeField, HideInInspector]
+        private Quaternion baseRotation;
+        public Quaternion BaseRotation { get => baseRotation; private set => baseRotation = value; }
 
-        public Quaternion RotOffset { get; set; } = Quaternion.identity;
+        [SerializeField]
+        private Quaternion rotOffset;
+        public Quaternion RotOffset { get => rotOffset; set => rotOffset = value; }
         private BuildingArea.BuildingArea attachedArea;
         public BuildingArea.BuildingArea AttachedArea
         {
@@ -107,16 +111,23 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 }
             }
         }
-        public BuildingSocket.BuildingSocket ActiveSocket { get; set; } = null;
+        
+        [SerializeField]
+        private int activeSocketIndex;
+        public BuildingSocket.BuildingSocket ActiveSocket { 
+            get => this.OwnedSocketList[activeSocketIndex];
+            set 
+            {
+                activeSocketIndex = this.OwnedSocketList.IndexOf(value);
+            }
+        }
         public List<BuildingSocket.BuildingSocket> OwnedSocketList { get; private set; }
         public int lastTriggerFrameCount { get; set; }
         public BuildingMode tmpTriggerMode { get; set; }
 
         public void AlternativeActiveSocket()
         {
-            int index = this.OwnedSocketList.IndexOf(this.ActiveSocket);
-            index = (index + 1) % this.OwnedSocketList.Count;
-            this.ActiveSocket = this.OwnedSocketList[index];
+            this.activeSocketIndex = (this.activeSocketIndex + 1) % this.OwnedSocketList.Count;
         }
 
         public BuildingCopiedMaterial GetCopiedMaterial()
@@ -166,22 +177,25 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             this.OwnedSocketList = new List<BuildingSocket.BuildingSocket>();
             this.OwnedSocketList.AddRange(this.GetComponentsInChildren<BuildingSocket.BuildingSocket>());
 
-            this.ActiveSocket = this.OwnedSocketList[0];
+            //this.ActiveSocket = this.OwnedSocketList[0];
         }
     
         private void SetColliderTrigger(bool isTrigger)
         {
             foreach(var col in this.GetComponentsInChildren<Collider>())
             {
-                col.isTrigger = isTrigger;
+                if(col.gameObject.layer == 7)
+                {
+                    col.isTrigger = isTrigger;
+                }
             }
             foreach(var socket in this.GetComponentsInChildren<BuildingSocket.BuildingSocket>())
             {
-                socket.gameObject.layer = isTrigger ? 2 : 8;
+                socket.enabled = !isTrigger;
             }
             foreach (var area in this.GetComponentsInChildren<BuildingArea.BuildingArea>())
             {
-                area.gameObject.layer = isTrigger ? 2 : 8;
+                area.enabled = !isTrigger;
             }
 
             if(isTrigger == true && this.GetComponent<Rigidbody>() == null)

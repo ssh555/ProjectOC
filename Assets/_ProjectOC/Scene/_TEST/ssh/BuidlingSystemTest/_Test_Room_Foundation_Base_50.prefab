@@ -68,7 +68,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 2147483647
   InTakeType: 2147483647
-  IsCanRotate: 0
+  IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 0}
   CanPlaceAreaType: 2147483647
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 2147483647
   InTakeType: 2147483647
-  IsCanRotate: 0
+  IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 0}
   CanPlaceAreaType: 2147483647
@@ -254,7 +254,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 0.99, y: 0.99, z: 0.99}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &727573264355854238
 MonoBehaviour:
@@ -276,6 +276,9 @@ MonoBehaviour:
   instanceID: 
   canPlaceInPlaceMode: 0
   mode: 0
+  baseRotation: {x: 0, y: 0, z: 0, w: 1}
+  rotOffset: {x: 0, y: 0, z: 0, w: 1}
+  activeSocketIndex: 0
 --- !u!1 &5091856680196464239
 GameObject:
   m_ObjectHideFlags: 0
@@ -344,7 +347,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 2147483647
   InTakeType: 2147483647
-  IsCanRotate: 0
+  IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 0}
   CanPlaceAreaType: 2147483647
@@ -493,7 +496,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 2147483647
   InTakeType: 2147483647
-  IsCanRotate: 0
+  IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 0}
   CanPlaceAreaType: 2147483647
@@ -565,7 +568,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 2147483647
   InTakeType: 2147483647
-  IsCanRotate: 0
+  IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 0}
   CanPlaceAreaType: 2147483647

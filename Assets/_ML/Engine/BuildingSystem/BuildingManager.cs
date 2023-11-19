@@ -98,14 +98,6 @@ namespace ML.Engine.BuildingSystem
                     {
                         BInput.Enable();
                     }
-                    if(mode == BuildingMode.Interact)
-                    {
-                        BInput.Build.Enable();
-                    }
-                    else
-                    {
-                        BInput.Build.Disable();
-                    }
                 }
 #else
                     if (mode == BuildingMode.None)
@@ -116,14 +108,6 @@ namespace ML.Engine.BuildingSystem
                     {
                         BInput.Enable();
                     }
-                    if(mode == BuildingMode.Interact)
-                    {
-                        BInput.Build.Enable();
-                    }
-                    else
-                    {
-                        BInput.Build.Disable();
-                    }
 #endif
             }
         }
@@ -133,11 +117,26 @@ namespace ML.Engine.BuildingSystem
         /// PreMode, CurMode
         /// </summary>
         public event System.Action<BuildingMode, BuildingMode> OnModeChanged;
-
+        private BuildingPlacer.BuildingPlacer placer;
         /// <summary>
         /// 控制的Placer
         /// </summary>
-        public BuildingPlacer.BuildingPlacer Placer { get; set; }
+        public BuildingPlacer.BuildingPlacer Placer
+        {
+            get => this.placer;
+            set
+            {
+                if(this.placer)
+                {
+                    this.OnModeChanged -= this.placer.OnModeChanged;
+                }
+                this.placer = value;
+                if (this.placer)
+                {
+                    this.OnModeChanged += this.placer.OnModeChanged;
+                }
+            }
+        }
 
         // to-do : EditMode使用PlaceMode的按键输入 -> PlaceMode全部启用,EditMode禁用: ChangeOutLook|ChangeStyle|SwitchFrame_PreHold|KeyCom
         private Input.BuildingInput binput = null;
