@@ -21,10 +21,109 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  enumNamespace: 
+  enumNamespace: ML.Engine.BuildingSystem.BuildingSocket
   AllName:
     name: All
     displayName: All
+    value: 
   NoneName:
     name: None
     displayName: None
+    value: 
+  Enums:
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 

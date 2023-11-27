@@ -334,8 +334,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// <param name="rot"></param>
         protected bool GetPlacePosAndRot(out Vector3 pos, out Quaternion rot)
         {
-
-
             if (this.SelectedPartInstance != null)
             {
                 // 归0
@@ -365,17 +363,28 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 Vector3 tmpP;
                 Quaternion tmpR;
                 // 位置&旋转 -> AttachedArea
-                if(this.SelectedPartInstance.ActiveSocket.GetMatchTransformOnArea(pos, out tmpP, out tmpR))
+                if(this.SelectedPartInstance.AttachedArea)
                 {
-                    pos = tmpP;
-                    rot = tmpR;
+                    if (this.SelectedPartInstance.ActiveSocket.GetMatchTransformOnArea(pos, out tmpP, out tmpR))
+                    {
+                        pos = tmpP;
+                        rot = tmpR;
+                        return true;
+                    }
+                    return false;
                 }
                 // 位置&旋转 -> AttachedSocket
-                if (this.SelectedPartInstance.ActiveSocket.GetMatchTransformOnSocket(out tmpP, out tmpR))
+                if (this.SelectedPartInstance.AttachedSocket)
                 {
-                    pos = tmpP;
-                    rot = tmpR;
+                    if (this.SelectedPartInstance.ActiveSocket.GetMatchTransformOnSocket(out tmpP, out tmpR))
+                    {
+                        pos = tmpP;
+                        rot = tmpR;
+                        return true;
+                    }
+                    return false;
                 }
+
 
                 return true;
             }
