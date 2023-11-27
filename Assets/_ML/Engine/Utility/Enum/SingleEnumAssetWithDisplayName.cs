@@ -8,6 +8,17 @@ namespace ML.Editor.Utility.Enum
     [CreateAssetMenu(fileName = "SingleEnumAssetWithDisplayNameScript", menuName = "ML/Enum/SingleEnumAssetWithDisplayName", order = 1)]
     public class SingleEnumAssetWithDisplayName : SerializedScriptableObject
     {
+        [System.Serializable]
+        protected struct EnumKV
+        {
+            [LabelText("枚举名"), SerializeField]
+            public string name;
+            [LabelText("显示名"), SerializeField]
+            public string displayName;
+            [LabelText("枚举值"), SerializeField]
+            public string value;
+        }
+
         public SingleEnumAssetWithDisplayName()
         {
             this.NoneName.displayName = this.NoneName.name = "None";
@@ -38,11 +49,11 @@ namespace ML.Editor.Utility.Enum
             }
         }
 
-        [LabelText("DefaultName"), FoldoutGroup("配置")]
-        public EnumKV NoneName;
+        [SerializeField, LabelText("DefaultName"), FoldoutGroup("配置")]
+        protected EnumKV NoneName;
 
-        [LabelText("枚举列表"), FoldoutGroup("配置"), Space(5)]
-        public List<EnumKV> EnumList = new List<EnumKV>();
+        [SerializeField, LabelText("枚举列表"), FoldoutGroup("配置"), Space(5)]
+        protected List<EnumKV> EnumList = new List<EnumKV>();
         #endregion
 
 
@@ -61,7 +72,7 @@ namespace ML.Editor.Utility.Enum
             {
                 code +=
                 ((_enum.name == null || _enum.name == "" || _enum.displayName == null || _enum.displayName == "") ? "" : ($"\t[LabelText(\"{_enum.displayName}\")]\n") + (isHasNamespace ? "\t" : "")) +
-                    ((_enum.name == null || _enum.name == "") ? "" : ($"\t{_enum.name},\n") + (isHasNamespace ? "\t" : ""));
+                    ((_enum.name == null || _enum.name == "") ? "" : (($"\t{_enum.name}" + ((_enum.value == null || _enum.value == "") ? "" : $" = {_enum.value}") + ",\n")) + (isHasNamespace ? "\t" : ""));
             }
 
 
@@ -73,7 +84,7 @@ namespace ML.Editor.Utility.Enum
                 $"public enum {System.IO.Path.GetFileNameWithoutExtension(assetPath)}\n" + (isHasNamespace ? "\t" : "") +
                 "{\n" + (isHasNamespace ? "\t" : "") +
                 ((this.NoneName.displayName == null || this.NoneName.displayName == "") ? ($"\t[LabelText(\"{this.NoneName.name}\")]\n") : ($"\t[LabelText(\"{this.NoneName.displayName}\")]\n") + (isHasNamespace ? "\t" : "")) +
-                $"\t{this.NoneName.name},\n" + (isHasNamespace ? "\t" : "") +
+                $"\t{this.NoneName.name}"+((NoneName.value == null || NoneName.value == "") ? "" : $" = {NoneName.value}") + ",\n" + (isHasNamespace ? "\t" : "") +
                 code +
                 "}\n" +
                 (isHasNamespace ? "}\n" : "");

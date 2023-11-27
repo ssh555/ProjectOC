@@ -6,9 +6,9 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 	public enum BuildingType
 	{
 		[LabelText("None")]
-		None,
+		None = -1,
 		[LabelText("地基")]
-		Foundation,
+		Foundation = 0,
 		[LabelText("地板")]
 		Floor,
 	}
