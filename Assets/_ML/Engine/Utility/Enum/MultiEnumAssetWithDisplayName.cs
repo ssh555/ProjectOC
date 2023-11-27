@@ -15,6 +15,8 @@ namespace ML.Editor.Utility.Enum
         public string name;
         [LabelText("显示名"), SerializeField]
         public string displayName;
+        [LabelText("枚举值"), SerializeField]
+        public string value;
     }
 
     [CreateAssetMenu(fileName = "MultiEnumAssetWithDisplayNameScript", menuName = "ML/Enum/MultiEnumAssetWithDisplayName", order = 1)]

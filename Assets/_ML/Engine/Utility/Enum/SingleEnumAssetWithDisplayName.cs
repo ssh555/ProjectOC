@@ -61,7 +61,7 @@ namespace ML.Editor.Utility.Enum
             {
                 code +=
                 ((_enum.name == null || _enum.name == "" || _enum.displayName == null || _enum.displayName == "") ? "" : ($"\t[LabelText(\"{_enum.displayName}\")]\n") + (isHasNamespace ? "\t" : "")) +
-                    ((_enum.name == null || _enum.name == "") ? "" : ($"\t{_enum.name},\n") + (isHasNamespace ? "\t" : ""));
+                    ((_enum.name == null || _enum.name == "") ? "" : (($"\t{_enum.name}" + ((_enum.value == null || _enum.value == "") ? "" : $" = {_enum.value}") + ",\n")) + (isHasNamespace ? "\t" : ""));
             }
 
 
@@ -73,7 +73,7 @@ namespace ML.Editor.Utility.Enum
                 $"public enum {System.IO.Path.GetFileNameWithoutExtension(assetPath)}\n" + (isHasNamespace ? "\t" : "") +
                 "{\n" + (isHasNamespace ? "\t" : "") +
                 ((this.NoneName.displayName == null || this.NoneName.displayName == "") ? ($"\t[LabelText(\"{this.NoneName.name}\")]\n") : ($"\t[LabelText(\"{this.NoneName.displayName}\")]\n") + (isHasNamespace ? "\t" : "")) +
-                $"\t{this.NoneName.name},\n" + (isHasNamespace ? "\t" : "") +
+                $"\t{this.NoneName.name}"+((NoneName.value == null || NoneName.value == "") ? "" : $" = {NoneName.value}") + ",\n" + (isHasNamespace ? "\t" : "") +
                 code +
                 "}\n" +
                 (isHasNamespace ? "}\n" : "");

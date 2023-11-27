@@ -178,7 +178,7 @@ namespace ML.Engine.InventorySystem
 
 #region to-do : 需读表导入所有所需的 Item 数据
         public const string typePath = "ML.Engine.InventorySystem.";
-        public const string spritePath = "ui/sprite";
+        public const string spritePath = "ui/texture2d";
         public const string worldPath = "prefabs/WorldItem";
 
 

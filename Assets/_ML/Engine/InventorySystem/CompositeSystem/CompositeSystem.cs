@@ -155,7 +155,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             }
 
             // SpritePath => 3
-            var request = Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<Texture2D>("ui/sprite", row[3].Trim(), null);
+            var request = Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<Texture2D>("ui/texture2d", row[3].Trim(), null);
 
             yield return request;
             Texture2D tex = request.asset as Texture2D;

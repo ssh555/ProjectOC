@@ -541,7 +541,7 @@ namespace ML.Engine.BuildingSystem.Input
                 {
                     ""name"": ""negative"",
                     ""id"": ""73caa78c-988b-4806-bb81-4e62d6f32b43"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Keyboard>/c"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -552,7 +552,7 @@ namespace ML.Engine.BuildingSystem.Input
                 {
                     ""name"": ""positive"",
                     ""id"": ""9c916b08-dbb9-4870-838a-e79112cd989c"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/v"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

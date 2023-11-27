@@ -402,10 +402,12 @@ MonoBehaviour:
     destroyColor: {r: 0.9622642, g: 0.049020927, b: 0.049020927, a: 0.39215687}
     interactColor: {r: 0.071769245, g: 0.9056604, b: 0.8972263, a: 0.39215687}
   BPartList:
-  - {fileID: 727573264355854238, guid: 1d7dd22e231d4244ca44052a5fe93e1e, type: 3}
+  - {fileID: 727573264355854238, guid: 26674bfd93433ac43bc9879352b74fdc, type: 3}
   - {fileID: 6034908226997694088, guid: bf7a7ccd01e5ca5439f1c7d9c9a6ee0a, type: 3}
   - {fileID: 5725160569678143863, guid: 4e0324553bd391e4fadeb6062a548750, type: 3}
   - {fileID: 5519476178042306345, guid: 2c3d5c343890c704787741e1fafc5528, type: 3}
+  - {fileID: 727573264355854238, guid: 1d7dd22e231d4244ca44052a5fe93e1e, type: 3}
+  - {fileID: 6034908226997694088, guid: 132b1365eef712647980787e0ce8771a, type: 3}
   area: {fileID: 1219518272}
 --- !u!1 &1459740960
 GameObject:

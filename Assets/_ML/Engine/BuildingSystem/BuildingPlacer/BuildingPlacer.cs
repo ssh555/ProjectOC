@@ -2,6 +2,7 @@ using ML.Engine.BuildingSystem.BuildingPart;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -131,7 +132,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// 进入EditMode
         /// </summary>
         public event System.Action<IBuildingPart> OnEditModeEnter;
-
         /// <summary>
         /// 退出EditMode
         /// </summary>
@@ -140,7 +140,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// <summary>
         /// 流程1 : 一级二级分类选择UI交互
         /// </summary>
-        public event System.Action OnBuildSelectionEnter;
+        public event System.Action<BuildingCategory[], int, BuildingType[], int> OnBuildSelectionEnter;
         /// <summary>
         /// 流程1 : 一级二级分类选择UI交互
         /// </summary>
@@ -160,7 +160,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// <summary>
         /// 数组总枚举, 当前index
         /// </summary>
-        public event System.Action<BuildingType[], int> OnBuildSelectionTypeChanged;
+        public event System.Action<BuildingCategory, BuildingType[], int> OnBuildSelectionTypeChanged;
         /// <summary>
         /// 流程3 : 放置
         /// </summary>
@@ -696,7 +696,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     // 进入流程1
                     if (this._placeControlFlow == 1)
                     {
-                        this.OnBuildSelectionEnter?.Invoke();
+                        this.OnBuildSelectionEnter?.Invoke(_placeCanSelectCategory, _placeSelectedCategoryIndex, _placeCanSelectType, _placeSelectedTypeIndex);
                     }
                     // 进入流程3
                     if (this._placeControlFlow == 3)
@@ -730,17 +730,19 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 {
                     this._placeSelectedCategoryIndex = (this._placeSelectedCategoryIndex - 1) % this._placeCanSelectCategory.Length;
                     this.OnBuildSelectionCategoryChanged?.Invoke(this._placeCanSelectCategory, this._placeSelectedCategoryIndex);
+                    this.UpdatePlaceBuildingType(this._placeCanSelectCategory[this._placeSelectedCategoryIndex]);
                 }
                 else if (BInput.BuildSelection.NextCategory.WasPressedThisFrame())
                 {
                     this._placeSelectedCategoryIndex = (this._placeSelectedCategoryIndex + 1) % this._placeCanSelectCategory.Length;
                     this.OnBuildSelectionCategoryChanged?.Invoke(this._placeCanSelectCategory, this._placeSelectedCategoryIndex);
+                    this.UpdatePlaceBuildingType(this._placeCanSelectCategory[this._placeSelectedCategoryIndex]);
                 }
                 // Type
                 else if(BInput.BuildSelection.AlternativeType.WasPressedThisFrame())
                 {
                     this._placeSelectedTypeIndex = (this._placeSelectedTypeIndex + 1) % this._placeCanSelectType.Length;
-                    this.OnBuildSelectionTypeChanged?.Invoke(this._placeCanSelectType, this._placeSelectedTypeIndex);
+                    this.OnBuildSelectionTypeChanged?.Invoke(this._placeCanSelectCategory[this._placeSelectedCategoryIndex], this._placeCanSelectType, this._placeSelectedTypeIndex);
                 }
             }
             // 流程2 : 外观选择UI交互(流程1进入时自动选择并跳过) => 不用管，自动跳过
@@ -827,11 +829,10 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         {
             if(_placeCanSelectCategory == null)
             {
-                this._placeCanSelectCategory = (BuildingCategory[])System.Enum.GetValues(typeof(BuildingCategory));
-                this._placeCanSelectCategory = this._placeCanSelectCategory[1..this._placeCanSelectCategory.Length];
+                this._placeCanSelectCategory = ((BuildingCategory[])System.Enum.GetValues(typeof(BuildingCategory))).Where(c => (int)c >= 0).ToArray();
+                //this._placeCanSelectCategory = this._placeCanSelectCategory[1..this._placeCanSelectCategory.Length];
 
-                this._placeCanSelectType = (BuildingType[])System.Enum.GetValues(typeof(BuildingType));
-                this._placeCanSelectType = this._placeCanSelectType[1..this._placeCanSelectType.Length];
+                this.UpdatePlaceBuildingType(this._placeCanSelectCategory[this._placeSelectedCategoryIndex]);
             }
 
             this.InteractBPartList.Clear();
@@ -881,6 +882,12 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             this.PlaceControlFlow = 0;
         }
 
+        protected void UpdatePlaceBuildingType(BuildingCategory category)
+        {
+            this._placeCanSelectType = ((BuildingType[])System.Enum.GetValues(typeof(BuildingType))).Where(type => (int)type >= ((int)category * 100) && (int)type < ((int)category * 100 + 100)).ToArray();
+            this._placeSelectedTypeIndex = 0;
+            this.OnBuildSelectionTypeChanged?.Invoke(category, this._placeCanSelectType, this._placeSelectedTypeIndex);
+        }
 
         #endregion
 
