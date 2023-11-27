@@ -111,9 +111,9 @@ public class Test_BuildingManager : MonoBehaviour
         {
             Debug.Log("Enter PlaceMode, Selected BPart: " + bpart.Classification.ToString());
         };
-        BM.Placer.OnPlaceModeExit += (bpart) =>
+        BM.Placer.OnPlaceModeExit += () =>
         {
-            Debug.Log("Exit PlaceMode, Selected BPart: " + bpart.Classification.ToString());
+            Debug.Log("Exit PlaceMode");
         };
         BM.Placer.OnPlaceModeChangeStyle += (bpart, isForward) =>
         {

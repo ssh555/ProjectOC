@@ -8,20 +8,22 @@ using ML.Editor;
 
 namespace ML.Editor.Utility.Enum
 {
-    [System.Serializable]
-    public struct EnumKV
-    {
-        [LabelText("枚举名"), SerializeField]
-        public string name;
-        [LabelText("显示名"), SerializeField]
-        public string displayName;
-        [LabelText("枚举值"), SerializeField]
-        public string value;
-    }
+
 
     [CreateAssetMenu(fileName = "MultiEnumAssetWithDisplayNameScript", menuName = "ML/Enum/MultiEnumAssetWithDisplayName", order = 1)]
     public class MultiEnumAssetWithDisplayName : SerializedScriptableObject
     {
+        [System.Serializable]
+        protected struct EnumKV
+        {
+            [LabelText("枚举名"), SerializeField]
+            public string name;
+            [LabelText("显示名"), SerializeField]
+            public string displayName;
+            [LabelText("枚举值"), SerializeField]
+            public string value;
+        }
+
         public MultiEnumAssetWithDisplayName()
         {
             this.AllName.name = this.AllName.displayName = "All";
@@ -53,202 +55,203 @@ namespace ML.Editor.Utility.Enum
             }
         }
 
-        [LabelText("全选 Name"), FoldoutGroup("配置"), Space(5)]
-        public EnumKV AllName;
-        [LabelText("全部不选 Name"), FoldoutGroup("配置")]
-        public EnumKV NoneName;
+        [SerializeField, LabelText("全选 Name"), FoldoutGroup("配置"), Space(5)]
+        protected EnumKV AllName;
+        [SerializeField, LabelText("全部不选 Name"), FoldoutGroup("配置")]
+        protected EnumKV NoneName;
         #endregion
 
         #region 枚举值
+        [SerializeField, HideInInspector]
         private EnumKV[] Enums = new EnumKV[32];
         [LabelText("Enum 0"), PropertySpace(5), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum0
+        protected EnumKV Enum0
         {
             get => Enums[0];
             set => Enums[0] = value;
         }
         [LabelText("Enum 1"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum1
+        protected EnumKV Enum1
         {
             get => Enums[1];
             set => Enums[1] = value;
         }
         [LabelText("Enum 2"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum2
+        protected EnumKV Enum2
         {
             get => Enums[2];
             set => Enums[2] = value;
         }
         [LabelText("Enum 3"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum3
+        protected EnumKV Enum3
         {
             get => Enums[3];
             set => Enums[3] = value;
         }
         [LabelText("Enum 4"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum4
+        protected EnumKV Enum4
         {
             get => Enums[4];
             set => Enums[4] = value;
         }
         [LabelText("Enum 5"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum5
+        protected EnumKV Enum5
         {
             get => Enums[5];
             set => Enums[5] = value;
         }
         [LabelText("Enum 6"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum6
+        protected EnumKV Enum6
         {
             get => Enums[6];
             set => Enums[6] = value;
         }
         [LabelText("Enum 7"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum7
+        protected EnumKV Enum7
         {
             get => Enums[7];
             set => Enums[7] = value;
         }
         [LabelText("Enum 8"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum8
+        protected EnumKV Enum8
         {
             get => Enums[8];
             set => Enums[8] = value;
         }
         [LabelText("Enum 9"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum9
+        protected EnumKV Enum9
         {
             get => Enums[9];
             set => Enums[9] = value;
         }
         [LabelText("Enum 10"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum10
+        protected EnumKV Enum10
         {
             get => Enums[10];
             set => Enums[10] = value;
         }
         [LabelText("Enum 11"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum11
+        protected EnumKV Enum11
         {
             get => Enums[11];
             set => Enums[11] = value;
         }
         [LabelText("Enum 12"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum12
+        protected EnumKV Enum12
         {
             get => Enums[12];
             set => Enums[12] = value;
         }
         [LabelText("Enum 13"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum13
+        protected EnumKV Enum13
         {
             get => Enums[13];
             set => Enums[13] = value;
         }
         [LabelText("Enum 14"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum14
+        protected EnumKV Enum14
         {
             get => Enums[14];
             set => Enums[14] = value;
         }
         [LabelText("Enum 15"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum15
+        protected EnumKV Enum15
         {
             get => Enums[15];
             set => Enums[15] = value;
         }
         [LabelText("Enum 16"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum16
+        protected EnumKV Enum16
         {
             get => Enums[16];
             set => Enums[16] = value;
         }
         [LabelText("Enum 17"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum17
+        protected EnumKV Enum17
         {
             get => Enums[17];
             set => Enums[17] = value;
         }
         [LabelText("Enum 18"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum18
+        protected EnumKV Enum18
         {
             get => Enums[18];
             set => Enums[18] = value;
         }
         [LabelText("Enum 19"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum19
+        protected EnumKV Enum19
         {
             get => Enums[19];
             set => Enums[19] = value;
         }
         [LabelText("Enum 20"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum20
+        protected EnumKV Enum20
         {
             get => Enums[20];
             set => Enums[20] = value;
         }
         [LabelText("Enum 21"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum21
+        protected EnumKV Enum21
         {
             get => Enums[21];
             set => Enums[21] = value;
         }
         [LabelText("Enum 22"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum22
+        protected EnumKV Enum22
         {
             get => Enums[22];
             set => Enums[22] = value;
         }
         [LabelText("Enum 23"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum23
+        protected EnumKV Enum23
         {
             get => Enums[23];
             set => Enums[23] = value;
         }
         [LabelText("Enum 24"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum24
+        protected EnumKV Enum24
         {
             get => Enums[24];
             set => Enums[24] = value;
         }
         [LabelText("Enum 25"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum25
+        protected EnumKV Enum25
         {
             get => Enums[25];
             set => Enums[25] = value;
         }
         [LabelText("Enum 26"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum26
+        protected EnumKV Enum26
         {
             get => Enums[26];
             set => Enums[26] = value;
         }
         [LabelText("Enum 27"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum27
+        protected EnumKV Enum27
         {
             get => Enums[27];
             set => Enums[27] = value;
         }
         [LabelText("Enum 28"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum28
+        protected EnumKV Enum28
         {
             get => Enums[28];
             set => Enums[28] = value;
         }
         [LabelText("Enum 29"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum29
+        protected EnumKV Enum29
         {
             get => Enums[29];
             set => Enums[29] = value;
         }
         [LabelText("Enum 30"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum30
+        protected EnumKV Enum30
         {
             get => Enums[30];
             set => Enums[30] = value;
         }
         [LabelText("Enum 31"), FoldoutGroup("枚举值"), ShowInInspector]
-        public EnumKV Enum31
+        protected EnumKV Enum31
         {
             get => Enums[31];
             set => Enums[31] = value;

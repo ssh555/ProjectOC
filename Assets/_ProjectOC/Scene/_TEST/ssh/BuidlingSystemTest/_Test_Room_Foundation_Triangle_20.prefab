@@ -484,7 +484,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
-    Category: 1
+    Category: 0
     Type: 0
     Style: 2
     Height: 20

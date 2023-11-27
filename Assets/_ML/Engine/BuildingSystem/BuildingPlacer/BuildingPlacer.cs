@@ -168,7 +168,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// <summary>
         /// 流程3 : 放置
         /// </summary>
-        public event System.Action<IBuildingPart> OnPlaceModeExit;
+        public event System.Action OnPlaceModeExit;
         /// <summary>
         /// Style 更改时调用
         /// 当前选择的BPart, 为向前还是向后选择
@@ -653,15 +653,17 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         #endregion
 
         #region Place
-        [ShowInInspector, LabelText("CategoryIndex")]
+        [ShowInInspector, LabelText("CategoryIndex"), FoldoutGroup("PlaceMode")]
         protected int _placeSelectedCategoryIndex = 0;
-        [ShowInInspector, LabelText("TypeIndex")]
+        [ShowInInspector, LabelText("TypeIndex"), FoldoutGroup("PlaceMode")]
         protected int _placeSelectedTypeIndex = 0;
-        [ShowInInspector, LabelText("CategoryArray")]
+        [ShowInInspector, LabelText("CategoryArray"), FoldoutGroup("PlaceMode")]
         protected BuildingCategory[] _placeCanSelectCategory;
-        [ShowInInspector, LabelText("TypeArray")]
+        [ShowInInspector, LabelText("TypeArray"), FoldoutGroup("PlaceMode")]
         protected BuildingType[] _placeCanSelectType;
 
+        public BuildingCategory _placeSelectedCategory => this._placeCanSelectCategory[this._placeSelectedCategoryIndex];
+        public BuildingType _placeSelectedType => this._placeCanSelectType[this._placeSelectedTypeIndex];
         private byte _placeControlFlow = 0;
         /// <summary>
         /// 0 -> 不处于PlaceMode, 回到InteractMode
@@ -684,7 +686,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 // 离开流程3 && 不是回到2进行外观选择
                 if (this._placeControlFlow == 3 && value != 2)
                 {
-                    this.OnPlaceModeExit?.Invoke(this.SelectedPartInstance);
+                    this.OnPlaceModeExit?.Invoke();
                 }
                 this._placeControlFlow = value;
                 if(this._placeControlFlow == 0)

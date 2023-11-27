@@ -8,6 +8,17 @@ namespace ML.Editor.Utility.Enum
     [CreateAssetMenu(fileName = "SingleEnumAssetWithDisplayNameScript", menuName = "ML/Enum/SingleEnumAssetWithDisplayName", order = 1)]
     public class SingleEnumAssetWithDisplayName : SerializedScriptableObject
     {
+        [System.Serializable]
+        protected struct EnumKV
+        {
+            [LabelText("枚举名"), SerializeField]
+            public string name;
+            [LabelText("显示名"), SerializeField]
+            public string displayName;
+            [LabelText("枚举值"), SerializeField]
+            public string value;
+        }
+
         public SingleEnumAssetWithDisplayName()
         {
             this.NoneName.displayName = this.NoneName.name = "None";
@@ -38,11 +49,11 @@ namespace ML.Editor.Utility.Enum
             }
         }
 
-        [LabelText("DefaultName"), FoldoutGroup("配置")]
-        public EnumKV NoneName;
+        [SerializeField, LabelText("DefaultName"), FoldoutGroup("配置")]
+        protected EnumKV NoneName;
 
-        [LabelText("枚举列表"), FoldoutGroup("配置"), Space(5)]
-        public List<EnumKV> EnumList = new List<EnumKV>();
+        [SerializeField, LabelText("枚举列表"), FoldoutGroup("配置"), Space(5)]
+        protected List<EnumKV> EnumList = new List<EnumKV>();
         #endregion
 
 

@@ -25,10 +25,14 @@ MonoBehaviour:
   NoneName:
     name: None
     displayName: None
+    value: 
   EnumList:
   - name: Base
     displayName: "\u6B63\u65B9\u5F62"
+    value: 
   - name: Triangle
     displayName: "\u4E09\u89D2\u5F62"
+    value: 
   - name: Quagrant
-    displayName: "\u56DB\u5206\u5706\u5F62"
+    displayName: "\u56DB\u65B9\u5706\u5F62"
+    value: 

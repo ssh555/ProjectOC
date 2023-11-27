@@ -268,7 +268,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
-    Category: 1
+    Category: 0
     Type: 1
     Style: 1
     Height: 20

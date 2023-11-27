@@ -11,7 +11,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		Base,
 		[LabelText("三角形")]
 		Triangle,
-		[LabelText("四分圆形")]
+		[LabelText("四方圆形")]
 		Quagrant,
 	}
 }
