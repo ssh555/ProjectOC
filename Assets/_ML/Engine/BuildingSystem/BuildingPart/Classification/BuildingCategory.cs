@@ -6,8 +6,8 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 	public enum BuildingCategory
 	{
 		[LabelText("None")]
-		None,
+		None = -1,
 		[LabelText("房屋")]
-		Room,
+		Room = 0,
 	}
 }

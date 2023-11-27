@@ -340,8 +340,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
-    Category: 1
-    Type: 1
+    Category: 0
+    Type: 0
     Style: 2
     Height: 50
   instanceID: 

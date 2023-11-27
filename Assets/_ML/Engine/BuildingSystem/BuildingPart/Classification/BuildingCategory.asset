@@ -25,6 +25,8 @@ MonoBehaviour:
   NoneName:
     name: None
     displayName: None
+    value: -1
   EnumList:
   - name: Room
     displayName: "\u623F\u5C4B"
+    value: 0
