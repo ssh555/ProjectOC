@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 4101266054
+CRC: 86429961
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -28,3 +28,10 @@ AssetBundleManifest:
     Info_6:
       Name: materials
       Dependencies: {}
+    Info_7:
+      Name: ui/buildingsystem/prefabs
+      Dependencies: {}
+    Info_8:
+      Name: prefabs/buildingsystem/bpart
+      Dependencies:
+        Dependency_0: materials

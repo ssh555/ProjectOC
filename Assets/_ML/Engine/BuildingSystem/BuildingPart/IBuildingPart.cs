@@ -39,6 +39,9 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         /// </summary>
         public bool CanPlaceInPlaceMode { get; set; }
 
+        public delegate bool CheckCanPlaceMode(IBuildingPart BPart);
+        public event CheckCanPlaceMode CheckCanInPlaceMode;
+
         /// <summary>
         /// 当前所处的建造模式
         /// </summary>

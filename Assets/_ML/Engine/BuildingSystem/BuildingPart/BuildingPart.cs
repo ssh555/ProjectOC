@@ -25,10 +25,11 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         {
             get
             {
-                return this.canPlaceInPlaceMode && (this.AttachedArea != null || this.AttachedSocket != null);
+                return this.canPlaceInPlaceMode && (this.AttachedArea != null || this.AttachedSocket != null) && (this.CheckCanInPlaceMode == null ? true : this.CheckCanInPlaceMode.Invoke(this));
             }
             set => canPlaceInPlaceMode = value; 
         }
+        public event IBuildingPart.CheckCanPlaceMode CheckCanInPlaceMode;
 
         [SerializeField, LabelText("ģʽ")]
         private BuildingMode mode;
@@ -166,6 +167,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         /// </summary>
         private Dictionary<Renderer, Material[]> rowMat;
 
+
         private void Awake()
         {
             this.rowMat = new Dictionary<Renderer, Material[]>();
@@ -185,16 +187,16 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 {
                     if(coll is BoxCollider)
                     {
-                        (coll as BoxCollider).size *= 0.99f;
+                        (coll as BoxCollider).size = Vector3.one * 0.99f;
                     }
                     else if(coll is CapsuleCollider)
                     {
-                        (coll as CapsuleCollider).radius *= 0.99f;
-                        (coll as CapsuleCollider).height *= 0.99f;
+                        (coll as CapsuleCollider).radius = 0.45f;
+                        (coll as CapsuleCollider).height = 1.98f;
                     }
                     else if(coll is SphereCollider)
                     {
-                        (coll as SphereCollider).radius *= 0.99f;
+                        (coll as SphereCollider).radius = 0.45f;
                     }
                 }
             }

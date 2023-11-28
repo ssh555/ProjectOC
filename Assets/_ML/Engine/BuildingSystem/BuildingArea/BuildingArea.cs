@@ -15,13 +15,13 @@ namespace ML.Engine.BuildingSystem.BuildingArea
         /// <summary>
         /// 用于依附的基础单位格子的边长，单位为m
         /// </summary>
-        [LabelText("基础单位格子边长"), PropertyTooltip("单位 m"), Range(0, 1), FoldoutGroup("网格"), ShowInInspector]
+        [LabelText("基础单位格子边长"), PropertyTooltip("单位 m"), Range(0, 100), FoldoutGroup("网格"), ShowInInspector]
         public static float BaseGridSideLength = 0.50f;
 
         /// <summary>
         /// 用于包裹基础单位格子的边长，单位为m
         /// </summary>
-        [LabelText("包裹单位格子边长"), PropertyTooltip("单位 m"), Range(0, 100), FoldoutGroup("网格"), ShowInInspector]
+        [LabelText("包裹单位格子边长"), PropertyTooltip("单位 m"), Range(0, 1000), FoldoutGroup("网格"), ShowInInspector]
         public static float BoundGridSideLength = 10.00f;
         #endregion
 

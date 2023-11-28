@@ -618,7 +618,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     this.HandelKeyCom();
                 }
                 // 退出次交互轮
-                else if (BInput.BuildKeyCom.KeyCom.WasReleasedThisFrame())
+                if (BInput.BuildKeyCom.KeyCom.WasReleasedThisFrame())
                 {
                     this.ExitKeyCom();
                 }
@@ -629,11 +629,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     this.HandleAppearance();
                 }
                 #endregion
-                // to-do : to-delete : 仅测试用, 退出建造模式
-                else if (ML.Engine.Input.InputManager.Instance.Common.Common.Back.WasPressedThisFrame())
-                {
-                    this.Mode = BuildingMode.None;
-                }
                 // 没有按键响应时，响应可交互项切换
                 else
                 {
@@ -653,10 +648,23 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 // 按键阻断 => 同一帧只能响应 InteractMode 的一种按键
                 return;
             }
+            else
+            {
+                // 退出次交互轮
+                if (BInput.BuildKeyCom.KeyCom.WasReleasedThisFrame())
+                {
+                    this.ExitKeyCom();
+                }
+            }
             // 切入 Place Mode -> 进入建筑物选择界面
             if (BInput.Build.SelectBuild.WasPressedThisFrame())
             {
                 this.EnterBuildSelection();
+            }
+            // to-do : to-delete : 仅测试用, 退出建造模式
+            else if (ML.Engine.Input.InputManager.Instance.Common.Common.Back.WasPressedThisFrame())
+            {
+                this.Mode = BuildingMode.None;
             }
         }
         #endregion
@@ -766,11 +774,57 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             {
                 // 实时更新落点的位置和旋转以及是否可放置
                 this.TransformSelectedPartInstance();
-                // 辅助网格
-                if (BInput.BuildPlaceMode.SwitchFrame_PreHold.IsInProgress() && BInput.BuildPlaceMode.SwitchFrame_PostPress.WasPressedThisFrame())
+                // 长按开始 => 用于事件调用，与建造系统逻辑无关
+                if (BInput.BuildPlaceMode.KeyCom.WasPressedThisFrame())
                 {
-                    this.IsEnableGridSupport = !IsEnableGridSupport;
+                    this.keyComStartTime = Time.time;
+                    this.OnKeyComStart?.Invoke();
                 }
+                // 长按进行中
+                else if (BInput.BuildPlaceMode.KeyCom.IsPressed())
+                {
+                    float curT = Time.time - this.keyComStartTime;
+                    // 用于事件调用
+                    if (curT < this.keyComTotalTime)
+                    {
+                        this.OnKeyComInProgress?.Invoke(curT, this.keyComTotalTime);
+                    }
+                    // 长按完成 => 切入次交互轮, 切入后不再是Input.Build，不会重复执行
+                    else
+                    {
+                        // 切入次交互轮 => 依旧是InteractMode
+                        this.EnterKeyCom();
+                    }
+                }
+                // 长按结束
+                else if (BInput.BuildPlaceMode.KeyCom.WasReleasedThisFrame())
+                {
+                    float curT = Time.time - this.keyComStartTime;
+                    // 长按取消
+                    if (curT < this.keyComTotalTime)
+                    {
+                        this.OnKeyComCancel?.Invoke(curT, this.keyComTotalTime);
+                    }
+                    //// 长按退出 => 由次交互轮的输入接管
+                    //else
+                    //{
+                    //    this.OnKeyComExit?.Invoke();
+                    //    // 退出KeyCom
+                    //    this.ExitKeyCom();
+                    //}
+                }
+                #region Input.KeyCom
+                // 切入次交互轮后 : 禁用Input.Build 启用Input.Keycom
+                else if (BInput.BuildKeyCom.KeyCom.IsPressed())
+                {
+                    this.HandelKeyCom();
+                }
+                // 退出次交互轮
+                else if (BInput.BuildKeyCom.KeyCom.WasReleasedThisFrame())
+                {
+                    this.ExitKeyCom();
+                }
+                #endregion
                 // 取消 -> 回到InteractMode
                 else if (this.backInputAction.WasPressedThisFrame())
                 {
@@ -828,7 +882,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
                     this.SelectedPartInstance = tmp;
                 }
-
             }
         }
 
@@ -883,6 +936,8 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
         protected void ExitPlaceMode()
         {
+            this.PlaceControlFlow = 0;
+
             // 启用 Input.Build
             this.Mode = BuildingMode.Interact;
             // 禁用 Input.Place
@@ -890,7 +945,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             // 更新BPart状态
             this.SelectedPartInstance = null;
 
-            this.PlaceControlFlow = 0;
         }
 
         protected void UpdatePlaceBuildingType(BuildingCategory category)
@@ -910,11 +964,57 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         {
             // 实时更新落点的位置和旋转以及是否可放置
             this.TransformSelectedPartInstance();
-            // 辅助网格
-            if (BInput.BuildPlaceMode.SwitchFrame_PreHold.IsInProgress() && BInput.BuildPlaceMode.SwitchFrame_PostPress.WasPressedThisFrame())
+            // 长按开始 => 用于事件调用，与建造系统逻辑无关
+            if (BInput.BuildPlaceMode.KeyCom.WasPressedThisFrame())
             {
-                this.IsEnableGridSupport = !IsEnableGridSupport;
+                this.keyComStartTime = Time.time;
+                this.OnKeyComStart?.Invoke();
             }
+            // 长按进行中
+            else if (BInput.BuildPlaceMode.KeyCom.IsPressed())
+            {
+                float curT = Time.time - this.keyComStartTime;
+                // 用于事件调用
+                if (curT < this.keyComTotalTime)
+                {
+                    this.OnKeyComInProgress?.Invoke(curT, this.keyComTotalTime);
+                }
+                // 长按完成 => 切入次交互轮, 切入后不再是Input.Build，不会重复执行
+                else
+                {
+                    // 切入次交互轮 => 依旧是InteractMode
+                    this.EnterKeyCom();
+                }
+            }
+            // 长按结束
+            else if (BInput.BuildPlaceMode.KeyCom.WasReleasedThisFrame())
+            {
+                float curT = Time.time - this.keyComStartTime;
+                // 长按取消
+                if (curT < this.keyComTotalTime)
+                {
+                    this.OnKeyComCancel?.Invoke(curT, this.keyComTotalTime);
+                }
+                //// 长按退出 => 由次交互轮的输入接管
+                //else
+                //{
+                //    this.OnKeyComExit?.Invoke();
+                //    // 退出KeyCom
+                //    this.ExitKeyCom();
+                //}
+            }
+            #region Input.KeyCom
+            // 切入次交互轮后 : 禁用Input.Build 启用Input.Keycom
+            else if (BInput.BuildKeyCom.KeyCom.IsPressed())
+            {
+                this.HandelKeyCom();
+            }
+            // 退出次交互轮
+            else if (BInput.BuildKeyCom.KeyCom.WasReleasedThisFrame())
+            {
+                this.ExitKeyCom();
+            }
+            #endregion
             // 取消 -> 回到原状态
             else if (this.backInputAction.WasPressedThisFrame())
             {
@@ -945,6 +1045,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             {
                 this.ExitEditMode();
             }
+
         }
 
         /// <summary>
@@ -983,7 +1084,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             BInput.BuildPlaceMode.ChangeOutLook.Disable();
             BInput.BuildPlaceMode.ChangeStyle.Disable();
             BInput.BuildPlaceMode.ChangeHeight.Disable();
-            BInput.BuildPlaceMode.KeyCom.Disable();
+            //BInput.BuildPlaceMode.KeyCom.Disable();
         }
 
         #endregion
@@ -1113,13 +1214,22 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             // CopyBuild
             if (BInput.BuildKeyCom.CopyBuild.WasPressedThisFrame())
             {
-                // 复制当前选中的可交互物进入PlaceMode
+                // 辅助网格
+                if (this.Mode == BuildingMode.Place || this.Mode == BuildingMode.Edit)
+                {
+                    this.IsEnableGridSupport = !IsEnableGridSupport;
+                }
+                // 复制建筑物
+                else
+                {
+                    // 复制当前选中的可交互物进入PlaceMode
 
-                // 复制一份当前选中的BPart(即一级二级分类选择和外观选择的流程)
-                this.SelectedPartInstance = BuildingManager.Instance.GetOneBPartCopyInstance(this.SelectedPartInstance);
+                    // 复制一份当前选中的BPart(即一级二级分类选择和外观选择的流程)
+                    this.SelectedPartInstance = BuildingManager.Instance.GetOneBPartCopyInstance(this.SelectedPartInstance);
 
-                // 进入PlaceMode的放置流程
-                this.PlaceControlFlow = 3;
+                    // 进入PlaceMode的放置流程
+                    this.PlaceControlFlow = 3;
+                }
             }
             // CopyOutLook
             else if(BInput.BuildKeyCom.CopyOutLook.WasPressedThisFrame())
@@ -1137,8 +1247,16 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
         protected void EnterKeyCom()
         {
-            // 禁用 Input.Build
-            BInput.Build.Disable();
+            if (this.Mode == BuildingMode.Interact)
+            {
+                // 禁用 Input.Build
+                BInput.Build.Disable();
+            }
+
+            else
+            {
+                BInput.BuildPlaceMode.Disable();
+            }
             // 启用 Input.KeyCom
             BInput.BuildKeyCom.Enable();
 
@@ -1151,11 +1269,18 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             // 避免没有松开KeyCom, 再次进入时直接打开
             this.keyComStartTime = Time.time;
 
-            // 启用 Input.Build
-            BInput.Build.Enable();
+            if(this.Mode == BuildingMode.Interact)
+            {
+                // 启用 Input.Build
+                BInput.Build.Enable();
+            }
+            else
+            {
+                BInput.BuildPlaceMode.Enable();
+            }
+
             // 禁用 Input.KeyCom
             BInput.BuildKeyCom.Disable();
-            Debug.Log("exit");
             this.OnKeyComExit?.Invoke();
         }
         #endregion

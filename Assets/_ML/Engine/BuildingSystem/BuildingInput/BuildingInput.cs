@@ -318,7 +318,7 @@ namespace ML.Engine.BuildingSystem.Input
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""CopyBuild"",
