@@ -5,6 +5,7 @@ using UnityEngine;
 using ML.Engine.BuildingSystem.BuildingPart;
 using System.Linq;
 using UnityEngine.Windows;
+using System;
 
 namespace ML.Engine.BuildingSystem
 {
@@ -38,6 +39,113 @@ namespace ML.Engine.BuildingSystem
         /// <ChildIndex, Material>
         /// </summary>
         public Dictionary<int, Material[]> ChildrenMat;
+
+        public override bool Equals(object obj)
+        {
+            return this == (BuildingCopiedMaterial)obj;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        public static bool operator ==(BuildingCopiedMaterial A, BuildingCopiedMaterial B)
+        {
+            if(A.ParentMat != null && B.ParentMat != null)
+            {
+                foreach(var ap in A.ParentMat)
+                {
+                    bool f = false;
+                    foreach (var bp in B.ParentMat)
+                    {
+                        if(ap.name == bp.name)
+                        {
+                            f = true;
+                            break;
+                        }
+                    }
+                    if(f == false)
+                    {
+                        return false;
+                    }
+                }
+                if (A.ChildrenMat != null && B.ChildrenMat != null)
+                {
+                    foreach (var ap in A.ChildrenMat)
+                    {
+                        if(B.ChildrenMat.ContainsKey(ap.Key))
+                        {
+                            foreach(var t in ap.Value)
+                            {
+                                bool f = false;
+                                foreach (var bp in B.ParentMat)
+                                {
+                                    if (t.name == bp.name)
+                                    {
+                                        f = true;
+                                        break;
+                                    }
+                                }
+                                if (f == false)
+                                {
+                                    return false;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+                else if(A.ChildrenMat == null && B.ChildrenMat== null)
+                {
+                    return true;
+                }
+            }
+            else if(A.ParentMat == null && B.ParentMat == null)
+            {
+                if (A.ChildrenMat != null && B.ChildrenMat != null)
+                {
+                    foreach (var ap in A.ChildrenMat)
+                    {
+                        if (B.ChildrenMat.ContainsKey(ap.Key))
+                        {
+                            foreach (var t in ap.Value)
+                            {
+                                bool f = false;
+                                foreach (var bp in B.ParentMat)
+                                {
+                                    if (t.name == bp.name)
+                                    {
+                                        f = true;
+                                        break;
+                                    }
+                                }
+                                if (f == false)
+                                {
+                                    return false;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+                else if (A.ChildrenMat == null && B.ChildrenMat == null)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool operator !=(BuildingCopiedMaterial A, BuildingCopiedMaterial B)
+        {
+            return !(A == B);
+        }
     }
 
     [System.Serializable]

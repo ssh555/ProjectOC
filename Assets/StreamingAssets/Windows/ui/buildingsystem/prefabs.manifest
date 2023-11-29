@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 347558252
+CRC: 2634050580
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 44d3aab6a9e6495c98c3145cbe07807b
+    Hash: 5b3b53eb173309a3b6194ece6a1f2b32
   TypeTreeHash:
     serializedVersion: 2
     Hash: 9c984c0f81243c1c347f87890f6f7467
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 44d3aab6a9e6495c98c3145cbe07807b
+    Hash: 5b3b53eb173309a3b6194ece6a1f2b32
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -108,6 +108,7 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/UIPrefabs/Panel/Test_BSBotPanel.prefab
 - Assets/_ML/MLResources/BuildingSystem/UIPrefabs/Panel/BSInteractMode_KeyCom.prefab
 Dependencies:
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/assets/buildingsystem
 - C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/fonts
 - C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/category
 - C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/style

@@ -55,9 +55,7 @@ namespace ML.Engine.BuildingSystem
         public BuildingManager BM;
 
         #region Config
-
-        #endregion
-        [LabelText("ÓïÑÔ"),  ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
+        [LabelText("ÓïÑÔ"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
         public Language language
         {
             get => Config.language;
@@ -75,6 +73,8 @@ namespace ML.Engine.BuildingSystem
             get => Config.inputDevice;
             set => Config.inputDevice = value;
         }
+        #endregion
+
 
         #region TextContent
 
@@ -406,16 +406,6 @@ namespace ML.Engine.BuildingSystem
                 this.PopPanel();
             };
 
-            //BM.Placer.OnKeyComStart += () =>
-            //{
-            //    Debug.Log("Start KeyCom");
-            //};
-
-            //BM.Placer.OnKeyComInProgress += (float cur, float total) =>
-            //{
-            //    Debug.Log("KeyCom Progress: " + (cur / total));
-            //};
-
             BM.Placer.OnKeyComComplete += () =>
             {
                 if(BM.Mode == BuildingMode.Interact)
@@ -432,29 +422,26 @@ namespace ML.Engine.BuildingSystem
                 }
             };
 
-            //BM.Placer.OnKeyComCancel += (float cur, float total) =>
-            //{
-            //    Debug.LogWarning("KeyCom Cancel: " + (cur / total));
-            //};
-
             BM.Placer.OnKeyComExit += () =>
             {
                 this.PopPanel();
             };
 
-            BM.Placer.OnEnterAppearance += (bpart) =>
+            BM.Placer.OnEnterAppearance += (bpart, texs, mats, index) =>
             {
                 this.PushPanel<UI.BSAppearancePanel>();
+                StartCoroutine((this.GetPeekPanel() as UI.BSAppearancePanel).Init(texs, mats, index));
+                // to-do
+                ProjectOC.Input.InputManager.PlayerInput.Disable();
             };
             BM.Placer.OnExitAppearance += (bpart) =>
             {
                 this.PopPanel();
+                // to-do
+                ProjectOC.Input.InputManager.PlayerInput.Enable();
+                ProjectOC.Input.InputManager.PlayerInput.Player.Crouch.Disable();
+                ProjectOC.Input.InputManager.PlayerInput.Player.Jump.Disable();
             };
-
-
-            //BM.Placer.OnDestroySelectedBPart += (bpart) =>
-            //{
-            //};
 
             BM.Placer.OnEditModeEnter += (bpart) =>
             {
@@ -470,10 +457,7 @@ namespace ML.Engine.BuildingSystem
                 this.PushPanel<UI.BSSelectBPartPanel>();
                 StartCoroutine((this.GetPeekPanel() as UI.BSSelectBPartPanel).Init(c, t, ic, it));
             };
-            //BM.Placer.OnBuildSelectionExit += () =>
-            //{
-            //    this.PopPanel();
-            //};
+
             BM.Placer.OnBuildSelectionComfirm += (bpart) =>
             {
                 this.PopPanel();
@@ -482,14 +466,6 @@ namespace ML.Engine.BuildingSystem
             {
                 this.PopPanel();
             };
-            //BM.Placer.OnBuildSelectionCategoryChanged += (BuildingCategory[] categorys, int index) =>
-            //{
-            //    Debug.Log("Current Selected Category: " + categorys[index]);
-            //};
-            //BM.Placer.OnBuildSelectionTypeChanged += (BuildingCategory category, BuildingType[] types, int index) =>
-            //{
-            //    Debug.Log("Current Selected Category: " + category + "-Type: " + types[index]);
-            //};
 
             BM.Placer.OnPlaceModeEnter += (bpart) =>
             {
@@ -502,17 +478,6 @@ namespace ML.Engine.BuildingSystem
             {
                 this.PopPanel();
             };
-            //BM.Placer.OnPlaceModeChangeStyle += (bpart, isForward) =>
-            //{
-            //    Debug.Log("PlaceMode Style Changed Selected BPart: " + bpart.Classification.ToString());
-            //};
-            //BM.Placer.OnPlaceModeChangeHeight += (bpart, isForward) =>
-            //{
-            //    Debug.Log("PlaceMode Height Changed Selected BPart: " + bpart.Classification.ToString());
-            //};
-            //BM.Placer.OnPlaceModeSuccess += (bpart) =>
-            //{
-            //};
         }
 
 

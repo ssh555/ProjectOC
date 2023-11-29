@@ -72,7 +72,7 @@ namespace ML.Engine.BuildingSystem.Input
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""KeyCom"",
@@ -622,17 +622,6 @@ namespace ML.Engine.BuildingSystem.Input
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""up"",
-                    ""id"": ""e95a14be-62d7-4c7a-bbbc-666784fa6090"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""AlterMaterial"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": ""down"",
                     ""id"": ""108ce15b-beb0-4cfe-91b3-a17c31652f52"",
                     ""path"": ""<Keyboard>/s"",
@@ -658,6 +647,17 @@ namespace ML.Engine.BuildingSystem.Input
                     ""name"": ""right"",
                     ""id"": ""2c24fa18-66d9-4f3d-ab6b-ef3946b7640c"",
                     ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterMaterial"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""e95a14be-62d7-4c7a-bbbc-666784fa6090"",
+                    ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

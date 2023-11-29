@@ -1,0 +1,55 @@
+ManifestFileVersion: 0
+CRC: 1027073572
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 4904a2e25090005bd1e443cdf74af810
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 032ce9f3001d9bcd1c318b3c9b5dacf4
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 4904a2e25090005bd1e443cdf74af810
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 670a3f6f18a8e5b449c8a5df82262fc0, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: ML.Engine.BuildingSystem.BSBPartMatPackage/MatPackage
+- AssemblyName: Assembly-CSharp
+  ClassName: ML.Engine.BuildingSystem.BSBPartMatPackage/MatPackageDict
+- AssemblyName: Assembly-CSharp
+  ClassName: ML.Engine.BuildingSystem.BuildingPart.BuildingCategory
+- AssemblyName: Assembly-CSharp
+  ClassName: ML.Engine.BuildingSystem.BuildingPart.BuildingPartClassification
+- AssemblyName: Assembly-CSharp
+  ClassName: ML.Engine.BuildingSystem.BuildingPart.BuildingStyle
+- AssemblyName: Assembly-CSharp
+  ClassName: ML.Engine.BuildingSystem.BuildingPart.BuildingType
+- AssemblyName: Sirenix.Serialization
+  ClassName: Sirenix.Serialization.SerializationData
+Assets:
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Texture2D/Blue.png
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Texture2D/Purple.png
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Floor_Base_20.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Texture2D/Orange.png
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Texture2D/Yellow.png
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Texture2D/Green.png
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Foundation_Triangle_20.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Foundation_Base_50.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Floor_Base_50.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Foundation_Triangle_50.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Foundation_Base_20.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Texture2D/Red.png
+Dependencies: []

@@ -274,6 +274,28 @@
                 "Chinese" : "",
                 "English" : ""
             }
+        },
+        {
+            "keyname" : "matlast",
+            "keymap" : {
+                "KeyBoard" : "A",
+                "XBOX" : "left"
+            },
+            "description" : {
+                "Chinese" : "",
+                "English" : ""
+            }
+        },
+        {
+            "keyname" : "matnext",
+            "keymap" : {
+                "KeyBoard" : "D",
+                "XBOX" : "right"
+            },
+            "description" : {
+                "Chinese" : "",
+                "English" : ""
+            }
         }
     ]
 }

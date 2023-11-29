@@ -38,6 +38,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             get => mode;
             set
             {
+
                 mode = value;
                 this.SetColliderTrigger((mode == BuildingMode.Place || mode == BuildingMode.Destroy || mode == BuildingMode.Edit));
 
@@ -134,17 +135,20 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         public BuildingCopiedMaterial GetCopiedMaterial()
         {
             BuildingCopiedMaterial mat = new BuildingCopiedMaterial();
+            var p = this.GetComponent<Renderer>();
+            if(p)
+            {
+                mat.ParentMat = rowMat[p];
 
-            mat.ParentMat = this.GetComponent<Renderer>().sharedMaterials;
-            for(int i = this.transform.childCount - 1; i >= 0; --i)
+            }
+            for (int i = this.transform.childCount - 1; i >= 0; --i)
             {
                 var renderer = this.transform.GetChild(i).GetComponent<Renderer>();
                 if (renderer)
                 {
-                    mat.ChildrenMat.Add(i, renderer.sharedMaterials);
+                    mat.ChildrenMat.Add(i, rowMat[renderer]);
                 }
             }
-
             return mat;
         }
 
@@ -154,9 +158,18 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             {
                 this.GetComponent<Renderer>().sharedMaterials = mat.ParentMat;
             }
-            foreach(var kv in mat.ChildrenMat)
+            if(mat.ChildrenMat != null)
             {
-                this.transform.GetChild(kv.Key).GetComponent<Renderer>().sharedMaterials = kv.Value;
+                foreach (var kv in mat.ChildrenMat)
+                {
+                    this.transform.GetChild(kv.Key).GetComponent<Renderer>().sharedMaterials = kv.Value;
+                }
+            }
+
+            this.rowMat.Clear();
+            foreach (var renderer in this.GetComponentsInChildren<Renderer>())
+            {
+                this.rowMat.Add(renderer, renderer.sharedMaterials);
             }
         }
 
