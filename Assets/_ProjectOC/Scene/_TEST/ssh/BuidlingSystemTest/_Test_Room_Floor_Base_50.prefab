@@ -158,7 +158,7 @@ GameObject:
   - component: {fileID: 8615991266869590065}
   - component: {fileID: 727573264355854238}
   m_Layer: 7
-  m_Name: _Test_Room_Foundation_Base_50 1
+  m_Name: _Test_Room_Floor_Base_50
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

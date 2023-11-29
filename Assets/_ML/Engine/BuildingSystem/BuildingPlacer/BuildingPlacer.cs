@@ -720,6 +720,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     // 进入流程3
                     if (this._placeControlFlow == 3)
                     {
+                        this.EnablePlaceModeInput();
                         this.OnPlaceModeEnter?.Invoke(this.SelectedPartInstance);
                     }
                     this.Mode = BuildingMode.Place;
@@ -851,17 +852,25 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     this.SelectedPartInstance.AlternativeActiveSocket();
                 }
                 // Style、Height切换BPart
-                else if(BInput.BuildPlaceMode.ChangeStyle.WasPressedThisFrame())
+                else if(BInput.BuildPlaceMode.ChangeStyleLast.WasPressedThisFrame())
                 {
-                    bool isForward = BInput.BuildPlaceMode.ChangeStyle.ReadValue<float>() > 0;
-                    this.AlternateBPartOnStyle (isForward);
-                    this.OnPlaceModeChangeStyle?.Invoke(this.SelectedPartInstance, isForward);
+                    this.AlternateBPartOnHeight (false);
+                    this.OnPlaceModeChangeStyle?.Invoke(this.SelectedPartInstance, false);
                 }
-                else if (BInput.BuildPlaceMode.ChangeHeight.WasPressedThisFrame())
+                else if (BInput.BuildPlaceMode.ChangeStyleNext.WasPressedThisFrame())
                 {
-                    bool isForward = BInput.BuildPlaceMode.ChangeHeight.ReadValue<float>() > 0;
-                    this.AlternateBPartOnHeight(isForward);
-                    this.OnPlaceModeChangeHeight?.Invoke(this.SelectedPartInstance, isForward);
+                    this.AlternateBPartOnHeight(true);
+                    this.OnPlaceModeChangeStyle?.Invoke(this.SelectedPartInstance, true);
+                }
+                else if (BInput.BuildPlaceMode.ChangeHeightLast.WasPressedThisFrame())
+                {
+                    this.AlternateBPartOnStyle(false);
+                    this.OnPlaceModeChangeHeight?.Invoke(this.SelectedPartInstance, false);
+                }
+                else if (BInput.BuildPlaceMode.ChangeHeightNext.WasPressedThisFrame())
+                {
+                    this.AlternateBPartOnStyle(true);
+                    this.OnPlaceModeChangeHeight?.Invoke(this.SelectedPartInstance, true);
                 }
                 // 回退到外观选择
                 else if(BInput.BuildPlaceMode.ChangeOutLook.WasPressedThisFrame())
@@ -929,8 +938,10 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         {
             BInput.BuildPlaceMode.Enable();
             BInput.BuildPlaceMode.ChangeOutLook.Enable();
-            BInput.BuildPlaceMode.ChangeStyle.Enable();
-            BInput.BuildPlaceMode.ChangeHeight.Enable();
+            BInput.BuildPlaceMode.ChangeStyleLast.Enable();
+            BInput.BuildPlaceMode.ChangeStyleNext.Enable();
+            BInput.BuildPlaceMode.ChangeHeightLast.Enable();
+            BInput.BuildPlaceMode.ChangeHeightNext.Enable();
             BInput.BuildPlaceMode.KeyCom.Enable();
         }
 
@@ -1082,8 +1093,10 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         {
             BInput.BuildPlaceMode.Enable();
             BInput.BuildPlaceMode.ChangeOutLook.Disable();
-            BInput.BuildPlaceMode.ChangeStyle.Disable();
-            BInput.BuildPlaceMode.ChangeHeight.Disable();
+            BInput.BuildPlaceMode.ChangeStyleLast.Disable();
+            BInput.BuildPlaceMode.ChangeStyleNext.Disable();
+            BInput.BuildPlaceMode.ChangeHeightLast.Disable();
+            BInput.BuildPlaceMode.ChangeHeightNext.Disable();
             //BInput.BuildPlaceMode.KeyCom.Disable();
         }
 
@@ -1227,6 +1240,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     // 复制一份当前选中的BPart(即一级二级分类选择和外观选择的流程)
                     this.SelectedPartInstance = BuildingManager.Instance.GetOneBPartCopyInstance(this.SelectedPartInstance);
 
+                    this.ExitKeyCom();
                     // 进入PlaceMode的放置流程
                     this.PlaceControlFlow = 3;
                 }
@@ -1259,7 +1273,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             }
             // 启用 Input.KeyCom
             BInput.BuildKeyCom.Enable();
-
             this.OnKeyComComplete?.Invoke();
 
         }

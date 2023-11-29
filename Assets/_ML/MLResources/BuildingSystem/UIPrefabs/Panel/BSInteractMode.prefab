@@ -511,6 +511,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1549436448289491324}
     m_Modifications:
+    - target: {fileID: 1003675609277667741, guid: 392bdbfed3e501a4ba0db76ef29c1a60, type: 3}
+      propertyPath: m_FillAmount
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2897551062011221486, guid: 392bdbfed3e501a4ba0db76ef29c1a60, type: 3}
       propertyPath: m_Name
       value: KT_KeyCom

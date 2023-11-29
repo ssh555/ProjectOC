@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using ML.Engine.BuildingSystem.BuildingPart;
 using System.Linq;
+using UnityEngine.Windows;
 
 namespace ML.Engine.BuildingSystem
 {
@@ -75,7 +76,7 @@ namespace ML.Engine.BuildingSystem
             set
             {
                 this.OnModeChanged?.Invoke(mode, value);
-
+                var last = mode;
                 mode = value;
                 bool isEnabled = mode != BuildingMode.None;
                 foreach (var socket in this.BuildingSocketList)
@@ -90,23 +91,33 @@ namespace ML.Engine.BuildingSystem
 #if UNITY_EDITOR
                 if (UnityEditor.EditorApplication.isPlaying)
                 {
-                    if (mode == BuildingMode.None)
+                    if (mode == BuildingMode.None && last != BuildingMode.None)
                     {
                         BInput.Disable();
                     }
-                    else
+                    else if (mode != BuildingMode.None && last == BuildingMode.None)
                     {
                         BInput.Enable();
+                        BInput.Build.Enable();
+                        BInput.BuildKeyCom.Disable();
+                        BInput.BuildSelection.Disable();
+                        BInput.BuildPlaceMode.Disable();
+                        BInput.BuildingAppearance.Disable();
                     }
                 }
 #else
-                    if (mode == BuildingMode.None)
+                    if (mode == BuildingMode.None && last != BuildingMode.None)
                     {
                         BInput.Disable();
                     }
-                    else
+                    else if (mode != BuildingMode.None && last == BuildingMode.None)
                     {
                         BInput.Enable();
+                        BInput.Build.Enable();
+                        BInput.BuildKeyCom.Disable();
+                        BInput.BuildSelection.Disable();
+                        BInput.BuildPlaceMode.Disable();
+                        BInput.BuildingAppearance.Disable();
                     }
 #endif
             }
@@ -335,6 +346,7 @@ namespace ML.Engine.BuildingSystem
                     var ret = BPartQueue.PeekFront();
                     BPartQueue.DequeueFront();
                     BPartQueue.EnqueueBack(ret);
+                    ret = BPartQueue.PeekFront();
                     return GameObject.Instantiate<GameObject>(ret.gameObject).GetComponent<IBuildingPart>();
                 }
                 else
@@ -352,6 +364,17 @@ namespace ML.Engine.BuildingSystem
         public IBuildingPart PollingBPartPeekInstanceOnStyle(IBuildingPart BPart, bool isForward)
         {
             return PollingBPartPeekInstanceOnStyle(BPart.Classification.Category, BPart.Classification.Type, BPart.Classification.Style, isForward);
+        }
+
+        public short[] GetAllHeightByBPartStyle(IBuildingPart BPart)
+        {
+            var bparts = BPartClassificationOnStyle[BPart.Classification.Category][BPart.Classification.Type][BPart.Classification.Style].ToArray();
+            short[] heights = new short[bparts.Length];
+            for(int i = 0; i < bparts.Length; ++i)
+            {
+                heights[i] = bparts[i].Classification.Height;
+            }
+            return heights;
         }
 
         #endregion
@@ -458,6 +481,7 @@ namespace ML.Engine.BuildingSystem
                     var ret = BPartQueue.PeekFront();
                     BPartQueue.DequeueFront();
                     BPartQueue.EnqueueBack(ret);
+                    ret = BPartQueue.PeekFront();
                     return GameObject.Instantiate<GameObject>(ret.gameObject).GetComponent<IBuildingPart>();
                 }
                 else
@@ -477,6 +501,16 @@ namespace ML.Engine.BuildingSystem
             return PollingBPartPeekInstanceOnHeight(BPart.Classification.Category, BPart.Classification.Type, BPart.Classification.Height, isForward);
         }
 
+        public BuildingStyle[] GetAllStyleByBPartHeight(IBuildingPart BPart)
+        {
+            var bparts = BPartClassificationOnHeight[BPart.Classification.Category][BPart.Classification.Type][BPart.Classification.Height].ToArray();
+            BuildingStyle[] styles = new BuildingStyle[bparts.Length];
+            for (int i = 0; i < bparts.Length; ++i)
+            {
+                styles[i] = bparts[i].Classification.Style;
+            }
+            return styles;
+        }
         #endregion
 
         #region Material
