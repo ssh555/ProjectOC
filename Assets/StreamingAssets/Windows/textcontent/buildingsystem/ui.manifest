@@ -1,0 +1,22 @@
+ManifestFileVersion: 0
+CRC: 1292942003
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 663198b83c79e9e200819ca75f80c73d
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5ad585dd02dfb5016c0dad519eab8f49
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 663198b83c79e9e200819ca75f80c73d
+HashAppended: 0
+ClassTypes:
+- Class: 49
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/_ML/MLResources/BuildingSystem/TextContent/Category.json
+- Assets/_ML/MLResources/BuildingSystem/TextContent/Type.json
+- Assets/_ML/MLResources/BuildingSystem/TextContent/KeyTip.json
+Dependencies: []

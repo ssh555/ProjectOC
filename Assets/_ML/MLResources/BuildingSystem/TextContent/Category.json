@@ -1,0 +1,11 @@
+{
+    "category" : [
+        {
+            "category" : "Room",
+            "name" : {
+                "Chinese" : "房屋",
+                "English" : "Room"
+            }
+        }
+    ]
+}

@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 1807483576
+CRC: 1682813680
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -34,6 +34,7 @@ AssetBundleManifest:
         Dependency_0: ui/buildingsystem/texture2d/category
         Dependency_1: ui/buildingsystem/texture2d/type
         Dependency_2: ui/buildingsystem/texture2d/style
+        Dependency_3: fonts
     Info_8:
       Name: prefabs/buildingsystem/bpart
       Dependencies:
@@ -46,4 +47,10 @@ AssetBundleManifest:
       Dependencies: {}
     Info_11:
       Name: ui/buildingsystem/texture2d/style
+      Dependencies: {}
+    Info_12:
+      Name: fonts
+      Dependencies: {}
+    Info_13:
+      Name: textcontent/buildingsystem/ui
       Dependencies: {}

@@ -5,16 +5,249 @@ using System;
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.UI;
 using Sirenix.OdinInspector;
+using UnityEngine.UI;
+using TMPro;
+using static ML.Engine.BuildingSystem.Config;
 
 namespace ML.Engine.BuildingSystem
 {
+    public static class Config
+    {
+        public enum Language
+        {
+            Chinese,
+            English,
+        }
+        public enum Platform
+        {
+            Windows,
+        }
+        public enum InputDevice
+        {
+            Keyboard,
+            XBOX,
+        }
+
+        public static Language language = Language.Chinese;
+        public static Platform platform = Platform.Windows;
+        public static InputDevice inputDevice = InputDevice.Keyboard;
+    }
+
+    public struct UIKeyTip
+    {
+        public RectTransform root;
+        public Image img;
+        public TextMeshProUGUI keytip;
+        public TextMeshProUGUI description;
+
+        public void ReWrite(Test_BuildingManager.KeyTip keyTip)
+        {
+            if(this.keytip)
+                this.keytip.text = keyTip.GetKeyMapText();
+            if(this.description)
+                this.description.text = keyTip.GetDescription();
+        }
+    }
+
     public class Test_BuildingManager : MonoBehaviour
     {
+        public static Test_BuildingManager Instance;
+        public BuildingManager BM;
+
+        #region Config
+
+        #endregion
+        [LabelText("语言"),  ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
+        public Language language
+        {
+            get => Config.language;
+            set => Config.language = value;
+        }
+        [LabelText("平台"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
+        public Platform platform
+        {
+            get => Config.platform;
+            set => Config.platform = value;
+        }
+        [LabelText("输入设备"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
+        public InputDevice inputDevice
+        {
+            get => Config.inputDevice;
+            set => Config.inputDevice = value;
+        }
+
+        #region TextContent
+
+        public const string TextContentABPath = "TextContent/BuildingSystem/UI";
+        [System.Serializable]
+        public struct TextContent
+        {
+            public string Chinese;
+
+            public string English;
+
+            public string GetText()
+            {
+                if(Config.language == Config.Language.Chinese)
+                {
+                    return Chinese;
+                }
+                else if(Config.language == Config.Language.English)
+                {
+                    return English;
+                }
+                return "";
+            }
+        }
+        
+        #region KeyTip
+        [System.Serializable]
+        public struct KeyMap
+        {
+            public string KeyBoard;
+
+            public string XBOX;
+
+            public string GetKeyMapText()
+            {
+                if (Config.inputDevice == Config.InputDevice.XBOX)
+                {
+                    return XBOX;
+                }
+                else if (Config.inputDevice == Config.InputDevice.Keyboard)
+                {
+                    return KeyBoard;
+                }
+                return "";
+            }
+        }
+        [System.Serializable]
+        public struct KeyTip
+        {
+            public string keyname;
+            public KeyMap keymap;
+            public TextContent description;
+
+            public string GetKeyMapText()
+            {
+                return this.keymap.GetKeyMapText();
+            }
+
+            public string GetDescription()
+            {
+                return this.description.GetText();
+            }
+        }
+        [System.Serializable]
+        private struct KeyTips
+        {
+            public KeyTip[] keytips;
+        }
+
+
+        public Dictionary<string, KeyTip> KeyTipDict = new Dictionary<string, KeyTip>();
+
+        #endregion
+
+        #region Category|Type
+        [System.Serializable]
+        public struct BCategory
+        {
+            public string category;
+            public TextContent name;
+
+            public string GetNameText()
+            {
+                return name.GetText();
+            }
+        }
+        [System.Serializable]
+        public struct BType
+        {
+            public string type;
+            public TextContent name;
+            public string GetNameText()
+            {
+                return name.GetText();
+            }
+        }
+
+        [System.Serializable]
+        private struct BCategorys
+        {
+            public BCategory[] category;
+        }
+        [System.Serializable]
+        private struct BTypes
+        {
+            public BType[] type;
+        }
+
+        public Dictionary<string, BCategory> CategoryDict = new Dictionary<string, BCategory>();
+        public Dictionary<string, BType> TypeDict = new Dictionary<string, BType>();
+
+        #endregion
+
+        private IEnumerator InitUITextContents()
+        {
+#if UNITY_EDITOR
+            float startT = Time.time;
+#endif
+            while (Manager.GameManager.Instance.ABResourceManager == null)
+            {
+                yield return null;
+            }
+            var abmgr = Manager.GameManager.Instance.ABResourceManager;
+            AssetBundle ab;
+            var crequest = abmgr.LoadLocalABAsync(TextContentABPath, null, out ab);
+            yield return crequest;
+            if(crequest != null)
+            {
+                ab = crequest.assetBundle;
+            }
+
+            // KeyTip
+            var request = ab.LoadAssetAsync<TextAsset>("KeyTip");
+            yield return request;
+            KeyTips keyTips = JsonUtility.FromJson<KeyTips>((request.asset as TextAsset).text);
+            foreach(var keytip in keyTips.keytips)
+            {
+                this.KeyTipDict.Add(keytip.keyname, keytip);
+            }
+
+            // Category
+            request = ab.LoadAssetAsync<TextAsset>("Category");
+            yield return request;
+            BCategorys categorys = JsonUtility.FromJson<BCategorys>((request.asset as TextAsset).text);
+            foreach (var category in categorys.category)
+            {
+                this.CategoryDict.Add(category.category, category);
+            }
+
+            // Type
+            request = ab.LoadAssetAsync<TextAsset>("Type");
+            yield return request;
+            BTypes btypes = JsonUtility.FromJson<BTypes>((request.asset as TextAsset).text);
+            foreach (var type in btypes.type)
+            {
+                this.TypeDict.Add(type.type, type);
+            }
+
+
+            abmgr.UnLoadLocalABAsync(TextContentABPath, false, null);
+
+#if UNITY_EDITOR
+            Debug.Log("RegisterBPartPrefab cost time: " + (Time.time - startT));
+#endif
+        }
+
+
+        #endregion
+
         public const string UIPanelABPath = "UI/BuildingSystem/Prefabs";
 
         public const string BPartABPath = "Prefabs/BuildingSystem/BPart";
 
-        public BuildingManager BM;
 
         private Dictionary<Type, UIBasePanel> uiBasePanelDict = new Dictionary<Type, UIBasePanel>();
 
@@ -53,6 +286,15 @@ namespace ML.Engine.BuildingSystem
             return Manager.GameManager.Instance.UIManager.GetTopUIPanel();
         }
 
+        private void Awake()
+        {
+            if(Instance != null)
+            {
+                Destroy(this.gameObject);
+            }
+            Instance = this;
+        }
+
         void Start()
         {
             ML.Engine.Manager.GameManager.Instance.RegisterLocalManager(BM);
@@ -63,6 +305,8 @@ namespace ML.Engine.BuildingSystem
             StartCoroutine(RigisterUIPanelPrefab());
 
             StartCoroutine(AddTestEvent());
+
+            StartCoroutine(InitUITextContents());
         }
 
         private IEnumerator RegisterBPartPrefab()
@@ -281,6 +525,14 @@ namespace ML.Engine.BuildingSystem
 
         }
 
+
+        private void OnDestroy()
+        {
+            if(Instance == this)
+            {
+                Instance = null;
+            }
+        }
     }
 
 }

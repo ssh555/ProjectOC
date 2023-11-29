@@ -43,6 +43,7 @@ namespace ML.Engine.BuildingSystem
     [System.Serializable]
     public sealed class BuildingManager : Manager.LocalManager.ILocalManager
     {
+        #region
         private static BuildingManager instance = null;
         public static BuildingManager Instance
         {
@@ -168,6 +169,7 @@ namespace ML.Engine.BuildingSystem
 
         public List<BuildingSocket.BuildingSocket> BuildingSocketList = new List<BuildingSocket.BuildingSocket>();
         public List<BuildingArea.BuildingArea> BuildingAreaList = new List<BuildingArea.BuildingArea>();
+        #endregion
 
         #region BPartPrefab
         /// <summary>
@@ -650,8 +652,8 @@ namespace ML.Engine.BuildingSystem
         #endregion
 
         #endregion
-    
-    
+
+
     }
 
 }
