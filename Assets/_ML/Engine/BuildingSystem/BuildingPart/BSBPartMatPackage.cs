@@ -12,9 +12,16 @@ namespace ML.Engine.BuildingSystem
     public class BSBPartMatPackage : SerializedScriptableObject
     {
         [Serializable]
-        public struct MatPackage
+        public struct MatArray
         {
             public Material[] Mats;
+        }
+
+
+        [Serializable]
+        public struct MatPackage
+        {
+            public MatArray[] Mats;
         }
 
         [Serializable]
@@ -42,15 +49,15 @@ namespace ML.Engine.BuildingSystem
             {
                 BuildingCopiedMaterial mat = new BuildingCopiedMaterial();
 
-                foreach (int index in MatStruct)
+                for(int j = 0; j < MatStruct.Length; ++j)
                 {
-                    if(index != -1)
+                    if (j != -1)
                     {
-                        mat.ChildrenMat.Add(index, MatPackages[i].MPs.Mats);
+                        mat.ChildrenMat.Add(j, MatPackages[i].MPs.Mats[j].Mats);
                     }
                     else
                     {
-                        mat.ParentMat = MatPackages[i].MPs.Mats;
+                        mat.ParentMat = MatPackages[i].MPs.Mats[j].Mats;
                     }
                 }
                 ret.Add(MatPackages[i].Tex, mat);

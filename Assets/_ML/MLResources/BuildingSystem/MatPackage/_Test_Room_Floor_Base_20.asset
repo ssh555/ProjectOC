@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: _Test_Room_Floor_Base_20
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
+    SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
@@ -31,12 +31,15 @@ MonoBehaviour:
   - Tex: {fileID: 2800000, guid: 3e8877450ec9644479d3989d906d5dc8, type: 3}
     MPs:
       Mats:
-      - {fileID: 2100000, guid: 0235cbc0d5e8983428f8f37fa28dee56, type: 2}
+      - Mats:
+        - {fileID: 2100000, guid: 0235cbc0d5e8983428f8f37fa28dee56, type: 2}
   - Tex: {fileID: 2800000, guid: 27e8f5a6e16c4c945a64afa59b35dcf0, type: 3}
     MPs:
       Mats:
-      - {fileID: 2100000, guid: 2f0dc36eab24da74ebd6ee4aac1b7b9c, type: 2}
+      - Mats:
+        - {fileID: 2100000, guid: 2f0dc36eab24da74ebd6ee4aac1b7b9c, type: 2}
   - Tex: {fileID: 2800000, guid: d69215c432da8404aa0f31e567fed409, type: 3}
     MPs:
       Mats:
-      - {fileID: 2100000, guid: a801849b98fcfa94cae24a8915b5e27a, type: 2}
+      - Mats:
+        - {fileID: 2100000, guid: a801849b98fcfa94cae24a8915b5e27a, type: 2}

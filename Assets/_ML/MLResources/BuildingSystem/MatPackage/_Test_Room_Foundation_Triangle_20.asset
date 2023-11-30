@@ -31,12 +31,15 @@ MonoBehaviour:
   - Tex: {fileID: 2800000, guid: 27e8f5a6e16c4c945a64afa59b35dcf0, type: 3}
     MPs:
       Mats:
-      - {fileID: 2100000, guid: 2f0dc36eab24da74ebd6ee4aac1b7b9c, type: 2}
+      - Mats:
+        - {fileID: 2100000, guid: 2f0dc36eab24da74ebd6ee4aac1b7b9c, type: 2}
   - Tex: {fileID: 2800000, guid: 443b4b93013fd584284ff636f578041e, type: 3}
     MPs:
       Mats:
-      - {fileID: 2100000, guid: d8b7d9d6526f8814fabf5efd6632d90a, type: 2}
+      - Mats:
+        - {fileID: 2100000, guid: d8b7d9d6526f8814fabf5efd6632d90a, type: 2}
   - Tex: {fileID: 2800000, guid: a5b58b3d28beeb749864bd8dd007c92a, type: 3}
     MPs:
       Mats:
-      - {fileID: 2100000, guid: e6a7780900c8488438c4078acc601e89, type: 2}
+      - Mats:
+        - {fileID: 2100000, guid: e6a7780900c8488438c4078acc601e89, type: 2}
