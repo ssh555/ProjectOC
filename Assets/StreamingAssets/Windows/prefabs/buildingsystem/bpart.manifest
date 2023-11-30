@@ -1,0 +1,61 @@
+ManifestFileVersion: 0
+CRC: 4118910345
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 522620152087ace52b6cb6e7e472a28b
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: cddaf69a6e77e76faee454ba618694b0
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 522620152087ace52b6cb6e7e472a28b
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 84b45a722afc9f748bdef2e991e7ddaf, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 88dfd9a1d40070e45bc302b503615a5e, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 135
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: ML.Engine.BuildingSystem.BuildingArea.BuildingAreaType
+- AssemblyName: Assembly-CSharp
+  ClassName: ML.Engine.BuildingSystem.BuildingPart.BuildingCategory
+- AssemblyName: Assembly-CSharp
+  ClassName: ML.Engine.BuildingSystem.BuildingPart.BuildingPartClassification
+- AssemblyName: Assembly-CSharp
+  ClassName: ML.Engine.BuildingSystem.BuildingPart.BuildingStyle
+- AssemblyName: Assembly-CSharp
+  ClassName: ML.Engine.BuildingSystem.BuildingPart.BuildingType
+- AssemblyName: Assembly-CSharp
+  ClassName: ML.Engine.BuildingSystem.BuildingSocket.BuildingSocketType
+Assets:
+- Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/_Test_Room_Foundation_Triangle_20.prefab
+- Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/_Test_Room_Floor_Base_20.prefab
+- Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/_Test_Room_Foundation_Base_20.prefab
+- Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/_Test_Room_Foundation_Triangle_50.prefab
+- Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/_Test_Room_Foundation_Base_50.prefab
+- Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/_Test_Room_Floor_Base_50.prefab
+Dependencies: []

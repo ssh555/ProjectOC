@@ -25,10 +25,11 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         {
             get
             {
-                return this.canPlaceInPlaceMode && (this.AttachedArea != null || this.AttachedSocket != null);
+                return this.canPlaceInPlaceMode && (this.AttachedArea != null || this.AttachedSocket != null) && (this.CheckCanInPlaceMode == null ? true : this.CheckCanInPlaceMode.Invoke(this));
             }
             set => canPlaceInPlaceMode = value; 
         }
+        public event IBuildingPart.CheckCanPlaceMode CheckCanInPlaceMode;
 
         [SerializeField, LabelText("模式")]
         private BuildingMode mode;
@@ -37,6 +38,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             get => mode;
             set
             {
+
                 mode = value;
                 this.SetColliderTrigger((mode == BuildingMode.Place || mode == BuildingMode.Destroy || mode == BuildingMode.Edit));
 
@@ -133,17 +135,20 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         public BuildingCopiedMaterial GetCopiedMaterial()
         {
             BuildingCopiedMaterial mat = new BuildingCopiedMaterial();
+            var p = this.GetComponent<Renderer>();
+            if(p)
+            {
+                mat.ParentMat = rowMat[p];
 
-            mat.ParentMat = this.GetComponent<Renderer>().sharedMaterials;
-            for(int i = this.transform.childCount - 1; i >= 0; --i)
+            }
+            for (int i = this.transform.childCount - 1; i >= 0; --i)
             {
                 var renderer = this.transform.GetChild(i).GetComponent<Renderer>();
                 if (renderer)
                 {
-                    mat.ChildrenMat.Add(i, renderer.sharedMaterials);
+                    mat.ChildrenMat.Add(i, rowMat[renderer]);
                 }
             }
-
             return mat;
         }
 
@@ -153,9 +158,18 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             {
                 this.GetComponent<Renderer>().sharedMaterials = mat.ParentMat;
             }
-            foreach(var kv in mat.ChildrenMat)
+            if(mat.ChildrenMat != null)
             {
-                this.transform.GetChild(kv.Key).GetComponent<Renderer>().sharedMaterials = kv.Value;
+                foreach (var kv in mat.ChildrenMat)
+                {
+                    this.transform.GetChild(kv.Key).GetComponent<Renderer>().sharedMaterials = kv.Value;
+                }
+            }
+
+            this.rowMat.Clear();
+            foreach (var renderer in this.GetComponentsInChildren<Renderer>())
+            {
+                this.rowMat.Add(renderer, renderer.sharedMaterials);
             }
         }
 
@@ -165,6 +179,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         /// 原生材质
         /// </summary>
         private Dictionary<Renderer, Material[]> rowMat;
+
 
         private void Awake()
         {
@@ -185,16 +200,16 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 {
                     if(coll is BoxCollider)
                     {
-                        (coll as BoxCollider).size *= 0.99f;
+                        (coll as BoxCollider).size = Vector3.one * 0.99f;
                     }
                     else if(coll is CapsuleCollider)
                     {
-                        (coll as CapsuleCollider).radius *= 0.99f;
-                        (coll as CapsuleCollider).height *= 0.99f;
+                        (coll as CapsuleCollider).radius = 0.45f;
+                        (coll as CapsuleCollider).height = 1.98f;
                     }
                     else if(coll is SphereCollider)
                     {
-                        (coll as SphereCollider).radius *= 0.99f;
+                        (coll as SphereCollider).radius = 0.45f;
                     }
                 }
             }

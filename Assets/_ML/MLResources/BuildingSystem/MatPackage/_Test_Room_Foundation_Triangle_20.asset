@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 670a3f6f18a8e5b449c8a5df82262fc0, type: 3}
+  m_Name: _Test_Room_Foundation_Triangle_20
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  Classification:
+    Category: 0
+    Type: 0
+    Style: 2
+    Height: 20
+  MatStruct: ffffffff
+  MatPackages:
+  - Tex: {fileID: 2800000, guid: 27e8f5a6e16c4c945a64afa59b35dcf0, type: 3}
+    MPs:
+      Mats:
+      - Mats:
+        - {fileID: 2100000, guid: 2f0dc36eab24da74ebd6ee4aac1b7b9c, type: 2}
+  - Tex: {fileID: 2800000, guid: 443b4b93013fd584284ff636f578041e, type: 3}
+    MPs:
+      Mats:
+      - Mats:
+        - {fileID: 2100000, guid: d8b7d9d6526f8814fabf5efd6632d90a, type: 2}
+  - Tex: {fileID: 2800000, guid: a5b58b3d28beeb749864bd8dd007c92a, type: 3}
+    MPs:
+      Mats:
+      - Mats:
+        - {fileID: 2100000, guid: e6a7780900c8488438c4078acc601e89, type: 2}

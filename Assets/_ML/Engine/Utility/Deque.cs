@@ -66,6 +66,13 @@ namespace ML.Engine
         {
             get { return list.Count; }
         }
+
+        public T[] ToArray()
+        {
+            T[] array = new T[list.Count];
+            list.CopyTo(array, 0);
+            return array;
+        }
     }
 
 }

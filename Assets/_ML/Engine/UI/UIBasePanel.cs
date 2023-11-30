@@ -14,12 +14,20 @@ namespace ML.Engine.UI
         /// <summary>
         /// À˘ ÙUIManager
         /// </summary>
-        protected UIManager UIMgr;
+        private UIManager _uiMgr;
         /// <summary>
         /// À˘ ÙUIManager
         /// </summary>
-        public UIManager SetUIMgr
+        public UIManager UIMgr
         {
+            get
+            {
+                if(_uiMgr == null)
+                {
+                    _uiMgr = ML.Engine.Manager.GameManager.Instance.UIManager;
+                }
+                return _uiMgr;
+            }
             set
             {
                 UIMgr = value;
@@ -31,7 +39,7 @@ namespace ML.Engine.UI
         /// </summary>
         public virtual void OnEnter()
         {
-            return;
+            this.gameObject.SetActive(true);
         }
 
         /// <summary>
@@ -39,7 +47,7 @@ namespace ML.Engine.UI
         /// </summary>
         public virtual void OnPause()
         {
-            return;
+            this.gameObject.SetActive(false);
         }
 
         /// <summary>
@@ -47,7 +55,7 @@ namespace ML.Engine.UI
         /// </summary>
         public virtual void OnRecovery()
         {
-            return;
+            this.gameObject.SetActive(true);
         }
 
         /// <summary>
@@ -55,7 +63,7 @@ namespace ML.Engine.UI
         /// </summary>
         public virtual void OnExit()
         {
-            return;
+            this.gameObject.SetActive(false);
         }
 
     }

@@ -39,6 +39,9 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         /// </summary>
         public bool CanPlaceInPlaceMode { get; set; }
 
+        public delegate bool CheckCanPlaceMode(IBuildingPart BPart);
+        public event CheckCanPlaceMode CheckCanInPlaceMode;
+
         /// <summary>
         /// 当前所处的建造模式
         /// </summary>
@@ -166,7 +169,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 {
                     this.tmpTriggerMode = this.Mode;
                 }
-                if (other.GetComponent<IBuildingPart>() != null && this.Mode != BuildingMode.Destroy)
+                if (other.GetComponent<IBuildingPart>() != null)
                 {
                     this.CanPlaceInPlaceMode = false;
                     this.Mode = BuildingMode.Destroy;

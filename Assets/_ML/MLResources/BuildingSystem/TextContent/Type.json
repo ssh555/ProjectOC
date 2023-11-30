@@ -1,0 +1,19 @@
+{
+    "type" : [
+        {
+            "type" : "Foundation",
+            "name" : {
+                "Chinese" : "地基",
+                "English" : "Foundation"
+            }
+        },
+        {
+            "type" : "Floor",
+            "name" : {
+                "Chinese" : "地板",
+                "English" : "Floor"
+            }
+        }
+
+    ]
+}
