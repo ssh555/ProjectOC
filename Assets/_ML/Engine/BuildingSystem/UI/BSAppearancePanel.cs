@@ -67,7 +67,9 @@ namespace ML.Engine.BuildingSystem.UI
                 Sprite sprite = Sprite.Create(texs[i], new Rect(0, 0, texs[i].width, texs[i].height), new Vector2(0.5f, 0.5f));
                 var img = Instantiate<GameObject>(templateMat.gameObject, matParent, false).GetComponent<UnityEngine.UI.Image>();
                 img.sprite = sprite;
-                img.color = new Color(144f / 255, 144f / 255, 144f / 255, 144f / 255);
+
+                Disactive(img);
+
                 img.gameObject.SetActive(true);
                 matInstance[i] = img;
             }
@@ -81,12 +83,31 @@ namespace ML.Engine.BuildingSystem.UI
 
         private IEnumerator Show(Texture2D[] texs, BuildingCopiedMaterial[] mats, int index)
         {
-            this.matInstance[activeIndex].color = new Color(144f / 255, 144f / 255, 144f / 255, 144f / 255);
+            Disactive(this.matInstance[activeIndex]);
             activeIndex = index;
-            this.matInstance[activeIndex].color = Color.white;
+            Active(this.matInstance[activeIndex]);
             yield break;
         }
-                
+
+        /// <summary>
+        /// to-yl
+        /// </summary>
+        /// <param name="img"></param>
+        private void Active(Image img)
+        {
+            img.color = Color.white;
+        }
+
+        /// <summary>
+        /// to-yl
+        /// </summary>
+        /// <param name="img"></param>
+        private void Disactive(Image img)
+        {
+            img.color = new Color(144f / 255, 144f / 255, 144f / 255, 144f / 255);
+        }
+
+
         private void ClearInstance()
         {
             if(matInstance != null)

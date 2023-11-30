@@ -225,11 +225,11 @@ namespace ML.Engine.BuildingSystem.UI
                 var img = instance.Value.GetComponentInChildren<Image>();
                 if(instance.Key != category)
                 {
-                    img.transform.localScale = Vector3.one;
+                    Disactive(img);
                 }
                 else
                 {
-                    img.transform.localScale = Vector3.one * 1.2f;
+                    Active(img);
                 }
             }
 
@@ -245,12 +245,31 @@ namespace ML.Engine.BuildingSystem.UI
 
                 if(type == types[tIndex])
                 {
-                    go.GetComponentInChildren<Image>().transform.localScale = Vector3.one * 1.2f;
+                    Active(go.GetComponentInChildren<Image>());
                 }
             }
 
             yield break;
         }
+
+        /// <summary>
+        /// to-yl
+        /// </summary>
+        /// <param name="img"></param>
+        private void Active(Image img)
+        {
+            img.transform.localScale = Vector3.one * 1.2f;
+        }
+
+        /// <summary>
+        /// to-yl
+        /// </summary>
+        /// <param name="img"></param>
+        private void Disactive(Image img)
+        {
+            img.transform.localScale = Vector3.one;
+        }
+
 
         private void ClearInstance()
         {

@@ -215,18 +215,35 @@ namespace ML.Engine.BuildingSystem.UI
                 var img = instance.Value.GetComponentInChildren<Image>();
                 if (instance.Key != style)
                 {
-                    img.color = Color.white;
-                    img.color = new Color(145f / 255, 145f / 255, 145f / 255, 145f / 255);
+                    Disactive(img);
                 }
                 else
                 {
-                    img.color = Color.white;
+                    Active(img);
                 }
             }
 
             // ¸ü»» Height
 
             yield break;
+        }
+
+        /// <summary>
+        /// to-yl
+        /// </summary>
+        /// <param name="img"></param>
+        private void Active(Image img)
+        {
+            img.color = Color.white;
+        }
+
+        /// <summary>
+        /// to-yl
+        /// </summary>
+        /// <param name="img"></param>
+        private void Disactive(Image img)
+        {
+            img.color = new Color(144f / 255, 144f / 255, 144f / 255, 144f / 255);
         }
 
         private void ClearInstance()
