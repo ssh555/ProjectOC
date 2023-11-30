@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static ML.Engine.BuildingSystem.Test_BuildingManager;
 
 namespace ML.Engine.BuildingSystem.BuildingPlacer
 {
@@ -120,8 +121,9 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// 进入外观选择面板时调用，即打开外观选择UI交互面板
         /// 参数 : 选择使用的BPart
         /// </summary>
-        public event System.Action<IBuildingPart> OnEnterAppearance;
+        public event System.Action<IBuildingPart, Texture2D[], BuildingCopiedMaterial[], int> OnEnterAppearance;
         public event System.Action<IBuildingPart> OnExitAppearance;
+        public event System.Action<Texture2D[], BuildingCopiedMaterial[], int> OnChangeAppearance;
 
         /// <summary>
         /// 在销毁BPart时调用
@@ -334,8 +336,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// <param name="rot"></param>
         protected bool GetPlacePosAndRot(out Vector3 pos, out Quaternion rot)
         {
-
-
             if (this.SelectedPartInstance != null)
             {
                 // 归0
@@ -365,17 +365,28 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 Vector3 tmpP;
                 Quaternion tmpR;
                 // 位置&旋转 -> AttachedArea
-                if(this.SelectedPartInstance.ActiveSocket.GetMatchTransformOnArea(pos, out tmpP, out tmpR))
+                if(this.SelectedPartInstance.AttachedArea)
                 {
-                    pos = tmpP;
-                    rot = tmpR;
+                    if (this.SelectedPartInstance.ActiveSocket.GetMatchTransformOnArea(pos, out tmpP, out tmpR))
+                    {
+                        pos = tmpP;
+                        rot = tmpR;
+                        return true;
+                    }
+                    return false;
                 }
                 // 位置&旋转 -> AttachedSocket
-                if (this.SelectedPartInstance.ActiveSocket.GetMatchTransformOnSocket(out tmpP, out tmpR))
+                if (this.SelectedPartInstance.AttachedSocket)
                 {
-                    pos = tmpP;
-                    rot = tmpR;
+                    if (this.SelectedPartInstance.ActiveSocket.GetMatchTransformOnSocket(out tmpP, out tmpR))
+                    {
+                        pos = tmpP;
+                        rot = tmpR;
+                        return true;
+                    }
+                    return false;
                 }
+
 
                 return true;
             }
@@ -454,7 +465,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         #region ITickComponent
         private void Start()
         {
-            this.enabled = false;
+            StartCoroutine(LoadMatPackages());
             BuildingManager.Instance.Placer = this;
 
             // 解析interactions字符串来获取hold的总时间值
@@ -609,7 +620,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     this.HandelKeyCom();
                 }
                 // 退出次交互轮
-                else if (BInput.BuildKeyCom.KeyCom.WasReleasedThisFrame())
+                if (BInput.BuildKeyCom.KeyCom.WasReleasedThisFrame())
                 {
                     this.ExitKeyCom();
                 }
@@ -620,11 +631,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     this.HandleAppearance();
                 }
                 #endregion
-                // to-do : to-delete : 仅测试用, 退出建造模式
-                else if (ML.Engine.Input.InputManager.Instance.Common.Common.Back.WasPressedThisFrame())
-                {
-                    this.Mode = BuildingMode.None;
-                }
                 // 没有按键响应时，响应可交互项切换
                 else
                 {
@@ -642,12 +648,26 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 }
 
                 // 按键阻断 => 同一帧只能响应 InteractMode 的一种按键
-                return;
+                //return;
             }
+            else
+            {
+                // 退出次交互轮
+                if (BInput.BuildKeyCom.KeyCom.WasReleasedThisFrame())
+                {
+                    this.ExitKeyCom();
+                }
+            }
+           
             // 切入 Place Mode -> 进入建筑物选择界面
-            if (BInput.Build.SelectBuild.WasPressedThisFrame())
+            if (!this.IsInAppearance && BInput.Build.SelectBuild.WasPressedThisFrame())
             {
                 this.EnterBuildSelection();
+            }
+            // to-do : to-delete : 仅测试用, 退出建造模式
+            else if (!this.IsInAppearance && BInput.Build.enabled &&  ML.Engine.Input.InputManager.Instance.Common.Common.Back.WasPressedThisFrame())
+            {
+                this.Mode = BuildingMode.None;
             }
         }
         #endregion
@@ -703,6 +723,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     // 进入流程3
                     if (this._placeControlFlow == 3)
                     {
+                        this.EnablePlaceModeInput();
                         this.OnPlaceModeEnter?.Invoke(this.SelectedPartInstance);
                     }
                     this.Mode = BuildingMode.Place;
@@ -757,11 +778,57 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             {
                 // 实时更新落点的位置和旋转以及是否可放置
                 this.TransformSelectedPartInstance();
-                // 辅助网格
-                if (BInput.BuildPlaceMode.SwitchFrame_PreHold.IsInProgress() && BInput.BuildPlaceMode.SwitchFrame_PostPress.WasPressedThisFrame())
+                // 长按开始 => 用于事件调用，与建造系统逻辑无关
+                if (BInput.BuildPlaceMode.KeyCom.WasPressedThisFrame())
                 {
-                    this.IsEnableGridSupport = !IsEnableGridSupport;
+                    this.keyComStartTime = Time.time;
+                    this.OnKeyComStart?.Invoke();
                 }
+                // 长按进行中
+                else if (BInput.BuildPlaceMode.KeyCom.IsPressed())
+                {
+                    float curT = Time.time - this.keyComStartTime;
+                    // 用于事件调用
+                    if (curT < this.keyComTotalTime)
+                    {
+                        this.OnKeyComInProgress?.Invoke(curT, this.keyComTotalTime);
+                    }
+                    // 长按完成 => 切入次交互轮, 切入后不再是Input.Build，不会重复执行
+                    else
+                    {
+                        // 切入次交互轮 => 依旧是InteractMode
+                        this.EnterKeyCom();
+                    }
+                }
+                // 长按结束
+                else if (BInput.BuildPlaceMode.KeyCom.WasReleasedThisFrame())
+                {
+                    float curT = Time.time - this.keyComStartTime;
+                    // 长按取消
+                    if (curT < this.keyComTotalTime)
+                    {
+                        this.OnKeyComCancel?.Invoke(curT, this.keyComTotalTime);
+                    }
+                    //// 长按退出 => 由次交互轮的输入接管
+                    //else
+                    //{
+                    //    this.OnKeyComExit?.Invoke();
+                    //    // 退出KeyCom
+                    //    this.ExitKeyCom();
+                    //}
+                }
+                #region Input.KeyCom
+                // 切入次交互轮后 : 禁用Input.Build 启用Input.Keycom
+                else if (BInput.BuildKeyCom.KeyCom.IsPressed())
+                {
+                    this.HandelKeyCom();
+                }
+                // 退出次交互轮
+                else if (BInput.BuildKeyCom.KeyCom.WasReleasedThisFrame())
+                {
+                    this.ExitKeyCom();
+                }
+                #endregion
                 // 取消 -> 回到InteractMode
                 else if (this.backInputAction.WasPressedThisFrame())
                 {
@@ -788,17 +855,25 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     this.SelectedPartInstance.AlternativeActiveSocket();
                 }
                 // Style、Height切换BPart
-                else if(BInput.BuildPlaceMode.ChangeStyle.WasPressedThisFrame())
+                else if(BInput.BuildPlaceMode.ChangeStyleLast.WasPressedThisFrame())
                 {
-                    bool isForward = BInput.BuildPlaceMode.ChangeStyle.ReadValue<float>() > 0;
-                    this.AlternateBPartOnStyle (isForward);
-                    this.OnPlaceModeChangeStyle?.Invoke(this.SelectedPartInstance, isForward);
+                    this.AlternateBPartOnHeight (false);
+                    this.OnPlaceModeChangeStyle?.Invoke(this.SelectedPartInstance, false);
                 }
-                else if (BInput.BuildPlaceMode.ChangeHeight.WasPressedThisFrame())
+                else if (BInput.BuildPlaceMode.ChangeStyleNext.WasPressedThisFrame())
                 {
-                    bool isForward = BInput.BuildPlaceMode.ChangeHeight.ReadValue<float>() > 0;
-                    this.AlternateBPartOnHeight(isForward);
-                    this.OnPlaceModeChangeHeight?.Invoke(this.SelectedPartInstance, isForward);
+                    this.AlternateBPartOnHeight(true);
+                    this.OnPlaceModeChangeStyle?.Invoke(this.SelectedPartInstance, true);
+                }
+                else if (BInput.BuildPlaceMode.ChangeHeightLast.WasPressedThisFrame())
+                {
+                    this.AlternateBPartOnStyle(false);
+                    this.OnPlaceModeChangeHeight?.Invoke(this.SelectedPartInstance, false);
+                }
+                else if (BInput.BuildPlaceMode.ChangeHeightNext.WasPressedThisFrame())
+                {
+                    this.AlternateBPartOnStyle(true);
+                    this.OnPlaceModeChangeHeight?.Invoke(this.SelectedPartInstance, true);
                 }
                 // 回退到外观选择
                 else if(BInput.BuildPlaceMode.ChangeOutLook.WasPressedThisFrame())
@@ -819,7 +894,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
                     this.SelectedPartInstance = tmp;
                 }
-
             }
         }
 
@@ -867,13 +941,17 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         {
             BInput.BuildPlaceMode.Enable();
             BInput.BuildPlaceMode.ChangeOutLook.Enable();
-            BInput.BuildPlaceMode.ChangeStyle.Enable();
-            BInput.BuildPlaceMode.ChangeHeight.Enable();
+            BInput.BuildPlaceMode.ChangeStyleLast.Enable();
+            BInput.BuildPlaceMode.ChangeStyleNext.Enable();
+            BInput.BuildPlaceMode.ChangeHeightLast.Enable();
+            BInput.BuildPlaceMode.ChangeHeightNext.Enable();
             BInput.BuildPlaceMode.KeyCom.Enable();
         }
 
         protected void ExitPlaceMode()
         {
+            this.PlaceControlFlow = 0;
+
             // 启用 Input.Build
             this.Mode = BuildingMode.Interact;
             // 禁用 Input.Place
@@ -881,7 +959,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             // 更新BPart状态
             this.SelectedPartInstance = null;
 
-            this.PlaceControlFlow = 0;
         }
 
         protected void UpdatePlaceBuildingType(BuildingCategory category)
@@ -901,11 +978,57 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         {
             // 实时更新落点的位置和旋转以及是否可放置
             this.TransformSelectedPartInstance();
-            // 辅助网格
-            if (BInput.BuildPlaceMode.SwitchFrame_PreHold.IsInProgress() && BInput.BuildPlaceMode.SwitchFrame_PostPress.WasPressedThisFrame())
+            // 长按开始 => 用于事件调用，与建造系统逻辑无关
+            if (BInput.BuildPlaceMode.KeyCom.WasPressedThisFrame())
             {
-                this.IsEnableGridSupport = !IsEnableGridSupport;
+                this.keyComStartTime = Time.time;
+                this.OnKeyComStart?.Invoke();
             }
+            // 长按进行中
+            else if (BInput.BuildPlaceMode.KeyCom.IsPressed())
+            {
+                float curT = Time.time - this.keyComStartTime;
+                // 用于事件调用
+                if (curT < this.keyComTotalTime)
+                {
+                    this.OnKeyComInProgress?.Invoke(curT, this.keyComTotalTime);
+                }
+                // 长按完成 => 切入次交互轮, 切入后不再是Input.Build，不会重复执行
+                else
+                {
+                    // 切入次交互轮 => 依旧是InteractMode
+                    this.EnterKeyCom();
+                }
+            }
+            // 长按结束
+            else if (BInput.BuildPlaceMode.KeyCom.WasReleasedThisFrame())
+            {
+                float curT = Time.time - this.keyComStartTime;
+                // 长按取消
+                if (curT < this.keyComTotalTime)
+                {
+                    this.OnKeyComCancel?.Invoke(curT, this.keyComTotalTime);
+                }
+                //// 长按退出 => 由次交互轮的输入接管
+                //else
+                //{
+                //    this.OnKeyComExit?.Invoke();
+                //    // 退出KeyCom
+                //    this.ExitKeyCom();
+                //}
+            }
+            #region Input.KeyCom
+            // 切入次交互轮后 : 禁用Input.Build 启用Input.Keycom
+            else if (BInput.BuildKeyCom.KeyCom.IsPressed())
+            {
+                this.HandelKeyCom();
+            }
+            // 退出次交互轮
+            else if (BInput.BuildKeyCom.KeyCom.WasReleasedThisFrame())
+            {
+                this.ExitKeyCom();
+            }
+            #endregion
             // 取消 -> 回到原状态
             else if (this.backInputAction.WasPressedThisFrame())
             {
@@ -936,6 +1059,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             {
                 this.ExitEditMode();
             }
+
         }
 
         /// <summary>
@@ -972,9 +1096,11 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         {
             BInput.BuildPlaceMode.Enable();
             BInput.BuildPlaceMode.ChangeOutLook.Disable();
-            BInput.BuildPlaceMode.ChangeStyle.Disable();
-            BInput.BuildPlaceMode.ChangeHeight.Disable();
-            BInput.BuildPlaceMode.KeyCom.Disable();
+            BInput.BuildPlaceMode.ChangeStyleLast.Disable();
+            BInput.BuildPlaceMode.ChangeStyleNext.Disable();
+            BInput.BuildPlaceMode.ChangeHeightLast.Disable();
+            BInput.BuildPlaceMode.ChangeHeightNext.Disable();
+            //BInput.BuildPlaceMode.KeyCom.Disable();
         }
 
         #endregion
@@ -998,6 +1124,11 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         #endregion
 
         #region Appearance
+        private Texture2D[] _aCurrentTexs;
+        private BuildingCopiedMaterial[] _aCurrentMatPackages;
+        private int _aCurrentIndex;
+        private Dictionary<BuildingPartClassification, Engine.BuildingSystem.BSBPartMatPackage> _allMatPackages;
+
         protected void HandleAppearance()
         {
             // 确认选择的材质
@@ -1012,7 +1143,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 this.ExitAppearancePanel();
             }
             // 切换材质
-            else
+            else if(BInput.BuildingAppearance.AlterMaterial.WasPressedThisFrame())
             {
                 Vector2 offset = BInput.BuildingAppearance.AlterMaterial.ReadValue<Vector2>();
                 if(offset != Vector2.zero)
@@ -1028,7 +1159,14 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// <param name="offset"></param>
         protected void SwitchSelectedAppearance(Vector2 offset)
         {
-            // to-do : 暂时还不知道外观材质数据来源
+            if(Mathf.Abs(offset.x) < 0.01)
+            {
+                return;
+            }
+            int of = offset.x > 0 ? 1 : -1;
+
+            this._aCurrentIndex = (this._aCurrentIndex + of + _aCurrentTexs.Length) % _aCurrentTexs.Length;
+            OnChangeAppearance?.Invoke(this._aCurrentTexs, this._aCurrentMatPackages, this._aCurrentIndex);
         }
 
         /// <summary>
@@ -1036,7 +1174,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// </summary>
         protected void ReplaceSelectedAppearance()
         {
-            // to-do : 暂时还不知道外观材质数据来源， 按下之后就继续进行，但不改变外观,也就是等同于取消
+            this.SelectedPartInstance.SetCopiedMaterial(this._aCurrentMatPackages[this._aCurrentIndex]);
         }
 
         /// <summary>
@@ -1064,7 +1202,15 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
             // 进入外观选择状态
             this.IsInAppearance = true;
-            this.OnEnterAppearance?.Invoke(this.SelectedPartInstance);
+
+            var kv = _allMatPackages[this.SelectedPartInstance.Classification].ToMatPackage();
+
+            this._aCurrentTexs = kv.Keys.ToArray();
+            this._aCurrentMatPackages = kv.Values.ToArray();
+            var mat = this.SelectedPartInstance.GetCopiedMaterial();
+            this._aCurrentIndex = System.Array.IndexOf(this._aCurrentMatPackages, mat);
+
+            this.OnEnterAppearance?.Invoke(this.SelectedPartInstance, this._aCurrentTexs, this._aCurrentMatPackages, this._aCurrentIndex);
         }
 
         protected void ExitAppearancePanel()
@@ -1092,6 +1238,40 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             this.OnExitAppearance?.Invoke(this.SelectedPartInstance);
         }
 
+        private const string MatPABPath = "Assets/BuildingSystem";
+        protected IEnumerator LoadMatPackages()
+        {
+#if UNITY_EDITOR
+            float startT = Time.time;
+#endif
+            while (Manager.GameManager.Instance.ABResourceManager == null)
+            {
+                yield return null;
+            }
+            var abmgr = Manager.GameManager.Instance.ABResourceManager;
+            AssetBundle ab;
+            var crequest = abmgr.LoadLocalABAsync(MatPABPath, null, out ab);
+            yield return crequest;
+            if (crequest != null)
+            {
+                ab = crequest.assetBundle;
+            }
+
+            var packages = ab.LoadAllAssets<BSBPartMatPackage>();
+            _allMatPackages = new Dictionary<BuildingPartClassification, BSBPartMatPackage>();
+            foreach (var package in packages)
+            {
+                this._allMatPackages.Add(package.Classification, package);
+            }
+
+            //abmgr.UnLoadLocalABAsync(TextContentABPath, false, null);
+
+#if UNITY_EDITOR
+            Debug.Log("LoadMatPackages cost time: " + (Time.time - startT));
+#endif
+
+            this.enabled = false;
+        }
         #endregion
 
         #region 次交互轮
@@ -1104,13 +1284,23 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             // CopyBuild
             if (BInput.BuildKeyCom.CopyBuild.WasPressedThisFrame())
             {
-                // 复制当前选中的可交互物进入PlaceMode
+                // 辅助网格
+                if (this.Mode == BuildingMode.Place || this.Mode == BuildingMode.Edit)
+                {
+                    this.IsEnableGridSupport = !IsEnableGridSupport;
+                }
+                // 复制建筑物
+                else
+                {
+                    // 复制当前选中的可交互物进入PlaceMode
 
-                // 复制一份当前选中的BPart(即一级二级分类选择和外观选择的流程)
-                this.SelectedPartInstance = BuildingManager.Instance.GetOneBPartCopyInstance(this.SelectedPartInstance);
+                    // 复制一份当前选中的BPart(即一级二级分类选择和外观选择的流程)
+                    this.SelectedPartInstance = BuildingManager.Instance.GetOneBPartCopyInstance(this.SelectedPartInstance);
 
-                // 进入PlaceMode的放置流程
-                this.PlaceControlFlow = 3;
+                    this.ExitKeyCom();
+                    // 进入PlaceMode的放置流程
+                    this.PlaceControlFlow = 3;
+                }
             }
             // CopyOutLook
             else if(BInput.BuildKeyCom.CopyOutLook.WasPressedThisFrame())
@@ -1119,7 +1309,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 BuildingManager.Instance.CopyBPartMaterial(this.SelectedPartInstance);
             }
             // PasteOutLook
-            else if (BInput.BuildKeyCom.CopyOutLook.WasPressedThisFrame())
+            else if (BInput.BuildKeyCom.PasteOutLook.WasPressedThisFrame())
             {
                 // 拷贝复制的材质到当前选中的可交互建筑物
                 BuildingManager.Instance.PasteBPartMaterial(this.SelectedPartInstance);
@@ -1128,11 +1318,18 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
         protected void EnterKeyCom()
         {
-            // 禁用 Input.Build
-            BInput.Build.Disable();
+            if (this.Mode == BuildingMode.Interact)
+            {
+                // 禁用 Input.Build
+                BInput.Build.Disable();
+            }
+
+            else
+            {
+                BInput.BuildPlaceMode.Disable();
+            }
             // 启用 Input.KeyCom
             BInput.BuildKeyCom.Enable();
-
             this.OnKeyComComplete?.Invoke();
 
         }
@@ -1142,11 +1339,18 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             // 避免没有松开KeyCom, 再次进入时直接打开
             this.keyComStartTime = Time.time;
 
-            // 启用 Input.Build
-            BInput.Build.Enable();
+            if(this.Mode == BuildingMode.Interact)
+            {
+                // 启用 Input.Build
+                BInput.Build.Enable();
+            }
+            else
+            {
+                BInput.BuildPlaceMode.Enable();
+            }
+
             // 禁用 Input.KeyCom
             BInput.BuildKeyCom.Disable();
-            Debug.Log("exit");
             this.OnKeyComExit?.Invoke();
         }
         #endregion

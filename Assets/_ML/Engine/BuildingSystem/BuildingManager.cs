@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using ML.Engine.BuildingSystem.BuildingPart;
 using System.Linq;
+using UnityEngine.Windows;
+using System;
 
 namespace ML.Engine.BuildingSystem
 {
@@ -37,11 +39,119 @@ namespace ML.Engine.BuildingSystem
         /// <ChildIndex, Material>
         /// </summary>
         public Dictionary<int, Material[]> ChildrenMat;
+
+        public override bool Equals(object obj)
+        {
+            return this == (BuildingCopiedMaterial)obj;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        public static bool operator ==(BuildingCopiedMaterial A, BuildingCopiedMaterial B)
+        {
+            if(A.ParentMat != null && B.ParentMat != null)
+            {
+                foreach(var ap in A.ParentMat)
+                {
+                    bool f = false;
+                    foreach (var bp in B.ParentMat)
+                    {
+                        if(ap.name == bp.name)
+                        {
+                            f = true;
+                            break;
+                        }
+                    }
+                    if(f == false)
+                    {
+                        return false;
+                    }
+                }
+                if (A.ChildrenMat != null && B.ChildrenMat != null)
+                {
+                    foreach (var ap in A.ChildrenMat)
+                    {
+                        if(B.ChildrenMat.ContainsKey(ap.Key))
+                        {
+                            foreach(var t in ap.Value)
+                            {
+                                bool f = false;
+                                foreach (var bp in B.ParentMat)
+                                {
+                                    if (t.name == bp.name)
+                                    {
+                                        f = true;
+                                        break;
+                                    }
+                                }
+                                if (f == false)
+                                {
+                                    return false;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+                else if(A.ChildrenMat == null && B.ChildrenMat== null)
+                {
+                    return true;
+                }
+            }
+            else if(A.ParentMat == null && B.ParentMat == null)
+            {
+                if (A.ChildrenMat != null && B.ChildrenMat != null)
+                {
+                    foreach (var ap in A.ChildrenMat)
+                    {
+                        if (B.ChildrenMat.ContainsKey(ap.Key))
+                        {
+                            foreach (var t in ap.Value)
+                            {
+                                bool f = false;
+                                foreach (var bp in B.ParentMat)
+                                {
+                                    if (t.name == bp.name)
+                                    {
+                                        f = true;
+                                        break;
+                                    }
+                                }
+                                if (f == false)
+                                {
+                                    return false;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+                else if (A.ChildrenMat == null && B.ChildrenMat == null)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool operator !=(BuildingCopiedMaterial A, BuildingCopiedMaterial B)
+        {
+            return !(A == B);
+        }
     }
 
     [System.Serializable]
     public sealed class BuildingManager : Manager.LocalManager.ILocalManager
     {
+        #region
         private static BuildingManager instance = null;
         public static BuildingManager Instance
         {
@@ -75,7 +185,7 @@ namespace ML.Engine.BuildingSystem
             set
             {
                 this.OnModeChanged?.Invoke(mode, value);
-
+                var last = mode;
                 mode = value;
                 bool isEnabled = mode != BuildingMode.None;
                 foreach (var socket in this.BuildingSocketList)
@@ -90,23 +200,33 @@ namespace ML.Engine.BuildingSystem
 #if UNITY_EDITOR
                 if (UnityEditor.EditorApplication.isPlaying)
                 {
-                    if (mode == BuildingMode.None)
+                    if (mode == BuildingMode.None && last != BuildingMode.None)
                     {
                         BInput.Disable();
                     }
-                    else
+                    else if (mode != BuildingMode.None && last == BuildingMode.None)
                     {
                         BInput.Enable();
+                        BInput.Build.Enable();
+                        BInput.BuildKeyCom.Disable();
+                        BInput.BuildSelection.Disable();
+                        BInput.BuildPlaceMode.Disable();
+                        BInput.BuildingAppearance.Disable();
                     }
                 }
 #else
-                    if (mode == BuildingMode.None)
+                    if (mode == BuildingMode.None && last != BuildingMode.None)
                     {
                         BInput.Disable();
                     }
-                    else
+                    else if (mode != BuildingMode.None && last == BuildingMode.None)
                     {
                         BInput.Enable();
+                        BInput.Build.Enable();
+                        BInput.BuildKeyCom.Disable();
+                        BInput.BuildSelection.Disable();
+                        BInput.BuildPlaceMode.Disable();
+                        BInput.BuildingAppearance.Disable();
                     }
 #endif
             }
@@ -157,6 +277,7 @@ namespace ML.Engine.BuildingSystem
 
         public List<BuildingSocket.BuildingSocket> BuildingSocketList = new List<BuildingSocket.BuildingSocket>();
         public List<BuildingArea.BuildingArea> BuildingAreaList = new List<BuildingArea.BuildingArea>();
+        #endregion
 
         #region BPartPrefab
         /// <summary>
@@ -335,6 +456,7 @@ namespace ML.Engine.BuildingSystem
                     var ret = BPartQueue.PeekFront();
                     BPartQueue.DequeueFront();
                     BPartQueue.EnqueueBack(ret);
+                    ret = BPartQueue.PeekFront();
                     return GameObject.Instantiate<GameObject>(ret.gameObject).GetComponent<IBuildingPart>();
                 }
                 else
@@ -352,6 +474,17 @@ namespace ML.Engine.BuildingSystem
         public IBuildingPart PollingBPartPeekInstanceOnStyle(IBuildingPart BPart, bool isForward)
         {
             return PollingBPartPeekInstanceOnStyle(BPart.Classification.Category, BPart.Classification.Type, BPart.Classification.Style, isForward);
+        }
+
+        public short[] GetAllHeightByBPartStyle(IBuildingPart BPart)
+        {
+            var bparts = BPartClassificationOnStyle[BPart.Classification.Category][BPart.Classification.Type][BPart.Classification.Style].ToArray();
+            short[] heights = new short[bparts.Length];
+            for(int i = 0; i < bparts.Length; ++i)
+            {
+                heights[i] = bparts[i].Classification.Height;
+            }
+            return heights;
         }
 
         #endregion
@@ -458,6 +591,7 @@ namespace ML.Engine.BuildingSystem
                     var ret = BPartQueue.PeekFront();
                     BPartQueue.DequeueFront();
                     BPartQueue.EnqueueBack(ret);
+                    ret = BPartQueue.PeekFront();
                     return GameObject.Instantiate<GameObject>(ret.gameObject).GetComponent<IBuildingPart>();
                 }
                 else
@@ -477,6 +611,16 @@ namespace ML.Engine.BuildingSystem
             return PollingBPartPeekInstanceOnHeight(BPart.Classification.Category, BPart.Classification.Type, BPart.Classification.Height, isForward);
         }
 
+        public BuildingStyle[] GetAllStyleByBPartHeight(IBuildingPart BPart)
+        {
+            var bparts = BPartClassificationOnHeight[BPart.Classification.Category][BPart.Classification.Type][BPart.Classification.Height].ToArray();
+            BuildingStyle[] styles = new BuildingStyle[bparts.Length];
+            for (int i = 0; i < bparts.Length; ++i)
+            {
+                styles[i] = bparts[i].Classification.Style;
+            }
+            return styles;
+        }
         #endregion
 
         #region Material
@@ -616,8 +760,8 @@ namespace ML.Engine.BuildingSystem
         #endregion
 
         #endregion
-    
-    
+
+
     }
 
 }
