@@ -180,7 +180,7 @@
             "keyname" : "stylelast",
             "keymap" : {
                 "KeyBoard" : "J",
-                "XBOX" : "J"
+                "XBOX" : "left"
             },
             "description" : {
                 "Chinese" : "",
@@ -191,7 +191,7 @@
             "keyname" : "stylenext",
             "keymap" : {
                 "KeyBoard" : "L",
-                "XBOX" : "L"
+                "XBOX" : "right"
             },
             "description" : {
                 "Chinese" : "",
@@ -202,7 +202,7 @@
             "keyname" : "heightlast",
             "keymap" : {
                 "KeyBoard" : "K",
-                "XBOX" : "K"
+                "XBOX" : "down"
             },
             "description" : {
                 "Chinese" : "",
@@ -213,7 +213,7 @@
             "keyname" : "heightnext",
             "keymap" : {
                 "KeyBoard" : "I",
-                "XBOX" : "I"
+                "XBOX" : "up"
             },
             "description" : {
                 "Chinese" : "",
@@ -299,6 +299,8 @@
         }
     ]
 }
+
+
 
 
 

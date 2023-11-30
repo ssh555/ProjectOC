@@ -659,8 +659,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 }
             }
            
-            Debug.Log(BInput.Build.SelectBuild.WasPressedThisFrame());
-
             // 切入 Place Mode -> 进入建筑物选择界面
             if (!this.IsInAppearance && BInput.Build.SelectBuild.WasPressedThisFrame())
             {

@@ -28,9 +28,12 @@ namespace ML.Engine.BuildingSystem
             XBOX,
         }
 
+        [SerializeField]
         public static Language language = Language.Chinese;
+        [SerializeField]
         public static Platform platform = Platform.Windows;
-        public static InputDevice inputDevice = InputDevice.Keyboard;
+        [SerializeField]
+        public static InputDevice inputDevice = InputDevice.XBOX;
     }
 
     public struct UIKeyTip
@@ -55,19 +58,19 @@ namespace ML.Engine.BuildingSystem
         public BuildingManager BM;
 
         #region Config
-        [LabelText("语言"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
+        [LabelText("语言"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1), ReadOnly]
         public Language language
         {
             get => Config.language;
             set => Config.language = value;
         }
-        [LabelText("平台"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
+        [LabelText("平台"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1), ReadOnly]
         public Platform platform
         {
             get => Config.platform;
             set => Config.platform = value;
         }
-        [LabelText("输入设备"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
+        [LabelText("输入设备"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1), ReadOnly]
         public InputDevice inputDevice
         {
             get => Config.inputDevice;

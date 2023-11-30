@@ -51,9 +51,9 @@ namespace ML.Engine.BuildingSystem
 
                 for(int j = 0; j < MatStruct.Length; ++j)
                 {
-                    if (j != -1)
+                    if (MatStruct[j] != -1)
                     {
-                        mat.ChildrenMat.Add(j, MatPackages[i].MPs.Mats[j].Mats);
+                        mat.ChildrenMat.Add(MatStruct[j], MatPackages[i].MPs.Mats[j].Mats);
                     }
                     else
                     {
