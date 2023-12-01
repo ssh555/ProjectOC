@@ -109,7 +109,7 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
             this.RefreshButtonContainer();
         }
 
-        protected void RefreshFormulaContainer(int[][] formulas)
+        protected void RefreshFormulaContainer(ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Formula[] formulas)
         {
             this.formulaContainer.RefreshFormulaContainer(formulas);
         }

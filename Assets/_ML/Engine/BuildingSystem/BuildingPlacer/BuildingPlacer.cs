@@ -197,12 +197,12 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// <summary>
         /// 禁用网格辅助时的旋转率
         /// </summary>
-        [LabelText("禁用时旋转率"), FoldoutGroup("网格辅助"), Range(0, 10)]
+        [LabelText("禁用时旋转率"), FoldoutGroup("网格辅助"), Range(0, 180)]
         public float DisableGridRotRate = 0.5f;
         /// <summary>
         /// 启用网格辅助时的旋转率
         /// </summary>
-        [LabelText("启用时旋转率"), FoldoutGroup("网格辅助"), Range(0, 90)]
+        [LabelText("启用时旋转率"), FoldoutGroup("网格辅助"), Range(0, 180)]
         public float EnableGridRotRate = 15f;
         #endregion
 
@@ -1129,17 +1129,21 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         private int _aCurrentIndex;
         private Dictionary<BuildingPartClassification, Engine.BuildingSystem.BSBPartMatPackage> _allMatPackages;
 
+        private BuildingMode _aMode;
+        private BuildingCopiedMaterial _aMat;
+
         protected void HandleAppearance()
         {
             // 确认选择的材质
             if (this.comfirmInputAction.WasPressedThisFrame())
             {
-                this.ReplaceSelectedAppearance();
+                //this.ReplaceSelectedAppearance();
                 this.ExitAppearancePanel();
             }
             // 取消外观编辑
             else if(this.backInputAction.WasPressedThisFrame())
             {
+                this.SelectedPartInstance.SetCopiedMaterial(this._aMat);
                 this.ExitAppearancePanel();
             }
             // 切换材质
@@ -1166,16 +1170,17 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             int of = offset.x > 0 ? 1 : -1;
 
             this._aCurrentIndex = (this._aCurrentIndex + of + _aCurrentTexs.Length) % _aCurrentTexs.Length;
+            this.SelectedPartInstance.SetCopiedMaterial(this._aCurrentMatPackages[this._aCurrentIndex]);
             OnChangeAppearance?.Invoke(this._aCurrentTexs, this._aCurrentMatPackages, this._aCurrentIndex);
         }
 
-        /// <summary>
-        /// 为SelectedBPart替换选中的外观材质
-        /// </summary>
-        protected void ReplaceSelectedAppearance()
-        {
-            this.SelectedPartInstance.SetCopiedMaterial(this._aCurrentMatPackages[this._aCurrentIndex]);
-        }
+        ///// <summary>
+        ///// 为SelectedBPart替换选中的外观材质
+        ///// </summary>
+        //protected void ReplaceSelectedAppearance()
+        //{
+        //    this.SelectedPartInstance.SetCopiedMaterial(this._aCurrentMatPackages[this._aCurrentIndex]);
+        //}
 
         /// <summary>
         /// 进入外观选择界面
@@ -1202,6 +1207,10 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
             // 进入外观选择状态
             this.IsInAppearance = true;
+
+            this._aMode = this.SelectedPartInstance.Mode;
+            this._aMat = this.SelectedPartInstance.GetCopiedMaterial();
+            this.SelectedPartInstance.Mode = BuildingMode.None;
 
             var kv = _allMatPackages[this.SelectedPartInstance.Classification].ToMatPackage();
 
@@ -1233,6 +1242,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 BInput.BuildingAppearance.Disable();
             }
 
+            this.SelectedPartInstance.Mode = this._aMode;
             // 退出外观选择状态
             this.IsInAppearance = false;
             this.OnExitAppearance?.Invoke(this.SelectedPartInstance);

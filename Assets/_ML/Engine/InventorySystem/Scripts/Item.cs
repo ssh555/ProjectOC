@@ -100,7 +100,7 @@ namespace ML.Engine.InventorySystem
         /// ≥ı ºªØ
         /// </summary>
         /// <param name="config"></param>
-        public abstract void Init(ItemSpawner.ItemTabelData config);
+        public abstract void Init(ItemSpawner.ItemTabelJsonData config);
 
         public abstract void Init(Item item);
 

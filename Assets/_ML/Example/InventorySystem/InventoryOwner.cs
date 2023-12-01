@@ -270,7 +270,7 @@ namespace ML.Example.InventorySystem
             {
                 foreach (var formula in ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.GetCompositonFomula(compositonID))
                 {
-                    this.inventory.RemoveItem(formula[0], formula[1]);
+                    this.inventory.RemoveItem(formula.id, formula.num);
                 }
             }
         }
