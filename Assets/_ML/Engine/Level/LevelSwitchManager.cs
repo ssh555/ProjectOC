@@ -165,29 +165,33 @@ namespace ML.Engine.Level
             AssetBundle ab;
             var crequest = abmgr.LoadLocalABAsync(LevelTableDataABPath, null, out ab);
             yield return crequest;
-            ab = crequest.assetBundle;
+            if(crequest != null)
+                ab = crequest.assetBundle;
 
 
             var request = ab.LoadAssetAsync<TextAsset>(TableName);
             yield return request;
             LevelRListArray datas = JsonUtility.FromJson<LevelRListArray>((request.asset as TextAsset).text);
-
-            foreach (var row in datas.table)
+            if(datas.table != null)
             {
-                LevelResource res = new LevelResource();
-                // 0 => level name
-                // 1 => global
-                res.globalres = row.globalres;
-                // 2 => local
-                res.localres = row.localres;
-                this.levelResourcesDict.Add(row.scenename, res);
+                foreach (var row in datas.table)
+                {
+                    LevelResource res = new LevelResource();
+                    // 0 => level name
+                    // 1 => global
+                    res.globalres = row.globalres;
+                    // 2 => local
+                    res.localres = row.localres;
+                    this.levelResourcesDict.Add(row.scenename, res);
+                }
+
+                abmgr.UnLoadLocalABAsync(LevelTableDataABPath, false, null);
+
+                // 载入当前场景的资源
+                this.CurSceneName = SceneManager.GetActiveScene().name;
+                Manager.GameManager.Instance.StartCoroutine(this.DispatchLevelResources(null, this.CurSceneName));
             }
 
-            abmgr.UnLoadLocalABAsync(LevelTableDataABPath, false, null);
-
-            // 载入当前场景的资源
-            this.CurSceneName = SceneManager.GetActiveScene().name;
-            Manager.GameManager.Instance.StartCoroutine(this.DispatchLevelResources(null, this.CurSceneName));
         }
 
         private void Internal_LoadGridResourcesList(string name)
