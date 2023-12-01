@@ -75,18 +75,78 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         }
 
 
+        [System.Serializable]
+        public struct Formula
+        {
+            public int id;
+            public int num;
+        }
+        [System.Serializable]
+        public struct CompositionJsonData
+        {
+            /// <summary>
+            /// 合成对象 -> Item | 建筑物 ID 引用
+            /// </summary>
+            public int id;
+
+            /// <summary>
+            /// 标签分级
+            /// 1级|2级|3级
+            /// </summary>
+            public string tag; // Category
+
+            /// <summary>
+            /// 合成公式
+            /// 没有 num 则默认为 1
+            /// num 目前仅限 item
+            /// num = <1,2> | <1,2>
+            /// 1 -> ID 
+            /// 2 -> Num
+            /// </summary>
+            public Formula[] formula;
+            /// <summary>
+            /// 一次可合成数量
+            /// </summary>
+            public int compositionnum;
+
+            public string texture2d;
+        }
+
+        [System.Serializable]
+        private struct CompositionJsonDatas
+        {
+            public CompositionJsonData[] table;
+        }
+
+        public const string CompositionTableDataABPath = "Json/TabelData";
+        public const string TableName = "CompositionTableData";
+
         /// <summary>
         /// 载入合成表数据
         /// </summary>
         public IEnumerator LoadTableData(MonoBehaviour mono)
         {
-            var datas = Utility.CSVUtils.ParseCSV("CSV/CompositeTableData", 3);
+            while (Manager.GameManager.Instance.ABResourceManager == null)
+            {
+                yield return null;
+            }
+            var abmgr = Manager.GameManager.Instance.ABResourceManager;
+            AssetBundle ab;
+            var crequest = abmgr.LoadLocalABAsync(CompositionTableDataABPath, null, out ab);
+            yield return crequest;
+            ab = crequest.assetBundle;
 
-            Coroutine[] coroutines = new Coroutine[datas.Count];
+
+            var request = ab.LoadAssetAsync<TextAsset>(TableName);
+            yield return request;
+            CompositionJsonDatas datas = JsonUtility.FromJson<CompositionJsonDatas>((request.asset as TextAsset).text);
+
+
+            Coroutine[] coroutines = new Coroutine[datas.table.Length];
 
             for (int i = 0; i < coroutines.Length; ++i)
             {
-                coroutines[i] = mono.StartCoroutine(LoadRowData(datas[i]));
+                coroutines[i] = mono.StartCoroutine(LoadRowData(datas.table[i]));
             }
 
             // to-do : 需优化资源加载
@@ -107,15 +167,18 @@ namespace ML.Engine.InventorySystem.CompositeSystem
 
                 }
             }
+
+            abmgr.UnLoadLocalABAsync(CompositionTableDataABPath, false, null);
+
         }
 
-        private IEnumerator LoadRowData(List<string> row)
+        private IEnumerator LoadRowData(CompositionJsonData row)
         {
             CompositionData data = new CompositionData();
             // ID-> 0
-            data.ID = int.Parse(row[0]);
+            data.ID = row.id;
             // Tag-> 1
-            string[] tags = row[1].Split('|', StringSplitOptions.RemoveEmptyEntries);
+            string[] tags = row.tag.Split('|', StringSplitOptions.RemoveEmptyEntries);
             string tag = tags[0].Trim();
             for (int i = 1; i < tags.Length; ++i)
             {
@@ -123,39 +186,17 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             }
             data.Tag = tag;
             // Formula-> 2
-            row[2] = (row[2].Trim()).Trim('\"');
-            // 有合成数量
-            if (row[2].Contains('='))
+            foreach(var f in row.formula)
             {
-                data.CompositionNum = int.Parse(row[2].Substring(0, row[2].IndexOf('=')).Trim());
-#if UNITY_EDITOR
-                if(data.CompositionNum < 1)
-                {
-                    Debug.LogError("CompositeTableData ID = " + data.ID + " : CompositionNum < 1");
-                }
-#endif
+                int[] d = new int[2];
+                d[0] = f.id;
+                d[1] = f.num;
+                data.Formula.Add(d);
             }
-            else
-            {
-                data.CompositionNum = 1;
-            }
-            string[] formulas = row[2].Split('|', StringSplitOptions.RemoveEmptyEntries);
-            // 有合成公式
-            if (formulas[0] != "null")
-            {
-                data.Formula = new List<int[]>();
-                foreach (var formula in formulas)
-                {
-                    string[] kv = formula.Trim().Split('-');
-                    int[] id_num = new int[2];
-                    id_num[0] = int.Parse(kv[0].Trim());
-                    id_num[1] = int.Parse(kv[1].Trim());
-                    data.Formula.Add(id_num);
-                }
-            }
+            data.CompositionNum = row.compositionnum;
 
             // SpritePath => 3
-            var request = Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<Texture2D>("ui/texture2d", row[3].Trim(), null);
+            var request = Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<Texture2D>("ui/texture2d", row.texture2d.Trim(), null);
 
             yield return request;
             Texture2D tex = request.asset as Texture2D;

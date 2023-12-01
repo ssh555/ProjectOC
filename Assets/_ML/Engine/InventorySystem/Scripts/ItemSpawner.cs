@@ -1,7 +1,9 @@
+using ML.Engine.BuildingSystem.BuildingPart;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static ML.Engine.BuildingSystem.Test_BuildingManager;
 
 namespace ML.Engine.InventorySystem
 {
@@ -178,19 +180,53 @@ namespace ML.Engine.InventorySystem
 
 #region to-do : 需读表导入所有所需的 Item 数据
         public const string typePath = "ML.Engine.InventorySystem.";
-        public const string spritePath = "ui/texture2d";
-        public const string worldPath = "prefabs/WorldItem";
+        public const string spritePath = "ui/Item/texture2d";
+        public const string worldPath = "prefabs/Item/WorldItem";
 
+        public const string ItemTableDataABPath = "Json/TabelData";
+        public const string TableName = "ItemTableData";
+
+        [System.Serializable]
+        public struct ItemTabelJsonData
+        {
+            public int id;
+            public string name;
+            public string type;
+            public bool bcanstack;
+            public int maxamount;
+            public string texture2d;
+            public string worldobject;
+        }
+        [System.Serializable]
+        private struct ItemTabelJsonDataArray
+        {
+            public ItemTabelJsonData[] table;
+        }
 
         public IEnumerator LoadTableData(MonoBehaviour mono)
         {
-            var datas = Utility.CSVUtils.ParseCSV("CSV/ItemTableData", 1);
+            while (Manager.GameManager.Instance.ABResourceManager == null)
+            {
+                yield return null;
+            }
+            var abmgr = Manager.GameManager.Instance.ABResourceManager;
+            AssetBundle ab;
+            var crequest = abmgr.LoadLocalABAsync(ItemTableDataABPath, null, out ab);
+            yield return crequest;
+            ab = crequest.assetBundle;
 
-            Coroutine[] coroutines = new Coroutine[datas.Count];
+
+            var request = ab.LoadAssetAsync<TextAsset>(TableName);
+            yield return request;
+            ItemTabelJsonDataArray datas = JsonUtility.FromJson<ItemTabelJsonDataArray>((request.asset as TextAsset).text);
+
+
+
+            Coroutine[] coroutines = new Coroutine[datas.table.Length];
 
             for(int i = 0; i < coroutines.Length; ++i)
             {
-                coroutines[i] = mono.StartCoroutine(LoadRowData(datas[i]));
+                coroutines[i] = mono.StartCoroutine(LoadRowData(datas.table[i]));
             }
 
             // to-do : 需优化资源加载
@@ -199,26 +235,28 @@ namespace ML.Engine.InventorySystem
                 yield return coroutine;
             }
 
+            abmgr.UnLoadLocalABAsync(ItemTableDataABPath, false, null);
+
             yield break;
         }
 
-        private IEnumerator LoadRowData(List<string> row)
+        private IEnumerator LoadRowData(ItemTabelJsonData row)
         {
             ItemTabelData data = new ItemTabelData();
             // ID -> 0
-            int id = int.Parse(row[0]);
+            int id = row.id;
             // Name -> 1
-            data.name = row[1];
+            data.name = row.name;
             // Type -> 2
-            data.type = ItemSpawner.typePath + row[2];
+            data.type = ItemSpawner.typePath + row.type;
             // bCanStack -> 3
-            data.bCanStack = row[3] == "1" ? true : false;
+            data.bCanStack = row.bcanstack;
             // MaxAmount -> 4
-            data.maxAmount = int.Parse(row[4]);
+            data.maxAmount = row.maxamount;
 
             // to-do : 可考虑采用两套，unityeditor不使用AB包，方便调试
-            var r1 = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<Texture2D>(ItemSpawner.spritePath, row[5], null);
-            var r2 = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<GameObject>(ItemSpawner.worldPath, row[6], null);
+            var r1 = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<Texture2D>(ItemSpawner.spritePath, row.texture2d, null);
+            var r2 = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<GameObject>(ItemSpawner.worldPath, row.worldobject, null);
 
             yield return r1;
             yield return r2;
@@ -228,7 +266,7 @@ namespace ML.Engine.InventorySystem
 #if UNITY_EDITOR
             if (tex == null)
             {
-                Debug.LogError(spritePath + "/" + row[5] + " 文件缺失");
+                Debug.LogError(spritePath + "/" + row.texture2d + " 文件缺失");
             }
 #endif
 
@@ -238,7 +276,7 @@ namespace ML.Engine.InventorySystem
 #if UNITY_EDITOR
             if (r2.asset == null)
             {
-                Debug.LogError(worldPath + "/" + row[6] + " 文件缺失");
+                Debug.LogError(worldPath + "/" + row.worldobject + " 文件缺失");
             }
 #endif
             data.worldObject = r2.asset as GameObject;
