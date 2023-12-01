@@ -1,49 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace ML.Engine.InventorySystem.CompositeSystem
 {
-    /// <summary>
-    /// 合成数据
-    /// </summary>
-    public struct CompositionData
-    {
-        /// <summary>
-        /// 合成对象 -> Item | 建筑物 ID 引用
-        /// </summary>
-        public int ID;
-
-        /// <summary>
-        /// 标签分级
-        /// 1级|2级|3级
-        /// </summary>
-        public string Tag; // Category
-
-        /// <summary>
-        /// 合成公式
-        /// 没有 num 则默认为 1
-        /// num 目前仅限 item
-        /// num = <1,2> | <1,2>
-        /// 1 -> ID 
-        /// 2 -> Num
-        /// </summary>
-        public List<int[]> Formula;
-        /// <summary>
-        /// 一次可合成数量
-        /// </summary>
-        public int CompositionNum;
-
-        /// <summary>
-        /// 可合成目标
-        /// </summary>
-        public List<int> Usage;
-
-        public Sprite sprite;
-    }
-
-
     public sealed class CompositeSystem : Manager.GlobalManager.IGlobalManager
     {
         private CompositeSystem() { }
@@ -66,12 +28,10 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <summary>
         /// 合成表数据
         /// </summary>
-        private Dictionary<int, CompositionData> CompositeData = new Dictionary<int, CompositionData>();
-        public CompositionData[] GetCompositionData()
+        private Dictionary<int, CompositionJsonData> CompositeData = new Dictionary<int, CompositionJsonData>();
+        public CompositionJsonData[] GetCompositionData()
         {
-            CompositionData[] ans = new CompositionData[this.CompositeData.Count];
-            this.CompositeData.Values.CopyTo(ans, 0);
-            return ans;
+            return this.CompositeData.Values.ToArray();
         }
 
 
@@ -82,7 +42,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             public int num;
         }
         [System.Serializable]
-        public struct CompositionJsonData
+        public class CompositionJsonData
         {
             /// <summary>
             /// 合成对象 -> Item | 建筑物 ID 引用
@@ -93,7 +53,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             /// 标签分级
             /// 1级|2级|3级
             /// </summary>
-            public string tag; // Category
+            public string[] tag; // Category
 
             /// <summary>
             /// 合成公式
@@ -110,6 +70,8 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             public int compositionnum;
 
             public string texture2d;
+
+            public List<int> usage;
         }
 
         [System.Serializable]
@@ -141,28 +103,23 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             yield return request;
             CompositionJsonDatas datas = JsonUtility.FromJson<CompositionJsonDatas>((request.asset as TextAsset).text);
 
-
-            Coroutine[] coroutines = new Coroutine[datas.table.Length];
-
-            for (int i = 0; i < coroutines.Length; ++i)
+            foreach(var data in datas.table)
             {
-                coroutines[i] = mono.StartCoroutine(LoadRowData(datas.table[i]));
-            }
-
-            // to-do : 需优化资源加载
-            foreach (var coroutine in coroutines)
-            {
-                yield return coroutine;
+                this.CompositeData.Add(data.id, data);
             }
 
             // 加入 Usage
             foreach (var data in this.CompositeData.Values)
             {
-                if (data.Formula != null)
+                if (data.formula != null)
                 {
-                    foreach (var usage in data.Formula)
+                    foreach (var usage in data.formula)
                     {
-                        this.CompositeData[usage[0]].Usage.Add(data.ID);
+                        if(this.CompositeData[usage.id].usage == null)
+                        {
+                            this.CompositeData[usage.id].usage = new List<int>();
+                        }
+                        this.CompositeData[usage.id].usage.Add(data.id);
                     }
 
                 }
@@ -170,44 +127,6 @@ namespace ML.Engine.InventorySystem.CompositeSystem
 
             abmgr.UnLoadLocalABAsync(CompositionTableDataABPath, false, null);
 
-        }
-
-        private IEnumerator LoadRowData(CompositionJsonData row)
-        {
-            CompositionData data = new CompositionData();
-            // ID-> 0
-            data.ID = row.id;
-            // Tag-> 1
-            string[] tags = row.tag.Split('|', StringSplitOptions.RemoveEmptyEntries);
-            string tag = tags[0].Trim();
-            for (int i = 1; i < tags.Length; ++i)
-            {
-                tag += '|' + tags[i].Trim();
-            }
-            data.Tag = tag;
-            // Formula-> 2
-            foreach(var f in row.formula)
-            {
-                int[] d = new int[2];
-                d[0] = f.id;
-                d[1] = f.num;
-                data.Formula.Add(d);
-            }
-            data.CompositionNum = row.compositionnum;
-
-            // SpritePath => 3
-            var request = Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<Texture2D>("ui/texture2d", row.texture2d.Trim(), null);
-
-            yield return request;
-            Texture2D tex = request.asset as Texture2D;
-            data.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-
-            // Usage
-            data.Usage = new List<int>();
-            lock (this.CompositeData)
-            {
-                this.CompositeData.Add(data.ID, data);
-            }
         }
 
         /// <summary>
@@ -218,14 +137,14 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <returns></returns>
         public bool CanComposite(Inventory resource, int compositonID)
         {
-            if (!this.CompositeData.ContainsKey(compositonID) || this.CompositeData[compositonID].Formula == null)
+            if (!this.CompositeData.ContainsKey(compositonID) || this.CompositeData[compositonID].formula == null)
             {
                 return false;
             }
-            foreach(var formula in this.CompositeData[compositonID].Formula)
+            foreach(var formula in this.CompositeData[compositonID].formula)
             {
                 // 数量不够
-                if(resource.GetItemAllNum(formula[0]) < formula[1])
+                if(resource.GetItemAllNum(formula.id) < formula.num)
                 {
                     return false;
                 }
@@ -249,9 +168,9 @@ namespace ML.Engine.InventorySystem.CompositeSystem
                 {
                     return null;
                 }
-                foreach (var formula in this.CompositeData[compositonID].Formula)
+                foreach (var formula in this.CompositeData[compositonID].formula)
                 {
-                    resource.RemoveItem(formula[0], formula[1]);
+                    resource.RemoveItem(formula.id, formula.num);
                 }
             }
 
@@ -260,7 +179,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             if (ItemSpawner.Instance.IsValidItemID(compositonID))
             {
                 Item item = ItemSpawner.Instance.SpawnItem(compositonID);
-                item.Amount = this.CompositeData[compositonID].CompositionNum;
+                item.Amount = this.CompositeData[compositonID].compositionnum;
                 return item as IComposition;
             }
             return null;
@@ -275,28 +194,41 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         {
             if (!this.CompositeData.ContainsKey(id))
                 return null;
-            return this.CompositeData[id].Usage.ToArray();
+            return this.CompositeData[id].usage.ToArray();
         }
 
-        public string GetCompositonTag(int id)
+        public string[] GetCompositonTag(int id)
         {
             if (!this.CompositeData.ContainsKey(id))
                 return null;
-            return this.CompositeData[id].Tag;
+            return this.CompositeData[id].tag;
+        }
+
+        public Texture2D GetCompositonTexture2D(int id)
+        {
+            if (!this.CompositeData.ContainsKey(id))
+            {
+                return null;
+            }
+
+            return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(ItemSpawner.Texture2DPath).LoadAsset<Texture2D>(this.CompositeData[id].texture2d);
         }
 
         public Sprite GetCompositonSprite(int id)
         {
-            if (!this.CompositeData.ContainsKey(id))
+            var tex = this.GetCompositonTexture2D(id);
+            if (tex == null)
+            {
                 return null;
-            return this.CompositeData[id].sprite;
+            }
+            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
         }
 
-        public int[][] GetCompositonFomula(int id)
+        public Formula[] GetCompositonFomula(int id)
         {
-            if (!this.CompositeData.ContainsKey(id) || this.CompositeData[id].Formula == null)
+            if (!this.CompositeData.ContainsKey(id) || this.CompositeData[id].formula == null)
                 return null;
-            return this.CompositeData[id].Formula.ToArray();
+            return this.CompositeData[id].formula;
         }
     }
 
