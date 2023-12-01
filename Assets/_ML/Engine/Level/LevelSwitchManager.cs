@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static ML.Engine.InventorySystem.CompositeSystem.CompositeSystem;
 
 namespace ML.Engine.Level
 {
@@ -12,12 +13,12 @@ namespace ML.Engine.Level
         private const float gridYSize = 1000f;
         private const float gridZSize = 2000f;
         private const float gridCenterRadius = 500f;
-        private const string levelResPath = "csv/LevelResources";
 
         private struct LevelResource
         {
-            public string[] globalResourceList;
-            public string[] locallResourceList;
+            public string scenename;
+            public string[] globalres;
+            public string[] localres;
         }
 
         /// <summary>
@@ -80,10 +81,8 @@ namespace ML.Engine.Level
             Manager.GameManager.Instance.TickManager.RegisterLateTick(-1, this);
 
             // 载入表数据 => 资源清单
-            this.Internal_LoadResourceList();
-            // 载入当前场景的资源
-            this.CurSceneName = SceneManager.GetActiveScene().name;
-            Manager.GameManager.Instance.StartCoroutine(this.DispatchLevelResources(null, this.CurSceneName));
+            Manager.GameManager.Instance.StartCoroutine(this.Internal_LoadResourceList());
+
         }
 
         #endregion
@@ -144,30 +143,51 @@ namespace ML.Engine.Level
 
         private DispatchGrids dispatchGrids;
 
+        public const string LevelTableDataABPath = "Json/TabelData";
+        public const string TableName = "LevelTableData";
+
+        [System.Serializable]
+        private struct LevelRListArray
+        {
+            public LevelResource[] table;
+        }
+
         /// <summary>
         /// 载入资源清单
         /// </summary>
-        private void Internal_LoadResourceList()
+        private IEnumerator Internal_LoadResourceList()
         {
-            var datas = ML.Engine.Utility.CSVUtils.ParseCSV(levelResPath, 1);
-            foreach(var row in datas)
+            while (Manager.GameManager.Instance.ABResourceManager == null)
+            {
+                yield return null;
+            }
+            var abmgr = Manager.GameManager.Instance.ABResourceManager;
+            AssetBundle ab;
+            var crequest = abmgr.LoadLocalABAsync(LevelTableDataABPath, null, out ab);
+            yield return crequest;
+            ab = crequest.assetBundle;
+
+
+            var request = ab.LoadAssetAsync<TextAsset>(TableName);
+            yield return request;
+            LevelRListArray datas = JsonUtility.FromJson<LevelRListArray>((request.asset as TextAsset).text);
+
+            foreach (var row in datas.table)
             {
                 LevelResource res = new LevelResource();
                 // 0 => level name
                 // 1 => global
-                res.globalResourceList = row[1].Split('|', System.StringSplitOptions.RemoveEmptyEntries);
-                for(int i = 0; i < res.globalResourceList.Length; ++i)
-                {
-                    res.globalResourceList[i] = res.globalResourceList[i].Trim();
-                }
+                res.globalres = row.globalres;
                 // 2 => local
-                res.locallResourceList = row[2].Split('|', System.StringSplitOptions.RemoveEmptyEntries);
-                for (int i = 0; i < res.locallResourceList.Length; ++i)
-                {
-                    res.locallResourceList[i] = res.locallResourceList[i].Trim();
-                }
-                this.levelResourcesDict.Add(row[0], res);
+                res.localres = row.localres;
+                this.levelResourcesDict.Add(row.scenename, res);
             }
+
+            abmgr.UnLoadLocalABAsync(LevelTableDataABPath, false, null);
+
+            // 载入当前场景的资源
+            this.CurSceneName = SceneManager.GetActiveScene().name;
+            Manager.GameManager.Instance.StartCoroutine(this.DispatchLevelResources(null, this.CurSceneName));
         }
 
         private void Internal_LoadGridResourcesList(string name)
@@ -208,12 +228,12 @@ namespace ML.Engine.Level
             // 释放之前场景的 LocalAB
             if (pre != null && this.levelResourcesDict.TryGetValue(pre, out LevelResource preList))
             {
-                foreach(var res in preList.locallResourceList)
+                foreach(var res in preList.localres)
                 {
                     bool release = true;
                     if(resIsNotNull)
                     {
-                        foreach (var r in resList.locallResourceList)
+                        foreach (var r in resList.localres)
                         {
                             if (r == res)
                                 release = false;
@@ -231,7 +251,7 @@ namespace ML.Engine.Level
             // Global
             if(resIsNotNull)
             {
-                foreach (var res in resList.globalResourceList)
+                foreach (var res in resList.globalres)
                 {
                     var t = this.ABRManager.LoadGlobalABAsync(res, null, out ab);
                     if (t != null)
@@ -240,7 +260,7 @@ namespace ML.Engine.Level
                     }
                 }
                 // Local
-                foreach (var res in resList.locallResourceList)
+                foreach (var res in resList.localres)
                 {
                     var t = this.ABRManager.LoadLocalABAsync(res, null, out ab);
                     if (t != null)

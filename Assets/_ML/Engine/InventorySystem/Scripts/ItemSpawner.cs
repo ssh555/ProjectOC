@@ -1,7 +1,10 @@
+using ML.Engine.BuildingSystem.BuildingPart;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using static ML.Engine.BuildingSystem.Test_BuildingManager;
 
 namespace ML.Engine.InventorySystem
 {
@@ -35,23 +38,10 @@ namespace ML.Engine.InventorySystem
         private Dictionary<int, Type> ItemDict = new Dictionary<int, Type>();
 
         /// <summary>
-        /// 读入的表数据
-        /// to-do : 需根据实际需求更改
-        /// </summary>
-        public struct ItemTabelData
-        {
-            public string name;
-            public string type;
-            public bool bCanStack;
-            public int maxAmount;
-            public Sprite sprite;
-            public GameObject worldObject;
-        }
-        /// <summary>
         /// to-do : 读表初始化
         /// 基础Item数据表 => 可加入联合体包含具体类型应有的数据
         /// </summary>
-        private Dictionary<int, ItemTabelData> ItemTypeStrDict = new Dictionary<int, ItemTabelData>();
+        private Dictionary<int, ItemTabelJsonData> ItemTypeStrDict = new Dictionary<int, ItemTabelJsonData>();
 
         /// <summary>
         /// 根据 id 生成一个崭新的Item，数量为1
@@ -60,7 +50,7 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public Item SpawnItem(int id)
         {
-            if (this.ItemTypeStrDict.TryGetValue(id, out ItemTabelData itemRow))
+            if (this.ItemTypeStrDict.TryGetValue(id, out ItemTabelJsonData itemRow))
             {
                 Type type;
                 if(!this.ItemDict.TryGetValue(id, out type))
@@ -82,16 +72,15 @@ namespace ML.Engine.InventorySystem
             return null;
         }
 
-
-
         public WorldItem SpawnWorldItem(Item item, Vector3 pos, Quaternion rot)
         {
+            
             if (item == null)
             {
                 return null;
             }
             // to-do : 可采用对象池形式
-            GameObject obj = GameObject.Instantiate(this.ItemTypeStrDict[item.ID].worldObject, pos, rot);
+            GameObject obj = GameObject.Instantiate(Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(WorldObjPath).LoadAsset<GameObject>(this.ItemTypeStrDict[item.ID].worldobject), pos, rot);
             WorldItem worldItem = obj.GetComponent<WorldItem>();
             if (worldItem == null)
             {
@@ -133,22 +122,33 @@ namespace ML.Engine.InventorySystem
             return this.ItemTypeStrDict.ContainsKey(id);
         }
 
-        public Sprite GetItemSprite(int id)
+        public Texture2D GetItemTexture2D(int id)
         {
             if (!this.ItemTypeStrDict.ContainsKey(id))
             {
                 return null;
             }
-            return this.ItemTypeStrDict[id].sprite;
+            
+            return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>(this.ItemTypeStrDict[id].texture2d);
         }
 
+        public Sprite GetItemSprite(int id)
+        {
+            var tex = this.GetItemTexture2D(id);
+            if(tex == null)
+            {
+                return null;
+            }
+            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+        }
         public GameObject GetItemObject(int id)
         {
             if (!this.ItemTypeStrDict.ContainsKey(id))
             {
                 return null;
             }
-            return this.ItemTypeStrDict[id].worldObject;
+
+            return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(WorldObjPath).LoadAsset<GameObject>(this.ItemTypeStrDict[id].worldobject);
         }
 
         public string GetItemName(int id)
@@ -177,73 +177,53 @@ namespace ML.Engine.InventorySystem
         }
 
 #region to-do : 需读表导入所有所需的 Item 数据
-        public const string typePath = "ML.Engine.InventorySystem.";
-        public const string spritePath = "ui/texture2d";
-        public const string worldPath = "prefabs/WorldItem";
+        public const string TypePath = "ML.Engine.InventorySystem.";
+        public const string Texture2DPath = "ui/Item/texture2d";
+        public const string WorldObjPath = "prefabs/Item/WorldItem";
 
+        public const string ItemTableDataABPath = "Json/TabelData";
+        public const string TableName = "ItemTableData";
+
+        [System.Serializable]
+        public struct ItemTabelJsonData
+        {
+            public int id;
+            public string name;
+            public string type;
+            public bool bcanstack;
+            public int maxamount;
+            public string texture2d;
+            public string worldobject;
+        }
+        [System.Serializable]
+        private struct ItemTabelJsonDataArray
+        {
+            public ItemTabelJsonData[] table;
+        }
 
         public IEnumerator LoadTableData(MonoBehaviour mono)
         {
-            var datas = Utility.CSVUtils.ParseCSV("CSV/ItemTableData", 1);
-
-            Coroutine[] coroutines = new Coroutine[datas.Count];
-
-            for(int i = 0; i < coroutines.Length; ++i)
+            while (Manager.GameManager.Instance.ABResourceManager == null)
             {
-                coroutines[i] = mono.StartCoroutine(LoadRowData(datas[i]));
+                yield return null;
+            }
+            var abmgr = Manager.GameManager.Instance.ABResourceManager;
+            AssetBundle ab;
+            var crequest = abmgr.LoadLocalABAsync(ItemTableDataABPath, null, out ab);
+            yield return crequest;
+            ab = crequest.assetBundle;
+
+
+            var request = ab.LoadAssetAsync<TextAsset>(TableName);
+            yield return request;
+            ItemTabelJsonDataArray datas = JsonUtility.FromJson<ItemTabelJsonDataArray>((request.asset as TextAsset).text);
+
+            foreach (var data in datas.table)
+            {
+                this.ItemTypeStrDict.Add(data.id, data);
             }
 
-            // to-do : 需优化资源加载
-            foreach(var coroutine in coroutines)
-            {
-                yield return coroutine;
-            }
-
-            yield break;
-        }
-
-        private IEnumerator LoadRowData(List<string> row)
-        {
-            ItemTabelData data = new ItemTabelData();
-            // ID -> 0
-            int id = int.Parse(row[0]);
-            // Name -> 1
-            data.name = row[1];
-            // Type -> 2
-            data.type = ItemSpawner.typePath + row[2];
-            // bCanStack -> 3
-            data.bCanStack = row[3] == "1" ? true : false;
-            // MaxAmount -> 4
-            data.maxAmount = int.Parse(row[4]);
-
-            // to-do : 可考虑采用两套，unityeditor不使用AB包，方便调试
-            var r1 = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<Texture2D>(ItemSpawner.spritePath, row[5], null);
-            var r2 = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<GameObject>(ItemSpawner.worldPath, row[6], null);
-
-            yield return r1;
-            yield return r2;
-
-            // SpritePath -> 5
-            Texture2D tex = r1.asset as Texture2D;
-#if UNITY_EDITOR
-            if (tex == null)
-            {
-                Debug.LogError(spritePath + "/" + row[5] + " 文件缺失");
-            }
-#endif
-
-            data.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-
-            // WorldObjectPath -> 6
-#if UNITY_EDITOR
-            if (r2.asset == null)
-            {
-                Debug.LogError(worldPath + "/" + row[6] + " 文件缺失");
-            }
-#endif
-            data.worldObject = r2.asset as GameObject;
-
-            this.ItemTypeStrDict.Add(id, data);
+            abmgr.UnLoadLocalABAsync(ItemTableDataABPath, false, null);
 
             yield break;
         }

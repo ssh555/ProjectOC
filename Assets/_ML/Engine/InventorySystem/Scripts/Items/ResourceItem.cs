@@ -14,11 +14,11 @@ namespace ML.Engine.InventorySystem
 
         int IComposition.ID { get => this.ID; set => throw new System.NotImplementedException(); }
 
-        public override void Init(ItemSpawner.ItemTabelData config)
+        public override void Init(ItemSpawner.ItemTabelJsonData config)
         {
-            this.bCanStack = config.bCanStack;
+            this.bCanStack = config.bcanstack;
 
-            this.MaxAmount = config.maxAmount;
+            this.MaxAmount = config.maxamount;
 
             this.Amount = 1;
         }

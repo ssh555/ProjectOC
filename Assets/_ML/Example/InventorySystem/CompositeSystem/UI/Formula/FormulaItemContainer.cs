@@ -9,7 +9,7 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
     {
         public PreviewPanel Owner;
 
-        protected int[][] curFormula;
+        protected ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Formula[] curFormula;
 
         protected FormulaItemBtn formulaItemTemplate;
 
@@ -19,7 +19,7 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
 
         }
 
-        public void RefreshFormulaContainer(int[][] formulas)
+        public void RefreshFormulaContainer(ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Formula[] formulas)
         {
             this.curFormula = formulas;
             if (curFormula == null)
@@ -41,8 +41,8 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
                 {
                     FormulaItemBtn rt = GameObject.Instantiate<FormulaItemBtn>(this.formulaItemTemplate, this.transform);
                     rt.Owner = this;
-                    rt.ID = curFormula[i][0];
-                    rt.Num = curFormula[i][1];
+                    rt.ID = curFormula[i].id;
+                    rt.Num = curFormula[i].num;
                     rt.gameObject.SetActive(true);
                 }
             }

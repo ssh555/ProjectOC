@@ -193,26 +193,6 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             this.OwnedSocketList.AddRange(this.GetComponentsInChildren<BuildingSocket.BuildingSocket>());
 
             //this.ActiveSocket = this.OwnedSocketList[0];
-
-            foreach(var coll in this.GetComponentsInChildren<Collider>())
-            {
-                if(coll.gameObject.layer == 7)
-                {
-                    if(coll is BoxCollider)
-                    {
-                        (coll as BoxCollider).size = Vector3.one * 0.99f;
-                    }
-                    else if(coll is CapsuleCollider)
-                    {
-                        (coll as CapsuleCollider).radius = 0.45f;
-                        (coll as CapsuleCollider).height = 1.98f;
-                    }
-                    else if(coll is SphereCollider)
-                    {
-                        (coll as SphereCollider).radius = 0.45f;
-                    }
-                }
-            }
         }
     
         private void SetColliderTrigger(bool isTrigger)
