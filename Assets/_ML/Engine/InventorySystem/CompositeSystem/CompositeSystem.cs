@@ -28,7 +28,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <summary>
         /// 合成表数据
         /// </summary>
-        private Dictionary<int, CompositionJsonData> CompositeData = new Dictionary<int, CompositionJsonData>();
+        private Dictionary<string, CompositionJsonData> CompositeData = new Dictionary<string, CompositionJsonData>();
         public CompositionJsonData[] GetCompositionData()
         {
             return this.CompositeData.Values.ToArray();
@@ -38,7 +38,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         [System.Serializable]
         public struct Formula
         {
-            public int id;
+            public string id;
             public int num;
         }
         [System.Serializable]
@@ -47,7 +47,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             /// <summary>
             /// 合成对象 -> Item | 建筑物 ID 引用
             /// </summary>
-            public int id;
+            public string id;
 
             /// <summary>
             /// 标签分级
@@ -71,7 +71,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
 
             public string texture2d;
 
-            public List<int> usage;
+            public List<string> usage;
         }
 
         [System.Serializable]
@@ -117,7 +117,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
                     {
                         if(this.CompositeData[usage.id].usage == null)
                         {
-                            this.CompositeData[usage.id].usage = new List<int>();
+                            this.CompositeData[usage.id].usage = new List<string>();
                         }
                         this.CompositeData[usage.id].usage.Add(data.id);
                     }
@@ -135,7 +135,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <param name="resource"></param>
         /// <param name="compositonID"></param>
         /// <returns></returns>
-        public bool CanComposite(Inventory resource, int compositonID)
+        public bool CanComposite(Inventory resource, string compositonID)
         {
             if (!this.CompositeData.ContainsKey(compositonID) || this.CompositeData[compositonID].formula == null)
             {
@@ -159,7 +159,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <param name="resource"></param>
         /// <param name="compositonID"></param>
         /// <returns></returns>
-        public IComposition Composite(Inventory resource, int compositonID)
+        public IComposition Composite(Inventory resource, string compositonID)
         {
             // 移除消耗的资源
             lock (resource)
@@ -190,21 +190,21 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public int[] GetCompositionUsage(int id)
+        public string[] GetCompositionUsage(string id)
         {
             if (!this.CompositeData.ContainsKey(id))
                 return null;
             return this.CompositeData[id].usage.ToArray();
         }
 
-        public string[] GetCompositonTag(int id)
+        public string[] GetCompositonTag(string id)
         {
             if (!this.CompositeData.ContainsKey(id))
                 return null;
             return this.CompositeData[id].tag;
         }
 
-        public Texture2D GetCompositonTexture2D(int id)
+        public Texture2D GetCompositonTexture2D(string id)
         {
             if (!this.CompositeData.ContainsKey(id))
             {
@@ -214,7 +214,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(ItemSpawner.Texture2DPath).LoadAsset<Texture2D>(this.CompositeData[id].texture2d);
         }
 
-        public Sprite GetCompositonSprite(int id)
+        public Sprite GetCompositonSprite(string id)
         {
             var tex = this.GetCompositonTexture2D(id);
             if (tex == null)
@@ -224,7 +224,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
         }
 
-        public Formula[] GetCompositonFomula(int id)
+        public Formula[] GetCompositonFomula(string id)
         {
             if (!this.CompositeData.ContainsKey(id) || this.CompositeData[id].formula == null)
                 return null;

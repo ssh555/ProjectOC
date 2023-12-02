@@ -169,7 +169,7 @@ namespace ML.Engine.InventorySystem
         /// <param name="itemID"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        public bool RemoveItem(int itemID, int amount)
+        public bool RemoveItem(string itemID, int amount)
         {
             // ÊýÁ¿²»¹»
             if (this.GetItemAllNum(itemID) < amount)
@@ -247,13 +247,13 @@ namespace ML.Engine.InventorySystem
         /// <param name="A"></param>
         /// <param name="B"></param>
         /// <returns></returns>
-        public bool MergeItems(int AID, int BID)
+        public bool MergeItems(int AIndex, int BIndex)
         {
-            if (((AID < 0 || AID > this.MaxSize) || BID < 0 || BID > this.MaxSize) || (this.itemList[AID] == null || this.itemList[BID] == null) || AID == BID || (this.itemList[AID].IsFillUp || this.itemList[BID].IsFillUp))
+            if (((AIndex < 0 || AIndex > this.MaxSize) || BIndex < 0 || BIndex > this.MaxSize) || (this.itemList[AIndex] == null || this.itemList[BIndex] == null) || AIndex == BIndex || (this.itemList[AIndex].IsFillUp || this.itemList[BIndex].IsFillUp))
             {
                 return false;
             }
-            bool ans = Item.MergeItems(this.itemList[AID], this.itemList[BID]);
+            bool ans = Item.MergeItems(this.itemList[AIndex], this.itemList[BIndex]);
             this.OnItemListChanged?.Invoke(this);
             return ans;
         }
@@ -264,15 +264,15 @@ namespace ML.Engine.InventorySystem
         /// <param name="A"></param>
         /// <param name="B"></param>
         /// <returns></returns>
-        public bool SwapItem(int AID, int BID)
+        public bool SwapItem(int AIndex, int BIndex)
         {
-            if((AID < 0 || AID > this.MaxSize) || BID < 0 || BID > this.MaxSize || AID == BID)
+            if((AIndex < 0 || AIndex > this.MaxSize) || BIndex < 0 || BIndex > this.MaxSize || AIndex == BIndex)
             {
                 return false;
             }
-            Item tmp = this.itemList[AID];
-            this.itemList[AID] = this.itemList[BID];
-            this.itemList[BID] = tmp;
+            Item tmp = this.itemList[AIndex];
+            this.itemList[AIndex] = this.itemList[BIndex];
+            this.itemList[BIndex] = tmp;
             this.OnItemListChanged?.Invoke(this);
             return true;
         }
@@ -313,7 +313,7 @@ namespace ML.Engine.InventorySystem
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public int GetItemAllNum(int id)
+        public int GetItemAllNum(string id)
         {
             int ans = 0;
 
