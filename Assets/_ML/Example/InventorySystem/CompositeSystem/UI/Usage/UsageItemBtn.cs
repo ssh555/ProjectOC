@@ -9,8 +9,8 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
     public class UsageItemBtn : ML.Example.UI.SingletonActivedButton, IPointerClickHandler
     {
         public UsageContainer Owner;
-        protected int _id;
-        public int ID
+        protected string _id;
+        public string ID
         {
             get => this._id;
             set

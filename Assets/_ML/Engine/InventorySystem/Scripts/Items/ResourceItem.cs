@@ -8,11 +8,11 @@ namespace ML.Engine.InventorySystem
     [System.Serializable]
     public class ResourceItem : Item, CompositeSystem.IComposition
     {
-        public ResourceItem(int ID) : base(ID)
+        public ResourceItem(string ID) : base(ID)
         {
         }
 
-        int IComposition.ID { get => this.ID; set => throw new System.NotImplementedException(); }
+        string IComposition.ID { get => this.ID; set => throw new System.NotImplementedException(); }
 
         public override void Init(ItemSpawner.ItemTabelJsonData config)
         {

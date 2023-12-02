@@ -22,7 +22,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <param name="resource"></param>
         /// <param name="compositonID"></param>
         /// <returns></returns>
-        public bool CanComposite(int compositonID)
+        public bool CanComposite(string compositonID)
         {
             return CompositeSystem.Instance.CanComposite(this.ResourceInventory, compositonID);
         }
@@ -33,7 +33,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <param name="resource"></param>
         /// <param name="compositonID"></param>
         /// <returns></returns>
-        public virtual IComposition Composite(int compositonID)
+        public virtual IComposition Composite(string compositonID)
         {
             return CompositeSystem.Instance.Composite(this.ResourceInventory, compositonID);
         }

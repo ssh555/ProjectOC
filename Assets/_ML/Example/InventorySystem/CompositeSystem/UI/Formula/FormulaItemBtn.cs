@@ -10,8 +10,8 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
     {
         public FormulaItemContainer Owner;
 
-        protected int _id;
-        public int ID
+        protected string _id;
+        public string ID
         {
             get => this._id;
             set
