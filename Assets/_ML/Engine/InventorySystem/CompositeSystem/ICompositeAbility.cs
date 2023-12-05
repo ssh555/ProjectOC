@@ -33,9 +33,9 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <param name="resource"></param>
         /// <param name="compositonID"></param>
         /// <returns></returns>
-        public virtual IComposition Composite(string compositonID)
+        public virtual CompositeSystem.CompositionObjectType Composite(string compositonID, out IComposition composition)
         {
-            return CompositeSystem.Instance.Composite(this.ResourceInventory, compositonID);
+            return CompositeSystem.Instance.Composite(this.ResourceInventory, compositonID, out composition);
         }
 
     }

@@ -251,7 +251,8 @@ namespace ML.Example.InventorySystem
         public IComposition Composite(string compositonID)
         {
             // 一次性合成
-            IComposition ret = ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.Composite(this.ResourceInventory, compositonID);
+            IComposition ret;
+            ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.Composite(this.ResourceInventory, compositonID, out ret);
 
             if(ret is Item)
             {

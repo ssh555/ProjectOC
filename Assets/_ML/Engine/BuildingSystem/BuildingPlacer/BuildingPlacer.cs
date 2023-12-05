@@ -903,13 +903,9 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// </summary>
         protected void EnterBuildSelection()
         {
-            if(_placeCanSelectCategory == null)
-            {
-                this._placeCanSelectCategory = ((BuildingCategory[])System.Enum.GetValues(typeof(BuildingCategory))).Where(c => (int)c >= 0).ToArray();
-                //this._placeCanSelectCategory = this._placeCanSelectCategory[1..this._placeCanSelectCategory.Length];
-
-                this.UpdatePlaceBuildingType(this._placeCanSelectCategory[this._placeSelectedCategoryIndex]);
-            }
+            this._placeCanSelectCategory = BuildingManager.Instance.GetRegisteredCategory().Where(c => (int)c >= 0).ToArray();
+            this._placeSelectedCategoryIndex = 0;
+            this.UpdatePlaceBuildingType(this._placeCanSelectCategory[this._placeSelectedCategoryIndex]);
 
             this.InteractBPartList.Clear();
             //if(this.SelectedPartInstance != null && this.SelectedPartInstance.Mode == BuildingMode.Place)
@@ -963,7 +959,8 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
         protected void UpdatePlaceBuildingType(BuildingCategory category)
         {
-            this._placeCanSelectType = ((BuildingType[])System.Enum.GetValues(typeof(BuildingType))).Where(type => (int)type >= ((int)category * 100) && (int)type < ((int)category * 100 + 100)).ToArray();
+            this._placeCanSelectType = BuildingManager.Instance.GetRegisteredType().Where(type => (int)type >= ((int)category * 100) && (int)type < ((int)category * 100 + 100)).ToArray();
+
             this._placeSelectedTypeIndex = 0;
             this.OnBuildSelectionTypeChanged?.Invoke(category, this._placeCanSelectType, this._placeSelectedTypeIndex);
         }
@@ -1252,7 +1249,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         protected IEnumerator LoadMatPackages()
         {
 #if UNITY_EDITOR
-            float startT = Time.time;
+            float startT = Time.realtimeSinceStartup;
 #endif
             while (Manager.GameManager.Instance.ABResourceManager == null)
             {
@@ -1277,7 +1274,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             //abmgr.UnLoadLocalABAsync(TextContentABPath, false, null);
 
 #if UNITY_EDITOR
-            Debug.Log("LoadMatPackages cost time: " + (Time.time - startT));
+            Debug.Log("LoadMatPackages cost time: " + (Time.realtimeSinceStartup - startT));
 #endif
 
             this.enabled = false;

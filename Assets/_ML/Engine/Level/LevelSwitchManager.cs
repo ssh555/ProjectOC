@@ -143,7 +143,7 @@ namespace ML.Engine.Level
 
         private DispatchGrids dispatchGrids;
 
-        public const string LevelTableDataABPath = "Json/TabelData";
+        public const string LevelTableDataABPath = "Json/TableData";
         public const string TableName = "LevelTableData";
 
         [System.Serializable]
@@ -185,7 +185,6 @@ namespace ML.Engine.Level
                     this.levelResourcesDict.Add(row.scenename, res);
                 }
 
-                abmgr.UnLoadLocalABAsync(LevelTableDataABPath, false, null);
 
                 // 载入当前场景的资源
                 this.CurSceneName = SceneManager.GetActiveScene().name;

@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 4118910345
+CRC: 256853973
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 522620152087ace52b6cb6e7e472a28b
+    Hash: 817a600323ecf1cb9b9880281b3f26a1
   TypeTreeHash:
     serializedVersion: 2
-    Hash: cddaf69a6e77e76faee454ba618694b0
+    Hash: f5eb839219ccfd260bddde80d0831047
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 522620152087ace52b6cb6e7e472a28b
+    Hash: 817a600323ecf1cb9b9880281b3f26a1
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -23,8 +23,6 @@ ClassTypes:
 - Class: 33
   Script: {instanceID: 0}
 - Class: 43
-  Script: {instanceID: 0}
-- Class: 48
   Script: {instanceID: 0}
 - Class: 65
   Script: {instanceID: 0}
@@ -52,10 +50,11 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: Assembly-CSharp
   ClassName: ML.Engine.BuildingSystem.BuildingSocket.BuildingSocketType
 Assets:
-- Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/_Test_Room_Foundation_Triangle_20.prefab
-- Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/_Test_Room_Floor_Base_20.prefab
-- Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/_Test_Room_Foundation_Base_20.prefab
-- Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/_Test_Room_Foundation_Triangle_50.prefab
-- Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/_Test_Room_Foundation_Base_50.prefab
-- Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/_Test_Room_Floor_Base_50.prefab
-Dependencies: []
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/_Test_Room_Foundation_Triangle_20.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/_Test_Room_Floor_Base_20.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/_Test_Room_Foundation_Base_20.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/_Test_Room_Foundation_Triangle_50.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/_Test_Room_Foundation_Base_50.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/_Test_Room_Floor_Base_50.prefab
+Dependencies:
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/assets/buildingsystem

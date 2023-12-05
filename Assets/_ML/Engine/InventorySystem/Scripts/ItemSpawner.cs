@@ -33,6 +33,11 @@ namespace ML.Engine.InventorySystem
         #endregion
         
         /// <summary>
+        /// 是否已加载完数据
+        /// </summary>
+        public bool IsLoadOvered = false;
+
+        /// <summary>
         /// 根据需求自动添加
         /// </summary>
         private Dictionary<string, Type> ItemDict = new Dictionary<string, Type>();
@@ -176,12 +181,12 @@ namespace ML.Engine.InventorySystem
             return null;
         }
 
-#region to-do : 需读表导入所有所需的 Item 数据
+        #region to-do : 需读表导入所有所需的 Item 数据
         public const string TypePath = "ML.Engine.InventorySystem.";
         public const string Texture2DPath = "ui/Item/texture2d";
         public const string WorldObjPath = "prefabs/Item/WorldItem";
 
-        public const string ItemTableDataABPath = "Json/TabelData";
+        public const string ItemTableDataABPath = "Json/TableData";
         public const string TableName = "ItemTableData";
 
         [System.Serializable]
@@ -211,7 +216,8 @@ namespace ML.Engine.InventorySystem
             AssetBundle ab;
             var crequest = abmgr.LoadLocalABAsync(ItemTableDataABPath, null, out ab);
             yield return crequest;
-            ab = crequest.assetBundle;
+            if(crequest != null)
+                ab = crequest.assetBundle;
 
 
             var request = ab.LoadAssetAsync<TextAsset>(TableName);
@@ -223,12 +229,12 @@ namespace ML.Engine.InventorySystem
                 this.ItemTypeStrDict.Add(data.id, data);
             }
 
-            abmgr.UnLoadLocalABAsync(ItemTableDataABPath, false, null);
+            //abmgr.UnLoadLocalABAsync(ItemTableDataABPath, false, null);
 
-            yield break;
+            IsLoadOvered = true;
         }
 
-#endregion
+        #endregion
 
 
     }

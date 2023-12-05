@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3394123941
+CRC: 1723985902
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e8f9eb312f24b0ffacab5757458ac19a
+    Hash: 66f34e4a0bff411b944b6a00cf9d0003
   TypeTreeHash:
     serializedVersion: 2
-    Hash: d51076249f1c6a82e875bd402d370125
+    Hash: 0de66c25345d41683819ddd8575b8a89
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: e8f9eb312f24b0ffacab5757458ac19a
+    Hash: 66f34e4a0bff411b944b6a00cf9d0003
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -44,6 +44,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fa7155796051b734daa718462081dc5f, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 136
@@ -78,3 +80,4 @@ Assets:
 Dependencies:
 - C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/animation/character/player/model
 - C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/animation/character/player/playermove
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/uipanel

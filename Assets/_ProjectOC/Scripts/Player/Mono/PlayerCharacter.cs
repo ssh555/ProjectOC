@@ -52,6 +52,11 @@ namespace ProjectOC.Player
         public PlayerModelStateController playerModelStateController;
         #endregion
 
+        #region UI
+        [FoldoutGroup("UI")]
+        public UI.PlayerUIBotPanel playerUIBotPanel;
+        #endregion
+
         #region Init
         private void Awake()
         {
@@ -90,6 +95,9 @@ namespace ProjectOC.Player
 
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterFixedTick(0, this);
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
+
+            ML.Engine.Manager.GameManager.Instance.UIManager.ChangeBotUIPanel(GameObject.Instantiate(this.playerUIBotPanel.gameObject, GameObject.Find("Canvas").transform, false).GetComponent<ML.Engine.UI.UIBasePanel>()); ;
+
             this.enabled = false;
         }
         #endregion

@@ -78,7 +78,8 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
 
         protected void Composite()
         {
-            IComposition composition = this.Owner.Owner.Composite(this.ID);
+            IComposition composition;
+            this.Owner.Owner.Composite(this.ID, out composition);
             this.RefreshPreviewPanel();
         }
 
