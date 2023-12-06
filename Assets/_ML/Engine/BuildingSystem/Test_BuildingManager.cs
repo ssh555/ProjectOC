@@ -7,128 +7,38 @@ using ML.Engine.UI;
 using Sirenix.OdinInspector;
 using UnityEngine.UI;
 using TMPro;
-using static ML.Engine.BuildingSystem.Config;
+using ML.Engine.TextContent;
+using Unity.VisualScripting;
+using Newtonsoft.Json;
 
 namespace ML.Engine.BuildingSystem
 {
-    public static class Config
-    {
-        public enum Language
-        {
-            Chinese,
-            English,
-        }
-        public enum Platform
-        {
-            Windows,
-        }
-        public enum InputDevice
-        {
-            Keyboard,
-            XBOX,
-        }
 
-        [SerializeField]
-        public static Language language => Test_BuildingManager.Instance.language;
-        [SerializeField]
-        public static Platform platform => Test_BuildingManager.Instance.platform;
-        [SerializeField]
-        public static InputDevice inputDevice => Test_BuildingManager.Instance.inputDevice;
-    }
-
-    public struct UIKeyTip
-    {
-        public RectTransform root;
-        public Image img;
-        public TextMeshProUGUI keytip;
-        public TextMeshProUGUI description;
-
-        public void ReWrite(Test_BuildingManager.KeyTip keyTip)
-        {
-            if(this.keytip)
-                this.keytip.text = keyTip.GetKeyMapText();
-            if(this.description)
-                this.description.text = keyTip.GetDescription();
-        }
-    }
 
     public class Test_BuildingManager : MonoBehaviour
     {
         public static Test_BuildingManager Instance;
         public BuildingManager BM;
+        private int IsInit = 3;
+        public bool IsLoadOvered => IsInit == 0;
 
         #region Config
         [LabelText("语言"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
-        public Language language = Language.Chinese;
+        public Config.Language language = Config.Language.Chinese;
         [LabelText("平台"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
-        public Platform platform = Platform.Windows;
+        public Config.Platform platform = Config.Platform.Windows;
         [LabelText("输入设备"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
-        public InputDevice inputDevice = InputDevice.Keyboard;
+        public Config.InputDevice inputDevice = Config.InputDevice.Keyboard;
         #endregion
 
 
         #region TextContent
 
-        public const string TextContentABPath = "TextContent/BuildingSystem/UI";
-        [System.Serializable]
-        public struct TextContent
-        {
-            public string Chinese;
+        public const string TextContentABPath = "JSON/TextContent/BuildingSystem/UI";
 
-            public string English;
-
-            public string GetText()
-            {
-                if(Config.language == Config.Language.Chinese)
-                {
-                    return Chinese;
-                }
-                else if(Config.language == Config.Language.English)
-                {
-                    return English;
-                }
-                return "";
-            }
-        }
         
         #region KeyTip
-        [System.Serializable]
-        public struct KeyMap
-        {
-            public string KeyBoard;
 
-            public string XBOX;
-
-            public string GetKeyMapText()
-            {
-                if (Config.inputDevice == Config.InputDevice.XBOX)
-                {
-                    return XBOX;
-                }
-                else if (Config.inputDevice == Config.InputDevice.Keyboard)
-                {
-                    return KeyBoard;
-                }
-                return "";
-            }
-        }
-        [System.Serializable]
-        public struct KeyTip
-        {
-            public string keyname;
-            public KeyMap keymap;
-            public TextContent description;
-
-            public string GetKeyMapText()
-            {
-                return this.keymap.GetKeyMapText();
-            }
-
-            public string GetDescription()
-            {
-                return this.description.GetText();
-            }
-        }
         [System.Serializable]
         private struct KeyTips
         {
@@ -145,7 +55,7 @@ namespace ML.Engine.BuildingSystem
         public struct BCategory
         {
             public string category;
-            public TextContent name;
+            public TextContent.TextContent name;
 
             public string GetNameText()
             {
@@ -156,7 +66,7 @@ namespace ML.Engine.BuildingSystem
         public struct BType
         {
             public string type;
-            public TextContent name;
+            public TextContent.TextContent name;
             public string GetNameText()
             {
                 return name.GetText();
@@ -182,7 +92,7 @@ namespace ML.Engine.BuildingSystem
         private IEnumerator InitUITextContents()
         {
 #if UNITY_EDITOR
-            float startT = Time.time;
+            float startT = Time.realtimeSinceStartup;
 #endif
             while (Manager.GameManager.Instance.ABResourceManager == null)
             {
@@ -200,7 +110,7 @@ namespace ML.Engine.BuildingSystem
             // KeyTip
             var request = ab.LoadAssetAsync<TextAsset>("KeyTip");
             yield return request;
-            KeyTips keyTips = JsonUtility.FromJson<KeyTips>((request.asset as TextAsset).text);
+            KeyTips keyTips = JsonConvert.DeserializeObject<KeyTips>((request.asset as TextAsset).text);
             foreach(var keytip in keyTips.keytips)
             {
                 this.KeyTipDict.Add(keytip.keyname, keytip);
@@ -209,7 +119,7 @@ namespace ML.Engine.BuildingSystem
             // Category
             request = ab.LoadAssetAsync<TextAsset>("Category");
             yield return request;
-            BCategorys categorys = JsonUtility.FromJson<BCategorys>((request.asset as TextAsset).text);
+            BCategorys categorys = JsonConvert.DeserializeObject<BCategorys>((request.asset as TextAsset).text);
             foreach (var category in categorys.category)
             {
                 this.CategoryDict.Add(category.category, category);
@@ -218,17 +128,14 @@ namespace ML.Engine.BuildingSystem
             // Type
             request = ab.LoadAssetAsync<TextAsset>("Type");
             yield return request;
-            BTypes btypes = JsonUtility.FromJson<BTypes>((request.asset as TextAsset).text);
+            BTypes btypes = JsonConvert.DeserializeObject<BTypes>((request.asset as TextAsset).text);
             foreach (var type in btypes.type)
             {
                 this.TypeDict.Add(type.type, type);
             }
-
-
-            abmgr.UnLoadLocalABAsync(TextContentABPath, false, null);
-
+            IsInit--;
 #if UNITY_EDITOR
-            Debug.Log("RegisterBPartPrefab cost time: " + (Time.time - startT));
+            Debug.Log("InitUITextContents cost time: " + (Time.realtimeSinceStartup - startT));
 #endif
         }
 
@@ -300,10 +207,11 @@ namespace ML.Engine.BuildingSystem
             StartCoroutine(InitUITextContents());
         }
 
+        public Dictionary<BuildingPartClassification, IBuildingPart> LoadedBPart = new Dictionary<BuildingPartClassification, IBuildingPart>();
         private IEnumerator RegisterBPartPrefab()
         {
 #if UNITY_EDITOR
-            float startT = Time.time;
+            float startT = Time.realtimeSinceStartup;
 #endif
             while (Manager.GameManager.Instance.ABResourceManager == null)
             {
@@ -313,7 +221,8 @@ namespace ML.Engine.BuildingSystem
             AssetBundle ab;
             var crequest = abmgr.LoadLocalABAsync(BPartABPath, null, out ab);
             yield return crequest;
-            ab = crequest.assetBundle;
+            if(crequest != null)
+                ab = crequest.assetBundle;
             
             var request = ab.LoadAllAssetsAsync<GameObject>();
             yield return request;
@@ -323,15 +232,16 @@ namespace ML.Engine.BuildingSystem
                 var bpart = (obj as GameObject).GetComponent<IBuildingPart>();
                 if (bpart != null)
                 {
-                    BM.RegisterBPartPrefab(bpart);
+                    this.LoadedBPart.Add(bpart.Classification, bpart);
+                    //BM.RegisterBPartPrefab(bpart);
                 }
             }
 
             // to-do : 暂时材质有用，不能UnLoad
             //abmgr.UnLoadLocalABAsync(BPartABPath, false, null);
-
+            IsInit--;
 #if UNITY_EDITOR
-            Debug.Log("RegisterBPartPrefab cost time: " + (Time.time - startT));
+            Debug.Log("RegisterBPartPrefab cost time: " + (Time.realtimeSinceStartup - startT));
 #endif
 
         }
@@ -339,7 +249,7 @@ namespace ML.Engine.BuildingSystem
         private IEnumerator RigisterUIPanelPrefab()
         {
 #if UNITY_EDITOR
-            float startT = Time.time;
+            float startT = Time.realtimeSinceStartup;
 #endif
 
             while (Manager.GameManager.Instance.ABResourceManager == null)
@@ -367,12 +277,12 @@ namespace ML.Engine.BuildingSystem
             // to-do : 暂时材质有用，不能UnLoad
             //abmgr.UnLoadLocalABAsync(BPartABPath, false, null);
 
-            var botPanel = this.GetPanel<UI.Test_BSBotPanel>();
-            botPanel.transform.SetParent(this.Canvas, false);
-            Manager.GameManager.Instance.UIManager.ChangeBotUIPanel(botPanel);
-
+            //var botPanel = this.GetPanel<UI.Test_BSBotPanel>();
+            //botPanel.transform.SetParent(this.Canvas, false);
+            //Manager.GameManager.Instance.UIManager.ChangeBotUIPanel(botPanel);
+            IsInit--;
 #if UNITY_EDITOR
-            Debug.Log("RigisterUIPanelPrefab cost time: " + (Time.time - startT));
+            Debug.Log("RigisterUIPanelPrefab cost time: " + (Time.realtimeSinceStartup - startT));
 #endif
         }
 
@@ -471,15 +381,6 @@ namespace ML.Engine.BuildingSystem
             };
         }
 
-
-        private void Update()
-        {
-            if (ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.WasPressedThisFrame() && BM.Mode == BuildingMode.None)
-            {
-                BM.Mode = BuildingMode.Interact;
-            }
-
-        }
 
 
         private void OnDestroy()

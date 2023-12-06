@@ -1,4 +1,5 @@
 using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.TextContent;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -172,7 +173,6 @@ namespace ML.Engine.BuildingSystem.UI
                 }
             }
 
-            abmgr.UnLoadLocalABAsync(TStyleABPath, false, null);
             IsInit = true;
 #if UNITY_EDITOR
             Debug.Log("InitStyleTexture2D cost time: " + (Time.time - startT));

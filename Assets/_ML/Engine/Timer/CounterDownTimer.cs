@@ -87,7 +87,7 @@ namespace ML.Engine.Timer
         /// <summary>
         /// 倒计时运行事件，参数为剩余时间
         /// </summary>
-        public event Action<double> OnUpdateEvent;
+        public Action<double> OnUpdateEvent;
 
         /// <summary>
         /// 倒计时结束时运行事件
@@ -130,7 +130,8 @@ namespace ML.Engine.Timer
                 {
                     this.IsStoped = true;
                 }
-
+                currentTime = 0;
+                this.OnUpdateEvent?.Invoke(currentTime);
                 this.OnEndEvent?.Invoke();
                 return currentTime;
             }
@@ -202,7 +203,6 @@ namespace ML.Engine.Timer
         /// <returns></returns>
         public double GetPercent()
         {
-            UpdateCurrentTime(0);
             if (currentTime <= 0 || Duration <= 0)
                 return 1f;
             return 1f - currentTime / Duration;

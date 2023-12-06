@@ -21,6 +21,15 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         [LabelText("四级分类-高度"), PropertyTooltip("单位cm, 用整数表示"), SerializeField]
         public short Height;
 
+        public BuildingPartClassification(string id)
+        {
+            string[] classification = id.Split('-');
+            Category = (BuildingCategory)Enum.Parse(typeof(BuildingCategory), classification[0]);
+            Type = (BuildingType)Enum.Parse(typeof(BuildingType), classification[1]);
+            Style = (BuildingStyle)Enum.Parse(typeof(BuildingStyle), classification[2]);
+            Height = short.Parse(classification[3]);
+        }
+
         public override bool Equals(object obj)
         {
             return this == (BuildingPartClassification)obj;

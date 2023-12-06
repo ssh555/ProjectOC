@@ -1,34 +1,33 @@
 ManifestFileVersion: 0
-CRC: 3255735839
+CRC: 351095472
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: csv
-      Dependencies: {}
-    Info_1:
       Name: animation/character/player/model
       Dependencies: {}
-    Info_2:
+    Info_1:
       Name: animation/character/player/playermove
       Dependencies: {}
-    Info_3:
+    Info_2:
       Name: prefabs/character/player
       Dependencies:
         Dependency_0: animation/character/player/model
         Dependency_1: animation/character/player/playermove
-    Info_4:
+        Dependency_2: ui/uipanel
+    Info_3:
       Name: scene
       Dependencies: {}
-    Info_5:
+    Info_4:
       Name: testscene
       Dependencies:
         Dependency_0: animation/character/player/model
         Dependency_1: prefabs/character/player
         Dependency_2: materials
-    Info_6:
+        Dependency_3: ui/uipanel
+    Info_5:
       Name: materials
       Dependencies: {}
-    Info_7:
+    Info_6:
       Name: ui/buildingsystem/prefabs
       Dependencies:
         Dependency_0: ui/buildingsystem/texture2d/category
@@ -36,24 +35,42 @@ AssetBundleManifest:
         Dependency_2: ui/buildingsystem/texture2d/style
         Dependency_3: fonts
         Dependency_4: assets/buildingsystem
-    Info_8:
+    Info_7:
       Name: prefabs/buildingsystem/bpart
-      Dependencies: {}
-    Info_9:
+      Dependencies:
+        Dependency_0: assets/buildingsystem
+    Info_8:
       Name: ui/buildingsystem/texture2d/category
       Dependencies: {}
-    Info_10:
+    Info_9:
       Name: ui/buildingsystem/texture2d/type
       Dependencies: {}
-    Info_11:
+    Info_10:
       Name: ui/buildingsystem/texture2d/style
       Dependencies: {}
-    Info_12:
+    Info_11:
       Name: fonts
       Dependencies: {}
+    Info_12:
+      Name: assets/buildingsystem
+      Dependencies: {}
     Info_13:
-      Name: textcontent/buildingsystem/ui
+      Name: json/tabledata
       Dependencies: {}
     Info_14:
-      Name: assets/buildingsystem
+      Name: ui/techpoint/texture2d
+      Dependencies: {}
+    Info_15:
+      Name: ui/uipanel
+      Dependencies:
+        Dependency_0: fonts
+        Dependency_1: ui/techpoint/texture2d
+    Info_16:
+      Name: json/textcontent/buildingsystem/ui
+      Dependencies: {}
+    Info_17:
+      Name: json/textcontent/techtree
+      Dependencies: {}
+    Info_18:
+      Name: json/textcontent/player
       Dependencies: {}

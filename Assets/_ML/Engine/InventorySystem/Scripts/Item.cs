@@ -20,7 +20,7 @@ namespace ML.Engine.InventorySystem
         /// 物品编号 : 范围 [1, int.MaxValue) 
         /// 默认为 int.MaxValue,表示为 null
         /// </summary>
-        public readonly int ID = int.MaxValue;
+        public readonly string ID;
 
         /// <summary>
         /// 所属 Inventory
@@ -82,7 +82,7 @@ namespace ML.Engine.InventorySystem
         public event Action<Inventory, Item> OnAmountToZero;
         #endregion
 
-        public Item(int ID)
+        public Item(string ID)
         {
             this.ID = ID;
 
@@ -153,15 +153,7 @@ namespace ML.Engine.InventorySystem
                     return -1;
                 }
 
-                if (x.ID == y.ID)
-                {
-                    return 0;
-                }
-                if (x.ID < y.ID)
-                {
-                    return -1;
-                }
-                return 1;
+                return string.Compare(x.ID, y.ID);
             }
 
             //int IComparer<Fruit>.Compare(Fruit x, Fruit y)
@@ -170,33 +162,6 @@ namespace ML.Engine.InventorySystem
             //}
         }
 
-        public static bool operator >(Item A, Item B)
-        {
-            int idA = A == null ? int.MaxValue : A.ID;
-            int idB = B == null ? int.MaxValue : B.ID;
-            return idA > idB;
-        }
-
-        public static bool operator >=(Item A, Item B)
-        {
-            int idA = A == null ? int.MaxValue : A.ID;
-            int idB = B == null ? int.MaxValue : B.ID;
-            return idA >= idB;
-        }
-
-        public static bool operator<(Item A, Item B)
-        {
-            int idA = A == null ? int.MaxValue : A.ID;
-            int idB = B == null ? int.MaxValue : B.ID;
-            return idA < idB;
-        }
-
-        public static bool operator <=(Item A, Item B)
-        {
-            int idA = A == null ? int.MaxValue : A.ID;
-            int idB = B == null ? int.MaxValue : B.ID;
-            return idA <= idB;
-        }
         #endregion
     }
 }

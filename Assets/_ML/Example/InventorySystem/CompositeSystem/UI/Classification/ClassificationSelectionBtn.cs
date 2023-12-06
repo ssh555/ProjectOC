@@ -24,7 +24,7 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
         /// <summary>
         /// <tag, IDList>
         /// </summary>
-        public Dictionary<string, List<int>> CataloguePair;
+        public Dictionary<string, List<string>> CataloguePair;
 
         protected override void Awake()
         {

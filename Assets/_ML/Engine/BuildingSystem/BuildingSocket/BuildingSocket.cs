@@ -99,7 +99,13 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         {
             if (this.ParentBPart.AttachedArea != null)
             {
-                this.ParentBPart.AttachedArea.GetMatchPointOnArea(TargetPos, AreaCheckRadius, out pos, out rot);
+                bool b = this.ParentBPart.AttachedArea.GetMatchPointOnArea(TargetPos, AreaCheckRadius, out pos, out rot);
+                if(b == false)
+                {
+                    pos = Vector3.negativeInfinity;
+                    rot = new Quaternion(float.NaN, float.NaN, float.NaN, float.NaN);
+                    return false;
+                }
                 rot *= (this.ParentBPart.AttachedArea.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
                 return true;
             }
