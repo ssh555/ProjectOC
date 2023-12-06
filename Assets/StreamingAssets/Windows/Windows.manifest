@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 3252027118
+CRC: 351095472
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -23,8 +23,7 @@ AssetBundleManifest:
         Dependency_0: animation/character/player/model
         Dependency_1: prefabs/character/player
         Dependency_2: materials
-        Dependency_3: fonts
-        Dependency_4: ui/uipanel
+        Dependency_3: ui/uipanel
     Info_5:
       Name: materials
       Dependencies: {}
@@ -59,15 +58,19 @@ AssetBundleManifest:
       Name: json/tabledata
       Dependencies: {}
     Info_14:
+      Name: ui/techpoint/texture2d
+      Dependencies: {}
+    Info_15:
       Name: ui/uipanel
       Dependencies:
         Dependency_0: fonts
-    Info_15:
+        Dependency_1: ui/techpoint/texture2d
+    Info_16:
       Name: json/textcontent/buildingsystem/ui
       Dependencies: {}
-    Info_16:
+    Info_17:
       Name: json/textcontent/techtree
       Dependencies: {}
-    Info_17:
+    Info_18:
       Name: json/textcontent/player
       Dependencies: {}

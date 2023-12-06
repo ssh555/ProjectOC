@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
@@ -10,6 +11,8 @@ namespace ProjectOC.TechTree
     public class TechPoint
     {
         public string ID;
+        public ML.Engine.TextContent.TextContent Name;
+        public int[] Grid;
         public TechPointCategory Category;
         public string Icon;
         public ML.Engine.TextContent.TextContent Description;

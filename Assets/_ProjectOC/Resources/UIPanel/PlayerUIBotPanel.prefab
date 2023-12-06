@@ -389,7 +389,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uITechPointPanel: {fileID: 0}
+  uITechPointPanel: {fileID: 5111336925827994217, guid: 8786123fbf5a14947a2c74aa35d4b9a9, type: 3}
   IsLoadOvered: 0
 --- !u!1 &5791167129079826881
 GameObject:

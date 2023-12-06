@@ -338,6 +338,9 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         {
             if (this.SelectedPartInstance != null)
             {
+                Vector3 oldP = this.SelectedPartInstance.transform.position;
+                var oldR = this.SelectedPartInstance.transform.rotation;
+
                 // ¹é0
                 this.SelectedPartInstance.transform.position = this.SelectedPartInstance.ActiveSocket.transform.position - this.SelectedPartInstance.ActiveSocket.transform.localPosition;
                 this.SelectedPartInstance.transform.rotation = Quaternion.identity;
@@ -373,6 +376,8 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                         rot = tmpR;
                         return true;
                     }
+                    this.SelectedPartInstance.transform.position = oldP;
+                    this.SelectedPartInstance.transform.rotation = oldR;
                     return false;
                 }
                 // Î»ÖÃ&Ðý×ª -> AttachedSocket
@@ -384,6 +389,8 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                         rot = tmpR;
                         return true;
                     }
+                    this.SelectedPartInstance.transform.position = oldP;
+                    this.SelectedPartInstance.transform.rotation = oldR;
                     return false;
                 }
 
@@ -403,6 +410,10 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         {
             if(this.GetPlacePosAndRot(out Vector3 pos, out Quaternion rot))
             {
+                //if(pos == Vector3.negativeInfinity || float.IsNaN(rot.x))
+                //{
+                //    return;
+                //}
                 Vector3 euler = rot.eulerAngles;
 
                 this.SelectedPartInstance.transform.rotation = Quaternion.identity;

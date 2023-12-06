@@ -1,4 +1,5 @@
 using ML.Engine.BuildingSystem.BuildingPart;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -222,7 +223,7 @@ namespace ML.Engine.InventorySystem
 
             var request = ab.LoadAssetAsync<TextAsset>(TableName);
             yield return request;
-            ItemTabelJsonDataArray datas = JsonUtility.FromJson<ItemTabelJsonDataArray>((request.asset as TextAsset).text);
+            ItemTabelJsonDataArray datas = JsonConvert.DeserializeObject<ItemTabelJsonDataArray>((request.asset as TextAsset).text);
 
             foreach (var data in datas.table)
             {

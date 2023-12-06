@@ -55,6 +55,15 @@ namespace ProjectOC.TechTree.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AlterTP"",
+                    ""type"": ""Value"",
+                    ""id"": ""c23a0fb1-6fd7-4e7e-984c-7291b5af0d3d"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -105,7 +114,7 @@ namespace ProjectOC.TechTree.Input
                 {
                     ""name"": """",
                     ""id"": ""282d903e-ece2-4df0-b9f5-60b0e847e22a"",
-                    ""path"": ""<Keyboard>/c"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -123,6 +132,116 @@ namespace ProjectOC.TechTree.Input
                     ""action"": ""Decipher"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""6e8a5ce3-c75c-4c9a-bc9d-251046afcc69"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterTP"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""75dfa114-c782-470c-8235-47d6eef12957"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterTP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""3215b8b3-ea46-4b72-bd7b-bdfc5632f5cb"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterTP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""d7861f29-38d6-4110-9318-6dda8bd53448"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterTP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""2e9c3be0-c257-45f8-9d26-cf5b92702b75"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterTP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""87bcb4b3-5163-4f61-82fe-79c11e98276a"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterTP"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""69ff69c0-f5c4-44ae-a9fe-93531c784091"",
+                    ""path"": ""<XInputController>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterTP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""5b1a9c3b-eccc-4be3-af67-e2056ff9ae11"",
+                    ""path"": ""<XInputController>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterTP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""592c8e76-8ad0-4790-af89-c340e407534b"",
+                    ""path"": ""<XInputController>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterTP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""169d5c7b-fb82-49a5-b276-638d28d38294"",
+                    ""path"": ""<XInputController>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterTP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -134,6 +253,7 @@ namespace ProjectOC.TechTree.Input
             m_TechTree_LastTerm = m_TechTree.FindAction("LastTerm", throwIfNotFound: true);
             m_TechTree_NextTerm = m_TechTree.FindAction("NextTerm", throwIfNotFound: true);
             m_TechTree_Decipher = m_TechTree.FindAction("Decipher", throwIfNotFound: true);
+            m_TechTree_AlterTP = m_TechTree.FindAction("AlterTP", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -198,6 +318,7 @@ namespace ProjectOC.TechTree.Input
         private readonly InputAction m_TechTree_LastTerm;
         private readonly InputAction m_TechTree_NextTerm;
         private readonly InputAction m_TechTree_Decipher;
+        private readonly InputAction m_TechTree_AlterTP;
         public struct TechTreeActions
         {
             private @TechTreeInput m_Wrapper;
@@ -205,6 +326,7 @@ namespace ProjectOC.TechTree.Input
             public InputAction @LastTerm => m_Wrapper.m_TechTree_LastTerm;
             public InputAction @NextTerm => m_Wrapper.m_TechTree_NextTerm;
             public InputAction @Decipher => m_Wrapper.m_TechTree_Decipher;
+            public InputAction @AlterTP => m_Wrapper.m_TechTree_AlterTP;
             public InputActionMap Get() { return m_Wrapper.m_TechTree; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -223,6 +345,9 @@ namespace ProjectOC.TechTree.Input
                 @Decipher.started += instance.OnDecipher;
                 @Decipher.performed += instance.OnDecipher;
                 @Decipher.canceled += instance.OnDecipher;
+                @AlterTP.started += instance.OnAlterTP;
+                @AlterTP.performed += instance.OnAlterTP;
+                @AlterTP.canceled += instance.OnAlterTP;
             }
 
             private void UnregisterCallbacks(ITechTreeActions instance)
@@ -236,6 +361,9 @@ namespace ProjectOC.TechTree.Input
                 @Decipher.started -= instance.OnDecipher;
                 @Decipher.performed -= instance.OnDecipher;
                 @Decipher.canceled -= instance.OnDecipher;
+                @AlterTP.started -= instance.OnAlterTP;
+                @AlterTP.performed -= instance.OnAlterTP;
+                @AlterTP.canceled -= instance.OnAlterTP;
             }
 
             public void RemoveCallbacks(ITechTreeActions instance)
@@ -258,6 +386,7 @@ namespace ProjectOC.TechTree.Input
             void OnLastTerm(InputAction.CallbackContext context);
             void OnNextTerm(InputAction.CallbackContext context);
             void OnDecipher(InputAction.CallbackContext context);
+            void OnAlterTP(InputAction.CallbackContext context);
         }
     }
 }

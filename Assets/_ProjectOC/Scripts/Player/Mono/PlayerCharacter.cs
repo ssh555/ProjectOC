@@ -57,6 +57,10 @@ namespace ProjectOC.Player
         public UI.PlayerUIBotPanel playerUIBotPanel;
         #endregion
 
+        #region 背包 to-do : 临时测试使用
+        public ML.Engine.InventorySystem.Inventory Inventory;
+        #endregion
+
         #region Init
         private void Awake()
         {
@@ -96,7 +100,13 @@ namespace ProjectOC.Player
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterFixedTick(0, this);
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
 
-            ML.Engine.Manager.GameManager.Instance.UIManager.ChangeBotUIPanel(GameObject.Instantiate(this.playerUIBotPanel.gameObject, GameObject.Find("Canvas").transform, false).GetComponent<ML.Engine.UI.UIBasePanel>()); ;
+            ML.Engine.Manager.GameManager.Instance.UIManager.ChangeBotUIPanel(GameObject.Instantiate(this.playerUIBotPanel.gameObject, GameObject.Find("Canvas").transform, false).GetComponent<ML.Engine.UI.UIBasePanel>());
+            (ML.Engine.Manager.GameManager.Instance.UIManager.GetTopUIPanel() as UI.PlayerUIBotPanel).player = this;
+
+            this.Inventory = new ML.Engine.InventorySystem.Inventory(65, this.transform);
+
+
+
 
             this.enabled = false;
         }

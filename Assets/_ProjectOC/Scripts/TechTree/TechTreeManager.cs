@@ -12,6 +12,8 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using ML.Engine.TextContent;
+using Newtonsoft.Json;
 
 namespace ProjectOC.TechTree
 {
@@ -39,6 +41,8 @@ namespace ProjectOC.TechTree
             StartCoroutine(LoadResource());
 
             StartCoroutine(LoadTableData());
+
+            StartCoroutine(InitUITextContents());
         }
 
         private void OnDestroy()
@@ -55,6 +59,11 @@ namespace ProjectOC.TechTree
 
         private Dictionary<string, TechPoint> registerTechPoints = new Dictionary<string, TechPoint>();
 
+        public string[] GetAllTPID()
+        {
+            return this.registerTechPoints.Keys.ToArray();
+        }
+
         public TechPoint GetTechPoint(string ID)
         {
             return this.registerTechPoints.ContainsKey(ID) ? this.registerTechPoints[ID] : null;
@@ -63,6 +72,21 @@ namespace ProjectOC.TechTree
         public Texture2D GetTPTexture2D(string ID)
         {
             return this.registerTechPoints.ContainsKey(ID)? GM.ABResourceManager.LoadAsset<Texture2D>(TPIconTexture2DABPath, this.registerTechPoints[ID].Icon) : null;
+        }
+
+        public string GetTPName(string ID)
+        {
+            return this.registerTechPoints.ContainsKey(ID) ?  this.registerTechPoints[ID].Name.GetText() : "";
+        }
+
+        public int[] GetTPGrid(string ID)
+        {
+            return this.registerTechPoints.ContainsKey(ID) ? this.registerTechPoints[ID].Grid : null;
+        }
+
+        public TechPointCategory GetTPCategory(string ID)
+        {
+            return this.registerTechPoints.ContainsKey(ID) ? this.registerTechPoints[ID].Category : TechPointCategory.None;
         }
 
         public Sprite GetTPSprite(string ID)
@@ -99,7 +123,7 @@ namespace ProjectOC.TechTree
             {
                 foreach(var point in this.registerTechPoints[ID].PrePoint)
                 {
-                    if(!this.IsUnlockedTP(ID))
+                    if(!this.IsUnlockedTP(point))
                     {
                         return false;
                     }
@@ -117,6 +141,22 @@ namespace ProjectOC.TechTree
         public int GetTPTimeCost(string ID)
         {
             return this.registerTechPoints.ContainsKey(ID) ? this.registerTechPoints[ID].TimeCost : -1;
+        }
+
+        public Texture2D GetTPCategoryTexture2D(TechPointCategory category)
+        {
+            var tex = GM.ABResourceManager.LoadAsset<Texture2D>(TPIconTexture2DABPath, category.ToString());
+            if(tex == null)
+            {
+                tex = GM.ABResourceManager.LoadAsset<Texture2D>(TPIconTexture2DABPath, "None");
+            }
+            return tex;
+        }
+        
+        public Sprite GetTPCategorySprite(TechPointCategory category)
+        {
+            var tex = this.GetTPCategoryTexture2D(category);
+            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(tex.width / 2, tex.height / 2));
         }
         #endregion
 
@@ -141,7 +181,7 @@ namespace ProjectOC.TechTree
             /// <summary>
             /// 当前解析时间
             /// </summary>
-            public int time;
+            public float time;
         }
 
         [System.Serializable]
@@ -167,10 +207,14 @@ namespace ProjectOC.TechTree
         public const string SaveUnlockingTPJsonDataPath = "UnlockingTechPoint.json";
 
         public Dictionary<string, CounterDownTimer> UnlockingTPTimers = new Dictionary<string, CounterDownTimer>();
-        private void OnTimerStart(CounterDownTimer timer, string id, bool isSave = true)
+        private void OnTimerStart(CounterDownTimer timer, string ID, bool isSave = true)
         {
-            this.UnlockingTPTimers.Add(id, timer);
-            if(isSave)
+            this.UnlockingTPTimers.Add(ID, timer);
+            if(!this.UnlockingTechPointDict.ContainsKey(ID))
+            {
+                this.UnlockingTechPointDict.Add(ID, new UnlockingTechPoint() { id = ID, time = (float)timer.CurrentTime });
+            }
+            if (isSave)
             {
                 this.SaveUnlockingTPData();
             }
@@ -180,6 +224,7 @@ namespace ProjectOC.TechTree
         {
             this.__Intenal__UnlockTechPoint(id);
             this.UnlockingTPTimers.Remove(id);
+            this.UnlockingTechPointDict.Remove(id);
             if (isSave)
             {
                 this.SaveData();
@@ -194,7 +239,7 @@ namespace ProjectOC.TechTree
         {
 
             // 需在ItemSystem、CompositonSystem、BuildingSystem加载完数据之后才能加载
-            while (GM.ABResourceManager == null || ML.Engine.InventorySystem.ItemSpawner.Instance.IsLoadOvered == false || ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.IsLoadOvered == false)
+            while (GM.ABResourceManager == null || ML.Engine.InventorySystem.ItemSpawner.Instance.IsLoadOvered == false || ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.IsLoadOvered == false || ML.Engine.BuildingSystem.Test_BuildingManager.Instance.IsLoadOvered == false)
             {
                 yield return null;
             }
@@ -217,8 +262,8 @@ namespace ProjectOC.TechTree
 
                 var request = ab.LoadAssetAsync<TextAsset>(TableName);
                 yield return request;
-                TechPointArray datas = JsonUtility.FromJson<TechPointArray>((request.asset as TextAsset).text);
-
+                TechPointArray datas = JsonConvert.DeserializeObject<TechPointArray>((request.asset as TextAsset).text);
+                
                 foreach (var data in datas.techPoints)
                 {
                     this.registerTechPoints.Add(data.ID, data);
@@ -231,8 +276,7 @@ namespace ProjectOC.TechTree
             else
             {
                 string json = System.IO.File.ReadAllText(System.IO.Path.Combine(Application.persistentDataPath, SaveTPJsonDataPath));
-                TechPointArray datas = JsonUtility.FromJson<TechPointArray>(json);
-
+                TechPointArray datas = JsonConvert.DeserializeObject<TechPointArray>(json);
                 foreach (var data in datas.techPoints)
                 {
                     this.registerTechPoints.Add(data.ID, data);
@@ -244,7 +288,7 @@ namespace ProjectOC.TechTree
             if (System.IO.File.Exists(System.IO.Path.Combine(Application.persistentDataPath, SaveUnlockingTPJsonDataPath)))
             {
                 string json = System.IO.File.ReadAllText(System.IO.Path.Combine(Application.persistentDataPath, SaveUnlockingTPJsonDataPath));
-                UnlockingTechPointArray datas = JsonUtility.FromJson<UnlockingTechPointArray>(json);
+                UnlockingTechPointArray datas = JsonConvert.DeserializeObject<UnlockingTechPointArray>(json);
 
                 foreach (var data in datas.data)
                 {
@@ -299,7 +343,7 @@ namespace ProjectOC.TechTree
 
             TechPointArray array = new TechPointArray();
             array.techPoints = registerTechPoints.Values.ToArray();
-            string json = JsonUtility.ToJson(array);
+            string json = JsonConvert.SerializeObject(array);
 
             WriteToFileAsync(path, json, SaveDataCTS);
         }
@@ -311,8 +355,7 @@ namespace ProjectOC.TechTree
 
             UnlockingTechPointArray array = new UnlockingTechPointArray();
             array.data = UnlockingTechPointDict.Values.ToArray();
-            string json = JsonUtility.ToJson(array);
-
+            string json = JsonConvert.SerializeObject(array);
             WriteToFileAsync(path, json, SaveUnlockingDataCTS);
         }
         private async void WriteToFileAsync(string path, string content, CancellationTokenSource cts)
@@ -354,6 +397,35 @@ namespace ProjectOC.TechTree
         [ReadOnly]
         public List<string> UnlockedBuild = new List<string>();
 
+        private bool ItemIsEnough(Inventory inventory, string ID)
+        {
+            var formula = this.GetTPItemCost(ID);
+            if(formula == null || formula.Length == 0)
+            {
+                return true;
+            }
+            foreach(var f in formula)
+            {
+                // 数量不够
+                if (inventory.GetItemAllNum(f.id) < f.num)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private void CostItem(Inventory inventory, string ID)
+        {
+            // 移除消耗的资源
+            lock (inventory)
+            {
+                foreach (var formula in this.GetTPItemCost(ID))
+                {
+                    inventory.RemoveItem(formula.id, formula.num);
+                }
+            }
+        }
 
         /// <summary>
         /// 是否能点亮对应的科技点
@@ -362,7 +434,7 @@ namespace ProjectOC.TechTree
         /// <returns></returns>
         public bool CanUnlockTechPoint(Inventory inventory, string ID)
         {
-            return this.IsAllUnlockedPreTP(ID) && CompositeSystem.Instance.CanComposite(inventory, ID);
+            return !this.UnlockingTechPointDict.ContainsKey(ID) && this.IsAllUnlockedPreTP(ID) && this.ItemIsEnough(inventory, ID);
         }
 
         /// <summary>
@@ -370,15 +442,15 @@ namespace ProjectOC.TechTree
         /// </summary>
         /// <param name="ID"></param>
         /// <returns></returns>
-        public bool UnlockTechPoint(CompositeAbility owner, string ID)
+        public bool UnlockTechPoint(Inventory inventory, string ID)
         {
-            if(!CanUnlockTechPoint(owner.ResourceInventory, ID))
+            if(!CanUnlockTechPoint(inventory, ID))
             {
                 return false;
             }
 
             // to-do : 暂定为提前消耗
-            CompositeSystem.Instance.OnlyCostResource(owner.ResourceInventory, ID);
+            this.CostItem(inventory, ID);
 
             // 计时
             var tp = this.registerTechPoints[ID];
@@ -413,6 +485,59 @@ namespace ProjectOC.TechTree
         }
         #endregion
 
+        #region TextContent
+        public const string TextContentABPath = "JSON/TextContent/TechTree";
+        public const string TPPanelName = "TechPointPanel";
+
+        public Dictionary<string, TextTip> CategoryDict = new Dictionary<string, TextTip>();
+        public TPPanel TPPanelTextContent;
+
+        [System.Serializable]
+        public struct TPPanel
+        {
+            public TextContent toptitle;
+            public TextTip[] category;
+            public KeyTip categorylast;
+            public KeyTip categorynext;
+            public TextContent lockedtitletip;
+            public TextContent unlockedtitletip;
+            public KeyTip inspector;
+            public TextContent timecosttip;
+            public KeyTip decipher;
+        }
+
+        private IEnumerator InitUITextContents()
+        {
+            while (ML.Engine.Manager.GameManager.Instance.ABResourceManager == null)
+            {
+                yield return null;
+            }
+#if UNITY_EDITOR
+            float startT = Time.realtimeSinceStartup;
+#endif
+            var abmgr = ML.Engine.Manager.GameManager.Instance.ABResourceManager;
+            AssetBundle ab;
+            var crequest = abmgr.LoadLocalABAsync(TextContentABPath, null, out ab);
+            yield return crequest;
+            if (crequest != null)
+            {
+                ab = crequest.assetBundle;
+            }
+
+            var request = ab.LoadAssetAsync<TextAsset>(TPPanelName);
+            yield return request;
+            TPPanel tips = JsonConvert.DeserializeObject<TPPanel>((request.asset as TextAsset).text);
+            foreach (var tip in tips.category)
+            {
+                this.CategoryDict.Add(tip.name, tip);
+            }
+            TPPanelTextContent = tips;
+
+#if UNITY_EDITOR
+            Debug.Log("InitUITextContents cost time: " + (Time.realtimeSinceStartup - startT));
+#endif
+        }
+        #endregion
 
         #region to-delete
         /// <summary>

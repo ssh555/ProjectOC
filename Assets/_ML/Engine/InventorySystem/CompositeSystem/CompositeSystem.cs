@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -107,7 +108,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
 
             var request = ab.LoadAssetAsync<TextAsset>(TableName);
             yield return request;
-            CompositionJsonDatas datas = JsonUtility.FromJson<CompositionJsonDatas>((request.asset as TextAsset).text);
+            CompositionJsonDatas datas = JsonConvert.DeserializeObject<CompositionJsonDatas>((request.asset as TextAsset).text);
 
             foreach (var data in datas.table)
             {

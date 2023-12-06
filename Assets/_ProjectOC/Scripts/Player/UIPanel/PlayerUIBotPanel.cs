@@ -1,6 +1,7 @@
 using ML.Engine.BuildingSystem;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
+using Newtonsoft.Json;
 using ProjectOC.TechTree.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ namespace ProjectOC.Player.UI
 {
     public class PlayerUIBotPanel : UIBasePanel
     {
+        public PlayerCharacter player;
+
         public UITechPointPanel uITechPointPanel;
 
         private IUISelected CurSelected;
@@ -46,8 +49,10 @@ namespace ProjectOC.Player.UI
             this.EnterTechTreeBtn = btnList.Find("EnterTechTree").GetComponent<SelectedButton>();
             this.EnterTechTreeBtn.OnInteract += () =>
             {
-                var panel = GameObject.Instantiate(uITechPointPanel, this.transform.parent, false);
+                var panel = GameObject.Instantiate(uITechPointPanel);
+                panel.transform.SetParent(this.transform.parent, false);
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+                panel.inventory = this.player.Inventory;
             };
 
 
@@ -146,7 +151,7 @@ namespace ProjectOC.Player.UI
 
             var request = ab.LoadAssetAsync<TextAsset>(TextContentName);
             yield return request;
-            TextTips Tips = JsonUtility.FromJson<TextTips>((request.asset as TextAsset).text);
+            TextTips Tips = JsonConvert.DeserializeObject<TextTips>((request.asset as TextAsset).text);
             foreach (var tip in Tips.tips)
             {
                 this.TipDict.Add(tip.name, tip);

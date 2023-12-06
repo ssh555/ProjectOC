@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -171,7 +172,7 @@ namespace ML.Engine.Level
 
             var request = ab.LoadAssetAsync<TextAsset>(TableName);
             yield return request;
-            LevelRListArray datas = JsonUtility.FromJson<LevelRListArray>((request.asset as TextAsset).text);
+            LevelRListArray datas = JsonConvert.DeserializeObject<LevelRListArray>((request.asset as TextAsset).text);
             if(datas.table != null)
             {
                 foreach (var row in datas.table)

@@ -8,6 +8,8 @@ using Sirenix.OdinInspector;
 using UnityEngine.UI;
 using TMPro;
 using ML.Engine.TextContent;
+using Unity.VisualScripting;
+using Newtonsoft.Json;
 
 namespace ML.Engine.BuildingSystem
 {
@@ -17,6 +19,8 @@ namespace ML.Engine.BuildingSystem
     {
         public static Test_BuildingManager Instance;
         public BuildingManager BM;
+        private int IsInit = 3;
+        public bool IsLoadOvered => IsInit == 0;
 
         #region Config
         [LabelText("语言"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
@@ -106,7 +110,7 @@ namespace ML.Engine.BuildingSystem
             // KeyTip
             var request = ab.LoadAssetAsync<TextAsset>("KeyTip");
             yield return request;
-            KeyTips keyTips = JsonUtility.FromJson<KeyTips>((request.asset as TextAsset).text);
+            KeyTips keyTips = JsonConvert.DeserializeObject<KeyTips>((request.asset as TextAsset).text);
             foreach(var keytip in keyTips.keytips)
             {
                 this.KeyTipDict.Add(keytip.keyname, keytip);
@@ -115,7 +119,7 @@ namespace ML.Engine.BuildingSystem
             // Category
             request = ab.LoadAssetAsync<TextAsset>("Category");
             yield return request;
-            BCategorys categorys = JsonUtility.FromJson<BCategorys>((request.asset as TextAsset).text);
+            BCategorys categorys = JsonConvert.DeserializeObject<BCategorys>((request.asset as TextAsset).text);
             foreach (var category in categorys.category)
             {
                 this.CategoryDict.Add(category.category, category);
@@ -124,12 +128,12 @@ namespace ML.Engine.BuildingSystem
             // Type
             request = ab.LoadAssetAsync<TextAsset>("Type");
             yield return request;
-            BTypes btypes = JsonUtility.FromJson<BTypes>((request.asset as TextAsset).text);
+            BTypes btypes = JsonConvert.DeserializeObject<BTypes>((request.asset as TextAsset).text);
             foreach (var type in btypes.type)
             {
                 this.TypeDict.Add(type.type, type);
             }
-
+            IsInit--;
 #if UNITY_EDITOR
             Debug.Log("InitUITextContents cost time: " + (Time.realtimeSinceStartup - startT));
 #endif
@@ -217,7 +221,8 @@ namespace ML.Engine.BuildingSystem
             AssetBundle ab;
             var crequest = abmgr.LoadLocalABAsync(BPartABPath, null, out ab);
             yield return crequest;
-            ab = crequest.assetBundle;
+            if(crequest != null)
+                ab = crequest.assetBundle;
             
             var request = ab.LoadAllAssetsAsync<GameObject>();
             yield return request;
@@ -234,7 +239,7 @@ namespace ML.Engine.BuildingSystem
 
             // to-do : 暂时材质有用，不能UnLoad
             //abmgr.UnLoadLocalABAsync(BPartABPath, false, null);
-
+            IsInit--;
 #if UNITY_EDITOR
             Debug.Log("RegisterBPartPrefab cost time: " + (Time.realtimeSinceStartup - startT));
 #endif
@@ -275,7 +280,7 @@ namespace ML.Engine.BuildingSystem
             //var botPanel = this.GetPanel<UI.Test_BSBotPanel>();
             //botPanel.transform.SetParent(this.Canvas, false);
             //Manager.GameManager.Instance.UIManager.ChangeBotUIPanel(botPanel);
-
+            IsInit--;
 #if UNITY_EDITOR
             Debug.Log("RigisterUIPanelPrefab cost time: " + (Time.realtimeSinceStartup - startT));
 #endif
