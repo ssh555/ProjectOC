@@ -3,13 +3,13 @@ CRC: 4267249433
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f512f1aa85a779025ec8957a00356dec
+    Hash: c41c5b7fb3dce835d41b629a6313326f
   TypeTreeHash:
     serializedVersion: 2
     Hash: e715f962b9c4987de0619b76abe6942c
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: f512f1aa85a779025ec8957a00356dec
+    Hash: c41c5b7fb3dce835d41b629a6313326f
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -77,5 +77,5 @@ Assets:
 - Assets/_ProjectOC/Resources/UIPanel/TechPointPanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIBotPanel.prefab
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/fonts
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/techpoint/texture2d
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/fonts
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/techpoint/texture2d
