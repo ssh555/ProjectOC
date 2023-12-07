@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BuildingSocketType
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 2
+    SerializedFormat: 0
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
@@ -31,18 +31,18 @@ MonoBehaviour:
     displayName: None
     value: 
   Enums:
-  - name: 
-    displayName: 
-    value: 
-  - name: 
-    displayName: 
-    value: 
-  - name: 
-    displayName: 
-    value: 
-  - name: 
-    displayName: 
-    value: 
+  - name: Foundation
+    displayName: "\u5730\u57FA\u5C42"
+    value: 01
+  - name: Floor
+    displayName: "\u5730\u677F\u5C42"
+    value: 02
+  - name: Wall
+    displayName: "\u5899\u5C42"
+    value: 03
+  - name: Ground
+    displayName: "\u5730\u9762\u5C42"
+    value: 00
   - name: 
     displayName: 
     value: 

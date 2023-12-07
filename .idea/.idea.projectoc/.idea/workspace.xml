@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="fef3870f-3f3d-437b-b554-2a7fe5c6b01a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPart/Classification/BuildingType.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPart/Classification/BuildingType.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPart/Classification/BuildingType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPart/Classification/BuildingType.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingSocket/BuildingSocketType.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingSocket/BuildingSocketType.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingSocket/BuildingSocketType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingSocket/BuildingSocketType.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/Test_BuildingManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/Test_BuildingManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/_Test_Room_Floor_Base_20.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/_Test_Room_Floor_Base_20.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/_Test_Room_Floor_Base_50.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/_Test_Room_Floor_Base_50.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/_Test_Room_Foundation_Base_20.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/_Test_Room_Foundation_Base_20.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/_Test_Room_Foundation_Base_50.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/_Test_Room_Foundation_Base_50.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/_Test_Room_Foundation_Triangle_20.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/_Test_Room_Foundation_Triangle_20.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/_Test_Room_Foundation_Triangle_50.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/_Test_Room_Foundation_Triangle_50.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Floor_Base_20.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Floor_Base_20.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Floor_Base_50.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Floor_Base_50.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Foundation_Base_20.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Foundation_Base_20.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Foundation_Base_50.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Foundation_Base_50.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Foundation_Triangle_20.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Foundation_Triangle_20.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Foundation_Triangle_50.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Foundation_Triangle_50.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/Json/TextContent/BuildingSystem/UI/Type.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/Json/TextContent/BuildingSystem/UI/Type.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "git-widget-placeholder": "yangLeNew",
+    "node.js.selected.package.tslint": "(autodetect)"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
+      <option name="EXE_PATH" value="D:\unity\2022.3.8f1c1\Editor\Unity.exe" />
+      <option name="PROGRAM_PARAMETERS" value="-projectPath D:\AAAworkwork\Git\projectoc -debugCodeOptimization" />
+      <option name="WORKING_DIRECTORY" value="D:\AAAworkwork\Git\projectoc" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unit Tests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
+      <option name="EXE_PATH" value="D:\unity\2022.3.8f1c1\Editor\Unity.exe" />
+      <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath D:\AAAworkwork\Git\projectoc -testResults Logs/results.xml -testPlatform EditMode -debugCodeOptimization" />
+      <option name="WORKING_DIRECTORY" value="D:\AAAworkwork\Git\projectoc" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="TaskManager">
+    <servers />
+  </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
+  <component name="UnityUnitTestConfiguration" currentTestLauncher="Both" />
+</project>

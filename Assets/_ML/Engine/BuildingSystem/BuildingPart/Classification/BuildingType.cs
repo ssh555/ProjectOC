@@ -10,6 +10,20 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		[LabelText("地基")]
 		Foundation = 0,
 		[LabelText("地板")]
-		Floor,
+		Floor = 001,
+		[LabelText("地基外沿")]
+		FoundationEdge = 002,
+		[LabelText("墙")]
+		Wall = 003,
+		[LabelText("柱")]
+		Pillar = 004,
+		[LabelText("梁")]
+		Beam = 005,
+		[LabelText("屋顶")]
+		Roof = 006,
+		[LabelText("门")]
+		Door = 007,
+		[LabelText("窗")]
+		Window = 008,
 	}
 }
