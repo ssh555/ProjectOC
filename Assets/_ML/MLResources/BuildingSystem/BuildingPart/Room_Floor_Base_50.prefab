@@ -12,6 +12,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Room_Floor_Base_50
       objectReference: {fileID: 0}
+    - target: {fileID: 392550845360455533, guid: 435e345b38c81e14bad9dbc6acad57ad, type: 3}
+      propertyPath: PositionOffset.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1049555815554518132, guid: 435e345b38c81e14bad9dbc6acad57ad, type: 3}
+      propertyPath: PositionOffset.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1355810707747675855, guid: 435e345b38c81e14bad9dbc6acad57ad, type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1717434215435767995, guid: 435e345b38c81e14bad9dbc6acad57ad, type: 3}
       propertyPath: m_LocalScale.y
       value: 0.5
@@ -56,13 +68,69 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2964056370330595170, guid: 435e345b38c81e14bad9dbc6acad57ad, type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3650868894985625572, guid: 435e345b38c81e14bad9dbc6acad57ad, type: 3}
+      propertyPath: PositionOffset.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3695878765690661508, guid: 435e345b38c81e14bad9dbc6acad57ad, type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3779951907540944868, guid: 435e345b38c81e14bad9dbc6acad57ad, type: 3}
+      propertyPath: PositionOffset.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4524697657698222017, guid: 435e345b38c81e14bad9dbc6acad57ad, type: 3}
+      propertyPath: PositionOffset.y
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 4730651490579998057, guid: 435e345b38c81e14bad9dbc6acad57ad, type: 3}
       propertyPath: classification.Height
       value: 50
       objectReference: {fileID: 0}
-    - target: {fileID: 5957015321139780912, guid: 435e345b38c81e14bad9dbc6acad57ad, type: 3}
-      propertyPath: m_IsActive
+    - target: {fileID: 5040529883029951887, guid: 435e345b38c81e14bad9dbc6acad57ad, type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5957021992980882370, guid: 435e345b38c81e14bad9dbc6acad57ad, type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5969594197797092025, guid: 435e345b38c81e14bad9dbc6acad57ad, type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6656987842731778570, guid: 435e345b38c81e14bad9dbc6acad57ad, type: 3}
+      propertyPath: PositionOffset.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6706271383272924214, guid: 435e345b38c81e14bad9dbc6acad57ad, type: 3}
+      propertyPath: PositionOffset.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7826475937907530868, guid: 435e345b38c81e14bad9dbc6acad57ad, type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7982976277771995815, guid: 435e345b38c81e14bad9dbc6acad57ad, type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8410196753333491432, guid: 435e345b38c81e14bad9dbc6acad57ad, type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8550481050242398456, guid: 435e345b38c81e14bad9dbc6acad57ad, type: 3}
+      propertyPath: PositionOffset.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674133910081692603, guid: 435e345b38c81e14bad9dbc6acad57ad, type: 3}
+      propertyPath: PositionOffset.y
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

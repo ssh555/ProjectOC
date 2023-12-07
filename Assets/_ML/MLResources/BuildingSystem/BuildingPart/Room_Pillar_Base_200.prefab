@@ -143,12 +143,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 2
-  InTakeType: 0
+  Type: 16
+  InTakeType: 114
   IsCanRotate: 1
-  PositionOffset: {x: 0, y: 0, z: 0}
+  PositionOffset: {x: 0, y: 2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 0}
-  CanPlaceAreaType: 2147483647
+  CanPlaceAreaType: 0
 --- !u!1 &5278139283466857009
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,12 +215,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 2
-  InTakeType: 0
+  Type: 16
+  InTakeType: 114
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 0}
-  CanPlaceAreaType: 2147483647
+  CanPlaceAreaType: 0
 --- !u!1 &5504472010688985949
 GameObject:
   m_ObjectHideFlags: 0
@@ -323,7 +323,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   classification:
     Category: 0
-    Type: -1
+    Type: 4
     Style: 1
     Height: 200
   instanceID: 
@@ -351,7 +351,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1.99
+  m_Radius: 0.1
+  m_Height: 1.49
   m_Direction: 1
-  m_Center: {x: 0, y: 1, z: -0.000000029802322}
+  m_Center: {x: 0, y: 1, z: 0}

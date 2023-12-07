@@ -66,12 +66,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 2
-  InTakeType: 0
+  Type: 32
+  InTakeType: 48
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 0}
-  CanPlaceAreaType: 2147483647
+  CanPlaceAreaType: 0
 --- !u!1 &3686603447452733102
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,12 +138,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 2
+  Type: 32
   InTakeType: 0
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 0}
-  CanPlaceAreaType: 2147483647
+  CanPlaceAreaType: 0
 --- !u!1 &5224440998231083806
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,9 +177,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8480747654785874426}
   - {fileID: 7172565013974393813}
   - {fileID: 8112337639045760329}
-  - {fileID: 8480747654785874426}
   - {fileID: 1179567989658779185}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -275,8 +275,8 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2.27
+  m_Radius: 0.1
+  m_Height: 1.49
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6995440328647252543
@@ -422,9 +422,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 2
-  InTakeType: 0
+  Type: 32
+  InTakeType: 48
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 0}
-  CanPlaceAreaType: 2147483647
+  CanPlaceAreaType: 0

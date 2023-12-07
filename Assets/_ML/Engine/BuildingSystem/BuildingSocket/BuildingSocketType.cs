@@ -17,5 +17,17 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 		Wall = 1 << 2,
 		[LabelText("地面层")]
 		Ground = 1 << 3,
+		[LabelText("柱")]
+		Piliar = 1 << 4,
+		[LabelText("梁")]
+		Beam = 1 << 5,
+		[LabelText("屋顶")]
+		Roof = 1 << 6,
+		[LabelText("门")]
+		Door = 1 << 7,
+		[LabelText("窗")]
+		Window = 1 << 8,
+		[LabelText("地基外围")]
+		FoundationEdge = 1 << 9,
 	}
 }

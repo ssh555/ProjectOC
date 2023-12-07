@@ -54,11 +54,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2854219929345063890, guid: 32921786b04ad2a47ba790e04375ded5, type: 3}
       propertyPath: m_Name
-      value: Room_Wall_Base_200 Variant
+      value: Room_Wall_Base_200
+      objectReference: {fileID: 0}
+    - target: {fileID: 4237075546965610873, guid: 32921786b04ad2a47ba790e04375ded5, type: 3}
+      propertyPath: PositionOffset.y
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4550755970589058961, guid: 32921786b04ad2a47ba790e04375ded5, type: 3}
       propertyPath: classification.Height
       value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270680451672107160, guid: 32921786b04ad2a47ba790e04375ded5, type: 3}
+      propertyPath: PositionOffset.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7429529208462299566, guid: 32921786b04ad2a47ba790e04375ded5, type: 3}
+      propertyPath: PositionOffset.y
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

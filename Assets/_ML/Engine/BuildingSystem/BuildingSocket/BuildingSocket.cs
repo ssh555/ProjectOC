@@ -84,9 +84,10 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
             if (this.ParentBPart.AttachedSocket != null)
             {
                 pos = this.ParentBPart.AttachedSocket.BPartPosition - (this.transform.position - this.ParentBPart.transform.position);
-                rot = ParentBPart.BaseRotation * this.ParentBPart.AttachedSocket.BPartRotation * (this.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
-
-
+                rot = (this.ParentBPart.AttachedSocket.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity)*ParentBPart.BaseRotation * this.ParentBPart.AttachedSocket.BPartRotation;
+                Debug.Log("isCanRotate:"+this.ParentBPart.AttachedSocket.IsCanRotate);
+                Debug.Log("rotOffset:"+ParentBPart.RotOffset.eulerAngles);
+                Debug.Log("rot:"+rot.eulerAngles);
                 return true;
             }
 

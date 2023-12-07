@@ -8,6 +8,38 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 658859327052778246, guid: 245a48d842503774da71bbcdcb8696b7, type: 3}
+      propertyPath: Type
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 658859327052778246, guid: 245a48d842503774da71bbcdcb8696b7, type: 3}
+      propertyPath: InTakeType
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 1457721660604853064, guid: 245a48d842503774da71bbcdcb8696b7, type: 3}
+      propertyPath: Type
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 1457721660604853064, guid: 245a48d842503774da71bbcdcb8696b7, type: 3}
+      propertyPath: InTakeType
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 1587859533770356684, guid: 245a48d842503774da71bbcdcb8696b7, type: 3}
+      propertyPath: Type
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 1587859533770356684, guid: 245a48d842503774da71bbcdcb8696b7, type: 3}
+      propertyPath: InTakeType
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 2129617828757427749, guid: 245a48d842503774da71bbcdcb8696b7, type: 3}
+      propertyPath: Type
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 2129617828757427749, guid: 245a48d842503774da71bbcdcb8696b7, type: 3}
+      propertyPath: InTakeType
+      value: 64
+      objectReference: {fileID: 0}
     - target: {fileID: 3196233754547684441, guid: 245a48d842503774da71bbcdcb8696b7, type: 3}
       propertyPath: m_LocalScale.y
       value: 0.5
@@ -55,6 +87,22 @@ PrefabInstance:
     - target: {fileID: 4082036798081853491, guid: 245a48d842503774da71bbcdcb8696b7, type: 3}
       propertyPath: m_Name
       value: Room_Roof_Base_100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5066663579864129151, guid: 245a48d842503774da71bbcdcb8696b7, type: 3}
+      propertyPath: Type
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 5066663579864129151, guid: 245a48d842503774da71bbcdcb8696b7, type: 3}
+      propertyPath: InTakeType
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083165466910300989, guid: 245a48d842503774da71bbcdcb8696b7, type: 3}
+      propertyPath: Type
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 7083165466910300989, guid: 245a48d842503774da71bbcdcb8696b7, type: 3}
+      propertyPath: InTakeType
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 8802398227253588363, guid: 245a48d842503774da71bbcdcb8696b7, type: 3}
       propertyPath: classification.Height

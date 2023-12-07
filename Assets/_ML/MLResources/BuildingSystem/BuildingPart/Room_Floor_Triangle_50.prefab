@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Room_Floor_Triangle_50
       objectReference: {fileID: 0}
+    - target: {fileID: 3501956445223966860, guid: fef9f1ff8b2b5734e96b9c6ca07d177b, type: 3}
+      propertyPath: PositionOffset.y
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 4209679848971611586, guid: fef9f1ff8b2b5734e96b9c6ca07d177b, type: 3}
       propertyPath: m_LocalScale.y
       value: 0.5
@@ -56,9 +60,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6187649021690175170, guid: fef9f1ff8b2b5734e96b9c6ca07d177b, type: 3}
+      propertyPath: PositionOffset.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6563765436949464449, guid: fef9f1ff8b2b5734e96b9c6ca07d177b, type: 3}
+      propertyPath: PositionOffset.y
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7789224742896359440, guid: fef9f1ff8b2b5734e96b9c6ca07d177b, type: 3}
       propertyPath: classification.Height
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8119764314596677967, guid: fef9f1ff8b2b5734e96b9c6ca07d177b, type: 3}
+      propertyPath: PositionOffset.y
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 9157459658303905865, guid: fef9f1ff8b2b5734e96b9c6ca07d177b, type: 3}
       propertyPath: m_IsActive

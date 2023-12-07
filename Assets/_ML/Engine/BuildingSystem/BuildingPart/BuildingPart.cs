@@ -2,6 +2,7 @@ using ML.Engine.InventorySystem.CompositeSystem;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace ML.Engine.BuildingSystem.BuildingPart
@@ -230,6 +231,14 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         public void OnTriggerStay(Collider other)
         {
             (this as IBuildingPart).CheckTriggerStay(other);
+        }
+        public void OnTriggerExit(Collider other)
+        {
+            if(this.Mode == BuildingMode.Place || this.Mode == BuildingMode.Destroy || this.Mode == BuildingMode.Edit)
+            {
+                this.CanPlaceInPlaceMode = true;
+                this.Mode = this.CanPlaceInPlaceMode ? this.tmpTriggerMode : BuildingMode.Destroy;
+            }
         }
     }
 

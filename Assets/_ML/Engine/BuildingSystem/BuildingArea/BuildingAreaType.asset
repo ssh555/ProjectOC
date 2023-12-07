@@ -25,6 +25,105 @@ MonoBehaviour:
   AllName:
     name: All
     displayName: All
+    value: 
   NoneName:
     name: None
     displayName: None
+    value: 
+  Enums:
+  - name: Foundation
+    displayName: "\u5730\u57FA\u5C42"
+    value: 
+  - name: Floor
+    displayName: "\u5730\u677F\u5C42"
+    value: 
+  - name: Wall
+    displayName: "\u5899\u5C42"
+    value: 
+  - name: Ground
+    displayName: "\u5730\u9762\u5C42"
+    value: 
+  - name: Pilliar
+    displayName: "\u67F1"
+    value: 
+  - name: Beam
+    displayName: "\u6881"
+    value: 
+  - name: Roof
+    displayName: "\u5C4B\u9876"
+    value: 
+  - name: Door
+    displayName: "\u95E8"
+    value: 
+  - name: Window
+    displayName: "\u7A97"
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 
+  - name: 
+    displayName: 
+    value: 

@@ -52,16 +52,37 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 773407339793806188, guid: bc936b6274995d245b0658bc0aa53486, type: 3}
+      propertyPath: PositionOffset.y
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 1491828148615178824, guid: bc936b6274995d245b0658bc0aa53486, type: 3}
       propertyPath: m_Name
       value: Room_Floor_Quagrant_50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2978695108837304664, guid: bc936b6274995d245b0658bc0aa53486, type: 3}
+      propertyPath: PositionOffset.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5372215643574481583, guid: bc936b6274995d245b0658bc0aa53486, type: 3}
+      propertyPath: PositionOffset.y
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6213315572619637744, guid: bc936b6274995d245b0658bc0aa53486, type: 3}
       propertyPath: classification.Height
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 7004767402382339681, guid: bc936b6274995d245b0658bc0aa53486, type: 3}
+      propertyPath: PositionOffset.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8069378739932427554, guid: bc936b6274995d245b0658bc0aa53486, type: 3}
+      propertyPath: PositionOffset.y
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3079416624434316902, guid: bc936b6274995d245b0658bc0aa53486, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc936b6274995d245b0658bc0aa53486, type: 3}
