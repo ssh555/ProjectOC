@@ -70,7 +70,7 @@ MonoBehaviour:
   InTakeType: 2147483647
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
-  RotationOffset: {x: 0, y: 0, z: 0, w: 0}
+  RotationOffset: {x: 0, y: 0, z: 0, w: 1}
   CanPlaceAreaType: 2147483647
 --- !u!1 &1449833583986846001
 GameObject:
@@ -142,7 +142,7 @@ MonoBehaviour:
   InTakeType: 2147483647
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
-  RotationOffset: {x: 0, y: 0, z: 0, w: 0}
+  RotationOffset: {x: 0, y: 0, z: 0, w: 1}
   CanPlaceAreaType: 2147483647
 --- !u!1 &4866521451364236861
 GameObject:
@@ -214,7 +214,7 @@ MonoBehaviour:
   InTakeType: 2147483647
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
-  RotationOffset: {x: 0, y: 0, z: 0, w: 0}
+  RotationOffset: {x: 0, y: 0, z: 0, w: 1}
   CanPlaceAreaType: 2147483647
 --- !u!1 &5473644838753777134
 GameObject:
@@ -286,7 +286,7 @@ MonoBehaviour:
   InTakeType: 2147483647
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
-  RotationOffset: {x: 0, y: 0, z: 0, w: 0}
+  RotationOffset: {x: 0, y: 0, z: 0, w: 1}
   CanPlaceAreaType: 2147483647
 --- !u!1 &7742085176393557741
 GameObject:
@@ -358,7 +358,7 @@ MonoBehaviour:
   InTakeType: 2147483647
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
-  RotationOffset: {x: 0, y: 0, z: 0, w: 0}
+  RotationOffset: {x: 0, y: 0, z: 0, w: 1}
   CanPlaceAreaType: 2147483647
 --- !u!1 &8455567880345686065
 GameObject:

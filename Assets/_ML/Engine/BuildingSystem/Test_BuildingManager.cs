@@ -233,7 +233,7 @@ namespace ML.Engine.BuildingSystem
                 if (bpart != null)
                 {
                     this.LoadedBPart.Add(bpart.Classification, bpart);
-                    //BM.RegisterBPartPrefab(bpart);
+                    BM.RegisterBPartPrefab(bpart);
                 }
             }
 
