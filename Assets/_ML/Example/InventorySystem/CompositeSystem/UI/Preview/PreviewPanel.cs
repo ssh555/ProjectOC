@@ -11,8 +11,8 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
 {
     public class PreviewPanel : MonoBehaviour
     {
-        protected int _id = -1;
-        public int ID
+        protected string _id = "";
+        public string ID
         {
             get => this._id;
             set
@@ -78,7 +78,8 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
 
         protected void Composite()
         {
-            IComposition composition = this.Owner.Owner.Composite(this.ID);
+            IComposition composition;
+            this.Owner.Owner.Composite(this.ID, out composition);
             this.RefreshPreviewPanel();
         }
 
@@ -86,7 +87,7 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
         public void RefreshPreviewPanel()
         {
             // Preview : None
-            if(this.ID < 0)
+            if(!ItemSpawner.Instance.IsValidItemID(this.ID))
             {
                 this.previewContainer.gameObject.SetActive(false);
                 this.RefreshFormulaContainer(null);
@@ -114,7 +115,7 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
             this.formulaContainer.RefreshFormulaContainer(formulas);
         }
 
-        protected void RefreshUsageContainer(int[] usage)
+        protected void RefreshUsageContainer(string[] usage)
         {
             this.usageContainer.RefreshUsageContainer(usage);
         }

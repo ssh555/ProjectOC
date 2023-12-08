@@ -1,0 +1,20 @@
+ManifestFileVersion: 0
+CRC: 2698296791
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 7c4e0ad28f22a95eb1f2b3c0459c97f5
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5ad585dd02dfb5016c0dad519eab8f49
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 7c4e0ad28f22a95eb1f2b3c0459c97f5
+HashAppended: 0
+ClassTypes:
+- Class: 49
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/_ProjectOC/Resources/Json/TextContent/PlayerUIBotPanel.json
+Dependencies: []

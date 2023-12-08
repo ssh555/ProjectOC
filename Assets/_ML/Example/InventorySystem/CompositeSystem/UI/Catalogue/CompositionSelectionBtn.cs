@@ -8,8 +8,8 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
 {
     public class CompositionSelectionBtn : ML.Example.UI.SingletonActivedButton
     {
-        protected int _id;
-        public int ID
+        protected string _id;
+        public string ID
         {
             get => this._id;
             set

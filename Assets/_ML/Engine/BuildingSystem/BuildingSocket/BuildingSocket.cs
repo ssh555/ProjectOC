@@ -64,7 +64,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         }
 
         [LabelText("BPart旋转偏移量"), FoldoutGroup("Transform"), SerializeField]
-        protected Quaternion RotationOffset;
+        protected Quaternion RotationOffset = Quaternion.identity;
         /// <summary>
         /// 放置的BPart的旋转
         /// </summary>
@@ -84,9 +84,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
             if (this.ParentBPart.AttachedSocket != null)
             {
                 pos = this.ParentBPart.AttachedSocket.BPartPosition - (this.transform.position - this.ParentBPart.transform.position);
-                rot = ParentBPart.BaseRotation * this.ParentBPart.AttachedSocket.BPartRotation * (this.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
-
-
+                rot = ParentBPart.BaseRotation * this.ParentBPart.AttachedSocket.BPartRotation * (this.ParentBPart.AttachedSocket.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
                 return true;
             }
 
@@ -99,7 +97,13 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         {
             if (this.ParentBPart.AttachedArea != null)
             {
-                this.ParentBPart.AttachedArea.GetMatchPointOnArea(TargetPos, AreaCheckRadius, out pos, out rot);
+                bool b = this.ParentBPart.AttachedArea.GetMatchPointOnArea(TargetPos, AreaCheckRadius, out pos, out rot);
+                if(b == false)
+                {
+                    pos = Vector3.negativeInfinity;
+                    rot = new Quaternion(float.NaN, float.NaN, float.NaN, float.NaN);
+                    return false;
+                }
                 rot *= (this.ParentBPart.AttachedArea.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
                 return true;
             }

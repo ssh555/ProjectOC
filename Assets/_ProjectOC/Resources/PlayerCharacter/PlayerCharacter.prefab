@@ -571,6 +571,7 @@ MonoBehaviour:
     IsCrouch: 0
     inAirLimitSpeed: 10
     inAirAccSpeed: 100
+  playerUIBotPanel: {fileID: -2576469941936671822, guid: 54f99402f01f5f04cb5afe4947fed3f9, type: 3}
 --- !u!95 &8934122120899684266
 Animator:
   serializedVersion: 5

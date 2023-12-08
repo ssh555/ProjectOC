@@ -71,7 +71,7 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
         [ShowInInspector, ReadOnly]
         protected Text compositionDescribeTemplate;
 
-        public CompositionSelectionBtn CreateAndAttachCompositionSelection(int id)
+        public CompositionSelectionBtn CreateAndAttachCompositionSelection(string id)
         {
             CompositionSelectionBtn ans = GameObject.Instantiate<CompositionSelectionBtn>(this.compositionSelectionTemplate, this.catalogueContainer);
             ans.gameObject.SetActive(true);
@@ -105,7 +105,7 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
         /// <summary>
         /// <PrimaryTag, <Tag, IDList>>
         /// </summary>
-        protected Dictionary<string, Dictionary<string, List<int>>> CatalogueDatas = new Dictionary<string, Dictionary<string, List<int>>>();
+        protected Dictionary<string, Dictionary<string, List<string>>> CatalogueDatas = new Dictionary<string, Dictionary<string, List<string>>>();
 
         private void Awake()
         {
@@ -117,12 +117,12 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
                 // 1级标签
                 if (!this.CatalogueDatas.ContainsKey(tags[0]))
                 {
-                    this.CatalogueDatas.Add(tags[0], new Dictionary<string, List<int>>());
+                    this.CatalogueDatas.Add(tags[0], new Dictionary<string, List<string>>());
                 }
                 // 2级标签
                 if (!this.CatalogueDatas[tags[0]].ContainsKey(tags[1]))
                 {
-                    this.CatalogueDatas[tags[0]].Add(tags[1], new List<int>());
+                    this.CatalogueDatas[tags[0]].Add(tags[1], new List<string>());
                 }
                 // 加入数据
                 this.CatalogueDatas[tags[0]][tags[1]].Add(data.id);
@@ -195,7 +195,7 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
         /// 激活对应 ID 的合成物品
         /// </summary>
         /// <param name="id"></param>
-        public void ActiveCompositionID(int id)
+        public void ActiveCompositionID(string id)
         {
             this.previewPanel.ID = id;
 

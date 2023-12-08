@@ -1,4 +1,5 @@
 using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.TextContent;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -148,7 +149,6 @@ namespace ML.Engine.BuildingSystem.UI
                 }
             }
 
-            abmgr.UnLoadLocalABAsync(TCategoryABPath, false, null);
             ++IsInit;
 #if UNITY_EDITOR
             Debug.Log("InitCategoryTexture2D cost time: " + (Time.time - startT));
@@ -184,7 +184,6 @@ namespace ML.Engine.BuildingSystem.UI
                 }
             }
 
-            abmgr.UnLoadLocalABAsync(TTypeABPath, false, null);
             ++IsInit;
 
 #if UNITY_EDITOR

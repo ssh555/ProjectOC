@@ -248,10 +248,11 @@ namespace ML.Example.InventorySystem
             CurWidget = openCompositeSystem.gameObject;
         }
 
-        public IComposition Composite(int compositonID)
+        public IComposition Composite(string compositonID)
         {
             // 一次性合成
-            IComposition ret = ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.Composite(this.ResourceInventory, compositonID);
+            IComposition ret;
+            ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.Composite(this.ResourceInventory, compositonID, out ret);
 
             if(ret is Item)
             {
@@ -263,7 +264,7 @@ namespace ML.Example.InventorySystem
         /// <summary>
         /// 根据合成物ID 消耗对应资源
         /// </summary>
-        public void CostResourcesFromCompID(int compositonID)
+        public void CostResourcesFromCompID(string compositonID)
         {
             // 移除消耗的资源
             lock (this.inventory)

@@ -1,3 +1,4 @@
+using ML.Engine.InventorySystem.CompositeSystem;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,9 +6,11 @@ using UnityEngine;
 
 namespace ML.Engine.BuildingSystem.BuildingPart
 {
-    public sealed class BuildingPart : MonoBehaviour, IBuildingPart
+    public sealed class BuildingPart : MonoBehaviour, IBuildingPart, IComposition
     {
         #region IBuildingPart
+        public string ID { get => this.classification.ToString(); set => this.classification = new BuildingPartClassification(value); }
+
         [SerializeField, LabelText("·ÖÀà")]
         private BuildingPartClassification classification;
         public BuildingPartClassification Classification { get => classification; private set => classification = value; }
@@ -61,7 +64,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         }
 
         [SerializeField, HideInInspector]
-        private Quaternion baseRotation;
+        private Quaternion baseRotation = Quaternion.identity;
         public Quaternion BaseRotation { get => baseRotation; private set => baseRotation = value; }
 
         [SerializeField]
@@ -126,6 +129,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         public List<BuildingSocket.BuildingSocket> OwnedSocketList { get; private set; }
         public int lastTriggerFrameCount { get; set; }
         public BuildingMode tmpTriggerMode { get; set; }
+
 
         public void AlternativeActiveSocket()
         {
@@ -226,6 +230,14 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         public void OnTriggerStay(Collider other)
         {
             (this as IBuildingPart).CheckTriggerStay(other);
+        }
+        public void OnTriggerExit(Collider other)
+        {
+            if (this.Mode == BuildingMode.Place || this.Mode == BuildingMode.Destroy || this.Mode == BuildingMode.Edit)
+            {
+                this.CanPlaceInPlaceMode = true;
+                this.Mode = this.CanPlaceInPlaceMode ? this.tmpTriggerMode : BuildingMode.Destroy;
+            }
         }
     }
 
