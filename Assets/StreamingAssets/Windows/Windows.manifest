@@ -1,18 +1,18 @@
 ManifestFileVersion: 0
-CRC: 2455968113
+CRC: 3807841870
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: animation/character/player/model
+      Name: animation/character/player/playermove
       Dependencies: {}
     Info_1:
-      Name: animation/character/player/playermove
+      Name: animation/character/player/model
       Dependencies: {}
     Info_2:
       Name: prefabs/character/player
       Dependencies:
-        Dependency_0: animation/character/player/model
-        Dependency_1: animation/character/player/playermove
+        Dependency_0: animation/character/player/playermove
+        Dependency_1: animation/character/player/model
         Dependency_2: ui/uipanel
     Info_3:
       Name: scene
@@ -30,35 +30,35 @@ AssetBundleManifest:
     Info_6:
       Name: ui/buildingsystem/prefabs
       Dependencies:
-        Dependency_0: ui/buildingsystem/texture2d/category
-        Dependency_1: ui/buildingsystem/texture2d/type
-        Dependency_2: ui/buildingsystem/texture2d/style
-        Dependency_3: fonts
+        Dependency_0: fonts
+        Dependency_1: ui/buildingsystem/texture2d/style
+        Dependency_2: ui/buildingsystem/texture2d/type
+        Dependency_3: ui/buildingsystem/texture2d/category
         Dependency_4: assets/buildingsystem
     Info_7:
-      Name: prefabs/buildingsystem/bpart
-      Dependencies:
-        Dependency_0: assets/buildingsystem
+      Name: fonts
+      Dependencies: {}
     Info_8:
-      Name: ui/buildingsystem/texture2d/category
+      Name: prefabs/buildingsystem/bpart
       Dependencies: {}
     Info_9:
-      Name: ui/buildingsystem/texture2d/type
-      Dependencies: {}
-    Info_10:
       Name: ui/buildingsystem/texture2d/style
       Dependencies: {}
+    Info_10:
+      Name: ui/buildingsystem/texture2d/type
+      Dependencies: {}
     Info_11:
-      Name: fonts
+      Name: ui/buildingsystem/texture2d/category
       Dependencies: {}
     Info_12:
       Name: assets/buildingsystem
-      Dependencies: {}
+      Dependencies:
+        Dependency_0: prefabs/buildingsystem/bpart
     Info_13:
-      Name: json/tabledata
+      Name: ui/techpoint/texture2d
       Dependencies: {}
     Info_14:
-      Name: ui/techpoint/texture2d
+      Name: json/tabledata
       Dependencies: {}
     Info_15:
       Name: ui/uipanel

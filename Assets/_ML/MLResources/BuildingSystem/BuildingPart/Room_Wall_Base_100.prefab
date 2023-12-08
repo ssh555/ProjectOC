@@ -199,7 +199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 4
-  InTakeType: 118
+  InTakeType: 502
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 1, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 0}
@@ -271,7 +271,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 4
-  InTakeType: 118
+  InTakeType: 502
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 1, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 0}
@@ -343,7 +343,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 4
-  InTakeType: 118
+  InTakeType: 502
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 1, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 0}

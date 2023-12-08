@@ -62,6 +62,20 @@
                 "Chinese" : "窗",
                 "English" : "Window"
             }
+        },
+        {
+            "type" : "CeilingLamp",
+            "name" : {
+                "Chinese" : "吊灯",
+                "English" : "CeilingLamp"
+            }
+        },
+        {
+            "type" : "Chair",
+            "name" : {
+                "Chinese" : "椅子",
+                "English" : "Chair"
+            }
         }
 
     ]

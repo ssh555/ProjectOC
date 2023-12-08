@@ -54,3 +54,9 @@ MonoBehaviour:
   - name: Window
     displayName: "\u7A97"
     value: 008
+  - name: CeilingLamp
+    displayName: "\u540A\u706F"
+    value: 100
+  - name: Chair
+    displayName: "\u6905\u5B50"
+    value: 101

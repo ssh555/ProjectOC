@@ -6,6 +6,13 @@
                 "Chinese" : "房屋",
                 "English" : "Room"
             }
+        },
+        {
+            "type" : "Furniture",
+            "name" : {
+                "Chinese" : "家具",
+                "English" : "Furniture"
+            }
         }
     ]
 }

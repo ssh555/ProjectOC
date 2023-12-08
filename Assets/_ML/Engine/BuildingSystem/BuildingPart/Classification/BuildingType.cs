@@ -25,5 +25,9 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		Door = 007,
 		[LabelText("窗")]
 		Window = 008,
+		[LabelText("吊灯")]
+		CeilingLamp = 100,
+		[LabelText("椅子")]
+		Chair = 101,
 	}
 }

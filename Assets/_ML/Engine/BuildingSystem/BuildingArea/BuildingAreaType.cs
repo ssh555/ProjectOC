@@ -27,5 +27,7 @@ namespace ML.Engine.BuildingSystem.BuildingArea
 		Door = 1 << 7,
 		[LabelText("窗")]
 		Window = 1 << 8,
+		[LabelText("地板下层")]
+		UnderFloor = 1 << 9,
 	}
 }
