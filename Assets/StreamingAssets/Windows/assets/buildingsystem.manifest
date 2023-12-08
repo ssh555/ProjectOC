@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1718776943
+CRC: 3019091121
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6796229117be10c30286c8e28cb50aff
+    Hash: e8b70f56499352f1b327e6f912441df5
   TypeTreeHash:
     serializedVersion: 2
     Hash: 8e5d6366ca6cbc4587e122cb742ad983
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 6796229117be10c30286c8e28cb50aff
+    Hash: e8b70f56499352f1b327e6f912441df5
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -46,6 +46,7 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Triangle_20.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Texture2D/Blue.png
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Pillar_Base_100.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Furniture_CeilingLamp.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/TestMat/Green.mat
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/TestMat/Orange.mat
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Door_Base_20.asset
@@ -55,6 +56,7 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Texture2D/Purple.png
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Beam_Base_100.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/TestMat/Red.mat
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Furniture_Chair.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Window_Base_20.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Roof_Base_400.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Wall_Base_200.asset

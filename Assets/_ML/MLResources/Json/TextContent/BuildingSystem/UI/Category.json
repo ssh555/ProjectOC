@@ -8,7 +8,7 @@
             }
         },
         {
-            "type" : "Furniture",
+            "category" : "Furniture",
             "name" : {
                 "Chinese" : "家具",
                 "English" : "Furniture"

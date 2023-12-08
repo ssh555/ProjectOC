@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1404516188
+CRC: 1750619640
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b047b8e27ef1669dedb87cd90c52be96
+    Hash: b57af3d998101440848fdc126eb926d0
   TypeTreeHash:
     serializedVersion: 2
     Hash: 8621703c20d893a1fafebd0569f80a33
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: b047b8e27ef1669dedb87cd90c52be96
+    Hash: b57af3d998101440848fdc126eb926d0
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -76,6 +76,7 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Beam_Base_100.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Wood3.mat
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Quagrant_50.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Furniture_Chair.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Floor_Triangle_20.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Wood2.mat
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Triangle_200.prefab
@@ -84,10 +85,11 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Floor_Quagrant_20.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Base_50.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Base_100.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Furniture_CeilingLamp.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Metal.mat
-- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Base_200.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Base_75.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Door_Base_20.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Base_200.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Triangle_400.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Base_200.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Wood1.mat
