@@ -133,7 +133,7 @@ MonoBehaviour:
   canPlaceInPlaceMode: 0
   mode: 0
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
-  rotOffset: {x: 0, y: 0.008726535, z: 0, w: 0.9999619}
+  rotOffset: {x: 0, y: 0, z: 0, w: 1}
   activeSocketIndex: 0
 --- !u!1 &1717772518762347836
 GameObject:

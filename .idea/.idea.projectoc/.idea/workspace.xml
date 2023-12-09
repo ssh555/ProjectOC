@@ -5,16 +5,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fef3870f-3f3d-437b-b554-2a7fe5c6b01a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.projectoc/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.projectoc/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/Windows" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/Windows" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/Windows.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/Windows.manifest" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/fonts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/fonts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/fonts.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/fonts.manifest" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/json/textcontent/buildingsystem/ui" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/json/textcontent/buildingsystem/ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/json/textcontent/buildingsystem/ui.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/json/textcontent/buildingsystem/ui.manifest" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart.manifest" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/testscene" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/testscene" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/testscene.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/testscene.manifest" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/buildingsystem/prefabs.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/buildingsystem/prefabs.manifest" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPlacer/BuildingPlacer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPlacer/BuildingPlacer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Furniture_CeilingLamp.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Furniture_CeilingLamp.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Furniture_Chair.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Furniture_Chair.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Door_Base_20.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Door_Base_20.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Floor_Base_20.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Floor_Base_20.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Floor_Quagrant_20.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Floor_Quagrant_20.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Floor_Triangle_20.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Floor_Triangle_20.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Pillar_Base_200.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Pillar_Base_200.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Base_20.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Base_20.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Quagrant_20.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Quagrant_20.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Triangle_20.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Triangle_20.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Window_Base_20.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Window_Base_20.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/UIPrefabs/Panel/BSInteractMode.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/UIPrefabs/Panel/BSInteractMode.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/Fonts.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/Fonts.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/Fonts/MSYH SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/Fonts/MSYH SDF.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/Json/TextContent/BuildingSystem/UI/KeyTip.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/Json/TextContent/BuildingSystem/UI/KeyTip.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/BuidlingSystemTest.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/BuidlingSystemTest.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/TechTree/UITechPointPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/TechTree/UITechPointPanel.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +43,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3ea01e77be99618395f448b16bd7cc2bd4248bd9e5d8474964b2d97f39c5d74/System.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -102,7 +125,9 @@
       <workItem from="1702016034040" duration="110000" />
       <workItem from="1702016243526" duration="1501000" />
       <workItem from="1702020987579" duration="2822000" />
-      <workItem from="1702092130498" duration="344000" />
+      <workItem from="1702092130498" duration="800000" />
+      <workItem from="1702105430345" duration="1571000" />
+      <workItem from="1702108916505" duration="807000" />
     </task>
     <servers />
   </component>

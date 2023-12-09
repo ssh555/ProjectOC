@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2422621180
+CRC: 112320822
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 18f5b556147cbc128880a709d793cad3
+    Hash: 0066494560ad99e5df1cb12756a160f3
   TypeTreeHash:
     serializedVersion: 2
     Hash: 8621703c20d893a1fafebd0569f80a33
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 18f5b556147cbc128880a709d793cad3
+    Hash: 0066494560ad99e5df1cb12756a160f3
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -43,8 +43,6 @@ ClassTypes:
 - Class: 136
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
-- AssemblyName: Assembly-CSharp
-  ClassName: ML.Engine.BuildingSystem.BuildingArea.BuildingAreaType
 - AssemblyName: Assembly-CSharp
   ClassName: ML.Engine.BuildingSystem.BuildingPart.BuildingCategory
 - AssemblyName: Assembly-CSharp

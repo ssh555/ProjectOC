@@ -431,7 +431,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9085524652065547204, guid: ddd2b8b2977d84c45b6baad5696290ac, type: 3}
       propertyPath: Type
-      value: 8
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 9085524652065547204, guid: ddd2b8b2977d84c45b6baad5696290ac, type: 3}
       propertyPath: IsCanRotate

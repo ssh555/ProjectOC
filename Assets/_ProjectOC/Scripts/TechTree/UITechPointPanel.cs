@@ -66,7 +66,7 @@ namespace ProjectOC.TechTree.UI
                 var grid = TechTreeManager.Instance.GetTPGrid(id);
                 TechPointList[grid[0] * GridRange.y + grid[1]] = id;
             }
-            int[] g = TechTreeManager.Instance.GetTPGrid(TechPointList.First(id => id != ""));
+            int[] g = TechTreeManager.Instance.GetTPGrid(TechPointList.First(id => (id != null && id != "")));
             CurrentGrid = new Vector2Int(g[0], g[0]);
         }
 

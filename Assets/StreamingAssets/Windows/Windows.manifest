@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 1852174026
+CRC: 2054828157
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -30,47 +30,47 @@ AssetBundleManifest:
     Info_6:
       Name: ui/buildingsystem/prefabs
       Dependencies:
-        Dependency_0: fonts
-        Dependency_1: ui/buildingsystem/texture2d/style
-        Dependency_2: ui/buildingsystem/texture2d/type
-        Dependency_3: ui/buildingsystem/texture2d/category
-        Dependency_4: assets/buildingsystem
+        Dependency_0: ui/buildingsystem/texture2d/style
+        Dependency_1: ui/buildingsystem/texture2d/type
+        Dependency_2: ui/buildingsystem/texture2d/category
+        Dependency_3: assets/buildingsystem
+        Dependency_4: fonts
     Info_7:
-      Name: fonts
-      Dependencies: {}
-    Info_8:
       Name: prefabs/buildingsystem/bpart
       Dependencies: {}
-    Info_9:
+    Info_8:
       Name: ui/buildingsystem/texture2d/style
       Dependencies: {}
-    Info_10:
+    Info_9:
       Name: ui/buildingsystem/texture2d/type
       Dependencies: {}
-    Info_11:
+    Info_10:
       Name: ui/buildingsystem/texture2d/category
       Dependencies: {}
-    Info_12:
+    Info_11:
       Name: assets/buildingsystem
       Dependencies:
         Dependency_0: prefabs/buildingsystem/bpart
-    Info_13:
+    Info_12:
       Name: ui/techpoint/texture2d
       Dependencies: {}
-    Info_14:
+    Info_13:
       Name: json/tabledata
       Dependencies: {}
-    Info_15:
+    Info_14:
       Name: ui/uipanel
       Dependencies:
-        Dependency_0: fonts
-        Dependency_1: ui/techpoint/texture2d
-    Info_16:
+        Dependency_0: ui/techpoint/texture2d
+        Dependency_1: fonts
+    Info_15:
       Name: json/textcontent/buildingsystem/ui
       Dependencies: {}
-    Info_17:
+    Info_16:
       Name: json/textcontent/techtree
       Dependencies: {}
-    Info_18:
+    Info_17:
       Name: json/textcontent/player
+      Dependencies: {}
+    Info_18:
+      Name: fonts
       Dependencies: {}

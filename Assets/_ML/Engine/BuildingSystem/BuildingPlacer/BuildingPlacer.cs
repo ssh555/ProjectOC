@@ -913,6 +913,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
                     this.SelectedPartInstance = tmp;
                 }
+                Debug.Log(this.SelectedPartInstance.CanPlaceInPlaceMode + " "  + this.comfirmInputAction.WasPressedThisFrame());
             }
         }
 
