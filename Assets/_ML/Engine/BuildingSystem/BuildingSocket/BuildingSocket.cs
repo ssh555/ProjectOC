@@ -120,7 +120,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         /// 可放置区域Area类型
         /// </summary>
         [LabelText("可放置区域Area类型"), FoldoutGroup("Area")]
-        public BuildingSystem.BuildingArea.BuildingAreaType CanPlaceAreaType;
+        public BuildingSocketType CanPlaceAreaType;
 
         /// <summary>
         /// 用于area检测时的判断半径，即Socket与Area使用两套判定逻辑
