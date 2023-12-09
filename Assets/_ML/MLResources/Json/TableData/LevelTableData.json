@@ -1,5 +1,7 @@
-{
-    "table" : [
-        {   "scenename" : "TestScene",  "globalres" : [],    "localres" : []}
-    ]
-}
+[
+    {
+        "scenename": "TestScene",
+        "globalres": [],
+        "localres": []
+    }
+]

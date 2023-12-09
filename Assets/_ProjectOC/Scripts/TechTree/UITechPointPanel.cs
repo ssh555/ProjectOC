@@ -316,15 +316,15 @@ namespace ProjectOC.TechTree.UI
                         var timer = TechTreeManager.Instance.UnlockingTPTimers[id];
                         timer.OnUpdateEvent += (time) =>
                         {
-                            mask.fillAmount = (float)(1 - timer.GetPercent());
-
-                            if(timer.IsTimeUp)
+                            mask.fillAmount = (float)(1 - timer.CurrentTime / TechTreeManager.Instance.GetTPTimeCost(id));
+                            
+                            if (timer.IsTimeUp)
                             {
                                 timer.OnUpdateEvent = null;
                                 Refresh();
                             }
                         };
-                        mask.fillAmount = (float)(1 - timer.GetPercent());
+                        mask.fillAmount = (float)(1 - timer.CurrentTime / TechTreeManager.Instance.GetTPTimeCost(id));
                         tempTimer.Add(timer);
                     }
                     // Select

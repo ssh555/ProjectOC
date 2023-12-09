@@ -18,10 +18,4 @@ namespace ML.Engine.TextContent
             return this.description.GetText();
         }
     }
-
-    [System.Serializable]
-    public class TextTipArray
-    {
-        public TextTip[] array;
-    }
 }

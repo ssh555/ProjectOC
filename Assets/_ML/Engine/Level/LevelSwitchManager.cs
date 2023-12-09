@@ -147,12 +147,6 @@ namespace ML.Engine.Level
         public const string LevelTableDataABPath = "Json/TableData";
         public const string TableName = "LevelTableData";
 
-        [System.Serializable]
-        private struct LevelRListArray
-        {
-            public LevelResource[] table;
-        }
-
         /// <summary>
         /// 载入资源清单
         /// </summary>
@@ -172,10 +166,10 @@ namespace ML.Engine.Level
 
             var request = ab.LoadAssetAsync<TextAsset>(TableName);
             yield return request;
-            LevelRListArray datas = JsonConvert.DeserializeObject<LevelRListArray>((request.asset as TextAsset).text);
-            if(datas.table != null)
+            LevelResource[] datas = JsonConvert.DeserializeObject<LevelResource[]>((request.asset as TextAsset).text);
+            if(datas != null)
             {
-                foreach (var row in datas.table)
+                foreach (var row in datas)
                 {
                     LevelResource res = new LevelResource();
                     // 0 => level name
