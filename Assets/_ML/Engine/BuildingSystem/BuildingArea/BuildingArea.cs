@@ -74,7 +74,7 @@ namespace ML.Engine.BuildingSystem.BuildingArea
         /// 用于匹配的AreaType
         /// </summary>
         [LabelText("匹配类型")]
-        public BuildingAreaType Type;
+        public BuildingSocket.BuildingSocketType Type;
 
         /// <summary>
         /// 目标Part是否能放置于此区域
