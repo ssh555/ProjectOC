@@ -52,7 +52,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1
+  m_Radius: 0.00001
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4310852999904537253
 MonoBehaviour:
@@ -67,11 +67,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 128
-  InTakeType: 34
+  InTakeType: 2
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  CanPlaceAreaType: 8
+  CanPlaceAreaType: 0
 --- !u!1 &5071729138495753550
 GameObject:
   m_ObjectHideFlags: 0
@@ -124,7 +124,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1
+  m_Radius: 0.00001
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4854037143948192610
 MonoBehaviour:
@@ -143,7 +143,7 @@ MonoBehaviour:
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0.2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  CanPlaceAreaType: 8
+  CanPlaceAreaType: 0
 --- !u!1 &8178050960973933663
 GameObject:
   m_ObjectHideFlags: 0
@@ -196,7 +196,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1
+  m_Radius: 0.00001
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4858743320522333089
 MonoBehaviour:
@@ -211,11 +211,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 128
-  InTakeType: 34
+  InTakeType: 2
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  CanPlaceAreaType: 8
+  CanPlaceAreaType: 0
 --- !u!1 &8876752173998477049
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,7 +380,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1
+  m_Radius: 0.00001
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6659446059035241267
 MonoBehaviour:
@@ -395,8 +395,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 128
-  InTakeType: 34
+  InTakeType: 2
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  CanPlaceAreaType: 8
+  CanPlaceAreaType: 0

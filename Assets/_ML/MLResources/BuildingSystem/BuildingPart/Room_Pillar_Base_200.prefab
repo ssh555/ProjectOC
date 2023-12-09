@@ -148,7 +148,7 @@ MonoBehaviour:
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  CanPlaceAreaType: 0
+  CanPlaceAreaType: 8
 --- !u!1 &5278139283466857009
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,7 +220,7 @@ MonoBehaviour:
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  CanPlaceAreaType: 0
+  CanPlaceAreaType: 8
 --- !u!1 &5504472010688985949
 GameObject:
   m_ObjectHideFlags: 0

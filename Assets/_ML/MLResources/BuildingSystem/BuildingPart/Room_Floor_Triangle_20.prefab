@@ -71,7 +71,7 @@ MonoBehaviour:
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0.2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 0}
-  CanPlaceAreaType: 2147483647
+  CanPlaceAreaType: 8
 --- !u!1 &1427006843354056573
 GameObject:
   m_ObjectHideFlags: 0
@@ -143,7 +143,7 @@ MonoBehaviour:
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0.2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 0}
-  CanPlaceAreaType: 2147483647
+  CanPlaceAreaType: 8
 --- !u!1 &1940728507229832730
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,7 +215,7 @@ MonoBehaviour:
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0.2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 0}
-  CanPlaceAreaType: 2147483647
+  CanPlaceAreaType: 8
 --- !u!1 &2271281073973848535
 GameObject:
   m_ObjectHideFlags: 0
@@ -287,7 +287,7 @@ MonoBehaviour:
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0.2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 0}
-  CanPlaceAreaType: 2147483647
+  CanPlaceAreaType: 8
 --- !u!1 &3357093745651794344
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,7 +495,7 @@ MonoBehaviour:
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0.2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 0}
-  CanPlaceAreaType: 2147483647
+  CanPlaceAreaType: 8
 --- !u!1 &4971989185466544752
 GameObject:
   m_ObjectHideFlags: 0
@@ -567,7 +567,7 @@ MonoBehaviour:
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0.2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 0}
-  CanPlaceAreaType: 2147483647
+  CanPlaceAreaType: 8
 --- !u!1 &5727336972917660738
 GameObject:
   m_ObjectHideFlags: 0
@@ -639,4 +639,4 @@ MonoBehaviour:
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0.2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 0}
-  CanPlaceAreaType: 2147483647
+  CanPlaceAreaType: 8
