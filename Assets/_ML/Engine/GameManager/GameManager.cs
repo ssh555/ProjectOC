@@ -329,27 +329,7 @@ namespace ML.Engine.Manager
         #endregion
         #endregion
 
-        #region to-delete
-        /// <summary>
-        /// to-do : 待移除更改，不能放置于此，此项为ItemTable和CompositeTable表数据加载项，用到这两个模块才需要加载 => 放置于Level中更合适
-        /// </summary>
-        /// <returns></returns>
-        IEnumerator LoadResource()
-        {
-            float startTime = Time.realtimeSinceStartup;
-            var c1 = StartCoroutine(ML.Engine.InventorySystem.ItemSpawner.Instance.LoadTableData(this));
-            var c2 = StartCoroutine(ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.LoadTableData(this));
-            yield return c1;
-            yield return c2;
 
-            Debug.Log("LoadTableData Cost: " + (Time.realtimeSinceStartup - startTime));
-            // 结束此协程
-            yield break;
-        }
-
-
-
-        #endregion
 
         #region Update
         private void Update()

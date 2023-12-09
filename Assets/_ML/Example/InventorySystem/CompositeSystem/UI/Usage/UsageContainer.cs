@@ -17,7 +17,7 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
 
         }
 
-        public void RefreshUsageContainer(int[] usage)
+        public void RefreshUsageContainer(string[] usage)
         {
             if (usage.Length == 0)
             {

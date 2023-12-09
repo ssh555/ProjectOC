@@ -280,19 +280,34 @@ namespace ML.Engine.BuildingSystem
         #endregion
 
         #region BPartPrefab
+        private Dictionary<BuildingPartClassification, IBuildingPart> registeredBPart = new Dictionary<BuildingPartClassification, IBuildingPart>();
+
+        public int GetRegisterBPartCount()
+        {
+            return registeredBPart.Count;
+        }
+        public bool IsValidBPartID(string id)
+        {
+            BuildingPartClassification classification = new BuildingPartClassification(id);
+            return this.registeredBPart.ContainsKey(classification);
+        }
+
         /// <summary>
         /// 将BPart加入管理队列
         /// </summary>
         /// <param name="BPart"></param>
         public void RegisterBPartPrefab(IBuildingPart BPart)
         {
-            if (BPart == null)
+            if (BPart == null || registeredBPart.ContainsKey(BPart.Classification))
             {
                 return;
             }
 
+
             this.AddBPartPrefabOnStyle(BPart);
             this.AddBPartPrefabOnHeight(BPart);
+
+            this.registeredBPart.Add(BPart.Classification, BPart);
         }
 
         /// <summary>
@@ -301,13 +316,15 @@ namespace ML.Engine.BuildingSystem
         /// <param name="BPart"></param>
         public void UnregisterBPartPrefab(IBuildingPart BPart)
         {
-            if (BPart == null)
+            if (BPart == null || !registeredBPart.ContainsKey(BPart.Classification))
             {
                 return;
             }
 
             this.RemoveBPartPrefabOnStyle(BPart);
             this.RemoveBPartPrefabOnHeight(BPart);
+
+            this.registeredBPart.Remove(BPart.Classification);
         }
 
         /// <summary>
@@ -342,7 +359,22 @@ namespace ML.Engine.BuildingSystem
             }
             return null;
         }
-        
+
+        public IBuildingPart GetOneBPartInstance(BuildingPartClassification classification)
+        {
+            if(this.registeredBPart.ContainsKey(classification))
+            {
+                return GameObject.Instantiate<GameObject>(this.registeredBPart[classification].gameObject).GetComponent<IBuildingPart>();
+            }
+            return null;
+        }
+
+        public IBuildingPart GetOneBPartInstance(string classification)
+        {
+            return GetOneBPartInstance(new BuildingPartClassification(classification));
+        }
+
+
         /// <summary>
         /// 获得一个复制的实例
         /// </summary>
@@ -352,6 +384,17 @@ namespace ML.Engine.BuildingSystem
         {
             BPart.Mode = BuildingMode.None;
             return GameObject.Instantiate<GameObject>(BPart.gameObject).GetComponent<IBuildingPart>();
+        }
+        
+        
+        public BuildingCategory[] GetRegisteredCategory()
+        {
+            return this.BPartClassificationOnStyle.Keys.ToArray();
+        }
+
+        public BuildingType[] GetRegisteredType()
+        {
+            return this.BPartClassificationOnStyle.Values.SelectMany(innerDict => innerDict.Keys).ToArray();
         }
         #endregion
 

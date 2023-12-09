@@ -431,66 +431,125 @@ namespace ProjectOC.Input
             ""id"": ""4798033b-71dc-4790-8049-9b265bf9cf30"",
             ""actions"": [
                 {
-                    ""name"": ""OpenUI"",
-                    ""type"": ""Button"",
-                    ""id"": ""8f9375af-827c-4f93-ac3d-3ed31625d559"",
-                    ""expectedControlType"": ""Button"",
+                    ""name"": ""AlterSelected"",
+                    ""type"": ""Value"",
+                    ""id"": ""3f5931db-7476-4692-923b-f779d592c9eb"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""CloseUI"",
-                    ""type"": ""Button"",
-                    ""id"": ""23c01106-87ae-416f-8370-33c51856c56d"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Composite"",
-                    ""type"": ""Button"",
-                    ""id"": ""305d80fe-1cc9-4cc2-8d5d-6609a5c7706d"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
                 {
-                    ""name"": """",
-                    ""id"": ""5a2b1d2d-c47a-4087-99d5-69b42cc14521"",
-                    ""path"": ""<Keyboard>/tab"",
+                    ""name"": ""KeyBoard"",
+                    ""id"": ""7b131fad-d494-4de7-a368-e5b96c9db53d"",
+                    ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""OpenUI"",
-                    ""isComposite"": false,
+                    ""action"": ""AlterSelected"",
+                    ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""cd082b02-73cc-4ee9-9a99-9b505c008cbe"",
-                    ""path"": ""<Keyboard>/tab"",
+                    ""name"": ""up"",
+                    ""id"": ""a20c0cbe-8308-4849-b2eb-a38b64970afa"",
+                    ""path"": ""<Keyboard>/upArrow"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""CloseUI"",
+                    ""action"": ""AlterSelected"",
                     ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""35fbd56b-a7bc-40b5-afae-761dc454608b"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterSelected"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""870149b0-7e43-4b1d-88fe-73876eeef49a"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterSelected"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""99425982-f153-4ac2-811e-599315cb827b"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterSelected"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""4a0ea280-a551-4a68-a171-774ecb7ee03d"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterSelected"",
+                    ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""8ef39a00-e449-4ab3-9cbe-5bb338560628"",
-                    ""path"": ""<Keyboard>/f"",
+                    ""name"": ""up"",
+                    ""id"": ""9889cd8e-043e-42e7-ba19-f951e21e4b41"",
+                    ""path"": ""<XInputController>/dpad/up"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Composite"",
+                    ""action"": ""AlterSelected"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""cce319de-2849-4f21-86df-6db00449bc26"",
+                    ""path"": ""<XInputController>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterSelected"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""4b0ebd66-b18e-4e94-b8ce-1e52b4a7984f"",
+                    ""path"": ""<XInputController>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterSelected"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""ecc2ff30-566f-4481-b51b-cc3a2fbcd67a"",
+                    ""path"": ""<XInputController>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterSelected"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -508,9 +567,7 @@ namespace ProjectOC.Input
             m_Player_PickUp = m_Player.FindAction("PickUp", throwIfNotFound: true);
             // PlayerUI
             m_PlayerUI = asset.FindActionMap("PlayerUI", throwIfNotFound: true);
-            m_PlayerUI_OpenUI = m_PlayerUI.FindAction("OpenUI", throwIfNotFound: true);
-            m_PlayerUI_CloseUI = m_PlayerUI.FindAction("CloseUI", throwIfNotFound: true);
-            m_PlayerUI_Composite = m_PlayerUI.FindAction("Composite", throwIfNotFound: true);
+            m_PlayerUI_AlterSelected = m_PlayerUI.FindAction("AlterSelected", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -666,16 +723,12 @@ namespace ProjectOC.Input
         // PlayerUI
         private readonly InputActionMap m_PlayerUI;
         private List<IPlayerUIActions> m_PlayerUIActionsCallbackInterfaces = new List<IPlayerUIActions>();
-        private readonly InputAction m_PlayerUI_OpenUI;
-        private readonly InputAction m_PlayerUI_CloseUI;
-        private readonly InputAction m_PlayerUI_Composite;
+        private readonly InputAction m_PlayerUI_AlterSelected;
         public struct PlayerUIActions
         {
             private @PlayerInput m_Wrapper;
             public PlayerUIActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
-            public InputAction @OpenUI => m_Wrapper.m_PlayerUI_OpenUI;
-            public InputAction @CloseUI => m_Wrapper.m_PlayerUI_CloseUI;
-            public InputAction @Composite => m_Wrapper.m_PlayerUI_Composite;
+            public InputAction @AlterSelected => m_Wrapper.m_PlayerUI_AlterSelected;
             public InputActionMap Get() { return m_Wrapper.m_PlayerUI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -685,28 +738,16 @@ namespace ProjectOC.Input
             {
                 if (instance == null || m_Wrapper.m_PlayerUIActionsCallbackInterfaces.Contains(instance)) return;
                 m_Wrapper.m_PlayerUIActionsCallbackInterfaces.Add(instance);
-                @OpenUI.started += instance.OnOpenUI;
-                @OpenUI.performed += instance.OnOpenUI;
-                @OpenUI.canceled += instance.OnOpenUI;
-                @CloseUI.started += instance.OnCloseUI;
-                @CloseUI.performed += instance.OnCloseUI;
-                @CloseUI.canceled += instance.OnCloseUI;
-                @Composite.started += instance.OnComposite;
-                @Composite.performed += instance.OnComposite;
-                @Composite.canceled += instance.OnComposite;
+                @AlterSelected.started += instance.OnAlterSelected;
+                @AlterSelected.performed += instance.OnAlterSelected;
+                @AlterSelected.canceled += instance.OnAlterSelected;
             }
 
             private void UnregisterCallbacks(IPlayerUIActions instance)
             {
-                @OpenUI.started -= instance.OnOpenUI;
-                @OpenUI.performed -= instance.OnOpenUI;
-                @OpenUI.canceled -= instance.OnOpenUI;
-                @CloseUI.started -= instance.OnCloseUI;
-                @CloseUI.performed -= instance.OnCloseUI;
-                @CloseUI.canceled -= instance.OnCloseUI;
-                @Composite.started -= instance.OnComposite;
-                @Composite.performed -= instance.OnComposite;
-                @Composite.canceled -= instance.OnComposite;
+                @AlterSelected.started -= instance.OnAlterSelected;
+                @AlterSelected.performed -= instance.OnAlterSelected;
+                @AlterSelected.canceled -= instance.OnAlterSelected;
             }
 
             public void RemoveCallbacks(IPlayerUIActions instance)
@@ -736,9 +777,7 @@ namespace ProjectOC.Input
         }
         public interface IPlayerUIActions
         {
-            void OnOpenUI(InputAction.CallbackContext context);
-            void OnCloseUI(InputAction.CallbackContext context);
-            void OnComposite(InputAction.CallbackContext context);
+            void OnAlterSelected(InputAction.CallbackContext context);
         }
     }
 }

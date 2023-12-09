@@ -1,0 +1,18 @@
+{
+    "tips" : [
+        {
+            "name" : "enterbuild",
+            "description" : {
+                "Chinese" : "建造模式",
+                "English" : "EntetBuild"
+            }
+        },
+        {
+            "name" : "techtree",
+            "description" : {
+                "Chinese" : "科技树",
+                "English" : "TechTree"
+            }
+        }
+    ]
+}

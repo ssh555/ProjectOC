@@ -9,7 +9,7 @@ namespace ML.Engine.InventorySystem
     public class WorldItem : MonoBehaviour
     {
         [SerializeField, ReadOnly]
-        protected int _id = -1;
+        protected string _id = "";
 
         /// <summary>
         /// ÓµÓÐµÄ Item
@@ -20,7 +20,7 @@ namespace ML.Engine.InventorySystem
         public void SetItem(Item item)
         {
             this.item = item;
-            _id = this.item != null ? this.item.ID : -1;
+            _id = this.item != null ? this.item.ID : "";
         }
 
         private void Start()

@@ -1,3 +1,4 @@
+using ML.Engine.InventorySystem.CompositeSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -75,11 +76,11 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         /// <summary>
         /// ”√”⁄BuildingArea∆•≈‰µƒActiveSocket.AreaType
         /// </summary>
-        public BuildingArea.BuildingAreaType ActiveAreaType
+        public BuildingSocket.BuildingSocketType ActiveAreaType
         {
             get
             {
-                return this.ActiveSocket == null ? BuildingArea.BuildingAreaType.None : this.ActiveSocket.CanPlaceAreaType;
+                return this.ActiveSocket == null ? BuildingSocket.BuildingSocketType.None : this.ActiveSocket.CanPlaceAreaType;
             }
         }
         #endregion

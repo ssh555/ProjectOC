@@ -15,7 +15,7 @@ namespace ML.Engine.CombatSystem.CombatObject.Character
         /// µôÂäÎïID
         /// </summary>
         [LabelText("ItemID")]
-        public int id;
+        public string id;
         /// <summary>
         /// µôÂäÊıÁ¿
         /// </summary>

@@ -12,7 +12,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <summary>
         /// ∫œ≥…ŒÔ ID
         /// </summary>
-        public int ID { get; set; }
+        public string ID { get; set; }
     }
 }
 

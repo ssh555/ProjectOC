@@ -15,9 +15,9 @@ namespace ML.Engine.ABResources
         /// ÓÃ | ¸ô¿ª
         /// </summary>
         #if UNITY_EDITOR
-        private const string DEFAULTAB = "csv|scene|testscene";
+        private const string DEFAULTAB = "scene|testscene";
         #else
-        private const string DEFAULTAB = "csv|scene";
+        private const string DEFAULTAB = "scene";
         #endif
 
         /// <summary>

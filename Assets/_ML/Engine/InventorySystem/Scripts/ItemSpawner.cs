@@ -1,4 +1,5 @@
 using ML.Engine.BuildingSystem.BuildingPart;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -33,22 +34,27 @@ namespace ML.Engine.InventorySystem
         #endregion
         
         /// <summary>
+        /// 是否已加载完数据
+        /// </summary>
+        public bool IsLoadOvered = false;
+
+        /// <summary>
         /// 根据需求自动添加
         /// </summary>
-        private Dictionary<int, Type> ItemDict = new Dictionary<int, Type>();
+        private Dictionary<string, Type> ItemDict = new Dictionary<string, Type>();
 
         /// <summary>
         /// to-do : 读表初始化
         /// 基础Item数据表 => 可加入联合体包含具体类型应有的数据
         /// </summary>
-        private Dictionary<int, ItemTabelJsonData> ItemTypeStrDict = new Dictionary<int, ItemTabelJsonData>();
+        private Dictionary<string, ItemTabelJsonData> ItemTypeStrDict = new Dictionary<string, ItemTabelJsonData>();
 
         /// <summary>
         /// 根据 id 生成一个崭新的Item，数量为1
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Item SpawnItem(int id)
+        public Item SpawnItem(string id)
         {
             if (this.ItemTypeStrDict.TryGetValue(id, out ItemTabelJsonData itemRow))
             {
@@ -117,12 +123,12 @@ namespace ML.Engine.InventorySystem
 
         }
 
-        public bool IsValidItemID(int id)
+        public bool IsValidItemID(string id)
         {
             return this.ItemTypeStrDict.ContainsKey(id);
         }
 
-        public Texture2D GetItemTexture2D(int id)
+        public Texture2D GetItemTexture2D(string id)
         {
             if (!this.ItemTypeStrDict.ContainsKey(id))
             {
@@ -132,7 +138,7 @@ namespace ML.Engine.InventorySystem
             return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>(this.ItemTypeStrDict[id].texture2d);
         }
 
-        public Sprite GetItemSprite(int id)
+        public Sprite GetItemSprite(string id)
         {
             var tex = this.GetItemTexture2D(id);
             if(tex == null)
@@ -141,7 +147,7 @@ namespace ML.Engine.InventorySystem
             }
             return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
         }
-        public GameObject GetItemObject(int id)
+        public GameObject GetItemObject(string id)
         {
             if (!this.ItemTypeStrDict.ContainsKey(id))
             {
@@ -151,7 +157,7 @@ namespace ML.Engine.InventorySystem
             return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(WorldObjPath).LoadAsset<GameObject>(this.ItemTypeStrDict[id].worldobject);
         }
 
-        public string GetItemName(int id)
+        public string GetItemName(string id)
         {
             if (!this.ItemTypeStrDict.ContainsKey(id))
             {
@@ -176,18 +182,18 @@ namespace ML.Engine.InventorySystem
             return null;
         }
 
-#region to-do : 需读表导入所有所需的 Item 数据
+        #region to-do : 需读表导入所有所需的 Item 数据
         public const string TypePath = "ML.Engine.InventorySystem.";
         public const string Texture2DPath = "ui/Item/texture2d";
         public const string WorldObjPath = "prefabs/Item/WorldItem";
 
-        public const string ItemTableDataABPath = "Json/TabelData";
+        public const string ItemTableDataABPath = "Json/TableData";
         public const string TableName = "ItemTableData";
 
         [System.Serializable]
         public struct ItemTabelJsonData
         {
-            public int id;
+            public string id;
             public string name;
             public string type;
             public bool bcanstack;
@@ -211,24 +217,25 @@ namespace ML.Engine.InventorySystem
             AssetBundle ab;
             var crequest = abmgr.LoadLocalABAsync(ItemTableDataABPath, null, out ab);
             yield return crequest;
-            ab = crequest.assetBundle;
+            if(crequest != null)
+                ab = crequest.assetBundle;
 
 
             var request = ab.LoadAssetAsync<TextAsset>(TableName);
             yield return request;
-            ItemTabelJsonDataArray datas = JsonUtility.FromJson<ItemTabelJsonDataArray>((request.asset as TextAsset).text);
+            ItemTabelJsonDataArray datas = JsonConvert.DeserializeObject<ItemTabelJsonDataArray>((request.asset as TextAsset).text);
 
             foreach (var data in datas.table)
             {
                 this.ItemTypeStrDict.Add(data.id, data);
             }
 
-            abmgr.UnLoadLocalABAsync(ItemTableDataABPath, false, null);
+            //abmgr.UnLoadLocalABAsync(ItemTableDataABPath, false, null);
 
-            yield break;
+            IsLoadOvered = true;
         }
 
-#endregion
+        #endregion
 
 
     }
