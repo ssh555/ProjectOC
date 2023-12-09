@@ -31,38 +31,38 @@ MonoBehaviour:
     displayName: None
     value: 
   Enums:
-  - name: 
-    displayName: 
+  - name: Foundation
+    displayName: "\u5730\u57FA\u5C42"
     value: 
-  - name: 
-    displayName: 
+  - name: Floor
+    displayName: "\u5730\u677F\u5C42"
     value: 
-  - name: 
-    displayName: 
+  - name: Wall
+    displayName: "\u5899\u5C42"
     value: 
-  - name: 
-    displayName: 
+  - name: Ground
+    displayName: "\u5730\u9762\u5C42"
     value: 
-  - name: 
-    displayName: 
+  - name: Piliar
+    displayName: "\u67F1"
     value: 
-  - name: 
-    displayName: 
+  - name: Beam
+    displayName: "\u6881"
     value: 
-  - name: 
-    displayName: 
+  - name: Roof
+    displayName: "\u5C4B\u9876"
     value: 
-  - name: 
-    displayName: 
+  - name: Door
+    displayName: "\u95E8"
     value: 
-  - name: 
-    displayName: 
+  - name: Window
+    displayName: "\u7A97"
     value: 
-  - name: 
-    displayName: 
+  - name: FoundationEdge
+    displayName: "\u5730\u57FA\u5916\u56F4"
     value: 
-  - name: 
-    displayName: 
+  - name: UnderFloor
+    displayName: "\u5730\u677F\u4E0B"
     value: 
   - name: 
     displayName: 

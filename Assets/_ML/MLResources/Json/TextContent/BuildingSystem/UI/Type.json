@@ -13,6 +13,69 @@
                 "Chinese" : "地板",
                 "English" : "Floor"
             }
+        },
+        {
+            "type" : "FoundationEdge",
+            "name" : {
+                "Chinese" : "地基外沿",
+                "English" : "FoundationEdge"
+            }
+        },
+        {
+            "type" : "Wall",
+            "name" : {
+                "Chinese" : "墙",
+                "English" : "Wall"
+            }
+        },
+        {
+            "type" : "Pillar",
+            "name" : {
+                "Chinese" : "柱",
+                "English" : "Pillar"
+            }
+        },
+        {
+            "type" : "Beam",
+            "name" : {
+                "Chinese" : "梁",
+                "English" : "Beam"
+            }
+        },
+        {
+            "type" : "Roof",
+            "name" : {
+                "Chinese" : "屋顶",
+                "English" : "Roof"
+            }
+        },
+        {
+            "type" : "Door",
+            "name" : {
+                "Chinese" : "门",
+                "English" : "Door"
+            }
+        },
+        {
+            "type" : "Window",
+            "name" : {
+                "Chinese" : "窗",
+                "English" : "Window"
+            }
+        },
+        {
+            "type" : "CeilingLamp",
+            "name" : {
+                "Chinese" : "吊灯",
+                "English" : "CeilingLamp"
+            }
+        },
+        {
+            "type" : "Chair",
+            "name" : {
+                "Chinese" : "椅子",
+                "English" : "Chair"
+            }
         }
 
     ]

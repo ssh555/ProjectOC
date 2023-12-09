@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2517803743
+CRC: 1681016513
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 700d6580cee16d1975848a05a0e75f21
+    Hash: 485dac38ebac03539a78b92a58b731c9
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2d8df09e698f722ada1caa03d3413830
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 700d6580cee16d1975848a05a0e75f21
+    Hash: 485dac38ebac03539a78b92a58b731c9
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -18,5 +18,16 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Beam.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Roof.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/CeilingLamp.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Foundation.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Pillar.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/FoundationEdge.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Floor.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Chair.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Door.png
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/None.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Wall.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Window.png
 Dependencies: []
