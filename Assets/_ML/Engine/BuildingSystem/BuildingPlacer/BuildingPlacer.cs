@@ -360,7 +360,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                         
                         this.SelectedPartInstance.AttachedSocket = null;
                     }
-                    if (this.SelectedPartInstance.AttachedArea && (this.SelectedPartInstance.ActiveSocket.Type & this.SelectedPartInstance.AttachedArea.Type) == 0)
+                    if (this.SelectedPartInstance.AttachedArea && (this.SelectedPartInstance.ActiveAreaType & this.SelectedPartInstance.AttachedArea.Type) == 0)
                     {
                         this.SelectedPartInstance.AttachedArea = null;
                     }
