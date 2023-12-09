@@ -1,5 +1,11 @@
-{
-    "table" : [
-        {   "id" : 100001,  "name" : "Item",    "type" : "ResourceItem",    "bcanstack" : false,    "maxamount" : 1,    "texture2d" : "Test",   "worldobject" : "test"  }
-    ]
-}
+[
+    {
+        "id": 100001,
+        "name": "Item",
+        "type": "ResourceItem",
+        "bcanstack": false,
+        "maxamount": 1,
+        "texture2d": "Test",
+        "worldobject": "test"
+    }
+]

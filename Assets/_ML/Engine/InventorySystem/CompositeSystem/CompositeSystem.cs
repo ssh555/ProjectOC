@@ -80,12 +80,6 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             public List<string> usage;
         }
 
-        [System.Serializable]
-        private struct CompositionJsonDatas
-        {
-            public CompositionJsonData[] table;
-        }
-
         public const string CompositionTableDataABPath = "Json/TableData";
         public const string TableName = "CompositionTableData";
 
@@ -108,9 +102,9 @@ namespace ML.Engine.InventorySystem.CompositeSystem
 
             var request = ab.LoadAssetAsync<TextAsset>(TableName);
             yield return request;
-            CompositionJsonDatas datas = JsonConvert.DeserializeObject<CompositionJsonDatas>((request.asset as TextAsset).text);
+            CompositionJsonData[] datas = JsonConvert.DeserializeObject<CompositionJsonData[]>((request.asset as TextAsset).text);
 
-            foreach (var data in datas.table)
+            foreach (var data in datas)
             {
                 this.CompositeData.Add(data.id, data);
             }

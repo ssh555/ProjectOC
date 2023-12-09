@@ -151,8 +151,8 @@ namespace ProjectOC.Player.UI
 
             var request = ab.LoadAssetAsync<TextAsset>(TextContentName);
             yield return request;
-            TextTips Tips = JsonConvert.DeserializeObject<TextTips>((request.asset as TextAsset).text);
-            foreach (var tip in Tips.tips)
+            ML.Engine.TextContent.TextTip[] Tips = JsonConvert.DeserializeObject<ML.Engine.TextContent.TextTip[]>((request.asset as TextAsset).text);
+            foreach (var tip in Tips)
             {
                 this.TipDict.Add(tip.name, tip);
             }
