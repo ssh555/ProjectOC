@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 2455968113
+CRC: 4140874620
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -37,8 +37,7 @@ AssetBundleManifest:
         Dependency_4: assets/buildingsystem
     Info_7:
       Name: prefabs/buildingsystem/bpart
-      Dependencies:
-        Dependency_0: assets/buildingsystem
+      Dependencies: {}
     Info_8:
       Name: ui/buildingsystem/texture2d/category
       Dependencies: {}
@@ -53,7 +52,8 @@ AssetBundleManifest:
       Dependencies: {}
     Info_12:
       Name: assets/buildingsystem
-      Dependencies: {}
+      Dependencies:
+        Dependency_0: prefabs/buildingsystem/bpart
     Info_13:
       Name: json/tabledata
       Dependencies: {}

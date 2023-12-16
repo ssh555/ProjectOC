@@ -30,3 +30,6 @@ MonoBehaviour:
   - name: Room
     displayName: "\u623F\u5C4B"
     value: 0
+  - name: Furniture
+    displayName: "\u5BB6\u5177"
+    value: 1

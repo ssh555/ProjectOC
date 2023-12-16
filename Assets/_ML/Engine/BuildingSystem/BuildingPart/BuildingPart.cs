@@ -23,7 +23,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         Transform IBuildingPart.transform { get => this.transform;  }
 
         [SerializeField, LabelText("ƒ‹∑Ò∑≈÷√"), ReadOnly]
-        private bool canPlaceInPlaceMode;
+        private bool canPlaceInPlaceMode = true;
         public bool CanPlaceInPlaceMode 
         {
             get
@@ -45,6 +45,15 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 mode = value;
                 this.SetColliderTrigger((mode == BuildingMode.Place || mode == BuildingMode.Destroy || mode == BuildingMode.Edit));
 
+                if (mode == BuildingMode.Edit || mode == BuildingMode.Place)
+                {
+                    this.canPlaceInPlaceMode = true;
+                }
+                else
+                {
+                    this.canPlaceInPlaceMode = false;
+                }
+                
                 Material mat = BuildingManager.Instance.GetBuldingMat(mode);
                 if(mat != null)
                 {

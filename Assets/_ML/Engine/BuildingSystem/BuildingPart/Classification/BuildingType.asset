@@ -32,4 +32,31 @@ MonoBehaviour:
     value: 0
   - name: Floor
     displayName: "\u5730\u677F"
-    value: 
+    value: 001
+  - name: FoundationEdge
+    displayName: "\u5730\u57FA\u5916\u6CBF"
+    value: 002
+  - name: Wall
+    displayName: "\u5899"
+    value: 003
+  - name: Pillar
+    displayName: "\u67F1"
+    value: 004
+  - name: Beam
+    displayName: "\u6881"
+    value: 005
+  - name: Roof
+    displayName: "\u5C4B\u9876"
+    value: 006
+  - name: Door
+    displayName: "\u95E8"
+    value: 007
+  - name: Window
+    displayName: "\u7A97"
+    value: 008
+  - name: CeilingLamp
+    displayName: "\u540A\u706F"
+    value: 100
+  - name: Chair
+    displayName: "\u6905\u5B50"
+    value: 101

@@ -355,6 +355,16 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     pos = hitInfo.point - this.SelectedPartInstance.ActiveSocket.transform.position + this.SelectedPartInstance.transform.position;
                     this.SelectedPartInstance.AttachedSocket = hitInfo.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
                     this.SelectedPartInstance.AttachedArea = hitInfo.collider.GetComponentInParent<BuildingArea.BuildingArea>();
+
+                    if(this.SelectedPartInstance.AttachedSocket && (this.SelectedPartInstance.ActiveSocket.Type & this.SelectedPartInstance.AttachedSocket.InTakeType) == 0)
+                    {
+                        
+                        this.SelectedPartInstance.AttachedSocket = null;
+                    }
+                    if (this.SelectedPartInstance.AttachedArea && (this.SelectedPartInstance.ActiveAreaType & this.SelectedPartInstance.AttachedArea.Type) == 0)
+                    {
+                        this.SelectedPartInstance.AttachedArea = null;
+                    }
                 }
                 else
                 {

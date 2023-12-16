@@ -201,11 +201,6 @@ namespace ML.Engine.InventorySystem
             public string texture2d;
             public string worldobject;
         }
-        [System.Serializable]
-        private struct ItemTabelJsonDataArray
-        {
-            public ItemTabelJsonData[] table;
-        }
 
         public IEnumerator LoadTableData(MonoBehaviour mono)
         {
@@ -223,9 +218,9 @@ namespace ML.Engine.InventorySystem
 
             var request = ab.LoadAssetAsync<TextAsset>(TableName);
             yield return request;
-            ItemTabelJsonDataArray datas = JsonConvert.DeserializeObject<ItemTabelJsonDataArray>((request.asset as TextAsset).text);
+            ItemTabelJsonData[] datas = JsonConvert.DeserializeObject<ItemTabelJsonData[]>((request.asset as TextAsset).text);
 
-            foreach (var data in datas.table)
+            foreach (var data in datas)
             {
                 this.ItemTypeStrDict.Add(data.id, data);
             }

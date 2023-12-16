@@ -9,5 +9,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		None = -1,
 		[LabelText("房屋")]
 		Room = 0,
+		[LabelText("家具")]
+		Furniture = 1,
 	}
 }

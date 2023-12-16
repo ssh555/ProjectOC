@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3661307728
+CRC: 2491269387
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: bc12d6908dcf3ef906005da2426ea198
+    Hash: 48e75cbe0a4e7da770a25f373470ab86
   TypeTreeHash:
     serializedVersion: 2
     Hash: 8e5d6366ca6cbc4587e122cb742ad983
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: bc12d6908dcf3ef906005da2426ea198
+    Hash: 48e75cbe0a4e7da770a25f373470ab86
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -42,22 +42,47 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: Sirenix.Serialization
   ClassName: Sirenix.Serialization.SerializationData
 Assets:
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Texture2D/Yellow.png
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Triangle_20.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Texture2D/Blue.png
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Pillar_Base_100.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Furniture_CeilingLamp.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/TestMat/Green.mat
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/TestMat/Orange.mat
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Door_Base_20.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Pillar_Base_200.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Triangle_50.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Beam_Base_200.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Texture2D/Purple.png
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Beam_Base_100.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/TestMat/Red.mat
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Furniture_Chair.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Window_Base_20.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Roof_Base_400.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Wall_Base_200.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Base_20.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Roof_Triangle_400.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/TestMat/Blue.mat
-- Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Floor_Base_20.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Quagrant_20.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/TestMat/Purple.mat
-- Assets/_ML/MLResources/BuildingSystem/MatPackage/Texture2D/Orange.png
-- Assets/_ML/MLResources/BuildingSystem/MatPackage/Texture2D/Yellow.png
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Roof_Triangle_200.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Wall_Base_100.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Foundation_Quagrant_50.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_FoundationEdge_Base_75.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Quagrant_50.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Roof_Triangle_100.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Texture2D/Green.png
-- Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Foundation_Triangle_20.asset
-- Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Foundation_Base_50.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Texture2D/Orange.png
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Roof_Base_200.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Foundation_Quagrant_20.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Foundation_Base_50.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Roof_Base_100.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Foundation_Triangle_20.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Base_50.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Foundation_Triangle_50.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/TestMat/Yellow.mat
-- Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Floor_Base_50.asset
-- Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Foundation_Triangle_50.asset
-- Assets/_ML/MLResources/BuildingSystem/MatPackage/_Test_Room_Foundation_Base_20.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_FoundationEdge_Base_100.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Foundation_Base_20.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Texture2D/Red.png
-Dependencies: []
+Dependencies:
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart

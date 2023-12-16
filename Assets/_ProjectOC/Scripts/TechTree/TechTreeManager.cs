@@ -162,12 +162,6 @@ namespace ProjectOC.TechTree
 
         #region SaveAndLoadData
         #region Struct
-        [System.Serializable]
-        private struct TechPointArray
-        {
-            public TechPoint[] techPoints;
-        }
-
         /// <summary>
         /// 正在解锁中的科技点
         /// </summary>
@@ -182,12 +176,6 @@ namespace ProjectOC.TechTree
             /// 当前解析时间
             /// </summary>
             public float time;
-        }
-
-        [System.Serializable]
-        private struct UnlockingTechPointArray
-        {
-            public UnlockingTechPoint[] data;
         }
         #endregion
 
@@ -262,9 +250,9 @@ namespace ProjectOC.TechTree
 
                 var request = ab.LoadAssetAsync<TextAsset>(TableName);
                 yield return request;
-                TechPointArray datas = JsonConvert.DeserializeObject<TechPointArray>((request.asset as TextAsset).text);
+                TechPoint[] datas = JsonConvert.DeserializeObject<TechPoint[]>((request.asset as TextAsset).text);
                 
-                foreach (var data in datas.techPoints)
+                foreach (var data in datas)
                 {
                     this.registerTechPoints.Add(data.ID, data);
                 }
@@ -276,8 +264,8 @@ namespace ProjectOC.TechTree
             else
             {
                 string json = System.IO.File.ReadAllText(System.IO.Path.Combine(Application.persistentDataPath, SaveTPJsonDataPath));
-                TechPointArray datas = JsonConvert.DeserializeObject<TechPointArray>(json);
-                foreach (var data in datas.techPoints)
+                TechPoint[] datas = JsonConvert.DeserializeObject<TechPoint[]>(json);
+                foreach (var data in datas)
                 {
                     this.registerTechPoints.Add(data.ID, data);
                 }
@@ -288,9 +276,9 @@ namespace ProjectOC.TechTree
             if (System.IO.File.Exists(System.IO.Path.Combine(Application.persistentDataPath, SaveUnlockingTPJsonDataPath)))
             {
                 string json = System.IO.File.ReadAllText(System.IO.Path.Combine(Application.persistentDataPath, SaveUnlockingTPJsonDataPath));
-                UnlockingTechPointArray datas = JsonConvert.DeserializeObject<UnlockingTechPointArray>(json);
+                UnlockingTechPoint[] datas = JsonConvert.DeserializeObject<UnlockingTechPoint[]>(json);
 
-                foreach (var data in datas.data)
+                foreach (var data in datas)
                 {
                     this.UnlockingTechPointDict.Add(data.id, data);
                 }
@@ -341,8 +329,7 @@ namespace ProjectOC.TechTree
         {
             string path = System.IO.Path.Combine(Application.persistentDataPath, SaveTPJsonDataPath);
 
-            TechPointArray array = new TechPointArray();
-            array.techPoints = registerTechPoints.Values.ToArray();
+            TechPoint[] array = registerTechPoints.Values.ToArray();
             string json = JsonConvert.SerializeObject(array);
 
             WriteToFileAsync(path, json, SaveDataCTS);
@@ -353,8 +340,7 @@ namespace ProjectOC.TechTree
         {
             string path = System.IO.Path.Combine(Application.persistentDataPath, SaveUnlockingTPJsonDataPath);
 
-            UnlockingTechPointArray array = new UnlockingTechPointArray();
-            array.data = UnlockingTechPointDict.Values.ToArray();
+            UnlockingTechPoint[] array = UnlockingTechPointDict.Values.ToArray();
             string json = JsonConvert.SerializeObject(array);
             WriteToFileAsync(path, json, SaveUnlockingDataCTS);
         }

@@ -206,7 +206,7 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 var go = Instantiate<GameObject>(this.templateCategory.gameObject, this.categoryParent, false);
                 go.GetComponentInChildren<Image>().sprite = GetCategorySprite(category);
-                go.GetComponentInChildren<TextMeshProUGUI>().text = Test_BuildingManager.Instance.CategoryDict[category.ToString()].GetNameText();
+                go.GetComponentInChildren<TextMeshProUGUI>().text = Test_BuildingManager.Instance.CategoryDict[category.ToString()].GetDescription();
                 go.SetActive(true);
                 this.categoryInstance.Add(category, go.transform as RectTransform);
             }
@@ -237,7 +237,7 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 var go = Instantiate<GameObject>(this.templateType.gameObject, this.typeParent, false);
                 go.GetComponentInChildren<Image>().sprite = GetTypeSprite(type);
-                go.GetComponentInChildren<TextMeshProUGUI>().text = Test_BuildingManager.Instance.TypeDict[type.ToString()].GetNameText();
+                go.GetComponentInChildren<TextMeshProUGUI>().text = Test_BuildingManager.Instance.TypeDict[type.ToString()].GetDescription();
                 go.SetActive(true);
 
                 this.typeInstance.Add(type, go.transform as RectTransform);

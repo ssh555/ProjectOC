@@ -1,11 +1,16 @@
-{
-    "category" : [
-        {
-            "category" : "Room",
-            "name" : {
-                "Chinese" : "房屋",
-                "English" : "Room"
-            }
+[
+    {
+        "name": "Room",
+        "description": {
+            "Chinese": "房屋",
+            "English": "Room"
         }
-    ]
-}
+    },
+    {
+        "name": "Furniture",
+        "description": {
+            "Chinese": "家具",
+            "English": "Furniture"
+        }
+    }
+]

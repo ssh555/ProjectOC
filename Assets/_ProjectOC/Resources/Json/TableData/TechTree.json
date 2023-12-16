@@ -1,120 +1,118 @@
-{
-    "techPoints": [
-        {
-            "ID": "01",
-            "Name": {
-                "Chinese": "测试",
-                "English": "Test"
-            },
-            "Grid": [
-                0,
-                0
-            ],
-            "Category": 1,
-            "Icon": "test",
-            "Description": {
-                "Chinese": "测试",
-                "English": "Test"
-            },
-            "IsUnlocked": false,
-            "UnLockRecipe": [],
-            "UnLockBuild": [
-                "Room-Floor-Base-20",
-                "Room-Floor-Base-50"
-            ],
-            "PrePoint": [],
-            "ItemCost": [],
-            "TimeCost": 5
+[
+    {
+        "ID": "01",
+        "Name": {
+            "Chinese": "测试",
+            "English": "Test"
         },
-        {
-            "ID": "02",
-            "Name": {
-                "Chinese": "测试",
-                "English": "Test"
-            },
-            "Grid": [
-                0,
-                2
-            ],
-            "Category": 1,
-            "Icon": "test",
-            "Description": {
-                "Chinese": "测试",
-                "English": "Test"
-            },
-            "IsUnlocked": false,
-            "UnLockRecipe": [],
-            "UnLockBuild": [
-                "Room-Foundation-Base-20",
-                "Room-Foundation-Base-50",
-                "Room-Foundation-Triangle-20",
-                "Room-Foundation-Triangle-50"
-            ],
-            "PrePoint": [
-                "01"
-            ],
-            "ItemCost": [],
-            "TimeCost": 5
+        "Grid": [
+            0,
+            0
+        ],
+        "Category": 1,
+        "Icon": "test",
+        "Description": {
+            "Chinese": "测试",
+            "English": "Test"
         },
-        {
-            "ID": "03",
-            "Name": {
-                "Chinese": "测试",
-                "English": "Test"
-            },
-            "Grid": [
-                2,
-                0
-            ],
-            "Category": 1,
-            "Icon": "test",
-            "Description": {
-                "Chinese": "测试",
-                "English": "Test"
-            },
-            "IsUnlocked": false,
-            "UnLockRecipe": [],
-            "UnLockBuild": [
-                "Room-Foundation-Base-20",
-                "Room-Foundation-Base-50",
-                "Room-Foundation-Triangle-20",
-                "Room-Foundation-Triangle-50"
-            ],
-            "PrePoint": [
-                "01"
-            ],
-            "ItemCost": [],
-            "TimeCost": 5
+        "IsUnlocked": false,
+        "UnLockRecipe": [],
+        "UnLockBuild": [
+            "Room-Floor-Base-20",
+            "Room-Floor-Base-50"
+        ],
+        "PrePoint": [],
+        "ItemCost": [],
+        "TimeCost": 5
+    },
+    {
+        "ID": "02",
+        "Name": {
+            "Chinese": "测试",
+            "English": "Test"
         },
-        {
-            "ID": "04",
-            "Name": {
-                "Chinese": "测试",
-                "English": "Test"
-            },
-            "Grid": [
-                1,
-                2
-            ],
-            "Category": 1,
-            "Icon": "test",
-            "Description": {
-                "Chinese": "测试",
-                "English": "Test"
-            },
-            "IsUnlocked": false,
-            "UnLockRecipe": [],
-            "UnLockBuild": [
-                "Room-Foundation-Base-20",
-                "Room-Foundation-Base-50",
-                "Room-Foundation-Triangle-20",
-                "Room-Foundation-Triangle-50"
-            ],
-            "PrePoint": [
-                "01"
-            ],
-            "ItemCost": [],
-            "TimeCost": 5
-        }
-    ]
-}
+        "Grid": [
+            0,
+            2
+        ],
+        "Category": 1,
+        "Icon": "test",
+        "Description": {
+            "Chinese": "测试",
+            "English": "Test"
+        },
+        "IsUnlocked": false,
+        "UnLockRecipe": [],
+        "UnLockBuild": [
+            "Room-Foundation-Base-20",
+            "Room-Foundation-Base-50",
+            "Room-Foundation-Triangle-20",
+            "Room-Foundation-Triangle-50"
+        ],
+        "PrePoint": [
+            "01"
+        ],
+        "ItemCost": [],
+        "TimeCost": 5
+    },
+    {
+        "ID": "03",
+        "Name": {
+            "Chinese": "测试",
+            "English": "Test"
+        },
+        "Grid": [
+            2,
+            0
+        ],
+        "Category": 1,
+        "Icon": "test",
+        "Description": {
+            "Chinese": "测试",
+            "English": "Test"
+        },
+        "IsUnlocked": false,
+        "UnLockRecipe": [],
+        "UnLockBuild": [
+            "Room-Foundation-Base-20",
+            "Room-Foundation-Base-50",
+            "Room-Foundation-Triangle-20",
+            "Room-Foundation-Triangle-50"
+        ],
+        "PrePoint": [
+            "01"
+        ],
+        "ItemCost": [],
+        "TimeCost": 5
+    },
+    {
+        "ID": "04",
+        "Name": {
+            "Chinese": "测试",
+            "English": "Test"
+        },
+        "Grid": [
+            1,
+            2
+        ],
+        "Category": 1,
+        "Icon": "test",
+        "Description": {
+            "Chinese": "测试",
+            "English": "Test"
+        },
+        "IsUnlocked": false,
+        "UnLockRecipe": [],
+        "UnLockBuild": [
+            "Room-Foundation-Base-20",
+            "Room-Foundation-Base-50",
+            "Room-Foundation-Triangle-20",
+            "Room-Foundation-Triangle-50"
+        ],
+        "PrePoint": [
+            "01"
+        ],
+        "ItemCost": [],
+        "TimeCost": 5
+    }
+]

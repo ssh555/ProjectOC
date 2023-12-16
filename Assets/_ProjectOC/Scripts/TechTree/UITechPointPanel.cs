@@ -66,7 +66,7 @@ namespace ProjectOC.TechTree.UI
                 var grid = TechTreeManager.Instance.GetTPGrid(id);
                 TechPointList[grid[0] * GridRange.y + grid[1]] = id;
             }
-            int[] g = TechTreeManager.Instance.GetTPGrid(TechPointList.First(id => id != ""));
+            int[] g = TechTreeManager.Instance.GetTPGrid(TechPointList.First(id => (id != null && id != "")));
             CurrentGrid = new Vector2Int(g[0], g[0]);
         }
 
@@ -316,15 +316,15 @@ namespace ProjectOC.TechTree.UI
                         var timer = TechTreeManager.Instance.UnlockingTPTimers[id];
                         timer.OnUpdateEvent += (time) =>
                         {
-                            mask.fillAmount = (float)(1 - timer.GetPercent());
-
-                            if(timer.IsTimeUp)
+                            mask.fillAmount = (float)(1 - timer.CurrentTime / TechTreeManager.Instance.GetTPTimeCost(id));
+                            
+                            if (timer.IsTimeUp)
                             {
                                 timer.OnUpdateEvent = null;
                                 Refresh();
                             }
                         };
-                        mask.fillAmount = (float)(1 - timer.GetPercent());
+                        mask.fillAmount = (float)(1 - timer.CurrentTime / TechTreeManager.Instance.GetTPTimeCost(id));
                         tempTimer.Add(timer);
                     }
                     // Select
