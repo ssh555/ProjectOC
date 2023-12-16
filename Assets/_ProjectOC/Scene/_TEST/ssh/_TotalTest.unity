@@ -620,6 +620,7 @@ MonoBehaviour:
   platform: 0
   inputDevice: 0
   area: {fileID: 883728750}
+  IsEnableArea: 1
 --- !u!4 &925970735
 Transform:
   m_ObjectHideFlags: 0
