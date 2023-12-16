@@ -115,6 +115,7 @@ namespace ML.Engine.BuildingSystem
         /// to-do : to-delete
         /// </summary>
         public BuildingArea.BuildingArea area;
+        public bool IsEnableArea = true;
 
         public T GetPanel<T>() where T : UIBasePanel
         {
@@ -257,7 +258,10 @@ namespace ML.Engine.BuildingSystem
             {
                 ProjectOC.Input.InputManager.PlayerInput.Player.Crouch.Disable();
                 ProjectOC.Input.InputManager.PlayerInput.Player.Jump.Disable();
-                area.gameObject.SetActive(true);
+
+                // to-delete
+                area.gameObject.SetActive(IsEnableArea);
+
                 this.PushPanel<UI.BSInteractModePanel>();
             };
             BM.Placer.OnBuildingModeExit += () =>

@@ -143,6 +143,10 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         public void AlternativeActiveSocket()
         {
             this.activeSocketIndex = (this.activeSocketIndex + 1) % this.OwnedSocketList.Count;
+            while(this.ActiveSocket.Type == BuildingSocket.BuildingSocketType.None)
+            {
+                this.activeSocketIndex = (this.activeSocketIndex + 1) % this.OwnedSocketList.Count;
+            }
         }
 
         public BuildingCopiedMaterial GetCopiedMaterial()
