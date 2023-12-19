@@ -11,6 +11,8 @@ using System.Linq;
 using UnityEngine.Purchasing;
 using ML.Engine.InventorySystem;
 using ML.Engine.Timer;
+using ML.Engine.InventorySystem.CompositeSystem;
+using BehaviorDesigner.Runtime.Tasks.Movement;
 
 namespace ProjectOC.TechTree.UI
 {
@@ -43,6 +45,7 @@ namespace ProjectOC.TechTree.UI
                 return TechPointList[CurrentGrid.x * GridRange.y + CurrentGrid.y];
             }
         }
+
 
         public int tickPriority { get; set; }
         public int fixedTickPriority { get; set; }
@@ -88,6 +91,10 @@ namespace ProjectOC.TechTree.UI
         #endregion
 
         public Inventory inventory;
+        /// <summary>
+        /// 是否满足破译当前节点的条件
+        /// </summary>
+        private bool CanDecipher => TechTreeManager.Instance.CanUnlockTechPoint(inventory, CurrentID);
 
         private TextMeshProUGUI topTitle;
 
@@ -101,7 +108,72 @@ namespace ProjectOC.TechTree.UI
         public Transform TechPointTemplate;
         #endregion
 
+        #region TechPointPanel
+        private Image TPIcon;
 
+        private TextMeshProUGUI TPName;
+
+        private TextMeshProUGUI TPDescription;
+
+        /// <summary>
+        /// 可破译项不同语言的提示
+        /// </summary>
+        private TextMeshProUGUI TPDecipherTip;
+
+        private UIKeyTip TPKTInspector;
+
+        /// <summary>
+        /// 破译后可以解锁项的UI模板
+        /// </summary>
+        private Transform TPUnlockTemplate;
+
+        /// <summary>
+        /// TP节点处于未解锁状态
+        /// </summary>
+        private Transform TPLockedState;
+
+        /// <summary>
+        /// 破译按键提示
+        /// </summary>
+        private UIKeyTip TPKT_Decipher;
+
+        /// <summary>
+        /// 破译的时间消耗
+        /// </summary>
+        private TextMeshProUGUI TPTimeCost;
+
+        /// <summary>
+        /// 破译消耗Item的UI模板
+        /// </summary>
+        private Transform TPItemCostTemplate;
+
+        /// <summary>
+        /// TP节点处于解锁状态
+        /// </summary>
+        private Transform TPUnlockedState;
+
+        /// <summary>
+        /// TP节点处于正在解锁(破译)状态
+        /// </summary>
+        private Transform TPUnlockingState;
+
+        /// <summary>
+        /// 正在破译的倒计时Text
+        /// </summary>
+        private TextMeshProUGUI TPUnlockingTimeCost;
+
+        /// <summary>
+        /// 正在破译的倒计时进度条
+        /// </summary>
+        private Slider TPUnlockingProgressBar;
+
+        #endregion
+
+        #region BotPanel
+        private UIKeyTip KT_Back;
+        #endregion
+
+        #region Unity
         private void Awake()
         {
 
@@ -130,6 +202,48 @@ namespace ProjectOC.TechTree.UI
 
             this.TechPointTemplate.gameObject.SetActive(false);
             #endregion
+
+            #region TechPointPanel
+            ContentPanel = this.transform.Find("ContentPanel").Find("TechPointPanel").Find("Viewport").Find("Content");
+
+            this.TPIcon = ContentPanel.Find("Icon").GetComponent<Image>();
+            this.TPName = ContentPanel.Find("Name").GetComponent<TextMeshProUGUI>();
+            this.TPDescription = ContentPanel.Find("Description").GetComponent<TextMeshProUGUI>();
+
+            this.TPDecipherTip = ContentPanel.Find("TitleTip").Find("TipText").GetComponent<TextMeshProUGUI>();
+            this.TPKTInspector = new UIKeyTip();
+            this.TPKTInspector.img = ContentPanel.Find("TitleTip").Find("KT_Inspect").Find("Image").GetComponent<Image>();
+            this.TPKTInspector.keytip = this.TPKTInspector.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
+            this.TPKTInspector.description = this.TPKTInspector.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
+
+            this.TPUnlockTemplate = ContentPanel.Find("UnlockIDList").Find("Viewport").Find("Content").Find("UnlockTemplate");
+            this.TPUnlockTemplate.gameObject.SetActive(false);
+
+            this.TPLockedState = ContentPanel.Find("InformationInspector").Find("Locked");
+            this.TPKT_Decipher = new UIKeyTip();
+            this.TPKT_Decipher.img = this.TPLockedState.Find("Viewport").Find("Content").Find("KT_Decipher").Find("Image").GetComponent<Image>();
+            this.TPKT_Decipher.keytip = this.TPKT_Decipher.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
+            this.TPKT_Decipher.description = this.TPKT_Decipher.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
+            this.TPTimeCost = this.TPLockedState.Find("Viewport").Find("Content").Find("TimeCost").GetComponent<TextMeshProUGUI>();
+            this.TPItemCostTemplate = this.TPLockedState.Find("Viewport").Find("Content").Find("ItemCostTemplate");
+            this.TPItemCostTemplate.gameObject.SetActive(false);
+
+            this.TPUnlockedState = ContentPanel.Find("InformationInspector").Find("Unlocked");
+            this.TPUnlockedState.gameObject.SetActive(false);
+
+            this.TPUnlockingState = ContentPanel.Find("InformationInspector").Find("Unlocking");
+            this.TPUnlockingTimeCost = this.TPUnlockingState.Find("DownTimer").Find("Time").GetComponent<TextMeshProUGUI>();
+            this.TPUnlockingProgressBar = this.TPUnlockingState.Find("ProgressBar").GetComponent<Slider>();
+            this.TPUnlockingState.gameObject.SetActive(false);
+            #endregion
+
+            #region BackPanel
+            ContentPanel = this.transform.Find("ContentPanel").Find("BotPanel").Find("KT_Back");
+            this.KT_Back = new UIKeyTip();
+            this.KT_Back.img = ContentPanel.Find("Image").GetComponent<Image>();
+            this.KT_Back.keytip = this.KT_Back.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
+            this.KT_Back.description = this.KT_Back.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
+            #endregion
         }
 
         private void Start()
@@ -138,6 +252,14 @@ namespace ProjectOC.TechTree.UI
             this.enabled = false;
         }
 
+        private void OnDestroy()
+        {
+            ClearTemp();
+
+        }
+        #endregion
+
+        #region Override
         /// <summary>
         /// 按键输入
         /// </summary>
@@ -174,14 +296,6 @@ namespace ProjectOC.TechTree.UI
             }
         }
 
-        private void Decipher()
-        {
-            //if(TechTreeManager.Instance.CanUnlockTechPoint)
-            //Debug.Log(TechTreeManager.Instance.UnlockTechPoint(inventory, CurrentID));
-            Refresh();
-        }
-
-
         public override void OnEnter()
         {
             InitStaticData();
@@ -212,6 +326,18 @@ namespace ProjectOC.TechTree.UI
             base.OnExit();
             ProjectOC.Input.InputManager.PlayerInput.Enable();
             ProjectOC.Input.InputManager.TechTreeInput.Disable();
+        }
+        #endregion
+
+        #region Internal
+
+        private void Decipher()
+        {
+            if (this.CanDecipher)
+            {
+                TechTreeManager.Instance.UnlockTechPoint(inventory, CurrentID, false);
+                Refresh();
+            }
         }
 
         private List<GameObject> tempGO = new List<GameObject>();
@@ -316,7 +442,7 @@ namespace ProjectOC.TechTree.UI
                         var timer = TechTreeManager.Instance.UnlockingTPTimers[id];
                         timer.OnUpdateEvent += (time) =>
                         {
-                            mask.fillAmount = (float)(1 - timer.CurrentTime / TechTreeManager.Instance.GetTPTimeCost(id));
+                            mask.fillAmount = (float)(timer.CurrentTime / TechTreeManager.Instance.GetTPTimeCost(id));
                             
                             if (timer.IsTimeUp)
                             {
@@ -324,7 +450,7 @@ namespace ProjectOC.TechTree.UI
                                 Refresh();
                             }
                         };
-                        mask.fillAmount = (float)(1 - timer.CurrentTime / TechTreeManager.Instance.GetTPTimeCost(id));
+                        mask.fillAmount = (float)(timer.CurrentTime / TechTreeManager.Instance.GetTPTimeCost(id));
                         tempTimer.Add(timer);
                     }
                     // Select
@@ -369,15 +495,130 @@ namespace ProjectOC.TechTree.UI
             }
             #endregion
 
+            #region TechPointPanel
+            // 0 : Locked | 1 : Unlocked | 2 : Unlocking
+            int tpStatus = TechTreeManager.Instance.IsUnlockedTP(CurrentID) ? 1 : (TechTreeManager.Instance.UnlockingTPTimers.ContainsKey(CurrentID) ? 2 : 0);
 
+            var TM = TechTreeManager.Instance;
 
-        }
+            // Icon
+            var s = TM.GetTPSprite(CurrentID);
+            tempSprite.Add(s);
+            this.TPIcon.sprite = s;
 
+            // Name
+            this.TPName.text = TM.GetTPName(CurrentID);
 
-        private void OnDestroy()
-        {
-            ClearTemp();
+            // Description
+            this.TPDescription.text = TM.GetTPDescription(CurrentID);
 
+            // DecipherTip
+            this.TPDecipherTip.text = tpStatus == 1 ? TM.TPPanelTextContent.unlockedtitletip.GetText() : TM.TPPanelTextContent.lockedtitletip.GetText();
+
+            // KTInspector
+            TPKTInspector.ReWrite(TM.TPPanelTextContent.inspector);
+
+            // 可解锁项
+            foreach(var id in TM.GetTPCanUnlockedID(CurrentID))
+            {
+                var unlock = Instantiate(TPUnlockTemplate.gameObject, TPUnlockTemplate.parent, false);
+                unlock.SetActive(true);
+
+                // Image
+                s = CompositeSystem.Instance.GetCompositonSprite(id);
+                tempSprite.Add(s);
+                unlock.GetComponentInChildren<Image>().sprite = s;
+
+                // Text
+                unlock.GetComponentInChildren<TextMeshProUGUI>().text = CompositeSystem.Instance.GetCompositonName(id);
+
+                this.tempGO.Add(unlock);
+            }
+            
+            // 面板状态
+            // 未解锁
+            if(tpStatus == 0)
+            {
+                this.TPLockedState.gameObject.SetActive(true);
+                this.TPUnlockedState.gameObject.SetActive(false);
+                this.TPUnlockingState.gameObject.SetActive(false);
+
+                // 破译按键提示
+                this.TPKT_Decipher.ReWrite(TM.TPPanelTextContent.decipher);
+
+                // 是否可以破译
+                // to-do : UI
+                bool canDecipher = CanDecipher;
+                this.TPKT_Decipher.img.transform.parent.Find("CanDecipherImg").GetComponent<Image>().color = canDecipher ? new Color32(77, 233, 16, 255) : Color.gray;
+                this.TPKT_Decipher.img.transform.parent.Find("Mask").GetComponent<Image>().gameObject.SetActive(!canDecipher);
+
+                // 时间消耗
+                this.TPTimeCost.text = "时间: " + TM.GetTPTimeCost(CurrentID).ToString() + "s";
+
+                // Item 消耗
+                foreach(var f in TM.GetTPItemCost(CurrentID))
+                {
+                    var item = Instantiate(TPItemCostTemplate.gameObject, TPItemCostTemplate.parent, false);
+                    item.SetActive(true);
+
+                    // Image
+                    s = ItemSpawner.Instance.GetItemSprite(f.id);
+                    tempSprite.Add(s);
+                    item.transform.Find("Image").GetComponent<Image>().sprite = s;
+
+                    // Num
+                    item.transform.Find("Image").Find("Num").GetComponent<TextMeshProUGUI>().text = f.num.ToString();
+
+                    // Name
+                    item.transform.Find("Name").GetComponent<TextMeshProUGUI>().text = ItemSpawner.Instance.GetItemName(f.id);
+
+                    this.tempGO.Add(item);
+
+                }
+            }
+            // 已解锁
+            else if(tpStatus == 1)
+            {
+                this.TPLockedState.gameObject.SetActive(false);
+                this.TPUnlockedState.gameObject.SetActive(true);
+                this.TPUnlockingState.gameObject.SetActive(false);
+            }
+            // 正在解锁
+            else if(tpStatus == 2)
+            {
+                this.TPLockedState.gameObject.SetActive(false);
+                this.TPUnlockedState.gameObject.SetActive(false);
+                this.TPUnlockingState.gameObject.SetActive(true);
+
+                var timer = TechTreeManager.Instance.UnlockingTPTimers[CurrentID];
+
+                // 正在破译倒计时Text
+                this.TPUnlockingTimeCost.text = timer.CurrentTime.ToString("0.00");
+                // 正在破译倒计时进度条
+                this.TPUnlockingProgressBar.value = (float)timer.CurrentTime / TM.GetTPTimeCost(CurrentID);
+
+                timer.OnUpdateEvent += (time) =>
+                {
+                    // 正在破译倒计时Text
+                    this.TPUnlockingTimeCost.text = timer.CurrentTime.ToString("0.00");
+                    // 正在破译倒计时进度条
+                    this.TPUnlockingProgressBar.value = (float)timer.CurrentTime / TM.GetTPTimeCost(CurrentID);
+
+                    // 不需要刷新。因为 TechTree 加入的里面已经带有刷新
+                    //if (timer.IsTimeUp)
+                    //{
+                    //    timer.OnUpdateEvent = null;
+                    //    Refresh();
+                    //}
+                };
+                // 不需要加入，因为前面 TechTree 时已经加入了
+                //tempTimer.Add(timer);
+            }
+            #endregion
+
+            #region BotPanel
+            this.KT_Back.ReWrite(TM.TPPanelTextContent.back);
+            #endregion
         }
 
 
@@ -398,6 +639,8 @@ namespace ProjectOC.TechTree.UI
         {
             obj.GetComponentInChildren<Image>().color = Color.white;
         }
+        #endregion
+
         #endregion
     }
 

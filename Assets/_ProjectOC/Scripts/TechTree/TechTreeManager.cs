@@ -254,6 +254,9 @@ namespace ProjectOC.TechTree
                 
                 foreach (var data in datas)
                 {
+                    //// 读取合成表数据
+                    //data.ItemCost = CompositeSystem.Instance.GetCompositonFomula(data.ID);
+
                     this.registerTechPoints.Add(data.ID, data);
                 }
 
@@ -267,6 +270,9 @@ namespace ProjectOC.TechTree
                 TechPoint[] datas = JsonConvert.DeserializeObject<TechPoint[]>(json);
                 foreach (var data in datas)
                 {
+                    //// 读取合成表数据
+                    //data.ItemCost = CompositeSystem.Instance.GetCompositonFomula(data.ID);
+
                     this.registerTechPoints.Add(data.ID, data);
                 }
             }
@@ -428,9 +434,9 @@ namespace ProjectOC.TechTree
         /// </summary>
         /// <param name="ID"></param>
         /// <returns></returns>
-        public bool UnlockTechPoint(Inventory inventory, string ID)
+        public bool UnlockTechPoint(Inventory inventory, string ID, bool IsCheck = true)
         {
-            if(!CanUnlockTechPoint(inventory, ID))
+            if(IsCheck && !CanUnlockTechPoint(inventory, ID))
             {
                 return false;
             }
@@ -490,6 +496,7 @@ namespace ProjectOC.TechTree
             public KeyTip inspector;
             public TextContent timecosttip;
             public KeyTip decipher;
+            public KeyTip back;
         }
 
         private IEnumerator InitUITextContents()

@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3516576467
+CRC: 2390739164
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c3b13b4177ff9e1d937cf45e2d4fd4f5
+    Hash: 279f624b664cd0d9c589e14fdb7af275
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2d8df09e698f722ada1caa03d3413830
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: c3b13b4177ff9e1d937cf45e2d4fd4f5
+    Hash: 279f624b664cd0d9c589e14fdb7af275
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -19,7 +19,7 @@ ClassTypes:
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/_ProjectOC/Resources/UI/TechPoint/Texture2D/DownTimer.png
-- Assets/_ProjectOC/Resources/UI/TechPoint/Texture2D/Test.png
+- Assets/_ProjectOC/Resources/UI/TechPoint/Texture2D/test.png
 - Assets/_ProjectOC/Resources/UI/TechPoint/Texture2D/Selected.png
 - Assets/_ProjectOC/Resources/UI/TechPoint/Category/None.png
 - Assets/_ProjectOC/Resources/UI/TechPoint/Texture2D/Mask.png
