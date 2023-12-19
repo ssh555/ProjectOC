@@ -194,7 +194,7 @@ namespace ML.Engine.InventorySystem
         public struct ItemTabelJsonData
         {
             public string id;
-            public string name;
+            public TextContent.TextContent name;
             public string type;
             public bool bcanstack;
             public int maxamount;

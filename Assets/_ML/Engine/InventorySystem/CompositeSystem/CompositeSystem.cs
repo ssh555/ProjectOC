@@ -56,6 +56,11 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             public string id;
 
             /// <summary>
+            /// 合成物名称
+            /// </summary>
+            public TextContent.TextContent name;
+
+            /// <summary>
             /// 标签分级
             /// 1级|2级|3级
             /// </summary>
@@ -262,6 +267,13 @@ namespace ML.Engine.InventorySystem.CompositeSystem
                 return null;
             }
             return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+        }
+
+        public string GetCompositonName(string id)
+        {
+            if (!this.CompositeData.ContainsKey(id))
+                return null;
+            return this.CompositeData[id].name;
         }
 
         public Formula[] GetCompositonFomula(string id)

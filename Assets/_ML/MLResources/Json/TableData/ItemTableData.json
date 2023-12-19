@@ -1,7 +1,10 @@
 [
     {
         "id": "100001",
-        "name": "Item",
+        "name": {
+            "Chinese": "测试",
+            "English": "TEST"
+          },
         "type": "ResourceItem",
         "bcanstack": false,
         "maxamount": 1,
