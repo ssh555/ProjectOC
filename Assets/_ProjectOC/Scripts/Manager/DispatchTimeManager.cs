@@ -1,4 +1,3 @@
-using ML.Engine.Manager.LocalManager;
 using ML.Engine.Timer;
 using System;
 using System.Collections;
@@ -12,11 +11,14 @@ namespace ProjectOC.ManagerNS
     /// 调度的时间管理器
     /// </summary>
     [System.Serializable]
-    public sealed class DispatchTimeManager : ILocalManager
+    public sealed class DispatchTimeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
+        /// <summary>
+        /// 时间流速比例，游戏timeScale s等于现实1h
+        /// </summary>
         private float timeScale = 60;
         /// <summary>
-        /// 时间流速比例，游戏1h等于现实timeScale s
+        /// 时间流速比例，游戏timeScale s等于现实1h
         /// </summary>
         public float TimeScale 
         { 

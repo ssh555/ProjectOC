@@ -4,7 +4,6 @@ namespace ProjectOC.WorkerNS
     public class TimeArrangement
     {
         private TimeStatus[] Status = new TimeStatus[24];
-
         public TimeStatus this[int index]
         {
             get

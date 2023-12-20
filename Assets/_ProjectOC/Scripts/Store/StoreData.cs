@@ -3,6 +3,7 @@ namespace ProjectOC.StoreNS
     /// <summary>
     /// 仓库里面每个存储格子的数据
     /// </summary>
+    [System.Serializable]
     public class StoreData
     {
         /// <summary>
@@ -10,26 +11,32 @@ namespace ProjectOC.StoreNS
         /// 只有当此容器存储量为0时，才能更改ItemID
         /// </summary>
         public string ItemID;
-        //public int StorageCapacityAll { get { return StorageCapacity + StorageCapacityReserve; } }
-        //public int EmptyCapacityAll { get { return EmptyCapacity + EmptyCapacityReserved; } }
+        public int StorageAll { get { return Storage + StorageReserved; } }
         /// <summary>
         /// 实际存放量
         /// </summary>
-        public int StorageCapacity;
+        public int Storage;
         /// <summary>
         /// 预留存放量
         /// 任务占用的取出量，仅搬运Worker可取出将其变为PlayerEmptyCapacity
         /// </summary>
-        public int StorageCapacityReserved;
+        public int StorageReserved;
         /// <summary>
         /// 实际空余量
         /// </summary>
-        public int EmptyCapacity;
+        public int Empty 
+        { 
+            get
+            {
+                int emptyCapacity = MaxCapacity - StorageAll - EmptyReserved;
+                return emptyCapacity > 0 ? emptyCapacity : 0;
+            } 
+        }
         /// <summary>
         /// 预留空余量
         /// 任务占用的存放量，仅搬运Worker可存入将其变为PlayerStoreCapacity
         /// </summary>
-        public int EmptyCapacityReserved;
+        public int EmptyReserved;
         /// <summary>
         /// 最大容量
         /// 由仓库的Level控制
@@ -37,30 +44,26 @@ namespace ProjectOC.StoreNS
         public int MaxCapacity;
         public StoreData()
         {
-            this.ItemID = "-1";
+            this.ItemID = "";
             this.MaxCapacity = 0;
-            this.StorageCapacity = 0;
-            this.StorageCapacityReserved = 0;
-            this.EmptyCapacity = 0;
-            this.EmptyCapacityReserved = 0;
+            this.Storage = 0;
+            this.StorageReserved = 0;
+            this.EmptyReserved = 0;
         }
         public StoreData(string itemID, int maxCapacity)
         {
             this.ItemID = itemID;
             this.MaxCapacity = maxCapacity;
-            this.StorageCapacity = 0;
-            this.StorageCapacityReserved = 0;
-            this.EmptyCapacity = maxCapacity;
-            this.EmptyCapacityReserved = 0;
+            this.Storage = 0;
+            this.StorageReserved = 0;
+            this.EmptyReserved = 0;
         }
-        public StoreData(string itemID, int playerStoreCapacity, int reserveStorageCapacity, 
-            int playerEmptyCapacity, int reservedEmptyCapacity, int maxCapacity)
+        public StoreData(string itemID, int storage, int storageReserved, int emptyReserved, int maxCapacity)
         {
             this.ItemID = itemID;
-            this.StorageCapacity = playerStoreCapacity;
-            this.StorageCapacityReserved = reserveStorageCapacity;
-            this.EmptyCapacity = playerEmptyCapacity;
-            this.EmptyCapacityReserved = reservedEmptyCapacity;
+            this.Storage = storage;
+            this.StorageReserved = storageReserved;
+            this.EmptyReserved = emptyReserved;
             this.MaxCapacity = maxCapacity;
         }
     }

@@ -1,11 +1,10 @@
 using ML.Engine.Manager;
 using ML.Engine.Timer;
-using ProjectOC.ItemNS;
+using ML.Engine.InventorySystem;
 using ProjectOC.MissionNS;
 using ProjectOC.WorkerNS;
-using System;
 using System.Collections.Generic;
-using UnityEngine;
+using System;
 
 namespace ProjectOC.ProductionNodeNS
 {
@@ -13,10 +12,10 @@ namespace ProjectOC.ProductionNodeNS
     /// 生产节点
     /// </summary>
     [System.Serializable]
-    public abstract class ProductionNode : MonoBehaviour, ITickComponent
+    public class ProductionNode
     {
         /// <summary>
-        /// 场景实例化ID，全局唯一
+        /// 建筑实例ID，全局唯一
         /// </summary>
         public string UID = "";
         /// <summary>
@@ -55,11 +54,34 @@ namespace ProjectOC.ProductionNodeNS
         /// <summary>
         /// 生产节点状态
         /// </summary>
-        public ProductionNodeState State;
+        public ProductionNodeState State{ 
+            get 
+            {
+                if (this.Recipe == null)
+                {
+                    return ProductionNodeState.Vacancy;
+                }
+                else
+                {
+                    if (this.timerForProduce != null && !this.timerForProduce.IsStoped)
+                    {
+                        return ProductionNodeState.Production;
+                    }
+                    else
+                    {
+                        return ProductionNodeState.Stagnation;
+                    }
+                }
+            } 
+        }
         /// <summary>
         /// 搬运优先级
         /// </summary>
         public PriorityTransport PriorityTransport;
+        /// <summary>
+        /// 已经分配的搬运任务
+        /// </summary>
+        public List<MissionTransport> MissionTransports = new List<MissionTransport>();
 
         /// <summary>
         /// 基础生产效率 单位%
@@ -117,7 +139,7 @@ namespace ProjectOC.ProductionNodeNS
         /// <summary>
         /// 当前堆积总值
         /// </summary>
-        public int StackNumCur { get { return StackNumAssign+ StackNumNoAssign; } }
+        public int StackNumCur { get { return StackNumReserve + StackNum; } }
         /// <summary>
         /// 堆放暂存上限
         /// </summary>
@@ -126,12 +148,12 @@ namespace ProjectOC.ProductionNodeNS
         /// 当前没有分配给任务的堆积值
         /// 玩家只能拿取此项，第一个进度条
         /// </summary>
-        public int StackNumNoAssign { get; protected set; }
+        public int StackNum { get; protected set; }
         /// <summary>
         /// 当前已分配给任务但尚未被搬运的堆积值
         /// Worker只能拿取此项，第二个进度条
         /// </summary>
-        public int StackNumAssign { get; protected set; }
+        public int StackNumReserve { get; protected set; }
         /// <summary>
         /// 堆积搬运阈值，未分配给任务的量达到此值，全部划分给任务，然后生成任务
         /// </summary>
@@ -186,17 +208,53 @@ namespace ProjectOC.ProductionNodeNS
                 return timerForMission;
             }
         }
+        public RecipeManager RecipeManager { get => RecipeManager.Instance; }
 
-        public int tickPriority { get; set; }
-        public int fixedTickPriority { get; set; }
-        public int lateTickPriority { get; set; }
-        public RecipeManager RecipeManager { get => GameManager.Instance.GetLocalManager<RecipeManager>(); }
-
-        public void InitProductionNode(string id)
+        public void Init(ProductionNodeManager.ProductionNodeTableJsonData config)
         {
-            GameManager.Instance.TickManager.RegisterTick(tickPriority, this);
-            // TODO: 读表拿数据
-            this.ID = id;
+            this.ID = config.id;
+            this.Name = config.name;
+            this.Type = config.type;
+            this.Category = config.category;
+            this.RecipeCategoryFiltered = new List<ItemCategory>(config.recipeCategoryFiltered);
+            this.ExpType = config.expType;
+            this.LevelUpgradeRequire = new List<Dictionary<string, int>>();
+            foreach (var dict in config.levelUpgradeRequire)
+            {
+                this.LevelUpgradeRequire.Add(new Dictionary<string, int>(dict));
+            }
+            this.StackNumMax = config.stackNumMax;
+            this.StackCarryThreshold = config.stackCarryThreshold;
+            this.NeedQuantityThreshold = config.needQuantityThreshold;
+        }
+        public void Init(ProductionNode node)
+        {
+            this.UID = node.UID;
+            this.ID = node.ID;
+            this.Name = node.Name;
+            this.Type = node.Type;
+            this.Category = node.Category;
+            this.RecipeCategoryFiltered = new List<ItemCategory>(node.RecipeCategoryFiltered);
+            this.ExpType = node.ExpType;
+            this.Recipe = node.Recipe;
+            this.Worker = node.Worker;
+            this.PriorityTransport = node.PriorityTransport;
+            this.MissionTransports = new List<MissionTransport>(node.MissionTransports);
+            this.EffBase = node.EffBase;
+            this.Level = node.Level;
+            this.LevelMax = node.LevelMax;
+            this.LevelUpgradeRequire = new List<Dictionary<string, int>>();
+            foreach (var dict in node.LevelUpgradeRequire)
+            {
+                this.LevelUpgradeRequire.Add(new Dictionary<string, int>(dict));
+            }
+            this.LevelUpgradeEff = new List<int>(node.LevelUpgradeEff);
+            this.StackNumMax = node.StackNumMax;
+            this.StackNum = node.StackNum;
+            this.StackNumReserve = node.StackNumReserve;
+            this.StackCarryThreshold = node.StackCarryThreshold;
+            this.NeedQuantityThreshold = node.NeedQuantityThreshold;
+            this.RawItems = new Dictionary<string, int>(node.RawItems);
         }
 
         /// <summary>
@@ -219,12 +277,11 @@ namespace ProjectOC.ProductionNodeNS
         /// <returns>更改是否成功</returns>
         public bool ChangeRecipe(string recipeID)
         {
-            Recipe recipe = RecipeManager.CreateRecipe(recipeID);
+            Recipe recipe = RecipeManager.SpawnRecipe(recipeID);
             if (recipe != null)
             {
                 this.RemoveRecipe();
                 this.Recipe = recipe;
-                this.State = ProductionNodeState.Stagnation;
                 foreach (string itemID in this.Recipe.RawItems.Keys)
                 {
                     this.RawItems.Add(itemID, 0);
@@ -252,10 +309,47 @@ namespace ProjectOC.ProductionNodeNS
             }
             // 清空数据
             this.Recipe = null;
-            this.StackNumNoAssign = 0;
-            this.StackNumAssign = 0;
+            this.StackNum = 0;
+            this.StackNumReserve = 0;
             this.RawItems.Clear();
-            this.State = ProductionNodeState.Vacancy;
+        }
+        /// <summary>
+        /// 更改在岗刁民
+        /// </summary>
+        /// <param name="worker">新刁民</param>
+        /// <returns>更改是否成功</returns>
+        public bool ChangeWorker(Worker worker)
+        {
+            if (this.Type == ProductionNodeType.Mannul && worker != null)
+            {
+                this.RemoveWorker();
+                worker.DutyProductionNode = this;
+                worker.SetTimeStatusAll(TimeStatus.Work_OnDuty);
+                this.Worker = worker;
+                this.StartWorking();
+                return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// 移除在岗刁民
+        /// </summary>
+        /// <returns>是否成功</returns>
+        public bool RemoveWorker()
+        {
+            if (this.Type == ProductionNodeType.Mannul)
+            {
+                this.EndWorking();
+                if (this.Worker != null)
+                {
+                    this.Worker.SetTimeStatusAll(TimeStatus.Relax);
+                    this.Worker.IsOnDuty = false;
+                    this.Worker.DutyProductionNode = null;
+                    this.Worker = null;
+                }
+                return true;
+            }
+            return false;
         }
         /// <summary>
         /// 开始运行生产节点，这个时候并不一定开始制作物品
@@ -277,48 +371,10 @@ namespace ProjectOC.ProductionNodeNS
             this.EndWorking();
         }
         /// <summary>
-        /// 更改在岗刁民
-        /// </summary>
-        /// <param name="worker">新刁民</param>
-        /// <returns>更改是否成功</returns>
-        public bool ChangeWorker(Worker worker)
-        {
-            if (this.Type == ProductionNodeType.Mannul && worker != null)
-            {
-                this.RemoveWorker();
-                worker.Status = Status.Fishing;
-                worker.IsOnDuty = true;
-                worker.SetTimeStatusAll(TimeStatus.Work_OnDuty);
-                this.Worker = worker;
-                this.StartWorking();
-                return true;
-            }
-            return false;
-        }
-        /// <summary>
-        /// 移除在岗刁民
-        /// </summary>
-        /// <returns>是否成功</returns>
-        public bool RemoveWorker()
-        {
-            if (this.Type == ProductionNodeType.Mannul)
-            {
-                this.EndWorking();
-                if (this.Worker != null)
-                {
-                    this.Worker.Status = Status.Fishing;
-                    this.Worker.IsOnDuty = false;
-                    this.Worker.SetTimeStatusAll(TimeStatus.Relax);
-                    this.Worker = null;
-                }
-                return true;
-            }
-            return false;
-        }
-        /// <summary>
         /// 开始制作物品
+        /// TODO:刁民状态改变时调用该方法
         /// </summary>
-        public void StartWorking()
+        public bool StartWorking()
         {
             if (this.CanWorking())
             {
@@ -328,11 +384,11 @@ namespace ProjectOC.ProductionNodeNS
                 }
                 // 启动生产计时器
                 this.TimerForProduce.Reset(this.TimeCost);
-                if (this.Type == ProductionNodeType.Mannul)
-                {
-                    this.Worker.Status = Status.Working;
-                }
-                this.State = ProductionNodeState.Production;
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
         /// <summary>
@@ -340,28 +396,21 @@ namespace ProjectOC.ProductionNodeNS
         /// </summary>
         public void EndWorking()
         {
-            // 停止生产计时器
-            if (this.Recipe != null)
-            {
-                this.State = ProductionNodeState.Stagnation;
-            }
-            else
-            {
-                this.State = ProductionNodeState.Vacancy;
-            }
-            if (this.Type == ProductionNodeType.Mannul && this.Worker != null)
-            {
-                this.Worker.Status = Status.Fishing;
-            }
             if (this.timerForProduce != null)
             {
+                // 生产一半停止返回生产材料
+                if (!this.TimerForProduce.IsStoped)
+                {
+                    foreach (var kv in this.Recipe.RawItems)
+                    {
+                        this.RawItems[kv.Key] += kv.Value;
+                    }
+                }
                 this.TimerForProduce.End();
-                this.timerForProduce = null;
             }
         }
-
         /// <summary>
-        /// 是否可以开始生产
+        /// 是否可以开始制作物品
         /// </summary>
         /// <returns></returns>
         public bool CanWorking()
@@ -375,7 +424,7 @@ namespace ProjectOC.ProductionNodeNS
                         return false;
                     }
                 }
-                if (this.Type == ProductionNodeType.Mannul && this.Worker == null)
+                if (this.Type == ProductionNodeType.Mannul && (this.Worker == null || !this.Worker.IsOnDuty))
                 {
                     return false;
                 }
@@ -389,48 +438,6 @@ namespace ProjectOC.ProductionNodeNS
             {
                 return false;
             }
-        }
-        /// <summary>
-        /// 是否正在运行
-        /// </summary>
-        /// <returns></returns>
-        public bool IsWorking()
-        {
-            if (this.timerForProduce != null && !this.timerForProduce.IsStoped)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        /// <summary>
-        /// 原料是否充足
-        /// 没配方默认原料充足
-        /// </summary>
-        /// <returns></returns>
-        public bool IsRawItemsEnough()
-        {
-            if (this.Recipe != null)
-            {
-                foreach (var kv in this.Recipe.RawItems)
-                {
-                    if (kv.Value > this.RawItems[kv.Key])
-                    {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-        /// <summary>
-        /// 产出是否堆积满
-        /// </summary>
-        /// <returns></returns>
-        public bool IsStackMax()
-        {
-            return this.StackNumCur >= this.StackNumMax;
         }
 
         /// <summary>
@@ -484,44 +491,70 @@ namespace ProjectOC.ProductionNodeNS
             return false;
         }
 
+        /// <summary>
+        /// 搬运任务的管理
+        /// </summary>
         protected void EndActionForMission()
         {
-            // 只有有Recipe时才会让TimerForMission运行
+            int missionNum = 0;
+            WorldProductionNode worldNode = ProductionNodeManager.Instance.GetWorldProductionNode(this.UID);
             foreach (var kv in this.Recipe.RawItems)
             {
-                if (this.RawItems[kv.Key] < kv.Value * this.NeedQuantityThreshold)
+                missionNum = kv.Value * this.NeedQuantityThreshold - this.RawItems[kv.Key] - GetAssignNum(kv.Key);
+                if (missionNum > 0)
                 {
-                    // TODO:分发任务，从仓库搬运kv.Value * this.NeedQuantityThreshold - this.RawItems[kv.Key]份材料来
+                    // 从仓库搬运材料来
+                    List<MissionTransport> missions = GameManager.Instance.GetLocalManager<MissionBroadCastManager>()?.
+                        CreateRetrievalMission(kv.Key, missionNum, worldNode.gameObject.transform, this.UID);
+                    this.MissionTransports.AddRange(missions);
                 }
             }
-            if (this.StackNumAssign > 0)
+            missionNum = this.StackNumReserve - GetAssignNum(this.Recipe.ProductItem);
+            if (missionNum > 0)
             {
-                // TODO:分发任务，搬运StackNumNoAssignToMission份产出物品到仓库
+                // 搬运产出物品到仓库
+                MissionTransport mission = GameManager.Instance.GetLocalManager<MissionBroadCastManager>()?.
+                    CreateStoreageMission(this.Recipe.ProductItem, missionNum, worldNode.gameObject.transform, this.UID);
+                this.MissionTransports.Add(mission);
             }
         }
         protected void EndActionForProduce()
         {
             // 结算
-            if (this.CanWorking())
+            StackNum += 1;
+            if (StackNum >= StackCarryThreshold)
             {
-                StackNumNoAssign += 1;
-                if (StackNumNoAssign >= StackCarryThreshold)
-                {
-                    StackNumAssign += StackNumNoAssign;
-                    StackNumNoAssign = 0;
-                }
-                this.Worker.AlterExp(this.ExpType, this.Recipe.ExpRecipe * this.Worker.ExpRate[this.ExpType]);
-                this.Worker.AlterAP(this.Worker.APCost);
+                StackNumReserve += StackNum;
+                StackNum = 0;
             }
+            this.Worker.AlterExp(this.ExpType, this.Recipe.ExpRecipe * this.Worker.ExpRate[this.ExpType]);
+            this.Worker.AlterAP(-1 * this.Worker.APCost);
             // 下一次生产
-            if (this.CanWorking())
-            {
-                this.StartWorking();
-            }
-            else
+            if (!this.StartWorking())
             {
                 this.EndWorking();
             }
+        }
+        /// <summary>
+        /// 获取已经分配任务的物品数量
+        /// </summary>
+        /// <param name="itemID"></param>
+        /// <param name="isIn">true表示搬入，false表示搬出</param>
+        /// <returns></returns>
+        private int GetAssignNum(string itemID, bool isIn=true)
+        {
+            int result = 0;
+            foreach (MissionTransport mission in this.MissionTransports)
+            {
+                if (mission != null && mission.ItemID == itemID)
+                {
+                    if ((isIn && mission.TargetUID == this.UID) || (!isIn && mission.SourceUID == this.UID))
+                    {
+                        result += mission.MissionNum;
+                    }
+                }
+            }
+            return result;
         }
     }
 }

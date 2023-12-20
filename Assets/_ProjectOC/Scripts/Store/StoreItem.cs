@@ -3,6 +3,7 @@ namespace ProjectOC.StoreNS
     /// <summary>
     /// ≤÷ø‚ŒÔ∆∑
     /// </summary>
+    [System.Serializable]
     public struct StoreItem 
     {
         /// <summary>

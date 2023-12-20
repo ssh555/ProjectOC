@@ -49,9 +49,26 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         public float PreParamFloat;
 
-        public Effect(string id)
+        public void Init(EffectManager.EffectTableJsonData config)
         {
-            // TODO: 读表拿数据
+            this.ID = config.id;
+            this.Name = config.name;
+            this.Type = config.type;
+            this.ParamStr = config.paramStr;
+            this.ParamInt = config.paramInt;
+            this.ParamFloat = config.paramFloat;
+        }
+        public void Init(Effect effect)
+        {
+            this.ID = effect.ID;
+            this.Name = effect.Name;
+            this.Type = effect.Type;
+            this.ParamStr = effect.ParamStr;
+            this.ParamInt = effect.ParamInt;
+            this.ParamFloat = effect.ParamFloat;
+            this.PreParamStr = effect.PreParamStr;
+            this.PreParamInt = effect.PreParamInt;
+            this.PreParamFloat = effect.PreParamFloat;
         }
 
         public void ApplyEffectToWorker(Worker worker)
@@ -102,7 +119,10 @@ namespace ProjectOC.WorkerNS
                     break;
             }
         }
-
+        /// <summary>
+        /// TODO: 移除逻辑还需要和策划讨论
+        /// </summary>
+        /// <param name="worker"></param>
         public void RemoveEffectToWorker(Worker worker)
         {
             if (worker == null)

@@ -1,4 +1,4 @@
-namespace ProjectOC.ItemNS
+namespace ML.Engine.InventorySystem
 {
     /// <summary>
     /// 物品类目
@@ -27,3 +27,4 @@ namespace ProjectOC.ItemNS
         Mineral = 4
     }
 }
+

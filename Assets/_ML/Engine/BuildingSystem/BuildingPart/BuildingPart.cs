@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ML.Engine.BuildingSystem.BuildingPart
 {
-    public sealed class BuildingPart : MonoBehaviour, IBuildingPart, IComposition
+    public class BuildingPart : MonoBehaviour, IBuildingPart, IComposition
     {
         #region IBuildingPart
         public string ID { get => this.classification.ToString(); set => this.classification = new BuildingPartClassification(value); }

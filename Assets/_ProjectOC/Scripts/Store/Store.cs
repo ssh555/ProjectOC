@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ML.Engine.InventorySystem;
 using ProjectOC.MissionNS;
 using UnityEngine;
 
@@ -20,6 +21,7 @@ namespace ProjectOC.StoreNS
         /// ID
         /// </summary>
         public string ID;
+        public string Name;
         /// <summary>
         /// 仓库类型
         /// </summary>
@@ -35,7 +37,7 @@ namespace ProjectOC.StoreNS
         {
             get
             {
-                return this.LevelStoreCapacity[this.Level];
+                return this.LevelStoreCapacity[this.Level - 1];
             }
         }
         /// <summary>
@@ -45,13 +47,73 @@ namespace ProjectOC.StoreNS
         {
             get
             {
-                return this.LevelStoreDataCapacity[this.Level];
+                return this.LevelStoreDataCapacity[this.Level - 1];
             }
         }
+        private int level = 1;
         /// <summary>
         /// 仓库等级
         /// </summary>
-        public int Level = 1;
+        public int Level 
+        {
+            get { return level; }
+            set 
+            {
+                int newLevel = value;
+                if (newLevel >= 1 && newLevel<=LevelMax)
+                {
+                    int newStoreCapacity = LevelStoreCapacity[newLevel];
+                    int newStoreDataCapacity = LevelStoreDataCapacity[newLevel];
+                    List<StoreItem> temp = new List<StoreItem>();
+                    if (newStoreCapacity >= StoreCapacity)
+                    {
+                        for (int i=0; i<newStoreCapacity-StoreCapacity;i++)
+                        {
+                            this.StoreDatas.Add(new StoreData("", newStoreDataCapacity));
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i <  StoreCapacity - newStoreCapacity; i++)
+                        {
+                            StoreData storeData = this.StoreDatas[this.StoreDatas.Count - 1];
+                            if (ItemSpawner.Instance.IsValidItemID(storeData.ItemID) && storeData.StorageAll > 0)
+                            {
+                                temp.Add(new StoreItem(storeData.ItemID, storeData.StorageAll));
+                            }
+                            this.StoreDatas.RemoveAt(this.StoreDatas.Count - 1);
+                        }
+                    }
+                    if (newStoreDataCapacity >= StoreDataCapacity)
+                    {
+                        foreach (StoreData storeData in this.StoreDatas)
+                        {
+                            storeData.MaxCapacity = newStoreDataCapacity;
+                        }
+                    }
+                    else
+                    {
+                        foreach (StoreData storeData in this.StoreDatas)
+                        {
+                            int removeAmount = storeData.MaxCapacity - newStoreDataCapacity;
+                            if (storeData.Storage > removeAmount)
+                            {
+                                storeData.Storage -= removeAmount;
+                                temp.Add(new StoreItem(storeData.ItemID, removeAmount));
+                            }
+                            else
+                            {
+                                temp.Add(new StoreItem(storeData.ItemID, storeData.Storage));
+                                storeData.Storage = 0;
+                            }
+                            storeData.MaxCapacity = newStoreDataCapacity;
+                        }
+                    }
+                    // TODO:根据temp生成场景物体
+                    this.level = value;
+                }
+            } 
+        }
         /// <summary>
         /// 仓库最大等级
         /// </summary>
@@ -84,17 +146,14 @@ namespace ProjectOC.StoreNS
         {
             for (int i = 0; i < this.StoreCapacity; i++)
             {
-                this.StoreDatas.Add(new StoreData("-1", this.StoreDataCapacity));
+                this.StoreDatas.Add(new StoreData("", this.StoreDataCapacity));
             }
         }
-        public Store(string id)
+        public void Init(StoreManager.StoreTableJsonData config)
         {
-            this.ID = id;
-            // TODO:读表
-            for (int i = 0; i < this.StoreCapacity; i++)
-            {
-                this.StoreDatas.Add(new StoreData("-1", this.StoreDataCapacity));
-            }
+            this.ID = config.id;
+            this.Name = config.name;
+            this.Type = config.type;
         }
         /// <summary>
         /// 修改仓库存储的物品
@@ -107,7 +166,7 @@ namespace ProjectOC.StoreNS
             if (0 <= index && index < this.StoreCapacity)
             {
                 StoreData data = this.StoreDatas[index];
-                if (data.StorageCapacity == 0 && data.StorageCapacityReserved == 0)
+                if (data.Storage == 0 && data.StorageReserved == 0)
                 {
                     this.StoreDatas[index] = new StoreData(itemID, this.StoreDataCapacity);
                     return true;
@@ -127,24 +186,21 @@ namespace ProjectOC.StoreNS
             {
                 if (data.ItemID != "" && data.ItemID == item.ItemID)
                 {
-                    if (data.EmptyCapacity >= item.Amount)
+                    if (data.Empty >= item.Amount)
                     {
-                        data.EmptyCapacity -= item.Amount;
-                        data.StorageCapacity += item.Amount;
+                        data.Storage += item.Amount;
                         item.Amount = 0;
                         break;
                     }
                     else
                     {
-                        data.StorageCapacity += data.EmptyCapacity;
-                        item.Amount -= data.EmptyCapacity;
-                        data.EmptyCapacity = 0;
+                        item.Amount -= data.Empty;
+                        data.Storage += data.Empty;
                     }
                 }
             }
             return item;
         }
-
         /// <summary>
         /// Player取出Item
         /// </summary>
@@ -153,64 +209,24 @@ namespace ProjectOC.StoreNS
         /// <returns>取出来的结果</returns>
         public StoreItem RemoveItemToPlayer(string itemID, int amount)
         {
-            int removeAmount = 0;
             foreach (StoreData data in this.StoreDatas)
             {
                 if (data.ItemID != "" && data.ItemID == itemID)
                 {
-                    if (data.StorageCapacity >= amount)
+                    if (data.Storage >= amount)
                     {
-                        data.EmptyCapacity += amount;
-                        data.StorageCapacity -= amount;
-                        removeAmount += amount;
+                        data.Storage -= amount;
                         amount = 0;
                         break;
                     }
                     else
                     {
-                        data.EmptyCapacity += data.StorageCapacity;
-                        removeAmount += data.StorageCapacity;
-                        amount -= data.StorageCapacity;
-                        data.StorageCapacity = 0;
+                        amount -= data.Storage;
+                        data.Storage = 0;
                     }
                 }
             }
-            return new StoreItem(itemID, removeAmount);
-        }
-
-        /// <summary>
-        /// 常规存，按照数量将物品在背包和仓库之间转移
-        /// 存不可超出仓库空位
-        /// </summary>
-        public void NormalAdd(Player.PlayerCharacter player, string itemID, int amount)
-        {
-            // TODO: 等待背包接口
-        }
-        /// <summary>
-        /// 常规取，按照数量将物品在背包和仓库之间转移
-        /// 取不可超出仓库存货和背包空位的较小值
-        /// </summary>
-        public void NormalRemove(Player.PlayerCharacter player, string itemID, int amount)
-        {
-            // TODO: 等待背包接口
-        }
-        /// <summary>
-        /// 快捷存放，将玩家背包中可存放在该仓库的物品全部转移至仓库中；
-        /// 仓库空位不足时将其填满，剩余的留在背包中；
-        /// </summary>
-        public void FastAdd(Player.PlayerCharacter player)
-        {
-            // TODO: 等待背包接口
-        }
-        /// <summary>
-        /// 快捷取出 背包空位不足时将其填满，剩余的留在仓库中。
-        /// </summary>
-        /// <param name="worker"></param>
-        /// <param name="itemID"></param>
-        /// <param name="amount"></param>
-        public void FastRemove(Player.PlayerCharacter player, string itemID, int amount)
-        {
-            // TODO: 等待背包接口
+            return new StoreItem(itemID, amount);
         }
 
         /// <summary>
@@ -219,37 +235,22 @@ namespace ProjectOC.StoreNS
         /// <param name="item"></param>
         public StoreItem AddItemFromWorker(StoreItem item)
         {
-            // TODO: 刁民存入物品时，允许超出仓库容量上限。
             foreach (StoreData data in this.StoreDatas)
             {
                 if (data.ItemID != "" && data.ItemID == item.ItemID)
                 {
-                    if (data.EmptyCapacityReserved >= item.Amount)
+                    if (data.EmptyReserved >= item.Amount)
                     {
-                        data.EmptyCapacityReserved -= item.Amount;
-                        data.StorageCapacity += item.Amount;
+                        data.EmptyReserved -= item.Amount;
+                        data.Storage += item.Amount;
                         item.Amount = 0;
                         break;
                     }
                     else
                     {
-                        data.StorageCapacity += data.EmptyCapacityReserved;
-                        item.Amount -= data.EmptyCapacityReserved;
-                        data.EmptyCapacityReserved = 0;
-                    }
-                }
-            }
-            // 超额存入
-            if (item.Amount > 0)
-            {
-                foreach (StoreData data in this.StoreDatas)
-                {
-                    if (data.ItemID != "" && data.ItemID == item.ItemID)
-                    {
-                        data.EmptyCapacityReserved -= item.Amount;
-                        data.StorageCapacity += item.Amount;
-                        item.Amount = 0;
-                        break;
+                        data.Storage += data.EmptyReserved;
+                        item.Amount -= data.EmptyReserved;
+                        data.EmptyReserved = 0;
                     }
                 }
             }
@@ -258,36 +259,30 @@ namespace ProjectOC.StoreNS
 
         /// <summary>
         /// 取出来自Worker搬运任务的Item
-        /// 返回值为移出的Item
         /// </summary>
         /// <param name="itemID"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
         public StoreItem RemoveItemToWorker(string itemID, int amount)
         {
-            int removeAmount = 0;
             foreach (StoreData data in this.StoreDatas)
             {
                 if (data.ItemID != "" && data.ItemID == itemID)
                 {
-                    if (data.StorageCapacityReserved >= amount)
+                    if (data.StorageReserved >= amount)
                     {
-                        data.StorageCapacityReserved -= amount;
-                        data.EmptyCapacity += amount;
-                        removeAmount += amount;
+                        data.StorageReserved -= amount;
                         amount = 0;
                         break;
                     }
                     else
                     {
-                        data.EmptyCapacity += data.StorageCapacityReserved;
-                        removeAmount += data.StorageCapacityReserved;
-                        amount -= data.StorageCapacityReserved;
-                        data.StorageCapacityReserved = 0;
+                        amount -= data.StorageReserved;
+                        data.StorageReserved = 0;
                     }
                 }
             }
-            return new StoreItem(itemID, removeAmount);
+            return new StoreItem(itemID, amount);
         }
 
         /// <summary>
@@ -302,18 +297,16 @@ namespace ProjectOC.StoreNS
             {
                 if (data.ItemID != "" && data.ItemID == itemID)
                 {
-                    if (data.EmptyCapacity >= amount)
+                    if (data.Empty >= amount)
                     {
-                        data.EmptyCapacity -= amount;
-                        data.EmptyCapacityReserved += amount;
+                        data.EmptyReserved += amount;
                         amount = 0;
                         break;
                     }
                     else
                     {
-                        data.EmptyCapacityReserved += data.EmptyCapacity;
-                        amount -= data.EmptyCapacity;
-                        data.EmptyCapacity = 0;
+                        amount -= data.Empty;
+                        data.EmptyReserved += data.Empty;
                     }
                 }
             }
@@ -323,8 +316,7 @@ namespace ProjectOC.StoreNS
                 {
                     if (data.ItemID != "" && data.ItemID == itemID)
                     {
-                        data.EmptyCapacity -= amount;
-                        data.EmptyCapacityReserved += amount;
+                        data.EmptyReserved += amount;
                         amount = 0;
                         break;
                     }
@@ -344,18 +336,18 @@ namespace ProjectOC.StoreNS
             {
                 if (data.ItemID != "" && data.ItemID == itemID)
                 {
-                    if (data.StorageCapacity >= amount)
+                    if (data.Storage >= amount)
                     {
-                        data.StorageCapacity -= amount;
-                        data.StorageCapacityReserved += amount;
+                        data.Storage -= amount;
+                        data.StorageReserved += amount;
                         amount = 0;
                         break;
                     }
                     else
                     {
-                        data.StorageCapacityReserved += data.StorageCapacity;
-                        amount -= data.StorageCapacity;
-                        data.StorageCapacity = 0;
+                        data.StorageReserved += data.Storage;
+                        amount -= data.Storage;
+                        data.Storage = 0;
                     }
                 }
             }
@@ -410,7 +402,7 @@ namespace ProjectOC.StoreNS
             {
                 if (data.ItemID == itemID)
                 {
-                    result += data.StorageCapacity;
+                    result += data.Storage;
                 }
             }
             return result;
@@ -427,12 +419,48 @@ namespace ProjectOC.StoreNS
             {
                 if (data.ItemID == itemID)
                 {
-                    result += data.EmptyCapacity;
+                    result += data.Empty;
                 }
             }
             return result;
         }
 
+        #region TODO
         // TODO: 拆除。拆除仓库时，将所有物品传给玩家背包。
+        /// <summary>
+        /// 常规存，按照数量将物品在背包和仓库之间转移
+        /// 存不可超出仓库空位
+        /// </summary>
+        public void NormalAdd(Player.PlayerCharacter player, string itemID, int amount)
+        {
+            // TODO: 等待背包接口
+        }
+        /// <summary>
+        /// 常规取，按照数量将物品在背包和仓库之间转移
+        /// 取不可超出仓库存货和背包空位的较小值
+        /// </summary>
+        public void NormalRemove(Player.PlayerCharacter player, string itemID, int amount)
+        {
+            // TODO: 等待背包接口
+        }
+        /// <summary>
+        /// 快捷存放，将玩家背包中可存放在该仓库的物品全部转移至仓库中；
+        /// 仓库空位不足时将其填满，剩余的留在背包中；
+        /// </summary>
+        public void FastAdd(Player.PlayerCharacter player)
+        {
+            // TODO: 等待背包接口
+        }
+        /// <summary>
+        /// 快捷取出 背包空位不足时将其填满，剩余的留在仓库中。
+        /// </summary>
+        /// <param name="worker"></param>
+        /// <param name="itemID"></param>
+        /// <param name="amount"></param>
+        public void FastRemove(Player.PlayerCharacter player, string itemID, int amount)
+        {
+            // TODO: 等待背包接口
+        }
+        #endregion
     }
 }

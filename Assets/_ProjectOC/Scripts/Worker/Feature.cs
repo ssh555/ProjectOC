@@ -28,10 +28,6 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         public string Name = "";
         /// <summary>
-        /// 图标
-        /// </summary>
-        public Texture Icon;
-        /// <summary>
         /// 类型
         /// </summary>        
         public FeatureType Type;
@@ -48,9 +44,41 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         public string EffectDescription = "";
 
-        public Feature(string id)
+        public void Init(FeatureManager.FeatureTableJsonData config)
         {
-            // TODO: 读表拿数据
+            this.ID = config.id;
+            this.IDExclude = config.idExclude; 
+            this.Sort = config.sort;
+            this.Name = config.name;
+            this.Type = config.type;
+            this.Effects = new List<Effect>();
+            foreach (string effectID in config.effectIDs)
+            {
+                Effect effect = EffectManager.Instance.SpawnEffect(effectID);
+                if (effect != null)
+                {
+                    this.Effects.Add(effect);
+                }
+            }
+            this.FeatureDescription = config.featureDescription;
+            this.EffectDescription = config.effectDescription;
+        }
+        public void Init(Feature feature)
+        {
+            this.ID = feature.ID;
+            this.IDExclude = feature.IDExclude;
+            this.Sort = feature.Sort;
+            this.Name = feature.Name;
+            this.Type = feature.Type;
+            this.Effects = new List<Effect>();
+            foreach (Effect effect in feature.Effects)
+            {
+                Effect newEffect = new Effect();
+                newEffect.Init(effect);
+                this.Effects.Add(newEffect);
+            }
+            this.FeatureDescription = feature.FeatureDescription;
+            this.EffectDescription = feature.EffectDescription;
         }
 
         public void ApplyEffectToWorker(Worker worker)
@@ -60,6 +88,16 @@ namespace ProjectOC.WorkerNS
                 foreach (Effect effect in this.Effects)
                 {
                     effect.ApplyEffectToWorker(worker);
+                }
+            }
+        }
+        public void RemoveEffectToWorker(Worker worker)
+        {
+            if (worker != null)
+            {
+                foreach (Effect effect in this.Effects)
+                {
+                    effect.RemoveEffectToWorker(worker);
                 }
             }
         }

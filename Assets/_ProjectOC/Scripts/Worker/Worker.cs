@@ -2,6 +2,7 @@ using ML.Engine.FSM;
 using ML.Engine.Manager;
 using ProjectOC.ManagerNS;
 using ProjectOC.MissionNS;
+using ProjectOC.ProductionNodeNS;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,11 @@ namespace ProjectOC.WorkerNS
     public class Worker : MonoBehaviour
     {
         /// <summary>
-        /// 名字，随机生成
+        /// 刁民ID
+        /// </summary>
+        public string ID = "";
+        /// <summary>
+        /// 名字，TODO:随机生成
         /// </summary>
         public string Name = "";
         /// <summary>
@@ -25,39 +30,45 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// 当前体力值
         /// </summary>
-        public int APCurrent;
+        public int APCurrent = 10;
         /// <summary>
         /// 体力上限
         /// </summary>
-        public int APMax;
+        public int APMax = 10;
         /// <summary>
         /// 体力工作阈值，判断工作状态刁民是否需要强制休息的阈值
         /// </summary>
-        public int APWorkThreshold;
+        public int APWorkThreshold = 3;
         /// <summary>
         /// 体力休息阈值，判断休息状态刁民是否需要主动进餐的阈值
         /// </summary>
-        public int APRelaxThreshold;
+        public int APRelaxThreshold = 5;
         /// <summary>
         /// 刁民完成一项任务消耗的体力值
         /// </summary>
-        public int APCost;
+        public int APCost = 1;
         /// <summary>
         /// 每次搬运结算消耗的体力值
         /// </summary>
-        public int APCostTransport;
-        /// <summary>
-        /// 移动速度，单位为 m/s
-        /// </summary>
-        public float WalkSpeed;
+        public int APCostTransport = 1;
         /// <summary>
         /// 当前负重
         /// </summary>
-        public int BURCurrent;
+        public int BURCurrent = 0;
         /// <summary>
         /// 负重上限
         /// </summary>
-        public int BURMax;
+        public int BURMax = 100;
+        /// <summary>
+        /// 技能
+        /// </summary>
+        public Dictionary<WorkType, Skill> Skills = new Dictionary<WorkType, Skill>();
+
+        #region 不进表
+        /// <summary>
+        /// 移动速度，单位为 m/s
+        /// </summary>
+        public float WalkSpeed = 10;
         /// <summary>
         /// 职业经验获取速度，单位为%
         /// </summary>
@@ -70,11 +81,6 @@ namespace ProjectOC.WorkerNS
         /// 特性
         /// </summary>
         public List<Feature> Features = new List<Feature>();
-        /// <summary>
-        /// 技能
-        /// </summary>
-        public Dictionary<WorkType, WorkerAbility> Skills = new Dictionary<WorkType, WorkerAbility>();
-
 
         /// <summary>
         /// 每个时段的安排
@@ -87,53 +93,35 @@ namespace ProjectOC.WorkerNS
         { 
             get 
             {
-                return TimeArrangement[GameManager.Instance.GetLocalManager<DispatchTimeManager>().CurrentTimeFrame];
+                DispatchTimeManager timeManager = GameManager.Instance.GetLocalManager<DispatchTimeManager>();
+                if (timeManager != null)
+                {
+                    return TimeArrangement[timeManager.CurrentTimeFrame];
+                }
+                return TimeStatus.None;
             } 
         }
         /// <summary>
         /// 当前实际状态
         /// </summary>
-        private Status status;
+        public Status Status;
         /// <summary>
-        /// 当前实际状态
+        /// 状态机控制器
         /// </summary>
-        public Status Status
-        {
-            get => status;
-            set
-            {
-                GameManager.Instance.GetLocalManager<MissionBroadCastManager>().UpdateWorkerStatusList(this, status, value);
-                status = value;
-            }
-        }
+        protected StateController StateController;
+        /// <summary>
+        /// 状态机
+        /// </summary>
+        protected WorkerStateMachine StateMachine;
         /// <summary>
         /// 是否在值班
         /// </summary>
         public bool IsOnDuty;
-        /// <summary>
-        /// 状态机控制器
-        /// </summary>
-        protected StateController stateController;
-        /// <summary>
-        /// 状态机
-        /// </summary>
-        protected WorkerStateMachine stateMachine;
-
-
+        public ProductionNode DutyProductionNode;
+        public MissionTransport MissionTransport;
+        #endregion
         public Worker()
         {
-            // TODO: 策划配置初始数值
-            this.Name = "";
-            this.WorkType = WorkType.Transport;
-            this.APCurrent = 10;
-            this.APMax = 10;
-            this.APWorkThreshold = 0;
-            this.APRelaxThreshold = 3;
-            this.APCost = 1;
-            this.APCostTransport = 1;
-            this.WalkSpeed = 10;
-            this.BURCurrent = 0;
-            this.BURMax = 10;
             this.ExpRate.Add(WorkType.Cook, 100);
             this.ExpRate.Add(WorkType.HandCraft, 100);
             this.ExpRate.Add(WorkType.Industry, 100);
@@ -148,32 +136,81 @@ namespace ProjectOC.WorkerNS
             this.Eff.Add(WorkType.Magic, 10);
             this.Eff.Add(WorkType.Transport, 50);
 
-            FeatureManager featureManager = GameManager.Instance.GetLocalManager<FeatureManager>();
-            if (featureManager != null)
-            {
-                this.Features = featureManager.CreateFeatureForWorker();
-            }
+            this.Features = FeatureManager.Instance.CreateFeatureForWorker();
             foreach (Feature feature in this.Features)
             {
                 feature.ApplyEffectToWorker(this);
             }
-            this.Skills.Add(WorkType.Cook, new WorkerAbility(""));
-            this.Skills.Add(WorkType.HandCraft, new WorkerAbility(""));
-            this.Skills.Add(WorkType.Industry, new WorkerAbility(""));
-            this.Skills.Add(WorkType.Science, new WorkerAbility(""));
-            this.Skills.Add(WorkType.Magic, new WorkerAbility(""));
-            this.Skills.Add(WorkType.Transport, new WorkerAbility(""));
-            // TODO:从表里拿skill id创建skill
-            foreach (WorkerAbility skill in this.Skills.Values)
-            {
-                skill.ApplyEffectToWorker(this);
-            }
-
             // 初始化状态机
-            stateController = new StateController(0);
-            stateMachine = new WorkerStateMachine();
-            stateController.SetStateMachine(stateMachine);
+            StateController = new StateController(0);
+            StateMachine = new WorkerStateMachine();
+            StateController.SetStateMachine(StateMachine);
         }
+        public void Init(WorkerManager.WorkerTableJsonData config)
+        {
+            this.ID = config.id;
+            this.Name = config.name;
+            this.WorkType = config.workType;
+            this.APCurrent = config.apMax;
+            this.APMax = config.apMax;
+            this.APWorkThreshold = config.apWorkThreshold;
+            this.APRelaxThreshold = config.apRelaxThreshold;
+            this.APCost = config.apCost;
+            this.APCostTransport = config.apCostTransport;
+            this.BURMax = config.burMax;
+            foreach (var kv in config.skillDict)
+            {
+                Skill skill = SkillManager.Instance.SpawnSkill(kv.Value);
+                if (skill != null)
+                {
+                    skill.ApplyEffectToWorker(this);
+                    this.Skills.Add(kv.Key, skill);
+                }
+            }
+        }
+        public void Init(Worker worker)
+        {
+            this.ID = worker.ID;
+            this.Name = worker.Name;
+            this.WorkType = worker.WorkType;
+            this.APCurrent = worker.APCurrent;
+            this.APMax = worker.APMax;
+            this.APWorkThreshold = worker.APWorkThreshold;
+            this.APRelaxThreshold = worker.APRelaxThreshold;
+            this.APCost = worker.APCost;
+            this.APCostTransport = worker.APCostTransport;
+            this.WalkSpeed = worker.WalkSpeed;
+            this.BURCurrent = worker.BURCurrent;
+            this.BURMax = worker.BURMax;
+            this.ExpRate = new Dictionary<WorkType, int>(worker.ExpRate);
+            this.Eff = new Dictionary<WorkType, int>(worker.Eff);
+            foreach (Feature feature in this.Features)
+            {
+                feature.RemoveEffectToWorker(this);
+            }
+            this.Features.Clear();
+            foreach (Feature feature in worker.Features)
+            {
+                Feature featureNew = new Feature();
+                featureNew.Init(feature);
+                featureNew.ApplyEffectToWorker(this);
+                this.Features.Add(featureNew);
+            }
+            foreach (Skill skill in this.Skills.Values)
+            {
+                skill.RemoveEffectToWorker(this);
+            }
+            this.Skills.Clear();
+            foreach (var kv in worker.Skills)
+            {
+                Skill skill = new Skill();
+                skill.Init(kv.Value);
+                skill.ApplyEffectToWorker(this);
+                this.Skills.Add(kv.Key, skill);
+            }
+            this.TimeArrangement.SetTimeArrangement(worker.TimeArrangement);
+        }
+
         /// <summary>
         /// 修改经验值
         /// </summary>
@@ -182,18 +219,21 @@ namespace ProjectOC.WorkerNS
         public void AlterExp(WorkType workType, int value)
         {
             this.Skills[workType].AlterExp(value);
-            // TODO:技能升级时效果变化
         }
-
         /// <summary>
         /// 修改体力值
         /// </summary>
         /// <param name="value">体力值</param>
-        public void AlterAP(int value)
+        public bool AlterAP(int value)
         {
-
+            int ap = this.APCurrent + value;
+            if (ap >= 0 && ap <= this.APMax)
+            {
+                this.APCurrent = ap;
+                return true;
+            }
+            return false;
         }
-
         public void SetTimeStatus(int time, TimeStatus timeStatus)
         {
             this.TimeArrangement[time] = timeStatus;
@@ -209,6 +249,5 @@ namespace ProjectOC.WorkerNS
         {
             this.TimeArrangement.SetTimeStatusAll(timeStatus);
         }
-
     }
 }

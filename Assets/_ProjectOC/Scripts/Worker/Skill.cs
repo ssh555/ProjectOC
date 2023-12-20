@@ -8,10 +8,10 @@ namespace ProjectOC.WorkerNS
     /// 技能
     /// </summary>
     [System.Serializable]
-    public class WorkerAbility
+    public class Skill
     {
         /// <summary>
-        /// 键，WorkerAbility_技能类型
+        /// 键，Skill_技能类型
         /// </summary>
         public string ID = "";
         /// <summary>
@@ -22,10 +22,6 @@ namespace ProjectOC.WorkerNS
         /// 序号，用于排序
         /// </summary>
         public int Sort;
-        /// <summary>
-        /// 技能的图标
-        /// </summary>
-        public Texture Icon;
         /// <summary>
         /// 技能类型
         /// </summary>
@@ -41,11 +37,11 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// 当前等级
         /// </summary>
-        public int Level;
+        public int Level = 0;
         /// <summary>
         /// 最大等级
         /// </summary>
-        public int LevelMax;
+        public int LevelMax = 10;
         /// <summary>
         /// 当前经验
         /// </summary>
@@ -54,21 +50,41 @@ namespace ProjectOC.WorkerNS
         /// 效果
         /// </summary>
         public List<Effect> Effects = new List<Effect>();
-
-        public WorkerAbility(string id)
+        public void Init(SkillManager.SkillTableJsonData config)
         {
-            //TODO:读表
-            this.ID = id;
-            this.Name = "";
-            this.Sort = 0;
-            //this.Icon;
-            //this.Type;
-            this.Desciption = "";
-            this.EffectsDescription = "";
-            this.Level = 0;
-            this.LevelMax = 10;
-            this.Exp = 0;
-            //Effects.Add(new Effect(effectID));
+            this.ID = config.id;
+            this.Name = config.name;
+            this.Sort = config.sort;
+            this.Type = config.type;
+            this.Desciption = config.desciption;
+            this.EffectsDescription = config.effectsDescription;
+            foreach (string effectID in config.effectIDs)
+            {
+                Effect effect = EffectManager.Instance.SpawnEffect(effectID);
+                if (effect != null)
+                {
+                    this.Effects.Add(effect);
+                }
+            }
+        }
+        public void Init(Skill skill)
+        {
+            this.ID = skill.ID;
+            this.Name = skill.Name;
+            this.Sort = skill.Sort;
+            this.Type = skill.Type;
+            this.Desciption = skill.Desciption;
+            this.EffectsDescription = skill.EffectsDescription;
+            this.Level = skill.Level;
+            this.LevelMax = skill.LevelMax;
+            this.Exp = skill.Exp;
+            this.Effects = new List<Effect>();
+            foreach (Effect effect in skill.Effects)
+            {
+                Effect effectNew = new Effect();
+                effectNew.Init(effect);
+                this.Effects.Add(effectNew);
+            }
         }
 
         /// <summary>
@@ -80,7 +96,7 @@ namespace ProjectOC.WorkerNS
             {
                 this.Level++;
                 this.Exp = 0;
-                //改变效果
+                // TODO:改变效果
             }
         }
         /// <summary>
@@ -93,7 +109,7 @@ namespace ProjectOC.WorkerNS
             {
                 this.Level--;
                 this.Exp = clearExp ? 0 : 100 * (this.Level + 1);
-                //改变效果
+                // TODO:改变效果
             }
         }
         /// <summary>
@@ -160,6 +176,17 @@ namespace ProjectOC.WorkerNS
                 foreach (Effect effect in this.Effects)
                 {
                     effect.ApplyEffectToWorker(worker);
+                }
+            }
+        }
+
+        public void RemoveEffectToWorker(Worker worker)
+        {
+            if (worker != null)
+            {
+                foreach (Effect effect in this.Effects)
+                {
+                    effect.RemoveEffectToWorker(worker);
                 }
             }
         }
