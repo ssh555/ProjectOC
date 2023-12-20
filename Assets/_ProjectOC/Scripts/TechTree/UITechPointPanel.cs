@@ -315,14 +315,14 @@ namespace ProjectOC.TechTree.UI
             ProjectOC.Input.InputManager.PlayerInput.Disable();
             Refresh();
 
-            //// to-delete
-            //for(int i = 0; i < 99; ++i)
-            //{
-            //    this.inventory.AddItem(ItemSpawner.Instance.SpawnItem("100001"));
-            //    this.inventory.AddItem(ItemSpawner.Instance.SpawnItem("100002"));
-            //    this.inventory.AddItem(ItemSpawner.Instance.SpawnItem("100003"));
-            //}
-        
+            // to-delete
+            for (int i = 0; i < 99; ++i)
+            {
+                this.inventory.AddItem(ItemSpawner.Instance.SpawnItem("100001"));
+                this.inventory.AddItem(ItemSpawner.Instance.SpawnItem("100002"));
+                this.inventory.AddItem(ItemSpawner.Instance.SpawnItem("100003"));
+            }
+
         }
 
         public override void OnPause()
@@ -357,16 +357,16 @@ namespace ProjectOC.TechTree.UI
                 TechTreeManager.Instance.UnlockTechPoint(inventory, CurrentID, false);
                 Refresh();
 
-                //// to-delete
-                //string text = "";
-                //foreach(var item in inventory.GetItemList())
-                //{
-                //    if(item != null)
-                //    {
-                //        text += item.ID + ": " + item.Amount + "\n";
-                //    }
-                //}
-                //Debug.Log("±³°üÊ£Óà: \n" + text);
+                // to-delete
+                string text = "";
+                foreach (var item in inventory.GetItemList())
+                {
+                    if (item != null)
+                    {
+                        text += item.ID + ": " + item.Amount + "\n";
+                    }
+                }
+                Debug.Log("±³°üÊ£Óà: \n" + text);
             }
         }
 

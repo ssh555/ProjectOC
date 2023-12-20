@@ -23,7 +23,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
         public BuildingPartClassification(string id)
         {
-            string[] classification = id.Split('-');
+            string[] classification = id.Split('_');
             Category = (BuildingCategory)Enum.Parse(typeof(BuildingCategory), classification[0]);
             Type = (BuildingType)Enum.Parse(typeof(BuildingType), classification[1]);
             Style = (BuildingStyle)Enum.Parse(typeof(BuildingStyle), classification[2]);
