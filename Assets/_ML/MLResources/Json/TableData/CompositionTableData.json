@@ -1,21 +1,16 @@
 [
     {
-        "id": 100001,
+        "id": "01",
+        "name": {
+            "Chinese": "测试01",
+            "English": "TEST01"
+        },
         "tag": [
             "一级",
             "二级",
             "三级"
         ],
-        "formula": [
-            {
-                "id": 100002,
-                "num": 3
-            },
-            {
-                "id": 100003,
-                "num": 2
-            }
-        ],
+        "formula": [],
         "compositionnum": 1,
         "texture2d": "Test"
     }

@@ -254,6 +254,9 @@ namespace ProjectOC.TechTree
                 
                 foreach (var data in datas)
                 {
+                    //// 读取合成表数据
+                    //data.ItemCost = CompositeSystem.Instance.GetCompositonFomula(data.ID);
+
                     this.registerTechPoints.Add(data.ID, data);
                 }
 
@@ -267,6 +270,9 @@ namespace ProjectOC.TechTree
                 TechPoint[] datas = JsonConvert.DeserializeObject<TechPoint[]>(json);
                 foreach (var data in datas)
                 {
+                    //// 读取合成表数据
+                    //data.ItemCost = CompositeSystem.Instance.GetCompositonFomula(data.ID);
+
                     this.registerTechPoints.Add(data.ID, data);
                 }
             }
@@ -428,9 +434,9 @@ namespace ProjectOC.TechTree
         /// </summary>
         /// <param name="ID"></param>
         /// <returns></returns>
-        public bool UnlockTechPoint(Inventory inventory, string ID)
+        public bool UnlockTechPoint(Inventory inventory, string ID, bool IsCheck = true)
         {
-            if(!CanUnlockTechPoint(inventory, ID))
+            if(IsCheck && !CanUnlockTechPoint(inventory, ID))
             {
                 return false;
             }
@@ -490,6 +496,7 @@ namespace ProjectOC.TechTree
             public KeyTip inspector;
             public TextContent timecosttip;
             public KeyTip decipher;
+            public KeyTip back;
         }
 
         private IEnumerator InitUITextContents()
@@ -542,7 +549,75 @@ namespace ProjectOC.TechTree
             // 结束此协程
             yield break;
         }
+
+        [Button("生成测试文件")]
+        void GenTESTFILE()
+        {
+            List<TechPoint> datas = new List<TechPoint>();
+
+            for (int c = 1; c < 6; ++c)
+            {
+                for (int row = 0; row < 10; ++row)
+                {
+                    for (int col = 0; col < 16; ++col)
+                    {
+                        var tp = new TechPoint();
+
+                        tp.Category = (TechPointCategory)c;
+
+                        tp.ID = tp.Category.ToString() + "_" + row.ToString() + "_" + col.ToString();
+                        tp.Name.Chinese = "测试" + tp.ID;
+                        tp.Name.English = "Test" + tp.ID;
+                        tp.Grid = new int[2] { row, col };
+                        tp.Icon = row.ToString() + "_" + col.ToString();
+                        tp.IsUnlocked = false;
+                        tp.Description.Chinese = "测试";
+                        tp.Description.English = "Test";
+
+                        tp.UnLockBuild = new string[0];
+                        tp.UnLockRecipe = new string[0];
+                        // to-do
+                        int num = Random.Range(1, 3);
+                        tp.ItemCost = new ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Formula[num];
+                        for(int i = 0; i < tp.ItemCost.Length; ++i)
+                        {
+                            CompositeSystem.Formula f = new CompositeSystem.Formula();
+                            f.id = i == 0 ? "100001" : (i == 1 ? "100002" : "100003");
+                            f.num = Random.Range(1, 5);
+                            tp.ItemCost[i] = f;
+                        }
+                        tp.TimeCost = Random.Range(5, 60);
+
+                        if (row == 0 && col == 0)
+                        {
+                            tp.PrePoint = new string[0];
+                        }
+                        else if (row != 0 && col == 0)
+                        {
+                            tp.PrePoint = new string[1] { tp.Category.ToString() + "_" + (row - 1).ToString() + "_" + col.ToString() };
+                        }
+                        else if (row == 0 && col != 0)
+                        {
+                            tp.PrePoint = new string[1] { tp.Category.ToString() + "_" + row.ToString() + "_" + (col - 1).ToString() };
+                        }
+                        else if (row != 0 && col != 0)
+                        {
+                            tp.PrePoint = new string[2] { tp.Category.ToString() + "_" + row.ToString() + "_" + (col - 1).ToString(), tp.Category.ToString() + "_" + (row - 1).ToString() + "_" + col.ToString() };
+                        }
+
+
+                        datas.Add(tp);
+                    }
+                }
+            }
+
+
+            string json = JsonConvert.SerializeObject(datas.ToArray());
+            System.IO.File.WriteAllText(Application.streamingAssetsPath + "/../../../t.json", json);
+            Debug.Log("输出路径: " + Application.streamingAssetsPath + "/../../../t.json");
+        }
         #endregion
+
     }
 
 }

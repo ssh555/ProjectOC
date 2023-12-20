@@ -115,6 +115,7 @@ namespace ML.Engine.BuildingSystem
         /// to-do : to-delete
         /// </summary>
         public BuildingArea.BuildingArea area;
+        public bool IsEnableArea = true;
 
         public T GetPanel<T>() where T : UIBasePanel
         {
@@ -167,6 +168,10 @@ namespace ML.Engine.BuildingSystem
         }
 
         public Dictionary<BuildingPartClassification, IBuildingPart> LoadedBPart = new Dictionary<BuildingPartClassification, IBuildingPart>();
+#if UNITY_EDITOR
+        [LabelText("加载建筑物时是否标记为可用"), SerializeField]
+        private bool IsAddBPartOnRegister = true;
+#endif
         private IEnumerator RegisterBPartPrefab()
         {
 #if UNITY_EDITOR
@@ -193,7 +198,13 @@ namespace ML.Engine.BuildingSystem
                 {
                     this.LoadedBPart.Add(bpart.Classification, bpart);
                     // to-do : 仅测试用，后续接入科技树后需注释掉
-                    BM.RegisterBPartPrefab(bpart);
+#if UNITY_EDITOR
+                    if (IsAddBPartOnRegister) 
+                    {
+                        BM.RegisterBPartPrefab(bpart);
+
+                    }
+#endif
                 }
             }
 
@@ -246,6 +257,8 @@ namespace ML.Engine.BuildingSystem
 #endif
         }
 
+
+
         private IEnumerator AddTestEvent()
         {
             while (BM.Placer == null)
@@ -257,7 +270,10 @@ namespace ML.Engine.BuildingSystem
             {
                 ProjectOC.Input.InputManager.PlayerInput.Player.Crouch.Disable();
                 ProjectOC.Input.InputManager.PlayerInput.Player.Jump.Disable();
-                area.gameObject.SetActive(true);
+
+                // to-delete
+                area.gameObject.SetActive(IsEnableArea);
+
                 this.PushPanel<UI.BSInteractModePanel>();
             };
             BM.Placer.OnBuildingModeExit += () =>

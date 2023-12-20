@@ -27,6 +27,16 @@ namespace ML.Engine.TextContent
             }
             return "";
         }
+
+        public override string ToString()
+        {
+            return this.GetText();
+        }
+
+        public static implicit operator string(TextContent text)
+        {
+            return text.GetText();
+        }
     }
 
 }

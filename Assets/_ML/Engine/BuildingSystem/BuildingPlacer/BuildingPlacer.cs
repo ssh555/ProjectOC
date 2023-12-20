@@ -349,21 +349,62 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 pos = this.transform.position - this.SelectedPartInstance.ActiveSocket.transform.position + this.SelectedPartInstance.transform.position;
 
                 // ScreenCenter->ScreenNormal 射线检测
-                // 命中 || 未命中 => 在终点处向下检测
-                if (Physics.Raycast(this.GetCameraRay(), out RaycastHit hitInfo, this.checkRadius, this.checkLayer) || Physics.Raycast(this.GetCameraRayEndPointDownRay(), out hitInfo, this.checkRadius, this.checkLayer))
+                var hits = Physics.RaycastAll(this.GetCameraRay(), this.checkRadius, this.checkLayer);
+                if (hits == null || hits.Length == 0)
                 {
-                    pos = hitInfo.point - this.SelectedPartInstance.ActiveSocket.transform.position + this.SelectedPartInstance.transform.position;
-                    this.SelectedPartInstance.AttachedSocket = hitInfo.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
-                    this.SelectedPartInstance.AttachedArea = hitInfo.collider.GetComponentInParent<BuildingArea.BuildingArea>();
+                    hits = Physics.RaycastAll(this.GetCameraRayEndPointDownRay(), this.checkRadius, this.checkLayer);
+                }
 
-                    if(this.SelectedPartInstance.AttachedSocket && (this.SelectedPartInstance.ActiveSocket.Type & this.SelectedPartInstance.AttachedSocket.InTakeType) == 0)
+                // 命中 || 未命中 => 在终点处向下检测
+                if (hits != null && hits.Length > 0)
+                {
+                    bool bisHit = false;
+                    bool bArea = false;
+                    RaycastHit hitInfo = hits[0];
+                    foreach (var h in hits)
                     {
-                        
-                        this.SelectedPartInstance.AttachedSocket = null;
+                        var socket = h.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
+                        if (socket != null)
+                        {
+                            if((socket.InTakeType & this.SelectedPartInstance.ActiveSocket.Type) != 0)
+                            {
+                                bisHit = true;
+                                hitInfo = h;
+                                break;
+                            }
+                        }
+                        else if(bArea == false)
+                        {
+                            var area = h.collider.GetComponentInParent<BuildingArea.BuildingArea>();
+                            if (area != null && (area.Type & this.SelectedPartInstance.ActiveAreaType) != 0)
+                            {
+                                hitInfo = h;
+                                bisHit = true;
+                                bArea = true;
+                            }
+                        }
                     }
-                    if (this.SelectedPartInstance.AttachedArea && (this.SelectedPartInstance.ActiveAreaType & this.SelectedPartInstance.AttachedArea.Type) == 0)
+
+
+                    if(!bisHit)
                     {
+                        this.SelectedPartInstance.AttachedSocket = null;
                         this.SelectedPartInstance.AttachedArea = null;
+                    }
+                    else
+                    {
+                        pos = hitInfo.point - this.SelectedPartInstance.ActiveSocket.transform.position + this.SelectedPartInstance.transform.position;
+                        this.SelectedPartInstance.AttachedSocket = hitInfo.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
+                        this.SelectedPartInstance.AttachedArea = hitInfo.collider.GetComponentInParent<BuildingArea.BuildingArea>();
+
+                        if (this.SelectedPartInstance.AttachedSocket && (this.SelectedPartInstance.ActiveSocket.Type & this.SelectedPartInstance.AttachedSocket.InTakeType) == 0)
+                        {
+                            this.SelectedPartInstance.AttachedSocket = null;
+                        }
+                        if (this.SelectedPartInstance.AttachedArea && (this.SelectedPartInstance.ActiveAreaType & this.SelectedPartInstance.AttachedArea.Type) == 0)
+                        {
+                            this.SelectedPartInstance.AttachedArea = null;
+                        }
                     }
                 }
                 else
@@ -403,7 +444,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     this.SelectedPartInstance.transform.rotation = oldR;
                     return false;
                 }
-
 
                 return true;
             }

@@ -105,9 +105,6 @@ namespace ProjectOC.Player
 
             this.Inventory = new ML.Engine.InventorySystem.Inventory(65, this.transform);
 
-
-
-
             this.enabled = false;
         }
         #endregion
