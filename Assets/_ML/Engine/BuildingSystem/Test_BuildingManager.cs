@@ -168,6 +168,10 @@ namespace ML.Engine.BuildingSystem
         }
 
         public Dictionary<BuildingPartClassification, IBuildingPart> LoadedBPart = new Dictionary<BuildingPartClassification, IBuildingPart>();
+#if UNITY_EDITOR
+        [LabelText("加载建筑物时是否标记为可用"), SerializeField]
+        private bool IsAddBPartOnRegister = true;
+#endif
         private IEnumerator RegisterBPartPrefab()
         {
 #if UNITY_EDITOR
@@ -194,7 +198,13 @@ namespace ML.Engine.BuildingSystem
                 {
                     this.LoadedBPart.Add(bpart.Classification, bpart);
                     // to-do : 仅测试用，后续接入科技树后需注释掉
-                    BM.RegisterBPartPrefab(bpart);
+#if UNITY_EDITOR
+                    if (IsAddBPartOnRegister) 
+                    {
+                        BM.RegisterBPartPrefab(bpart);
+
+                    }
+#endif
                 }
             }
 
@@ -246,6 +256,8 @@ namespace ML.Engine.BuildingSystem
             Debug.Log("RigisterUIPanelPrefab cost time: " + (Time.realtimeSinceStartup - startT));
 #endif
         }
+
+
 
         private IEnumerator AddTestEvent()
         {

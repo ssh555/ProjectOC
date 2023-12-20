@@ -45,7 +45,14 @@ namespace ProjectOC.TechTree.UI
                 return TechPointList[CurrentGrid.x * GridRange.y + CurrentGrid.y];
             }
         }
-
+        private static Vector2Int LastGrid;
+        private static string LastID
+        {
+            get
+            {
+                return TechPointList[LastGrid.x * GridRange.y + LastGrid.y];
+            }
+        }
 
         public int tickPriority { get; set; }
         public int fixedTickPriority { get; set; }
@@ -83,7 +90,8 @@ namespace ProjectOC.TechTree.UI
         {
             do
             {
-                CurrentGrid.x = (CurrentGrid.x + GridRange.x + offset.y) % GridRange.x;
+                LastGrid = CurrentGrid;
+                CurrentGrid.x = (CurrentGrid.x + GridRange.x - offset.y) % GridRange.x;
                 CurrentGrid.y = (CurrentGrid.y + GridRange.y + offset.x) % GridRange.y;
             } while (CurrentID == null || CurrentID == "");
         }
@@ -106,6 +114,7 @@ namespace ProjectOC.TechTree.UI
 
         #region TechTreePanel
         public Transform TechPointTemplate;
+        public ScrollRect TTTPScrollRect;
         #endregion
 
         #region TechPointPanel
@@ -198,6 +207,7 @@ namespace ProjectOC.TechTree.UI
             #endregion
 
             #region TechTreePanel
+            this.TTTPScrollRect = ContentPanel.Find("TechTreePanel").GetComponent<ScrollRect>();
             this.TechPointTemplate = ContentPanel.Find("TechTreePanel").Find("Viewport").Find("Content").Find("TechPointTemplate");
 
             this.TechPointTemplate.gameObject.SetActive(false);
@@ -304,6 +314,15 @@ namespace ProjectOC.TechTree.UI
             ProjectOC.Input.InputManager.TechTreeInput.Enable();
             ProjectOC.Input.InputManager.PlayerInput.Disable();
             Refresh();
+
+            //// to-delete
+            //for(int i = 0; i < 99; ++i)
+            //{
+            //    this.inventory.AddItem(ItemSpawner.Instance.SpawnItem("100001"));
+            //    this.inventory.AddItem(ItemSpawner.Instance.SpawnItem("100002"));
+            //    this.inventory.AddItem(ItemSpawner.Instance.SpawnItem("100003"));
+            //}
+        
         }
 
         public override void OnPause()
@@ -337,13 +356,48 @@ namespace ProjectOC.TechTree.UI
             {
                 TechTreeManager.Instance.UnlockTechPoint(inventory, CurrentID, false);
                 Refresh();
+
+                //// to-delete
+                //string text = "";
+                //foreach(var item in inventory.GetItemList())
+                //{
+                //    if(item != null)
+                //    {
+                //        text += item.ID + ": " + item.Amount + "\n";
+                //    }
+                //}
+                //Debug.Log("背包剩余: \n" + text);
             }
         }
 
-        private List<GameObject> tempGO = new List<GameObject>();
+
+        private bool IsUIInit = false;
         private List<Sprite> tempSprite = new List<Sprite>();
         private List<CounterDownTimer> tempTimer = new List<CounterDownTimer>();
+        private List<GameObject> tempGO = new List<GameObject>();
+        /// <summary>
+        /// Category对应的UIGO
+        /// </summary>
+        private Dictionary<TechPointCategory, GameObject> TPCGO = new Dictionary<TechPointCategory, GameObject>();
+        /// <summary>
+        /// TechTreePanel中TP对应的UIGO
+        /// </summary>
+        private Dictionary<string, GameObject> TTTPGO = new Dictionary<string, GameObject>();
+        /// <summary>
+        /// TechTreePanel中TP的EDGE对应的UIGO
+        /// </summary>
+        private Dictionary<string, GameObject> TTTPEGO = new Dictionary<string, GameObject>();
 
+        /// <summary>
+        /// TechPointPanel可解锁项的UIGO
+        /// </summary>
+        private Dictionary<string, GameObject> TPUnlockGO = new Dictionary<string, GameObject>();
+        /// <summary>
+        /// TechPointPanel破译消耗的Item的UIGO
+        /// </summary>
+        private Dictionary<string, GameObject> TPCItemGO = new Dictionary<string, GameObject>();
+
+        private int lastCIndex;
         private void ClearTemp()
         {
             foreach(var s in tempSprite)
@@ -351,6 +405,31 @@ namespace ProjectOC.TechTree.UI
                 Destroy(s);
             }
             tempSprite.Clear();
+            foreach (var s in TPCGO.Values)
+            {
+                Destroy(s);
+            }
+            TPCGO.Clear();
+            foreach (var s in TTTPGO.Values)
+            {
+                Destroy(s);
+            }
+            TTTPGO.Clear();
+            foreach (var s in TTTPEGO.Values)
+            {
+                Destroy(s);
+            }
+            TTTPEGO.Clear();
+            foreach (var s in TPCItemGO.Values)
+            {
+                Destroy(s);
+            }
+            TPCItemGO.Clear();
+            foreach (var s in TPUnlockGO.Values)
+            {
+                Destroy(s);
+            }
+            TPUnlockGO.Clear();
             foreach (var s in tempGO)
             {
                 Destroy(s);
@@ -359,13 +438,30 @@ namespace ProjectOC.TechTree.UI
             foreach (var s in tempTimer)
             {
                 s.OnUpdateEvent = null;
+                s.OnEndEvent -= Refresh;
             }
             tempTimer.Clear();
         }
 
         private void Refresh()
         {
-            ClearTemp();
+            if(lastCIndex != cIndex)
+            {
+                lastCIndex = cIndex;
+                this.IsUIInit = false;
+            }
+
+            foreach (var t in tempTimer)
+            {
+                t.OnUpdateEvent = null;
+                t.OnEndEvent -= Refresh;
+            }
+            tempTimer.Clear();
+
+            if(!this.IsUIInit)
+            {
+                ClearTemp();
+            }
 
             topTitle.text = TechTreeManager.Instance.TPPanelTextContent.toptitle.GetText();
 
@@ -375,17 +471,19 @@ namespace ProjectOC.TechTree.UI
 
             foreach(var c in category)
             {
-                var obj = GameObject.Instantiate(this.categoryTemplate.gameObject, this.categoryTemplate.parent, false);
-                obj.SetActive(true);
-                var sprite = TechTreeManager.Instance.GetTPCategorySprite(c);
-                obj.GetComponentInChildren<Image>().sprite = sprite;
+                if(!this.TPCGO.TryGetValue(c, out var obj))
+                {
+                    obj = GameObject.Instantiate(this.categoryTemplate.gameObject, this.categoryTemplate.parent, false);
+                    obj.SetActive(true);
+                    TPCGO.Add(c, obj);
+
+                    var sprite = TechTreeManager.Instance.GetTPCategorySprite(c);
+                    obj.GetComponentInChildren<Image>().sprite = sprite;
+                    tempSprite.Add(sprite);
+                }
+
                 obj.GetComponentInChildren<TextMeshProUGUI>().text = TechTreeManager.Instance.CategoryDict[c.ToString()].GetDescription();
-
-
-                tempSprite.Add(sprite);
-                tempGO.Add(obj);
-
-                if(c != category[cIndex])
+                if (c != category[cIndex])
                 {
                     DisactiveCategory(obj);
                 }
@@ -407,26 +505,34 @@ namespace ProjectOC.TechTree.UI
             {
                 if(id == "" || id == null)
                 {
-                    var obj = new GameObject();
-                    obj.transform.SetParent(this.TechPointTemplate.parent);
-                    this.tempGO.Add(obj);
-                    obj.AddComponent<RectTransform>();
+                    if(!this.IsUIInit)
+                    {
+                        var obj = new GameObject();
+                        obj.transform.SetParent(this.TechPointTemplate.parent);
 
+                        obj.AddComponent<RectTransform>();
+
+                        tempGO.Add(obj);
+                    }
                 }
                 else
                 {
-                    var obj = GameObject.Instantiate(this.TechPointTemplate.gameObject);
-                    obj.transform.SetParent(this.TechPointTemplate.parent);
-                    obj.SetActive(true);
-                    this.tempGO.Add(obj);
+                    if(!this.TTTPGO.TryGetValue(id, out var obj))
+                    {
+                        obj = GameObject.Instantiate(this.TechPointTemplate.gameObject);
+                        obj.transform.SetParent(this.TechPointTemplate.parent);
+                        obj.SetActive(true);
+                        this.TTTPGO.Add(id, obj);
+
+                        // Icon
+                        var icon = obj.transform.Find("Icon").GetComponent<Image>();
+                        icon.sprite = TechTreeManager.Instance.GetTPSprite(id);
+                        this.tempSprite.Add(icon.sprite);
+                    }
+
 
                     // 0 : Locked | 1 : Unlocked | 2 : Unlocking
                     int status = TechTreeManager.Instance.IsUnlockedTP(id) ? 1 : (TechTreeManager.Instance.UnlockingTPTimers.ContainsKey(id) ? 2 :0);
-
-                    // Icon
-                    var icon = obj.transform.Find("Icon").GetComponent<Image>();
-                    icon.sprite = TechTreeManager.Instance.GetTPSprite(id);
-                    this.tempSprite.Add(icon.sprite);
                     // Mask & Timer
                     var mask = obj.transform.Find("Mask").GetComponent<Image>();
                     if (status == 0)
@@ -443,23 +549,77 @@ namespace ProjectOC.TechTree.UI
                         timer.OnUpdateEvent += (time) =>
                         {
                             mask.fillAmount = (float)(timer.CurrentTime / TechTreeManager.Instance.GetTPTimeCost(id));
-                            
-                            if (timer.IsTimeUp)
-                            {
-                                timer.OnUpdateEvent = null;
-                                Refresh();
-                            }
                         };
+                        timer.OnEndEvent += Refresh;
                         mask.fillAmount = (float)(timer.CurrentTime / TechTreeManager.Instance.GetTPTimeCost(id));
                         tempTimer.Add(timer);
                     }
                     // Select
-                    var selected = obj.transform.Find("Selected").gameObject;
-                    selected.SetActive((CurrentID == id));
+                    if(CurrentID == id)
+                    {
+                        var selected = obj.transform.Find("Selected").gameObject;
+                        selected.SetActive(true);
+
+                        
+                    }
+                    else
+                    {
+                        var selected = obj.transform.Find("Selected").gameObject;
+                        selected.SetActive(false);
+                    }
+
 
                     tpPoint.Add(id, obj);
                 }
+
             }
+           
+            #region 更新滑动窗口
+            var cur = this.TTTPGO[CurrentID];
+
+            // 当前激活的TP四个边点有一个不位于窗口内 -> 更新窗口滑动
+            RectTransform uiRectTransform = cur.GetComponent<RectTransform>();
+            RectTransform scrollRectTransform = cur.transform.parent.parent.parent.GetComponent<RectTransform>();
+            // 获取 ScrollRect 组件
+            ScrollRect scrollRect = scrollRectTransform.GetComponent<ScrollRect>();
+            // 获取 Content 的 RectTransform 组件
+            RectTransform contentRect = scrollRect.content;
+
+            // 获取 UI 元素的四个角点
+            Vector3[] corners = new Vector3[4];
+            uiRectTransform.GetWorldCorners(corners);
+            bool allCornersVisible = true;
+            for (int i = 0; i < 4; ++i)
+            {
+                // 将世界空间的点转换为屏幕空间的点
+                Vector3 screenPoint = RectTransformUtility.WorldToScreenPoint(null, corners[i]);
+                // 判断 ScrollRect 是否包含这个点
+                if (!RectTransformUtility.RectangleContainsScreenPoint(scrollRectTransform, screenPoint, null))
+                {
+                    allCornersVisible = false;
+                    break;
+                }
+            }
+            // 当前激活的TP四个边点有一个不位于窗口内 -> 更新窗口滑动
+            if (!allCornersVisible)
+            {
+                // 将当前选中的这个放置于上一个激活TP的位置
+
+                // 设置滑动位置
+
+                // 获取点 A 和点 B 在 Content 中的位置
+                Vector2 positionA = (this.TTTPGO[LastID].transform as RectTransform).anchoredPosition;
+                Vector2 positionB = (cur.transform as RectTransform).anchoredPosition;
+
+                // 计算点 B 相对于点 A 的偏移量
+                Vector2 offset = positionB - positionA;
+
+                // 根据偏移量更新 ScrollRect 的滑动位置
+                Vector2 normalizedPosition = scrollRect.normalizedPosition;
+                normalizedPosition += new Vector2(offset.x / (contentRect.rect.width - (contentRect.parent as RectTransform).rect.width), offset.y / (contentRect.rect.height - (contentRect.parent as RectTransform).rect.height));
+                scrollRect.normalizedPosition = normalizedPosition;
+            }
+            #endregion
 
             // 强制立即更新 GridLayoutGroup 的布局
             LayoutRebuilder.ForceRebuildLayoutImmediate(gridlayout.GetComponent<RectTransform>());
@@ -472,21 +632,35 @@ namespace ProjectOC.TechTree.UI
                 Color32 color = TechTreeManager.Instance.IsUnlockedTP(kv.Key) ? new Color32(255, 165, 0, 255) : Color.white;
                 foreach (var tp in preTP)
                 {
-                    var edge = GameObject.Instantiate(edgeTemplate, edgeTemplate.parent);
-                    tempGO.Add(edge.gameObject);
-                    edge.gameObject.SetActive(true);
+                    Transform edge = null;
+                    if (!this.TTTPEGO.TryGetValue(kv.Key + tp, out var edgeGO))
+                    {
+                        edge = GameObject.Instantiate(edgeTemplate, edgeTemplate.parent);
 
-                    var obj = tpPoint[tp];
+                        TTTPEGO.Add(kv.Key + tp, edge.gameObject);
 
-                    // 旋转parnet -> Selt to Target
-                    RectTransform UIA = edge.parent.transform as RectTransform;
-                    RectTransform UIB = obj.transform as RectTransform;
-                    UIA.rotation = Quaternion.Euler(0, 0, Vector3.Angle(new Vector3(1, 0, 0), UIB.position - UIA.position));
+                        edge.gameObject.SetActive(true);
 
-                    // Width : Distance(Self, Target) - 100
-                    float dis = Vector3.Distance(UIB.position, (UIA.parent as RectTransform).position) - 100;
-                    var e = (edge as RectTransform);
-                    e.sizeDelta = new Vector2(dis, e.sizeDelta.y);
+                        var obj = tpPoint[tp];
+
+                        // 旋转 -> Self to Target
+                        RectTransform UIA = edge.transform as RectTransform;
+                        RectTransform UIB = obj.transform as RectTransform;
+                        UIA.rotation = Quaternion.Euler(0, 0, Vector3.Angle(new Vector3(1, 0, 0), UIB.position - UIA.position));
+
+                        // Width : Distance(Self, Target) - Size
+                        float dis = Vector3.Distance(UIB.position, (UIA.parent.parent as RectTransform).position) - gridlayout.cellSize.x;
+
+                        var e = (edge as RectTransform);
+                        e.sizeDelta = new Vector2(dis, e.sizeDelta.y);
+
+                        // 位置
+                        UIA.localPosition = UIA.rotation * new Vector3(50, 0, 0);
+                    }
+                    else
+                    {
+                        edge = TTTPEGO[kv.Key + tp].transform;
+                    }
 
                     // IsUnlocked
                     edge.GetComponent<Image>().color = color;
@@ -501,38 +675,39 @@ namespace ProjectOC.TechTree.UI
 
             var TM = TechTreeManager.Instance;
 
-            // Icon
-            var s = TM.GetTPSprite(CurrentID);
-            tempSprite.Add(s);
-            this.TPIcon.sprite = s;
-
+            if(!this.IsUIInit)
+            {
+                // Icon
+                var s = TM.GetTPSprite(CurrentID);
+                tempSprite.Add(s);
+                this.TPIcon.sprite = s;
+            }
             // Name
             this.TPName.text = TM.GetTPName(CurrentID);
-
             // Description
             this.TPDescription.text = TM.GetTPDescription(CurrentID);
-
             // DecipherTip
             this.TPDecipherTip.text = tpStatus == 1 ? TM.TPPanelTextContent.unlockedtitletip.GetText() : TM.TPPanelTextContent.lockedtitletip.GetText();
-
             // KTInspector
             TPKTInspector.ReWrite(TM.TPPanelTextContent.inspector);
 
             // 可解锁项
             foreach(var id in TM.GetTPCanUnlockedID(CurrentID))
             {
-                var unlock = Instantiate(TPUnlockTemplate.gameObject, TPUnlockTemplate.parent, false);
-                unlock.SetActive(true);
+                if(!TPUnlockGO.TryGetValue(id, out var unlock))
+                {
+                    unlock = Instantiate(TPUnlockTemplate.gameObject, TPUnlockTemplate.parent, false);
+                    unlock.SetActive(true);
+                    this.TPUnlockGO.Add(id, unlock);
 
-                // Image
-                s = CompositeSystem.Instance.GetCompositonSprite(id);
-                tempSprite.Add(s);
-                unlock.GetComponentInChildren<Image>().sprite = s;
+                    // Image
+                    var s = CompositeSystem.Instance.GetCompositonSprite(id);
+                    tempSprite.Add(s);
+                    unlock.GetComponentInChildren<Image>().sprite = s;
+                }
 
                 // Text
                 unlock.GetComponentInChildren<TextMeshProUGUI>().text = CompositeSystem.Instance.GetCompositonName(id);
-
-                this.tempGO.Add(unlock);
             }
             
             // 面板状态
@@ -553,27 +728,28 @@ namespace ProjectOC.TechTree.UI
                 this.TPKT_Decipher.img.transform.parent.Find("Mask").GetComponent<Image>().gameObject.SetActive(!canDecipher);
 
                 // 时间消耗
-                this.TPTimeCost.text = "时间: " + TM.GetTPTimeCost(CurrentID).ToString() + "s";
+                this.TPTimeCost.text = TM.TPPanelTextContent.timecosttip + TM.GetTPTimeCost(CurrentID).ToString() + "s";
 
                 // Item 消耗
                 foreach(var f in TM.GetTPItemCost(CurrentID))
                 {
-                    var item = Instantiate(TPItemCostTemplate.gameObject, TPItemCostTemplate.parent, false);
-                    item.SetActive(true);
+                    if(!this.TPCItemGO.TryGetValue(f.id, out var item))
+                    {
+                        item = Instantiate(TPItemCostTemplate.gameObject, TPItemCostTemplate.parent, false);
+                        item.SetActive(true);
+                        this.TPCItemGO.Add(f.id, item);
 
-                    // Image
-                    s = ItemSpawner.Instance.GetItemSprite(f.id);
-                    tempSprite.Add(s);
-                    item.transform.Find("Image").GetComponent<Image>().sprite = s;
+                        // Image
+                        var s = ItemSpawner.Instance.GetItemSprite(f.id);
+                        tempSprite.Add(s);
+                        item.transform.Find("Image").GetComponent<Image>().sprite = s;
+                    }
 
                     // Num
                     item.transform.Find("Image").Find("Num").GetComponent<TextMeshProUGUI>().text = f.num.ToString();
 
                     // Name
                     item.transform.Find("Name").GetComponent<TextMeshProUGUI>().text = ItemSpawner.Instance.GetItemName(f.id);
-
-                    this.tempGO.Add(item);
-
                 }
             }
             // 已解锁
@@ -619,6 +795,15 @@ namespace ProjectOC.TechTree.UI
             #region BotPanel
             this.KT_Back.ReWrite(TM.TPPanelTextContent.back);
             #endregion
+
+            if(!this.IsUIInit)
+            {
+                if (this.TTTPGO.ContainsKey(CurrentID))
+                {
+                    TTTPScrollRect.normalizedPosition = new Vector2(0, 1);
+                }
+            }
+            this.IsUIInit = true;
         }
 
 
