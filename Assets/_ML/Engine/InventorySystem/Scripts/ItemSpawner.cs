@@ -61,10 +61,10 @@ namespace ML.Engine.InventorySystem
                 Type type;
                 if(!this.ItemDict.TryGetValue(id, out type))
                 {
-                    type = GetTypeByName(itemRow.type);
+                    type = GetTypeByName(TypePath + itemRow.type);
                     if (type == null)
                     {
-                        Debug.LogError("没有对应ID为 " + id + " 的Item");
+                        Debug.LogError($"没有对应ID为 {id} Type为 {itemRow.type} 的Item");
                         return null;
                     }
                     this.ItemDict.Add(id, type);

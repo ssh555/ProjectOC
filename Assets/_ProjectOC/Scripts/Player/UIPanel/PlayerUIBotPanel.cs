@@ -51,8 +51,8 @@ namespace ProjectOC.Player.UI
             {
                 var panel = GameObject.Instantiate(uITechPointPanel);
                 panel.transform.SetParent(this.transform.parent, false);
-                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
                 panel.inventory = this.player.Inventory;
+                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
             };
 
 

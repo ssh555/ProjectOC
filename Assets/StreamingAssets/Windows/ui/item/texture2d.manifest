@@ -1,0 +1,24 @@
+ManifestFileVersion: 0
+CRC: 971087007
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: d4955404a6c91c731bdece19c53b6a54
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2d8df09e698f722ada1caa03d3413830
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: d4955404a6c91c731bdece19c53b6a54
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/test/100001.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/test/100003.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/test/100002.png
+Dependencies: []

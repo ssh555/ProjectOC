@@ -2,13 +2,37 @@
     {
         "id": "100001",
         "name": {
-            "Chinese": "测试",
-            "English": "TEST"
+            "Chinese": "100001",
+            "English": "100001"
           },
         "type": "ResourceItem",
-        "bcanstack": false,
-        "maxamount": 1,
-        "texture2d": "Test",
-        "worldobject": "test"
+        "bcanstack": true,
+        "maxamount": 99,
+        "texture2d": "100001",
+        "worldobject": "100001"
+    },
+    {
+        "id": "100002",
+        "name": {
+            "Chinese": "100002",
+            "English": "100002"
+          },
+        "type": "ResourceItem",
+        "bcanstack": true,
+        "maxamount": 99,
+        "texture2d": "100002",
+        "worldobject": "100002"
+    },
+    {
+        "id": "100003",
+        "name": {
+            "Chinese": "100003",
+            "English": "100003"
+          },
+        "type": "ResourceItem",
+        "bcanstack": true,
+        "maxamount": 99,
+        "texture2d": "100003",
+        "worldobject": "100003"
     }
 ]
