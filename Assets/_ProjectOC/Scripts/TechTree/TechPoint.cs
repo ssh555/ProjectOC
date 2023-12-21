@@ -20,7 +20,7 @@ namespace ProjectOC.TechTree
         public string[] UnLockRecipe;
         public string[] UnLockBuild;
         public string[] PrePoint;
-        public ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Formula[] ItemCost;
+        public ML.Engine.InventorySystem.CompositeSystem.Formula[] ItemCost;
         public int TimeCost;
     }
 }
