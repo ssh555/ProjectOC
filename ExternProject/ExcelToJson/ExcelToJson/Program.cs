@@ -37,18 +37,29 @@ namespace ExcelToJson
 
             System.Threading.Tasks.Parallel.ForEach(configs, (config) =>
             {
-                Console.WriteLine($"开始处理: {System.IO.Path.GetFullPath(config.ExcelFilePath)} -> {System.IO.Path.GetFullPath(config.JsonFilePath)}");
+                try
+                {
+                    Console.WriteLine($"开始处理: {System.IO.Path.GetFullPath(config.ExcelFilePath)} -> {System.IO.Path.GetFullPath(config.JsonFilePath)}");
 
-                MethodInfo genericMethodDefinition = typeof(ExcelJsonManager).GetMethod("ReadExcel");
-                MethodInfo constructedMethod = genericMethodDefinition.MakeGenericMethod(config.type);
+                    MethodInfo genericMethodDefinition = typeof(ExcelJsonManager).GetMethod("ReadExcel");
+                    MethodInfo constructedMethod = genericMethodDefinition.MakeGenericMethod(config.type);
 
-                var datas = constructedMethod.Invoke(EJMgr, new object[] { config.ExcelFilePath, config.IBeginRow, config.IWorksheet });
+                    var datas = constructedMethod.Invoke(EJMgr, new object[] { config.ExcelFilePath, config.IBeginRow, config.IWorksheet });
 
-                genericMethodDefinition = typeof(ExcelJsonManager).GetMethod("WriteJson");
-                constructedMethod = genericMethodDefinition.MakeGenericMethod(config.type);
-                constructedMethod.Invoke(EJMgr, new object[] { datas, config.JsonFilePath, Formatting.None });
+                    genericMethodDefinition = typeof(ExcelJsonManager).GetMethod("WriteJson");
+                    constructedMethod = genericMethodDefinition.MakeGenericMethod(config.type);
+                    constructedMethod.Invoke(EJMgr, new object[] { datas, config.JsonFilePath, Formatting.None });
 
-                Console.WriteLine($"转换完成: {System.IO.Path.GetFullPath(config.ExcelFilePath)} -> {System.IO.Path.GetFullPath(config.JsonFilePath)}");
+                    Console.WriteLine($"转换完成: {System.IO.Path.GetFullPath(config.ExcelFilePath)} -> {System.IO.Path.GetFullPath(config.JsonFilePath)}");
+                }
+                catch(Exception e)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Error: 处理异常 {System.IO.Path.GetFullPath(config.ExcelFilePath)} -> {System.IO.Path.GetFullPath(config.JsonFilePath)} => {e.Message}");
+                    Console.ResetColor();
+                }
+
+
             });
 
             Console.WriteLine("\n----------------------------------------");
