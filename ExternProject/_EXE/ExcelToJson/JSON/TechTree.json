@@ -3,7 +3,7 @@
         "ID": "Energy_0_0",
         "Name": {
             "Chinese": "Energy_0_0",
-            "English": ""
+            "English": "Energy_0_0"
         },
         "Grid": [
             0,
@@ -13,7 +13,7 @@
         "Icon": "0_0",
         "Description": {
             "Chinese": "测试",
-            "English": ""
+            "English": "测试"
         },
         "IsUnlocked": false,
         "UnLockRecipe": [],
@@ -35,7 +35,7 @@
         "ID": "Energy_0_1",
         "Name": {
             "Chinese": "Energy_0_1",
-            "English": ""
+            "English": "Energy_0_1"
         },
         "Grid": [
             0,
@@ -45,7 +45,7 @@
         "Icon": "0_1",
         "Description": {
             "Chinese": "测试",
-            "English": ""
+            "English": "测试"
         },
         "IsUnlocked": true,
         "UnLockRecipe": [],

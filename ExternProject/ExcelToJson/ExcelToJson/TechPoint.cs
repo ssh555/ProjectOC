@@ -36,13 +36,13 @@ namespace ProjectOC.TechTree
             // 2 -> Name
             this.Name = new ML.Engine.TextContent.TextContent();
             this.Name.Chinese = row[2];
-            this.Name.English = "";
+            this.Name.English = row[2];
             // 3 -> Icon
             this.Icon = row[3];
             // 4 -> ÃèÊö
             this.Description = new ML.Engine.TextContent.TextContent();
             this.Description.Chinese = row[4];
-            this.Description.English = "";
+            this.Description.English = row[4];
             // 5 -> Grid
             var sgrid = row[5].Split(',');
             this.Grid = new int[2] { int.Parse(sgrid[0]), int.Parse(sgrid[1]) };
