@@ -19,6 +19,8 @@ namespace ML.Engine.Timer
         private List<ITickComponent> removeFixedTick;
         private List<ITickComponent> removeLateTick;
 
+        public float TimeScale;
+
         public TickManager()
         {
             this.tickComponents = new SortedDictionary<int, List<ITickComponent>>();
@@ -33,7 +35,8 @@ namespace ML.Engine.Timer
         #region Tick
         public void Tick(float deltatime)
         {
-            foreach(var tickkv in this.tickComponents)
+            deltatime *= TimeScale;
+            foreach (var tickkv in this.tickComponents)
             {
                 foreach(var tick in tickkv.Value)
                 {
@@ -50,6 +53,7 @@ namespace ML.Engine.Timer
 
         public void FixedTick(float deltatime)
         {
+            deltatime *= TimeScale;
             foreach (var tickkv in this.fixedTickComponents)
             {
                 foreach (var tick in tickkv.Value)
@@ -67,6 +71,7 @@ namespace ML.Engine.Timer
 
         public void LateTick(float deltatime)
         {
+            deltatime *= TimeScale;
             foreach (var tickkv in this.lateTickComponents)
             {
                 foreach (var tick in tickkv.Value)

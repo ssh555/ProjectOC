@@ -329,8 +329,6 @@ namespace ML.Engine.Manager
         #endregion
         #endregion
 
-
-
         #region Update
         private void Update()
         {
@@ -355,8 +353,39 @@ namespace ML.Engine.Manager
             this.TickManager.LateTick(Time.deltaTime);
         }
         #endregion
+        
+        #region GameTimeRate
+        /// <summary>
+        /// 是否全局暂停
+        /// </summary>
+        public bool IsPause { get; private set; } = false;
 
+        /// <summary>
+        /// 设置游戏时速
+        /// 0 为暂停
+        /// </summary>
+        /// <param name="rate"></param>
+        public void SetAllGameTimeRate(float rate)
+        {
+            Time.timeScale = rate;
+            IsPause = rate < float.Epsilon;
+        }
 
-}
+        /// <summary>
+        /// 设置Tick的时间流速
+        /// </summary>
+        /// <param name="rate"></param>
+        public void SetTickTimeRate(float rate)
+        {
+            this.TickManager.TimeScale = rate;
+        }
+
+        public void SetCDTimerRate(float rate)
+        {
+            this.CounterDownTimerManager.TimeScale = rate;
+        }
+
+        #endregion
+    }
 }
 

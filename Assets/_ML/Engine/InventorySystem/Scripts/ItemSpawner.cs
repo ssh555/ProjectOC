@@ -193,6 +193,7 @@ namespace ML.Engine.InventorySystem
             public string type;
             public int sort;
             public ItemCategory category;
+            public Item itemtype;
             public int weight;
             public bool bcanstack;
             public int maxamount;

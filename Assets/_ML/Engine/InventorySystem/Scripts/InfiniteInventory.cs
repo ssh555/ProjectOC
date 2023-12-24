@@ -8,6 +8,11 @@ namespace ML.Engine.InventorySystem
     public class InfiniteInventory : IInventory
     {
         #region Field|Property
+        /// <summary>
+        /// 背包最大容量
+        /// </summary>
+        public readonly int MaxSize;
+
         private Transform m_owner;
         /// <summary>
         /// 背包的拥有者
@@ -37,9 +42,10 @@ namespace ML.Engine.InventorySystem
         public event System.Action<InfiniteInventory> OnItemListChanged;
         #endregion
 
-        public InfiniteInventory(Transform Owner)
+        public InfiniteInventory(Transform Owner, int maxSize)
         {
             this.m_owner = Owner;
+            this.MaxSize = maxSize;
             this.itemList = new List<Item>();
         }
 
@@ -50,19 +56,38 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public bool AddItem(Item item)
         {
-            if (item == null || !ItemSpawner.Instance.IsValidItemID(item.ID))
+            if (this.Size >= this.MaxSize || item == null || !ItemSpawner.Instance.IsValidItemID(item.ID))
             {
                 return false;
             }
-            Item it = this.itemList.Find(i => i.ID == item.ID);
-            // 寻找合适格子装入
-            if (it != null)
-            {
-                it.Amount += item.Amount;
-            }
-            else
+            // 不可以堆叠
+            if(!item.bCanStack)
             {
                 this.itemList.Add(item);
+            }
+            // 可以堆叠
+            else
+            {
+                Item it = this.itemList.Find(i => i.ID == item.ID);
+                // 寻找合适格子装入
+                if (it != null)
+                {
+                    // 没有达到数量上限
+                    if(it.Amount + item.Amount <= it.MaxAmount)
+                    {
+                        it.Amount += item.Amount;
+                    }
+                    else
+                    {
+                        item.Amount = it.MaxAmount - it.Amount - item.Amount;
+                        it.Amount = it.MaxAmount;
+                        this.itemList.Add(item);
+                    }
+                }
+                else
+                {
+                    this.itemList.Add(item);
+                }
             }
             this.SortItem();
             return true;
@@ -78,7 +103,7 @@ namespace ML.Engine.InventorySystem
         }
 
         /// <summary>
-        /// 将item移除背包
+        /// 将item对象移除背包
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -88,7 +113,7 @@ namespace ML.Engine.InventorySystem
             {
                 return false;
             }
-            var it = this.itemList.Find(i => i.ID == item.ID);
+            var it = this.itemList.Find(i => i == item);
             if(it == null)
             {
                 return false;
@@ -99,18 +124,18 @@ namespace ML.Engine.InventorySystem
         }
 
         /// <summary>
-        /// 将item移除背包
+        /// 将item对象移除背包
         /// amount 超过 最大值，则全部移除
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Item RemoveItem(Item item, int amount)
+        public Item RemoveItem(Item item, int amount = 1)
         {
             if (item == null || amount <= 0)
             {
                 return null;
             }
-            var it = this.itemList.Find(i => i.ID == item.ID);
+            var it = this.itemList.Find(i => i == item);
             if (it == null)
             {
                 return null;
@@ -136,7 +161,7 @@ namespace ML.Engine.InventorySystem
         /// <param name="itemID"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        public bool RemoveItem(string itemID, int amount)
+        public bool RemoveItem(string itemID, int amount = 1)
         {
             // 数量不够
             if (this.GetItemAllNum(itemID) < amount)
@@ -144,12 +169,22 @@ namespace ML.Engine.InventorySystem
                 return false;
             }
 
-            var item = this.itemList.Find(i => i.ID == itemID);
-            if(item == null || item.Amount < amount)
+            var items = this.itemList.FindAll(i => i.ID == itemID);
+            foreach(var item in items)
             {
-                return false;
+                if(item.Amount >= amount)
+                {
+                    item.Amount -= amount;
+                    break;
+                }
+                else
+                {
+                    amount -= item.Amount;
+                    item.Amount = 0;
+                }
             }
-            item.Amount -= amount;
+
+            this.OnItemListChanged?.Invoke(this);
             return true;
         }
 
@@ -191,12 +226,13 @@ namespace ML.Engine.InventorySystem
             {
                 return 0;
             }
-            var item = this.itemList.Find(i => i.ID == id);
-            if (item == null)
+            var items = this.itemList.FindAll(i => i.ID == id);
+            int res = 0;
+            foreach(var item in items)
             {
-                return 0;
+                res += item.Amount;
             }
-            return item.Amount;
+            return res;
         }
     }
 }

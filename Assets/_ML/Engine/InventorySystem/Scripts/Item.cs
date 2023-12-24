@@ -26,7 +26,7 @@ namespace ML.Engine.InventorySystem
         /// </summary>
         public int SortNum;
         /// <summary>
-        /// 物品类目
+        /// 物品配方类目
         /// </summary>
         public ItemCategory Category;
         /// <summary>
@@ -37,6 +37,10 @@ namespace ML.Engine.InventorySystem
         /// 总重量
         /// </summary>
         public int Weight {get { return SingleItemWeight * Amount; }}
+        /// <summary>
+        /// 物品类目
+        /// </summary>
+        public ItemType ItemType;
         /// <summary>
         /// 物品描述
         /// </summary>
@@ -135,6 +139,63 @@ namespace ML.Engine.InventorySystem
         public virtual void Execute(int amount)
         {
             this.Amount -= amount;
+        }
+
+        /// <summary>
+        /// 是否能使用 -> 仅供UI使用
+        /// </summary>
+        /// <returns></returns>
+        public bool CanUse()
+        {
+            switch (this.ItemType)
+            {
+                case ItemType.Equip:
+                case ItemType.Food:
+                    return true;
+                case ItemType.Material:
+                case ItemType.Mission:
+                    return false;
+                default:
+                    return true;
+            }
+        }
+
+        /// <summary>
+        /// 是否能丢弃 -> 仅供UI使用
+        /// </summary>
+        /// <returns></returns>
+        public bool CanDrop()
+        {
+            switch (this.ItemType)
+            {
+                case ItemType.Equip:
+                case ItemType.Food:
+                case ItemType.Material:
+                    return true;
+                case ItemType.Mission:
+                    return false;
+                default:
+                    return true;
+            }
+        }
+
+        /// <summary>
+        /// 是否能销毁 -> 仅供UI使用
+        /// </summary>
+        /// <returns></returns>
+        public bool CanDestroy()
+        {
+            switch (this.ItemType)
+            {
+                case ItemType.Equip:
+                case ItemType.Food:
+                case ItemType.Material:
+                    return true;
+                case ItemType.Mission:
+                    return false;
+                default:
+                    return true;
+            }
         }
 
         /// <summary>
