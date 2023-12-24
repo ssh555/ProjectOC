@@ -16,10 +16,27 @@ namespace ExcelToJson
         /// </summary>
         struct EJConfig
         {
+            /// <summary>
+            /// 原Excel表格的文件路径
+            /// </summary>
             public string ExcelFilePath;
+            /// <summary>
+            /// 目标JSON数据的文件路径
+            /// </summary>
             public string JsonFilePath;
+            /// <summary>
+            /// 使用Excel表格的第几个WorkSheet表项
+            /// 0 开始计数
+            /// </summary>
             public int IWorksheet;
+            /// <summary>
+            /// 第几行开始是实际数据
+            /// 1 开始计数
+            /// </summary>
             public int IBeginRow;
+            /// <summary>
+            /// 转换过程中存储EXCEL表格数据的数据结构类型
+            /// </summary>
             public Type type;
         }
 

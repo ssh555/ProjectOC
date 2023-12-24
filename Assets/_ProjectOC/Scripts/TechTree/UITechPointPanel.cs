@@ -276,19 +276,19 @@ namespace ProjectOC.TechTree.UI
         public void Tick(float deltatime)
         {
             // 向前
-            if (ProjectOC.Input.InputManager.TechTreeInput.TechTree.LastTerm.WasPressedThisFrame())
+            if (ProjectOC.Input.InputManager.PlayerInput.TechTree.LastTerm.WasPressedThisFrame())
             {
                 RefreshCategory((cIndex - 1 + category.Length) % category.Length);
                 Refresh();
             }
             // 向后
-            if (ProjectOC.Input.InputManager.TechTreeInput.TechTree.NextTerm.WasPressedThisFrame())
+            if (ProjectOC.Input.InputManager.PlayerInput.TechTree.NextTerm.WasPressedThisFrame())
             {
                 RefreshCategory((cIndex + 1 + category.Length) % category.Length);
                 Refresh();
             }
             // 破译
-            if (ProjectOC.Input.InputManager.TechTreeInput.TechTree.Decipher.WasPressedThisFrame())
+            if (ProjectOC.Input.InputManager.PlayerInput.TechTree.Decipher.WasPressedThisFrame())
             {
                 Decipher();
             }
@@ -298,9 +298,9 @@ namespace ProjectOC.TechTree.UI
                 ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
             }
             // 科技点
-            if (ProjectOC.Input.InputManager.TechTreeInput.TechTree.AlterTP.WasPressedThisFrame())
+            if (ProjectOC.Input.InputManager.PlayerInput.TechTree.AlterTP.WasPressedThisFrame())
             {
-                Vector2Int offset = Vector2Int.RoundToInt(ProjectOC.Input.InputManager.TechTreeInput.TechTree.AlterTP.ReadValue<Vector2>());
+                Vector2Int offset = Vector2Int.RoundToInt(ProjectOC.Input.InputManager.PlayerInput.TechTree.AlterTP.ReadValue<Vector2>());
                 AlterTP(offset);
                 Refresh();
             }
@@ -311,8 +311,8 @@ namespace ProjectOC.TechTree.UI
             InitStaticData();
 
             base.OnEnter();
-            ProjectOC.Input.InputManager.TechTreeInput.Enable();
-            ProjectOC.Input.InputManager.PlayerInput.Disable();
+            ProjectOC.Input.InputManager.PlayerInput.TechTree.Enable();
+            ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
             Refresh();
 
             // to-delete
@@ -328,23 +328,23 @@ namespace ProjectOC.TechTree.UI
         public override void OnPause()
         {
             base.OnPause();
-            ProjectOC.Input.InputManager.PlayerInput.Enable();
-            ProjectOC.Input.InputManager.TechTreeInput.Disable();
+            ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
+            ProjectOC.Input.InputManager.PlayerInput.TechTree.Disable();
         }
 
         public override void OnRecovery()
         {
             base.OnRecovery();
-            ProjectOC.Input.InputManager.PlayerInput.Disable();
-            ProjectOC.Input.InputManager.TechTreeInput.Enable();
+            ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
+            ProjectOC.Input.InputManager.PlayerInput.TechTree.Enable();
             Refresh();
         }
 
         public override void OnExit()
         {
             base.OnExit();
-            ProjectOC.Input.InputManager.PlayerInput.Enable();
-            ProjectOC.Input.InputManager.TechTreeInput.Disable();
+            ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
+            ProjectOC.Input.InputManager.PlayerInput.TechTree.Disable();
         }
         #endregion
 

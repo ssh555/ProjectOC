@@ -1125,6 +1125,10 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// </summary>
         protected void EnterEditMode()
         {
+            if (!this.SelectedPartInstance.CanEnterEditMode())
+            {
+                return;
+            }
             // Ω˚”√ Input.Build
             this.Mode = BuildingMode.Edit;
             // ∆Ù”√ Input.Edit
@@ -1169,8 +1173,14 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// </summary>
         protected void EnterDestroyMode()
         {
+            if (!this.SelectedPartInstance.CanEnterDestoryMode())
+            {
+                return;
+            }
 
             var tmp = this.SelectedPartInstance;
+
+            tmp.OnBPartDestroy();
 
             this.SelectedPartInstance = null;
 
