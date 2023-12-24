@@ -80,13 +80,24 @@ namespace ML.Engine.InventorySystem
         /// 数量归0时调用
         /// </summary>
         public event Action<Inventory, Item> OnAmountToZero;
+
+        /// <summary>
+        /// 用于排序的数值
+        /// </summary>
+        public int sort;
         #endregion
 
-        public Item(string ID)
+        public Item(string ID, ItemSpawner.ItemTabelJsonData config, int initAmount)
         {
             this.ID = ID;
 
-            this.amount = 1;
+            this.bCanStack = config.bcanstack;
+
+            this.amount = initAmount;
+
+            this.maxAmount = config.maxamount;
+
+            this.sort = config.sort;
 
             // 默认添加数量为0时从Inventory移除并销毁
             this.OnAmountToZero += (Inventory inventory,Item item) =>
@@ -95,14 +106,6 @@ namespace ML.Engine.InventorySystem
                     inventory.RemoveItem(this);
             };
         }
-
-        /// <summary>
-        /// 初始化
-        /// </summary>
-        /// <param name="config"></param>
-        public abstract void Init(ItemSpawner.ItemTabelJsonData config);
-
-        public abstract void Init(Item item);
 
         /// <summary>
         /// 使用物品调用函数

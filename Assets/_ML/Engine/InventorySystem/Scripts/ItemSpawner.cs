@@ -54,7 +54,7 @@ namespace ML.Engine.InventorySystem
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Item SpawnItem(string id)
+        public Item SpawnItem(string id, int amount = 1)
         {
             if (this.ItemTypeStrDict.TryGetValue(id, out ItemTabelJsonData itemRow))
             {
@@ -70,8 +70,7 @@ namespace ML.Engine.InventorySystem
                     this.ItemDict.Add(id, type);
                 }
                 // to-do : 采用反射，可能会有性能问题
-                Item item = System.Activator.CreateInstance(type, id) as Item;
-                item.Init(itemRow);
+                Item item = System.Activator.CreateInstance(type, id, itemRow, amount) as Item;
                 return item;
             }
             Debug.LogError("没有对应ID为 " + id + " 的Item");
@@ -200,6 +199,7 @@ namespace ML.Engine.InventorySystem
             public int maxamount;
             public string texture2d;
             public string worldobject;
+            public int sort;
         }
 
         public IEnumerator LoadTableData(MonoBehaviour mono)
