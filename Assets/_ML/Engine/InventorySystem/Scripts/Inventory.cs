@@ -8,7 +8,7 @@ namespace ML.Engine.InventorySystem
     /// <summary>
     /// ¼òÒ×±³°ü
     /// </summary>
-    public class Inventory
+    public class Inventory : IInventory
     {
         #region Field|Property
         public readonly Transform Owner;
@@ -43,6 +43,11 @@ namespace ML.Engine.InventorySystem
             this.Owner = Owner;
             this.MaxSize = maxSize;
             this.itemList = new Item[this.MaxSize];
+        }
+
+        public bool AddItem(Item item)
+        {
+            return this.AddItem(item, false) >= 0;
         }
 
         /// <summary>

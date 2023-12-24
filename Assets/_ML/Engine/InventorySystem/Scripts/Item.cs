@@ -48,7 +48,7 @@ namespace ML.Engine.InventorySystem
         /// <summary>
         /// 所属 Inventory
         /// </summary>
-        public Inventory OwnInventory = null;
+        public IInventory OwnInventory = null;
         /// <summary>
         /// 数量
         /// </summary>
@@ -97,10 +97,10 @@ namespace ML.Engine.InventorySystem
         /// <summary>
         /// 数量归0时调用
         /// </summary>
-        public event Action<Inventory, Item> OnAmountToZero;
+        public event Action<IInventory, Item> OnAmountToZero;
         #endregion
 
-        public Item(string ID, ItemSpawner.ItemTabelJsonData config, int initAmount)
+        public Item(string ID, ItemSpawner.ItemTableJsonData config, int initAmount)
         {
             this.ID = ID;
 
@@ -110,10 +110,18 @@ namespace ML.Engine.InventorySystem
 
             this.maxAmount = config.maxamount;
 
-            this.sort = config.sort;
+            this.SortNum = config.sort;
+
+            this.Category = config.category;
+
+            this.SingleItemWeight = config.weight;
+
+            this.ItemDescription = config.description;
+
+            this.EffectsDescription = config.effectsDescription;
 
             // 默认添加数量为0时从Inventory移除并销毁
-            this.OnAmountToZero += (Inventory inventory,Item item) =>
+            this.OnAmountToZero += (IInventory inventory,Item item) =>
             {
                 if(inventory != null)
                     inventory.RemoveItem(this);
