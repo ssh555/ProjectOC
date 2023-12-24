@@ -237,7 +237,7 @@ namespace ML.Engine.InventorySystem
         /// </summary>
         public void SortItem()
         {
-            System.Array.Sort(this.itemList, new Item.SortByID());
+            System.Array.Sort(this.itemList, new Item.Sort());
             this.OnItemListChanged?.Invoke(this);
         }
     

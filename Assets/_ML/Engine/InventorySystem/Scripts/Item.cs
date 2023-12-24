@@ -17,16 +17,38 @@ namespace ML.Engine.InventorySystem
     {
         #region Field|Property
         /// <summary>
-        /// 物品编号 : 范围 [1, int.MaxValue) 
-        /// 默认为 int.MaxValue,表示为 null
+        /// 物品编号 : Item_类型_序号
+        /// 默认为空字符串，表示null。
         /// </summary>
-        public readonly string ID;
-
+        public readonly string ID = "";
+        /// <summary>
+        /// 显示层排序序号，越小排在越前面
+        /// </summary>
+        public int SortNum;
+        /// <summary>
+        /// 物品类目
+        /// </summary>
+        public ItemCategory Category;
+        /// <summary>
+        /// 单个物品的重量
+        /// </summary>
+        public int SingleItemWeight;
+        /// <summary>
+        /// 总重量
+        /// </summary>
+        public int Weight {get { return SingleItemWeight * Amount; }}
+        /// <summary>
+        /// 物品描述
+        /// </summary>
+        public string ItemDescription = "";
+        /// <summary>
+        /// 效果描述
+        /// </summary>
+        public string EffectsDescription = "";
         /// <summary>
         /// 所属 Inventory
         /// </summary>
         public Inventory OwnInventory = null;
-
         /// <summary>
         /// 数量
         /// </summary>
@@ -44,7 +66,6 @@ namespace ML.Engine.InventorySystem
                     this.OnAmountToZero?.Invoke(this.OwnInventory, this);
             }
         }
-
         protected int maxAmount = 1;
         /// <summary>
         /// 最大数量
@@ -59,7 +80,6 @@ namespace ML.Engine.InventorySystem
                 maxAmount = Math.Max(1, value);
             }
         }
-
         /// <summary>
         /// 数量达到上限
         /// </summary>
@@ -70,21 +90,14 @@ namespace ML.Engine.InventorySystem
                 return this.Amount == this.MaxAmount;
             }
         }
-
         /// <summary>
         /// 能否叠加存储
         /// </summary>
         public bool bCanStack;
-
         /// <summary>
         /// 数量归0时调用
         /// </summary>
         public event Action<Inventory, Item> OnAmountToZero;
-
-        /// <summary>
-        /// 用于排序的数值
-        /// </summary>
-        public int sort;
         #endregion
 
         public Item(string ID, ItemSpawner.ItemTabelJsonData config, int initAmount)
@@ -164,7 +177,36 @@ namespace ML.Engine.InventorySystem
             //    return x.Name.CompareTo(y.Name);
             //}
         }
+        public class Sort : IComparer<Item>
+        {
+            public int Compare(Item x, Item y)
+            {
+                if (x == null)
+                {
+                    if (y == null)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        return 1;
+                    }
+                }
+                if (y == null)
+                {
+                    return -1;
+                }
 
+                if (x.SortNum != y.SortNum)
+                {
+                    return x.SortNum.CompareTo(y.SortNum);
+                }
+                else
+                {
+                    return string.Compare(x.ID, y.ID);
+                }
+            }
+        }
         #endregion
     }
 }

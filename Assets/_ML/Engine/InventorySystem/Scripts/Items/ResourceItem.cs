@@ -14,7 +14,6 @@ namespace ML.Engine.InventorySystem
         }
 
         string IComposition.ID { get => this.ID; set => throw new System.NotImplementedException(); }
-
     }
 }
 

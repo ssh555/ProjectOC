@@ -1,11 +1,8 @@
-using ML.Engine.BuildingSystem.BuildingPart;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
-using static ML.Engine.BuildingSystem.Test_BuildingManager;
 
 namespace ML.Engine.InventorySystem
 {
@@ -47,7 +44,7 @@ namespace ML.Engine.InventorySystem
         /// to-do : 读表初始化
         /// 基础Item数据表 => 可加入联合体包含具体类型应有的数据
         /// </summary>
-        private Dictionary<string, ItemTabelJsonData> ItemTypeStrDict = new Dictionary<string, ItemTabelJsonData>();
+        private Dictionary<string, ItemTableJsonData> ItemTypeStrDict = new Dictionary<string, ItemTableJsonData>();
 
         /// <summary>
         /// 根据 id 生成一个崭新的Item，数量为1
@@ -56,7 +53,7 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public Item SpawnItem(string id, int amount = 1)
         {
-            if (this.ItemTypeStrDict.TryGetValue(id, out ItemTabelJsonData itemRow))
+            if (this.ItemTypeStrDict.TryGetValue(id, out ItemTableJsonData itemRow))
             {
                 Type type;
                 if(!this.ItemDict.TryGetValue(id, out type))
@@ -119,7 +116,6 @@ namespace ML.Engine.InventorySystem
             worldItem.SetItem(item);
             return worldItem;
 #endif
-
         }
 
         public bool IsValidItemID(string id)
@@ -190,16 +186,20 @@ namespace ML.Engine.InventorySystem
         public const string TableName = "ItemTableData";
 
         [System.Serializable]
-        public struct ItemTabelJsonData
+        public struct ItemTableJsonData
         {
             public string id;
             public TextContent.TextContent name;
             public string type;
+            public int sort;
+            public ItemCategory category;
+            public int weight;
             public bool bcanstack;
             public int maxamount;
             public string texture2d;
             public string worldobject;
-            public int sort;
+            public string description;
+            public string effectsDescription;
         }
 
         public IEnumerator LoadTableData(MonoBehaviour mono)
@@ -218,7 +218,7 @@ namespace ML.Engine.InventorySystem
 
             var request = ab.LoadAssetAsync<TextAsset>(TableName);
             yield return request;
-            ItemTabelJsonData[] datas = JsonConvert.DeserializeObject<ItemTabelJsonData[]>((request.asset as TextAsset).text);
+            ItemTableJsonData[] datas = JsonConvert.DeserializeObject<ItemTableJsonData[]>((request.asset as TextAsset).text);
 
             foreach (var data in datas)
             {
