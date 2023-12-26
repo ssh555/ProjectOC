@@ -44,6 +44,8 @@ namespace ExcelToJson
         {
             ExcelJsonManager EJMgr = new ExcelJsonManager();
 
+            // to-do: 在处理前或处理后需要根据Recipe表、Build表需要合成表JSON文件，用于合成系统
+
             List<EJConfig> configs = new List<EJConfig>();
             // 科技树
             // to-do : JSON输出路径待修改 -> 更改为unity/assets下面的正确路径
@@ -81,6 +83,7 @@ namespace ExcelToJson
 
             Console.WriteLine("\n----------------------------------------");
             Console.WriteLine("转换完成!!!");
+            Console.WriteLine("按任意键关闭");
             Console.Read();
 
         }

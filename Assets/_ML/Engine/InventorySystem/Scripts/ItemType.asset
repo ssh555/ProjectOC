@@ -21,7 +21,7 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  enumNamespace: 
+  enumNamespace: ML.Engine.InventorySystem
   NoneName:
     name: None
     displayName: None

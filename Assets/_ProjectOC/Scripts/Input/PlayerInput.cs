@@ -772,6 +772,226 @@ namespace ProjectOC.Input
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""UIInventory"",
+            ""id"": ""7057597f-dd83-480d-a439-81cedab5aa7f"",
+            ""actions"": [
+                {
+                    ""name"": ""DropAndDestroy"",
+                    ""type"": ""Button"",
+                    ""id"": ""bd543c13-a674-4748-aa09-6d0702ba6f93"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AlterItem"",
+                    ""type"": ""Value"",
+                    ""id"": ""3c54a2cf-a79c-4d0c-b90f-c38578702cc5"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""NextTerm"",
+                    ""type"": ""Button"",
+                    ""id"": ""d57e1367-4ab5-4d2b-91f1-860c1853fee5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LastTerm"",
+                    ""type"": ""Button"",
+                    ""id"": ""902c2dc0-d0b1-48e2-8fb5-9244a6e9fb86"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""1f941058-fb48-4029-a3d5-3970d7e088ab"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DropAndDestroy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d6c65be8-d71a-444f-b0c8-d51c7d86ccc9"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DropAndDestroy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""30f1b5fe-1721-41f6-92e7-b2426f09bb0e"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LastTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1c055c47-262d-4863-aaf4-1cc2064f0cfb"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LastTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""109c8526-a9bc-4787-a7ec-b809fb945e99"",
+                    ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e7917561-d6b7-410f-9400-8d4c3bfb5609"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""KeyBoard"",
+                    ""id"": ""9ba20314-7515-44d4-abe0-3a9c7df45480"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterItem"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""d8674d65-cfcb-4f50-b37b-0f7466baaedf"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""11efd7ea-7754-47c6-af55-01b2f9991fd0"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""b60ad2d8-deb7-4e20-816b-fa4130f54f94"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""1c19dc0a-a652-4659-acd7-8781300c82b3"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""c0a3caf4-0a48-4820-9a92-ede9edc777f4"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterItem"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""f05114a4-8dba-4ce0-a8d1-dfddfaeb7d86"",
+                    ""path"": ""<XInputController>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""1af2987f-15c2-4de2-ab90-548279db8cb0"",
+                    ""path"": ""<XInputController>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""b9852f43-e7f6-4b87-aaac-cd80061222b6"",
+                    ""path"": ""<XInputController>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""89e0adca-e904-47b0-8c4a-8e25a19a895a"",
+                    ""path"": ""<XInputController>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -794,6 +1014,12 @@ namespace ProjectOC.Input
             // PlayerUI
             m_PlayerUI = asset.FindActionMap("PlayerUI", throwIfNotFound: true);
             m_PlayerUI_AlterSelected = m_PlayerUI.FindAction("AlterSelected", throwIfNotFound: true);
+            // UIInventory
+            m_UIInventory = asset.FindActionMap("UIInventory", throwIfNotFound: true);
+            m_UIInventory_DropAndDestroy = m_UIInventory.FindAction("DropAndDestroy", throwIfNotFound: true);
+            m_UIInventory_AlterItem = m_UIInventory.FindAction("AlterItem", throwIfNotFound: true);
+            m_UIInventory_NextTerm = m_UIInventory.FindAction("NextTerm", throwIfNotFound: true);
+            m_UIInventory_LastTerm = m_UIInventory.FindAction("LastTerm", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -1061,6 +1287,76 @@ namespace ProjectOC.Input
             }
         }
         public PlayerUIActions @PlayerUI => new PlayerUIActions(this);
+
+        // UIInventory
+        private readonly InputActionMap m_UIInventory;
+        private List<IUIInventoryActions> m_UIInventoryActionsCallbackInterfaces = new List<IUIInventoryActions>();
+        private readonly InputAction m_UIInventory_DropAndDestroy;
+        private readonly InputAction m_UIInventory_AlterItem;
+        private readonly InputAction m_UIInventory_NextTerm;
+        private readonly InputAction m_UIInventory_LastTerm;
+        public struct UIInventoryActions
+        {
+            private @PlayerInput m_Wrapper;
+            public UIInventoryActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @DropAndDestroy => m_Wrapper.m_UIInventory_DropAndDestroy;
+            public InputAction @AlterItem => m_Wrapper.m_UIInventory_AlterItem;
+            public InputAction @NextTerm => m_Wrapper.m_UIInventory_NextTerm;
+            public InputAction @LastTerm => m_Wrapper.m_UIInventory_LastTerm;
+            public InputActionMap Get() { return m_Wrapper.m_UIInventory; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(UIInventoryActions set) { return set.Get(); }
+            public void AddCallbacks(IUIInventoryActions instance)
+            {
+                if (instance == null || m_Wrapper.m_UIInventoryActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_UIInventoryActionsCallbackInterfaces.Add(instance);
+                @DropAndDestroy.started += instance.OnDropAndDestroy;
+                @DropAndDestroy.performed += instance.OnDropAndDestroy;
+                @DropAndDestroy.canceled += instance.OnDropAndDestroy;
+                @AlterItem.started += instance.OnAlterItem;
+                @AlterItem.performed += instance.OnAlterItem;
+                @AlterItem.canceled += instance.OnAlterItem;
+                @NextTerm.started += instance.OnNextTerm;
+                @NextTerm.performed += instance.OnNextTerm;
+                @NextTerm.canceled += instance.OnNextTerm;
+                @LastTerm.started += instance.OnLastTerm;
+                @LastTerm.performed += instance.OnLastTerm;
+                @LastTerm.canceled += instance.OnLastTerm;
+            }
+
+            private void UnregisterCallbacks(IUIInventoryActions instance)
+            {
+                @DropAndDestroy.started -= instance.OnDropAndDestroy;
+                @DropAndDestroy.performed -= instance.OnDropAndDestroy;
+                @DropAndDestroy.canceled -= instance.OnDropAndDestroy;
+                @AlterItem.started -= instance.OnAlterItem;
+                @AlterItem.performed -= instance.OnAlterItem;
+                @AlterItem.canceled -= instance.OnAlterItem;
+                @NextTerm.started -= instance.OnNextTerm;
+                @NextTerm.performed -= instance.OnNextTerm;
+                @NextTerm.canceled -= instance.OnNextTerm;
+                @LastTerm.started -= instance.OnLastTerm;
+                @LastTerm.performed -= instance.OnLastTerm;
+                @LastTerm.canceled -= instance.OnLastTerm;
+            }
+
+            public void RemoveCallbacks(IUIInventoryActions instance)
+            {
+                if (m_Wrapper.m_UIInventoryActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IUIInventoryActions instance)
+            {
+                foreach (var item in m_Wrapper.m_UIInventoryActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_UIInventoryActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public UIInventoryActions @UIInventory => new UIInventoryActions(this);
         public interface IPlayerActions
         {
             void OnMove(InputAction.CallbackContext context);
@@ -1081,6 +1377,13 @@ namespace ProjectOC.Input
         public interface IPlayerUIActions
         {
             void OnAlterSelected(InputAction.CallbackContext context);
+        }
+        public interface IUIInventoryActions
+        {
+            void OnDropAndDestroy(InputAction.CallbackContext context);
+            void OnAlterItem(InputAction.CallbackContext context);
+            void OnNextTerm(InputAction.CallbackContext context);
+            void OnLastTerm(InputAction.CallbackContext context);
         }
     }
 }

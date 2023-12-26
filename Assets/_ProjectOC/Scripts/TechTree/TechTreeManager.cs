@@ -236,8 +236,6 @@ namespace ProjectOC.TechTree
 #endif
             var abmgr = GM.ABResourceManager;
             #region Load TPJsonData
-            // 不存在 则复制一份
-            if (!System.IO.File.Exists(System.IO.Path.Combine(Application.persistentDataPath, SaveTPJsonDataPath)))
             {
                 AssetBundle ab;
                 var crequest = abmgr.LoadLocalABAsync(TableDataABPath, null, out ab);
@@ -251,29 +249,25 @@ namespace ProjectOC.TechTree
                 var request = ab.LoadAssetAsync<TextAsset>(TableName);
                 yield return request;
                 TechPoint[] datas = JsonConvert.DeserializeObject<TechPoint[]>((request.asset as TextAsset).text);
-                
+
                 foreach (var data in datas)
                 {
-                    //// 读取合成表数据
-                    //data.ItemCost = CompositeSystem.Instance.GetCompositonFomula(data.ID);
-
                     this.registerTechPoints.Add(data.ID, data);
                 }
-
-                // 存档
-                SaveTPJsonData();
-            }
-            // 直接读取文件载入
-            else
-            {
-                string json = System.IO.File.ReadAllText(System.IO.Path.Combine(Application.persistentDataPath, SaveTPJsonDataPath));
-                TechPoint[] datas = JsonConvert.DeserializeObject<TechPoint[]>(json);
-                foreach (var data in datas)
+                // 存在则更新
+                if (!System.IO.File.Exists(System.IO.Path.Combine(Application.persistentDataPath, SaveTPJsonDataPath)))
                 {
-                    //// 读取合成表数据
-                    //data.ItemCost = CompositeSystem.Instance.GetCompositonFomula(data.ID);
-
-                    this.registerTechPoints.Add(data.ID, data);
+                    string json = System.IO.File.ReadAllText(System.IO.Path.Combine(Application.persistentDataPath, SaveTPJsonDataPath));
+                    datas = JsonConvert.DeserializeObject<TechPoint[]>(json);
+                    foreach (var data in datas)
+                    {
+                        // 只需要更新 是否解锁
+                        if(this.registerTechPoints.ContainsKey(data.ID))
+                        {
+                            // 有一个解锁则标记为解锁
+                            this.registerTechPoints[data.ID].IsUnlocked = data.IsUnlocked || this.registerTechPoints[data.ID].IsUnlocked;
+                        }
+                    }
                 }
             }
             #endregion
@@ -286,15 +280,21 @@ namespace ProjectOC.TechTree
 
                 foreach (var data in datas)
                 {
-                    this.UnlockingTechPointDict.Add(data.id, data);
+                    // 剔除更新数据后不存在的节点
+                    if(this.registerTechPoints.ContainsKey(data.id))
+                    {
+                        this.UnlockingTechPointDict.Add(data.id, data);
+                    }
                 }
             }
+            // 更新存档
+            SaveData();
             #endregion
 
 
             // 恢复存档数据
             #region TPJsonData
-            foreach(var tp in this.registerTechPoints.Values)
+            foreach (var tp in this.registerTechPoints.Values)
             {
                 if(tp.IsUnlocked)
                 {

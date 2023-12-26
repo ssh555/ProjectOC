@@ -19,7 +19,7 @@ namespace ML.Engine.Timer
         private List<ITickComponent> removeFixedTick;
         private List<ITickComponent> removeLateTick;
 
-        public float TimeScale;
+        public float TimeScale = 1;
 
         public TickManager()
         {

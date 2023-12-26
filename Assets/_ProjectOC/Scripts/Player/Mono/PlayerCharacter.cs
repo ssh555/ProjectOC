@@ -113,7 +113,6 @@ namespace ProjectOC.Player
         public void Tick(float deltatime)
         {
             this.moveAbility.UpdateJump(deltatime, this.playerInputActions.Jump);
-
             //// In-Window
             //if (Application.isFocused)
             //{

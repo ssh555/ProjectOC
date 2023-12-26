@@ -332,7 +332,10 @@ namespace ML.Engine.Manager
         #region Update
         private void Update()
         {
-            // 先更新计时器
+            if (IsPause)
+            {
+                return;
+            }// 先更新计时器
             this.CounterDownTimerManager.Update(Time.deltaTime);
 
             this.TickManager.Tick(Time.deltaTime);
@@ -340,7 +343,10 @@ namespace ML.Engine.Manager
 
         private void FixedUpdate()
         {
-            // 先更新计时器
+            if (IsPause)
+            {
+                return;
+            }// 先更新计时器
             this.CounterDownTimerManager.FixedUpdate(Time.fixedDeltaTime);
 
             this.TickManager.FixedTick(Time.fixedDeltaTime);
@@ -348,6 +354,10 @@ namespace ML.Engine.Manager
 
         private void LateUpdate()
         {
+            if(IsPause)
+            {
+                return;
+            }
             this.CounterDownTimerManager.LateUpdate(Time.deltaTime);
 
             this.TickManager.LateTick(Time.deltaTime);
