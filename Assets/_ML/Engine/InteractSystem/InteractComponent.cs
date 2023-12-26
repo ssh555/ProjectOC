@@ -5,7 +5,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using static ProjectOC.TechTree.TechTreeManager;
 
 namespace ML.Engine.InteractSystem
 {
@@ -47,33 +46,21 @@ namespace ML.Engine.InteractSystem
                 {
                     CurrentInteraction.OnSelectedExit(this);
                     CurrentInteraction = null;
+                    uiKeyTip.img.transform.parent.gameObject.SetActive(false);
                     return;
                 }
                 uiKeyTip.img.transform.parent.gameObject.SetActive(true);
                 uiKeyTip.ReWrite(GetKeyTip(CurrentInteraction.InteractType));
-                var screenPosition = Camera.main.WorldToScreenPoint(CurrentInteraction.gameObject.transform.position + CurrentInteraction.PosOffset);
-                if (screenPosition.x < 0)
-                {
-                    screenPosition.x = 0;
-                }
-                else if (screenPosition.x > Screen.width)
-                {
-                    screenPosition.x = Screen.width;
-                }
 
-                if (screenPosition.y < 0)
-                {
-                    screenPosition.y = 0;
-                }
-                else if (screenPosition.y > Screen.height)
-                {
-                    screenPosition.y = Screen.height;
-                }
+                // 将世界坐标转换为屏幕坐标
+                Vector3 screenPosition = Camera.main.WorldToScreenPoint(CurrentInteraction.gameObject.transform.position + CurrentInteraction.PosOffset);
 
-                Vector2 localPosition; // UI坐标
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(uiKeyTip.img.transform.parent.parent as RectTransform, screenPosition, null, out localPosition);
+                // 如果屏幕坐标超出了屏幕范围，将其设置在屏幕边缘
+                screenPosition.x = Mathf.Clamp(screenPosition.x, 0, Screen.width);
+                screenPosition.y = Mathf.Clamp(screenPosition.y, 0, Screen.height);
 
-                uiKeyTip.img.transform.parent.GetComponent<RectTransform>().anchoredPosition = localPosition;
+                // 更新UI元素的位置
+                uiKeyTip.img.transform.parent.position = screenPosition;
 
                 // 确认交互
                 if (Input.InputManager.Instance.Common.Common.Comfirm.WasPressedThisFrame())
