@@ -327,7 +327,7 @@ namespace ML.Engine.BuildingSystem
                 this.PopPanel();
             };
 
-            BM.Placer.OnBuildSelectionEnter += (BuildingCategory[] c, int ic, BuildingType[] t, int it) =>
+            BM.Placer.OnBuildSelectionEnter += (BuildingCategory1[] c, int ic, BuildingCategory2[] t, int it) =>
             {
                 this.PushPanel<UI.BSSelectBPartPanel>();
                 StartCoroutine((this.GetPeekPanel() as UI.BSSelectBPartPanel).Init(c, t, ic, it));
@@ -347,7 +347,7 @@ namespace ML.Engine.BuildingSystem
                 this.PushPanel<UI.BSPlaceModePanel>();
                 var styles = BM.GetAllStyleByBPartHeight(bpart);
                 var heights = BM.GetAllHeightByBPartStyle(bpart);
-                StartCoroutine((this.GetPeekPanel() as UI.BSPlaceModePanel).Init(styles, heights, Array.IndexOf(styles, bpart.Classification.Style), Array.IndexOf(heights, bpart.Classification.Height))) ;
+                StartCoroutine((this.GetPeekPanel() as UI.BSPlaceModePanel).Init(styles, heights, Array.IndexOf(styles, bpart.Classification.Category3), Array.IndexOf(heights, bpart.Classification.Category4))) ;
             };
             BM.Placer.OnPlaceModeExit += () =>
             {

@@ -13,14 +13,14 @@ namespace ML.Engine.BuildingSystem.UI
     {
         public const string TStyleABPath = "UI/BuildingSystem/Texture2D/Style";
 
-        public static Dictionary<BuildingStyle, Texture2D> TStyleDict = null;
+        public static Dictionary<BuildingCategory3, Texture2D> TStyleDict = null;
         public static bool IsInit = false;
 
-        public static Sprite GetStyleSprite(BuildingStyle style)
+        public static Sprite GetStyleSprite(BuildingCategory3 style)
         {
             if (!TStyleDict.ContainsKey(style))
             {
-                style = BuildingStyle.None;
+                style = BuildingCategory3.None;
             }
             Texture2D texture = TStyleDict[style];
             Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
@@ -30,7 +30,7 @@ namespace ML.Engine.BuildingSystem.UI
 
         private BuildingManager BM => BuildingManager.Instance;
 
-        private Dictionary<BuildingStyle, RectTransform> styleInstance = new Dictionary<BuildingStyle, RectTransform>();
+        private Dictionary<BuildingCategory3, RectTransform> styleInstance = new Dictionary<BuildingCategory3, RectTransform>();
         private RectTransform styleParent;
         private RectTransform templateStyle;
 
@@ -154,7 +154,7 @@ namespace ML.Engine.BuildingSystem.UI
                 yield return null;
             }
 
-            TStyleDict = new Dictionary<BuildingStyle, Texture2D>();
+            TStyleDict = new Dictionary<BuildingCategory3, Texture2D>();
 
             var abmgr = Manager.GameManager.Instance.ABResourceManager;
             AssetBundle ab;
@@ -167,9 +167,9 @@ namespace ML.Engine.BuildingSystem.UI
             foreach (var obj in request.allAssets)
             {
                 var tex = (obj as Texture2D);
-                if (tex != null && Enum.IsDefined(typeof(BuildingStyle), tex.name))
+                if (tex != null && Enum.IsDefined(typeof(BuildingCategory3), tex.name))
                 {
-                    TStyleDict.Add((BuildingStyle)Enum.Parse(typeof(BuildingStyle), tex.name), tex);
+                    TStyleDict.Add((BuildingCategory3)Enum.Parse(typeof(BuildingCategory3), tex.name), tex);
                 }
             }
 
@@ -179,7 +179,7 @@ namespace ML.Engine.BuildingSystem.UI
 #endif
         }
 
-        public IEnumerator Init(BuildingStyle[] styles, short[] heights, int sIndex, int hIndex)
+        public IEnumerator Init(BuildingCategory3[] styles, short[] heights, int sIndex, int hIndex)
         {
             while (!IsInit)
             {
@@ -207,7 +207,7 @@ namespace ML.Engine.BuildingSystem.UI
         }
 
 
-        private IEnumerator ShowStyleAndHeight(BuildingStyle style, short height)
+        private IEnumerator ShowStyleAndHeight(BuildingCategory3 style, short height)
         {
             // ¸ü»» Style
             foreach (var instance in this.styleInstance)
@@ -310,14 +310,14 @@ namespace ML.Engine.BuildingSystem.UI
         {
             var styles = BM.GetAllStyleByBPartHeight(bpart);
             var heights = BM.GetAllHeightByBPartStyle(bpart);
-            StartCoroutine(this.Init(styles, heights, Array.IndexOf(styles, bpart.Classification.Style), Array.IndexOf(heights, bpart.Classification.Height)));
+            StartCoroutine(this.Init(styles, heights, Array.IndexOf(styles, bpart.Classification.Category3), Array.IndexOf(heights, bpart.Classification.Category4)));
         }
 
         private void Placer_OnPlaceModeChangeStyle(IBuildingPart bpart, bool arg2)
         {
             var styles = BM.GetAllStyleByBPartHeight(bpart);
             var heights = BM.GetAllHeightByBPartStyle(bpart);
-            StartCoroutine(this.Init(styles, heights, Array.IndexOf(styles, bpart.Classification.Style), Array.IndexOf(heights, bpart.Classification.Height)));
+            StartCoroutine(this.Init(styles, heights, Array.IndexOf(styles, bpart.Classification.Category3), Array.IndexOf(heights, bpart.Classification.Category4)));
         }
     }
 }

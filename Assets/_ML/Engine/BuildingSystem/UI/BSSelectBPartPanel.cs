@@ -16,25 +16,25 @@ namespace ML.Engine.BuildingSystem.UI
         public const string TCategoryABPath = "UI/BuildingSystem/Texture2D/Category";
         public const string TTypeABPath = "UI/BuildingSystem/Texture2D/Type";
 
-        public static Dictionary<BuildingCategory, Texture2D> TCategoryDict = null;
-        public static Dictionary<BuildingType, Texture2D> TTypeDict = null;
+        public static Dictionary<BuildingCategory1, Texture2D> TCategoryDict = null;
+        public static Dictionary<BuildingCategory2, Texture2D> TTypeDict = null;
         public static int IsInit = -1;
 
-        public static Sprite GetCategorySprite(BuildingCategory category)
+        public static Sprite GetCategorySprite(BuildingCategory1 category)
         {
             if(!TCategoryDict.ContainsKey(category))
             {
-                category = BuildingCategory.None;
+                category = BuildingCategory1.None;
             }
             Texture2D texture = TCategoryDict[category];
             Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
             return sprite;
         }
-        public static Sprite GetTypeSprite(BuildingType type)
+        public static Sprite GetTypeSprite(BuildingCategory2 type)
         {
             if (!TTypeDict.ContainsKey(type))
             {
-                type = BuildingType.None;
+                type = BuildingCategory2.None;
             }
             Texture2D texture = TTypeDict[type];
             Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
@@ -43,8 +43,8 @@ namespace ML.Engine.BuildingSystem.UI
 
         private BuildingManager BM => BuildingManager.Instance;
 
-        private Dictionary<BuildingCategory, RectTransform> categoryInstance = new Dictionary<BuildingCategory, RectTransform>();
-        private Dictionary<BuildingType, RectTransform> typeInstance = new Dictionary<BuildingType, RectTransform>();
+        private Dictionary<BuildingCategory1, RectTransform> categoryInstance = new Dictionary<BuildingCategory1, RectTransform>();
+        private Dictionary<BuildingCategory2, RectTransform> typeInstance = new Dictionary<BuildingCategory2, RectTransform>();
 
         private RectTransform categoryParent;
         private RectTransform templateCategory;
@@ -130,7 +130,7 @@ namespace ML.Engine.BuildingSystem.UI
                 yield return null;
             }
 
-            TCategoryDict = new Dictionary<BuildingCategory, Texture2D>();
+            TCategoryDict = new Dictionary<BuildingCategory1, Texture2D>();
 
             var abmgr = Manager.GameManager.Instance.ABResourceManager;
             AssetBundle ab;
@@ -143,9 +143,9 @@ namespace ML.Engine.BuildingSystem.UI
             foreach (var obj in request.allAssets)
             {
                 var tex = (obj as Texture2D);
-                if (tex != null && Enum.IsDefined(typeof(BuildingCategory), tex.name))
+                if (tex != null && Enum.IsDefined(typeof(BuildingCategory1), tex.name))
                 {
-                    TCategoryDict.Add((BuildingCategory)Enum.Parse(typeof(BuildingCategory), tex.name), tex);
+                    TCategoryDict.Add((BuildingCategory1)Enum.Parse(typeof(BuildingCategory1), tex.name), tex);
                 }
             }
 
@@ -165,7 +165,7 @@ namespace ML.Engine.BuildingSystem.UI
                 yield return null;
             }
 
-            TTypeDict = new Dictionary<BuildingType, Texture2D>();
+            TTypeDict = new Dictionary<BuildingCategory2, Texture2D>();
 
             var abmgr = Manager.GameManager.Instance.ABResourceManager;
             AssetBundle ab;
@@ -178,9 +178,9 @@ namespace ML.Engine.BuildingSystem.UI
             foreach (var obj in request.allAssets)
             {
                 var tex = (obj as Texture2D);
-                if (tex != null && Enum.IsDefined(typeof(BuildingType), tex.name))
+                if (tex != null && Enum.IsDefined(typeof(BuildingCategory2), tex.name))
                 {
-                    TTypeDict.Add((BuildingType)Enum.Parse(typeof(BuildingType), tex.name), tex);
+                    TTypeDict.Add((BuildingCategory2)Enum.Parse(typeof(BuildingCategory2), tex.name), tex);
                 }
             }
 
@@ -193,7 +193,7 @@ namespace ML.Engine.BuildingSystem.UI
 
 
 
-        public IEnumerator Init(BuildingCategory[] categorys, BuildingType[] types, int cIndex, int tIndex)
+        public IEnumerator Init(BuildingCategory1[] categorys, BuildingCategory2[] types, int cIndex, int tIndex)
         {
             while(IsInit < 1)
             {
@@ -214,7 +214,7 @@ namespace ML.Engine.BuildingSystem.UI
             StartCoroutine(this.ShowCategoryAndType(categorys[cIndex], types, tIndex));
         }
 
-        private IEnumerator ShowCategoryAndType(BuildingCategory category, BuildingType[] types, int tIndex)
+        private IEnumerator ShowCategoryAndType(BuildingCategory1 category, BuildingCategory2[] types, int tIndex)
         {
             this.ClearTypeInstance();
 
@@ -303,7 +303,7 @@ namespace ML.Engine.BuildingSystem.UI
             BM.Placer.OnBuildSelectionTypeChanged += Placer_OnBuildSelectionTypeChanged;
         }
 
-        private void Placer_OnBuildSelectionTypeChanged(BuildingCategory category, BuildingType[] types, int tIndex)
+        private void Placer_OnBuildSelectionTypeChanged(BuildingCategory1 category, BuildingCategory2[] types, int tIndex)
         {
             StartCoroutine(this.ShowCategoryAndType(category, types, tIndex));
         }

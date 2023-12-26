@@ -3,7 +3,7 @@ using Sirenix.OdinInspector;
 namespace ML.Engine.BuildingSystem.BuildingPart
 {
 	[System.Serializable]
-	public enum BuildingStyle
+	public enum BuildingCategory3
 	{
 		[LabelText("None")]
 		None,

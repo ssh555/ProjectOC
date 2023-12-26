@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIInfiniteInventory : ML.Engine.UI.UIBasePanel
 {
@@ -146,4 +147,20 @@ public class UIInfiniteInventory : ML.Engine.UI.UIBasePanel
     #region TextContent
 
     #endregion
+
+    public Vector2 GetGridSize(GridLayoutGroup gridLayout)
+    {
+        RectTransform rectTransform = gridLayout.GetComponent<RectTransform>();
+        Vector2 size = rectTransform.rect.size;
+        Vector2 cellSize = gridLayout.cellSize;
+        Vector2 spacing = gridLayout.spacing;
+        Vector2 padding = new Vector2(gridLayout.padding.horizontal, gridLayout.padding.vertical);
+
+        Vector2 gridSize = (size - padding + spacing) / (cellSize + spacing);
+
+        int rows = Mathf.FloorToInt(gridSize.y);
+        int columns = Mathf.FloorToInt(gridSize.x);
+
+        return new Vector2(rows, columns);
+    }
 }

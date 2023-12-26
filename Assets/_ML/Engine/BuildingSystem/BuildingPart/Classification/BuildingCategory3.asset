@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e04c33259d65b934fa9ee5353f84593e, type: 3}
-  m_Name: BuildingCategory
+  m_Name: BuildingCategory3
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -25,11 +25,14 @@ MonoBehaviour:
   NoneName:
     name: None
     displayName: None
-    value: -1
+    value: 
   EnumList:
-  - name: Room
-    displayName: "\u623F\u5C4B"
-    value: 0
-  - name: Furniture
-    displayName: "\u5BB6\u5177"
-    value: 1
+  - name: Base
+    displayName: "\u6B63\u65B9\u5F62"
+    value: 
+  - name: Triangle
+    displayName: "\u4E09\u89D2\u5F62"
+    value: 
+  - name: Quagrant
+    displayName: "\u56DB\u65B9\u5706\u5F62"
+    value: 
