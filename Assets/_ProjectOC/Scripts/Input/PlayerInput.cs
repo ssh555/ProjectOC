@@ -84,9 +84,9 @@ namespace ProjectOC.Input
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""PickUp"",
+                    ""name"": ""OpenBotUI"",
                     ""type"": ""Button"",
-                    ""id"": ""48f95d05-93ca-4ac2-8e0b-819581db0eec"",
+                    ""id"": ""c51a75d1-aca8-4df9-a513-e61e6373f4e3"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -152,7 +152,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""0eae1f6a-e0ff-463a-b088-33a24d852ad5"",
-                    ""path"": ""<XInputController>/buttonEast"",
+                    ""path"": ""<XInputController>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -404,23 +404,23 @@ namespace ProjectOC.Input
                 },
                 {
                     ""name"": """",
-                    ""id"": ""66240ca2-927c-408a-84e0-1e5f585276c7"",
-                    ""path"": ""<Keyboard>/f"",
+                    ""id"": ""2355a4a4-d2bb-4832-886c-a43ec6707981"",
+                    ""path"": ""<Keyboard>/p"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""PickUp"",
+                    ""action"": ""OpenBotUI"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""8924878b-2f38-4a74-a19c-4f09305a0274"",
-                    ""path"": ""<XInputController>/buttonSouth"",
+                    ""id"": ""daebb05f-51df-457d-b0ac-6ef65a0a1c11"",
+                    ""path"": ""<XInputController>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""PickUp"",
+                    ""action"": ""OpenBotUI"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1004,7 +1004,7 @@ namespace ProjectOC.Input
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_MouseX = m_Player.FindAction("MouseX", throwIfNotFound: true);
             m_Player_MouseY = m_Player.FindAction("MouseY", throwIfNotFound: true);
-            m_Player_PickUp = m_Player.FindAction("PickUp", throwIfNotFound: true);
+            m_Player_OpenBotUI = m_Player.FindAction("OpenBotUI", throwIfNotFound: true);
             // TechTree
             m_TechTree = asset.FindActionMap("TechTree", throwIfNotFound: true);
             m_TechTree_LastTerm = m_TechTree.FindAction("LastTerm", throwIfNotFound: true);
@@ -1087,7 +1087,7 @@ namespace ProjectOC.Input
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_MouseX;
         private readonly InputAction m_Player_MouseY;
-        private readonly InputAction m_Player_PickUp;
+        private readonly InputAction m_Player_OpenBotUI;
         public struct PlayerActions
         {
             private @PlayerInput m_Wrapper;
@@ -1098,7 +1098,7 @@ namespace ProjectOC.Input
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
             public InputAction @MouseX => m_Wrapper.m_Player_MouseX;
             public InputAction @MouseY => m_Wrapper.m_Player_MouseY;
-            public InputAction @PickUp => m_Wrapper.m_Player_PickUp;
+            public InputAction @OpenBotUI => m_Wrapper.m_Player_OpenBotUI;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1126,9 +1126,9 @@ namespace ProjectOC.Input
                 @MouseY.started += instance.OnMouseY;
                 @MouseY.performed += instance.OnMouseY;
                 @MouseY.canceled += instance.OnMouseY;
-                @PickUp.started += instance.OnPickUp;
-                @PickUp.performed += instance.OnPickUp;
-                @PickUp.canceled += instance.OnPickUp;
+                @OpenBotUI.started += instance.OnOpenBotUI;
+                @OpenBotUI.performed += instance.OnOpenBotUI;
+                @OpenBotUI.canceled += instance.OnOpenBotUI;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -1151,9 +1151,9 @@ namespace ProjectOC.Input
                 @MouseY.started -= instance.OnMouseY;
                 @MouseY.performed -= instance.OnMouseY;
                 @MouseY.canceled -= instance.OnMouseY;
-                @PickUp.started -= instance.OnPickUp;
-                @PickUp.performed -= instance.OnPickUp;
-                @PickUp.canceled -= instance.OnPickUp;
+                @OpenBotUI.started -= instance.OnOpenBotUI;
+                @OpenBotUI.performed -= instance.OnOpenBotUI;
+                @OpenBotUI.canceled -= instance.OnOpenBotUI;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -1365,7 +1365,7 @@ namespace ProjectOC.Input
             void OnJump(InputAction.CallbackContext context);
             void OnMouseX(InputAction.CallbackContext context);
             void OnMouseY(InputAction.CallbackContext context);
-            void OnPickUp(InputAction.CallbackContext context);
+            void OnOpenBotUI(InputAction.CallbackContext context);
         }
         public interface ITechTreeActions
         {

@@ -209,6 +209,9 @@ namespace ML.Engine.InventorySystem
             {
                 yield return null;
             }
+#if UNITY_EDITOR
+            float startTime = Time.realtimeSinceStartup;
+#endif
             var abmgr = Manager.GameManager.Instance.ABResourceManager;
             AssetBundle ab;
             var crequest = abmgr.LoadLocalABAsync(ItemTableDataABPath, null, out ab);
@@ -220,14 +223,14 @@ namespace ML.Engine.InventorySystem
             var request = ab.LoadAssetAsync<TextAsset>(TableName);
             yield return request;
             ItemTableJsonData[] datas = JsonConvert.DeserializeObject<ItemTableJsonData[]>((request.asset as TextAsset).text);
-
             foreach (var data in datas)
             {
                 this.ItemTypeStrDict.Add(data.id, data);
             }
-
             //abmgr.UnLoadLocalABAsync(ItemTableDataABPath, false, null);
-
+#if UNITY_EDITOR
+            Debug.Log("LoadItemTable Cost: " + (Time.realtimeSinceStartup - startTime));
+#endif
             IsLoadOvered = true;
         }
 

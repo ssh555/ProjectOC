@@ -56,14 +56,12 @@ public class UIInfiniteInventory : ML.Engine.UI.UIBasePanel
     {
         this.RegisterInput();
         ProjectOC.Input.InputManager.PlayerInput.UIInventory.Enable();
-        ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
         ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
     }
 
     private void Exit()
     {
         ProjectOC.Input.InputManager.PlayerInput.UIInventory.Disable();
-        ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
         ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
         this.UnregisterInput();
     }

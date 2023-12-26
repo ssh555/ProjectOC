@@ -1,0 +1,13 @@
+[
+    {
+        "keyname" : "Interaction",
+        "keymap" :{
+            "KeyBoard" : "E",
+            "XBOX" : "A"
+        },
+        "description" :{
+            "Chinese" : "可交互",
+            "English" : "Interact"
+        }
+    }
+]

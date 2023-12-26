@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ProjectOC.ProductionNodeNS
 {
-    public class WorldProductionNode : BuildingPart, IInteractionObject
+    public class WorldProductionNode : BuildingPart
     {
         /// <summary>
         /// 生产节点ID

@@ -91,6 +91,9 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             {
                 yield return null;
             }
+#if UNITY_EDITOR
+            float startTime = Time.realtimeSinceStartup;
+#endif
             var abmgr = Manager.GameManager.Instance.ABResourceManager;
             AssetBundle ab;
             var crequest = abmgr.LoadLocalABAsync(CompositionTableDataABPath, null, out ab);
@@ -129,6 +132,10 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             //abmgr.UnLoadLocalABAsync(CompositionTableDataABPath, false, null);
 
             IsLoadOvered = true;
+
+#if UNITY_EDITOR
+            Debug.Log("LoadCompositionTable Cost: " + (Time.realtimeSinceStartup - startTime));
+#endif
         }
 
 

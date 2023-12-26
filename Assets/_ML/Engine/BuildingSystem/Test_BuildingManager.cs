@@ -268,8 +268,7 @@ namespace ML.Engine.BuildingSystem
             
             BM.Placer.OnBuildingModeEnter += () =>
             {
-                ProjectOC.Input.InputManager.PlayerInput.Player.Crouch.Disable();
-                ProjectOC.Input.InputManager.PlayerInput.Player.Jump.Disable();
+
 
                 // to-delete
                 area.gameObject.SetActive(IsEnableArea);
@@ -278,8 +277,7 @@ namespace ML.Engine.BuildingSystem
             };
             BM.Placer.OnBuildingModeExit += () =>
             {
-                ProjectOC.Input.InputManager.PlayerInput.Player.Crouch.Enable();
-                ProjectOC.Input.InputManager.PlayerInput.Player.Jump.Enable();
+
                 this.PopPanel();
             };
 

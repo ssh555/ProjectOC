@@ -258,14 +258,13 @@ namespace ProjectOC.TechTree.UI
 
         private void Start()
         {
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
             this.enabled = false;
         }
 
         private void OnDestroy()
         {
             ClearTemp();
-
+            (this as ITickComponent).DisposeTick();
         }
         #endregion
 
@@ -309,10 +308,10 @@ namespace ProjectOC.TechTree.UI
         public override void OnEnter()
         {
             InitStaticData();
+            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
 
             base.OnEnter();
             ProjectOC.Input.InputManager.PlayerInput.TechTree.Enable();
-            ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
             Refresh();
 
             //// to-delete
@@ -328,14 +327,14 @@ namespace ProjectOC.TechTree.UI
         public override void OnPause()
         {
             base.OnPause();
-            ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
+            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
             ProjectOC.Input.InputManager.PlayerInput.TechTree.Disable();
         }
 
         public override void OnRecovery()
         {
+            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
             base.OnRecovery();
-            ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
             ProjectOC.Input.InputManager.PlayerInput.TechTree.Enable();
             Refresh();
         }
@@ -343,7 +342,7 @@ namespace ProjectOC.TechTree.UI
         public override void OnExit()
         {
             base.OnExit();
-            ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
+            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
             ProjectOC.Input.InputManager.PlayerInput.TechTree.Disable();
         }
         #endregion

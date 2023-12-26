@@ -60,9 +60,9 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "PickUp",
+                    "name": "OpenBotUI",
                     "type": "Button",
-                    "id": "48f95d05-93ca-4ac2-8e0b-819581db0eec",
+                    "id": "c51a75d1-aca8-4df9-a513-e61e6373f4e3",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -128,7 +128,7 @@
                 {
                     "name": "",
                     "id": "0eae1f6a-e0ff-463a-b088-33a24d852ad5",
-                    "path": "<XInputController>/buttonEast",
+                    "path": "<XInputController>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -380,23 +380,23 @@
                 },
                 {
                     "name": "",
-                    "id": "66240ca2-927c-408a-84e0-1e5f585276c7",
-                    "path": "<Keyboard>/f",
+                    "id": "2355a4a4-d2bb-4832-886c-a43ec6707981",
+                    "path": "<Keyboard>/p",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "PickUp",
+                    "action": "OpenBotUI",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "8924878b-2f38-4a74-a19c-4f09305a0274",
-                    "path": "<XInputController>/buttonSouth",
+                    "id": "daebb05f-51df-457d-b0ac-6ef65a0a1c11",
+                    "path": "<XInputController>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "PickUp",
+                    "action": "OpenBotUI",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
