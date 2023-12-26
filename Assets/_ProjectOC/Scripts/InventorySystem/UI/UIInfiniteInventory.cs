@@ -17,7 +17,6 @@ public class UIInfiniteInventory : ML.Engine.UI.UIBasePanel
     #region Unity
     private void Awake()
     {
-        ProjectOC.Input.InputManager.PlayerInput.UIInventory.Enable();
         this.enabled = false;
     }
 
@@ -50,8 +49,9 @@ public class UIInfiniteInventory : ML.Engine.UI.UIBasePanel
 
     #endregion
 
-
     #region Internal
+    public ML.Engine.InventorySystem.InfiniteInventory inventory;
+
     private void Enter()
     {
         this.RegisterInput();
@@ -102,7 +102,7 @@ public class UIInfiniteInventory : ML.Engine.UI.UIBasePanel
 
     private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        throw new System.NotImplementedException();
+        UIMgr.PopPanel();
     }
 
     private void Comfirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -136,6 +136,14 @@ public class UIInfiniteInventory : ML.Engine.UI.UIBasePanel
     {
         this.ItemIsDestroyed = true;
     }
+
+    #endregion
+
+    #region UI
+
+    #endregion
+
+    #region TextContent
 
     #endregion
 }

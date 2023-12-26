@@ -12,5 +12,12 @@
             "Chinese" : "科技树",
             "English" : "TechTree"
         }
+    },
+    {
+        "name" : "inventory",
+        "description" : {
+            "Chinese" : "背包",
+            "English" : "Inventory"
+        }
     }
 ]

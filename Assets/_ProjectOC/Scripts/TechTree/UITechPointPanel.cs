@@ -98,7 +98,7 @@ namespace ProjectOC.TechTree.UI
 
         #endregion
 
-        public Inventory inventory;
+        public IInventory inventory;
         /// <summary>
         /// 是否满足破译当前节点的条件
         /// </summary>

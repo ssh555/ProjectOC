@@ -155,7 +155,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <param name="resource"></param>
         /// <param name="compositonID"></param>
         /// <returns></returns>
-        public bool CanComposite(Inventory resource, string compositonID)
+        public bool CanComposite(IInventory resource, string compositonID)
         {
             if (!this.CompositeData.ContainsKey(compositonID) || this.CompositeData[compositonID].formula == null)
             {
@@ -179,7 +179,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <param name="resource"></param>
         /// <param name="compositonID"></param>
         /// <returns></returns>
-        public CompositionObjectType Composite(Inventory resource, string compositonID, out IComposition composition)
+        public CompositionObjectType Composite(IInventory resource, string compositonID, out IComposition composition)
         {
             composition = null;
 
@@ -214,7 +214,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             return CompositionObjectType.Error;
         }
     
-        public bool OnlyCostResource(Inventory resource, string compositonID)
+        public bool OnlyCostResource(IInventory resource, string compositonID)
         {
             // 移除消耗的资源
             lock (resource)

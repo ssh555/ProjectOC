@@ -334,33 +334,50 @@ namespace ML.Engine.Manager
         {
             if (IsPause)
             {
-                return;
-            }// 先更新计时器
-            this.CounterDownTimerManager.Update(Time.deltaTime);
+                this.TickManager.UpdateTickComponentList();
+            }
+            else
+            {
+                // 先更新计时器
+                this.CounterDownTimerManager.Update(Time.deltaTime);
 
-            this.TickManager.Tick(Time.deltaTime);
+                this.TickManager.Tick(Time.deltaTime);
+
+                this.TickManager.UpdateTickComponentList();
+            }
         }
 
         private void FixedUpdate()
         {
             if (IsPause)
             {
-                return;
-            }// 先更新计时器
-            this.CounterDownTimerManager.FixedUpdate(Time.fixedDeltaTime);
+                this.TickManager.UpdateFixedTickComponentList();
+            }
+            else
+            {
+                // 先更新计时器
+                this.CounterDownTimerManager.FixedUpdate(Time.fixedDeltaTime);
 
-            this.TickManager.FixedTick(Time.fixedDeltaTime);
+                this.TickManager.FixedTick(Time.fixedDeltaTime);
+
+                this.TickManager.UpdateFixedTickComponentList();
+            }
         }
 
         private void LateUpdate()
         {
             if(IsPause)
             {
-                return;
+                this.TickManager.UpdateLateTickComponentList();
             }
-            this.CounterDownTimerManager.LateUpdate(Time.deltaTime);
+            else
+            {
+                this.CounterDownTimerManager.LateUpdate(Time.deltaTime);
 
-            this.TickManager.LateTick(Time.deltaTime);
+                this.TickManager.LateTick(Time.deltaTime);
+
+                this.TickManager.UpdateLateTickComponentList();
+            }
         }
         #endregion
         

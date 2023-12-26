@@ -14,6 +14,8 @@ namespace ML.Engine.InventorySystem
 
         public bool RemoveItem(string itemID, int amount);
 
+        public int GetItemAllNum(string id);
+
     }
 
 }

@@ -18,10 +18,13 @@ namespace ProjectOC.Player.UI
 
         public UITechPointPanel uITechPointPanel;
 
+        public UIInfiniteInventory uIInfiniteInventory;
+
         private IUISelected CurSelected;
 
         private SelectedButton EnterBuildBtn;
         private SelectedButton EnterTechTreeBtn;
+        private SelectedButton EnterInventoryBtn;
 
         private BuildingManager BM => BuildingManager.Instance;
 
@@ -58,6 +61,15 @@ namespace ProjectOC.Player.UI
                 var panel = GameObject.Instantiate(uITechPointPanel);
                 panel.transform.SetParent(this.transform.parent, false);
                 panel.inventory = this.player.Inventory;
+                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+            };
+
+            this.EnterInventoryBtn = btnList.Find("EnterInventory").GetComponent<SelectedButton>();
+            this.EnterInventoryBtn.OnInteract += () =>
+            {
+                var panel = GameObject.Instantiate(uIInfiniteInventory);
+                panel.transform.SetParent(this.transform.parent, false);
+                panel.inventory = this.player.Inventory as ML.Engine.InventorySystem.InfiniteInventory;
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
             };
 
@@ -195,6 +207,7 @@ namespace ProjectOC.Player.UI
             {
                 this.EnterBuildBtn.text.text = this.TipDict["enterbuild"].GetDescription();
                 this.EnterTechTreeBtn.text.text = this.TipDict["techtree"].GetDescription();
+                this.EnterInventoryBtn.text.text = this.TipDict["inventory"].GetDescription();
             }
         }
     }

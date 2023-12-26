@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3831075187
+CRC: 2747272746
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b05a59e805c991f689539509f63995d4
+    Hash: 15f8ee7a65d1a4724d89f314f329869a
   TypeTreeHash:
     serializedVersion: 2
-    Hash: d0d3b0d081c0b9341f4cf0745b3baaf6
+    Hash: d1936c7995ea03b26c3683767d1f379a
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: b05a59e805c991f689539509f63995d4
+    Hash: 15f8ee7a65d1a4724d89f314f329869a
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -65,8 +65,6 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 9ea83b1ab433e514bb440b78e1a6f54a, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 5e626c9daacc88545836fc3016b72e0c, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 3e87641e6af1fb746a87cdc198aba595, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f4044717213e31446939f7bd49c896ea, type: 3}
@@ -88,8 +86,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 6feb82b60c7707348a49cccd1c157035, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: a444fb26d79a4a94ebd9400ba547e490, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: eea3d28ffbcb4cd47a326cb08ba74d18, type: 3}
 - Class: 114
@@ -119,9 +115,15 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 902042dd59e50754a80bcc00d8654070, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: f371f36022d2b4244b195cf029a5205a, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: a444fb26d79a4a94ebd9400ba547e490, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 18e0a5fd7f32347419b785bf00a72db7, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 5e626c9daacc88545836fc3016b72e0c, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -153,3 +155,4 @@ Dependencies:
 - C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/animation/character/player/model
 - C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials
 - C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/prefabs/character/player
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/uipanel

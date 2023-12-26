@@ -42,22 +42,61 @@ namespace ML.Engine.Timer
         }   
 
         #region Tick
-        public void Tick(float deltatime)
+        public void UpdateTickComponentList()
         {
             foreach (var tick in this.addTick)
             {
                 this.tickComponents[tick.tickPriority].Add(tick);
             }
             this.addTick.Clear();
-
-
-
-            foreach(var tick in this.removeTick)
+            foreach (var tick in this.removeTick)
             {
                 this.tickComponents[tick.tickPriority].Remove(tick);
             }
             this.removeTick.Clear();
+            foreach (var tick in this.tickComponents.Values)
+            {
+                tick.Remove(null);
+            }
+        }
+        public void UpdateFixedTickComponentList()
+        {
+            foreach (var tick in this.addFixedTick)
+            {
+                this.fixedTickComponents[tick.fixedTickPriority].Add(tick);
+            }
+            this.addFixedTick.Clear();
+            foreach (var tick in this.removeFixedTick)
+            {
+                this.fixedTickComponents[tick.fixedTickPriority].Remove(tick);
+            }
+            this.removeFixedTick.Clear();
+            foreach (var tick in this.fixedTickComponents.Values)
+            {
+                tick.Remove(null);
+            }
 
+        }
+        public void UpdateLateTickComponentList()
+        {
+            foreach (var tick in this.addLateTick)
+            {
+                this.lateTickComponents[tick.lateTickPriority].Add(tick);
+            }
+            this.addLateTick.Clear();
+            foreach (var tick in this.removeLateTick)
+            {
+                this.lateTickComponents[tick.lateTickPriority].Remove(tick);
+            }
+            this.removeLateTick.Clear();
+            foreach (var tick in this.lateTickComponents.Values)
+            {
+                tick.Remove(null);
+            }
+        }
+
+        public void Tick(float deltatime)
+        {
             deltatime *= TimeScale;
             foreach (var tickkv in this.tickComponents)
             {
@@ -70,19 +109,6 @@ namespace ML.Engine.Timer
 
         public void FixedTick(float deltatime)
         {
-            foreach (var tick in this.addFixedTick)
-            {
-                this.fixedTickComponents[tick.fixedTickPriority].Add(tick);
-            }
-            this.addFixedTick.Clear();
-
-
-            foreach (var tick in this.removeFixedTick)
-            {
-                this.fixedTickComponents[tick.fixedTickPriority].Remove(tick);
-            }
-            this.removeFixedTick.Clear();
-
             deltatime *= TimeScale;
             foreach (var tickkv in this.fixedTickComponents)
             {
@@ -95,18 +121,6 @@ namespace ML.Engine.Timer
 
         public void LateTick(float deltatime)
         {
-            foreach (var tick in this.addLateTick)
-            {
-                this.lateTickComponents[tick.lateTickPriority].Add(tick);
-            }
-            this.addLateTick.Clear();
-
-            foreach (var tick in this.removeLateTick)
-            {
-                this.lateTickComponents[tick.lateTickPriority].Remove(tick);
-            }
-            this.removeLateTick.Clear();
-
             deltatime *= TimeScale;
             foreach (var tickkv in this.lateTickComponents)
             {
@@ -144,14 +158,14 @@ namespace ML.Engine.Timer
                 return true;
             }
         }
-        public ITickComponent UnregisterTick(ITickComponent tickComponent)
+        public bool UnregisterTick(ITickComponent tickComponent)
         {
             if(this.tickComponents.ContainsKey(tickComponent.tickPriority) && this.tickComponents[tickComponent.tickPriority].Contains(tickComponent))
             {
                 this.removeTick.Add(tickComponent);
-                return tickComponent;
+                return true;
             }
-            return null;
+            return false;
         }
         #endregion
 

@@ -330,7 +330,7 @@ namespace ProjectOC.TechTree
             this.SaveUnlockingTPData();
         }
 
-        private CancellationTokenSource SaveDataCTS;
+        private CancellationTokenSource SaveDataCTS = null;
         private void SaveTPJsonData()
         {
             string path = System.IO.Path.Combine(Application.persistentDataPath, SaveTPJsonDataPath);
@@ -341,7 +341,7 @@ namespace ProjectOC.TechTree
             WriteToFileAsync(path, json, SaveDataCTS);
         }
 
-        private CancellationTokenSource SaveUnlockingDataCTS;
+        private CancellationTokenSource SaveUnlockingDataCTS = null;
         private void SaveUnlockingTPData()
         {
             string path = System.IO.Path.Combine(Application.persistentDataPath, SaveUnlockingTPJsonDataPath);
@@ -389,7 +389,7 @@ namespace ProjectOC.TechTree
         [ReadOnly]
         public List<string> UnlockedBuild = new List<string>();
 
-        private bool ItemIsEnough(Inventory inventory, string ID)
+        private bool ItemIsEnough(IInventory inventory, string ID)
         {
             var formula = this.GetTPItemCost(ID);
             if(formula == null || formula.Length == 0)
@@ -407,7 +407,7 @@ namespace ProjectOC.TechTree
             return true;
         }
 
-        private void CostItem(Inventory inventory, string ID)
+        private void CostItem(IInventory inventory, string ID)
         {
             // 移除消耗的资源
             lock (inventory)
@@ -424,7 +424,7 @@ namespace ProjectOC.TechTree
         /// </summary>
         /// <param name="ID"></param>
         /// <returns></returns>
-        public bool CanUnlockTechPoint(Inventory inventory, string ID)
+        public bool CanUnlockTechPoint(IInventory inventory, string ID)
         {
             return !this.UnlockingTechPointDict.ContainsKey(ID) && this.IsAllUnlockedPreTP(ID) && this.ItemIsEnough(inventory, ID);
         }
@@ -434,7 +434,7 @@ namespace ProjectOC.TechTree
         /// </summary>
         /// <param name="ID"></param>
         /// <returns></returns>
-        public bool UnlockTechPoint(Inventory inventory, string ID, bool IsCheck = true)
+        public bool UnlockTechPoint(IInventory inventory, string ID, bool IsCheck = true)
         {
             if(IsCheck && !CanUnlockTechPoint(inventory, ID))
             {

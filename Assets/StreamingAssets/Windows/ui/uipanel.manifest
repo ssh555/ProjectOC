@@ -1,18 +1,20 @@
 ManifestFileVersion: 0
-CRC: 1104850579
+CRC: 2205045300
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 8d7f0c0a1405e027aae84c8a55f05edd
+    Hash: ca0e79382b26828a5514e85c89507420
   TypeTreeHash:
     serializedVersion: 2
-    Hash: bbff3a80973a7b1f667c9ad06da23621
+    Hash: 39d3599804ff4d391ca75173210f4041
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 8d7f0c0a1405e027aae84c8a55f05edd
+    Hash: ca0e79382b26828a5514e85c89507420
 HashAppended: 0
 ClassTypes:
 - Class: 1
+  Script: {instanceID: 0}
+- Class: 4
   Script: {instanceID: 0}
 - Class: 21
   Script: {instanceID: 0}
@@ -44,6 +46,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 902042dd59e50754a80bcc00d8654070, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 18e0a5fd7f32347419b785bf00a72db7, type: 3}
 - Class: 115
@@ -77,6 +81,7 @@ SerializeReferenceClassIdentifiers:
   ClassName: UnityEngine.UI.SpriteState
 Assets:
 - Assets/_ProjectOC/Resources/UIPanel/TechPointPanel.prefab
+- Assets/_ProjectOC/Resources/UIPanel/UIInfiniteInventoryPanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIPanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIBotPanel.prefab
 Dependencies:
