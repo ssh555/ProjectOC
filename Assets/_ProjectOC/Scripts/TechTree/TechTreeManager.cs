@@ -469,7 +469,11 @@ namespace ProjectOC.TechTree
             // 解锁建筑物
             this.UnlockedBuild.AddRange(this.registerTechPoints[ID].UnLockBuild);
             // to-do : 待优化
-            foreach(var c in this.registerTechPoints[ID].UnLockBuild)
+            // to-do : 四级分类不再是ID，后续会载入Build表数据，拆分为合成子表、<建筑ID, 建筑分类>映射表
+            // 后续使用映射表加入
+            // 合成子表在Excel转JSON时自动加入合成表中
+            // <建筑ID, 建筑分类>映射表为单独的JSON数据表，待完善加入
+            foreach (var c in this.registerTechPoints[ID].UnLockBuild)
             {
                 Test_BuildingManager.Instance.BM.RegisterBPartPrefab(Test_BuildingManager.Instance.LoadedBPart[new ML.Engine.BuildingSystem.BuildingPart.BuildingPartClassification(c)]);
             }    

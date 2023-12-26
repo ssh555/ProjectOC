@@ -83,6 +83,15 @@ namespace ML.Engine.InteractSystem
         /// 当前选中的可交互物
         /// </summary>
         public IInteraction CurrentInteraction { get; protected set; }
+
+        public void Disable()
+        {
+            Manager.GameManager.Instance.TickManager.UnregisterTick(this);
+        }
+        public void Enable()
+        {
+            Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
+        }
         #endregion
 
         #region Unity

@@ -32,24 +32,28 @@ namespace ProjectOC.Player.UI
         {
             base.OnEnter();
             Input.InputManager.PlayerInput.Player.Enable();
+            this.player.interactComponent.Enable();
         }
 
         public override void OnPause()
         {
             base.OnPause();
             Input.InputManager.PlayerInput.Player.Disable();
+            this.player.interactComponent.Disable();
         }
 
         public override void OnRecovery()
         {
             base.OnRecovery();
             Input.InputManager.PlayerInput.Player.Enable();
+            this.player.interactComponent.Enable();
         }
 
         public override void OnExit()
         {
             base.OnExit();
             Input.InputManager.PlayerInput.Player.Disable();
+            this.player.interactComponent.Disable();
         }
     }
 }

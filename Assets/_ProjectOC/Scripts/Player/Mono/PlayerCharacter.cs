@@ -33,7 +33,7 @@ namespace ProjectOC.Player
         /// </summary>
         protected ProjectOC.Input.PlayerInput.PlayerActions playerInputActions => Input.InputManager.PlayerInput.Player;
 
-        protected ML.Engine.InteractSystem.InteractComponent interactComponent;
+        public ML.Engine.InteractSystem.InteractComponent interactComponent;
 
         #endregion
 
