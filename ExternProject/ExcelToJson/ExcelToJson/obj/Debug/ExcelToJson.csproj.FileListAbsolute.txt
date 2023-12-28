@@ -1,0 +1,8 @@
+C:\Github\Unity\ProjectOC\ExternProject\_EXE\ExcelToJson\ExcelToJson.exe.config
+C:\Github\Unity\ProjectOC\ExternProject\_EXE\ExcelToJson\ExcelToJson.exe
+C:\Github\Unity\ProjectOC\ExternProject\_EXE\ExcelToJson\ExcelToJson.pdb
+C:\Github\Unity\ProjectOC\ExternProject\ExcelToJson\ExcelToJson\obj\Debug\ExcelToJson.csproj.CoreCompileInputs.cache
+C:\Github\Unity\ProjectOC\ExternProject\ExcelToJson\ExcelToJson\obj\Debug\ExcelToJson.exe
+C:\Github\Unity\ProjectOC\ExternProject\ExcelToJson\ExcelToJson\obj\Debug\ExcelToJson.pdb
+C:\Github\Unity\ProjectOC\ExternProject\ExcelToJson\ExcelToJson\obj\Debug\ExcelToJson.csproj.AssemblyReference.cache
+C:\Github\Unity\ProjectOC\ExternProject\ExcelToJson\ExcelToJson\obj\Debug\ExcelToJson.csproj.CopyComplete

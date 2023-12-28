@@ -17,7 +17,11 @@
         },
         "IsUnlocked": false,
         "UnLockRecipe": [],
-        "UnLockBuild": [],
+        "UnLockBuild": [
+            "Room_Beam_Base_100",
+            "Room_Beam_Base_200",
+            "Room_Floor_Base_50"
+        ],
         "PrePoint": [],
         "ItemCost": [
             {
@@ -29,7 +33,7 @@
                 "num": 1
             }
         ],
-        "TimeCost": 30
+        "TimeCost": 5
     },
     {
         "ID": "Energy_0_1",

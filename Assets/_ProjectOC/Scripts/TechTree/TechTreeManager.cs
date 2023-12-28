@@ -133,7 +133,7 @@ namespace ProjectOC.TechTree
             return false;
         }
 
-        public ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Formula[] GetTPItemCost(string ID)
+        public ML.Engine.InventorySystem.CompositeSystem.Formula[] GetTPItemCost(string ID)
         {
             return this.registerTechPoints.ContainsKey(ID) ? this.registerTechPoints[ID].ItemCost : null;
         }
@@ -578,10 +578,10 @@ namespace ProjectOC.TechTree
                         tp.UnLockRecipe = new string[0];
                         // to-do
                         int num = Random.Range(1, 3);
-                        tp.ItemCost = new ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Formula[num];
+                        tp.ItemCost = new ML.Engine.InventorySystem.CompositeSystem.Formula[num];
                         for(int i = 0; i < tp.ItemCost.Length; ++i)
                         {
-                            CompositeSystem.Formula f = new CompositeSystem.Formula();
+                            Formula f = new Formula();
                             f.id = i == 0 ? "100001" : (i == 1 ? "100002" : "100003");
                             f.num = Random.Range(1, 5);
                             tp.ItemCost[i] = f;
