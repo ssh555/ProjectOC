@@ -25,7 +25,6 @@ namespace ML.Engine.UI
             // µ¯³öÕ»¶¥
             UIBasePanel topPanel = panelStack.Pop();
             topPanel.OnExit();
-
             // ¼¤»îÕ»¶¥
             panelStack.Peek().OnRecovery();
             return topPanel;

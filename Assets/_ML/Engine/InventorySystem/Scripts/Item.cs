@@ -26,7 +26,7 @@ namespace ML.Engine.InventorySystem
         /// </summary>
         public int SortNum;
         /// <summary>
-        /// 物品类目
+        /// 物品配方类目
         /// </summary>
         public ItemCategory Category;
         /// <summary>
@@ -38,6 +38,10 @@ namespace ML.Engine.InventorySystem
         /// </summary>
         public int Weight {get { return SingleItemWeight * Amount; }}
         /// <summary>
+        /// 物品类目
+        /// </summary>
+        public ItemType ItemType;
+        /// <summary>
         /// 物品描述
         /// </summary>
         public string ItemDescription = "";
@@ -48,7 +52,7 @@ namespace ML.Engine.InventorySystem
         /// <summary>
         /// 所属 Inventory
         /// </summary>
-        public Inventory OwnInventory = null;
+        public IInventory OwnInventory = null;
         /// <summary>
         /// 数量
         /// </summary>
@@ -97,30 +101,36 @@ namespace ML.Engine.InventorySystem
         /// <summary>
         /// 数量归0时调用
         /// </summary>
-        public event Action<Inventory, Item> OnAmountToZero;
+        public event Action<IInventory, Item> OnAmountToZero;
         #endregion
 
-        public Item(string ID)
+        public Item(string ID, ItemSpawner.ItemTableJsonData config, int initAmount)
         {
             this.ID = ID;
 
-            this.amount = 1;
+            this.bCanStack = config.bcanstack;
+
+            this.amount = initAmount;
+
+            this.maxAmount = config.maxamount;
+
+            this.SortNum = config.sort;
+
+            this.Category = config.category;
+
+            this.SingleItemWeight = config.weight;
+
+            this.ItemDescription = config.description;
+
+            this.EffectsDescription = config.effectsDescription;
 
             // 默认添加数量为0时从Inventory移除并销毁
-            this.OnAmountToZero += (Inventory inventory,Item item) =>
+            this.OnAmountToZero += (IInventory inventory,Item item) =>
             {
                 if(inventory != null)
                     inventory.RemoveItem(this);
             };
         }
-
-        /// <summary>
-        /// 初始化
-        /// </summary>
-        /// <param name="config"></param>
-        public abstract void Init(ItemSpawner.ItemTableJsonData config);
-
-        public abstract void Init(Item item);
 
         /// <summary>
         /// 使用物品调用函数
@@ -129,6 +139,63 @@ namespace ML.Engine.InventorySystem
         public virtual void Execute(int amount)
         {
             this.Amount -= amount;
+        }
+
+        /// <summary>
+        /// 是否能使用 -> 仅供UI使用
+        /// </summary>
+        /// <returns></returns>
+        public bool CanUse()
+        {
+            switch (this.ItemType)
+            {
+                case ItemType.Equip:
+                case ItemType.Food:
+                    return true;
+                case ItemType.Material:
+                case ItemType.Mission:
+                    return false;
+                default:
+                    return true;
+            }
+        }
+
+        /// <summary>
+        /// 是否能丢弃 -> 仅供UI使用
+        /// </summary>
+        /// <returns></returns>
+        public bool CanDrop()
+        {
+            switch (this.ItemType)
+            {
+                case ItemType.Equip:
+                case ItemType.Food:
+                case ItemType.Material:
+                    return true;
+                case ItemType.Mission:
+                    return false;
+                default:
+                    return true;
+            }
+        }
+
+        /// <summary>
+        /// 是否能销毁 -> 仅供UI使用
+        /// </summary>
+        /// <returns></returns>
+        public bool CanDestroy()
+        {
+            switch (this.ItemType)
+            {
+                case ItemType.Equip:
+                case ItemType.Food:
+                case ItemType.Material:
+                    return true;
+                case ItemType.Mission:
+                    return false;
+                default:
+                    return true;
+            }
         }
 
         /// <summary>

@@ -51,7 +51,7 @@ namespace ML.Engine.InventorySystem
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Item SpawnItem(string id)
+        public Item SpawnItem(string id, int amount = 1)
         {
             if (this.ItemTypeStrDict.TryGetValue(id, out ItemTableJsonData itemRow))
             {
@@ -67,8 +67,7 @@ namespace ML.Engine.InventorySystem
                     this.ItemDict.Add(id, type);
                 }
                 // to-do : 采用反射，可能会有性能问题
-                Item item = System.Activator.CreateInstance(type, id) as Item;
-                item.Init(itemRow);
+                Item item = System.Activator.CreateInstance(type, id, itemRow, amount) as Item;
                 return item;
             }
             Debug.LogError("没有对应ID为 " + id + " 的Item");
@@ -194,6 +193,7 @@ namespace ML.Engine.InventorySystem
             public string type;
             public int sort;
             public ItemCategory category;
+            public Item itemtype;
             public int weight;
             public bool bcanstack;
             public int maxamount;
@@ -209,6 +209,9 @@ namespace ML.Engine.InventorySystem
             {
                 yield return null;
             }
+#if UNITY_EDITOR
+            float startTime = Time.realtimeSinceStartup;
+#endif
             var abmgr = Manager.GameManager.Instance.ABResourceManager;
             AssetBundle ab;
             var crequest = abmgr.LoadLocalABAsync(ItemTableDataABPath, null, out ab);
@@ -220,14 +223,14 @@ namespace ML.Engine.InventorySystem
             var request = ab.LoadAssetAsync<TextAsset>(TableName);
             yield return request;
             ItemTableJsonData[] datas = JsonConvert.DeserializeObject<ItemTableJsonData[]>((request.asset as TextAsset).text);
-
             foreach (var data in datas)
             {
                 this.ItemTypeStrDict.Add(data.id, data);
             }
-
             //abmgr.UnLoadLocalABAsync(ItemTableDataABPath, false, null);
-
+#if UNITY_EDITOR
+            Debug.Log("LoadItemTable Cost: " + (Time.realtimeSinceStartup - startTime));
+#endif
             IsLoadOvered = true;
         }
 

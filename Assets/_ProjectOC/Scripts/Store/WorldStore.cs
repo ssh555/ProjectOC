@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ProjectOC.StoreNS
 {
-    public class WorldStore : BuildingPart, IInteractionObject
+    public class WorldStore : BuildingPart
     {
         [SerializeField, ReadOnly]
         protected string StoreID = "";

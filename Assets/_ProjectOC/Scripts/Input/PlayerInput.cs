@@ -84,9 +84,9 @@ namespace ProjectOC.Input
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""PickUp"",
+                    ""name"": ""OpenBotUI"",
                     ""type"": ""Button"",
-                    ""id"": ""48f95d05-93ca-4ac2-8e0b-819581db0eec"",
+                    ""id"": ""c51a75d1-aca8-4df9-a513-e61e6373f4e3"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -152,7 +152,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""0eae1f6a-e0ff-463a-b088-33a24d852ad5"",
-                    ""path"": ""<XInputController>/buttonEast"",
+                    ""path"": ""<XInputController>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -404,25 +404,245 @@ namespace ProjectOC.Input
                 },
                 {
                     ""name"": """",
-                    ""id"": ""66240ca2-927c-408a-84e0-1e5f585276c7"",
-                    ""path"": ""<Keyboard>/f"",
+                    ""id"": ""2355a4a4-d2bb-4832-886c-a43ec6707981"",
+                    ""path"": ""<Keyboard>/p"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""PickUp"",
+                    ""action"": ""OpenBotUI"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""8924878b-2f38-4a74-a19c-4f09305a0274"",
-                    ""path"": ""<XInputController>/buttonSouth"",
+                    ""id"": ""daebb05f-51df-457d-b0ac-6ef65a0a1c11"",
+                    ""path"": ""<XInputController>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""PickUp"",
+                    ""action"": ""OpenBotUI"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""TechTree"",
+            ""id"": ""2c61ba0d-549f-46fb-9ae4-3a551b982404"",
+            ""actions"": [
+                {
+                    ""name"": ""LastTerm"",
+                    ""type"": ""Button"",
+                    ""id"": ""d8b4fada-3c87-4dee-8381-5cd011dd4c37"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextTerm"",
+                    ""type"": ""Button"",
+                    ""id"": ""b0c4cc69-cec8-4230-ba75-1addfad3d6ed"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Decipher"",
+                    ""type"": ""Button"",
+                    ""id"": ""13e72e23-1601-44f4-9ba8-8f95579a8983"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AlterTP"",
+                    ""type"": ""Value"",
+                    ""id"": ""b6cbedcf-d640-46ea-b6a8-557c4c546119"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""8c4c2afe-29cb-41ca-9588-89f0ef9ba553"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LastTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b25ba123-a791-4d08-a767-9cfc1d136454"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LastTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7990367e-eef4-4998-a829-b05b18258f48"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""65510378-d157-46e6-9141-8a461db135c4"",
+                    ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""76c8a350-57a7-435c-888d-c04215343e2e"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Decipher"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2455d40a-af07-4ad8-a734-48fa1ec8d27b"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Decipher"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""c43d8a2a-ed7c-47a0-a513-e931cf9b4927"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterTP"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""7a0bff3a-67fd-4f2b-8912-106d87491b85"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterTP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""85b07b18-fa5e-4664-94ea-a123aeaca291"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterTP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""0aca844c-190e-4f31-98e8-f76862979ee5"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterTP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""10051ceb-6f5f-48c6-9354-8685fee0ac1e"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterTP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""4f2f1575-fd37-4ff8-9c58-352c06b5f470"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterTP"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""729bdd78-b8dd-406c-a519-1e536e570ffc"",
+                    ""path"": ""<XInputController>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterTP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""a72208ae-9cf2-4273-94a4-44f3ab94a2c7"",
+                    ""path"": ""<XInputController>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterTP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""03caaa94-1cc8-4f45-a2c5-67f8892ffdcf"",
+                    ""path"": ""<XInputController>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterTP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""2ed67f45-c610-4d51-b9d8-88efb76524ee"",
+                    ""path"": ""<XInputController>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterTP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -552,6 +772,226 @@ namespace ProjectOC.Input
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""UIInventory"",
+            ""id"": ""7057597f-dd83-480d-a439-81cedab5aa7f"",
+            ""actions"": [
+                {
+                    ""name"": ""DropAndDestroy"",
+                    ""type"": ""Button"",
+                    ""id"": ""bd543c13-a674-4748-aa09-6d0702ba6f93"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AlterItem"",
+                    ""type"": ""Value"",
+                    ""id"": ""3c54a2cf-a79c-4d0c-b90f-c38578702cc5"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""NextTerm"",
+                    ""type"": ""Button"",
+                    ""id"": ""d57e1367-4ab5-4d2b-91f1-860c1853fee5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LastTerm"",
+                    ""type"": ""Button"",
+                    ""id"": ""902c2dc0-d0b1-48e2-8fb5-9244a6e9fb86"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""1f941058-fb48-4029-a3d5-3970d7e088ab"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DropAndDestroy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d6c65be8-d71a-444f-b0c8-d51c7d86ccc9"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DropAndDestroy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""30f1b5fe-1721-41f6-92e7-b2426f09bb0e"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LastTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1c055c47-262d-4863-aaf4-1cc2064f0cfb"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LastTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""109c8526-a9bc-4787-a7ec-b809fb945e99"",
+                    ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e7917561-d6b7-410f-9400-8d4c3bfb5609"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""KeyBoard"",
+                    ""id"": ""9ba20314-7515-44d4-abe0-3a9c7df45480"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterItem"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""d8674d65-cfcb-4f50-b37b-0f7466baaedf"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""11efd7ea-7754-47c6-af55-01b2f9991fd0"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""b60ad2d8-deb7-4e20-816b-fa4130f54f94"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""1c19dc0a-a652-4659-acd7-8781300c82b3"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""c0a3caf4-0a48-4820-9a92-ede9edc777f4"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterItem"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""f05114a4-8dba-4ce0-a8d1-dfddfaeb7d86"",
+                    ""path"": ""<XInputController>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""1af2987f-15c2-4de2-ab90-548279db8cb0"",
+                    ""path"": ""<XInputController>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""b9852f43-e7f6-4b87-aaac-cd80061222b6"",
+                    ""path"": ""<XInputController>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""89e0adca-e904-47b0-8c4a-8e25a19a895a"",
+                    ""path"": ""<XInputController>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -564,10 +1004,22 @@ namespace ProjectOC.Input
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_MouseX = m_Player.FindAction("MouseX", throwIfNotFound: true);
             m_Player_MouseY = m_Player.FindAction("MouseY", throwIfNotFound: true);
-            m_Player_PickUp = m_Player.FindAction("PickUp", throwIfNotFound: true);
+            m_Player_OpenBotUI = m_Player.FindAction("OpenBotUI", throwIfNotFound: true);
+            // TechTree
+            m_TechTree = asset.FindActionMap("TechTree", throwIfNotFound: true);
+            m_TechTree_LastTerm = m_TechTree.FindAction("LastTerm", throwIfNotFound: true);
+            m_TechTree_NextTerm = m_TechTree.FindAction("NextTerm", throwIfNotFound: true);
+            m_TechTree_Decipher = m_TechTree.FindAction("Decipher", throwIfNotFound: true);
+            m_TechTree_AlterTP = m_TechTree.FindAction("AlterTP", throwIfNotFound: true);
             // PlayerUI
             m_PlayerUI = asset.FindActionMap("PlayerUI", throwIfNotFound: true);
             m_PlayerUI_AlterSelected = m_PlayerUI.FindAction("AlterSelected", throwIfNotFound: true);
+            // UIInventory
+            m_UIInventory = asset.FindActionMap("UIInventory", throwIfNotFound: true);
+            m_UIInventory_DropAndDestroy = m_UIInventory.FindAction("DropAndDestroy", throwIfNotFound: true);
+            m_UIInventory_AlterItem = m_UIInventory.FindAction("AlterItem", throwIfNotFound: true);
+            m_UIInventory_NextTerm = m_UIInventory.FindAction("NextTerm", throwIfNotFound: true);
+            m_UIInventory_LastTerm = m_UIInventory.FindAction("LastTerm", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -635,7 +1087,7 @@ namespace ProjectOC.Input
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_MouseX;
         private readonly InputAction m_Player_MouseY;
-        private readonly InputAction m_Player_PickUp;
+        private readonly InputAction m_Player_OpenBotUI;
         public struct PlayerActions
         {
             private @PlayerInput m_Wrapper;
@@ -646,7 +1098,7 @@ namespace ProjectOC.Input
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
             public InputAction @MouseX => m_Wrapper.m_Player_MouseX;
             public InputAction @MouseY => m_Wrapper.m_Player_MouseY;
-            public InputAction @PickUp => m_Wrapper.m_Player_PickUp;
+            public InputAction @OpenBotUI => m_Wrapper.m_Player_OpenBotUI;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -674,9 +1126,9 @@ namespace ProjectOC.Input
                 @MouseY.started += instance.OnMouseY;
                 @MouseY.performed += instance.OnMouseY;
                 @MouseY.canceled += instance.OnMouseY;
-                @PickUp.started += instance.OnPickUp;
-                @PickUp.performed += instance.OnPickUp;
-                @PickUp.canceled += instance.OnPickUp;
+                @OpenBotUI.started += instance.OnOpenBotUI;
+                @OpenBotUI.performed += instance.OnOpenBotUI;
+                @OpenBotUI.canceled += instance.OnOpenBotUI;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -699,9 +1151,9 @@ namespace ProjectOC.Input
                 @MouseY.started -= instance.OnMouseY;
                 @MouseY.performed -= instance.OnMouseY;
                 @MouseY.canceled -= instance.OnMouseY;
-                @PickUp.started -= instance.OnPickUp;
-                @PickUp.performed -= instance.OnPickUp;
-                @PickUp.canceled -= instance.OnPickUp;
+                @OpenBotUI.started -= instance.OnOpenBotUI;
+                @OpenBotUI.performed -= instance.OnOpenBotUI;
+                @OpenBotUI.canceled -= instance.OnOpenBotUI;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -719,6 +1171,76 @@ namespace ProjectOC.Input
             }
         }
         public PlayerActions @Player => new PlayerActions(this);
+
+        // TechTree
+        private readonly InputActionMap m_TechTree;
+        private List<ITechTreeActions> m_TechTreeActionsCallbackInterfaces = new List<ITechTreeActions>();
+        private readonly InputAction m_TechTree_LastTerm;
+        private readonly InputAction m_TechTree_NextTerm;
+        private readonly InputAction m_TechTree_Decipher;
+        private readonly InputAction m_TechTree_AlterTP;
+        public struct TechTreeActions
+        {
+            private @PlayerInput m_Wrapper;
+            public TechTreeActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @LastTerm => m_Wrapper.m_TechTree_LastTerm;
+            public InputAction @NextTerm => m_Wrapper.m_TechTree_NextTerm;
+            public InputAction @Decipher => m_Wrapper.m_TechTree_Decipher;
+            public InputAction @AlterTP => m_Wrapper.m_TechTree_AlterTP;
+            public InputActionMap Get() { return m_Wrapper.m_TechTree; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(TechTreeActions set) { return set.Get(); }
+            public void AddCallbacks(ITechTreeActions instance)
+            {
+                if (instance == null || m_Wrapper.m_TechTreeActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_TechTreeActionsCallbackInterfaces.Add(instance);
+                @LastTerm.started += instance.OnLastTerm;
+                @LastTerm.performed += instance.OnLastTerm;
+                @LastTerm.canceled += instance.OnLastTerm;
+                @NextTerm.started += instance.OnNextTerm;
+                @NextTerm.performed += instance.OnNextTerm;
+                @NextTerm.canceled += instance.OnNextTerm;
+                @Decipher.started += instance.OnDecipher;
+                @Decipher.performed += instance.OnDecipher;
+                @Decipher.canceled += instance.OnDecipher;
+                @AlterTP.started += instance.OnAlterTP;
+                @AlterTP.performed += instance.OnAlterTP;
+                @AlterTP.canceled += instance.OnAlterTP;
+            }
+
+            private void UnregisterCallbacks(ITechTreeActions instance)
+            {
+                @LastTerm.started -= instance.OnLastTerm;
+                @LastTerm.performed -= instance.OnLastTerm;
+                @LastTerm.canceled -= instance.OnLastTerm;
+                @NextTerm.started -= instance.OnNextTerm;
+                @NextTerm.performed -= instance.OnNextTerm;
+                @NextTerm.canceled -= instance.OnNextTerm;
+                @Decipher.started -= instance.OnDecipher;
+                @Decipher.performed -= instance.OnDecipher;
+                @Decipher.canceled -= instance.OnDecipher;
+                @AlterTP.started -= instance.OnAlterTP;
+                @AlterTP.performed -= instance.OnAlterTP;
+                @AlterTP.canceled -= instance.OnAlterTP;
+            }
+
+            public void RemoveCallbacks(ITechTreeActions instance)
+            {
+                if (m_Wrapper.m_TechTreeActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(ITechTreeActions instance)
+            {
+                foreach (var item in m_Wrapper.m_TechTreeActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_TechTreeActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public TechTreeActions @TechTree => new TechTreeActions(this);
 
         // PlayerUI
         private readonly InputActionMap m_PlayerUI;
@@ -765,6 +1287,76 @@ namespace ProjectOC.Input
             }
         }
         public PlayerUIActions @PlayerUI => new PlayerUIActions(this);
+
+        // UIInventory
+        private readonly InputActionMap m_UIInventory;
+        private List<IUIInventoryActions> m_UIInventoryActionsCallbackInterfaces = new List<IUIInventoryActions>();
+        private readonly InputAction m_UIInventory_DropAndDestroy;
+        private readonly InputAction m_UIInventory_AlterItem;
+        private readonly InputAction m_UIInventory_NextTerm;
+        private readonly InputAction m_UIInventory_LastTerm;
+        public struct UIInventoryActions
+        {
+            private @PlayerInput m_Wrapper;
+            public UIInventoryActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @DropAndDestroy => m_Wrapper.m_UIInventory_DropAndDestroy;
+            public InputAction @AlterItem => m_Wrapper.m_UIInventory_AlterItem;
+            public InputAction @NextTerm => m_Wrapper.m_UIInventory_NextTerm;
+            public InputAction @LastTerm => m_Wrapper.m_UIInventory_LastTerm;
+            public InputActionMap Get() { return m_Wrapper.m_UIInventory; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(UIInventoryActions set) { return set.Get(); }
+            public void AddCallbacks(IUIInventoryActions instance)
+            {
+                if (instance == null || m_Wrapper.m_UIInventoryActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_UIInventoryActionsCallbackInterfaces.Add(instance);
+                @DropAndDestroy.started += instance.OnDropAndDestroy;
+                @DropAndDestroy.performed += instance.OnDropAndDestroy;
+                @DropAndDestroy.canceled += instance.OnDropAndDestroy;
+                @AlterItem.started += instance.OnAlterItem;
+                @AlterItem.performed += instance.OnAlterItem;
+                @AlterItem.canceled += instance.OnAlterItem;
+                @NextTerm.started += instance.OnNextTerm;
+                @NextTerm.performed += instance.OnNextTerm;
+                @NextTerm.canceled += instance.OnNextTerm;
+                @LastTerm.started += instance.OnLastTerm;
+                @LastTerm.performed += instance.OnLastTerm;
+                @LastTerm.canceled += instance.OnLastTerm;
+            }
+
+            private void UnregisterCallbacks(IUIInventoryActions instance)
+            {
+                @DropAndDestroy.started -= instance.OnDropAndDestroy;
+                @DropAndDestroy.performed -= instance.OnDropAndDestroy;
+                @DropAndDestroy.canceled -= instance.OnDropAndDestroy;
+                @AlterItem.started -= instance.OnAlterItem;
+                @AlterItem.performed -= instance.OnAlterItem;
+                @AlterItem.canceled -= instance.OnAlterItem;
+                @NextTerm.started -= instance.OnNextTerm;
+                @NextTerm.performed -= instance.OnNextTerm;
+                @NextTerm.canceled -= instance.OnNextTerm;
+                @LastTerm.started -= instance.OnLastTerm;
+                @LastTerm.performed -= instance.OnLastTerm;
+                @LastTerm.canceled -= instance.OnLastTerm;
+            }
+
+            public void RemoveCallbacks(IUIInventoryActions instance)
+            {
+                if (m_Wrapper.m_UIInventoryActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IUIInventoryActions instance)
+            {
+                foreach (var item in m_Wrapper.m_UIInventoryActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_UIInventoryActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public UIInventoryActions @UIInventory => new UIInventoryActions(this);
         public interface IPlayerActions
         {
             void OnMove(InputAction.CallbackContext context);
@@ -773,11 +1365,25 @@ namespace ProjectOC.Input
             void OnJump(InputAction.CallbackContext context);
             void OnMouseX(InputAction.CallbackContext context);
             void OnMouseY(InputAction.CallbackContext context);
-            void OnPickUp(InputAction.CallbackContext context);
+            void OnOpenBotUI(InputAction.CallbackContext context);
+        }
+        public interface ITechTreeActions
+        {
+            void OnLastTerm(InputAction.CallbackContext context);
+            void OnNextTerm(InputAction.CallbackContext context);
+            void OnDecipher(InputAction.CallbackContext context);
+            void OnAlterTP(InputAction.CallbackContext context);
         }
         public interface IPlayerUIActions
         {
             void OnAlterSelected(InputAction.CallbackContext context);
+        }
+        public interface IUIInventoryActions
+        {
+            void OnDropAndDestroy(InputAction.CallbackContext context);
+            void OnAlterItem(InputAction.CallbackContext context);
+            void OnNextTerm(InputAction.CallbackContext context);
+            void OnLastTerm(InputAction.CallbackContext context);
         }
     }
 }

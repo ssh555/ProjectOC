@@ -548,10 +548,10 @@ namespace ProjectOC.ProductionNodeNS
             {
                 if (mission != null && mission.ItemID == itemID)
                 {
-                    if ((isIn && mission.TargetUID == this.UID) || (!isIn && mission.SourceUID == this.UID))
-                    {
-                        result += mission.MissionNum;
-                    }
+                    //if ((isIn && mission.TargetUID == this.UID) || (!isIn && mission.SourceUID == this.UID))
+                    //{
+                    //    result += mission.MissionNum;
+                    //}
                 }
             }
             return result;
