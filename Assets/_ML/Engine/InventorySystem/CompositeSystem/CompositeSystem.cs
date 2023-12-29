@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static ML.Engine.InventorySystem.ItemSpawner;
 
 namespace ML.Engine.InventorySystem.CompositeSystem
 {
@@ -30,7 +31,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <summary>
         /// 是否已加载完数据
         /// </summary>
-        public bool IsLoadOvered = false;
+        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
 
 
         [System.Serializable]
@@ -79,66 +80,40 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             public List<string> usage;
         }
 
-        public const string CompositionTableDataABPath = "Json/TableData";
-        public const string TableName = "CompositionTableData";
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<CompositionJsonData[]> ABJAProcessor;
 
-        /// <summary>
-        /// 载入合成表数据
-        /// </summary>
-        public IEnumerator LoadTableData(MonoBehaviour mono)
+        public void LoadTableData()
         {
-            while (Manager.GameManager.Instance.ABResourceManager == null)
+            if (ABJAProcessor == null)
             {
-                yield return null;
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<CompositionJsonData[]>("Json/TableData", "CompositionTableData", (datas) =>
+                {
+                    foreach (var data in datas)
+                    {
+                        this.CompositeData.Add(data.id, data);
+                    }
+
+                    // to-do : 暂时取消Usage功能
+                    //// 加入 Usage
+                    //foreach (var data in this.CompositeData.Values)
+                    //{
+                    //    if (data.formula != null)
+                    //    {
+                    //        foreach (var usage in data.formula)
+                    //        {
+                    //            if (this.CompositeData[usage.id].usage == null)
+                    //            {
+                    //                this.CompositeData[usage.id].usage = new List<string>();
+                    //            }
+                    //            this.CompositeData[usage.id].usage.Add(data.id);
+                    //        }
+
+                    //    }
+                    //}
+                }, null, "合成系统表数据");
+                ABJAProcessor.StartLoadJsonAssetData();
             }
-#if UNITY_EDITOR
-            float startTime = Time.realtimeSinceStartup;
-#endif
-            var abmgr = Manager.GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(CompositionTableDataABPath, null, out ab);
-            yield return crequest;
-            if(crequest != null)
-                ab = crequest.assetBundle;
-
-
-            var request = ab.LoadAssetAsync<TextAsset>(TableName);
-            yield return request;
-            CompositionJsonData[] datas = JsonConvert.DeserializeObject<CompositionJsonData[]>((request.asset as TextAsset).text);
-
-            foreach (var data in datas)
-            {
-                this.CompositeData.Add(data.id, data);
-            }
-
-            // to-do : 暂时取消Usage功能
-            //// 加入 Usage
-            //foreach (var data in this.CompositeData.Values)
-            //{
-            //    if (data.formula != null)
-            //    {
-            //        foreach (var usage in data.formula)
-            //        {
-            //            if (this.CompositeData[usage.id].usage == null)
-            //            {
-            //                this.CompositeData[usage.id].usage = new List<string>();
-            //            }
-            //            this.CompositeData[usage.id].usage.Add(data.id);
-            //        }
-
-            //    }
-            //}
-
-            //abmgr.UnLoadLocalABAsync(CompositionTableDataABPath, false, null);
-
-            IsLoadOvered = true;
-
-#if UNITY_EDITOR
-            Debug.Log("LoadCompositionTable Cost: " + (Time.realtimeSinceStartup - startTime));
-#endif
         }
-
-
 
         /// <summary>
         /// 合成表数据
@@ -155,7 +130,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <param name="resource"></param>
         /// <param name="compositonID"></param>
         /// <returns></returns>
-        public bool CanComposite(Inventory resource, string compositonID)
+        public bool CanComposite(IInventory resource, string compositonID)
         {
             if (!this.CompositeData.ContainsKey(compositonID) || this.CompositeData[compositonID].formula == null)
             {
@@ -179,7 +154,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <param name="resource"></param>
         /// <param name="compositonID"></param>
         /// <returns></returns>
-        public CompositionObjectType Composite(Inventory resource, string compositonID, out IComposition composition)
+        public CompositionObjectType Composite(IInventory resource, string compositonID, out IComposition composition)
         {
             composition = null;
 
@@ -214,7 +189,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             return CompositionObjectType.Error;
         }
     
-        public bool OnlyCostResource(Inventory resource, string compositonID)
+        public bool OnlyCostResource(IInventory resource, string compositonID)
         {
             // 移除消耗的资源
             lock (resource)

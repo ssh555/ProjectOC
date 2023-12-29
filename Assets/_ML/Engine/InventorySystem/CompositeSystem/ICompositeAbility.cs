@@ -14,7 +14,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <summary>
         /// 所用资源仓库
         /// </summary>
-        public Inventory ResourceInventory { get;}
+        public IInventory ResourceInventory { get;}
 
         /// <summary>
         /// 能否合成对应物品

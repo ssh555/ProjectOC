@@ -2,7 +2,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using static ProjectOC.ProductionNodeNS.RecipeManager;
 
 namespace ML.Engine.InventorySystem
 {
@@ -29,11 +31,12 @@ namespace ML.Engine.InventorySystem
             }
         }
         #endregion
-        
+
+        #region Load And Data
         /// <summary>
         /// 是否已加载完数据
         /// </summary>
-        public bool IsLoadOvered = false;
+        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
 
         /// <summary>
         /// 根据需求自动添加
@@ -46,12 +49,55 @@ namespace ML.Engine.InventorySystem
         /// </summary>
         private Dictionary<string, ItemTableJsonData> ItemTypeStrDict = new Dictionary<string, ItemTableJsonData>();
 
+        #region to-do : 需读表导入所有所需的 Item 数据
+        public const string TypePath = "ML.Engine.InventorySystem.";
+        public const string Texture2DPath = "ui/Item/texture2d";
+        public const string WorldObjPath = "prefabs/Item/WorldItem";
+
+        [System.Serializable]
+        public struct ItemTableJsonData
+        {
+            public string id;
+            public TextContent.TextContent name;
+            public string type;
+            public int sort;
+            public ItemCategory category;
+            public ItemType itemtype;
+            public int weight;
+            public bool bcanstack;
+            public int maxamount;
+            public string texture2d;
+            public string worldobject;
+            public string description;
+            public string effectsDescription;
+        }
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableJsonData[]> ABJAProcessor;
+
+        public void LoadTableData()
+        {
+            if (ABJAProcessor == null)
+            {
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableJsonData[]>("Json/TableData", "ItemTableData", (datas) =>
+                {
+                    foreach (var data in datas)
+                    {
+                        this.ItemTypeStrDict.Add(data.id, data);
+                    }
+                }, null, "背包系统物品Item表数据");
+                ABJAProcessor.StartLoadJsonAssetData();
+            }
+        }
+        #endregion
+
+        #endregion
+
+        #region Spawn
         /// <summary>
         /// 根据 id 生成一个崭新的Item，数量为1
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Item SpawnItem(string id, int amount = 1)
+        public Item SpawnItem(string id)
         {
             if (this.ItemTypeStrDict.TryGetValue(id, out ItemTableJsonData itemRow))
             {
@@ -67,12 +113,40 @@ namespace ML.Engine.InventorySystem
                     this.ItemDict.Add(id, type);
                 }
                 // to-do : 采用反射，可能会有性能问题
-                Item item = System.Activator.CreateInstance(type, id, itemRow, amount) as Item;
+                Item item = System.Activator.CreateInstance(type, id, itemRow, 1) as Item;
                 return item;
             }
             Debug.LogError("没有对应ID为 " + id + " 的Item");
             return null;
         }
+
+        public List<Item> SpawnItems(string id, int amount)
+        {
+            List<Item> res = new List<Item>();
+            var item = SpawnItem(id);
+            var ma = GetMaxAmount(item.ID);
+            if (item != null)
+            {
+                while(amount > 0)
+                {
+                    if (ma >= amount)
+                    {
+                        item.Amount = amount;
+                        res.Add(item);
+                        amount = 0;
+                    }
+                    else
+                    {
+                        amount -= ma;
+                        item.Amount = ma;
+                        res.Add(item);
+                        item = SpawnItem(id);
+                    }
+                }
+            }
+            return res;
+        }
+
 
         public WorldItem SpawnWorldItem(Item item, Vector3 pos, Quaternion rot)
         {
@@ -116,6 +190,13 @@ namespace ML.Engine.InventorySystem
             worldItem.SetItem(item);
             return worldItem;
 #endif
+        }
+        #endregion
+
+        #region Getter
+        public string[] GetAllItemID()
+        {
+            return ItemTypeStrDict.Keys.ToArray();
         }
 
         public bool IsValidItemID(string id)
@@ -161,6 +242,69 @@ namespace ML.Engine.InventorySystem
             return this.ItemTypeStrDict[id].name;
         }
 
+        public bool GetCanStack(string id)
+        {
+            if (!this.ItemTypeStrDict.ContainsKey(id))
+            {
+                return false;
+            }
+            return this.ItemTypeStrDict[id].bcanstack;
+        }
+
+        public int GetWeight(string id)
+        {
+            if (!this.ItemTypeStrDict.ContainsKey(id))
+            {
+                return -1;
+            }
+            return this.ItemTypeStrDict[id].weight;
+        }
+
+        public int GetSortNum(string id)
+        {
+            if (!this.ItemTypeStrDict.ContainsKey(id))
+            {
+                return int.MinValue;
+            }
+            return this.ItemTypeStrDict[id].sort;
+        }
+
+        public ItemType GetItemType(string id)
+        {
+            if (!this.ItemTypeStrDict.ContainsKey(id))
+            {
+                return ItemType.None;
+            }
+            return this.ItemTypeStrDict[id].itemtype;
+        }
+
+        public int GetMaxAmount(string id)
+        {
+            if (!this.ItemTypeStrDict.ContainsKey(id))
+            {
+                return 0;
+            }
+            return this.ItemTypeStrDict[id].maxamount;
+        }
+
+        public string GetItemDescription(string id)
+        {
+            if (!this.ItemTypeStrDict.ContainsKey(id))
+            {
+                return null;
+            }
+            return this.ItemTypeStrDict[id].description;
+        }
+
+        public string GetEffectDescription(string id)
+        {
+            if (!this.ItemTypeStrDict.ContainsKey(id))
+            {
+                return null;
+            }
+            return this.ItemTypeStrDict[id].effectsDescription;
+        }
+
         public static Type GetTypeByName(string fullName)
         {
             //获取应用程序用到的所有程序集
@@ -176,67 +320,7 @@ namespace ML.Engine.InventorySystem
             }
             return null;
         }
-
-        #region to-do : 需读表导入所有所需的 Item 数据
-        public const string TypePath = "ML.Engine.InventorySystem.";
-        public const string Texture2DPath = "ui/Item/texture2d";
-        public const string WorldObjPath = "prefabs/Item/WorldItem";
-
-        public const string ItemTableDataABPath = "Json/TableData";
-        public const string TableName = "ItemTableData";
-
-        [System.Serializable]
-        public struct ItemTableJsonData
-        {
-            public string id;
-            public TextContent.TextContent name;
-            public string type;
-            public int sort;
-            public ItemCategory category;
-            public ItemType itemtype;
-            public int weight;
-            public bool bcanstack;
-            public int maxamount;
-            public string texture2d;
-            public string worldobject;
-            public TextContent.TextContent description;
-            public TextContent.TextContent effectsDescription;
-        }
-
-        public IEnumerator LoadTableData(MonoBehaviour mono)
-        {
-            while (Manager.GameManager.Instance.ABResourceManager == null)
-            {
-                yield return null;
-            }
-#if UNITY_EDITOR
-            float startTime = Time.realtimeSinceStartup;
-#endif
-            var abmgr = Manager.GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(ItemTableDataABPath, null, out ab);
-            yield return crequest;
-            if(crequest != null)
-                ab = crequest.assetBundle;
-
-
-            var request = ab.LoadAssetAsync<TextAsset>(TableName);
-            yield return request;
-            ItemTableJsonData[] datas = JsonConvert.DeserializeObject<ItemTableJsonData[]>((request.asset as TextAsset).text);
-            foreach (var data in datas)
-            {
-                this.ItemTypeStrDict.Add(data.id, data);
-            }
-            //abmgr.UnLoadLocalABAsync(ItemTableDataABPath, false, null);
-#if UNITY_EDITOR
-            Debug.Log("LoadItemTable Cost: " + (Time.realtimeSinceStartup - startTime));
-#endif
-            IsLoadOvered = true;
-        }
-
         #endregion
-
-
     }
 }
 

@@ -51,7 +51,7 @@ namespace ML.Example.InventorySystem
 
         public void Init()
         {
-            if (this.item == null || !this.item.bCanStack)
+            if (this.item == null || !ItemSpawner.Instance.GetCanStack(this.item.ID))
             {
                 this.AmountText.text = "";
             }

@@ -5,6 +5,7 @@ using ML.Engine.FSM;
 using Sirenix.OdinInspector;
 using ProjectOC.Player.Terrain;
 using UnityEngine.InputSystem;
+using static UnityEngine.Rendering.DebugUI;
 
 
 namespace ProjectOC.Player
@@ -33,7 +34,7 @@ namespace ProjectOC.Player
         /// </summary>
         protected ProjectOC.Input.PlayerInput.PlayerActions playerInputActions => Input.InputManager.PlayerInput.Player;
 
-        protected ML.Engine.InteractSystem.InteractComponent interactComponent;
+        public ML.Engine.InteractSystem.InteractComponent interactComponent;
 
         #endregion
 
@@ -62,7 +63,8 @@ namespace ProjectOC.Player
         #endregion
 
         #region 背包 to-do : 临时测试使用
-        public ML.Engine.InventorySystem.Inventory Inventory;
+        [ShowInInspector, ReadOnly]
+        public ML.Engine.InventorySystem.IInventory Inventory;
         #endregion
 
         #region Init
@@ -100,18 +102,21 @@ namespace ProjectOC.Player
             this.moveStateMachine.SetMoveAnimator(this.GetComponent<Animator>());
             this.moveStateController.SetStateMachine(moveStateMachine);
 
+            this.interactComponent = this.GetComponentInChildren<ML.Engine.InteractSystem.InteractComponent>();
+
             this.playerInputActions.Enable();
 
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterFixedTick(0, this);
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
 
             // 按下对应按键才会压入栈
-            ML.Engine.Manager.GameManager.Instance.UIManager.ChangeBotUIPanel(GameObject.Instantiate(this.playerUIBotPanel.gameObject, GameObject.Find("Canvas").transform, false).GetComponent<ML.Engine.UI.UIBasePanel>());
-            (ML.Engine.Manager.GameManager.Instance.UIManager.GetTopUIPanel() as UI.PlayerUIBotPanel).player = this;
+            var botui = GameObject.Instantiate(this.playerUIBotPanel.gameObject, GameObject.Find("Canvas").transform, false).GetComponent<UI.PlayerUIBotPanel>();
+            botui.player = this;
+            ML.Engine.Manager.GameManager.Instance.UIManager.ChangeBotUIPanel(botui);
 
-            this.Inventory = new ML.Engine.InventorySystem.Inventory(65, this.transform);
+            this.Inventory = new ML.Engine.InventorySystem.InfiniteInventory(this.transform, 999);
 
-            this.interactComponent = this.GetComponentInChildren<ML.Engine.InteractSystem.InteractComponent>();
+
 
             StartCoroutine(__DelayInit__());
 
@@ -141,6 +146,16 @@ namespace ProjectOC.Player
                     Input.InputManager.PlayerInput.Player.Disable();
                 }
             };
+            while(!ML.Engine.InventorySystem.ItemSpawner.Instance.IsLoadOvered)
+            {
+                yield return null;
+            }
+            // to-do : to-delete
+            foreach (var id in ML.Engine.InventorySystem.ItemSpawner.Instance.GetAllItemID())
+            {
+                var item = ML.Engine.InventorySystem.ItemSpawner.Instance.SpawnItems(id, ML.Engine.InventorySystem.ItemSpawner.Instance.GetCanStack(id) ? UnityEngine.Random.Range(1, 999) : 1)[0];
+                Inventory.AddItem(item);
+            }
         }
 
         private void OnDestroy()

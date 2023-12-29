@@ -342,60 +342,6 @@ MonoBehaviour:
   IsLoadOvered: 0
   UnlockedRecipe: []
   UnlockedBuild: []
-  TPPanelTextContent:
-    toptitle:
-      Chinese: 
-      English: 
-    category: []
-    categorylast:
-      keyname: 
-      keymap:
-        KeyBoard: 
-        XBOX: 
-      description:
-        Chinese: 
-        English: 
-    categorynext:
-      keyname: 
-      keymap:
-        KeyBoard: 
-        XBOX: 
-      description:
-        Chinese: 
-        English: 
-    lockedtitletip:
-      Chinese: 
-      English: 
-    unlockedtitletip:
-      Chinese: 
-      English: 
-    inspector:
-      keyname: 
-      keymap:
-        KeyBoard: 
-        XBOX: 
-      description:
-        Chinese: 
-        English: 
-    timecosttip:
-      Chinese: 
-      English: 
-    decipher:
-      keyname: 
-      keymap:
-        KeyBoard: 
-        XBOX: 
-      description:
-        Chinese: 
-        English: 
-    back:
-      keyname: 
-      keymap:
-        KeyBoard: 
-        XBOX: 
-      description:
-        Chinese: 
-        English: 
 --- !u!1 &698254406
 GameObject:
   m_ObjectHideFlags: 0
@@ -1442,7 +1388,7 @@ SceneRoots:
   - {fileID: 1829990095}
   - {fileID: 1691802471}
   - {fileID: 1792029832}
-  - {fileID: 1286856955}
   - {fileID: 698254410}
   - {fileID: 883728749}
   - {fileID: 1507186402}
+  - {fileID: 1286856955}

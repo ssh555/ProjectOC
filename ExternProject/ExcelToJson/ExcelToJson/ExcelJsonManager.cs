@@ -47,15 +47,25 @@ namespace ExcelToJson
                 // 选择工作表
                 var worksheet = package.Workbook.Worksheets[iWorksheet];
                 int rowCount = worksheet.Dimension.Rows;
-
-                for (int row = iBeginRow; row <= rowCount; ++row)
+                System.Threading.Tasks.Parallel.For(iBeginRow, rowCount + 1, (row) =>
                 {
                     T d = new T();
                     if (d.GenData(GetRowData(worksheet, row)))
                     {
-                        data.Add(d);
+                        lock(data)
+                        {
+                            data.Add(d);
+                        }
                     }
-                }
+                });
+                //for (int row = iBeginRow; row <= rowCount; ++row)
+                //{
+                //    T d = new T();
+                //    if (d.GenData(GetRowData(worksheet, row)))
+                //    {
+                //        data.Add(d);
+                //    }
+                //}
             }
             return data;
         }

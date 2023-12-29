@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static ProjectOC.WorkerNS.SkillManager;
 
 namespace ProjectOC.WorkerNS
 {
@@ -36,10 +37,7 @@ namespace ProjectOC.WorkerNS
             }
         }
         #endregion
-        /// <summary>
-        /// 是否已加载完数据
-        /// </summary>
-        public bool IsLoadOvered = false;
+
         private System.Random Random = new System.Random();
         private Dictionary<FeatureType, List<string>> FeatureTypeDict = new Dictionary<FeatureType, List<string>>();
         /// <summary>
@@ -124,8 +122,6 @@ namespace ProjectOC.WorkerNS
 
         #region to-do : 需读表导入所有所需的 Feature 数据
         public const string Texture2DPath = "ui/Feature/texture2d";
-        public const string TableDataABPath = "Json/TableData";
-        public const string TableName = "FeatureTableData";
 
         [System.Serializable]
         public struct FeatureTableJsonData
@@ -140,32 +136,26 @@ namespace ProjectOC.WorkerNS
             public TextContent featureDescription;
             public TextContent effectDescription;
         }
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableJsonData[]> ABJAProcessor;
 
-        public IEnumerator LoadTableData()
+        public void LoadTableData()
         {
-            while (GameManager.Instance.ABResourceManager == null)
+            if (ABJAProcessor == null)
             {
-                yield return null;
-            }
-            var abmgr = GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(TableDataABPath, null, out ab);
-            yield return crequest;
-            if (crequest != null)
-                ab = crequest.assetBundle;
-            var request = ab.LoadAssetAsync<TextAsset>(TableName);
-            yield return request;
-            FeatureTableJsonData[] datas = JsonConvert.DeserializeObject<FeatureTableJsonData[]>((request.asset as TextAsset).text);
-            foreach (var data in datas)
-            {
-                this.FeatureTableDict.Add(data.id, data);
-                if (!FeatureTypeDict.ContainsKey(data.type))
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableJsonData[]>("Json/TableData", "FeatureTableData", (datas) =>
                 {
-                    this.FeatureTypeDict.Add(data.type, new List<string>());
-                }
-                this.FeatureTypeDict[data.type].Add(data.id);
+                    foreach (var data in datas)
+                    {
+                        this.FeatureTableDict.Add(data.id, data);
+                        if (!FeatureTypeDict.ContainsKey(data.type))
+                        {
+                            this.FeatureTypeDict.Add(data.type, new List<string>());
+                        }
+                        this.FeatureTypeDict[data.type].Add(data.id);
+                    }
+                }, null, "隐兽Feature表数据");
+                ABJAProcessor.StartLoadJsonAssetData();
             }
-            IsLoadOvered = true;
         }
         #endregion
     }

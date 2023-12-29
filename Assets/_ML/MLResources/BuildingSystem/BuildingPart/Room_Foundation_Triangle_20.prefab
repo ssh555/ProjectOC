@@ -125,10 +125,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
-    Category: 0
-    Type: 0
-    Style: 2
-    Height: 20
+    Category1: 0
+    Category2: 0
+    Category3: 2
+    Category4: 20
   instanceID: 
   canPlaceInPlaceMode: 0
   mode: 0

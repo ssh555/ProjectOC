@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2491269387
+CRC: 3988875816
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 48e75cbe0a4e7da770a25f373470ab86
+    Hash: 5ccc7db7d6c47724ae8dceb319003aaa
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 8e5d6366ca6cbc4587e122cb742ad983
+    Hash: 632c17e5ae17fbf2d2d578d89e423c63
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 48e75cbe0a4e7da770a25f373470ab86
+    Hash: 5ccc7db7d6c47724ae8dceb319003aaa
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -32,13 +32,13 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: Assembly-CSharp
   ClassName: ML.Engine.BuildingSystem.BSBPartMatPackage/MatPackageDict
 - AssemblyName: Assembly-CSharp
-  ClassName: ML.Engine.BuildingSystem.BuildingPart.BuildingCategory
+  ClassName: ML.Engine.BuildingSystem.BuildingPart.BuildingCategory1
+- AssemblyName: Assembly-CSharp
+  ClassName: ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2
+- AssemblyName: Assembly-CSharp
+  ClassName: ML.Engine.BuildingSystem.BuildingPart.BuildingCategory3
 - AssemblyName: Assembly-CSharp
   ClassName: ML.Engine.BuildingSystem.BuildingPart.BuildingPartClassification
-- AssemblyName: Assembly-CSharp
-  ClassName: ML.Engine.BuildingSystem.BuildingPart.BuildingStyle
-- AssemblyName: Assembly-CSharp
-  ClassName: ML.Engine.BuildingSystem.BuildingPart.BuildingType
 - AssemblyName: Sirenix.Serialization
   ClassName: Sirenix.Serialization.SerializationData
 Assets:
@@ -46,7 +46,7 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Triangle_20.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Texture2D/Blue.png
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Pillar_Base_100.asset
-- Assets/_ML/MLResources/BuildingSystem/MatPackage/Furniture_CeilingLamp.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Furniture_CeilingLamp_Base_0.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/TestMat/Green.mat
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/TestMat/Orange.mat
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Door_Base_20.asset
@@ -56,7 +56,7 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Texture2D/Purple.png
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Beam_Base_100.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/TestMat/Red.mat
-- Assets/_ML/MLResources/BuildingSystem/MatPackage/Furniture_Chair.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Furniture_Chair_Base_0.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Window_Base_20.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Roof_Base_400.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Wall_Base_200.asset
