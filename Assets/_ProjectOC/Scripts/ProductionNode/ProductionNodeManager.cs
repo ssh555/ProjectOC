@@ -6,6 +6,7 @@ using System;
 using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ProjectOC.WorkerNS;
+using static ML.Engine.InventorySystem.CompositeSystem.CompositeSystem;
 
 namespace ProjectOC.ProductionNodeNS
 {
@@ -34,10 +35,7 @@ namespace ProjectOC.ProductionNodeNS
         }
         #endregion
 
-        /// <summary>
-        /// 是否已加载完数据
-        /// </summary>
-        public bool IsLoadOvered = false;
+
         /// <summary>
         /// 生成的生产节点，键为ID
         /// </summary>
@@ -202,33 +200,24 @@ namespace ProjectOC.ProductionNodeNS
             public string worldobject;
         }
 
-        public IEnumerator LoadTableData()
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<ProductionNodeTableJsonData[]> ABJAProcessor;
+
+        public void LoadTableData()
         {
-            while (GameManager.Instance.ABResourceManager == null)
+            if (ABJAProcessor == null)
             {
-                yield return null;
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ProductionNodeTableJsonData[]>("Json/TableData", "CompositionTableData", (datas) =>
+                {
+                    foreach (var data in datas)
+                    {
+                        this.ProductionNodeTableDict.Add(data.id, data);
+                    }
+                }, null, "生产节点表数据");
             }
-            var abmgr = GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(TableDataABPath, null, out ab);
-            yield return crequest;
-            if (crequest != null)
-                ab = crequest.assetBundle;
-
-
-            var request = ab.LoadAssetAsync<TextAsset>(TableName);
-            yield return request;
-            ProductionNodeTableJsonData[] datas = JsonConvert.DeserializeObject<ProductionNodeTableJsonData[]>((request.asset as TextAsset).text);
-
-            foreach (var data in datas)
-            {
-                this.ProductionNodeTableDict.Add(data.id, data);
-            }
-
-            //abmgr.UnLoadLocalABAsync(ItemTableDataABPath, false, null);
-
-            IsLoadOvered = true;
+            ABJAProcessor.StartLoadJsonAssetData();
         }
+
+
         #endregion
     }
 }

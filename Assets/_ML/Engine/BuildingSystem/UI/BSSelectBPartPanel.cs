@@ -58,11 +58,25 @@ namespace ML.Engine.BuildingSystem.UI
         private UIKeyTip comfirm;
         private UIKeyTip back;
 
-
+        private static bool IsLoading = false;
         private void Awake()
         {
-            if (TCategoryDict == null)
+            //    if (ABJAProcessor == null)
+            //    {
+            //        ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextContent.KeyTip[]>("JSON/TextContent/InteractSystem", "InteractKeyTip", (datas) =>
+            //        {
+            //            foreach (var tip in datas)
+            //            {
+            //                STATIC_KTDict.Add(tip.keyname, tip);
+            //            }
+
+            //        }, null);
+            //    }
+            //    ABJAProcessor.StartLoadJsonAssetData();
+            if (!IsLoading)
             {
+                IsLoading = true;
+
                 StartCoroutine(InitCategoryTexture2D());
                 StartCoroutine(InitTypeTexture2D());
             }
@@ -120,17 +134,19 @@ namespace ML.Engine.BuildingSystem.UI
             typenext.ReWrite(Test_BuildingManager.Instance.KeyTipDict["typenext"]);
         }
 
+
         private IEnumerator InitCategoryTexture2D()
         {
 #if UNITY_EDITOR
             float startT = Time.time;
 #endif
+            TCategoryDict = new Dictionary<BuildingCategory1, Texture2D>();
+
             while (Manager.GameManager.Instance.ABResourceManager == null)
             {
                 yield return null;
             }
 
-            TCategoryDict = new Dictionary<BuildingCategory1, Texture2D>();
 
             var abmgr = Manager.GameManager.Instance.ABResourceManager;
             AssetBundle ab;
@@ -160,12 +176,13 @@ namespace ML.Engine.BuildingSystem.UI
 #if UNITY_EDITOR
             float startT = Time.time;
 #endif
+            TTypeDict = new Dictionary<BuildingCategory2, Texture2D>();
+
             while (Manager.GameManager.Instance.ABResourceManager == null)
             {
                 yield return null;
             }
 
-            TTypeDict = new Dictionary<BuildingCategory2, Texture2D>();
 
             var abmgr = Manager.GameManager.Instance.ABResourceManager;
             AssetBundle ab;
@@ -247,7 +264,8 @@ namespace ML.Engine.BuildingSystem.UI
                     Active(go.GetComponentInChildren<Image>());
                 }
             }
-
+            LayoutRebuilder.ForceRebuildLayoutImmediate(this.templateCategory.parent.GetComponent<RectTransform>());
+            LayoutRebuilder.ForceRebuildLayoutImmediate(this.templateType.parent.GetComponent<RectTransform>());
             yield break;
         }
 

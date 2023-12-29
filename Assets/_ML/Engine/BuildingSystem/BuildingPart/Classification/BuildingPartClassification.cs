@@ -2,6 +2,9 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Security.Claims;
+using UnityEditor;
 using UnityEngine;
 
 namespace ML.Engine.BuildingSystem.BuildingPart
@@ -9,10 +12,10 @@ namespace ML.Engine.BuildingSystem.BuildingPart
     [System.Serializable, LabelText("建筑物分类")]
     public struct BuildingPartClassification
     {
-        [LabelText("一级分类-Category1")]
+        [LabelText("一级分类-Category1"), OnValueChanged("OnCategory1Changed")]
         public BuildingCategory1 Category1;
 
-        [LabelText("二级分类-Category2")]
+        [LabelText("二级分类-Category2"), ValueDropdown("GetCategory2Values", AppendNextDrawer = true, DisableGUIInAppendedDrawer = true)]
         public BuildingCategory2 Category2;
 
         [LabelText("三级分类-Category3")]
@@ -53,5 +56,51 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         {
             return $"{Category1}-{Category2}-{Category3}-{Category4}";
         }
+
+
+
+        private ValueDropdownList<int> GetCategory2Values()
+        {
+            var values = new ValueDropdownList<int>();
+            foreach (var value in Enum.GetValues(typeof(BuildingCategory2)))
+            {
+                var fieldInfo = typeof(BuildingCategory2).GetField(value.ToString());
+                var attributes = fieldInfo.GetCustomAttributes(typeof(LabelTextAttribute), false);
+                var labelText = ((LabelTextAttribute)attributes[0]).Text;
+
+                if ((int)value >= (int)Category1 * 100 && (int)value < ((int)Category1 + 1) * 100)
+                {
+                    values.Add(labelText, (int)value);
+                }
+            }
+            return values;
+        }
+
+        private void OnCategory1Changed()
+        {
+            int min = (int)Category1 * 100;
+            int max = ((int)Category1 + 1) * 100;
+            BuildingCategory2 closestValue = BuildingCategory2.None;
+            int closestDifference = int.MaxValue;
+
+            foreach (var value in Enum.GetValues(typeof(BuildingCategory2)))
+            {
+                int intValue = (int)value;
+                if (intValue >= min && intValue < max)
+                {
+                    int difference = Math.Abs(intValue - min);
+                    if (difference < closestDifference)
+                    {
+                        closestDifference = difference;
+                        closestValue = (BuildingCategory2)value;
+                    }
+                }
+            }
+
+            Category2 = closestValue;
+
+        }
+
+
     }
 }

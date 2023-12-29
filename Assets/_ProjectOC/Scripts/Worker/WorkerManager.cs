@@ -5,6 +5,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 using System;
 using ML.Engine.Manager;
+using static ProjectOC.InventorySystem.UI.UIInfiniteInventory;
 
 namespace ProjectOC.WorkerNS
 {
@@ -30,10 +31,7 @@ namespace ProjectOC.WorkerNS
             }
         }
         #endregion
-        /// <summary>
-        /// 是否已加载完数据
-        /// </summary>
-        public bool IsLoadOvered = false;
+
         /// <summary>
         /// 刁民数量
         /// </summary>
@@ -139,9 +137,6 @@ namespace ProjectOC.WorkerNS
         public const string Texture2DPath = "ui/Worker/texture2d";
         public const string WorldObjPath = "prefabs/Worker/WorldWorker";
 
-        public const string TableDataABPath = "Json/TableData";
-        public const string TableName = "WorkerTableData";
-
         [System.Serializable]
         public struct WorkerTableJsonData
         {
@@ -159,32 +154,21 @@ namespace ProjectOC.WorkerNS
             public string worldobject;
         }
 
-        public IEnumerator LoadTableData()
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<WorkerTableJsonData[]> ABJAProcessor;
+
+        public void LoadTableData()
         {
-            while (GameManager.Instance.ABResourceManager == null)
+            if (ABJAProcessor == null)
             {
-                yield return null;
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<WorkerTableJsonData[]>("Json/TableData", "WorkerTableData", (datas) =>
+                {
+                    foreach (var data in datas)
+                    {
+                        this.WorkerTableDict.Add(data.id, data);
+                    }
+                }, null, "隐兽表数据");
             }
-            var abmgr = GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(TableDataABPath, null, out ab);
-            yield return crequest;
-            if (crequest != null)
-                ab = crequest.assetBundle;
-
-
-            var request = ab.LoadAssetAsync<TextAsset>(TableName);
-            yield return request;
-            WorkerTableJsonData[] datas = JsonConvert.DeserializeObject<WorkerTableJsonData[]>((request.asset as TextAsset).text);
-
-            foreach (var data in datas)
-            {
-                this.WorkerTableDict.Add(data.id, data);
-            }
-
-            //abmgr.UnLoadLocalABAsync(ItemTableDataABPath, false, null);
-
-            IsLoadOvered = true;
+            ABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
     }

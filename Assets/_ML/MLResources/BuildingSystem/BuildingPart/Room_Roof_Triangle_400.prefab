@@ -60,6 +60,10 @@ PrefabInstance:
       propertyPath: classification.Height
       value: 400
       objectReference: {fileID: 0}
+    - target: {fileID: 6127935814033006376, guid: f8e0f38d7e690ce4885a299415e6254b, type: 3}
+      propertyPath: classification.Category4
+      value: 400
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -98,7 +98,7 @@ namespace ML.Engine.InteractSystem
         private void Start()
         {
             // 载入数据
-            StartCoroutine(InitUITextContents());
+            InitUITextContents();
 
             Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
         }
@@ -110,53 +110,45 @@ namespace ML.Engine.InteractSystem
         #endregion
 
         #region UI
-        public const string TextContentABPath = "JSON/TextContent/InteractSystem";
-        public const string ABName = "InteractKeyTip";
         /// <summary>
         /// keyname -> key -> IInteraction.InteractType
         /// </summary>
-        private Dictionary<string, TextContent.KeyTip> KTDict = new Dictionary<string, TextContent.KeyTip>();
+        private static Dictionary<string, TextContent.KeyTip> STATIC_KTDict = new Dictionary<string, TextContent.KeyTip>();
 
         private KeyTip GetKeyTip(string key)
         {
-            if(KTDict.ContainsKey(key))
+            if(STATIC_KTDict.ContainsKey(key))
             {
-                return KTDict[key];
+                return STATIC_KTDict[key];
             }
-            return KTDict["Interaction"];
+            return STATIC_KTDict["Interaction"];
         }
 
-        private IEnumerator InitUITextContents()
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<TextContent.KeyTip[]> ABJAProcessor;
+
+        public void InitUITextContents()
         {
-            while (ML.Engine.Manager.GameManager.Instance.ABResourceManager == null)
+            if (ABJAProcessor == null)
             {
-                yield return null;
-            }
-#if UNITY_EDITOR
-            float startT = Time.realtimeSinceStartup;
-#endif
-            var abmgr = ML.Engine.Manager.GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(TextContentABPath, null, out ab);
-            yield return crequest;
-            if (crequest != null)
-            {
-                ab = crequest.assetBundle;
-            }
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextContent.KeyTip[]>("JSON/TextContent/InteractSystem", "InteractKeyTip", (datas) =>
+                {
+                    foreach (var tip in datas)
+                    {
+                        STATIC_KTDict.Add(tip.keyname, tip);
+                    }
 
-            var request = ab.LoadAssetAsync<TextAsset>(ABName);
-            yield return request;
-            TextContent.KeyTip[] tips = JsonConvert.DeserializeObject<TextContent.KeyTip[]>((request.asset as TextAsset).text);
-            foreach (var tip in tips)
-            {
-                this.KTDict.Add(tip.keyname, tip);
+                }, null, "交互组件按键提示");
             }
+            ABJAProcessor.StartLoadJsonAssetData();
+            StartCoroutine(OnLoadOver());
+        }
 
-            // 禁用 Mono
-            this.enabled = false;
+        private IEnumerator OnLoadOver()
+        {
+            var abmgr = Manager.GameManager.Instance.ABResourceManager;
 
             // 载入 keyTipPrefab
-            crequest = abmgr.LoadLocalABAsync("UI/InteractSystem", null, out ab);
+            var crequest = abmgr.LoadLocalABAsync("UI/InteractSystem", null, out var ab);
             yield return crequest;
             if (crequest != null)
             {
@@ -171,9 +163,12 @@ namespace ML.Engine.InteractSystem
 
             uiKeyTip.img.transform.parent.SetParent(GameObject.Find("Canvas").transform);
 
-#if UNITY_EDITOR
-            Debug.Log("InitUITextContents cost time: " + (Time.realtimeSinceStartup - startT));
-#endif
+            while(!ABJAProcessor.IsLoaded)
+            {
+                yield return null;
+            }
+            // 禁用 Mono
+            this.enabled = false;
         }
 
         private TextContent.UIKeyTip uiKeyTip;

@@ -144,8 +144,14 @@ namespace ML.Engine.BuildingSystem.UI
             stylenext.ReWrite(Test_BuildingManager.Instance.KeyTipDict["stylenext"]);
         }
 
+        private static bool IsLoading = false;
         private IEnumerator InitStyleTexture2D()
         {
+            if(IsLoading)
+            {
+                yield break;
+            }
+            IsLoading = true;
 #if UNITY_EDITOR
             float startT = Time.time;
 #endif

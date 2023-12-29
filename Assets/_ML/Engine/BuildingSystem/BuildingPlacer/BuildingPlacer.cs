@@ -812,7 +812,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 // Category
                 else if(BInput.BuildSelection.LastCategory.WasPressedThisFrame())
                 {
-                    this._placeSelectedCategoryIndex = (this._placeSelectedCategoryIndex - 1) % this._placeCanSelectCategory.Length;
+                    this._placeSelectedCategoryIndex = (this._placeSelectedCategoryIndex + this._placeCanSelectCategory.Length - 1) % this._placeCanSelectCategory.Length;
                     this.OnBuildSelectionCategoryChanged?.Invoke(this._placeCanSelectCategory, this._placeSelectedCategoryIndex);
                     this.UpdatePlaceBuildingType(this._placeCanSelectCategory[this._placeSelectedCategoryIndex]);
                 }

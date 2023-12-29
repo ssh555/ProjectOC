@@ -65,6 +65,14 @@ namespace ML.Engine.BuildingSystem
 
             return ret;
         }
+#if UNITY_EDITOR
+
+        [Button("根据资产名更正类型"), PropertyOrder(-1)]
+        private void ChangeCategoryFromName()
+        {
+            Classification = new BuildingPartClassification(this.name);
+        }
+#endif
     }
 }
 

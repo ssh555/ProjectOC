@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static ProjectOC.WorkerNS.WorkerManager;
 
 namespace ProjectOC.WorkerNS
 {
@@ -30,10 +31,7 @@ namespace ProjectOC.WorkerNS
             }
         }
         #endregion
-        /// <summary>
-        /// 是否已加载完数据
-        /// </summary>
-        public bool IsLoadOvered = false;
+
         /// <summary>
         /// 基础 Skill 数据表
         /// </summary>
@@ -82,9 +80,6 @@ namespace ProjectOC.WorkerNS
         #region to-do : 需读表导入所有所需的 Skill 数据
         public const string Texture2DPath = "ui/Skill/texture2d";
 
-        public const string TableDataABPath = "Json/TableData";
-        public const string TableName = "SkillTableData";
-
         [System.Serializable]
         public struct SkillTableJsonData
         {
@@ -98,32 +93,21 @@ namespace ProjectOC.WorkerNS
             public string texture2d;
         }
 
-        public IEnumerator LoadTableData()
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableJsonData[]> ABJAProcessor;
+
+        public void LoadTableData()
         {
-            while (GameManager.Instance.ABResourceManager == null)
+            if (ABJAProcessor == null)
             {
-                yield return null;
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableJsonData[]>("Json/TableData", "SkillTableData", (datas) =>
+                {
+                    foreach (var data in datas)
+                    {
+                        this.SkillTableDict.Add(data.id, data);
+                    }
+                }, null, "隐兽Skill表数据");
             }
-            var abmgr = GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(TableDataABPath, null, out ab);
-            yield return crequest;
-            if (crequest != null)
-                ab = crequest.assetBundle;
-
-
-            var request = ab.LoadAssetAsync<TextAsset>(TableName);
-            yield return request;
-            SkillTableJsonData[] datas = JsonConvert.DeserializeObject<SkillTableJsonData[]>((request.asset as TextAsset).text);
-
-            foreach (var data in datas)
-            {
-                this.SkillTableDict.Add(data.id, data);
-            }
-
-            //abmgr.UnLoadLocalABAsync(ItemTableDataABPath, false, null);
-
-            IsLoadOvered = true;
+            ABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
     }

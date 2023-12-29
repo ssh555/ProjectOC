@@ -151,7 +151,9 @@ namespace ML.Engine.InventorySystem
             {
                 it.Amount -= amount;
                 this.OnItemListChanged?.Invoke(this);
-                return ItemSpawner.Instance.SpawnItem(item.ID, amount);
+                var res = ItemSpawner.Instance.SpawnItem(item.ID);
+                res.Amount = amount;
+                return res;
             }
         }
 

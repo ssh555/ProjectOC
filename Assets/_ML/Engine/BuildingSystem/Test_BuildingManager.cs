@@ -19,7 +19,7 @@ namespace ML.Engine.BuildingSystem
     {
         public static Test_BuildingManager Instance;
         public BuildingManager BM;
-        private int IsInit = 3;
+        private int IsInit = 5;
         public bool IsLoadOvered => IsInit == 0;
 
         #region Config
@@ -33,13 +33,8 @@ namespace ML.Engine.BuildingSystem
 
 
         #region TextContent
-
-        public const string TextContentABPath = "JSON/TextContent/BuildingSystem/UI";
-
-        
         #region KeyTip
         public Dictionary<string, KeyTip> KeyTipDict = new Dictionary<string, KeyTip>();
-
         #endregion
 
         #region Category|Type
@@ -47,60 +42,48 @@ namespace ML.Engine.BuildingSystem
         public Dictionary<string, TextContent.TextTip> TypeDict = new Dictionary<string, TextContent.TextTip>();
 
         #endregion
+        public static bool IsLoading = false;
 
-        private IEnumerator InitUITextContents()
+        public void InitUITextContents()
         {
-#if UNITY_EDITOR
-            float startT = Time.realtimeSinceStartup;
-#endif
-            while (Manager.GameManager.Instance.ABResourceManager == null)
+            if (!IsLoading)
             {
-                yield return null;
-            }
-            var abmgr = Manager.GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(TextContentABPath, null, out ab);
-            yield return crequest;
-            if(crequest != null)
-            {
-                ab = crequest.assetBundle;
-            }
+                IsLoading = true;
+                var KeyTip_ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<KeyTip[]>("JSON/TextContent/BuildingSystem/UI", "KeyTip", (datas) =>
+                {
+                    foreach (var keytip in datas)
+                    {
+                        this.KeyTipDict.Add(keytip.keyname, keytip);
+                    }
+                    IsInit--;
+                }, null, "建造系统按键提示");
+                KeyTip_ABJAProcessor.StartLoadJsonAssetData();
 
-            // KeyTip
-            var request = ab.LoadAssetAsync<TextAsset>("KeyTip");
-            yield return request;
-            KeyTip[] keyTips = JsonConvert.DeserializeObject<KeyTip[]>((request.asset as TextAsset).text);
-            foreach(var keytip in keyTips)
-            {
-                this.KeyTipDict.Add(keytip.keyname, keytip);
-            }
+                var Category_ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextTip[]>("JSON/TextContent/BuildingSystem/UI", "Category", (datas) =>
+                {
+                    foreach (var category in datas)
+                    {
+                        this.CategoryDict.Add(category.name, category);
+                    }
+                    IsInit--;
+                }, null, "建造系统Category1");
+                Category_ABJAProcessor.StartLoadJsonAssetData();
 
-            // Category
-            request = ab.LoadAssetAsync<TextAsset>("Category");
-            yield return request;
-            TextContent.TextTip[] categorys = JsonConvert.DeserializeObject<TextContent.TextTip[]>((request.asset as TextAsset).text);
-            foreach (var category in categorys)
-            {
-                this.CategoryDict.Add(category.name, category);
+                var Type_ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextTip[]>("JSON/TextContent/BuildingSystem/UI", "Type", (datas) =>
+                {
+                    foreach (var type in datas)
+                    {
+                        this.TypeDict.Add(type.name, type);
+                    }
+                    IsInit--;
+                }, null, "建造系统Category2");
+                Type_ABJAProcessor.StartLoadJsonAssetData();
             }
-
-            // Type
-            request = ab.LoadAssetAsync<TextAsset>("Type");
-            yield return request;
-            TextContent.TextTip[] btypes = JsonConvert.DeserializeObject<TextContent.TextTip[]>((request.asset as TextAsset).text);
-            foreach (var type in btypes)
-            {
-                this.TypeDict.Add(type.name, type);
-            }
-            IsInit--;
-#if UNITY_EDITOR
-            Debug.Log("InitUITextContents cost time: " + (Time.realtimeSinceStartup - startT));
-#endif
         }
-
 
         #endregion
 
+        #region Internal
         public const string UIPanelABPath = "UI/BuildingSystem/Prefabs";
 
         public const string BPartABPath = "Prefabs/BuildingSystem/BPart";
@@ -164,7 +147,7 @@ namespace ML.Engine.BuildingSystem
 
             StartCoroutine(AddTestEvent());
 
-            StartCoroutine(InitUITextContents());
+            InitUITextContents();
         }
 
         public Dictionary<BuildingPartClassification, IBuildingPart> LoadedBPart = new Dictionary<BuildingPartClassification, IBuildingPart>();
@@ -364,6 +347,8 @@ namespace ML.Engine.BuildingSystem
                 Instance = null;
             }
         }
+
+        #endregion
     }
 
 }

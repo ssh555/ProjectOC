@@ -108,6 +108,18 @@ PrefabInstance:
       propertyPath: classification.Height
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 8802398227253588363, guid: 245a48d842503774da71bbcdcb8696b7, type: 3}
+      propertyPath: classification.Category2
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8802398227253588363, guid: 245a48d842503774da71bbcdcb8696b7, type: 3}
+      propertyPath: classification.Category3
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8802398227253588363, guid: 245a48d842503774da71bbcdcb8696b7, type: 3}
+      propertyPath: classification.Category4
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

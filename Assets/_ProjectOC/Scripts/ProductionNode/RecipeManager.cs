@@ -4,6 +4,7 @@ using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using Newtonsoft.Json;
 using System.Collections;
+using static ProjectOC.StoreNS.StoreManager;
 
 namespace ProjectOC.ProductionNodeNS
 {
@@ -35,10 +36,7 @@ namespace ProjectOC.ProductionNodeNS
             }
         }
         #endregion
-        /// <summary>
-        /// 是否已加载完数据
-        /// </summary>
-        public bool IsLoadOvered = false;
+
         public Dictionary<ItemCategory, List<string>> RecipeCategorys = new Dictionary<ItemCategory, List<string>>();
         /// <summary>
         /// 基础Recipe数据表
@@ -83,9 +81,6 @@ namespace ProjectOC.ProductionNodeNS
         }
 
         #region to-do : 需读表导入所有所需的 Recipe 数据
-        public const string TableDataABPath = "Json/TableData";
-        public const string TableName = "RecipeTableData";
-
         [System.Serializable]
         public struct RecipeTableJsonData
         {
@@ -96,38 +91,26 @@ namespace ProjectOC.ProductionNodeNS
             public int timeCost;
             public int expRecipe;
         }
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableJsonData[]> ABJAProcessor;
 
-        public IEnumerator LoadTableData()
+        public void LoadTableData()
         {
-            while (GameManager.Instance.ABResourceManager == null)
+            if (ABJAProcessor == null)
             {
-                yield return null;
-            }
-            var abmgr = GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(TableDataABPath, null, out ab);
-            yield return crequest;
-            if (crequest != null)
-                ab = crequest.assetBundle;
-
-
-            var request = ab.LoadAssetAsync<TextAsset>(TableName);
-            yield return request;
-            RecipeTableJsonData[] datas = JsonConvert.DeserializeObject<RecipeTableJsonData[]>((request.asset as TextAsset).text);
-
-            foreach (var data in datas)
-            {
-                this.RecipeTableDict.Add(data.id, data);
-                if (!this.RecipeCategorys.ContainsKey(data.category))
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableJsonData[]>("Json/TableData", "RecipeTableData", (datas) =>
                 {
-                    this.RecipeCategorys[data.category] = new List<string>();
-                }
-                this.RecipeCategorys[data.category].Add(data.id);
+                    foreach (var data in datas)
+                    {
+                        this.RecipeTableDict.Add(data.id, data);
+                        if (!this.RecipeCategorys.ContainsKey(data.category))
+                        {
+                            this.RecipeCategorys[data.category] = new List<string>();
+                        }
+                        this.RecipeCategorys[data.category].Add(data.id);
+                    }
+                }, null, "配方表数据");
             }
-
-            //abmgr.UnLoadLocalABAsync(ItemTableDataABPath, false, null);
-
-            IsLoadOvered = true;
+            ABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
     }

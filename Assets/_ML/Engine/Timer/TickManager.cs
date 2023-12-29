@@ -56,7 +56,7 @@ namespace ML.Engine.Timer
             this.removeTick.Clear();
             foreach (var tick in this.tickComponents.Values)
             {
-                tick.Remove(null);
+                tick.RemoveAll(item => item == null);
             }
         }
         public void UpdateFixedTickComponentList()
@@ -73,7 +73,7 @@ namespace ML.Engine.Timer
             this.removeFixedTick.Clear();
             foreach (var tick in this.fixedTickComponents.Values)
             {
-                tick.Remove(null);
+                tick.RemoveAll(item => item ==null);
             }
 
         }
@@ -91,7 +91,7 @@ namespace ML.Engine.Timer
             this.removeLateTick.Clear();
             foreach (var tick in this.lateTickComponents.Values)
             {
-                tick.Remove(null);
+                tick.RemoveAll(item => item == null);
             }
         }
 

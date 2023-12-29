@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using ML.Engine.TextContent;
 using Newtonsoft.Json;
+using static ProjectOC.WorkerNS.EffectManager;
 
 namespace ProjectOC.TechTree
 {
@@ -42,7 +43,7 @@ namespace ProjectOC.TechTree
 
             StartCoroutine(LoadTableData());
 
-            StartCoroutine(InitUITextContents());
+            InitUITextContents();
         }
 
         private void OnDestroy()
@@ -183,8 +184,6 @@ namespace ProjectOC.TechTree
         [ReadOnly]
         public bool IsLoadOvered = false;
 
-        public const string TableDataABPath = "Json/TableData";
-        public const string TableName = "TechTree";
         /// <summary>
         /// 科技树存档
         /// </summary>
@@ -220,36 +219,19 @@ namespace ProjectOC.TechTree
         }
 
         public Dictionary<string, UnlockingTechPoint> UnlockingTechPointDict = new Dictionary<string, UnlockingTechPoint>();
+
         #endregion
 
         #region Load
         private IEnumerator LoadTableData()
         {
-
-            // 需在ItemSystem、CompositonSystem、BuildingSystem加载完数据之后才能加载
-            while (GM.ABResourceManager == null || ML.Engine.InventorySystem.ItemSpawner.Instance.IsLoadOvered == false || ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.IsLoadOvered == false || ML.Engine.BuildingSystem.Test_BuildingManager.Instance.IsLoadOvered == false)
-            {
-                yield return null;
-            }
 #if UNITY_EDITOR
             float startT = Time.realtimeSinceStartup;
 #endif
-            var abmgr = GM.ABResourceManager;
+
             #region Load TPJsonData
+            ML.Engine.ABResources.ABJsonAssetProcessor<TechPoint[]> ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TechPoint[]>("Json/TableData", "TechTree", (datas) =>
             {
-                AssetBundle ab;
-                var crequest = abmgr.LoadLocalABAsync(TableDataABPath, null, out ab);
-                yield return crequest;
-                if (crequest != null)
-                {
-                    ab = crequest.assetBundle;
-                }
-
-
-                var request = ab.LoadAssetAsync<TextAsset>(TableName);
-                yield return request;
-                TechPoint[] datas = JsonConvert.DeserializeObject<TechPoint[]>((request.asset as TextAsset).text);
-
                 foreach (var data in datas)
                 {
                     this.registerTechPoints.Add(data.ID, data);
@@ -262,13 +244,21 @@ namespace ProjectOC.TechTree
                     foreach (var data in datas)
                     {
                         // 只需要更新 是否解锁
-                        if(this.registerTechPoints.ContainsKey(data.ID))
+                        if (this.registerTechPoints.ContainsKey(data.ID))
                         {
                             // 有一个解锁则标记为解锁
                             this.registerTechPoints[data.ID].IsUnlocked = data.IsUnlocked || this.registerTechPoints[data.ID].IsUnlocked;
                         }
                     }
                 }
+            }, () => {
+
+                return (ML.Engine.InventorySystem.ItemSpawner.Instance.IsLoadOvered == false || ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.IsLoadOvered == false || ML.Engine.BuildingSystem.Test_BuildingManager.Instance.IsLoadOvered == false);
+            }, "科技树数据");
+            ABJAProcessor.StartLoadJsonAssetData();
+            while(!ABJAProcessor.IsLoaded)
+            {
+                yield return null;
             }
             #endregion
 
@@ -316,6 +306,7 @@ namespace ProjectOC.TechTree
             #endregion
 
             IsLoadOvered = true;
+
 #if UNITY_EDITOR
             Debug.Log("LoadTableData cost time: " + (Time.realtimeSinceStartup - startT));
             Debug.Log($"存储路径: {Application.persistentDataPath}");
@@ -482,11 +473,8 @@ namespace ProjectOC.TechTree
         #endregion
 
         #region TextContent
-        public const string TextContentABPath = "JSON/TextContent/TechTree";
-        public const string TPPanelName = "TechPointPanel";
-
         public Dictionary<string, TextTip> CategoryDict = new Dictionary<string, TextTip>();
-        public TPPanel TPPanelTextContent;
+        public TPPanel TPPanelTextContent => ABJAProcessor_TPPanel.Datas;
 
         [System.Serializable]
         public struct TPPanel
@@ -502,37 +490,21 @@ namespace ProjectOC.TechTree
             public KeyTip decipher;
             public KeyTip back;
         }
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<TPPanel> ABJAProcessor_TPPanel;
 
-        private IEnumerator InitUITextContents()
+        public void InitUITextContents()
         {
-            while (ML.Engine.Manager.GameManager.Instance.ABResourceManager == null)
+            if (ABJAProcessor_TPPanel == null)
             {
-                yield return null;
+                ABJAProcessor_TPPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<TPPanel>("JSON/TextContent/TechTree", "TechPointPanel", (datas) =>
+                {
+                    foreach (var tip in datas.category)
+                    {
+                        this.CategoryDict.Add(tip.name, tip);
+                    }
+                }, null, "科技树UIPanel");
             }
-#if UNITY_EDITOR
-            float startT = Time.realtimeSinceStartup;
-#endif
-            var abmgr = ML.Engine.Manager.GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(TextContentABPath, null, out ab);
-            yield return crequest;
-            if (crequest != null)
-            {
-                ab = crequest.assetBundle;
-            }
-
-            var request = ab.LoadAssetAsync<TextAsset>(TPPanelName);
-            yield return request;
-            TPPanel tips = JsonConvert.DeserializeObject<TPPanel>((request.asset as TextAsset).text);
-            foreach (var tip in tips.category)
-            {
-                this.CategoryDict.Add(tip.name, tip);
-            }
-            TPPanelTextContent = tips;
-
-#if UNITY_EDITOR
-            Debug.Log("InitUITextContents cost time: " + (Time.realtimeSinceStartup - startT));
-#endif
+            ABJAProcessor_TPPanel.StartLoadJsonAssetData();
         }
         #endregion
 
@@ -543,8 +515,8 @@ namespace ProjectOC.TechTree
         /// <returns></returns>
         void LoadResource()
         {
-            var c1 = StartCoroutine(ML.Engine.InventorySystem.ItemSpawner.Instance.LoadTableData(this));
-            var c2 = StartCoroutine(ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.LoadTableData(this));
+            ML.Engine.InventorySystem.ItemSpawner.Instance.LoadTableData();
+            ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.LoadTableData();
         }
 
         [Button("生成测试文件")]

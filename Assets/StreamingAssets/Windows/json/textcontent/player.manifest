@@ -1,20 +1,20 @@
 ManifestFileVersion: 0
-CRC: 2197895692
+CRC: 3129524585
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1c776a910f20c056ebe2fa1c1ee4e72c
+    Hash: 4d3055b2ab7864f83df769563ee22e89
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5ad585dd02dfb5016c0dad519eab8f49
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 1c776a910f20c056ebe2fa1c1ee4e72c
+    Hash: 4d3055b2ab7864f83df769563ee22e89
 HashAppended: 0
 ClassTypes:
 - Class: 49
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ProjectOC/Resources/Json/TextContent/PlayerUIBotPanel.json
+- Assets/_ProjectOC/Resources/Json/TextContent/PlayerUIPanel.json
 Dependencies: []

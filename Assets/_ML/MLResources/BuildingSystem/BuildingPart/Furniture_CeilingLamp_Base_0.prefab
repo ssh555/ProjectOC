@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6990821254945706450}
   - component: {fileID: 3517299277645353592}
   m_Layer: 7
-  m_Name: Furniture_CeilingLamp
+  m_Name: Furniture_CeilingLamp_Base_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -99,10 +99,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
-    Category: 1
-    Type: 100
-    Style: 1
-    Height: 20
+    Category1: 1
+    Category2: 100
+    Category3: 1
+    Category4: 0
   instanceID: 
   canPlaceInPlaceMode: 0
   mode: 0
