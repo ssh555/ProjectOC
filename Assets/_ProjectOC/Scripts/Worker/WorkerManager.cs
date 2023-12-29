@@ -167,8 +167,8 @@ namespace ProjectOC.WorkerNS
                         this.WorkerTableDict.Add(data.id, data);
                     }
                 }, null, "ÒþÊÞ±íÊý¾Ý");
+                ABJAProcessor.StartLoadJsonAssetData();
             }
-            ABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
     }

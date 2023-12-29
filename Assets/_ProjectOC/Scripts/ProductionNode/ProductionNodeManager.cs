@@ -213,8 +213,8 @@ namespace ProjectOC.ProductionNodeNS
                         this.ProductionNodeTableDict.Add(data.id, data);
                     }
                 }, null, "生产节点表数据");
+                ABJAProcessor.StartLoadJsonAssetData();
             }
-            ABJAProcessor.StartLoadJsonAssetData();
         }
 
 

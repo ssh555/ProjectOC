@@ -31,6 +31,7 @@ namespace ProjectOC.Player.UI
         public int fixedTickPriority { get; set; }
         public int lateTickPriority { get; set; }
 
+        public bool IsInit = false;
         private void Start()
         {
             InitUITextContents();
@@ -69,7 +70,9 @@ namespace ProjectOC.Player.UI
                 var panel = GameObject.Instantiate(uIInfiniteInventory);
                 panel.transform.SetParent(this.transform.parent, false);
                 panel.inventory = this.player.Inventory as ML.Engine.InventorySystem.InfiniteInventory;
-                //panel.inventory
+
+
+
 
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
             };
@@ -88,6 +91,10 @@ namespace ProjectOC.Player.UI
 
             this.CurSelected = EnterBuildBtn;
             this.CurSelected.OnSelectedEnter();
+
+            IsInit = true;
+
+            Refresh();
         }
 
         public void Tick(float deltatime)
@@ -153,7 +160,7 @@ namespace ProjectOC.Player.UI
             Input.InputManager.PlayerInput.PlayerUI.Disable();
         }
 
-        public Dictionary<string, TextTip> TipDict = new Dictionary<string, TextTip>();
+        public static Dictionary<string, TextTip> TipDict = new Dictionary<string, TextTip>();
 
         [System.Serializable]
         private struct TextTips
@@ -170,22 +177,27 @@ namespace ProjectOC.Player.UI
                 {
                     foreach (var tip in datas)
                     {
-                        this.TipDict.Add(tip.name, tip);
+                        TipDict.Add(tip.name, tip);
                     }
                     this.Refresh();
                     this.enabled = false;
                 }, null, "PlayerUIPanel");
+                ABJAProcessor.StartLoadJsonAssetData();
             }
-            ABJAProcessor.StartLoadJsonAssetData();
+            else
+            {
+                this.Refresh();
+                this.enabled = false;
+            }
         }
 
         private void Refresh()
         {
-            if(ABJAProcessor != null && ABJAProcessor.IsLoaded)
+            if(ABJAProcessor != null && ABJAProcessor.IsLoaded && IsInit)
             {
-                this.EnterBuildBtn.text.text = this.TipDict["enterbuild"].GetDescription();
-                this.EnterTechTreeBtn.text.text = this.TipDict["techtree"].GetDescription();
-                this.EnterInventoryBtn.text.text = this.TipDict["inventory"].GetDescription();
+                this.EnterBuildBtn.text.text = TipDict["enterbuild"].GetDescription();
+                this.EnterTechTreeBtn.text.text = TipDict["techtree"].GetDescription();
+                this.EnterInventoryBtn.text.text = TipDict["inventory"].GetDescription();
             }
         }
     }

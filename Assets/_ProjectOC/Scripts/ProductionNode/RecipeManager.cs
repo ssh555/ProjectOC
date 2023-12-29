@@ -109,8 +109,8 @@ namespace ProjectOC.ProductionNodeNS
                         this.RecipeCategorys[data.category].Add(data.id);
                     }
                 }, null, "配方表数据");
+                ABJAProcessor.StartLoadJsonAssetData();
             }
-            ABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
     }

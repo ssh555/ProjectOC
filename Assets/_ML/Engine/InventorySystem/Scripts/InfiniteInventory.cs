@@ -61,7 +61,7 @@ namespace ML.Engine.InventorySystem
                 return false;
             }
             // 不可以堆叠
-            if(!item.bCanStack)
+            if(!ItemSpawner.Instance.GetCanStack(item.ID))
             {
                 this.itemList.Add(item);
             }
@@ -72,15 +72,16 @@ namespace ML.Engine.InventorySystem
                 // 寻找合适格子装入
                 if (it != null)
                 {
+                    var ma = ItemSpawner.Instance.GetMaxAmount(it.ID);
                     // 没有达到数量上限
-                    if(it.Amount + item.Amount <= it.MaxAmount)
+                    if (it.Amount + item.Amount <= ma)
                     {
                         it.Amount += item.Amount;
                     }
                     else
                     {
-                        item.Amount = it.MaxAmount - it.Amount - item.Amount;
-                        it.Amount = it.MaxAmount;
+                        item.Amount = ma - it.Amount - item.Amount;
+                        it.Amount = ma;
                         this.itemList.Add(item);
                     }
                 }
@@ -197,7 +198,9 @@ namespace ML.Engine.InventorySystem
         {
             this.itemList.Sort((a, b) =>
             {
-                return IsDesc ? b.SortNum.CompareTo(a.SortNum) : a.SortNum.CompareTo(b.SortNum);
+                var sa = ItemSpawner.Instance.GetSortNum(a.ID);
+                var sb = ItemSpawner.Instance.GetSortNum(b.ID);
+                return IsDesc ? sb.CompareTo(sa) : sa.CompareTo(sb);
             });
             this.OnItemListChanged?.Invoke(this);
         }

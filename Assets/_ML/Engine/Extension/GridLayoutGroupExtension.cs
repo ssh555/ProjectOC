@@ -17,7 +17,6 @@ public static class GridLayoutGroupExtension
 
         int rows = Mathf.FloorToInt(gridSize.y);
         int columns = Mathf.FloorToInt(gridSize.x);
-
         return new Vector2Int(rows, columns);
     }
 

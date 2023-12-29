@@ -83,8 +83,8 @@ namespace ProjectOC.WorkerNS
                         this.EffectTableDict.Add(data.id, data);
                     }
                 }, null, "ÒþÊÞEffect±íÊý¾Ý");
+                ABJAProcessor.StartLoadJsonAssetData();
             }
-            ABJAProcessor.StartLoadJsonAssetData();
         }
        
         #endregion
