@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static ProjectOC.ProductionNodeNS.RecipeManager;
 
@@ -30,7 +31,8 @@ namespace ML.Engine.InventorySystem
             }
         }
         #endregion
-        
+
+        #region Load And Data
         /// <summary>
         /// 是否已加载完数据
         /// </summary>
@@ -47,6 +49,49 @@ namespace ML.Engine.InventorySystem
         /// </summary>
         private Dictionary<string, ItemTableJsonData> ItemTypeStrDict = new Dictionary<string, ItemTableJsonData>();
 
+        #region to-do : 需读表导入所有所需的 Item 数据
+        public const string TypePath = "ML.Engine.InventorySystem.";
+        public const string Texture2DPath = "ui/Item/texture2d";
+        public const string WorldObjPath = "prefabs/Item/WorldItem";
+
+        [System.Serializable]
+        public struct ItemTableJsonData
+        {
+            public string id;
+            public TextContent.TextContent name;
+            public string type;
+            public int sort;
+            public ItemCategory category;
+            public ItemType itemtype;
+            public int weight;
+            public bool bcanstack;
+            public int maxamount;
+            public string texture2d;
+            public string worldobject;
+            public string description;
+            public string effectsDescription;
+        }
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableJsonData[]> ABJAProcessor;
+
+        public void LoadTableData()
+        {
+            if (ABJAProcessor == null)
+            {
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableJsonData[]>("Json/TableData", "ItemTableData", (datas) =>
+                {
+                    foreach (var data in datas)
+                    {
+                        this.ItemTypeStrDict.Add(data.id, data);
+                    }
+                }, null, "背包系统物品Item表数据");
+                ABJAProcessor.StartLoadJsonAssetData();
+            }
+        }
+        #endregion
+
+        #endregion
+
+        #region Spawn
         /// <summary>
         /// 根据 id 生成一个崭新的Item，数量为1
         /// </summary>
@@ -79,11 +124,12 @@ namespace ML.Engine.InventorySystem
         {
             List<Item> res = new List<Item>();
             var item = SpawnItem(id);
-            if(item != null)
+            var ma = GetMaxAmount(item.ID);
+            if (item != null)
             {
                 while(amount > 0)
                 {
-                    if (item.MaxAmount >= amount)
+                    if (ma >= amount)
                     {
                         item.Amount = amount;
                         res.Add(item);
@@ -91,8 +137,8 @@ namespace ML.Engine.InventorySystem
                     }
                     else
                     {
-                        amount -= item.MaxAmount;
-                        item.Amount = item.MaxAmount;
+                        amount -= ma;
+                        item.Amount = ma;
                         res.Add(item);
                         item = SpawnItem(id);
                     }
@@ -145,6 +191,13 @@ namespace ML.Engine.InventorySystem
             return worldItem;
 #endif
         }
+        #endregion
+
+        #region Getter
+        public string[] GetAllItemID()
+        {
+            return ItemTypeStrDict.Keys.ToArray();
+        }
 
         public bool IsValidItemID(string id)
         {
@@ -189,6 +242,69 @@ namespace ML.Engine.InventorySystem
             return this.ItemTypeStrDict[id].name;
         }
 
+        public bool GetCanStack(string id)
+        {
+            if (!this.ItemTypeStrDict.ContainsKey(id))
+            {
+                return false;
+            }
+            return this.ItemTypeStrDict[id].bcanstack;
+        }
+
+        public int GetWeight(string id)
+        {
+            if (!this.ItemTypeStrDict.ContainsKey(id))
+            {
+                return -1;
+            }
+            return this.ItemTypeStrDict[id].weight;
+        }
+
+        public int GetSortNum(string id)
+        {
+            if (!this.ItemTypeStrDict.ContainsKey(id))
+            {
+                return int.MinValue;
+            }
+            return this.ItemTypeStrDict[id].sort;
+        }
+
+        public ItemType GetItemType(string id)
+        {
+            if (!this.ItemTypeStrDict.ContainsKey(id))
+            {
+                return ItemType.None;
+            }
+            return this.ItemTypeStrDict[id].itemtype;
+        }
+
+        public int GetMaxAmount(string id)
+        {
+            if (!this.ItemTypeStrDict.ContainsKey(id))
+            {
+                return 0;
+            }
+            return this.ItemTypeStrDict[id].maxamount;
+        }
+
+        public string GetItemDescription(string id)
+        {
+            if (!this.ItemTypeStrDict.ContainsKey(id))
+            {
+                return null;
+            }
+            return this.ItemTypeStrDict[id].description;
+        }
+
+        public string GetEffectDescription(string id)
+        {
+            if (!this.ItemTypeStrDict.ContainsKey(id))
+            {
+                return null;
+            }
+            return this.ItemTypeStrDict[id].effectsDescription;
+        }
+
         public static Type GetTypeByName(string fullName)
         {
             //获取应用程序用到的所有程序集
@@ -205,47 +321,7 @@ namespace ML.Engine.InventorySystem
             return null;
         }
 
-        #region to-do : 需读表导入所有所需的 Item 数据
-        public const string TypePath = "ML.Engine.InventorySystem.";
-        public const string Texture2DPath = "ui/Item/texture2d";
-        public const string WorldObjPath = "prefabs/Item/WorldItem";
-
-        [System.Serializable]
-        public struct ItemTableJsonData
-        {
-            public string id;
-            public TextContent.TextContent name;
-            public string type;
-            public int sort;
-            public ItemCategory category;
-            public Item itemtype;
-            public int weight;
-            public bool bcanstack;
-            public int maxamount;
-            public string texture2d;
-            public string worldobject;
-            public string description;
-            public string effectsDescription;
-        }
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableJsonData[]> ABJAProcessor;
-
-        public void LoadTableData()
-        {
-            if (ABJAProcessor == null)
-            {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableJsonData[]>("Json/TableData", "ItemTableData", (datas) =>
-                {
-                    foreach (var data in datas)
-                    {
-                        this.ItemTypeStrDict.Add(data.id, data);
-                    }
-                }, null, "背包系统物品Item表数据");
-            }
-            ABJAProcessor.StartLoadJsonAssetData();
-        }
         #endregion
-
-
     }
 }
 

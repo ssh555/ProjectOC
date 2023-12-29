@@ -1,3 +1,4 @@
+using ML.Engine.InteractSystem;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using UnityEngine;
 namespace ML.Engine.InventorySystem
 {
     [RequireComponent(typeof(Collider))]
-    public class WorldItem : MonoBehaviour
+    public class WorldItem : MonoBehaviour, InteractSystem.IInteraction
     {
         [SerializeField, ReadOnly]
         protected string _id = "";
@@ -16,6 +17,7 @@ namespace ML.Engine.InventorySystem
         /// </summary>
         [ShowInInspector, ReadOnly, SerializeField]
         protected Item item;
+
 
         public void SetItem(Item item)
         {
@@ -43,23 +45,40 @@ namespace ML.Engine.InventorySystem
         /// 拾取
         /// </summary>
         /// <param name="inventory"></param>
-        public void PickUp(Inventory inventory)
+        public void PickUp(IInventory inventory)
         {
-            if (this.item == null && ItemSpawner.Instance.IsValidItemID(this._id))
+            if (this.item == null)
             {
-                this.item = ItemSpawner.Instance.SpawnItem(this._id);
+                if(ItemSpawner.Instance.IsValidItemID(this._id))
+                {
+                    this.item = ItemSpawner.Instance.SpawnItem(this._id);
+
+                }
+                else
+                {
+                    throw new System.Exception(this.gameObject.name + " WorldItem.Item == null !!!");
+                }
             }
-            else
-            {
-                throw new System.Exception(this.gameObject.name + " WorldItem.Item == null !!!");
-            }
+
 
             inventory.AddItem(item);
 
             Destroy(this.gameObject);
         }
 
+        #region IInteraction
+        public string InteractType { get; set; } = "";
+        public Vector3 PosOffset { get; set; } = Vector3.zero;
+        public bool IsDestroyDirty { get; set; } = false;
+
+        public void Interact(InteractComponent component)
+        {
+            component.SetInteractionNull();
+            // to-do : Inventory 更改时这里也需要更改
+            PickUp(component.gameObject.GetComponentInParent<ProjectOC.Player.PlayerCharacter>().Inventory);
+        }
+        #endregion
     }
-   
+
 }
 

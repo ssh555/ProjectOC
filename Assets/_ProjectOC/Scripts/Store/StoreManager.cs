@@ -264,8 +264,8 @@ namespace ProjectOC.StoreNS
                         this.StoreTableDict.Add(data.id, data);
                     }
                 }, null, "²Ö¿â±íÊý¾Ý");
+                ABJAProcessor.StartLoadJsonAssetData();
             }
-            ABJAProcessor.StartLoadJsonAssetData();
         }
 
         #endregion

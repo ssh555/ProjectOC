@@ -68,8 +68,13 @@ namespace ML.Engine.InteractSystem
                     this.CurrentInteraction.Interact(this);
                 }
             }
-
-
+            else
+            {
+                if(uiKeyTip.img != null)
+                {
+                    uiKeyTip.img.transform.parent.gameObject.SetActive(false);
+                }
+            }
         }
         #endregion
 
@@ -83,7 +88,10 @@ namespace ML.Engine.InteractSystem
         /// 当前选中的可交互物
         /// </summary>
         public IInteraction CurrentInteraction { get; protected set; }
-
+        public void SetInteractionNull()
+        {
+            CurrentInteraction = null;
+        }
         public void Disable()
         {
             Manager.GameManager.Instance.TickManager.UnregisterTick(this);
@@ -138,8 +146,8 @@ namespace ML.Engine.InteractSystem
                     }
 
                 }, null, "交互组件按键提示");
+                ABJAProcessor.StartLoadJsonAssetData();
             }
-            ABJAProcessor.StartLoadJsonAssetData();
             StartCoroutine(OnLoadOver());
         }
 

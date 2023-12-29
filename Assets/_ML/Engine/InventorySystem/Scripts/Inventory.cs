@@ -81,7 +81,7 @@ namespace ML.Engine.InventorySystem
                 else if (this.itemList[i].ID == item.ID && !IsFillToNullItem && !this.itemList[i].IsFillUp)
                 {
                     // 能完全装下
-                    if (this.itemList[i].Amount + item.Amount <= this.itemList[i].MaxAmount)
+                    if (this.itemList[i].Amount + item.Amount <= ItemSpawner.Instance.GetMaxAmount(this.itemList[i].ID))
                     {
                         this.itemList[i].Amount += item.Amount;
                         this.OnItemListChanged?.Invoke(this);
@@ -90,8 +90,8 @@ namespace ML.Engine.InventorySystem
                     // 不能完全装下
                     else
                     {
-                        int delta = this.itemList[i].MaxAmount - this.itemList[i].Amount;
-                        this.itemList[i].Amount = this.itemList[i].MaxAmount;
+                        int delta = ItemSpawner.Instance.GetMaxAmount(this.itemList[i].ID) - this.itemList[i].Amount;
+                        this.itemList[i].Amount = ItemSpawner.Instance.GetMaxAmount(this.itemList[i].ID);
                         item.Amount -= delta;
                         continue;
                     }
@@ -145,7 +145,7 @@ namespace ML.Engine.InventorySystem
             if (item == null || item.OwnInventory != this || amount <= 0)
                 return null;
 
-            if (!item.bCanStack && amount == 1)
+            if (!ItemSpawner.Instance.GetCanStack(item.ID) && amount == 1)
             {
                 if (this.RemoveItem(item))
                 {
@@ -215,7 +215,7 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public bool BinarySplitItem(Item item)
         {
-            if(item == null || !item.bCanStack || item.Amount < 2 || this.Size >= this.MaxSize || item.OwnInventory != this)
+            if(item == null || !ItemSpawner.Instance.GetCanStack(item.ID) || item.Amount < 2 || this.Size >= this.MaxSize || item.OwnInventory != this)
             {
                 return false;
             }

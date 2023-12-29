@@ -22,33 +22,9 @@ namespace ML.Engine.InventorySystem
         /// </summary>
         public readonly string ID = "";
         /// <summary>
-        /// 显示层排序序号，越小排在越前面
-        /// </summary>
-        public int SortNum;
-        /// <summary>
-        /// 物品配方类目
-        /// </summary>
-        public ItemCategory Category;
-        /// <summary>
-        /// 单个物品的重量
-        /// </summary>
-        public int SingleItemWeight;
-        /// <summary>
         /// 总重量
         /// </summary>
-        public int Weight {get { return SingleItemWeight * Amount; }}
-        /// <summary>
-        /// 物品类目
-        /// </summary>
-        public ItemType ItemType;
-        /// <summary>
-        /// 物品描述
-        /// </summary>
-        public string ItemDescription = "";
-        /// <summary>
-        /// 效果描述
-        /// </summary>
-        public string EffectsDescription = "";
+        public int Weight {get { return ItemSpawner.Instance.GetWeight(ID) * Amount; }}
         /// <summary>
         /// 所属 Inventory
         /// </summary>
@@ -65,23 +41,9 @@ namespace ML.Engine.InventorySystem
             get => amount;
             set
             {
-                amount = Math.Clamp(value, 0, this.MaxAmount);
+                amount = Math.Clamp(value, 0, ItemSpawner.Instance.GetMaxAmount(ID));
                 if (amount == 0)
                     this.OnAmountToZero?.Invoke(this.OwnInventory, this);
-            }
-        }
-        protected int maxAmount = 1;
-        /// <summary>
-        /// 最大数量
-        /// </summary>
-        public int MaxAmount
-        {
-            get => maxAmount;
-            set
-            {
-                if (!this.bCanStack)
-                    maxAmount = 1;
-                maxAmount = Math.Max(1, value);
             }
         }
         /// <summary>
@@ -91,13 +53,10 @@ namespace ML.Engine.InventorySystem
         {
             get
             {
-                return this.Amount == this.MaxAmount;
+                return this.Amount == ItemSpawner.Instance.GetMaxAmount(ID);
             }
         }
-        /// <summary>
-        /// 能否叠加存储
-        /// </summary>
-        public bool bCanStack;
+
         /// <summary>
         /// 数量归0时调用
         /// </summary>
@@ -108,21 +67,7 @@ namespace ML.Engine.InventorySystem
         {
             this.ID = ID;
 
-            this.bCanStack = config.bcanstack;
-
             this.amount = initAmount;
-
-            this.maxAmount = config.maxamount;
-
-            this.SortNum = config.sort;
-
-            this.Category = config.category;
-
-            this.SingleItemWeight = config.weight;
-
-            this.ItemDescription = config.description;
-
-            this.EffectsDescription = config.effectsDescription;
 
             // 默认添加数量为0时从Inventory移除并销毁
             this.OnAmountToZero += (IInventory inventory,Item item) =>
@@ -147,7 +92,7 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public bool CanUse()
         {
-            switch (this.ItemType)
+            switch (ItemSpawner.Instance.GetItemType(ID))
             {
                 case ItemType.Equip:
                 case ItemType.Food:
@@ -166,7 +111,7 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public bool CanDrop()
         {
-            switch (this.ItemType)
+            switch (ItemSpawner.Instance.GetItemType(ID))
             {
                 case ItemType.Equip:
                 case ItemType.Food:
@@ -185,7 +130,7 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public bool CanDestroy()
         {
-            switch (this.ItemType)
+            switch (ItemSpawner.Instance.GetItemType(ID))
             {
                 case ItemType.Equip:
                 case ItemType.Food:
@@ -265,10 +210,11 @@ namespace ML.Engine.InventorySystem
                 {
                     return -1;
                 }
-
-                if (x.SortNum != y.SortNum)
+                var xs = ItemSpawner.Instance.GetSortNum(x.ID);
+                var ys = ItemSpawner.Instance.GetSortNum(y.ID);
+                if (xs != ys)
                 {
-                    return x.SortNum.CompareTo(y.SortNum);
+                    return xs.CompareTo(ys);
                 }
                 else
                 {

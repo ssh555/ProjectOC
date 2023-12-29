@@ -106,8 +106,8 @@ namespace ProjectOC.WorkerNS
                         this.SkillTableDict.Add(data.id, data);
                     }
                 }, null, "ÒþÊÞSkill±íÊý¾Ý");
+                ABJAProcessor.StartLoadJsonAssetData();
             }
-            ABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
     }

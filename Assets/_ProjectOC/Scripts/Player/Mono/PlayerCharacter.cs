@@ -5,6 +5,7 @@ using ML.Engine.FSM;
 using Sirenix.OdinInspector;
 using ProjectOC.Player.Terrain;
 using UnityEngine.InputSystem;
+using static UnityEngine.Rendering.DebugUI;
 
 
 namespace ProjectOC.Player
@@ -62,6 +63,7 @@ namespace ProjectOC.Player
         #endregion
 
         #region 背包 to-do : 临时测试使用
+        [ShowInInspector, ReadOnly]
         public ML.Engine.InventorySystem.IInventory Inventory;
         #endregion
 
@@ -144,6 +146,16 @@ namespace ProjectOC.Player
                     Input.InputManager.PlayerInput.Player.Disable();
                 }
             };
+            while(!ML.Engine.InventorySystem.ItemSpawner.Instance.IsLoadOvered)
+            {
+                yield return null;
+            }
+            // to-do : to-delete
+            foreach (var id in ML.Engine.InventorySystem.ItemSpawner.Instance.GetAllItemID())
+            {
+                var item = ML.Engine.InventorySystem.ItemSpawner.Instance.SpawnItems(id, ML.Engine.InventorySystem.ItemSpawner.Instance.GetCanStack(id) ? UnityEngine.Random.Range(1, 999) : 1)[0];
+                Inventory.AddItem(item);
+            }
         }
 
         private void OnDestroy()

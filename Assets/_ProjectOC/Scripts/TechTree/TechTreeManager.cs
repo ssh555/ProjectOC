@@ -503,8 +503,8 @@ namespace ProjectOC.TechTree
                         this.CategoryDict.Add(tip.name, tip);
                     }
                 }, null, "¿Æ¼¼Ê÷UIPanel");
+                ABJAProcessor_TPPanel.StartLoadJsonAssetData();
             }
-            ABJAProcessor_TPPanel.StartLoadJsonAssetData();
         }
         #endregion
 

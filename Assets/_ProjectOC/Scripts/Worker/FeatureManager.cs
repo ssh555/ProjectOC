@@ -155,8 +155,8 @@ namespace ProjectOC.WorkerNS
                         this.FeatureTypeDict[data.type].Add(data.id);
                     }
                 }, null, "ÒþÊÞFeature±íÊý¾Ý");
+                ABJAProcessor.StartLoadJsonAssetData();
             }
-            ABJAProcessor.StartLoadJsonAssetData();
         }
 
         #endregion

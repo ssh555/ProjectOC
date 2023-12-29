@@ -111,8 +111,8 @@ namespace ML.Engine.InventorySystem.CompositeSystem
                     //    }
                     //}
                 }, null, "合成系统表数据");
+                ABJAProcessor.StartLoadJsonAssetData();
             }
-            ABJAProcessor.StartLoadJsonAssetData();
         }
 
         /// <summary>
