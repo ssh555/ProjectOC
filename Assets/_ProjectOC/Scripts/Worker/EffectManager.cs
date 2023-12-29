@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static ProjectOC.WorkerNS.FeatureManager;
 
 namespace ProjectOC.WorkerNS
 {
@@ -29,10 +30,7 @@ namespace ProjectOC.WorkerNS
             }
         }
         #endregion
-        /// <summary>
-        /// 是否已加载完数据
-        /// </summary>
-        public bool IsLoadOvered = false;
+
         /// <summary>
         /// 基础数据表
         /// </summary>
@@ -61,8 +59,6 @@ namespace ProjectOC.WorkerNS
         }
 
         #region to-do : 需读表导入所有所需的 Effect 数据
-        public const string TableDataABPath = "Json/TableData";
-        public const string TableName = "EffectTableData";
 
         [System.Serializable]
         public struct EffectTableJsonData
@@ -74,34 +70,23 @@ namespace ProjectOC.WorkerNS
             public int paramInt;
             public float paramFloat;
         }
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<EffectTableJsonData[]> ABJAProcessor;
 
-        public IEnumerator LoadTableData()
+        public void LoadTableData()
         {
-            while (GameManager.Instance.ABResourceManager == null)
+            if (ABJAProcessor == null)
             {
-                yield return null;
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<EffectTableJsonData[]>("Json/TableData", "EffectTableData", (datas) =>
+                {
+                    foreach (var data in datas)
+                    {
+                        this.EffectTableDict.Add(data.id, data);
+                    }
+                }, null, "隐兽Effect表数据");
             }
-            var abmgr = GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(TableDataABPath, null, out ab);
-            yield return crequest;
-            if (crequest != null)
-                ab = crequest.assetBundle;
-
-
-            var request = ab.LoadAssetAsync<TextAsset>(TableName);
-            yield return request;
-            EffectTableJsonData[] datas = JsonConvert.DeserializeObject<EffectTableJsonData[]>((request.asset as TextAsset).text);
-
-            foreach (var data in datas)
-            {
-                this.EffectTableDict.Add(data.id, data);
-            }
-
-            //abmgr.UnLoadLocalABAsync(ItemTableDataABPath, false, null);
-
-            IsLoadOvered = true;
+            ABJAProcessor.StartLoadJsonAssetData();
         }
+       
         #endregion
     }
 }

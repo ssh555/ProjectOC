@@ -1,0 +1,20 @@
+ManifestFileVersion: 0
+CRC: 350318237
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: ca91b9a31f1b1644c303f1d4de4168a3
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5ad585dd02dfb5016c0dad519eab8f49
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: ca91b9a31f1b1644c303f1d4de4168a3
+HashAppended: 0
+ClassTypes:
+- Class: 49
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/_ProjectOC/Resources/Json/TextContent/Inventory/InventoryPanel.json
+Dependencies: []

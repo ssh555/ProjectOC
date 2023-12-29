@@ -2,6 +2,7 @@ using ML.Engine.InventorySystem.CompositeSystem;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace ML.Engine.BuildingSystem.BuildingPart
@@ -263,6 +264,25 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 this.Mode = this.CanPlaceInPlaceMode ? this.tmpTriggerMode : BuildingMode.Destroy;
             }
         }
+
+#if UNITY_EDITOR
+        [Button("根据资产名更正类型"), PropertyOrder(-1), ShowIf("IsPrefab")]
+        private void ChangeCategoryFromName()
+        {
+            Classification = new BuildingPartClassification(this.name);
+        }
+
+        public bool IsPrefab()
+        {
+            var type = UnityEditor.PrefabUtility.GetPrefabAssetType(this.gameObject);
+            var status = UnityEditor.PrefabUtility.GetPrefabInstanceStatus(this.gameObject);
+            if (type != UnityEditor.PrefabAssetType.NotAPrefab && status == UnityEditor.PrefabInstanceStatus.NotAPrefab)
+            {
+                return true;
+            }
+            return false;
+        }
+#endif
     }
 
 }

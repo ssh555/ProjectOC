@@ -32,6 +32,18 @@ PrefabInstance:
       propertyPath: classification.Height
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 5416369412012966046, guid: 25a4c8ea58a63f14a821ca534c5df664, type: 3}
+      propertyPath: classification.Category2
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5416369412012966046, guid: 25a4c8ea58a63f14a821ca534c5df664, type: 3}
+      propertyPath: classification.Category3
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5416369412012966046, guid: 25a4c8ea58a63f14a821ca534c5df664, type: 3}
+      propertyPath: classification.Category4
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 5504472010688985949, guid: 25a4c8ea58a63f14a821ca534c5df664, type: 3}
       propertyPath: m_Name
       value: Room_Pillar_Base_100

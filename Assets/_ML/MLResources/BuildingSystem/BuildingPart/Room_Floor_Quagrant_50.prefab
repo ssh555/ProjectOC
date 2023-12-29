@@ -72,6 +72,10 @@ PrefabInstance:
       propertyPath: classification.Height
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 6213315572619637744, guid: bc936b6274995d245b0658bc0aa53486, type: 3}
+      propertyPath: classification.Category4
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 7004767402382339681, guid: bc936b6274995d245b0658bc0aa53486, type: 3}
       propertyPath: PositionOffset.y
       value: 0.5

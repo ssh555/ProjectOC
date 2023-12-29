@@ -32,6 +32,18 @@ PrefabInstance:
       propertyPath: classification.Height
       value: 75
       objectReference: {fileID: 0}
+    - target: {fileID: 5514341237574899913, guid: 6cabbb5ed5875f84b9fb50ba3f0a530a, type: 3}
+      propertyPath: classification.Category2
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5514341237574899913, guid: 6cabbb5ed5875f84b9fb50ba3f0a530a, type: 3}
+      propertyPath: classification.Category3
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5514341237574899913, guid: 6cabbb5ed5875f84b9fb50ba3f0a530a, type: 3}
+      propertyPath: classification.Category4
+      value: 75
+      objectReference: {fileID: 0}
     - target: {fileID: 5788171735168805689, guid: 6cabbb5ed5875f84b9fb50ba3f0a530a, type: 3}
       propertyPath: m_LocalScale.y
       value: 0.75

@@ -142,7 +142,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// <summary>
         /// 流程1 : 一级二级分类选择UI交互
         /// </summary>
-        public event System.Action<BuildingCategory[], int, BuildingType[], int> OnBuildSelectionEnter;
+        public event System.Action<BuildingCategory1[], int, BuildingCategory2[], int> OnBuildSelectionEnter;
         /// <summary>
         /// 流程1 : 一级二级分类选择UI交互
         /// </summary>
@@ -158,11 +158,11 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// <summary>
         /// 数组总枚举, 当前index
         /// </summary>
-        public event System.Action<BuildingCategory[], int> OnBuildSelectionCategoryChanged;
+        public event System.Action<BuildingCategory1[], int> OnBuildSelectionCategoryChanged;
         /// <summary>
         /// 数组总枚举, 当前index
         /// </summary>
-        public event System.Action<BuildingCategory, BuildingType[], int> OnBuildSelectionTypeChanged;
+        public event System.Action<BuildingCategory1, BuildingCategory2[], int> OnBuildSelectionTypeChanged;
         /// <summary>
         /// 流程3 : 放置
         /// </summary>
@@ -249,7 +249,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// </summary>
         /// <param name="Category"></param>
         /// <param name="Type"></param>
-        public void ChangeBPart(BuildingCategory Category, BuildingType Type)
+        public void ChangeBPart(BuildingCategory1 Category, BuildingCategory2 Type)
         {
             this.ResetBPart();
             this.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(Category, Type);
@@ -739,12 +739,12 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         [ShowInInspector, LabelText("TypeIndex"), FoldoutGroup("PlaceMode")]
         protected int _placeSelectedTypeIndex = 0;
         [ShowInInspector, LabelText("CategoryArray"), FoldoutGroup("PlaceMode")]
-        protected BuildingCategory[] _placeCanSelectCategory;
+        protected BuildingCategory1[] _placeCanSelectCategory;
         [ShowInInspector, LabelText("TypeArray"), FoldoutGroup("PlaceMode")]
-        protected BuildingType[] _placeCanSelectType;
+        protected BuildingCategory2[] _placeCanSelectType;
 
-        public BuildingCategory _placeSelectedCategory => this._placeCanSelectCategory[this._placeSelectedCategoryIndex];
-        public BuildingType _placeSelectedType => this._placeCanSelectType[this._placeSelectedTypeIndex];
+        public BuildingCategory1 _placeSelectedCategory => this._placeCanSelectCategory[this._placeSelectedCategoryIndex];
+        public BuildingCategory2 _placeSelectedType => this._placeCanSelectType[this._placeSelectedTypeIndex];
         private byte _placeControlFlow = 0;
         /// <summary>
         /// 0 -> 不处于PlaceMode, 回到InteractMode
@@ -812,7 +812,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 // Category
                 else if(BInput.BuildSelection.LastCategory.WasPressedThisFrame())
                 {
-                    this._placeSelectedCategoryIndex = (this._placeSelectedCategoryIndex - 1) % this._placeCanSelectCategory.Length;
+                    this._placeSelectedCategoryIndex = (this._placeSelectedCategoryIndex + this._placeCanSelectCategory.Length - 1) % this._placeCanSelectCategory.Length;
                     this.OnBuildSelectionCategoryChanged?.Invoke(this._placeCanSelectCategory, this._placeSelectedCategoryIndex);
                     this.UpdatePlaceBuildingType(this._placeCanSelectCategory[this._placeSelectedCategoryIndex]);
                 }
@@ -1018,7 +1018,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
         }
 
-        protected void UpdatePlaceBuildingType(BuildingCategory category)
+        protected void UpdatePlaceBuildingType(BuildingCategory1 category)
         {
             this._placeCanSelectType = BuildingManager.Instance.GetRegisteredType().Where(type => (int)type >= ((int)category * 100) && (int)type < ((int)category * 100 + 100)).ToArray();
 

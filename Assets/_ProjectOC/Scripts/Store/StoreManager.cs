@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static ProjectOC.WorkerNS.EffectManager;
 
 namespace ProjectOC.StoreNS
 {
@@ -32,10 +33,7 @@ namespace ProjectOC.StoreNS
             }
         }
         #endregion
-        /// <summary>
-        /// 是否已加载完数据
-        /// </summary>
-        public bool IsLoadOvered = false;
+
         /// <summary>
         /// 生成的仓库，键为ID
         /// </summary>
@@ -244,9 +242,6 @@ namespace ProjectOC.StoreNS
         public const string Texture2DPath = "ui/Store/texture2d";
         public const string WorldObjPath = "prefabs/Store/WorldStore";
 
-        public const string TableDataABPath = "Json/TableData";
-        public const string TableName = "StoreTableData";
-
         [System.Serializable]
         public struct StoreTableJsonData
         {
@@ -256,34 +251,23 @@ namespace ProjectOC.StoreNS
             public string texture2d;
             public string worldobject;
         }
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<StoreTableJsonData[]> ABJAProcessor;
 
-        public IEnumerator LoadTableData()
+        public void LoadTableData()
         {
-            while (GameManager.Instance.ABResourceManager == null)
+            if (ABJAProcessor == null)
             {
-                yield return null;
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StoreTableJsonData[]>("Json/TableData", "StoreTableData", (datas) =>
+                {
+                    foreach (var data in datas)
+                    {
+                        this.StoreTableDict.Add(data.id, data);
+                    }
+                }, null, "仓库表数据");
             }
-            var abmgr = GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(TableDataABPath, null, out ab);
-            yield return crequest;
-            if (crequest != null)
-                ab = crequest.assetBundle;
-
-
-            var request = ab.LoadAssetAsync<TextAsset>(TableName);
-            yield return request;
-            StoreTableJsonData[] datas = JsonConvert.DeserializeObject<StoreTableJsonData[]>((request.asset as TextAsset).text);
-
-            foreach (var data in datas)
-            {
-                this.StoreTableDict.Add(data.id, data);
-            }
-
-            //abmgr.UnLoadLocalABAsync(ItemTableDataABPath, false, null);
-
-            IsLoadOvered = true;
+            ABJAProcessor.StartLoadJsonAssetData();
         }
+
         #endregion
     }
 }

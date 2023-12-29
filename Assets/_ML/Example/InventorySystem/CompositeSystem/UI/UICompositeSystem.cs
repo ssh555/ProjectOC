@@ -159,12 +159,12 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
 
         private void Start()
         {
-            this.owner.ResourceInventory.OnItemListChanged += OnInventoryChanged;
+            (this.owner.ResourceInventory as Inventory).OnItemListChanged += OnInventoryChanged;
         }
 
         private void OnDestroy()
         {
-            this.owner.ResourceInventory.OnItemListChanged -= OnInventoryChanged;
+            (this.owner.ResourceInventory as Inventory).OnItemListChanged -= OnInventoryChanged;
         }
 
         private void OnInventoryChanged(Inventory inv)
