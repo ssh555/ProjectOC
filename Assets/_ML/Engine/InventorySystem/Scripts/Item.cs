@@ -44,11 +44,11 @@ namespace ML.Engine.InventorySystem
         /// <summary>
         /// 物品描述
         /// </summary>
-        public string ItemDescription = "";
+        public TextContent.TextContent ItemDescription;
         /// <summary>
         /// 效果描述
         /// </summary>
-        public string EffectsDescription = "";
+        public TextContent.TextContent EffectsDescription;
         /// <summary>
         /// 所属 Inventory
         /// </summary>
@@ -107,29 +107,43 @@ namespace ML.Engine.InventorySystem
         public Item(string ID, ItemSpawner.ItemTableJsonData config, int initAmount)
         {
             this.ID = ID;
-
-            this.bCanStack = config.bcanstack;
-
-            this.amount = initAmount;
-
-            this.maxAmount = config.maxamount;
-
             this.SortNum = config.sort;
-
             this.Category = config.category;
-
             this.SingleItemWeight = config.weight;
-
+            this.ItemType = config.itemtype;
             this.ItemDescription = config.description;
-
             this.EffectsDescription = config.effectsDescription;
-
+            this.amount = initAmount;
+            this.maxAmount = config.maxamount;
+            this.bCanStack = config.bcanstack;
             // 默认添加数量为0时从Inventory移除并销毁
             this.OnAmountToZero += (IInventory inventory,Item item) =>
             {
                 if(inventory != null)
                     inventory.RemoveItem(this);
             };
+        }
+        public Item(Item item, int initAmount)
+        {
+            this.ID = item.ID;
+            this.SortNum = item.SortNum;
+            this.Category = item.Category;
+            this.SingleItemWeight = item.SingleItemWeight;
+            this.ItemType = item.ItemType;
+            this.ItemDescription = item.ItemDescription;
+            this.EffectsDescription = item.EffectsDescription;
+            this.amount = initAmount;
+            this.maxAmount = item.MaxAmount;
+            this.bCanStack = item.bCanStack;
+            // 默认添加数量为0时从Inventory移除并销毁
+            this.OnAmountToZero += (IInventory inventory, Item item) =>
+            {
+                if (inventory != null)
+                    inventory.RemoveItem(this);
+            };
+        }
+        public Item(Item item) : this(item, item.Amount)
+        {
         }
 
         /// <summary>

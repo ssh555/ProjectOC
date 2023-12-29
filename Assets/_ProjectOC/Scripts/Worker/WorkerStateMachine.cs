@@ -1,6 +1,7 @@
 using ML.Engine.FSM;
 using ProjectOC.MissionNS;
 using ProjectOC.ProductionNodeNS;
+using UnityEngine;
 
 namespace ProjectOC.WorkerNS
 {
@@ -13,19 +14,33 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// 状态机所属刁民
         /// </summary>
-        public Worker Worker;
+        public Worker Worker 
+        {
+            get 
+            {
+                if (Worker == null)
+                {
+                    Debug.LogError("Worker is Null");
+                }
+                return Worker;
+            }
+            set 
+            { 
+                Worker = value; 
+            }
+        }
         /// <summary>
         /// 值班节点
         /// </summary>
-        public ProductionNode DutyProductionNode { get { return this.Worker?.DutyProductionNode; } }
+        public ProductionNode DutyProductionNode { get { return this.Worker.ProductionNode; } }
         /// <summary>
         /// 搬运任务
         /// </summary>
-        public MissionTransport MissionTransport { get { return this.Worker?.MissionTransport; } }
+        public Transport MissionTransport { get { return this.Worker.Transport; } }
         /// <summary>
         /// 当前时段的安排
         /// </summary>
-        public TimeStatus CurTimeFrameStatus { get { return this.Worker?.CurTimeFrameStatus ?? TimeStatus.None; } }
+        public TimeStatus CurTimeFrameStatus { get { return this.Worker.CurTimeFrameStatus; } }
         /// <summary>
         /// 体力是否高于工作阈值
         /// </summary>
@@ -33,11 +48,7 @@ namespace ProjectOC.WorkerNS
         { 
             get
             {
-                if (this.Worker != null)
-                {
-                    return this.Worker.APCurrent >= this.Worker.APWorkThreshold;
-                }
-                return false;
+                return this.Worker.APCurrent >= this.Worker.APWorkThreshold;
             }
         }
         /// <summary>
@@ -59,8 +70,9 @@ namespace ProjectOC.WorkerNS
         private WorkerStateWorkingDuty StateWorkingDuty;
         private WorkerStateWorkingTransport StateWorkingTransport;
         private WorkerStateRelaxing StateRelaxing;
-        public WorkerStateMachine()
+        public WorkerStateMachine(Worker worker)
         {
+            this.Worker = worker;
             this.StateFishing = new WorkerStateFishing("StateFishing");
             this.StateWorkingDuty = new WorkerStateWorkingDuty("StateWorkingDuty");
             this.StateWorkingTransport = new WorkerStateWorkingTransport("StateWorkingTransport");

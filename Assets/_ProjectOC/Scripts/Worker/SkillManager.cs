@@ -1,4 +1,5 @@
 using ML.Engine.Manager;
+using ML.Engine.TextContent;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -50,11 +51,10 @@ namespace ProjectOC.WorkerNS
         }
         public Skill SpawnSkill(string id)
         {
-            if (SkillTableDict.ContainsKey(id))
+            if (this.SkillTableDict.ContainsKey(id))
             {
                 SkillTableJsonData row = this.SkillTableDict[id];
-                Skill skill = new Skill();
-                skill.Init(row);
+                Skill skill = new Skill(row);
                 return skill;
             }
             Debug.LogError("没有对应ID为 " + id + " 的技能");
@@ -66,7 +66,6 @@ namespace ProjectOC.WorkerNS
             {
                 return null;
             }
-
             return GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>(this.SkillTableDict[id].texture2d);
         }
         public Sprite GetSprite(string id)
@@ -81,7 +80,6 @@ namespace ProjectOC.WorkerNS
 
         #region to-do : 需读表导入所有所需的 Skill 数据
         public const string Texture2DPath = "ui/Skill/texture2d";
-
         public const string TableDataABPath = "Json/TableData";
         public const string TableName = "SkillTableData";
 
@@ -89,11 +87,11 @@ namespace ProjectOC.WorkerNS
         public struct SkillTableJsonData
         {
             public string id;
-            public string name;
+            public TextContent name;
             public int sort;
             public WorkType type;
-            public string desciption;
-            public string effectsDescription;
+            public TextContent desciption;
+            public TextContent effectsDescription;
             public List<string> effectIDs;
             public string texture2d;
         }
@@ -110,19 +108,13 @@ namespace ProjectOC.WorkerNS
             yield return crequest;
             if (crequest != null)
                 ab = crequest.assetBundle;
-
-
             var request = ab.LoadAssetAsync<TextAsset>(TableName);
             yield return request;
             SkillTableJsonData[] datas = JsonConvert.DeserializeObject<SkillTableJsonData[]>((request.asset as TextAsset).text);
-
             foreach (var data in datas)
             {
                 this.SkillTableDict.Add(data.id, data);
             }
-
-            //abmgr.UnLoadLocalABAsync(ItemTableDataABPath, false, null);
-
             IsLoadOvered = true;
         }
         #endregion

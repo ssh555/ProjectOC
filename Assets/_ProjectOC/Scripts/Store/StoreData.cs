@@ -7,7 +7,7 @@ namespace ProjectOC.StoreNS
     public class StoreData
     {
         /// <summary>
-        /// 存储的Item的ID，-1为无效值，即空
+        /// 存储的Item的ID
         /// 只有当此容器存储量为0时，才能更改ItemID
         /// </summary>
         public string ItemID;

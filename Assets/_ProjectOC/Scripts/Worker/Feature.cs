@@ -1,3 +1,4 @@
+using ML.Engine.TextContent;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,11 +23,11 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// 序号，用于排序，从上到下的顺序为增益、减益、整活特性
         /// </summary>
-        public int Sort;
+        public int SortNum;
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name = "";
+        public TextContent Name;
         /// <summary>
         /// 类型
         /// </summary>        
@@ -38,17 +39,17 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// 特性本身的描述性文本
         /// </summary>
-        public string FeatureDescription = "";
+        public TextContent FeatureDescription;
         /// <summary>
         /// 特性效果的描述性文本
         /// </summary>
-        public string EffectDescription = "";
+        public TextContent EffectDescription;
 
-        public void Init(FeatureManager.FeatureTableJsonData config)
+        public Feature(FeatureManager.FeatureTableJsonData config)
         {
             this.ID = config.id;
-            this.IDExclude = config.idExclude; 
-            this.Sort = config.sort;
+            this.IDExclude = config.idExclude;
+            this.SortNum = config.sort;
             this.Name = config.name;
             this.Type = config.type;
             this.Effects = new List<Effect>();
@@ -59,23 +60,33 @@ namespace ProjectOC.WorkerNS
                 {
                     this.Effects.Add(effect);
                 }
+                else
+                {
+                    Debug.LogError($"Feature {this.ID} Effect {effectID} is Null");
+                }
             }
             this.FeatureDescription = config.featureDescription;
             this.EffectDescription = config.effectDescription;
         }
-        public void Init(Feature feature)
+        public Feature(Feature feature)
         {
             this.ID = feature.ID;
             this.IDExclude = feature.IDExclude;
-            this.Sort = feature.Sort;
+            this.SortNum = feature.SortNum;
             this.Name = feature.Name;
             this.Type = feature.Type;
             this.Effects = new List<Effect>();
             foreach (Effect effect in feature.Effects)
             {
-                Effect newEffect = new Effect();
-                newEffect.Init(effect);
-                this.Effects.Add(newEffect);
+                Effect newEffect = new Effect(effect);
+                if (newEffect != null)
+                {
+                    this.Effects.Add(newEffect);
+                }
+                else
+                {
+                    Debug.LogError($"Feature {feature.ID} effect is Null");
+                }
             }
             this.FeatureDescription = feature.FeatureDescription;
             this.EffectDescription = feature.EffectDescription;
@@ -90,6 +101,10 @@ namespace ProjectOC.WorkerNS
                     effect.ApplyEffectToWorker(worker);
                 }
             }
+            else
+            {
+                Debug.LogError($"Feature {this.ID} ApplyEffectToWorker Worker is Null");
+            }
         }
         public void RemoveEffectToWorker(Worker worker)
         {
@@ -98,6 +113,44 @@ namespace ProjectOC.WorkerNS
                 foreach (Effect effect in this.Effects)
                 {
                     effect.RemoveEffectToWorker(worker);
+                }
+            }
+            else
+            {
+                Debug.LogError($"Feature {this.ID} RemoveEffectToWorker Worker is Null");
+            }
+        }
+
+        /// <summary>
+        /// 特性按照增益、减益、无功能的顺序从上至下排序
+        /// </summary>
+        public class Sort : IComparer<Feature>
+        {
+            public int Compare(Feature x, Feature y)
+            {
+                if (x == null)
+                {
+                    if (y == null)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        return 1;
+                    }
+                }
+                if (y == null)
+                {
+                    return -1;
+                }
+
+                if (x.SortNum != y.SortNum)
+                {
+                    return x.SortNum.CompareTo(y.SortNum);
+                }
+                else
+                {
+                    return string.Compare(x.ID, y.ID);
                 }
             }
         }

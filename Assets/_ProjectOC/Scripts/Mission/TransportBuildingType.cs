@@ -1,9 +1,9 @@
 namespace ProjectOC.MissionNS
 {
     /// <summary>
-    /// 任务建筑类型
+    /// 搬运建筑类型
     /// </summary>
-    public enum MissionBuildingType
+    public enum TransportBuildingType
     {
         None = 0,
         /// <summary>
@@ -13,7 +13,11 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// 生产节点
         /// </summary>
-        ProductionNode = 2
+        ProductionNode = 2,
+        /// <summary>
+        /// 场景物品
+        /// </summary>
+        WorldItem = 3
     }
 }
 

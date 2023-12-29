@@ -1,3 +1,4 @@
+using ML.Engine.TextContent;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,11 +18,11 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name = "";
+        public TextContent Name;
         /// <summary>
         /// 序号，用于排序
         /// </summary>
-        public int Sort;
+        public int SortNum;
         /// <summary>
         /// 技能类型
         /// </summary>
@@ -29,11 +30,15 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// 技能描述
         /// </summary>
-        public string Desciption = "";
+        public TextContent Desciption;
         /// <summary>
         /// 技能效果描述
         /// </summary>
-        public string EffectsDescription = "";
+        public TextContent EffectsDescription;
+        /// <summary>
+        /// 效果
+        /// </summary>
+        public List<Effect> Effects = new List<Effect>();
         /// <summary>
         /// 当前等级
         /// </summary>
@@ -46,15 +51,11 @@ namespace ProjectOC.WorkerNS
         /// 当前经验
         /// </summary>
         private int Exp;
-        /// <summary>
-        /// 效果
-        /// </summary>
-        public List<Effect> Effects = new List<Effect>();
-        public void Init(SkillManager.SkillTableJsonData config)
+        public Skill(SkillManager.SkillTableJsonData config)
         {
             this.ID = config.id;
             this.Name = config.name;
-            this.Sort = config.sort;
+            this.SortNum = config.sort;
             this.Type = config.type;
             this.Desciption = config.desciption;
             this.EffectsDescription = config.effectsDescription;
@@ -65,28 +66,40 @@ namespace ProjectOC.WorkerNS
                 {
                     this.Effects.Add(effect);
                 }
+                else
+                {
+                    Debug.LogError($"Skill {this.ID} Effect {effectID} is Null");
+                }
             }
+            this.Level = 0;
+            this.LevelMax = 10;
+            this.Exp = 0;
         }
-        public void Init(Skill skill)
+        public Skill(Skill skill)
         {
             this.ID = skill.ID;
             this.Name = skill.Name;
-            this.Sort = skill.Sort;
+            this.SortNum = skill.SortNum;
             this.Type = skill.Type;
             this.Desciption = skill.Desciption;
             this.EffectsDescription = skill.EffectsDescription;
-            this.Level = skill.Level;
-            this.LevelMax = skill.LevelMax;
-            this.Exp = skill.Exp;
             this.Effects = new List<Effect>();
             foreach (Effect effect in skill.Effects)
             {
-                Effect effectNew = new Effect();
-                effectNew.Init(effect);
-                this.Effects.Add(effectNew);
+                Effect newEffect = new Effect(effect);
+                if (newEffect != null)
+                {
+                    this.Effects.Add(newEffect);
+                }
+                else
+                {
+                    Debug.LogError($"Skill {skill.ID} effect is Null");
+                }
             }
+            this.Level = skill.Level;
+            this.LevelMax = skill.LevelMax;
+            this.Exp = skill.Exp;
         }
-
         /// <summary>
         /// 等级增加
         /// </summary>
@@ -178,6 +191,10 @@ namespace ProjectOC.WorkerNS
                     effect.ApplyEffectToWorker(worker);
                 }
             }
+            else
+            {
+                Debug.LogError($"Skill {this.ID} ApplyEffectToWorker Worker is Null");
+            }
         }
 
         public void RemoveEffectToWorker(Worker worker)
@@ -188,6 +205,10 @@ namespace ProjectOC.WorkerNS
                 {
                     effect.RemoveEffectToWorker(worker);
                 }
+            }
+            else
+            {
+                Debug.LogError($"Skill {this.ID} RemoveEffectToWorker Worker is Null");
             }
         }
     }

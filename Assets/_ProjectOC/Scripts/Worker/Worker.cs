@@ -1,5 +1,7 @@
 using ML.Engine.FSM;
+using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
+using ML.Engine.TextContent;
 using ProjectOC.ManagerNS;
 using ProjectOC.MissionNS;
 using ProjectOC.ProductionNodeNS;
@@ -20,9 +22,9 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         public string ID = "";
         /// <summary>
-        /// 名字，TODO:随机生成
+        /// 名字
         /// </summary>
-        public string Name = "";
+        public TextContent Name;
         /// <summary>
         /// 职业类型
         /// </summary>
@@ -36,11 +38,11 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         public int APMax = 10;
         /// <summary>
-        /// 体力工作阈值，判断工作状态刁民是否需要强制休息的阈值
+        /// 体力工作阈值
         /// </summary>
         public int APWorkThreshold = 3;
         /// <summary>
-        /// 体力休息阈值，判断休息状态刁民是否需要主动进餐的阈值
+        /// 体力休息阈值
         /// </summary>
         public int APRelaxThreshold = 5;
         /// <summary>
@@ -54,7 +56,18 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// 当前负重
         /// </summary>
-        public int BURCurrent = 0;
+        public int BURCurrent 
+        {
+            get
+            {
+                int result = 0;
+                foreach (Item item in this.TransportItems)
+                {
+                    result += item.Weight;
+                }
+                return result;
+            }
+        }
         /// <summary>
         /// 负重上限
         /// </summary>
@@ -63,12 +76,15 @@ namespace ProjectOC.WorkerNS
         /// 技能
         /// </summary>
         public Dictionary<WorkType, Skill> Skills = new Dictionary<WorkType, Skill>();
-
         #region 不进表
         /// <summary>
         /// 移动速度，单位为 m/s
         /// </summary>
         public float WalkSpeed = 10;
+        /// <summary>
+        /// 搬运经验值
+        /// </summary>
+        public int ExpTransport = 10;
         /// <summary>
         /// 职业经验获取速度，单位为%
         /// </summary>
@@ -81,7 +97,6 @@ namespace ProjectOC.WorkerNS
         /// 特性
         /// </summary>
         public List<Feature> Features = new List<Feature>();
-
         /// <summary>
         /// 每个时段的安排
         /// </summary>
@@ -98,6 +113,7 @@ namespace ProjectOC.WorkerNS
                 {
                     return TimeArrangement[timeManager.CurrentTimeFrame];
                 }
+                Debug.LogError("DispatchTimeManager is Null");
                 return TimeStatus.None;
             } 
         }
@@ -116,9 +132,13 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// 是否在值班
         /// </summary>
-        public bool IsOnDuty;
-        public ProductionNode DutyProductionNode;
-        public MissionTransport MissionTransport;
+        public bool IsOnDuty { get { return this.ProductionNode != null && this.Status != Status.Relaxing; } }
+        public ProductionNode ProductionNode;
+        public Transport Transport;
+        /// <summary>
+        /// 正在搬运的物品
+        /// </summary>
+        public List<Item> TransportItems = new List<Item>();
         #endregion
         public Worker()
         {
@@ -143,7 +163,7 @@ namespace ProjectOC.WorkerNS
             }
             // 初始化状态机
             StateController = new StateController(0);
-            StateMachine = new WorkerStateMachine();
+            StateMachine = new WorkerStateMachine(this);
             StateController.SetStateMachine(StateMachine);
         }
         public void Init(WorkerManager.WorkerTableJsonData config)
@@ -166,6 +186,10 @@ namespace ProjectOC.WorkerNS
                     skill.ApplyEffectToWorker(this);
                     this.Skills.Add(kv.Key, skill);
                 }
+                else
+                {
+                    Debug.LogError($"Worker {this.ID} Skill {kv.Value} is Null");
+                }
             }
         }
         public void Init(Worker worker)
@@ -179,9 +203,19 @@ namespace ProjectOC.WorkerNS
             this.APRelaxThreshold = worker.APRelaxThreshold;
             this.APCost = worker.APCost;
             this.APCostTransport = worker.APCostTransport;
-            this.WalkSpeed = worker.WalkSpeed;
-            this.BURCurrent = worker.BURCurrent;
             this.BURMax = worker.BURMax;
+            foreach (Skill skill in this.Skills.Values)
+            {
+                skill.RemoveEffectToWorker(this);
+            }
+            this.Skills.Clear();
+            foreach (var kv in worker.Skills)
+            {
+                Skill skill = new Skill(kv.Value);
+                skill.ApplyEffectToWorker(this);
+                this.Skills.Add(kv.Key, skill);
+            }
+            this.WalkSpeed = worker.WalkSpeed;
             this.ExpRate = new Dictionary<WorkType, int>(worker.ExpRate);
             this.Eff = new Dictionary<WorkType, int>(worker.Eff);
             foreach (Feature feature in this.Features)
@@ -191,26 +225,12 @@ namespace ProjectOC.WorkerNS
             this.Features.Clear();
             foreach (Feature feature in worker.Features)
             {
-                Feature featureNew = new Feature();
-                featureNew.Init(feature);
+                Feature featureNew = new Feature(feature);
                 featureNew.ApplyEffectToWorker(this);
                 this.Features.Add(featureNew);
             }
-            foreach (Skill skill in this.Skills.Values)
-            {
-                skill.RemoveEffectToWorker(this);
-            }
-            this.Skills.Clear();
-            foreach (var kv in worker.Skills)
-            {
-                Skill skill = new Skill();
-                skill.Init(kv.Value);
-                skill.ApplyEffectToWorker(this);
-                this.Skills.Add(kv.Key, skill);
-            }
             this.TimeArrangement.SetTimeArrangement(worker.TimeArrangement);
         }
-
         /// <summary>
         /// 修改经验值
         /// </summary>
@@ -234,6 +254,15 @@ namespace ProjectOC.WorkerNS
             }
             return false;
         }
+        /// <summary>
+        /// 结算搬运奖励
+        /// </summary>
+        public void SettleTransport()
+        {
+            this.AlterAP(this.APCostTransport);
+            this.AlterExp(WorkType.Transport, this.ExpTransport);
+        }
+
         public void SetTimeStatus(int time, TimeStatus timeStatus)
         {
             this.TimeArrangement[time] = timeStatus;

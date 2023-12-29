@@ -1,4 +1,5 @@
 using ML.Engine.Manager;
+using ML.Engine.TextContent;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -49,11 +50,10 @@ namespace ProjectOC.WorkerNS
         }
         public Effect SpawnEffect(string id)
         {
-            if (EffectTableDict.ContainsKey(id))
+            if (this.EffectTableDict.ContainsKey(id))
             {
                 EffectTableJsonData row = this.EffectTableDict[id];
-                Effect effect = new Effect();
-                effect.Init(row);
+                Effect effect = new Effect(row);
                 return effect;
             }
             Debug.LogError("没有对应ID为 " + id + " 的效果");
@@ -68,7 +68,7 @@ namespace ProjectOC.WorkerNS
         public struct EffectTableJsonData
         {
             public string id;
-            public string name;
+            public TextContent name;
             public EffectType type;
             public string paramStr;
             public int paramInt;
@@ -87,19 +87,13 @@ namespace ProjectOC.WorkerNS
             yield return crequest;
             if (crequest != null)
                 ab = crequest.assetBundle;
-
-
             var request = ab.LoadAssetAsync<TextAsset>(TableName);
             yield return request;
             EffectTableJsonData[] datas = JsonConvert.DeserializeObject<EffectTableJsonData[]>((request.asset as TextAsset).text);
-
             foreach (var data in datas)
             {
                 this.EffectTableDict.Add(data.id, data);
             }
-
-            //abmgr.UnLoadLocalABAsync(ItemTableDataABPath, false, null);
-
             IsLoadOvered = true;
         }
         #endregion

@@ -6,17 +6,17 @@ namespace ProjectOC.WorkerNS
     public enum FeatureType
     {
         /// <summary>
-        /// 整活特性
-        /// </summary>
-        None = 0,
-        /// <summary>
         /// 增益特性
         /// </summary>
-        Buff = 1,
+        Buff = 0,
         /// <summary>
         /// 减益特性
         /// </summary>
-        Debuff = 2
+        Debuff = 1,
+        /// <summary>
+        /// 整活特性
+        /// </summary>
+        None = 2
     }
 }
 

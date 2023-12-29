@@ -3,7 +3,7 @@ namespace ProjectOC.MissionNS
     /// <summary>
     /// 搬运优先级
     /// </summary>
-    public enum PriorityTransport
+    public enum TransportPriority
     {
         /// <summary>
         /// 常规

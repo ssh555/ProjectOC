@@ -5,6 +5,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 using System;
 using ML.Engine.Manager;
+using ML.Engine.TextContent;
 
 namespace ProjectOC.WorkerNS
 {
@@ -69,7 +70,7 @@ namespace ProjectOC.WorkerNS
             Worker result = null;
             foreach (Worker worker in this.Workers)
             {
-                if (worker != null && worker.Status == Status.Fishing && worker.DutyProductionNode == null)
+                if (worker != null && worker.Status == Status.Fishing && worker.ProductionNode == null)
                 {
                     result = worker;
                     break;
@@ -81,7 +82,6 @@ namespace ProjectOC.WorkerNS
         {
             this.Workers.Remove(worker);
         }
-
         /// <summary>
         /// 根据id创建新的刁民
         /// </summary>
@@ -106,7 +106,6 @@ namespace ProjectOC.WorkerNS
             Debug.LogError("没有对应ID为 " + id + " 的刁民");
             return null;
         }
-
         public Texture2D GetTexture2D(string id)
         {
             if (!this.WorkerTableDict.ContainsKey(id))
@@ -138,7 +137,6 @@ namespace ProjectOC.WorkerNS
         #region to-do : 需读表导入所有所需的 Worker 数据
         public const string Texture2DPath = "ui/Worker/texture2d";
         public const string WorldObjPath = "prefabs/Worker/WorldWorker";
-
         public const string TableDataABPath = "Json/TableData";
         public const string TableName = "WorkerTableData";
 
@@ -146,7 +144,7 @@ namespace ProjectOC.WorkerNS
         public struct WorkerTableJsonData
         {
             public string id;
-            public string name;
+            public TextContent name;
             public WorkType workType;
             public int apMax;
             public int apWorkThreshold;
@@ -171,19 +169,13 @@ namespace ProjectOC.WorkerNS
             yield return crequest;
             if (crequest != null)
                 ab = crequest.assetBundle;
-
-
             var request = ab.LoadAssetAsync<TextAsset>(TableName);
             yield return request;
             WorkerTableJsonData[] datas = JsonConvert.DeserializeObject<WorkerTableJsonData[]>((request.asset as TextAsset).text);
-
             foreach (var data in datas)
             {
                 this.WorkerTableDict.Add(data.id, data);
             }
-
-            //abmgr.UnLoadLocalABAsync(ItemTableDataABPath, false, null);
-
             IsLoadOvered = true;
         }
         #endregion

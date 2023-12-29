@@ -13,17 +13,20 @@ namespace ProjectOC.ProductionNodeNS
         /// 生产节点ID
         /// </summary>
         [SerializeField, ReadOnly]
-        protected string ProductionNodeID = "";
+        protected string ProductionNodeID{ get { return this.ProductionNode?.ID ?? ""; }}
         /// <summary>
         /// 拥有的生产节点
         /// </summary>
         [ShowInInspector, ReadOnly, SerializeField]
-        protected ProductionNode ProductionNode;
+        public ProductionNode ProductionNode;
         public void SetProductionNode(ProductionNode node)
         {
+            if (this.ProductionNode != null)
+            {
+                this.ProductionNode.WorldProductionNode = null;
+            }
             this.ProductionNode = node;
-            this.ProductionNodeID = this.ProductionNode != null ? this.ProductionNode.ID : "";
-            this.ProductionNode.UID = this.InstanceID;
+            this.ProductionNode.WorldProductionNode = this;
         }
         private void Start()
         {

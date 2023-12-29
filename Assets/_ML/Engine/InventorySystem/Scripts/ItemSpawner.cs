@@ -193,14 +193,14 @@ namespace ML.Engine.InventorySystem
             public string type;
             public int sort;
             public ItemCategory category;
-            public Item itemtype;
+            public ItemType itemtype;
             public int weight;
             public bool bcanstack;
             public int maxamount;
             public string texture2d;
             public string worldobject;
-            public string description;
-            public string effectsDescription;
+            public TextContent.TextContent description;
+            public TextContent.TextContent effectsDescription;
         }
 
         public IEnumerator LoadTableData(MonoBehaviour mono)

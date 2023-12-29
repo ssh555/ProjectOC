@@ -16,12 +16,7 @@ namespace ProjectOC.WorkerNS
                 {
                     if (machine is WorkerStateMachine workerMachine && workerMachine.Worker != null)
                     {
-                        Worker worker = workerMachine.Worker;
-                        worker.Status = Status.Fishing;
-                        if (worker.DutyProductionNode != null)
-                        {
-                            // 寻路去生产节点
-                        }
+                        workerMachine.Worker.Status = Status.Fishing;
                     }
                 }
             );

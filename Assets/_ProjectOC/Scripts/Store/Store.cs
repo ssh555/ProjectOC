@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using ML.Engine.InventorySystem;
+using ML.Engine.TextContent;
 using ProjectOC.MissionNS;
 using UnityEngine;
 
@@ -11,17 +12,12 @@ namespace ProjectOC.StoreNS
     /// 仓库
     /// </summary>
     [System.Serializable]
-    public class Store
+    public class Store: IMission
     {
-        /// <summary>
-        /// 统一使用建筑物实例编号, -1 为 invalid value
-        /// </summary>
-        public string UID;
-        /// <summary>
-        /// ID
-        /// </summary>
+        public WorldStore WorldStore;
+        public string UID { get { return WorldStore?.InstanceID ?? ""; } }
         public string ID;
-        public string Name;
+        public TextContent Name;
         /// <summary>
         /// 仓库类型
         /// </summary>
@@ -30,6 +26,8 @@ namespace ProjectOC.StoreNS
         /// 仓库存储数据
         /// </summary>
         public List<StoreData> StoreDatas = new List<StoreData>();
+        public List<Transport> Transports = new List<Transport>();
+
         /// <summary>
         /// 仓库容量，仓库能放多少种物品
         /// </summary>
@@ -129,7 +127,7 @@ namespace ProjectOC.StoreNS
         /// <summary>
         /// 搬运优先级
         /// </summary>
-        public PriorityTransport PriorityTransport;
+        public TransportPriority TransportPriority;
         /// <summary>
         /// 玩家是否正在与此仓库交互
         /// 只要玩家正在与某一个仓库进行交互，就将此项设为true,生成任务时不能考虑此项为true的仓库
@@ -142,15 +140,12 @@ namespace ProjectOC.StoreNS
         /// </summary>
         //public event Action<string, List<StoreData>> OnStoreCapacityChanged;
 
-        public Store()
+        public Store(StoreManager.StoreTableJsonData config)
         {
             for (int i = 0; i < this.StoreCapacity; i++)
             {
                 this.StoreDatas.Add(new StoreData("", this.StoreDataCapacity));
             }
-        }
-        public void Init(StoreManager.StoreTableJsonData config)
-        {
             this.ID = config.id;
             this.Name = config.name;
             this.Type = config.type;
@@ -460,6 +455,60 @@ namespace ProjectOC.StoreNS
         public void FastRemove(Player.PlayerCharacter player, string itemID, int amount)
         {
             // TODO: 等待背包接口
+        }
+
+
+        #endregion
+
+        #region IMission接口
+        Transform IMission.GetTransform()
+        {
+            throw new NotImplementedException();
+        }
+
+        TransportPriority IMission.GetTransportPriority()
+        {
+            throw new NotImplementedException();
+        }
+
+        string IMission.GetUID()
+        {
+            throw new NotImplementedException();
+        }
+
+        void IMission.AddTransport(Transport transport)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IMission.RemoveTranport(Transport transport)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IMission.AddMissionTranport(MissionTransport mission)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IMission.RemoveMissionTranport(MissionTransport mission)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IMission.PutIn(string itemID, int amount)
+        {
+            throw new NotImplementedException();
+        }
+
+        int IMission.PutOut(string itemID, int amount)
+        {
+            throw new NotImplementedException();
+        }
+
+        int IMission.GetItemAmount(string itemID)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

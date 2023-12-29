@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ML.Engine.TextContent;
 
 namespace ProjectOC.WorkerNS
 {
@@ -14,11 +15,11 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// ID Effects_效果名
         /// </summary>
-        public string ID = "";
+        public string ID;
         /// <summary>
         /// 效果名称
         /// </summary>
-        public string Name = "";
+        public TextContent Name;
         /// <summary>
         /// 效果类型
         /// </summary>
@@ -35,7 +36,6 @@ namespace ProjectOC.WorkerNS
         /// 效果参数3 float
         /// </summary>
         public float ParamFloat;
-
         /// <summary>
         /// 存储Set操作之前的数值，用于RemoveEffect
         /// </summary>
@@ -49,7 +49,7 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         public float PreParamFloat;
 
-        public void Init(EffectManager.EffectTableJsonData config)
+        public Effect(EffectManager.EffectTableJsonData config)
         {
             this.ID = config.id;
             this.Name = config.name;
@@ -57,8 +57,11 @@ namespace ProjectOC.WorkerNS
             this.ParamStr = config.paramStr;
             this.ParamInt = config.paramInt;
             this.ParamFloat = config.paramFloat;
+            this.PreParamStr = "";
+            this.PreParamInt = 0;
+            this.PreParamFloat = 0;
         }
-        public void Init(Effect effect)
+        public Effect(Effect effect)
         {
             this.ID = effect.ID;
             this.Name = effect.Name;
@@ -75,6 +78,7 @@ namespace ProjectOC.WorkerNS
         {
             if (worker == null)
             {
+                Debug.LogError($"Effect {this.ID} ApplyEffectToWorker Worker is Null");
                 return;
             }
             string workTypeStr;
@@ -127,6 +131,7 @@ namespace ProjectOC.WorkerNS
         {
             if (worker == null)
             {
+                Debug.LogError($"Effect {this.ID} RemoveEffectToWorker Worker is Null");
                 return;
             }
             string workTypeStr;

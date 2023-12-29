@@ -9,14 +9,17 @@ namespace ProjectOC.StoreNS
     public class WorldStore : BuildingPart
     {
         [SerializeField, ReadOnly]
-        protected string StoreID = "";
+        protected string StoreID { get { return this.Store?.ID ?? ""; } }
         [ShowInInspector, ReadOnly, SerializeField]
         public Store Store;
         public void SetStore(Store store)
         {
+            if (this.Store != null)
+            {
+                this.Store.WorldStore = null;
+            }
             this.Store = store;
-            this.StoreID = this.Store != null ? this.Store.ID : "";
-            this.Store.UID = this.InstanceID;
+            this.Store.WorldStore = this;
         }
         private void Start()
         {

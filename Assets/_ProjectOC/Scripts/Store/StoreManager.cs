@@ -1,4 +1,5 @@
 using ML.Engine.Manager;
+using ML.Engine.TextContent;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -83,16 +84,15 @@ namespace ProjectOC.StoreNS
             }
             return null;
         }
-
         /// <summary>
         /// 获取满足存入条件的仓库
         /// </summary>
         /// <param name="itemID">物品ID</param>
         /// <param name="amount">数量</param>
         /// <returns></returns>
-        public WorldStore GetWorldStoreForStorage(string itemID, int amount)
+        public Store GetStoreForStorage(string itemID, int amount)
         {
-            WorldStore result = null;
+            Store result = null;
             // 从头到尾遍历仓库(跳过玩家正在交互的仓库)
             foreach (WorldStore worldStore in this.WorldStoreDict.Values)
             {
@@ -103,11 +103,11 @@ namespace ProjectOC.StoreNS
                     // 若没有，则寻找第一个可以存入的，可溢出存入
                     if (result == null)
                     {
-                        result = worldStore;
+                        result = store;
                     }
                     if (store.IsStoreHaveItemEmpty(itemID, amount))
                     {
-                        result = worldStore;
+                        result = store;
                         break;
                     }
                 }
@@ -120,10 +120,9 @@ namespace ProjectOC.StoreNS
         /// <param name="itemID">物品ID</param>
         /// <param name="amount">数量</param>
         /// <returns>取出数量和对应仓库列表</returns>
-        public Tuple<int, List<WorldStore>> GetWorldStoreForRetrieve(string itemID, int amount)
+        public List<Tuple<int, Store>> GetStoreForRetrieve(string itemID, int amount)
         {
-            List<WorldStore> result = new List<WorldStore>();
-            // 取出来的数量
+            List<Tuple<int, Store>> result = new List<Tuple<int, Store>>();
             int resultAmount = 0;
             // 从头到尾遍历仓库(跳过玩家正在交互的仓库)
             foreach (WorldStore worldStore in this.WorldStoreDict.Values)
@@ -134,18 +133,18 @@ namespace ProjectOC.StoreNS
                     int storeAmount = store.GetItemStorageCapacity(itemID);
                     if (resultAmount + storeAmount >= amount)
                     {
-                        result.Add(worldStore);
+                        result.Add(new Tuple<int, Store>(amount - resultAmount, store));
                         resultAmount = amount;
                         break;
                     }
                     else
                     {
-                        result.Add(worldStore);
+                        result.Add(new Tuple<int, Store>(storeAmount, store));
                         resultAmount += storeAmount;
                     }
                 }
             }
-            return new Tuple<int, List<WorldStore>>(resultAmount, result);
+            return result;
         }
 
         /// <summary>
@@ -158,8 +157,7 @@ namespace ProjectOC.StoreNS
             if (StoreTableDict.ContainsKey(id))
             {
                 StoreTableJsonData row = this.StoreTableDict[id];
-                Store store = new Store();
-                store.Init(row);
+                Store store = new Store(row);
                 if (!StoreDict.ContainsKey(store.ID))
                 {
                     StoreDict.Add(store.ID, new List<Store>());
@@ -251,7 +249,7 @@ namespace ProjectOC.StoreNS
         public struct StoreTableJsonData
         {
             public string id;
-            public string name;
+            public TextContent name;
             public StoreType type;
             public string texture2d;
             public string worldobject;
@@ -269,8 +267,6 @@ namespace ProjectOC.StoreNS
             yield return crequest;
             if (crequest != null)
                 ab = crequest.assetBundle;
-
-
             var request = ab.LoadAssetAsync<TextAsset>(TableName);
             yield return request;
             StoreTableJsonData[] datas = JsonConvert.DeserializeObject<StoreTableJsonData[]>((request.asset as TextAsset).text);
@@ -279,9 +275,6 @@ namespace ProjectOC.StoreNS
             {
                 this.StoreTableDict.Add(data.id, data);
             }
-
-            //abmgr.UnLoadLocalABAsync(ItemTableDataABPath, false, null);
-
             IsLoadOvered = true;
         }
         #endregion

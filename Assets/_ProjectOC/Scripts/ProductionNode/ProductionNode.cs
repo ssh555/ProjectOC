@@ -5,6 +5,7 @@ using ProjectOC.MissionNS;
 using ProjectOC.WorkerNS;
 using System.Collections.Generic;
 using System;
+using UnityEngine;
 
 namespace ProjectOC.ProductionNodeNS
 {
@@ -12,12 +13,13 @@ namespace ProjectOC.ProductionNodeNS
     /// 生产节点
     /// </summary>
     [System.Serializable]
-    public class ProductionNode
+    public class ProductionNode: IMission
     {
+        public WorldProductionNode WorldProductionNode;
         /// <summary>
         /// 建筑实例ID，全局唯一
         /// </summary>
-        public string UID = "";
+        public string UID { get { return this.WorldProductionNode?.InstanceID ?? ""; } }
         /// <summary>
         /// ID
         /// </summary>
@@ -77,12 +79,11 @@ namespace ProjectOC.ProductionNodeNS
         /// <summary>
         /// 搬运优先级
         /// </summary>
-        public PriorityTransport PriorityTransport;
+        public TransportPriority TransportPriority;
         /// <summary>
         /// 已经分配的搬运任务
         /// </summary>
         public List<MissionTransport> MissionTransports = new List<MissionTransport>();
-
         /// <summary>
         /// 基础生产效率 单位%
         /// </summary>
@@ -229,7 +230,6 @@ namespace ProjectOC.ProductionNodeNS
         }
         public void Init(ProductionNode node)
         {
-            this.UID = node.UID;
             this.ID = node.ID;
             this.Name = node.Name;
             this.Type = node.Type;
@@ -238,8 +238,7 @@ namespace ProjectOC.ProductionNodeNS
             this.ExpType = node.ExpType;
             this.Recipe = node.Recipe;
             this.Worker = node.Worker;
-            this.PriorityTransport = node.PriorityTransport;
-            this.MissionTransports = new List<MissionTransport>(node.MissionTransports);
+            this.TransportPriority = node.TransportPriority;
             this.EffBase = node.EffBase;
             this.Level = node.Level;
             this.LevelMax = node.LevelMax;
@@ -323,7 +322,7 @@ namespace ProjectOC.ProductionNodeNS
             if (this.Type == ProductionNodeType.Mannul && worker != null)
             {
                 this.RemoveWorker();
-                worker.DutyProductionNode = this;
+                worker.ProductionNode = this;
                 worker.SetTimeStatusAll(TimeStatus.Work_OnDuty);
                 this.Worker = worker;
                 this.StartWorking();
@@ -343,8 +342,7 @@ namespace ProjectOC.ProductionNodeNS
                 if (this.Worker != null)
                 {
                     this.Worker.SetTimeStatusAll(TimeStatus.Relax);
-                    this.Worker.IsOnDuty = false;
-                    this.Worker.DutyProductionNode = null;
+                    this.Worker.ProductionNode = null;
                     this.Worker = null;
                 }
                 return true;
@@ -504,17 +502,17 @@ namespace ProjectOC.ProductionNodeNS
                 if (missionNum > 0)
                 {
                     // 从仓库搬运材料来
-                    List<MissionTransport> missions = GameManager.Instance.GetLocalManager<MissionBroadCastManager>()?.
-                        CreateRetrievalMission(kv.Key, missionNum, worldNode.gameObject.transform, this.UID);
-                    this.MissionTransports.AddRange(missions);
+                    MissionTransport missions = GameManager.Instance.GetLocalManager<MissionManager>()?.
+                        CreateTransportMission(MissionTransportType.Store_ProductionNode, kv.Key, missionNum, this);
+                    this.MissionTransports.Add(missions);
                 }
             }
             missionNum = this.StackNumReserve - GetAssignNum(this.Recipe.ProductItem);
             if (missionNum > 0)
             {
                 // 搬运产出物品到仓库
-                MissionTransport mission = GameManager.Instance.GetLocalManager<MissionBroadCastManager>()?.
-                    CreateStoreageMission(this.Recipe.ProductItem, missionNum, worldNode.gameObject.transform, this.UID);
+                MissionTransport mission = GameManager.Instance.GetLocalManager<MissionManager>()?.
+                    CreateTransportMission(MissionTransportType.ProductionNode_Store, this.Recipe.ProductItem, missionNum, this);
                 this.MissionTransports.Add(mission);
             }
         }
@@ -539,7 +537,7 @@ namespace ProjectOC.ProductionNodeNS
         /// 获取已经分配任务的物品数量
         /// </summary>
         /// <param name="itemID"></param>
-        /// <param name="isIn">true表示搬入，false表示搬出</param>
+        /// <param name="isIn">true表示放入，false表示取出</param>
         /// <returns></returns>
         private int GetAssignNum(string itemID, bool isIn=true)
         {
@@ -548,13 +546,66 @@ namespace ProjectOC.ProductionNodeNS
             {
                 if (mission != null && mission.ItemID == itemID)
                 {
-                    //if ((isIn && mission.TargetUID == this.UID) || (!isIn && mission.SourceUID == this.UID))
-                    //{
-                    //    result += mission.MissionNum;
-                    //}
+                    if ((isIn && mission.Type == MissionTransportType.Store_ProductionNode) || 
+                        (!isIn && mission.Type == MissionTransportType.ProductionNode_Store))
+                    {
+                        result += mission.MissionNum;
+                    }
                 }
             }
             return result;
         }
+
+        #region IMission接口
+        public Transform GetTransform()
+        {
+            return this.WorldProductionNode?.transform;
+        }
+
+        public TransportPriority GetTransportPriority()
+        {
+            return this.TransportPriority;
+        }
+
+        public string GetUID()
+        {
+            return this.UID;
+        }
+
+        void IMission.AddTransport(Transport transport)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IMission.RemoveTranport(Transport transport)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IMission.AddMissionTranport(MissionTransport mission)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IMission.RemoveMissionTranport(MissionTransport mission)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IMission.PutIn(string itemID, int amount)
+        {
+            throw new NotImplementedException();
+        }
+
+        int IMission.PutOut(string itemID, int amount)
+        {
+            throw new NotImplementedException();
+        }
+
+        int IMission.GetItemAmount(string itemID)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 }

@@ -10,13 +10,13 @@ namespace ProjectOC.ManagerNS
     public sealed class LocalGameManager : MonoBehaviour, ILocalManager
     {
         public DispatchTimeManager DispatchTimeManager { get; private set; }
-        public MissionBroadCastManager MissionBroadCastManager { get; private set; }
+        public MissionManager MissionBroadCastManager { get; private set; }
 
         void Start()
         {
             GameManager.Instance.RegisterLocalManager(this);
             DispatchTimeManager = GameManager.Instance.RegisterLocalManager<DispatchTimeManager>();
-            MissionBroadCastManager = GameManager.Instance.RegisterLocalManager<MissionBroadCastManager>();
+            MissionBroadCastManager = GameManager.Instance.RegisterLocalManager<MissionManager>();
         }
     }
 }

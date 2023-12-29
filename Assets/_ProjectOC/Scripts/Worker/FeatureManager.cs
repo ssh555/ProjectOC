@@ -1,4 +1,5 @@
 using ML.Engine.Manager;
+using ML.Engine.TextContent;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -87,8 +88,7 @@ namespace ProjectOC.WorkerNS
                         curSampleNum += 1;
                     }
                 }
-                // 特性按照增益、减益、无功能的顺序从上至下排序
-                result.Sort((f1, f2) => f1.Sort.CompareTo(f2.Sort));
+                result.Sort(new Feature.Sort());
             }
             return result;
         }
@@ -97,8 +97,7 @@ namespace ProjectOC.WorkerNS
             if (FeatureTableDict.ContainsKey(id))
             {
                 FeatureTableJsonData row = this.FeatureTableDict[id];
-                Feature feature = new Feature();
-                feature.Init(row);
+                Feature feature = new Feature(row);
                 return feature;
             }
             Debug.LogError("没有对应ID为 " + id + " 的特征");
@@ -125,7 +124,6 @@ namespace ProjectOC.WorkerNS
 
         #region to-do : 需读表导入所有所需的 Feature 数据
         public const string Texture2DPath = "ui/Feature/texture2d";
-
         public const string TableDataABPath = "Json/TableData";
         public const string TableName = "FeatureTableData";
 
@@ -135,12 +133,12 @@ namespace ProjectOC.WorkerNS
             public string id;
             public string idExclude;
             public int sort;
-            public string name;
+            public TextContent name;
             public string texture2d;
             public FeatureType type;
             public List<string> effectIDs;
-            public string featureDescription;
-            public string effectDescription;
+            public TextContent featureDescription;
+            public TextContent effectDescription;
         }
 
         public IEnumerator LoadTableData()
@@ -155,12 +153,9 @@ namespace ProjectOC.WorkerNS
             yield return crequest;
             if (crequest != null)
                 ab = crequest.assetBundle;
-
-
             var request = ab.LoadAssetAsync<TextAsset>(TableName);
             yield return request;
             FeatureTableJsonData[] datas = JsonConvert.DeserializeObject<FeatureTableJsonData[]>((request.asset as TextAsset).text);
-
             foreach (var data in datas)
             {
                 this.FeatureTableDict.Add(data.id, data);
@@ -170,9 +165,6 @@ namespace ProjectOC.WorkerNS
                 }
                 this.FeatureTypeDict[data.type].Add(data.id);
             }
-
-            //abmgr.UnLoadLocalABAsync(ItemTableDataABPath, false, null);
-
             IsLoadOvered = true;
         }
         #endregion
