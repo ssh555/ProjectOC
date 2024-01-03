@@ -1,0 +1,783 @@
+using ML.Engine.Manager;
+using ML.Engine.Timer;
+using ML.Engine.InventorySystem;
+using ProjectOC.MissionNS;
+using ProjectOC.WorkerNS;
+using System.Collections.Generic;
+using System;
+using UnityEngine;
+
+namespace ProjectOC.ProNodeNS
+{
+    /// <summary>
+    /// 生产节点
+    /// </summary>
+    [System.Serializable]
+    public class ProNode: IMission, IInventory
+    {
+        /// <summary>
+        /// 对应的全局生产节点
+        /// </summary>
+        public WorldProNode WorldProNode;
+        /// <summary>
+        /// 建筑实例ID，全局唯一
+        /// </summary>
+        public string UID { get { return WorldProNode?.InstanceID ?? ""; } }
+        /// <summary>
+        /// ID
+        /// </summary>
+        public string ID = "";
+
+        #region 读表数据
+        /// <summary>
+        /// 名称
+        /// </summary>
+        public string Name { get => ProNodeManager.Instance.GetName(ID); }
+        /// <summary>
+        /// 生产节点类型
+        /// </summary>
+        public ProNodeType ProNodeType { get => ProNodeManager.Instance.GetProNodeType(ID); }
+        /// <summary>
+        /// 生产节点类目
+        /// </summary>
+        public RecipeCategory Category { get => ProNodeManager.Instance.GetCategory(ID); }
+        /// <summary>
+        /// 生产节点可执行配方类目
+        /// </summary>
+        public List<RecipeCategory> RecipeCategoryFilter { get => ProNodeManager.Instance.GetRecipeCategoryFilterd(ID); }
+        /// <summary>
+        /// 经验类型
+        /// </summary>
+        public WorkType ExpType { get => ProNodeManager.Instance.GetExpType(ID); }
+        /// <summary>
+        /// 堆放暂存上限份数
+        /// </summary>
+        public int StackMaxNum { get => ProNodeManager.Instance.GetStack(ID); }
+        /// <summary>
+        /// 堆积搬运阈值，未分配给任务的份数达到此值，全部划分给任务，然后生成任务
+        /// </summary>
+        public int StackThresholdNum { get => ProNodeManager.Instance.GetStackThreshold(ID); }
+        /// <summary>
+        ///  当原材料可生产的Item份数低于此值时，发布搬运任务
+        ///  搬运 MaxStackNum - 此值份量的原材料到此生产节点
+        /// </summary>
+        public int RawThresholdNum { get => ProNodeManager.Instance.GetRawThreshold(ID); }
+        /// <summary>
+        /// 升至1级耗材
+        /// </summary>
+        public Dictionary<string, int> Lv1Required { get => ProNodeManager.Instance.GetLv1Required(ID); }
+        /// <summary>
+        /// 升至2级耗材
+        /// </summary>
+        public Dictionary<string, int> Lv2Required { get => ProNodeManager.Instance.GetLv2Required(ID); }
+        #endregion
+
+        #region 不进表的配置数据
+        /// <summary>
+        /// 基础生产效率，单位%
+        /// </summary>
+        public int EffBase { get; private set; } = 100;
+        /// <summary>
+        /// 最大等级
+        /// </summary>
+        public int LevelMax { get; private set; } = 2;
+        /// <summary>
+        /// 升级提高的基础生产效率
+        /// </summary>
+        public List<int> LevelUpgradeEff = new List<int>() { 50, 50, 50 };
+        #endregion
+
+        #region Property
+        /// <summary>
+        /// 总堆积数量
+        /// </summary>
+        public int StackAll { get { return StackReserve + Stack; } }
+        /// <summary>
+        /// 总堆积份数
+        /// </summary>
+        public int StackAllNum { get => StackAll / ProductNum; }
+        /// <summary>
+        /// 没有分配任务的堆积份数
+        /// </summary>
+        public int StackNum { get => Stack / ProductNum; }
+        /// <summary>
+        /// 生产物ID
+        /// </summary>
+        public string ProductItem { get => Recipe?.GetProductID() ?? ""; }
+        /// <summary>
+        /// 一次生产的生产物数量
+        /// </summary>
+        public int ProductNum { get => Recipe?.GetProductNum() ?? 0; }
+        /// <summary>
+        /// 生产节点状态
+        /// </summary>
+        public ProNodeState State
+        {
+            get
+            {
+                if (this.Recipe == null)
+                {
+                    return ProNodeState.Vacancy;
+                }
+                else
+                {
+                    if (this.timerForProduce != null && !this.timerForProduce.IsStoped)
+                    {
+                        return ProNodeState.Production;
+                    }
+                    else
+                    {
+                        return ProNodeState.Stagnation;
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// 生产效率 单位%
+        /// </summary>
+        public int Eff
+        {
+            get
+            {
+                if ((this.ProNodeType == ProNodeType.Mannul) && this.Worker != null)
+                {
+                    return this.EffBase + this.Worker.Eff[this.ExpType];
+                }
+                else
+                {
+                    return this.EffBase;
+                }
+            }
+        }
+        /// <summary>
+        /// 生产一次所需要的时间
+        /// </summary>
+        public int TimeCost
+        {
+            get
+            {
+                if (this.Recipe != null && this.Eff > 0)
+                {
+                    return (int)(this.Recipe.TimeCost / this.Eff) + 1;
+                }
+                return 0;
+            }
+        }
+        #endregion
+
+        /// <summary>
+        /// 等级
+        /// </summary>
+        public int Level = 0;
+        /// <summary>
+        /// 搬运优先级
+        /// </summary>
+        public TransportPriority TransportPriority = TransportPriority.Normal;
+        /// <summary>
+        /// 正在生产的配方
+        /// </summary>
+        public Recipe Recipe;
+        /// <summary>
+        /// 人工生产节点常驻刁民
+        /// </summary>
+        public Worker Worker;
+        /// <summary>
+        /// 已经分配的搬运任务
+        /// </summary>
+        public List<MissionTransport> MissionTransports = new List<MissionTransport>();
+        /// <summary>
+        /// 没有分配任务的堆积值
+        /// 玩家优先拿取此项，第一个进度条
+        /// </summary>
+        public int Stack { get; protected set; }
+        /// <summary>
+        /// 已分配给任务但尚未被搬运的堆积值
+        /// Worker只能拿取此项，第二个进度条
+        /// </summary>
+        public int StackReserve { get; protected set; }
+        /// <summary>
+        ///  原材料ID, 还有多少个
+        /// </summary>
+        protected Dictionary<string, int> RawItems = new Dictionary<string, int>();
+
+        #region 计时器
+        /// <summary>
+        /// 生产计时器，时间为配方生产一次所需的时间
+        /// </summary>
+        protected CounterDownTimer timerForProduce;
+        /// <summary>
+        /// 生产计时器，时间为配方生产一次所需的时间
+        /// </summary>
+        protected CounterDownTimer TimerForProduce
+        {
+            get
+            {
+                if (timerForProduce == null)
+                {
+                    timerForProduce = new CounterDownTimer(this.TimeCost, false, false);
+                    timerForProduce.OnEndEvent += EndActionForProduce;
+                }
+                return timerForProduce;
+            }
+        }
+        /// <summary>
+        /// 任务计时器
+        /// </summary>
+        protected CounterDownTimer timerForMission;
+        /// <summary>
+        /// 任务计时器
+        /// </summary>
+        protected CounterDownTimer TimerForMission
+        {
+            get
+            {
+                if (timerForMission == null)
+                {
+                    timerForMission = new CounterDownTimer(1f, true, false);
+                    timerForMission.OnEndEvent += EndActionForMission;
+                }
+                return timerForMission;
+            }
+        }
+        #endregion
+
+        public ProNode(ProNodeManager.ProNodeTableJsonData config)
+        {
+            this.ID = config.ID;
+        }
+
+        /// <summary>
+        /// 获取生产节点可以生产的配方
+        /// </summary>
+        public List<string> GetCanProduceRecipe()
+        {
+            List<string> result = new List<string>();
+            foreach (RecipeCategory recipeCategory in this.RecipeCategoryFilter)
+            {
+                result.AddRange(RecipeManager.Instance.GetRecipeIDsByCategory(recipeCategory));
+            }
+            return result;
+        }
+        /// <summary>
+        /// 更改生产项
+        /// </summary>
+        /// <param name="recipeID">配方ID</param>
+        /// <returns>更改是否成功</returns>
+        public bool ChangeRecipe(Player.PlayerCharacter player, string recipeID)
+        {
+            Recipe recipe = RecipeManager.Instance.SpawnRecipe(recipeID);
+            if (recipe != null)
+            {
+                this.RemoveRecipe(player);
+                this.Recipe = recipe;
+                foreach (string itemID in this.Recipe.Raw.Keys)
+                {
+                    this.RawItems.Add(itemID, 0);
+                }
+                this.StartRun();
+                return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// 移除当前生产项
+        /// </summary>
+        public void RemoveRecipe(Player.PlayerCharacter player)
+        {
+            this.StopRun();
+            // 将堆放的成品，素材，全部返还至玩家背包
+            bool flag = false;
+            List<Item> resItems = new List<Item>();
+            // 堆放的成品
+            if (this.Recipe != null)
+            {
+                List<Item> items = ItemSpawner.Instance.SpawnItems(ProductItem, StackAll);
+                foreach (var item in items)
+                {
+                    if (flag)
+                    {
+                        resItems.Add(item);
+                    }
+                    else
+                    {
+                        if (!player.Inventory.AddItem(item))
+                        {
+                            flag = true;
+                        }
+                    }
+                }
+            }
+            // 素材
+            foreach (var raw in this.RawItems)
+            {
+                flag = false;
+                List<Item> items = ItemSpawner.Instance.SpawnItems(raw.Key, raw.Value);
+                foreach (var item in items)
+                {
+                    if (flag)
+                    {
+                        resItems.Add(item);
+                    }
+                    else
+                    {
+                        if (!player.Inventory.AddItem(item))
+                        {
+                            flag = true;
+                        }
+                    }
+                }
+            }
+            // 没有加到玩家背包的都变成WorldItem
+            foreach (Item item in resItems)
+            {
+                ItemSpawner.Instance.SpawnWorldItem(item, WorldProNode.transform.position, WorldProNode.transform.rotation);
+            }
+            // 清空数据
+            foreach (MissionTransport mission in this.MissionTransports)
+            {
+                mission.End();
+            }
+            this.MissionTransports.Clear();
+            this.Stack = 0;
+            this.StackReserve = 0;
+            this.RawItems.Clear();
+            this.Recipe = null;
+        }
+        /// <summary>
+        /// 更改在岗刁民
+        /// </summary>
+        /// <param name="worker">新刁民</param>
+        /// <returns>更改是否成功</returns>
+        public bool ChangeWorker(Worker worker)
+        {
+            if (this.ProNodeType == ProNodeType.Mannul && worker != null)
+            {
+                this.RemoveWorker();
+                worker.ProNode = this;
+                worker.SetTimeStatusAll(TimeStatus.Work_OnDuty);
+                this.Worker = worker;
+                this.StartProduce();
+                return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// 移除在岗刁民
+        /// </summary>
+        /// <returns>是否成功</returns>
+        public bool RemoveWorker()
+        {
+            if (this.ProNodeType == ProNodeType.Mannul)
+            {
+                this.StopProduce();
+                if (this.Worker != null)
+                {
+                    this.Worker.SetTimeStatusAll(TimeStatus.Relax);
+                    this.Worker.ProNode = null;
+                    this.Worker = null;
+                }
+                return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// 开始运行生产节点，这个时候并不一定开始制作物品
+        /// </summary>
+        public void StartRun()
+        {
+            this.TimerForMission.Start();
+            this.StartProduce();
+        }
+        /// <summary>
+        /// 取消运行，这个时候会停止制作物品
+        /// </summary>
+        public void StopRun()
+        {
+            if (this.timerForMission != null)
+            {
+                this.TimerForMission.End();
+            }
+            this.StopProduce();
+        }
+        /// <summary>
+        /// 开始制作物品
+        /// </summary>
+        public bool StartProduce()
+        {
+            if (this.CanWorking())
+            {
+                // 启动生产计时器
+                this.TimerForProduce.Reset(this.TimeCost);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// 停止制作物品
+        /// </summary>
+        public void StopProduce()
+        {
+            if (this.timerForProduce != null)
+            {
+                this.TimerForProduce.End();
+            }
+        }
+        /// <summary>
+        /// 是否可以开始制作物品
+        /// </summary>
+        public bool CanWorking()
+        {
+            if (this.Recipe != null)
+            {
+                foreach (var kv in this.Recipe.Raw)
+                {
+                    if (this.RawItems[kv.Key] < kv.Value)
+                    {
+                        return false;
+                    }
+                }
+                if (this.ProNodeType == ProNodeType.Mannul && (this.Worker == null || !this.Worker.IsOnDuty))
+                {
+                    return false;
+                }
+                if (this.StackAllNum >= this.StackMaxNum)
+                {
+                    return false;
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 搬运任务的管理
+        /// </summary>
+        protected void EndActionForMission()
+        {
+            int missionNum;
+            foreach (var kv in Recipe.Raw)
+            {
+                missionNum = kv.Value * RawThresholdNum - RawItems[kv.Key] - GetAssignNum(kv.Key, true);
+                if (missionNum > 0)
+                {
+                    // 从仓库搬运材料来
+                    GameManager.Instance.GetLocalManager<MissionManager>()?.
+                        CreateTransportMission(MissionTransportType.Store_ProNode, kv.Key, missionNum, this);
+                }
+            }
+            missionNum = StackReserve - GetAssignNum(ProductItem, false);
+            if (missionNum > 0)
+            {
+                // 搬运产出物品到仓库
+                GameManager.Instance.GetLocalManager<MissionManager>()?.
+                    CreateTransportMission(MissionTransportType.ProNode_Store, ProductItem, missionNum, this);
+            }
+        }
+        protected void EndActionForProduce()
+        {
+            // 结算
+            Item item = Recipe.Composite(this);
+            AddItem(item);
+            Worker.AlterExp(ExpType, Recipe.ExpRecipe);
+            Worker.AlterAP(-1 * Worker.APCost);
+            // 下一次生产
+            if (!StartProduce())
+            {
+                StopProduce();
+            }
+        }
+        /// <summary>
+        /// 获取已经分配任务的物品数量
+        /// </summary>
+        /// <param name="itemID"></param>
+        /// <param name="isIn">true表示放入，false表示取出</param>
+        /// <returns></returns>
+        private int GetAssignNum(string itemID, bool isIn=true)
+        {
+            int result = 0;
+            foreach (MissionTransport mission in this.MissionTransports)
+            {
+                if (mission != null && mission.ItemID == itemID)
+                {
+                    if ((isIn && mission.Type == MissionTransportType.Store_ProNode) || 
+                        (!isIn && mission.Type == MissionTransportType.ProNode_Store))
+                    {
+                        result += mission.MissionNum;
+                    }
+                }
+            }
+            return result;
+        }
+
+        #region IMission接口
+        public Transform GetTransform()
+        {
+            return WorldProNode?.transform;
+        }
+        public TransportPriority GetTransportPriority()
+        {
+            return TransportPriority;
+        }
+        public string GetUID()
+        {
+            return UID;
+        }
+        public void AddTransport(Transport transport) {}
+        public void RemoveTranport(Transport transport) {}
+        public void AddMissionTranport(MissionTransport mission)
+        {
+            MissionTransports.Add(mission);
+        }
+        public void RemoveMissionTranport(MissionTransport mission)
+        {
+            MissionTransports.Remove(mission);
+        }
+        public bool PutIn(string itemID, int amount)
+        {
+            if (RawItems.ContainsKey(itemID) && amount >= 0)
+            {
+                RawItems[itemID] += amount;
+                StartProduce();
+                return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// 返回取出的数量
+        /// </summary>
+        public int PutOut(string itemID, int amount)
+        {
+            if (ProductItem == itemID && amount > 0)
+            { 
+                if (StackReserve >= amount)
+                {
+                    StackReserve -= amount;
+                }
+                else
+                {
+                    amount = StackReserve;
+                    StackReserve = 0;
+                }
+                return amount;
+            }
+            return 0;
+        }
+        #endregion
+
+        #region IInventory接口
+        public bool AddItem(Item item)
+        {
+            if (item.Amount >= 0)
+            {
+                if (this.RawItems.ContainsKey(item.ID))
+                {
+                    if (this.RawItems[item.ID] + item.Amount > this.StackMaxNum * this.Recipe.GetRawNum(item.ID))
+                    {
+                        return false;
+                    }
+                    this.RawItems[item.ID] += item.Amount;
+                    this.StartProduce();
+                    return true;
+                }
+                if (ProductItem == item.ID)
+                {
+                    Stack += item.Amount;
+                    if (StackNum >= StackThresholdNum)
+                    {
+                        StackReserve += Stack;
+                        Stack = 0;
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+        public bool RemoveItem(Item item)
+        {
+            if (item.Amount >= 0)
+            {
+                if (RawItems.ContainsKey(item.ID) && RawItems[item.ID] >= item.Amount)
+                {
+                    RawItems[item.ID] -= item.Amount;
+                    return true;
+                }
+                else if (ProductItem == item.ID && Stack >= item.Amount)
+                {
+                    Stack -= item.Amount;
+                    return true;
+                }
+            }
+            return false;
+        }
+        public Item RemoveItem(Item item, int amount)
+        {
+            if (amount > 0)
+            {
+                if (RawItems.ContainsKey(item.ID))
+                {
+                    if (RawItems[item.ID] >= amount)
+                    {
+                        RawItems[item.ID] -= amount;
+                    }
+                    else
+                    {
+                        amount = RawItems[item.ID];
+                        RawItems[item.ID] = 0;
+                    }
+                }
+                else if (ProductItem == item.ID)
+                {
+                    if (Stack >= amount)
+                    {
+                        Stack -= amount;
+                    }
+                    else
+                    {
+                        amount = Stack;
+                        Stack = 0;
+                    }
+                }
+            }
+            Item result = ItemSpawner.Instance.SpawnItem(item.ID);
+            result.Amount = amount;
+            if (result.Amount != amount)
+            {
+                Debug.LogError($"Item Amount Error ItemAmount: {result.Amount} Amount: {amount}");
+            }
+            return result;
+        }
+        public bool RemoveItem(string itemID, int amount)
+        {
+            if (amount >= 0)
+            {
+                if (RawItems.ContainsKey(itemID))
+                {
+                    if (RawItems[itemID] >= amount)
+                    {
+                        RawItems[itemID] -= amount;
+                        return true;
+                    }
+                }
+                else if (ProductItem == itemID)
+                {
+                    if (Stack >= amount)
+                    {
+                        Stack -= amount;
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        public int GetItemAllNum(string id)
+        {
+            if (RawItems.ContainsKey(id))
+            {
+                return RawItems[id];
+            }
+            else if (ProductItem == id)
+            {
+                return StackAll;
+            }
+            Debug.LogError($"Item {id} is not in ProNode {ID}");
+            return 0;
+        }
+        #endregion
+
+        #region TODO: 升级
+        ///// <summary>
+        ///// 生产节点升级
+        ///// </summary>
+        //public bool Upgrade(Player.PlayerCharacter player)
+        //{
+        //    if (this.Level < this.LevelMax && this.Level >= 0)
+        //    {
+        //        // 从背包获取升级材料
+        //        Dictionary<string, int> lvRequired;
+        //        if (this.Level == 0)
+        //        {
+        //            lvRequired = Lv1Required;
+        //        } 
+        //        else if (this.Level == 1)
+        //        {
+        //            lvRequired = Lv2Required;
+        //        }
+        //        else
+        //        {
+        //            return false;
+        //        }
+        //        foreach (var kv in lvRequired)
+        //        {
+        //            if (player.Inventory.GetItemAllNum(kv.Key) < kv.Value)
+        //            {
+        //                return false;
+        //            }
+        //        }
+        //        foreach (var kv in lvRequired)
+        //        {
+        //            if (player.Inventory.RemoveItem(kv.Key, kv.Value))
+        //            {
+        //                return false;
+        //            }
+        //        }
+        //        this.EffBase += LevelUpgradeEff[Level];
+        //        this.Level += 1;
+        //        return true;
+        //    }
+        //    return false;
+        //}
+        ///// <summary>
+        ///// 生产节点降级
+        ///// </summary>
+        //public bool Downgrade(Player.PlayerCharacter player)
+        //{
+        //    if (this.Level <= this.LevelMax && this.Level > 0)
+        //    {
+        //        // 升级材料添加到背包
+        //        Dictionary<string, int> lvRequired;
+        //        if (this.Level == 1)
+        //        {
+        //            lvRequired = Lv1Required;
+        //        }
+        //        else if (this.Level == 2)
+        //        {
+        //            lvRequired = Lv2Required;
+        //        }
+        //        else
+        //        {
+        //            return false;
+        //        }
+        //        foreach (var kv in lvRequired)
+        //        {
+        //            bool flag = false;
+        //            List<Item> items = ItemSpawner.Instance.SpawnItems(kv.Key, kv.Value);
+        //            foreach (Item item in items)
+        //            {
+        //                if (flag)
+        //                {
+        //                    ItemSpawner.Instance.SpawnWorldItem(item, player.transform.position, player.transform.rotation);
+        //                }
+        //                else
+        //                {
+        //                    if (!player.Inventory.AddItem(item))
+        //                    {
+        //                        flag = true;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        this.Level -= 1;
+        //        this.EffBase -= LevelUpgradeEff[Level];
+        //        return true;
+        //    }
+        //    return false;
+        //}
+        #endregion
+    }
+}

@@ -1,4 +1,3 @@
-using ML.Engine.TextContent;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,47 +12,46 @@ namespace ProjectOC.WorkerNS
     public class Feature
     {
         /// <summary>
-        /// 键，Feature_类型_序号
+        /// ID
         /// </summary>
         public string ID = "";
-        /// <summary>
-        /// 互斥键，会发生矛盾的特性
-        /// </summary>
-        public string IDExclude = "";
-        /// <summary>
-        /// 序号，用于排序，从上到下的顺序为增益、减益、整活特性
-        /// </summary>
-        public int SortNum;
-        /// <summary>
-        /// 名称
-        /// </summary>
-        public TextContent Name;
-        /// <summary>
-        /// 类型
-        /// </summary>        
-        public FeatureType Type;
         /// <summary>
         /// 效果
         /// </summary>
         public List<Effect> Effects = new List<Effect>();
+
+        #region 读表属性
+        /// <summary>
+        /// 互斥键，会发生矛盾的特性
+        /// </summary>
+        public string IDExclude { get => FeatureManager.Instance.GetIDExclude(ID); }
+        /// <summary>
+        /// 序号，用于排序，从上到下的顺序为种族、增益、减益、整活特性
+        /// </summary>
+        public int Sort { get => FeatureManager.Instance.GetSort(ID); }
+        /// <summary>
+        /// 名称
+        /// </summary>
+        public string Name { get => FeatureManager.Instance.GetName(ID); }
+        /// <summary>
+        /// 类型
+        /// </summary>        
+        public FeatureType FeatureType { get => FeatureManager.Instance.GetFeatureType(ID); }
         /// <summary>
         /// 特性本身的描述性文本
         /// </summary>
-        public TextContent FeatureDescription;
+        public string Description { get => FeatureManager.Instance.GetItemDescription(ID); }
         /// <summary>
         /// 特性效果的描述性文本
         /// </summary>
-        public TextContent EffectDescription;
+        public string EffectsDescription { get => FeatureManager.Instance.GetEffectsDescription(ID); }
+        #endregion
 
         public Feature(FeatureManager.FeatureTableJsonData config)
         {
-            this.ID = config.id;
-            this.IDExclude = config.idExclude;
-            this.SortNum = config.sort;
-            this.Name = config.name;
-            this.Type = config.type;
+            this.ID = config.ID;
             this.Effects = new List<Effect>();
-            foreach (string effectID in config.effectIDs)
+            foreach (string effectID in config.Effects)
             {
                 Effect effect = EffectManager.Instance.SpawnEffect(effectID);
                 if (effect != null)
@@ -65,66 +63,40 @@ namespace ProjectOC.WorkerNS
                     Debug.LogError($"Feature {this.ID} Effect {effectID} is Null");
                 }
             }
-            this.FeatureDescription = config.featureDescription;
-            this.EffectDescription = config.effectDescription;
         }
         public Feature(Feature feature)
         {
             this.ID = feature.ID;
-            this.IDExclude = feature.IDExclude;
-            this.SortNum = feature.SortNum;
-            this.Name = feature.Name;
-            this.Type = feature.Type;
             this.Effects = new List<Effect>();
             foreach (Effect effect in feature.Effects)
             {
-                Effect newEffect = new Effect(effect);
-                if (newEffect != null)
+                if (effect != null)
                 {
-                    this.Effects.Add(newEffect);
+                    this.Effects.Add(new Effect(effect));
                 }
                 else
                 {
                     Debug.LogError($"Feature {feature.ID} effect is Null");
                 }
             }
-            this.FeatureDescription = feature.FeatureDescription;
-            this.EffectDescription = feature.EffectDescription;
         }
 
-        public void ApplyEffectToWorker(Worker worker)
+        public void ApplyFeature(Worker worker)
         {
             if (worker != null)
             {
                 foreach (Effect effect in this.Effects)
                 {
-                    effect.ApplyEffectToWorker(worker);
+                    effect.ApplyEffect(worker);
                 }
             }
             else
             {
-                Debug.LogError($"Feature {this.ID} ApplyEffectToWorker Worker is Null");
-            }
-        }
-        public void RemoveEffectToWorker(Worker worker)
-        {
-            if (worker != null)
-            {
-                foreach (Effect effect in this.Effects)
-                {
-                    effect.RemoveEffectToWorker(worker);
-                }
-            }
-            else
-            {
-                Debug.LogError($"Feature {this.ID} RemoveEffectToWorker Worker is Null");
+                Debug.LogError($"Feature {this.ID} Worker is Null");
             }
         }
 
-        /// <summary>
-        /// 特性按照增益、减益、无功能的顺序从上至下排序
-        /// </summary>
-        public class Sort : IComparer<Feature>
+        public class FeatureSort : IComparer<Feature>
         {
             public int Compare(Feature x, Feature y)
             {
@@ -143,10 +115,11 @@ namespace ProjectOC.WorkerNS
                 {
                     return -1;
                 }
-
-                if (x.SortNum != y.SortNum)
+                int xs = x.Sort;
+                int ys = y.Sort;
+                if (xs != ys)
                 {
-                    return x.SortNum.CompareTo(y.SortNum);
+                    return xs.CompareTo(ys);
                 }
                 else
                 {

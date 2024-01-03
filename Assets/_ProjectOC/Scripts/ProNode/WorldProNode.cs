@@ -5,28 +5,28 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace ProjectOC.ProductionNodeNS
+namespace ProjectOC.ProNodeNS
 {
-    public class WorldProductionNode : BuildingPart
+    public class WorldProNode : BuildingPart
     {
         /// <summary>
         /// 生产节点ID
         /// </summary>
         [SerializeField, ReadOnly]
-        protected string ProductionNodeID{ get { return this.ProductionNode?.ID ?? ""; }}
+        protected string ProNodeID{ get { return this.ProNode?.ID ?? ""; }}
         /// <summary>
         /// 拥有的生产节点
         /// </summary>
         [ShowInInspector, ReadOnly, SerializeField]
-        public ProductionNode ProductionNode;
-        public void SetProductionNode(ProductionNode node)
+        public ProNode ProNode;
+        public void SetProNode(ProNode node)
         {
-            if (this.ProductionNode != null)
+            if (this.ProNode != null)
             {
-                this.ProductionNode.WorldProductionNode = null;
+                this.ProNode.WorldProNode = null;
             }
-            this.ProductionNode = node;
-            this.ProductionNode.WorldProductionNode = this;
+            this.ProNode = node;
+            this.ProNode.WorldProNode = this;
         }
         private void Start()
         {

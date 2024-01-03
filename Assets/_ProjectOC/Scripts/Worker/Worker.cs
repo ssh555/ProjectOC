@@ -1,10 +1,10 @@
 using ML.Engine.FSM;
 using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
-using ML.Engine.TextContent;
 using ProjectOC.ManagerNS;
 using ProjectOC.MissionNS;
-using ProjectOC.ProductionNodeNS;
+using ProjectOC.ProNodeNS;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,46 +17,25 @@ namespace ProjectOC.WorkerNS
     [System.Serializable]
     public class Worker : MonoBehaviour
     {
-        /// <summary>
-        /// 刁民ID
-        /// </summary>
-        public string ID = "";
-        /// <summary>
-        /// 名字
-        /// </summary>
-        public TextContent Name;
-        /// <summary>
-        /// 职业类型
-        /// </summary>
-        public WorkType WorkType;
-        /// <summary>
-        /// 当前体力值
-        /// </summary>
+        #region 策划配置项
+        [LabelText("名字")]
+        public string Name = "Worker";
+        [LabelText("当前体力值")]
         public int APCurrent = 10;
-        /// <summary>
-        /// 体力上限
-        /// </summary>
+        [LabelText("体力上限")]
         public int APMax = 10;
-        /// <summary>
-        /// 体力工作阈值
-        /// </summary>
+        [LabelText("体力工作阈值")]
         public int APWorkThreshold = 3;
-        /// <summary>
-        /// 体力休息阈值
-        /// </summary>
+        [LabelText("体力休息阈值")]
         public int APRelaxThreshold = 5;
-        /// <summary>
-        /// 刁民完成一项任务消耗的体力值
-        /// </summary>
+        [LabelText("完成一次任务消耗的体力值")]
         public int APCost = 1;
-        /// <summary>
-        /// 每次搬运结算消耗的体力值
-        /// </summary>
+        [LabelText("完成一次搬运消耗的体力值")]
         public int APCostTransport = 1;
-        /// <summary>
-        /// 当前负重
-        /// </summary>
-        public int BURCurrent 
+        [LabelText("移动速度")]
+        public float WalkSpeed = 10;
+        [LabelText("当前负重")]
+        public int BURCurrent
         {
             get
             {
@@ -68,42 +47,26 @@ namespace ProjectOC.WorkerNS
                 return result;
             }
         }
-        /// <summary>
-        /// 负重上限
-        /// </summary>
+        [LabelText("负重上限")]
         public int BURMax = 100;
-        /// <summary>
-        /// 技能
-        /// </summary>
-        public Dictionary<WorkType, Skill> Skills = new Dictionary<WorkType, Skill>();
-        #region 不进表
-        /// <summary>
-        /// 移动速度，单位为 m/s
-        /// </summary>
-        public float WalkSpeed = 10;
-        /// <summary>
-        /// 搬运经验值
-        /// </summary>
+        [LabelText("搬运经验值")]
         public int ExpTransport = 10;
-        /// <summary>
-        /// 职业经验获取速度，单位为%
-        /// </summary>
+        [LabelText("技能类型")]
+        public WorkType SkillType;
+        public Dictionary<WorkType, string> SkillConfig = new Dictionary<WorkType, string>();
+        [LabelText("技能")]
+        public Dictionary<WorkType, Skill> Skill = new Dictionary<WorkType, Skill>();
+        [LabelText("技能经验获取速度")]
         public Dictionary<WorkType, int> ExpRate = new Dictionary<WorkType, int>();
-        /// <summary>
-        /// 职业效率加成，单位为%
-        /// </summary>
+        [LabelText("职业效率加成")]
         public Dictionary<WorkType, int> Eff = new Dictionary<WorkType, int>();
-        /// <summary>
-        /// 特性
-        /// </summary>
+        #endregion
+
+        [LabelText("特性")]
         public List<Feature> Features = new List<Feature>();
-        /// <summary>
-        /// 每个时段的安排
-        /// </summary>
-        protected TimeArrangement TimeArrangement;
-        /// <summary>
-        /// 当前时段的安排应该所处的状态
-        /// </summary>
+        [LabelText("每个时段的安排")]
+        public TimeArrangement TimeArrangement;
+        [LabelText("当前时段的安排应该所处的状态")]
         public TimeStatus CurTimeFrameStatus 
         { 
             get 
@@ -118,10 +81,6 @@ namespace ProjectOC.WorkerNS
             } 
         }
         /// <summary>
-        /// 当前实际状态
-        /// </summary>
-        public Status Status;
-        /// <summary>
         /// 状态机控制器
         /// </summary>
         protected StateController StateController;
@@ -129,107 +88,58 @@ namespace ProjectOC.WorkerNS
         /// 状态机
         /// </summary>
         protected WorkerStateMachine StateMachine;
-        /// <summary>
-        /// 是否在值班
-        /// </summary>
-        public bool IsOnDuty { get { return this.ProductionNode != null && this.Status != Status.Relaxing; } }
-        public ProductionNode ProductionNode;
+        [LabelText("当前实际状态")]
+        public Status Status;
+        [LabelText("是否在值班")]
+        public bool IsOnDuty { get { return this.ProNode != null && this.Status != Status.Relaxing; } }
+        [LabelText("生产节点")]
+        public ProNode ProNode;
+        [LabelText("搬运")]
         public Transport Transport;
-        /// <summary>
-        /// 正在搬运的物品
-        /// </summary>
+        [LabelText("搬运物品")]
         public List<Item> TransportItems = new List<Item>();
-        #endregion
         public Worker()
         {
+            //this.ExpRate.Add(WorkType.Cook, "Skill ID");
+
             this.ExpRate.Add(WorkType.Cook, 100);
             this.ExpRate.Add(WorkType.HandCraft, 100);
             this.ExpRate.Add(WorkType.Industry, 100);
-            this.ExpRate.Add(WorkType.Science, 100);
             this.ExpRate.Add(WorkType.Magic, 100);
             this.ExpRate.Add(WorkType.Transport, 100);
+            this.ExpRate.Add(WorkType.Collect, 100);
 
-            this.Eff.Add(WorkType.Cook, 10);
-            this.Eff.Add(WorkType.HandCraft, 10);
-            this.Eff.Add(WorkType.Industry, 10);
-            this.Eff.Add(WorkType.Science, 10);
-            this.Eff.Add(WorkType.Magic, 10);
+            this.Eff.Add(WorkType.Cook, 0);
+            this.Eff.Add(WorkType.HandCraft, 0);
+            this.Eff.Add(WorkType.Industry, 0);
+            this.Eff.Add(WorkType.Magic, 0);
             this.Eff.Add(WorkType.Transport, 50);
+            this.Eff.Add(WorkType.Collect, 0);
 
-            this.Features = FeatureManager.Instance.CreateFeatureForWorker();
+            this.Features = FeatureManager.Instance.CreateFeature();
             foreach (Feature feature in this.Features)
             {
-                feature.ApplyEffectToWorker(this);
+                feature.ApplyFeature(this);
             }
-            // 初始化状态机
-            StateController = new StateController(0);
-            StateMachine = new WorkerStateMachine(this);
-            StateController.SetStateMachine(StateMachine);
-        }
-        public void Init(WorkerManager.WorkerTableJsonData config)
-        {
-            this.ID = config.id;
-            this.Name = config.name;
-            this.WorkType = config.workType;
-            this.APCurrent = config.apMax;
-            this.APMax = config.apMax;
-            this.APWorkThreshold = config.apWorkThreshold;
-            this.APRelaxThreshold = config.apRelaxThreshold;
-            this.APCost = config.apCost;
-            this.APCostTransport = config.apCostTransport;
-            this.BURMax = config.burMax;
-            foreach (var kv in config.skillDict)
+
+            foreach (var kv in SkillConfig)
             {
                 Skill skill = SkillManager.Instance.SpawnSkill(kv.Value);
                 if (skill != null)
                 {
-                    skill.ApplyEffectToWorker(this);
-                    this.Skills.Add(kv.Key, skill);
+                    skill.ApplySkill(this);
+                    this.Skill.Add(kv.Key, skill);
                 }
                 else
                 {
-                    Debug.LogError($"Worker {this.ID} Skill {kv.Value} is Null");
+                    Debug.LogError($"Worker {Name} Skill {kv.Value} is Null");
                 }
             }
-        }
-        public void Init(Worker worker)
-        {
-            this.ID = worker.ID;
-            this.Name = worker.Name;
-            this.WorkType = worker.WorkType;
-            this.APCurrent = worker.APCurrent;
-            this.APMax = worker.APMax;
-            this.APWorkThreshold = worker.APWorkThreshold;
-            this.APRelaxThreshold = worker.APRelaxThreshold;
-            this.APCost = worker.APCost;
-            this.APCostTransport = worker.APCostTransport;
-            this.BURMax = worker.BURMax;
-            foreach (Skill skill in this.Skills.Values)
-            {
-                skill.RemoveEffectToWorker(this);
-            }
-            this.Skills.Clear();
-            foreach (var kv in worker.Skills)
-            {
-                Skill skill = new Skill(kv.Value);
-                skill.ApplyEffectToWorker(this);
-                this.Skills.Add(kv.Key, skill);
-            }
-            this.WalkSpeed = worker.WalkSpeed;
-            this.ExpRate = new Dictionary<WorkType, int>(worker.ExpRate);
-            this.Eff = new Dictionary<WorkType, int>(worker.Eff);
-            foreach (Feature feature in this.Features)
-            {
-                feature.RemoveEffectToWorker(this);
-            }
-            this.Features.Clear();
-            foreach (Feature feature in worker.Features)
-            {
-                Feature featureNew = new Feature(feature);
-                featureNew.ApplyEffectToWorker(this);
-                this.Features.Add(featureNew);
-            }
-            this.TimeArrangement.SetTimeArrangement(worker.TimeArrangement);
+
+            // 初始化状态机
+            StateController = new StateController(0);
+            StateMachine = new WorkerStateMachine(this);
+            StateController.SetStateMachine(StateMachine);
         }
         /// <summary>
         /// 修改经验值
@@ -238,7 +148,7 @@ namespace ProjectOC.WorkerNS
         /// <param name="value">经验值</param>
         public void AlterExp(WorkType workType, int value)
         {
-            this.Skills[workType].AlterExp(value);
+            this.Skill[workType].AlterExp(value * ExpRate[workType]);
         }
         /// <summary>
         /// 修改体力值
@@ -259,8 +169,8 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         public void SettleTransport()
         {
-            this.AlterAP(this.APCostTransport);
-            this.AlterExp(WorkType.Transport, this.ExpTransport);
+            this.AlterAP(-1 * APCostTransport);
+            this.AlterExp(WorkType.Transport, ExpTransport);
         }
 
         public void SetTimeStatus(int time, TimeStatus timeStatus)

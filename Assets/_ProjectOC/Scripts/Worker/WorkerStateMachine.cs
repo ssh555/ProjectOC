@@ -1,6 +1,6 @@
 using ML.Engine.FSM;
 using ProjectOC.MissionNS;
-using ProjectOC.ProductionNodeNS;
+using ProjectOC.ProNodeNS;
 using UnityEngine;
 
 namespace ProjectOC.WorkerNS
@@ -32,11 +32,11 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// 值班节点
         /// </summary>
-        public ProductionNode DutyProductionNode { get { return this.Worker.ProductionNode; } }
+        public ProNode ProNode { get { return this.Worker.ProNode; } }
         /// <summary>
         /// 搬运任务
         /// </summary>
-        public Transport MissionTransport { get { return this.Worker.Transport; } }
+        public Transport Transport { get { return this.Worker.Transport; } }
         /// <summary>
         /// 当前时段的安排
         /// </summary>
@@ -103,7 +103,7 @@ namespace ProjectOC.WorkerNS
                 return false;
             }
             // 体力高于工作阈值 && 有生产节点 && 生产节点在生产
-            return this.IsAPAboveWorkThreshold && this.DutyProductionNode != null && this.DutyProductionNode.State == ProductionNodeState.Production;
+            return this.IsAPAboveWorkThreshold && this.ProNode != null && this.ProNode.State == ProNodeState.Production;
         }
         /// <summary>
         /// 生产节点工作到摸鱼
@@ -115,7 +115,7 @@ namespace ProjectOC.WorkerNS
                 return false;
             }
             // 体力低于工作阈值 || 没有生产节点 || 生产节点未在生产
-            return !this.IsAPAboveWorkThreshold || this.DutyProductionNode == null || this.DutyProductionNode.State != ProductionNodeState.Production;
+            return !this.IsAPAboveWorkThreshold || this.ProNode == null || this.ProNode.State != ProNodeState.Production;
         }
         /// <summary>
         /// 摸鱼到搬运
@@ -127,7 +127,7 @@ namespace ProjectOC.WorkerNS
                 return false;
             }
             // 体力高于工作阈值 && 没有生产节点 && 有任务
-            return this.IsAPAboveWorkThreshold && this.DutyProductionNode == null && this.MissionTransport != null;
+            return this.IsAPAboveWorkThreshold && this.ProNode == null && this.Transport != null;
         }
         /// <summary>
         /// 搬运到摸鱼
@@ -139,7 +139,7 @@ namespace ProjectOC.WorkerNS
                 return false;
             }
             // 体力低于工作阈值 || 有生产节点 || 没有任务
-            return !this.IsAPAboveWorkThreshold || this.DutyProductionNode != null || this.MissionTransport == null;
+            return !this.IsAPAboveWorkThreshold || this.ProNode != null || this.Transport == null;
         }
         /// <summary>
         /// 摸鱼到休息

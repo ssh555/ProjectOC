@@ -1,11 +1,10 @@
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
-using Newtonsoft.Json;
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using static ProjectOC.WorkerNS.FeatureManager;
+
 
 namespace ProjectOC.WorkerNS
 {
@@ -32,43 +31,26 @@ namespace ProjectOC.WorkerNS
         }
         #endregion
 
+        #region Load And Data
+        /// <summary>
+        /// 是否已加载完数据
+        /// </summary>
+        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
+
         /// <summary>
         /// 基础数据表
         /// </summary>
         private Dictionary<string, EffectTableJsonData> EffectTableDict = new Dictionary<string, EffectTableJsonData>();
 
-        /// <summary>
-        /// 是否是有效的ID
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public bool IsValidID(string id)
-        {
-            return this.EffectTableDict.ContainsKey(id);
-        }
-        public Effect SpawnEffect(string id)
-        {
-            if (this.EffectTableDict.ContainsKey(id))
-            {
-                EffectTableJsonData row = this.EffectTableDict[id];
-                Effect effect = new Effect(row);
-                return effect;
-            }
-            Debug.LogError("没有对应ID为 " + id + " 的效果");
-            return null;
-        }
-
-        #region to-do : 需读表导入所有所需的 Effect 数据
-
         [System.Serializable]
         public struct EffectTableJsonData
         {
-            public string id;
-            public TextContent name;
-            public EffectType type;
-            public string paramStr;
-            public int paramInt;
-            public float paramFloat;
+            public string ID;
+            public TextContent Name;
+            public EffectType Type;
+            public string Param1;
+            public int Param2;
+            public float Param3;
         }
         public static ML.Engine.ABResources.ABJsonAssetProcessor<EffectTableJsonData[]> ABJAProcessor;
 
@@ -80,13 +62,52 @@ namespace ProjectOC.WorkerNS
                 {
                     foreach (var data in datas)
                     {
-                        this.EffectTableDict.Add(data.id, data);
+                        this.EffectTableDict.Add(data.ID, data);
                     }
                 }, null, "隐兽Effect表数据");
                 ABJAProcessor.StartLoadJsonAssetData();
             }
         }
-       
+        #endregion
+
+        #region Spawn
+        public Effect SpawnEffect(string id)
+        {
+            if (this.EffectTableDict.TryGetValue(id, out EffectTableJsonData row))
+            {
+                Effect effect = new Effect(row);
+                return effect;
+            }
+            Debug.LogError("没有对应ID为 " + id + " 的Effect");
+            return null;
+        }
+        #endregion
+
+        #region Getter
+        public string[] GetAllEffectID()
+        {
+            return EffectTableDict.Keys.ToArray();
+        }
+        public bool IsValidID(string id)
+        {
+            return EffectTableDict.ContainsKey(id);
+        }
+        public string GetName(string id)
+        {
+            if (!this.EffectTableDict.ContainsKey(id))
+            {
+                return "";
+            }
+            return this.EffectTableDict[id].Name;
+        }
+        public EffectType GetEffectType(string id)
+        {
+            if (!this.EffectTableDict.ContainsKey(id))
+            {
+                return EffectType.None;
+            }
+            return this.EffectTableDict[id].Type;
+        }
         #endregion
     }
 }

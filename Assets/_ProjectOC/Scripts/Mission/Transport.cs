@@ -1,5 +1,6 @@
 using ML.Engine.InventorySystem;
 using ProjectOC.WorkerNS;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ProjectOC.MissionNS
@@ -79,13 +80,6 @@ namespace ProjectOC.MissionNS
                 return CurNum > 0 ? TransportState.HoldingObjects : TransportState.EmptyHanded;
             }
         }
-        public bool IsFinish
-        {
-            get 
-            {
-                return this.FinishNum >= this.MissionNum;
-            }
-        }
         public Transport(MissionTransport mission, string itemID, int missionNum, IMission source, IMission destination, Worker worker)
         {
             this.Mission = mission;
@@ -106,12 +100,12 @@ namespace ProjectOC.MissionNS
         {
             bool flagBurden = false;
             bool flagSource = false;
-            while (true)
+            List<Item> items = ItemSpawner.Instance.SpawnItems(ItemID, this.NeedTransportNum);
+            foreach (Item item in items)
             {
-                Item item = ItemSpawner.Instance.SpawnItem(ItemID, this.NeedTransportNum);
                 if (item.Weight + Worker.BURCurrent >= Worker.BURMax)
                 {
-                    int num = (Worker.BURMax - Worker.BURCurrent) / item.SingleItemWeight;
+                    int num = (Worker.BURMax - Worker.BURCurrent) / ItemSpawner.Instance.GetWeight(item.ID);
                     item.Amount = num;
                     flagBurden = true;
                 }
@@ -122,10 +116,14 @@ namespace ProjectOC.MissionNS
                     flagSource = true;
                 }
                 Worker.TransportItems.Add(item);
-                if (this.NeedTransportNum == 0 || flagBurden || flagSource)
+                if (flagBurden || flagSource)
                 {
                     break;
                 }
+            }
+            if (flagSource)
+            {
+                Debug.LogError("Source is not Enough");
             }
         }
         /// <summary>
@@ -133,11 +131,12 @@ namespace ProjectOC.MissionNS
         /// </summary>
         public void PutInTarget()
         {
-            bool flagTarget = this.Target.PutIn(this.ItemID, this.CurNum);
+            int num = this.CurNum;
+            bool flagTarget = this.Target.PutIn(this.ItemID, num);
             if (flagTarget)
             {
-                this.FinishNum += this.CurNum;
-                this.Mission.FinishNum += this.CurNum;
+                this.FinishNum += num;
+                this.Mission.FinishNum += num;
                 this.Worker.TransportItems.Clear();
                 // ÈÎÎñ½áÊø
                 if (this.FinishNum == this.MissionNum)
@@ -145,9 +144,14 @@ namespace ProjectOC.MissionNS
                     this.Worker.SettleTransport();
                     this.End();
                 }
+                else if (this.FinishNum > this.MissionNum)
+                {
+                    Debug.LogError($"FinishNum > MissionNum");
+                }
             }
             else
             {
+                Debug.LogError($"Target Cannot Put In {ItemID} {num}");
                 this.End();
             }
         }

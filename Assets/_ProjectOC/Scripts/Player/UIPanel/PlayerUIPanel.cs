@@ -7,7 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static ML.Engine.BuildingSystem.Test_BuildingManager;
-using static ProjectOC.ProductionNodeNS.ProductionNodeManager;
+using static ProjectOC.ProNodeNS.ProNodeManager;
 
 namespace ProjectOC.Player.UI
 {

@@ -1,3 +1,5 @@
+using Sirenix.OdinInspector;
+
 namespace ProjectOC.MissionNS
 {
     /// <summary>
@@ -5,18 +7,13 @@ namespace ProjectOC.MissionNS
     /// </summary>
     public enum TransportBuildingType
     {
+        [LabelText("None")]
         None = 0,
-        /// <summary>
-        /// 仓库
-        /// </summary>
+        [LabelText("仓库")]
         Store = 1,
-        /// <summary>
-        /// 生产节点
-        /// </summary>
-        ProductionNode = 2,
-        /// <summary>
-        /// 场景物品
-        /// </summary>
+        [LabelText("生产节点")]
+        ProNode = 2,
+        [LabelText("场景物品")]
         WorldItem = 3
     }
 }

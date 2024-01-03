@@ -1,3 +1,5 @@
+using Sirenix.OdinInspector;
+
 namespace ProjectOC.MissionNS
 {
     /// <summary>
@@ -5,17 +7,11 @@ namespace ProjectOC.MissionNS
     /// </summary>
     public enum TransportPriority
     {
-        /// <summary>
-        /// 常规
-        /// </summary>
+        [LabelText("常规")]
         Normal = 0,
-        /// <summary>
-        /// 紧急
-        /// </summary>
+        [LabelText("紧急")]
         Urgency = 1,
-        /// <summary>
-        /// 备选
-        /// </summary>
+        [LabelText("备选")]
         Alternative = 2
     }
 }

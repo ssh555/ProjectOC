@@ -8,8 +8,8 @@ namespace ProjectOC.StoreNS
 {
     public class WorldStore : BuildingPart
     {
-        [SerializeField, ReadOnly]
-        protected string StoreID { get { return this.Store?.ID ?? ""; } }
+        //[SerializeField, ReadOnly]
+        //protected string StoreID { get { return this.Store?.ID ?? ""; } }
         [ShowInInspector, ReadOnly, SerializeField]
         public Store Store;
         public void SetStore(Store store)

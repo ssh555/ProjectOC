@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ProjectOC.MissionNS
@@ -15,6 +14,5 @@ namespace ProjectOC.MissionNS
         public void RemoveMissionTranport(MissionTransport mission);
         public bool PutIn(string itemID, int amount);
         public int PutOut(string itemID, int amount);
-        public int GetItemAmount(string itemID);
     }
 }

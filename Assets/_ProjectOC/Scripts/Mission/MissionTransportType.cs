@@ -1,3 +1,5 @@
+using Sirenix.OdinInspector;
+
 namespace ProjectOC.MissionNS
 {
     /// <summary>
@@ -9,18 +11,13 @@ namespace ProjectOC.MissionNS
     /// </summary>
     public enum MissionTransportType
     {
+        [LabelText("None")]
         None = 0,
-        /// <summary>
-        /// 生产节点到仓库
-        /// </summary>
-        ProductionNode_Store = 1,
-        /// <summary>
-        /// 仓库到生产节点
-        /// </summary>
-        Store_ProductionNode = 2,
-        /// <summary>
-        /// 外部到仓库
-        /// </summary>
+        [LabelText("生产节点到仓库")]
+        ProNode_Store = 1,
+        [LabelText("仓库到生产节点")]
+        Store_ProNode = 2,
+        [LabelText("外部到仓库")]
         Outside_Store = 3,
     }
 }

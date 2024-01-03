@@ -1,3 +1,4 @@
+using ML.Engine.Manager;
 using ML.Engine.Manager.LocalManager;
 using ML.Engine.Timer;
 using ProjectOC.StoreNS;
@@ -53,12 +54,12 @@ namespace ProjectOC.MissionNS
         private void InitiatorToStore(MissionTransport mission)
         {
             int missionNum = mission.NeedAssignNum;
-            Store store = StoreManager.Instance.GetStoreForStorage(mission.ItemID, missionNum);
-            Worker worker = WorkerManager.Instance.GetCanTransportWorker();
+            Store store = GameManager.Instance.GetLocalManager<StoreManager>()?.GetCanPutInStore(mission.ItemID, missionNum);
+            Worker worker = GameManager.Instance.GetLocalManager<WorkerManager>()?.GetCanTransportWorker();
             if (worker != null && store != null)
             {
                 Transport transport = new Transport(mission, mission.ItemID, missionNum, mission.Initiator, store, worker);
-                store.ReserveEmptyCapacityToWorker(mission.ItemID, missionNum);
+                store.ReserveEmptyToWorker(mission.ItemID, missionNum);
             }
         }
         /// <summary>
@@ -66,16 +67,16 @@ namespace ProjectOC.MissionNS
         /// </summary>
         private void StoreToInitiator(MissionTransport mission)
         {
-            List<Tuple<int, Store>> result = StoreManager.Instance.GetStoreForRetrieve(mission.ItemID, mission.NeedAssignNum);
-            foreach (var res in result)
+            Dictionary<Store, int> result = GameManager.Instance.GetLocalManager<StoreManager>()?.GetCanPutOutStore(mission.ItemID, mission.NeedAssignNum);
+            foreach (var kv in result)
             {
-                int missionNum = res.Item1;
-                Store store = res.Item2;
-                Worker worker = WorkerManager.Instance.GetCanTransportWorker();
+                Store store = kv.Key;
+                int missionNum = kv.Value;
+                Worker worker = GameManager.Instance.GetLocalManager<WorkerManager>()?.GetCanTransportWorker();
                 if (worker != null && store != null)
                 { 
                     Transport transport = new Transport(mission, mission.ItemID, missionNum, mission.Initiator, store, worker);
-                    store.ReserveStorageCapacityToWorker(mission.ItemID, missionNum);
+                    store.ReserveStorageToWorker(mission.ItemID, missionNum);
                 }
                 if (worker == null)
                 {
@@ -93,12 +94,12 @@ namespace ProjectOC.MissionNS
                 switch (mission.Type)
                 {
                     // ´æÈë²Ö¿â
-                    case MissionTransportType.ProductionNode_Store:
+                    case MissionTransportType.ProNode_Store:
                     case MissionTransportType.Outside_Store:
                         InitiatorToStore(mission);
                         break;
                     // È¡³ö²Ö¿â
-                    case MissionTransportType.Store_ProductionNode:
+                    case MissionTransportType.Store_ProNode:
                         StoreToInitiator(mission);
                         break;
                 }

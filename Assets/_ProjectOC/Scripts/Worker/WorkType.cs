@@ -1,3 +1,5 @@
+using Sirenix.OdinInspector;
+
 namespace ProjectOC.WorkerNS
 {
     /// <summary>
@@ -5,29 +7,19 @@ namespace ProjectOC.WorkerNS
     /// </summary>
     public enum WorkType
     {
-        /// <summary>
-        /// 烹饪
-        /// </summary>
-        Cook = 0,
-        /// <summary>
-        /// 手工
-        /// </summary>
-        HandCraft = 1,
-        /// <summary>
-        /// 重工
-        /// </summary>
-        Industry = 2,
-        /// <summary>
-        /// 科学
-        /// </summary>
-        Science = 3,
-        /// <summary>
-        /// 魔法
-        /// </summary>
-        Magic = 4,
-        /// <summary>
-        /// 搬运
-        /// </summary>
-        Transport = 5
+        [LabelText("None")]
+        None,
+        [LabelText("烹饪")]
+        Cook,
+        [LabelText("轻工")]
+        HandCraft,
+        [LabelText("精工")]
+        Industry,
+        [LabelText("术法")]
+        Magic,
+        [LabelText("搬运")]
+        Transport,
+        [LabelText("采集")]
+        Collect
     }
 }

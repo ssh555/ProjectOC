@@ -1,12 +1,9 @@
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
-using Newtonsoft.Json;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static ProjectOC.WorkerNS.SkillManager;
 
 namespace ProjectOC.WorkerNS
 {
@@ -19,6 +16,7 @@ namespace ProjectOC.WorkerNS
             FeatureTypeDict.Add(FeatureType.Buff, new List<string>());
             FeatureTypeDict.Add(FeatureType.Debuff, new List<string>());
             FeatureTypeDict.Add(FeatureType.None, new List<string>());
+            FeatureTypeDict.Add(FeatureType.Race, new List<string>());
         }
 
         private static FeatureManager instance;
@@ -38,29 +36,69 @@ namespace ProjectOC.WorkerNS
         }
         #endregion
 
-        private System.Random Random = new System.Random();
-        private Dictionary<FeatureType, List<string>> FeatureTypeDict = new Dictionary<FeatureType, List<string>>();
+        #region Load And Data
         /// <summary>
-        /// 基础Feature数据表
+        /// 是否已加载完数据
+        /// </summary>
+        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
+
+        private System.Random Random = new System.Random();
+
+        private Dictionary<FeatureType, List<string>> FeatureTypeDict = new Dictionary<FeatureType, List<string>>();
+        
+        /// <summary>
+        /// Feature数据表
         /// </summary>
         private Dictionary<string, FeatureTableJsonData> FeatureTableDict = new Dictionary<string, FeatureTableJsonData>();
 
-        /// <summary>
-        /// 是否是有效的ID
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public bool IsValidID(string id)
+        public const string Texture2DPath = "ui/Feature/texture2d";
+
+        [System.Serializable]
+        public struct FeatureTableJsonData
         {
-            return this.FeatureTableDict.ContainsKey(id);
+            public string ID;
+            public string IDExclude;
+            public int Sort;
+            public TextContent Name;
+            public string Icon;
+            public FeatureType Type;
+            public List<string> Effects;
+            public TextContent ItemDescription;
+            public TextContent EffectsDescription;
         }
-        public List<Feature> CreateFeatureForWorker()
+
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableJsonData[]> ABJAProcessor;
+
+        public void LoadTableData()
+        {
+            if (ABJAProcessor == null)
+            {
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableJsonData[]>("Json/TableData", "FeatureTableData", (datas) =>
+                {
+                    foreach (var data in datas)
+                    {
+                        this.FeatureTableDict.Add(data.ID, data);
+
+                        if (!FeatureTypeDict.ContainsKey(data.Type))
+                        {
+                            this.FeatureTypeDict.Add(data.Type, new List<string>());
+                        }
+                        this.FeatureTypeDict[data.Type].Add(data.ID);
+                    }
+                }, null, "隐兽Feature表数据");
+                ABJAProcessor.StartLoadJsonAssetData();
+            }
+        }
+        #endregion
+
+        #region Spawn
+        public List<Feature> CreateFeature()
         {
             // 特性上限在2-4个之间等概率随机
             int maxFeatureNum = this.Random.Next(2, 5);
-            return CreateFeatureForWorker(maxFeatureNum);
+            return CreateFeature(maxFeatureNum);
         }
-        public List<Feature> CreateFeatureForWorker(int maxFeatureNum)
+        public List<Feature> CreateFeature(int maxFeatureNum)
         {
             List<Feature> result = new List<Feature>();
             if (maxFeatureNum > 0 && maxFeatureNum < FeatureTableDict.Count)
@@ -86,30 +124,70 @@ namespace ProjectOC.WorkerNS
                         curSampleNum += 1;
                     }
                 }
-                result.Sort(new Feature.Sort());
+                result.Sort(new Feature.FeatureSort());
             }
             return result;
         }
         public Feature SpawnFeature(string id)
         {
-            if (FeatureTableDict.ContainsKey(id))
+            if (FeatureTableDict.TryGetValue(id, out FeatureTableJsonData row))
             {
-                FeatureTableJsonData row = this.FeatureTableDict[id];
                 Feature feature = new Feature(row);
                 return feature;
             }
-            Debug.LogError("没有对应ID为 " + id + " 的特征");
+            Debug.LogError("没有对应ID为 " + id + " 的Feature");
             return null;
         }
+        #endregion
+
+        #region Getter
+        public string[] GetAllFeatureID()
+        {
+            return FeatureTableDict.Keys.ToArray();
+        }
+
+        public bool IsValidID(string id)
+        {
+            return FeatureTableDict.ContainsKey(id);
+        }
+
+        public string GetIDExclude(string id)
+        {
+            if (!FeatureTableDict.ContainsKey(id))
+            {
+                return "";
+            }
+            return FeatureTableDict[id].IDExclude;
+        }
+
+        public int GetSort(string id)
+        {
+            if (!FeatureTableDict.ContainsKey(id))
+            {
+                return int.MaxValue;
+            }
+            return (int)FeatureTableDict[id].Type;
+        }
+
+        public string GetName(string id)
+        {
+            if (!FeatureTableDict.ContainsKey(id))
+            {
+                return "";
+            }
+            return FeatureTableDict[id].Name;
+        }
+
         public Texture2D GetTexture2D(string id)
         {
-            if (!this.FeatureTableDict.ContainsKey(id))
+            if (!FeatureTableDict.ContainsKey(id))
             {
                 return null;
             }
 
-            return GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>(this.FeatureTableDict[id].texture2d);
+            return GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>(FeatureTableDict[id].Icon);
         }
+
         public Sprite GetSprite(string id)
         {
             var tex = this.GetTexture2D(id);
@@ -120,43 +198,32 @@ namespace ProjectOC.WorkerNS
             return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
         }
 
-        #region to-do : 需读表导入所有所需的 Feature 数据
-        public const string Texture2DPath = "ui/Feature/texture2d";
-
-        [System.Serializable]
-        public struct FeatureTableJsonData
+        public FeatureType GetFeatureType(string id)
         {
-            public string id;
-            public string idExclude;
-            public int sort;
-            public TextContent name;
-            public string texture2d;
-            public FeatureType type;
-            public List<string> effectIDs;
-            public TextContent featureDescription;
-            public TextContent effectDescription;
-        }
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableJsonData[]> ABJAProcessor;
-
-        public void LoadTableData()
-        {
-            if (ABJAProcessor == null)
+            if (!FeatureTableDict.ContainsKey(id))
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableJsonData[]>("Json/TableData", "FeatureTableData", (datas) =>
-                {
-                    foreach (var data in datas)
-                    {
-                        this.FeatureTableDict.Add(data.id, data);
-                        if (!FeatureTypeDict.ContainsKey(data.type))
-                        {
-                            this.FeatureTypeDict.Add(data.type, new List<string>());
-                        }
-                        this.FeatureTypeDict[data.type].Add(data.id);
-                    }
-                }, null, "隐兽Feature表数据");
-                ABJAProcessor.StartLoadJsonAssetData();
+                return FeatureType.None;
             }
+            return FeatureTableDict[id].Type;
         }
-        #endregion
+
+        public string GetItemDescription(string id)
+        {
+            if (!FeatureTableDict.ContainsKey(id))
+            {
+                return "";
+            }
+            return FeatureTableDict[id].ItemDescription;
+        }
+
+        public string GetEffectsDescription(string id)
+        {
+            if (!FeatureTableDict.ContainsKey(id))
+            {
+                return "";
+            }
+            return FeatureTableDict[id].EffectsDescription;
+        }
+        #endregion        
     }
 }

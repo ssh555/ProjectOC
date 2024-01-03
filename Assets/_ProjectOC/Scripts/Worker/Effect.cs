@@ -2,28 +2,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ML.Engine.TextContent;
 
 namespace ProjectOC.WorkerNS
 {
     /// <summary>
-    /// 刁民属性效果
+    /// 刁民效果
     /// </summary>
     [System.Serializable]
     public class Effect
     {
         /// <summary>
-        /// ID Effects_效果名
+        /// ID
         /// </summary>
         public string ID;
-        /// <summary>
-        /// 效果名称
-        /// </summary>
-        public TextContent Name;
-        /// <summary>
-        /// 效果类型
-        /// </summary>
-        public EffectType Type;
         /// <summary>
         /// 效果参数1 string
         /// </summary>
@@ -36,139 +27,78 @@ namespace ProjectOC.WorkerNS
         /// 效果参数3 float
         /// </summary>
         public float ParamFloat;
+        #region 读表属性
         /// <summary>
-        /// 存储Set操作之前的数值，用于RemoveEffect
+        /// 效果名称
         /// </summary>
-        public string PreParamStr = "";
+        public string Name { get => EffectManager.Instance.GetName(ID); }
         /// <summary>
-        /// 存储Set操作之前的数值，用于RemoveEffect
+        /// 效果类型
         /// </summary>
-        public int PreParamInt;
-        /// <summary>
-        /// 存储Set操作之前的数值，用于RemoveEffect
-        /// </summary>
-        public float PreParamFloat;
+        public EffectType EffectType { get => EffectManager.Instance.GetEffectType(ID); }
+        #endregion
 
         public Effect(EffectManager.EffectTableJsonData config)
         {
-            this.ID = config.id;
-            this.Name = config.name;
-            this.Type = config.type;
-            this.ParamStr = config.paramStr;
-            this.ParamInt = config.paramInt;
-            this.ParamFloat = config.paramFloat;
-            this.PreParamStr = "";
-            this.PreParamInt = 0;
-            this.PreParamFloat = 0;
+            this.ID = config.ID;
+            this.ParamStr = config.Param1;
+            this.ParamInt = config.Param2;
+            this.ParamFloat = config.Param3;
         }
         public Effect(Effect effect)
         {
             this.ID = effect.ID;
-            this.Name = effect.Name;
-            this.Type = effect.Type;
             this.ParamStr = effect.ParamStr;
             this.ParamInt = effect.ParamInt;
             this.ParamFloat = effect.ParamFloat;
-            this.PreParamStr = effect.PreParamStr;
-            this.PreParamInt = effect.PreParamInt;
-            this.PreParamFloat = effect.PreParamFloat;
         }
 
-        public void ApplyEffectToWorker(Worker worker)
+        public void ApplyEffect(Worker worker)
         {
             if (worker == null)
             {
-                Debug.LogError($"Effect {this.ID} ApplyEffectToWorker Worker is Null");
+                Debug.LogError($"Effect {this.ID} Worker is Null");
                 return;
             }
             string workTypeStr;
             WorkType workType;
-            switch (this.Type)
+            switch (this.EffectType)
             {
-                case EffectType.Set_int_APMax:
-                    PreParamInt = ParamInt - worker.APMax;
+                case EffectType.AlterAPMax:
                     worker.APMax = ParamInt;
                     break;
-                case EffectType.Set_int_ExpRate_Cook:
-                case EffectType.Set_int_ExpRate_HandCraft:
-                case EffectType.Set_int_ExpRate_Industry:
-                case EffectType.Set_int_ExpRate_Science:
-                case EffectType.Set_int_ExpRate_Magic:
-                case EffectType.Set_int_ExpRate_Transport:
-                    workTypeStr = this.Type.ToString().Split('_')[3];
+
+                case EffectType.AlterExpRate_Cook:
+                case EffectType.AlterExpRate_HandCraft:
+                case EffectType.AlterExpRate_Industry:
+                case EffectType.AlterExpRate_Magic:
+                case EffectType.AlterExpRate_Transport:
+                case EffectType.AlterExpRate_Collect:
+                    workTypeStr = this.EffectType.ToString().Split('_')[1];
                     if (Enum.TryParse(workTypeStr, out workType))
                     {
-                        PreParamInt = ParamInt - worker.ExpRate[workType];
                         worker.ExpRate[workType] = ParamInt;
                     }
                     break;
 
-                case EffectType.Offset_float_WalkSpeed:
+                case EffectType.AlterWalkSpeed:
                     worker.WalkSpeed += ParamFloat;
                     break;
-                case EffectType.Offset_int_BURMax:
+
+                case EffectType.AlterBURMax:
                     worker.BURMax += ParamInt;
                     break;
-                case EffectType.Offset_int_Eff_Cook:
-                case EffectType.Offset_int_Eff_HandCraft:
-                case EffectType.Offset_int_Eff_Industry:
-                case EffectType.Offset_int_Eff_Science:
-                case EffectType.Offset_int_Eff_Magic:
-                case EffectType.Offset_int_Eff_Transport:
-                    workTypeStr = this.Type.ToString().Split('_')[3];
+
+                case EffectType.AlterEff_Cook:
+                case EffectType.AlterEff_HandCraft:
+                case EffectType.AlterEff_Industry:
+                case EffectType.AlterEff_Magic:
+                case EffectType.AlterEff_Transport:
+                case EffectType.AlterEff_Collect:
+                    workTypeStr = this.EffectType.ToString().Split('_')[1];
                     if (Enum.TryParse(workTypeStr, out workType))
                     {
                         worker.Eff[workType] += ParamInt;
-                    }
-                    break;
-            }
-        }
-        /// <summary>
-        /// TODO: 移除逻辑还需要和策划讨论
-        /// </summary>
-        /// <param name="worker"></param>
-        public void RemoveEffectToWorker(Worker worker)
-        {
-            if (worker == null)
-            {
-                Debug.LogError($"Effect {this.ID} RemoveEffectToWorker Worker is Null");
-                return;
-            }
-            string workTypeStr;
-            WorkType workType;
-            switch (this.Type)
-            {
-                case EffectType.Set_int_APMax:
-                    worker.APMax -= PreParamInt;
-                    break;
-                case EffectType.Offset_float_WalkSpeed:
-                    worker.WalkSpeed -= ParamFloat;
-                    break;
-                case EffectType.Offset_int_BURMax:
-                    worker.BURMax -= ParamInt;
-                    break;
-                case EffectType.Offset_int_Eff_Cook:
-                case EffectType.Offset_int_Eff_HandCraft:
-                case EffectType.Offset_int_Eff_Industry:
-                case EffectType.Offset_int_Eff_Science:
-                case EffectType.Offset_int_Eff_Magic:
-                case EffectType.Offset_int_Eff_Transport:
-                    workTypeStr = this.Type.ToString().Split('_')[3];
-                    if (Enum.TryParse(workTypeStr, out workType))
-                    {
-                        worker.Eff[workType] -= ParamInt;
-                    }
-                    break;
-                case EffectType.Set_int_ExpRate_Cook:
-                case EffectType.Set_int_ExpRate_HandCraft:
-                case EffectType.Set_int_ExpRate_Industry:
-                case EffectType.Set_int_ExpRate_Science:
-                case EffectType.Set_int_ExpRate_Magic:
-                case EffectType.Set_int_ExpRate_Transport:
-                    workTypeStr = this.Type.ToString().Split('_')[3];
-                    if (Enum.TryParse(workTypeStr, out workType))
-                    {
-                        worker.ExpRate[workType] -= PreParamInt;
                     }
                     break;
             }
