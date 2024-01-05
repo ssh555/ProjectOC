@@ -41,7 +41,7 @@ namespace ML.Engine.Timer
 
         private bool _isStoped = false;
         /// <summary>
-        ///  «∑Ò «∑Ò‘›Õ£¡À
+        ///  «∑Ò‘›Õ£
         /// </summary>
         public bool IsStoped { get => this._isStoped; 
             private set

@@ -87,7 +87,7 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
         public void RefreshPreviewPanel()
         {
             // Preview : None
-            if(!ItemSpawner.Instance.IsValidItemID(this.ID))
+            if(!ItemManager.Instance.IsValidItemID(this.ID))
             {
                 this.previewContainer.gameObject.SetActive(false);
                 this.RefreshFormulaContainer(null);
@@ -96,15 +96,15 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
                 return;
             }
             // PreViewContainer
-            this.previewContainer.GetChild(0).GetComponent<Image>().sprite = ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.GetCompositonSprite(this._id);
-            this.previewContainer.GetChild(1).GetComponent<Text>().text = ItemSpawner.Instance.GetItemName(this.ID) + "   Own: " + this.Owner.Owner.ResourceInventory.GetItemAllNum(this.ID);
+            this.previewContainer.GetChild(0).GetComponent<Image>().sprite = ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.GetCompositonSprite(this._id);
+            this.previewContainer.GetChild(1).GetComponent<Text>().text = ItemManager.Instance.GetItemName(this.ID) + "   Own: " + this.Owner.Owner.ResourceInventory.GetItemAllNum(this.ID);
             this.previewContainer.gameObject.SetActive(true);
 
             // FormulaContainer
-            this.RefreshFormulaContainer(ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.GetCompositonFomula(this.ID));
+            this.RefreshFormulaContainer(ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.GetCompositonFomula(this.ID));
 
             // UsageContainer
-            this.RefreshUsageContainer(ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.GetCompositionUsage(this.ID));
+            this.RefreshUsageContainer(ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.GetCompositionUsage(this.ID));
 
             // ButtonContainer
             this.RefreshButtonContainer();

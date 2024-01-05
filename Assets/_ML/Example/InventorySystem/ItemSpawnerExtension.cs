@@ -14,7 +14,7 @@ namespace ML.Example.InventorySystem
         /// </summary>
         /// <param name="uIItem"></param>
         /// <param name="item"></param>
-        public static void InitUIItem(this ItemSpawner itemSpawner, UIItem uIItem, int ItemIndex)
+        public static void InitUIItem(this ItemManager itemSpawner, UIItem uIItem, int ItemIndex)
         {
             uIItem.ItemIndex = ItemIndex;
             uIItem.Init();

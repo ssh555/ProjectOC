@@ -199,6 +199,9 @@ namespace ML.Engine.FSM
             }
         }
 
+        /// <summary>
+        /// ÖØÖÃµ±Ç°×´Ì¬
+        /// </summary>
         public void ResetCurrentState()
         {
             _currentState.InvokeExitAction(this, _currentState);

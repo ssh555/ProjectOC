@@ -282,10 +282,19 @@ namespace ML.Engine.BuildingSystem
         #region BPartPrefab
         private Dictionary<BuildingPartClassification, IBuildingPart> registeredBPart = new Dictionary<BuildingPartClassification, IBuildingPart>();
 
+        /// <summary>
+        /// 当前允许放置生成的建筑物数量
+        /// </summary>
+        /// <returns></returns>
         public int GetRegisterBPartCount()
         {
             return registeredBPart.Count;
         }
+        /// <summary>
+        /// 是否是合法的建筑物ID -> 必须是已经注册的建筑物，未注册但是依旧合法的建筑物ID仍然返回fasle
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public bool IsValidBPartID(string id)
         {
             BuildingPartClassification classification = new BuildingPartClassification(id);
@@ -376,14 +385,19 @@ namespace ML.Engine.BuildingSystem
 
 
         /// <summary>
-        /// 获得一个复制的实例
+        /// 若BPart可以复制，则获得一个复制的实例
+        /// 若不可以复制，则直接返回BPart
         /// </summary>
         /// <param name="BPart"></param>
         /// <returns></returns>
         public IBuildingPart GetOneBPartCopyInstance(IBuildingPart BPart)
         {
-            BPart.Mode = BuildingMode.None;
-            return GameObject.Instantiate<GameObject>(BPart.gameObject).GetComponent<IBuildingPart>();
+            if(BPart.GetCanCopy())
+            {
+                BPart.Mode = BuildingMode.None;
+                return GameObject.Instantiate<GameObject>(BPart.gameObject).GetComponent<IBuildingPart>();
+            }
+            return BPart;
         }
         
         

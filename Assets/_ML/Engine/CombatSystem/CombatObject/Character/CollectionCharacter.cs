@@ -33,7 +33,7 @@ namespace ML.Engine.CombatSystem.CombatObject.Character
         /// <returns>返回值为null 表示没有掉落物生成</returns>
         public ML.Engine.InventorySystem.Item TryGetDroppedItem()
         {
-            return Random.value <= probabilty ? ML.Engine.InventorySystem.ItemSpawner.Instance.SpawnItem(this.id) : null;
+            return Random.value <= probabilty ? ML.Engine.InventorySystem.ItemManager.Instance.SpawnItem(this.id) : null;
         }
     }
 
@@ -200,7 +200,7 @@ namespace ML.Engine.CombatSystem.CombatObject.Character
                 ML.Engine.InventorySystem.Item item = drop.TryGetDroppedItem();
                 if (item != null)
                 {
-                    ML.Engine.InventorySystem.ItemSpawner.Instance.SpawnWorldItem(item, this.transform.position, this.transform.rotation);
+                    ML.Engine.InventorySystem.ItemManager.Instance.SpawnWorldItem(item, this.transform.position, this.transform.rotation);
                 }
             }
         }

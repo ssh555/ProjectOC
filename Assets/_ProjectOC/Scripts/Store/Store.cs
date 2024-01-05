@@ -77,7 +77,7 @@ namespace ProjectOC.StoreNS
                         for (int i = 0; i <  StoreCapacity - newStoreCapacity; i++)
                         {
                             StoreData storeData = this.StoreDatas[this.StoreDatas.Count - 1];
-                            if (ItemSpawner.Instance.IsValidItemID(storeData.ItemID) && storeData.StorageAll > 0)
+                            if (ItemManager.Instance.IsValidItemID(storeData.ItemID) && storeData.StorageAll > 0)
                             {
                                 temp.Add(new StoreItem(storeData.ItemID, storeData.StorageAll));
                             }

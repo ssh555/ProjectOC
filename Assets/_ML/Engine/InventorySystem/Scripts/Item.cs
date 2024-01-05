@@ -24,7 +24,7 @@ namespace ML.Engine.InventorySystem
         /// <summary>
         /// 总重量
         /// </summary>
-        public int Weight {get { return ItemSpawner.Instance.GetWeight(ID) * Amount; }}
+        public int Weight {get { return ItemManager.Instance.GetWeight(ID) * Amount; }}
         /// <summary>
         /// 所属 Inventory
         /// </summary>
@@ -41,7 +41,7 @@ namespace ML.Engine.InventorySystem
             get => amount;
             set
             {
-                amount = Math.Clamp(value, 0, ItemSpawner.Instance.GetMaxAmount(ID));
+                amount = Math.Clamp(value, 0, ItemManager.Instance.GetMaxAmount(ID));
                 if (amount == 0)
                     this.OnAmountToZero?.Invoke(this.OwnInventory, this);
             }
@@ -53,7 +53,7 @@ namespace ML.Engine.InventorySystem
         {
             get
             {
-                return this.Amount == ItemSpawner.Instance.GetMaxAmount(ID);
+                return this.Amount == ItemManager.Instance.GetMaxAmount(ID);
             }
         }
 
@@ -63,7 +63,7 @@ namespace ML.Engine.InventorySystem
         public event Action<IInventory, Item> OnAmountToZero;
         #endregion
 
-        public Item(string ID, ItemSpawner.ItemTableJsonData config, int initAmount)
+        public Item(string ID, ItemManager.ItemTableJsonData config, int initAmount)
         {
             this.ID = ID;
 
@@ -92,7 +92,7 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public bool CanUse()
         {
-            switch (ItemSpawner.Instance.GetItemType(ID))
+            switch (ItemManager.Instance.GetItemType(ID))
             {
                 case ItemType.Equip:
                 case ItemType.Food:
@@ -111,7 +111,7 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public bool CanDrop()
         {
-            switch (ItemSpawner.Instance.GetItemType(ID))
+            switch (ItemManager.Instance.GetItemType(ID))
             {
                 case ItemType.Equip:
                 case ItemType.Food:
@@ -130,7 +130,7 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public bool CanDestroy()
         {
-            switch (ItemSpawner.Instance.GetItemType(ID))
+            switch (ItemManager.Instance.GetItemType(ID))
             {
                 case ItemType.Equip:
                 case ItemType.Food:
@@ -210,8 +210,8 @@ namespace ML.Engine.InventorySystem
                 {
                     return -1;
                 }
-                var xs = ItemSpawner.Instance.GetSortNum(x.ID);
-                var ys = ItemSpawner.Instance.GetSortNum(y.ID);
+                var xs = ItemManager.Instance.GetSortNum(x.ID);
+                var ys = ItemManager.Instance.GetSortNum(y.ID);
                 if (xs != ys)
                 {
                     return xs.CompareTo(ys);

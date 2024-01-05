@@ -81,7 +81,7 @@ namespace ML.Engine.InventorySystem
                 else if (this.itemList[i].ID == item.ID && !IsFillToNullItem && !this.itemList[i].IsFillUp)
                 {
                     // 能完全装下
-                    if (this.itemList[i].Amount + item.Amount <= ItemSpawner.Instance.GetMaxAmount(this.itemList[i].ID))
+                    if (this.itemList[i].Amount + item.Amount <= ItemManager.Instance.GetMaxAmount(this.itemList[i].ID))
                     {
                         this.itemList[i].Amount += item.Amount;
                         this.OnItemListChanged?.Invoke(this);
@@ -90,8 +90,8 @@ namespace ML.Engine.InventorySystem
                     // 不能完全装下
                     else
                     {
-                        int delta = ItemSpawner.Instance.GetMaxAmount(this.itemList[i].ID) - this.itemList[i].Amount;
-                        this.itemList[i].Amount = ItemSpawner.Instance.GetMaxAmount(this.itemList[i].ID);
+                        int delta = ItemManager.Instance.GetMaxAmount(this.itemList[i].ID) - this.itemList[i].Amount;
+                        this.itemList[i].Amount = ItemManager.Instance.GetMaxAmount(this.itemList[i].ID);
                         item.Amount -= delta;
                         continue;
                     }
@@ -145,7 +145,7 @@ namespace ML.Engine.InventorySystem
             if (item == null || item.OwnInventory != this || amount <= 0)
                 return null;
 
-            if (!ItemSpawner.Instance.GetCanStack(item.ID) && amount == 1)
+            if (!ItemManager.Instance.GetCanStack(item.ID) && amount == 1)
             {
                 if (this.RemoveItem(item))
                 {
@@ -157,7 +157,7 @@ namespace ML.Engine.InventorySystem
             {
                 if (this.itemList[i] == item)
                 {
-                    Item ans = ItemSpawner.Instance.SpawnItem(item.ID);
+                    Item ans = ItemManager.Instance.SpawnItem(item.ID);
                     ans.Amount = Mathf.Min(amount, item.Amount);
 
                     item.Amount -= amount;
@@ -215,7 +215,7 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public bool BinarySplitItem(Item item)
         {
-            if(item == null || !ItemSpawner.Instance.GetCanStack(item.ID) || item.Amount < 2 || this.Size >= this.MaxSize || item.OwnInventory != this)
+            if(item == null || !ItemManager.Instance.GetCanStack(item.ID) || item.Amount < 2 || this.Size >= this.MaxSize || item.OwnInventory != this)
             {
                 return false;
             }
@@ -227,7 +227,7 @@ namespace ML.Engine.InventorySystem
                     int amount = item.Amount / 2;
                     item.Amount -= amount;
 
-                    Item item1 = ItemSpawner.Instance.SpawnItem(item.ID);
+                    Item item1 = ItemManager.Instance.SpawnItem(item.ID);
                     item1.Amount = amount;
                     this.AddItem(item1, true);
                     return true;
