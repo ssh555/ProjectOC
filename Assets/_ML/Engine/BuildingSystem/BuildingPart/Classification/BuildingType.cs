@@ -29,5 +29,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		CeilingLamp = 100,
 		[LabelText("椅子")]
 		Chair = 101,
+		[LabelText("挂钟")]
+		Clock = 102,
 	}
 }

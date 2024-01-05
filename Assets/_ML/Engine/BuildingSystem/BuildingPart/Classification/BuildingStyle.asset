@@ -36,3 +36,6 @@ MonoBehaviour:
   - name: Quagrant
     displayName: "\u56DB\u65B9\u5706\u5F62"
     value: 
+  - name: BaseCorner
+    displayName: "\u65B9\u5F62\u8F6C\u89D2"
+    value: 

@@ -31,5 +31,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 		FoundationEdge = 1 << 9,
 		[LabelText("地板下")]
 		UnderFloor = 1 << 10,
+		[LabelText("墙面")]
+		WallSpace = 1 << 11,
 	}
 }

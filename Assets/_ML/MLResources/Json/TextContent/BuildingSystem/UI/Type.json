@@ -76,6 +76,13 @@
                 "Chinese" : "椅子",
                 "English" : "Chair"
             }
+        },
+        {
+            "type" : "Clock",
+            "name" : {
+                "Chinese" : "挂钟",
+                "English" : "Clock"
+            }
         }
 
     ]

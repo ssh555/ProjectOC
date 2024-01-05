@@ -60,3 +60,6 @@ MonoBehaviour:
   - name: Chair
     displayName: "\u6905\u5B50"
     value: 101
+  - name: Clock
+    displayName: "\u6302\u949F"
+    value: 102

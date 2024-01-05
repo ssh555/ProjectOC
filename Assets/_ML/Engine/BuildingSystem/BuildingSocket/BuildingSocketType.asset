@@ -64,8 +64,8 @@ MonoBehaviour:
   - name: UnderFloor
     displayName: "\u5730\u677F\u4E0B"
     value: 
-  - name: 
-    displayName: 
+  - name: WallSpace
+    displayName: "\u5899\u9762"
     value: 
   - name: 
     displayName: 

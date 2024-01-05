@@ -66,8 +66,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 2
-  InTakeType: 118
+  Type: 64
+  InTakeType: 0
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
@@ -183,8 +183,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.99, y: 1.9899999, z: 1.99}
-  m_Center: {x: 0, y: 0.99999994, z: 0}
+  m_Size: {x: 0.99, y: 1.9899999, z: 0.99}
+  m_Center: {x: -0.5, y: 0.99999994, z: 0.5}
 --- !u!114 &6127935814033006376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,8 +274,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 2
-  InTakeType: 118
+  Type: 64
+  InTakeType: 0
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
@@ -346,8 +346,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 2
-  InTakeType: 118
+  Type: 64
+  InTakeType: 0
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
@@ -418,8 +418,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 2
-  InTakeType: 118
+  Type: 64
+  InTakeType: 0
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
@@ -490,8 +490,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 2
-  InTakeType: 118
+  Type: 64
+  InTakeType: 0
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
