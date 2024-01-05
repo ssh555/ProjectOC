@@ -36,7 +36,13 @@ namespace ML.Engine.ABResources
         /// </summary>
         public T Datas;
 
+        /// <summary>
+        /// AB包路径
+        /// </summary>
         public readonly string ABPath;
+        /// <summary>
+        /// AB包资产名称
+        /// </summary>
         public readonly string ABName;
         private readonly OnLoadOver onLoadOver;
         private readonly LoadStartCondition condition;
@@ -91,7 +97,7 @@ namespace ML.Engine.ABResources
             yield return request;
 
             Datas = JsonConvert.DeserializeObject<T>((request.asset as TextAsset).text);
-
+            
             IsLoaded = true;
 
             this.onLoadOver?.Invoke(Datas);

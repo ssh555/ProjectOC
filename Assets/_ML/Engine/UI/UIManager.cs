@@ -17,7 +17,7 @@ namespace ML.Engine.UI
         /// </summary>
         public UIBasePanel PopPanel()
         {
-            //最底层UI->start无法移除
+            // 最底层UI->start无法移除
             if (panelStack.Count < 2)
             {
                 return null;
@@ -49,7 +49,6 @@ namespace ML.Engine.UI
         /// 当UI栈数量为0或1时，可以更改最底层UIPanel，只能通过此函数将最底层UIPanel出栈
         /// 但栈为空时，可以通过PushPanel压入最底层的UIPanel
         /// </summary>
-        /// <returns></returns>
         public bool ChangeBotUIPanel(UIBasePanel panel)
         {
             if(this.panelStack.Count > 2)

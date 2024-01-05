@@ -56,12 +56,12 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public bool AddItem(Item item)
         {
-            if (this.Size >= this.MaxSize || item == null || !ItemSpawner.Instance.IsValidItemID(item.ID))
+            if (this.Size >= this.MaxSize || item == null || !ItemManager.Instance.IsValidItemID(item.ID))
             {
                 return false;
             }
             // 不可以堆叠
-            if(!ItemSpawner.Instance.GetCanStack(item.ID))
+            if(!ItemManager.Instance.GetCanStack(item.ID))
             {
                 this.itemList.Add(item);
             }
@@ -72,7 +72,7 @@ namespace ML.Engine.InventorySystem
                 // 寻找合适格子装入
                 if (it != null)
                 {
-                    var ma = ItemSpawner.Instance.GetMaxAmount(it.ID);
+                    var ma = ItemManager.Instance.GetMaxAmount(it.ID);
                     // 没有达到数量上限
                     if (it.Amount + item.Amount <= ma)
                     {
@@ -152,7 +152,7 @@ namespace ML.Engine.InventorySystem
             {
                 it.Amount -= amount;
                 this.OnItemListChanged?.Invoke(this);
-                var res = ItemSpawner.Instance.SpawnItem(item.ID);
+                var res = ItemManager.Instance.SpawnItem(item.ID);
                 res.Amount = amount;
                 return res;
             }
@@ -198,8 +198,8 @@ namespace ML.Engine.InventorySystem
         {
             this.itemList.Sort((a, b) =>
             {
-                var sa = ItemSpawner.Instance.GetSortNum(a.ID);
-                var sb = ItemSpawner.Instance.GetSortNum(b.ID);
+                var sa = ItemManager.Instance.GetSortNum(a.ID);
+                var sb = ItemManager.Instance.GetSortNum(b.ID);
                 return IsDesc ? sb.CompareTo(sa) : sa.CompareTo(sb);
             });
             this.OnItemListChanged?.Invoke(this);
@@ -207,7 +207,7 @@ namespace ML.Engine.InventorySystem
 
         public void UseItem(string itemID, int amount = 1)
         {
-            if (!ItemSpawner.Instance.IsValidItemID(itemID))
+            if (!ItemManager.Instance.IsValidItemID(itemID))
             {
                 return;
             }
@@ -227,7 +227,7 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public int GetItemAllNum(string id)
         {
-            if (!ItemSpawner.Instance.IsValidItemID(id))
+            if (!ItemManager.Instance.IsValidItemID(id))
             {
                 return 0;
             }

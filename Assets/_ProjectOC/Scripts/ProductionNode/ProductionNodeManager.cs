@@ -6,7 +6,7 @@ using System;
 using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ProjectOC.WorkerNS;
-using static ML.Engine.InventorySystem.CompositeSystem.CompositeSystem;
+using static ML.Engine.InventorySystem.CompositeSystem.CompositeManager;
 
 namespace ProjectOC.ProductionNodeNS
 {

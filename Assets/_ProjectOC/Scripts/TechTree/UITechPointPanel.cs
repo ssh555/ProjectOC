@@ -700,13 +700,13 @@ namespace ProjectOC.TechTree.UI
                     this.TPUnlockGO.Add(id, unlock);
 
                     // Image
-                    var s = CompositeSystem.Instance.GetCompositonSprite(id);
+                    var s = CompositeManager.Instance.GetCompositonSprite(id);
                     tempSprite.Add(s);
                     unlock.GetComponentInChildren<Image>().sprite = s;
                 }
 
                 // Text
-                unlock.GetComponentInChildren<TextMeshProUGUI>().text = CompositeSystem.Instance.GetCompositonName(id);
+                unlock.GetComponentInChildren<TextMeshProUGUI>().text = CompositeManager.Instance.GetCompositonName(id);
             }
             
             // Ãæ°å×´Ì¬
@@ -739,7 +739,7 @@ namespace ProjectOC.TechTree.UI
                         this.TPCItemGO.Add(f.id, item);
 
                         // Image
-                        var s = ItemSpawner.Instance.GetItemSprite(f.id);
+                        var s = ItemManager.Instance.GetItemSprite(f.id);
                         tempSprite.Add(s);
                         item.transform.Find("Image").GetComponent<Image>().sprite = s;
                     }
@@ -748,7 +748,7 @@ namespace ProjectOC.TechTree.UI
                     item.transform.Find("Image").Find("Num").GetComponent<TextMeshProUGUI>().text = f.num.ToString();
 
                     // Name
-                    item.transform.Find("Name").GetComponent<TextMeshProUGUI>().text = ItemSpawner.Instance.GetItemName(f.id);
+                    item.transform.Find("Name").GetComponent<TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(f.id);
                 }
             }
             // ÒÑ½âËø

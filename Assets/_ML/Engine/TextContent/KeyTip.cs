@@ -26,6 +26,7 @@ namespace ML.Engine.TextContent
             return "";
         }
     }
+
     [System.Serializable]
     public struct KeyTip
     {

@@ -252,7 +252,7 @@ namespace ML.Example.InventorySystem
         {
             // 一次性合成
             IComposition ret;
-            ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.Composite(this.ResourceInventory, compositonID, out ret);
+            ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.Composite(this.ResourceInventory, compositonID, out ret);
 
             if(ret is Item)
             {
@@ -269,7 +269,7 @@ namespace ML.Example.InventorySystem
             // 移除消耗的资源
             lock (this.inventory)
             {
-                foreach (var formula in ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.GetCompositonFomula(compositonID))
+                foreach (var formula in ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.GetCompositonFomula(compositonID))
                 {
                     this.inventory.RemoveItem(formula.id, formula.num);
                 }

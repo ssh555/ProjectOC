@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static ML.Engine.InventorySystem.CompositeSystem.CompositeSystem;
+using static ML.Engine.InventorySystem.CompositeSystem.CompositeManager;
 
 namespace ML.Engine.Level
 {
