@@ -15,21 +15,15 @@ namespace ML.Engine.BuildingSystem
 {
 
 
-    public class Test_BuildingManager : MonoBehaviour
+    public class MonoBuildingManager : MonoBehaviour
     {
-        public static Test_BuildingManager Instance;
+        public static MonoBuildingManager Instance;
         public BuildingManager BM;
         private int IsInit = 5;
+        /// <summary>
+        /// 是否初始化完成所有数据的载入
+        /// </summary>
         public bool IsLoadOvered => IsInit == 0;
-
-        #region Config
-        [LabelText("语言"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
-        public Config.Language language = Config.Language.Chinese;
-        [LabelText("平台"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
-        public Config.Platform platform = Config.Platform.Windows;
-        [LabelText("输入设备"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
-        public Config.InputDevice inputDevice = Config.InputDevice.Keyboard;
-        #endregion
 
 
         #region TextContent
@@ -38,10 +32,11 @@ namespace ML.Engine.BuildingSystem
         #endregion
 
         #region Category|Type
-        public Dictionary<string, TextContent.TextTip> CategoryDict = new Dictionary<string, TextContent.TextTip>();
-        public Dictionary<string, TextContent.TextTip> TypeDict = new Dictionary<string, TextContent.TextTip>();
+        public Dictionary<string, TextContent.TextTip> Category1Dict = new Dictionary<string, TextContent.TextTip>();
+        public Dictionary<string, TextContent.TextTip> Category2Dict = new Dictionary<string, TextContent.TextTip>();
 
         #endregion
+       
         public static bool IsLoading = false;
 
         public void InitUITextContents()
@@ -63,7 +58,7 @@ namespace ML.Engine.BuildingSystem
                 {
                     foreach (var category in datas)
                     {
-                        this.CategoryDict.Add(category.name, category);
+                        this.Category1Dict.Add(category.name, category);
                     }
                     IsInit--;
                 }, null, "建造系统Category1");
@@ -73,7 +68,7 @@ namespace ML.Engine.BuildingSystem
                 {
                     foreach (var type in datas)
                     {
-                        this.TypeDict.Add(type.name, type);
+                        this.Category2Dict.Add(type.name, type);
                     }
                     IsInit--;
                 }, null, "建造系统Category2");

@@ -6,8 +6,8 @@ using ProjectOC.TechTree.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static ML.Engine.BuildingSystem.Test_BuildingManager;
-using static ProjectOC.ProNodeNS.ProNodeManager;
+using static ML.Engine.BuildingSystem.MonoBuildingManager;
+using static ProjectOC.ProductionNodeNS.ProductionNodeManager;
 
 namespace ProjectOC.Player.UI
 {
@@ -67,13 +67,13 @@ namespace ProjectOC.Player.UI
             this.EnterInventoryBtn = btnList.Find("EnterInventory").GetComponent<SelectedButton>();
             this.EnterInventoryBtn.OnInteract += () =>
             {
-                var panel = GameObject.Instantiate(uIInfiniteInventory);
-                panel.transform.SetParent(this.transform.parent, false);
+                // 实例化
+                var panel = GameObject.Instantiate(uIInfiniteInventory, this.transform.parent, false);
+
+                // 初始化
                 panel.inventory = this.player.Inventory as ML.Engine.InventorySystem.InfiniteInventory;
 
-
-
-
+                // Push
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
             };
 

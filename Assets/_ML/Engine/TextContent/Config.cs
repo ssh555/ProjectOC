@@ -26,11 +26,11 @@ namespace ML.Engine.TextContent
         }
 
         [SerializeField]
-        public static Language language => Test_BuildingManager.Instance.language;
+        public static Language language => Manager.GameManager.Instance.language;
         [SerializeField]
-        public static Platform platform => Test_BuildingManager.Instance.platform;
+        public static Platform platform => Manager.GameManager.Instance.platform;
         [SerializeField]
-        public static InputDevice inputDevice => Test_BuildingManager.Instance.inputDevice;
+        public static InputDevice inputDevice => Manager.GameManager.Instance.inputDevice;
     }
 
 }

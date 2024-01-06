@@ -4,23 +4,23 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static ML.Engine.InventorySystem.ItemSpawner;
+using static ML.Engine.InventorySystem.ItemManager;
 
 namespace ML.Engine.InventorySystem.CompositeSystem
 {
-    public sealed class CompositeSystem : Manager.GlobalManager.IGlobalManager
+    public sealed class CompositeManager : Manager.GlobalManager.IGlobalManager
     {
-        private CompositeSystem() { }
+        private CompositeManager() { }
 
-        private static CompositeSystem instance;
+        private static CompositeManager instance;
 
-        public static CompositeSystem Instance
+        public static CompositeManager Instance
         {
             get
             {
                 if (instance == null)
                 {
-                    instance = new CompositeSystem();
+                    instance = new CompositeManager();
                     Manager.GameManager.Instance.RegisterGlobalManager(instance);
                 }
                 return instance;
@@ -172,9 +172,9 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             }
 
             // 是 Item
-            if (ItemSpawner.Instance.IsValidItemID(compositonID))
+            if (ItemManager.Instance.IsValidItemID(compositonID))
             {
-                Item item = ItemSpawner.Instance.SpawnItem(compositonID);
+                Item item = ItemManager.Instance.SpawnItem(compositonID);
                 item.Amount = this.CompositeData[compositonID].compositionnum;
                 composition = item as IComposition;
                 return CompositionObjectType.Item;
@@ -188,6 +188,12 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             return CompositionObjectType.Error;
         }
     
+        /// <summary>
+        /// 消耗Item 但不生成合成物
+        /// </summary>
+        /// <param name="resource"></param>
+        /// <param name="compositonID"></param>
+        /// <returns></returns>
         public bool OnlyCostResource(IInventory resource, string compositonID)
         {
             // 移除消耗的资源
@@ -231,7 +237,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
                 return null;
             }
 
-            return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(ItemSpawner.Texture2DPath).LoadAsset<Texture2D>(this.CompositeData[id].texture2d);
+            return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(ItemManager.Texture2DPath).LoadAsset<Texture2D>(this.CompositeData[id].texture2d);
         }
 
         public Sprite GetCompositonSprite(string id)

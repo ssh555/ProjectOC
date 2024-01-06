@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static ML.Engine.BuildingSystem.Test_BuildingManager;
+using static ML.Engine.BuildingSystem.MonoBuildingManager;
 
 namespace ML.Engine.BuildingSystem.UI
 {
@@ -23,28 +23,28 @@ namespace ML.Engine.BuildingSystem.UI
             keycom.root = keycoms.Find("KT_KeyCom") as RectTransform;
             keycom.img = keycom.root.Find("Image").GetComponent<Image>();
             keycom.keytip = keycom.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            keycom.ReWrite(Test_BuildingManager.Instance.KeyTipDict["keycom"]);
+            keycom.ReWrite(MonoBuildingManager.Instance.KeyTipDict["keycom"]);
 
             copymat = new UIKeyTip();
             copymat.root = keycoms.Find("KT_CopyMat") as RectTransform;
             copymat.img = copymat.root.Find("Image").GetComponent<Image>();
             copymat.keytip = copymat.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             copymat.description = copymat.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            copymat.ReWrite(Test_BuildingManager.Instance.KeyTipDict["copymat"]);
+            copymat.ReWrite(MonoBuildingManager.Instance.KeyTipDict["copymat"]);
 
             pastemat = new UIKeyTip();
             pastemat.root = keycoms.Find("KT_PasteMat") as RectTransform;
             pastemat.img = pastemat.root.Find("Image").GetComponent<Image>();
             pastemat.keytip = pastemat.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             pastemat.description = pastemat.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            pastemat.ReWrite(Test_BuildingManager.Instance.KeyTipDict["pastemat"]);
+            pastemat.ReWrite(MonoBuildingManager.Instance.KeyTipDict["pastemat"]);
 
             switchframe = new UIKeyTip();
             switchframe.root = keycoms.Find("KT_SwitchFrame") as RectTransform;
             switchframe.img = switchframe.root.Find("Image").GetComponent<Image>();
             switchframe.keytip = switchframe.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             switchframe.description = switchframe.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            switchframe.ReWrite(Test_BuildingManager.Instance.KeyTipDict["switchframe"]);
+            switchframe.ReWrite(MonoBuildingManager.Instance.KeyTipDict["switchframe"]);
         }
 
         public override void OnExit()

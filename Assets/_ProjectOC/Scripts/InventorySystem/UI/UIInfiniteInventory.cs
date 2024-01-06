@@ -126,11 +126,26 @@ namespace ProjectOC.InventorySystem.UI
         #endregion
 
         #region Internal
+        /// <summary>
+        /// 对应的逻辑背包
+        /// </summary>
         public ML.Engine.InventorySystem.InfiniteInventory inventory;
 
+        /// <summary>
+        /// UI显示的ItemType枚举
+        /// </summary>
         private ItemType[] ItemTypes;
+        /// <summary>
+        /// 当前选中的ItemTypes的Index
+        /// </summary>
         private int _currentItemTypeIndex = 0;
+        /// <summary>
+        /// 当前选中的ItemType
+        /// </summary>
         private ItemType CurrentItemType => ItemTypes[CurrentItemTypeIndex];
+        /// <summary>
+        /// 封装的ItemTypeIndex，便于在更新值时一并更新其他数据并Refresh
+        /// </summary>
         private int CurrentItemTypeIndex
         {
             get => _currentItemTypeIndex;
@@ -138,15 +153,26 @@ namespace ProjectOC.InventorySystem.UI
             {
                 _currentItemTypeIndex = value;
                 SelectedItems.Clear();
-                SelectedItems.AddRange(inventory.GetItemList().Where(item => ItemSpawner.Instance.GetItemType(item.ID) == CurrentItemType));
+                SelectedItems.AddRange(inventory.GetItemList().Where(item => ItemManager.Instance.GetItemType(item.ID) == CurrentItemType));
                 CurrentItemIndex = 0;
-                this.Refresh();
             }
         }
+        /// <summary>
+        /// UIPanel.Inventory区域控制处理的Item列表(根据选中的ItemType筛选出来的)
+        /// </summary>
         [ShowInInspector]
         private List<Item> SelectedItems = new List<Item>();
+        /// <summary>
+        /// 上一次选中的ItemIndex，用于移动滑动窗口
+        /// </summary>
         private int _lastItemIndex = 0;
+        /// <summary>
+        /// 当前选中的ItemIndex
+        /// </summary>
         private int _currentItemIndex = 0;
+        /// <summary>
+        /// 封装，方便更新数据和Refresh
+        /// </summary>
         private int CurrentItemIndex
         {
             get => _currentItemIndex;
@@ -197,11 +223,18 @@ namespace ProjectOC.InventorySystem.UI
                 this.Refresh();
             }
         }
+        /// <summary>
+        /// 当前选中的Item
+        /// </summary>
         private Item CurrentItem
         {
             get
             {
-                return SelectedItems[CurrentItemIndex];
+                if(CurrentItemIndex < SelectedItems.Count)
+                {
+                    return SelectedItems[CurrentItemIndex];
+                }
+                return null;
             }
         }
 
@@ -261,7 +294,7 @@ namespace ProjectOC.InventorySystem.UI
             SelectedItems.Remove(item);
             this.CurrentItemIndex = this.CurrentItemIndex;
             // 将Item生成为世界物体
-            ItemSpawner.Instance.SpawnWorldItem(item, this.inventory.Owner.position, this.inventory.Owner.rotation);
+            ItemManager.Instance.SpawnWorldItem(item, this.inventory.Owner.position, this.inventory.Owner.rotation);
         }
 
         public void DestroyItem()
@@ -382,27 +415,37 @@ namespace ProjectOC.InventorySystem.UI
         
         public void Refresh()
         {
+            // 加载完成JSON数据 & 查找完所有引用
             if(ABJAProcessor == null || !ABJAProcessor.IsLoaded || !IsInit)
             {
                 return;
             }
 
             #region TopTitle
+            // 更新标题文本
             this.TopTitleText.text = PanelTextContent.toptitle.GetText();
             #endregion
 
             #region ItemType
+            // 更新按键提示
             this.KT_LastTerm.ReWrite(PanelTextContent.lastterm);
             this.KT_NextTerm.ReWrite(PanelTextContent.nextterm);
+            // 刷新ItemType选择区域
             foreach(var itemtype in ItemTypes)
             {
+                // 对应的ItemType显示对象不存在，则实例化生成
                 if(!tempItemType.TryGetValue(itemtype, out var obj))
                 {
+                    // 实例化
                     obj = Instantiate(ItemTypeTemplate.gameObject, ItemTypeTemplate.parent, false);
+                    // 模板是false,需要设置为true
                     obj.SetActive(true);
+                    // 加入临时内存管理
                     tempItemType.Add(itemtype, obj);
+                    // 载入ItemType对应的Texture2D
                     var ab = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadLocalAB("UI/Inventory/Texture2D/ItemType");
                     var tex = ab.LoadAsset<Texture2D>(itemtype.ToString());
+                    // 创建Sprite并加入临时内存管理
                     if(tex != null)
                     {
                         var sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
@@ -410,18 +453,23 @@ namespace ProjectOC.InventorySystem.UI
                         tempSprite.Add(sprite);
                     }
                 }
+                
+                // 刷新显示文本
                 obj.transform.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.itemtype.FirstOrDefault(it => it.name == itemtype.ToString()).GetDescription();
-                var selected = obj.transform.Find("Selected").gameObject;
                 // 更新 Selected
+                var selected = obj.transform.Find("Selected").gameObject;
                 selected.SetActive(CurrentItemType == itemtype);
             }
 
+            // 强制刷新Layout布局
+            // Unity 底层不会自动更新，需要手动调用
             LayoutRebuilder.ForceRebuildLayoutImmediate(this.ItemTypeTemplate.parent.GetComponent<RectTransform>());
             #endregion
 
             #region Inventory
+            // 临时内存生成的UIItem数量(只增不减，多的隐藏掉即可) - 当前筛选出来的Item数量
             int delta = tempUIItems.Count - SelectedItems.Count;
-            // >0 => 有多余，隐藏
+            // > 0 => 有多余，隐藏
             if(delta > 0)
             {
                 for(int i = 0; i < delta; ++i)
@@ -429,7 +477,7 @@ namespace ProjectOC.InventorySystem.UI
                     tempUIItems[tempUIItems.Count - 1 - i].SetActive(false);
                 }
             }
-            // <0 => 不够， 增加
+            // < 0 => 不够， 增加
             else if (delta < 0)
             {
                 delta = -delta;
@@ -440,26 +488,32 @@ namespace ProjectOC.InventorySystem.UI
                 }
             }
 
+            // 用于更新滑动窗口
+            // 当前选中的UIItem
             GameObject cur = null;
+            // 上一个UIItem
             GameObject last = null;
 
+            // 遍历筛选的ItemList
             for (int i = 0; i < SelectedItems.Count; ++i)
             {
                 var item = tempUIItems[i];
                 // Active
                 item.SetActive(true);
-                // Icon
+                // 更新Icon
                 var img = item.transform.Find("Icon").GetComponent<Image>();
-                var sprite = tempSprite.Find(s => s.texture == ItemSpawner.Instance.GetItemTexture2D(SelectedItems[i].ID));
+                // 查找临时存储的Sprite
+                var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(SelectedItems[i].ID));
+                // 不存在则生成
                 if(sprite == null)
                 {
-                    sprite = ItemSpawner.Instance.GetItemSprite(SelectedItems[i].ID);
+                    sprite = ItemManager.Instance.GetItemSprite(SelectedItems[i].ID);
                     tempSprite.Add(sprite);
                 }
                 img.sprite = sprite;
                 // Amount
                 var amounttext = item.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
-                amounttext.gameObject.SetActive(ItemSpawner.Instance.GetCanStack(SelectedItems[i].ID));
+                amounttext.gameObject.SetActive(ItemManager.Instance.GetCanStack(SelectedItems[i].ID));
                 amounttext.text = SelectedItems[i].Amount.ToString();
                 // Selected
                 var selected = item.transform.Find("Selected");
@@ -504,6 +558,7 @@ namespace ProjectOC.InventorySystem.UI
                         break;
                     }
                 }
+                
                 // 当前激活的TP四个边点有一个不位于窗口内 -> 更新窗口滑动
                 if (!allCornersVisible)
                 {
@@ -523,7 +578,6 @@ namespace ProjectOC.InventorySystem.UI
                     normalizedPosition += new Vector2(offset.x / (contentRect.rect.width - (contentRect.parent as RectTransform).rect.width), offset.y / (contentRect.rect.height - (contentRect.parent as RectTransform).rect.height));
                     scrollRect.normalizedPosition = normalizedPosition;
                 }
-                #endregion
 
 
             }
@@ -531,26 +585,55 @@ namespace ProjectOC.InventorySystem.UI
             {
                 Inventory_GridLayout.transform.parent.parent.GetComponent<ScrollRect>().normalizedPosition = new Vector2(0, 1);
             }
+            #endregion
+            
             // 强制立即更新 GridLayoutGroup 的布局
             LayoutRebuilder.ForceRebuildLayoutImmediate(Inventory_GridLayout.GetComponent<RectTransform>());
             #endregion
 
             #region ItemInfo
-            Info_ItemName.text = ItemSpawner.Instance.GetItemName(CurrentItem.ID);
-            Info_ItemIcon.sprite = tempSprite.Find(s => s.texture == ItemSpawner.Instance.GetItemTexture2D(CurrentItem.ID));
-            Info_ItemWeight.text = PanelTextContent.weightprefix + ItemSpawner.Instance.GetWeight(CurrentItem.ID);
-            Info_ItemDescription.text = PanelTextContent.descriptionprefix + "\n" + ItemSpawner.Instance.GetItemDescription(CurrentItem.ID);
-            Info_ItemEffectDescription.text = PanelTextContent.effectdescriptionprefix + "\n" + ItemSpawner.Instance.GetEffectDescription(CurrentItem.ID);
+            if(CurrentItem != null)
+            {
+                // 显示ItemInfo
+                this.transform.Find("ItemInfo").gameObject.SetActive(true);
+                // 更新Item名称
+                Info_ItemName.text = ItemManager.Instance.GetItemName(CurrentItem.ID);
+                // 更新图标 => 必定是载入了的
+                Info_ItemIcon.sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(CurrentItem.ID));
+                // 更新单个重量: JsonText + Amount
+                Info_ItemWeight.text = PanelTextContent.weightprefix + ItemManager.Instance.GetWeight(CurrentItem.ID);
+
+                // 更新描述文本: JsonText + ItemDescription
+                Info_ItemDescription.text = PanelTextContent.descriptionprefix + "\n" + ItemManager.Instance.GetItemDescription(CurrentItem.ID);
+                // 强制更新布局 => 更新文本高度 -> 用于更新父物体的高度，适配UI显示
+                LayoutRebuilder.ForceRebuildLayoutImmediate(Info_ItemDescription.GetComponent<RectTransform>());
+                // 更新父物体的高度
+                Info_ItemDescription.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(Info_ItemDescription.transform.parent.GetComponent<RectTransform>().sizeDelta.x, Info_ItemDescription.GetComponent<RectTransform>().sizeDelta.y);
+
+
+                Info_ItemEffectDescription.text = PanelTextContent.effectdescriptionprefix + "\n" + ItemManager.Instance.GetEffectDescription(CurrentItem.ID);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(Info_ItemEffectDescription.GetComponent<RectTransform>());
+                Info_ItemEffectDescription.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(Info_ItemEffectDescription.transform.parent.GetComponent<RectTransform>().sizeDelta.x, Info_ItemEffectDescription.GetComponent<RectTransform>().sizeDelta.y);
+
+                LayoutRebuilder.ForceRebuildLayoutImmediate(Info_ItemEffectDescription.transform.parent.parent.GetComponent<RectTransform>());
+            }
+            else
+            {
+                this.transform.Find("ItemInfo").gameObject.SetActive(false);
+            }
             #endregion
 
             #region BotKeyTips
             KT_Use.ReWrite(PanelTextContent.use);
-            KT_Use.img.transform.parent.gameObject.SetActive(CurrentItem.CanUse());
             KT_Back.ReWrite(PanelTextContent.back);
             KT_Drop.ReWrite(PanelTextContent.drop);
-            KT_Drop.img.transform.parent.gameObject.SetActive(CurrentItem.CanDrop());
             KT_Destroy.ReWrite(PanelTextContent.destroy);
-            KT_Destroy.img.transform.parent.gameObject.SetActive(CurrentItem.CanDestroy());
+            if (CurrentItem != null)
+            {
+                KT_Use.img.transform.parent.gameObject.SetActive(CurrentItem.CanUse());
+                KT_Drop.img.transform.parent.gameObject.SetActive(CurrentItem.CanDrop());
+                KT_Destroy.img.transform.parent.gameObject.SetActive(CurrentItem.CanDestroy());
+            }
             #endregion
 
 
@@ -595,7 +678,7 @@ namespace ProjectOC.InventorySystem.UI
         [Button("生成测试文件")]
         void GenTESTFILE()
         {
-            List<ItemSpawner.ItemTableJsonData> datas = new List<ItemSpawner.ItemTableJsonData>();
+            List<ItemManager.ItemTableJsonData> datas = new List<ItemManager.ItemTableJsonData>();
 
             var itypes = Enum.GetValues(typeof(ML.Engine.InventorySystem.ItemType)).Cast<ML.Engine.InventorySystem.ItemType>().Where(e => (int)e > 0).ToArray();
             foreach(var itype in itypes)
@@ -603,7 +686,7 @@ namespace ProjectOC.InventorySystem.UI
                 int cnt = UnityEngine.Random.Range(50, 100);
                 for(int i = 0; i < cnt; ++i)
                 {
-                    var data = new ItemSpawner.ItemTableJsonData();
+                    var data = new ItemManager.ItemTableJsonData();
                     // id
                     data.ID = itype.ToString() + "_" + i;
                     // name

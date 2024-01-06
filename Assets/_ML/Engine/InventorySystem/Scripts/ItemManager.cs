@@ -10,20 +10,20 @@ namespace ML.Engine.InventorySystem
     /// <summary>
     /// 没有以 Manager 为后缀，是懒得改其他地方了，太多了
     /// </summary>
-    public sealed class ItemSpawner : Manager.GlobalManager.IGlobalManager
+    public sealed class ItemManager : Manager.GlobalManager.IGlobalManager
     {
         #region Instance
-        private ItemSpawner() { }
+        private ItemManager() { }
 
-        private static ItemSpawner instance;
+        private static ItemManager instance;
 
-        public static ItemSpawner Instance
+        public static ItemManager Instance
         {
             get
             {
                 if (instance == null)
                 {
-                    instance = new ItemSpawner();
+                    instance = new ItemManager();
                     Manager.GameManager.Instance.RegisterGlobalManager(instance);
                 }
                 return instance;
@@ -67,6 +67,9 @@ namespace ML.Engine.InventorySystem
             // TODO: 修改为TextContent
             public string EffectsDescription;
             public string type;
+            public int sort;
+            public ItemType itemtype;
+            public int weight;
             public bool bcanstack;
             public int maxamount;
             public string worldobject;

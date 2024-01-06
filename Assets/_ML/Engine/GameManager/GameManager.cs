@@ -1,4 +1,6 @@
+using ML.Engine.TextContent;
 using ML.Engine.Utility;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -412,6 +414,17 @@ namespace ML.Engine.Manager
             this.CounterDownTimerManager.TimeScale = rate;
         }
 
+        #endregion
+
+
+
+        #region Config
+        [LabelText("语言"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
+        public Config.Language language = Config.Language.Chinese;
+        [LabelText("平台"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
+        public Config.Platform platform = Config.Platform.Windows;
+        [LabelText("输入设备"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
+        public Config.InputDevice inputDevice = Config.InputDevice.Keyboard;
         #endregion
     }
 }

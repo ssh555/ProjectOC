@@ -5,7 +5,6 @@ using ML.Engine.FSM;
 using Sirenix.OdinInspector;
 using ProjectOC.Player.Terrain;
 using UnityEngine.InputSystem;
-using static UnityEngine.Rendering.DebugUI;
 
 
 namespace ProjectOC.Player
@@ -67,7 +66,11 @@ namespace ProjectOC.Player
         public ML.Engine.InventorySystem.IInventory Inventory;
         #endregion
 
+
         #region Init
+        /// <summary>
+        /// 处理物体引用
+        /// </summary>
         private void Awake()
         {
             this.playerViewer = this.transform.Find("PlayerViewer");
@@ -77,6 +80,9 @@ namespace ProjectOC.Player
 
         }
 
+        /// <summary>
+        /// 处理初始化
+        /// </summary>
         private void Start()
         {
             this.moveStateParams.RuntimeInit(this.playerInputActions.Acc, this.playerInputActions.Crouch);
@@ -120,7 +126,7 @@ namespace ProjectOC.Player
 
             StartCoroutine(__DelayInit__());
 
-            this.enabled = false;
+            //this.enabled = false;
         }
 
         private IEnumerator __DelayInit__()
@@ -146,16 +152,19 @@ namespace ProjectOC.Player
                     Input.InputManager.PlayerInput.Player.Disable();
                 }
             };
-            while(!ML.Engine.InventorySystem.ItemSpawner.Instance.IsLoadOvered)
+            while(!ML.Engine.InventorySystem.ItemManager.Instance.IsLoadOvered)
             {
                 yield return null;
             }
-            // to-do : to-delete
-            foreach (var id in ML.Engine.InventorySystem.ItemSpawner.Instance.GetAllItemID())
-            {
-                var item = ML.Engine.InventorySystem.ItemSpawner.Instance.SpawnItems(id, ML.Engine.InventorySystem.ItemSpawner.Instance.GetCanStack(id) ? UnityEngine.Random.Range(1, 999) : 1)[0];
-                Inventory.AddItem(item);
-            }
+            //// to-do : to-delete
+            //// 仅测试用
+            //foreach (var id in ML.Engine.InventorySystem.ItemManager.Instance.GetAllItemID())
+            //{
+            //    var item = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(id, ML.Engine.InventorySystem.ItemManager.Instance.GetCanStack(id) ? UnityEngine.Random.Range(1, 999) : 1)[0];
+            //    Inventory.AddItem(item);
+            //}
+
+            //this.enabled = false;
         }
 
         private void OnDestroy()
