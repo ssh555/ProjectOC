@@ -103,7 +103,7 @@ namespace ProjectOC.StoreNS
                     for (int i = 0; i < StoreCapacity - newStoreCapacity; i++)
                     {
                         StoreData storeData = StoreDatas[StoreDatas.Count - 1];
-                        if (ItemSpawner.Instance.IsValidItemID(storeData.ItemID) && storeData.StorageAll > 0)
+                        if (ItemManager.Instance.IsValidItemID(storeData.ItemID) && storeData.StorageAll > 0)
                         {
                             temp.Add(storeData.ItemID, storeData.StorageAll);
                         }
@@ -138,10 +138,10 @@ namespace ProjectOC.StoreNS
                 // 根据temp生成场景物体
                 foreach (var kv in temp)
                 {
-                    List<Item> items = ItemSpawner.Instance.SpawnItems(kv.Key, kv.Value);
+                    List<Item> items = ItemManager.Instance.SpawnItems(kv.Key, kv.Value);
                     foreach (Item item in items)
                     {
-                        ItemSpawner.Instance.SpawnWorldItem(item, WorldStore.transform.position, WorldStore.transform.rotation);
+                        ItemManager.Instance.SpawnWorldItem(item, WorldStore.transform.position, WorldStore.transform.rotation);
                     }
                 }
                 Level = newLevel;
@@ -532,7 +532,7 @@ namespace ProjectOC.StoreNS
                     }
                 }
             }
-            Item result = ItemSpawner.Instance.SpawnItem(item.ID);
+            Item result = ItemManager.Instance.SpawnItem(item.ID);
             int newAmount = oldAmount - amount;
             result.Amount = newAmount;
             if (item.Amount != newAmount)
@@ -571,6 +571,11 @@ namespace ProjectOC.StoreNS
         public int GetItemAllNum(string id)
         {
             return GetStoreStorageAll(id);
+        }
+
+        public Item[] GetItemList()
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

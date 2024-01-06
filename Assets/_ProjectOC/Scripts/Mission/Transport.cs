@@ -100,12 +100,12 @@ namespace ProjectOC.MissionNS
         {
             bool flagBurden = false;
             bool flagSource = false;
-            List<Item> items = ItemSpawner.Instance.SpawnItems(ItemID, this.NeedTransportNum);
+            List<Item> items = ItemManager.Instance.SpawnItems(ItemID, this.NeedTransportNum);
             foreach (Item item in items)
             {
                 if (item.Weight + Worker.BURCurrent >= Worker.BURMax)
                 {
-                    int num = (Worker.BURMax - Worker.BURCurrent) / ItemSpawner.Instance.GetWeight(item.ID);
+                    int num = (Worker.BURMax - Worker.BURCurrent) / ItemManager.Instance.GetWeight(item.ID);
                     item.Amount = num;
                     flagBurden = true;
                 }
@@ -162,7 +162,7 @@ namespace ProjectOC.MissionNS
         {
             foreach (Item item in Worker.TransportItems)
             {
-                ItemSpawner.Instance.SpawnWorldItem(item, Worker.transform.position, Worker.transform.rotation);
+                ItemManager.Instance.SpawnWorldItem(item, Worker.transform.position, Worker.transform.rotation);
             }
             Worker.TransportItems.Clear();
             Worker.Transport = null;

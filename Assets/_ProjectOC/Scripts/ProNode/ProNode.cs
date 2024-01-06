@@ -291,7 +291,7 @@ namespace ProjectOC.ProNodeNS
             // 堆放的成品
             if (this.Recipe != null)
             {
-                List<Item> items = ItemSpawner.Instance.SpawnItems(ProductItem, StackAll);
+                List<Item> items = ItemManager.Instance.SpawnItems(ProductItem, StackAll);
                 foreach (var item in items)
                 {
                     if (flag)
@@ -311,7 +311,7 @@ namespace ProjectOC.ProNodeNS
             foreach (var raw in this.RawItems)
             {
                 flag = false;
-                List<Item> items = ItemSpawner.Instance.SpawnItems(raw.Key, raw.Value);
+                List<Item> items = ItemManager.Instance.SpawnItems(raw.Key, raw.Value);
                 foreach (var item in items)
                 {
                     if (flag)
@@ -330,7 +330,7 @@ namespace ProjectOC.ProNodeNS
             // 没有加到玩家背包的都变成WorldItem
             foreach (Item item in resItems)
             {
-                ItemSpawner.Instance.SpawnWorldItem(item, WorldProNode.transform.position, WorldProNode.transform.rotation);
+                ItemManager.Instance.SpawnWorldItem(item, WorldProNode.transform.position, WorldProNode.transform.rotation);
             }
             // 清空数据
             foreach (MissionTransport mission in this.MissionTransports)
@@ -644,7 +644,7 @@ namespace ProjectOC.ProNodeNS
                     }
                 }
             }
-            Item result = ItemSpawner.Instance.SpawnItem(item.ID);
+            Item result = ItemManager.Instance.SpawnItem(item.ID);
             result.Amount = amount;
             if (result.Amount != amount)
             {
@@ -688,6 +688,12 @@ namespace ProjectOC.ProNodeNS
             Debug.LogError($"Item {id} is not in ProNode {ID}");
             return 0;
         }
+
+        public Item[] GetItemList()
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region TODO: 升级

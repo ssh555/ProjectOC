@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using ML.Engine.InventorySystem.CompositeSystem;
 
 namespace ML.Engine.InventorySystem
 {
@@ -92,11 +93,10 @@ namespace ML.Engine.InventorySystem
             {
                 foreach (var kv in Product)
                 {
-                    CompositeSystem.CompositeSystem.CompositionObjectType compObjType =
-                        CompositeSystem.CompositeSystem.Instance.Composite(inventory, kv.Key, out var composition);
+                    CompositeManager.CompositionObjectType compObjType = CompositeManager.Instance.Composite(inventory, kv.Key, out var composition);
                     switch (compObjType)
                     {
-                        case CompositeSystem.CompositeSystem.CompositionObjectType.Item:
+                        case CompositeManager.CompositionObjectType.Item:
                             Item item = composition as Item;
                             if (item.Amount != GetProductNum())
                             {
