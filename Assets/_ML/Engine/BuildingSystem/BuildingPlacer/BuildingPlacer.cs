@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static ML.Engine.BuildingSystem.Test_BuildingManager;
+using static ML.Engine.BuildingSystem.MonoBuildingManager;
 
 namespace ML.Engine.BuildingSystem.BuildingPlacer
 {
@@ -142,7 +142,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// <summary>
         /// 流程1 : 一级二级分类选择UI交互
         /// </summary>
-        public event System.Action<BuildingCategory[], int, BuildingType[], int> OnBuildSelectionEnter;
+        public event System.Action<BuildingCategory1[], int, BuildingCategory2[], int> OnBuildSelectionEnter;
         /// <summary>
         /// 流程1 : 一级二级分类选择UI交互
         /// </summary>
@@ -158,11 +158,11 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// <summary>
         /// 数组总枚举, 当前index
         /// </summary>
-        public event System.Action<BuildingCategory[], int> OnBuildSelectionCategoryChanged;
+        public event System.Action<BuildingCategory1[], int> OnBuildSelectionCategoryChanged;
         /// <summary>
         /// 数组总枚举, 当前index
         /// </summary>
-        public event System.Action<BuildingCategory, BuildingType[], int> OnBuildSelectionTypeChanged;
+        public event System.Action<BuildingCategory1, BuildingCategory2[], int> OnBuildSelectionTypeChanged;
         /// <summary>
         /// 流程3 : 放置
         /// </summary>
@@ -249,7 +249,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// </summary>
         /// <param name="Category"></param>
         /// <param name="Type"></param>
-        public void ChangeBPart(BuildingCategory Category, BuildingType Type)
+        public void ChangeBPart(BuildingCategory1 Category, BuildingCategory2 Type)
         {
             this.ResetBPart();
             this.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(Category, Type);
@@ -349,21 +349,62 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 pos = this.transform.position - this.SelectedPartInstance.ActiveSocket.transform.position + this.SelectedPartInstance.transform.position;
 
                 // ScreenCenter->ScreenNormal 射线检测
-                // 命中 || 未命中 => 在终点处向下检测
-                if (Physics.Raycast(this.GetCameraRay(), out RaycastHit hitInfo, this.checkRadius, this.checkLayer) || Physics.Raycast(this.GetCameraRayEndPointDownRay(), out hitInfo, this.checkRadius, this.checkLayer))
+                var hits = Physics.RaycastAll(this.GetCameraRay(), this.checkRadius, this.checkLayer);
+                if (hits == null || hits.Length == 0)
                 {
-                    pos = hitInfo.point - this.SelectedPartInstance.ActiveSocket.transform.position + this.SelectedPartInstance.transform.position;
-                    this.SelectedPartInstance.AttachedSocket = hitInfo.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
-                    this.SelectedPartInstance.AttachedArea = hitInfo.collider.GetComponentInParent<BuildingArea.BuildingArea>();
+                    hits = Physics.RaycastAll(this.GetCameraRayEndPointDownRay(), this.checkRadius, this.checkLayer);
+                }
 
-                    if(this.SelectedPartInstance.AttachedSocket && (this.SelectedPartInstance.ActiveSocket.Type & this.SelectedPartInstance.AttachedSocket.InTakeType) == 0)
+                // 命中 || 未命中 => 在终点处向下检测
+                if (hits != null && hits.Length > 0)
+                {
+                    bool bisHit = false;
+                    bool bArea = false;
+                    RaycastHit hitInfo = hits[0];
+                    foreach (var h in hits)
                     {
-                        
-                        this.SelectedPartInstance.AttachedSocket = null;
+                        var socket = h.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
+                        if (socket != null)
+                        {
+                            if((socket.InTakeType & this.SelectedPartInstance.ActiveSocket.Type) != 0)
+                            {
+                                bisHit = true;
+                                hitInfo = h;
+                                break;
+                            }
+                        }
+                        else if(bArea == false)
+                        {
+                            var area = h.collider.GetComponentInParent<BuildingArea.BuildingArea>();
+                            if (area != null && (area.Type & this.SelectedPartInstance.ActiveAreaType) != 0)
+                            {
+                                hitInfo = h;
+                                bisHit = true;
+                                bArea = true;
+                            }
+                        }
                     }
-                    if (this.SelectedPartInstance.AttachedArea && (this.SelectedPartInstance.ActiveAreaType & this.SelectedPartInstance.AttachedArea.Type) == 0)
+
+
+                    if(!bisHit)
                     {
+                        this.SelectedPartInstance.AttachedSocket = null;
                         this.SelectedPartInstance.AttachedArea = null;
+                    }
+                    else
+                    {
+                        pos = hitInfo.point - this.SelectedPartInstance.ActiveSocket.transform.position + this.SelectedPartInstance.transform.position;
+                        this.SelectedPartInstance.AttachedSocket = hitInfo.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
+                        this.SelectedPartInstance.AttachedArea = hitInfo.collider.GetComponentInParent<BuildingArea.BuildingArea>();
+
+                        if (this.SelectedPartInstance.AttachedSocket && (this.SelectedPartInstance.ActiveSocket.Type & this.SelectedPartInstance.AttachedSocket.InTakeType) == 0)
+                        {
+                            this.SelectedPartInstance.AttachedSocket = null;
+                        }
+                        if (this.SelectedPartInstance.AttachedArea && (this.SelectedPartInstance.ActiveAreaType & this.SelectedPartInstance.AttachedArea.Type) == 0)
+                        {
+                            this.SelectedPartInstance.AttachedArea = null;
+                        }
                     }
                 }
                 else
@@ -403,7 +444,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     this.SelectedPartInstance.transform.rotation = oldR;
                     return false;
                 }
-
 
                 return true;
             }
@@ -699,12 +739,12 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         [ShowInInspector, LabelText("TypeIndex"), FoldoutGroup("PlaceMode")]
         protected int _placeSelectedTypeIndex = 0;
         [ShowInInspector, LabelText("CategoryArray"), FoldoutGroup("PlaceMode")]
-        protected BuildingCategory[] _placeCanSelectCategory;
+        protected BuildingCategory1[] _placeCanSelectCategory;
         [ShowInInspector, LabelText("TypeArray"), FoldoutGroup("PlaceMode")]
-        protected BuildingType[] _placeCanSelectType;
+        protected BuildingCategory2[] _placeCanSelectType;
 
-        public BuildingCategory _placeSelectedCategory => this._placeCanSelectCategory[this._placeSelectedCategoryIndex];
-        public BuildingType _placeSelectedType => this._placeCanSelectType[this._placeSelectedTypeIndex];
+        public BuildingCategory1 _placeSelectedCategory => this._placeCanSelectCategory[this._placeSelectedCategoryIndex];
+        public BuildingCategory2 _placeSelectedType => this._placeCanSelectType[this._placeSelectedTypeIndex];
         private byte _placeControlFlow = 0;
         /// <summary>
         /// 0 -> 不处于PlaceMode, 回到InteractMode
@@ -772,7 +812,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 // Category
                 else if(BInput.BuildSelection.LastCategory.WasPressedThisFrame())
                 {
-                    this._placeSelectedCategoryIndex = (this._placeSelectedCategoryIndex - 1) % this._placeCanSelectCategory.Length;
+                    this._placeSelectedCategoryIndex = (this._placeSelectedCategoryIndex + this._placeCanSelectCategory.Length - 1) % this._placeCanSelectCategory.Length;
                     this.OnBuildSelectionCategoryChanged?.Invoke(this._placeCanSelectCategory, this._placeSelectedCategoryIndex);
                     this.UpdatePlaceBuildingType(this._placeCanSelectCategory[this._placeSelectedCategoryIndex]);
                 }
@@ -978,7 +1018,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
         }
 
-        protected void UpdatePlaceBuildingType(BuildingCategory category)
+        protected void UpdatePlaceBuildingType(BuildingCategory1 category)
         {
             this._placeCanSelectType = BuildingManager.Instance.GetRegisteredType().Where(type => (int)type >= ((int)category * 100) && (int)type < ((int)category * 100 + 100)).ToArray();
 
@@ -1085,6 +1125,10 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// </summary>
         protected void EnterEditMode()
         {
+            if (!this.SelectedPartInstance.CanEnterEditMode())
+            {
+                return;
+            }
             // 禁用 Input.Build
             this.Mode = BuildingMode.Edit;
             // 启用 Input.Edit
@@ -1129,8 +1173,14 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// </summary>
         protected void EnterDestroyMode()
         {
+            if (!this.SelectedPartInstance.CanEnterDestoryMode())
+            {
+                return;
+            }
 
             var tmp = this.SelectedPartInstance;
+
+            tmp.OnBPartDestroy();
 
             this.SelectedPartInstance = null;
 
@@ -1285,9 +1335,10 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 ab = crequest.assetBundle;
             }
 
-            var packages = ab.LoadAllAssets<BSBPartMatPackage>();
+            var packages = ab.LoadAllAssetsAsync<BSBPartMatPackage>();
+            yield return packages;
             _allMatPackages = new Dictionary<BuildingPartClassification, BSBPartMatPackage>();
-            foreach (var package in packages)
+            foreach (BSBPartMatPackage package in packages.allAssets)
             {
                 this._allMatPackages.Add(package.Classification, package);
             }
@@ -1323,11 +1374,21 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     // 复制当前选中的可交互物进入PlaceMode
 
                     // 复制一份当前选中的BPart(即一级二级分类选择和外观选择的流程)
-                    this.SelectedPartInstance = BuildingManager.Instance.GetOneBPartCopyInstance(this.SelectedPartInstance);
 
-                    this.ExitKeyCom();
-                    // 进入PlaceMode的放置流程
-                    this.PlaceControlFlow = 3;
+                    var bpart = BuildingManager.Instance.GetOneBPartCopyInstance(this.SelectedPartInstance);
+                    if(bpart == this.SelectedPartInstance)
+                    {
+                        this.ExitKeyCom();
+                        // 进入PlaceMode的放置流程
+                        this.PlaceControlFlow = 3;
+                    }
+                    // to-do : 待商定
+                    // 不能复制则直接进入Edit模式
+                    //else
+                    //{
+                    //    this.ExitKeyCom();
+                    //    this.EnterEditMode();
+                    //}
                 }
             }
             // CopyOutLook

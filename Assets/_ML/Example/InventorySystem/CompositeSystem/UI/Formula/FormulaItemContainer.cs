@@ -9,7 +9,7 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
     {
         public PreviewPanel Owner;
 
-        protected ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Formula[] curFormula;
+        protected ML.Engine.InventorySystem.CompositeSystem.Formula[] curFormula;
 
         protected FormulaItemBtn formulaItemTemplate;
 
@@ -19,7 +19,7 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
 
         }
 
-        public void RefreshFormulaContainer(ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Formula[] formulas)
+        public void RefreshFormulaContainer(ML.Engine.InventorySystem.CompositeSystem.Formula[] formulas)
         {
             this.curFormula = formulas;
             if (curFormula == null)

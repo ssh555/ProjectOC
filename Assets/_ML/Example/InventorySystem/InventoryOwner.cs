@@ -70,7 +70,7 @@ namespace ML.Example.InventorySystem
         #endregion
         
         #region Inventory
-        private Inventory inventory;
+        private IInventory inventory;
 
         public int MaxSize = 65;
 
@@ -89,7 +89,7 @@ namespace ML.Example.InventorySystem
         #endregion
 
         #region CompositeAbility
-        public Inventory ResourceInventory { get => inventory;}
+        public IInventory ResourceInventory { get => inventory;}
         public CompositeAbility compositeAbility { get => (this as CompositeAbility); }
 
 
@@ -147,7 +147,7 @@ namespace ML.Example.InventorySystem
             if (Input.GetKeyDown(this.PickUpKey))
 #endif
                 {
-                    this._pickUpItem.PickUp(this.inventory);
+                    this._pickUpItem.PickUp(this.inventory as Inventory);
                     this._pickUpItem = null;
                 }
             }
@@ -225,7 +225,7 @@ namespace ML.Example.InventorySystem
             if(openInventory == null)
             {
                 openInventory = UnityEngine.Object.Instantiate(this.uIInventory.transform, this.openMainHUD).GetComponent<UIInventory>();
-                openInventory.SetInventory(this.inventory);
+                openInventory.SetInventory(this.inventory as Inventory);
                 openInventory.transform.SetParent(this.hudSocket);
                 RectTransform rect = openInventory.transform as RectTransform;
                 rect.offsetMax = Vector2.zero;
@@ -252,7 +252,7 @@ namespace ML.Example.InventorySystem
         {
             // 一次性合成
             IComposition ret;
-            ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.Composite(this.ResourceInventory, compositonID, out ret);
+            ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.Composite(this.ResourceInventory, compositonID, out ret);
 
             if(ret is Item)
             {
@@ -269,7 +269,7 @@ namespace ML.Example.InventorySystem
             // 移除消耗的资源
             lock (this.inventory)
             {
-                foreach (var formula in ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.GetCompositonFomula(compositonID))
+                foreach (var formula in ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.GetCompositonFomula(compositonID))
                 {
                     this.inventory.RemoveItem(formula.id, formula.num);
                 }

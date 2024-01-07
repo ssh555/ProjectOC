@@ -106,7 +106,7 @@ namespace ML.Example.InventorySystem
                 UIItem itemSlot = Instantiate(itemSlotTemplate.transform, itemSlotTemplate.transform.parent).GetComponent<UIItem>();
                 itemSlot.gameObject.SetActive(true);
                 itemSlot.OwnUIInventoy = this;
-                ItemSpawner.Instance.InitUIItem(itemSlot, i);
+                ItemManager.Instance.InitUIItem(itemSlot, i);
             }
         }
 
@@ -178,7 +178,7 @@ namespace ML.Example.InventorySystem
             }
             //int index = UIItem.CurActiveItem.ItemIndex;
             Transform owner = this.inventory.Owner;
-            ItemSpawner.Instance.SpawnWorldItem(this.inventory.RemoveItem(UIItem.CurActiveItem.item, 1), owner.position, Quaternion.identity);
+            ItemManager.Instance.SpawnWorldItem(this.inventory.RemoveItem(UIItem.CurActiveItem.item, 1), owner.position, Quaternion.identity);
             //if (this.inventory.GetItemList()[index] != null)
             //{
             //    UIItem.ActiveUIItem(this.itemSlotContainer.GetChild(this.inventory.MaxSize + index + 1).GetComponent<UIItem>());
@@ -192,7 +192,7 @@ namespace ML.Example.InventorySystem
             if (ans)
             {
                 Transform owner = this.inventory.Owner;
-                return ItemSpawner.Instance.SpawnWorldItem(item, owner.position, Quaternion.identity);
+                return ItemManager.Instance.SpawnWorldItem(item, owner.position, Quaternion.identity);
             }
 
             return null;

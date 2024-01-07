@@ -22,9 +22,11 @@ namespace ML.Engine.Timer
         /// </summary>
         private List<CounterDownTimer> destroyCounterDownTimers = new List<CounterDownTimer>();
 
+        public float TimeScale = 1;
 
         public void Update(float deltaTime)
         {
+            deltaTime *= TimeScale;
             foreach (var timer in this.updateCounterDownTimers)
             {
                 timer.UpdateCurrentTime(deltaTime);
@@ -33,6 +35,7 @@ namespace ML.Engine.Timer
 
         public void FixedUpdate(float deltaTime)
         {
+            deltaTime *= TimeScale;
             foreach (var timer in fixedCounterDownTimers)
             {
                 timer.UpdateCurrentTime(deltaTime);
@@ -41,7 +44,8 @@ namespace ML.Engine.Timer
 
         public void LateUpdate(float deltaTime)
         {
-            foreach(var item in destroyCounterDownTimers)
+            deltaTime *= TimeScale;
+            foreach (var item in destroyCounterDownTimers)
             {
                 if (fixedCounterDownTimers.Contains(item))
                 {

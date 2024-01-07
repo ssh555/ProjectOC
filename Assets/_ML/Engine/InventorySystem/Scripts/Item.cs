@@ -17,16 +17,18 @@ namespace ML.Engine.InventorySystem
     {
         #region Field|Property
         /// <summary>
-        /// 物品编号 : 范围 [1, int.MaxValue) 
-        /// 默认为 int.MaxValue,表示为 null
+        /// 物品编号 : Item_类型_序号
+        /// 默认为空字符串，表示null。
         /// </summary>
-        public readonly string ID;
-
+        public readonly string ID = "";
+        /// <summary>
+        /// 总重量
+        /// </summary>
+        public int Weight {get { return ItemManager.Instance.GetWeight(ID) * Amount; }}
         /// <summary>
         /// 所属 Inventory
         /// </summary>
-        public Inventory OwnInventory = null;
-
+        public IInventory OwnInventory = null;
         /// <summary>
         /// 数量
         /// </summary>
@@ -39,27 +41,11 @@ namespace ML.Engine.InventorySystem
             get => amount;
             set
             {
-                amount = Math.Clamp(value, 0, this.MaxAmount);
+                amount = Math.Clamp(value, 0, ItemManager.Instance.GetMaxAmount(ID));
                 if (amount == 0)
                     this.OnAmountToZero?.Invoke(this.OwnInventory, this);
             }
         }
-
-        protected int maxAmount = 1;
-        /// <summary>
-        /// 最大数量
-        /// </summary>
-        public int MaxAmount
-        {
-            get => maxAmount;
-            set
-            {
-                if (!this.bCanStack)
-                    maxAmount = 1;
-                maxAmount = Math.Max(1, value);
-            }
-        }
-
         /// <summary>
         /// 数量达到上限
         /// </summary>
@@ -67,42 +53,29 @@ namespace ML.Engine.InventorySystem
         {
             get
             {
-                return this.Amount == this.MaxAmount;
+                return this.Amount == ItemManager.Instance.GetMaxAmount(ID);
             }
         }
 
         /// <summary>
-        /// 能否叠加存储
-        /// </summary>
-        public bool bCanStack;
-
-        /// <summary>
         /// 数量归0时调用
         /// </summary>
-        public event Action<Inventory, Item> OnAmountToZero;
+        public event Action<IInventory, Item> OnAmountToZero;
         #endregion
 
-        public Item(string ID)
+        public Item(string ID, ItemManager.ItemTableJsonData config, int initAmount)
         {
             this.ID = ID;
 
-            this.amount = 1;
+            this.amount = initAmount;
 
             // 默认添加数量为0时从Inventory移除并销毁
-            this.OnAmountToZero += (Inventory inventory,Item item) =>
+            this.OnAmountToZero += (IInventory inventory,Item item) =>
             {
                 if(inventory != null)
                     inventory.RemoveItem(this);
             };
         }
-
-        /// <summary>
-        /// 初始化
-        /// </summary>
-        /// <param name="config"></param>
-        public abstract void Init(ItemSpawner.ItemTabelJsonData config);
-
-        public abstract void Init(Item item);
 
         /// <summary>
         /// 使用物品调用函数
@@ -111,6 +84,63 @@ namespace ML.Engine.InventorySystem
         public virtual void Execute(int amount)
         {
             this.Amount -= amount;
+        }
+
+        /// <summary>
+        /// 是否能使用 -> 仅供UI使用
+        /// </summary>
+        /// <returns></returns>
+        public bool CanUse()
+        {
+            switch (ItemManager.Instance.GetItemType(ID))
+            {
+                case ItemType.Equip:
+                case ItemType.Food:
+                    return true;
+                case ItemType.Material:
+                case ItemType.Mission:
+                    return false;
+                default:
+                    return true;
+            }
+        }
+
+        /// <summary>
+        /// 是否能丢弃 -> 仅供UI使用
+        /// </summary>
+        /// <returns></returns>
+        public bool CanDrop()
+        {
+            switch (ItemManager.Instance.GetItemType(ID))
+            {
+                case ItemType.Equip:
+                case ItemType.Food:
+                case ItemType.Material:
+                    return true;
+                case ItemType.Mission:
+                    return false;
+                default:
+                    return true;
+            }
+        }
+
+        /// <summary>
+        /// 是否能销毁 -> 仅供UI使用
+        /// </summary>
+        /// <returns></returns>
+        public bool CanDestroy()
+        {
+            switch (ItemManager.Instance.GetItemType(ID))
+            {
+                case ItemType.Equip:
+                case ItemType.Food:
+                case ItemType.Material:
+                    return true;
+                case ItemType.Mission:
+                    return false;
+                default:
+                    return true;
+            }
         }
 
         /// <summary>
@@ -161,7 +191,37 @@ namespace ML.Engine.InventorySystem
             //    return x.Name.CompareTo(y.Name);
             //}
         }
-
+        public class Sort : IComparer<Item>
+        {
+            public int Compare(Item x, Item y)
+            {
+                if (x == null)
+                {
+                    if (y == null)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        return 1;
+                    }
+                }
+                if (y == null)
+                {
+                    return -1;
+                }
+                var xs = ItemManager.Instance.GetSortNum(x.ID);
+                var ys = ItemManager.Instance.GetSortNum(y.ID);
+                if (xs != ys)
+                {
+                    return xs.CompareTo(ys);
+                }
+                else
+                {
+                    return string.Compare(x.ID, y.ID);
+                }
+            }
+        }
         #endregion
     }
 }

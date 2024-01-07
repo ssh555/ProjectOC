@@ -22,10 +22,10 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   Classification:
-    Category: 0
-    Type: 1
-    Style: 1
-    Height: 50
+    Category1: 0
+    Category2: 1
+    Category3: 1
+    Category4: 50
   MatStruct: ffffffff
   MatPackages:
   - Tex: {fileID: 2800000, guid: 54c2641c5e3b2cf4ba95947a755fa385, type: 3}

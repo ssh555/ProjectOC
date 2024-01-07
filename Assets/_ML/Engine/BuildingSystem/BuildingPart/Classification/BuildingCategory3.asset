@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e04c33259d65b934fa9ee5353f84593e, type: 3}
+  m_Name: BuildingCategory3
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  enumNamespace: ML.Engine.BuildingSystem.BuildingPart
+  NoneName:
+    name: None
+    displayName: None
+    value: 
+  EnumList:
+  - name: Base
+    displayName: "\u6B63\u65B9\u5F62"
+    value: 
+  - name: Triangle
+    displayName: "\u4E09\u89D2\u5F62"
+    value: 
+  - name: Quagrant
+    displayName: "\u56DB\u65B9\u5706\u5F62"
+    value: 
+  - name: BaseCorner
+    displayName: "\u65B9\u5F62\u8F6C\u89D2"
+    value: 

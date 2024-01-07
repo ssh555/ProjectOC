@@ -390,10 +390,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
-    Category: 0
-    Type: 8
-    Style: 1
-    Height: 20
+    Category1: 0
+    Category2: 8
+    Category3: 1
+    Category4: 20
   instanceID: 
   canPlaceInPlaceMode: 0
   mode: 0

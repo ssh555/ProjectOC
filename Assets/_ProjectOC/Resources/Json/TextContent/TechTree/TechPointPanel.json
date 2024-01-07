@@ -95,5 +95,16 @@
             "Chinese" : "破译",
             "English" : "Decipher"
         }
+    },
+    "back" : {
+        "keyname" : "back",
+        "keymap" : {
+            "KeyBoard" : "ESC",
+            "XBOX" : "B"
+        },
+        "description" : {
+            "Chinese" : "返回",
+            "English" : "Back"
+        }
     }
 }

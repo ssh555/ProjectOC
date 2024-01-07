@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using ML.Engine.TextContent;
 using Newtonsoft.Json;
+using static ProjectOC.WorkerNS.EffectManager;
 
 namespace ProjectOC.TechTree
 {
@@ -24,7 +25,9 @@ namespace ProjectOC.TechTree
 
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
 
-
+        /// <summary>
+        /// 单例管理
+        /// </summary>
         private void Awake()
         {
             if (Instance != null)
@@ -34,15 +37,22 @@ namespace ProjectOC.TechTree
             Instance = this;
         }
 
+        /// <summary>
+        /// 数据载入初始化
+        /// </summary>
         private void Start()
         {
+            // 注册 Manager
             GM.RegisterLocalManager(this);
 
-            StartCoroutine(LoadResource());
+            // 载入 Item 和 合成表格
+            LoadResource();
 
+            // 载入科技树表格数据 以及 恢复存档
             StartCoroutine(LoadTableData());
 
-            StartCoroutine(InitUITextContents());
+            // 载入UI数据
+            InitUITextContents();
         }
 
         private void OnDestroy()
@@ -57,6 +67,9 @@ namespace ProjectOC.TechTree
         #region TechPoint
         public const string TPIconTexture2DABPath = "UI/TechPoint/Texture2D";
 
+        /// <summary>
+        /// 载入的科技点表格数据
+        /// </summary>
         private Dictionary<string, TechPoint> registerTechPoints = new Dictionary<string, TechPoint>();
 
         public string[] GetAllTPID()
@@ -133,7 +146,7 @@ namespace ProjectOC.TechTree
             return false;
         }
 
-        public ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Formula[] GetTPItemCost(string ID)
+        public ML.Engine.InventorySystem.CompositeSystem.Formula[] GetTPItemCost(string ID)
         {
             return this.registerTechPoints.ContainsKey(ID) ? this.registerTechPoints[ID].ItemCost : null;
         }
@@ -162,12 +175,6 @@ namespace ProjectOC.TechTree
 
         #region SaveAndLoadData
         #region Struct
-        [System.Serializable]
-        private struct TechPointArray
-        {
-            public TechPoint[] techPoints;
-        }
-
         /// <summary>
         /// 正在解锁中的科技点
         /// </summary>
@@ -183,20 +190,12 @@ namespace ProjectOC.TechTree
             /// </summary>
             public float time;
         }
-
-        [System.Serializable]
-        private struct UnlockingTechPointArray
-        {
-            public UnlockingTechPoint[] data;
-        }
         #endregion
 
         #region Data
         [ReadOnly]
         public bool IsLoadOvered = false;
 
-        public const string TableDataABPath = "Json/TableData";
-        public const string TableName = "TechTree";
         /// <summary>
         /// 科技树存档
         /// </summary>
@@ -206,6 +205,10 @@ namespace ProjectOC.TechTree
         /// </summary>
         public const string SaveUnlockingTPJsonDataPath = "UnlockingTechPoint.json";
 
+        /// <summary>
+        /// 正在解锁中的科技点的计时器
+        /// 用于计时解锁以及判断是否正在解锁
+        /// </summary>
         public Dictionary<string, CounterDownTimer> UnlockingTPTimers = new Dictionary<string, CounterDownTimer>();
         private void OnTimerStart(CounterDownTimer timer, string ID, bool isSave = true)
         {
@@ -231,56 +234,50 @@ namespace ProjectOC.TechTree
             }
         }
 
+        /// <summary>
+        /// 正在解锁的科技点
+        /// </summary>
         public Dictionary<string, UnlockingTechPoint> UnlockingTechPointDict = new Dictionary<string, UnlockingTechPoint>();
+
         #endregion
 
         #region Load
         private IEnumerator LoadTableData()
         {
-
-            // 需在ItemSystem、CompositonSystem、BuildingSystem加载完数据之后才能加载
-            while (GM.ABResourceManager == null || ML.Engine.InventorySystem.ItemSpawner.Instance.IsLoadOvered == false || ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.IsLoadOvered == false || ML.Engine.BuildingSystem.Test_BuildingManager.Instance.IsLoadOvered == false)
-            {
-                yield return null;
-            }
 #if UNITY_EDITOR
             float startT = Time.realtimeSinceStartup;
 #endif
-            var abmgr = GM.ABResourceManager;
+
             #region Load TPJsonData
-            // 不存在 则复制一份
-            if (!System.IO.File.Exists(System.IO.Path.Combine(Application.persistentDataPath, SaveTPJsonDataPath)))
+            ML.Engine.ABResources.ABJsonAssetProcessor<TechPoint[]> ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TechPoint[]>("Json/TableData", "TechTree", (datas) =>
             {
-                AssetBundle ab;
-                var crequest = abmgr.LoadLocalABAsync(TableDataABPath, null, out ab);
-                yield return crequest;
-                if (crequest != null)
-                {
-                    ab = crequest.assetBundle;
-                }
-
-
-                var request = ab.LoadAssetAsync<TextAsset>(TableName);
-                yield return request;
-                TechPointArray datas = JsonConvert.DeserializeObject<TechPointArray>((request.asset as TextAsset).text);
-                
-                foreach (var data in datas.techPoints)
+                foreach (var data in datas)
                 {
                     this.registerTechPoints.Add(data.ID, data);
                 }
-
-                // 存档
-                SaveTPJsonData();
-            }
-            // 直接读取文件载入
-            else
-            {
-                string json = System.IO.File.ReadAllText(System.IO.Path.Combine(Application.persistentDataPath, SaveTPJsonDataPath));
-                TechPointArray datas = JsonConvert.DeserializeObject<TechPointArray>(json);
-                foreach (var data in datas.techPoints)
+                // 读取AB包表格数据，若有存档，将读取的数据的是否解锁更新为存档数据，更新存档
+                // 存在则更新
+                if (!System.IO.File.Exists(System.IO.Path.Combine(Application.persistentDataPath, SaveTPJsonDataPath)))
                 {
-                    this.registerTechPoints.Add(data.ID, data);
+                    string json = System.IO.File.ReadAllText(System.IO.Path.Combine(Application.persistentDataPath, SaveTPJsonDataPath));
+                    datas = JsonConvert.DeserializeObject<TechPoint[]>(json);
+                    foreach (var data in datas)
+                    {
+                        // 只需要更新 是否解锁
+                        if (this.registerTechPoints.ContainsKey(data.ID))
+                        {
+                            // 有一个解锁则标记为解锁
+                            this.registerTechPoints[data.ID].IsUnlocked = data.IsUnlocked || this.registerTechPoints[data.ID].IsUnlocked;
+                        }
+                    }
                 }
+            }, () => {
+                return (ML.Engine.InventorySystem.ItemManager.Instance.IsLoadOvered == false || ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.IsLoadOvered == false || ML.Engine.BuildingSystem.MonoBuildingManager.Instance.IsLoadOvered == false);
+            }, "科技树数据");
+            ABJAProcessor.StartLoadJsonAssetData();
+            while(!ABJAProcessor.IsLoaded)
+            {
+                yield return null;
             }
             #endregion
 
@@ -288,19 +285,25 @@ namespace ProjectOC.TechTree
             if (System.IO.File.Exists(System.IO.Path.Combine(Application.persistentDataPath, SaveUnlockingTPJsonDataPath)))
             {
                 string json = System.IO.File.ReadAllText(System.IO.Path.Combine(Application.persistentDataPath, SaveUnlockingTPJsonDataPath));
-                UnlockingTechPointArray datas = JsonConvert.DeserializeObject<UnlockingTechPointArray>(json);
+                UnlockingTechPoint[] datas = JsonConvert.DeserializeObject<UnlockingTechPoint[]>(json);
 
-                foreach (var data in datas.data)
+                foreach (var data in datas)
                 {
-                    this.UnlockingTechPointDict.Add(data.id, data);
+                    // 剔除更新数据后不存在的节点
+                    if(this.registerTechPoints.ContainsKey(data.id))
+                    {
+                        this.UnlockingTechPointDict.Add(data.id, data);
+                    }
                 }
             }
+            // 更新存档
+            SaveData();
             #endregion
 
 
             // 恢复存档数据
             #region TPJsonData
-            foreach(var tp in this.registerTechPoints.Values)
+            foreach (var tp in this.registerTechPoints.Values)
             {
                 if(tp.IsUnlocked)
                 {
@@ -322,9 +325,10 @@ namespace ProjectOC.TechTree
             #endregion
 
             IsLoadOvered = true;
+
 #if UNITY_EDITOR
-            Debug.Log($"存储路径: {Application.persistentDataPath}");
             Debug.Log("LoadTableData cost time: " + (Time.realtimeSinceStartup - startT));
+            Debug.Log($"存储路径: {Application.persistentDataPath}");
 #endif
         }
         #endregion
@@ -336,25 +340,23 @@ namespace ProjectOC.TechTree
             this.SaveUnlockingTPData();
         }
 
-        private CancellationTokenSource SaveDataCTS;
+        private CancellationTokenSource SaveDataCTS = null;
         private void SaveTPJsonData()
         {
             string path = System.IO.Path.Combine(Application.persistentDataPath, SaveTPJsonDataPath);
 
-            TechPointArray array = new TechPointArray();
-            array.techPoints = registerTechPoints.Values.ToArray();
+            TechPoint[] array = registerTechPoints.Values.ToArray();
             string json = JsonConvert.SerializeObject(array);
 
             WriteToFileAsync(path, json, SaveDataCTS);
         }
 
-        private CancellationTokenSource SaveUnlockingDataCTS;
+        private CancellationTokenSource SaveUnlockingDataCTS = null;
         private void SaveUnlockingTPData()
         {
             string path = System.IO.Path.Combine(Application.persistentDataPath, SaveUnlockingTPJsonDataPath);
 
-            UnlockingTechPointArray array = new UnlockingTechPointArray();
-            array.data = UnlockingTechPointDict.Values.ToArray();
+            UnlockingTechPoint[] array = UnlockingTechPointDict.Values.ToArray();
             string json = JsonConvert.SerializeObject(array);
             WriteToFileAsync(path, json, SaveUnlockingDataCTS);
         }
@@ -397,7 +399,13 @@ namespace ProjectOC.TechTree
         [ReadOnly]
         public List<string> UnlockedBuild = new List<string>();
 
-        private bool ItemIsEnough(Inventory inventory, string ID)
+        /// <summary>
+        /// 判断背包的材料是否足够解锁id对应的科技点
+        /// </summary>
+        /// <param name="inventory"></param>
+        /// <param name="ID"></param>
+        /// <returns></returns>
+        private bool ItemIsEnough(IInventory inventory, string ID)
         {
             var formula = this.GetTPItemCost(ID);
             if(formula == null || formula.Length == 0)
@@ -415,7 +423,12 @@ namespace ProjectOC.TechTree
             return true;
         }
 
-        private void CostItem(Inventory inventory, string ID)
+        /// <summary>
+        /// 消耗Item
+        /// </summary>
+        /// <param name="inventory"></param>
+        /// <param name="ID"></param>
+        private void CostItem(IInventory inventory, string ID)
         {
             // 移除消耗的资源
             lock (inventory)
@@ -432,7 +445,7 @@ namespace ProjectOC.TechTree
         /// </summary>
         /// <param name="ID"></param>
         /// <returns></returns>
-        public bool CanUnlockTechPoint(Inventory inventory, string ID)
+        public bool CanUnlockTechPoint(IInventory inventory, string ID)
         {
             return !this.UnlockingTechPointDict.ContainsKey(ID) && this.IsAllUnlockedPreTP(ID) && this.ItemIsEnough(inventory, ID);
         }
@@ -442,9 +455,9 @@ namespace ProjectOC.TechTree
         /// </summary>
         /// <param name="ID"></param>
         /// <returns></returns>
-        public bool UnlockTechPoint(Inventory inventory, string ID)
+        public bool UnlockTechPoint(IInventory inventory, string ID, bool IsCheck = true)
         {
-            if(!CanUnlockTechPoint(inventory, ID))
+            if(IsCheck && !CanUnlockTechPoint(inventory, ID))
             {
                 return false;
             }
@@ -477,20 +490,21 @@ namespace ProjectOC.TechTree
             // 解锁建筑物
             this.UnlockedBuild.AddRange(this.registerTechPoints[ID].UnLockBuild);
             // to-do : 待优化
-            foreach(var c in this.registerTechPoints[ID].UnLockBuild)
+            // to-do : 四级分类不再是ID，后续会载入Build表数据，拆分为合成子表、<建筑ID, 建筑分类>映射表
+            // 后续使用映射表加入
+            // 合成子表在Excel转JSON时自动加入合成表中
+            // <建筑ID, 建筑分类>映射表为单独的JSON数据表，待完善加入
+            foreach (var c in this.registerTechPoints[ID].UnLockBuild)
             {
-                Test_BuildingManager.Instance.BM.RegisterBPartPrefab(Test_BuildingManager.Instance.LoadedBPart[new ML.Engine.BuildingSystem.BuildingPart.BuildingPartClassification(c)]);
+                MonoBuildingManager.Instance.BM.RegisterBPartPrefab(MonoBuildingManager.Instance.LoadedBPart[new ML.Engine.BuildingSystem.BuildingPart.BuildingPartClassification(c)]);
             }    
 
         }
         #endregion
 
         #region TextContent
-        public const string TextContentABPath = "JSON/TextContent/TechTree";
-        public const string TPPanelName = "TechPointPanel";
-
         public Dictionary<string, TextTip> CategoryDict = new Dictionary<string, TextTip>();
-        public TPPanel TPPanelTextContent;
+        public TPPanel TPPanelTextContent => ABJAProcessor_TPPanel.Datas;
 
         [System.Serializable]
         public struct TPPanel
@@ -504,38 +518,23 @@ namespace ProjectOC.TechTree
             public KeyTip inspector;
             public TextContent timecosttip;
             public KeyTip decipher;
+            public KeyTip back;
         }
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<TPPanel> ABJAProcessor_TPPanel;
 
-        private IEnumerator InitUITextContents()
+        public void InitUITextContents()
         {
-            while (ML.Engine.Manager.GameManager.Instance.ABResourceManager == null)
+            if (ABJAProcessor_TPPanel == null)
             {
-                yield return null;
+                ABJAProcessor_TPPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<TPPanel>("JSON/TextContent/TechTree", "TechPointPanel", (datas) =>
+                {
+                    foreach (var tip in datas.category)
+                    {
+                        this.CategoryDict.Add(tip.name, tip);
+                    }
+                }, null, "科技树UIPanel");
+                ABJAProcessor_TPPanel.StartLoadJsonAssetData();
             }
-#if UNITY_EDITOR
-            float startT = Time.realtimeSinceStartup;
-#endif
-            var abmgr = ML.Engine.Manager.GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(TextContentABPath, null, out ab);
-            yield return crequest;
-            if (crequest != null)
-            {
-                ab = crequest.assetBundle;
-            }
-
-            var request = ab.LoadAssetAsync<TextAsset>(TPPanelName);
-            yield return request;
-            TPPanel tips = JsonConvert.DeserializeObject<TPPanel>((request.asset as TextAsset).text);
-            foreach (var tip in tips.category)
-            {
-                this.CategoryDict.Add(tip.name, tip);
-            }
-            TPPanelTextContent = tips;
-
-#if UNITY_EDITOR
-            Debug.Log("InitUITextContents cost time: " + (Time.realtimeSinceStartup - startT));
-#endif
         }
         #endregion
 
@@ -544,19 +543,80 @@ namespace ProjectOC.TechTree
         /// to-do : 待移除更改，不能放置于此，此项为ItemTable和CompositeTable表数据加载项，用到这两个模块才需要加载 => 放置于Level中更合适
         /// </summary>
         /// <returns></returns>
-        IEnumerator LoadResource()
+        void LoadResource()
         {
-            float startTime = Time.realtimeSinceStartup;
-            var c1 = StartCoroutine(ML.Engine.InventorySystem.ItemSpawner.Instance.LoadTableData(this));
-            var c2 = StartCoroutine(ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.LoadTableData(this));
-            yield return c1;
-            yield return c2;
+            ML.Engine.InventorySystem.ItemManager.Instance.LoadTableData();
+            ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.LoadTableData();
+        }
 
-            Debug.Log("LoadTableData Cost: " + (Time.realtimeSinceStartup - startTime));
-            // 结束此协程
-            yield break;
+        [Button("生成测试文件")]
+        void GenTESTFILE()
+        {
+            List<TechPoint> datas = new List<TechPoint>();
+
+            for (int c = 1; c < 6; ++c)
+            {
+                for (int row = 0; row < 10; ++row)
+                {
+                    for (int col = 0; col < 16; ++col)
+                    {
+                        var tp = new TechPoint();
+
+                        tp.Category = (TechPointCategory)c;
+
+                        tp.ID = tp.Category.ToString() + "_" + row.ToString() + "_" + col.ToString();
+                        tp.Name.Chinese = "测试" + tp.ID;
+                        tp.Name.English = "Test" + tp.ID;
+                        tp.Grid = new int[2] { row, col };
+                        tp.Icon = row.ToString() + "_" + col.ToString();
+                        tp.IsUnlocked = false;
+                        tp.Description.Chinese = "测试";
+                        tp.Description.English = "Test";
+
+                        tp.UnLockBuild = new string[0];
+                        tp.UnLockRecipe = new string[0];
+                        // to-do
+                        int num = Random.Range(1, 3);
+                        tp.ItemCost = new ML.Engine.InventorySystem.CompositeSystem.Formula[num];
+                        for(int i = 0; i < tp.ItemCost.Length; ++i)
+                        {
+                            Formula f = new Formula();
+                            f.id = i == 0 ? "100001" : (i == 1 ? "100002" : "100003");
+                            f.num = Random.Range(1, 5);
+                            tp.ItemCost[i] = f;
+                        }
+                        tp.TimeCost = Random.Range(5, 60);
+
+                        if (row == 0 && col == 0)
+                        {
+                            tp.PrePoint = new string[0];
+                        }
+                        else if (row != 0 && col == 0)
+                        {
+                            tp.PrePoint = new string[1] { tp.Category.ToString() + "_" + (row - 1).ToString() + "_" + col.ToString() };
+                        }
+                        else if (row == 0 && col != 0)
+                        {
+                            tp.PrePoint = new string[1] { tp.Category.ToString() + "_" + row.ToString() + "_" + (col - 1).ToString() };
+                        }
+                        else if (row != 0 && col != 0)
+                        {
+                            tp.PrePoint = new string[2] { tp.Category.ToString() + "_" + row.ToString() + "_" + (col - 1).ToString(), tp.Category.ToString() + "_" + (row - 1).ToString() + "_" + col.ToString() };
+                        }
+
+
+                        datas.Add(tp);
+                    }
+                }
+            }
+
+
+            string json = JsonConvert.SerializeObject(datas.ToArray());
+            System.IO.File.WriteAllText(Application.streamingAssetsPath + "/../../../t.json", json);
+            Debug.Log("输出路径: " + Application.streamingAssetsPath + "/../../../t.json");
         }
         #endregion
+
     }
 
 }

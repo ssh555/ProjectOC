@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,6 +35,16 @@ namespace ML.Engine.Timer
 
         }
 
+        public void DisposeTick()
+        {
+            if(Manager.GameManager.Instance != null && Manager.GameManager.Instance.TickManager != null)
+            {
+                Manager.GameManager.Instance.TickManager.UnregisterTick(this);
+                Manager.GameManager.Instance.TickManager.UnregisterLateTick(this);
+                Manager.GameManager.Instance.TickManager.UnregisterFixedTick(this);
+            }
+
+        }
     }
 
 }

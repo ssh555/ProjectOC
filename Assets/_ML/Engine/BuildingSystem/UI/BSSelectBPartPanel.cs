@@ -16,25 +16,25 @@ namespace ML.Engine.BuildingSystem.UI
         public const string TCategoryABPath = "UI/BuildingSystem/Texture2D/Category";
         public const string TTypeABPath = "UI/BuildingSystem/Texture2D/Type";
 
-        public static Dictionary<BuildingCategory, Texture2D> TCategoryDict = null;
-        public static Dictionary<BuildingType, Texture2D> TTypeDict = null;
+        public static Dictionary<BuildingCategory1, Texture2D> TCategoryDict = null;
+        public static Dictionary<BuildingCategory2, Texture2D> TTypeDict = null;
         public static int IsInit = -1;
 
-        public static Sprite GetCategorySprite(BuildingCategory category)
+        public static Sprite GetCategorySprite(BuildingCategory1 category)
         {
             if(!TCategoryDict.ContainsKey(category))
             {
-                category = BuildingCategory.None;
+                category = BuildingCategory1.None;
             }
             Texture2D texture = TCategoryDict[category];
             Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
             return sprite;
         }
-        public static Sprite GetTypeSprite(BuildingType type)
+        public static Sprite GetTypeSprite(BuildingCategory2 type)
         {
             if (!TTypeDict.ContainsKey(type))
             {
-                type = BuildingType.None;
+                type = BuildingCategory2.None;
             }
             Texture2D texture = TTypeDict[type];
             Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
@@ -43,8 +43,8 @@ namespace ML.Engine.BuildingSystem.UI
 
         private BuildingManager BM => BuildingManager.Instance;
 
-        private Dictionary<BuildingCategory, RectTransform> categoryInstance = new Dictionary<BuildingCategory, RectTransform>();
-        private Dictionary<BuildingType, RectTransform> typeInstance = new Dictionary<BuildingType, RectTransform>();
+        private Dictionary<BuildingCategory1, RectTransform> categoryInstance = new Dictionary<BuildingCategory1, RectTransform>();
+        private Dictionary<BuildingCategory2, RectTransform> typeInstance = new Dictionary<BuildingCategory2, RectTransform>();
 
         private RectTransform categoryParent;
         private RectTransform templateCategory;
@@ -58,11 +58,25 @@ namespace ML.Engine.BuildingSystem.UI
         private UIKeyTip comfirm;
         private UIKeyTip back;
 
-
+        private static bool IsLoading = false;
         private void Awake()
         {
-            if (TCategoryDict == null)
+            //    if (ABJAProcessor == null)
+            //    {
+            //        ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextContent.KeyTip[]>("JSON/TextContent/InteractSystem", "InteractKeyTip", (datas) =>
+            //        {
+            //            foreach (var tip in datas)
+            //            {
+            //                STATIC_KTDict.Add(tip.keyname, tip);
+            //            }
+
+            //        }, null);
+            //    }
+            //    ABJAProcessor.StartLoadJsonAssetData();
+            if (!IsLoading)
             {
+                IsLoading = true;
+
                 StartCoroutine(InitCategoryTexture2D());
                 StartCoroutine(InitTypeTexture2D());
             }
@@ -82,14 +96,14 @@ namespace ML.Engine.BuildingSystem.UI
             comfirm.img = comfirm.root.Find("Image").GetComponent<Image>();
             comfirm.keytip = comfirm.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             comfirm.description = comfirm.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            comfirm.ReWrite(Test_BuildingManager.Instance.KeyTipDict["comfirm"]);
+            comfirm.ReWrite(MonoBuildingManager.Instance.KeyTipDict["comfirm"]);
 
             back = new UIKeyTip();
             back.root = keytip.Find("KT_Back") as RectTransform;
             back.img = back.root.Find("Image").GetComponent<Image>();
             back.keytip = back.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             back.description = back.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            back.ReWrite(Test_BuildingManager.Instance.KeyTipDict["back"]);
+            back.ReWrite(MonoBuildingManager.Instance.KeyTipDict["back"]);
 
             keytip = this.transform.Find("SelectCategory");
 
@@ -97,13 +111,13 @@ namespace ML.Engine.BuildingSystem.UI
             categorylast.root = keytip.Find("KT_Last") as RectTransform;
             categorylast.img = categorylast.root.Find("Image").GetComponent<Image>();
             categorylast.keytip = categorylast.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            categorylast.ReWrite(Test_BuildingManager.Instance.KeyTipDict["categorylast"]);
+            categorylast.ReWrite(MonoBuildingManager.Instance.KeyTipDict["categorylast"]);
 
             categorynext = new UIKeyTip();
             categorynext.root = keytip.Find("KT_Next") as RectTransform;
             categorynext.img = categorynext.root.Find("Image").GetComponent<Image>();
             categorynext.keytip = categorynext.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            categorynext.ReWrite(Test_BuildingManager.Instance.KeyTipDict["categorynext"]);
+            categorynext.ReWrite(MonoBuildingManager.Instance.KeyTipDict["categorynext"]);
 
             keytip = this.transform.Find("SelectType");
 
@@ -111,26 +125,28 @@ namespace ML.Engine.BuildingSystem.UI
             typelast.root = keytip.Find("KT_Last") as RectTransform;
             typelast.img = typelast.root.Find("Image").GetComponent<Image>();
             typelast.keytip = typelast.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            typelast.ReWrite(Test_BuildingManager.Instance.KeyTipDict["typelast"]);
+            typelast.ReWrite(MonoBuildingManager.Instance.KeyTipDict["typelast"]);
 
             typenext = new UIKeyTip();
             typenext.root = keytip.Find("KT_Next") as RectTransform;
             typenext.img = typenext.root.Find("Image").GetComponent<Image>();
             typenext.keytip = typenext.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            typenext.ReWrite(Test_BuildingManager.Instance.KeyTipDict["typenext"]);
+            typenext.ReWrite(MonoBuildingManager.Instance.KeyTipDict["typenext"]);
         }
+
 
         private IEnumerator InitCategoryTexture2D()
         {
 #if UNITY_EDITOR
             float startT = Time.time;
 #endif
+            TCategoryDict = new Dictionary<BuildingCategory1, Texture2D>();
+
             while (Manager.GameManager.Instance.ABResourceManager == null)
             {
                 yield return null;
             }
 
-            TCategoryDict = new Dictionary<BuildingCategory, Texture2D>();
 
             var abmgr = Manager.GameManager.Instance.ABResourceManager;
             AssetBundle ab;
@@ -143,9 +159,9 @@ namespace ML.Engine.BuildingSystem.UI
             foreach (var obj in request.allAssets)
             {
                 var tex = (obj as Texture2D);
-                if (tex != null && Enum.IsDefined(typeof(BuildingCategory), tex.name))
+                if (tex != null && Enum.IsDefined(typeof(BuildingCategory1), tex.name))
                 {
-                    TCategoryDict.Add((BuildingCategory)Enum.Parse(typeof(BuildingCategory), tex.name), tex);
+                    TCategoryDict.Add((BuildingCategory1)Enum.Parse(typeof(BuildingCategory1), tex.name), tex);
                 }
             }
 
@@ -160,12 +176,13 @@ namespace ML.Engine.BuildingSystem.UI
 #if UNITY_EDITOR
             float startT = Time.time;
 #endif
+            TTypeDict = new Dictionary<BuildingCategory2, Texture2D>();
+
             while (Manager.GameManager.Instance.ABResourceManager == null)
             {
                 yield return null;
             }
 
-            TTypeDict = new Dictionary<BuildingType, Texture2D>();
 
             var abmgr = Manager.GameManager.Instance.ABResourceManager;
             AssetBundle ab;
@@ -178,9 +195,9 @@ namespace ML.Engine.BuildingSystem.UI
             foreach (var obj in request.allAssets)
             {
                 var tex = (obj as Texture2D);
-                if (tex != null && Enum.IsDefined(typeof(BuildingType), tex.name))
+                if (tex != null && Enum.IsDefined(typeof(BuildingCategory2), tex.name))
                 {
-                    TTypeDict.Add((BuildingType)Enum.Parse(typeof(BuildingType), tex.name), tex);
+                    TTypeDict.Add((BuildingCategory2)Enum.Parse(typeof(BuildingCategory2), tex.name), tex);
                 }
             }
 
@@ -193,7 +210,7 @@ namespace ML.Engine.BuildingSystem.UI
 
 
 
-        public IEnumerator Init(BuildingCategory[] categorys, BuildingType[] types, int cIndex, int tIndex)
+        public IEnumerator Init(BuildingCategory1[] categorys, BuildingCategory2[] types, int cIndex, int tIndex)
         {
             while(IsInit < 1)
             {
@@ -206,7 +223,7 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 var go = Instantiate<GameObject>(this.templateCategory.gameObject, this.categoryParent, false);
                 go.GetComponentInChildren<Image>().sprite = GetCategorySprite(category);
-                go.GetComponentInChildren<TextMeshProUGUI>().text = Test_BuildingManager.Instance.CategoryDict[category.ToString()].GetNameText();
+                go.GetComponentInChildren<TextMeshProUGUI>().text = MonoBuildingManager.Instance.Category1Dict[category.ToString()].GetDescription();
                 go.SetActive(true);
                 this.categoryInstance.Add(category, go.transform as RectTransform);
             }
@@ -214,7 +231,7 @@ namespace ML.Engine.BuildingSystem.UI
             StartCoroutine(this.ShowCategoryAndType(categorys[cIndex], types, tIndex));
         }
 
-        private IEnumerator ShowCategoryAndType(BuildingCategory category, BuildingType[] types, int tIndex)
+        private IEnumerator ShowCategoryAndType(BuildingCategory1 category, BuildingCategory2[] types, int tIndex)
         {
             this.ClearTypeInstance();
 
@@ -237,7 +254,7 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 var go = Instantiate<GameObject>(this.templateType.gameObject, this.typeParent, false);
                 go.GetComponentInChildren<Image>().sprite = GetTypeSprite(type);
-                go.GetComponentInChildren<TextMeshProUGUI>().text = Test_BuildingManager.Instance.TypeDict[type.ToString()].GetNameText();
+                go.GetComponentInChildren<TextMeshProUGUI>().text = MonoBuildingManager.Instance.Category2Dict[type.ToString()].GetDescription();
                 go.SetActive(true);
 
                 this.typeInstance.Add(type, go.transform as RectTransform);
@@ -247,7 +264,8 @@ namespace ML.Engine.BuildingSystem.UI
                     Active(go.GetComponentInChildren<Image>());
                 }
             }
-
+            LayoutRebuilder.ForceRebuildLayoutImmediate(this.templateCategory.parent.GetComponent<RectTransform>());
+            LayoutRebuilder.ForceRebuildLayoutImmediate(this.templateType.parent.GetComponent<RectTransform>());
             yield break;
         }
 
@@ -303,7 +321,7 @@ namespace ML.Engine.BuildingSystem.UI
             BM.Placer.OnBuildSelectionTypeChanged += Placer_OnBuildSelectionTypeChanged;
         }
 
-        private void Placer_OnBuildSelectionTypeChanged(BuildingCategory category, BuildingType[] types, int tIndex)
+        private void Placer_OnBuildSelectionTypeChanged(BuildingCategory1 category, BuildingCategory2[] types, int tIndex)
         {
             StartCoroutine(this.ShowCategoryAndType(category, types, tIndex));
         }
