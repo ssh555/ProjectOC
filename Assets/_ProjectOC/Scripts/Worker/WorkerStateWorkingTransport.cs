@@ -20,9 +20,6 @@ namespace ProjectOC.WorkerNS
                     }
                 }
             );
-            this.BindUpdateAction((machine, state) => {
-                // TODO:控制搬运流程(开始 - 搬运 - 任务结束)
-            });
         }
     }
 }
