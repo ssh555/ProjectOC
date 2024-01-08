@@ -1,3 +1,5 @@
+using Sirenix.OdinInspector;
+
 namespace ProjectOC.MissionNS 
 {
     /// <summary>
@@ -5,13 +7,9 @@ namespace ProjectOC.MissionNS
     /// </summary>
     public enum TransportState
     {
-        /// <summary>
-        /// 空手行进
-        /// </summary>
+        [LabelText("空手行进")]
         EmptyHanded,
-        /// <summary>
-        /// 持物行进
-        /// </summary>
+        [LabelText("持物行进")]
         HoldingObjects
     }
 }

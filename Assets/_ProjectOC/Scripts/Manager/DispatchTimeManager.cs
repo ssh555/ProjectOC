@@ -14,11 +14,11 @@ namespace ProjectOC.ManagerNS
     public sealed class DispatchTimeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         /// <summary>
-        /// 时间流速比例，游戏timeScale s等于现实1h
+        /// 时间流速比例，现实timeScale s等于游戏1h
         /// </summary>
         private float timeScale = 60;
         /// <summary>
-        /// 时间流速比例，游戏timeScale s等于现实1h
+        /// 时间流速比例，现实timeScale s等于游戏1h
         /// </summary>
         public float TimeScale 
         { 
@@ -53,6 +53,7 @@ namespace ProjectOC.ManagerNS
         {
             this.Timer = new CounterDownTimer(this.TimeScale, true, false);
             this.Timer.OnEndEvent += EndActionForTimer;
+            this.Timer.Start();
         }
         private void EndActionForTimer()
         {

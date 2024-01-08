@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static ProjectOC.ProductionNodeNS.RecipeManager;
 
 namespace ML.Engine.InventorySystem
 {
@@ -57,18 +56,23 @@ namespace ML.Engine.InventorySystem
         [System.Serializable]
         public struct ItemTableJsonData
         {
-            public string id;
-            public TextContent.TextContent name;
+            public string ID;
+            public int Sort;
+            public ItemType Itemtype;
+            public TextContent.TextContent Name;
+            public int Weight;
+            public string Icon;
+            // TODO: 修改为TextContent
+            public string ItemDescription;
+            // TODO: 修改为TextContent
+            public string EffectsDescription;
             public string type;
             public int sort;
             public ItemType itemtype;
             public int weight;
             public bool bcanstack;
             public int maxamount;
-            public string texture2d;
             public string worldobject;
-            public string description;
-            public string effectsDescription;
         }
         public static ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableJsonData[]> ABJAProcessor;
 
@@ -80,7 +84,7 @@ namespace ML.Engine.InventorySystem
                 {
                     foreach (var data in datas)
                     {
-                        this.ItemTypeStrDict.Add(data.id, data);
+                        this.ItemTypeStrDict.Add(data.ID, data);
                     }
                 }, null, "背包系统物品Item表数据");
                 ABJAProcessor.StartLoadJsonAssetData();
@@ -210,7 +214,7 @@ namespace ML.Engine.InventorySystem
                 return null;
             }
             
-            return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>(this.ItemTypeStrDict[id].texture2d);
+            return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>(this.ItemTypeStrDict[id].Icon);
         }
 
         public Sprite GetItemSprite(string id)
@@ -238,7 +242,7 @@ namespace ML.Engine.InventorySystem
             {
                 return "";
             }
-            return this.ItemTypeStrDict[id].name;
+            return this.ItemTypeStrDict[id].Name;
         }
 
         public bool GetCanStack(string id)
@@ -256,16 +260,16 @@ namespace ML.Engine.InventorySystem
             {
                 return -1;
             }
-            return this.ItemTypeStrDict[id].weight;
+            return this.ItemTypeStrDict[id].Weight;
         }
 
         public int GetSortNum(string id)
         {
             if (!this.ItemTypeStrDict.ContainsKey(id))
             {
-                return int.MinValue;
+                return int.MaxValue;
             }
-            return this.ItemTypeStrDict[id].sort;
+            return this.ItemTypeStrDict[id].Sort;
         }
 
         public ItemType GetItemType(string id)
@@ -274,7 +278,7 @@ namespace ML.Engine.InventorySystem
             {
                 return ItemType.None;
             }
-            return this.ItemTypeStrDict[id].itemtype;
+            return this.ItemTypeStrDict[id].Itemtype;
         }
 
         public int GetMaxAmount(string id)
@@ -292,7 +296,7 @@ namespace ML.Engine.InventorySystem
             {
                 return null;
             }
-            return this.ItemTypeStrDict[id].description;
+            return this.ItemTypeStrDict[id].ItemDescription;
         }
 
         public string GetEffectDescription(string id)
@@ -301,7 +305,7 @@ namespace ML.Engine.InventorySystem
             {
                 return null;
             }
-            return this.ItemTypeStrDict[id].effectsDescription;
+            return this.ItemTypeStrDict[id].EffectsDescription;
         }
 
         public static Type GetTypeByName(string fullName)
@@ -319,7 +323,6 @@ namespace ML.Engine.InventorySystem
             }
             return null;
         }
-
         #endregion
     }
 }

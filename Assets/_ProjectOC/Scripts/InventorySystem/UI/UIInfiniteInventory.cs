@@ -688,31 +688,31 @@ namespace ProjectOC.InventorySystem.UI
                 {
                     var data = new ItemManager.ItemTableJsonData();
                     // id
-                    data.id = itype.ToString() + "_" + i;
+                    data.ID = itype.ToString() + "_" + i;
                     // name
-                    data.name = new TextContent();
-                    data.name.Chinese = data.id;
-                    data.name.English = data.id;
+                    data.Name = new TextContent();
+                    data.Name.Chinese = data.ID;
+                    data.Name.English = data.ID;
                     // type
                     data.type = "ResourceItem";
                     // sort
-                    data.sort = i;
+                    data.Sort = i;
                     // itemtype
-                    data.itemtype = itype;
+                    data.Itemtype = itype;
                     // weight
-                    data.weight = UnityEngine.Random.Range(1, 10);
+                    data.Weight = UnityEngine.Random.Range(1, 10);
                     // bcanstack
                     data.bcanstack = UnityEngine.Random.Range(1, 10) < 9;
                     // maxamount
                     data.maxamount = 999;
                     // texture2d
-                    data.texture2d = "100001";
+                    data.Icon = "100001";
                     // worldobject
                     data.worldobject = "TESTWorldItem";
                     // description
-                    data.description = "TTTTTTTTTTTTTTTTTTTTTTTT\nXXXXXXXXXXXXXXXXXXXXXXXX\nTTTTTTTTTTTTTTTTTTTTTTTT";
+                    data.ItemDescription = "TTTTTTTTTTTTTTTTTTTTTTTT\nXXXXXXXXXXXXXXXXXXXXXXXX\nTTTTTTTTTTTTTTTTTTTTTTTT";
                     // effectsDescription
-                    data.effectsDescription = "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%金币掉落\n<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%攻击力持续300s</b></color>";
+                    data.EffectsDescription = "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%金币掉落\n<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%攻击力持续300s</b></color>";
                     datas.Add(data);
                 }
             }

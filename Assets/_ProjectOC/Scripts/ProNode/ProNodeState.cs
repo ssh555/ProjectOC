@@ -1,9 +1,9 @@
-namespace ProjectOC.ProductionNodeNS
+namespace ProjectOC.ProNodeNS
 {
     /// <summary>
     /// 生产节点状态
     /// </summary>
-    public enum ProductionNodeState
+    public enum ProNodeState
     {
         /// <summary>
         /// 空置：未选择生产项；

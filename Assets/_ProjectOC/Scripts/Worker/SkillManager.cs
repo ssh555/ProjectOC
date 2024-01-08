@@ -1,11 +1,8 @@
 using ML.Engine.Manager;
-using Newtonsoft.Json;
-using System;
-using System.Collections;
+using ML.Engine.TextContent;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static ProjectOC.WorkerNS.WorkerManager;
 
 namespace ProjectOC.WorkerNS
 {
@@ -32,41 +29,91 @@ namespace ProjectOC.WorkerNS
         }
         #endregion
 
+        #region Load And Data
         /// <summary>
-        /// 基础 Skill 数据表
+        /// 是否已加载完数据
+        /// </summary>
+        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
+
+        /// <summary>
+        /// Skill 数据表
         /// </summary>
         private Dictionary<string, SkillTableJsonData> SkillTableDict = new Dictionary<string, SkillTableJsonData>();
 
-        /// <summary>
-        /// 是否是有效的ID
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public bool IsValidID(string id)
+        public const string Texture2DPath = "ui/WorkerAbility/texture2d";
+        
+        [System.Serializable]
+        public struct SkillTableJsonData
         {
-            return this.SkillTableDict.ContainsKey(id);
+            public string ID;
+            public int Sort;
+            public string Icon;
+            public WorkType AbilityType;
+            public List<string> Effects;
+            public TextContent ItemDescription;
+            public TextContent EffectsDescription;
         }
+
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableJsonData[]> ABJAProcessor;
+
+        public void LoadTableData()
+        {
+            if (ABJAProcessor == null)
+            {
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableJsonData[]>("Json/TableData", "WorkerAbilityTableData", (datas) =>
+                {
+                    foreach (var data in datas)
+                    {
+                        this.SkillTableDict.Add(data.ID, data);
+                    }
+                }, null, "隐兽Skill表数据");
+                ABJAProcessor.StartLoadJsonAssetData();
+            }
+        }
+        #endregion
+
+        #region Spawn
         public Skill SpawnSkill(string id)
         {
-            if (SkillTableDict.ContainsKey(id))
+            if (this.SkillTableDict.TryGetValue(id, out SkillTableJsonData row))
             {
-                SkillTableJsonData row = this.SkillTableDict[id];
-                Skill skill = new Skill();
-                skill.Init(row);
+                Skill skill = new Skill(row);
                 return skill;
             }
-            Debug.LogError("没有对应ID为 " + id + " 的技能");
+            Debug.LogError("没有对应ID为 " + id + " 的Skill");
             return null;
         }
+        #endregion
+
+        #region Getter
+        public string[] GetAllSkillID()
+        {
+            return SkillTableDict.Keys.ToArray();
+        }
+
+        public bool IsValidSkillID(string id)
+        {
+            return SkillTableDict.ContainsKey(id);
+        }
+
+        public int GetSort(string id)
+        {
+            if (!SkillTableDict.ContainsKey(id))
+            {
+                return int.MaxValue;
+            }
+            return SkillTableDict[id].Sort;
+        }
+
         public Texture2D GetTexture2D(string id)
         {
-            if (!this.SkillTableDict.ContainsKey(id))
+            if (!SkillTableDict.ContainsKey(id))
             {
                 return null;
             }
-
-            return GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>(this.SkillTableDict[id].texture2d);
+            return GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>(SkillTableDict[id].Icon);
         }
+
         public Sprite GetSprite(string id)
         {
             var tex = this.GetTexture2D(id);
@@ -77,37 +124,31 @@ namespace ProjectOC.WorkerNS
             return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
         }
 
-        #region to-do : 需读表导入所有所需的 Skill 数据
-        public const string Texture2DPath = "ui/Skill/texture2d";
-
-        [System.Serializable]
-        public struct SkillTableJsonData
+        public WorkType GetSkillType(string id)
         {
-            public string id;
-            public string name;
-            public int sort;
-            public WorkType type;
-            public string desciption;
-            public string effectsDescription;
-            public List<string> effectIDs;
-            public string texture2d;
+            if (!SkillTableDict.ContainsKey(id))
+            {
+                return WorkType.None;
+            }
+            return SkillTableDict[id].AbilityType;
         }
 
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableJsonData[]> ABJAProcessor;
-
-        public void LoadTableData()
+        public string GetItemDescription(string id)
         {
-            if (ABJAProcessor == null)
+            if (!SkillTableDict.ContainsKey(id))
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableJsonData[]>("Json/TableData", "SkillTableData", (datas) =>
-                {
-                    foreach (var data in datas)
-                    {
-                        this.SkillTableDict.Add(data.id, data);
-                    }
-                }, null, "隐兽Skill表数据");
-                ABJAProcessor.StartLoadJsonAssetData();
+                return "";
             }
+            return SkillTableDict[id].ItemDescription;
+        }
+
+        public string GetEffectsDescription(string id)
+        {
+            if (!SkillTableDict.ContainsKey(id))
+            {
+                return "";
+            }
+            return SkillTableDict[id].EffectsDescription;
         }
         #endregion
     }
