@@ -22,6 +22,8 @@ namespace ProjectOC.ManagerNS
             MissionBroadCastManager = GameManager.Instance.RegisterLocalManager<MissionManager>();
             WorkerManager = GameManager.Instance.RegisterLocalManager<WorkerManager>();
             StoreManager = GameManager.Instance.RegisterLocalManager<StoreManager>();
+
+            this.enabled = false;
         }
     }
 }

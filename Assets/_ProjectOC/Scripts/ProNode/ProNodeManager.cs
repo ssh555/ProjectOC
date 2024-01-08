@@ -11,7 +11,7 @@ namespace ProjectOC.ProNodeNS
     /// <summary>
     /// 生产节点管理器
     /// </summary>
-    public sealed class ProNodeManager : ML.Engine.Manager.GlobalManager.IGlobalManager
+    public sealed class ProNodeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         #region Instance
         private ProNodeManager() { }
@@ -25,7 +25,7 @@ namespace ProjectOC.ProNodeNS
                 if (instance == null)
                 {
                     instance = new ProNodeManager();
-                    GameManager.Instance.RegisterGlobalManager(instance);
+                    GameManager.Instance.RegisterLocalManager(instance);
                     instance.LoadTableData();
                 }
                 return instance;
@@ -112,21 +112,26 @@ namespace ProjectOC.ProNodeNS
             Debug.LogError("没有对应ID为 " + id + " 的生产节点");
             return null;
         }
+
         public WorldProNode SpawnWorldProNode(ProNode node, Vector3 pos, Quaternion rot)
         {
             if (node == null)
             {
                 return null;
             }
+
             // to-do : 可采用对象池形式
             GameObject obj = GameObject.Instantiate(GameManager.Instance.ABResourceManager.LoadLocalAB(WorldObjPath).LoadAsset<GameObject>(this.ProNodeTableDict[node.ID].worldobject), pos, rot);
+
             WorldProNode worldNode = obj.GetComponent<WorldProNode>();
             if (worldNode == null)
             {
                 worldNode = obj.AddComponent<WorldProNode>();
             }
+
             worldNode.SetProNode(node);
             WorldProNodeDict.Add(node.UID, worldNode);
+
             return worldNode;
         }
         #endregion

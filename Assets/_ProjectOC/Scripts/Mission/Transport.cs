@@ -15,26 +15,32 @@ namespace ProjectOC.MissionNS
         /// 搬运所属的任务
         /// </summary>
         public MissionTransport Mission;
+
         /// <summary>
         /// 搬运物品ID
         /// </summary>
         public string ItemID = "";
+
         /// <summary>
         /// 需要搬运的数量
         /// </summary>
         public int MissionNum;
+
         /// <summary>
         /// 取货地
         /// </summary>
         public IMission Source;
+
         /// <summary>
         /// 送货地
         /// </summary>
         public IMission Target;
+
         /// <summary>
         /// 该任务的刁民
         /// </summary>
         public Worker Worker;
+
         /// <summary>
         /// 当前拿到的数量
         /// </summary>
@@ -56,6 +62,7 @@ namespace ProjectOC.MissionNS
                 return result;
             }
         }
+
         /// <summary>
         /// 还需要搬运的数量
         /// </summary>
@@ -66,10 +73,12 @@ namespace ProjectOC.MissionNS
                 return MissionNum - FinishNum - CurNum;
             }
         }
+
         /// <summary>
         /// 完成的数量
         /// </summary>
         public int FinishNum;
+
         /// <summary>
         /// 刁民搬运状态
         /// </summary>
@@ -80,6 +89,7 @@ namespace ProjectOC.MissionNS
                 return CurNum > 0 ? TransportState.HoldingObjects : TransportState.EmptyHanded;
             }
         }
+
         public Transport(MissionTransport mission, string itemID, int missionNum, IMission source, IMission destination, Worker worker)
         {
             this.Mission = mission;
@@ -93,6 +103,7 @@ namespace ProjectOC.MissionNS
             this.Target.AddTransport(this);
             this.Worker.Transport = this;
         }
+
         /// <summary>
         /// 从取货地拿出
         /// </summary>
@@ -126,6 +137,7 @@ namespace ProjectOC.MissionNS
                 Debug.LogError("Source is not Enough");
             }
         }
+
         /// <summary>
         /// 放入送货地
         /// </summary>
@@ -155,6 +167,7 @@ namespace ProjectOC.MissionNS
                 this.End();
             }
         }
+
         /// <summary>
         /// 强制结束搬运
         /// </summary>

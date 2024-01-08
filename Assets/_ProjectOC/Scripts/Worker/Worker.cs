@@ -64,8 +64,10 @@ namespace ProjectOC.WorkerNS
 
         [LabelText("特性")]
         public List<Feature> Features = new List<Feature>();
+
         [LabelText("每个时段的安排")]
         public TimeArrangement TimeArrangement;
+
         [LabelText("当前时段的安排应该所处的状态")]
         public TimeStatus CurTimeFrameStatus 
         { 
@@ -80,24 +82,32 @@ namespace ProjectOC.WorkerNS
                 return TimeStatus.None;
             } 
         }
+        
         /// <summary>
         /// 状态机控制器
         /// </summary>
         protected StateController StateController;
+
         /// <summary>
         /// 状态机
         /// </summary>
         protected WorkerStateMachine StateMachine;
+
         [LabelText("当前实际状态")]
         public Status Status;
+
         [LabelText("是否在值班")]
         public bool IsOnDuty { get { return this.ProNode != null && this.Status != Status.Relaxing; } }
+
         [LabelText("生产节点")]
         public ProNode ProNode;
+
         [LabelText("搬运")]
         public Transport Transport;
+
         [LabelText("搬运物品")]
         public List<Item> TransportItems = new List<Item>();
+
         public Worker()
         {
             //this.ExpRate.Add(WorkType.Cook, "Skill ID");
@@ -141,6 +151,7 @@ namespace ProjectOC.WorkerNS
             StateMachine = new WorkerStateMachine(this);
             StateController.SetStateMachine(StateMachine);
         }
+
         /// <summary>
         /// 修改经验值
         /// </summary>
@@ -150,6 +161,7 @@ namespace ProjectOC.WorkerNS
         {
             this.Skill[workType].AlterExp(value * ExpRate[workType]);
         }
+
         /// <summary>
         /// 修改体力值
         /// </summary>
@@ -164,6 +176,7 @@ namespace ProjectOC.WorkerNS
             }
             return false;
         }
+
         /// <summary>
         /// 结算搬运奖励
         /// </summary>

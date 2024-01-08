@@ -21,7 +21,11 @@ namespace ProjectOC.MissionNS
         /// 搬运任务列表
         /// </summary>
         public SortedSet<MissionTransport> MissionTransports = new SortedSet<MissionTransport>(new MissionTransport.Sort());
-        public CounterDownTimer timer;
+
+        private CounterDownTimer timer;
+        /// <summary>
+        /// 代替Tick的更新任务的计时器
+        /// </summary>
         public CounterDownTimer Timer
         {
             get 
@@ -34,10 +38,12 @@ namespace ProjectOC.MissionNS
                 return this.timer;
             }
         }
+
         public MissionManager()
         {
             this.Timer.Start();
         }
+
         /// <summary>
         /// 创建搬运任务
         /// </summary>
@@ -62,6 +68,7 @@ namespace ProjectOC.MissionNS
                 store.ReserveEmptyToWorker(mission.ItemID, missionNum);
             }
         }
+
         /// <summary>
         /// 仓库到发起者，取出仓库
         /// </summary>
@@ -78,12 +85,14 @@ namespace ProjectOC.MissionNS
                     Transport transport = new Transport(mission, mission.ItemID, missionNum, mission.Initiator, store, worker);
                     store.ReserveStorageToWorker(mission.ItemID, missionNum);
                 }
+                // 没有空闲的Worker
                 if (worker == null)
                 {
                     break;
                 }
             }
         }
+
         /// <summary>
         /// 计时器结束时执行一次分配任务
         /// </summary>
