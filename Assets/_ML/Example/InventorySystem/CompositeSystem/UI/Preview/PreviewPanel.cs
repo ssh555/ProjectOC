@@ -104,7 +104,7 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
             this.RefreshFormulaContainer(ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.GetCompositonFomula(this.ID));
 
             // UsageContainer
-            this.RefreshUsageContainer(ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.GetCompositionUsage(this.ID));
+            //this.RefreshUsageContainer(ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.GetCompositionUsage(this.ID));
 
             // ButtonContainer
             this.RefreshButtonContainer();

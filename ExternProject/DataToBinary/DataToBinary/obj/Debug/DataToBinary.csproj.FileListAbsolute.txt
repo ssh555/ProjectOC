@@ -1,0 +1,8 @@
+C:\Github\Unity\ProjectOC\ExternProject\_EXE\DataToBinary\DataToBinary.exe.config
+C:\Github\Unity\ProjectOC\ExternProject\_EXE\DataToBinary\DataToBinary.exe
+C:\Github\Unity\ProjectOC\ExternProject\_EXE\DataToBinary\DataToBinary.pdb
+C:\Github\Unity\ProjectOC\ExternProject\DataToBinary\DataToBinary\obj\Debug\DataToBinary.csproj.AssemblyReference.cache
+C:\Github\Unity\ProjectOC\ExternProject\DataToBinary\DataToBinary\obj\Debug\DataToBinary.csproj.CoreCompileInputs.cache
+C:\Github\Unity\ProjectOC\ExternProject\DataToBinary\DataToBinary\obj\Debug\DataToBinary.csproj.CopyComplete
+C:\Github\Unity\ProjectOC\ExternProject\DataToBinary\DataToBinary\obj\Debug\DataToBinary.exe
+C:\Github\Unity\ProjectOC\ExternProject\DataToBinary\DataToBinary\obj\Debug\DataToBinary.pdb

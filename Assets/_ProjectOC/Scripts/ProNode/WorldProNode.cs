@@ -14,11 +14,13 @@ namespace ProjectOC.ProNodeNS
         /// </summary>
         [SerializeField, ReadOnly]
         protected string ProNodeID{ get { return this.ProNode?.ID ?? ""; }}
+
         /// <summary>
         /// 拥有的生产节点
         /// </summary>
         [ShowInInspector, ReadOnly, SerializeField]
         public ProNode ProNode;
+
         public void SetProNode(ProNode node)
         {
             if (this.ProNode != null)
@@ -28,6 +30,7 @@ namespace ProjectOC.ProNodeNS
             this.ProNode = node;
             this.ProNode.WorldProNode = this;
         }
+
         private void Start()
         {
             // 不需要 Update

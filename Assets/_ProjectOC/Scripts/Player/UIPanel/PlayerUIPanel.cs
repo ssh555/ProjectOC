@@ -161,18 +161,13 @@ namespace ProjectOC.Player.UI
 
         public static Dictionary<string, TextTip> TipDict = new Dictionary<string, TextTip>();
 
-        [System.Serializable]
-        private struct TextTips
-        {
-            public ML.Engine.TextContent.TextTip[] tips;
-        }
         public static ML.Engine.ABResources.ABJsonAssetProcessor<ML.Engine.TextContent.TextTip[]> ABJAProcessor;
 
         public void InitUITextContents()
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ML.Engine.TextContent.TextTip[]>("JSON/TextContent/Player", "PlayerUIPanel", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ML.Engine.TextContent.TextTip[]>("Binary/TextContent/Player", "PlayerUIPanel", (datas) =>
                 {
                     foreach (var tip in datas)
                     {

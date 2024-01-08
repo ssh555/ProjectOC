@@ -15,11 +15,13 @@ namespace ML.Engine.InventorySystem
         /// ID
         /// </summary>
         public string ID = "";
+
         #region 读表数据
         /// <summary>
         /// 序号用于排序
         /// </summary>
         public int Sort { get => RecipeManager.Instance.GetSort(ID); }
+
         /// <summary>
         /// 类目
         /// </summary>
@@ -46,10 +48,12 @@ namespace ML.Engine.InventorySystem
         {
             this.ID = config.ID;
         }
+
         public Recipe(Recipe recipe)
         {
             this.ID = recipe.ID;
         }
+
         public string GetProductID()
         {
             if (Product.Count == 1)
@@ -62,6 +66,7 @@ namespace ML.Engine.InventorySystem
             Debug.LogError("Recipe Product Num is Error");
             return "";
         }
+
         public int GetProductNum()
         {
             if (Product.Count == 1)
@@ -74,6 +79,7 @@ namespace ML.Engine.InventorySystem
             Debug.LogError("Recipe Product Num is Error");
             return 0;
         }
+
         public int GetRawNum(string itemID)
         {
             if (Raw.ContainsKey(itemID))

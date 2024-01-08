@@ -19,10 +19,12 @@ namespace ProjectOC.ProNodeNS
         /// 对应的全局生产节点
         /// </summary>
         public WorldProNode WorldProNode;
+
         /// <summary>
         /// 建筑实例ID，全局唯一
         /// </summary>
         public string UID { get { return WorldProNode?.InstanceID ?? ""; } }
+
         /// <summary>
         /// ID
         /// </summary>
@@ -220,6 +222,7 @@ namespace ProjectOC.ProNodeNS
                 return timerForProduce;
             }
         }
+
         /// <summary>
         /// 任务计时器
         /// </summary>
@@ -258,6 +261,7 @@ namespace ProjectOC.ProNodeNS
             }
             return result;
         }
+
         /// <summary>
         /// 更改生产项
         /// </summary>
@@ -279,6 +283,7 @@ namespace ProjectOC.ProNodeNS
             }
             return false;
         }
+
         /// <summary>
         /// 移除当前生产项
         /// </summary>
@@ -343,6 +348,7 @@ namespace ProjectOC.ProNodeNS
             this.RawItems.Clear();
             this.Recipe = null;
         }
+
         /// <summary>
         /// 更改在岗刁民
         /// </summary>
@@ -361,6 +367,7 @@ namespace ProjectOC.ProNodeNS
             }
             return false;
         }
+
         /// <summary>
         /// 移除在岗刁民
         /// </summary>
@@ -380,6 +387,7 @@ namespace ProjectOC.ProNodeNS
             }
             return false;
         }
+
         /// <summary>
         /// 开始运行生产节点，这个时候并不一定开始制作物品
         /// </summary>
@@ -388,6 +396,7 @@ namespace ProjectOC.ProNodeNS
             this.TimerForMission.Start();
             this.StartProduce();
         }
+
         /// <summary>
         /// 取消运行，这个时候会停止制作物品
         /// </summary>
@@ -399,6 +408,7 @@ namespace ProjectOC.ProNodeNS
             }
             this.StopProduce();
         }
+
         /// <summary>
         /// 开始制作物品
         /// </summary>
@@ -415,6 +425,7 @@ namespace ProjectOC.ProNodeNS
                 return false;
             }
         }
+
         /// <summary>
         /// 停止制作物品
         /// </summary>
@@ -425,6 +436,7 @@ namespace ProjectOC.ProNodeNS
                 this.TimerForProduce.End();
             }
         }
+
         /// <summary>
         /// 是否可以开始制作物品
         /// </summary>
@@ -479,6 +491,7 @@ namespace ProjectOC.ProNodeNS
                     CreateTransportMission(MissionTransportType.ProNode_Store, ProductItem, missionNum, this);
             }
         }
+
         protected void EndActionForProduce()
         {
             // 结算
@@ -492,6 +505,7 @@ namespace ProjectOC.ProNodeNS
                 StopProduce();
             }
         }
+
         /// <summary>
         /// 获取已经分配任务的物品数量
         /// </summary>

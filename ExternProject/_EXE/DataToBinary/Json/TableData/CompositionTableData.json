@@ -1,0 +1,18 @@
+[
+    {
+        "id": "01",
+        "name": {
+            "Chinese": "测试01",
+            "English": "TEST01"
+        },
+        "tag": [
+            "一级",
+            "二级",
+            "三级"
+        ],
+        "formula": [],
+        "compositionnum": 1,
+        "texture2d": "Test",
+        "usage" : null
+    }
+]

@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1170213606
+CRC: 3034767901
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 3dfb0282df011d671bf7bada2d0b8c80
+    Hash: 352d4f36d9b1fe3be6f4d34d37744286
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 7f063347b10f03a604a393472598e06c
+    Hash: d0c8639e8e852785b9da9ba9aa1a9e6d
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 3dfb0282df011d671bf7bada2d0b8c80
+    Hash: 352d4f36d9b1fe3be6f4d34d37744286
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -53,11 +53,11 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
@@ -113,6 +113,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 84a92b25f83d49b9bc132d206b370281, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 88dfd9a1d40070e45bc302b503615a5e, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
@@ -124,8 +126,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 18e0a5fd7f32347419b785bf00a72db7, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 88dfd9a1d40070e45bc302b503615a5e, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -151,9 +151,11 @@ ClassTypes:
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/_ProjectOC/Scene/_TEST/yangLe/_TASceneTest.unity
+- Assets/_ProjectOC/Scene/_TEST/cwt/CwtTotalTest.unity
 - Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/BuidlingSystemTest.unity
 - Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity
 Dependencies:
 - C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/animation/character/player/model
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/fonts
 - C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials
 - C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/prefabs/character/player
