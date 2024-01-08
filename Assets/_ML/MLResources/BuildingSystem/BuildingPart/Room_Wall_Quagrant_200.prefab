@@ -56,9 +56,13 @@ PrefabInstance:
       propertyPath: classification.Height
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 4754381983598646201, guid: 99e1e7cddf4b4d6469da196fee6a3170, type: 3}
+      propertyPath: classification.Category4
+      value: 200
+      objectReference: {fileID: 0}
     - target: {fileID: 7109581220052550088, guid: 99e1e7cddf4b4d6469da196fee6a3170, type: 3}
       propertyPath: m_Name
-      value: Room_Wall_Quagrant_200 Variant
+      value: Room_Wall_Quagrant_200
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

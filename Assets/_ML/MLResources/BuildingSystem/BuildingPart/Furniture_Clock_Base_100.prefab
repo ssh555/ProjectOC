@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 3766971281658842530}
   - component: {fileID: 505722819217253411}
   m_Layer: 7
-  m_Name: Furniture_Clock
+  m_Name: Furniture_Clock_Base_100
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -171,10 +171,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
-    Category: 1
-    Type: 102
-    Style: 1
-    Height: 20
+    Category1: 1
+    Category2: 102
+    Category3: 1
+    Category4: 100
   instanceID: 
   canPlaceInPlaceMode: 0
   mode: 0

@@ -75,5 +75,12 @@
             "Chinese": "椅子",
             "English": "Chair"
         }
+    },
+    {
+        "name": "Clock",
+        "description": {
+            "Chinese": "挂钟",
+            "English": "Clock"
+        }
     }
 ]

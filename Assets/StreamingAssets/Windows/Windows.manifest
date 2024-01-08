@@ -1,18 +1,18 @@
 ManifestFileVersion: 0
-CRC: 1166699222
+CRC: 3649627856
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: animation/character/player/model
+      Name: animation/character/player/playermove
       Dependencies: {}
     Info_1:
-      Name: animation/character/player/playermove
+      Name: animation/character/player/model
       Dependencies: {}
     Info_2:
       Name: prefabs/character/player
       Dependencies:
-        Dependency_0: animation/character/player/model
-        Dependency_1: animation/character/player/playermove
+        Dependency_0: animation/character/player/playermove
+        Dependency_1: animation/character/player/model
         Dependency_2: ui/uipanel
     Info_3:
       Name: scene
@@ -29,66 +29,66 @@ AssetBundleManifest:
     Info_6:
       Name: ui/buildingsystem/prefabs
       Dependencies:
-        Dependency_0: ui/buildingsystem/texture2d/category
+        Dependency_0: ui/buildingsystem/texture2d/style
         Dependency_1: ui/buildingsystem/texture2d/type
-        Dependency_2: ui/buildingsystem/texture2d/style
-        Dependency_3: fonts
-        Dependency_4: assets/buildingsystem
+        Dependency_2: ui/buildingsystem/texture2d/category
+        Dependency_3: assets/buildingsystem
+        Dependency_4: fonts
     Info_7:
       Name: prefabs/buildingsystem/bpart
       Dependencies: {}
     Info_8:
-      Name: ui/buildingsystem/texture2d/category
+      Name: ui/buildingsystem/texture2d/style
       Dependencies: {}
     Info_9:
       Name: ui/buildingsystem/texture2d/type
       Dependencies: {}
     Info_10:
-      Name: ui/buildingsystem/texture2d/style
+      Name: ui/buildingsystem/texture2d/category
       Dependencies: {}
     Info_11:
-      Name: fonts
-      Dependencies: {}
-    Info_12:
       Name: assets/buildingsystem
       Dependencies:
         Dependency_0: prefabs/buildingsystem/bpart
-    Info_13:
+    Info_12:
       Name: ui/item/texture2d
       Dependencies: {}
-    Info_14:
+    Info_13:
       Name: prefabs/item/worlditem
+      Dependencies: {}
+    Info_14:
+      Name: ui/techpoint/texture2d
       Dependencies: {}
     Info_15:
       Name: json/tabledata
       Dependencies: {}
     Info_16:
-      Name: ui/techpoint/texture2d
-      Dependencies: {}
-    Info_17:
       Name: ui/uipanel
       Dependencies:
-        Dependency_0: fonts
-        Dependency_1: ui/techpoint/texture2d
-    Info_18:
+        Dependency_0: ui/techpoint/texture2d
+        Dependency_1: fonts
+    Info_17:
       Name: json/textcontent/buildingsystem/ui
       Dependencies: {}
-    Info_19:
+    Info_18:
       Name: json/textcontent/techtree
       Dependencies: {}
-    Info_20:
+    Info_19:
       Name: json/textcontent/player
+      Dependencies: {}
+    Info_20:
+      Name: fonts
       Dependencies: {}
     Info_21:
       Name: json/textcontent/interactsystem
       Dependencies: {}
     Info_22:
+      Name: ui/inventory/texture2d/itemtype
+      Dependencies: {}
+    Info_23:
       Name: ui/interactsystem
       Dependencies:
         Dependency_0: fonts
-    Info_23:
-      Name: json/textcontent/inventory
-      Dependencies: {}
     Info_24:
-      Name: ui/inventory/texture2d/itemtype
+      Name: json/textcontent/inventory
       Dependencies: {}

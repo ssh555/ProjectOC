@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: classification.Height
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 5154948290328816093, guid: 3b2d53fbaae062d4b9b304c477f43a5f, type: 3}
+      propertyPath: classification.Category4
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 7812184949812933790, guid: 3b2d53fbaae062d4b9b304c477f43a5f, type: 3}
       propertyPath: m_LocalScale.y
       value: 0.5

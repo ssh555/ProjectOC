@@ -54,10 +54,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1441747043776368372, guid: 9bdf5670e4aba75449c45bf682a9cd90, type: 3}
       propertyPath: m_Name
-      value: Room_FoundationEdge_Triangle_75 Variant
+      value: Room_FoundationEdge_Triangle_75
       objectReference: {fileID: 0}
     - target: {fileID: 2128048769409143770, guid: 9bdf5670e4aba75449c45bf682a9cd90, type: 3}
       propertyPath: classification.Height
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 2128048769409143770, guid: 9bdf5670e4aba75449c45bf682a9cd90, type: 3}
+      propertyPath: classification.Category4
       value: 75
       objectReference: {fileID: 0}
     m_RemovedComponents: []

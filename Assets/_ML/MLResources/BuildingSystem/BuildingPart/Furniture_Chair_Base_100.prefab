@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5144789343004960823}
   - component: {fileID: 7373776624381670312}
   m_Layer: 7
-  m_Name: Furniture_Chair_Base_0
+  m_Name: Furniture_Chair_Base_100
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -102,7 +102,7 @@ MonoBehaviour:
     Category1: 1
     Category2: 101
     Category3: 1
-    Category4: 0
+    Category4: 100
   instanceID: 
   canPlaceInPlaceMode: 0
   mode: 0

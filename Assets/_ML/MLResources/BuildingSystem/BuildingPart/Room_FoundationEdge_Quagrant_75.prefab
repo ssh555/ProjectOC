@@ -56,6 +56,10 @@ PrefabInstance:
       propertyPath: classification.Height
       value: 75
       objectReference: {fileID: 0}
+    - target: {fileID: 3804518659609854317, guid: b0aace77d6f2339408cf95d9fb6bd96c, type: 3}
+      propertyPath: classification.Category4
+      value: 75
+      objectReference: {fileID: 0}
     - target: {fileID: 4415244834863864899, guid: b0aace77d6f2339408cf95d9fb6bd96c, type: 3}
       propertyPath: m_Name
       value: Room_FoundationEdge_Quagrant_75

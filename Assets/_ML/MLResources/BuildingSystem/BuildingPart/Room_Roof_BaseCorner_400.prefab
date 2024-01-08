@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: classification.Height
       value: 400
       objectReference: {fileID: 0}
+    - target: {fileID: 2143085364776968026, guid: 5b3dbd05c4dab7544acfae2287f48508, type: 3}
+      propertyPath: classification.Category4
+      value: 400
+      objectReference: {fileID: 0}
     - target: {fileID: 2949989586612801028, guid: 5b3dbd05c4dab7544acfae2287f48508, type: 3}
       propertyPath: m_Name
       value: Room_Roof_BaseCorner_400

@@ -54,10 +54,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8432199409486748183, guid: 328f6973a1c4a924a9915082155bcc77, type: 3}
       propertyPath: m_Name
-      value: Room_Wall_Triangle_200 Variant
+      value: Room_Wall_Triangle_200
       objectReference: {fileID: 0}
     - target: {fileID: 8968618307452829997, guid: 328f6973a1c4a924a9915082155bcc77, type: 3}
       propertyPath: classification.Height
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 8968618307452829997, guid: 328f6973a1c4a924a9915082155bcc77, type: 3}
+      propertyPath: classification.Category4
       value: 200
       objectReference: {fileID: 0}
     m_RemovedComponents: []

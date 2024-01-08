@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2395717542
+CRC: 1523090614
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: eb20b742fbb8e23dd024916ab958b3f8
+    Hash: c89630c6c789305d6b09b24e62544d7e
   TypeTreeHash:
     serializedVersion: 2
     Hash: 97aa7e701ffaec6ff358fb4311fb64ac
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: eb20b742fbb8e23dd024916ab958b3f8
+    Hash: c89630c6c789305d6b09b24e62544d7e
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -121,5 +121,5 @@ Assets:
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIPanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIBotPanel.prefab
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/fonts
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/techpoint/texture2d
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/fonts
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/techpoint/texture2d

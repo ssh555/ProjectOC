@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4142160112760919263, guid: 2dd3c6cf150ee464f9ccf8a7b708cab7, type: 3}
       propertyPath: m_Name
-      value: Room_Roof_Quagrant_400 Variant
+      value: Room_Roof_Quagrant_400
       objectReference: {fileID: 0}
     - target: {fileID: 5026097898478692079, guid: 2dd3c6cf150ee464f9ccf8a7b708cab7, type: 3}
       propertyPath: m_LocalScale.y
@@ -58,6 +58,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5407216257656974632, guid: 2dd3c6cf150ee464f9ccf8a7b708cab7, type: 3}
       propertyPath: classification.Height
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 5407216257656974632, guid: 2dd3c6cf150ee464f9ccf8a7b708cab7, type: 3}
+      propertyPath: classification.Category4
       value: 400
       objectReference: {fileID: 0}
     m_RemovedComponents: []
