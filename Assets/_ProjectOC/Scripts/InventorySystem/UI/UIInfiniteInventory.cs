@@ -664,7 +664,7 @@ namespace ProjectOC.InventorySystem.UI
         {
             if(ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<InventoryPanel>("JSON/TextContent/Inventory", "InventoryPanel", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<InventoryPanel>("Binary/TextContent/Inventory", "InventoryPanel", (datas) =>
                 {
                     Refresh();
                     this.enabled = false;
@@ -678,7 +678,7 @@ namespace ProjectOC.InventorySystem.UI
         [Button("生成测试文件")]
         void GenTESTFILE()
         {
-            List<ItemManager.ItemTableJsonData> datas = new List<ItemManager.ItemTableJsonData>();
+            List<ItemTableJsonData> datas = new List<ItemTableJsonData>();
 
             var itypes = Enum.GetValues(typeof(ML.Engine.InventorySystem.ItemType)).Cast<ML.Engine.InventorySystem.ItemType>().Where(e => (int)e > 0).ToArray();
             foreach(var itype in itypes)
@@ -686,33 +686,33 @@ namespace ProjectOC.InventorySystem.UI
                 int cnt = UnityEngine.Random.Range(50, 100);
                 for(int i = 0; i < cnt; ++i)
                 {
-                    var data = new ItemManager.ItemTableJsonData();
+                    var data = new ItemTableJsonData();
                     // id
-                    data.ID = itype.ToString() + "_" + i;
+                    data.id = itype.ToString() + "_" + i;
                     // name
-                    data.Name = new TextContent();
-                    data.Name.Chinese = data.ID;
-                    data.Name.English = data.ID;
+                    data.name = new TextContent();
+                    data.name.Chinese = data.id;
+                    data.name.English = data.id;
                     // type
                     data.type = "ResourceItem";
                     // sort
-                    data.Sort = i;
+                    data.sort = i;
                     // itemtype
-                    data.Itemtype = itype;
+                    data.itemtype = itype;
                     // weight
-                    data.Weight = UnityEngine.Random.Range(1, 10);
+                    data.weight = UnityEngine.Random.Range(1, 10);
                     // bcanstack
                     data.bcanstack = UnityEngine.Random.Range(1, 10) < 9;
                     // maxamount
                     data.maxamount = 999;
                     // texture2d
-                    data.Icon = "100001";
+                    data.icon = "100001";
                     // worldobject
                     data.worldobject = "TESTWorldItem";
                     // description
-                    data.ItemDescription = "TTTTTTTTTTTTTTTTTTTTTTTT\nXXXXXXXXXXXXXXXXXXXXXXXX\nTTTTTTTTTTTTTTTTTTTTTTTT";
+                    data.itemdescription = "TTTTTTTTTTTTTTTTTTTTTTTT\nXXXXXXXXXXXXXXXXXXXXXXXX\nTTTTTTTTTTTTTTTTTTTTTTTT";
                     // effectsDescription
-                    data.EffectsDescription = "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%金币掉落\n<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%攻击力持续300s</b></color>";
+                    data.effectsdescription = "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%金币掉落\n<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%攻击力持续300s</b></color>";
                     datas.Add(data);
                 }
             }

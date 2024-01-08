@@ -1,10 +1,9 @@
-using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using Unity.VisualScripting;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
-using static ProjectOC.InventorySystem.UI.UIInfiniteInventory;
 
 namespace ML.Engine.ABResources
 {
@@ -96,9 +95,13 @@ namespace ML.Engine.ABResources
             var request = ab.LoadAssetAsync<TextAsset>(this.ABName);
             yield return request;
 
-            Datas = JsonConvert.DeserializeObject<T>((request.asset as TextAsset).text);
-            
-            IsLoaded = true;
+            using (MemoryStream ms = new MemoryStream((request.asset as TextAsset).bytes))
+            {
+                DataContractSerializer serializer = new DataContractSerializer(typeof(T));
+                Datas = (T)serializer.ReadObject(ms);
+            }
+
+           IsLoaded = true;
 
             this.onLoadOver?.Invoke(Datas);
 
