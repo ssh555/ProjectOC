@@ -18,7 +18,7 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
             {
                 this._id = value;
                 // id
-                this.transform.GetChild(0).GetComponent<Image>().sprite = ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.GetCompositonSprite(this._id);
+                this.transform.GetChild(0).GetComponent<Image>().sprite = ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.GetCompositonSprite(this._id);
                 // own num
                 this.transform.GetChild(2).GetComponent<Text>().text = this.Owner.Owner.Owner.Owner.ResourceInventory.GetItemAllNum(value).ToString();
             }

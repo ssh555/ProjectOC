@@ -51,7 +51,7 @@ namespace ML.Example.InventorySystem
 
         public void Init()
         {
-            if (this.item == null || !this.item.bCanStack)
+            if (this.item == null || !ItemManager.Instance.GetCanStack(this.item.ID))
             {
                 this.AmountText.text = "";
             }
@@ -164,7 +164,7 @@ namespace ML.Example.InventorySystem
 
             if (this.item != null)
             {
-                this.SetImage(ItemSpawner.Instance.GetItemSprite(this.item.ID));
+                this.SetImage(ItemManager.Instance.GetItemSprite(this.item.ID));
             }
             else
             {

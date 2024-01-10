@@ -1,12 +1,14 @@
 using ML.Engine.InventorySystem.CompositeSystem;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace ML.Engine.BuildingSystem.BuildingPart
 {
-    public sealed class BuildingPart : MonoBehaviour, IBuildingPart, IComposition
+    public class BuildingPart : MonoBehaviour, IBuildingPart, IComposition
     {
         #region IBuildingPart
         public string ID { get => this.classification.ToString(); set => this.classification = new BuildingPartClassification(value); }
@@ -32,7 +34,23 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             }
             set => canPlaceInPlaceMode = value; 
         }
-        public event IBuildingPart.CheckCanPlaceMode CheckCanInPlaceMode;
+        public event IBuildingPart.CheckMode CheckCanInPlaceMode;
+        public event IBuildingPart.CheckMode CheckCanEdit;
+        public event IBuildingPart.CheckMode CheckCanDestory;
+        public void OnChangePlaceEvent()
+        {
+
+        }
+
+        public bool CanEnterEditMode()
+        {
+            return CheckCanEdit != null && CheckCanEdit.Invoke(this);
+        }
+
+        public bool CanEnterDestoryMode()
+        {
+            return CheckCanDestory != null && CheckCanDestory.Invoke(this);
+        }
 
         [SerializeField, LabelText("模式")]
         private BuildingMode mode;
@@ -142,11 +160,13 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
         public void AlternativeActiveSocket()
         {
+            ActiveSocket.OnDisactive();
             this.activeSocketIndex = (this.activeSocketIndex + 1) % this.OwnedSocketList.Count;
             while(this.ActiveSocket.Type == BuildingSocket.BuildingSocketType.None)
             {
                 this.activeSocketIndex = (this.activeSocketIndex + 1) % this.OwnedSocketList.Count;
             }
+            ActiveSocket.OnActive();
         }
 
         public BuildingCopiedMaterial GetCopiedMaterial()
@@ -252,6 +272,25 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 this.Mode = this.CanPlaceInPlaceMode ? this.tmpTriggerMode : BuildingMode.Destroy;
             }
         }
+
+#if UNITY_EDITOR
+        [Button("根据资产名更正类型"), PropertyOrder(-1), ShowIf("IsPrefab")]
+        private void ChangeCategoryFromName()
+        {
+            Classification = new BuildingPartClassification(this.name);
+        }
+
+        public bool IsPrefab()
+        {
+            var type = UnityEditor.PrefabUtility.GetPrefabAssetType(this.gameObject);
+            var status = UnityEditor.PrefabUtility.GetPrefabInstanceStatus(this.gameObject);
+            if (type != UnityEditor.PrefabAssetType.NotAPrefab && status == UnityEditor.PrefabInstanceStatus.NotAPrefab)
+            {
+                return true;
+            }
+            return false;
+        }
+#endif
     }
 
 }

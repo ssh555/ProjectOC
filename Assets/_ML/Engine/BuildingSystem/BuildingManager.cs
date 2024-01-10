@@ -282,10 +282,19 @@ namespace ML.Engine.BuildingSystem
         #region BPartPrefab
         private Dictionary<BuildingPartClassification, IBuildingPart> registeredBPart = new Dictionary<BuildingPartClassification, IBuildingPart>();
 
+        /// <summary>
+        /// 当前允许放置生成的建筑物数量
+        /// </summary>
+        /// <returns></returns>
         public int GetRegisterBPartCount()
         {
             return registeredBPart.Count;
         }
+        /// <summary>
+        /// 是否是合法的建筑物ID -> 必须是已经注册的建筑物，未注册但是依旧合法的建筑物ID仍然返回fasle
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public bool IsValidBPartID(string id)
         {
             BuildingPartClassification classification = new BuildingPartClassification(id);
@@ -351,7 +360,7 @@ namespace ML.Engine.BuildingSystem
         /// <param name="Category"></param>
         /// <param name="Type"></param>
         /// <returns></returns>
-        public IBuildingPart GetOneBPartInstance(BuildingCategory Category, BuildingType Type)
+        public IBuildingPart GetOneBPartInstance(BuildingCategory1 Category, BuildingCategory2 Type)
         {
             if(this.BPartClassificationOnStyle.ContainsKey(Category) && this.BPartClassificationOnStyle[Category].ContainsKey(Type) && this.BPartClassificationOnStyle[Category][Type].Count > 0)
             {
@@ -376,23 +385,28 @@ namespace ML.Engine.BuildingSystem
 
 
         /// <summary>
-        /// 获得一个复制的实例
+        /// 若BPart可以复制，则获得一个复制的实例
+        /// 若不可以复制，则直接返回BPart
         /// </summary>
         /// <param name="BPart"></param>
         /// <returns></returns>
         public IBuildingPart GetOneBPartCopyInstance(IBuildingPart BPart)
         {
-            BPart.Mode = BuildingMode.None;
-            return GameObject.Instantiate<GameObject>(BPart.gameObject).GetComponent<IBuildingPart>();
+            if(BPart.GetCanCopy())
+            {
+                BPart.Mode = BuildingMode.None;
+                return GameObject.Instantiate<GameObject>(BPart.gameObject).GetComponent<IBuildingPart>();
+            }
+            return BPart;
         }
         
         
-        public BuildingCategory[] GetRegisteredCategory()
+        public BuildingCategory1[] GetRegisteredCategory()
         {
             return this.BPartClassificationOnStyle.Keys.ToArray();
         }
 
-        public BuildingType[] GetRegisteredType()
+        public BuildingCategory2[] GetRegisteredType()
         {
             return this.BPartClassificationOnStyle.Values.SelectMany(innerDict => innerDict.Keys).ToArray();
         }
@@ -402,7 +416,7 @@ namespace ML.Engine.BuildingSystem
         /// <summary>
         /// 基于BuildingStyle的三级分类
         /// </summary>
-        private Dictionary<BuildingCategory, Dictionary<BuildingType, Dictionary<BuildingStyle, Deque<IBuildingPart>>>> BPartClassificationOnStyle = new Dictionary<BuildingCategory, Dictionary<BuildingType, Dictionary<BuildingStyle, Deque<IBuildingPart>>>>();
+        private Dictionary<BuildingCategory1, Dictionary<BuildingCategory2, Dictionary<BuildingCategory3, Deque<IBuildingPart>>>> BPartClassificationOnStyle = new Dictionary<BuildingCategory1, Dictionary<BuildingCategory2, Dictionary<BuildingCategory3, Deque<IBuildingPart>>>>();
 
         private void AddBPartPrefabOnStyle(IBuildingPart BPart)
         {
@@ -411,33 +425,33 @@ namespace ML.Engine.BuildingSystem
                 return;
             }
             // 不存在对应队列
-            if (!this.BPartClassificationOnStyle.ContainsKey(BPart.Classification.Category) || !this.BPartClassificationOnStyle[BPart.Classification.Category].ContainsKey(BPart.Classification.Type) || !this.BPartClassificationOnStyle[BPart.Classification.Category][BPart.Classification.Type].ContainsKey(BPart.Classification.Style))
+            if (!this.BPartClassificationOnStyle.ContainsKey(BPart.Classification.Category1) || !this.BPartClassificationOnStyle[BPart.Classification.Category1].ContainsKey(BPart.Classification.Category2) || !this.BPartClassificationOnStyle[BPart.Classification.Category1][BPart.Classification.Category2].ContainsKey(BPart.Classification.Category3))
             {
-                var onType = new Dictionary<BuildingType, Dictionary<BuildingStyle, Deque<IBuildingPart>>>();
-                var onStyle = new Dictionary<BuildingStyle, Deque<IBuildingPart>>();
+                var onType = new Dictionary<BuildingCategory2, Dictionary<BuildingCategory3, Deque<IBuildingPart>>>();
+                var onStyle = new Dictionary<BuildingCategory3, Deque<IBuildingPart>>();
                 var Deque = new Deque<IBuildingPart>();
 
-                if (this.BPartClassificationOnStyle.TryAdd(BPart.Classification.Category, onType))
+                if (this.BPartClassificationOnStyle.TryAdd(BPart.Classification.Category1, onType))
                 {
-                    if (onType.TryAdd(BPart.Classification.Type, onStyle))
+                    if (onType.TryAdd(BPart.Classification.Category2, onStyle))
                     {
-                        onStyle.TryAdd(BPart.Classification.Style, Deque);
+                        onStyle.TryAdd(BPart.Classification.Category3, Deque);
                     }
                 }
                 else
                 {
-                    if (this.BPartClassificationOnStyle[BPart.Classification.Category].TryAdd(BPart.Classification.Type, onStyle))
+                    if (this.BPartClassificationOnStyle[BPart.Classification.Category1].TryAdd(BPart.Classification.Category2, onStyle))
                     {
-                        onStyle.TryAdd(BPart.Classification.Style, Deque);
+                        onStyle.TryAdd(BPart.Classification.Category3, Deque);
                     }
                     else
                     {
-                        this.BPartClassificationOnStyle[BPart.Classification.Category][BPart.Classification.Type].TryAdd(BPart.Classification.Style, Deque);
+                        this.BPartClassificationOnStyle[BPart.Classification.Category1][BPart.Classification.Category2].TryAdd(BPart.Classification.Category3, Deque);
                     }
                 }
             }
 
-            this.BPartClassificationOnStyle[BPart.Classification.Category][BPart.Classification.Type][BPart.Classification.Style].EnqueueBack(BPart);
+            this.BPartClassificationOnStyle[BPart.Classification.Category1][BPart.Classification.Category2][BPart.Classification.Category3].EnqueueBack(BPart);
         }
 
         private void RemoveBPartPrefabOnStyle(IBuildingPart BPart)
@@ -446,10 +460,10 @@ namespace ML.Engine.BuildingSystem
             {
                 return;
             }
-            var Deque = this.BPartClassificationOnStyle[BPart.Classification.Category][BPart.Classification.Type][BPart.Classification.Style];
+            var Deque = this.BPartClassificationOnStyle[BPart.Classification.Category1][BPart.Classification.Category2][BPart.Classification.Category3];
             for (int i = Deque.Count; i > 0; --i)
             {
-                if(Deque.PeekFront().Classification.Height == BPart.Classification.Height)
+                if(Deque.PeekFront().Classification.Category4 == BPart.Classification.Category4)
                 {
                     Deque.DequeueFront();
                     break;
@@ -468,7 +482,7 @@ namespace ML.Engine.BuildingSystem
         /// <param name="type"></param>
         /// <param name="style"></param>
         /// <returns></returns>
-        public IBuildingPart GetBPartPeekInstanceOnStyle(BuildingCategory category, BuildingType type, BuildingStyle style)
+        public IBuildingPart GetBPartPeekInstanceOnStyle(BuildingCategory1 category, BuildingCategory2 type, BuildingCategory3 style)
         {
             if(this.BPartClassificationOnStyle.ContainsKey(category) && this.BPartClassificationOnStyle[category].ContainsKey(type) && this.BPartClassificationOnStyle[category][type].ContainsKey(style))
             {
@@ -479,7 +493,7 @@ namespace ML.Engine.BuildingSystem
 
         public IBuildingPart GetBPartPeekInstanceOnStyle(IBuildingPart BPart)
         {
-            return GetBPartPeekInstanceOnStyle(BPart.Classification.Category, BPart.Classification.Type, BPart.Classification.Style);
+            return GetBPartPeekInstanceOnStyle(BPart.Classification.Category1, BPart.Classification.Category2, BPart.Classification.Category3);
         }
 
         /// <summary>
@@ -489,7 +503,7 @@ namespace ML.Engine.BuildingSystem
         /// <param name="type"></param>
         /// <param name="style"></param>
         /// <returns></returns>
-        public IBuildingPart PollingBPartPeekInstanceOnStyle(BuildingCategory category, BuildingType type, BuildingStyle style, bool isForward)
+        public IBuildingPart PollingBPartPeekInstanceOnStyle(BuildingCategory1 category, BuildingCategory2 type, BuildingCategory3 style, bool isForward)
         {
             if (this.BPartClassificationOnStyle.ContainsKey(category) && this.BPartClassificationOnStyle[category].ContainsKey(type) && this.BPartClassificationOnStyle[category][type].ContainsKey(style))
             {
@@ -516,16 +530,16 @@ namespace ML.Engine.BuildingSystem
 
         public IBuildingPart PollingBPartPeekInstanceOnStyle(IBuildingPart BPart, bool isForward)
         {
-            return PollingBPartPeekInstanceOnStyle(BPart.Classification.Category, BPart.Classification.Type, BPart.Classification.Style, isForward);
+            return PollingBPartPeekInstanceOnStyle(BPart.Classification.Category1, BPart.Classification.Category2, BPart.Classification.Category3, isForward);
         }
 
         public short[] GetAllHeightByBPartStyle(IBuildingPart BPart)
         {
-            var bparts = BPartClassificationOnStyle[BPart.Classification.Category][BPart.Classification.Type][BPart.Classification.Style].ToArray();
+            var bparts = BPartClassificationOnStyle[BPart.Classification.Category1][BPart.Classification.Category2][BPart.Classification.Category3].ToArray();
             short[] heights = new short[bparts.Length];
             for(int i = 0; i < bparts.Length; ++i)
             {
-                heights[i] = bparts[i].Classification.Height;
+                heights[i] = bparts[i].Classification.Category4;
             }
             return heights;
         }
@@ -536,7 +550,7 @@ namespace ML.Engine.BuildingSystem
         /// <summary>
         /// 基于BuildingHeight的三级分类
         /// </summary>
-        private Dictionary<BuildingCategory, Dictionary<BuildingType, Dictionary<short, Deque<IBuildingPart>>>> BPartClassificationOnHeight = new Dictionary<BuildingCategory, Dictionary<BuildingType, Dictionary<short, Deque<IBuildingPart>>>>();
+        private Dictionary<BuildingCategory1, Dictionary<BuildingCategory2, Dictionary<short, Deque<IBuildingPart>>>> BPartClassificationOnHeight = new Dictionary<BuildingCategory1, Dictionary<BuildingCategory2, Dictionary<short, Deque<IBuildingPart>>>>();
 
         private void AddBPartPrefabOnHeight(IBuildingPart BPart)
         {
@@ -545,33 +559,33 @@ namespace ML.Engine.BuildingSystem
                 return;
             }
             // 不存在对应队列
-            if (!this.BPartClassificationOnHeight.ContainsKey(BPart.Classification.Category) || !this.BPartClassificationOnHeight[BPart.Classification.Category].ContainsKey(BPart.Classification.Type) || !this.BPartClassificationOnHeight[BPart.Classification.Category][BPart.Classification.Type].ContainsKey(BPart.Classification.Height))
+            if (!this.BPartClassificationOnHeight.ContainsKey(BPart.Classification.Category1) || !this.BPartClassificationOnHeight[BPart.Classification.Category1].ContainsKey(BPart.Classification.Category2) || !this.BPartClassificationOnHeight[BPart.Classification.Category1][BPart.Classification.Category2].ContainsKey(BPart.Classification.Category4))
             {
-                var onType = new Dictionary<BuildingType, Dictionary<short, Deque<IBuildingPart>>>();
+                var onType = new Dictionary<BuildingCategory2, Dictionary<short, Deque<IBuildingPart>>>();
                 var onHeight = new Dictionary<short, Deque<IBuildingPart>>();
                 var Deque = new Deque<IBuildingPart>();
 
-                if(this.BPartClassificationOnHeight.TryAdd(BPart.Classification.Category, onType))
+                if(this.BPartClassificationOnHeight.TryAdd(BPart.Classification.Category1, onType))
                 {
-                    if(onType.TryAdd(BPart.Classification.Type, onHeight))
+                    if(onType.TryAdd(BPart.Classification.Category2, onHeight))
                     {
-                        onHeight.TryAdd(BPart.Classification.Height, Deque);
+                        onHeight.TryAdd(BPart.Classification.Category4, Deque);
                     }
                 }
                 else
                 {
-                    if(this.BPartClassificationOnHeight[BPart.Classification.Category].TryAdd(BPart.Classification.Type, onHeight))
+                    if(this.BPartClassificationOnHeight[BPart.Classification.Category1].TryAdd(BPart.Classification.Category2, onHeight))
                     {
-                        onHeight.TryAdd(BPart.Classification.Height, Deque);
+                        onHeight.TryAdd(BPart.Classification.Category4, Deque);
                     }
                     else
                     {
-                        this.BPartClassificationOnHeight[BPart.Classification.Category][BPart.Classification.Type].TryAdd(BPart.Classification.Height, Deque);
+                        this.BPartClassificationOnHeight[BPart.Classification.Category1][BPart.Classification.Category2].TryAdd(BPart.Classification.Category4, Deque);
                     }
                 }
             }
 
-            this.BPartClassificationOnHeight[BPart.Classification.Category][BPart.Classification.Type][BPart.Classification.Height].EnqueueBack(BPart);
+            this.BPartClassificationOnHeight[BPart.Classification.Category1][BPart.Classification.Category2][BPart.Classification.Category4].EnqueueBack(BPart);
         }
 
         private void RemoveBPartPrefabOnHeight(IBuildingPart BPart)
@@ -580,10 +594,10 @@ namespace ML.Engine.BuildingSystem
             {
                 return;
             }
-            var Deque = this.BPartClassificationOnHeight[BPart.Classification.Category][BPart.Classification.Type][BPart.Classification.Height];
+            var Deque = this.BPartClassificationOnHeight[BPart.Classification.Category1][BPart.Classification.Category2][BPart.Classification.Category4];
             for (int i = Deque.Count; i > 0; --i)
             {
-                if (Deque.PeekFront().Classification.Style == BPart.Classification.Style)
+                if (Deque.PeekFront().Classification.Category3 == BPart.Classification.Category3)
                 {
                     Deque.DequeueFront();
                     break;
@@ -603,7 +617,7 @@ namespace ML.Engine.BuildingSystem
         /// <param name="type"></param>
         /// <param name="style"></param>
         /// <returns></returns>
-        public IBuildingPart GetBPartPeekInstanceOnHeight(BuildingCategory category, BuildingType type, short height)
+        public IBuildingPart GetBPartPeekInstanceOnHeight(BuildingCategory1 category, BuildingCategory2 type, short height)
         {
             if (this.BPartClassificationOnHeight.ContainsKey(category) && this.BPartClassificationOnHeight[category].ContainsKey(type) && this.BPartClassificationOnHeight[category][type].ContainsKey(height))
             {
@@ -614,7 +628,7 @@ namespace ML.Engine.BuildingSystem
 
         public IBuildingPart GetBPartPeekInstanceOnHeight(IBuildingPart BPart)
         {
-            return GetBPartPeekInstanceOnHeight(BPart.Classification.Category, BPart.Classification.Type, BPart.Classification.Height);
+            return GetBPartPeekInstanceOnHeight(BPart.Classification.Category1, BPart.Classification.Category2, BPart.Classification.Category4);
         }
 
         /// <summary>
@@ -624,7 +638,7 @@ namespace ML.Engine.BuildingSystem
         /// <param name="type"></param>
         /// <param name="style"></param>
         /// <returns></returns>
-        public IBuildingPart PollingBPartPeekInstanceOnHeight(BuildingCategory category, BuildingType type, short height, bool isForward)
+        public IBuildingPart PollingBPartPeekInstanceOnHeight(BuildingCategory1 category, BuildingCategory2 type, short height, bool isForward)
         {
             if (this.BPartClassificationOnHeight.ContainsKey(category) && this.BPartClassificationOnHeight[category].ContainsKey(type) && this.BPartClassificationOnHeight[category][type].ContainsKey(height))
             {
@@ -651,16 +665,16 @@ namespace ML.Engine.BuildingSystem
 
         public IBuildingPart PollingBPartPeekInstanceOnHeight(IBuildingPart BPart, bool isForward)
         {
-            return PollingBPartPeekInstanceOnHeight(BPart.Classification.Category, BPart.Classification.Type, BPart.Classification.Height, isForward);
+            return PollingBPartPeekInstanceOnHeight(BPart.Classification.Category1, BPart.Classification.Category2, BPart.Classification.Category4, isForward);
         }
 
-        public BuildingStyle[] GetAllStyleByBPartHeight(IBuildingPart BPart)
+        public BuildingCategory3[] GetAllStyleByBPartHeight(IBuildingPart BPart)
         {
-            var bparts = BPartClassificationOnHeight[BPart.Classification.Category][BPart.Classification.Type][BPart.Classification.Height].ToArray();
-            BuildingStyle[] styles = new BuildingStyle[bparts.Length];
+            var bparts = BPartClassificationOnHeight[BPart.Classification.Category1][BPart.Classification.Category2][BPart.Classification.Category4].ToArray();
+            BuildingCategory3[] styles = new BuildingCategory3[bparts.Length];
             for (int i = 0; i < bparts.Length; ++i)
             {
-                styles[i] = bparts[i].Classification.Style;
+                styles[i] = bparts[i].Classification.Category3;
             }
             return styles;
         }

@@ -20,6 +20,18 @@ PrefabInstance:
       propertyPath: classification.Height
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 5657331971444577388, guid: acc6ccdebe7daee4cb3c83b82c193b4a, type: 3}
+      propertyPath: classification.Category2
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5657331971444577388, guid: acc6ccdebe7daee4cb3c83b82c193b4a, type: 3}
+      propertyPath: classification.Category3
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5657331971444577388, guid: acc6ccdebe7daee4cb3c83b82c193b4a, type: 3}
+      propertyPath: classification.Category4
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 9199958302948466944, guid: acc6ccdebe7daee4cb3c83b82c193b4a, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.5

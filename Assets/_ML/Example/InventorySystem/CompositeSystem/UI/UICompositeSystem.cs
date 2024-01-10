@@ -110,7 +110,7 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
         private void Awake()
         {
             #region InitData
-            var datas = ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.GetCompositionData();
+            var datas = ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.GetCompositionData();
             foreach (var data in datas)
             {
                 string[] tags = data.tag;
@@ -159,12 +159,12 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
 
         private void Start()
         {
-            this.owner.ResourceInventory.OnItemListChanged += OnInventoryChanged;
+            (this.owner.ResourceInventory as Inventory).OnItemListChanged += OnInventoryChanged;
         }
 
         private void OnDestroy()
         {
-            this.owner.ResourceInventory.OnItemListChanged -= OnInventoryChanged;
+            (this.owner.ResourceInventory as Inventory).OnItemListChanged -= OnInventoryChanged;
         }
 
         private void OnInventoryChanged(Inventory inv)
@@ -199,7 +199,7 @@ namespace ML.Example.InventorySystem.CompositeSystem.UI
         {
             this.previewPanel.ID = id;
 
-            string[] tags = ML.Engine.InventorySystem.CompositeSystem.CompositeSystem.Instance.GetCompositonTag(id);
+            string[] tags = ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.GetCompositonTag(id);
             // 1级标签 -> 找到对应 大类分类
             var csbtn = this.CSBtnDict[tags[0]];
             csbtn.SetActived(null, typeof(ClassificationSelectionBtn));

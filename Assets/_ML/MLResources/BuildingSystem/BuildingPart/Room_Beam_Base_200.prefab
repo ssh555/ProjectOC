@@ -246,10 +246,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
-    Category: 0
-    Type: 5
-    Style: 1
-    Height: 200
+    Category1: 0
+    Category2: 5
+    Category3: 1
+    Category4: 200
   instanceID: 
   canPlaceInPlaceMode: 0
   mode: 0

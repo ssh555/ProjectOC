@@ -1,4 +1,6 @@
+using ML.Engine.TextContent;
 using ML.Engine.Utility;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -329,34 +331,101 @@ namespace ML.Engine.Manager
         #endregion
         #endregion
 
-
-
         #region Update
         private void Update()
         {
-            // 先更新计时器
-            this.CounterDownTimerManager.Update(Time.deltaTime);
+            if (IsPause)
+            {
+                this.TickManager.UpdateTickComponentList();
+            }
+            else
+            {
+                // 先更新计时器
+                this.CounterDownTimerManager.Update(Time.deltaTime);
 
-            this.TickManager.Tick(Time.deltaTime);
+                this.TickManager.Tick(Time.deltaTime);
+
+                this.TickManager.UpdateTickComponentList();
+            }
         }
 
         private void FixedUpdate()
         {
-            // 先更新计时器
-            this.CounterDownTimerManager.FixedUpdate(Time.fixedDeltaTime);
+            if (IsPause)
+            {
+                this.TickManager.UpdateFixedTickComponentList();
+            }
+            else
+            {
+                // 先更新计时器
+                this.CounterDownTimerManager.FixedUpdate(Time.fixedDeltaTime);
 
-            this.TickManager.FixedTick(Time.fixedDeltaTime);
+                this.TickManager.FixedTick(Time.fixedDeltaTime);
+
+                this.TickManager.UpdateFixedTickComponentList();
+            }
         }
 
         private void LateUpdate()
         {
-            this.CounterDownTimerManager.LateUpdate(Time.deltaTime);
+            if(IsPause)
+            {
+                this.TickManager.UpdateLateTickComponentList();
+            }
+            else
+            {
+                this.CounterDownTimerManager.LateUpdate(Time.deltaTime);
 
-            this.TickManager.LateTick(Time.deltaTime);
+                this.TickManager.LateTick(Time.deltaTime);
+
+                this.TickManager.UpdateLateTickComponentList();
+            }
         }
+        #endregion
+        
+        #region GameTimeRate
+        /// <summary>
+        /// 是否全局暂停
+        /// </summary>
+        public bool IsPause { get; private set; } = false;
+
+        /// <summary>
+        /// 设置游戏时速
+        /// 0 为暂停
+        /// </summary>
+        /// <param name="rate"></param>
+        public void SetAllGameTimeRate(float rate)
+        {
+            Time.timeScale = rate;
+            IsPause = rate < float.Epsilon;
+        }
+
+        /// <summary>
+        /// 设置Tick的时间流速
+        /// </summary>
+        /// <param name="rate"></param>
+        public void SetTickTimeRate(float rate)
+        {
+            this.TickManager.TimeScale = rate;
+        }
+
+        public void SetCDTimerRate(float rate)
+        {
+            this.CounterDownTimerManager.TimeScale = rate;
+        }
+
         #endregion
 
 
-}
+
+        #region Config
+        [LabelText("语言"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
+        public Config.Language language = Config.Language.Chinese;
+        [LabelText("平台"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
+        public Config.Platform platform = Config.Platform.Windows;
+        [LabelText("输入设备"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
+        public Config.InputDevice inputDevice = Config.InputDevice.Keyboard;
+        #endregion
+    }
 }
 

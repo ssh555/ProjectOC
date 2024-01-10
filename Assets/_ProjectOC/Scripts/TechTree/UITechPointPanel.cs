@@ -98,7 +98,7 @@ namespace ProjectOC.TechTree.UI
 
         #endregion
 
-        public Inventory inventory;
+        public IInventory inventory;
         /// <summary>
         /// 是否满足破译当前节点的条件
         /// </summary>
@@ -258,14 +258,13 @@ namespace ProjectOC.TechTree.UI
 
         private void Start()
         {
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
             this.enabled = false;
         }
 
         private void OnDestroy()
         {
             ClearTemp();
-
+            (this as ITickComponent).DisposeTick();
         }
         #endregion
 
@@ -276,19 +275,19 @@ namespace ProjectOC.TechTree.UI
         public void Tick(float deltatime)
         {
             // 向前
-            if (ProjectOC.Input.InputManager.TechTreeInput.TechTree.LastTerm.WasPressedThisFrame())
+            if (ProjectOC.Input.InputManager.PlayerInput.TechTree.LastTerm.WasPressedThisFrame())
             {
                 RefreshCategory((cIndex - 1 + category.Length) % category.Length);
                 Refresh();
             }
             // 向后
-            if (ProjectOC.Input.InputManager.TechTreeInput.TechTree.NextTerm.WasPressedThisFrame())
+            if (ProjectOC.Input.InputManager.PlayerInput.TechTree.NextTerm.WasPressedThisFrame())
             {
                 RefreshCategory((cIndex + 1 + category.Length) % category.Length);
                 Refresh();
             }
             // 破译
-            if (ProjectOC.Input.InputManager.TechTreeInput.TechTree.Decipher.WasPressedThisFrame())
+            if (ProjectOC.Input.InputManager.PlayerInput.TechTree.Decipher.WasPressedThisFrame())
             {
                 Decipher();
             }
@@ -298,9 +297,9 @@ namespace ProjectOC.TechTree.UI
                 ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
             }
             // 科技点
-            if (ProjectOC.Input.InputManager.TechTreeInput.TechTree.AlterTP.WasPressedThisFrame())
+            if (ProjectOC.Input.InputManager.PlayerInput.TechTree.AlterTP.WasPressedThisFrame())
             {
-                Vector2Int offset = Vector2Int.RoundToInt(ProjectOC.Input.InputManager.TechTreeInput.TechTree.AlterTP.ReadValue<Vector2>());
+                Vector2Int offset = Vector2Int.RoundToInt(ProjectOC.Input.InputManager.PlayerInput.TechTree.AlterTP.ReadValue<Vector2>());
                 AlterTP(offset);
                 Refresh();
             }
@@ -309,42 +308,42 @@ namespace ProjectOC.TechTree.UI
         public override void OnEnter()
         {
             InitStaticData();
+            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
 
             base.OnEnter();
-            ProjectOC.Input.InputManager.TechTreeInput.Enable();
-            ProjectOC.Input.InputManager.PlayerInput.Disable();
+            ProjectOC.Input.InputManager.PlayerInput.TechTree.Enable();
             Refresh();
 
-            // to-delete
-            for (int i = 0; i < 99; ++i)
-            {
-                this.inventory.AddItem(ItemSpawner.Instance.SpawnItem("100001"));
-                this.inventory.AddItem(ItemSpawner.Instance.SpawnItem("100002"));
-                this.inventory.AddItem(ItemSpawner.Instance.SpawnItem("100003"));
-            }
+            //// to-delete
+            //for (int i = 0; i < 99; ++i)
+            //{
+            //    this.inventory.AddItem(ItemSpawner.Instance.SpawnItem("100001"));
+            //    this.inventory.AddItem(ItemSpawner.Instance.SpawnItem("100002"));
+            //    this.inventory.AddItem(ItemSpawner.Instance.SpawnItem("100003"));
+            //}
 
         }
 
         public override void OnPause()
         {
             base.OnPause();
-            ProjectOC.Input.InputManager.PlayerInput.Enable();
-            ProjectOC.Input.InputManager.TechTreeInput.Disable();
+            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
+            ProjectOC.Input.InputManager.PlayerInput.TechTree.Disable();
         }
 
         public override void OnRecovery()
         {
+            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
             base.OnRecovery();
-            ProjectOC.Input.InputManager.PlayerInput.Disable();
-            ProjectOC.Input.InputManager.TechTreeInput.Enable();
+            ProjectOC.Input.InputManager.PlayerInput.TechTree.Enable();
             Refresh();
         }
 
         public override void OnExit()
         {
             base.OnExit();
-            ProjectOC.Input.InputManager.PlayerInput.Enable();
-            ProjectOC.Input.InputManager.TechTreeInput.Disable();
+            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
+            ProjectOC.Input.InputManager.PlayerInput.TechTree.Disable();
         }
         #endregion
 
@@ -357,16 +356,16 @@ namespace ProjectOC.TechTree.UI
                 TechTreeManager.Instance.UnlockTechPoint(inventory, CurrentID, false);
                 Refresh();
 
-                // to-delete
-                string text = "";
-                foreach (var item in inventory.GetItemList())
-                {
-                    if (item != null)
-                    {
-                        text += item.ID + ": " + item.Amount + "\n";
-                    }
-                }
-                Debug.Log("背包剩余: \n" + text);
+                //// to-delete
+                //string text = "";
+                //foreach (var item in inventory.GetItemList())
+                //{
+                //    if (item != null)
+                //    {
+                //        text += item.ID + ": " + item.Amount + "\n";
+                //    }
+                //}
+                //Debug.Log("背包剩余: \n" + text);
             }
         }
 
@@ -701,13 +700,13 @@ namespace ProjectOC.TechTree.UI
                     this.TPUnlockGO.Add(id, unlock);
 
                     // Image
-                    var s = CompositeSystem.Instance.GetCompositonSprite(id);
+                    var s = CompositeManager.Instance.GetCompositonSprite(id);
                     tempSprite.Add(s);
                     unlock.GetComponentInChildren<Image>().sprite = s;
                 }
 
                 // Text
-                unlock.GetComponentInChildren<TextMeshProUGUI>().text = CompositeSystem.Instance.GetCompositonName(id);
+                unlock.GetComponentInChildren<TextMeshProUGUI>().text = CompositeManager.Instance.GetCompositonName(id);
             }
             
             // 面板状态
@@ -740,7 +739,7 @@ namespace ProjectOC.TechTree.UI
                         this.TPCItemGO.Add(f.id, item);
 
                         // Image
-                        var s = ItemSpawner.Instance.GetItemSprite(f.id);
+                        var s = ItemManager.Instance.GetItemSprite(f.id);
                         tempSprite.Add(s);
                         item.transform.Find("Image").GetComponent<Image>().sprite = s;
                     }
@@ -749,7 +748,7 @@ namespace ProjectOC.TechTree.UI
                     item.transform.Find("Image").Find("Num").GetComponent<TextMeshProUGUI>().text = f.num.ToString();
 
                     // Name
-                    item.transform.Find("Name").GetComponent<TextMeshProUGUI>().text = ItemSpawner.Instance.GetItemName(f.id);
+                    item.transform.Find("Name").GetComponent<TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(f.id);
                 }
             }
             // 已解锁

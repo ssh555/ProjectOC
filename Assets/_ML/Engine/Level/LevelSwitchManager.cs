@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static ML.Engine.InventorySystem.CompositeSystem.CompositeSystem;
+using static ML.Engine.InventorySystem.CompositeSystem.CompositeManager;
 
 namespace ML.Engine.Level
 {
@@ -144,7 +144,7 @@ namespace ML.Engine.Level
 
         private DispatchGrids dispatchGrids;
 
-        public const string LevelTableDataABPath = "Json/TableData";
+        public const string LevelTableDataABPath = "Binary/TableData";
         public const string TableName = "LevelTableData";
 
         /// <summary>
@@ -578,7 +578,6 @@ namespace ML.Engine.Level
         }
         #endregion
         #endregion
-
     }
 }
 

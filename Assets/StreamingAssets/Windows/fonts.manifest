@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 4220558566
+CRC: 1520153522
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 604d03f6f5661e133a61191dca59c2b1
+    Hash: 5b9e1cf29dd5252913dbd1f5050b1b74
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2172eb9bcb39b2bdaceec7c9e1d524e1
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 604d03f6f5661e133a61191dca59c2b1
+    Hash: 5b9e1cf29dd5252913dbd1f5050b1b74
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -55,4 +55,5 @@ Assets:
 - Assets/_ML/MLResources/Fonts/MSYH SDF.asset
 - Assets/_ML/MLResources/Fonts/MSYHL.TTC
 - Assets/_ML/MLResources/Fonts/MSYH.TTC
+- Assets/_ML/MLResources/Fonts/MSYHBD.TTC
 Dependencies: []

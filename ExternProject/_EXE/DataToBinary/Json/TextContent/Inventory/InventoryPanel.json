@@ -1,0 +1,115 @@
+{
+    "toptitle" : {
+        "Chinese" : "背包",
+        "English" : "Inventory"
+    },
+    "itemtype" : [
+        {
+            "name" : "Equip",
+            "description" : {
+                "Chinese" : "装备",
+                "English" : "Equip"
+            }
+        },
+        {
+            "name" : "Food",
+            "description" : {
+                "Chinese" : "食物",
+                "English" : "Food"
+            }
+        },
+        {
+            "name" : "Material",
+            "description" : {
+                "Chinese" : "材料",
+                "English" : "Material"
+            }
+        },
+        {
+            "name" : "Mission",
+            "description" : {
+                "Chinese" : "任务",
+                "English" : "Mission"
+            }
+        }
+    ],
+    "lastterm" : {
+        "keyname" : "lastterm",
+        "keymap" : {
+            "KeyBoard" : "Z",
+            "XBOX" : "LB"
+        },
+        "description" : {
+            "Chinese" : "",
+            "English" : ""
+        }
+    },
+    "nextterm" : {
+        "keyname" : "nextterm",
+        "keymap" : {
+            "KeyBoard" : "X",
+            "XBOX" : "RB"
+        },
+        "description" : {
+            "Chinese" : "",
+            "English" : ""
+        }
+    },
+    "weightprefix" : {
+        "Chinese" : "单个重量：",
+        "English" : "Per Weight: "
+    },
+    "descriptionprefix" : {
+        "Chinese" : "物品描述：",
+        "English" : "Description: "
+    },
+    "effectdescriptionprefix" : {
+        "Chinese" : "效果描述：",
+        "English" : "Effect Description: "
+    },
+    "back" : {
+        "keyname" : "back",
+        "keymap" : {
+            "KeyBoard" : "ESC",
+            "XBOX" : "B"
+        },
+        "description" : {
+            "Chinese" : "返回",
+            "English" : "Back"
+        }
+    },
+    "use" : {
+        "keyname" : "use",
+        "keymap" : {
+            "KeyBoard" : "E",
+            "XBOX" : "A"
+        },
+        "description" : {
+            "Chinese" : "使用",
+            "English" : "Use"
+        }
+    },
+    "drop" : {
+        "keyname" : "drop",
+        "keymap" : {
+            "KeyBoard" : "F",
+            "XBOX" : "X"
+        },
+        "description" : {
+            "Chinese" : "丢弃",
+            "English" : "Drop"
+        }
+    },
+    "destroy" : {
+        "keyname" : "destroy",
+        "keymap" : {
+            "KeyBoard" : "F",
+            "XBOX" : "X"
+        },
+        "description" : {
+            "Chinese" : "销毁",
+            "English" : "Destroy"
+        }
+    }
+}
+

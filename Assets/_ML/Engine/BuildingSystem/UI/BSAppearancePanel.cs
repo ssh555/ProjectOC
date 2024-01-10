@@ -35,27 +35,27 @@ namespace ML.Engine.BuildingSystem.UI
             comfirm.img = comfirm.root.Find("Image").GetComponent<Image>();
             comfirm.keytip = comfirm.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             comfirm.description = comfirm.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            comfirm.ReWrite(Test_BuildingManager.Instance.KeyTipDict["comfirm"]);
+            comfirm.ReWrite(MonoBuildingManager.Instance.KeyTipDict["comfirm"]);
 
             back = new UIKeyTip();
             back.root = keytips.Find("KT_Back") as RectTransform;
             back.img = back.root.Find("Image").GetComponent<Image>();
             back.keytip = back.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             back.description = back.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            back.ReWrite(Test_BuildingManager.Instance.KeyTipDict["back"]);
+            back.ReWrite(MonoBuildingManager.Instance.KeyTipDict["back"]);
 
             keytips = this.transform.Find("KT_AlterMat").Find("KT_AlterStyle");
             matlast = new UIKeyTip();
             matlast.root = keytips.Find("KT_Left") as RectTransform;
             matlast.img = matlast.root.Find("Image").GetComponent<Image>();
             matlast.keytip = matlast.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            matlast.ReWrite(Test_BuildingManager.Instance.KeyTipDict["matlast"]);
+            matlast.ReWrite(MonoBuildingManager.Instance.KeyTipDict["matlast"]);
 
             matnext = new UIKeyTip();
             matnext.root = keytips.Find("KT_Right") as RectTransform;
             matnext.img = matnext.root.Find("Image").GetComponent<Image>();
             matnext.keytip = matnext.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            matnext.ReWrite(Test_BuildingManager.Instance.KeyTipDict["matnext"]);
+            matnext.ReWrite(MonoBuildingManager.Instance.KeyTipDict["matnext"]);
         }
 
         public IEnumerator Init(Texture2D[] texs, BuildingCopiedMaterial[] mats, int index)

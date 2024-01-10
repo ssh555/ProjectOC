@@ -14,7 +14,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <summary>
         /// 所用资源仓库
         /// </summary>
-        public Inventory ResourceInventory { get;}
+        public IInventory ResourceInventory { get;}
 
         /// <summary>
         /// 能否合成对应物品
@@ -24,7 +24,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <returns></returns>
         public bool CanComposite(string compositonID)
         {
-            return CompositeSystem.Instance.CanComposite(this.ResourceInventory, compositonID);
+            return CompositeManager.Instance.CanComposite(this.ResourceInventory, compositonID);
         }
 
         /// <summary>
@@ -33,9 +33,9 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <param name="resource"></param>
         /// <param name="compositonID"></param>
         /// <returns></returns>
-        public virtual CompositeSystem.CompositionObjectType Composite(string compositonID, out IComposition composition)
+        public virtual CompositeManager.CompositionObjectType Composite(string compositonID, out IComposition composition)
         {
-            return CompositeSystem.Instance.Composite(this.ResourceInventory, compositonID, out composition);
+            return CompositeManager.Instance.Composite(this.ResourceInventory, compositonID, out composition);
         }
 
     }

@@ -248,7 +248,7 @@ namespace ProjectOC.Player
 
             // 加边
             // Idle -> Walk : 速度高于lowestWalkSpeed
-            this.ConnectState("Idle", "Walk", (stateController, curState) =>
+            this.ConnectState(this.idleState.Name, "Walk", (stateController, curState) =>
             {
                 return this.moveData.Speed >= this.stateParams.lowestWalkSpeed && !this.stateParams.IsCrouch;
             });

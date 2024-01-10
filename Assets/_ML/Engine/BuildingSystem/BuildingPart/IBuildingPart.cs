@@ -40,8 +40,24 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         /// </summary>
         public bool CanPlaceInPlaceMode { get; set; }
 
-        public delegate bool CheckCanPlaceMode(IBuildingPart BPart);
-        public event CheckCanPlaceMode CheckCanInPlaceMode;
+        public delegate bool CheckMode(IBuildingPart BPart);
+        public event CheckMode CheckCanInPlaceMode;
+        public event CheckMode CheckCanEdit;
+        public event CheckMode CheckCanDestory;
+
+        public abstract bool CanEnterEditMode();
+
+        public abstract bool CanEnterDestoryMode();
+
+        public virtual bool GetCanCopy()
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// 在PlaceMode或者EditMode更改之后调用
+        /// </summary>
+        public void OnChangePlaceEvent();
 
         /// <summary>
         /// 当前所处的建造模式
@@ -187,6 +203,15 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         }
         #endregion
 
+        #region Event
+        /// <summary>
+        /// InteractMode下销毁时调用
+        /// </summary>
+        public virtual void OnBPartDestroy()
+        {
+
+        }
+        #endregion
     }
 }
 

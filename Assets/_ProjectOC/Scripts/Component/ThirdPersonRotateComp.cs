@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace ProjectOC.Player
 {
+    /// <summary>
+    /// 不使用时记得调用 DisposeTick
+    /// </summary>
     [System.Serializable]
     public class ThirdPersonRotateComp : ML.Engine.Timer.ITickComponent
     {
@@ -129,7 +132,7 @@ namespace ProjectOC.Player
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterLateTick(priority, this);
         }
 
-        public void Unregister()
+        public void UnregisterTick()
         {
             ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterLateTick(this);
         }

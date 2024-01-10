@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace ML.Engine.FSM
 {
+    /// <summary>
+    /// 不使用时记得调用 DisposeTick
+    /// </summary>
     [System.Serializable]
     public class StateController : Timer.ITickComponent
     {
@@ -66,7 +69,6 @@ namespace ML.Engine.FSM
             this.isRunning = true;
             Machine.CurrentState.InvokeEnterAction(Machine, null);
         }
-
     }
 }
 
