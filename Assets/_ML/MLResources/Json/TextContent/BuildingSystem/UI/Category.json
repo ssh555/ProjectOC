@@ -12,5 +12,12 @@
             "Chinese": "家具",
             "English": "Furniture"
         }
+    },
+    {
+        "name": "ExternalFacility",
+        "description": {
+            "Chinese": "室外设施",
+            "English": "ExternalFacility"
+        }
     }
 ]

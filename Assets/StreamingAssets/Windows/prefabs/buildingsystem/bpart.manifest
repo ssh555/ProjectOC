@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 4119447827
+CRC: 3412000837
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 39ed8ff0adae17b01bf3c8ea88f831e2
+    Hash: abc0e0225a6269506e97b8d767916c31
   TypeTreeHash:
     serializedVersion: 2
     Hash: 6ec20a259d9969888a6abb3ce1975c1b
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 39ed8ff0adae17b01bf3c8ea88f831e2
+    Hash: abc0e0225a6269506e97b8d767916c31
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -68,6 +68,7 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Base_100.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Glass.mat
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Quagrant_100.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/ExternalFacility_PowerCore_Base_100.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Wood3.mat
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Quagrant_50.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Furniture_Clock_Base_100.prefab
@@ -78,6 +79,7 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Furniture_CeilingLamp_Base_100.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Quagrant_200.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Base_75.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/ExternalFacility_PowerSub_Base_100.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Triangle_100.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Wood1.mat
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Base_20.prefab
@@ -101,6 +103,7 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Base_50.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Metal.mat
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Base_200.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Metal2.mat
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Door_Base_20.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Triangle_100.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Base_200.prefab

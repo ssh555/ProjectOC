@@ -82,5 +82,19 @@
             "Chinese": "挂钟",
             "English": "Clock"
         }
+    },
+    {
+        "name": "PowerCore",
+        "description": {
+            "Chinese": "生命导流桩",
+            "English": "PowerCore"
+        }
+    },
+    {
+        "name": "PowerSub",
+        "description": {
+            "Chinese": "导流节点",
+            "English": "PowerSub"
+        }
     }
 ]

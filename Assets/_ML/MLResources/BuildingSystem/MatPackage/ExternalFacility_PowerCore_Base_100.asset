@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e04c33259d65b934fa9ee5353f84593e, type: 3}
-  m_Name: BuildingCategory1
+  m_Script: {fileID: 11500000, guid: 670a3f6f18a8e5b449c8a5df82262fc0, type: 3}
+  m_Name: ExternalFacility_PowerCore_Base_100
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -21,18 +21,15 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  enumNamespace: ML.Engine.BuildingSystem.BuildingPart
-  NoneName:
-    name: None
-    displayName: None
-    value: -1
-  EnumList:
-  - name: Room
-    displayName: "\u623F\u5C4B"
-    value: 0
-  - name: Furniture
-    displayName: "\u5BB6\u5177"
-    value: 1
-  - name: ExternalFacility
-    displayName: "\u5BA4\u5916\u8BBE\u65BD"
-    value: 2
+  Classification:
+    Category1: 2
+    Category2: 200
+    Category3: 1
+    Category4: 100
+  MatStruct: ffffffff
+  MatPackages:
+  - Tex: {fileID: 2800000, guid: 54c2641c5e3b2cf4ba95947a755fa385, type: 3}
+    MPs:
+      Mats:
+      - Mats:
+        - {fileID: 2100000, guid: 8adea38a03132814f922df534bc95aeb, type: 2}

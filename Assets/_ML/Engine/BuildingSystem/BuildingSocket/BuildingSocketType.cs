@@ -33,5 +33,9 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 		UnderFloor = 1 << 10,
 		[LabelText("墙面")]
 		WallSpace = 1 << 11,
+		[LabelText("生命导流桩")]
+		PowerCore = 1 << 12,
+		[LabelText("导流节点")]
+		PowerSub = 1 << 13,
 	}
 }

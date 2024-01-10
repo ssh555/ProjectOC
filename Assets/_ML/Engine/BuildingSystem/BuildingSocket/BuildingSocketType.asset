@@ -67,11 +67,11 @@ MonoBehaviour:
   - name: WallSpace
     displayName: "\u5899\u9762"
     value: 
-  - name: 
-    displayName: 
+  - name: PowerCore
+    displayName: "\u751F\u547D\u5BFC\u6D41\u6869"
     value: 
-  - name: 
-    displayName: 
+  - name: PowerSub
+    displayName: "\u5BFC\u6D41\u8282\u70B9"
     value: 
   - name: 
     displayName: 

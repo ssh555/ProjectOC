@@ -31,5 +31,9 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		Chair = 101,
 		[LabelText("挂钟")]
 		Clock = 102,
+		[LabelText("生命导流桩")]
+		PowerCore = 200,
+		[LabelText("导流节点")]
+		PowerSub = 201,
 	}
 }

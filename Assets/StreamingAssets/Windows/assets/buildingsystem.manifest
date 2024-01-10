@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2480821462
+CRC: 4002208646
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6f97d384923db4ebd08bd7f1bd8cb67e
+    Hash: 28c1ac44a23c08024bc2e7886204abef
   TypeTreeHash:
     serializedVersion: 2
     Hash: 632c17e5ae17fbf2d2d578d89e423c63
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 6f97d384923db4ebd08bd7f1bd8cb67e
+    Hash: 28c1ac44a23c08024bc2e7886204abef
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -43,6 +43,7 @@ SerializeReferenceClassIdentifiers:
   ClassName: Sirenix.Serialization.SerializationData
 Assets:
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Pillar_Base_100.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/ExternalFacility_PowerCore_Base_100.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_FoundationEdge_Quagrant_75.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Pillar_Base_200.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_FoundationEdge_Triangle_75.asset
@@ -73,6 +74,7 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Door_Base_20.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Triangle_50.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Beam_Base_200.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/ExternalFacility_PowerSub_Base_100.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Window_Base_20.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Wall_Base_200.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Roof_Triangle_400.asset
