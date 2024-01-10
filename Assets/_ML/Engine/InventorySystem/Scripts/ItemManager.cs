@@ -4,10 +4,29 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static ProjectOC.ProductionNodeNS.RecipeManager;
+using ML.Engine.TextContent;
 
 namespace ML.Engine.InventorySystem
 {
+    [System.Serializable]
+    public struct ItemTableJsonData
+    {
+        public string id;
+        public int sort;
+        public ItemType itemtype;
+        public ML.Engine.TextContent.TextContent name;
+        public int weight;
+        public string icon;
+        // TODO: 修改为TextContent
+        public string itemdescription;
+        // TODO: 修改为TextContent
+        public string effectsdescription;
+        public string type;
+        public bool bcanstack;
+        public int maxamount;
+        public string worldobject;
+    }
+
     /// <summary>
     /// 没有以 Manager 为后缀，是懒得改其他地方了，太多了
     /// </summary>
@@ -31,7 +50,7 @@ namespace ML.Engine.InventorySystem
             }
         }
         #endregion
-
+        
         #region Load And Data
         /// <summary>
         /// 是否已加载完数据
@@ -54,29 +73,15 @@ namespace ML.Engine.InventorySystem
         public const string Texture2DPath = "ui/Item/texture2d";
         public const string WorldObjPath = "prefabs/Item/WorldItem";
 
-        [System.Serializable]
-        public struct ItemTableJsonData
-        {
-            public string id;
-            public TextContent.TextContent name;
-            public string type;
-            public int sort;
-            public ItemType itemtype;
-            public int weight;
-            public bool bcanstack;
-            public int maxamount;
-            public string texture2d;
-            public string worldobject;
-            public string description;
-            public string effectsDescription;
-        }
+
+        
         public static ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableJsonData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableJsonData[]>("Json/TableData", "ItemTableData", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableJsonData[]>("Binary/TableData", "ItemTableData", (datas) =>
                 {
                     foreach (var data in datas)
                     {
@@ -210,7 +215,7 @@ namespace ML.Engine.InventorySystem
                 return null;
             }
             
-            return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>(this.ItemTypeStrDict[id].texture2d);
+            return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>(this.ItemTypeStrDict[id].icon);
         }
 
         public Sprite GetItemSprite(string id)
@@ -263,7 +268,7 @@ namespace ML.Engine.InventorySystem
         {
             if (!this.ItemTypeStrDict.ContainsKey(id))
             {
-                return int.MinValue;
+                return int.MaxValue;
             }
             return this.ItemTypeStrDict[id].sort;
         }
@@ -292,7 +297,7 @@ namespace ML.Engine.InventorySystem
             {
                 return null;
             }
-            return this.ItemTypeStrDict[id].description;
+            return this.ItemTypeStrDict[id].itemdescription;
         }
 
         public string GetEffectDescription(string id)
@@ -301,7 +306,7 @@ namespace ML.Engine.InventorySystem
             {
                 return null;
             }
-            return this.ItemTypeStrDict[id].effectsDescription;
+            return this.ItemTypeStrDict[id].effectsdescription;
         }
 
         public static Type GetTypeByName(string fullName)
@@ -319,7 +324,6 @@ namespace ML.Engine.InventorySystem
             }
             return null;
         }
-
         #endregion
     }
 }

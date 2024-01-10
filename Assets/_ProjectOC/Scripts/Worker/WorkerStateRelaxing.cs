@@ -1,13 +1,10 @@
 using ML.Engine.FSM;
-using ML.Engine.Manager;
 using ML.Engine.Timer;
-using ProjectOC.ManagerNS;
 
 namespace ProjectOC.WorkerNS
 {
     public class WorkerStateRelaxing : State
     {
-        public DispatchTimeManager TimeManager { get { return GameManager.Instance.GetLocalManager<DispatchTimeManager>(); } }
         /// <summary>
         /// ¼ÆÊ±Æ÷
         /// </summary>
@@ -39,8 +36,6 @@ namespace ProjectOC.WorkerNS
                     if (machine is WorkerStateMachine workerMachine && workerMachine.Worker != null)
                     {
                         workerMachine.Worker.Status = Status.Relaxing;
-                        workerMachine.Worker.IsOnDuty = false;
-
                         this.Timer.OnEndEvent += () =>
                         {
                             workerMachine.Worker.AlterAP((int)(workerMachine.Worker.APMax * 0.01));

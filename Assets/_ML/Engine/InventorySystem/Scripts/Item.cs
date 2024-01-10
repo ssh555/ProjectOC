@@ -63,10 +63,9 @@ namespace ML.Engine.InventorySystem
         public event Action<IInventory, Item> OnAmountToZero;
         #endregion
 
-        public Item(string ID, ItemManager.ItemTableJsonData config, int initAmount)
+        public Item(string ID, ItemTableJsonData config, int initAmount)
         {
             this.ID = ID;
-
             this.amount = initAmount;
 
             // 默认添加数量为0时从Inventory移除并销毁

@@ -664,7 +664,7 @@ namespace ProjectOC.InventorySystem.UI
         {
             if(ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<InventoryPanel>("JSON/TextContent/Inventory", "InventoryPanel", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<InventoryPanel>("Binary/TextContent/Inventory", "InventoryPanel", (datas) =>
                 {
                     Refresh();
                     this.enabled = false;
@@ -678,7 +678,7 @@ namespace ProjectOC.InventorySystem.UI
         [Button("生成测试文件")]
         void GenTESTFILE()
         {
-            List<ItemManager.ItemTableJsonData> datas = new List<ItemManager.ItemTableJsonData>();
+            List<ItemTableJsonData> datas = new List<ItemTableJsonData>();
 
             var itypes = Enum.GetValues(typeof(ML.Engine.InventorySystem.ItemType)).Cast<ML.Engine.InventorySystem.ItemType>().Where(e => (int)e > 0).ToArray();
             foreach(var itype in itypes)
@@ -686,7 +686,7 @@ namespace ProjectOC.InventorySystem.UI
                 int cnt = UnityEngine.Random.Range(50, 100);
                 for(int i = 0; i < cnt; ++i)
                 {
-                    var data = new ItemManager.ItemTableJsonData();
+                    var data = new ItemTableJsonData();
                     // id
                     data.id = itype.ToString() + "_" + i;
                     // name
@@ -706,13 +706,13 @@ namespace ProjectOC.InventorySystem.UI
                     // maxamount
                     data.maxamount = 999;
                     // texture2d
-                    data.texture2d = "100001";
+                    data.icon = "100001";
                     // worldobject
                     data.worldobject = "TESTWorldItem";
                     // description
-                    data.description = "TTTTTTTTTTTTTTTTTTTTTTTT\nXXXXXXXXXXXXXXXXXXXXXXXX\nTTTTTTTTTTTTTTTTTTTTTTTT";
+                    data.itemdescription = "TTTTTTTTTTTTTTTTTTTTTTTT\nXXXXXXXXXXXXXXXXXXXXXXXX\nTTTTTTTTTTTTTTTTTTTTTTTT";
                     // effectsDescription
-                    data.effectsDescription = "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%金币掉落\n<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%攻击力持续300s</b></color>";
+                    data.effectsdescription = "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%金币掉落\n<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%攻击力持续300s</b></color>";
                     datas.Add(data);
                 }
             }

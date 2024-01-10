@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1523090614
+CRC: 4055235957
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c89630c6c789305d6b09b24e62544d7e
+    Hash: 4f7bee09213bac0ffa95567bc5586eee
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 97aa7e701ffaec6ff358fb4311fb64ac
+    Hash: d1abeb4fb046bb95265b25a66ee22c4c
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: c89630c6c789305d6b09b24e62544d7e
+    Hash: 4f7bee09213bac0ffa95567bc5586eee
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -23,9 +23,9 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
@@ -118,8 +118,10 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/_ProjectOC/Resources/UIPanel/TechPointPanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/UIInfiniteInventoryPanel.prefab
+- Assets/_ProjectOC/Resources/UIPanel/UIStorePanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIPanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIBotPanel.prefab
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/fonts
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/techpoint/texture2d
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/fonts
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/inventory/texture2d/itemtype
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/techpoint/texture2d

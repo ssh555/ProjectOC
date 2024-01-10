@@ -1,3 +1,5 @@
+using Sirenix.OdinInspector;
+
 namespace ProjectOC.StoreNS
 {
     /// <summary>
@@ -5,13 +7,11 @@ namespace ProjectOC.StoreNS
     /// </summary>
     public enum StoreType
     {
-        /// <summary>
-        /// 储物箱：可储存任何物品的基础仓库
-        /// </summary>
+        [LabelText("None")]
+        None,
+        [LabelText("储物箱")]
         Normal,
-        /// <summary>
-        /// 恒温箱：可调节温度的仓库，保证某些特殊物品不会坏掉
-        /// </summary>
+        [LabelText("恒温箱")]
         Incubator
     }
 }

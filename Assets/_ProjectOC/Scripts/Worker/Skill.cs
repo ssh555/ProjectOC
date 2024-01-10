@@ -15,25 +15,9 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         public string ID = "";
         /// <summary>
-        /// 名称
+        /// 效果
         /// </summary>
-        public string Name = "";
-        /// <summary>
-        /// 序号，用于排序
-        /// </summary>
-        public int Sort;
-        /// <summary>
-        /// 技能类型
-        /// </summary>
-        public WorkType Type;
-        /// <summary>
-        /// 技能描述
-        /// </summary>
-        public string Desciption = "";
-        /// <summary>
-        /// 技能效果描述
-        /// </summary>
-        public string EffectsDescription = "";
+        public List<Effect> Effects = new List<Effect>();
         /// <summary>
         /// 当前等级
         /// </summary>
@@ -46,47 +30,64 @@ namespace ProjectOC.WorkerNS
         /// 当前经验
         /// </summary>
         private int Exp;
+
+        #region 读表属性
         /// <summary>
-        /// 效果
+        /// 序号，用于排序
         /// </summary>
-        public List<Effect> Effects = new List<Effect>();
-        public void Init(SkillManager.SkillTableJsonData config)
+        public int Sort { get => SkillManager.Instance.GetSort(ID); }
+        /// <summary>
+        /// 技能类型
+        /// </summary>
+        public WorkType SkillType { get => SkillManager.Instance.GetSkillType(ID); }
+        /// <summary>
+        /// 技能描述
+        /// </summary>
+        public string Desciption { get => SkillManager.Instance.GetItemDescription(ID); }
+        /// <summary>
+        /// 技能效果描述
+        /// </summary>
+        public string EffectsDescription { get => SkillManager.Instance.GetEffectsDescription(ID); }
+        #endregion
+
+        public Skill(SkillManager.SkillTableJsonData config)
         {
-            this.ID = config.id;
-            this.Name = config.name;
-            this.Sort = config.sort;
-            this.Type = config.type;
-            this.Desciption = config.desciption;
-            this.EffectsDescription = config.effectsDescription;
-            foreach (string effectID in config.effectIDs)
+            this.ID = config.ID;
+            foreach (string effectID in config.Effects)
             {
                 Effect effect = EffectManager.Instance.SpawnEffect(effectID);
                 if (effect != null)
                 {
                     this.Effects.Add(effect);
                 }
+                else
+                {
+                    Debug.LogError($"Skill {this.ID} Effect {effectID} is Null");
+                }
             }
+            this.Level = 0;
+            this.LevelMax = 10;
+            this.Exp = 0;
         }
-        public void Init(Skill skill)
+        public Skill(Skill skill)
         {
             this.ID = skill.ID;
-            this.Name = skill.Name;
-            this.Sort = skill.Sort;
-            this.Type = skill.Type;
-            this.Desciption = skill.Desciption;
-            this.EffectsDescription = skill.EffectsDescription;
-            this.Level = skill.Level;
-            this.LevelMax = skill.LevelMax;
-            this.Exp = skill.Exp;
             this.Effects = new List<Effect>();
             foreach (Effect effect in skill.Effects)
             {
-                Effect effectNew = new Effect();
-                effectNew.Init(effect);
-                this.Effects.Add(effectNew);
+                if (effect != null)
+                {
+                    this.Effects.Add(new Effect(effect));
+                }
+                else
+                {
+                    Debug.LogError($"Skill {skill.ID} effect is Null");
+                }
             }
+            this.Level = skill.Level;
+            this.LevelMax = skill.LevelMax;
+            this.Exp = skill.Exp;
         }
-
         /// <summary>
         /// 等级增加
         /// </summary>
@@ -169,25 +170,18 @@ namespace ProjectOC.WorkerNS
             CheckLevel();
         }
 
-        public void ApplyEffectToWorker(Worker worker)
+        public void ApplySkill(Worker worker)
         {
             if (worker != null)
             {
                 foreach (Effect effect in this.Effects)
                 {
-                    effect.ApplyEffectToWorker(worker);
+                    effect.ApplyEffect(worker);
                 }
             }
-        }
-
-        public void RemoveEffectToWorker(Worker worker)
-        {
-            if (worker != null)
+            else
             {
-                foreach (Effect effect in this.Effects)
-                {
-                    effect.RemoveEffectToWorker(worker);
-                }
+                Debug.LogError($"Skill {this.ID} Worker is Null");
             }
         }
     }
