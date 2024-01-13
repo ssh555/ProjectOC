@@ -101,7 +101,7 @@ MonoBehaviour:
   classification:
     Category1: 1
     Category2: 100
-    Category3: 1
+    Category3: 0
     Category4: 0
   instanceID: 
   canPlaceInPlaceMode: 0
