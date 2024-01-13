@@ -992,6 +992,288 @@ namespace ProjectOC.Input
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""UIStore"",
+            ""id"": ""6c9463f6-81a1-4ff6-ad81-9b25e52ed957"",
+            ""actions"": [
+                {
+                    ""name"": ""NextPriority"",
+                    ""type"": ""Button"",
+                    ""id"": ""127ae37f-8a08-4977-968a-aef14074cea4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChangeStoreData"",
+                    ""type"": ""Button"",
+                    ""id"": ""e187d8c7-7825-440a-b954-9c52e6b1f573"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AlterStoreData"",
+                    ""type"": ""Value"",
+                    ""id"": ""a88c7458-1957-4bf2-8552-c159134b876a"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Remove1"",
+                    ""type"": ""Button"",
+                    ""id"": ""7de4161b-eba3-4eda-a0b5-8e5010edde9f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Remove10"",
+                    ""type"": ""Button"",
+                    ""id"": ""cdc16934-a633-4bc5-8f80-d0c33d8eb723"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FastAdd"",
+                    ""type"": ""Button"",
+                    ""id"": ""e2a803a8-3c5b-485c-8587-3b41d4f8ceb8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""2d152131-bfef-4ab4-938a-15fe3a0c3fce"",
+                    ""path"": ""<XInputController>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextPriority"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""188683a8-cf0d-4cb1-aa6c-a983cbd2891e"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextPriority"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e7840604-f4f3-4dd9-b617-28cf525b3c7f"",
+                    ""path"": ""<XInputController>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeStoreData"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""db8ad17a-856a-46cf-a9be-8d29947512c3"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeStoreData"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""KeyBoard"",
+                    ""id"": ""02d150a4-d82f-4b8a-ba2b-1ace06b1f76b"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterStoreData"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""45bd83b0-e9f7-4ce6-aa86-5115aca8fb3c"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterStoreData"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""0678282e-ec10-46fb-83d6-5e2e38497284"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterStoreData"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""3e10dbc0-1b67-476d-bf4b-068321a341ea"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterStoreData"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""791b05b0-01d0-4317-a42b-8b65177398fd"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterStoreData"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""471c472e-00cd-403d-a291-7c8711707230"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterStoreData"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""8f23e198-6925-49f6-89a8-fff03911ba1d"",
+                    ""path"": ""<XInputController>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterStoreData"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""5dadc7c7-33a6-4af0-a55e-514b8b0738ce"",
+                    ""path"": ""<XInputController>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterStoreData"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""b8c497cd-c6a5-4a14-9141-a130a1334f67"",
+                    ""path"": ""<XInputController>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterStoreData"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""102ae375-002d-4127-b73b-a8f8a027ea3a"",
+                    ""path"": ""<XInputController>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterStoreData"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8e7db927-4ca8-4a74-b4a4-eea8f7f71bbe"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fff4c8a5-5012-4e6c-a787-8fa445766c9e"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a09f564f-a92d-479a-92ab-3b5abc3d9a8e"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove10"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""98ac3791-c45b-4c66-9fe1-a4aac0b72d8c"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove10"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3fa4ff71-f3de-4a1c-b6fa-88aed36a92d4"",
+                    ""path"": ""<XInputController>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FastAdd"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""90ab7934-3ce3-4621-83f6-63383b4af996"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FastAdd"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -1020,6 +1302,14 @@ namespace ProjectOC.Input
             m_UIInventory_AlterItem = m_UIInventory.FindAction("AlterItem", throwIfNotFound: true);
             m_UIInventory_NextTerm = m_UIInventory.FindAction("NextTerm", throwIfNotFound: true);
             m_UIInventory_LastTerm = m_UIInventory.FindAction("LastTerm", throwIfNotFound: true);
+            // UIStore
+            m_UIStore = asset.FindActionMap("UIStore", throwIfNotFound: true);
+            m_UIStore_NextPriority = m_UIStore.FindAction("NextPriority", throwIfNotFound: true);
+            m_UIStore_ChangeStoreData = m_UIStore.FindAction("ChangeStoreData", throwIfNotFound: true);
+            m_UIStore_AlterStoreData = m_UIStore.FindAction("AlterStoreData", throwIfNotFound: true);
+            m_UIStore_Remove1 = m_UIStore.FindAction("Remove1", throwIfNotFound: true);
+            m_UIStore_Remove10 = m_UIStore.FindAction("Remove10", throwIfNotFound: true);
+            m_UIStore_FastAdd = m_UIStore.FindAction("FastAdd", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -1357,6 +1647,92 @@ namespace ProjectOC.Input
             }
         }
         public UIInventoryActions @UIInventory => new UIInventoryActions(this);
+
+        // UIStore
+        private readonly InputActionMap m_UIStore;
+        private List<IUIStoreActions> m_UIStoreActionsCallbackInterfaces = new List<IUIStoreActions>();
+        private readonly InputAction m_UIStore_NextPriority;
+        private readonly InputAction m_UIStore_ChangeStoreData;
+        private readonly InputAction m_UIStore_AlterStoreData;
+        private readonly InputAction m_UIStore_Remove1;
+        private readonly InputAction m_UIStore_Remove10;
+        private readonly InputAction m_UIStore_FastAdd;
+        public struct UIStoreActions
+        {
+            private @PlayerInput m_Wrapper;
+            public UIStoreActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @NextPriority => m_Wrapper.m_UIStore_NextPriority;
+            public InputAction @ChangeStoreData => m_Wrapper.m_UIStore_ChangeStoreData;
+            public InputAction @AlterStoreData => m_Wrapper.m_UIStore_AlterStoreData;
+            public InputAction @Remove1 => m_Wrapper.m_UIStore_Remove1;
+            public InputAction @Remove10 => m_Wrapper.m_UIStore_Remove10;
+            public InputAction @FastAdd => m_Wrapper.m_UIStore_FastAdd;
+            public InputActionMap Get() { return m_Wrapper.m_UIStore; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(UIStoreActions set) { return set.Get(); }
+            public void AddCallbacks(IUIStoreActions instance)
+            {
+                if (instance == null || m_Wrapper.m_UIStoreActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_UIStoreActionsCallbackInterfaces.Add(instance);
+                @NextPriority.started += instance.OnNextPriority;
+                @NextPriority.performed += instance.OnNextPriority;
+                @NextPriority.canceled += instance.OnNextPriority;
+                @ChangeStoreData.started += instance.OnChangeStoreData;
+                @ChangeStoreData.performed += instance.OnChangeStoreData;
+                @ChangeStoreData.canceled += instance.OnChangeStoreData;
+                @AlterStoreData.started += instance.OnAlterStoreData;
+                @AlterStoreData.performed += instance.OnAlterStoreData;
+                @AlterStoreData.canceled += instance.OnAlterStoreData;
+                @Remove1.started += instance.OnRemove1;
+                @Remove1.performed += instance.OnRemove1;
+                @Remove1.canceled += instance.OnRemove1;
+                @Remove10.started += instance.OnRemove10;
+                @Remove10.performed += instance.OnRemove10;
+                @Remove10.canceled += instance.OnRemove10;
+                @FastAdd.started += instance.OnFastAdd;
+                @FastAdd.performed += instance.OnFastAdd;
+                @FastAdd.canceled += instance.OnFastAdd;
+            }
+
+            private void UnregisterCallbacks(IUIStoreActions instance)
+            {
+                @NextPriority.started -= instance.OnNextPriority;
+                @NextPriority.performed -= instance.OnNextPriority;
+                @NextPriority.canceled -= instance.OnNextPriority;
+                @ChangeStoreData.started -= instance.OnChangeStoreData;
+                @ChangeStoreData.performed -= instance.OnChangeStoreData;
+                @ChangeStoreData.canceled -= instance.OnChangeStoreData;
+                @AlterStoreData.started -= instance.OnAlterStoreData;
+                @AlterStoreData.performed -= instance.OnAlterStoreData;
+                @AlterStoreData.canceled -= instance.OnAlterStoreData;
+                @Remove1.started -= instance.OnRemove1;
+                @Remove1.performed -= instance.OnRemove1;
+                @Remove1.canceled -= instance.OnRemove1;
+                @Remove10.started -= instance.OnRemove10;
+                @Remove10.performed -= instance.OnRemove10;
+                @Remove10.canceled -= instance.OnRemove10;
+                @FastAdd.started -= instance.OnFastAdd;
+                @FastAdd.performed -= instance.OnFastAdd;
+                @FastAdd.canceled -= instance.OnFastAdd;
+            }
+
+            public void RemoveCallbacks(IUIStoreActions instance)
+            {
+                if (m_Wrapper.m_UIStoreActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IUIStoreActions instance)
+            {
+                foreach (var item in m_Wrapper.m_UIStoreActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_UIStoreActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public UIStoreActions @UIStore => new UIStoreActions(this);
         public interface IPlayerActions
         {
             void OnMove(InputAction.CallbackContext context);
@@ -1384,6 +1760,15 @@ namespace ProjectOC.Input
             void OnAlterItem(InputAction.CallbackContext context);
             void OnNextTerm(InputAction.CallbackContext context);
             void OnLastTerm(InputAction.CallbackContext context);
+        }
+        public interface IUIStoreActions
+        {
+            void OnNextPriority(InputAction.CallbackContext context);
+            void OnChangeStoreData(InputAction.CallbackContext context);
+            void OnAlterStoreData(InputAction.CallbackContext context);
+            void OnRemove1(InputAction.CallbackContext context);
+            void OnRemove10(InputAction.CallbackContext context);
+            void OnFastAdd(InputAction.CallbackContext context);
         }
     }
 }

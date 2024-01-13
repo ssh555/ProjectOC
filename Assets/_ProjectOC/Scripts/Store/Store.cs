@@ -340,22 +340,79 @@ namespace ProjectOC.StoreNS
             return result;
         }
 
-        #region TODO
-        // TODO: 拆除。拆除仓库时，将所有物品传给玩家背包。
-        /// <summary>
-        /// 快捷存放，将玩家背包中可存放在该仓库的物品全部转移至仓库中；
-        /// 仓库空位不足时将其填满，剩余的留在背包中；
-        /// </summary>
-        public void FastAdd(Player.PlayerCharacter player)
+        #region UI接口
+        public void UIAdd(Player.PlayerCharacter player, StoreData storeData, int amount)
         {
-            
+            if (player != null && storeData != null && amount > 0)
+            {
+                if (ItemManager.Instance.IsValidItemID(storeData.ItemID) && storeData.Empty >= amount)
+                {
+                    if (player.Inventory.RemoveItem(storeData.ItemID, amount))
+                    {
+                        storeData.Storage += amount;
+                    }
+                }
+            }
         }
-        /// <summary>
-        /// 快捷取出 背包空位不足时将其填满，剩余的留在仓库中。
-        /// </summary>
-        public void FastRemove(Player.PlayerCharacter player, string itemID, int amount)
+        public void UIRemove(Player.PlayerCharacter player, StoreData storeData, int amount)
         {
-            
+            if (player != null && storeData != null && amount > 0)
+            {
+                if (ItemManager.Instance.IsValidItemID(storeData.ItemID) && storeData.Storage >= amount)
+                {
+                    List<Item> items = ItemManager.Instance.SpawnItems(storeData.ItemID, amount);
+                    foreach (Item item in items)
+                    {
+                        int itemAmount = item.Amount;
+                        if (player.Inventory.AddItem(item))
+                        {
+                            storeData.Storage -= itemAmount;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        public void UIFastAdd(Player.PlayerCharacter player, StoreData storeData)
+        {
+            if (player != null && storeData != null)
+            {
+                if (ItemManager.Instance.IsValidItemID(storeData.ItemID))
+                {
+                    int amount = player.Inventory.GetItemAllNum(storeData.ItemID);
+                    amount = amount >= storeData.Empty ? storeData.Empty : amount;
+                    if (player.Inventory.RemoveItem(storeData.ItemID, amount))
+                    {
+                        storeData.Storage += amount;
+                    }
+                }
+            }
+        }
+        public void UIFastRemove(Player.PlayerCharacter player, StoreData storeData)
+        {
+            if (player != null && storeData != null)
+            {
+                if (ItemManager.Instance.IsValidItemID(storeData.ItemID))
+                {
+                    int amount = storeData.Storage;
+                    List<Item> items = ItemManager.Instance.SpawnItems(storeData.ItemID, amount);
+                    foreach (Item item in items)
+                    {
+                        int itemAmount = item.Amount;
+                        if (player.Inventory.AddItem(item))
+                        {
+                            storeData.Storage -= itemAmount;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
         }
         #endregion
 
