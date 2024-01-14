@@ -1,9 +1,15 @@
 namespace ProjectOC.WorkerNS
 {
     [System.Serializable]
-    public class TimeArrangement
+    public struct TimeArrangement
     {
-        private TimeStatus[] Status = new TimeStatus[24];
+        private TimeStatus[] Status;
+
+        public TimeArrangement(int time=24)
+        {
+            Status = new TimeStatus[24];
+        }
+
         public TimeStatus this[int index]
         {
             get
@@ -35,12 +41,9 @@ namespace ProjectOC.WorkerNS
         }
         public void SetTimeArrangement(TimeArrangement timeArrangement)
         {
-            if (timeArrangement != null)
+            for (int i = 0; i < 24; i++)
             {
-                for (int i = 0; i < 24; i++)
-                {
-                    Status[i] = timeArrangement[i];
-                }
+                Status[i] = timeArrangement[i];
             }
         }
     }

@@ -10,7 +10,7 @@ namespace ML.Engine.InventorySystem
         //[Button("Éú³É WorldItem")]
         public WorldItem SpawnerWorldItem(string id)
         {
-            var ret = ItemSpawner.Instance.SpawnWorldItem(ItemSpawner.Instance.SpawnItem(id), this.transform.position, this.transform.rotation);
+            var ret = ItemManager.Instance.SpawnWorldItem(ItemManager.Instance.SpawnItem(id), this.transform.position, this.transform.rotation);
             ret.transform.SetParent(this.transform);
             return ret;
         }

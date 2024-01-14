@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2713557158
+CRC: 4055235957
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a31cca3e3070735dab1aeabd8f0d2b88
+    Hash: 4f7bee09213bac0ffa95567bc5586eee
   TypeTreeHash:
     serializedVersion: 2
-    Hash: ec28a2bed95fc7833fef54b111da9782
+    Hash: d1abeb4fb046bb95265b25a66ee22c4c
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: a31cca3e3070735dab1aeabd8f0d2b88
+    Hash: 4f7bee09213bac0ffa95567bc5586eee
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -23,9 +23,9 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
@@ -41,19 +41,17 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 122d184a229d7654389bc4921fdb6ac7, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 87badff79e1e54a4a9d68c74f002b591, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 84a92b25f83d49b9bc132d206b370281, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 18e0a5fd7f32347419b785bf00a72db7, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -119,12 +117,11 @@ SerializeReferenceClassIdentifiers:
   ClassName: UnityEngine.UI.SpriteState
 Assets:
 - Assets/_ProjectOC/Resources/UIPanel/TechPointPanel.prefab
-- Assets/_ProjectOC/Resources/UIPanel/ResonanceWheelUI_sub2.prefab
 - Assets/_ProjectOC/Resources/UIPanel/UIInfiniteInventoryPanel.prefab
+- Assets/_ProjectOC/Resources/UIPanel/UIStorePanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIPanel.prefab
-- Assets/_ProjectOC/Resources/UIPanel/ResonanceWheelUI.prefab
-- Assets/_ProjectOC/Resources/UIPanel/ResonanceWheelUI_sub1.prefab
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIBotPanel.prefab
 Dependencies:
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/fonts
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/techpoint/texture2d
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/fonts
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/inventory/texture2d/itemtype
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/techpoint/texture2d

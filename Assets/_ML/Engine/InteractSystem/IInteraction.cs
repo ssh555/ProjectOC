@@ -8,6 +8,7 @@ namespace ML.Engine.InteractSystem
     {
         /// <summary>
         /// 可交互物类别 -> 用于UI
+        /// 对应json文件 : InteractKeyTip.json
         /// </summary>
         public string InteractType { get; set; }
 

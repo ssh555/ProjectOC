@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static ML.Engine.BuildingSystem.Test_BuildingManager;
+using static ML.Engine.BuildingSystem.MonoBuildingManager;
 
 namespace ML.Engine.BuildingSystem.BuildingPlacer
 {
@@ -950,6 +950,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
                     // 新建建筑物 -> 赋予实例ID
                     this.SelectedPartInstance.InstanceID = BuildingManager.Instance.GetOneNewBPartInstanceID();
+                    this.SelectedPartInstance.OnChangePlaceEvent();
                     this.OnPlaceModeSuccess?.Invoke(this.SelectedPartInstance);
 
 
@@ -1115,6 +1116,8 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             // 确认 -> 放置于新位置, 回到InteractMode
             else if (this.SelectedPartInstance.CanPlaceInPlaceMode && this.comfirmInputAction.WasPressedThisFrame())
             {
+                this.SelectedPartInstance.OnChangePlaceEvent();
+
                 this.ExitEditMode();
             }
 
@@ -1374,11 +1377,21 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     // 复制当前选中的可交互物进入PlaceMode
 
                     // 复制一份当前选中的BPart(即一级二级分类选择和外观选择的流程)
-                    this.SelectedPartInstance = BuildingManager.Instance.GetOneBPartCopyInstance(this.SelectedPartInstance);
 
-                    this.ExitKeyCom();
-                    // 进入PlaceMode的放置流程
-                    this.PlaceControlFlow = 3;
+                    var bpart = BuildingManager.Instance.GetOneBPartCopyInstance(this.SelectedPartInstance);
+                    if(bpart == this.SelectedPartInstance)
+                    {
+                        this.ExitKeyCom();
+                        // 进入PlaceMode的放置流程
+                        this.PlaceControlFlow = 3;
+                    }
+                    // to-do : 待商定
+                    // 不能复制则直接进入Edit模式
+                    //else
+                    //{
+                    //    this.ExitKeyCom();
+                    //    this.EnterEditMode();
+                    //}
                 }
             }
             // CopyOutLook

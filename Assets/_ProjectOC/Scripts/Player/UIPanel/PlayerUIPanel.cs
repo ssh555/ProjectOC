@@ -6,8 +6,7 @@ using ProjectOC.TechTree.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static ML.Engine.BuildingSystem.Test_BuildingManager;
-using static ProjectOC.ProductionNodeNS.ProductionNodeManager;
+using static ML.Engine.BuildingSystem.MonoBuildingManager;
 
 namespace ProjectOC.Player.UI
 {
@@ -69,13 +68,13 @@ namespace ProjectOC.Player.UI
             this.EnterInventoryBtn = btnList.Find("EnterInventory").GetComponent<SelectedButton>();
             this.EnterInventoryBtn.OnInteract += () =>
             {
-                var panel = GameObject.Instantiate(uIInfiniteInventory);
-                panel.transform.SetParent(this.transform.parent, false);
+                // 实例化
+                var panel = GameObject.Instantiate(uIInfiniteInventory, this.transform.parent, false);
+
+                // 初始化
                 panel.inventory = this.player.Inventory as ML.Engine.InventorySystem.InfiniteInventory;
 
-
-
-
+                // Push
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
                 
             };
@@ -181,18 +180,13 @@ namespace ProjectOC.Player.UI
 
         public static Dictionary<string, TextTip> TipDict = new Dictionary<string, TextTip>();
 
-        [System.Serializable]
-        private struct TextTips
-        {
-            public ML.Engine.TextContent.TextTip[] tips;
-        }
         public static ML.Engine.ABResources.ABJsonAssetProcessor<ML.Engine.TextContent.TextTip[]> ABJAProcessor;
 
         public void InitUITextContents()
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ML.Engine.TextContent.TextTip[]>("JSON/TextContent/Player", "PlayerUIPanel", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ML.Engine.TextContent.TextTip[]>("Binary/TextContent/Player", "PlayerUIPanel", (datas) =>
                 {
                     foreach (var tip in datas)
                     {

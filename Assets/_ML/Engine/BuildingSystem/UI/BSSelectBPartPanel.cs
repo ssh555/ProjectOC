@@ -96,14 +96,14 @@ namespace ML.Engine.BuildingSystem.UI
             comfirm.img = comfirm.root.Find("Image").GetComponent<Image>();
             comfirm.keytip = comfirm.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             comfirm.description = comfirm.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            comfirm.ReWrite(Test_BuildingManager.Instance.KeyTipDict["comfirm"]);
+            comfirm.ReWrite(MonoBuildingManager.Instance.KeyTipDict["comfirm"]);
 
             back = new UIKeyTip();
             back.root = keytip.Find("KT_Back") as RectTransform;
             back.img = back.root.Find("Image").GetComponent<Image>();
             back.keytip = back.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             back.description = back.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            back.ReWrite(Test_BuildingManager.Instance.KeyTipDict["back"]);
+            back.ReWrite(MonoBuildingManager.Instance.KeyTipDict["back"]);
 
             keytip = this.transform.Find("SelectCategory");
 
@@ -111,13 +111,13 @@ namespace ML.Engine.BuildingSystem.UI
             categorylast.root = keytip.Find("KT_Last") as RectTransform;
             categorylast.img = categorylast.root.Find("Image").GetComponent<Image>();
             categorylast.keytip = categorylast.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            categorylast.ReWrite(Test_BuildingManager.Instance.KeyTipDict["categorylast"]);
+            categorylast.ReWrite(MonoBuildingManager.Instance.KeyTipDict["categorylast"]);
 
             categorynext = new UIKeyTip();
             categorynext.root = keytip.Find("KT_Next") as RectTransform;
             categorynext.img = categorynext.root.Find("Image").GetComponent<Image>();
             categorynext.keytip = categorynext.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            categorynext.ReWrite(Test_BuildingManager.Instance.KeyTipDict["categorynext"]);
+            categorynext.ReWrite(MonoBuildingManager.Instance.KeyTipDict["categorynext"]);
 
             keytip = this.transform.Find("SelectType");
 
@@ -125,13 +125,13 @@ namespace ML.Engine.BuildingSystem.UI
             typelast.root = keytip.Find("KT_Last") as RectTransform;
             typelast.img = typelast.root.Find("Image").GetComponent<Image>();
             typelast.keytip = typelast.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            typelast.ReWrite(Test_BuildingManager.Instance.KeyTipDict["typelast"]);
+            typelast.ReWrite(MonoBuildingManager.Instance.KeyTipDict["typelast"]);
 
             typenext = new UIKeyTip();
             typenext.root = keytip.Find("KT_Next") as RectTransform;
             typenext.img = typenext.root.Find("Image").GetComponent<Image>();
             typenext.keytip = typenext.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            typenext.ReWrite(Test_BuildingManager.Instance.KeyTipDict["typenext"]);
+            typenext.ReWrite(MonoBuildingManager.Instance.KeyTipDict["typenext"]);
         }
 
 
@@ -223,7 +223,7 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 var go = Instantiate<GameObject>(this.templateCategory.gameObject, this.categoryParent, false);
                 go.GetComponentInChildren<Image>().sprite = GetCategorySprite(category);
-                go.GetComponentInChildren<TextMeshProUGUI>().text = Test_BuildingManager.Instance.CategoryDict[category.ToString()].GetDescription();
+                go.GetComponentInChildren<TextMeshProUGUI>().text = MonoBuildingManager.Instance.Category1Dict[category.ToString()].GetDescription();
                 go.SetActive(true);
                 this.categoryInstance.Add(category, go.transform as RectTransform);
             }
@@ -254,7 +254,7 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 var go = Instantiate<GameObject>(this.templateType.gameObject, this.typeParent, false);
                 go.GetComponentInChildren<Image>().sprite = GetTypeSprite(type);
-                go.GetComponentInChildren<TextMeshProUGUI>().text = Test_BuildingManager.Instance.TypeDict[type.ToString()].GetDescription();
+                go.GetComponentInChildren<TextMeshProUGUI>().text = MonoBuildingManager.Instance.Category2Dict[type.ToString()].GetDescription();
                 go.SetActive(true);
 
                 this.typeInstance.Add(type, go.transform as RectTransform);

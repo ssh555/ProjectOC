@@ -1,5 +1,6 @@
 using ML.Engine.InventorySystem.CompositeSystem;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -36,6 +37,11 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         public event IBuildingPart.CheckMode CheckCanInPlaceMode;
         public event IBuildingPart.CheckMode CheckCanEdit;
         public event IBuildingPart.CheckMode CheckCanDestory;
+        public void OnChangePlaceEvent()
+        {
+
+        }
+
         public bool CanEnterEditMode()
         {
             return CheckCanEdit != null && CheckCanEdit.Invoke(this);
@@ -154,11 +160,13 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
         public void AlternativeActiveSocket()
         {
+            ActiveSocket.OnDisactive();
             this.activeSocketIndex = (this.activeSocketIndex + 1) % this.OwnedSocketList.Count;
             while(this.ActiveSocket.Type == BuildingSocket.BuildingSocketType.None)
             {
                 this.activeSocketIndex = (this.activeSocketIndex + 1) % this.OwnedSocketList.Count;
             }
+            ActiveSocket.OnActive();
         }
 
         public BuildingCopiedMaterial GetCopiedMaterial()

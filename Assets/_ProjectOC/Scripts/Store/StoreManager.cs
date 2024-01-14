@@ -1,10 +1,8 @@
 using ML.Engine.Manager;
-using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static ProjectOC.WorkerNS.EffectManager;
 
 namespace ProjectOC.StoreNS
 {
@@ -12,67 +10,24 @@ namespace ProjectOC.StoreNS
     /// 仓库管理器
     /// </summary>
     [System.Serializable]
-    public sealed class StoreManager : ML.Engine.Manager.GlobalManager.IGlobalManager
+    public sealed class StoreManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
-        #region Instance
-        private StoreManager() { }
-
-        private static StoreManager instance;
-
-        public static StoreManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new StoreManager();
-                    GameManager.Instance.RegisterGlobalManager(instance);
-                    instance.LoadTableData();
-                }
-                return instance;
-            }
-        }
-        #endregion
-
-        /// <summary>
-        /// 生成的仓库，键为ID
-        /// </summary>
-        private Dictionary<string, List<Store>> StoreDict = new Dictionary<string, List<Store>>();
         /// <summary>
         /// 实例化生成的仓库，键为UID
         /// </summary>
         private Dictionary<string, WorldStore> WorldStoreDict = new Dictionary<string, WorldStore>();
-        /// <summary>
-        /// 基础Store数据表
-        /// </summary>
-        private Dictionary<string, StoreTableJsonData> StoreTableDict = new Dictionary<string, StoreTableJsonData>();
 
-        /// <summary>
-        /// 是否是有效的仓库ID
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public bool IsValidID(string id)
-        {
-            return this.StoreTableDict.ContainsKey(id);
-        }
         /// <summary>
         /// 是否是有效的仓库UID
         /// </summary>
-        /// <param name="uid"></param>
-        /// <returns></returns>
         public bool IsValidUID(string uid)
         {
             return WorldStoreDict.ContainsKey(uid);
         }
-        public List<Store> GetStore(string id)
-        {
-            if (this.StoreDict.ContainsKey(id))
-            {
-                return this.StoreDict[id];
-            }
-            return new List<Store>();
-        }
+
+        /// <summary>
+        /// 根据UID获取WorldStore
+        /// </summary>
         public WorldStore GetWorldStore(string uid)
         {
             if (this.WorldStoreDict.ContainsKey(uid))
@@ -88,9 +43,9 @@ namespace ProjectOC.StoreNS
         /// <param name="itemID">物品ID</param>
         /// <param name="amount">数量</param>
         /// <returns></returns>
-        public WorldStore GetWorldStoreForStorage(string itemID, int amount)
+        public Store GetCanPutInStore(string itemID, int amount)
         {
-            WorldStore result = null;
+            Store result = null;
             // 从头到尾遍历仓库(跳过玩家正在交互的仓库)
             foreach (WorldStore worldStore in this.WorldStoreDict.Values)
             {
@@ -101,27 +56,27 @@ namespace ProjectOC.StoreNS
                     // 若没有，则寻找第一个可以存入的，可溢出存入
                     if (result == null)
                     {
-                        result = worldStore;
+                        result = store;
                     }
-                    if (store.IsStoreHaveItemEmpty(itemID, amount))
+                    if (store.IsStoreHaveEmpty(itemID, amount))
                     {
-                        result = worldStore;
+                        result = store;
                         break;
                     }
                 }
             }
             return result;
         }
+
         /// <summary>
         /// 获取满足取出条件的仓库
         /// </summary>
         /// <param name="itemID">物品ID</param>
         /// <param name="amount">数量</param>
         /// <returns>取出数量和对应仓库列表</returns>
-        public Tuple<int, List<WorldStore>> GetWorldStoreForRetrieve(string itemID, int amount)
+        public Dictionary<Store, int> GetCanPutOutStore(string itemID, int amount)
         {
-            List<WorldStore> result = new List<WorldStore>();
-            // 取出来的数量
+            Dictionary<Store, int> result = new Dictionary<Store, int>();
             int resultAmount = 0;
             // 从头到尾遍历仓库(跳过玩家正在交互的仓库)
             foreach (WorldStore worldStore in this.WorldStoreDict.Values)
@@ -129,146 +84,64 @@ namespace ProjectOC.StoreNS
                 Store store = worldStore.Store;
                 if (store != null && !store.IsInteracting && store.IsStoreHaveItem(itemID))
                 {
-                    int storeAmount = store.GetItemStorageCapacity(itemID);
+                    int storeAmount = store.GetStoreStorage(itemID);
                     if (resultAmount + storeAmount >= amount)
                     {
-                        result.Add(worldStore);
+                        result.Add(store, amount - resultAmount);
                         resultAmount = amount;
                         break;
                     }
                     else
                     {
-                        result.Add(worldStore);
+                        result.Add(store, storeAmount);
                         resultAmount += storeAmount;
                     }
                 }
             }
-            return new Tuple<int, List<WorldStore>>(resultAmount, result);
+            return result;
         }
 
         /// <summary>
-        /// 根据id创建新的仓库
+        /// 创建新的仓库
         /// </summary>
-        /// <param name="id">仓库id</param>
-        /// <returns></returns>
-        public Store SpawnStore(string id)
+        public Store SpawnStore(StoreType storeType)
         {
-            if (StoreTableDict.ContainsKey(id))
-            {
-                StoreTableJsonData row = this.StoreTableDict[id];
-                Store store = new Store();
-                store.Init(row);
-                if (!StoreDict.ContainsKey(store.ID))
-                {
-                    StoreDict.Add(store.ID, new List<Store>());
-                }
-                StoreDict[id].Add(store);
-                return store;
-            }
-            Debug.LogError("没有对应ID为 " + id + " 的仓库");
-            return null;
+            Store store = new Store(storeType);
+            return store;
         }
+
         public WorldStore SpawnWorldStore(Store store, Vector3 pos, Quaternion rot)
         {
             if (store == null)
             {
                 return null;
             }
-            // to-do : 可采用对象池形式
-            GameObject obj = GameObject.Instantiate(GameManager.Instance.ABResourceManager.LoadLocalAB(WorldObjPath).LoadAsset<GameObject>(this.StoreTableDict[store.ID].worldobject), pos, rot);
-            WorldStore worldstore = obj.GetComponent<WorldStore>();
-            if (worldstore == null)
-            {
-                worldstore = obj.AddComponent<WorldStore>();
-            }
+            GameObject obj = GameObject.Instantiate(GetObject(), pos, rot);
+            WorldStore worldstore = obj.AddComponent<WorldStore>();
             worldstore.SetStore(store);
             WorldStoreDict.Add(store.UID, worldstore);
             return worldstore;
         }
-        public static WorldStore SpawnWorldStoreInEditor(GameObject obj, Store store, Vector3 pos, Quaternion rot)
+
+        public const string Texture2DPath = "ui/Store/texture2d";
+        public const string WorldObjPath = "prefabs/Store/WorldStore";
+        public Texture2D GetTexture2D()
         {
-#if !UNITY_EDITOR
-            return null;
-#else
-            if (store == null || UnityEditor.EditorApplication.isPlaying)
-            {
-                return null;
-            }
-
-            obj = UnityEditor.PrefabUtility.InstantiatePrefab(obj) as GameObject;
-            obj.transform.position = pos;
-            obj.transform.rotation = rot;
-
-            WorldStore worldstore = obj.GetComponent<WorldStore>();
-            if (worldstore == null)
-            {
-                worldstore = obj.AddComponent<WorldStore>();
-            }
-            worldstore.SetStore(store);
-            Instance.WorldStoreDict.Add(store.UID, worldstore);
-            return worldstore;
-#endif
+            return GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>("Store");
         }
-
-        public Texture2D GetTexture2D(string id)
+        public Sprite GetSprite()
         {
-            if (!this.StoreTableDict.ContainsKey(id))
-            {
-                return null;
-            }
-
-            return GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>(this.StoreTableDict[id].texture2d);
-        }
-        public Sprite GetSprite(string id)
-        {
-            var tex = this.GetTexture2D(id);
+            var tex = GetTexture2D();
             if (tex == null)
             {
                 return null;
             }
             return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
         }
-        public GameObject GetObject(string id)
+        public GameObject GetObject()
         {
-            if (!this.StoreTableDict.ContainsKey(id))
-            {
-                return null;
-            }
-
-            return GameManager.Instance.ABResourceManager.LoadLocalAB(WorldObjPath).LoadAsset<GameObject>(this.StoreTableDict[id].worldobject);
+            return GameManager.Instance.ABResourceManager.LoadLocalAB(WorldObjPath).LoadAsset<GameObject>("Store");
         }
-
-        #region to-do : 需读表导入所有所需的 Store 数据
-        public const string Texture2DPath = "ui/Store/texture2d";
-        public const string WorldObjPath = "prefabs/Store/WorldStore";
-
-        [System.Serializable]
-        public struct StoreTableJsonData
-        {
-            public string id;
-            public string name;
-            public StoreType type;
-            public string texture2d;
-            public string worldobject;
-        }
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<StoreTableJsonData[]> ABJAProcessor;
-
-        public void LoadTableData()
-        {
-            if (ABJAProcessor == null)
-            {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StoreTableJsonData[]>("Json/TableData", "StoreTableData", (datas) =>
-                {
-                    foreach (var data in datas)
-                    {
-                        this.StoreTableDict.Add(data.id, data);
-                    }
-                }, null, "仓库表数据");
-                ABJAProcessor.StartLoadJsonAssetData();
-            }
-        }
-
-        #endregion
     }
 }
 

@@ -49,6 +49,16 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
         public abstract bool CanEnterDestoryMode();
 
+        public virtual bool GetCanCopy()
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// 在PlaceMode或者EditMode更改之后调用
+        /// </summary>
+        public void OnChangePlaceEvent();
+
         /// <summary>
         /// 当前所处的建造模式
         /// </summary>

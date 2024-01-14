@@ -35,9 +35,9 @@ namespace ML.Engine.InventorySystem
 
         protected void InitItem()
         {
-            if (this.item == null && ItemSpawner.Instance.IsValidItemID(this._id))
+            if (this.item == null && ItemManager.Instance.IsValidItemID(this._id))
             {
-                this.item = ItemSpawner.Instance.SpawnItem(this._id);
+                this.item = ItemManager.Instance.SpawnItem(this._id);
             }
         }
 
@@ -49,9 +49,9 @@ namespace ML.Engine.InventorySystem
         {
             if (this.item == null)
             {
-                if(ItemSpawner.Instance.IsValidItemID(this._id))
+                if(ItemManager.Instance.IsValidItemID(this._id))
                 {
-                    this.item = ItemSpawner.Instance.SpawnItem(this._id);
+                    this.item = ItemManager.Instance.SpawnItem(this._id);
 
                 }
                 else
@@ -69,7 +69,6 @@ namespace ML.Engine.InventorySystem
         #region IInteraction
         public string InteractType { get; set; } = "";
         public Vector3 PosOffset { get; set; } = Vector3.zero;
-        public bool IsDestroyDirty { get; set; } = false;
 
         public void Interact(InteractComponent component)
         {

@@ -138,7 +138,7 @@ namespace ML.Engine.InteractSystem
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextContent.KeyTip[]>("JSON/TextContent/InteractSystem", "InteractKeyTip", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextContent.KeyTip[]>("Binary/TextContent/InteractSystem", "InteractKeyTip", (datas) =>
                 {
                     foreach (var tip in datas)
                     {

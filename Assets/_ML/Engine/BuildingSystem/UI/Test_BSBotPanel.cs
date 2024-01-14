@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static ML.Engine.BuildingSystem.Test_BuildingManager;
+using static ML.Engine.BuildingSystem.MonoBuildingManager;
 
 namespace ML.Engine.BuildingSystem.UI
 {
@@ -24,7 +24,7 @@ namespace ML.Engine.BuildingSystem.UI
             enterbuild.img = enterbuild.root.Find("Image").GetComponent<Image>();
             enterbuild.keytip = enterbuild.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             enterbuild.description = enterbuild.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            enterbuild.ReWrite(Test_BuildingManager.Instance.KeyTipDict["enterbuild"]);
+            enterbuild.ReWrite(MonoBuildingManager.Instance.KeyTipDict["enterbuild"]);
         }
 
         public override void OnExit()

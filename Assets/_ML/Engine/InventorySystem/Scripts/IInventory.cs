@@ -6,6 +6,8 @@ namespace ML.Engine.InventorySystem
 {
     public interface IInventory
     {
+        public Item[] GetItemList();
+
         public bool AddItem(Item item);
 
         public bool RemoveItem(Item item);
