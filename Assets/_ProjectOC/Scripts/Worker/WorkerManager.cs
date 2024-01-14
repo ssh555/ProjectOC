@@ -4,6 +4,8 @@ using System.Linq;
 using UnityEngine;
 using System;
 using ML.Engine.Manager;
+using ML.Engine.InventorySystem.CompositeSystem;
+using ML.Engine.InventorySystem;
 
 namespace ProjectOC.WorkerNS
 {
@@ -48,12 +50,26 @@ namespace ProjectOC.WorkerNS
             this.Workers.Remove(worker);
         }
 
+        public Worker Composite(IInventory inventory)
+        {
+            CompositeManager.CompositionObjectType compObjType = CompositeManager.Instance.Composite(inventory, "Worker", out var composition);
+            if (compObjType == CompositeManager.CompositionObjectType.Worker)
+            {
+                return composition as Worker;
+            }
+            else
+            {
+                Debug.LogError($"Worker Composite Error");
+                return null;
+            }
+        }
+
         /// <summary>
         /// 创建新的刁民
         /// </summary>
-        public Worker SpawnWorker(Vector3 pos, Quaternion rot)
+        public Worker SpawnWorker()
         {
-            GameObject obj = GameObject.Instantiate(GetObject(), pos, rot);
+            GameObject obj = GameObject.Instantiate(GetObject());
             Worker worker = obj.AddComponent<Worker>();
             Workers.Add(worker);
             return worker;

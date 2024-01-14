@@ -108,6 +108,10 @@ namespace ProjectOC.WorkerNS
         [LabelText("∞·‘ÀŒÔ∆∑")]
         public List<Item> TransportItems = new List<Item>();
 
+        public void Start()
+        {
+            this.enabled = false;
+        }
         public Worker()
         {
             //this.ExpRate.Add(WorkType.Cook, "Skill ID");
