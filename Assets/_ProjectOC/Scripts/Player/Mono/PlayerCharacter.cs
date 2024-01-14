@@ -110,6 +110,7 @@ namespace ProjectOC.Player
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
 
             // 按下对应按键才会压入栈
+
             var botui = GameObject.Instantiate(this.playerUIBotPanel.gameObject, GameObject.Find("Canvas").transform, false).GetComponent<UI.PlayerUIBotPanel>();
             botui.player = this;
             ML.Engine.Manager.GameManager.Instance.UIManager.ChangeBotUIPanel(botui);

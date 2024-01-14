@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1801127718
+CRC: 2713557158
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: bd32ac622de75b4e9c333be8f28fa9df
+    Hash: a31cca3e3070735dab1aeabd8f0d2b88
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 97aa7e701ffaec6ff358fb4311fb64ac
+    Hash: ec28a2bed95fc7833fef54b111da9782
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: bd32ac622de75b4e9c333be8f28fa9df
+    Hash: a31cca3e3070735dab1aeabd8f0d2b88
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -41,17 +41,19 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 122d184a229d7654389bc4921fdb6ac7, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 87badff79e1e54a4a9d68c74f002b591, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 84a92b25f83d49b9bc132d206b370281, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 18e0a5fd7f32347419b785bf00a72db7, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -117,9 +119,12 @@ SerializeReferenceClassIdentifiers:
   ClassName: UnityEngine.UI.SpriteState
 Assets:
 - Assets/_ProjectOC/Resources/UIPanel/TechPointPanel.prefab
+- Assets/_ProjectOC/Resources/UIPanel/ResonanceWheelUI_sub2.prefab
 - Assets/_ProjectOC/Resources/UIPanel/UIInfiniteInventoryPanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIPanel.prefab
+- Assets/_ProjectOC/Resources/UIPanel/ResonanceWheelUI.prefab
+- Assets/_ProjectOC/Resources/UIPanel/ResonanceWheelUI_sub1.prefab
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIBotPanel.prefab
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/fonts
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/techpoint/texture2d
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/fonts
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/techpoint/texture2d

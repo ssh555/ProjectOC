@@ -6,18 +6,25 @@
             "English" : "EntetBuild"
         }
     },
-    {
-        "name" : "techtree",
-        "description" : {
-            "Chinese" : "科技树",
-            "English" : "TechTree"
-        }
-    },
-    {
-        "name" : "inventory",
-        "description" : {
-            "Chinese" : "背包",
-            "English" : "Inventory"
-        }
+  {
+    "name": "entertechtree",
+    "description": {
+      "Chinese": "科技树",
+      "English": "TechTree"
     }
+  },
+  {
+    "name": "enterinventory",
+    "description": {
+      "Chinese": "背包",
+      "English": "Inventory"
+    }
+  },
+  {
+    "name": "enterresonancewheel",
+    "description": {
+      "Chinese": "共鸣轮",
+      "English": "ResonanceWheel"
+    }
+  }
 ]

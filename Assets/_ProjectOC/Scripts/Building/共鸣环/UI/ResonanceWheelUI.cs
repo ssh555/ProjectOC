@@ -1,0 +1,418 @@
+using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.InventorySystem;
+using ML.Engine.TextContent;
+using ML.Engine.Timer;
+using Newtonsoft.Json;
+using ProjectOC.TechTree.UI;
+using Sirenix.OdinInspector;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using Unity.Burst.CompilerServices;
+using UnityEngine;
+using UnityEngine.Purchasing;
+using UnityEngine.Rendering;
+using UnityEngine.UI;
+
+namespace ProjectOC.ResonanceWheelSystem.UI
+{
+    public class ResonanceWheelUI : ML.Engine.UI.UIBasePanel
+    {
+
+        public IInventory inventory;
+
+        #region Input
+        /// <summary>
+        /// 用于Drop和Destroy按键响应Cancel
+        /// 长按响应了Destroy就置为true
+        /// Cancel就不响应Drop 并 重置
+        /// </summary>
+        private bool ItemIsDestroyed = false;
+        #endregion
+
+        #region Unity
+        public bool IsInit = false;
+        private void Start()
+        {
+            InitUITextContents();
+
+
+
+            // TopTitle
+            TopTitleText = this.transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
+
+            //FuctionType
+
+            var content = this.transform.Find("FunctionType").Find("Content");
+            KT_LastTerm = new UIKeyTip();
+            KT_LastTerm.img = content.Find("KT_LastTerm").Find("Image").GetComponent<UnityEngine.UI.Image>();
+            KT_LastTerm.keytip = KT_LastTerm.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
+
+            HiddenBeastResonanceTemplate = content.Find("HiddenBeastResonanceContainer").Find("HiddenBeastResonanceTemplate");
+            SongofSeaBeastsTemplate = content.Find("SongofSeaBeastsContainer").Find("SongofSeaBeastsTemplate");
+
+            KT_NextTerm = new UIKeyTip();
+            KT_NextTerm.img = content.Find("KT_NextTerm").Find("Image").GetComponent<UnityEngine.UI.Image>();
+            KT_NextTerm.keytip = KT_NextTerm.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
+
+            //Ring
+            var ringcontent = this.transform.Find("Ring").Find("Viewport").Find("Content");
+            KT_NextGrid = new UIKeyTip();
+            KT_NextGrid.keytip= ringcontent.Find("SelectKey").GetComponent<TMPro.TextMeshProUGUI>();
+            var ring = ringcontent.Find("Ring");
+            Grid1 = ring.Find("Grid1");
+            Grid2 = ring.Find("Grid2");
+            Grid3 = ring.Find("Grid3");
+            Grid4 = ring.Find("Grid4");
+            Grid5 = ring.Find("Grid5");
+            Grids.Add(Grid1);
+            Grids.Add(Grid2);
+            Grids.Add(Grid3);
+            Grids.Add(Grid4);
+            Grids.Add(Grid5);
+
+
+            IsInit = true;
+            Refresh();
+        }
+
+        #endregion
+
+        #region Override
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            this.Enter();
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+            this.Exit();
+            ClearTemp();
+        }
+
+        public override void OnPause()
+        {
+            base.OnPause();
+            this.Exit();
+        }
+
+        public override void OnRecovery()
+        {
+            base.OnRecovery();
+            this.Enter();
+        }
+
+        #endregion
+
+        #region Internal
+ 
+
+   
+        private int CurrentFuctionTypeIndex = 0;//0为HBR 1为SSB
+        private int CurrentGridIndex = 0;//0到4
+
+
+        private void Enter()
+        {
+            this.RegisterInput();
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Enable();
+            ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
+            this.Refresh();
+        }
+
+        private void Exit()
+        {
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Disable();
+            ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
+            this.UnregisterInput();
+        }
+
+        private void UnregisterInput()
+        {
+            // 切换类目
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.LastTerm.performed -= LastTerm_performed;
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.NextTerm.performed -= NextTerm_performed;
+
+            //切换隐兽
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.NextGrid.performed -= NextGrid_performed;
+
+            //切换对象
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed -= SwitchTarget_performed;
+
+
+
+
+            // 返回
+            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
+
+            
+
+        }
+
+        private void RegisterInput()
+        {
+            // 切换类目
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.LastTerm.performed += LastTerm_performed;
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.NextTerm.performed += NextTerm_performed;
+
+            //切换隐兽
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.NextGrid.performed += NextGrid_performed;
+
+
+            //切换对象
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed += SwitchTarget_performed;
+
+            // 返回
+            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
+
+        }
+
+
+
+
+
+        private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            UIMgr.PopPanel();
+        }
+
+
+
+
+
+        private void LastTerm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            CurrentFuctionTypeIndex = (CurrentFuctionTypeIndex + 2 - 1) % 2;
+            this.Refresh();
+        }
+
+        private void NextTerm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            CurrentFuctionTypeIndex = (CurrentFuctionTypeIndex + 1) % 2;
+            this.Refresh();
+        }
+
+        private void NextGrid_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            CurrentGridIndex = (CurrentGridIndex + 1) % Grids.Count;
+            this.Refresh();
+        }
+
+        private void SwitchTarget_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            var panel = GameObject.Instantiate(resonanceWheel_Sub2);
+            panel.transform.SetParent(this.transform.parent, false);
+            ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+            Debug.Log("SwitchTarget_performed!");
+        }
+        #endregion
+
+        #region UI
+        #region Temp
+        private List<Sprite> tempSprite = new List<Sprite>();
+        private Dictionary<ML.Engine.InventorySystem.ItemType, GameObject> tempItemType = new Dictionary<ML.Engine.InventorySystem.ItemType, GameObject>();
+        private List<GameObject> tempUIItems = new List<GameObject>();
+
+
+        private void ClearTemp()
+        {
+            foreach (var s in tempSprite)
+            {
+                Destroy(s);
+            }
+            foreach (var s in tempItemType.Values)
+            {
+                Destroy(s);
+            }
+            foreach (var s in tempUIItems)
+            {
+                Destroy(s);
+            }
+        }
+
+        #endregion
+
+        #region UI对象引用
+        public ResonanceWheel_sub2 resonanceWheel_Sub2;//随机选择隐兽界面 
+
+        private TMPro.TextMeshProUGUI TopTitleText;
+
+        private UIKeyTip KT_LastTerm;
+        private Transform HiddenBeastResonanceTemplate;
+        private Transform SongofSeaBeastsTemplate;
+        private UIKeyTip KT_NextTerm;
+
+        private List<Transform> Grids = new List<Transform>();
+        private Transform Grid1, Grid2, Grid3, Grid4, Grid5;
+
+
+        private UIKeyTip KT_NextGrid;
+        #endregion
+
+        public void Refresh()
+        {
+            if (ABJAProcessor.IsLoaded == false) return;
+            
+                
+            TopTitleText.text = PanelTextContent.toptitle;
+
+            #region FunctionType
+            this.KT_LastTerm.ReWrite(PanelTextContent.lastterm);
+            GameObject HBR = HiddenBeastResonanceTemplate.Find("Selected").gameObject;
+            GameObject SSB = SongofSeaBeastsTemplate.Find("Selected").gameObject;
+
+            if (CurrentFuctionTypeIndex == 0) 
+            {
+                HBR.SetActive(false);
+                SSB.SetActive(true);
+            }
+            else if(CurrentFuctionTypeIndex == 1)
+            {
+                HBR.SetActive(true);
+                SSB.SetActive(false);
+            }
+
+            this.KT_NextTerm.ReWrite(PanelTextContent.nextterm);
+            #endregion
+
+            #region Ring
+            this.KT_NextGrid.ReWrite(PanelTextContent.nextgrid);
+            GameObject s1 = Grid1.transform.Find("Selected").gameObject;
+            GameObject s2 = Grid2.transform.Find("Selected").gameObject;
+            GameObject s3 = Grid3.transform.Find("Selected").gameObject;
+            GameObject s4 = Grid4.transform.Find("Selected").gameObject;
+            GameObject s5 = Grid5.transform.Find("Selected").gameObject;
+
+            switch (CurrentGridIndex)
+            {
+                case 0:
+                    s1.SetActive(true);
+                    s2.SetActive(false);
+                    s3.SetActive(false);
+                    s4.SetActive(false);
+                    s5.SetActive(false);
+                    break;
+                case 1:
+                    s1.SetActive(false);
+                    s2.SetActive(true);
+                    s3.SetActive(false);
+                    s4.SetActive(false);
+                    s5.SetActive(false);
+                    break;
+                case 2:
+                    s1.SetActive(false);
+                    s2.SetActive(false);
+                    s3.SetActive(true);
+                    s4.SetActive(false);
+                    s5.SetActive(false);
+                    break;
+                case 3:
+                    s1.SetActive(false);
+                    s2.SetActive(false);
+                    s3.SetActive(false);
+                    s4.SetActive(true);
+                    s5.SetActive(false);
+                    break;
+                case 4:
+                    s1.SetActive(false);
+                    s2.SetActive(false);
+                    s3.SetActive(false);
+                    s4.SetActive(false);
+                    s5.SetActive(true);
+                    break;
+            }
+
+
+
+            #endregion
+
+
+        }
+        #endregion
+
+        #region TextContent
+        [System.Serializable]
+        public struct ResonanceWheelPanel
+        {
+            public TextContent toptitle;
+            public TextTip[] itemtype;
+            public KeyTip lastterm;
+            public KeyTip nextterm;
+            public KeyTip nextgrid;
+        }
+
+        public static ResonanceWheelPanel PanelTextContent => ABJAProcessor.Datas;
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheelPanel> ABJAProcessor;
+
+        private void InitUITextContents()
+        {
+            if (ABJAProcessor == null)
+            {
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheelPanel>("JSON/TextContent/ResonanceWheel", "ResonanceWheelPanel", (datas) =>
+                {
+                    Refresh();
+                    this.enabled = false;
+                }, null, "UI共鸣轮Panel数据");
+                ABJAProcessor.StartLoadJsonAssetData();
+            }
+            Debug.Log("1 "+ABJAProcessor.Datas.toptitle);
+        }
+        #endregion
+
+        #region to-delete
+        [Button("生成测试文件")]
+        void GenTESTFILE()
+        {
+            List<ItemSpawner.ItemTableJsonData> datas = new List<ItemSpawner.ItemTableJsonData>();
+
+            var itypes = Enum.GetValues(typeof(ML.Engine.InventorySystem.ItemType)).Cast<ML.Engine.InventorySystem.ItemType>().Where(e => (int)e > 0).ToArray();
+            foreach (var itype in itypes)
+            {
+                int cnt = UnityEngine.Random.Range(50, 100);
+                for (int i = 0; i < cnt; ++i)
+                {
+                    var data = new ItemSpawner.ItemTableJsonData();
+                    // id
+                    data.id = itype.ToString() + "_" + i;
+                    // name
+                    data.name = new TextContent();
+                    data.name.Chinese = data.id;
+                    data.name.English = data.id;
+                    // type
+                    data.type = "ResourceItem";
+                    // sort
+                    data.sort = i;
+                    // itemtype
+                    data.itemtype = itype;
+                    // weight
+                    data.weight = UnityEngine.Random.Range(1, 10);
+                    // bcanstack
+                    data.bcanstack = UnityEngine.Random.Range(1, 10) < 9;
+                    // maxamount
+                    data.maxamount = 999;
+                    // texture2d
+                    data.texture2d = "100001";
+                    // worldobject
+                    data.worldobject = "TESTWorldItem";
+                    // description
+                    data.description = "TTTTTTTTTTTTTTTTTTTTTTTT\nXXXXXXXXXXXXXXXXXXXXXXXX\nTTTTTTTTTTTTTTTTTTTTTTTT";
+                    // effectsDescription
+                    data.effectsDescription = "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%金币掉落\n<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%攻击力持续300s</b></color>";
+                    datas.Add(data);
+                }
+            }
+
+            string json = JsonConvert.SerializeObject(datas.ToArray(), Formatting.Indented);
+
+            System.IO.File.WriteAllText(Application.streamingAssetsPath + "/../../../t.json", json);
+            Debug.Log("输出路径: " + System.IO.Path.GetFullPath(Application.streamingAssetsPath + "/../../../t.json"));
+        }
+
+        #endregion
+    }
+
+}

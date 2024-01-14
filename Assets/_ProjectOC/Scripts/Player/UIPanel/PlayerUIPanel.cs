@@ -19,12 +19,14 @@ namespace ProjectOC.Player.UI
 
         public InventorySystem.UI.UIInfiniteInventory uIInfiniteInventory;
 
+        public ResonanceWheelSystem.UI.ResonanceWheelUI uIResonanceWheel;
+
         private IUISelected CurSelected;
 
         private SelectedButton EnterBuildBtn;
         private SelectedButton EnterTechTreeBtn;
         private SelectedButton EnterInventoryBtn;
-
+        private SelectedButton EnterResonanceWheelBtn;
         private BuildingManager BM => BuildingManager.Instance;
 
         public int tickPriority { get; set; }
@@ -77,6 +79,19 @@ namespace ProjectOC.Player.UI
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
             };
 
+
+            this.EnterResonanceWheelBtn = btnList.Find("EnterResonanceWheel").GetComponent<SelectedButton>();
+            this.EnterResonanceWheelBtn.OnInteract += () =>
+            {
+                var panel = GameObject.Instantiate(uIResonanceWheel);
+                panel.transform.SetParent(this.transform.parent, false);
+                panel.inventory = this.player.Inventory;
+
+
+
+
+                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+            };
 
             var btn = btnList.GetComponentsInChildren<SelectedButton>();
             
@@ -177,6 +192,7 @@ namespace ProjectOC.Player.UI
                 {
                     foreach (var tip in datas)
                     {
+                        Debug.Log(tip.name+tip);
                         TipDict.Add(tip.name, tip);
                     }
                     this.Refresh();
@@ -193,11 +209,14 @@ namespace ProjectOC.Player.UI
 
         private void Refresh()
         {
+            
+
             if(ABJAProcessor != null && ABJAProcessor.IsLoaded && IsInit)
             {
                 this.EnterBuildBtn.text.text = TipDict["enterbuild"].GetDescription();
-                this.EnterTechTreeBtn.text.text = TipDict["techtree"].GetDescription();
-                this.EnterInventoryBtn.text.text = TipDict["inventory"].GetDescription();
+                this.EnterTechTreeBtn.text.text = TipDict["entertechtree"].GetDescription();
+                this.EnterInventoryBtn.text.text = TipDict["enterinventory"].GetDescription();
+                this.EnterResonanceWheelBtn.text.text = TipDict["enterresonancewheel"].GetDescription();
             }
         }
     }
