@@ -14,10 +14,12 @@ namespace ProjectOC.MissionNS
         /// 搬运类型
         /// </summary>
         public MissionTransportType Type;
+
         /// <summary>
         /// 搬运物品ID
         /// </summary>
         public string ItemID = "";
+
         /// <summary>
         /// 已经分配的数量
         /// </summary>
@@ -33,10 +35,12 @@ namespace ProjectOC.MissionNS
                 return result;
             }
         }
+
         /// <summary>
         /// 需要分配的数量
         /// </summary>
         public int NeedAssignNum{ get{ return MissionNum - FinishNum - AssignNum; } }
+
         /// <summary>
         /// 完成的数量
         /// </summary>
@@ -56,14 +60,17 @@ namespace ProjectOC.MissionNS
                 }
             }
         }
+
         /// <summary>
         /// 需要搬运的数量
         /// </summary>
         public int MissionNum;
+
         /// <summary>
         /// 任务发起者
         /// </summary>
         public IMission Initiator;
+
         /// <summary>
         /// 分配的搬运
         /// </summary>
@@ -77,6 +84,7 @@ namespace ProjectOC.MissionNS
             this.Initiator = imission;
             this.Initiator.AddMissionTranport(this);
         }
+
         /// <summary>
         /// 获取搬运优先级，优先级越大数字越小
         /// </summary>
@@ -101,14 +109,20 @@ namespace ProjectOC.MissionNS
             }
             return priority;
         }
+
         /// <summary>
         /// 获取UID
         /// </summary>
         /// <returns></returns>
         public string GetUID()
         {
+            // 为null则返回 ""
             return this.Initiator?.GetUID() ?? "";
         }
+
+        /// <summary>
+        /// 终止任务
+        /// </summary>
         public void End()
         {
             foreach (Transport transport in this.Transports)
@@ -120,6 +134,9 @@ namespace ProjectOC.MissionNS
             missionManager?.MissionTransports?.Remove(this);
         }
 
+        /// <summary>
+        /// 排序
+        /// </summary>
         public class Sort : IComparer<MissionTransport>
         {
             public int Compare(MissionTransport x, MissionTransport y)

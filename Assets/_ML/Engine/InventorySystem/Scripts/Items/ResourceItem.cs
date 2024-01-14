@@ -8,7 +8,7 @@ namespace ML.Engine.InventorySystem
     [System.Serializable]
     public class ResourceItem : Item, CompositeSystem.IComposition
     {
-        public ResourceItem(string ID, ItemManager.ItemTableJsonData config, int initAmount) : base(ID, config, initAmount)
+        public ResourceItem(string ID, ItemTableJsonData config, int initAmount) : base(ID, config, initAmount)
         {
 
         }

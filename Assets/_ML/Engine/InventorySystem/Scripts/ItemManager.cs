@@ -4,9 +4,29 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using ML.Engine.TextContent;
 
 namespace ML.Engine.InventorySystem
 {
+    [System.Serializable]
+    public struct ItemTableJsonData
+    {
+        public string id;
+        public int sort;
+        public ItemType itemtype;
+        public ML.Engine.TextContent.TextContent name;
+        public int weight;
+        public string icon;
+        // TODO: 修改为TextContent
+        public string itemdescription;
+        // TODO: 修改为TextContent
+        public string effectsdescription;
+        public string type;
+        public bool bcanstack;
+        public int maxamount;
+        public string worldobject;
+    }
+
     /// <summary>
     /// 没有以 Manager 为后缀，是懒得改其他地方了，太多了
     /// </summary>
@@ -30,7 +50,7 @@ namespace ML.Engine.InventorySystem
             }
         }
         #endregion
-
+        
         #region Load And Data
         /// <summary>
         /// 是否已加载完数据
@@ -53,38 +73,19 @@ namespace ML.Engine.InventorySystem
         public const string Texture2DPath = "ui/Item/texture2d";
         public const string WorldObjPath = "prefabs/Item/WorldItem";
 
-        [System.Serializable]
-        public struct ItemTableJsonData
-        {
-            public string ID;
-            public int Sort;
-            public ItemType Itemtype;
-            public TextContent.TextContent Name;
-            public int Weight;
-            public string Icon;
-            // TODO: 修改为TextContent
-            public string ItemDescription;
-            // TODO: 修改为TextContent
-            public string EffectsDescription;
-            public string type;
-            public int sort;
-            public ItemType itemtype;
-            public int weight;
-            public bool bcanstack;
-            public int maxamount;
-            public string worldobject;
-        }
+
+        
         public static ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableJsonData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableJsonData[]>("Json/TableData", "ItemTableData", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableJsonData[]>("Binary/TableData", "ItemTableData", (datas) =>
                 {
                     foreach (var data in datas)
                     {
-                        this.ItemTypeStrDict.Add(data.ID, data);
+                        this.ItemTypeStrDict.Add(data.id, data);
                     }
                 }, null, "背包系统物品Item表数据");
                 ABJAProcessor.StartLoadJsonAssetData();
@@ -214,7 +215,7 @@ namespace ML.Engine.InventorySystem
                 return null;
             }
             
-            return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>(this.ItemTypeStrDict[id].Icon);
+            return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>(this.ItemTypeStrDict[id].icon);
         }
 
         public Sprite GetItemSprite(string id)
@@ -242,7 +243,7 @@ namespace ML.Engine.InventorySystem
             {
                 return "";
             }
-            return this.ItemTypeStrDict[id].Name;
+            return this.ItemTypeStrDict[id].name;
         }
 
         public bool GetCanStack(string id)
@@ -260,7 +261,7 @@ namespace ML.Engine.InventorySystem
             {
                 return -1;
             }
-            return this.ItemTypeStrDict[id].Weight;
+            return this.ItemTypeStrDict[id].weight;
         }
 
         public int GetSortNum(string id)
@@ -269,7 +270,7 @@ namespace ML.Engine.InventorySystem
             {
                 return int.MaxValue;
             }
-            return this.ItemTypeStrDict[id].Sort;
+            return this.ItemTypeStrDict[id].sort;
         }
 
         public ItemType GetItemType(string id)
@@ -278,7 +279,7 @@ namespace ML.Engine.InventorySystem
             {
                 return ItemType.None;
             }
-            return this.ItemTypeStrDict[id].Itemtype;
+            return this.ItemTypeStrDict[id].itemtype;
         }
 
         public int GetMaxAmount(string id)
@@ -296,7 +297,7 @@ namespace ML.Engine.InventorySystem
             {
                 return null;
             }
-            return this.ItemTypeStrDict[id].ItemDescription;
+            return this.ItemTypeStrDict[id].itemdescription;
         }
 
         public string GetEffectDescription(string id)
@@ -305,7 +306,7 @@ namespace ML.Engine.InventorySystem
             {
                 return null;
             }
-            return this.ItemTypeStrDict[id].EffectsDescription;
+            return this.ItemTypeStrDict[id].effectsdescription;
         }
 
         public static Type GetTypeByName(string fullName)

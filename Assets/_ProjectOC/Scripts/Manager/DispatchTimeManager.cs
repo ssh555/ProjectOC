@@ -14,7 +14,7 @@ namespace ProjectOC.ManagerNS
     public sealed class DispatchTimeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         /// <summary>
-        /// 时间流速比例，现实timeScale s等于游戏1h
+        /// 时间流速比例，现实 timeScale秒 等于游戏内 1h
         /// </summary>
         private float timeScale = 60;
         /// <summary>
@@ -38,7 +38,7 @@ namespace ProjectOC.ManagerNS
         /// </summary>
         public int CurrentTimeFrame 
         { 
-            get { return currentTimeFrame % 24; } 
+            get { return currentTimeFrame; } 
             private set {currentTimeFrame = value;} 
         }
         /// <summary>
@@ -57,7 +57,7 @@ namespace ProjectOC.ManagerNS
         }
         private void EndActionForTimer()
         {
-            this.CurrentTimeFrame += 1;
+            this.CurrentTimeFrame = (this.CurrentTimeFrame + 1) % 24;
             this.OnTimeFrameChanged?.Invoke(this.CurrentTimeFrame);
         }
     }

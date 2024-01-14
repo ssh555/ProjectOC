@@ -15,13 +15,18 @@ namespace ProjectOC.StoreNS
     public class Store: IMission, IInventory
     {
         public WorldStore WorldStore;
+
         public string UID { get { return WorldStore?.InstanceID ?? ""; } }
+
         [LabelText("仓库名字")]
         public string Name = "";
+
         [LabelText("仓库类型")]
         public StoreType StoreType;
+
         [LabelText("仓库存储数据")]
         public List<StoreData> StoreDatas = new List<StoreData>();
+
         [LabelText("仓库对应的搬运")]
         public List<Transport> Transports = new List<Transport>();
 
@@ -35,6 +40,7 @@ namespace ProjectOC.StoreNS
                 return this.LevelStoreCapacity[this.Level];
             }
         }
+        
         /// <summary>
         /// 仓库数据的容量，单种物品的最大存储数量
         /// </summary>
@@ -45,22 +51,27 @@ namespace ProjectOC.StoreNS
                 return this.LevelStoreDataCapacity[this.Level];
             }
         }
+        
         /// <summary>
         /// 仓库等级
         /// </summary>
         public int Level { get; private set; }
+        
         /// <summary>
         /// 仓库最大等级
         /// </summary>
         public int LevelMax = 2;
+
         /// <summary>
         /// 每个级别仓库的存储格子数量
         /// </summary>
         public List<int> LevelStoreCapacity = new List<int>() { 2, 4, 8 };
+
         /// <summary>
         /// 每个级别仓库单个格子的容量上限
         /// </summary>
         public List<int> LevelStoreDataCapacity = new List<int>() { 50, 100, 200 };
+
         /// <summary>
         /// 搬运优先级
         /// </summary>
@@ -206,6 +217,7 @@ namespace ProjectOC.StoreNS
             }
             return amount;
         }
+
         /// <summary>
         /// 给刁民预留取出的量
         /// </summary>
@@ -249,6 +261,7 @@ namespace ProjectOC.StoreNS
             }
             return false;
         }
+
         /// <summary>
         /// 仓库是否有指定数量的该物品
         /// </summary>
@@ -259,6 +272,7 @@ namespace ProjectOC.StoreNS
         {
             return GetStoreStorage(itemID) > amount;
         }
+
         /// <summary>
         /// 仓库是否能存入指定数量的该物品
         /// </summary>
@@ -269,6 +283,7 @@ namespace ProjectOC.StoreNS
         {
             return GetStoreEmpty(itemID) > amount;
         }
+
         public int GetStoreStorageAll(string itemID)
         {
             int result = 0;
@@ -281,6 +296,7 @@ namespace ProjectOC.StoreNS
             }
             return result;
         }
+
         /// <summary>
         /// 仓库中有多少数量的该物品
         /// </summary>
@@ -298,6 +314,7 @@ namespace ProjectOC.StoreNS
             }
             return result;
         }
+
         public int GetStoreStorageReserve(string itemID)
         {
             int result = 0;
@@ -310,6 +327,7 @@ namespace ProjectOC.StoreNS
             }
             return result;
         }
+
         /// <summary>
         /// 仓库中能存放多少数量的该物品
         /// </summary>
@@ -327,6 +345,7 @@ namespace ProjectOC.StoreNS
             }
             return result;
         }
+
         public int GetStoreEmptyReserve(string itemID)
         {
             int result = 0;

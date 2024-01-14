@@ -16,6 +16,7 @@ namespace ProjectOC.StoreNS
         /// 实例化生成的仓库，键为UID
         /// </summary>
         private Dictionary<string, WorldStore> WorldStoreDict = new Dictionary<string, WorldStore>();
+
         /// <summary>
         /// 是否是有效的仓库UID
         /// </summary>
@@ -23,6 +24,7 @@ namespace ProjectOC.StoreNS
         {
             return WorldStoreDict.ContainsKey(uid);
         }
+
         /// <summary>
         /// 根据UID获取WorldStore
         /// </summary>
@@ -34,6 +36,7 @@ namespace ProjectOC.StoreNS
             }
             return null;
         }
+
         /// <summary>
         /// 获取满足存入条件的仓库
         /// </summary>
@@ -64,6 +67,7 @@ namespace ProjectOC.StoreNS
             }
             return result;
         }
+
         /// <summary>
         /// 获取满足取出条件的仓库
         /// </summary>
@@ -105,6 +109,7 @@ namespace ProjectOC.StoreNS
             Store store = new Store(storeType);
             return store;
         }
+
         public WorldStore SpawnWorldStore(Store store, Vector3 pos, Quaternion rot)
         {
             if (store == null)

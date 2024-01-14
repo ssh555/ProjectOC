@@ -14,15 +14,18 @@ namespace ProjectOC.WorkerNS
         /// 刁民数量
         /// </summary>
         public int WorkerNum { get { return Workers.Count; } }
+
         /// <summary>
         /// 刁民
         /// </summary>
         private HashSet<Worker> Workers = new HashSet<Worker>();
+
         public List<Worker> GetWorkers()
         {
             this.Workers.RemoveWhere(item => item == null);
             return this.Workers.ToList();
         }
+
         /// <summary>
         /// 获取能执行搬运任务的刁民
         /// </summary>
@@ -39,10 +42,12 @@ namespace ProjectOC.WorkerNS
             }
             return result;
         }
+
         public void RemoveWorker(Worker worker)
         {
             this.Workers.Remove(worker);
         }
+
         /// <summary>
         /// 创建新的刁民
         /// </summary>
@@ -53,6 +58,7 @@ namespace ProjectOC.WorkerNS
             Workers.Add(worker);
             return worker;
         }
+
         public const string Texture2DPath = "ui/Worker/texture2d";
         public const string WorldObjPath = "prefabs/Worker/WorldWorker";
         public Texture2D GetTexture2D()
