@@ -9,16 +9,14 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Unity.Burst.CompilerServices;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Purchasing;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
-using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheelUI;
 
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
-    public class ResonanceWheel_sub2 : ML.Engine.UI.UIBasePanel
+    public class ResonanceWheel_sub1 : ML.Engine.UI.UIBasePanel
     {
 
         public IInventory inventory;
@@ -29,7 +27,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         /// 长按响应了Destroy就置为true
         /// Cancel就不响应Drop 并 重置
         /// </summary>
-        private bool ItemIsDestroyed = false;
+
         #endregion
 
         #region Unity
@@ -40,28 +38,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
 
-            //Ring
-            var ringcontent = this.transform.Find("Ring").Find("Viewport").Find("Content");
-            KT_NextGrid = new UIKeyTip();
-            KT_NextGrid.keytip = ringcontent.Find("SelectKey").GetComponent<TMPro.TextMeshProUGUI>();
-            var ring = ringcontent.Find("Ring");
-            Grid1 = ring.Find("Grid1");
-            Grid2 = ring.Find("Grid2");
-            Grid3 = ring.Find("Grid3");
-            Grid4 = ring.Find("Grid4");
-            Grid5 = ring.Find("Grid5");
-            Grid6 = ring.Find("Grid6");
-            Grids.Add(Grid1.transform);
-            Grids.Add(Grid2.transform);
-            Grids.Add(Grid3.transform);
-            Grids.Add(Grid4.transform);
-            Grids.Add(Grid5.transform);
-            Grids.Add(Grid6.transform);
+            
+
 
             IsInit = true;
-
-          
-
             Refresh();
         }
 
@@ -71,16 +51,13 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public override void OnEnter()
         {
             base.OnEnter();
-            
             this.Enter();
         }
 
         public override void OnExit()
         {
             base.OnExit();
-            
             this.Exit();
-            
             ClearTemp();
         }
 
@@ -99,32 +76,39 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region Internal
+ 
+
+   
+        private int CurrentFuctionTypeIndex = 0;//0为HBR 1为SSB
+        private int CurrentGridIndex = 0;//0到4
+
 
         private void Enter()
         {
             this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.Enable();
-            //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Enable();
+            ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
             this.Refresh();
         }
 
         private void Exit()
         {
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.Disable();
-            //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Disable();
+            ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
             this.UnregisterInput();
-            
         }
 
         private void UnregisterInput()
         {
-           
+            // 切换类目
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.LastTerm.performed -= LastTerm_performed;
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.NextTerm.performed -= NextTerm_performed;
 
             //切换隐兽
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.NextGrid.performed -= NextGrid_performed;
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.NextGrid.performed -= NextGrid_performed;
 
             //切换对象
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.SwitchTarget.performed -= SwitchTarget_performed;
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed -= SwitchTarget_performed;
 
 
 
@@ -138,13 +122,16 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void RegisterInput()
         {
-            
+            // 切换类目
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.LastTerm.performed += LastTerm_performed;
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.NextTerm.performed += NextTerm_performed;
+
             //切换隐兽
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.NextGrid.performed += NextGrid_performed;
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.NextGrid.performed += NextGrid_performed;
 
 
             //切换对象
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.SwitchTarget.performed += SwitchTarget_performed;
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed += SwitchTarget_performed;
 
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
@@ -157,21 +144,28 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            Debug.Log("sub2 Back_performed");
             UIMgr.PopPanel();
-            
-
         }
 
 
 
 
 
+        private void LastTerm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            CurrentFuctionTypeIndex = (CurrentFuctionTypeIndex + 2 - 1) % 2;
+            this.Refresh();
+        }
 
+        private void NextTerm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            CurrentFuctionTypeIndex = (CurrentFuctionTypeIndex + 1) % 2;
+            this.Refresh();
+        }
 
         private void NextGrid_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            //CurrentGridIndex = (CurrentGridIndex + 1) % Grids.Count;
+            CurrentGridIndex = (CurrentGridIndex + 1) % Grids.Count;
             this.Refresh();
         }
 
@@ -208,20 +202,21 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region UI对象引用
-        public ResonanceWheelUI parentUI;
+         
+
+
+        private TMPro.TextMeshProUGUI TopTitleText;
 
         private UIKeyTip KT_LastTerm;
         private Transform HiddenBeastResonanceTemplate;
         private Transform SongofSeaBeastsTemplate;
         private UIKeyTip KT_NextTerm;
 
-        [ShowInInspector]
         private List<Transform> Grids = new List<Transform>();
-        private Transform Grid1, Grid2, Grid3, Grid4, Grid5, Grid6;
-        private int CurrentGridIndex = 0;//0到5
+        private Transform Grid1, Grid2, Grid3, Grid4, Grid5;
+
 
         private UIKeyTip KT_NextGrid;
-
         #endregion
 
         public void Refresh()
@@ -232,19 +227,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
 
 
-            //ring
-
-            for (int i = 0; i < Grids.Count; i++)
-            {
-                if (CurrentGridIndex == i)
-                {
-                    Grids[i].transform.Find("Selected").gameObject.SetActive(true);
-                }
-                else
-                {
-                    Grids[i].transform.Find("Selected").gameObject.SetActive(false);
-                }
-            }
+            
 
 
 

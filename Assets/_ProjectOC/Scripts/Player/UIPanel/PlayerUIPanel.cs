@@ -77,12 +77,14 @@ namespace ProjectOC.Player.UI
 
 
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+                
             };
 
 
             this.EnterResonanceWheelBtn = btnList.Find("EnterResonanceWheel").GetComponent<SelectedButton>();
             this.EnterResonanceWheelBtn.OnInteract += () =>
             {
+                Debug.Log("werwerw");
                 var panel = GameObject.Instantiate(uIResonanceWheel);
                 panel.transform.SetParent(this.transform.parent, false);
                 panel.inventory = this.player.Inventory;
@@ -91,6 +93,8 @@ namespace ProjectOC.Player.UI
 
 
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+                Debug.Log("2 " + ML.Engine.Manager.GameManager.Instance.UIManager.GetTopUIPanel());
+
             };
 
             var btn = btnList.GetComponentsInChildren<SelectedButton>();

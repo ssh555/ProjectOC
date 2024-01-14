@@ -4,6 +4,7 @@ using ML.Engine.TextContent;
 using ML.Engine.Timer;
 using Newtonsoft.Json;
 using ProjectOC.TechTree.UI;
+using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -18,10 +19,13 @@ using UnityEngine.UI;
 
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
-    public class ResonanceWheelUI : ML.Engine.UI.UIBasePanel
+    public class ResonanceWheelUI : ML.Engine.UI.UIBasePanel,ITickComponent
     {
 
         public IInventory inventory;
+
+        
+        
 
         #region Input
         /// <summary>
@@ -29,7 +33,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         /// 长按响应了Destroy就置为true
         /// Cancel就不响应Drop 并 重置
         /// </summary>
-        private bool ItemIsDestroyed = false;
+
         #endregion
 
         #region Unity
@@ -38,7 +42,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             InitUITextContents();
 
-
+            //exclusivePart
+            exclusivePart = this.transform.Find("ExclusivePart");
 
             // TopTitle
             TopTitleText = this.transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
@@ -58,7 +63,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             KT_NextTerm.keytip = KT_NextTerm.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
 
             //Ring
-            var ringcontent = this.transform.Find("Ring").Find("Viewport").Find("Content");
+            var ringcontent = exclusivePart.Find("Ring").Find("Viewport").Find("Content");
             KT_NextGrid = new UIKeyTip();
             KT_NextGrid.keytip= ringcontent.Find("SelectKey").GetComponent<TMPro.TextMeshProUGUI>();
             var ring = ringcontent.Find("Ring");
@@ -67,11 +72,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             Grid3 = ring.Find("Grid3");
             Grid4 = ring.Find("Grid4");
             Grid5 = ring.Find("Grid5");
-            Grids.Add(Grid1);
-            Grids.Add(Grid2);
-            Grids.Add(Grid3);
-            Grids.Add(Grid4);
-            Grids.Add(Grid5);
+            Grids.Add(new RingGrid(Grid1.transform));
+            Grids.Add(new RingGrid(Grid2.transform));
+            Grids.Add(new RingGrid(Grid3.transform));
+            Grids.Add(new RingGrid(Grid4.transform));
+            Grids.Add(new RingGrid(Grid5.transform));
 
 
             IsInit = true;
@@ -80,55 +85,140 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #endregion
 
+        #region Tick
+        public int tickPriority { get; set; }
+        public int fixedTickPriority { get; set; }
+        public int lateTickPriority { get; set; }
+
+        public void Tick(float deltatime)
+        {
+            Debug.Log("Tick");
+        }
+
+        #endregion
+
+
+
+
         #region Override
         public override void OnEnter()
         {
             base.OnEnter();
             this.Enter();
+            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
         }
 
         public override void OnExit()
         {
+            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
+
             base.OnExit();
+
+            Debug.Log("1 " + ML.Engine.Manager.GameManager.Instance.UIManager.GetTopUIPanel());
             this.Exit();
             ClearTemp();
         }
 
         public override void OnPause()
         {
-            base.OnPause();
-            this.Exit();
+            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
+            //setfalse 主ui的独有部分
+            exclusivePart?.gameObject.SetActive(false);
+
+            //禁用主ui独有的输入
+            //切换隐兽
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.NextGrid.performed -= NextGrid_performed;
+
+
+            //切换对象
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed -= SwitchTarget_performed;
+
+            // 返回
+            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
+
+            //base.OnPause();
+            //this.Exit();
         }
 
         public override void OnRecovery()
         {
-            base.OnRecovery();
+            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
+
+
+            //setfalse 主ui的独有部分
+            if (exclusivePart != null)
+                exclusivePart.gameObject.SetActive(true);
+
+            //恢复主ui独有的输入
+            //切换隐兽
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.NextGrid.performed += NextGrid_performed;
+
+
+            //切换对象
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed += SwitchTarget_performed;
+
+            // 返回
+            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
+
+            //base.OnRecovery();
             this.Enter();
+        }
+
+
+        private void OnDestroy()
+        {
+            ClearTemp();
+            (this as ITickComponent).DisposeTick();
         }
 
         #endregion
 
         #region Internal
- 
 
-   
-        private int CurrentFuctionTypeIndex = 0;//0为HBR 1为SSB
-        private int CurrentGridIndex = 0;//0到4
+        public class RingGrid
+        {
+            public Sprite sprite;//隐兽显示贴图
+            public bool isNull;//是否为空
+            public bool isResonating;//是否共鸣完成
+            public Worker worker;//对应的隐兽
+            public Transform transform;
+
+            public RingGrid(Sprite sprite, bool isNull, bool isResonating, Worker worker,Transform transform)
+            {
+                this.sprite = sprite;
+                this.isNull = isNull;
+                this.isResonating = isResonating;
+                this.worker = worker;
+                this.transform = transform;
+            }
+
+            public RingGrid(Transform transform)
+            {
+                this.sprite = null;
+                this.isNull = true;
+                this.isResonating = false;
+                this.worker = null;
+                this.transform = transform;
+            }
+        }
+
+
 
 
         private void Enter()
         {
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Enable();
-            ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
+            
+
             this.Refresh();
         }
 
         private void Exit()
         {
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Disable();
-            ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
             this.UnregisterInput();
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Disable();
+            
         }
 
         private void UnregisterInput()
@@ -143,8 +233,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //切换对象
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed -= SwitchTarget_performed;
 
-
-
+            //开始共鸣
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed -= StartResonance_performed;
 
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
@@ -166,6 +256,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //切换对象
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed += SwitchTarget_performed;
 
+            //开始共鸣
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed += StartResonance_performed;
+
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
 
@@ -173,10 +266,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
 
-
-
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
+            Debug.Log("main Back_performed");
             UIMgr.PopPanel();
         }
 
@@ -198,6 +290,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void NextGrid_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
+            Debug.Log("253453 " + Grids[0]);
+            Debug.Log("123412 "+Grids.Count);
             CurrentGridIndex = (CurrentGridIndex + 1) % Grids.Count;
             this.Refresh();
         }
@@ -206,8 +300,24 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             var panel = GameObject.Instantiate(resonanceWheel_Sub2);
             panel.transform.SetParent(this.transform.parent, false);
+
+            
             ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+            //ActiveSubUI();
             Debug.Log("SwitchTarget_performed!");
+            
+        }
+
+        private void StartResonance_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            //检查背包
+
+            //能否成功合成 判空
+
+
+
+            Debug.Log("StartResonance_performed!");
+
         }
         #endregion
 
@@ -237,27 +347,40 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region UI对象引用
+        public ResonanceWheel_sub1 resonanceWheel_Sub1;//详细隐兽界面 
         public ResonanceWheel_sub2 resonanceWheel_Sub2;//随机选择隐兽界面 
+
+        public Transform exclusivePart;//主ui独有部分
+
+        
+
+
 
         private TMPro.TextMeshProUGUI TopTitleText;
 
         private UIKeyTip KT_LastTerm;
         private Transform HiddenBeastResonanceTemplate;
         private Transform SongofSeaBeastsTemplate;
+        private int CurrentFuctionTypeIndex = 0;//0为HBR 1为SSB
         private UIKeyTip KT_NextTerm;
 
-        private List<Transform> Grids = new List<Transform>();
+        [ShowInInspector]
+        private List<RingGrid> Grids = new List<RingGrid>();
         private Transform Grid1, Grid2, Grid3, Grid4, Grid5;
-
+        
+        private int CurrentGridIndex = 0;//0到4
 
         private UIKeyTip KT_NextGrid;
         #endregion
 
         public void Refresh()
         {
-            if (ABJAProcessor.IsLoaded == false) return;
-            
-                
+            if (ABJAProcessor == null || !ABJAProcessor.IsLoaded || !IsInit)
+            {
+                return;
+            }
+
+
             TopTitleText.text = PanelTextContent.toptitle;
 
             #region FunctionType
@@ -281,51 +404,18 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             #region Ring
             this.KT_NextGrid.ReWrite(PanelTextContent.nextgrid);
-            GameObject s1 = Grid1.transform.Find("Selected").gameObject;
-            GameObject s2 = Grid2.transform.Find("Selected").gameObject;
-            GameObject s3 = Grid3.transform.Find("Selected").gameObject;
-            GameObject s4 = Grid4.transform.Find("Selected").gameObject;
-            GameObject s5 = Grid5.transform.Find("Selected").gameObject;
 
-            switch (CurrentGridIndex)
+            for (int i = 0; i < Grids.Count; i++) 
             {
-                case 0:
-                    s1.SetActive(true);
-                    s2.SetActive(false);
-                    s3.SetActive(false);
-                    s4.SetActive(false);
-                    s5.SetActive(false);
-                    break;
-                case 1:
-                    s1.SetActive(false);
-                    s2.SetActive(true);
-                    s3.SetActive(false);
-                    s4.SetActive(false);
-                    s5.SetActive(false);
-                    break;
-                case 2:
-                    s1.SetActive(false);
-                    s2.SetActive(false);
-                    s3.SetActive(true);
-                    s4.SetActive(false);
-                    s5.SetActive(false);
-                    break;
-                case 3:
-                    s1.SetActive(false);
-                    s2.SetActive(false);
-                    s3.SetActive(false);
-                    s4.SetActive(true);
-                    s5.SetActive(false);
-                    break;
-                case 4:
-                    s1.SetActive(false);
-                    s2.SetActive(false);
-                    s3.SetActive(false);
-                    s4.SetActive(false);
-                    s5.SetActive(true);
-                    break;
+                if (CurrentGridIndex == i)
+                {
+                    Grids[i].transform.Find("Selected").gameObject.SetActive(true);
+                }
+                else
+                {
+                    Grids[i].transform.Find("Selected").gameObject.SetActive(false);
+                }
             }
-
 
 
             #endregion

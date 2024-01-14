@@ -21,13 +21,11 @@ namespace ML.Engine.TextContent
         {
             if (this.keytip)
             {
-                Debug.Log("1 "+keyTip.GetKeyMapText());
                 this.keytip.text = keyTip.GetKeyMapText();
             }
                 
             if (this.description)
             {
-                Debug.Log("2 " + keyTip.GetDescription());
                 this.description.text = keyTip.GetDescription();
             }
                 
