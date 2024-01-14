@@ -186,12 +186,6 @@ namespace ML.Engine.InventorySystem.CompositeSystem
                 composition = BuildingSystem.BuildingManager.Instance.GetOneBPartInstance(compositonID) as IComposition;
                 return CompositionObjectType.BuildingPart;
             }
-            // ÊÇ Worker
-            else if (compositonID == "Worker")
-            {
-                composition = ML.Engine.Manager.GameManager.Instance.GetLocalManager<ProjectOC.WorkerNS.WorkerManager>().SpawnWorker() as IComposition;
-                return CompositionObjectType.Worker;
-            }
             return CompositionObjectType.Error;
         }
     
