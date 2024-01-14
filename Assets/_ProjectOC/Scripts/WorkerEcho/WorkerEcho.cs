@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using ML.Engine.Manager;
 using ML.Engine.Timer;
 using ProjectOC.WorkerNS;
@@ -7,48 +8,39 @@ using UnityEngine;
 
 namespace ProjectOC.WorkerEchoNS
 {
-    public struct ExternWorker
+    public class ExternWorker
     {
-        public Worker worker;
-        public CounterDownTimer timer;
+        public Worker worker { get; private set; }
+        public CounterDownTimer timer { get;private set; }
         public ExternWorker(Worker worker, float time)
         {
             this.worker = worker;
-            timer = new CounterDownTimer(time);
+            timer = new CounterDownTimer(time); 
         }
     }
     public sealed class WorkerEcho : ML.Engine.Manager.LocalManager.ILocalManager
     {
         private int Level = 1;
         private List<ExternWorker> Workers = new List<ExternWorker>(5);
-        public void SummonWorker()
+        public void SummonWorker(int index)
         {
             if(this.Level==1)
             {
 
             }
-
-        }
-        public void SpawnWorker(Worker worker)
-        {
-            foreach (ExternWorker externWorker in Workers)
+            else
             {
-                if (externWorker.worker == worker)
-                {
-                    Workers.Remove(externWorker);
-                    GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker(Vector3.zero, Quaternion.identity);
-                }
+                
             }
         }
-        public void ExpelWorker(Worker worker)
+        public void SpawnWorker(int index)
         {
-            foreach (ExternWorker externWorker in Workers)
-            {
-                if (externWorker.worker == worker)
-                {
-                    Workers.Remove(externWorker);
-                }
-            }
+            // ’¡Ù
+            GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker(Vector3.zero, Quaternion.identity);
+        }
+        public void ExpelWorker(int index)
+        {
+            Workers[index] = null; 
         }
         public void LevelUp()
         {
@@ -67,6 +59,16 @@ namespace ProjectOC.WorkerEchoNS
                 }
             }
             return EchoStatusType.Waiting;
+        }
+        public List<ExternWorker> GetExternWorkers()
+        {
+            return Workers;
+        }
+        public void StopEcho(int index)
+        {
+            Workers[index].timer.End();
+            Workers[index] = null;
+            //to-do ∑µªπ≤ƒ¡œ 
         }
     }
 }
