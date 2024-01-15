@@ -211,10 +211,10 @@ namespace ProjectOC.Player.UI
 
             if(ABJAProcessor != null && ABJAProcessor.IsLoaded && IsInit)
             {
-                this.EnterBuildBtn.text.text = TipDict["enterbuild"].GetDescription();
+                /*this.EnterBuildBtn.text.text = TipDict["enterbuild"].GetDescription();
                 this.EnterTechTreeBtn.text.text = TipDict["entertechtree"].GetDescription();
                 this.EnterInventoryBtn.text.text = TipDict["enterinventory"].GetDescription();
-                this.EnterResonanceWheelBtn.text.text = TipDict["enterresonancewheel"].GetDescription();
+                this.EnterResonanceWheelBtn.text.text = TipDict["enterresonancewheel"].GetDescription();*/
             }
         }
     }

@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 4110404571
+CRC: 3636344297
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d11c944e8c5ddb6644c16a41c52e486c
+    Hash: cfaf55d9cb9595fd374d61de0923f656
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 15c6e6a51bb56c78fbbd7b5535330402
+    Hash: 4cd0b38f0971001be9c330ba38be2dd0
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: d11c944e8c5ddb6644c16a41c52e486c
+    Hash: cfaf55d9cb9595fd374d61de0923f656
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -82,6 +82,6 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/_ProjectOC/Resources/PlayerCharacter/PlayerCharacter.prefab
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/animation/character/player/model
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/animation/character/player/playermove
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/uipanel
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/animation/character/player/playermove
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/uipanel

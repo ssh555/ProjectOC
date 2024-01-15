@@ -1,7 +1,9 @@
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InventorySystem;
+using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using Newtonsoft.Json;
+using ProjectOC.WorkerEchoNS;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -52,6 +54,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             base.OnEnter();
             this.Enter();
+            GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>().MainToSub1();
         }
 
         public override void OnExit()
@@ -59,6 +62,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             base.OnExit();
             this.Exit();
             ClearTemp();
+            GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>().Sub1ToMain();
         }
 
         public override void OnPause()
@@ -86,32 +90,29 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private void Enter()
         {
             this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Enable();
-            ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Enable();
+            
             this.Refresh();
         }
 
         private void Exit()
         {
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Disable();
-            ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Disable();
+            
             this.UnregisterInput();
         }
 
         private void UnregisterInput()
         {
-            // 切换类目
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.LastTerm.performed -= LastTerm_performed;
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.NextTerm.performed -= NextTerm_performed;
-
-            //切换隐兽
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.NextGrid.performed -= NextGrid_performed;
-
-            //切换对象
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed -= SwitchTarget_performed;
 
 
 
+
+            //驱逐
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Expel.performed -= Expel_performed;
+
+            //收留
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Receive.performed -= Receive_performed;
 
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
@@ -122,16 +123,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void RegisterInput()
         {
-            // 切换类目
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.LastTerm.performed += LastTerm_performed;
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.NextTerm.performed += NextTerm_performed;
-
-            //切换隐兽
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.NextGrid.performed += NextGrid_performed;
+            
 
 
-            //切换对象
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed += SwitchTarget_performed;
+            //驱逐
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Expel.performed += Expel_performed;
+
+            //收留
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Receive.performed += Receive_performed;
 
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
@@ -149,30 +148,21 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
 
-
-
-        private void LastTerm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void Expel_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            CurrentFuctionTypeIndex = (CurrentFuctionTypeIndex + 2 - 1) % 2;
-            this.Refresh();
+            parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
+            GameManager.Instance.GetLocalManager<WorkerEcho>().ExpelWorker(parentUI.CurrentGridIndex);
+
+            //ui
+
+            Debug.Log("Expel_performed!");
         }
 
-        private void NextTerm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void Receive_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            CurrentFuctionTypeIndex = (CurrentFuctionTypeIndex + 1) % 2;
-            this.Refresh();
-        }
-
-        private void NextGrid_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            CurrentGridIndex = (CurrentGridIndex + 1) % Grids.Count;
-            this.Refresh();
-        }
-
-        private void SwitchTarget_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-
-            Debug.Log("SwitchTarget_performed!");
+            parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
+            GameManager.Instance.GetLocalManager<WorkerEcho>().SpawnWorker(parentUI.CurrentGridIndex);
+            Debug.Log("Receive_performed!");
         }
         #endregion
 
@@ -202,7 +192,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region UI对象引用
-         
+        public ResonanceWheelUI parentUI;
 
 
         private TMPro.TextMeshProUGUI TopTitleText;
@@ -265,56 +255,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
         #endregion
 
-        #region to-delete
-        [Button("生成测试文件")]
-        void GenTESTFILE()
-        {
-            List<ItemSpawner.ItemTableJsonData> datas = new List<ItemSpawner.ItemTableJsonData>();
-
-            var itypes = Enum.GetValues(typeof(ML.Engine.InventorySystem.ItemType)).Cast<ML.Engine.InventorySystem.ItemType>().Where(e => (int)e > 0).ToArray();
-            foreach (var itype in itypes)
-            {
-                int cnt = UnityEngine.Random.Range(50, 100);
-                for (int i = 0; i < cnt; ++i)
-                {
-                    var data = new ItemSpawner.ItemTableJsonData();
-                    // id
-                    data.id = itype.ToString() + "_" + i;
-                    // name
-                    data.name = new TextContent();
-                    data.name.Chinese = data.id;
-                    data.name.English = data.id;
-                    // type
-                    data.type = "ResourceItem";
-                    // sort
-                    data.sort = i;
-                    // itemtype
-                    data.itemtype = itype;
-                    // weight
-                    data.weight = UnityEngine.Random.Range(1, 10);
-                    // bcanstack
-                    data.bcanstack = UnityEngine.Random.Range(1, 10) < 9;
-                    // maxamount
-                    data.maxamount = 999;
-                    // texture2d
-                    data.texture2d = "100001";
-                    // worldobject
-                    data.worldobject = "TESTWorldItem";
-                    // description
-                    data.description = "TTTTTTTTTTTTTTTTTTTTTTTT\nXXXXXXXXXXXXXXXXXXXXXXXX\nTTTTTTTTTTTTTTTTTTTTTTTT";
-                    // effectsDescription
-                    data.effectsDescription = "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%金币掉落\n<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%攻击力持续300s</b></color>";
-                    datas.Add(data);
-                }
-            }
-
-            string json = JsonConvert.SerializeObject(datas.ToArray(), Formatting.Indented);
-
-            System.IO.File.WriteAllText(Application.streamingAssetsPath + "/../../../t.json", json);
-            Debug.Log("输出路径: " + System.IO.Path.GetFullPath(Application.streamingAssetsPath + "/../../../t.json"));
-        }
-
-        #endregion
+       
     }
 
 }

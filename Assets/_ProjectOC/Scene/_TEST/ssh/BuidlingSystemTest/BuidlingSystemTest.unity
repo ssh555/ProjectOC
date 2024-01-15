@@ -123,6 +123,50 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &284393000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 284393002}
+  - component: {fileID: 284393001}
+  m_Layer: 0
+  m_Name: LocalManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &284393001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 284393000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7411b32275d93534cb08e4d96c084289, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &284393002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 284393000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 31.292107, y: -72.60945, z: -405.5442}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &515944518
 GameObject:
   m_ObjectHideFlags: 0
@@ -373,6 +417,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6da62ef2a40c0440adb4f3243b15be8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  language: 0
+  platform: 0
+  inputDevice: 0
 --- !u!1001 &775822607
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -584,9 +631,6 @@ MonoBehaviour:
     editColor: {r: 0.08282302, g: 0.26954424, b: 0.9339623, a: 0.39215687}
     destroyColor: {r: 0.9622642, g: 0.049020927, b: 0.049020927, a: 0.39215687}
     interactColor: {r: 0.071769245, g: 0.9056604, b: 0.8972263, a: 0.39215687}
-  language: 0
-  platform: 0
-  inputDevice: 0
   area: {fileID: 1219518272}
   IsEnableArea: 1
   IsAddBPartOnRegister: 1
@@ -1344,3 +1388,4 @@ SceneRoots:
   - {fileID: 775822607}
   - {fileID: 549792053}
   - {fileID: 815302400}
+  - {fileID: 284393002}

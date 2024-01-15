@@ -38,12 +38,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             InitUITextContents();
 
-
+            parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
 
             //Ring
             var ringcontent = this.transform.Find("Ring").Find("Viewport").Find("Content");
-            KT_NextGrid = new UIKeyTip();
-            KT_NextGrid.keytip = ringcontent.Find("SelectKey").GetComponent<TMPro.TextMeshProUGUI>();
+
             var ring = ringcontent.Find("Ring");
             Grid1 = ring.Find("Grid1");
             Grid2 = ring.Find("Grid2");
@@ -51,12 +50,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             Grid4 = ring.Find("Grid4");
             Grid5 = ring.Find("Grid5");
             Grid6 = ring.Find("Grid6");
-            Grids.Add(Grid1.transform);
-            Grids.Add(Grid2.transform);
-            Grids.Add(Grid3.transform);
-            Grids.Add(Grid4.transform);
-            Grids.Add(Grid5.transform);
-            Grids.Add(Grid6.transform);
+            Grids.Add(new GridBeastType(Grid1.transform, "123"));
+            Grids.Add(new GridBeastType(Grid2.transform, "124"));
+            Grids.Add(new GridBeastType(Grid3.transform, "125"));
+            Grids.Add(new GridBeastType(Grid4.transform, "126"));
+            Grids.Add(new GridBeastType(Grid5.transform, "127"));
+            Grids.Add(new GridBeastType(Grid6.transform, "128"));
 
             IsInit = true;
 
@@ -73,6 +72,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             base.OnEnter();
             
             this.Enter();
+
+            GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>().MainToSub2();
+            
         }
 
         public override void OnExit()
@@ -82,6 +84,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             this.Exit();
             
             ClearTemp();
+            GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>().Sub2ToMain();
+
         }
 
         public override void OnPause()
@@ -97,6 +101,23 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
 
         #endregion
+
+        public class GridBeastType
+        {
+            public Transform transform;
+            public string beastID;
+
+            public GridBeastType(Transform transform, string beastID)
+            {
+                this.transform = transform;
+                this.beastID = beastID;
+            }
+
+        }
+
+
+
+
 
         #region Internal
 
@@ -123,8 +144,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //切换隐兽
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.NextGrid.performed -= NextGrid_performed;
 
-            //切换对象
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.SwitchTarget.performed -= SwitchTarget_performed;
+            //确认
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.Confirm.performed -= Confirm_performed;
 
 
 
@@ -143,8 +164,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.NextGrid.performed += NextGrid_performed;
 
 
-            //切换对象
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.SwitchTarget.performed += SwitchTarget_performed;
+            //确认
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.Confirm.performed += Confirm_performed;
 
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
@@ -171,14 +192,19 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void NextGrid_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            //CurrentGridIndex = (CurrentGridIndex + 1) % Grids.Count;
+            Debug.Log("253453 " + Grids[0]);
+            Debug.Log("123412 " + Grids.Count);
+            CurrentGridIndex = (CurrentGridIndex + 1) % Grids.Count;
             this.Refresh();
         }
 
-        private void SwitchTarget_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-
-            Debug.Log("SwitchTarget_performed!");
+            
+            
+            parentUI.Grids[parentUI.CurrentGridIndex].id = Grids[CurrentGridIndex].beastID;
+            UIMgr.PopPanel();
+            
         }
         #endregion
 
@@ -216,7 +242,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private UIKeyTip KT_NextTerm;
 
         [ShowInInspector]
-        private List<Transform> Grids = new List<Transform>();
+        private List<GridBeastType> Grids = new List<GridBeastType>();
         private Transform Grid1, Grid2, Grid3, Grid4, Grid5, Grid6;
         private int CurrentGridIndex = 0;//0到5
 
@@ -226,10 +252,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         public void Refresh()
         {
-            if (ABJAProcessor == null || !ABJAProcessor.IsLoaded || !IsInit)
+            /*if (ABJAProcessor == null || !ABJAProcessor.IsLoaded || !IsInit)
             {
                 return;
-            }
+            }*/
 
 
             //ring
@@ -282,56 +308,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
         #endregion
 
-        #region to-delete
-        [Button("生成测试文件")]
-        void GenTESTFILE()
-        {
-            List<ItemSpawner.ItemTableJsonData> datas = new List<ItemSpawner.ItemTableJsonData>();
-
-            var itypes = Enum.GetValues(typeof(ML.Engine.InventorySystem.ItemType)).Cast<ML.Engine.InventorySystem.ItemType>().Where(e => (int)e > 0).ToArray();
-            foreach (var itype in itypes)
-            {
-                int cnt = UnityEngine.Random.Range(50, 100);
-                for (int i = 0; i < cnt; ++i)
-                {
-                    var data = new ItemSpawner.ItemTableJsonData();
-                    // id
-                    data.id = itype.ToString() + "_" + i;
-                    // name
-                    data.name = new TextContent();
-                    data.name.Chinese = data.id;
-                    data.name.English = data.id;
-                    // type
-                    data.type = "ResourceItem";
-                    // sort
-                    data.sort = i;
-                    // itemtype
-                    data.itemtype = itype;
-                    // weight
-                    data.weight = UnityEngine.Random.Range(1, 10);
-                    // bcanstack
-                    data.bcanstack = UnityEngine.Random.Range(1, 10) < 9;
-                    // maxamount
-                    data.maxamount = 999;
-                    // texture2d
-                    data.texture2d = "100001";
-                    // worldobject
-                    data.worldobject = "TESTWorldItem";
-                    // description
-                    data.description = "TTTTTTTTTTTTTTTTTTTTTTTT\nXXXXXXXXXXXXXXXXXXXXXXXX\nTTTTTTTTTTTTTTTTTTTTTTTT";
-                    // effectsDescription
-                    data.effectsDescription = "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%金币掉落\n<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%攻击力持续300s</b></color>";
-                    datas.Add(data);
-                }
-            }
-
-            string json = JsonConvert.SerializeObject(datas.ToArray(), Formatting.Indented);
-
-            System.IO.File.WriteAllText(Application.streamingAssetsPath + "/../../../t.json", json);
-            Debug.Log("输出路径: " + System.IO.Path.GetFullPath(Application.streamingAssetsPath + "/../../../t.json"));
-        }
-
-        #endregion
+       
     }
 
 }

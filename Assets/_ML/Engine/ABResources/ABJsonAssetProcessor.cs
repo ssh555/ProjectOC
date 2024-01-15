@@ -98,7 +98,7 @@ namespace ML.Engine.ABResources
             using (MemoryStream ms = new MemoryStream((request.asset as TextAsset).bytes))
             {
                 DataContractSerializer serializer = new DataContractSerializer(typeof(T));
-                Datas = (T)serializer.ReadObject(ms);
+                //Datas = (T)serializer.ReadObject(ms);
             }
 
            IsLoaded = true;

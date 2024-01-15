@@ -1041,6 +1041,15 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""StopResonance"",
+                    ""type"": ""Button"",
+                    ""id"": ""513fad6a-8ee3-4115-a1b4-d74fb58e207b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1153,6 +1162,28 @@ namespace ProjectOC.Input
                     ""action"": ""StartResonance"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fa78a219-5207-4c58-be3b-2d9b2317c0a8"",
+                    ""path"": ""<XInputController>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StopResonance"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6fa05b10-b67b-4500-a782-e68220226d5e"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StopResonance"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1161,25 +1192,7 @@ namespace ProjectOC.Input
             ""id"": ""e9165586-3f0a-419f-bd54-ae835ca19a6f"",
             ""actions"": [
                 {
-                    ""name"": ""LastTerm"",
-                    ""type"": ""Button"",
-                    ""id"": ""6b01ebe1-de1e-4f12-a451-69bf6a475d21"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""NextTerm"",
-                    ""type"": ""Button"",
-                    ""id"": ""6f5b93b8-435b-48a5-bd51-f701515132cf"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""NextGrid"",
+                    ""name"": ""Expel"",
                     ""type"": ""Button"",
                     ""id"": ""86980f4c-669b-4ab8-9b8b-28d2eed04402"",
                     ""expectedControlType"": ""Button"",
@@ -1188,7 +1201,7 @@ namespace ProjectOC.Input
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""SwitchTarget"",
+                    ""name"": ""Receive"",
                     ""type"": ""Button"",
                     ""id"": ""cb12c7fa-58a4-4b1c-add3-f4e03c5b27c1"",
                     ""expectedControlType"": ""Button"",
@@ -1200,89 +1213,45 @@ namespace ProjectOC.Input
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""ea1d388b-6577-4d4c-a88d-f4d559bd8499"",
-                    ""path"": ""<XInputController>/leftShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LastTerm"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a4240ac3-e62c-4a0f-bb7b-d6cc33b49386"",
-                    ""path"": ""<Keyboard>/z"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LastTerm"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a07e2587-b329-45a4-83e5-0ff9232c32cd"",
-                    ""path"": ""<XInputController>/rightShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""NextTerm"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""7228b09d-e6dd-43f3-8daa-02ce5645f495"",
-                    ""path"": ""<Keyboard>/x"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""NextTerm"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""9882526e-8828-42bd-9af1-6a2113202f3e"",
-                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""path"": ""<XInputController>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""NextGrid"",
+                    ""action"": ""Expel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""e625ba29-b376-423c-8dc9-bdc1ba49c07c"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""NextGrid"",
+                    ""action"": ""Expel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""e2589faa-4603-4b39-84af-efef138c82ec"",
-                    ""path"": ""<XInputController>/buttonNorth"",
+                    ""path"": ""<XInputController>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""SwitchTarget"",
+                    ""action"": ""Receive"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""9d40a40c-af7a-456c-8e1d-e7064cf913dd"",
-                    ""path"": ""<Keyboard>/r"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""SwitchTarget"",
+                    ""action"": ""Receive"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1320,7 +1289,7 @@ namespace ProjectOC.Input
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""SwitchTarget"",
+                    ""name"": ""Confirm"",
                     ""type"": ""Button"",
                     ""id"": ""20a6ef1b-e076-445b-9007-68f98fac662e"",
                     ""expectedControlType"": ""Button"",
@@ -1403,7 +1372,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""SwitchTarget"",
+                    ""action"": ""Confirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1414,7 +1383,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""SwitchTarget"",
+                    ""action"": ""Confirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1454,18 +1423,17 @@ namespace ProjectOC.Input
             m_ResonanceWheelUI_NextGrid = m_ResonanceWheelUI.FindAction("NextGrid", throwIfNotFound: true);
             m_ResonanceWheelUI_SwitchTarget = m_ResonanceWheelUI.FindAction("SwitchTarget", throwIfNotFound: true);
             m_ResonanceWheelUI_StartResonance = m_ResonanceWheelUI.FindAction("StartResonance", throwIfNotFound: true);
+            m_ResonanceWheelUI_StopResonance = m_ResonanceWheelUI.FindAction("StopResonance", throwIfNotFound: true);
             // ResonanceWheelUI_sub1
             m_ResonanceWheelUI_sub1 = asset.FindActionMap("ResonanceWheelUI_sub1", throwIfNotFound: true);
-            m_ResonanceWheelUI_sub1_LastTerm = m_ResonanceWheelUI_sub1.FindAction("LastTerm", throwIfNotFound: true);
-            m_ResonanceWheelUI_sub1_NextTerm = m_ResonanceWheelUI_sub1.FindAction("NextTerm", throwIfNotFound: true);
-            m_ResonanceWheelUI_sub1_NextGrid = m_ResonanceWheelUI_sub1.FindAction("NextGrid", throwIfNotFound: true);
-            m_ResonanceWheelUI_sub1_SwitchTarget = m_ResonanceWheelUI_sub1.FindAction("SwitchTarget", throwIfNotFound: true);
+            m_ResonanceWheelUI_sub1_Expel = m_ResonanceWheelUI_sub1.FindAction("Expel", throwIfNotFound: true);
+            m_ResonanceWheelUI_sub1_Receive = m_ResonanceWheelUI_sub1.FindAction("Receive", throwIfNotFound: true);
             // ResonanceWheelUI_sub2
             m_ResonanceWheelUI_sub2 = asset.FindActionMap("ResonanceWheelUI_sub2", throwIfNotFound: true);
             m_ResonanceWheelUI_sub2_LastTerm = m_ResonanceWheelUI_sub2.FindAction("LastTerm", throwIfNotFound: true);
             m_ResonanceWheelUI_sub2_NextTerm = m_ResonanceWheelUI_sub2.FindAction("NextTerm", throwIfNotFound: true);
             m_ResonanceWheelUI_sub2_NextGrid = m_ResonanceWheelUI_sub2.FindAction("NextGrid", throwIfNotFound: true);
-            m_ResonanceWheelUI_sub2_SwitchTarget = m_ResonanceWheelUI_sub2.FindAction("SwitchTarget", throwIfNotFound: true);
+            m_ResonanceWheelUI_sub2_Confirm = m_ResonanceWheelUI_sub2.FindAction("Confirm", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -1812,6 +1780,7 @@ namespace ProjectOC.Input
         private readonly InputAction m_ResonanceWheelUI_NextGrid;
         private readonly InputAction m_ResonanceWheelUI_SwitchTarget;
         private readonly InputAction m_ResonanceWheelUI_StartResonance;
+        private readonly InputAction m_ResonanceWheelUI_StopResonance;
         public struct ResonanceWheelUIActions
         {
             private @PlayerInput m_Wrapper;
@@ -1821,6 +1790,7 @@ namespace ProjectOC.Input
             public InputAction @NextGrid => m_Wrapper.m_ResonanceWheelUI_NextGrid;
             public InputAction @SwitchTarget => m_Wrapper.m_ResonanceWheelUI_SwitchTarget;
             public InputAction @StartResonance => m_Wrapper.m_ResonanceWheelUI_StartResonance;
+            public InputAction @StopResonance => m_Wrapper.m_ResonanceWheelUI_StopResonance;
             public InputActionMap Get() { return m_Wrapper.m_ResonanceWheelUI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1845,6 +1815,9 @@ namespace ProjectOC.Input
                 @StartResonance.started += instance.OnStartResonance;
                 @StartResonance.performed += instance.OnStartResonance;
                 @StartResonance.canceled += instance.OnStartResonance;
+                @StopResonance.started += instance.OnStopResonance;
+                @StopResonance.performed += instance.OnStopResonance;
+                @StopResonance.canceled += instance.OnStopResonance;
             }
 
             private void UnregisterCallbacks(IResonanceWheelUIActions instance)
@@ -1864,6 +1837,9 @@ namespace ProjectOC.Input
                 @StartResonance.started -= instance.OnStartResonance;
                 @StartResonance.performed -= instance.OnStartResonance;
                 @StartResonance.canceled -= instance.OnStartResonance;
+                @StopResonance.started -= instance.OnStopResonance;
+                @StopResonance.performed -= instance.OnStopResonance;
+                @StopResonance.canceled -= instance.OnStopResonance;
             }
 
             public void RemoveCallbacks(IResonanceWheelUIActions instance)
@@ -1885,18 +1861,14 @@ namespace ProjectOC.Input
         // ResonanceWheelUI_sub1
         private readonly InputActionMap m_ResonanceWheelUI_sub1;
         private List<IResonanceWheelUI_sub1Actions> m_ResonanceWheelUI_sub1ActionsCallbackInterfaces = new List<IResonanceWheelUI_sub1Actions>();
-        private readonly InputAction m_ResonanceWheelUI_sub1_LastTerm;
-        private readonly InputAction m_ResonanceWheelUI_sub1_NextTerm;
-        private readonly InputAction m_ResonanceWheelUI_sub1_NextGrid;
-        private readonly InputAction m_ResonanceWheelUI_sub1_SwitchTarget;
+        private readonly InputAction m_ResonanceWheelUI_sub1_Expel;
+        private readonly InputAction m_ResonanceWheelUI_sub1_Receive;
         public struct ResonanceWheelUI_sub1Actions
         {
             private @PlayerInput m_Wrapper;
             public ResonanceWheelUI_sub1Actions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
-            public InputAction @LastTerm => m_Wrapper.m_ResonanceWheelUI_sub1_LastTerm;
-            public InputAction @NextTerm => m_Wrapper.m_ResonanceWheelUI_sub1_NextTerm;
-            public InputAction @NextGrid => m_Wrapper.m_ResonanceWheelUI_sub1_NextGrid;
-            public InputAction @SwitchTarget => m_Wrapper.m_ResonanceWheelUI_sub1_SwitchTarget;
+            public InputAction @Expel => m_Wrapper.m_ResonanceWheelUI_sub1_Expel;
+            public InputAction @Receive => m_Wrapper.m_ResonanceWheelUI_sub1_Receive;
             public InputActionMap Get() { return m_Wrapper.m_ResonanceWheelUI_sub1; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1906,34 +1878,22 @@ namespace ProjectOC.Input
             {
                 if (instance == null || m_Wrapper.m_ResonanceWheelUI_sub1ActionsCallbackInterfaces.Contains(instance)) return;
                 m_Wrapper.m_ResonanceWheelUI_sub1ActionsCallbackInterfaces.Add(instance);
-                @LastTerm.started += instance.OnLastTerm;
-                @LastTerm.performed += instance.OnLastTerm;
-                @LastTerm.canceled += instance.OnLastTerm;
-                @NextTerm.started += instance.OnNextTerm;
-                @NextTerm.performed += instance.OnNextTerm;
-                @NextTerm.canceled += instance.OnNextTerm;
-                @NextGrid.started += instance.OnNextGrid;
-                @NextGrid.performed += instance.OnNextGrid;
-                @NextGrid.canceled += instance.OnNextGrid;
-                @SwitchTarget.started += instance.OnSwitchTarget;
-                @SwitchTarget.performed += instance.OnSwitchTarget;
-                @SwitchTarget.canceled += instance.OnSwitchTarget;
+                @Expel.started += instance.OnExpel;
+                @Expel.performed += instance.OnExpel;
+                @Expel.canceled += instance.OnExpel;
+                @Receive.started += instance.OnReceive;
+                @Receive.performed += instance.OnReceive;
+                @Receive.canceled += instance.OnReceive;
             }
 
             private void UnregisterCallbacks(IResonanceWheelUI_sub1Actions instance)
             {
-                @LastTerm.started -= instance.OnLastTerm;
-                @LastTerm.performed -= instance.OnLastTerm;
-                @LastTerm.canceled -= instance.OnLastTerm;
-                @NextTerm.started -= instance.OnNextTerm;
-                @NextTerm.performed -= instance.OnNextTerm;
-                @NextTerm.canceled -= instance.OnNextTerm;
-                @NextGrid.started -= instance.OnNextGrid;
-                @NextGrid.performed -= instance.OnNextGrid;
-                @NextGrid.canceled -= instance.OnNextGrid;
-                @SwitchTarget.started -= instance.OnSwitchTarget;
-                @SwitchTarget.performed -= instance.OnSwitchTarget;
-                @SwitchTarget.canceled -= instance.OnSwitchTarget;
+                @Expel.started -= instance.OnExpel;
+                @Expel.performed -= instance.OnExpel;
+                @Expel.canceled -= instance.OnExpel;
+                @Receive.started -= instance.OnReceive;
+                @Receive.performed -= instance.OnReceive;
+                @Receive.canceled -= instance.OnReceive;
             }
 
             public void RemoveCallbacks(IResonanceWheelUI_sub1Actions instance)
@@ -1958,7 +1918,7 @@ namespace ProjectOC.Input
         private readonly InputAction m_ResonanceWheelUI_sub2_LastTerm;
         private readonly InputAction m_ResonanceWheelUI_sub2_NextTerm;
         private readonly InputAction m_ResonanceWheelUI_sub2_NextGrid;
-        private readonly InputAction m_ResonanceWheelUI_sub2_SwitchTarget;
+        private readonly InputAction m_ResonanceWheelUI_sub2_Confirm;
         public struct ResonanceWheelUI_sub2Actions
         {
             private @PlayerInput m_Wrapper;
@@ -1966,7 +1926,7 @@ namespace ProjectOC.Input
             public InputAction @LastTerm => m_Wrapper.m_ResonanceWheelUI_sub2_LastTerm;
             public InputAction @NextTerm => m_Wrapper.m_ResonanceWheelUI_sub2_NextTerm;
             public InputAction @NextGrid => m_Wrapper.m_ResonanceWheelUI_sub2_NextGrid;
-            public InputAction @SwitchTarget => m_Wrapper.m_ResonanceWheelUI_sub2_SwitchTarget;
+            public InputAction @Confirm => m_Wrapper.m_ResonanceWheelUI_sub2_Confirm;
             public InputActionMap Get() { return m_Wrapper.m_ResonanceWheelUI_sub2; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1985,9 +1945,9 @@ namespace ProjectOC.Input
                 @NextGrid.started += instance.OnNextGrid;
                 @NextGrid.performed += instance.OnNextGrid;
                 @NextGrid.canceled += instance.OnNextGrid;
-                @SwitchTarget.started += instance.OnSwitchTarget;
-                @SwitchTarget.performed += instance.OnSwitchTarget;
-                @SwitchTarget.canceled += instance.OnSwitchTarget;
+                @Confirm.started += instance.OnConfirm;
+                @Confirm.performed += instance.OnConfirm;
+                @Confirm.canceled += instance.OnConfirm;
             }
 
             private void UnregisterCallbacks(IResonanceWheelUI_sub2Actions instance)
@@ -2001,9 +1961,9 @@ namespace ProjectOC.Input
                 @NextGrid.started -= instance.OnNextGrid;
                 @NextGrid.performed -= instance.OnNextGrid;
                 @NextGrid.canceled -= instance.OnNextGrid;
-                @SwitchTarget.started -= instance.OnSwitchTarget;
-                @SwitchTarget.performed -= instance.OnSwitchTarget;
-                @SwitchTarget.canceled -= instance.OnSwitchTarget;
+                @Confirm.started -= instance.OnConfirm;
+                @Confirm.performed -= instance.OnConfirm;
+                @Confirm.canceled -= instance.OnConfirm;
             }
 
             public void RemoveCallbacks(IResonanceWheelUI_sub2Actions instance)
@@ -2056,20 +2016,19 @@ namespace ProjectOC.Input
             void OnNextGrid(InputAction.CallbackContext context);
             void OnSwitchTarget(InputAction.CallbackContext context);
             void OnStartResonance(InputAction.CallbackContext context);
+            void OnStopResonance(InputAction.CallbackContext context);
         }
         public interface IResonanceWheelUI_sub1Actions
         {
-            void OnLastTerm(InputAction.CallbackContext context);
-            void OnNextTerm(InputAction.CallbackContext context);
-            void OnNextGrid(InputAction.CallbackContext context);
-            void OnSwitchTarget(InputAction.CallbackContext context);
+            void OnExpel(InputAction.CallbackContext context);
+            void OnReceive(InputAction.CallbackContext context);
         }
         public interface IResonanceWheelUI_sub2Actions
         {
             void OnLastTerm(InputAction.CallbackContext context);
             void OnNextTerm(InputAction.CallbackContext context);
             void OnNextGrid(InputAction.CallbackContext context);
-            void OnSwitchTarget(InputAction.CallbackContext context);
+            void OnConfirm(InputAction.CallbackContext context);
         }
     }
 }

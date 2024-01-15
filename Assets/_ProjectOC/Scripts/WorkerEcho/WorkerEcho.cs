@@ -18,21 +18,30 @@ namespace ProjectOC.WorkerEchoNS
             timer = new CounterDownTimer(time); 
         }
     }
+    [System.Serializable]
     public sealed class WorkerEcho : ML.Engine.Manager.LocalManager.ILocalManager
     {
-        private int Level = 1;
+        public int Level = 2;
         private List<ExternWorker> Workers = new List<ExternWorker>(5);
-        public void SummonWorker(int index)
+        /// <summary>
+        /// 一级召唤
+        /// </summary>
+        public ExternWorker SummonWorker1(int index)
         {
-            if(this.Level==1)
-            {
-
-            }
-            else
-            {
-                
-            }
+            
+            ExternWorker worker = new ExternWorker(null, 5);
+            return worker;
         }
+        /// <summary>
+        /// 二级召唤
+        /// </summary>
+        public ExternWorker SummonWorker2(int index,string id)
+        {
+            ExternWorker worker = new ExternWorker(null, 5);
+            Debug.Log("SummonWorker2:  " + id);
+            return worker;
+        }
+
         public void SpawnWorker(int index)
         {
             //收留
