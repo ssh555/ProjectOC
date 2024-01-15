@@ -6,6 +6,7 @@ using ProjectOC.WorkerNS;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using ProjectOC.StoreNS;
 
 namespace ProjectOC.ProNodeNS
 {
@@ -201,7 +202,7 @@ namespace ProjectOC.ProNodeNS
         ///  原材料ID, 还有多少个
         /// </summary>
         protected Dictionary<string, int> RawItems = new Dictionary<string, int>();
-
+        public event Action OnActionChange;
         #region 计时器
         /// <summary>
         /// 生产计时器，时间为配方生产一次所需的时间
@@ -504,6 +505,7 @@ namespace ProjectOC.ProNodeNS
             {
                 StopProduce();
             }
+            OnActionChange?.Invoke();
         }
 
         /// <summary>
@@ -528,6 +530,75 @@ namespace ProjectOC.ProNodeNS
             }
             return result;
         }
+
+        #region UI接口
+        public void UIAdd(Player.PlayerCharacter player, string itemID, int amount)
+        {
+            if (player != null && RawItems.ContainsKey(itemID) && amount > 0 && 
+                this.RawItems[itemID] + amount <= this.StackMaxNum * this.Recipe.GetRawNum(itemID))
+            {
+                if (player.Inventory.RemoveItem(itemID, amount))
+                {
+                    RawItems[itemID] += amount;
+                    StartProduce();
+                }
+            }
+        }
+        public void UIRemove(Player.PlayerCharacter player, int amount)
+        {
+            if (player != null && amount > 0 && Stack >= amount)
+            {
+                List<Item> items = ItemManager.Instance.SpawnItems(ProductItem, amount);
+                foreach (Item item in items)
+                {
+                    int itemAmount = item.Amount;
+                    if (player.Inventory.AddItem(item))
+                    {
+                        Stack -= itemAmount;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                StartProduce();
+            }
+        }
+        public void UIFastAdd(Player.PlayerCharacter player, string itemID)
+        {
+            if (player != null && RawItems.ContainsKey(itemID))
+            {
+                int amount = player.Inventory.GetItemAllNum(itemID);
+                int maxAmount = StackMaxNum * Recipe.GetRawNum(itemID) - RawItems[itemID];
+                amount = amount >= maxAmount ? maxAmount : amount;
+                if (player.Inventory.RemoveItem(itemID, amount))
+                {
+                    RawItems[itemID] += amount;
+                    StartProduce();
+                }
+            }
+        }
+        public void UIFastRemove(Player.PlayerCharacter player)
+        {
+            if (player != null)
+            {
+                List<Item> items = ItemManager.Instance.SpawnItems(ProductItem, Stack);
+                foreach (Item item in items)
+                {
+                    int itemAmount = item.Amount;
+                    if (player.Inventory.AddItem(item))
+                    {
+                        Stack -= itemAmount;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                StartProduce();
+            }
+        }
+        #endregion
 
         #region IMission接口
         public Transform GetTransform()
@@ -560,6 +631,7 @@ namespace ProjectOC.ProNodeNS
                 StartProduce();
                 return true;
             }
+            OnActionChange?.Invoke();
             return false;
         }
         /// <summary>
@@ -578,6 +650,7 @@ namespace ProjectOC.ProNodeNS
                     amount = StackReserve;
                     StackReserve = 0;
                 }
+                OnActionChange?.Invoke();
                 return amount;
             }
             return 0;
@@ -607,6 +680,7 @@ namespace ProjectOC.ProNodeNS
                         StackReserve += Stack;
                         Stack = 0;
                     }
+                    OnActionChange?.Invoke();
                     return true;
                 }
             }
@@ -624,6 +698,7 @@ namespace ProjectOC.ProNodeNS
                 else if (ProductItem == item.ID && Stack >= item.Amount)
                 {
                     Stack -= item.Amount;
+                    OnActionChange?.Invoke();
                     return true;
                 }
             }
@@ -664,6 +739,7 @@ namespace ProjectOC.ProNodeNS
             {
                 Debug.LogError($"Item Amount Error ItemAmount: {result.Amount} Amount: {amount}");
             }
+            OnActionChange?.Invoke();
             return result;
         }
         public bool RemoveItem(string itemID, int amount)
@@ -683,6 +759,7 @@ namespace ProjectOC.ProNodeNS
                     if (Stack >= amount)
                     {
                         Stack -= amount;
+                        OnActionChange?.Invoke();
                         return true;
                     }
                 }

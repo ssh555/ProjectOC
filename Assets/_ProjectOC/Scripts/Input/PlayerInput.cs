@@ -1274,6 +1274,348 @@ namespace ProjectOC.Input
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UIProNode"",
+            ""id"": ""7be38ac4-f3e0-4298-af9f-bfb7129aba09"",
+            ""actions"": [
+                {
+                    ""name"": ""NextPriority"",
+                    ""type"": ""Button"",
+                    ""id"": ""8c21e479-24d3-4141-8f2c-446832cf9133"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Upgrade"",
+                    ""type"": ""Button"",
+                    ""id"": ""9ba3f665-0544-44f4-81a5-e794d0b0601c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AlterRawItem"",
+                    ""type"": ""Value"",
+                    ""id"": ""1a286c3e-5479-48e0-b312-c005d1204369"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Remove1"",
+                    ""type"": ""Button"",
+                    ""id"": ""8973dd42-db36-411c-92bd-4827c8b757f7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Remove10"",
+                    ""type"": ""Button"",
+                    ""id"": ""a43d0ad0-d595-433d-8740-83ccafaa5e74"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FastAdd"",
+                    ""type"": ""Button"",
+                    ""id"": ""b072730b-87c6-4f53-a412-856a6f31d311"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChangeRecipe"",
+                    ""type"": ""Button"",
+                    ""id"": ""aff339b1-cbf1-449c-9fa9-4a3214ed7d9f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChangeWorker"",
+                    ""type"": ""Button"",
+                    ""id"": ""339699fa-04cc-4c40-be7d-e826a3bebd10"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RemoveWorker"",
+                    ""type"": ""Button"",
+                    ""id"": ""9426e949-b89a-46f1-97ba-88da48a782d9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""f0fe7934-c340-479c-a4c8-9e9432a93f07"",
+                    ""path"": ""<XInputController>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextPriority"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""53eb5514-2f08-44dc-9d84-165c1304659b"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextPriority"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""46301721-3ba5-4558-b9c1-93926e954c30"",
+                    ""path"": ""<XInputController>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Upgrade"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6d63c30d-26b5-41c0-9c64-5a2db20ecda6"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Upgrade"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""KeyBoard"",
+                    ""id"": ""6d7178fd-01ba-48e6-b80f-828911d1e752"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterRawItem"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""dd1e748f-0c49-4842-b66e-4efb47d2755c"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterRawItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""3441ff6c-86a2-4efd-b7c7-b325ae670dbe"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterRawItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""86cb4fc7-0b07-4576-894f-918f41218696"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterRawItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""cd4eee97-33df-4edf-805b-51ff54aec145"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterRawItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""bf3209ce-bec4-4238-b6da-e5185ba20c63"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterRawItem"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""9ef64ad6-1469-4941-bac3-1ad6d272b6ba"",
+                    ""path"": ""<XInputController>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterRawItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""10b6474b-d4a0-4f91-a7e7-9f7cf463d7ef"",
+                    ""path"": ""<XInputController>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterRawItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""9b2fafe2-13fa-42ec-9767-cb4124271758"",
+                    ""path"": ""<XInputController>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterRawItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""cdc2d751-844a-4136-9e66-745dd178a9c4"",
+                    ""path"": ""<XInputController>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterRawItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bffdff7c-5dda-47e9-ac11-d20cc139ffab"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a4b2f75f-7100-4ac2-bb32-f6566a8040b5"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8cdc6c39-36f7-4977-ac32-d5b22450f706"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove10"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c6ba8d4b-99d5-4d61-ac2b-d55a9675ca86"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove10"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eeb66f92-e2f3-4af7-bc1b-1a185c9ee96b"",
+                    ""path"": ""<XInputController>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FastAdd"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bc2c45bd-1644-44e8-acb6-caddd945b1b4"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FastAdd"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f9253efa-d962-4de4-bd9a-5ebec8aa867f"",
+                    ""path"": ""<XInputController>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeRecipe"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""73d82c5b-7d0b-42bc-a88b-3abdee935233"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeWorker"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9a4a7946-7f31-4be2-9a55-e7c15f46fcf9"",
+                    ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RemoveWorker"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -1310,6 +1652,17 @@ namespace ProjectOC.Input
             m_UIStore_Remove1 = m_UIStore.FindAction("Remove1", throwIfNotFound: true);
             m_UIStore_Remove10 = m_UIStore.FindAction("Remove10", throwIfNotFound: true);
             m_UIStore_FastAdd = m_UIStore.FindAction("FastAdd", throwIfNotFound: true);
+            // UIProNode
+            m_UIProNode = asset.FindActionMap("UIProNode", throwIfNotFound: true);
+            m_UIProNode_NextPriority = m_UIProNode.FindAction("NextPriority", throwIfNotFound: true);
+            m_UIProNode_Upgrade = m_UIProNode.FindAction("Upgrade", throwIfNotFound: true);
+            m_UIProNode_AlterRawItem = m_UIProNode.FindAction("AlterRawItem", throwIfNotFound: true);
+            m_UIProNode_Remove1 = m_UIProNode.FindAction("Remove1", throwIfNotFound: true);
+            m_UIProNode_Remove10 = m_UIProNode.FindAction("Remove10", throwIfNotFound: true);
+            m_UIProNode_FastAdd = m_UIProNode.FindAction("FastAdd", throwIfNotFound: true);
+            m_UIProNode_ChangeRecipe = m_UIProNode.FindAction("ChangeRecipe", throwIfNotFound: true);
+            m_UIProNode_ChangeWorker = m_UIProNode.FindAction("ChangeWorker", throwIfNotFound: true);
+            m_UIProNode_RemoveWorker = m_UIProNode.FindAction("RemoveWorker", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -1733,6 +2086,116 @@ namespace ProjectOC.Input
             }
         }
         public UIStoreActions @UIStore => new UIStoreActions(this);
+
+        // UIProNode
+        private readonly InputActionMap m_UIProNode;
+        private List<IUIProNodeActions> m_UIProNodeActionsCallbackInterfaces = new List<IUIProNodeActions>();
+        private readonly InputAction m_UIProNode_NextPriority;
+        private readonly InputAction m_UIProNode_Upgrade;
+        private readonly InputAction m_UIProNode_AlterRawItem;
+        private readonly InputAction m_UIProNode_Remove1;
+        private readonly InputAction m_UIProNode_Remove10;
+        private readonly InputAction m_UIProNode_FastAdd;
+        private readonly InputAction m_UIProNode_ChangeRecipe;
+        private readonly InputAction m_UIProNode_ChangeWorker;
+        private readonly InputAction m_UIProNode_RemoveWorker;
+        public struct UIProNodeActions
+        {
+            private @PlayerInput m_Wrapper;
+            public UIProNodeActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @NextPriority => m_Wrapper.m_UIProNode_NextPriority;
+            public InputAction @Upgrade => m_Wrapper.m_UIProNode_Upgrade;
+            public InputAction @AlterRawItem => m_Wrapper.m_UIProNode_AlterRawItem;
+            public InputAction @Remove1 => m_Wrapper.m_UIProNode_Remove1;
+            public InputAction @Remove10 => m_Wrapper.m_UIProNode_Remove10;
+            public InputAction @FastAdd => m_Wrapper.m_UIProNode_FastAdd;
+            public InputAction @ChangeRecipe => m_Wrapper.m_UIProNode_ChangeRecipe;
+            public InputAction @ChangeWorker => m_Wrapper.m_UIProNode_ChangeWorker;
+            public InputAction @RemoveWorker => m_Wrapper.m_UIProNode_RemoveWorker;
+            public InputActionMap Get() { return m_Wrapper.m_UIProNode; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(UIProNodeActions set) { return set.Get(); }
+            public void AddCallbacks(IUIProNodeActions instance)
+            {
+                if (instance == null || m_Wrapper.m_UIProNodeActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_UIProNodeActionsCallbackInterfaces.Add(instance);
+                @NextPriority.started += instance.OnNextPriority;
+                @NextPriority.performed += instance.OnNextPriority;
+                @NextPriority.canceled += instance.OnNextPriority;
+                @Upgrade.started += instance.OnUpgrade;
+                @Upgrade.performed += instance.OnUpgrade;
+                @Upgrade.canceled += instance.OnUpgrade;
+                @AlterRawItem.started += instance.OnAlterRawItem;
+                @AlterRawItem.performed += instance.OnAlterRawItem;
+                @AlterRawItem.canceled += instance.OnAlterRawItem;
+                @Remove1.started += instance.OnRemove1;
+                @Remove1.performed += instance.OnRemove1;
+                @Remove1.canceled += instance.OnRemove1;
+                @Remove10.started += instance.OnRemove10;
+                @Remove10.performed += instance.OnRemove10;
+                @Remove10.canceled += instance.OnRemove10;
+                @FastAdd.started += instance.OnFastAdd;
+                @FastAdd.performed += instance.OnFastAdd;
+                @FastAdd.canceled += instance.OnFastAdd;
+                @ChangeRecipe.started += instance.OnChangeRecipe;
+                @ChangeRecipe.performed += instance.OnChangeRecipe;
+                @ChangeRecipe.canceled += instance.OnChangeRecipe;
+                @ChangeWorker.started += instance.OnChangeWorker;
+                @ChangeWorker.performed += instance.OnChangeWorker;
+                @ChangeWorker.canceled += instance.OnChangeWorker;
+                @RemoveWorker.started += instance.OnRemoveWorker;
+                @RemoveWorker.performed += instance.OnRemoveWorker;
+                @RemoveWorker.canceled += instance.OnRemoveWorker;
+            }
+
+            private void UnregisterCallbacks(IUIProNodeActions instance)
+            {
+                @NextPriority.started -= instance.OnNextPriority;
+                @NextPriority.performed -= instance.OnNextPriority;
+                @NextPriority.canceled -= instance.OnNextPriority;
+                @Upgrade.started -= instance.OnUpgrade;
+                @Upgrade.performed -= instance.OnUpgrade;
+                @Upgrade.canceled -= instance.OnUpgrade;
+                @AlterRawItem.started -= instance.OnAlterRawItem;
+                @AlterRawItem.performed -= instance.OnAlterRawItem;
+                @AlterRawItem.canceled -= instance.OnAlterRawItem;
+                @Remove1.started -= instance.OnRemove1;
+                @Remove1.performed -= instance.OnRemove1;
+                @Remove1.canceled -= instance.OnRemove1;
+                @Remove10.started -= instance.OnRemove10;
+                @Remove10.performed -= instance.OnRemove10;
+                @Remove10.canceled -= instance.OnRemove10;
+                @FastAdd.started -= instance.OnFastAdd;
+                @FastAdd.performed -= instance.OnFastAdd;
+                @FastAdd.canceled -= instance.OnFastAdd;
+                @ChangeRecipe.started -= instance.OnChangeRecipe;
+                @ChangeRecipe.performed -= instance.OnChangeRecipe;
+                @ChangeRecipe.canceled -= instance.OnChangeRecipe;
+                @ChangeWorker.started -= instance.OnChangeWorker;
+                @ChangeWorker.performed -= instance.OnChangeWorker;
+                @ChangeWorker.canceled -= instance.OnChangeWorker;
+                @RemoveWorker.started -= instance.OnRemoveWorker;
+                @RemoveWorker.performed -= instance.OnRemoveWorker;
+                @RemoveWorker.canceled -= instance.OnRemoveWorker;
+            }
+
+            public void RemoveCallbacks(IUIProNodeActions instance)
+            {
+                if (m_Wrapper.m_UIProNodeActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IUIProNodeActions instance)
+            {
+                foreach (var item in m_Wrapper.m_UIProNodeActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_UIProNodeActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public UIProNodeActions @UIProNode => new UIProNodeActions(this);
         public interface IPlayerActions
         {
             void OnMove(InputAction.CallbackContext context);
@@ -1769,6 +2232,18 @@ namespace ProjectOC.Input
             void OnRemove1(InputAction.CallbackContext context);
             void OnRemove10(InputAction.CallbackContext context);
             void OnFastAdd(InputAction.CallbackContext context);
+        }
+        public interface IUIProNodeActions
+        {
+            void OnNextPriority(InputAction.CallbackContext context);
+            void OnUpgrade(InputAction.CallbackContext context);
+            void OnAlterRawItem(InputAction.CallbackContext context);
+            void OnRemove1(InputAction.CallbackContext context);
+            void OnRemove10(InputAction.CallbackContext context);
+            void OnFastAdd(InputAction.CallbackContext context);
+            void OnChangeRecipe(InputAction.CallbackContext context);
+            void OnChangeWorker(InputAction.CallbackContext context);
+            void OnRemoveWorker(InputAction.CallbackContext context);
         }
     }
 }

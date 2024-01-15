@@ -81,6 +81,7 @@ namespace ProjectOC.StoreNS
         /// 只要玩家正在与某一个仓库进行交互，就将此项设为true,生成任务时不能考虑此项为true的仓库
         /// </summary>
         public bool IsInteracting;
+        public event Action OnStoreDataChange;
 
         public Store(StoreType storeType)
         {
@@ -175,6 +176,7 @@ namespace ProjectOC.StoreNS
                 if (data.Storage == 0 && data.StorageReserve == 0 && data.EmptyReserve == 0)
                 {
                     this.StoreDatas[index] = new StoreData(itemID, this.StoreDataCapacity);
+                    OnStoreDataChange?.Invoke();
                     return true;
                 }
             }
@@ -492,6 +494,7 @@ namespace ProjectOC.StoreNS
                     temp.EmptyReserve = 0;
                     amount = 0;
                 }
+                OnStoreDataChange?.Invoke();
                 return amount == 0;
             }
             return false;
@@ -552,6 +555,7 @@ namespace ProjectOC.StoreNS
                     }
                 }
             }
+            OnStoreDataChange?.Invoke();
             return true;
         }
 
@@ -579,6 +583,7 @@ namespace ProjectOC.StoreNS
                     }
                 }
             }
+            OnStoreDataChange?.Invoke();
             return true;
         }
 
@@ -615,6 +620,7 @@ namespace ProjectOC.StoreNS
             {
                 Debug.LogError($"Item Amount Error ItemAmount: {result.Amount} Amount: {newAmount}");
             }
+            OnStoreDataChange?.Invoke();
             return result;
         }
 
@@ -641,6 +647,7 @@ namespace ProjectOC.StoreNS
                     }
                 }
             }
+            OnStoreDataChange?.Invoke();
             return true;
         }
 

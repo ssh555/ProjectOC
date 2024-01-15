@@ -65,7 +65,7 @@ namespace ProjectOC.InventorySystem.UI
             #endregion
 
             CurPriority = MissionNS.TransportPriority.Normal;
-
+            Store.OnStoreDataChange += Refresh;
             IsInit = true;
             Refresh();
         }
@@ -596,7 +596,7 @@ namespace ProjectOC.InventorySystem.UI
         {
             if(ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StorePanel>("JSON/TextContent/Store", "StorePanel", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StorePanel>("Binary/TextContent/Store", "StorePanel", (datas) =>
                 {
                     Refresh();
                     this.enabled = false;
