@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3034767901
+CRC: 2483024416
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 352d4f36d9b1fe3be6f4d34d37744286
+    Hash: 35cbcb473e0e8ac663180eec2f2cee63
   TypeTreeHash:
     serializedVersion: 2
     Hash: d0c8639e8e852785b9da9ba9aa1a9e6d
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 352d4f36d9b1fe3be6f4d34d37744286
+    Hash: 35cbcb473e0e8ac663180eec2f2cee63
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -156,6 +156,5 @@ Assets:
 - Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity
 Dependencies:
 - C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/animation/character/player/model
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/fonts
 - C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials
 - C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/prefabs/character/player
