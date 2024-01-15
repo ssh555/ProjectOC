@@ -8,6 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/.idea.projectoc/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.projectoc/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/Windows" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/Windows" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/Windows.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/Windows.manifest" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/assets/buildingsystem" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/assets/buildingsystem" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/assets/buildingsystem.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/assets/buildingsystem.manifest" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/binary.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/binary.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/binary/tabledata.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/binary/tabledata.manifest" afterDir="false" />
@@ -31,64 +32,86 @@
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/binary/textcontent/techtree.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/binary/textcontent/techtree.manifest" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/binary/textcontent/techtree.manifest.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/binary/textcontent/techtree.manifest.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/binary/textcontent/techtree.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/binary/textcontent/techtree.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/fonts" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/fonts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/fonts.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/fonts.manifest" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/materials.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/materials.manifest" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart.manifest" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/character/player.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/character/player.manifest" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/item.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/item.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/item/worlditem.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/item/worlditem.manifest" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/item/worlditem.manifest.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/item/worlditem.manifest.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/item/worlditem.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/item/worlditem.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/testscene" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/testscene" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/testscene.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/testscene.manifest" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/buildingsystem/prefabs.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/buildingsystem/prefabs.manifest" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/category.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/category.manifest" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/style.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/style.manifest" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/type" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/type" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/type.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/type.manifest" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/interactsystem.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/interactsystem.manifest" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/interactsystem.manifest.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/interactsystem.manifest.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/interactsystem.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/interactsystem.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/inventory.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/inventory.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/inventory/texture2d.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/inventory/texture2d.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/inventory/texture2d/itemtype.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/inventory/texture2d/itemtype.manifest" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/item/texture2d.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/item/texture2d.manifest" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/techpoint/texture2d.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/techpoint/texture2d.manifest" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/uipanel" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/uipanel" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/inventory/texture2d/itemtype.manifest.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/inventory/texture2d/itemtype.manifest.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/inventory/texture2d/itemtype.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/inventory/texture2d/itemtype.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/uipanel.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/ui/uipanel.manifest" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPart/BuildingPart.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPart/BuildingPart.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPart/Classification/BuildingCategory2.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPart/Classification/BuildingCategory2.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPart/Classification/BuildingCategory2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPart/Classification/BuildingCategory2.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPart/IBuildingPart.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPart/IBuildingPart.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPart/IPowerBPart.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPart/IPowerBPart.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPlacer/BuildingPlacer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPlacer/BuildingPlacer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/Binary/TableData/ItemTableData.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/Binary/TableData/ItemTableData.bytes" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/Binary/TextContent/BuildingSystem/UI/Category.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/Binary/TextContent/BuildingSystem/UI/Category.bytes" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/Binary/TextContent/BuildingSystem/UI/Type.bytes" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/Binary/TextContent/BuildingSystem/UI/Type.bytes" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/ExternalFacility_PowerCore_Base_100.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/ExternalFacility_PowerCore_Base_100.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/ExternalFacility_PowerSub_Base_100.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/ExternalFacility_PowerSub_Base_100.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Furniture_CeilingLamp_Base_100.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Furniture_CeilingLamp_Base_100.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Furniture_Chair_Base_100.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Furniture_Chair_Base_100.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Furniture_Clock_Base_100.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Furniture_Clock_Base_100.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Floor_Base_20.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Floor_Base_20.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Floor_Triangle_20.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Floor_Triangle_20.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Base_100.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Base_100.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Quagrant_100.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Quagrant_100.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Quagrant_75.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Quagrant_75.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Triangle_100.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Triangle_100.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Triangle_75.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Triangle_75.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Base_20.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Base_20.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Quagrant_20.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Quagrant_20.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Triangle_20.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Triangle_20.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_BaseCorner_100.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_BaseCorner_100.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_BaseCorner_200.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_BaseCorner_200.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_BaseCorner_400.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_BaseCorner_400.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Quagrant_100.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Quagrant_100.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Quagrant_200.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Quagrant_200.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Quagrant_400.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Quagrant_400.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Triangle_200.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Triangle_200.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Base_100.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Base_100.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Quagrant_100.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Quagrant_100.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Quagrant_200.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Quagrant_200.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Triangle_100.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Triangle_100.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Triangle_200.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Triangle_200.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/Fonts/MSYH SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/Fonts/MSYH SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/ISland_Manager.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/ISland_Manager.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/Island_Base.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/Island_Base.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/Island_Main.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/Island_Main.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/Island_Sub.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/Island_Sub.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/ExternalFacility_PowerCore_Base_100.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/ExternalFacility_PowerCore_Base_100.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/ExternalFacility_PowerSub_Base_100.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/ExternalFacility_PowerSub_Base_100.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Furniture_CeilingLamp_Base_0.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Furniture_CeilingLamp_Base_0.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Furniture_Chair_Base_0.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Furniture_Chair_Base_0.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Furniture_Clock.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Furniture_Clock.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Beam_Base_100.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Beam_Base_100.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Beam_Base_200.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Beam_Base_200.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Door_Base_20.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Door_Base_20.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Base_20.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Base_20.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Base_50.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Base_50.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Quagrant_20.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Quagrant_20.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Quagrant_50.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Quagrant_50.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Triangle_20.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Triangle_20.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Triangle_50.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Triangle_50.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_FoundationEdge_Base_100.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_FoundationEdge_Base_100.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_FoundationEdge_Base_75.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_FoundationEdge_Base_75.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_FoundationEdge_Quagrant_100.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_FoundationEdge_Quagrant_100.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_FoundationEdge_Quagrant_75.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_FoundationEdge_Quagrant_75.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_FoundationEdge_Triangle_100.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_FoundationEdge_Triangle_100.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_FoundationEdge_Triangle_75.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_FoundationEdge_Triangle_75.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Foundation_Base_20.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Foundation_Base_20.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Foundation_Base_50.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Foundation_Base_50.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Foundation_Quagrant_20.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Foundation_Quagrant_20.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Foundation_Quagrant_50.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Foundation_Quagrant_50.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Foundation_Triangle_20.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Foundation_Triangle_20.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Foundation_Triangle_50.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Foundation_Triangle_50.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Pillar_Base_100.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Pillar_Base_100.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Pillar_Base_200.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Pillar_Base_200.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Roof_Base_100.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Roof_Base_100.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Roof_Base_200.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Roof_Base_200.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Roof_Base_400.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Roof_Base_400.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Roof_Triangle_100.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Roof_Triangle_100.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Roof_Triangle_200.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Roof_Triangle_200.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Roof_Triangle_400.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Roof_Triangle_400.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Wall_Base_100.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Wall_Base_100.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Wall_Base_200.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Wall_Base_200.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Window_Base_20.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Window_Base_20.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/yangLe/_LandMassExpandTest.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/yangLe/_LandMassExpandTest.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/BuildPowerCore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/BuildPowerCore.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/BuildPowerIslandManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/BuildPowerIslandManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/BuildPowerSub.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/BuildPowerSub.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/IslandBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/IslandBase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/IslandManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/IslandManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ExternProject/_EXE/DataToBinary/Json/TextContent/BuildingSystem/UI/Type.json" beforeDir="false" afterPath="$PROJECT_DIR$/ExternProject/_EXE/DataToBinary/Json/TextContent/BuildingSystem/UI/Type.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,12 +125,13 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9b9fa26e86114fcba20da47317e725fe172c00/d9/5928a646/Transform.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9b9fa26e86114fcba20da47317e725fe172c00/f4/4d115c28/Vector3.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3ea01e77be99618395f448b16bd7cc2bd4248bd9e5d8474964b2d97f39c5d74/System.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/IPowerBPart.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d44b17e136d09081da1e8fd0e8c83fde60e11818b9f2442d7ed8cb733fae895e/System.Collections.Generic.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.universal@14.0.8/Shaders/Lit.shader" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.timeline@1.7.5/Editor/Animation/TimelineAnimationUtilities.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="Toolset" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -206,7 +230,16 @@
       <workItem from="1704936537921" duration="2555000" />
       <workItem from="1704955125723" duration="11786000" />
       <workItem from="1704987011458" duration="2123000" />
-      <workItem from="1705023590151" duration="10938000" />
+      <workItem from="1705023590151" duration="23268000" />
+      <workItem from="1705073945000" duration="28000" />
+      <workItem from="1705073985533" duration="2641000" />
+      <workItem from="1705115695792" duration="2908000" />
+      <workItem from="1705127197260" duration="10263000" />
+      <workItem from="1705220699014" duration="4362000" />
+      <workItem from="1705234036138" duration="640000" />
+      <workItem from="1705283858171" duration="9943000" />
+      <workItem from="1705331005702" duration="1161000" />
+      <workItem from="1705332213487" duration="1319000" />
     </task>
     <servers />
   </component>

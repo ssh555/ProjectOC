@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2416526535
+CRC: 3798352463
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 02626cca5873be5f9f7f72f6ca6c07df
+    Hash: 4838b647b6576047c2e9aa69b8167cfa
   TypeTreeHash:
     serializedVersion: 2
     Hash: b90360021f95c293bf3f1bef88434a62
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 02626cca5873be5f9f7f72f6ca6c07df
+    Hash: 4838b647b6576047c2e9aa69b8167cfa
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -23,6 +23,7 @@ ClassTypes:
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Beam.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/ElectAppliance.png
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Roof.png
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Materials/Pillar.mat
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/CeilingLamp.png

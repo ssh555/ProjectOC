@@ -1,17 +1,35 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace ML.Engine.BuildingSystem
 {
     public class BuildPowerCore : MonoBehaviour
     {
-        public int powerSupportRange;
+        [SerializeField] private Transform powerSupportVFX;
+        
+        private int powerSupportRange = 20;
+        [ShowInInspector]public int PowerSupportRange
+        {
+            get => powerSupportRange;
+            set
+            {
+                powerSupportRange = value;
+                float _localScale = value * 0.2f;
+                powerSupportVFX.transform.localScale = new Vector3(_localScale,1,_localScale);
+            }
+        }
 
-        //光圈特效
-        [SerializeField] private Transform powerSupportVisual;
+        private void Awake()
+        {
+            BuildPowerIslandManager.Instance.powerCores.Add(this);
+        }
+        void OnDestroy()
+        {
+            BuildPowerIslandManager.Instance.powerCores.Remove(this);
+        }
 
-        //可建造范围
-        [SerializeField] int buildableRange;
     }
 }

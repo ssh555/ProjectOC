@@ -69,3 +69,6 @@ MonoBehaviour:
   - name: PowerSub
     displayName: "\u5BFC\u6D41\u8282\u70B9"
     value: 201
+  - name: ElectAppliance
+    displayName: "\u7528\u7535\u5668"
+    value: 202

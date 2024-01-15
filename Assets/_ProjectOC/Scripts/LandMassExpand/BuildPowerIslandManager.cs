@@ -1,74 +1,125 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.Manager;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ML.Engine.BuildingSystem
 {
-    public class BuildPowerIslandManager : Manager.LocalManager.ILocalManager
+    public class BuildPowerIslandManager : MonoBehaviour, Manager.LocalManager.ILocalManager
     {
-        private static BuildPowerIslandManager instance = null;
+        public static BuildPowerIslandManager Instance = null;
 
-        public static BuildPowerIslandManager Instance
+        void OnDestroy()
         {
-            get
+            if(Instance == this)
             {
-                if (instance == null)
-                {
-                    instance = new BuildPowerIslandManager();
-                    Manager.GameManager.Instance.RegisterLocalManager(instance);
-                }
-                return instance;
-            }    
-        }
-        ~BuildPowerIslandManager()
-        {
-            if(instance == this)
-            {
-                instance = null;
+                Instance = null;
             }
         }
-
-        void Start()
+        
+        private void Awake()
         {
-            
+            if (Instance != null)
+            {
+                Destroy(this.gameObject);
+            }
+            Instance = this;
         }
-        public List<BuildPowerCore> powerCores;
-        public List<BuildPowerSub> powerSubs;
 
+        private void Start()
+        {
+            GameManager.Instance.RegisterLocalManager(this);
+        }
 
-
+        public List<BuildPowerCore> powerCores = new List<BuildPowerCore>();
+        public List<BuildPowerSub> powerSubs = new List<BuildPowerSub>();
+        public List<ElectAppliance> electAppliances = new List<ElectAppliance>();
+        
+        
         //重新计算电线受电情况
         public void PowerSupportCalculation()
         {
-            List<BuildPowerSub> detectInPower;
-            
-            foreach (var _powerSub in powerSubs)
+            List<BuildPowerSub> detectInPowers = new List<BuildPowerSub>();
+            //powerSubs.RemoveAll(p => p == null);
+            //powerCores.RemoveAll(p => p == null);
+            foreach (var powerSub in powerSubs)
             {
-                _powerSub.inPower = false;
+                foreach (var powerCore in powerCores)
+                {
+                    if (CoverEachOther(powerCore, powerSub))
+                    {
+                        detectInPowers.Add(powerSub);                    
+                        continue;
+                    } 
+                }
             }
+            
+            
+            List<BuildPowerSub> inPowers = new List<BuildPowerSub>(detectInPowers);
+            List<BuildPowerSub> unPowers = new List<BuildPowerSub>(powerSubs);
+            foreach (var detectInPower in detectInPowers)
+            {
+                unPowers.Remove(detectInPower);
+            }
+            
+            while (detectInPowers.Count !=0)
+            {
+                List<BuildPowerSub> tempInPowers = new List<BuildPowerSub>();
+                foreach (var unPower in unPowers)
+                {
+                    foreach (var detectInPower in detectInPowers)
+                    {
+                        if (CoverEachOther(unPower, detectInPower))
+                        {
+                            tempInPowers.Add(unPower);
+                            continue;
+                        }
+                    }
+                }
+                
+                detectInPowers.Clear();
+                detectInPowers = tempInPowers;
+                foreach (var detectInPower in detectInPowers)
+                {
+                    inPowers.Add(detectInPower);
+                    unPowers.Remove(detectInPower);
+                }
+            }
+
+            foreach (var inPower in inPowers)
+            {
+                inPower.Inpower = true;
+            }
+            foreach (var unPower in unPowers)
+            {
+                unPower.Inpower = false;
+            }
+            
         }
 
-        bool CoverEachOther(BuildPowerCore buildPowerCore, BuildPowerSub buildPowerSub)
+        public bool CoverEachOther(BuildPowerCore buildPowerCore, BuildPowerSub buildPowerSub)
         {
-            float r1 = buildPowerCore.powerSupportRange;
-            float r2 = buildPowerSub.powerSupportRange;
+            float r1 = buildPowerCore.PowerSupportRange;
+            float r2 = buildPowerSub.PowerSupportRange;
             Vector3 pos1 = buildPowerCore.transform.position;
-            Vector3 pos2 = buildPowerCore.transform.position;
+            Vector3 pos2 = buildPowerSub.transform.position;
             return RangeCoverEachOther(r1, r2, pos1, pos2);
         }
 
-        bool CoverEachOther(BuildPowerSub buildPowerSub1, BuildPowerSub buildPowerSub2)
+        public bool CoverEachOther(BuildPowerSub buildPowerSub1, BuildPowerSub buildPowerSub2)
         {
-            float r1 = buildPowerSub1.powerSupportRange;
-            float r2 = buildPowerSub2.powerSupportRange;
+            float r1 = buildPowerSub1.PowerSupportRange;
+            float r2 = buildPowerSub2.PowerSupportRange;
             Vector3 pos1 = buildPowerSub1.transform.position;
             Vector3 pos2 = buildPowerSub2.transform.position;
             return RangeCoverEachOther(r1, r2, pos1, pos2);
         }
 
-        bool RangeCoverEachOther(float r1, float r2, Vector3 pos1, Vector3 pos2)
+        public bool RangeCoverEachOther(float r1, float r2, Vector3 pos1, Vector3 pos2)
         {
             float distanceSquared = (pos1 - pos2).sqrMagnitude;
             float radiusSunSquared = (r1 + r2) * (r1 + r2);

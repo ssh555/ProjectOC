@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Room_FoundationEdge_Base_75
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 2
+    SerializedFormat: 0
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 

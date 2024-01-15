@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2710978439
+CRC: 1178441142
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e66862d07651e066a7d9a4f3e82b5be6
+    Hash: 0fcadf70a39077765420b980a70b2b3b
   TypeTreeHash:
     serializedVersion: 2
-    Hash: db43b6c3257261bb9c78497c93c369b5
+    Hash: 31b0868dc66f1d957353a3ccd3f34d00
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: e66862d07651e066a7d9a4f3e82b5be6
+    Hash: 0fcadf70a39077765420b980a70b2b3b
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -28,12 +28,16 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 48
   Script: {instanceID: 0}
-- Class: 64
-  Script: {instanceID: 0}
 - Class: 65
   Script: {instanceID: 0}
 - Class: 114
+  Script: {fileID: 11500000, guid: 1b69e2587bc92af46baf9b9c8a18bc47, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4eaeb81a05cd54643b2d664b64e8dc44, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: eb3d211586925844984e282ee1983188, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 84b45a722afc9f748bdef2e991e7ddaf, type: 3}
 - Class: 114
@@ -112,4 +116,5 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Quagrant_75.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_BaseCorner_200.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Stone2.mat
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/ExternalFacility_ElectAppliance_Base_100.prefab
 Dependencies: []

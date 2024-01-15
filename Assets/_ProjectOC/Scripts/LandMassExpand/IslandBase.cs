@@ -28,10 +28,11 @@ namespace ML.Engine.LandMassExpand
             for(int i = 0;i<islandMapRange.Length;i++)
             {
                 GameObject colliderGo = new GameObject("collider"+i);
-                BoxCollider boxCollid = colliderGo.AddComponent<BoxCollider>();
-                boxCollid.size = Vector3.one * IslandManager.MapSize;
-                colliderGo.transform.localPosition = new Vector3(islandMapRange[i].x,0,islandMapRange[i].y)*IslandManager.MapSize;
                 colliderGo.transform.SetParent(colliderTransform);
+                BoxCollider boxCollid = colliderGo.AddComponent<BoxCollider>();
+                int mapSize = FindObjectOfType<IslandManager>().GetComponent<IslandManager>().mapSize;
+                boxCollid.size = Vector3.one * mapSize;
+                colliderGo.transform.localPosition = new Vector3(islandMapRange[i].x,0,islandMapRange[i].y)*mapSize;
             }
         }
     }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ExternalFacility_PowerCore_Base_100
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 2
+    SerializedFormat: 0
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 

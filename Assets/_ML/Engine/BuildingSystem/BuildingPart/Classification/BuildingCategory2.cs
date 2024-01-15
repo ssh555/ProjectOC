@@ -35,5 +35,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		PowerCore = 200,
 		[LabelText("导流节点")]
 		PowerSub = 201,
+		[LabelText("用电器")]
+		ElectAppliance = 202,
 	}
 }

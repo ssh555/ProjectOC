@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace ML.Engine.LandMassExpand
 {
-    public class IslandManager : Manager.LocalManager.ILocalManager
+    public class IslandManager : MonoBehaviour, Manager.LocalManager.ILocalManager
     {
-        private static IslandManager instance = null;
+        public static IslandManager instance = null;
 
         public static IslandManager Instance
         {
@@ -29,8 +30,8 @@ namespace ML.Engine.LandMassExpand
             }
         }
 
-        public int MapSize = 100;
-        private List<IslandMain> islandMains;
+        public int mapSize = 100;
+        [SerializeField]private List<IslandMain> islandMains;
 
         bool UnlockIsland(int island_Index)
         {

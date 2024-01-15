@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 4002208646
+CRC: 2823053905
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 37887cef4c9aa344c46df6ea7f2e6dcf
+    Hash: 127bcedb4620cba5a7fc554a51e1f8c1
   TypeTreeHash:
     serializedVersion: 2
     Hash: 632c17e5ae17fbf2d2d578d89e423c63
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 37887cef4c9aa344c46df6ea7f2e6dcf
+    Hash: 127bcedb4620cba5a7fc554a51e1f8c1
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -69,7 +69,7 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Texture2D/Blue.png
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/TestMat/Green.mat
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Furniture_CeilingLamp_Base_0.asset
-- Assets/_ML/MLResources/BuildingSystem/MatPackage/Furniture_Clock.asset
+- Assets/_ML/MLResources/BuildingSystem/MatPackage/Furniture_Clock_Base_0.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/TestMat/Orange.mat
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Door_Base_20.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Floor_Triangle_50.asset

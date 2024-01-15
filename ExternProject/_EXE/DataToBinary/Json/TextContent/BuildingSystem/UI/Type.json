@@ -96,5 +96,12 @@
             "Chinese": "导流节点",
             "English": "PowerSub"
         }
+    },
+    {
+        "name": "ElectAppliance",
+        "description": {
+            "Chinese": "用电器",
+            "English": "ElectAppliance"
+        }
     }
 ]
