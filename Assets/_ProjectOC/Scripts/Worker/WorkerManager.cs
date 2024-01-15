@@ -44,7 +44,6 @@ namespace ProjectOC.WorkerNS
             }
             return result;
         }
-
         public void RemoveWorker(Worker worker)
         {
             this.Workers.Remove(worker);
