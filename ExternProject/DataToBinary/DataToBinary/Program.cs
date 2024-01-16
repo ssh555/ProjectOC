@@ -1,5 +1,4 @@
-﻿using DataToBinary;
-using ML.Engine.InventorySystem;
+﻿using ML.Engine.InventorySystem;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.TextContent;
 using Newtonsoft.Json;
@@ -10,6 +9,7 @@ using System.Reflection;
 using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
+using static ProjectOC.InventorySystem.UI.UIInfiniteInventory;
 
 namespace ExcelToJson
 {
@@ -65,9 +65,11 @@ namespace ExcelToJson
             DataToBinaryManager DBMgr = new DataToBinaryManager();
 
             #region EXCEL
-            // to-do: 在处理前或处理后需要根据Recipe表、Build表需要合成表JSON文件，用于合成系统
-            // 合成表二进制文件
+            // to-do: 在处理前或处理后需要根据Recipe表、Build表需要合成表Binary文件，用于合成系统
 
+
+            // 合成表二进制文件
+            // 必须是.bytes后缀
             List<EBConfig> configs = new List<EBConfig>();
             // 科技树
             // to-do : 输出路径待修改 -> 更改为unity/assets下面的正确路径
@@ -104,11 +106,21 @@ namespace ExcelToJson
             Console.WriteLine("\n----------------------------------------");
             Console.WriteLine("EXCEL转换完成!!!");
 
+
+            // 1. 读入需要的EXCEL表
+
+            // 2. 分别解析表格并将数据暂存在内存中
+
+            // 3. 将解析完成的数据存为对应的二进制文件
+
+            // 4. 将暂存的数据进行处理生成其他数据的二进制文件(比如合成表)
+
             #endregion
 
             #region JSON
 
             // ../../../Assets/_ProjectOC/Resources/Binary/TableData/TechTree
+            // 必须是.bytes后缀
             List<JBConfig> jBConfigs = new List<JBConfig>();
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TableData/TechTree.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TableData/TechTree.bytes", type = typeof(ProjectOC.TechTree.TechPoint[]) });
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TableData/CompositionTableData.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TableData/CompositionTableData.bytes", type = typeof(CompositionJsonData[]) });
