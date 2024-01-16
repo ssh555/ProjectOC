@@ -1,16 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using ML.Engine.BuildingSystem.BuildingPart;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace ML.Engine.BuildingSystem.BuildingPart
+namespace ProjectOC.LandMassExpand
 {
     public class ElectAppliance : BuildingPart, IPowerBPart
     {
-        [Header("用电器部分")] private int powerCount;
+        [Header("用电器部分")] private int powerCount = 0;
 
-        public int PowerCount
+        [ShowInInspector]public int PowerCount
         {
             get => powerCount;
             set
@@ -27,6 +25,17 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             }
         }
 
+        private int powerSupportRange;
+
+        [ShowInInspector]public int PowerSupportRange
+        {
+            get => powerSupportRange;
+            set
+            {
+                powerSupportRange = value;
+            }
+        }
+
         private bool inpower = false;
 
         [ShowInInspector]public bool Inpower
@@ -35,12 +44,12 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             set
             {
                 inpower = value;
-                Debug.Log("Color: " + powerVFXMat.GetColor("_Color"));
                 
                 if (inpower)
                     powerVFXMat.SetColor("_Color",inPowerColor);
                 else
                     powerVFXMat.SetColor("_Color",unPowerColor);
+                //Debug.Log("Color: " + powerVFXMat.GetColor("_Color"));
             }
         }
 
@@ -48,7 +57,6 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         private Material powerVFXMat;
         private new void Awake()
         {
-            BuildPowerIslandManager.Instance.electAppliances.Add(this);
             powerVFXMat = GetComponent<Renderer>().material;
             GetComponent<Renderer>().sharedMaterial = powerVFXMat;
 
@@ -56,11 +64,19 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         }
         void OnDestroy()
         {
-            BuildPowerIslandManager.Instance.electAppliances.Remove(this);
+            if (BuildPowerIslandManager.Instance != null && Inpower && BuildPowerIslandManager.Instance.electAppliances.Contains(this))
+            {
+                BuildPowerIslandManager.Instance.electAppliances.Remove(this);
+            }
         }
 
         public new void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
+            //如果没有，说明刚建造则加入
+            if (!BuildPowerIslandManager.Instance.electAppliances.Contains(this))
+            {
+                BuildPowerIslandManager.Instance.electAppliances.Add(this);
+            }
             RecalculatePowerCount();
         }
 
@@ -69,14 +85,14 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             int tempCount = 0;
             foreach (var powerCore in BuildPowerIslandManager.Instance.powerCores)
             {
-                if(BuildPowerIslandManager.Instance.RangeCoverEachOther(0, powerCore.PowerSupportRange, 
+                if(BuildPowerIslandManager.Instance.CoverEachOther(0, powerCore.PowerSupportRange, 
                        transform.position, powerCore.transform.position))
                     tempCount++;
             }
             
             foreach (var powerSub in BuildPowerIslandManager.Instance.powerSubs)
             {
-                if(BuildPowerIslandManager.Instance.RangeCoverEachOther(0, powerSub.PowerSupportRange, 
+                if(BuildPowerIslandManager.Instance.CoverEachOther(0, powerSub.PowerSupportRange, 
                        transform.position, powerSub.transform.position))
                     tempCount++;
             }

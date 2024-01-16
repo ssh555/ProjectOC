@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6570629409126202675}
   - component: {fileID: 6004092562024517639}
   - component: {fileID: 3517299277645353592}
-  - component: {fileID: 8953419499220050681}
   - component: {fileID: 5603806638364125606}
   m_Layer: 7
   m_Name: ExternalFacility_PowerCore_Base_100
@@ -35,7 +34,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1464504560573181443}
-  - {fileID: 1707868264487999719}
   - {fileID: 1559227801019406495}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -110,7 +108,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.49, y: 9.99, z: 2.49}
   m_Center: {x: 0, y: 4.99, z: 0}
---- !u!114 &8953419499220050681
+--- !u!114 &5603806638364125606
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -119,7 +117,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1171554598088775692}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84b45a722afc9f748bdef2e991e7ddaf, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b69e2587bc92af46baf9b9c8a18bc47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
@@ -133,96 +131,7 @@ MonoBehaviour:
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 0, z: 0, w: 0}
   activeSocketIndex: 0
---- !u!114 &5603806638364125606
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1171554598088775692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b69e2587bc92af46baf9b9c8a18bc47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   powerSupportVFX: {fileID: 1559227801019406495}
---- !u!1 &5131526647692448502
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1707868264487999719}
-  - component: {fileID: 4214557176851318711}
-  - component: {fileID: 5272586521715389566}
-  - component: {fileID: 7136190846626648685}
-  m_Layer: 8
-  m_Name: BuildingArea
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1707868264487999719
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5131526647692448502}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 100, y: 0.099999994, z: 100}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7158257889511601892}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &4214557176851318711
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5131526647692448502}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &5272586521715389566
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5131526647692448502}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.99, y: 1, z: 1.99}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7136190846626648685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5131526647692448502}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88dfd9a1d40070e45bc302b503615a5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsCanRotate: 0
-  Type: 8192
 --- !u!1 &9122978137770692295
 GameObject:
   m_ObjectHideFlags: 0

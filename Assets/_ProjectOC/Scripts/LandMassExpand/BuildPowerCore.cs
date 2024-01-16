@@ -1,12 +1,12 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using ML.Engine.InventorySystem.CompositeSystem;
+using ML.Engine.BuildingSystem.BuildingPart;
 
-namespace ML.Engine.BuildingSystem
+
+namespace ProjectOC.LandMassExpand
 {
-    public class BuildPowerCore : MonoBehaviour
+    public class BuildPowerCore : BuildingPart,IPowerBPart
     {
         [SerializeField] private Transform powerSupportVFX;
         
@@ -21,15 +21,30 @@ namespace ML.Engine.BuildingSystem
                 powerSupportVFX.transform.localScale = new Vector3(_localScale,1,_localScale);
             }
         }
+        public int PowerCount { get; set; }
+        public bool Inpower { get; set; }
 
-        private void Awake()
+        private new void Awake()
         {
-            BuildPowerIslandManager.Instance.powerCores.Add(this);
+            base.Awake();
         }
         void OnDestroy()
         {
-            BuildPowerIslandManager.Instance.powerCores.Remove(this);
+            if (BuildPowerIslandManager.Instance != null && BuildPowerIslandManager.Instance.powerCores.Contains(this))
+            {
+                BuildPowerIslandManager.Instance.powerCores.Remove(this);
+            }
+            
         }
 
+        public new void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
+        {
+            //如果List没有，说明刚建造则加入
+            if (!BuildPowerIslandManager.Instance.powerCores.Contains(this))
+            {
+                BuildPowerIslandManager.Instance.powerCores.Add(this);
+            }
+            BuildPowerIslandManager.Instance.PowerSupportCalculation();
+        }
     }
 }

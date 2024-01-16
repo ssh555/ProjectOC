@@ -1,10 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace ML.Engine.LandMassExpand
+
+namespace ProjectOC.LandMassExpand
 {
-    public class IslandManager : MonoBehaviour, Manager.LocalManager.ILocalManager
+    public class IslandManager : MonoBehaviour, ML.Engine.Manager.LocalManager.ILocalManager
     {
         public static IslandManager instance = null;
 
@@ -15,24 +19,25 @@ namespace ML.Engine.LandMassExpand
                 if (instance == null)
                 {
                     instance = new IslandManager();
-                    Manager.GameManager.Instance.RegisterLocalManager(instance);
+                    ML.Engine.Manager.GameManager.Instance.RegisterLocalManager(instance);
                 }
 
                 return instance;
             }
         }
-
-        ~IslandManager()
+        
+        void OnDestroy()
         {
             if (instance == this)
             {
                 instance = null;
-            }
+            }    
         }
-
-        public int mapSize = 100;
+        
+        public int mapGridSize = 100;
+        public Vector2Int maxSize;
         [SerializeField]private List<IslandMain> islandMains;
-
+        private IslandBase[,] islandGrids;
         bool UnlockIsland(int island_Index)
         {
             return true;
@@ -42,6 +47,11 @@ namespace ML.Engine.LandMassExpand
         public void IslandRandomGeneration()
         {
             //to-do
+        }
+
+        private void OnValidate()
+        {
+            islandGrids = new IslandBase[maxSize.x,maxSize.y];
         }
     }
 }

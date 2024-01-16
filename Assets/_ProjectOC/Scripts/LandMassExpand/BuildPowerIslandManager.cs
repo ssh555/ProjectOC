@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.Manager;
-using Unity.VisualScripting;
-using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace ML.Engine.BuildingSystem
+using UnityEngine;
+
+
+namespace ProjectOC.LandMassExpand
 {
-    public class BuildPowerIslandManager : MonoBehaviour, Manager.LocalManager.ILocalManager
+    public class BuildPowerIslandManager : MonoBehaviour, ML.Engine.Manager.LocalManager.ILocalManager
     {
         public static BuildPowerIslandManager Instance = null;
 
@@ -83,10 +83,12 @@ namespace ML.Engine.BuildingSystem
                 
                 detectInPowers.Clear();
                 detectInPowers = tempInPowers;
+                
                 foreach (var detectInPower in detectInPowers)
                 {
                     inPowers.Add(detectInPower);
                     unPowers.Remove(detectInPower);
+                    
                 }
             }
 
@@ -101,25 +103,16 @@ namespace ML.Engine.BuildingSystem
             
         }
 
-        public bool CoverEachOther(BuildPowerCore buildPowerCore, BuildPowerSub buildPowerSub)
+        public bool CoverEachOther(IPowerBPart powerBPart1, IPowerBPart powerBPart2)
         {
-            float r1 = buildPowerCore.PowerSupportRange;
-            float r2 = buildPowerSub.PowerSupportRange;
-            Vector3 pos1 = buildPowerCore.transform.position;
-            Vector3 pos2 = buildPowerSub.transform.position;
-            return RangeCoverEachOther(r1, r2, pos1, pos2);
+            float r1 = powerBPart1.PowerSupportRange;
+            float r2 = powerBPart2.PowerSupportRange;
+            Vector3 pos1 = powerBPart1.transform.position;
+            Vector3 pos2 = powerBPart2.transform.position;
+            return CoverEachOther(r1, r2, pos1, pos2);
         }
-
-        public bool CoverEachOther(BuildPowerSub buildPowerSub1, BuildPowerSub buildPowerSub2)
-        {
-            float r1 = buildPowerSub1.PowerSupportRange;
-            float r2 = buildPowerSub2.PowerSupportRange;
-            Vector3 pos1 = buildPowerSub1.transform.position;
-            Vector3 pos2 = buildPowerSub2.transform.position;
-            return RangeCoverEachOther(r1, r2, pos1, pos2);
-        }
-
-        public bool RangeCoverEachOther(float r1, float r2, Vector3 pos1, Vector3 pos2)
+        
+        public bool CoverEachOther(float r1, float r2, Vector3 pos1, Vector3 pos2)
         {
             float distanceSquared = (pos1 - pos2).sqrMagnitude;
             float radiusSunSquared = (r1 + r2) * (r1 + r2);

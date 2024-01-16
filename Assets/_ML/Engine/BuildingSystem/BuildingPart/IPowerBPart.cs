@@ -1,11 +1,12 @@
 using UnityEngine;
 
-namespace ML.Engine.BuildingSystem.BuildingPart
+namespace ProjectOC.LandMassExpand
 {
-    public interface IPowerBPart : IBuildingPart
+    public interface IPowerBPart : ML.Engine.BuildingSystem.BuildingPart.IBuildingPart
     {
         public int PowerCount { get; set; }
-        
+        public int PowerSupportRange { get; set; }
         public bool Inpower { get; set; }
+        
     }
 }

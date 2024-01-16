@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 3251213772
+CRC: 2299021336
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -23,7 +23,6 @@ AssetBundleManifest:
         Dependency_0: animation/character/player/model
         Dependency_1: prefabs/character/player
         Dependency_2: materials
-        Dependency_3: prefabs/buildingsystem/bpart
     Info_5:
       Name: materials
       Dependencies: {}

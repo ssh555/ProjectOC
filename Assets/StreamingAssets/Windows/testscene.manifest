@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 490451911
+CRC: 2273158954
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 2b847c73bf45b4ee63f2d8de9dbf4e41
+    Hash: 980822b52eefb100d912f48736a6292a
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 61318bcdf0dcb15dacd26b795fdf6fd7
+    Hash: 3de8049eae715b13ced1a8b5d943f334
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 2b847c73bf45b4ee63f2d8de9dbf4e41
+    Hash: 980822b52eefb100d912f48736a6292a
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -31,6 +31,8 @@ ClassTypes:
 - Class: 48
   Script: {instanceID: 0}
 - Class: 54
+  Script: {instanceID: 0}
+- Class: 64
   Script: {instanceID: 0}
 - Class: 65
   Script: {instanceID: 0}
@@ -77,6 +79,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: d37d3d4c9a445db4dbea37f893d6ff3d, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f6da62ef2a40c0440adb4f3243b15be8, type: 3}
@@ -95,8 +99,6 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: a444fb26d79a4a94ebd9400ba547e490, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: eea3d28ffbcb4cd47a326cb08ba74d18, type: 3}
@@ -107,9 +109,9 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: eb3d211586925844984e282ee1983188, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: af8d7691ad33d024bb987315792c6fb6, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 39fa3d8997a24136984ca6e2c99902bc, type: 3}
 - Class: 114
@@ -132,6 +134,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 18e0a5fd7f32347419b785bf00a72db7, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: a79d93bee2b59d94fa12949e4c5e61d1, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -166,5 +170,4 @@ Assets:
 Dependencies:
 - D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
 - D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart
 - D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
