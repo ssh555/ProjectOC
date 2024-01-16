@@ -7,28 +7,8 @@ using System.Linq;
 
 namespace ML.Engine.InventorySystem
 {
-    public sealed class RecipeManager : Manager.GlobalManager.IGlobalManager
+    public sealed class RecipeManager : Manager.LocalManager.ILocalManager
     {
-        #region Instance
-        private RecipeManager(){}
-
-        private static RecipeManager instance;
-
-        public static RecipeManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new RecipeManager();
-                    GameManager.Instance.RegisterGlobalManager(instance);
-                    instance.LoadTableData();
-                }
-                return instance;
-            }
-        }
-        #endregion
-
         #region Load And Data
         /// <summary>
         /// 是否已加载完数据
@@ -47,8 +27,8 @@ namespace ML.Engine.InventorySystem
             public string ID;
             public int Sort;
             public RecipeCategory Category;
-            public Dictionary<string, int> Raw;
-            public Dictionary<string, int> Product;
+            public List<Tuple<string, int>> Raw;
+            public List<Tuple<string, int>> Product;
             public int TimeCost;
             public int ExpRecipe;
         }
@@ -133,20 +113,28 @@ namespace ML.Engine.InventorySystem
 
         public Dictionary<string, int> GetRaw(string id)
         {
-            if (!RecipeTableDict.ContainsKey(id))
+            Dictionary<string, int> result = new Dictionary<string, int>();
+            if (RecipeTableDict.ContainsKey(id))
             {
-                return new Dictionary<string, int>();
+                foreach (var tuple in RecipeTableDict[id].Raw)
+                {
+                    result.Add(tuple.Item1, tuple.Item2);
+                }
             }
-            return RecipeTableDict[id].Raw;
+            return result;
         }
 
         public Dictionary<string, int> GetProduct(string id)
         {
-            if (!RecipeTableDict.ContainsKey(id))
+            Dictionary<string, int> result = new Dictionary<string, int>();
+            if (RecipeTableDict.ContainsKey(id))
             {
-                return new Dictionary<string, int>();
+                foreach (var tuple in RecipeTableDict[id].Product)
+                {
+                    result.Add(tuple.Item1, tuple.Item2);
+                }
             }
-            return RecipeTableDict[id].Product;
+            return result;
         }
 
         public int GetTimeCost(string id)

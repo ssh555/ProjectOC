@@ -1,3 +1,4 @@
+using ProjectOC.ManagerNS;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,19 +36,19 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// 序号，用于排序
         /// </summary>
-        public int Sort { get => SkillManager.Instance.GetSort(ID); }
+        public int Sort { get => LocalGameManager.Instance.SkillManager.GetSort(ID); }
         /// <summary>
         /// 技能类型
         /// </summary>
-        public WorkType SkillType { get => SkillManager.Instance.GetSkillType(ID); }
+        public WorkType SkillType { get => LocalGameManager.Instance.SkillManager.GetSkillType(ID); }
         /// <summary>
         /// 技能描述
         /// </summary>
-        public string Desciption { get => SkillManager.Instance.GetItemDescription(ID); }
+        public string Desciption { get => LocalGameManager.Instance.SkillManager.GetItemDescription(ID); }
         /// <summary>
         /// 技能效果描述
         /// </summary>
-        public string EffectsDescription { get => SkillManager.Instance.GetEffectsDescription(ID); }
+        public string EffectsDescription { get => LocalGameManager.Instance.SkillManager.GetEffectsDescription(ID); }
         #endregion
 
         public Skill(SkillManager.SkillTableJsonData config)
@@ -55,7 +56,7 @@ namespace ProjectOC.WorkerNS
             this.ID = config.ID;
             foreach (string effectID in config.Effects)
             {
-                Effect effect = EffectManager.Instance.SpawnEffect(effectID);
+                Effect effect = LocalGameManager.Instance.EffectManager.SpawnEffect(effectID);
                 if (effect != null)
                 {
                     this.Effects.Add(effect);

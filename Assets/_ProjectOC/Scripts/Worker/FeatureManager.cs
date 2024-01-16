@@ -8,34 +8,8 @@ using UnityEngine;
 namespace ProjectOC.WorkerNS
 {
     [System.Serializable]
-    public sealed class FeatureManager : ML.Engine.Manager.GlobalManager.IGlobalManager
+    public sealed class FeatureManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
-        #region Instance
-        private FeatureManager()
-        {
-            FeatureTypeDict.Add(FeatureType.Buff, new List<string>());
-            FeatureTypeDict.Add(FeatureType.Debuff, new List<string>());
-            FeatureTypeDict.Add(FeatureType.None, new List<string>());
-            FeatureTypeDict.Add(FeatureType.Race, new List<string>());
-        }
-
-        private static FeatureManager instance;
-
-        public static FeatureManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new FeatureManager();
-                    GameManager.Instance.RegisterGlobalManager(instance);
-                    instance.LoadTableData();
-                }
-                return instance;
-            }
-        }
-        #endregion
-
         #region Load And Data
         /// <summary>
         /// 是否已加载完数据

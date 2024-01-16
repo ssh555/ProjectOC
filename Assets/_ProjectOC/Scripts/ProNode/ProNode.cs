@@ -6,7 +6,6 @@ using ProjectOC.WorkerNS;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-using ProjectOC.StoreNS;
 
 namespace ProjectOC.ProNodeNS
 {
@@ -14,7 +13,7 @@ namespace ProjectOC.ProNodeNS
     /// 生产节点
     /// </summary>
     [System.Serializable]
-    public class ProNode: IMission, IInventory
+    public class ProNode: IMissionObj, IInventory
     {
         /// <summary>
         /// 对应的全局生产节点
@@ -35,44 +34,44 @@ namespace ProjectOC.ProNodeNS
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name { get => ProNodeManager.Instance.GetName(ID); }
+        public string Name { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetName(ID); }
         /// <summary>
         /// 生产节点类型
         /// </summary>
-        public ProNodeType ProNodeType { get => ProNodeManager.Instance.GetProNodeType(ID); }
+        public ProNodeType ProNodeType { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetProNodeType(ID); }
         /// <summary>
         /// 生产节点类目
         /// </summary>
-        public RecipeCategory Category { get => ProNodeManager.Instance.GetCategory(ID); }
+        public RecipeCategory Category { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetCategory(ID); }
         /// <summary>
         /// 生产节点可执行配方类目
         /// </summary>
-        public List<RecipeCategory> RecipeCategoryFilter { get => ProNodeManager.Instance.GetRecipeCategoryFilterd(ID); }
+        public List<RecipeCategory> RecipeCategoryFilter { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetRecipeCategoryFilterd(ID); }
         /// <summary>
         /// 经验类型
         /// </summary>
-        public WorkType ExpType { get => ProNodeManager.Instance.GetExpType(ID); }
+        public WorkType ExpType { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetExpType(ID); }
         /// <summary>
         /// 堆放暂存上限份数
         /// </summary>
-        public int StackMaxNum { get => ProNodeManager.Instance.GetStack(ID); }
+        public int StackMaxNum { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetStack(ID); }
         /// <summary>
         /// 堆积搬运阈值，未分配给任务的份数达到此值，全部划分给任务，然后生成任务
         /// </summary>
-        public int StackThresholdNum { get => ProNodeManager.Instance.GetStackThreshold(ID); }
+        public int StackThresholdNum { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetStackThreshold(ID); }
         /// <summary>
         ///  当原材料可生产的Item份数低于此值时，发布搬运任务
         ///  搬运 MaxStackNum - 此值份量的原材料到此生产节点
         /// </summary>
-        public int RawThresholdNum { get => ProNodeManager.Instance.GetRawThreshold(ID); }
+        public int RawThresholdNum { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetRawThreshold(ID); }
         /// <summary>
         /// 升至1级耗材
         /// </summary>
-        public Dictionary<string, int> Lv1Required { get => ProNodeManager.Instance.GetLv1Required(ID); }
+        public Dictionary<string, int> Lv1Required { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetLv1Required(ID); }
         /// <summary>
         /// 升至2级耗材
         /// </summary>
-        public Dictionary<string, int> Lv2Required { get => ProNodeManager.Instance.GetLv2Required(ID); }
+        public Dictionary<string, int> Lv2Required { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetLv2Required(ID); }
         #endregion
 
         #region 不进表的配置数据
@@ -203,6 +202,7 @@ namespace ProjectOC.ProNodeNS
         /// </summary>
         protected Dictionary<string, int> RawItems = new Dictionary<string, int>();
         public event Action OnActionChange;
+        public event Action<double> OnProduceTimerUpdate;
         #region 计时器
         /// <summary>
         /// 生产计时器，时间为配方生产一次所需的时间
@@ -219,6 +219,7 @@ namespace ProjectOC.ProNodeNS
                 {
                     timerForProduce = new CounterDownTimer(this.TimeCost, false, false);
                     timerForProduce.OnEndEvent += EndActionForProduce;
+                    timerForProduce.OnUpdateEvent += OnProduceTimerUpdate;
                 }
                 return timerForProduce;
             }
@@ -258,7 +259,7 @@ namespace ProjectOC.ProNodeNS
             List<string> result = new List<string>();
             foreach (RecipeCategory recipeCategory in this.RecipeCategoryFilter)
             {
-                result.AddRange(RecipeManager.Instance.GetRecipeIDsByCategory(recipeCategory));
+                result.AddRange(ManagerNS.LocalGameManager.Instance.RecipeManager.GetRecipeIDsByCategory(recipeCategory));
             }
             return result;
         }
@@ -270,7 +271,7 @@ namespace ProjectOC.ProNodeNS
         /// <returns>更改是否成功</returns>
         public bool ChangeRecipe(Player.PlayerCharacter player, string recipeID)
         {
-            Recipe recipe = RecipeManager.Instance.SpawnRecipe(recipeID);
+            Recipe recipe = ManagerNS.LocalGameManager.Instance.RecipeManager.SpawnRecipe(recipeID);
             if (recipe != null)
             {
                 this.RemoveRecipe(player);
@@ -480,16 +481,14 @@ namespace ProjectOC.ProNodeNS
                 if (missionNum > 0)
                 {
                     // 从仓库搬运材料来
-                    GameManager.Instance.GetLocalManager<MissionManager>()?.
-                        CreateTransportMission(MissionTransportType.Store_ProNode, kv.Key, missionNum, this);
+                    ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionTransportType.Store_ProNode, kv.Key, missionNum, this);
                 }
             }
             missionNum = StackReserve - GetAssignNum(ProductItem, false);
             if (missionNum > 0)
             {
                 // 搬运产出物品到仓库
-                GameManager.Instance.GetLocalManager<MissionManager>()?.
-                    CreateTransportMission(MissionTransportType.ProNode_Store, ProductItem, missionNum, this);
+                ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionTransportType.ProNode_Store, ProductItem, missionNum, this);
             }
         }
 

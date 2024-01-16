@@ -9,28 +9,8 @@ using UnityEngine;
 namespace ProjectOC.WorkerNS
 {
     [System.Serializable]
-    public sealed class EffectManager : ML.Engine.Manager.GlobalManager.IGlobalManager
+    public sealed class EffectManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
-        #region Instance
-        private EffectManager(){}
-
-        private static EffectManager instance;
-
-        public static EffectManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new EffectManager();
-                    GameManager.Instance.RegisterGlobalManager(instance);
-                    instance.LoadTableData();
-                }
-                return instance;
-            }
-        }
-        #endregion
-
         #region Load And Data
         /// <summary>
         /// 是否已加载完数据

@@ -1,7 +1,5 @@
 using ML.Engine.FSM;
 using ML.Engine.InventorySystem;
-using ML.Engine.Manager;
-using ProjectOC.ManagerNS;
 using ProjectOC.MissionNS;
 using ProjectOC.ProNodeNS;
 using Sirenix.OdinInspector;
@@ -73,7 +71,7 @@ namespace ProjectOC.WorkerNS
         { 
             get 
             {
-                DispatchTimeManager timeManager = GameManager.Instance.GetLocalManager<DispatchTimeManager>();
+                ManagerNS.DispatchTimeManager timeManager = ManagerNS.LocalGameManager.Instance.DispatchTimeManager;
                 if (timeManager != null)
                 {
                     return TimeArrangement[timeManager.CurrentTimeFrame];
@@ -130,7 +128,7 @@ namespace ProjectOC.WorkerNS
             this.Eff.Add(WorkType.Transport, 50);
             this.Eff.Add(WorkType.Collect, 0);
 
-            this.Features = FeatureManager.Instance.CreateFeature();
+            this.Features = ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature();
             foreach (Feature feature in this.Features)
             {
                 feature.ApplyFeature(this);
@@ -138,7 +136,7 @@ namespace ProjectOC.WorkerNS
 
             foreach (var kv in SkillConfig)
             {
-                Skill skill = SkillManager.Instance.SpawnSkill(kv.Value);
+                Skill skill = ManagerNS.LocalGameManager.Instance.SkillManager.SpawnSkill(kv.Value);
                 if (skill != null)
                 {
                     skill.ApplySkill(this);

@@ -76,6 +76,12 @@ namespace ProjectOC.InventorySystem.UI
 
             CurPriority = MissionNS.TransportPriority.Normal;
             ProNode.OnActionChange += RefreshDynamic;
+            ProNode.OnProduceTimerUpdate += (double time) =>
+            {
+                RectTransform rect = Product.transform.Find("Mask").GetComponent<RectTransform>();
+                float percent = 1 - (float) (100 * time / ProNode.TimeCost);
+                rect.sizeDelta = new Vector2(rect.sizeDelta.x, percent * Product.transform.Find("Icon").GetComponent<RectTransform>().sizeDelta.y);
+            };
             IsInit = true;
             Refresh();
         }
@@ -537,7 +543,7 @@ namespace ProjectOC.InventorySystem.UI
                 var name = UIWorker.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
                 name.text = Worker.Name;
                 var img = UIWorker.transform.Find("Icon").GetComponent<Image>();
-                WorkerManager workerManager = ML.Engine.Manager.GameManager.Instance.GetLocalManager<WorkerManager>();
+                WorkerManager workerManager = ManagerNS.LocalGameManager.Instance.WorkerManager;
                 var sprite = tempSprite.Find(s => s.texture == workerManager.GetTexture2D());
                 if (sprite == null)
                 {

@@ -429,11 +429,11 @@ namespace ProjectOC.InventorySystem.UI
                 // 更新Icon
                 var img = uiStoreData.transform.Find("Icon").GetComponent<Image>();
                 // 查找临时存储的Sprite
-                var sprite = tempSprite.Find(s => s.texture == GameManager.Instance.GetLocalManager<StoreManager>().GetTexture2D());
+                var sprite = tempSprite.Find(s => s.texture == ManagerNS.LocalGameManager.Instance.StoreManager.GetTexture2D());
                 // 不存在则生成
                 if (sprite == null)
                 {
-                    sprite = GameManager.Instance.GetLocalManager<StoreManager>().GetSprite();
+                    sprite = ManagerNS.LocalGameManager.Instance.StoreManager.GetSprite();
                     tempSprite.Add(sprite);
                 }
                 img.sprite = sprite;

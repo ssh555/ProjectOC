@@ -29,12 +29,12 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// 取货地
         /// </summary>
-        public IMission Source;
+        public IMissionObj Source;
 
         /// <summary>
         /// 送货地
         /// </summary>
-        public IMission Target;
+        public IMissionObj Target;
 
         /// <summary>
         /// 该任务的刁民
@@ -90,7 +90,7 @@ namespace ProjectOC.MissionNS
             }
         }
 
-        public Transport(MissionTransport mission, string itemID, int missionNum, IMission source, IMission destination, Worker worker)
+        public Transport(MissionTransport mission, string itemID, int missionNum, IMissionObj source, IMissionObj destination, Worker worker)
         {
             this.Mission = mission;
             this.ItemID = itemID;

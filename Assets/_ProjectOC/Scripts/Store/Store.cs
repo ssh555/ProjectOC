@@ -12,7 +12,7 @@ namespace ProjectOC.StoreNS
     /// ²Ö¿â
     /// </summary>
     [System.Serializable]
-    public class Store: IMission, IInventory
+    public class Store: IMissionObj, IInventory
     {
         public WorldStore WorldStore;
 

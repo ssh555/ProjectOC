@@ -7,28 +7,8 @@ using UnityEngine;
 namespace ProjectOC.WorkerNS
 {
     [System.Serializable]
-    public sealed class SkillManager : ML.Engine.Manager.GlobalManager.IGlobalManager
+    public sealed class SkillManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
-        #region Instance
-        private SkillManager(){}
-
-        private static SkillManager instance;
-
-        public static SkillManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new SkillManager();
-                    GameManager.Instance.RegisterGlobalManager(instance);
-                    instance.LoadTableData();
-                }
-                return instance;
-            }
-        }
-        #endregion
-
         #region Load And Data
         /// <summary>
         /// 是否已加载完数据

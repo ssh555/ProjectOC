@@ -1,3 +1,4 @@
+using ProjectOC.ManagerNS;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -31,11 +32,11 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// 效果名称
         /// </summary>
-        public string Name { get => EffectManager.Instance.GetName(ID); }
+        public string Name { get => LocalGameManager.Instance.EffectManager.GetName(ID); }
         /// <summary>
         /// 效果类型
         /// </summary>
-        public EffectType EffectType { get => EffectManager.Instance.GetEffectType(ID); }
+        public EffectType EffectType { get => LocalGameManager.Instance.EffectManager.GetEffectType(ID); }
         #endregion
 
         public Effect(EffectManager.EffectTableJsonData config)

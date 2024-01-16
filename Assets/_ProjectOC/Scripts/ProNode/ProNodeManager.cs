@@ -5,6 +5,7 @@ using ML.Engine.Manager;
 using ProjectOC.WorkerNS;
 using ML.Engine.TextContent;
 using System.Linq;
+using System;
 
 namespace ProjectOC.ProNodeNS
 {
@@ -13,26 +14,6 @@ namespace ProjectOC.ProNodeNS
     /// </summary>
     public sealed class ProNodeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
-        #region Instance
-        private ProNodeManager() { }
-
-        private static ProNodeManager instance;
-
-        public static ProNodeManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new ProNodeManager();
-                    GameManager.Instance.RegisterLocalManager(instance);
-                    instance.LoadTableData();
-                }
-                return instance;
-            }
-        }
-        #endregion
-
         #region Load And Data
         /// <summary>
         /// 是否已加载完数据
@@ -59,8 +40,8 @@ namespace ProjectOC.ProNodeNS
             public int Stack;
             public int StackThreshold;
             public int RawThreshold;
-            public Dictionary<string, int> Lv1Required;
-            public Dictionary<string, int> Lv2Required;
+            public List<Tuple<string, int>> Lv1Required;
+            public List<Tuple<string, int>> Lv2Required;
 
             public string texture2d;
             public string worldobject;
@@ -274,20 +255,28 @@ namespace ProjectOC.ProNodeNS
 
         public Dictionary<string, int> GetLv1Required(string id)
         {
-            if (!ProNodeTableDict.ContainsKey(id))
+            Dictionary<string, int> result = new Dictionary<string, int>();
+            if (ProNodeTableDict.ContainsKey(id))
             {
-                return new Dictionary<string, int>();
+                foreach (var tuple in ProNodeTableDict[id].Lv1Required)
+                {
+                    result.Add(tuple.Item1, tuple.Item2);
+                }
             }
-            return ProNodeTableDict[id].Lv1Required;
+            return result;
         }
 
         public Dictionary<string, int> GetLv2Required(string id)
         {
-            if (!ProNodeTableDict.ContainsKey(id))
+            Dictionary<string, int> result = new Dictionary<string, int>();
+            if (ProNodeTableDict.ContainsKey(id))
             {
-                return new Dictionary<string, int>();
+                foreach (var tuple in ProNodeTableDict[id].Lv2Required)
+                {
+                    result.Add(tuple.Item1, tuple.Item2);
+                }
             }
-            return ProNodeTableDict[id].Lv2Required;
+            return result;
         }
         #endregion
     }

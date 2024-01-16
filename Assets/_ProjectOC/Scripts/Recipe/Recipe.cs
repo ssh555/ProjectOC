@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using ML.Engine.InventorySystem.CompositeSystem;
+using ProjectOC.ManagerNS;
 
 namespace ML.Engine.InventorySystem
 {
@@ -20,28 +21,28 @@ namespace ML.Engine.InventorySystem
         /// <summary>
         /// 序号用于排序
         /// </summary>
-        public int Sort { get => RecipeManager.Instance.GetSort(ID); }
+        public int Sort { get => LocalGameManager.Instance.RecipeManager.GetSort(ID); }
 
         /// <summary>
         /// 类目
         /// </summary>
-        public RecipeCategory Category { get => RecipeManager.Instance.GetCategory(ID); }
+        public RecipeCategory Category { get => LocalGameManager.Instance.RecipeManager.GetCategory(ID); }
         /// <summary>
         /// 原料
         /// </summary>
-        public Dictionary<string, int> Raw { get => RecipeManager.Instance.GetRaw(ID); }
+        public Dictionary<string, int> Raw { get => LocalGameManager.Instance.RecipeManager.GetRaw(ID); }
         /// <summary>
         /// 成品
         /// </summary>
-        public Dictionary<string, int> Product { get => RecipeManager.Instance.GetProduct(ID); }
+        public Dictionary<string, int> Product { get => LocalGameManager.Instance.RecipeManager.GetProduct(ID); }
         /// <summary>
         /// 时间消耗，进行1次生产需要多少秒
         /// </summary>
-        public int TimeCost { get => RecipeManager.Instance.GetTimeCost(ID); }
+        public int TimeCost { get => LocalGameManager.Instance.RecipeManager.GetTimeCost(ID); }
         /// <summary>
         /// 配方经验，该配方制作完成时可获得的经验值
         /// </summary>
-        public int ExpRecipe { get => RecipeManager.Instance.GetExpRecipe(ID); }
+        public int ExpRecipe { get => LocalGameManager.Instance.RecipeManager.GetExpRecipe(ID); }
         #endregion
 
         public Recipe(RecipeManager.RecipeTableJsonData config)
