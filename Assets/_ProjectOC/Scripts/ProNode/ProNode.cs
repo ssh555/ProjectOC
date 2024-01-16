@@ -64,14 +64,14 @@ namespace ProjectOC.ProNodeNS
         ///  搬运 MaxStackNum - 此值份量的原材料到此生产节点
         /// </summary>
         public int RawThresholdNum { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetRawThreshold(ID); }
-        /// <summary>
-        /// 升至1级耗材
-        /// </summary>
-        public Dictionary<string, int> Lv1Required { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetLv1Required(ID); }
-        /// <summary>
-        /// 升至2级耗材
-        /// </summary>
-        public Dictionary<string, int> Lv2Required { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetLv2Required(ID); }
+        ///// <summary>
+        ///// 升至1级耗材
+        ///// </summary>
+        //public Dictionary<string, int> Lv1Required { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetLv1Required(ID); }
+        ///// <summary>
+        ///// 升至2级耗材
+        ///// </summary>
+        //public Dictionary<string, int> Lv2Required { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetLv2Required(ID); }
         #endregion
 
         #region 不进表的配置数据
@@ -246,7 +246,7 @@ namespace ProjectOC.ProNodeNS
         }
         #endregion
 
-        public ProNode(ProNodeManager.ProNodeTableJsonData config)
+        public ProNode(ProNodeTableData config)
         {
             this.ID = config.ID;
         }

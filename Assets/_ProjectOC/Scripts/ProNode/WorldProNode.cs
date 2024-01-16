@@ -9,15 +9,6 @@ namespace ProjectOC.ProNodeNS
 {
     public class WorldProNode : BuildingPart
     {
-        /// <summary>
-        /// 生产节点ID
-        /// </summary>
-        [SerializeField, ReadOnly]
-        protected string ProNodeID{ get { return this.ProNode?.ID ?? ""; }}
-
-        /// <summary>
-        /// 拥有的生产节点
-        /// </summary>
         [ShowInInspector, ReadOnly, SerializeField]
         public ProNode ProNode;
 

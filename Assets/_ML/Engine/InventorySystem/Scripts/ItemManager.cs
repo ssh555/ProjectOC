@@ -9,18 +9,16 @@ using ML.Engine.TextContent;
 namespace ML.Engine.InventorySystem
 {
     [System.Serializable]
-    public struct ItemTableJsonData
+    public struct ItemTableData
     {
         public string id;
         public int sort;
         public ItemType itemtype;
-        public ML.Engine.TextContent.TextContent name;
+        public TextContent.TextContent name;
         public int weight;
         public string icon;
-        // TODO: 修改为TextContent
-        public string itemdescription;
-        // TODO: 修改为TextContent
-        public string effectsdescription;
+        public TextContent.TextContent itemdescription;
+        public TextContent.TextContent effectsdescription;
         public string type;
         public bool bcanstack;
         public int maxamount;
@@ -66,7 +64,7 @@ namespace ML.Engine.InventorySystem
         /// to-do : 读表初始化
         /// 基础Item数据表 => 可加入联合体包含具体类型应有的数据
         /// </summary>
-        private Dictionary<string, ItemTableJsonData> ItemTypeStrDict = new Dictionary<string, ItemTableJsonData>();
+        private Dictionary<string, ItemTableData> ItemTypeStrDict = new Dictionary<string, ItemTableData>();
 
         #region to-do : 需读表导入所有所需的 Item 数据
         public const string TypePath = "ML.Engine.InventorySystem.";
@@ -75,13 +73,13 @@ namespace ML.Engine.InventorySystem
 
 
         
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableJsonData[]> ABJAProcessor;
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableJsonData[]>("Binary/TableData", "ItemTableData", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableData[]>("Binary/TableData", "ItemTableData", (datas) =>
                 {
                     foreach (var data in datas)
                     {
@@ -103,7 +101,7 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public Item SpawnItem(string id)
         {
-            if (this.ItemTypeStrDict.TryGetValue(id, out ItemTableJsonData itemRow))
+            if (this.ItemTypeStrDict.TryGetValue(id, out ItemTableData itemRow))
             {
                 Type type;
                 if(!this.ItemDict.TryGetValue(id, out type))

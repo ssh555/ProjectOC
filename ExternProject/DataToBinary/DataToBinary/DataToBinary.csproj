@@ -85,6 +85,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EffectTableData.cs" />
+    <Compile Include="FeatureTableData.cs" />
+    <Compile Include="ProNodeTableData.cs" />
     <Compile Include="CompositionJsonData.cs" />
     <Compile Include="DataToBinaryManager.cs" />
     <Compile Include="Formula.cs" />
@@ -94,11 +97,14 @@
     <Compile Include="KeyTip.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecipeTableData.cs" />
+    <Compile Include="SkillTableData.cs" />
     <Compile Include="TechPoint.cs" />
     <Compile Include="TechPointCategory.cs" />
     <Compile Include="TextContent.cs" />
     <Compile Include="TextTip.cs" />
     <Compile Include="TPPanel.cs" />
+    <Compile Include="WorkType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

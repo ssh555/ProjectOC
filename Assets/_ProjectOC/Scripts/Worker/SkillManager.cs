@@ -7,6 +7,18 @@ using UnityEngine;
 namespace ProjectOC.WorkerNS
 {
     [System.Serializable]
+    public struct SkillTableData
+    {
+        public string ID;
+        public int Sort;
+        public string Icon;
+        public WorkType AbilityType;
+        public List<string> Effects;
+        public TextContent ItemDescription;
+        public TextContent EffectsDescription;
+    }
+
+    [System.Serializable]
     public sealed class SkillManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         #region Load And Data
@@ -18,29 +30,17 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// Skill Êý¾Ý±í
         /// </summary>
-        private Dictionary<string, SkillTableJsonData> SkillTableDict = new Dictionary<string, SkillTableJsonData>();
+        private Dictionary<string, SkillTableData> SkillTableDict = new Dictionary<string, SkillTableData>();
 
         public const string Texture2DPath = "ui/WorkerAbility/texture2d";
-        
-        [System.Serializable]
-        public struct SkillTableJsonData
-        {
-            public string ID;
-            public int Sort;
-            public string Icon;
-            public WorkType AbilityType;
-            public List<string> Effects;
-            public TextContent ItemDescription;
-            public TextContent EffectsDescription;
-        }
 
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableJsonData[]> ABJAProcessor;
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableJsonData[]>("Json/TableData", "WorkerAbilityTableData", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableData[]>("Json/TableData", "WorkerAbilityTableData", (datas) =>
                 {
                     foreach (var data in datas)
                     {
@@ -55,7 +55,7 @@ namespace ProjectOC.WorkerNS
         #region Spawn
         public Skill SpawnSkill(string id)
         {
-            if (this.SkillTableDict.TryGetValue(id, out SkillTableJsonData row))
+            if (this.SkillTableDict.TryGetValue(id, out SkillTableData row))
             {
                 Skill skill = new Skill(row);
                 return skill;

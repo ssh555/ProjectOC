@@ -39,12 +39,9 @@ namespace ProjectOC.WorkerNS
         public EffectType EffectType { get => LocalGameManager.Instance.EffectManager.GetEffectType(ID); }
         #endregion
 
-        public Effect(EffectManager.EffectTableJsonData config)
+        public Effect(EffectTableData config)
         {
             this.ID = config.ID;
-            this.ParamStr = config.Param1;
-            this.ParamInt = config.Param2;
-            this.ParamFloat = config.Param3;
         }
         public Effect(Effect effect)
         {
@@ -68,7 +65,6 @@ namespace ProjectOC.WorkerNS
                 case EffectType.AlterAPMax:
                     worker.APMax = ParamInt;
                     break;
-
                 case EffectType.AlterExpRate_Cook:
                 case EffectType.AlterExpRate_HandCraft:
                 case EffectType.AlterExpRate_Industry:
@@ -81,7 +77,6 @@ namespace ProjectOC.WorkerNS
                         worker.ExpRate[workType] = ParamInt;
                     }
                     break;
-
                 case EffectType.AlterWalkSpeed:
                     worker.WalkSpeed += ParamFloat;
                     break;
@@ -89,7 +84,6 @@ namespace ProjectOC.WorkerNS
                 case EffectType.AlterBURMax:
                     worker.BURMax += ParamInt;
                     break;
-
                 case EffectType.AlterEff_Cook:
                 case EffectType.AlterEff_HandCraft:
                 case EffectType.AlterEff_Industry:

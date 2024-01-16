@@ -8,6 +8,20 @@ using UnityEngine;
 namespace ProjectOC.WorkerNS
 {
     [System.Serializable]
+    public struct FeatureTableData
+    {
+        public string ID;
+        public string IDExclude;
+        public int Sort;
+        public TextContent Name;
+        public string Icon;
+        public FeatureType Type;
+        public List<string> Effects;
+        public TextContent ItemDescription;
+        public TextContent EffectsDescription;
+    }
+
+    [System.Serializable]
     public sealed class FeatureManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         #region Load And Data
@@ -23,31 +37,17 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// FeatureÊý¾Ý±í
         /// </summary>
-        private Dictionary<string, FeatureTableJsonData> FeatureTableDict = new Dictionary<string, FeatureTableJsonData>();
+        private Dictionary<string, FeatureTableData> FeatureTableDict = new Dictionary<string, FeatureTableData>();
 
         public const string Texture2DPath = "ui/Feature/texture2d";
 
-        [System.Serializable]
-        public struct FeatureTableJsonData
-        {
-            public string ID;
-            public string IDExclude;
-            public int Sort;
-            public TextContent Name;
-            public string Icon;
-            public FeatureType Type;
-            public List<string> Effects;
-            public TextContent ItemDescription;
-            public TextContent EffectsDescription;
-        }
-
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableJsonData[]> ABJAProcessor;
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableJsonData[]>("Json/TableData", "FeatureTableData", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableData[]>("Json/TableData", "FeatureTableData", (datas) =>
                 {
                     foreach (var data in datas)
                     {
@@ -104,7 +104,7 @@ namespace ProjectOC.WorkerNS
         }
         public Feature SpawnFeature(string id)
         {
-            if (FeatureTableDict.TryGetValue(id, out FeatureTableJsonData row))
+            if (FeatureTableDict.TryGetValue(id, out FeatureTableData row))
             {
                 Feature feature = new Feature(row);
                 return feature;

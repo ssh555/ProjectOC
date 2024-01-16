@@ -45,7 +45,7 @@ namespace ML.Engine.InventorySystem
         public int ExpRecipe { get => LocalGameManager.Instance.RecipeManager.GetExpRecipe(ID); }
         #endregion
 
-        public Recipe(RecipeManager.RecipeTableJsonData config)
+        public Recipe(RecipeTableData config)
         {
             this.ID = config.ID;
         }

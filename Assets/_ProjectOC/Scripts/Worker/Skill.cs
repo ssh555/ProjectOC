@@ -51,7 +51,7 @@ namespace ProjectOC.WorkerNS
         public string EffectsDescription { get => LocalGameManager.Instance.SkillManager.GetEffectsDescription(ID); }
         #endregion
 
-        public Skill(SkillManager.SkillTableJsonData config)
+        public Skill(SkillTableData config)
         {
             this.ID = config.ID;
             foreach (string effectID in config.Effects)

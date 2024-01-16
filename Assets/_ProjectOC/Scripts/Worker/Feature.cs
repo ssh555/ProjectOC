@@ -48,7 +48,7 @@ namespace ProjectOC.WorkerNS
         public string EffectsDescription { get => LocalGameManager.Instance.FeatureManager.GetEffectsDescription(ID); }
         #endregion
 
-        public Feature(FeatureManager.FeatureTableJsonData config)
+        public Feature(FeatureTableData config)
         {
             this.ID = config.ID;
             this.Effects = new List<Effect>();

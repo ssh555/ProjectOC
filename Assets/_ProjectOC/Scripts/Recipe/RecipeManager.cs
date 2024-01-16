@@ -7,6 +7,19 @@ using System.Linq;
 
 namespace ML.Engine.InventorySystem
 {
+    [System.Serializable]
+    public struct RecipeTableData
+    {
+        public string ID;
+        public int Sort;
+        public RecipeCategory Category;
+        public TextContent.TextContent Name;
+        public List<Tuple<string, int>> Raw;
+        public List<Tuple<string, int>> Product;
+        public int TimeCost;
+        public int ExpRecipe;
+    }
+
     public sealed class RecipeManager : Manager.LocalManager.ILocalManager
     {
         #region Load And Data
@@ -19,26 +32,15 @@ namespace ML.Engine.InventorySystem
         /// <summary>
         /// Recipe Êý¾Ý±í
         /// </summary>
-        private Dictionary<string, RecipeTableJsonData> RecipeTableDict = new Dictionary<string, RecipeTableJsonData>();
+        private Dictionary<string, RecipeTableData> RecipeTableDict = new Dictionary<string, RecipeTableData>();
 
-        [System.Serializable]
-        public struct RecipeTableJsonData
-        {
-            public string ID;
-            public int Sort;
-            public RecipeCategory Category;
-            public List<Tuple<string, int>> Raw;
-            public List<Tuple<string, int>> Product;
-            public int TimeCost;
-            public int ExpRecipe;
-        }
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableJsonData[]> ABJAProcessor;
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableJsonData[]>("Json/TableData", "RecipeTableData", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]>("Json/TableData", "RecipeTableData", (datas) =>
                 {
                     foreach (var data in datas)
                     {
@@ -62,7 +64,7 @@ namespace ML.Engine.InventorySystem
         /// </summary>
         public Recipe SpawnRecipe(string id)
         {
-            if (RecipeTableDict.TryGetValue(id, out RecipeTableJsonData row))
+            if (RecipeTableDict.TryGetValue(id, out RecipeTableData row))
             {
                 Recipe recipe = new Recipe(row);
                 return recipe;
