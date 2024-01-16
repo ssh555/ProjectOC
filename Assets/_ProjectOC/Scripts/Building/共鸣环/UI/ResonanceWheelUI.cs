@@ -174,7 +174,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             public bool isNull;//是否为空
             public bool isTiming;//是否正在计时
             public bool isResonating;//是否共鸣完成
-            public bool isInfoOn;
+
             public ExternWorker worker;//对应的隐兽
             public Transform transform;
             public string id;
@@ -187,7 +187,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 this.isNull = true;
                 this.isTiming = false;
                 this.isResonating = false;
-                this.isInfoOn = false;
+
                 this.worker = null;
                 this.transform = transform;
                 this.id = null;
@@ -198,7 +198,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 grid.isNull = true;
                 grid.isTiming = false;
                 grid.isResonating = false;
-                grid.isInfoOn = false;
                 grid.worker = null;
                 grid.transform = transform;
                 grid.id = null;

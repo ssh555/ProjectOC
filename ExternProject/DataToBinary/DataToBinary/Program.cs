@@ -122,7 +122,7 @@ namespace ExcelToJson
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/InteractSystem/InteractKeyTip.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TextContent/InteractSystem/InteractKeyTip.bytes", type = typeof(KeyTip[]) });
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/Inventory/InventoryPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/Inventory/InventoryPanel.bytes", type = typeof(InventoryPanel) });
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/TechTree/TechPointPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/TechTree/TechPointPanel.bytes", type = typeof(ProjectOC.TechTree.TechTreeManager.TPPanel) });
-
+            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/ResonanceWheel/ResonanceWheelPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/ResonanceWheel/ResonanceWheelPanel.bytes", type = typeof(ResonanceWheelPanel) });
             System.Threading.Tasks.Parallel.ForEach(jBConfigs, (config) =>
             {
                 try
