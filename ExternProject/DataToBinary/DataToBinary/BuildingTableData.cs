@@ -1,9 +1,6 @@
 ﻿using ExcelToJson;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ML.Engine.BuildingSystem
 {
@@ -18,7 +15,7 @@ namespace ML.Engine.BuildingSystem
         public string category3;
         public string category4;
         public string actorID;
-        public List<Tuple<string, int>> raw;
+        public List<ML.Engine.InventorySystem.CompositeSystem.Formula> raw;
 
         public bool GenData(string[] row)
         {
@@ -43,14 +40,9 @@ namespace ML.Engine.BuildingSystem
             // 6 -> category4
             this.category4 = row[6];
             // 7 -> actorID
-            this.actorID = row[7];
+            this.actorID = !string.IsNullOrEmpty(row[7]) ? row[7] : "";
             // 8 -> raw
-            this.raw = new List<Tuple<string, int>>();
-            foreach (var str in row[8].Split(';').Where(x => !string.IsNullOrEmpty(x)))
-            {
-                string[] s = str.Split(',');
-                this.raw.Add(new Tuple<string, int>(s[0], int.Parse(s[1])));
-            }
+            this.raw = Program.ParseFormula(row[8]);
             return true;
         }
     }

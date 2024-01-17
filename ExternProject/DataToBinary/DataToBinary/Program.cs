@@ -2,15 +2,11 @@
 using ML.Engine.InventorySystem;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.TextContent;
-using Newtonsoft.Json;
 using ProjectOC.TechTree;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using static ProjectOC.InventorySystem.UI.UIInfiniteInventory;
 
 namespace ExcelToJson
 {
@@ -135,14 +131,12 @@ namespace ExcelToJson
             #region JSON
             // 必须是.bytes后缀
             List<JBConfig> jBConfigs = new List<JBConfig>();
-            //jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TableData/TechTree.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TableData/TechTree.bytes", type = typeof(ProjectOC.TechTree.TechPoint[]) });
-            //jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TableData/CompositionTableData.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TableData/CompositionTableData.bytes", type = typeof(CompositionTableData[]) });
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/PlayerUIPanel/PlayerUIPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/PlayerUIPanel/PlayerUIPanel.bytes", type = typeof(TextTip[]) });
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/BuildingSystem/UI/Category.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TextContent/BuildingSystem/UI/Category.bytes", type = typeof(TextTip[]) });
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/BuildingSystem/UI/Type.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TextContent/BuildingSystem/UI/Type.bytes", type = typeof(TextTip[]) });
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/BuildingSystem/UI/KeyTip.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TextContent/BuildingSystem/UI/KeyTip.bytes", type = typeof(KeyTip[]) });
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/InteractSystem/InteractKeyTip.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TextContent/InteractSystem/InteractKeyTip.bytes", type = typeof(KeyTip[]) });
-            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/Inventory/InventoryPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/Inventory/InventoryPanel.bytes", type = typeof(InventoryPanel) });
+            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/Inventory/InventoryPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/Inventory/InventoryPanel.bytes", type = typeof(ProjectOC.InventorySystem.UI.UIInfiniteInventory.InventoryPanel) });
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/TechTree/TechPointPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/TechTree/TechPointPanel.bytes", type = typeof(ProjectOC.TechTree.TechTreeManager.TPPanel) });
 
             System.Threading.Tasks.Parallel.ForEach(jBConfigs, (config) =>
@@ -182,17 +176,19 @@ namespace ExcelToJson
         {
             // 100001,3;100002,1
             List<ML.Engine.InventorySystem.CompositeSystem.Formula> formulas = new List<ML.Engine.InventorySystem.CompositeSystem.Formula>();
-            string[] sfs = data.Split(';').Where(x => !string.IsNullOrEmpty(x)).ToArray();
-            foreach(var sf in sfs)
+            if (!string.IsNullOrEmpty(data))
             {
-                var t = sf.Split(',');
-                var f = new ML.Engine.InventorySystem.CompositeSystem.Formula();
-                f.id = t[0];
-                f.num = int.Parse(t[1]);
+                string[] sfs = data.Split(';').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                foreach (var sf in sfs)
+                {
+                    var t = sf.Split(',');
+                    var f = new ML.Engine.InventorySystem.CompositeSystem.Formula();
+                    f.id = t[0];
+                    f.num = int.Parse(t[1]);
 
-                formulas.Add(f);
+                    formulas.Add(f);
+                }
             }
-
             return formulas;
         }
     }

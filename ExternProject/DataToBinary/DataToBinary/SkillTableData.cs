@@ -14,7 +14,7 @@ namespace ProjectOC.WorkerNS
         public int Sort;
         public string Icon;
         public WorkType AbilityType;
-        public List<string> Effects;
+        public List<Tuple<string, float>> Effects;
         public ML.Engine.TextContent.TextContent ItemDescription;
         public ML.Engine.TextContent.TextContent EffectsDescription;
 
@@ -33,7 +33,15 @@ namespace ProjectOC.WorkerNS
             // 3 -> AbilityType
             this.AbilityType = (WorkType)Enum.Parse(typeof(WorkType), row[3]);
             // 4 -> Effects
-            this.Effects = row[4].Split(',').Where(x => !string.IsNullOrEmpty(x)).ToList();
+            this.Effects = new List<Tuple<string, float>>();
+            if (!string.IsNullOrEmpty(row[4]))
+            {
+                foreach (string str in row[4].Split(';').Where(x => !string.IsNullOrEmpty(x)))
+                {
+                    string[] s = str.Split(',');
+                    this.Effects.Add(new Tuple<string, float>(s[0], float.Parse(s[1])));
+                }
+            }
             // 5 -> ItemDescription
             this.ItemDescription = new ML.Engine.TextContent.TextContent();
             this.ItemDescription.Chinese = row[5];

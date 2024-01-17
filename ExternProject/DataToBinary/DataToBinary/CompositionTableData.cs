@@ -16,14 +16,9 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// </summary>
         public string id;
         /// <summary>
-        /// 合成物名称
+        /// 一次可合成数量
         /// </summary>
-        public TextContent.TextContent name;
-        /// <summary>
-        /// 标签分级
-        /// 1级|2级|3级
-        /// </summary>
-        public string[] tag;
+        public int compositionnum;
         /// <summary>
         /// 合成公式
         /// 没有 num 则默认为 1
@@ -34,24 +29,23 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// </summary>
         public Formula[] formula;
         /// <summary>
-        /// 一次可合成数量
+        /// 合成物名称
         /// </summary>
-        public int compositionnum;
+        public TextContent.TextContent name;
+        /// <summary>
+        /// 标签分级
+        /// 1级|2级|3级
+        /// </summary>
+        public string[] tag;
         public string texture2d;
         public List<string> usage;
 
         public CompositionTableData(RecipeTableData data)
         {
-            this.id = data.Product[0].Item1;
-            this.compositionnum = data.Product[0].Item2;
+            this.id = data.Product.id;
+            this.compositionnum = data.Product.num;
+            this.formula = data.Raw.ToArray();
             this.name = data.Name;
-            List<Formula> temp = new List<Formula>();
-            foreach (var tuple in data.Raw)
-            {
-                temp.Add(new Formula { id = tuple.Item1, num = tuple.Item2} );
-            }
-            formula = temp.ToArray();
-
             this.tag = new List<string>().ToArray();
             this.texture2d = "";
             this.usage = new List<string>();
@@ -59,29 +53,19 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         public CompositionTableData(BuildingTableData data)
         {
             this.id = data.id;
-            this.name = data.name;
-            this.tag = new string[] { data.category1, data.category2, data.category3 };
-            List<Formula> temp = new List<Formula>();
-            foreach (var tuple in data.raw)
-            {
-                temp.Add(new Formula { id=tuple.Item1, num=tuple.Item2});
-            }
-            this.formula = temp.ToArray();
             this.compositionnum = 1;
+            this.formula = data.raw.ToArray();
+            this.name = data.name;
+            this.tag = new string[] { data.category1, data.category2, data.category3, data.category4 };
             this.texture2d = data.icon;
             this.usage = new List<string>();
         }
         public CompositionTableData(BuildingUpgradeTableData data)
         {
             this.id = data.id;
-            this.name = data.name;
-            List<Formula> temp = new List<Formula>();
-            foreach (var tuple in data.upgradeRaw)
-            {
-                temp.Add(new Formula { id = tuple.Item1, num = tuple.Item2 });
-            }
-            this.formula = temp.ToArray();
             this.compositionnum = 1;
+            this.formula = data.upgradeRaw.ToArray();
+            this.name = data.name;
             this.tag = new List<string>().ToArray();
             this.texture2d = "";
             this.usage = new List<string>();
@@ -101,13 +85,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             // 2 -> tag
             this.tag = row[2].Split(',').Where(x => !string.IsNullOrEmpty(x)).ToArray();
             // 3 -> formula
-            List<Formula> temp = new List<Formula>();
-            foreach (var str in row[3].Split(';').Where(x => !string.IsNullOrEmpty(x)))
-            {
-                string[] s = str.Split(',');
-                temp.Add(new Formula { id = s[0], num = int.Parse(s[1]) });
-            }
-            formula = temp.ToArray();
+            formula = Program.ParseFormula(row[3]).ToArray();
             // 4 -> compositionnum
             this.compositionnum = int.Parse(row[4]);
             // 5 -> texture2d

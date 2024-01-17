@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace ProjectOC.ProNodeNS
@@ -47,6 +45,10 @@ namespace ProjectOC.ProNodeNS
             if (!string.IsNullOrEmpty(row[5]))
             {
                 this.ExpType = (WorkerNS.WorkType)Enum.Parse(typeof(WorkerNS.WorkType), row[5]);
+            }
+            else
+            {
+                this.ExpType = WorkerNS.WorkType.None;
             }
             // 6 -> Stack
             this.Stack = int.Parse(row[6]);

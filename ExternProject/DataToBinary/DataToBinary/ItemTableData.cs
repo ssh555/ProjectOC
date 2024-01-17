@@ -1,9 +1,5 @@
 ﻿using ExcelToJson;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 // 命名空间
 namespace ML.Engine.InventorySystem
@@ -41,7 +37,7 @@ namespace ML.Engine.InventorySystem
             // 2 -> ItemType
             this.itemtype = (ItemType)Enum.Parse(typeof(ItemType), row[2]);
             // 3 -> Name
-            this.name = new ML.Engine.TextContent.TextContent();
+            this.name = new TextContent.TextContent();
             this.name.Chinese = row[3];
             this.name.English = row[3];
             // 4 -> Weight

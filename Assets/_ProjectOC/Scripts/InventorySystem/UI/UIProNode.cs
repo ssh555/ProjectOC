@@ -253,7 +253,7 @@ namespace ProjectOC.InventorySystem.UI
         {
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Upgrade.performed -= Upgrade_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.NextPriority.performed -= NextPriority_performed;
-            ProjectOC.Input.InputManager.PlayerInput.UIProNode.ChangeRecipe.performed -= ChangeRecipe_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.performed -= ChangeRecipe_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove1.performed -= Remove1_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove10.performed -= Remove10_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.FastAdd.performed -= FastAdd_performed;
@@ -267,7 +267,7 @@ namespace ProjectOC.InventorySystem.UI
         {
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Upgrade.performed += Upgrade_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.NextPriority.performed += NextPriority_performed;
-            ProjectOC.Input.InputManager.PlayerInput.UIProNode.ChangeRecipe.performed += ChangeRecipe_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.performed += ChangeRecipe_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove1.performed += Remove1_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove10.performed += Remove10_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.FastAdd.performed += FastAdd_performed;
@@ -389,7 +389,7 @@ namespace ProjectOC.InventorySystem.UI
             }
 
             #region TopTitle
-            Text_Title.text = PanelTextContent.textTitle.GetText();
+            //Text_Title.text = PanelTextContent.textTitle.GetText();
             KT_Upgrade.ReWrite(PanelTextContent.ktUpgrade);
             KT_NextPriority.ReWrite(PanelTextContent.ktNextPriority);
             #endregion
@@ -614,10 +614,19 @@ namespace ProjectOC.InventorySystem.UI
         [System.Serializable]
         public struct ProNodePanel
         {
-            public TextContent textTitle;
+            public TextTip[] proNodeType;
+            public TextContent textEmpty;
             public TextContent textUrgency;
             public TextContent textNormal;
             public TextContent textAlternative;
+            public TextContent textStateVacancy;
+            public TextContent textStateStagnation;
+            public TextContent textStateProduction;
+            public TextContent textWorkerStateWork;
+            public TextContent textWorkerStateTransport;
+            public TextContent textWorkerStateFish;
+            public TextContent textWorkerStateRelax;
+            public TextContent textPrefixEff;
 
             public KeyTip ktUpgrade;
             public KeyTip ktNextPriority;
@@ -628,6 +637,12 @@ namespace ProjectOC.InventorySystem.UI
             public KeyTip ktBack;
             public KeyTip ktChangeWorker;
             public KeyTip ktRemoveWorker;
+            public KeyTip ktConfirmRecipe;
+            public KeyTip ktBackRecipe;
+            public KeyTip ktConfirmWorker;
+            public KeyTip ktBackWorker;
+            public KeyTip ktConfirmLevel;
+            public KeyTip ktBackLevel;
         }
 
         public static ProNodePanel PanelTextContent => ABJAProcessor.Datas;

@@ -1256,15 +1256,6 @@
             "id": "7be38ac4-f3e0-4298-af9f-bfb7129aba09",
             "actions": [
                 {
-                    "name": "NextPriority",
-                    "type": "Button",
-                    "id": "8c21e479-24d3-4141-8f2c-446832cf9133",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Upgrade",
                     "type": "Button",
                     "id": "9ba3f665-0544-44f4-81a5-e794d0b0601c",
@@ -1274,13 +1265,13 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "AlterRawItem",
-                    "type": "Value",
-                    "id": "1a286c3e-5479-48e0-b312-c005d1204369",
-                    "expectedControlType": "Vector2",
+                    "name": "NextPriority",
+                    "type": "Button",
+                    "id": "8c21e479-24d3-4141-8f2c-446832cf9133",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Remove1",
@@ -1310,15 +1301,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ChangeRecipe",
-                    "type": "Button",
-                    "id": "aff339b1-cbf1-449c-9fa9-4a3214ed7d9f",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "ChangeWorker",
                     "type": "Button",
                     "id": "339699fa-04cc-4c40-be7d-e826a3bebd10",
@@ -1335,6 +1317,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "AlterRawItem",
+                    "type": "Value",
+                    "id": "1a286c3e-5479-48e0-b312-c005d1204369",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -1357,28 +1348,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "NextPriority",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "46301721-3ba5-4558-b9c1-93926e954c30",
-                    "path": "<XInputController>/leftTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Upgrade",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "6d63c30d-26b5-41c0-9c64-5a2db20ecda6",
-                    "path": "<Keyboard>/g",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Upgrade",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1494,6 +1463,28 @@
                 },
                 {
                     "name": "",
+                    "id": "46301721-3ba5-4558-b9c1-93926e954c30",
+                    "path": "<XInputController>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Upgrade",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6d63c30d-26b5-41c0-9c64-5a2db20ecda6",
+                    "path": "<Keyboard>/g",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Upgrade",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "bffdff7c-5dda-47e9-ac11-d20cc139ffab",
                     "path": "<XInputController>/buttonWest",
                     "interactions": "",
@@ -1555,17 +1546,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "FastAdd",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "f9253efa-d962-4de4-bd9a-5ebec8aa867f",
-                    "path": "<XInputController>/buttonSouth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeRecipe",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

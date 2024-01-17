@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProjectOC.WorkerNS
 {
@@ -16,7 +14,7 @@ namespace ProjectOC.WorkerNS
         public ML.Engine.TextContent.TextContent Name;
         public string Icon;
         public FeatureType Type;
-        public List<string> Effects;
+        public List<Tuple<string, float>> Effects;
         public ML.Engine.TextContent.TextContent ItemDescription;
         public ML.Engine.TextContent.TextContent EffectsDescription;
 
@@ -29,7 +27,7 @@ namespace ProjectOC.WorkerNS
             // 0 -> ID
             this.ID = row[0];
             // 1 -> IDExclude
-            this.IDExclude = row[1];
+            this.IDExclude = !string.IsNullOrEmpty(row[1]) ? row[1] : "";
             // 2 -> Sort
             this.Sort = int.Parse(row[2]);
             // 3 -> Name
@@ -37,19 +35,27 @@ namespace ProjectOC.WorkerNS
             this.Name.Chinese = row[3];
             this.Name.English = row[3];
             // 4 -> Icon
-            this.Icon = row[4];
+            this.Icon = !string.IsNullOrEmpty(row[4]) ? row[4] : "";
             // 5 -> Type
             this.Type = (FeatureType)Enum.Parse(typeof(FeatureType), row[5]);
             // 6 -> Effects
-            this.Effects = row[6].Split(',').Where(x => !string.IsNullOrEmpty(x)).ToList();
+            this.Effects = new List<Tuple<string, float>>();
+            if (!string.IsNullOrEmpty(row[6]))
+            {
+                foreach (string str in row[6].Split(';').Where(x => !string.IsNullOrEmpty(x)))
+                {
+                    string[] s = str.Split(',');
+                    this.Effects.Add(new Tuple<string, float>(s[0], float.Parse(s[1])));
+                }
+            }
             // 7 -> ItemDescription
             this.ItemDescription = new ML.Engine.TextContent.TextContent();
-            this.ItemDescription.Chinese = row[7];
-            this.ItemDescription.English = row[7];
+            this.ItemDescription.Chinese = !string.IsNullOrEmpty(row[7]) ? row[7] : "";
+            this.ItemDescription.English = !string.IsNullOrEmpty(row[7]) ? row[7] : "";
             // 8  -> EffectsDescription
             this.EffectsDescription = new ML.Engine.TextContent.TextContent();
-            this.EffectsDescription.Chinese = row[8];
-            this.EffectsDescription.English = row[8];
+            this.EffectsDescription.Chinese = !string.IsNullOrEmpty(row[8]) ? row[8] : "";
+            this.EffectsDescription.English = !string.IsNullOrEmpty(row[8]) ? row[8] : "";
             return true;
         }
     }

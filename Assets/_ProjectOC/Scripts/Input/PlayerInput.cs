@@ -1280,15 +1280,6 @@ namespace ProjectOC.Input
             ""id"": ""7be38ac4-f3e0-4298-af9f-bfb7129aba09"",
             ""actions"": [
                 {
-                    ""name"": ""NextPriority"",
-                    ""type"": ""Button"",
-                    ""id"": ""8c21e479-24d3-4141-8f2c-446832cf9133"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Upgrade"",
                     ""type"": ""Button"",
                     ""id"": ""9ba3f665-0544-44f4-81a5-e794d0b0601c"",
@@ -1298,13 +1289,13 @@ namespace ProjectOC.Input
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""AlterRawItem"",
-                    ""type"": ""Value"",
-                    ""id"": ""1a286c3e-5479-48e0-b312-c005d1204369"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""name"": ""NextPriority"",
+                    ""type"": ""Button"",
+                    ""id"": ""8c21e479-24d3-4141-8f2c-446832cf9133"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""Remove1"",
@@ -1334,15 +1325,6 @@ namespace ProjectOC.Input
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ChangeRecipe"",
-                    ""type"": ""Button"",
-                    ""id"": ""aff339b1-cbf1-449c-9fa9-4a3214ed7d9f"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""ChangeWorker"",
                     ""type"": ""Button"",
                     ""id"": ""339699fa-04cc-4c40-be7d-e826a3bebd10"",
@@ -1359,6 +1341,15 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AlterRawItem"",
+                    ""type"": ""Value"",
+                    ""id"": ""1a286c3e-5479-48e0-b312-c005d1204369"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -1381,28 +1372,6 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""NextPriority"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""46301721-3ba5-4558-b9c1-93926e954c30"",
-                    ""path"": ""<XInputController>/leftTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Upgrade"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""6d63c30d-26b5-41c0-9c64-5a2db20ecda6"",
-                    ""path"": ""<Keyboard>/g"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Upgrade"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1518,6 +1487,28 @@ namespace ProjectOC.Input
                 },
                 {
                     ""name"": """",
+                    ""id"": ""46301721-3ba5-4558-b9c1-93926e954c30"",
+                    ""path"": ""<XInputController>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Upgrade"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6d63c30d-26b5-41c0-9c64-5a2db20ecda6"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Upgrade"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""bffdff7c-5dda-47e9-ac11-d20cc139ffab"",
                     ""path"": ""<XInputController>/buttonWest"",
                     ""interactions"": """",
@@ -1584,17 +1575,6 @@ namespace ProjectOC.Input
                 },
                 {
                     ""name"": """",
-                    ""id"": ""f9253efa-d962-4de4-bd9a-5ebec8aa867f"",
-                    ""path"": ""<XInputController>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeRecipe"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""73d82c5b-7d0b-42bc-a88b-3abdee935233"",
                     ""path"": ""<XInputController>/leftShoulder"",
                     ""interactions"": """",
@@ -1654,15 +1634,14 @@ namespace ProjectOC.Input
             m_UIStore_FastAdd = m_UIStore.FindAction("FastAdd", throwIfNotFound: true);
             // UIProNode
             m_UIProNode = asset.FindActionMap("UIProNode", throwIfNotFound: true);
-            m_UIProNode_NextPriority = m_UIProNode.FindAction("NextPriority", throwIfNotFound: true);
             m_UIProNode_Upgrade = m_UIProNode.FindAction("Upgrade", throwIfNotFound: true);
-            m_UIProNode_AlterRawItem = m_UIProNode.FindAction("AlterRawItem", throwIfNotFound: true);
+            m_UIProNode_NextPriority = m_UIProNode.FindAction("NextPriority", throwIfNotFound: true);
             m_UIProNode_Remove1 = m_UIProNode.FindAction("Remove1", throwIfNotFound: true);
             m_UIProNode_Remove10 = m_UIProNode.FindAction("Remove10", throwIfNotFound: true);
             m_UIProNode_FastAdd = m_UIProNode.FindAction("FastAdd", throwIfNotFound: true);
-            m_UIProNode_ChangeRecipe = m_UIProNode.FindAction("ChangeRecipe", throwIfNotFound: true);
             m_UIProNode_ChangeWorker = m_UIProNode.FindAction("ChangeWorker", throwIfNotFound: true);
             m_UIProNode_RemoveWorker = m_UIProNode.FindAction("RemoveWorker", throwIfNotFound: true);
+            m_UIProNode_AlterRawItem = m_UIProNode.FindAction("AlterRawItem", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -2090,28 +2069,26 @@ namespace ProjectOC.Input
         // UIProNode
         private readonly InputActionMap m_UIProNode;
         private List<IUIProNodeActions> m_UIProNodeActionsCallbackInterfaces = new List<IUIProNodeActions>();
-        private readonly InputAction m_UIProNode_NextPriority;
         private readonly InputAction m_UIProNode_Upgrade;
-        private readonly InputAction m_UIProNode_AlterRawItem;
+        private readonly InputAction m_UIProNode_NextPriority;
         private readonly InputAction m_UIProNode_Remove1;
         private readonly InputAction m_UIProNode_Remove10;
         private readonly InputAction m_UIProNode_FastAdd;
-        private readonly InputAction m_UIProNode_ChangeRecipe;
         private readonly InputAction m_UIProNode_ChangeWorker;
         private readonly InputAction m_UIProNode_RemoveWorker;
+        private readonly InputAction m_UIProNode_AlterRawItem;
         public struct UIProNodeActions
         {
             private @PlayerInput m_Wrapper;
             public UIProNodeActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
-            public InputAction @NextPriority => m_Wrapper.m_UIProNode_NextPriority;
             public InputAction @Upgrade => m_Wrapper.m_UIProNode_Upgrade;
-            public InputAction @AlterRawItem => m_Wrapper.m_UIProNode_AlterRawItem;
+            public InputAction @NextPriority => m_Wrapper.m_UIProNode_NextPriority;
             public InputAction @Remove1 => m_Wrapper.m_UIProNode_Remove1;
             public InputAction @Remove10 => m_Wrapper.m_UIProNode_Remove10;
             public InputAction @FastAdd => m_Wrapper.m_UIProNode_FastAdd;
-            public InputAction @ChangeRecipe => m_Wrapper.m_UIProNode_ChangeRecipe;
             public InputAction @ChangeWorker => m_Wrapper.m_UIProNode_ChangeWorker;
             public InputAction @RemoveWorker => m_Wrapper.m_UIProNode_RemoveWorker;
+            public InputAction @AlterRawItem => m_Wrapper.m_UIProNode_AlterRawItem;
             public InputActionMap Get() { return m_Wrapper.m_UIProNode; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -2121,15 +2098,12 @@ namespace ProjectOC.Input
             {
                 if (instance == null || m_Wrapper.m_UIProNodeActionsCallbackInterfaces.Contains(instance)) return;
                 m_Wrapper.m_UIProNodeActionsCallbackInterfaces.Add(instance);
-                @NextPriority.started += instance.OnNextPriority;
-                @NextPriority.performed += instance.OnNextPriority;
-                @NextPriority.canceled += instance.OnNextPriority;
                 @Upgrade.started += instance.OnUpgrade;
                 @Upgrade.performed += instance.OnUpgrade;
                 @Upgrade.canceled += instance.OnUpgrade;
-                @AlterRawItem.started += instance.OnAlterRawItem;
-                @AlterRawItem.performed += instance.OnAlterRawItem;
-                @AlterRawItem.canceled += instance.OnAlterRawItem;
+                @NextPriority.started += instance.OnNextPriority;
+                @NextPriority.performed += instance.OnNextPriority;
+                @NextPriority.canceled += instance.OnNextPriority;
                 @Remove1.started += instance.OnRemove1;
                 @Remove1.performed += instance.OnRemove1;
                 @Remove1.canceled += instance.OnRemove1;
@@ -2139,28 +2113,25 @@ namespace ProjectOC.Input
                 @FastAdd.started += instance.OnFastAdd;
                 @FastAdd.performed += instance.OnFastAdd;
                 @FastAdd.canceled += instance.OnFastAdd;
-                @ChangeRecipe.started += instance.OnChangeRecipe;
-                @ChangeRecipe.performed += instance.OnChangeRecipe;
-                @ChangeRecipe.canceled += instance.OnChangeRecipe;
                 @ChangeWorker.started += instance.OnChangeWorker;
                 @ChangeWorker.performed += instance.OnChangeWorker;
                 @ChangeWorker.canceled += instance.OnChangeWorker;
                 @RemoveWorker.started += instance.OnRemoveWorker;
                 @RemoveWorker.performed += instance.OnRemoveWorker;
                 @RemoveWorker.canceled += instance.OnRemoveWorker;
+                @AlterRawItem.started += instance.OnAlterRawItem;
+                @AlterRawItem.performed += instance.OnAlterRawItem;
+                @AlterRawItem.canceled += instance.OnAlterRawItem;
             }
 
             private void UnregisterCallbacks(IUIProNodeActions instance)
             {
-                @NextPriority.started -= instance.OnNextPriority;
-                @NextPriority.performed -= instance.OnNextPriority;
-                @NextPriority.canceled -= instance.OnNextPriority;
                 @Upgrade.started -= instance.OnUpgrade;
                 @Upgrade.performed -= instance.OnUpgrade;
                 @Upgrade.canceled -= instance.OnUpgrade;
-                @AlterRawItem.started -= instance.OnAlterRawItem;
-                @AlterRawItem.performed -= instance.OnAlterRawItem;
-                @AlterRawItem.canceled -= instance.OnAlterRawItem;
+                @NextPriority.started -= instance.OnNextPriority;
+                @NextPriority.performed -= instance.OnNextPriority;
+                @NextPriority.canceled -= instance.OnNextPriority;
                 @Remove1.started -= instance.OnRemove1;
                 @Remove1.performed -= instance.OnRemove1;
                 @Remove1.canceled -= instance.OnRemove1;
@@ -2170,15 +2141,15 @@ namespace ProjectOC.Input
                 @FastAdd.started -= instance.OnFastAdd;
                 @FastAdd.performed -= instance.OnFastAdd;
                 @FastAdd.canceled -= instance.OnFastAdd;
-                @ChangeRecipe.started -= instance.OnChangeRecipe;
-                @ChangeRecipe.performed -= instance.OnChangeRecipe;
-                @ChangeRecipe.canceled -= instance.OnChangeRecipe;
                 @ChangeWorker.started -= instance.OnChangeWorker;
                 @ChangeWorker.performed -= instance.OnChangeWorker;
                 @ChangeWorker.canceled -= instance.OnChangeWorker;
                 @RemoveWorker.started -= instance.OnRemoveWorker;
                 @RemoveWorker.performed -= instance.OnRemoveWorker;
                 @RemoveWorker.canceled -= instance.OnRemoveWorker;
+                @AlterRawItem.started -= instance.OnAlterRawItem;
+                @AlterRawItem.performed -= instance.OnAlterRawItem;
+                @AlterRawItem.canceled -= instance.OnAlterRawItem;
             }
 
             public void RemoveCallbacks(IUIProNodeActions instance)
@@ -2235,15 +2206,14 @@ namespace ProjectOC.Input
         }
         public interface IUIProNodeActions
         {
-            void OnNextPriority(InputAction.CallbackContext context);
             void OnUpgrade(InputAction.CallbackContext context);
-            void OnAlterRawItem(InputAction.CallbackContext context);
+            void OnNextPriority(InputAction.CallbackContext context);
             void OnRemove1(InputAction.CallbackContext context);
             void OnRemove10(InputAction.CallbackContext context);
             void OnFastAdd(InputAction.CallbackContext context);
-            void OnChangeRecipe(InputAction.CallbackContext context);
             void OnChangeWorker(InputAction.CallbackContext context);
             void OnRemoveWorker(InputAction.CallbackContext context);
+            void OnAlterRawItem(InputAction.CallbackContext context);
         }
     }
 }

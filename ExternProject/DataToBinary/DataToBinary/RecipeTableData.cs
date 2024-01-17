@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ML.Engine.InventorySystem
 {
@@ -14,8 +12,8 @@ namespace ML.Engine.InventorySystem
         public int Sort;
         public RecipeCategory Category;
         public TextContent.TextContent Name;
-        public List<Tuple<string, int>> Raw;
-        public List<Tuple<string, int>> Product;
+        public List<CompositeSystem.Formula> Raw;
+        public CompositeSystem.Formula Product;
         public int TimeCost;
         public int ExpRecipe;
         public bool GenData(string[] row)
@@ -35,22 +33,20 @@ namespace ML.Engine.InventorySystem
             this.Name.Chinese = row[3];
             this.Name.English = row[3];
             // 4 -> Raw
-            this.Raw = new List<Tuple<string, int>>();
-            foreach (string str in row[4].Split(';').Where(x => !string.IsNullOrEmpty(x)).ToList())
-            {
-                string[] s = str.Split(',');
-                this.Raw.Add(new Tuple<string, int>(s[0], int.Parse(s[1])));
-            }
+            this.Raw = Program.ParseFormula(row[4]);
             // 5 -> Product
-            this.Product = new List<Tuple<string, int>>();
-            foreach (string str in row[5].Split(';').Where(x => !string.IsNullOrEmpty(x)).ToList())
+            List<CompositeSystem.Formula> temp = Program.ParseFormula(row[5]);
+            if (temp.Count >= 1)
             {
-                string[] s = str.Split(',');
-                this.Product.Add(new Tuple<string, int>(s[0], int.Parse(s[1])));
+                this.Product = temp[0];
             }
-            // 6 -> Stack
+            else
+            {
+                this.Product = new CompositeSystem.Formula();
+            }
+            // 6 -> TimeCost
             this.TimeCost = int.Parse(row[6]);
-            // 7 -> StackThreshold
+            // 7 -> ExpRecipe
             this.ExpRecipe = int.Parse(row[7]);
             return true;
         }
