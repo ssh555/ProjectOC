@@ -92,8 +92,11 @@
     <Compile Include="InventoryPanel.cs" />
     <Compile Include="ItemTableJsonData.cs" />
     <Compile Include="KeyTip.cs" />
+    <Compile Include="MultiTextContent.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResonanceWheelPanel.cs" />
+    <Compile Include="ResonanceWheel_sub1.cs" />
     <Compile Include="TechPoint.cs" />
     <Compile Include="TechPointCategory.cs" />
     <Compile Include="TextContent.cs" />

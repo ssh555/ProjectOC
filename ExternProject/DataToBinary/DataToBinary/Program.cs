@@ -2,6 +2,7 @@
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.TextContent;
 using Newtonsoft.Json;
+using ProjectOC.ResonanceWheelSystem.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
 using static ProjectOC.InventorySystem.UI.UIInfiniteInventory;
+using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheelUI;
 
 namespace ExcelToJson
 {
@@ -135,6 +137,7 @@ namespace ExcelToJson
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/Inventory/InventoryPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/Inventory/InventoryPanel.bytes", type = typeof(InventoryPanel) });
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/TechTree/TechPointPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/TechTree/TechPointPanel.bytes", type = typeof(ProjectOC.TechTree.TechTreeManager.TPPanel) });
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/ResonanceWheel/ResonanceWheelPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/ResonanceWheel/ResonanceWheelPanel.bytes", type = typeof(ResonanceWheelPanel) });
+            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/ResonanceWheel/ResonanceWheel_sub1.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/ResonanceWheel_sub1/ResonanceWheel_sub1.bytes", type = typeof(ResonanceWheel_sub1.ResonanceWheel_sub1Struct) });
             System.Threading.Tasks.Parallel.ForEach(jBConfigs, (config) =>
             {
                 try

@@ -1,0 +1,33 @@
+ManifestFileVersion: 0
+CRC: 3886325907
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 00382892fafcac35cf744fdcadafe2fa
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2d8df09e698f722ada1caa03d3413830
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 00382892fafcac35cf744fdcadafe2fa
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/icon_beast.png
+- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/green_background.png
+- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/blue_background.png
+- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/btn_switchtarget.png
+- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/yellow_background.png
+- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/gray_background.png
+- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/slectgrid.png
+- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/orange_background.png
+- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/box.png
+- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/icon_gender.png
+- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/icon_timing.png
+- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/circle.png
+Dependencies: []

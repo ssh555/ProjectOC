@@ -1,9 +1,9 @@
 {
+  //topPart
   "toptitle": {
-    "Chinese": "背包",
-    "English": "Inventory"
+    "Chinese": "共鸣轮",
+    "English": "ResonanceWheel"
   },
-
   "lastterm": {
     "keyname": "lastterm",
     "keymap": {
@@ -26,7 +26,15 @@
       "English": ""
     }
   },
-
+  "HiddenBeastResonanceText": {
+    "Chinese": "隐兽共鸣",
+    "English": "HiddenBeastResonance"
+  },
+  "SongofSeaBeastsText": {
+    "Chinese": "海兽之歌",
+    "English": "SongofSeaBeasts"
+  },
+  //ring
   "nextgrid": {
     "keyname": "nextgrid",
     "keymap": {
@@ -38,18 +46,62 @@
       "English": ""
     }
   },
-  "weightprefix": {
-    "Chinese": "单个重量：",
-    "English": "Per Weight: "
+  "Grid1Text": {
+    "Chinese": "空",
+    "English": "Empty"
   },
-  "descriptionprefix": {
-    "Chinese": "物品描述：",
-    "English": "Description: "
+  "Grid2Text": {
+    "Chinese": "空",
+    "English": "Empty"
   },
-  "effectdescriptionprefix": {
-    "Chinese": "效果描述：",
-    "English": "Effect Description: "
+  "Grid3Text": {
+    "Chinese": "空",
+    "English": "Empty"
   },
+  "Grid4Text": {
+    "Chinese": "空",
+    "English": "Empty"
+  },
+  "Grid5Text": {
+    "Chinese": "空",
+    "English": "Empty"
+  },
+  //ResonanceTarget
+  "ResonanceTargetTitle": {
+    "Chinese": "共鸣对象",
+    "English": "ResonanceTarget"
+  },
+  "RandomText": {
+    "Chinese": "随机",
+    "English": "Random"
+  },
+  "SwitchTargetText": {
+    "Chinese": "切换对象",
+    "English": "SwitchTarget"
+  },
+  //ResonanceConsumpion
+  "ResonanceConsumpionTitle": {
+    "description": [
+      {
+        "Chinese": "共鸣消耗",
+        "English": "ResonanceConsumpion"
+      },
+      {
+        "Chinese": "共鸣中",
+        "English": "Resonancing"
+      }
+    ]
+  },
+  "StartResonanceText": {
+    "Chinese": "开始共鸣",
+    "English": "StartResonance"
+  },
+  "StopResonanceText": {
+    "Chinese": "停止共鸣",
+    "English": "StopResonance"
+  },
+
+  //BotKeyTips
   "back": {
     "keyname": "back",
     "keymap": {
@@ -59,39 +111,6 @@
     "description": {
       "Chinese": "返回",
       "English": "Back"
-    }
-  },
-  "use": {
-    "keyname": "use",
-    "keymap": {
-      "KeyBoard": "E",
-      "XBOX": "A"
-    },
-    "description": {
-      "Chinese": "使用",
-      "English": "Use"
-    }
-  },
-  "drop": {
-    "keyname": "drop",
-    "keymap": {
-      "KeyBoard": "F",
-      "XBOX": "X"
-    },
-    "description": {
-      "Chinese": "丢弃",
-      "English": "Drop"
-    }
-  },
-  "destroy": {
-    "keyname": "destroy",
-    "keymap": {
-      "KeyBoard": "F",
-      "XBOX": "X"
-    },
-    "description": {
-      "Chinese": "销毁",
-      "English": "Destroy"
     }
   }
 }

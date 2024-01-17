@@ -15,5 +15,10 @@ namespace ProjectOC.WorkerEchoNS
             this.InteractType = "BuilidngPart";
             this.PosOffset = this.transform.position;
         }
+        public void Interact(InteractComponent component)
+        {
+
+        }
+
     }
 }

@@ -36,7 +36,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public bool IsInit = false;
         private void Start()
         {
-            InitUITextContents();
+
 
             parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
 
@@ -192,8 +192,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void NextGrid_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            Debug.Log("253453 " + Grids[0]);
-            Debug.Log("123412 " + Grids.Count);
             CurrentGridIndex = (CurrentGridIndex + 1) % Grids.Count;
             this.Refresh();
         }
@@ -279,34 +277,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
         #endregion
 
-        #region TextContent
-        [System.Serializable]
-        public struct ResonanceWheelPanel
-        {
-            public TextContent toptitle;
-            public TextTip[] itemtype;
-            public KeyTip lastterm;
-            public KeyTip nextterm;
-            public KeyTip nextgrid;
-        }
 
-        public static ResonanceWheelPanel PanelTextContent => ABJAProcessor.Datas;
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheelPanel> ABJAProcessor;
-
-        private void InitUITextContents()
-        {
-            if (ABJAProcessor == null)
-            {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheelPanel>("JSON/TextContent/ResonanceWheel", "ResonanceWheelPanel", (datas) =>
-                {
-                    Refresh();
-                    this.enabled = false;
-                }, null, "UI¹²ÃùÂÖPanelÊý¾Ý");
-                ABJAProcessor.StartLoadJsonAssetData();
-            }
-            Debug.Log("1 "+ABJAProcessor.Datas.toptitle);
-        }
-        #endregion
+        
 
        
     }

@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1601824431
+CRC: 3633382808
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1e5bd1c9ac23a497182bf6ecde112d58
+    Hash: 62b94a71786008d736f8ad74d91ca554
   TypeTreeHash:
     serializedVersion: 2
-    Hash: eb428c918b98c08e4707156514e531aa
+    Hash: d4ddd8a0eb45a5fef92061db6d05b428
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 1e5bd1c9ac23a497182bf6ecde112d58
+    Hash: 62b94a71786008d736f8ad74d91ca554
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -25,13 +25,17 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 27e27c8eeb2d1554babedcc209602ac4, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 9ea83b1ab433e514bb440b78e1a6f54a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ba8a2ec004d09ff4a886c0a90da6574f, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 902042dd59e50754a80bcc00d8654070, type: 3}
 - Class: 114
@@ -127,10 +131,12 @@ Assets:
 - Assets/_ProjectOC/Resources/UIPanel/UIInfiniteInventoryPanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/UIStorePanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIPanel.prefab
+- Assets/_ProjectOC/Resources/UIPanel/SkillGraph.prefab
 - Assets/_ProjectOC/Resources/UIPanel/ResonanceWheelUI.prefab
 - Assets/_ProjectOC/Resources/UIPanel/ResonanceWheelUI_sub1.prefab
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIBotPanel.prefab
 Dependencies:
 - E:/OC/projectoc/Assets/StreamingAssets/Windows/fonts
 - E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/inventory/texture2d/itemtype
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d
 - E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/techpoint/texture2d

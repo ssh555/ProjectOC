@@ -38,10 +38,38 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             InitUITextContents();
 
+            //BeastInfo
+            var Info1 = this.transform.Find("HiddenBeastInfo1").Find("Info");
+            Stamina = Info1.Find("PhysicalStrength").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
+            Speed = Info1.Find("MovingSpeed").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
 
+            var GInfo = Info1.Find("SkillGraph").Find("Viewport").Find("Content").Find("Ring");
+            Cook = GInfo.Find("Skill1").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
+            HandCraft = GInfo.Find("Skill6").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
+            Industry = GInfo.Find("Skill5").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
+            Magic = GInfo.Find("Skill4").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
+            Transport = GInfo.Find("Skill3").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
+            Collect = GInfo.Find("Skill2").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
+
+            var Info2 = this.transform.Find("HiddenBeastInfo2").Find("Info");
+            var btn1 = this.transform.Find("HiddenBeastInfo2").Find("btn1");
+            expel = new UIKeyTip();
+            expel.keytip = btn1.Find("KeyTip").Find("Image").Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
+            expel.description = btn1.Find("KeyTip").Find("Image").Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
+
+            var btn2 = this.transform.Find("HiddenBeastInfo2").Find("btn2");
+            receive = new UIKeyTip();
+            receive.keytip = btn2.Find("KeyTip").Find("Image").Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
+            receive.description = btn2.Find("KeyTip").Find("Image").Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
 
             
 
+            //BotKeyTips
+            var kt = this.transform.Find("BotKeyTips").Find("KeyTips");
+            KT_Back = new UIKeyTip();
+            KT_Back.img = kt.Find("KT_Back").Find("Image").GetComponent<Image>();
+            KT_Back.keytip = KT_Back.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
+            KT_Back.description = KT_Back.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
 
             IsInit = true;
             Refresh();
@@ -193,69 +221,98 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #region UI对象引用
         public ResonanceWheelUI parentUI;
+        //BeastInfo
+        private TMPro.TextMeshProUGUI Stamina;
+        private TMPro.TextMeshProUGUI Speed;
+
+        private TMPro.TextMeshProUGUI Cook;
+        private TMPro.TextMeshProUGUI HandCraft;
+        private TMPro.TextMeshProUGUI Industry;
+        private TMPro.TextMeshProUGUI Magic;
+        private TMPro.TextMeshProUGUI Transport;
+        private TMPro.TextMeshProUGUI Collect;
+
+        private UIKeyTip expel;
+        private UIKeyTip receive;
 
 
-        private TMPro.TextMeshProUGUI TopTitleText;
-
-        private UIKeyTip KT_LastTerm;
-        private Transform HiddenBeastResonanceTemplate;
-        private Transform SongofSeaBeastsTemplate;
-        private UIKeyTip KT_NextTerm;
-
-        private List<Transform> Grids = new List<Transform>();
-        private Transform Grid1, Grid2, Grid3, Grid4, Grid5;
+        //BotKeyTips
+        private UIKeyTip KT_Back;
 
 
-        private UIKeyTip KT_NextGrid;
         #endregion
 
         public void Refresh()
         {
-            if (ABJAProcessor == null || !ABJAProcessor.IsLoaded || !IsInit)
+
+            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
             {
+                Debug.Log("ABJAProcessorJson is null");
                 return;
             }
 
 
-            
+            //BeastInfo
+            Stamina.text = PanelTextContent.Stamina;
+            Speed.text = PanelTextContent.Speed;
+
+            Cook.text = PanelTextContent.Cook;
+            HandCraft.text = PanelTextContent.HandCraft;
+            Industry.text = PanelTextContent.Industry;
+            Magic.text = PanelTextContent.Magic;
+            Transport.text = PanelTextContent.Transport;
+            Collect.text = PanelTextContent.Collect;
+
+            expel.ReWrite(PanelTextContent.expel);
+            receive.ReWrite(PanelTextContent.receive);
 
 
-
-
-
+            //BotKeyTips
+            KT_Back.ReWrite(PanelTextContent.back);
         }
         #endregion
 
         #region TextContent
         [System.Serializable]
-        public struct ResonanceWheelPanel
+        public struct ResonanceWheel_sub1Struct
         {
-            public TextContent toptitle;
-            public TextTip[] itemtype;
-            public KeyTip lastterm;
-            public KeyTip nextterm;
-            public KeyTip nextgrid;
+            //BeastInfo
+            public TextContent Stamina;
+            public TextContent Speed;
+
+            public TextContent Cook;
+            public TextContent HandCraft;
+            public TextContent Industry;
+            public TextContent Magic;
+            public TextContent Transport;
+            public TextContent Collect;
+
+            public KeyTip expel;
+            public KeyTip receive;
+
+            //BotKeyTips
+            public KeyTip back;
         }
 
-        public static ResonanceWheelPanel PanelTextContent => ABJAProcessor.Datas;
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheelPanel> ABJAProcessor;
+        public static ResonanceWheel_sub1Struct PanelTextContent => ABJAProcessorJson.Datas;
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub1Struct> ABJAProcessorJson;
 
         private void InitUITextContents()
         {
-            if (ABJAProcessor == null)
+            if (ABJAProcessorJson == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheelPanel>("JSON/TextContent/ResonanceWheel", "ResonanceWheelPanel", (datas) =>
+                ABJAProcessorJson = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub1Struct>("Binary/TextContent/ResonanceWheel_sub1", "ResonanceWheel_sub1", (datas) =>
                 {
                     Refresh();
                     this.enabled = false;
-                }, null, "UI共鸣轮Panel数据");
-                ABJAProcessor.StartLoadJsonAssetData();
+                }, null, "UI共鸣轮Panel_sub1数据");
+                ABJAProcessorJson.StartLoadJsonAssetData();
             }
-            Debug.Log("1 "+ABJAProcessor.Datas.toptitle);
+
         }
         #endregion
 
-       
+
     }
 
 }
