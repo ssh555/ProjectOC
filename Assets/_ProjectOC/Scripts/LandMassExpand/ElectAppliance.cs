@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ProjectOC.LandMassExpand
 {
-    public class ElectAppliance : BuildingPart, IPowerBPart
+    public class ElectAppliance : BuildingPart, INeedPowerBpart
     {
         [Header("用电器部分")] private int powerCount = 0;
 
@@ -16,45 +16,37 @@ namespace ProjectOC.LandMassExpand
                 powerCount = value;
                 if (powerCount <= 0)
                 {
-                    Inpower = false;
+                    InPower = false;
                 }
                 else
                 {
-                    Inpower = true;
+                    InPower = true;
                 }
             }
         }
+        
+        private bool inPower = false;
 
-        private int powerSupportRange;
-
-        [ShowInInspector]public int PowerSupportRange
+        [ShowInInspector]public bool InPower
         {
-            get => powerSupportRange;
+            get => inPower;
             set
             {
-                powerSupportRange = value;
-            }
-        }
-
-        private bool inpower = false;
-
-        [ShowInInspector]public bool Inpower
-        {
-            get => inpower;
-            set
-            {
-                inpower = value;
+                inPower = value;
+                if(vfxTranf != null)
+                    vfxTranf.SetActive(value);
                 
-                if (inpower)
+                //bug to-do
+                if (value)
                     powerVFXMat.SetColor("_Color",inPowerColor);
                 else
                     powerVFXMat.SetColor("_Color",unPowerColor);
-                //Debug.Log("Color: " + powerVFXMat.GetColor("_Color"));
             }
         }
 
         [SerializeField] private Color inPowerColor, unPowerColor;
         private Material powerVFXMat;
+        [SerializeField]private GameObject vfxTranf;
         private new void Awake()
         {
             powerVFXMat = GetComponent<Renderer>().material;
@@ -64,7 +56,7 @@ namespace ProjectOC.LandMassExpand
         }
         void OnDestroy()
         {
-            if (BuildPowerIslandManager.Instance != null && Inpower && BuildPowerIslandManager.Instance.electAppliances.Contains(this))
+            if (BuildPowerIslandManager.Instance != null && InPower && BuildPowerIslandManager.Instance.electAppliances.Contains(this))
             {
                 BuildPowerIslandManager.Instance.electAppliances.Remove(this);
             }
@@ -92,9 +84,12 @@ namespace ProjectOC.LandMassExpand
             
             foreach (var powerSub in BuildPowerIslandManager.Instance.powerSubs)
             {
-                if(BuildPowerIslandManager.Instance.CoverEachOther(0, powerSub.PowerSupportRange, 
-                       transform.position, powerSub.transform.position))
-                    tempCount++;
+                {
+                    if(powerSub.InPower && BuildPowerIslandManager.Instance.CoverEachOther(0, powerSub.PowerSupportRange, 
+                           transform.position, powerSub.transform.position))
+                        tempCount++;                    
+                }
+                
             }
 
             PowerCount = tempCount;

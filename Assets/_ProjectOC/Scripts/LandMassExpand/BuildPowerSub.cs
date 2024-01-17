@@ -7,7 +7,7 @@ namespace ProjectOC.LandMassExpand
 {
     //拷贝自BuildingPart，增加OnChangePlaceEvent，放置后更新用电数量
 
-    public class BuildPowerSub : BuildingPart, IPowerBPart, IComposition
+    public class BuildPowerSub : BuildingPart, ISupportPowerBPart,INeedPowerBpart, IComposition
     {
         [Header("供电部分")]
 
@@ -39,22 +39,22 @@ namespace ProjectOC.LandMassExpand
             set => powerCount = value;
         }
   
-        private bool inpower = false;
+        private bool inPower = false;
         [ShowInInspector]
-        public bool Inpower
+        public bool InPower
         {
-            get=>this.inpower;
+            get=>this.inPower;
             set
             {
-                if (value != inpower)
+                if (value != inPower)
                 {
-                    inpower = value;
+                    inPower = value;
                     //更换颜色
                     Color32 vfxColor = (value ? new Color32(255, 178,126,255): new Color32(139, 167,236,255));
                     powerVFXMat.SetColor("_VFXColor",vfxColor);
 
                     //在位置不变的情况下，计算附近用电器powercount情况，
-                    CalculatePowerCount(transform.position,Inpower);
+                    CalculatePowerCount(transform.position,InPower);
                 }
             }
         }
@@ -74,7 +74,7 @@ namespace ProjectOC.LandMassExpand
         {
             if (BuildPowerIslandManager.Instance != null && BuildPowerIslandManager.Instance.powerSubs.Contains(this))
             {
-                Inpower = false;
+                InPower = false;
                 BuildPowerIslandManager.Instance.powerSubs.Remove(this);
             }
         }
@@ -92,9 +92,9 @@ namespace ProjectOC.LandMassExpand
             float startT = Time.realtimeSinceStartup;
 #endif
             //说明是移动，不是建造
-            if (Inpower)
+            if (InPower)
             {
-                inpower = false;
+                inPower = false;
                 Color32 vfxColor = new Color32(139, 167,236,255);
                 powerVFXMat.SetColor("_VFXColor",vfxColor);
                 CalculatePowerCount(oldPos,false);

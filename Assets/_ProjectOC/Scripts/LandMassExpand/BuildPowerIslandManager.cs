@@ -94,16 +94,16 @@ namespace ProjectOC.LandMassExpand
 
             foreach (var inPower in inPowers)
             {
-                inPower.Inpower = true;
+                inPower.InPower = true;
             }
             foreach (var unPower in unPowers)
             {
-                unPower.Inpower = false;
+                unPower.InPower = false;
             }
             
         }
 
-        public bool CoverEachOther(IPowerBPart powerBPart1, IPowerBPart powerBPart2)
+        public bool CoverEachOther(ISupportPowerBPart powerBPart1, ISupportPowerBPart powerBPart2)
         {
             float r1 = powerBPart1.PowerSupportRange;
             float r2 = powerBPart2.PowerSupportRange;

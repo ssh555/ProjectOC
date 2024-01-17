@@ -12,11 +12,10 @@
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart.manifest" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/testscene" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/testscene" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/testscene.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/testscene.manifest" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPart/IPowerBPart.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPart/IPowerBPart.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPart/IPowerBPart.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingPart/IPowerBPart.cs.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_ML/Example/LandMassExpand/Prefabs/IslandMainPrefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Example/LandMassExpand/Prefabs/IslandMainPrefab.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/Example/LandMassExpand/Prefabs/IslandSubPrefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Example/LandMassExpand/Prefabs/IslandSubPrefab.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/ExternalFacility_ElectAppliance_Base_100.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/ExternalFacility_ElectAppliance_Base_100.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/ExternalFacility_PowerCore_Base_100.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/MLResources/BuildingSystem/BuildingPart/ExternalFacility_PowerCore_Base_100.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/yangLe/_LandMassExpandTest.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/yangLe/_LandMassExpandTest.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/BuildPowerCore.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/BuildPowerCore.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/BuildPowerIslandManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/BuildPowerIslandManager.cs" afterDir="false" />
@@ -40,6 +39,8 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9b9fa26e86114fcba20da47317e725fe172c00/f4/4d115c28/Vector3.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3ea01e77be99618395f448b16bd7cc2bd4248bd9e5d8474964b2d97f39c5d74/System.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d44b17e136d09081da1e8fd0e8c83fde60e11818b9f2442d7ed8cb733fae895e/System.Collections.Generic.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/INeedPowerBpart.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/ISupportPowerBPart.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.universal@14.0.8/Shaders/Lit.shader" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.timeline@1.7.5/Editor/Animation/TimelineAnimationUtilities.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
@@ -157,6 +158,9 @@
       <workItem from="1705368029935" duration="12890000" />
       <workItem from="1705390097148" duration="6417000" />
       <workItem from="1705403484056" duration="1255000" />
+      <workItem from="1705405942718" duration="898000" />
+      <workItem from="1705416195465" duration="2454000" />
+      <workItem from="1705454982243" duration="10194000" />
     </task>
     <servers />
   </component>

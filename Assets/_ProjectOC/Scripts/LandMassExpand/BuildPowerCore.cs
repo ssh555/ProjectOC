@@ -6,11 +6,12 @@ using ML.Engine.BuildingSystem.BuildingPart;
 
 namespace ProjectOC.LandMassExpand
 {
-    public class BuildPowerCore : BuildingPart,IPowerBPart
+    public class BuildPowerCore : BuildingPart,ISupportPowerBPart
     {
         [SerializeField] private Transform powerSupportVFX;
         
         private int powerSupportRange = 20;
+
         [ShowInInspector]public int PowerSupportRange
         {
             get => powerSupportRange;
@@ -21,8 +22,7 @@ namespace ProjectOC.LandMassExpand
                 powerSupportVFX.transform.localScale = new Vector3(_localScale,1,_localScale);
             }
         }
-        public int PowerCount { get; set; }
-        public bool Inpower { get; set; }
+        public bool InPower { get; set; }
 
         private new void Awake()
         {
