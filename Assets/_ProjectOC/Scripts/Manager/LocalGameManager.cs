@@ -4,6 +4,7 @@ using ProjectOC.MissionNS;
 using UnityEngine;
 using ProjectOC.WorkerNS;
 using ProjectOC.StoreNS;
+using ProjectOC.WorkerEchoNS;
 
 namespace ProjectOC.ManagerNS
 {
@@ -14,7 +15,7 @@ namespace ProjectOC.ManagerNS
         public MissionManager MissionBroadCastManager { get; private set; }
         public WorkerManager WorkerManager { get; private set; }
         public StoreManager StoreManager { get; private set; }
-
+        public WorkerEcho WorkerEcho { get; private set; }
         void Start()
         {
             GameManager.Instance.RegisterLocalManager(this);
@@ -22,6 +23,7 @@ namespace ProjectOC.ManagerNS
             MissionBroadCastManager = GameManager.Instance.RegisterLocalManager<MissionManager>();
             WorkerManager = GameManager.Instance.RegisterLocalManager<WorkerManager>();
             StoreManager = GameManager.Instance.RegisterLocalManager<StoreManager>();
+            WorkerEcho = GameManager.Instance.RegisterLocalManager<WorkerEcho>();
 
             this.enabled = false;
         }

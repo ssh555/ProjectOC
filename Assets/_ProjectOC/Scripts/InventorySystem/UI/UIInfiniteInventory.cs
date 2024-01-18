@@ -20,7 +20,6 @@ namespace ProjectOC.InventorySystem.UI
     {
 
         #region Input
-        /// <summary>
         /// 用于Drop和Destroy按键响应Cancel
         /// 长按响应了Destroy就置为true
         /// Cancel就不响应Drop 并 重置
@@ -487,7 +486,7 @@ namespace ProjectOC.InventorySystem.UI
                     tempUIItems.Add(uiitem.gameObject);
                 }
             }
-
+            
             // 用于更新滑动窗口
             // 当前选中的UIItem
             GameObject cur = null;
