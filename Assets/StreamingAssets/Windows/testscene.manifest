@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 962727836
+CRC: 2020721122
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a7d3c00d6d34c88ee542d1bdf84616bc
+    Hash: c9486ea5dff4500418f686a1bd80522c
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 3de8049eae715b13ced1a8b5d943f334
+    Hash: ec9c2743aaf935a7e78510951b566b6c
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: a7d3c00d6d34c88ee542d1bdf84616bc
+    Hash: c9486ea5dff4500418f686a1bd80522c
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -99,6 +99,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: a444fb26d79a4a94ebd9400ba547e490, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: eea3d28ffbcb4cd47a326cb08ba74d18, type: 3}
@@ -170,4 +172,5 @@ Assets:
 Dependencies:
 - D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
 - D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart
 - D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player

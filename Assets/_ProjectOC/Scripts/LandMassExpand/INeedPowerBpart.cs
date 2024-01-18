@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ProjectOC.LandMassExpand
 {
-    public interface INeedPowerBpart : IBuildingPart
+    public interface INeedPowerBpart : IPowerBPart
     {
         int PowerCount { get; set; }
     }   

@@ -7,7 +7,7 @@ namespace ProjectOC.LandMassExpand
 {
   public class IslandMain : IslandBase
   {
-    //∏Ω Ùµ∫”Ï
+    [LabelText("∏Ω Ùµ∫”Ï")]
     public List<IslandSub> affiliatedIslands;
 
     public override void IslandMove(Vector2Int centerPos)

@@ -7,15 +7,11 @@ namespace ProjectOC.LandMassExpand
 {
     //拷贝自BuildingPart，增加OnChangePlaceEvent，放置后更新用电数量
 
-    public class BuildPowerSub : BuildingPart, ISupportPowerBPart,INeedPowerBpart, IComposition
+    public class BuildPowerSub : BuildingPart, ISupportPowerBPart, IComposition
     {
-        [Header("供电部分")]
-
-        //光圈特效
-        
-        private int powerSupportRange = 5;
-        [ShowInInspector]
-        public int PowerSupportRange
+        [Header("供电部分"),SerializeField,LabelText("供电范围")]
+        private float powerSupportRange = 5;
+        public float PowerSupportRange
         {
             get => powerSupportRange;
             set
@@ -25,7 +21,8 @@ namespace ProjectOC.LandMassExpand
                 powerSupportVFX.transform.localScale = new Vector3(localScale,1,localScale);
             }
         }
-        [SerializeField]
+        
+        [SerializeField,LabelText("供电范围特效")]
         private GameObject powerSupportVFX;
         [SerializeField]
         private Material powerVFXMat;
@@ -87,27 +84,30 @@ namespace ProjectOC.LandMassExpand
             {
                 BuildPowerIslandManager.Instance.powerSubs.Add(this);
             }
+            //原地放
+            else if(oldPos == newPos)
+            {
+                return;
+            }
             
-#if UNITY_EDITOR
-            float startT = Time.realtimeSinceStartup;
-#endif
+
             //说明是移动，不是建造
             if (InPower)
             {
                 inPower = false;
                 Color32 vfxColor = new Color32(139, 167,236,255);
                 powerVFXMat.SetColor("_VFXColor",vfxColor);
+                //原来的位置powerCount-1
                 CalculatePowerCount(oldPos,false);
             }
-#if UNITY_EDITOR
-            Debug.Log($"CalculatePowerCount cost time: {Time.realtimeSinceStartup - startT}");          
-#endif
-            BuildPowerIslandManager.Instance.PowerSupportCalculation();
-            
-#if UNITY_EDITOR
-            //不超过0.02
-            Debug.Log($"CalculatePowerCount + PowerSub cost time: {Time.realtimeSinceStartup - startT}");          
-#endif        
+
+            foreach (var powerCore in BuildPowerIslandManager.Instance.powerCores)
+            {
+                if(BuildPowerIslandManager.Instance.CoverEachOther(powerCore,this))
+                {
+                    InPower = true;
+                }
+            }
         }
 
         private void CalculatePowerCount(Vector3 pos,bool isAdd)
@@ -120,7 +120,7 @@ namespace ProjectOC.LandMassExpand
             
             foreach (var electAppliance in BuildPowerIslandManager.Instance.electAppliances)
             {
-                if (CoverEachOther(electAppliance, pos))
+                if(BuildPowerIslandManager.Instance.CoverEachOther(electAppliance,PowerSupportRange,pos))
                     electAppliance.PowerCount += add;
             }
         }
@@ -128,7 +128,7 @@ namespace ProjectOC.LandMassExpand
         public bool CoverEachOther(ElectAppliance electAppliance, Vector3 powerSubPos)
         {
 
-            return CoverEachOther(PowerSupportRange, 0, 
+            return CoverEachOther(electAppliance.PowerSupportRange, PowerSupportRange, 
                 electAppliance.transform.position, powerSubPos);
         }
         

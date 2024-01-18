@@ -8,11 +8,13 @@ namespace ProjectOC.LandMassExpand
 {
     public class BuildPowerCore : BuildingPart,ISupportPowerBPart
     {
-        [SerializeField] private Transform powerSupportVFX;
+        [Header("供电部分"),SerializeField,LabelText("供电范围特效")] 
+        private Transform powerSupportVFX;
         
-        private int powerSupportRange = 20;
+        private float powerSupportRange = 20;
 
-        [ShowInInspector]public int PowerSupportRange
+        [LabelText("供电范围"),ShowInInspector]
+        public float PowerSupportRange
         {
             get => powerSupportRange;
             set
@@ -44,7 +46,15 @@ namespace ProjectOC.LandMassExpand
             {
                 BuildPowerIslandManager.Instance.powerCores.Add(this);
             }
-            BuildPowerIslandManager.Instance.PowerSupportCalculation();
+            
+            foreach (var powerSub in BuildPowerIslandManager.Instance.powerSubs)
+            {
+                if (BuildPowerIslandManager.Instance.CoverEachOther(powerSub, this))
+                {
+                    powerSub.InPower = true;
+                }
+
+            }
         }
     }
 }

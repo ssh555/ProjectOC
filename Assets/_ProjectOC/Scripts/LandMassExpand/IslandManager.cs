@@ -33,10 +33,12 @@ namespace ProjectOC.LandMassExpand
                 instance = null;
             }    
         }
-        
+        [LabelText("大地图网格大小 m")]
         public int mapGridSize = 100;
+        [LabelText("大地图网格大小")]
         public Vector2Int maxSize;
-        [SerializeField]private List<IslandMain> islandMains;
+        [SerializeField,LabelText("主岛屿")]
+        private List<IslandMain> islandMains;
         public IslandBase[,] islandGrids;
         bool UnlockIsland(int island_Index)
         {

@@ -6,57 +6,39 @@ namespace ProjectOC.LandMassExpand
 {
     public class ElectAppliance : BuildingPart, INeedPowerBpart
     {
-        [Header("用电器部分")] private int powerCount = 0;
+        private int powerCount = 0;
+        [Header("用电器部分"),SerializeField,LabelText("充电范围")]
+        private float powerSupportRange;
+        public float PowerSupportRange
+        {
+            get => powerSupportRange;
+            set
+            {
+                powerSupportRange = value;
+            }
+        }
 
-        [ShowInInspector]public int PowerCount
+        [ShowInInspector]
+        public int PowerCount
         {
             get => powerCount;
             set
             {
                 powerCount = value;
-                if (powerCount <= 0)
-                {
-                    InPower = false;
-                }
-                else
-                {
-                    InPower = true;
-                }
+                
+                bool inPower = powerCount > 0;
+                if(vfxTranf != null)
+                    vfxTranf.SetActive(inPower);
             }
         }
         
-        private bool inPower = false;
 
-        [ShowInInspector]public bool InPower
-        {
-            get => inPower;
-            set
-            {
-                inPower = value;
-                if(vfxTranf != null)
-                    vfxTranf.SetActive(value);
-                
-                //bug to-do
-                if (value)
-                    powerVFXMat.SetColor("_Color",inPowerColor);
-                else
-                    powerVFXMat.SetColor("_Color",unPowerColor);
-            }
-        }
+        [SerializeField,LabelText("充电特效")]
+        private GameObject vfxTranf;
 
-        [SerializeField] private Color inPowerColor, unPowerColor;
-        private Material powerVFXMat;
-        [SerializeField]private GameObject vfxTranf;
-        private new void Awake()
-        {
-            powerVFXMat = GetComponent<Renderer>().material;
-            GetComponent<Renderer>().sharedMaterial = powerVFXMat;
-
-            base.Awake();
-        }
         void OnDestroy()
         {
-            if (BuildPowerIslandManager.Instance != null && InPower && BuildPowerIslandManager.Instance.electAppliances.Contains(this))
+            if (BuildPowerIslandManager.Instance != null  && BuildPowerIslandManager.Instance.electAppliances.Contains(this))
             {
                 BuildPowerIslandManager.Instance.electAppliances.Remove(this);
             }
@@ -77,24 +59,19 @@ namespace ProjectOC.LandMassExpand
             int tempCount = 0;
             foreach (var powerCore in BuildPowerIslandManager.Instance.powerCores)
             {
-                if(BuildPowerIslandManager.Instance.CoverEachOther(0, powerCore.PowerSupportRange, 
-                       transform.position, powerCore.transform.position))
+                if(BuildPowerIslandManager.Instance.CoverEachOther(this,powerCore))
                     tempCount++;
             }
             
             foreach (var powerSub in BuildPowerIslandManager.Instance.powerSubs)
             {
-                {
-                    if(powerSub.InPower && BuildPowerIslandManager.Instance.CoverEachOther(0, powerSub.PowerSupportRange, 
-                           transform.position, powerSub.transform.position))
-                        tempCount++;                    
-                }
-                
+                if(BuildPowerIslandManager.Instance.CoverEachOther(this,powerSub))
+                    tempCount++;                    
             }
 
             PowerCount = tempCount;
         }
-        
-        
+
+
     }
 }

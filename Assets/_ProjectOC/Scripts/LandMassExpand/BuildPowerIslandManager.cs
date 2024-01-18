@@ -34,81 +34,27 @@ namespace ProjectOC.LandMassExpand
         {
             GameManager.Instance.RegisterLocalManager(this);
         }
-
+        
+        [HideInInspector]
         public List<BuildPowerCore> powerCores = new List<BuildPowerCore>();
+        [HideInInspector]
         public List<BuildPowerSub> powerSubs = new List<BuildPowerSub>();
+        [HideInInspector]
         public List<ElectAppliance> electAppliances = new List<ElectAppliance>();
         
-        
-        //重新计算电线受电情况
-        public void PowerSupportCalculation()
-        {
-            List<BuildPowerSub> detectInPowers = new List<BuildPowerSub>();
-            //powerSubs.RemoveAll(p => p == null);
-            //powerCores.RemoveAll(p => p == null);
-            foreach (var powerSub in powerSubs)
-            {
-                foreach (var powerCore in powerCores)
-                {
-                    if (CoverEachOther(powerCore, powerSub))
-                    {
-                        detectInPowers.Add(powerSub);                    
-                        continue;
-                    } 
-                }
-            }
-            
-            
-            List<BuildPowerSub> inPowers = new List<BuildPowerSub>(detectInPowers);
-            List<BuildPowerSub> unPowers = new List<BuildPowerSub>(powerSubs);
-            foreach (var detectInPower in detectInPowers)
-            {
-                unPowers.Remove(detectInPower);
-            }
-            
-            while (detectInPowers.Count !=0)
-            {
-                List<BuildPowerSub> tempInPowers = new List<BuildPowerSub>();
-                foreach (var unPower in unPowers)
-                {
-                    foreach (var detectInPower in detectInPowers)
-                    {
-                        if (CoverEachOther(unPower, detectInPower))
-                        {
-                            tempInPowers.Add(unPower);
-                            continue;
-                        }
-                    }
-                }
-                
-                detectInPowers.Clear();
-                detectInPowers = tempInPowers;
-                
-                foreach (var detectInPower in detectInPowers)
-                {
-                    inPowers.Add(detectInPower);
-                    unPowers.Remove(detectInPower);
-                    
-                }
-            }
 
-            foreach (var inPower in inPowers)
-            {
-                inPower.InPower = true;
-            }
-            foreach (var unPower in unPowers)
-            {
-                unPower.InPower = false;
-            }
-            
-        }
-
-        public bool CoverEachOther(ISupportPowerBPart powerBPart1, ISupportPowerBPart powerBPart2)
+        public bool CoverEachOther(IPowerBPart powerBPart1, IPowerBPart powerBPart2)
         {
             float r1 = powerBPart1.PowerSupportRange;
             float r2 = powerBPart2.PowerSupportRange;
             Vector3 pos1 = powerBPart1.transform.position;
             Vector3 pos2 = powerBPart2.transform.position;
+            return CoverEachOther(r1, r2, pos1, pos2);
+        }
+        public bool CoverEachOther(IPowerBPart powerBPart1, float r2, Vector3 pos2)
+        {
+            float r1 = powerBPart1.PowerSupportRange;
+            Vector3 pos1 = powerBPart1.transform.position;
             return CoverEachOther(r1, r2, pos1, pos2);
         }
         

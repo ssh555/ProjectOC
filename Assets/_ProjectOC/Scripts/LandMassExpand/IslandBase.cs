@@ -3,14 +3,19 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ProjectOC.LandMassExpand
 {
     public class IslandBase : MonoBehaviour
     {
         private int island_Index;
-        [SerializeField] protected Vector2Int islandMapPos;
-        [SerializeField] protected Vector2Int[] islandMapRange;
+        [SerializeField,LabelText("岛屿大地图位置")] 
+        protected Vector2Int islandMapPos;
+        [SerializeField,LabelText("岛屿大地图网格")]
+        protected Vector2Int[] islandMapRanges;
+        [SerializeField,LabelText("岛屿模型")]
+        private Transform islandMesh;
         public virtual void OnUnlock()
         { }
 
@@ -30,12 +35,12 @@ namespace ProjectOC.LandMassExpand
             //移动岛屿父物体
             transform.position= new Vector3(centerPos.x,0,centerPos.y)*mapSize;
             
-            for(int i = 0;i<islandMapRange.Length;i++)
+            for(int i = 0;i<islandMapRanges.Length;i++)
             {
                 //检查是否超出边界
 
                 #region 检查是否超出边界或有重合
-                Vector2Int bigMapPos = centerPos + islandMapRange[i];
+                Vector2Int bigMapPos = centerPos + islandMapRanges[i];
                 //从[-halfMapSize,halfMapSize]转到[0,bigMapSize-1]
                 Vector2Int bigMapSize = islandManager.maxSize;
                 Vector2Int halfMapSize = (islandManager.maxSize - Vector2Int.one) / 2;
@@ -62,6 +67,18 @@ namespace ProjectOC.LandMassExpand
             
         }
 
+        [Button(name: "旋转岛屿"),PropertyOrder(-1)]
+        public void RotateIsland()
+        {
+            //顺时针旋转
+            islandMesh.rotation = Quaternion.Euler(islandMesh.eulerAngles + Vector3.up*90);
+            for (int i = 0; i < islandMapRanges.Length; i++)
+            {
+                islandMapRanges[i] = new Vector2Int(islandMapRanges[i].y, -islandMapRanges[i].x);
+            }
+        }
+        
+        
         void OnDrawGizmosSelected()
         {
             if(this.GetType() == typeof(IslandMain))
@@ -73,11 +90,11 @@ namespace ProjectOC.LandMassExpand
                 Gizmos.color = Color.red;
             }
             
-            IslandManager islandManager = FindObjectOfType<IslandManager>().GetComponent<IslandManager>();
-            for (int i = 0; i < islandMapRange.Length; i++)
+            IslandManager islandManager = GetComponentInParent<IslandManager>();
+            for (int i = 0; i < islandMapRanges.Length; i++)
             {
                 Vector2Int bigMapSize = islandManager.maxSize;
-                Gizmos.DrawWireCube(new Vector3(islandMapRange[i].x, 0, islandMapRange[i].y) * islandManager.mapGridSize + transform.position,
+                Gizmos.DrawWireCube(new Vector3(islandMapRanges[i].x, 0, islandMapRanges[i].y) * islandManager.mapGridSize + transform.position,
                     Vector3.one * islandManager.mapGridSize);
             }
         }
