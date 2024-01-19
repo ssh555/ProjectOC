@@ -1,9 +1,9 @@
 [
     {
-        "name": "Room",
+        "name": "House",
         "description": {
             "Chinese": "房屋",
-            "English": "Room"
+            "English": "House"
         }
     },
     {
@@ -11,6 +11,20 @@
         "description": {
             "Chinese": "家具",
             "English": "Furniture"
+        }
+    },
+    {
+        "name": "ProNode",
+        "description": {
+            "Chinese": "生产节点",
+            "English": "ProNode"
+        }
+    },
+    {
+        "name": "Interact",
+        "description": {
+            "Chinese": "交互建筑",
+            "English": "Interact"
         }
     }
 ]

@@ -4,6 +4,8 @@ using System.Linq;
 using UnityEngine;
 using System;
 using ML.Engine.Manager;
+using ML.Engine.InventorySystem.CompositeSystem;
+using ML.Engine.InventorySystem;
 
 namespace ProjectOC.WorkerNS
 {
@@ -47,19 +49,34 @@ namespace ProjectOC.WorkerNS
             this.Workers.Remove(worker);
         }
 
-        /// <summary>
-        /// 创建新的刁民
-        /// </summary>
-        public Worker SpawnWorker(Vector3 pos, Quaternion rot)
+        public bool OnlyCostResource(IInventory inventory, string workerID)
+        {
+            return CompositeManager.Instance.OnlyCostResource(inventory, workerID);
+        }
+        public Worker SpawnWorker(Vector3 pos, Quaternion rot, string workerID)
         {
             GameObject obj = GameObject.Instantiate(GetObject(), pos, rot);
             Worker worker = obj.AddComponent<Worker>();
             Workers.Add(worker);
             return worker;
         }
+        public Worker SpawnWorker(Vector3 pos, Quaternion rot, IInventory inventory, string workerID)
+        {
+            if (CompositeManager.Instance.OnlyCostResource(inventory, workerID))
+            {
+                GameObject obj = GameObject.Instantiate(GetObject(), pos, rot);
+                Worker worker = obj.AddComponent<Worker>();
+                Workers.Add(worker);
+                return worker;
+            }
+            else
+            {
+                return null;
+            }
+        }
 
         public const string Texture2DPath = "ui/Worker/texture2d";
-        public const string WorldObjPath = "prefabs/Worker/WorldWorker";
+        public const string WorldObjPath = "prefabs/Worker/";
         public Texture2D GetTexture2D()
         {
             return GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>("Worker");
@@ -77,6 +94,8 @@ namespace ProjectOC.WorkerNS
         {
             return GameManager.Instance.ABResourceManager.LoadLocalAB(WorldObjPath).LoadAsset<GameObject>("Worker");
         }
+
+
     }
 }
 

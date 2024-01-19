@@ -1,3 +1,4 @@
+using ProjectOC.ManagerNS;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,43 +25,43 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// 互斥键，会发生矛盾的特性
         /// </summary>
-        public string IDExclude { get => FeatureManager.Instance.GetIDExclude(ID); }
+        public string IDExclude { get => LocalGameManager.Instance.FeatureManager.GetIDExclude(ID); }
         /// <summary>
         /// 序号，用于排序，从上到下的顺序为种族、增益、减益、整活特性
         /// </summary>
-        public int Sort { get => FeatureManager.Instance.GetSort(ID); }
+        public int Sort { get => LocalGameManager.Instance.FeatureManager.GetSort(ID); }
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name { get => FeatureManager.Instance.GetName(ID); }
+        public string Name { get => LocalGameManager.Instance.FeatureManager.GetName(ID); }
         /// <summary>
         /// 类型
         /// </summary>        
-        public FeatureType FeatureType { get => FeatureManager.Instance.GetFeatureType(ID); }
+        public FeatureType FeatureType { get => LocalGameManager.Instance.FeatureManager.GetFeatureType(ID); }
         /// <summary>
         /// 特性本身的描述性文本
         /// </summary>
-        public string Description { get => FeatureManager.Instance.GetItemDescription(ID); }
+        public string Description { get => LocalGameManager.Instance.FeatureManager.GetItemDescription(ID); }
         /// <summary>
         /// 特性效果的描述性文本
         /// </summary>
-        public string EffectsDescription { get => FeatureManager.Instance.GetEffectsDescription(ID); }
+        public string EffectsDescription { get => LocalGameManager.Instance.FeatureManager.GetEffectsDescription(ID); }
         #endregion
 
-        public Feature(FeatureManager.FeatureTableJsonData config)
+        public Feature(FeatureTableData config)
         {
             this.ID = config.ID;
             this.Effects = new List<Effect>();
-            foreach (string effectID in config.Effects)
+            foreach (var tuple in config.Effects)
             {
-                Effect effect = EffectManager.Instance.SpawnEffect(effectID);
+                Effect effect = LocalGameManager.Instance.EffectManager.SpawnEffect(tuple.Item1, tuple.Item2);
                 if (effect != null)
                 {
                     this.Effects.Add(effect);
                 }
                 else
                 {
-                    Debug.LogError($"Feature {this.ID} Effect {effectID} is Null");
+                    Debug.LogError($"Feature {this.ID} Effect {tuple.Item1} is Null");
                 }
             }
         }

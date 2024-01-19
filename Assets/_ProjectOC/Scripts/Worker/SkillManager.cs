@@ -1,5 +1,6 @@
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,28 +8,20 @@ using UnityEngine;
 namespace ProjectOC.WorkerNS
 {
     [System.Serializable]
-    public sealed class SkillManager : ML.Engine.Manager.GlobalManager.IGlobalManager
+    public struct SkillTableData
     {
-        #region Instance
-        private SkillManager(){}
+        public string ID;
+        public int Sort;
+        public string Icon;
+        public WorkType AbilityType;
+        public List<Tuple<string, string>> Effects;
+        public TextContent ItemDescription;
+        public TextContent EffectsDescription;
+    }
 
-        private static SkillManager instance;
-
-        public static SkillManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new SkillManager();
-                    GameManager.Instance.RegisterGlobalManager(instance);
-                    instance.LoadTableData();
-                }
-                return instance;
-            }
-        }
-        #endregion
-
+    [System.Serializable]
+    public sealed class SkillManager : ML.Engine.Manager.LocalManager.ILocalManager
+    {
         #region Load And Data
         /// <summary>
         /// 是否已加载完数据
@@ -38,29 +31,17 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// Skill 数据表
         /// </summary>
-        private Dictionary<string, SkillTableJsonData> SkillTableDict = new Dictionary<string, SkillTableJsonData>();
+        private Dictionary<string, SkillTableData> SkillTableDict = new Dictionary<string, SkillTableData>();
 
         public const string Texture2DPath = "ui/WorkerAbility/texture2d";
-        
-        [System.Serializable]
-        public struct SkillTableJsonData
-        {
-            public string ID;
-            public int Sort;
-            public string Icon;
-            public WorkType AbilityType;
-            public List<string> Effects;
-            public TextContent ItemDescription;
-            public TextContent EffectsDescription;
-        }
 
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableJsonData[]> ABJAProcessor;
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableJsonData[]>("Json/TableData", "WorkerAbilityTableData", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableData[]>("Binary/TableData", "Skill", (datas) =>
                 {
                     foreach (var data in datas)
                     {
@@ -75,7 +56,7 @@ namespace ProjectOC.WorkerNS
         #region Spawn
         public Skill SpawnSkill(string id)
         {
-            if (this.SkillTableDict.TryGetValue(id, out SkillTableJsonData row))
+            if (this.SkillTableDict.TryGetValue(id, out SkillTableData row))
             {
                 Skill skill = new Skill(row);
                 return skill;

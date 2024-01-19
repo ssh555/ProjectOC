@@ -10,11 +10,11 @@ namespace ProjectOC.TechTree
     public class TechPoint : IGenData
     {
         public string ID;
-        public ML.Engine.TextContent.TextContent Name;
-        public int[] Grid;
         public TechPointCategory Category;
+        public ML.Engine.TextContent.TextContent Name;
         public string Icon;
         public ML.Engine.TextContent.TextContent Description;
+        public int[] Grid;
         public bool IsUnlocked;
         public string[] UnLockRecipe;
         public string[] UnLockBuild;
@@ -37,7 +37,7 @@ namespace ProjectOC.TechTree
             // 0 -> ID
             this.ID = row[0];
             // 1 -> Category
-            this.Category = (ProjectOC.TechTree.TechPointCategory)Enum.Parse(typeof(ProjectOC.TechTree.TechPointCategory), row[1]);
+            this.Category = (TechPointCategory)Enum.Parse(typeof(TechPointCategory), row[1]);
             // 2 -> Name
             this.Name = new ML.Engine.TextContent.TextContent();
             this.Name.Chinese = row[2];
@@ -52,17 +52,38 @@ namespace ProjectOC.TechTree
             var sgrid = row[5].Split(',');
             this.Grid = new int[2] { int.Parse(sgrid[0]), int.Parse(sgrid[1]) };
             // 6 -> IsUnlocked
-            this.IsUnlocked = row[6] != "0";
+            this.IsUnlocked = row[6] == "True";
             // 7 -> 配方
-            this.UnLockRecipe = row[7].Split(',').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            if (!string.IsNullOrEmpty(row[7]))
+            {
+                this.UnLockRecipe = row[7].Split(',').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            }
+            else
+            {
+                this.UnLockRecipe = new List<string>().ToArray();
+            }
             // 8 -> 建筑物
-            this.UnLockBuild = row[8].Split(',').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            if (!string.IsNullOrEmpty(row[8]))
+            {
+                this.UnLockBuild = row[8].Split(',').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            }
+            else
+            {
+                this.UnLockBuild = new List<string>().ToArray();
+            }
             // 9 -> 前置科技点
-            this.PrePoint = row[9].Split(',').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            if (!string.IsNullOrEmpty(row[9]))
+            {
+                this.PrePoint = row[9].Split(',').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            }
+            else
+            {
+                this.PrePoint = new List<string>().ToArray();
+            }
             // 10 -> ItemCost
             this.ItemCost = Program.ParseFormula(row[10]).ToArray();
             // 11 -> TimeCost
-            this.TimeCost = int.Parse(row[11]);
+            this.TimeCost = !string.IsNullOrEmpty(row[11]) ? int.Parse(row[11]) : 0;
             return true;
         }
     }

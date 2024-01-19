@@ -9,5 +9,16 @@
             "Chinese" : "可交互",
             "English" : "Interact"
         }
+    },
+    {
+        "keyname" : "WorkerEcho",
+        "keymap" :{
+            "KeyBoard" : "E",
+            "XBOX" : "A"
+        },
+        "description" :{
+            "Chinese" : "交互",
+            "English" : "Interact"
+        }
     }
 ]

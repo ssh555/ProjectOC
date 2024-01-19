@@ -8,34 +8,22 @@ using UnityEngine;
 namespace ProjectOC.WorkerNS
 {
     [System.Serializable]
-    public sealed class FeatureManager : ML.Engine.Manager.GlobalManager.IGlobalManager
+    public struct FeatureTableData
     {
-        #region Instance
-        private FeatureManager()
-        {
-            FeatureTypeDict.Add(FeatureType.Buff, new List<string>());
-            FeatureTypeDict.Add(FeatureType.Debuff, new List<string>());
-            FeatureTypeDict.Add(FeatureType.None, new List<string>());
-            FeatureTypeDict.Add(FeatureType.Race, new List<string>());
-        }
+        public string ID;
+        public string IDExclude;
+        public int Sort;
+        public TextContent Name;
+        public string Icon;
+        public FeatureType Type;
+        public List<Tuple<string, string>> Effects;
+        public TextContent ItemDescription;
+        public TextContent EffectsDescription;
+    }
 
-        private static FeatureManager instance;
-
-        public static FeatureManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new FeatureManager();
-                    GameManager.Instance.RegisterGlobalManager(instance);
-                    instance.LoadTableData();
-                }
-                return instance;
-            }
-        }
-        #endregion
-
+    [System.Serializable]
+    public sealed class FeatureManager : ML.Engine.Manager.LocalManager.ILocalManager
+    {
         #region Load And Data
         /// <summary>
         /// 是否已加载完数据
@@ -49,31 +37,17 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// Feature数据表
         /// </summary>
-        private Dictionary<string, FeatureTableJsonData> FeatureTableDict = new Dictionary<string, FeatureTableJsonData>();
+        private Dictionary<string, FeatureTableData> FeatureTableDict = new Dictionary<string, FeatureTableData>();
 
         public const string Texture2DPath = "ui/Feature/texture2d";
 
-        [System.Serializable]
-        public struct FeatureTableJsonData
-        {
-            public string ID;
-            public string IDExclude;
-            public int Sort;
-            public TextContent Name;
-            public string Icon;
-            public FeatureType Type;
-            public List<string> Effects;
-            public TextContent ItemDescription;
-            public TextContent EffectsDescription;
-        }
-
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableJsonData[]> ABJAProcessor;
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableJsonData[]>("Json/TableData", "FeatureTableData", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableData[]>("Binary/TableData", "Feature", (datas) =>
                 {
                     foreach (var data in datas)
                     {
@@ -130,7 +104,7 @@ namespace ProjectOC.WorkerNS
         }
         public Feature SpawnFeature(string id)
         {
-            if (FeatureTableDict.TryGetValue(id, out FeatureTableJsonData row))
+            if (FeatureTableDict.TryGetValue(id, out FeatureTableData row))
             {
                 Feature feature = new Feature(row);
                 return feature;
