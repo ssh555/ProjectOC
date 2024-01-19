@@ -33,3 +33,6 @@ MonoBehaviour:
   - name: Furniture
     displayName: "\u5BB6\u5177"
     value: 1
+  - name: ExternalFacility
+    displayName: "\u5BA4\u5916\u8BBE\u65BD"
+    value: 2

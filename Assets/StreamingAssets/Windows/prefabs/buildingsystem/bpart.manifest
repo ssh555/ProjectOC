@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2900598008
+CRC: 4172693991
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 88cfceab01931b36dd7037809f9e5154
+    Hash: abfeb5a0065cab98be1a4e42769bf84f
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 6ec20a259d9969888a6abb3ce1975c1b
+    Hash: e6486af2f53fb2d37f9fc1c3c57b1d9a
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 88cfceab01931b36dd7037809f9e5154
+    Hash: abfeb5a0065cab98be1a4e42769bf84f
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -31,7 +31,13 @@ ClassTypes:
 - Class: 65
   Script: {instanceID: 0}
 - Class: 114
+  Script: {fileID: 11500000, guid: 1b69e2587bc92af46baf9b9c8a18bc47, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4eaeb81a05cd54643b2d664b64e8dc44, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: eb3d211586925844984e282ee1983188, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 84b45a722afc9f748bdef2e991e7ddaf, type: 3}
 - Class: 114
@@ -54,42 +60,61 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: Assembly-CSharp
   ClassName: ML.Engine.BuildingSystem.BuildingSocket.BuildingSocketType
 Assets:
-- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Base_20.prefab
-- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Quagrant_20.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Floor_Base_20.prefab
-- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Triangle_100.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_BaseCorner_400.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Triangle_20.prefab
-- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Floor_Quagrant_50.prefab
-- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Triangle_50.prefab
-- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Floor_Base_50.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Quagrant_100.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Triangle_75.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Triangle_200.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Stone3.mat
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Beam_Base_200.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Pillar_Base_200.prefab
-- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Pillar_Base_100.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Quagrant_100.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Window_Base_20.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Base_100.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Glass.mat
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Quagrant_100.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/ExternalFacility_PowerCore_Base_100.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Wood3.mat
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Quagrant_50.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Furniture_Clock_Base_100.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Quagrant_200.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Stone1.mat
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Floor_Quagrant_20.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Base_100.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Furniture_CeilingLamp_Base_100.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Quagrant_200.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Base_75.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/ExternalFacility_PowerSub_Base_100.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Triangle_100.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Wood1.mat
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Base_20.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Quagrant_20.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Triangle_100.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Floor_Quagrant_50.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Triangle_50.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Floor_Base_50.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Quagrant_400.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Pillar_Base_100.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_BaseCorner_100.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Base_400.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Floor_Triangle_50.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Beam_Base_100.prefab
-- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Wood3.mat
-- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Quagrant_50.prefab
-- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Furniture_Chair_Base_0.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Furniture_Chair_Base_100.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Floor_Triangle_20.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Wood2.mat
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Triangle_200.prefab
-- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Stone1.mat
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Base_100.prefab
-- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Floor_Quagrant_20.prefab
-- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Base_50.prefab
-- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Base_100.prefab
-- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Furniture_CeilingLamp_Base_0.prefab
-- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Metal.mat
-- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Base_75.prefab
-- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Door_Base_20.prefab
-- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Base_200.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Triangle_400.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Foundation_Base_50.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Metal.mat
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_Base_200.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Metal2.mat
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Door_Base_20.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Triangle_100.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Wall_Base_200.prefab
-- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Wood1.mat
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_FoundationEdge_Quagrant_75.prefab
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/Room_Roof_BaseCorner_200.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/Materials/Mat_Stone2.mat
+- Assets/_ML/MLResources/BuildingSystem/BuildingPart/ExternalFacility_ElectAppliance_Base_100.prefab
 Dependencies: []

@@ -13,5 +13,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		Triangle,
 		[LabelText("四方圆形")]
 		Quagrant,
+		[LabelText("方形转角")]
+		BaseCorner,
 	}
 }

@@ -11,5 +11,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		Room = 0,
 		[LabelText("家具")]
 		Furniture = 1,
+		[LabelText("室外设施")]
+		ExternalFacility = 2,
 	}
 }

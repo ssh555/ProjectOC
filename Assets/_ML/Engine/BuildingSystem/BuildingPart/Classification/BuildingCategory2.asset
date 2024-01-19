@@ -60,3 +60,15 @@ MonoBehaviour:
   - name: Chair
     displayName: "\u6905\u5B50"
     value: 101
+  - name: Clock
+    displayName: "\u6302\u949F"
+    value: 102
+  - name: PowerCore
+    displayName: "\u751F\u547D\u5BFC\u6D41\u6869"
+    value: 200
+  - name: PowerSub
+    displayName: "\u5BFC\u6D41\u8282\u70B9"
+    value: 201
+  - name: ElectAppliance
+    displayName: "\u7528\u7535\u5668"
+    value: 202

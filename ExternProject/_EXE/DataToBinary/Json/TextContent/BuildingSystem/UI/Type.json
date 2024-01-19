@@ -75,5 +75,33 @@
             "Chinese": "椅子",
             "English": "Chair"
         }
+    },
+    {
+        "name": "Clock",
+        "description": {
+            "Chinese": "挂钟",
+            "English": "Clock"
+        }
+    },
+    {
+        "name": "PowerCore",
+        "description": {
+            "Chinese": "生命导流桩",
+            "English": "PowerCore"
+        }
+    },
+    {
+        "name": "PowerSub",
+        "description": {
+            "Chinese": "导流节点",
+            "English": "PowerSub"
+        }
+    },
+    {
+        "name": "ElectAppliance",
+        "description": {
+            "Chinese": "用电器",
+            "English": "ElectAppliance"
+        }
     }
 ]
