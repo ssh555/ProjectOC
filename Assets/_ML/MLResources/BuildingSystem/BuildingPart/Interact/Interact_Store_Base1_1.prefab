@@ -1,5 +1,77 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &343715595484083516
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8645788026856500082}
+  - component: {fileID: 2057674393388952461}
+  - component: {fileID: 7360413389573511094}
+  m_Layer: 8
+  m_Name: BuildingSocket
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8645788026856500082
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 343715595484083516}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.418, z: 0}
+  m_LocalScale: {x: 1.0546632, y: 1, z: 1.3735974}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6194900535394012328}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &2057674393388952461
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 343715595484083516}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.09
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7360413389573511094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 343715595484083516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 8192
+  InTakeType: 0
+  IsCanRotate: 1
+  PositionOffset: {x: 0, y: 0, z: 0}
+  RotationOffset: {x: 0, y: 0, z: 0, w: 1}
+  CanPlaceAreaType: 8192
 --- !u!1 &3374980008265688684
 GameObject:
   m_ObjectHideFlags: 0
@@ -12,8 +84,8 @@ GameObject:
   - component: {fileID: 1977299075646261708}
   - component: {fileID: 7663959595814774666}
   - component: {fileID: 4371231804377761434}
-  - component: {fileID: -9051667194605346111}
-  m_Layer: 0
+  - component: {fileID: 2767999185065839591}
+  m_Layer: 7
   m_Name: Interact_Store_Base1_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32,7 +104,8 @@ Transform:
   m_LocalPosition: {x: 0.51597, y: 0.521, z: 6.511}
   m_LocalScale: {x: 0.94817, y: 1, z: 0.72801536}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8645788026856500082}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1977299075646261708
@@ -106,7 +179,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.92379564, y: 0.8136058, z: 1.1716423}
   m_Center: {x: -0.0026062727, y: -0.0029441565, z: 0.00088205934}
---- !u!114 &-9051667194605346111
+--- !u!114 &2767999185065839591
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,7 +188,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3374980008265688684}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d70636ddcc0088439ec85c7af608e52, type: 3}
+  m_Script: {fileID: 11500000, guid: 84b45a722afc9f748bdef2e991e7ddaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
@@ -129,14 +202,3 @@ MonoBehaviour:
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 0, z: 0, w: 0}
   activeSocketIndex: 0
-  Store:
-    WorldStore: {fileID: 0}
-    Name: 
-    StoreType: 0
-    StoreDatas: []
-    Transports: []
-    LevelMax: 0
-    LevelStoreCapacity: 
-    LevelStoreDataCapacity: 
-    TransportPriority: 0
-    IsInteracting: 0
