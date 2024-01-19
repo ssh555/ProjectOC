@@ -3,13 +3,13 @@ CRC: 1635873959
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b5e92c21e7b0ee10b1f951d81e027b26
+    Hash: 450aabe14ea211f3aadafcb2ed93f2f9
   TypeTreeHash:
     serializedVersion: 2
     Hash: 632c17e5ae17fbf2d2d578d89e423c63
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: b5e92c21e7b0ee10b1f951d81e027b26
+    Hash: 450aabe14ea211f3aadafcb2ed93f2f9
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -87,4 +87,4 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Foundation_Base_20.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Texture2D/Red.png
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart

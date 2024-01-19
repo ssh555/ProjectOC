@@ -1,12 +1,7 @@
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.Manager;
-using ML.Engine.TextContent;
-using ProjectOC.WorkerNS;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.Mathematics;
-using static ProjectOC.WorkerNS.EffectManager;
 
 namespace ProjectOC.WorkerEchoNS
 {
@@ -22,6 +17,14 @@ namespace ProjectOC.WorkerEchoNS
         Seal,
     }
 
+    [System.Serializable]
+    public struct WorkerEchoTableData
+    {
+        public string ID;
+        public Category Category;
+        public List<Formula> Raw;
+        public int TimeCost;
+    }
 
     [System.Serializable]
     public sealed class WorkerEchoManager : ML.Engine.Manager.LocalManager.ILocalManager
@@ -33,22 +36,15 @@ namespace ProjectOC.WorkerEchoNS
         /// <summary>
         /// 基础数据表
         /// </summary>
-        private Dictionary<string, WorkerEchoTableJsonData> EffectTableDict = new Dictionary<string, WorkerEchoTableJsonData>();
-        [System.Serializable]
-        public struct WorkerEchoTableJsonData
-        {
-            public string ID;
-            public Category Category;
-            public List<Formula> Raw;
-            public int TimeCost;
-        }
-        private Dictionary<string, WorkerEchoTableJsonData> WorkerEchoTableDict = new Dictionary<string, WorkerEchoTableJsonData>();
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<WorkerEchoTableJsonData[]> ABJAProcessor;
+        private Dictionary<string, WorkerEchoTableData> EffectTableDict = new Dictionary<string, WorkerEchoTableData>();
+        
+        private Dictionary<string, WorkerEchoTableData> WorkerEchoTableDict = new Dictionary<string, WorkerEchoTableData>();
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<WorkerEchoTableData[]> ABJAProcessor;
         public void LoadTableData()
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<WorkerEchoTableJsonData[]>("Json/TableData", "WorkerEchoTableData", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<WorkerEchoTableData[]>("Binary/TableData", "WorkerEcho", (datas) =>
                 {
                     foreach (var data in datas)
                     {
