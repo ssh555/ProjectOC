@@ -84,7 +84,7 @@ GameObject:
   - component: {fileID: 5199786087546406035}
   - component: {fileID: 4784482071398813289}
   - component: {fileID: 4149819133391620478}
-  - component: {fileID: 3660646660207962696}
+  - component: {fileID: -3691035713637541013}
   m_Layer: 0
   m_Name: ProNode_Aggregator_Base1_3
   m_TagString: Untagged
@@ -179,7 +179,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 13.659738, y: 24.80234, z: 12.296447}
   m_Center: {x: -0.0000023841856, y: 12.401166, z: 0.12447905}
---- !u!114 &3660646660207962696
+--- !u!114 &-3691035713637541013
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -188,7 +188,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9084853602477247886}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84b45a722afc9f748bdef2e991e7ddaf, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a66f0dd625d0f74da1f89b119491b94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
@@ -202,3 +202,13 @@ MonoBehaviour:
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 0, z: 0, w: 0}
   activeSocketIndex: 0
+  ProNode:
+    WorldProNode: {fileID: 0}
+    ID: 
+    LevelUpgradeEff: 
+    Level: 0
+    TransportPriority: 0
+    Recipe:
+      ID: 
+    Worker: {fileID: 0}
+    MissionTransports: []

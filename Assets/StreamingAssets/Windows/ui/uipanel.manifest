@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2832659822
+CRC: 3168158824
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 4dce477ed223bb6bf9a3eadc921acdb7
+    Hash: 7c97990ac776be4684b24254a6c8d67f
   TypeTreeHash:
     serializedVersion: 2
-    Hash: d1abeb4fb046bb95265b25a66ee22c4c
+    Hash: 78ea3cf392300231fcf550a46da1b812
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 4dce477ed223bb6bf9a3eadc921acdb7
+    Hash: 7c97990ac776be4684b24254a6c8d67f
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -45,6 +45,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: b5a75fe406490b1448c391e02cf791da, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 84a92b25f83d49b9bc132d206b370281, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
@@ -52,6 +54,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 18e0a5fd7f32347419b785bf00a72db7, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 8225f47635ce8874c8d32afa594ed0e2, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -63,6 +67,12 @@ ClassTypes:
 - Class: 224
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: ML.Engine.InventorySystem.Recipe
+- AssemblyName: Assembly-CSharp
+  ClassName: ProjectOC.ProNodeNS.ProNode
+- AssemblyName: Assembly-CSharp
+  ClassName: ProjectOC.StoreNS.Store
 - AssemblyName: Unity.TextMeshPro
   ClassName: TMPro.FaceInfo_Legacy
 - AssemblyName: Unity.TextMeshPro
@@ -120,8 +130,8 @@ Assets:
 - Assets/_ProjectOC/Resources/UIPanel/UIInfiniteInventoryPanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/UIStorePanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIPanel.prefab
+- Assets/_ProjectOC/Resources/UIPanel/UIProNodePanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIBotPanel.prefab
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/fonts
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/inventory/texture2d/itemtype
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/techpoint/texture2d
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/inventory/texture2d/itemtype
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/techpoint/texture2d

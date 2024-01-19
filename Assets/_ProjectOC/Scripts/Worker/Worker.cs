@@ -1,13 +1,13 @@
 using ML.Engine.FSM;
 using ML.Engine.InventorySystem;
-using ML.Engine.Manager;
-using ProjectOC.ManagerNS;
 using ProjectOC.MissionNS;
 using ProjectOC.ProNodeNS;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace ProjectOC.WorkerNS
 {
@@ -73,7 +73,7 @@ namespace ProjectOC.WorkerNS
         { 
             get 
             {
-                DispatchTimeManager timeManager = GameManager.Instance.GetLocalManager<DispatchTimeManager>();
+                ManagerNS.DispatchTimeManager timeManager = ManagerNS.LocalGameManager.Instance.DispatchTimeManager;
                 if (timeManager != null)
                 {
                     return TimeArrangement[timeManager.CurrentTimeFrame];
@@ -97,10 +97,12 @@ namespace ProjectOC.WorkerNS
         public Status Status;
 
         [LabelText("是否在值班")]
-        public bool IsOnDuty { get { return this.ProNode != null && this.Status != Status.Relaxing; } }
+        public bool IsOnDuty { get { return this.ProNode != null && this.Status != Status.Relaxing && ArriveProNode; } }
 
         [LabelText("生产节点")]
         public ProNode ProNode;
+
+        public bool ArriveProNode = false;
 
         [LabelText("搬运")]
         public Transport Transport;
@@ -108,10 +110,60 @@ namespace ProjectOC.WorkerNS
         [LabelText("搬运物品")]
         public List<Item> TransportItems = new List<Item>();
 
+        private Transform Target;
+        private NavMeshAgent Agent;
+        public float Threshold = 0.5f;
+        private event Action<Worker> OnArrival;
+        private bool HasArrived = false;
+
+
+        public void Start()
+        {
+            Agent = GetComponent<NavMeshAgent>();
+            //this.enabled = false;
+        }
+
+        public void Update()
+        {
+            if (Target != null && !HasArrived && Vector3.Distance(transform.position, Target.position) < Threshold)
+            {
+                HasArrived = true;
+                OnArrival?.Invoke(this);
+            }
+        }
+
+        public bool SetDestination(Transform target, Action<Worker> action = null, bool isClearAction=true)
+        {
+            this.Target = target;
+            if (Target != null)
+            {
+                if (Agent.SetDestination(Target.position))
+                {
+                    HasArrived = false;
+                    if (isClearAction)
+                    {
+                        OnArrival = action;
+                    }
+                    else
+                    {
+                        OnArrival += action;
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+        public bool ClearDestination()
+        {
+            this.Target = null;
+            OnArrival = null;
+            HasArrived = false;
+            return false;
+        }
+
+
         public Worker()
         {
-            //this.ExpRate.Add(WorkType.Cook, "Skill ID");
-
             this.ExpRate.Add(WorkType.Cook, 100);
             this.ExpRate.Add(WorkType.HandCraft, 100);
             this.ExpRate.Add(WorkType.Industry, 100);
@@ -126,7 +178,7 @@ namespace ProjectOC.WorkerNS
             this.Eff.Add(WorkType.Transport, 50);
             this.Eff.Add(WorkType.Collect, 0);
 
-            this.Features = FeatureManager.Instance.CreateFeature();
+            this.Features = ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature();
             foreach (Feature feature in this.Features)
             {
                 feature.ApplyFeature(this);
@@ -134,7 +186,7 @@ namespace ProjectOC.WorkerNS
 
             foreach (var kv in SkillConfig)
             {
-                Skill skill = SkillManager.Instance.SpawnSkill(kv.Value);
+                Skill skill = ManagerNS.LocalGameManager.Instance.SkillManager.SpawnSkill(kv.Value);
                 if (skill != null)
                 {
                     skill.ApplySkill(this);
@@ -200,6 +252,19 @@ namespace ProjectOC.WorkerNS
         public void SetTimeStatusAll(TimeStatus timeStatus)
         {
             this.TimeArrangement.SetTimeStatusAll(timeStatus);
+        }
+
+        public void ChangeProNode(ProNode proNode)
+        {
+            if (this.Transport != null)
+            {
+                this.Transport.End();
+            }
+            if (this.ProNode != null)
+            {
+                this.ProNode.RemoveWorker();
+            }
+            this.ProNode = proNode;
         }
     }
 }

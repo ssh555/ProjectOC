@@ -13,7 +13,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("增益特性")]
         Buff,
         [LabelText("减益特性")]
-        Debuff,
+        DeBuff,
         [LabelText("整活特性")]
         None,
     }

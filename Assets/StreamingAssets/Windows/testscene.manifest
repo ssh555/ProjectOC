@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2725106278
+CRC: 1767491516
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d6cb93a25857144231f06f656844bad5
+    Hash: 5774be55dc2f99b2c66baa730547fe3a
   TypeTreeHash:
     serializedVersion: 2
-    Hash: ec9c2743aaf935a7e78510951b566b6c
+    Hash: 58e24d8248a9d14f8ef7ab42ad58303e
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: d6cb93a25857144231f06f656844bad5
+    Hash: 5774be55dc2f99b2c66baa730547fe3a
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -138,6 +138,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 18e0a5fd7f32347419b785bf00a72db7, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: a79d93bee2b59d94fa12949e4c5e61d1, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -162,15 +164,17 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 224
   Script: {instanceID: 0}
+- Class: 238
+  Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/_ProjectOC/Scene/_TEST/yangLe/_TASceneTest.unity
+- Assets/_ProjectOC/Scene/_TEST/cwt/Cwt_TotalTest.unity
 - Assets/_ProjectOC/Scene/_TEST/yangLe/_LandMassExpandTest.unity
-- Assets/_ProjectOC/Scene/_TEST/cwt/CwtTotalTest.unity
 - Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/BuidlingSystemTest.unity
 - Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/materials
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
