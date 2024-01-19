@@ -6,7 +6,6 @@ using ProjectOC.TechTree.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static ML.Engine.BuildingSystem.MonoBuildingManager;
 
 namespace ProjectOC.Player.UI
 {
@@ -23,6 +22,7 @@ namespace ProjectOC.Player.UI
         private SelectedButton EnterBuildBtn;
         private SelectedButton EnterTechTreeBtn;
         private SelectedButton EnterInventoryBtn;
+        private SelectedButton CreateWorkerBtn;
 
         private BuildingManager BM => BuildingManager.Instance;
 
@@ -74,6 +74,12 @@ namespace ProjectOC.Player.UI
 
                 // Push
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+            };
+
+            this.CreateWorkerBtn = btnList.Find("CreateWorker").GetComponent<SelectedButton>();
+            this.CreateWorkerBtn.OnInteract += () =>
+            {
+                ProjectOC.ManagerNS.LocalGameManager.Instance.WorkerManager.SpawnWorker(player.transform.position, player.transform.rotation);
             };
 
 
@@ -192,6 +198,7 @@ namespace ProjectOC.Player.UI
                 this.EnterBuildBtn.text.text = TipDict["enterbuild"].GetDescription();
                 this.EnterTechTreeBtn.text.text = TipDict["techtree"].GetDescription();
                 this.EnterInventoryBtn.text.text = TipDict["inventory"].GetDescription();
+                this.CreateWorkerBtn.text.text = TipDict["worker"].GetDescription();
             }
         }
     }

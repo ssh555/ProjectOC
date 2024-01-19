@@ -84,7 +84,7 @@ GameObject:
   - component: {fileID: 6700727869357048722}
   - component: {fileID: 6694352890605822637}
   - component: {fileID: 8054550849339967467}
-  - component: {fileID: 8992068250220266832}
+  - component: {fileID: 4033487184801063255}
   m_Layer: 7
   m_Name: Interact_Reservoir_Base1_1
   m_TagString: Untagged
@@ -179,7 +179,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.85185945, y: 1.1579026, z: 0.86052775}
   m_Center: {x: 0.0063108653, y: 0.5719541, z: 0.00025109947}
---- !u!114 &8992068250220266832
+--- !u!114 &4033487184801063255
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -188,7 +188,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5636521842404627981}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84b45a722afc9f748bdef2e991e7ddaf, type: 3}
+  m_Script: {fileID: 11500000, guid: 1d70636ddcc0088439ec85c7af608e52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
@@ -202,3 +202,14 @@ MonoBehaviour:
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 0, z: 0, w: 0}
   activeSocketIndex: 0
+  Store:
+    WorldStore: {fileID: 0}
+    Name: 
+    StoreType: 0
+    StoreDatas: []
+    Transports: []
+    LevelMax: 0
+    LevelStoreCapacity: 
+    LevelStoreDataCapacity: 
+    TransportPriority: 0
+    IsInteracting: 0

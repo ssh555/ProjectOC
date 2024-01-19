@@ -42,7 +42,9 @@ namespace ProjectOC.ManagerNS
         {
             GM.RegisterLocalManager(this);
             DispatchTimeManager = GM.RegisterLocalManager<DispatchTimeManager>();
+            DispatchTimeManager.Init();
             MissionManager = GM.RegisterLocalManager<MissionManager>();
+            MissionManager.Init();
             ProNodeManager = GM.RegisterLocalManager<ProNodeManager>();
             ProNodeManager.LoadTableData();
             RecipeManager = GM.RegisterLocalManager<RecipeManager>();
@@ -56,6 +58,7 @@ namespace ProjectOC.ManagerNS
             SkillManager = GM.RegisterLocalManager<SkillManager>();
             SkillManager.LoadTableData();
             WorkerEchoManager = GM.RegisterLocalManager<WorkerEchoManager>();
+            WorkerEchoManager.LoadTableData();
             this.enabled = false;
         }
         private void OnDestroy()

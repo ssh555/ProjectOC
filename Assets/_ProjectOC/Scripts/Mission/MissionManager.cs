@@ -40,7 +40,7 @@ namespace ProjectOC.MissionNS
             }
         }
 
-        public MissionManager()
+        public void Init()
         {
             this.Timer.Start();
         }

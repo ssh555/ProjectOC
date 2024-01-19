@@ -53,6 +53,13 @@ namespace ProjectOC.WorkerNS
         {
             return CompositeManager.Instance.OnlyCostResource(inventory, workerID);
         }
+        public Worker SpawnWorker(Vector3 pos, Quaternion rot)
+        {
+            GameObject obj = GameObject.Instantiate(GetObject(), pos, rot);
+            Worker worker = obj.AddComponent<Worker>();
+            Workers.Add(worker);
+            return worker;
+        }
         public Worker SpawnWorker(Vector3 pos, Quaternion rot, string workerID)
         {
             GameObject obj = GameObject.Instantiate(GetObject(), pos, rot);
@@ -76,7 +83,7 @@ namespace ProjectOC.WorkerNS
         }
 
         public const string Texture2DPath = "ui/Worker/texture2d";
-        public const string WorldObjPath = "prefabs/Worker/";
+        public const string WorldObjPath = "prefabs/Worker";
         public Texture2D GetTexture2D()
         {
             return GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>("Worker");
@@ -94,8 +101,6 @@ namespace ProjectOC.WorkerNS
         {
             return GameManager.Instance.ABResourceManager.LoadLocalAB(WorldObjPath).LoadAsset<GameObject>("Worker");
         }
-
-
     }
 }
 
