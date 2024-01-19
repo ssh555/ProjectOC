@@ -1,5 +1,6 @@
 using JetBrains.Annotations;
 using ML.Engine.ABResources;
+using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.Manager;
 using ML.Engine.Timer;
 using ProjectOC.WorkerNS;
@@ -14,13 +15,13 @@ namespace ProjectOC.WorkerEchoNS
         public string WorkerID;
         public CounterDownTimer timer;
         public Worker worker;
-        public ExternWorker(string WorkerID, float time)
+        public ExternWorker(string WorkerID, float time,BuildingPart buildingPart)
         {
 
             timer = new CounterDownTimer(time);
             timer.OnEndEvent += () =>
             {
-                //GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker();
+                //GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker(buildingPart.transform.position,Quaternion.identity,WorkerID);
             };
         }
     }
@@ -29,15 +30,20 @@ namespace ProjectOC.WorkerEchoNS
     {
         private int Level = 1;
         ExternWorker[] Workers = new ExternWorker[5];
- 
-        public ExternWorker SummonWorker1(string id,int index)
+        BuildingPart BuildingPart = null;
+
+        public WorkerEcho(BuildingPart buildingPart)
+        {
+            this.BuildingPart = buildingPart;
+        }
+        public ExternWorker SummonWorker(string id,int index)
         {
             if(this.Level==1)
             {
                 id = GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRandomID();
             }
-            //µ˜”√WorkerManager
-            return null;
+            ExternWorker externWorker = new ExternWorker(id, GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetTimeCost(id), BuildingPart);
+            return externWorker;
         }
         /// <summary>
         ///  ’¡Ù“˛ ﬁ

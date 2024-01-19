@@ -82,5 +82,14 @@ namespace ProjectOC.WorkerEchoNS
             return this.WorkerEchoTableDict[id].Raw;
         }
 
+        public int GetTimeCost(string id)
+        {
+            if (!this.WorkerEchoTableDict.ContainsKey(id))
+            {
+                return 0;
+            }
+            return this.WorkerEchoTableDict[id].TimeCost;
+        }
+
     }
 }
