@@ -94,6 +94,8 @@ namespace ProjectOC.WorkerNS
         {
             return GameManager.Instance.ABResourceManager.LoadLocalAB(WorldObjPath).LoadAsset<GameObject>("Worker");
         }
+
+
     }
 }
 

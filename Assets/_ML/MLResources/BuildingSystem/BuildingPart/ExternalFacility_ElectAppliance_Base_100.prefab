@@ -133,8 +133,6 @@ MonoBehaviour:
   rotOffset: {x: 0, y: 0, z: 0, w: 0}
   activeSocketIndex: 0
   powerSupportRange: 0.5
-  inPowerColor: {r: 0.87058824, g: 0.53188676, b: 0.1764706, a: 1}
-  unPowerColor: {r: 0.28368637, g: 0.6564229, b: 0.7075472, a: 1}
   vfxTranf: {fileID: 2998490245737103053}
 --- !u!1 &2998490245737103053
 GameObject:

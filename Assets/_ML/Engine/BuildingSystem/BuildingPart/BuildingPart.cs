@@ -218,7 +218,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         private Dictionary<Renderer, Material[]> rowMat;
 
 
-        protected void Awake()
+        protected virtual void Awake()
         {
             this.rowMat = new Dictionary<Renderer, Material[]>();
             foreach(var renderer in this.GetComponentsInChildren<Renderer>())
