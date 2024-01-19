@@ -63,17 +63,145 @@
         }
     },
     {
-        "name": "CeilingLamp",
+        "name": "WaterCollector",
         "description": {
-            "Chinese": "吊灯",
-            "English": "CeilingLamp"
+            "Chinese": "露水收集器",
+            "English": "WaterCollector"
         }
     },
     {
-        "name": "Chair",
+        "name": "WaterPurifier",
         "description": {
-            "Chinese": "椅子",
-            "English": "Chair"
+            "Chinese": "水源纯化器",
+            "English": "WaterPurifier"
+        }
+    },
+    {
+    
+        "name": "SeedBox",
+        "description": {
+            "Chinese": "种籽箱",
+            "English": "SeedBox"
+        }
+    },
+    {
+        "name": "Integrator",
+        "description": {
+            "Chinese": "光流整束器",
+            "English": "Integrator"
+        }
+    },
+    {
+        "name": "SeedPlot",
+        "description": {
+            "Chinese": "苗圃",
+            "English": "SeedPlot"
+        }
+    },
+    {
+        "name": "Detector",
+        "description": {
+            "Chinese": "捕捞站",
+            "English": "Detector"
+        }
+    },
+    {
+        "name": "Refine",
+        "description": {
+            "Chinese": "精炼炉",
+            "English": "Refine"
+        }
+    },
+    {
+        "name": "Sawn",
+        "description": {
+            "Chinese": "锯木床",
+            "English": "Sawn"
+        }
+    },
+    {
+        "name": "Textile",
+        "description": {
+            "Chinese": "纺织机",
+            "English": "Textile"
+        }
+    },
+    {
+        "name": "Aggregator",
+        "description": {
+            "Chinese": "聚合器",
+            "English": "Aggregator"
+        }
+    },
+    {
+        "name": "Processor",
+        "description": {
+            "Chinese": "精密加工机",
+            "English": "Processor"
+        }
+    },
+    {
+        "name": "Kitchen",
+        "description": {
+            "Chinese": "风味工坊",
+            "English": "Kitchen"
+        }
+    },
+    {
+        "name": "Calculus",
+        "description": {
+            "Chinese": "演算仪",
+            "English": "Calculus"
+        }
+    },
+    {
+    
+        "name": "Store",
+        "description": {
+            "Chinese": "仓库",
+            "English": "Store"
+        }
+    },
+    {
+        "name": "Reservoir",
+        "description": {
+            "Chinese": "储液罐",
+            "English": "Reservoir"
+        }
+    },
+    {
+        "name": "Incubator",
+        "description": {
+            "Chinese": "恒温仓",
+            "English": "Incubator"
+        }
+    },
+    {
+        "name": "EchoWheel",
+        "description": {
+            "Chinese": "共鸣轮",
+            "English": "EchoWheel"
+        }
+    },
+    {
+        "name": "DiversionNode",
+        "description": {
+            "Chinese": "导流节点",
+            "English": "DiversionNode"
+        }
+    },
+    {
+        "name": "LifeDiversion",
+        "description": {
+            "Chinese": "生命导流桩",
+            "English": "LifeDiversion"
+        }
+    },
+    {
+        "name": "Projector",
+        "description": {
+            "Chinese": "生态投影装置",
+            "English": "Projector"
         }
     },
     {
@@ -104,4 +232,5 @@
             "English": "ElectAppliance"
         }
     }
+
 ]

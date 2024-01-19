@@ -27,12 +27,15 @@ MonoBehaviour:
     displayName: None
     value: -1
   EnumList:
-  - name: Room
-    displayName: "\u623F\u5C4B"
+  - name: ProNode
+    displayName: "\u751F\u4EA7\u8282\u70B9"
     value: 0
+  - name: Interact
+    displayName: "\u4EA4\u4E92\u5EFA\u7B51"
+    value: 1
+  - name: House
+    displayName: "\u623F\u5C4B"
+    value: 2
   - name: Furniture
     displayName: "\u5BB6\u5177"
-    value: 1
-  - name: ExternalFacility
-    displayName: "\u5BA4\u5916\u8BBE\u65BD"
-    value: 2
+    value: 3

@@ -7,11 +7,13 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 	{
 		[LabelText("None")]
 		None = -1,
+		[LabelText("生产节点")]
+		ProNode = 0,
+		[LabelText("交互建筑")]
+		Interact = 1,
 		[LabelText("房屋")]
-		Room = 0,
+		House = 2,
 		[LabelText("家具")]
-		Furniture = 1,
-		[LabelText("室外设施")]
-		ExternalFacility = 2,
+		Furniture = 3,
 	}
 }

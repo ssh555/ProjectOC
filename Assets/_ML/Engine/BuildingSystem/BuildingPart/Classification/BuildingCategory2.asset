@@ -27,48 +27,90 @@ MonoBehaviour:
     displayName: None
     value: -1
   EnumList:
+  - name: WaterCollector
+    displayName: "\u9732\u6C34\u6536\u96C6\u5668"
+    value: 0
+  - name: WaterPurifier
+    displayName: "\u6C34\u6E90\u7EAF\u5316\u5668"
+    value: 001
+  - name: SeedBox
+    displayName: "\u79CD\u7C7D\u7BB1"
+    value: 002
+  - name: Integrator
+    displayName: "\u5149\u6D41\u6574\u675F\u5668"
+    value: 003
+  - name: SeedPlot
+    displayName: "\u82D7\u5703"
+    value: 004
+  - name: Detector
+    displayName: "\u6355\u635E\u7AD9"
+    value: 005
+  - name: Refine
+    displayName: "\u7CBE\u70BC\u7089"
+    value: 006
+  - name: Sawn
+    displayName: "\u952F\u6728\u5E8A"
+    value: 007
+  - name: Textile
+    displayName: "\u7EBA\u7EC7\u673A"
+    value: 008
+  - name: Aggregator
+    displayName: "\u805A\u5408\u5668"
+    value: 009
+  - name: Processor
+    displayName: "\u7CBE\u5BC6\u52A0\u5DE5\u673A"
+    value: 010
+  - name: Kitchen
+    displayName: "\u98CE\u5473\u5DE5\u574A"
+    value: 011
+  - name: Calculus
+    displayName: "\u6F14\u7B97\u4EEA"
+    value: 012
+  - name: Store
+    displayName: "\u4ED3\u5E93"
+    value: 100
+  - name: Reservoir
+    displayName: "\u50A8\u6DB2\u7F50"
+    value: 101
+  - name: Incubator
+    displayName: "\u6052\u6E29\u4ED3"
+    value: 102
+  - name: EchoWheel
+    displayName: "\u5171\u9E23\u8F6E"
+    value: 103
+  - name: DiversionNode
+    displayName: "\u5BFC\u6D41\u8282\u70B9"
+    value: 104
+  - name: LifeDiversion
+    displayName: "\u751F\u547D\u5BFC\u6D41\u6869"
+    value: 105
+  - name: Projector
+    displayName: "\u751F\u6001\u6295\u5F71\u88C5\u7F6E"
+    value: 106
   - name: Foundation
     displayName: "\u5730\u57FA"
-    value: 0
-  - name: Floor
-    displayName: "\u5730\u677F"
-    value: 001
+    value: 200
   - name: FoundationEdge
     displayName: "\u5730\u57FA\u5916\u6CBF"
-    value: 002
+    value: 201
+  - name: Floor
+    displayName: "\u5730\u677F"
+    value: 202
   - name: Wall
     displayName: "\u5899"
-    value: 003
+    value: 203
   - name: Pillar
     displayName: "\u67F1"
-    value: 004
+    value: 204
   - name: Beam
     displayName: "\u6881"
-    value: 005
+    value: 205
   - name: Roof
     displayName: "\u5C4B\u9876"
-    value: 006
+    value: 206
   - name: Door
     displayName: "\u95E8"
-    value: 007
+    value: 207
   - name: Window
     displayName: "\u7A97"
-    value: 008
-  - name: CeilingLamp
-    displayName: "\u540A\u706F"
-    value: 100
-  - name: Chair
-    displayName: "\u6905\u5B50"
-    value: 101
-  - name: Clock
-    displayName: "\u6302\u949F"
-    value: 102
-  - name: PowerCore
-    displayName: "\u751F\u547D\u5BFC\u6D41\u6869"
-    value: 200
-  - name: PowerSub
-    displayName: "\u5BFC\u6D41\u8282\u70B9"
-    value: 201
-  - name: ElectAppliance
-    displayName: "\u7528\u7535\u5668"
-    value: 202
+    value: 208
