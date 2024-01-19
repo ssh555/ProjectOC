@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Room_Wall_Base_200
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 2
+    SerializedFormat: 0
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
