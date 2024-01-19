@@ -69,14 +69,14 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// 任务发起者
         /// </summary>
-        public IMission Initiator;
+        public IMissionObj Initiator;
 
         /// <summary>
         /// 分配的搬运
         /// </summary>
         public HashSet<Transport> Transports = new HashSet<Transport>();
 
-        public MissionTransport(MissionTransportType type, string itemID, int missionNum, IMission imission)
+        public MissionTransport(MissionTransportType type, string itemID, int missionNum, IMissionObj imission)
         {
             this.Type = type;
             this.ItemID = itemID;

@@ -1,34 +1,27 @@
 using System.Collections.Generic;
 using UnityEngine;
-using ML.Engine.Manager;
 using System.Collections;
 using System;
 using System.Linq;
+using ML.Engine.InventorySystem.CompositeSystem;
 
 namespace ML.Engine.InventorySystem
 {
-    public sealed class RecipeManager : Manager.GlobalManager.IGlobalManager
+    [System.Serializable]
+    public struct RecipeTableData
     {
-        #region Instance
-        private RecipeManager(){}
+        public string ID;
+        public int Sort;
+        public RecipeCategory Category;
+        public TextContent.TextContent Name;
+        public List<Formula> Raw;
+        public Formula Product;
+        public int TimeCost;
+        public int ExpRecipe;
+    }
 
-        private static RecipeManager instance;
-
-        public static RecipeManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new RecipeManager();
-                    GameManager.Instance.RegisterGlobalManager(instance);
-                    instance.LoadTableData();
-                }
-                return instance;
-            }
-        }
-        #endregion
-
+    public sealed class RecipeManager : Manager.LocalManager.ILocalManager
+    {
         #region Load And Data
         /// <summary>
         /// 是否已加载完数据
@@ -39,26 +32,15 @@ namespace ML.Engine.InventorySystem
         /// <summary>
         /// Recipe 数据表
         /// </summary>
-        private Dictionary<string, RecipeTableJsonData> RecipeTableDict = new Dictionary<string, RecipeTableJsonData>();
+        private Dictionary<string, RecipeTableData> RecipeTableDict = new Dictionary<string, RecipeTableData>();
 
-        [System.Serializable]
-        public struct RecipeTableJsonData
-        {
-            public string ID;
-            public int Sort;
-            public RecipeCategory Category;
-            public Dictionary<string, int> Raw;
-            public Dictionary<string, int> Product;
-            public int TimeCost;
-            public int ExpRecipe;
-        }
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableJsonData[]> ABJAProcessor;
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableJsonData[]>("Json/TableData", "RecipeTableData", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]>("Binary/TableData", "Recipe", (datas) =>
                 {
                     foreach (var data in datas)
                     {
@@ -82,7 +64,7 @@ namespace ML.Engine.InventorySystem
         /// </summary>
         public Recipe SpawnRecipe(string id)
         {
-            if (RecipeTableDict.TryGetValue(id, out RecipeTableJsonData row))
+            if (RecipeTableDict.TryGetValue(id, out RecipeTableData row))
             {
                 Recipe recipe = new Recipe(row);
                 return recipe;
@@ -131,22 +113,23 @@ namespace ML.Engine.InventorySystem
             return RecipeTableDict[id].Category;
         }
 
-        public Dictionary<string, int> GetRaw(string id)
+        public List<Formula> GetRaw(string id)
         {
-            if (!RecipeTableDict.ContainsKey(id))
+            List<Formula> result = new List<Formula>();
+            if (RecipeTableDict.ContainsKey(id))
             {
-                return new Dictionary<string, int>();
+                result.AddRange(RecipeTableDict[id].Raw);
             }
-            return RecipeTableDict[id].Raw;
+            return result;
         }
 
-        public Dictionary<string, int> GetProduct(string id)
+        public Formula GetProduct(string id)
         {
-            if (!RecipeTableDict.ContainsKey(id))
+            if (RecipeTableDict.ContainsKey(id))
             {
-                return new Dictionary<string, int>();
+                return RecipeTableDict[id].Product;
             }
-            return RecipeTableDict[id].Product;
+            return new Formula();
         }
 
         public int GetTimeCost(string id)

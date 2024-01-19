@@ -65,6 +65,20 @@ namespace ProjectOC.WorkerNS
                 return false;
             }
         }
+        /// <summary>
+        /// 体力达到最大值
+        /// </summary>
+        public bool IsAPMax
+        {
+            get
+            {
+                if (this.Worker != null)
+                {
+                    return this.Worker.APCurrent >= this.Worker.APMax;
+                }
+                return true;
+            }
+        }
 
         private WorkerStateFishing StateFishing;
         private WorkerStateWorkingDuty StateWorkingDuty;
@@ -102,8 +116,8 @@ namespace ProjectOC.WorkerNS
             {
                 return false;
             }
-            // 体力高于工作阈值 && 有生产节点 && 生产节点在生产
-            return this.IsAPAboveWorkThreshold && this.ProNode != null && this.ProNode.State == ProNodeState.Production;
+            // 体力高于工作阈值 && 在生产节点 && 生产节点在生产
+            return this.IsAPAboveWorkThreshold && this.Worker.IsOnDuty && this.ProNode.State == ProNodeState.Production;
         }
         /// <summary>
         /// 生产节点工作到摸鱼
@@ -114,8 +128,8 @@ namespace ProjectOC.WorkerNS
             {
                 return false;
             }
-            // 体力低于工作阈值 || 没有生产节点 || 生产节点未在生产
-            return !this.IsAPAboveWorkThreshold || this.ProNode == null || this.ProNode.State != ProNodeState.Production;
+            // 体力低于工作阈值 || 没在生产节点 || 生产节点未在生产
+            return !this.IsAPAboveWorkThreshold || !this.Worker.IsOnDuty || this.ProNode.State != ProNodeState.Production;
         }
         /// <summary>
         /// 摸鱼到搬运
@@ -150,8 +164,7 @@ namespace ProjectOC.WorkerNS
             {
                 return false;
             }
-            // 体力低于工作阈值 || 处于休息时段
-            return !this.IsAPAboveWorkThreshold || this.CurTimeFrameStatus == TimeStatus.Relax;
+            return (CurTimeFrameStatus == TimeStatus.Relax && !IsAPAboveWorkThreshold) || (CurTimeFrameStatus != TimeStatus.Relax && !IsAPAboveWorkThreshold);
         }
         /// <summary>
         /// 休息到摸鱼
@@ -162,8 +175,9 @@ namespace ProjectOC.WorkerNS
             {
                 return false;
             }
-            // 体力低于休息阈值 && 不处于休息时段
-            return this.IsAPAboveRelaxThreshold && this.CurTimeFrameStatus != TimeStatus.Relax;
+            // 如果当前不是休息时段，就休息到第二阈值
+            // 如果是休息时段，结束的时候到达第一阈值就可以回去了，如果不到，就继续休息
+            return (CurTimeFrameStatus == TimeStatus.Relax && IsAPAboveWorkThreshold) || (CurTimeFrameStatus != TimeStatus.Relax && IsAPAboveRelaxThreshold);
         }
     }
 }

@@ -1,17 +1,13 @@
-﻿using ML.Engine.InventorySystem;
+﻿using ML.Engine.BuildingSystem;
+using ML.Engine.InventorySystem;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.TextContent;
-using Newtonsoft.Json;
-using ProjectOC.ResonanceWheelSystem.UI;
+using ProjectOC.TechTree;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Versioning;
-using System.Text;
-using System.Threading.Tasks;
-using static ProjectOC.InventorySystem.UI.UIInfiniteInventory;
-using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheelUI;
 
 namespace ExcelToJson
 {
@@ -67,18 +63,43 @@ namespace ExcelToJson
             DataToBinaryManager DBMgr = new DataToBinaryManager();
 
             #region EXCEL
-            // to-do: 在处理前或处理后需要根据Recipe表、Build表需要合成表Binary文件，用于合成系统
+            string excelFilePath = "./DataTable/Config_OC_数据表.xlsx";
+            string rootPath = "../../../Assets/_ProjectOC/Resources/Binary/TableData/";
 
+            // 在处理前或处理后需要根据Recipe表、Build表需要合成表Binary文件，用于合成系统
+            List<CompositionTableData> compositionTableDatas = new List<CompositionTableData>();
+            // 1. 读入需要的EXCEL表
+            List<BuildingTableData> buildingTableDatas = DBMgr.ReadExcel<BuildingTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 4);
+            List<BuildingUpgradeTableData> buildingUpgradeTableDatas = DBMgr.ReadExcel<BuildingUpgradeTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 5);
+            List<RecipeTableData> recipeTableDatas = DBMgr.ReadExcel<RecipeTableData>(path:excelFilePath, iBeginRow:5, iWorksheet:6);
+            // 2. 分别解析表格并将数据暂存在内存中
+            foreach (BuildingTableData data in buildingTableDatas)
+            {
+                compositionTableDatas.Add(new CompositionTableData(data));
+            }
+            foreach (BuildingUpgradeTableData data in buildingUpgradeTableDatas)
+            {
+                compositionTableDatas.Add(new CompositionTableData(data));
+            }
+            foreach (RecipeTableData data in recipeTableDatas)
+            {
+                compositionTableDatas.Add(new CompositionTableData(data));
+            }
+            // 3. 将解析完成的数据存为对应的二进制文件
+            DBMgr.WriteBinaryFromExcel(buildingTableDatas, rootPath + "Building.bytes");
+            DBMgr.WriteBinaryFromExcel(buildingUpgradeTableDatas, rootPath + "BuildingUpgrade.bytes");
+            DBMgr.WriteBinaryFromExcel(recipeTableDatas, rootPath + "Recipe.bytes");
+            DBMgr.WriteBinaryFromExcel(compositionTableDatas, rootPath + "Composition.bytes");
 
             // 合成表二进制文件
             // 必须是.bytes后缀
             List<EBConfig> configs = new List<EBConfig>();
-            // 科技树
-            // to-do : 输出路径待修改 -> 更改为unity/assets下面的正确路径
-            // ../../../Assets/_ProjectOC/Resources/Json/TableData/TechTree
-            //configs.Add(new EBConfig { ExcelFilePath = "./DataTable/Config_OC_数据表.xlsx", IBeginRow = 5, IWorksheet = 8, BinaryFilePath = "./BINARY/TechTree", type = typeof(ProjectOC.TechTree.TechPoint.bytes) });
-
-
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 1,  BinaryFilePath = rootPath + "ProNode.bytes", type = typeof(ProjectOC.ProNodeNS.ProNodeTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 3, BinaryFilePath = rootPath + "TechPoint.bytes", type = typeof(TechPoint) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 7,  BinaryFilePath = rootPath + "Item.bytes", type = typeof(ItemTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 8,  BinaryFilePath = rootPath + "Feature.bytes", type = typeof(ProjectOC.WorkerNS.FeatureTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 9,  BinaryFilePath = rootPath + "Effect.bytes", type = typeof(ProjectOC.WorkerNS.EffectTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 10, BinaryFilePath = rootPath + "Skill.bytes", type = typeof(ProjectOC.WorkerNS.SkillTableData) });
 
             System.Threading.Tasks.Parallel.ForEach(configs, (config) =>
             {
@@ -104,41 +125,23 @@ namespace ExcelToJson
                     Console.ResetColor();
                 }
             });
-
             Console.WriteLine("\n----------------------------------------");
             Console.WriteLine("EXCEL转换完成!!!");
-
-
-            // 1. 读入需要的EXCEL表
-
-            // 2. 分别解析表格并将数据暂存在内存中
-
-            // 3. 将解析完成的数据存为对应的二进制文件
-
-            // 4. 将暂存的数据进行处理生成其他数据的二进制文件(比如合成表)
-
             #endregion
 
             #region JSON
-
-            // ../../../Assets/_ProjectOC/Resources/Binary/TableData/TechTree
             // 必须是.bytes后缀
             List<JBConfig> jBConfigs = new List<JBConfig>();
-            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TableData/TechTree.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TableData/TechTree.bytes", type = typeof(ProjectOC.TechTree.TechPoint[]) });
-            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TableData/CompositionTableData.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TableData/CompositionTableData.bytes", type = typeof(CompositionJsonData[]) });
-            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TableData/ItemTableData.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TableData/ItemTableData.bytes", type = typeof(ItemTableJsonData[]) });
-
-
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/PlayerUIPanel/PlayerUIPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/PlayerUIPanel/PlayerUIPanel.bytes", type = typeof(TextTip[]) });
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/BuildingSystem/UI/Category.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TextContent/BuildingSystem/UI/Category.bytes", type = typeof(TextTip[]) });
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/BuildingSystem/UI/Type.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TextContent/BuildingSystem/UI/Type.bytes", type = typeof(TextTip[]) });
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/BuildingSystem/UI/KeyTip.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TextContent/BuildingSystem/UI/KeyTip.bytes", type = typeof(KeyTip[]) });
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/InteractSystem/InteractKeyTip.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TextContent/InteractSystem/InteractKeyTip.bytes", type = typeof(KeyTip[]) });
-            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/Inventory/InventoryPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/Inventory/InventoryPanel.bytes", type = typeof(InventoryPanel) });
+            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/Inventory/InventoryPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/Inventory/InventoryPanel.bytes", type = typeof(ProjectOC.InventorySystem.UI.UIInfiniteInventory.InventoryPanel) });
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/TechTree/TechPointPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/TechTree/TechPointPanel.bytes", type = typeof(ProjectOC.TechTree.TechTreeManager.TPPanel) });
-            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/ResonanceWheel/ResonanceWheelPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/ResonanceWheel/ResonanceWheelPanel.bytes", type = typeof(ResonanceWheelPanel) });
-            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/ResonanceWheel/ResonanceWheel_sub1.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/ResonanceWheel_sub1/ResonanceWheel_sub1.bytes", type = typeof(ResonanceWheel_sub1.ResonanceWheel_sub1Struct) });
-            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/ResonanceWheel/ResonanceWheel_sub2.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/ResonanceWheel_sub2/ResonanceWheel_sub2.bytes", type = typeof(ResonanceWheel_sub2.ResonanceWheel_sub2Struct) });
+            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/Store/StorePanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/Inventory/StorePanel.bytes", type = typeof(ProjectOC.InventorySystem.UI.UIStore.StorePanel) });
+            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/ProNode/ProNodePanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/Inventory/ProNodePanel.bytes", type = typeof(ProjectOC.InventorySystem.UI.UIProNode.ProNodePanel) });
+
             System.Threading.Tasks.Parallel.ForEach(jBConfigs, (config) =>
             {
                 try
@@ -163,34 +166,38 @@ namespace ExcelToJson
                     Console.ResetColor();
                 }
             });
-
-
             Console.WriteLine("\n----------------------------------------");
             Console.WriteLine("JSON转换完成!!!");
-
             #endregion
 
             Console.WriteLine("\n----------------------------------------");
             Console.WriteLine("按任意键关闭");
             Console.Read();
-
         }
 
         public static List<ML.Engine.InventorySystem.CompositeSystem.Formula> ParseFormula(string data)
         {
             // 100001,3;100002,1
             List<ML.Engine.InventorySystem.CompositeSystem.Formula> formulas = new List<ML.Engine.InventorySystem.CompositeSystem.Formula>();
-            string[] sfs = data.Split(';').Where(x => !string.IsNullOrEmpty(x)).ToArray();
-            foreach(var sf in sfs)
+            if (!string.IsNullOrEmpty(data))
             {
-                var t = sf.Split(',');
-                var f = new ML.Engine.InventorySystem.CompositeSystem.Formula();
-                f.id = t[0];
-                f.num = int.Parse(t[1]);
-
-                formulas.Add(f);
+                string[] sfs = data.Split(';').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                foreach (var sf in sfs)
+                {
+                    var t = sf.Split( ',', '，' );
+                    if (t.Length == 2)
+                    {
+                        var f = new ML.Engine.InventorySystem.CompositeSystem.Formula();
+                        f.id = t[0];
+                        f.num = int.Parse(t[1]);
+                        formulas.Add(f);
+                    }
+                    else
+                    {
+                        Debug.Print($"Error {t}");
+                    }
+                }
             }
-
             return formulas;
         }
     }

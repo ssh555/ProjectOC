@@ -11,10 +11,20 @@ namespace ProjectOC.TechTree
 		Energy,
 		[LabelText("栽培")]
 		Plant,
-		[LabelText("工艺")]
+		[LabelText("Smelt")]
+		Smelt,
+        [LabelText("Storage")]
+        Storage,
+        [LabelText("Craft")]
+        Craft,
+        [LabelText("Echo")]
+        Echo,
+        [LabelText("Cook")]
+        Cook,
+        [LabelText("工艺")]
 		Technology,
 		[LabelText("演算")]
-		Calculation,
+		Calculus,
 		[LabelText("共鸣")]
 		Resonance,
 	}

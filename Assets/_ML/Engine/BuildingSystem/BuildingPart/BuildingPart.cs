@@ -37,19 +37,19 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         public event IBuildingPart.CheckMode CheckCanInPlaceMode;
         public event IBuildingPart.CheckMode CheckCanEdit;
         public event IBuildingPart.CheckMode CheckCanDestory;
-        public void OnChangePlaceEvent()
+        public virtual void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
 
         }
 
         public bool CanEnterEditMode()
         {
-            return CheckCanEdit != null && CheckCanEdit.Invoke(this);
+            return CheckCanEdit == null || (CheckCanEdit != null && CheckCanEdit.Invoke(this));
         }
 
         public bool CanEnterDestoryMode()
         {
-            return CheckCanDestory != null && CheckCanDestory.Invoke(this);
+            return CheckCanDestory == null || (CheckCanDestory != null && CheckCanDestory.Invoke(this));
         }
 
         [SerializeField, LabelText("ģʽ")]
@@ -218,7 +218,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         private Dictionary<Renderer, Material[]> rowMat;
 
 
-        private void Awake()
+        protected virtual void Awake()
         {
             this.rowMat = new Dictionary<Renderer, Material[]>();
             foreach(var renderer in this.GetComponentsInChildren<Renderer>())
