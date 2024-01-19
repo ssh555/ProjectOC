@@ -3,6 +3,7 @@ using ML.Engine.InventorySystem;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.TextContent;
 using ProjectOC.TechTree;
+using ProjectOC.WorkerEchoNS;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -72,6 +73,7 @@ namespace ExcelToJson
             List<BuildingTableData> buildingTableDatas = DBMgr.ReadExcel<BuildingTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 4);
             List<BuildingUpgradeTableData> buildingUpgradeTableDatas = DBMgr.ReadExcel<BuildingUpgradeTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 5);
             List<RecipeTableData> recipeTableDatas = DBMgr.ReadExcel<RecipeTableData>(path:excelFilePath, iBeginRow:5, iWorksheet:6);
+            List<WorkerEchoTableData> workerEchoTableDatas = DBMgr.ReadExcel<WorkerEchoTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 11);
             // 2. 分别解析表格并将数据暂存在内存中
             foreach (BuildingTableData data in buildingTableDatas)
             {
@@ -85,11 +87,16 @@ namespace ExcelToJson
             {
                 compositionTableDatas.Add(new CompositionTableData(data));
             }
+            foreach (WorkerEchoTableData data in workerEchoTableDatas)
+            {
+                compositionTableDatas.Add(new CompositionTableData(data));
+            }
             // 3. 将解析完成的数据存为对应的二进制文件
             DBMgr.WriteBinaryFromExcel(buildingTableDatas, rootPath + "Building.bytes");
             DBMgr.WriteBinaryFromExcel(buildingUpgradeTableDatas, rootPath + "BuildingUpgrade.bytes");
             DBMgr.WriteBinaryFromExcel(recipeTableDatas, rootPath + "Recipe.bytes");
             DBMgr.WriteBinaryFromExcel(compositionTableDatas, rootPath + "Composition.bytes");
+            DBMgr.WriteBinaryFromExcel(workerEchoTableDatas, rootPath + "WorkerEcho.bytes");
 
             // 合成表二进制文件
             // 必须是.bytes后缀

@@ -3,13 +3,13 @@ CRC: 2534764056
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: cdbae1ca9aa67db761cde7ec0aae84e4
+    Hash: 5051409ddd691a929acbdebc2465c253
   TypeTreeHash:
     serializedVersion: 2
     Hash: 3c65d140b64870cd1347596e1c70e1b4
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: cdbae1ca9aa67db761cde7ec0aae84e4
+    Hash: 5051409ddd691a929acbdebc2465c253
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -173,7 +173,7 @@ Assets:
 - Assets/_ProjectOC/Scene/_TEST/yangLe/_LandMassExpandTest.unity
 - Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/BuidlingSystemTest.unity
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/materials
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player

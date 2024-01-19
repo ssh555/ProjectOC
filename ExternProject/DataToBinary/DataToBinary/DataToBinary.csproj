@@ -108,6 +108,7 @@
     <Compile Include="TextContent.cs" />
     <Compile Include="TextTip.cs" />
     <Compile Include="TPPanel.cs" />
+    <Compile Include="WorkerEchoTableData.cs" />
     <Compile Include="WorkType.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2928860160
+CRC: 2436045496
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 780ed65e243ae76eb016a81440ac55d0
+    Hash: 147b410ca0896391ea3f12bdd9c27f3f
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5ad585dd02dfb5016c0dad519eab8f49
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 780ed65e243ae76eb016a81440ac55d0
+    Hash: 147b410ca0896391ea3f12bdd9c27f3f
 HashAppended: 0
 ClassTypes:
 - Class: 49
@@ -21,13 +21,10 @@ Assets:
 - Assets/_ProjectOC/Resources/Binary/TableData/ProNode.bytes
 - Assets/_ProjectOC/Resources/Binary/TableData/Building.bytes
 - Assets/_ProjectOC/Resources/Binary/TableData/Recipe.bytes
-- Assets/_ProjectOC/Resources/Binary/TableData/TechTree.bytes
-- Assets/_ML/MLResources/Binary/TableData/CompositionTableData.bytes
-- Assets/_ML/MLResources/Binary/TableData/ItemTableData.bytes
 - Assets/_ProjectOC/Resources/Binary/TableData/Composition.bytes
 - Assets/_ProjectOC/Resources/Binary/TableData/TechPoint.bytes
 - Assets/_ProjectOC/Resources/Binary/TableData/Skill.bytes
-- Assets/_ML/MLResources/Binary/TableData/LevelTableData.json
 - Assets/_ProjectOC/Resources/Binary/TableData/BuildingUpgrade.bytes
 - Assets/_ProjectOC/Resources/Binary/TableData/Item.bytes
+- Assets/_ProjectOC/Resources/Binary/TableData/WorkerEcho.bytes
 Dependencies: []
