@@ -950,7 +950,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
                     // 新建建筑物 -> 赋予实例ID
                     this.SelectedPartInstance.InstanceID = BuildingManager.Instance.GetOneNewBPartInstanceID();
-                    this.SelectedPartInstance.OnChangePlaceEvent();
+                    this.SelectedPartInstance.OnChangePlaceEvent(this.SelectedPartInstance.transform.position, this.SelectedPartInstance.transform.position);
                     this.OnPlaceModeSuccess?.Invoke(this.SelectedPartInstance);
 
 
@@ -1116,7 +1116,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             // 确认 -> 放置于新位置, 回到InteractMode
             else if (this.SelectedPartInstance.CanPlaceInPlaceMode && this.comfirmInputAction.WasPressedThisFrame())
             {
-                this.SelectedPartInstance.OnChangePlaceEvent();
+                this.SelectedPartInstance.OnChangePlaceEvent(this._editOldPos, this.SelectedPartInstance.transform.position);
 
                 this.ExitEditMode();
             }

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using ML.Engine.InventorySystem;
-using ML.Engine.Manager;
 using ProjectOC.WorkerNS;
 using ML.Engine.TextContent;
 using System.Linq;
@@ -38,9 +37,6 @@ namespace ProjectOC.ProNodeNS
         /// 基础ProNode数据表
         /// </summary>
         private Dictionary<string, ProNodeTableData> ProNodeTableDict = new Dictionary<string, ProNodeTableData>();
-
-        public const string Texture2DPath = "ui/ProNode/texture2d";
-        public const string WorldObjPath = "prefabs/ProNode/WorldProNode";
 
         public static ML.Engine.ABResources.ABJsonAssetProcessor<ProNodeTableData[]> ABJAProcessor;
 
@@ -89,27 +85,27 @@ namespace ProjectOC.ProNodeNS
             return null;
         }
 
-        //public WorldProNode SpawnWorldProNode(ProNode node, Vector3 pos, Quaternion rot)
-        //{
-        //    if (node == null)
-        //    {
-        //        return null;
-        //    }
-
-        //    // to-do : 可采用对象池形式
-        //    GameObject obj = GameObject.Instantiate(GameManager.Instance.ABResourceManager.LoadLocalAB(WorldObjPath).LoadAsset<GameObject>(this.ProNodeTableDict[node.ID].worldobject), pos, rot);
-
-        //    WorldProNode worldNode = obj.GetComponent<WorldProNode>();
-        //    if (worldNode == null)
-        //    {
-        //        worldNode = obj.AddComponent<WorldProNode>();
-        //    }
-
-        //    worldNode.SetProNode(node);
-        //    WorldProNodeDict.Add(node.UID, worldNode);
-
-        //    return worldNode;
-        //}
+        public void WorldNodeSetData(WorldProNode worldNode, string storeID)
+        {
+            ProNode node = SpawnProNode(storeID);
+            if (node != null)
+            {
+                if (worldNode.ProNode != null)
+                {
+                    worldNode.ProNode.WorldProNode = null;
+                }
+                worldNode.ProNode = node;
+                node.WorldProNode = worldNode;
+                if (WorldProNodeDict.ContainsKey(worldNode.InstanceID))
+                {
+                    WorldProNodeDict[worldNode.InstanceID] =  worldNode;
+                }
+                else
+                {
+                    WorldProNodeDict.Add(worldNode.InstanceID, worldNode);
+                }
+            }
+        }
         #endregion
 
         #region Getter

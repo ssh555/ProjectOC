@@ -5,7 +5,6 @@ using UnityEngine;
 using ML.Engine.BuildingSystem.BuildingPart;
 using System.Linq;
 using System;
-using Palmmedia.ReportGenerator.Core;
 
 namespace ML.Engine.BuildingSystem
 {
@@ -21,6 +20,16 @@ namespace ML.Engine.BuildingSystem
         public string category4;
         public string actorID;
         public List<InventorySystem.CompositeSystem.Formula> raw;
+
+        public string GetClassificationString()
+        {
+            return $"{category1}_{category2}_{category3}_{category4}";
+        }
+
+        public BuildingPartClassification GetClassification()
+        {
+            return new BuildingPartClassification(GetClassificationString());
+        }
     }
     [System.Serializable]
     public struct BuildingUpgradeTableData
@@ -180,6 +189,8 @@ namespace ML.Engine.BuildingSystem
                 if(instance == null)
                 {
                     instance = Manager.GameManager.Instance.GetLocalManager<BuildingManager>();
+                    instance.LoadTableData();
+
                 }
                 return instance;
             }
@@ -838,7 +849,42 @@ namespace ML.Engine.BuildingSystem
 
         #endregion
 
+        #region 读表
+        public Dictionary<string, BuildingTableData> BPartTableDictOnID = new Dictionary<string, BuildingTableData>();
+        public Dictionary<string, BuildingTableData> BPartTableDictOnClass = new Dictionary<string, BuildingTableData>();
+        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
 
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]> ABJAProcessor;
+
+        public void LoadTableData()
+        {
+            if (ABJAProcessor == null)
+            {
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]>("Binary/TableData", "Building", (datas) =>
+                {
+                    foreach (var data in datas)
+                    {
+                        BPartTableDictOnID.Add(data.id, data);
+                        BPartTableDictOnClass.Add(data.GetClassificationString(), data);
+                    }
+                }, null, "建筑表数据");
+                ABJAProcessor.StartLoadJsonAssetData();
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="CID">4级分类ID</param>
+        /// <returns></returns>
+        public string GetActorID(string CID)
+        {
+            if (BPartTableDictOnClass.ContainsKey(CID))
+            {
+                return BPartTableDictOnClass[CID].actorID;
+            }
+            return null;
+        }
+        #endregion
     }
 
 }

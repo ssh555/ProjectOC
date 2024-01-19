@@ -37,7 +37,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         public event IBuildingPart.CheckMode CheckCanInPlaceMode;
         public event IBuildingPart.CheckMode CheckCanEdit;
         public event IBuildingPart.CheckMode CheckCanDestory;
-        public void OnChangePlaceEvent()
+        public virtual void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
 
         }

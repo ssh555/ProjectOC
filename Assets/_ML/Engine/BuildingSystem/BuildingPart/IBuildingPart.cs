@@ -57,7 +57,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         /// <summary>
         /// 在PlaceMode或者EditMode更改之后调用
         /// </summary>
-        public void OnChangePlaceEvent();
+        public void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos);
 
         /// <summary>
         /// 当前所处的建造模式
