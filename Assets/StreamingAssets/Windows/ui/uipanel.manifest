@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3168158824
+CRC: 2254835549
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 7c97990ac776be4684b24254a6c8d67f
+    Hash: 68a422e8c3d1cbecd0531d016090848f
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 78ea3cf392300231fcf550a46da1b812
+    Hash: a92b946a895a31dcad9eb83536b1665f
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 7c97990ac776be4684b24254a6c8d67f
+    Hash: 68a422e8c3d1cbecd0531d016090848f
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -45,8 +45,6 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: b5a75fe406490b1448c391e02cf791da, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 84a92b25f83d49b9bc132d206b370281, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
@@ -56,6 +54,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 18e0a5fd7f32347419b785bf00a72db7, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 8225f47635ce8874c8d32afa594ed0e2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: b5a75fe406490b1448c391e02cf791da, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -133,5 +133,5 @@ Assets:
 - Assets/_ProjectOC/Resources/UIPanel/UIProNodePanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIBotPanel.prefab
 Dependencies:
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/inventory/texture2d/itemtype
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/techpoint/texture2d
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/inventory/texture2d/itemtype
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/techpoint/texture2d
