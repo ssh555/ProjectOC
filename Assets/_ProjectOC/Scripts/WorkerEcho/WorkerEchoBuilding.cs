@@ -10,7 +10,8 @@ namespace ProjectOC.WorkerEchoNS
     {
         public string InteractType { get; set; }
         public Vector3 PosOffset { get; set; }
-        private void Awake()
+
+        protected override void Awake()
         {
             this.InteractType = "BuilidngPart";
             this.PosOffset = this.transform.position;

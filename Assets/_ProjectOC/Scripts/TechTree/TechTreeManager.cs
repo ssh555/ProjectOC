@@ -495,7 +495,10 @@ namespace ProjectOC.TechTree
             // <建筑ID, 建筑分类>映射表为单独的JSON数据表，待完善加入
             foreach (var c in this.registerTechPoints[ID].UnLockBuild)
             {
-                MonoBuildingManager.Instance.BM.RegisterBPartPrefab(MonoBuildingManager.Instance.LoadedBPart[new ML.Engine.BuildingSystem.BuildingPart.BuildingPartClassification(c)]);
+                // 映射表转换
+                var id = c;
+                this.UnlockedBuild.Add(id);
+                MonoBuildingManager.Instance.BM.RegisterBPartPrefab(MonoBuildingManager.Instance.LoadedBPart[new ML.Engine.BuildingSystem.BuildingPart.BuildingPartClassification(id)]);
             }    
 
         }
