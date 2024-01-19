@@ -12,9 +12,10 @@ namespace ProjectOC.WorkerEchoNS
         public string InteractType { get; set; }
         public Vector3 PosOffset { get; set; }
 
-        public WorkerEcho workerEcho = new WorkerEcho();
+        public WorkerEcho workerEcho;
         private void Awake()
         {
+            this.workerEcho = new WorkerEcho(this);
             this.InteractType = "WorkerEcho";
             this.PosOffset = Vector3.zero;
             this.CheckCanDestory += CheckCanDestroyOrEdit();

@@ -1,11 +1,15 @@
 using JetBrains.Annotations;
 using ML.Engine.ABResources;
 using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.InventorySystem;
+using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.Manager;
 using ML.Engine.Timer;
+using ProjectOC.Player;
 using ProjectOC.WorkerNS;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace ProjectOC.WorkerEchoNS
@@ -19,9 +23,10 @@ namespace ProjectOC.WorkerEchoNS
         {
 
             timer = new CounterDownTimer(time);
+            GameManager.Instance.GetLocalManager<WorkerManager>().OnlyCostResource(GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory, WorkerID);
             timer.OnEndEvent += () =>
             {
-                //GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker(buildingPart.transform.position,Quaternion.identity,WorkerID);
+                GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker(buildingPart.transform.position,Quaternion.identity,WorkerID);
             };
         }
     }
@@ -45,17 +50,13 @@ namespace ProjectOC.WorkerEchoNS
             ExternWorker externWorker = new ExternWorker(id, GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetTimeCost(id), BuildingPart);
             return externWorker;
         }
-        /// <summary>
-        /// ��������
-        /// </summary>
-        /// <param name="index"></param>
         public void SpawnWorker(int index)
         {
-            GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker(Vector3.zero, Quaternion.identity, null, "Worker");
-
+            Workers[index].worker.transform.position = Vector3.zero;
         }
         public void ExpelWorker(int index)
         {
+            GameManager.Instance.GetLocalManager<WorkerManager>().RemoveWorker(Workers[index].worker);
             Workers[index] = null;
         }
         public void LevelUp()
@@ -81,13 +82,23 @@ namespace ProjectOC.WorkerEchoNS
         public ExternWorker[] GetExternWorkers()
         {
             return Workers;
-
         }
         public void StopEcho(int index)
         {
-            Workers[index].timer.End();
-            Workers[index] = null;
-            //to-do �������� 
+            IInventory inventory = GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory;
+            List<ML.Engine.InventorySystem.CompositeSystem.Formula> dict = GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRaw(Workers[index].WorkerID);
+            foreach(var pair in dict)
+            {
+                foreach (Item item in ItemManager.Instance.SpawnItems(pair.id, pair.num))
+                {
+                    if (inventory.AddItem(item))
+                    {
+                        inventory.AddItem(item);
+                    }
+                }
+
+            }
+
         }
     }
 }

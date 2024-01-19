@@ -1,3 +1,4 @@
+using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ProjectOC.WorkerNS;
@@ -32,13 +33,13 @@ namespace ProjectOC.WorkerEchoNS
         /// <summary>
         /// 基础数据表
         /// </summary>
-        private Dictionary<string, EffectTableJsonData> EffectTableDict = new Dictionary<string, EffectTableJsonData>();
+        private Dictionary<string, WorkerEchoTableJsonData> EffectTableDict = new Dictionary<string, WorkerEchoTableJsonData>();
         [System.Serializable]
         public struct WorkerEchoTableJsonData
         {
             public string ID;
             public Category Category;
-            public Dictionary<string,int> Raw;
+            public List<Formula> Raw;
             public int TimeCost;
         }
         private Dictionary<string, WorkerEchoTableJsonData> WorkerEchoTableDict = new Dictionary<string, WorkerEchoTableJsonData>();
@@ -73,7 +74,7 @@ namespace ProjectOC.WorkerEchoNS
             }
             return this.WorkerEchoTableDict[id].Category;
         }
-        public Dictionary<string,int> GetRaw(string id)
+        public List<Formula> GetRaw(string id)
         {
             if (!this.WorkerEchoTableDict.ContainsKey(id))
             {
