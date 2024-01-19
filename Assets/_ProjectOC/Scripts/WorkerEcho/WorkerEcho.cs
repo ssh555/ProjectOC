@@ -53,6 +53,7 @@ namespace ProjectOC.WorkerEchoNS
         public void SpawnWorker(int index)
         {
             Workers[index].worker.transform.position = Vector3.zero;
+            Workers[index] = null;
         }
         public void ExpelWorker(int index)
         {
