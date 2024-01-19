@@ -96,6 +96,7 @@
     <Compile Include="Assets\_ML\Example\InputAciton\PlayerInputAction.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\CapsuleCollider\SetCenter.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\SetApplyRootMotion.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\WorkerEcho\WorkerEchoBuilding.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Light\SetCookie.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\BoxCollider2D\GetSize.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Composites\Parallel.cs" />
@@ -438,6 +439,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Input\GetMousePosition.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SharedTransformToGameObject.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Input\GetButton.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\WorkerEcho\EchoStatusType.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\RotateAround.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetVector2.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\String\BuildString.cs" />
@@ -691,6 +693,7 @@
     <Compile Include="Assets\_ProjectOC\Scripts\TechTree\TechTreeManager.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedTransform.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Debug\DrawLine.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\WorkerEcho\WorkerEcho.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector3\Operator.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\SetEulerAngles.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedObject.cs" />
