@@ -2761,7 +2761,7 @@ GameObject:
   m_Component:
   - component: {fileID: 63195479720567518}
   m_Layer: 0
-  m_Name: UIStoreDataTemplate
+  m_Name: UIItemTemplate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2791,10 +2791,10 @@ RectTransform:
   - {fileID: 6000126292206014640}
   m_Father: {fileID: 3824658909687465437}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 910, y: -120}
-  m_SizeDelta: {x: 1820, y: 240}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4744362857730430303
 GameObject:
@@ -3278,6 +3278,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1047093728779744075}
+  - component: {fileID: 948843532962971231}
   - component: {fileID: 257790905731768433}
   m_Layer: 0
   m_Name: UIStorePanel
@@ -3310,6 +3311,30 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -100, y: -100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &948843532962971231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5374525249118679032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8225f47635ce8874c8d32afa594ed0e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsInit: 0
+  Store:
+    WorldStore: {fileID: 0}
+    Name: 
+    StoreType: 0
+    StoreDatas: []
+    Transports: []
+    LevelMax: 0
+    LevelStoreCapacity: 
+    LevelStoreDataCapacity: 
+    TransportPriority: 0
+    IsInteracting: 0
 --- !u!222 &257790905731768433
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5574,7 +5599,7 @@ PrefabInstance:
       objectReference: {fileID: 4082434896347632634, guid: d44758f85b12ec641a02e5954ca54924, type: 2}
     - target: {fileID: 8080040334883754039, guid: 36b6ff7c34f77d9459812b2b4c17397a, type: 3}
       propertyPath: m_Name
-      value: KT_ChangeStoreData
+      value: KT_ChangeItem
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

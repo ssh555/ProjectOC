@@ -52,16 +52,16 @@ namespace ProjectOC.WorkerNS
         {
             this.ID = config.ID;
             this.Effects = new List<Effect>();
-            foreach (string effectID in config.Effects)
+            foreach (var tuple in config.Effects)
             {
-                Effect effect = LocalGameManager.Instance.EffectManager.SpawnEffect(effectID);
+                Effect effect = LocalGameManager.Instance.EffectManager.SpawnEffect(tuple.Item1, tuple.Item2);
                 if (effect != null)
                 {
                     this.Effects.Add(effect);
                 }
                 else
                 {
-                    Debug.LogError($"Feature {this.ID} Effect {effectID} is Null");
+                    Debug.LogError($"Feature {this.ID} Effect {tuple.Item1} is Null");
                 }
             }
         }

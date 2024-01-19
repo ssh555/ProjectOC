@@ -51,6 +51,7 @@ namespace ML.Engine.InventorySystem
             return true;
         }
     }
+    [System.Serializable]
     public enum RecipeCategory
     {
         None,

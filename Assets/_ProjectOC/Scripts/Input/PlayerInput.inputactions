@@ -992,7 +992,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "AlterStoreData",
+                    "name": "Alter",
                     "type": "Value",
                     "id": "a88c7458-1957-4bf2-8552-c159134b876a",
                     "expectedControlType": "Vector2",
@@ -1080,7 +1080,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AlterStoreData",
+                    "action": "Alter",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -1091,7 +1091,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AlterStoreData",
+                    "action": "Alter",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1102,7 +1102,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AlterStoreData",
+                    "action": "Alter",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1113,7 +1113,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AlterStoreData",
+                    "action": "Alter",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1124,7 +1124,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AlterStoreData",
+                    "action": "Alter",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1135,7 +1135,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AlterStoreData",
+                    "action": "Alter",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -1146,7 +1146,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AlterStoreData",
+                    "action": "Alter",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1157,7 +1157,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AlterStoreData",
+                    "action": "Alter",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1168,7 +1168,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AlterStoreData",
+                    "action": "Alter",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1179,7 +1179,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AlterStoreData",
+                    "action": "Alter",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },

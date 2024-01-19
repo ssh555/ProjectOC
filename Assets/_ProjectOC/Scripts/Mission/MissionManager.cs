@@ -1,3 +1,4 @@
+using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.Manager.LocalManager;
 using ML.Engine.Timer;
@@ -60,8 +61,13 @@ namespace ProjectOC.MissionNS
         private bool InitiatorToStore(MissionTransport mission)
         {
             int missionNum = mission.NeedAssignNum;
-            Store store = ManagerNS.LocalGameManager.Instance.StoreManager.GetCanPutInStore(mission.ItemID, missionNum);
             Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
+            if (worker != null)
+            {
+                int maxBurNum = (int)(worker.BURMax / ItemManager.Instance.GetWeight(mission.ItemID));
+                missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
+            }
+            Store store = ManagerNS.LocalGameManager.Instance.StoreManager.GetCanPutInStore(mission.ItemID, missionNum);
             if (worker != null && store != null)
             {
                 Transport transport = new Transport(mission, mission.ItemID, missionNum, mission.Initiator, store, worker);
@@ -81,6 +87,11 @@ namespace ProjectOC.MissionNS
                 Store store = kv.Key;
                 int missionNum = kv.Value;
                 Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
+                if (worker != null)
+                {
+                    int maxBurNum = (int)(worker.BURMax / ItemManager.Instance.GetWeight(mission.ItemID));
+                    missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
+                }
                 if (worker != null && store != null)
                 { 
                     Transport transport = new Transport(mission, mission.ItemID, missionNum, mission.Initiator, store, worker);

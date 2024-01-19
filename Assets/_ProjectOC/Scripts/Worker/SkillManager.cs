@@ -1,5 +1,6 @@
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace ProjectOC.WorkerNS
         public int Sort;
         public string Icon;
         public WorkType AbilityType;
-        public List<string> Effects;
+        public List<Tuple<string, string>> Effects;
         public TextContent ItemDescription;
         public TextContent EffectsDescription;
     }
@@ -40,7 +41,7 @@ namespace ProjectOC.WorkerNS
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableData[]>("Json/TableData", "WorkerAbilityTableData", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableData[]>("Binary/TableData", "Skill", (datas) =>
                 {
                     foreach (var data in datas)
                     {

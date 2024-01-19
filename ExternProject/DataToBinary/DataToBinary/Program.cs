@@ -5,6 +5,7 @@ using ML.Engine.TextContent;
 using ProjectOC.TechTree;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
@@ -93,12 +94,12 @@ namespace ExcelToJson
             // 合成表二进制文件
             // 必须是.bytes后缀
             List<EBConfig> configs = new List<EBConfig>();
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 1,  BinaryFilePath = rootPath + "ProNode.bytes", type = typeof(ProjectOC.ProNodeNS.ProNodeTableData[]) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 3, BinaryFilePath = rootPath + "TechPoint.bytes", type = typeof(TechPoint[]) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 7,  BinaryFilePath = rootPath + "Item.bytes", type = typeof(ItemTableData[]) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 8,  BinaryFilePath = rootPath + "Feature.bytes", type = typeof(ProjectOC.WorkerNS.FeatureTableData[]) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 9,  BinaryFilePath = rootPath + "Effect.bytes", type = typeof(ProjectOC.WorkerNS.EffectTableData[]) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 10, BinaryFilePath = rootPath + "Skill.bytes", type = typeof(ProjectOC.WorkerNS.SkillTableData[]) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 1,  BinaryFilePath = rootPath + "ProNode.bytes", type = typeof(ProjectOC.ProNodeNS.ProNodeTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 3, BinaryFilePath = rootPath + "TechPoint.bytes", type = typeof(TechPoint) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 7,  BinaryFilePath = rootPath + "Item.bytes", type = typeof(ItemTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 8,  BinaryFilePath = rootPath + "Feature.bytes", type = typeof(ProjectOC.WorkerNS.FeatureTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 9,  BinaryFilePath = rootPath + "Effect.bytes", type = typeof(ProjectOC.WorkerNS.EffectTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 10, BinaryFilePath = rootPath + "Skill.bytes", type = typeof(ProjectOC.WorkerNS.SkillTableData) });
 
             System.Threading.Tasks.Parallel.ForEach(configs, (config) =>
             {
@@ -138,6 +139,8 @@ namespace ExcelToJson
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/InteractSystem/InteractKeyTip.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TextContent/InteractSystem/InteractKeyTip.bytes", type = typeof(KeyTip[]) });
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/Inventory/InventoryPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/Inventory/InventoryPanel.bytes", type = typeof(ProjectOC.InventorySystem.UI.UIInfiniteInventory.InventoryPanel) });
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/TechTree/TechPointPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/TechTree/TechPointPanel.bytes", type = typeof(ProjectOC.TechTree.TechTreeManager.TPPanel) });
+            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/Store/StorePanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/Inventory/StorePanel.bytes", type = typeof(ProjectOC.InventorySystem.UI.UIStore.StorePanel) });
+            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/ProNode/ProNodePanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/Inventory/ProNodePanel.bytes", type = typeof(ProjectOC.InventorySystem.UI.UIProNode.ProNodePanel) });
 
             System.Threading.Tasks.Parallel.ForEach(jBConfigs, (config) =>
             {
@@ -181,12 +184,18 @@ namespace ExcelToJson
                 string[] sfs = data.Split(';').Where(x => !string.IsNullOrEmpty(x)).ToArray();
                 foreach (var sf in sfs)
                 {
-                    var t = sf.Split(',');
-                    var f = new ML.Engine.InventorySystem.CompositeSystem.Formula();
-                    f.id = t[0];
-                    f.num = int.Parse(t[1]);
-
-                    formulas.Add(f);
+                    var t = sf.Split( ',', '，' );
+                    if (t.Length == 2)
+                    {
+                        var f = new ML.Engine.InventorySystem.CompositeSystem.Formula();
+                        f.id = t[0];
+                        f.num = int.Parse(t[1]);
+                        formulas.Add(f);
+                    }
+                    else
+                    {
+                        Debug.Print($"Error {t}");
+                    }
                 }
             }
             return formulas;

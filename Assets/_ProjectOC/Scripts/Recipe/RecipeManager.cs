@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
-using ML.Engine.Manager;
 using System.Collections;
 using System;
 using System.Linq;
+using ML.Engine.InventorySystem.CompositeSystem;
 
 namespace ML.Engine.InventorySystem
 {
@@ -14,8 +14,8 @@ namespace ML.Engine.InventorySystem
         public int Sort;
         public RecipeCategory Category;
         public TextContent.TextContent Name;
-        public List<Tuple<string, int>> Raw;
-        public List<Tuple<string, int>> Product;
+        public List<Formula> Raw;
+        public Formula Product;
         public int TimeCost;
         public int ExpRecipe;
     }
@@ -40,7 +40,7 @@ namespace ML.Engine.InventorySystem
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]>("Json/TableData", "RecipeTableData", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]>("Binary/TableData", "Recipe", (datas) =>
                 {
                     foreach (var data in datas)
                     {
@@ -113,30 +113,23 @@ namespace ML.Engine.InventorySystem
             return RecipeTableDict[id].Category;
         }
 
-        public Dictionary<string, int> GetRaw(string id)
+        public List<Formula> GetRaw(string id)
         {
-            Dictionary<string, int> result = new Dictionary<string, int>();
+            List<Formula> result = new List<Formula>();
             if (RecipeTableDict.ContainsKey(id))
             {
-                foreach (var tuple in RecipeTableDict[id].Raw)
-                {
-                    result.Add(tuple.Item1, tuple.Item2);
-                }
+                result.AddRange(RecipeTableDict[id].Raw);
             }
             return result;
         }
 
-        public Dictionary<string, int> GetProduct(string id)
+        public Formula GetProduct(string id)
         {
-            Dictionary<string, int> result = new Dictionary<string, int>();
             if (RecipeTableDict.ContainsKey(id))
             {
-                foreach (var tuple in RecipeTableDict[id].Product)
-                {
-                    result.Add(tuple.Item1, tuple.Item2);
-                }
+                return RecipeTableDict[id].Product;
             }
-            return result;
+            return new Formula();
         }
 
         public int GetTimeCost(string id)

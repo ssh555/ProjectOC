@@ -1,4 +1,3 @@
-using ML.Engine.Manager;
 using ML.Engine.Timer;
 using ML.Engine.InventorySystem;
 using ProjectOC.MissionNS;
@@ -6,6 +5,7 @@ using ProjectOC.WorkerNS;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using ML.Engine.InventorySystem.CompositeSystem;
 
 namespace ProjectOC.ProNodeNS
 {
@@ -64,14 +64,6 @@ namespace ProjectOC.ProNodeNS
         ///  搬运 MaxStackNum - 此值份量的原材料到此生产节点
         /// </summary>
         public int RawThresholdNum { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetRawThreshold(ID); }
-        ///// <summary>
-        ///// 升至1级耗材
-        ///// </summary>
-        //public Dictionary<string, int> Lv1Required { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetLv1Required(ID); }
-        ///// <summary>
-        ///// 升至2级耗材
-        ///// </summary>
-        //public Dictionary<string, int> Lv2Required { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetLv2Required(ID); }
         #endregion
 
         #region 不进表的配置数据
@@ -251,6 +243,30 @@ namespace ProjectOC.ProNodeNS
             this.ID = config.ID;
         }
 
+        public bool SetLevel(int level)
+        {
+            if (0 <= level && level <= LevelMax)
+            {
+                if (level > Level)
+                {
+                    for (int i = Level; i < level; i++)
+                    {
+                        EffBase += LevelUpgradeEff[i];
+                    }
+                }
+                else if (level < Level)
+                {
+                    for (int i = Level; i > level; i--)
+                    {
+                        EffBase -= LevelUpgradeEff[i - 1];
+                    }
+                }
+                this.Level = level;
+                return true;
+            }
+            return false;
+        }
+
         /// <summary>
         /// 获取生产节点可以生产的配方
         /// </summary>
@@ -276,9 +292,9 @@ namespace ProjectOC.ProNodeNS
             {
                 this.RemoveRecipe(player);
                 this.Recipe = recipe;
-                foreach (string itemID in this.Recipe.Raw.Keys)
+                foreach (Formula raw in this.Recipe.Raw)
                 {
-                    this.RawItems.Add(itemID, 0);
+                    this.RawItems.Add(raw.id, 0);
                 }
                 this.StartRun();
                 return true;
@@ -361,7 +377,7 @@ namespace ProjectOC.ProNodeNS
             if (this.ProNodeType == ProNodeType.Mannul && worker != null)
             {
                 this.RemoveWorker();
-                worker.ProNode = this;
+                worker.ChangeProNode(this);
                 worker.SetTimeStatusAll(TimeStatus.Work_OnDuty);
                 this.Worker = worker;
                 this.StartProduce();
@@ -382,7 +398,9 @@ namespace ProjectOC.ProNodeNS
                 if (this.Worker != null)
                 {
                     this.Worker.SetTimeStatusAll(TimeStatus.Relax);
+                    this.Worker.ClearDestination();
                     this.Worker.ProNode = null;
+                    this.Worker.gameObject.SetActive(true);
                     this.Worker = null;
                 }
                 return true;
@@ -448,7 +466,7 @@ namespace ProjectOC.ProNodeNS
             {
                 foreach (var kv in this.Recipe.Raw)
                 {
-                    if (this.RawItems[kv.Key] < kv.Value)
+                    if (this.RawItems[kv.id] < kv.num)
                     {
                         return false;
                     }
@@ -477,11 +495,11 @@ namespace ProjectOC.ProNodeNS
             int missionNum;
             foreach (var kv in Recipe.Raw)
             {
-                missionNum = kv.Value * RawThresholdNum - RawItems[kv.Key] - GetAssignNum(kv.Key, true);
+                missionNum = kv.num * RawThresholdNum - RawItems[kv.id] - GetAssignNum(kv.id, true);
                 if (missionNum > 0)
                 {
                     // 从仓库搬运材料来
-                    ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionTransportType.Store_ProNode, kv.Key, missionNum, this);
+                    ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionTransportType.Store_ProNode, kv.id, missionNum, this);
                 }
             }
             missionNum = StackReserve - GetAssignNum(ProductItem, false);
@@ -783,97 +801,6 @@ namespace ProjectOC.ProNodeNS
         {
             throw new NotImplementedException();
         }
-
-        #endregion
-
-        #region TODO: 升级
-        ///// <summary>
-        ///// 生产节点升级
-        ///// </summary>
-        //public bool Upgrade(Player.PlayerCharacter player)
-        //{
-        //    if (this.Level < this.LevelMax && this.Level >= 0)
-        //    {
-        //        // 从背包获取升级材料
-        //        Dictionary<string, int> lvRequired;
-        //        if (this.Level == 0)
-        //        {
-        //            lvRequired = Lv1Required;
-        //        } 
-        //        else if (this.Level == 1)
-        //        {
-        //            lvRequired = Lv2Required;
-        //        }
-        //        else
-        //        {
-        //            return false;
-        //        }
-        //        foreach (var kv in lvRequired)
-        //        {
-        //            if (player.Inventory.GetItemAllNum(kv.Key) < kv.Value)
-        //            {
-        //                return false;
-        //            }
-        //        }
-        //        foreach (var kv in lvRequired)
-        //        {
-        //            if (player.Inventory.RemoveItem(kv.Key, kv.Value))
-        //            {
-        //                return false;
-        //            }
-        //        }
-        //        this.EffBase += LevelUpgradeEff[Level];
-        //        this.Level += 1;
-        //        return true;
-        //    }
-        //    return false;
-        //}
-        ///// <summary>
-        ///// 生产节点降级
-        ///// </summary>
-        //public bool Downgrade(Player.PlayerCharacter player)
-        //{
-        //    if (this.Level <= this.LevelMax && this.Level > 0)
-        //    {
-        //        // 升级材料添加到背包
-        //        Dictionary<string, int> lvRequired;
-        //        if (this.Level == 1)
-        //        {
-        //            lvRequired = Lv1Required;
-        //        }
-        //        else if (this.Level == 2)
-        //        {
-        //            lvRequired = Lv2Required;
-        //        }
-        //        else
-        //        {
-        //            return false;
-        //        }
-        //        foreach (var kv in lvRequired)
-        //        {
-        //            bool flag = false;
-        //            List<Item> items = ItemSpawner.Instance.SpawnItems(kv.Key, kv.Value);
-        //            foreach (Item item in items)
-        //            {
-        //                if (flag)
-        //                {
-        //                    ItemSpawner.Instance.SpawnWorldItem(item, player.transform.position, player.transform.rotation);
-        //                }
-        //                else
-        //                {
-        //                    if (!player.Inventory.AddItem(item))
-        //                    {
-        //                        flag = true;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        this.Level -= 1;
-        //        this.EffBase -= LevelUpgradeEff[Level];
-        //        return true;
-        //    }
-        //    return false;
-        //}
         #endregion
     }
 }

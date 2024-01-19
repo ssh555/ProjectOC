@@ -4,11 +4,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using ML.Engine.BuildingSystem.BuildingPart;
 using System.Linq;
-using UnityEngine.Windows;
 using System;
+using Palmmedia.ReportGenerator.Core;
 
 namespace ML.Engine.BuildingSystem
 {
+    [System.Serializable]
+    public struct BuildingTableData
+    {
+        public string id;
+        public TextContent.TextContent name;
+        public string icon;
+        public string category1;
+        public string category2;
+        public string category3;
+        public string category4;
+        public string actorID;
+        public List<InventorySystem.CompositeSystem.Formula> raw;
+    }
+    [System.Serializable]
+    public struct BuildingUpgradeTableData
+    {
+        public string id;
+        public TextContent.TextContent name;
+        public List<InventorySystem.CompositeSystem.Formula> upgradeRaw;
+    }
     [LabelText("建造模式")]
     public enum BuildingMode
     {

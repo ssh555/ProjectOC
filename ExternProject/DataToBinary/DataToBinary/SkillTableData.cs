@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProjectOC.WorkerNS
 {
@@ -14,7 +12,7 @@ namespace ProjectOC.WorkerNS
         public int Sort;
         public string Icon;
         public WorkType AbilityType;
-        public List<Tuple<string, float>> Effects;
+        public List<Tuple<string, string>> Effects;
         public ML.Engine.TextContent.TextContent ItemDescription;
         public ML.Engine.TextContent.TextContent EffectsDescription;
 
@@ -33,13 +31,13 @@ namespace ProjectOC.WorkerNS
             // 3 -> AbilityType
             this.AbilityType = (WorkType)Enum.Parse(typeof(WorkType), row[3]);
             // 4 -> Effects
-            this.Effects = new List<Tuple<string, float>>();
+            this.Effects = new List<Tuple<string, string>>();
             if (!string.IsNullOrEmpty(row[4]))
             {
                 foreach (string str in row[4].Split(';').Where(x => !string.IsNullOrEmpty(x)))
                 {
                     string[] s = str.Split(',');
-                    this.Effects.Add(new Tuple<string, float>(s[0], float.Parse(s[1])));
+                    this.Effects.Add(new Tuple<string, string>(s[0], s[1]));
                 }
             }
             // 5 -> ItemDescription

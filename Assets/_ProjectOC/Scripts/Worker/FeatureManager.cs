@@ -16,7 +16,7 @@ namespace ProjectOC.WorkerNS
         public TextContent Name;
         public string Icon;
         public FeatureType Type;
-        public List<string> Effects;
+        public List<Tuple<string, string>> Effects;
         public TextContent ItemDescription;
         public TextContent EffectsDescription;
     }
@@ -47,7 +47,7 @@ namespace ProjectOC.WorkerNS
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableData[]>("Json/TableData", "FeatureTableData", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableData[]>("Binary/TableData", "Feature", (datas) =>
                 {
                     foreach (var data in datas)
                     {

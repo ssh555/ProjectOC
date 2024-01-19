@@ -30,11 +30,11 @@ namespace ML.Engine.InventorySystem
         /// <summary>
         /// 原料
         /// </summary>
-        public Dictionary<string, int> Raw { get => LocalGameManager.Instance.RecipeManager.GetRaw(ID); }
+        public List<Formula> Raw { get => LocalGameManager.Instance.RecipeManager.GetRaw(ID); }
         /// <summary>
         /// 成品
         /// </summary>
-        public Dictionary<string, int> Product { get => LocalGameManager.Instance.RecipeManager.GetProduct(ID); }
+        public Formula Product { get => LocalGameManager.Instance.RecipeManager.GetProduct(ID); }
         /// <summary>
         /// 时间消耗，进行1次生产需要多少秒
         /// </summary>
@@ -57,64 +57,43 @@ namespace ML.Engine.InventorySystem
 
         public string GetProductID()
         {
-            if (Product.Count == 1)
-            {
-                foreach (var kv in Product)
-                {
-                    return kv.Key;
-                }
-            }
-            Debug.LogError("Recipe Product Num is Error");
-            return "";
+            return Product.id;
         }
 
         public int GetProductNum()
         {
-            if (Product.Count == 1)
-            {
-                foreach (var kv in Product)
-                {
-                    return kv.Value;
-                }
-            }
-            Debug.LogError("Recipe Product Num is Error");
-            return 0;
+            return Product.num;
         }
 
         public int GetRawNum(string itemID)
         {
-            if (Raw.ContainsKey(itemID))
+            foreach (Formula raw in Raw)
             {
-                return Raw[itemID];
+                if (raw.id == itemID)
+                {
+                    return raw.num;
+                }
             }
-            else
-            {
-                Debug.LogError($"Raw {itemID} is not exist in recipe {ID}");
-                return 0;
-            }
+            Debug.LogError($"Raw {itemID} is not exist in recipe {ID}");
+            return 0;
         }
 
         public Item Composite(IInventory inventory)
         {
-            if (Product.Count == 1)
+            
+            CompositeManager.CompositionObjectType compObjType = CompositeManager.Instance.Composite(inventory, Product.id, out var composition);
+            switch (compObjType)
             {
-                foreach (var kv in Product)
-                {
-                    CompositeManager.CompositionObjectType compObjType = CompositeManager.Instance.Composite(inventory, kv.Key, out var composition);
-                    switch (compObjType)
+                case CompositeManager.CompositionObjectType.Item:
+                    Item item = composition as Item;
+                    if (item.Amount != GetProductNum())
                     {
-                        case CompositeManager.CompositionObjectType.Item:
-                            Item item = composition as Item;
-                            if (item.Amount != GetProductNum())
-                            {
-                                Debug.LogError($"Recipe {ID} Product {kv.Key} Item Num is Error");
-                            }
-                            return item;
-                        default:
-                            Debug.LogError($"Recipe {ID} Product {kv.Key} Composite {compObjType}");
-                            break;
+                        Debug.LogError($"Recipe {ID} Product {Product.id} Item Num is Error");
                     }
-                }
+                    return item;
+                default:
+                    Debug.LogError($"Recipe {ID} Product {Product.id} Composite {compObjType}");
+                    break;
             }
             Debug.LogError("Recipe Product Num is Error");
             return null;

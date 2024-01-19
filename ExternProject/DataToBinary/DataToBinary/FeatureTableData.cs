@@ -14,7 +14,7 @@ namespace ProjectOC.WorkerNS
         public ML.Engine.TextContent.TextContent Name;
         public string Icon;
         public FeatureType Type;
-        public List<Tuple<string, float>> Effects;
+        public List<Tuple<string, string>> Effects;
         public ML.Engine.TextContent.TextContent ItemDescription;
         public ML.Engine.TextContent.TextContent EffectsDescription;
 
@@ -39,13 +39,13 @@ namespace ProjectOC.WorkerNS
             // 5 -> Type
             this.Type = (FeatureType)Enum.Parse(typeof(FeatureType), row[5]);
             // 6 -> Effects
-            this.Effects = new List<Tuple<string, float>>();
+            this.Effects = new List<Tuple<string, string>>();
             if (!string.IsNullOrEmpty(row[6]))
             {
                 foreach (string str in row[6].Split(';').Where(x => !string.IsNullOrEmpty(x)))
                 {
                     string[] s = str.Split(',');
-                    this.Effects.Add(new Tuple<string, float>(s[0], float.Parse(s[1])));
+                    this.Effects.Add(new Tuple<string, string>(s[0], s[1]));
                 }
             }
             // 7 -> ItemDescription
@@ -59,11 +59,12 @@ namespace ProjectOC.WorkerNS
             return true;
         }
     }
+    [System.Serializable]
     public enum FeatureType
     {
         Race,
         Buff,
-        Debuff,
+        DeBuff,
         None,
     }
 }

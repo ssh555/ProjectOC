@@ -49,9 +49,17 @@ namespace ProjectOC.WorkerNS
             this.Workers.Remove(worker);
         }
 
-        /// <summary>
-        /// 创建新的刁民
-        /// </summary>
+        public bool OnlyCostResource(IInventory inventory, string workerID)
+        {
+            return CompositeManager.Instance.OnlyCostResource(inventory, workerID);
+        }
+        public Worker SpawnWorker(Vector3 pos, Quaternion rot, string workerID)
+        {
+            GameObject obj = GameObject.Instantiate(GetObject(), pos, rot);
+            Worker worker = obj.AddComponent<Worker>();
+            Workers.Add(worker);
+            return worker;
+        }
         public Worker SpawnWorker(Vector3 pos, Quaternion rot, IInventory inventory, string workerID)
         {
             if (CompositeManager.Instance.OnlyCostResource(inventory, workerID))

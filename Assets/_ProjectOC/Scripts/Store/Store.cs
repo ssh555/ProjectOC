@@ -524,6 +524,7 @@ namespace ProjectOC.StoreNS
                         }
                     }
                 }
+                OnStoreDataChange?.Invoke();
                 return amount - result;
             }
             return 0;

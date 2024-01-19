@@ -59,6 +59,7 @@ namespace ProjectOC.ProNodeNS
             return true;
         }
     }
+    [System.Serializable]
     public enum ProNodeType
     {
         None,

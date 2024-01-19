@@ -35,7 +35,7 @@ namespace ProjectOC.WorkerNS
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<EffectTableData[]>("Json/TableData", "EffectTableData", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<EffectTableData[]>("Binary/TableData", "Effect", (datas) =>
                 {
                     foreach (var data in datas)
                     {
@@ -48,11 +48,11 @@ namespace ProjectOC.WorkerNS
         #endregion
 
         #region Spawn
-        public Effect SpawnEffect(string id)
+        public Effect SpawnEffect(string id, string value)
         {
             if (this.EffectTableDict.TryGetValue(id, out EffectTableData row))
             {
-                Effect effect = new Effect(row);
+                Effect effect = new Effect(row, value);
                 return effect;
             }
             Debug.LogError("没有对应ID为 " + id + " 的Effect");

@@ -251,7 +251,7 @@ namespace ProjectOC.TechTree
 #endif
 
             #region Load TPJsonData
-            ML.Engine.ABResources.ABJsonAssetProcessor<TechPoint[]> ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TechPoint[]>("Binary/TableData", "TechTree", (datas) =>
+            ML.Engine.ABResources.ABJsonAssetProcessor<TechPoint[]> ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TechPoint[]>("Binary/TableData", "TechPoint", (datas) =>
             {
                 foreach (var data in datas)
                 {

@@ -26,6 +26,7 @@ namespace ProjectOC.WorkerNS
             return true;
         }
     }
+    [System.Serializable]
     public enum EffectType
     {
         None,

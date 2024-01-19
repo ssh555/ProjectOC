@@ -102,6 +102,7 @@ namespace ProjectOC.MissionNS
             this.Source.AddTransport(this);
             this.Target.AddTransport(this);
             this.Worker.Transport = this;
+            this.Worker.SetTimeStatusAll(TimeStatus.Work_Transport);
         }
 
         /// <summary>
@@ -177,8 +178,10 @@ namespace ProjectOC.MissionNS
             {
                 ItemManager.Instance.SpawnWorldItem(item, Worker.transform.position, Worker.transform.rotation);
             }
+            Worker.SetTimeStatusAll(TimeStatus.Relax);
             Worker.TransportItems.Clear();
             Worker.Transport = null;
+            Worker.ClearDestination();
             Mission.Transports.Remove(this);
             Source.RemoveTranport(this);
             Target.RemoveTranport(this);

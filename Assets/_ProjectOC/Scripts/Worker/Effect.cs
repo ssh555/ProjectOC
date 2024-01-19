@@ -39,9 +39,36 @@ namespace ProjectOC.WorkerNS
         public EffectType EffectType { get => LocalGameManager.Instance.EffectManager.GetEffectType(ID); }
         #endregion
 
-        public Effect(EffectTableData config)
+        public Effect(EffectTableData config, string value)
         {
             this.ID = config.ID;
+
+            switch (EffectType)
+            {
+                #region int
+                case EffectType.AlterAPMax:
+                case EffectType.AlterExpRate_Cook:
+                case EffectType.AlterExpRate_HandCraft:
+                case EffectType.AlterExpRate_Industry:
+                case EffectType.AlterExpRate_Magic:
+                case EffectType.AlterExpRate_Transport:
+                case EffectType.AlterExpRate_Collect:
+                case EffectType.AlterBURMax:
+                case EffectType.AlterEff_Cook:
+                case EffectType.AlterEff_HandCraft:
+                case EffectType.AlterEff_Industry:
+                case EffectType.AlterEff_Magic:
+                case EffectType.AlterEff_Transport:
+                case EffectType.AlterEff_Collect:
+                    ParamInt = int.Parse(value);
+                    break;
+                #endregion
+                #region float
+                case EffectType.AlterWalkSpeed:
+                    ParamFloat = int.Parse(value);
+                    break;
+                #endregion
+            }
         }
         public Effect(Effect effect)
         {

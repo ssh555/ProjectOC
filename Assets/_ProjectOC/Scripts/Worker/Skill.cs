@@ -54,16 +54,16 @@ namespace ProjectOC.WorkerNS
         public Skill(SkillTableData config)
         {
             this.ID = config.ID;
-            foreach (string effectID in config.Effects)
+            foreach (var tuple in config.Effects)
             {
-                Effect effect = LocalGameManager.Instance.EffectManager.SpawnEffect(effectID);
+                Effect effect = LocalGameManager.Instance.EffectManager.SpawnEffect(tuple.Item1, tuple.Item2);
                 if (effect != null)
                 {
                     this.Effects.Add(effect);
                 }
                 else
                 {
-                    Debug.LogError($"Skill {this.ID} Effect {effectID} is Null");
+                    Debug.LogError($"Skill {this.ID} Effect {tuple.Item1} is Null");
                 }
             }
             this.Level = 0;

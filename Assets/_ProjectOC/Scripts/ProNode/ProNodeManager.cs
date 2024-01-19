@@ -48,7 +48,7 @@ namespace ProjectOC.ProNodeNS
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ProNodeTableData[]>("Json/TableData", "ProNodesTableData", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ProNodeTableData[]>("Binary/TableData", "ProNode", (datas) =>
                 {
                     foreach (var data in datas)
                     {
@@ -217,32 +217,6 @@ namespace ProjectOC.ProNodeNS
             }
             return ProNodeTableDict[id].RawThreshold;
         }
-
-        //public Dictionary<string, int> GetLv1Required(string id)
-        //{
-        //    Dictionary<string, int> result = new Dictionary<string, int>();
-        //    if (ProNodeTableDict.ContainsKey(id))
-        //    {
-        //        foreach (var tuple in ProNodeTableDict[id].Lv1Required)
-        //        {
-        //            result.Add(tuple.Item1, tuple.Item2);
-        //        }
-        //    }
-        //    return result;
-        //}
-
-        //public Dictionary<string, int> GetLv2Required(string id)
-        //{
-        //    Dictionary<string, int> result = new Dictionary<string, int>();
-        //    if (ProNodeTableDict.ContainsKey(id))
-        //    {
-        //        foreach (var tuple in ProNodeTableDict[id].Lv2Required)
-        //        {
-        //            result.Add(tuple.Item1, tuple.Item2);
-        //        }
-        //    }
-        //    return result;
-        //}
         #endregion
     }
 }

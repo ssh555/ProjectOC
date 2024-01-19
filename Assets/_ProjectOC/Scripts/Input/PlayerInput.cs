@@ -1016,7 +1016,7 @@ namespace ProjectOC.Input
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""AlterStoreData"",
+                    ""name"": ""Alter"",
                     ""type"": ""Value"",
                     ""id"": ""a88c7458-1957-4bf2-8552-c159134b876a"",
                     ""expectedControlType"": ""Vector2"",
@@ -1104,7 +1104,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AlterStoreData"",
+                    ""action"": ""Alter"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -1115,7 +1115,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AlterStoreData"",
+                    ""action"": ""Alter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -1126,7 +1126,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AlterStoreData"",
+                    ""action"": ""Alter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -1137,7 +1137,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AlterStoreData"",
+                    ""action"": ""Alter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -1148,7 +1148,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AlterStoreData"",
+                    ""action"": ""Alter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -1159,7 +1159,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AlterStoreData"",
+                    ""action"": ""Alter"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -1170,7 +1170,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AlterStoreData"",
+                    ""action"": ""Alter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -1181,7 +1181,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AlterStoreData"",
+                    ""action"": ""Alter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -1192,7 +1192,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AlterStoreData"",
+                    ""action"": ""Alter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -1203,7 +1203,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AlterStoreData"",
+                    ""action"": ""Alter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -1628,7 +1628,7 @@ namespace ProjectOC.Input
             m_UIStore = asset.FindActionMap("UIStore", throwIfNotFound: true);
             m_UIStore_NextPriority = m_UIStore.FindAction("NextPriority", throwIfNotFound: true);
             m_UIStore_ChangeStoreData = m_UIStore.FindAction("ChangeStoreData", throwIfNotFound: true);
-            m_UIStore_AlterStoreData = m_UIStore.FindAction("AlterStoreData", throwIfNotFound: true);
+            m_UIStore_Alter = m_UIStore.FindAction("Alter", throwIfNotFound: true);
             m_UIStore_Remove1 = m_UIStore.FindAction("Remove1", throwIfNotFound: true);
             m_UIStore_Remove10 = m_UIStore.FindAction("Remove10", throwIfNotFound: true);
             m_UIStore_FastAdd = m_UIStore.FindAction("FastAdd", throwIfNotFound: true);
@@ -1985,7 +1985,7 @@ namespace ProjectOC.Input
         private List<IUIStoreActions> m_UIStoreActionsCallbackInterfaces = new List<IUIStoreActions>();
         private readonly InputAction m_UIStore_NextPriority;
         private readonly InputAction m_UIStore_ChangeStoreData;
-        private readonly InputAction m_UIStore_AlterStoreData;
+        private readonly InputAction m_UIStore_Alter;
         private readonly InputAction m_UIStore_Remove1;
         private readonly InputAction m_UIStore_Remove10;
         private readonly InputAction m_UIStore_FastAdd;
@@ -1995,7 +1995,7 @@ namespace ProjectOC.Input
             public UIStoreActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
             public InputAction @NextPriority => m_Wrapper.m_UIStore_NextPriority;
             public InputAction @ChangeStoreData => m_Wrapper.m_UIStore_ChangeStoreData;
-            public InputAction @AlterStoreData => m_Wrapper.m_UIStore_AlterStoreData;
+            public InputAction @Alter => m_Wrapper.m_UIStore_Alter;
             public InputAction @Remove1 => m_Wrapper.m_UIStore_Remove1;
             public InputAction @Remove10 => m_Wrapper.m_UIStore_Remove10;
             public InputAction @FastAdd => m_Wrapper.m_UIStore_FastAdd;
@@ -2014,9 +2014,9 @@ namespace ProjectOC.Input
                 @ChangeStoreData.started += instance.OnChangeStoreData;
                 @ChangeStoreData.performed += instance.OnChangeStoreData;
                 @ChangeStoreData.canceled += instance.OnChangeStoreData;
-                @AlterStoreData.started += instance.OnAlterStoreData;
-                @AlterStoreData.performed += instance.OnAlterStoreData;
-                @AlterStoreData.canceled += instance.OnAlterStoreData;
+                @Alter.started += instance.OnAlter;
+                @Alter.performed += instance.OnAlter;
+                @Alter.canceled += instance.OnAlter;
                 @Remove1.started += instance.OnRemove1;
                 @Remove1.performed += instance.OnRemove1;
                 @Remove1.canceled += instance.OnRemove1;
@@ -2036,9 +2036,9 @@ namespace ProjectOC.Input
                 @ChangeStoreData.started -= instance.OnChangeStoreData;
                 @ChangeStoreData.performed -= instance.OnChangeStoreData;
                 @ChangeStoreData.canceled -= instance.OnChangeStoreData;
-                @AlterStoreData.started -= instance.OnAlterStoreData;
-                @AlterStoreData.performed -= instance.OnAlterStoreData;
-                @AlterStoreData.canceled -= instance.OnAlterStoreData;
+                @Alter.started -= instance.OnAlter;
+                @Alter.performed -= instance.OnAlter;
+                @Alter.canceled -= instance.OnAlter;
                 @Remove1.started -= instance.OnRemove1;
                 @Remove1.performed -= instance.OnRemove1;
                 @Remove1.canceled -= instance.OnRemove1;
@@ -2199,7 +2199,7 @@ namespace ProjectOC.Input
         {
             void OnNextPriority(InputAction.CallbackContext context);
             void OnChangeStoreData(InputAction.CallbackContext context);
-            void OnAlterStoreData(InputAction.CallbackContext context);
+            void OnAlter(InputAction.CallbackContext context);
             void OnRemove1(InputAction.CallbackContext context);
             void OnRemove10(InputAction.CallbackContext context);
             void OnFastAdd(InputAction.CallbackContext context);
