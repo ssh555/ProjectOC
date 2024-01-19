@@ -9,7 +9,6 @@ namespace ML.Engine.InventorySystem
         public Item[] GetItemList();
 
         public bool AddItem(Item item);
-
         public bool RemoveItem(Item item);
 
         public Item RemoveItem(Item item, int amount);

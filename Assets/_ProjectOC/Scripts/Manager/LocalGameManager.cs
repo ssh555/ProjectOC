@@ -22,7 +22,7 @@ namespace ProjectOC.ManagerNS
         public EffectManager EffectManager { get; private set; }
         public FeatureManager FeatureManager { get; private set; }
         public SkillManager SkillManager { get; private set; }
-        public WorkerEcho WorkerEcho { get; private set; }
+        public WorkerEchoManager WorkerEchoManager { get; private set; }
 
         /// <summary>
         /// µ¥Àý¹ÜÀí
@@ -55,7 +55,7 @@ namespace ProjectOC.ManagerNS
             FeatureManager.LoadTableData();
             SkillManager = GM.RegisterLocalManager<SkillManager>();
             SkillManager.LoadTableData();
-            WorkerEcho = GM.RegisterLocalManager<WorkerEcho>();
+            WorkerEchoManager = GM.RegisterLocalManager<WorkerEchoManager>();
             this.enabled = false;
         }
         private void OnDestroy()
