@@ -89,7 +89,7 @@ namespace ExcelToJson
             DBMgr.WriteBinaryFromExcel(buildingTableDatas, rootPath + "Building.bytes");
             DBMgr.WriteBinaryFromExcel(buildingUpgradeTableDatas, rootPath + "BuildingUpgrade.bytes");
             DBMgr.WriteBinaryFromExcel(recipeTableDatas, rootPath + "Recipe.bytes");
-            DBMgr.WriteBinaryFromExcel(compositionTableDatas, rootPath + "CompositionTableData.bytes");
+            DBMgr.WriteBinaryFromExcel(compositionTableDatas, rootPath + "Composition.bytes");
 
             // 合成表二进制文件
             // 必须是.bytes后缀

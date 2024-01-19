@@ -189,7 +189,10 @@ namespace ML.Engine.BuildingSystem
                 if(instance == null)
                 {
                     instance = Manager.GameManager.Instance.GetLocalManager<BuildingManager>();
-                    instance.LoadTableData();
+                    if(instance != null)
+                    {
+                        instance.LoadTableData();
+                    }
 
                 }
                 return instance;

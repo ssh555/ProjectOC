@@ -1,7 +1,7 @@
 ﻿using ExcelToJson;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 
 namespace ML.Engine.InventorySystem
 {
@@ -42,7 +42,7 @@ namespace ML.Engine.InventorySystem
             }
             else
             {
-                this.Product = new CompositeSystem.Formula();
+                return false;
             }
             // 6 -> TimeCost
             this.TimeCost = int.Parse(row[6]);

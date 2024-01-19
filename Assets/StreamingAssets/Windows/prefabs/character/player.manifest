@@ -82,6 +82,6 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/_ProjectOC/Resources/PlayerCharacter/PlayerCharacter.prefab
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/animation/character/player/playermove
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/uipanel
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/animation/character/player/playermove
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/uipanel
