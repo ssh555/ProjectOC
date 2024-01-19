@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Furniture_Chair_Base_0
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 2
+    SerializedFormat: 0
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 

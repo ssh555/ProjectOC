@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Room_Floor_Base_20
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 2
+    SerializedFormat: 0
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
@@ -23,7 +23,7 @@ MonoBehaviour:
     SerializationNodes: []
   Classification:
     Category1: 0
-    Category2: 3
+    Category2: 1
     Category3: 1
     Category4: 20
   MatStruct: ffffffff
