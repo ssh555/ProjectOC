@@ -15,7 +15,7 @@ namespace ProjectOC.ManagerNS
         public MissionManager MissionBroadCastManager { get; private set; }
         public WorkerManager WorkerManager { get; private set; }
         public StoreManager StoreManager { get; private set; }
-        public WorkerEcho WorkerEcho { get; private set; }
+        public WorkerEchoManager WorkerEchoManager { get; private set; }
         void Start()
         {
             GameManager.Instance.RegisterLocalManager(this);
@@ -23,7 +23,7 @@ namespace ProjectOC.ManagerNS
             MissionBroadCastManager = GameManager.Instance.RegisterLocalManager<MissionManager>();
             WorkerManager = GameManager.Instance.RegisterLocalManager<WorkerManager>();
             StoreManager = GameManager.Instance.RegisterLocalManager<StoreManager>();
-            WorkerEcho = GameManager.Instance.RegisterLocalManager<WorkerEcho>();
+            WorkerEchoManager = GameManager.Instance.RegisterLocalManager<WorkerEchoManager>();
 
             this.enabled = false;
         }
