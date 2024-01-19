@@ -1,4 +1,5 @@
 using ML.Engine.TextContent;
+using ML.Engine.Timer;
 using Newtonsoft.Json;
 using Sirenix.OdinInspector;
 using System.Collections;
@@ -63,8 +64,9 @@ namespace ML.Engine.InteractSystem
                 uiKeyTip.img.transform.parent.position = screenPosition;
 
                 // »∑»œΩªª•
-                if (Input.InputManager.Instance.Common.Common.Comfirm.WasPressedThisFrame())
+                if (Input.InputManager.Instance.Common.Common.Comfirm.WasPerformedThisFrame())
                 {
+                    Debug.Log("WasPerformedThisFrame "+ Time.frameCount);
                     this.CurrentInteraction.Interact(this);
                 }
             }

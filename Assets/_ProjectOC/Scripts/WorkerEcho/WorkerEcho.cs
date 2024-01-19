@@ -33,7 +33,7 @@ namespace ProjectOC.WorkerEchoNS
     [System.Serializable]
     public sealed class WorkerEcho : ML.Engine.Manager.LocalManager.ILocalManager
     {
-        private int Level = 1;
+        public int Level = 1;
         ExternWorker[] Workers = new ExternWorker[5];
         BuildingPart BuildingPart = null;
 

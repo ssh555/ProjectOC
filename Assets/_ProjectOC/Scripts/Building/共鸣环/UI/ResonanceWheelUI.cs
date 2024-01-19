@@ -48,7 +48,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private void Start()
         {
             Debug.Log("121323 " + GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>());
-            //workerEcho = (GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).WorkerEcho;
+            workerEcho = (GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
+            //workerEcho = GameObject.Find("Cube").GetComponent<WorkerEchoBuilding>().workerEcho;
             InitUITextContents();
             InitUITexture2D();
             //exclusivePart
@@ -258,8 +259,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Enable();
 
-            
-
 
 
             this.Refresh();
@@ -269,7 +268,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             this.UnregisterInput();
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Disable();
-            
+
         }
 
         private void UnregisterInput()
@@ -369,18 +368,19 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //检查背包
             Debug.Log("StartResonance_perfozqrmed!");
             Debug.Log(GameManager.Instance.GetLocalManager<WorkerManager>());
-            ExternWorker worker = new ExternWorker(null,5);
-            /*            if (workerEcho.Level == 1) //GameManager.Instance.Level == 1
-                        {
-                            //能否成功合成 判空
-                            worker = workerEcho.SummonWorker1(CurrentGridIndex);
+            //ExternWorker worker = new ExternWorker(null,5,null);
+            ExternWorker worker;
+            if (workerEcho.Level == 1) //GameManager.Instance.Level == 1
+            {
+                //能否成功合成 判空
+                worker = workerEcho.SummonWorker(null,CurrentGridIndex);
 
 
-                        }
-                        else
-                        {
-                            worker = workerEcho.SummonWorker2(CurrentGridIndex, Grids[CurrentGridIndex].id);
-                        }*/
+            }
+            else
+            {
+                worker = workerEcho.SummonWorker(Grids[CurrentGridIndex].id, CurrentGridIndex);
+            }
 
             if (worker != null)
             {
@@ -440,7 +440,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
 
 
-            //workerEcho.StopEcho(CurrentGridIndex);
+            workerEcho.StopEcho(CurrentGridIndex);
 
 
             Grids[CurrentGridIndex].isNull = true;
