@@ -11,6 +11,7 @@ namespace ProjectOC.WorkerNS
     [System.Serializable]
     public sealed class WorkerStateMachine : StateMachine
     {
+        private Worker worker;
         /// <summary>
         /// ×´Ì¬»úËùÊôµóÃñ
         /// </summary>
@@ -18,15 +19,15 @@ namespace ProjectOC.WorkerNS
         {
             get 
             {
-                if (Worker == null)
+                if (worker == null)
                 {
                     Debug.LogError("Worker is Null");
                 }
-                return Worker;
+                return worker;
             }
             set 
-            { 
-                Worker = value; 
+            {
+                worker = value; 
             }
         }
         /// <summary>

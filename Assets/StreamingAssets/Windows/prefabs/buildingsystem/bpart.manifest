@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1167452991
+CRC: 2110181208
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 17a344c3d55b491a393a0c546f841090
+    Hash: 3a54ac76b5e6034ceeb0adb511dbbf14
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 7e31b0ded2fdc710feed591d428773b7
+    Hash: 02392fbf9477fede0047963329e53657
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 17a344c3d55b491a393a0c546f841090
+    Hash: 3a54ac76b5e6034ceeb0adb511dbbf14
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -32,6 +32,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 114
   Script: {fileID: 11500000, guid: 1b69e2587bc92af46baf9b9c8a18bc47, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1d70636ddcc0088439ec85c7af608e52, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 4eaeb81a05cd54643b2d664b64e8dc44, type: 3}
 - Class: 114
@@ -65,6 +67,8 @@ SerializeReferenceClassIdentifiers:
   ClassName: ML.Engine.InventorySystem.Recipe
 - AssemblyName: Assembly-CSharp
   ClassName: ProjectOC.ProNodeNS.ProNode
+- AssemblyName: Assembly-CSharp
+  ClassName: ProjectOC.StoreNS.Store
 Assets:
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/ProNode/ProNode_Calculus_Base1_2.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/ProNode/ProNode_Aggregator_Base1_2.prefab
