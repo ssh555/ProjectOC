@@ -36,7 +36,7 @@ namespace ProjectOC.WorkerEchoNS
         public void SpawnWorker(int index)
         {
             // ’¡Ù
-            GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker(Vector3.zero, Quaternion.identity);
+            GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker(Vector3.zero, Quaternion.identity, null, "Worker");
         }
         public void ExpelWorker(int index)
         {

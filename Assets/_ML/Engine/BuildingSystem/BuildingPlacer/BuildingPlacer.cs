@@ -1116,6 +1116,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             // 确认 -> 放置于新位置, 回到InteractMode
             else if (this.SelectedPartInstance.CanPlaceInPlaceMode && this.comfirmInputAction.WasPressedThisFrame())
             {
+
                 this.SelectedPartInstance.OnChangePlaceEvent(_editOldPos, this.SelectedPartInstance.gameObject.transform.position);
 
                 this.ExitEditMode();

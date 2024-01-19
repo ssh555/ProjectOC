@@ -1,3 +1,4 @@
+using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.Manager.LocalManager;
 using ML.Engine.Timer;
@@ -47,7 +48,7 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// 创建搬运任务
         /// </summary>
-        public MissionTransport CreateTransportMission(MissionTransportType transportType, string itemID, int missionNum, IMission Initiator)
+        public MissionTransport CreateTransportMission(MissionTransportType transportType, string itemID, int missionNum, IMissionObj Initiator)
         {
             MissionTransport mission = new MissionTransport(transportType, itemID, missionNum, Initiator);
             this.MissionTransports.Add(mission);
@@ -57,29 +58,40 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// 发起者到仓库，存入仓库
         /// </summary>
-        private void InitiatorToStore(MissionTransport mission)
+        private bool InitiatorToStore(MissionTransport mission)
         {
             int missionNum = mission.NeedAssignNum;
-            Store store = GameManager.Instance.GetLocalManager<StoreManager>()?.GetCanPutInStore(mission.ItemID, missionNum);
-            Worker worker = GameManager.Instance.GetLocalManager<WorkerManager>()?.GetCanTransportWorker();
+            Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
+            if (worker != null)
+            {
+                int maxBurNum = (int)(worker.BURMax / ItemManager.Instance.GetWeight(mission.ItemID));
+                missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
+            }
+            Store store = ManagerNS.LocalGameManager.Instance.StoreManager.GetCanPutInStore(mission.ItemID, missionNum);
             if (worker != null && store != null)
             {
                 Transport transport = new Transport(mission, mission.ItemID, missionNum, mission.Initiator, store, worker);
                 store.ReserveEmptyToWorker(mission.ItemID, missionNum);
             }
+            return worker != null;
         }
 
         /// <summary>
         /// 仓库到发起者，取出仓库
         /// </summary>
-        private void StoreToInitiator(MissionTransport mission)
+        private bool StoreToInitiator(MissionTransport mission)
         {
-            Dictionary<Store, int> result = GameManager.Instance.GetLocalManager<StoreManager>()?.GetCanPutOutStore(mission.ItemID, mission.NeedAssignNum);
+            Dictionary<Store, int> result = ManagerNS.LocalGameManager.Instance.StoreManager.GetCanPutOutStore(mission.ItemID, mission.NeedAssignNum);
             foreach (var kv in result)
             {
                 Store store = kv.Key;
                 int missionNum = kv.Value;
-                Worker worker = GameManager.Instance.GetLocalManager<WorkerManager>()?.GetCanTransportWorker();
+                Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
+                if (worker != null)
+                {
+                    int maxBurNum = (int)(worker.BURMax / ItemManager.Instance.GetWeight(mission.ItemID));
+                    missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
+                }
                 if (worker != null && store != null)
                 { 
                     Transport transport = new Transport(mission, mission.ItemID, missionNum, mission.Initiator, store, worker);
@@ -88,9 +100,10 @@ namespace ProjectOC.MissionNS
                 // 没有空闲的Worker
                 if (worker == null)
                 {
-                    break;
+                    return false;
                 }
             }
+            return true;
         }
 
         /// <summary>
@@ -105,11 +118,17 @@ namespace ProjectOC.MissionNS
                     // 存入仓库
                     case MissionTransportType.ProNode_Store:
                     case MissionTransportType.Outside_Store:
-                        InitiatorToStore(mission);
+                        if (!InitiatorToStore(mission))
+                        {
+                            return;
+                        }
                         break;
                     // 取出仓库
                     case MissionTransportType.Store_ProNode:
-                        StoreToInitiator(mission);
+                        if (!StoreToInitiator(mission))
+                        {
+                            return;
+                        }
                         break;
                 }
             }

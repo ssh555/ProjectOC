@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ProjectOC.MissionNS
 {
-    public interface IMission
+    public interface IMissionObj
     {
         public Transform GetTransform();
         public TransportPriority GetTransportPriority();

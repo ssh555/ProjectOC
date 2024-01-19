@@ -12,6 +12,8 @@ namespace ProjectOC.StoreNS
         [LabelText("¥¢ŒÔœ‰")]
         Normal,
         [LabelText("∫„Œ¬œ‰")]
-        Incubator
+        Incubator,
+        [LabelText("¥¢“∫πﬁ")]
+        Reservoir
     }
 }

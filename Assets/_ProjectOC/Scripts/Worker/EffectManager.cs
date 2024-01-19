@@ -1,4 +1,3 @@
-using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using System;
 using System.Collections.Generic;
@@ -9,28 +8,16 @@ using UnityEngine;
 namespace ProjectOC.WorkerNS
 {
     [System.Serializable]
-    public sealed class EffectManager : ML.Engine.Manager.GlobalManager.IGlobalManager
+    public struct EffectTableData
     {
-        #region Instance
-        private EffectManager(){}
+        public string ID;
+        public TextContent Name;
+        public EffectType Type;
+    }
 
-        private static EffectManager instance;
-
-        public static EffectManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new EffectManager();
-                    GameManager.Instance.RegisterGlobalManager(instance);
-                    instance.LoadTableData();
-                }
-                return instance;
-            }
-        }
-        #endregion
-
+    [System.Serializable]
+    public sealed class EffectManager : ML.Engine.Manager.LocalManager.ILocalManager
+    {
         #region Load And Data
         /// <summary>
         /// 是否已加载完数据
@@ -40,25 +27,15 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// 基础数据表
         /// </summary>
-        private Dictionary<string, EffectTableJsonData> EffectTableDict = new Dictionary<string, EffectTableJsonData>();
-
-        [System.Serializable]
-        public struct EffectTableJsonData
-        {
-            public string ID;
-            public TextContent Name;
-            public EffectType Type;
-            public string Param1;
-            public int Param2;
-            public float Param3;
-        }
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<EffectTableJsonData[]> ABJAProcessor;
+        private Dictionary<string, EffectTableData> EffectTableDict = new Dictionary<string, EffectTableData>();
+        
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<EffectTableData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<EffectTableJsonData[]>("Json/TableData", "EffectTableData", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<EffectTableData[]>("Binary/TableData", "Effect", (datas) =>
                 {
                     foreach (var data in datas)
                     {
@@ -71,11 +48,11 @@ namespace ProjectOC.WorkerNS
         #endregion
 
         #region Spawn
-        public Effect SpawnEffect(string id)
+        public Effect SpawnEffect(string id, string value)
         {
-            if (this.EffectTableDict.TryGetValue(id, out EffectTableJsonData row))
+            if (this.EffectTableDict.TryGetValue(id, out EffectTableData row))
             {
-                Effect effect = new Effect(row);
+                Effect effect = new Effect(row, value);
                 return effect;
             }
             Debug.LogError("没有对应ID为 " + id + " 的Effect");
