@@ -205,6 +205,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetIgnoreListenerPause.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Worker\EffectType.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\WaitForState.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\LandMassExpand\IslandSub.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\GetTime.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetRolloffMode.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetAngularDrag.cs" />
@@ -234,6 +235,7 @@
     <Compile Include="Assets\_ML\Engine\CombatSystem\CombatObject\Interface\IFreezeFrame.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Scripts\BehaviorSelection.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Light\GetIntensity.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\LandMassExpand\BuildPowerSub.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector2\Lerp.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\IsStopped.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedBool.cs" />
@@ -279,6 +281,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\SetLocalScale.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetAngularVelocity.cs" />
     <Compile Include="Assets\_ML\Engine\InventorySystem\Scripts\InfiniteInventory.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\LandMassExpand\IPowerBPart.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetVelocity.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedGameObjectList.cs" />
     <Compile Include="Assets\_ML\Engine\InventorySystem\Scripts\Item.cs" />
@@ -349,11 +352,13 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetAcceleration.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedQuaternion.cs" />
     <Compile Include="Assets\_ML\Engine\CombatSystem\NumericalProperty\CombatPropertyStruct.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\LandMassExpand\ElectAppliance.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Input\PlayerInput.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedVector4.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\AddTorque.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\CapsuleCollider\GetRadius.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Worker\TimeArrangement.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\LandMassExpand\IslandMain.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\GameObject\FindGameObjectsWithTag.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedInt.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Store\StoreType.cs" />
@@ -499,6 +504,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetMass.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Conditionals\HasReceivedEvent.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\AddRelativeTorque.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\LandMassExpand\BuildPowerCore.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetPriority.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\PlayOneShot.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Timeline\IsPlaying.cs" />
@@ -515,6 +521,7 @@
     <Compile Include="Assets\_ProjectOC\Scripts\TechTree\TechPoint.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\SetLocalEulerAngles.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\String\GetLength.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\LandMassExpand\INeedPowerBpart.cs" />
     <Compile Include="Assets\_ML\Engine\Timer\CounterDownTimer.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Time\GetTimeScale.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetTimeSamples.cs" />
@@ -536,6 +543,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\GetLocalScale.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Decorators\Repeater.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Worker\Worker.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\LandMassExpand\IslandManager.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animation\Play.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\GetAngleToTarget.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\IsName.cs" />
@@ -630,6 +638,7 @@
     <Compile Include="Assets\_ML\Example\InventorySystem\CompositeSystem\UI\Formula\FormulaItemBtn.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedRect.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetStartDelay.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\LandMassExpand\ISupportPowerBPart.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedString.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Mission\MissionManager.cs" />
     <Compile Include="Assets\_ML\Example\InventorySystem\UIItem.cs" />
@@ -697,6 +706,7 @@
     <Compile Include="Assets\_ProjectOC\Scripts\WorkerEcho\WorkerEcho.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector3\Operator.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\SetEulerAngles.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\LandMassExpand\BuildPowerIslandManager.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedObject.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetDrag.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\GetParent.cs" />
@@ -742,6 +752,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedBool.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\MoveRotation.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\GetPosition.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\LandMassExpand\IslandBase.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetSqrMagnitude.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedUInt.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Math\BoolFlip.cs" />
@@ -826,6 +837,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Shaders\GridUVScale.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
+    <None Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Shaders\RangeVFXShader.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\Sirenix.Serialization.dll" />
     <None Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\Sirenix.Serialization.xml" />

@@ -123,7 +123,7 @@ namespace ExcelToJson
             // 必须是.bytes后缀
             List<JBConfig> jBConfigs = new List<JBConfig>();
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TableData/TechTree.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TableData/TechTree.bytes", type = typeof(ProjectOC.TechTree.TechPoint[]) });
-            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TableData/CompositionTableData.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TableData/CompositionTableData.bytes", type = typeof(CompositionJsonData[]) });
+            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TableData/CompositionTableData.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TableData/CompositionTableData.bytes", type = typeof(CompositionTableData[]) });
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TableData/ItemTableData.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TableData/ItemTableData.bytes", type = typeof(ItemTableJsonData[]) });
 
 

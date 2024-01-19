@@ -249,7 +249,10 @@ namespace ML.Engine.BuildingSystem
 
 
                 // to-delete
-                area.gameObject.SetActive(IsEnableArea);
+                if(area != null)
+                {
+                    area.gameObject.SetActive(IsEnableArea);
+                }
 
                 this.PushPanel<UI.BSInteractModePanel>();
             };
