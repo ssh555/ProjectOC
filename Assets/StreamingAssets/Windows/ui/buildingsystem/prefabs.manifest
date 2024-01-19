@@ -3,13 +3,13 @@ CRC: 4208726744
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: eb49befb2909a6408359a4043c22173d
+    Hash: 7110c11322c6f3cf76ca90b36305762b
   TypeTreeHash:
     serializedVersion: 2
     Hash: a7469a380d0ed91666bfb38c0fa7dd68
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: eb49befb2909a6408359a4043c22173d
+    Hash: 7110c11322c6f3cf76ca90b36305762b
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -105,8 +105,8 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/UIPrefabs/KT_KeyCom.prefab
 - Assets/_ML/MLResources/BuildingSystem/UIPrefabs/Panel/BSInteractMode_KeyCom.prefab
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/assets/buildingsystem
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/fonts
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/category
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/style
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/type
+- E:/Project/projectoc/Assets/StreamingAssets/Windows/assets/buildingsystem
+- E:/Project/projectoc/Assets/StreamingAssets/Windows/fonts
+- E:/Project/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/category
+- E:/Project/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/style
+- E:/Project/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/type

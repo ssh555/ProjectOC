@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2483024416
+CRC: 2355932669
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 35cbcb473e0e8ac663180eec2f2cee63
+    Hash: 7fe334756a3ba7ccad51188b89f103d1
   TypeTreeHash:
     serializedVersion: 2
-    Hash: d0c8639e8e852785b9da9ba9aa1a9e6d
+    Hash: 626af72234994b52904781a6e8eb9e3f
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 35cbcb473e0e8ac663180eec2f2cee63
+    Hash: 7fe334756a3ba7ccad51188b89f103d1
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -115,6 +115,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 88dfd9a1d40070e45bc302b503615a5e, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 39885ced2427947418fd575b5d2b3bde, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
@@ -155,6 +157,6 @@ Assets:
 - Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/BuidlingSystemTest.unity
 - Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/animation/character/player/model
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/prefabs/character/player
+- E:/Project/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
+- E:/Project/projectoc/Assets/StreamingAssets/Windows/materials
+- E:/Project/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
