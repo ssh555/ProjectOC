@@ -46,13 +46,12 @@ namespace ProjectOC.WorkerEchoNS
             return externWorker;
         }
         /// <summary>
-        /// ÊÕÁôÒþÊÞ
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         /// <param name="index"></param>
         public void SpawnWorker(int index)
         {
-            //ÊÕÁô
-            GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker(Vector3.zero, Quaternion.identity);
+            GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker(Vector3.zero, Quaternion.identity, null, "Worker");
 
         }
         public void ExpelWorker(int index)
@@ -88,7 +87,7 @@ namespace ProjectOC.WorkerEchoNS
         {
             Workers[index].timer.End();
             Workers[index] = null;
-            //to-do ·µ»¹²ÄÁÏ 
+            //to-do ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
         }
     }
 }

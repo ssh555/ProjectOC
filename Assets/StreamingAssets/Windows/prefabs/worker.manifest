@@ -1,0 +1,36 @@
+ManifestFileVersion: 0
+CRC: 898136696
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: fc69c02c1974cba68b6825e9145846fb
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 1ee0a567d526694bf6212284d2447887
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: fc69c02c1974cba68b6825e9145846fb
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 136
+  Script: {instanceID: 0}
+- Class: 195
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/_ProjectOC/Resources/Prefabs/Worker/Worker.prefab
+Dependencies: []

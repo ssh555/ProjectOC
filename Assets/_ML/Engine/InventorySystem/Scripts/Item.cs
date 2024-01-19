@@ -63,7 +63,7 @@ namespace ML.Engine.InventorySystem
         public event Action<IInventory, Item> OnAmountToZero;
         #endregion
 
-        public Item(string ID, ItemTableJsonData config, int initAmount)
+        public Item(string ID, ItemTableData config, int initAmount)
         {
             this.ID = ID;
             this.amount = initAmount;

@@ -336,7 +336,6 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedInt.cs" />
     <Compile Include="Assets\_ML\Engine\Utility\Enum\SingleEnumAssetWithDisplayName.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Actions\Reflection\GetPropertyValue.cs" />
-    <Compile Include="Assets\_ProjectOC\Scripts\Mission\IMission.cs" />
     <Compile Include="Assets\_ML\Engine\CombatSystem\NumericalProperty\NumericalFloat.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetIsKinematic.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Manager\DispatchTimeManager.cs" />
@@ -697,6 +696,7 @@
     <Compile Include="Assets\_ML\Engine\CombatSystem\NumericalProperty\SkillActionDataStruct.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\SetLocalRotation.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedGameObject.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\InventorySystem\UI\UIProNode.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Scripts\Movement.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\MatchTarget.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Math\Lerp.cs" />
@@ -707,6 +707,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector3\Operator.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\SetEulerAngles.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\LandMassExpand\BuildPowerIslandManager.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\InventorySystem\UI\UIStore.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedObject.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetDrag.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\GetParent.cs" />
@@ -739,6 +740,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Scripts\Tasks\RotateTowards.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SharedGameObjectsToGameObjectList.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Conditionals\Reflection\ComparePropertyValue.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\Mission\IMissionObj.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Actions\Idle.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\InterruptMatchTarget.cs" />
     <Compile Include="Assets\_ML\Engine\InventorySystem\CompositeSystem\IComposition.cs" />
