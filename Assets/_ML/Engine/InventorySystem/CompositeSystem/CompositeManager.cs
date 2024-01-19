@@ -9,7 +9,7 @@ using static ML.Engine.InventorySystem.ItemManager;
 namespace ML.Engine.InventorySystem.CompositeSystem
 {
     [System.Serializable]
-    public class CompositionJsonData
+    public class CompositionTableData
     {
         /// <summary>
         /// 合成对象 -> Item | 建筑物 ID 引用
@@ -81,13 +81,13 @@ namespace ML.Engine.InventorySystem.CompositeSystem
 
 
 
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<CompositionJsonData[]> ABJAProcessor;
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<CompositionTableData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<CompositionJsonData[]>("Binary/TableData", "CompositionTableData", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<CompositionTableData[]>("Binary/TableData", "CompositionTableData", (datas) =>
                 {
                     foreach (var data in datas)
                     {
@@ -119,8 +119,8 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <summary>
         /// 合成表数据
         /// </summary>
-        private Dictionary<string, CompositionJsonData> CompositeData = new Dictionary<string, CompositionJsonData>();
-        public CompositionJsonData[] GetCompositionData()
+        private Dictionary<string, CompositionTableData> CompositeData = new Dictionary<string, CompositionTableData>();
+        public CompositionTableData[] GetCompositionData()
         {
             return this.CompositeData.Values.ToArray();
         }

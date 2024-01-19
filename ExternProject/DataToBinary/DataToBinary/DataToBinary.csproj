@@ -85,7 +85,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompositionJsonData.cs" />
+    <Compile Include="CompositionTableData.cs" />
     <Compile Include="DataToBinaryManager.cs" />
     <Compile Include="Formula.cs" />
     <Compile Include="IGenData.cs" />

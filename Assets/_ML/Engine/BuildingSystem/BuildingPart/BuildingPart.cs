@@ -37,7 +37,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         public event IBuildingPart.CheckMode CheckCanInPlaceMode;
         public event IBuildingPart.CheckMode CheckCanEdit;
         public event IBuildingPart.CheckMode CheckCanDestory;
-        public void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
+        public virtual void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
 
         }
@@ -218,7 +218,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         private Dictionary<Renderer, Material[]> rowMat;
 
 
-        protected void Awake()
+        protected virtual void Awake()
         {
             this.rowMat = new Dictionary<Renderer, Material[]>();
             foreach(var renderer in this.GetComponentsInChildren<Renderer>())

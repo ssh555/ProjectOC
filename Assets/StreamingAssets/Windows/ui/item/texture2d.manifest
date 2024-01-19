@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 971087007
+CRC: 2198406105
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 56f77fed3c5b8f1fddd05157adaeff40
+    Hash: 39f6f0687286186c22962c8efc7d464f
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2d8df09e698f722ada1caa03d3413830
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 56f77fed3c5b8f1fddd05157adaeff40
+    Hash: 39f6f0687286186c22962c8efc7d464f
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -18,7 +18,102 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_14.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_75.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_39.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_83.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_51.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_9.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_43.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_4.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_72.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_42.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_93.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_34.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_30.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_78.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_84.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_27.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_61.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_73.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_31.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_5.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_50.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_52.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_7.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_41.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_2.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_38.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_60.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_76.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_77.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_47.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_10.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_58.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_15.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_94.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_16.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_26.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_6.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_19.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_91.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_40.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_24.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_74.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_18.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_35.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_88.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_92.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_3.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_17.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_33.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_63.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_36.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_59.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_20.png
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/test/100001.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_66.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_29.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_62.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_55.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_90.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_85.png
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/test/100003.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_28.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_1.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_37.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_25.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_22.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_44.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_45.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_64.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_8.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_11.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_23.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_48.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_12.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_87.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_86.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_79.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_13.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_32.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_95.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_69.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_53.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_82.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_56.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_89.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_71.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_54.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_70.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_65.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_49.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_21.png
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/test/100002.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_68.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_67.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_46.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_80.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_81.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_57.png
 Dependencies: []
