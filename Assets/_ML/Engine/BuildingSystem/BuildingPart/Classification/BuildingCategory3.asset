@@ -27,12 +27,75 @@ MonoBehaviour:
     displayName: None
     value: 
   EnumList:
-  - name: Base
-    displayName: "\u6B63\u65B9\u5F62"
-    value: 
-  - name: Triangle
-    displayName: "\u4E09\u89D2\u5F62"
-    value: 
-  - name: Quagrant
-    displayName: "\u56DB\u65B9\u5706\u5F62"
-    value: 
+  - name: Base1
+    displayName: "\u6B63\u65B9\u5F621"
+    value: 100
+  - name: Triangle1
+    displayName: "\u4E09\u89D2\u5F621"
+    value: 101
+  - name: Quagrant1
+    displayName: "\u56DB\u65B9\u5706\u5F621"
+    value: 102
+  - name: Extra1
+    displayName: "\u9644\u52A01"
+    value: 103
+  - name: Base2
+    displayName: "\u6B63\u65B9\u5F622"
+    value: 200
+  - name: Triangle2
+    displayName: "\u4E09\u89D2\u5F622"
+    value: 201
+  - name: Quagrant2
+    displayName: "\u56DB\u65B9\u5706\u5F622"
+    value: 202
+  - name: Extra2
+    displayName: "\u9644\u52A02"
+    value: 203
+  - name: Base3
+    displayName: "\u6B63\u65B9\u5F623"
+    value: 300
+  - name: Triangle3
+    displayName: "\u4E09\u89D2\u5F623"
+    value: 301
+  - name: Quagrant3
+    displayName: "\u56DB\u65B9\u5706\u5F623"
+    value: 302
+  - name: Extra3
+    displayName: "\u9644\u52A03"
+    value: 303
+  - name: Base4
+    displayName: "\u6B63\u65B9\u5F624"
+    value: 400
+  - name: Triangle4
+    displayName: "\u4E09\u89D2\u5F624"
+    value: 401
+  - name: Quagrant4
+    displayName: "\u56DB\u65B9\u5706\u5F624"
+    value: 402
+  - name: Extra4
+    displayName: "\u9644\u52A04"
+    value: 403
+  - name: Base5
+    displayName: "\u6B63\u65B9\u5F625"
+    value: 500
+  - name: Triangle5
+    displayName: "\u4E09\u89D2\u5F625"
+    value: 501
+  - name: Quagrant5
+    displayName: "\u56DB\u65B9\u5706\u5F625"
+    value: 502
+  - name: Extra5
+    displayName: "\u9644\u52A05"
+    value: 503
+  - name: Base6
+    displayName: "\u6B63\u65B9\u5F626"
+    value: 600
+  - name: Triangle6
+    displayName: "\u4E09\u89D2\u5F626"
+    value: 601
+  - name: Quagrant6
+    displayName: "\u56DB\u65B9\u5706\u5F626"
+    value: 602
+  - name: Extra6
+    displayName: "\u9644\u52A06"
+    value: 603
