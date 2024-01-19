@@ -35,25 +35,25 @@
   },
 
   "expel": {
-    "keyname": "expel",
+    "keyname": "Expel",
     "keymap": {
       "KeyBoard": "R",
       "XBOX": "Y"
     },
     "description": {
-      "Chinese": "",
-      "English": ""
+      "Chinese": "驱逐",
+      "English": "Deport"
     }
   },
   "receive": {
-    "keyname": "receive",
+    "keyname": "Receive",
     "keymap": {
       "KeyBoard": "E",
       "XBOX": "X"
     },
     "description": {
-      "Chinese": "",
-      "English": ""
+      "Chinese": "收留",
+      "English": "Receive"
     }
   },
   //BotKeyTips

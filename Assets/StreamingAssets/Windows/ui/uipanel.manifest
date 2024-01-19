@@ -1,20 +1,18 @@
 ManifestFileVersion: 0
-CRC: 3633382808
+CRC: 4135301836
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 62b94a71786008d736f8ad74d91ca554
+    Hash: c52058d82e647b5b8e79f9f83e785111
   TypeTreeHash:
     serializedVersion: 2
-    Hash: d4ddd8a0eb45a5fef92061db6d05b428
+    Hash: edf39f1fb4fc07f3eb7e06ced2faf83c
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 62b94a71786008d736f8ad74d91ca554
+    Hash: c52058d82e647b5b8e79f9f83e785111
 HashAppended: 0
 ClassTypes:
 - Class: 1
-  Script: {instanceID: 0}
-- Class: 4
   Script: {instanceID: 0}
 - Class: 21
   Script: {instanceID: 0}
@@ -73,6 +71,8 @@ ClassTypes:
 - Class: 224
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: ProjectOC.WorkerEchoNS.WorkerEcho
 - AssemblyName: Unity.TextMeshPro
   ClassName: TMPro.FaceInfo_Legacy
 - AssemblyName: Unity.TextMeshPro

@@ -76,8 +76,15 @@
     "English": "Random"
   },
   "SwitchTargetText": {
-    "Chinese": "切换对象",
-    "English": "SwitchTarget"
+    "keyname": "SwitchTarget",
+    "keymap": {
+      "KeyBoard": "R",
+      "XBOX": "Y"
+    },
+    "description": {
+      "Chinese": "切换对象",
+      "English": "SwitchTarget"
+    }
   },
   //ResonanceConsumpion
   "ResonanceConsumpionTitle": {
@@ -93,14 +100,27 @@
     ]
   },
   "StartResonanceText": {
-    "Chinese": "开始共鸣",
-    "English": "StartResonance"
+    "keyname": "StartResonance",
+    "keymap": {
+      "KeyBoard": "E",
+      "XBOX": "X"
+    },
+    "description": {
+      "Chinese": "开始共鸣",
+      "English": "StartResonance"
+    }
   },
   "StopResonanceText": {
-    "Chinese": "停止共鸣",
-    "English": "StopResonance"
+    "keyname": "StopResonance",
+    "keymap": {
+      "KeyBoard": "R",
+      "XBOX": "Y"
+    },
+    "description": {
+      "Chinese": "停止共鸣",
+      "English": "StopResonance"
+    }
   },
-
   //BotKeyTips
   "back": {
     "keyname": "back",

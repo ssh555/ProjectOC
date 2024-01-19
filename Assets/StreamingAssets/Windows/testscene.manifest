@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1836404334
+CRC: 1018497060
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a190547465093511b7205b3b278f058a
+    Hash: c49032eec3648a2c7d304ad22a0a850c
   TypeTreeHash:
     serializedVersion: 2
-    Hash: e92f9ab9f70ab71014a9c7ffd8a2d0c8
+    Hash: 0aa4a26a85b11b7df4a9e7a858c19f76
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: a190547465093511b7205b3b278f058a
+    Hash: c49032eec3648a2c7d304ad22a0a850c
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -166,5 +166,8 @@ Assets:
 - Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity
 Dependencies:
 - E:/OC/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/fonts
 - E:/OC/projectoc/Assets/StreamingAssets/Windows/materials
 - E:/OC/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/uipanel

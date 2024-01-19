@@ -36,6 +36,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public bool IsInit = false;
         private void Start()
         {
+
             InitUITextContents();
 
             //BeastInfo
@@ -62,7 +63,23 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             receive.keytip = btn2.Find("KeyTip").Find("Image").Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
             receive.description = btn2.Find("KeyTip").Find("Image").Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
 
-            
+            //需要调接口显示的隐兽信息
+
+            BeastName= Info1.Find("Icon").Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
+
+
+            var Description1 = Info2.Find("Description1");
+            FeatureName1 = Description1.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>();
+            FeatureText1 = Description1.Find("Text2").GetComponent<TMPro.TextMeshProUGUI>();
+            EffectText1 = Description1.Find("Text3").GetComponent<TMPro.TextMeshProUGUI>();
+            var Description2 = Info2.Find("Description2");
+            FeatureName2 = Description1.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>();
+            FeatureText2 = Description1.Find("Text2").GetComponent<TMPro.TextMeshProUGUI>();
+            EffectText2 = Description1.Find("Text3").GetComponent<TMPro.TextMeshProUGUI>();
+            var Description3 = Info2.Find("Description3");
+            FeatureName3 = Description1.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>();
+            FeatureText3 = Description1.Find("Text2").GetComponent<TMPro.TextMeshProUGUI>();
+            EffectText3 = Description1.Find("Text3").GetComponent<TMPro.TextMeshProUGUI>();
 
             //BotKeyTips
             var kt = this.transform.Find("BotKeyTips").Find("KeyTips");
@@ -179,7 +196,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private void Expel_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
-            GameManager.Instance.GetLocalManager<WorkerEcho>().ExpelWorker(parentUI.CurrentGridIndex);
+            parentUI.workerEcho.ExpelWorker(parentUI.CurrentGridIndex);
 
             //ui
 
@@ -189,7 +206,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private void Receive_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
-            GameManager.Instance.GetLocalManager<WorkerEcho>().SpawnWorker(parentUI.CurrentGridIndex);
+            parentUI.workerEcho.SpawnWorker(parentUI.CurrentGridIndex);
             Debug.Log("Receive_performed!");
         }
         #endregion
@@ -235,6 +252,20 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private UIKeyTip expel;
         private UIKeyTip receive;
 
+         //需要调接口显示的隐兽信息
+        private TMPro.TextMeshProUGUI BeastName;
+
+        private TMPro.TextMeshProUGUI FeatureName1;
+        private TMPro.TextMeshProUGUI FeatureText1;
+        private TMPro.TextMeshProUGUI EffectText1;
+
+        private TMPro.TextMeshProUGUI FeatureName2;
+        private TMPro.TextMeshProUGUI FeatureText2;
+        private TMPro.TextMeshProUGUI EffectText2;
+
+        private TMPro.TextMeshProUGUI FeatureName3;
+        private TMPro.TextMeshProUGUI FeatureText3;
+        private TMPro.TextMeshProUGUI EffectText3;
 
         //BotKeyTips
         private UIKeyTip KT_Back;

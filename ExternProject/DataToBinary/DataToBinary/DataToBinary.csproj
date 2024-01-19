@@ -97,6 +97,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResonanceWheelPanel.cs" />
     <Compile Include="ResonanceWheel_sub1.cs" />
+    <Compile Include="ResonanceWheel_sub2.cs" />
     <Compile Include="TechPoint.cs" />
     <Compile Include="TechPointCategory.cs" />
     <Compile Include="TextContent.cs" />

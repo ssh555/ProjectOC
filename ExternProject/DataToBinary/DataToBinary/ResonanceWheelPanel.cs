@@ -26,12 +26,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //ResonanceTarget
             public TextContent ResonanceTargetTitle;
             public TextContent RandomText;
-            public TextContent SwitchTargetText;
+            public KeyTip SwitchTargetText;
 
             //ResonanceConsumpion
             public MultiTextContent ResonanceConsumpionTitle;
-            public TextContent StartResonanceText;
-            public TextContent StopResonanceText;
+            public KeyTip StartResonanceText;
+            public KeyTip StopResonanceText;
 
             //BotKeyTips
             public KeyTip back;

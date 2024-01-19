@@ -1368,7 +1368,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""efd95cf5-9f20-46af-adfa-6ca67793e1fd"",
-                    ""path"": ""<XInputController>/buttonNorth"",
+                    ""path"": ""<XInputController>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1379,7 +1379,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""c140a62e-2860-408f-b5ad-0706527a974b"",
-                    ""path"": ""<Keyboard>/r"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

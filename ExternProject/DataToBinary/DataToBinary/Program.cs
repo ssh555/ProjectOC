@@ -138,6 +138,7 @@ namespace ExcelToJson
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/TechTree/TechPointPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/TechTree/TechPointPanel.bytes", type = typeof(ProjectOC.TechTree.TechTreeManager.TPPanel) });
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/ResonanceWheel/ResonanceWheelPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/ResonanceWheel/ResonanceWheelPanel.bytes", type = typeof(ResonanceWheelPanel) });
             jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/ResonanceWheel/ResonanceWheel_sub1.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/ResonanceWheel_sub1/ResonanceWheel_sub1.bytes", type = typeof(ResonanceWheel_sub1.ResonanceWheel_sub1Struct) });
+            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/ResonanceWheel/ResonanceWheel_sub2.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/ResonanceWheel_sub2/ResonanceWheel_sub2.bytes", type = typeof(ResonanceWheel_sub2.ResonanceWheel_sub2Struct) });
             System.Threading.Tasks.Parallel.ForEach(jBConfigs, (config) =>
             {
                 try

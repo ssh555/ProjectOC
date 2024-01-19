@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 3889230917
+CRC: 195776522
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -30,7 +30,10 @@ AssetBundleManifest:
       Dependencies:
         Dependency_0: materials
         Dependency_1: animation/character/player/model
-        Dependency_2: prefabs/character/player
+        Dependency_2: fonts
+        Dependency_3: ui/uipanel
+        Dependency_4: prefabs/character/player
+        Dependency_5: ui/resonancewheel/texture2d
     Info_7:
       Name: ui/buildingsystem/texture2d/type
       Dependencies: {}
@@ -102,4 +105,7 @@ AssetBundleManifest:
       Dependencies: {}
     Info_27:
       Name: binary/textcontent/resonancewheel_sub1
+      Dependencies: {}
+    Info_28:
+      Name: binary/textcontent/resonancewheel_sub2
       Dependencies: {}

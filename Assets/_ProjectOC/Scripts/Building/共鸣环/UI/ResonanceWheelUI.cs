@@ -4,6 +4,7 @@ using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.Timer;
 using Newtonsoft.Json;
+using ProjectOC.Player;
 using ProjectOC.TechTree.UI;
 using ProjectOC.WorkerEchoNS;
 using ProjectOC.WorkerNS;
@@ -46,6 +47,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public bool IsInit = false;
         private void Start()
         {
+            Debug.Log("121323 " + GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>());
+            //workerEcho = (GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).WorkerEcho;
             InitUITextContents();
             InitUITexture2D();
             //exclusivePart
@@ -99,14 +102,31 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             RTInfo = ResonanceTarget.Find("Info");
             ResonanceTargetTitle = RTInfo.Find("Name").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             RandomText = RTInfo.Find("Random").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
-            SwitchTargetText = RTInfo.Find("SwitchTarget").Find("Image").Find("KeyTip").Find("Image").Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
+
+            SwitchTargetText = new UIKeyTip();
+            SwitchTargetText.keytip = RTInfo.Find("SwitchTarget").Find("Image").Find("KeyTip").Find("Image").Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
+            SwitchTargetText.description = RTInfo.Find("SwitchTarget").Find("Image").Find("KeyTip").Find("Image").Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
             //ResonanceConsumpion
             var ResonanceConsumpion = exclusivePart.Find("ResonanceConsumption");
             RCInfo = ResonanceConsumpion.Find("Info");
             TimerUI = RCInfo.Find("Timer");
             ResonanceConsumpionTitle = RCInfo.Find("Name").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
-            StartResonanceText = RCInfo.Find("StartResonance").Find("Image").Find("KeyTip").Find("Image").Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-            StopResonanceText = RCInfo.Find("StopResonance").Find("Image").Find("KeyTip").Find("Image").Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
+
+
+            StartResonanceText = new UIKeyTip();
+            StartResonanceText.keytip = RCInfo.Find("StartResonance").Find("Image").Find("KeyTip").Find("Image").Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
+            StartResonanceText.description = RCInfo.Find("StartResonance").Find("Image").Find("KeyTip").Find("Image").Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
+
+            StopResonanceText = new UIKeyTip();
+            StopResonanceText.keytip = RCInfo.Find("StopResonance").Find("Image").Find("KeyTip").Find("Image").Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
+            StopResonanceText.description = RCInfo.Find("StopResonance").Find("Image").Find("KeyTip").Find("Image").Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
+
+            
+            
+
+            Slot1Text = RCInfo.Find("Consumables").Find("Slot1").Find("ItemName").GetComponent<TMPro.TextMeshProUGUI>();
+            Slot2Text = RCInfo.Find("Consumables").Find("Slot2").Find("ItemName").GetComponent<TMPro.TextMeshProUGUI>();
+            Slot3Text = RCInfo.Find("Consumables").Find("Slot3").Find("ItemName").GetComponent<TMPro.TextMeshProUGUI>();
 
             //BotKeyTips
             var kt = this.exclusivePart.Find("BotKeyTips").Find("KeyTips");
@@ -349,18 +369,18 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //检查背包
             Debug.Log("StartResonance_perfozqrmed!");
             Debug.Log(GameManager.Instance.GetLocalManager<WorkerManager>());
-            ExternWorker worker;
-            if (GameManager.Instance.GetLocalManager<WorkerEcho>().Level == 1) 
-            {
-                //能否成功合成 判空
-                worker = GameManager.Instance.GetLocalManager<WorkerEcho>().SummonWorker1(CurrentGridIndex);
-                
-                  
-            }
-            else
-            {
-                worker = GameManager.Instance.GetLocalManager<WorkerEcho>().SummonWorker2(CurrentGridIndex, Grids[CurrentGridIndex].id);
-            }
+            ExternWorker worker = new ExternWorker(null,5);
+            /*            if (workerEcho.Level == 1) //GameManager.Instance.Level == 1
+                        {
+                            //能否成功合成 判空
+                            worker = workerEcho.SummonWorker1(CurrentGridIndex);
+
+
+                        }
+                        else
+                        {
+                            worker = workerEcho.SummonWorker2(CurrentGridIndex, Grids[CurrentGridIndex].id);
+                        }*/
 
             if (worker != null)
             {
@@ -420,7 +440,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
 
 
-            //GameManager.Instance.GetLocalManager<WorkerEcho>().StopEcho(CurrentGridIndex);
+            //workerEcho.StopEcho(CurrentGridIndex);
 
 
             Grids[CurrentGridIndex].isNull = true;
@@ -578,6 +598,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region UI对象引用
+        public WorkerEcho workerEcho;
         public ResonanceWheel_sub1 resonanceWheel_Sub1;//详细隐兽界面 
         public ResonanceWheel_sub2 resonanceWheel_Sub2;//随机选择隐兽界面 
 
@@ -608,14 +629,19 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private Transform RTInfo;
         private TMPro.TextMeshProUGUI ResonanceTargetTitle;
         private TMPro.TextMeshProUGUI RandomText;
-        private TMPro.TextMeshProUGUI SwitchTargetText;
+        private UIKeyTip SwitchTargetText;
 
         //ResonanceConsumpion
         private Transform RCInfo;
         private Transform TimerUI;
         private TMPro.TextMeshProUGUI ResonanceConsumpionTitle;
-        private TMPro.TextMeshProUGUI StartResonanceText;
-        private TMPro.TextMeshProUGUI StopResonanceText;
+        private UIKeyTip StartResonanceText;
+        private UIKeyTip StopResonanceText;
+
+        private TMPro.TextMeshProUGUI Slot1Text;
+        private TMPro.TextMeshProUGUI Slot2Text;
+        private TMPro.TextMeshProUGUI Slot3Text;
+
 
         //BotKeyTips
         private UIKeyTip KT_Back;
@@ -688,7 +714,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 StartBtn.gameObject.SetActive(true);
                 StopBtn.gameObject.SetActive(false);
 
-                //RingGrid.Reset(Grids[CurrentGridIndex], Grids[CurrentGridIndex].transform);
+
+                StartResonanceText.ReWrite(PanelTextContent.StartResonanceText);
+
 
 
                 Grids[CurrentGridIndex].transform.Find("Image").GetComponent<Image>().sprite = sprite3;
@@ -719,6 +747,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 StartBtn.gameObject.SetActive(false);
                 StopBtn.gameObject.SetActive(true);
 
+                StopResonanceText.ReWrite(PanelTextContent.StopResonanceText);
                 //取消选择对象功能
                 var SwitchTarget = exclusivePart.Find("ResonanceTarget").Find("Info").Find("SwitchTarget");
                 SwitchTarget.gameObject.SetActive(false);
@@ -766,11 +795,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             #region ResonanceTarget
             ResonanceTargetTitle.text = PanelTextContent.ResonanceTargetTitle;
             RandomText.text=PanelTextContent.RandomText;
-            SwitchTargetText.text= PanelTextContent.SwitchTargetText;
+            SwitchTargetText.ReWrite(PanelTextContent.SwitchTargetText);
+            //SwitchTargetText.text= PanelTextContent.SwitchTargetText;
             #endregion
 
             #region ResonanceConsumpion
-            if(Grids[CurrentGridIndex].isNull)
+            if (Grids[CurrentGridIndex].isNull)
             {
                 ResonanceConsumpionTitle.text = PanelTextContent.ResonanceConsumpionTitle.description[0];//0 代表共鸣消耗
             }
@@ -778,9 +808,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             {
                 ResonanceConsumpionTitle.text = PanelTextContent.ResonanceConsumpionTitle.description[1];//1 代表共鸣中
             }
-            
-            
-            StartResonanceText.text = PanelTextContent.StartResonanceText;
+
+
+            StartResonanceText.ReWrite(PanelTextContent.StartResonanceText);
             #endregion
 
             #region BotKeyTips
@@ -808,12 +838,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //ResonanceTarget
             public TextContent ResonanceTargetTitle;
             public TextContent RandomText;
-            public TextContent SwitchTargetText;
+            public KeyTip SwitchTargetText;
 
             //ResonanceConsumpion
             public MultiTextContent ResonanceConsumpionTitle;
-            public TextContent StartResonanceText;
-            public TextContent StopResonanceText;
+            public KeyTip StartResonanceText;
+            public KeyTip StopResonanceText;
 
             //BotKeyTips
             public KeyTip back;
