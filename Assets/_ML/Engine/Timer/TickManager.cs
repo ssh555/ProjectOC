@@ -141,7 +141,13 @@ namespace ML.Engine.Timer
         /// <param name="tickComponent"></param>
         public bool RegisterTick(int priority, ITickComponent tickComponent)
         {
-            if (this.tickComponents.ContainsKey(tickComponent.tickPriority) && this.tickComponents[tickComponent.tickPriority].Contains(tickComponent))
+
+            if(this.addTick.Contains(tickComponent))
+            {
+                return false;
+            }
+
+            if (  this.tickComponents.ContainsKey(tickComponent.tickPriority) && this.tickComponents[tickComponent.tickPriority].Contains(tickComponent))
             {
                 return false;
             }
@@ -178,6 +184,12 @@ namespace ML.Engine.Timer
         /// <returns></returns>
         public bool RegisterFixedTick(int priority, ITickComponent tickComponent)
         {
+
+            if (this.addFixedTick.Contains(tickComponent))
+            {
+                return false;
+            }
+
             if (this.fixedTickComponents.ContainsKey(tickComponent.fixedTickPriority) && this.fixedTickComponents[tickComponent.fixedTickPriority].Contains(tickComponent))
             {
                 return false;
@@ -215,6 +227,11 @@ namespace ML.Engine.Timer
         /// <returns></returns>
         public bool RegisterLateTick(int priority, ITickComponent tickComponent)
         {
+            if (this.addLateTick.Contains(tickComponent))
+            {
+                return false;
+            }
+
             if (this.lateTickComponents.ContainsKey(tickComponent.lateTickPriority) && this.lateTickComponents[tickComponent.lateTickPriority].Contains(tickComponent))
             {
                 return false;

@@ -100,7 +100,8 @@ namespace ML.Engine.InteractSystem
         }
         public void Enable()
         {
-            Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
+            //Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
+            Debug.Log("12414122 " + Manager.GameManager.Instance.TickManager.RegisterTick(0, this)+" "+Time.frameCount);
         }
         #endregion
 
@@ -110,7 +111,8 @@ namespace ML.Engine.InteractSystem
             // ‘ÿ»Î ˝æ›
             InitUITextContents();
 
-            Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
+
+            Debug.Log("12414123 "+Manager.GameManager.Instance.TickManager.RegisterTick(0, this) + " " + Time.frameCount);
         }
 
         private void OnDestroy()
