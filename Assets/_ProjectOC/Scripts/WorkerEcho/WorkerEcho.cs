@@ -21,12 +21,12 @@ namespace ProjectOC.WorkerEchoNS
         public Worker worker;
         public ExternWorker(string WorkerID, float time,BuildingPart buildingPart)
         {
-
+            this.WorkerID = WorkerID;
             timer = new CounterDownTimer(time);
             GameManager.Instance.GetLocalManager<WorkerManager>().OnlyCostResource(GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory, WorkerID);
             timer.OnEndEvent += () =>
             {
-                GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker(buildingPart.transform.position,Quaternion.identity,WorkerID);
+                this.worker = GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker(buildingPart.transform.position,Quaternion.identity,WorkerID);
             };
         }
     }
@@ -43,21 +43,30 @@ namespace ProjectOC.WorkerEchoNS
         }
         public ExternWorker SummonWorker(string id,int index)
         {
+            
             if(this.Level==1)
             {
                 id = GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRandomID();
+                Debug.Log(id+"#########");
             }
             ExternWorker externWorker = new ExternWorker(id, GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetTimeCost(id), BuildingPart);
+            Workers[index] = externWorker;
+            Debug.Log("随机生成的id"+externWorker.WorkerID);
             return externWorker;
         }
         public void SpawnWorker(int index)
         {
-            Workers[index].worker.transform.position = Vector3.zero;
+            Debug.Log(Workers[index].WorkerID + "*******");
+        
+            Workers[index].worker.transform.position = new Vector3(2,2,2);
             Workers[index] = null;
         }
         public void ExpelWorker(int index)
         {
-            GameManager.Instance.GetLocalManager<WorkerManager>().RemoveWorker(Workers[index].worker);
+            Debug.Log(Workers[index].WorkerID+"*******");
+            //GameObject.Destroy(Workers[index].worker);
+            GameObject.Destroy(Workers[index].worker.gameObject);
+           
             Workers[index] = null;
         }
         public void LevelUp()
@@ -86,6 +95,7 @@ namespace ProjectOC.WorkerEchoNS
         }
         public void StopEcho(int index)
         {
+            
             IInventory inventory = GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory;
             List<ML.Engine.InventorySystem.CompositeSystem.Formula> dict = GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRaw(Workers[index].WorkerID);
             foreach(var pair in dict)
@@ -99,7 +109,7 @@ namespace ProjectOC.WorkerEchoNS
                 }
 
             }
-
+            Workers[index] = null;
         }
     }
 }
