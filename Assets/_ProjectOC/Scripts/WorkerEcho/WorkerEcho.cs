@@ -7,6 +7,7 @@ using ML.Engine.Manager;
 using ML.Engine.Timer;
 using ProjectOC.Player;
 using ProjectOC.WorkerNS;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -19,7 +20,7 @@ namespace ProjectOC.WorkerEchoNS
         public string WorkerID;
         public CounterDownTimer timer;
         public Worker worker;
-        public ExternWorker(string WorkerID, float time,BuildingPart buildingPart)
+        public ExternWorker(string WorkerID, float time,BuildingPart buildingPart,int index)
         {
             this.WorkerID = WorkerID;
             timer = new CounterDownTimer(time);
@@ -27,6 +28,7 @@ namespace ProjectOC.WorkerEchoNS
             timer.OnEndEvent += () =>
             {
                 this.worker = GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker(buildingPart.transform.position,Quaternion.identity,WorkerID);
+                this.worker.gameObject.transform.position = this.worker.gameObject.transform.position += new Vector3((float)(3 *Math.Cos(2 * 3.1415926 * index / 5)),0, (float)(3 * Math.Sin(2 * 3.1415926 * index / 5)));
             };
         }
     }
@@ -47,24 +49,22 @@ namespace ProjectOC.WorkerEchoNS
             if(this.Level==1)
             {
                 id = GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRandomID();
-                Debug.Log(id+"#########");
+                
             }
-            ExternWorker externWorker = new ExternWorker(id, GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetTimeCost(id), BuildingPart);
+            ExternWorker externWorker = new ExternWorker(id, GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetTimeCost(id), BuildingPart,index);
             Workers[index] = externWorker;
-            Debug.Log("随机生成的id"+externWorker.WorkerID);
+           
             return externWorker;
         }
         public void SpawnWorker(int index)
         {
-            Debug.Log(Workers[index].WorkerID + "*******");
+          
         
             Workers[index].worker.transform.position = new Vector3(2,2,2);
             Workers[index] = null;
         }
         public void ExpelWorker(int index)
         {
-            Debug.Log(Workers[index].WorkerID+"*******");
-            //GameObject.Destroy(Workers[index].worker);
             GameObject.Destroy(Workers[index].worker.gameObject);
            
             Workers[index] = null;
