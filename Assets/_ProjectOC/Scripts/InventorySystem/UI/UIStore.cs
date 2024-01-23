@@ -148,15 +148,15 @@ namespace ProjectOC.InventorySystem.UI
                 {
                     case MissionNS.TransportPriority.Urgency:
                         Priority = PriorityUrgency;
-                        Text_Priority.text = PanelTextContent.text_PriorityUrgency.GetText();
+                        Text_Priority.text = PanelTextContent_Main.text_PriorityUrgency.GetText();
                         break;
                     case MissionNS.TransportPriority.Normal:
                         Priority = PriorityNormal;
-                        Text_Priority.text = PanelTextContent.text_PriorityNormal.GetText();
+                        Text_Priority.text = PanelTextContent_Main.text_PriorityNormal.GetText();
                         break;
                     case MissionNS.TransportPriority.Alternative:
                         Priority = PriorityAlternative;
-                        Text_Priority.text = PanelTextContent.text_PriorityAlternative.GetText();
+                        Text_Priority.text = PanelTextContent_Main.text_PriorityAlternative.GetText();
                         break;
                 }
                 Priority.Find("Selected").gameObject.SetActive(true);
@@ -536,9 +536,9 @@ namespace ProjectOC.InventorySystem.UI
 
                 StoreDatas = Store.StoreDatas;
                 #region TopTitle
-                Text_Title.text = PanelTextContent.text_Title.GetText();
-                KT_ChangeItem.ReWrite(PanelTextContent.kt_ChangeItem);
-                KT_NextPriority.ReWrite(PanelTextContent.kt_NextPriority);
+                Text_Title.text = PanelTextContent_Main.text_Title.GetText();
+                KT_ChangeItem.ReWrite(PanelTextContent_Main.kt_ChangeItem);
+                KT_NextPriority.ReWrite(PanelTextContent_Main.kt_NextPriority);
                 #endregion
 
                 #region Store
@@ -595,7 +595,7 @@ namespace ProjectOC.InventorySystem.UI
                     }
                     else
                     {
-                        nametext.text = PanelTextContent.text_Empty;
+                        nametext.text = PanelTextContent_Main.text_Empty;
                     }
                     // Amount
                     int amount = storeData.StorageAll;
@@ -644,8 +644,8 @@ namespace ProjectOC.InventorySystem.UI
                     progressBarRectCur3.sizeDelta = new Vector2(progressBarRectMax3.sizeDelta.x * width3, progressBarRectCur3.sizeDelta.y);
 
                     // Add and Remove
-                    uiStoreData.transform.Find("Add").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_Add.GetText();
-                    uiStoreData.transform.Find("Remove").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_Remove.GetText();
+                    uiStoreData.transform.Find("Add").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent_Main.text_Add.GetText();
+                    uiStoreData.transform.Find("Remove").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent_Main.text_Remove.GetText();
                     // Selected
                     var selected = uiStoreData.transform.Find("Selected");
                     if (CurrentStoreData == StoreDatas[i])
@@ -721,9 +721,9 @@ namespace ProjectOC.InventorySystem.UI
                 #endregion
 
                 #region BotKeyTips
-                KT_Remove1.ReWrite(PanelTextContent.kt_Remove1);
-                KT_Remove10.ReWrite(PanelTextContent.kt_Remove10);
-                KT_FastAdd.ReWrite(PanelTextContent.kt_FastAdd);
+                KT_Remove1.ReWrite(PanelTextContent_Main.kt_Remove1);
+                KT_Remove10.ReWrite(PanelTextContent_Main.kt_Remove10);
+                KT_FastAdd.ReWrite(PanelTextContent_Main.kt_FastAdd);
                 #endregion
             }
             else if(this.CurMode == Mode.ChangeItem)
@@ -787,7 +787,7 @@ namespace ProjectOC.InventorySystem.UI
                     }
                     else
                     {
-                        nametext.text = PanelTextContent.text_Empty;
+                        nametext.text = PanelTextContent_Main.text_Empty;
                     }
                     // Selected
                     var selected = uiItemData.transform.Find("Selected");
@@ -864,8 +864,8 @@ namespace ProjectOC.InventorySystem.UI
                 #endregion
 
                 #region BotKeyTips
-                KT_ChangeItem_Confirm.ReWrite(PanelTextContent.kt_ChangeItem_Confirm);
-                KT_ChangeItem_Back.ReWrite(PanelTextContent.kt_ChangeItem_Back);
+                KT_ChangeItem_Confirm.ReWrite(PanelTextContent_Main.kt_ChangeItem_Confirm);
+                KT_ChangeItem_Back.ReWrite(PanelTextContent_Main.kt_ChangeItem_Back);
                 #endregion
             }
         }
@@ -892,7 +892,7 @@ namespace ProjectOC.InventorySystem.UI
             public KeyTip kt_ChangeItem_Back;
         }
 
-        public static StorePanel PanelTextContent => ABJAProcessor.Datas;
+        public static StorePanel PanelTextContent_Main => ABJAProcessor.Datas;
         public static ML.Engine.ABResources.ABJsonAssetProcessor<StorePanel> ABJAProcessor;
 
         private void InitUITextContents()

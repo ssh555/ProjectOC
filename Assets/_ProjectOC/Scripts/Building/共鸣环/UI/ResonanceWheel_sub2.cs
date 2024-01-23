@@ -36,7 +36,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public bool IsInit = false;
         private void Start()
         {
-            InitUITextContents();
 
             parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
 
@@ -262,7 +261,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         public void Refresh()
         {
-            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
+            if (ResonanceWheelUI.ABJAProcessorJson_sub2 == null || !ResonanceWheelUI.ABJAProcessorJson_sub2.IsLoaded || !IsInit)
             {
                 Debug.Log("ABJAProcessorJson is null");
                 return;
@@ -285,8 +284,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
             //BotKeyTips
-            KT_Confirm.ReWrite(PanelTextContent.confirm);
-            KT_Back.ReWrite(PanelTextContent.back);
+            KT_Confirm.ReWrite(ResonanceWheelUI.PanelTextContent_sub2.confirm);
+            KT_Back.ReWrite(ResonanceWheelUI.PanelTextContent_sub2.back);
 
 
     }
@@ -302,24 +301,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             public KeyTip confirm;
             public KeyTip back;
         }
-
-        public static ResonanceWheel_sub2Struct PanelTextContent => ABJAProcessorJson.Datas;
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub2Struct> ABJAProcessorJson;
-
-        private void InitUITextContents()
-        {
-            if (ABJAProcessorJson == null)
-            {
-                ABJAProcessorJson = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub2Struct>("Binary/TextContent/ResonanceWheel_sub2", "ResonanceWheel_sub2", (datas) =>
-                {
-                    Refresh();
-                    this.enabled = false;
-                }, null, "UI¹²ÃùÂÖPanel_sub2Êý¾Ý");
-                ABJAProcessorJson.StartLoadJsonAssetData();
-            }
-
-        }
         #endregion
+
 
     }
 

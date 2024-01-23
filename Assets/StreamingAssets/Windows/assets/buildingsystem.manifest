@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1635873959
+CRC: 4161997341
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 450aabe14ea211f3aadafcb2ed93f2f9
+    Hash: 82ea4e38b6a175bd163ea518563fd0bf
   TypeTreeHash:
     serializedVersion: 2
     Hash: 632c17e5ae17fbf2d2d578d89e423c63
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 450aabe14ea211f3aadafcb2ed93f2f9
+    Hash: 82ea4e38b6a175bd163ea518563fd0bf
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -87,4 +87,4 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Room_Foundation_Base_20.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/Texture2D/Red.png
 Dependencies:
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart

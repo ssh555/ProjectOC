@@ -153,7 +153,7 @@ namespace ProjectOC.InventorySystem.UI
                 RectTransform rect = Product.transform.Find("Mask").GetComponent<RectTransform>();
                 float percent = 1 - (float) (time / ProNode.TimeCost);
                 rect.sizeDelta = new Vector2(rect.sizeDelta.x, percent * Product.transform.Find("Icon").GetComponent<RectTransform>().sizeDelta.y);
-                Product.transform.Find("Time").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textPrefixTime + time.ToString("F2");
+                Product.transform.Find("Time").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent_Main.textPrefixTime + time.ToString("F2");
             };
             IsInit = true;
             Refresh();
@@ -222,15 +222,15 @@ namespace ProjectOC.InventorySystem.UI
                 {
                     case MissionNS.TransportPriority.Urgency:
                         Priority = PriorityUrgency;
-                        Text_Priority.text = PanelTextContent.textUrgency.GetText();
+                        Text_Priority.text = PanelTextContent_Main.textUrgency.GetText();
                         break;
                     case MissionNS.TransportPriority.Normal:
                         Priority = PriorityNormal;
-                        Text_Priority.text = PanelTextContent.textNormal.GetText();
+                        Text_Priority.text = PanelTextContent_Main.textNormal.GetText();
                         break;
                     case MissionNS.TransportPriority.Alternative:
                         Priority = PriorityAlternative;
-                        Text_Priority.text = PanelTextContent.textAlternative.GetText();
+                        Text_Priority.text = PanelTextContent_Main.textAlternative.GetText();
                         break;
                 }
                 Priority.Find("Selected").gameObject.SetActive(true);
@@ -729,7 +729,7 @@ namespace ProjectOC.InventorySystem.UI
                 this.BotKeyTips_Level.gameObject.SetActive(false);
 
                 #region TopTitle
-                foreach (TextTip tp in PanelTextContent.proNodeType)
+                foreach (TextTip tp in PanelTextContent_Main.proNodeType)
                 {
                     if (tp.name == ProNode.Recipe.ToString())
                     {
@@ -737,8 +737,8 @@ namespace ProjectOC.InventorySystem.UI
                         break;
                     }
                 }
-                KT_Upgrade.ReWrite(PanelTextContent.ktUpgrade);
-                KT_NextPriority.ReWrite(PanelTextContent.ktNextPriority);
+                KT_Upgrade.ReWrite(PanelTextContent_Main.ktUpgrade);
+                KT_NextPriority.ReWrite(PanelTextContent_Main.ktNextPriority);
                 #endregion
 
                 #region ProNode
@@ -902,17 +902,17 @@ namespace ProjectOC.InventorySystem.UI
                     switch (Worker.Status)
                     {
                         case Status.Relaxing:
-                            onDuty.text = PanelTextContent.textWorkerStateRelax;
+                            onDuty.text = PanelTextContent_Main.textWorkerStateRelax;
                             break;
                         case Status.Fishing:
-                            onDuty.text = PanelTextContent.textWorkerStateFish;
+                            onDuty.text = PanelTextContent_Main.textWorkerStateFish;
                             if (Worker.IsOnDuty)
                             {
-                                onDuty.text = PanelTextContent.textWorkerOnDuty;
+                                onDuty.text = PanelTextContent_Main.textWorkerOnDuty;
                             }
                             break;
                         case Status.Working:
-                            onDuty.text = PanelTextContent.textWorkerStateWork;
+                            onDuty.text = PanelTextContent_Main.textWorkerStateWork;
                             break;
                     }
                     var rect = UIWorker.transform.Find("PrograssBar").Find("Cur").GetComponent<RectTransform>();
@@ -921,7 +921,7 @@ namespace ProjectOC.InventorySystem.UI
                 }
                 #endregion
                 #region Eff
-                Text_Eff.text = PanelTextContent.textPrefixEff + ": +" + ProNode.Eff.ToString() + "%";
+                Text_Eff.text = PanelTextContent_Main.textPrefixEff + ": +" + ProNode.Eff.ToString() + "%";
                 Text_EffProNode.text = ProNode.Name + ": +" + ProNode.EffBase.ToString() + "%";
                 if (Worker != null)
                 {
@@ -935,13 +935,13 @@ namespace ProjectOC.InventorySystem.UI
                 #endregion
 
                 #region BotKeyTips
-                KT_ChangeRecipe.ReWrite(PanelTextContent.ktChangeRecipe);
-                KT_Remove1.ReWrite(PanelTextContent.ktRemove1);
-                KT_Remove10.ReWrite(PanelTextContent.ktRemove10);
-                KT_FastAdd.ReWrite(PanelTextContent.ktFastAdd);
-                KT_Back.ReWrite(PanelTextContent.ktBack);
-                KT_ChangeWorker.ReWrite(PanelTextContent.ktChangeWorker);
-                KT_RemoveWorker.ReWrite(PanelTextContent.ktRemoveWorker);
+                KT_ChangeRecipe.ReWrite(PanelTextContent_Main.ktChangeRecipe);
+                KT_Remove1.ReWrite(PanelTextContent_Main.ktRemove1);
+                KT_Remove10.ReWrite(PanelTextContent_Main.ktRemove10);
+                KT_FastAdd.ReWrite(PanelTextContent_Main.ktFastAdd);
+                KT_Back.ReWrite(PanelTextContent_Main.ktBack);
+                KT_ChangeWorker.ReWrite(PanelTextContent_Main.ktChangeWorker);
+                KT_RemoveWorker.ReWrite(PanelTextContent_Main.ktRemoveWorker);
                 #endregion
             }
             else if (CurMode == Mode.ChangeRecipe)
@@ -993,7 +993,7 @@ namespace ProjectOC.InventorySystem.UI
                     name.text = ItemManager.Instance.GetItemName(product.id);
                     if (name.text == "")
                     {
-                        name.text = PanelTextContent.textEmpty;
+                        name.text = PanelTextContent_Main.textEmpty;
                     }
                     // ¸üÐÂIcon
                     var img = item.transform.Find("Icon").GetComponent<Image>();
@@ -1084,7 +1084,7 @@ namespace ProjectOC.InventorySystem.UI
                 nameProduct.text = ItemManager.Instance.GetItemName(product.id);
                 if (nameProduct.text == "")
                 {
-                    nameProduct.text = PanelTextContent.textEmpty;
+                    nameProduct.text = PanelTextContent_Main.textEmpty;
                 }
                 var imgProduct = Product.transform.Find("Icon").GetComponent<Image>();
                 var spriteProduct = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(product.id));
@@ -1129,7 +1129,7 @@ namespace ProjectOC.InventorySystem.UI
                     name.text = ItemManager.Instance.GetItemName(itemID);
                     if (name.text == "")
                     {
-                        name.text = PanelTextContent.textEmpty;
+                        name.text = PanelTextContent_Main.textEmpty;
                     }
                     // NeedAmount
                     var amount = item.transform.Find("NeedAmount").GetComponent<TMPro.TextMeshProUGUI>();
@@ -1150,8 +1150,8 @@ namespace ProjectOC.InventorySystem.UI
                 #endregion
 
                 #region BotKeyTips
-                KT_ConfirmRecipe.ReWrite(PanelTextContent.ktConfirmRecipe);
-                KT_BackRecipe.ReWrite(PanelTextContent.ktBackRecipe);
+                KT_ConfirmRecipe.ReWrite(PanelTextContent_Main.ktConfirmRecipe);
+                KT_BackRecipe.ReWrite(PanelTextContent_Main.ktBackRecipe);
                 #endregion
             }
             else if (CurMode == Mode.ChangeWorker)
@@ -1201,7 +1201,7 @@ namespace ProjectOC.InventorySystem.UI
                         name.text = worker.Name;
                         if (name.text == "")
                         {
-                            name.text = PanelTextContent.textEmpty;
+                            name.text = PanelTextContent_Main.textEmpty;
                         }
                         var img = item.transform.Find("Icon").GetComponent<Image>();
                         var sprite = tempSprite.Find(s => s.texture == LocalGameManager.Instance.WorkerManager.GetTexture2D());
@@ -1216,17 +1216,17 @@ namespace ProjectOC.InventorySystem.UI
                         switch (worker.Status)
                         {
                             case Status.Relaxing:
-                                state.text = PanelTextContent.textWorkerStateRelax;
+                                state.text = PanelTextContent_Main.textWorkerStateRelax;
                                 break;
                             case Status.Fishing:
-                                state.text = PanelTextContent.textWorkerStateFish;
+                                state.text = PanelTextContent_Main.textWorkerStateFish;
                                 if (worker.IsOnDuty)
                                 {
-                                    state.text = PanelTextContent.textWorkerOnDuty;
+                                    state.text = PanelTextContent_Main.textWorkerOnDuty;
                                 }
                                 break;
                             case Status.Working:
-                                state.text = PanelTextContent.textWorkerStateWork;
+                                state.text = PanelTextContent_Main.textWorkerStateWork;
                                 break;
                         }
                         // PrograssBar
@@ -1331,8 +1331,8 @@ namespace ProjectOC.InventorySystem.UI
                 #endregion
 
                 #region BotKeyTips
-                KT_ConfirmWorker.ReWrite(PanelTextContent.ktConfirmWorker);
-                KT_BackWorker.ReWrite(PanelTextContent.ktBackWorker);
+                KT_ConfirmWorker.ReWrite(PanelTextContent_Main.ktConfirmWorker);
+                KT_BackWorker.ReWrite(PanelTextContent_Main.ktBackWorker);
                 #endregion
             }
             else if (CurMode == Mode.ChangeLevel)
@@ -1364,20 +1364,20 @@ namespace ProjectOC.InventorySystem.UI
                     switch (Worker.Status)
                     {
                         case Status.Relaxing:
-                            onDuty.text = PanelTextContent.textWorkerStateRelax;
+                            onDuty.text = PanelTextContent_Main.textWorkerStateRelax;
                             break;
                         case Status.Fishing:
-                            onDuty.text = PanelTextContent.textWorkerStateFish;
+                            onDuty.text = PanelTextContent_Main.textWorkerStateFish;
                             if (Worker.IsOnDuty) 
                             {
-                                onDuty.text = PanelTextContent.textWorkerOnDuty;
+                                onDuty.text = PanelTextContent_Main.textWorkerOnDuty;
                             }
                             break;
                         case Status.Working:
-                            onDuty.text = PanelTextContent.textWorkerStateWork;
+                            onDuty.text = PanelTextContent_Main.textWorkerStateWork;
                             break;
                     }
-                    Text_Eff.text = PanelTextContent.textPrefixEff + ": +" + ProNode.Eff.ToString() + "%";
+                    Text_Eff.text = PanelTextContent_Main.textPrefixEff + ": +" + ProNode.Eff.ToString() + "%";
                     Text_EffProNode.text = ProNode.Name + ": +" + ProNode.EffBase.ToString() + "%";
                     Text_EffWorker.text = Worker.Name + ": +" + (ProNode.Eff - ProNode.EffBase).ToString() + "%";
                     var rect = UIWorker.transform.Find("PrograssBar").Find("Cur").GetComponent<RectTransform>();
@@ -1425,7 +1425,7 @@ namespace ProjectOC.InventorySystem.UI
             public KeyTip ktBackLevel;
         }
 
-        public static ProNodePanel PanelTextContent => ABJAProcessor.Datas;
+        public static ProNodePanel PanelTextContent_Main => ABJAProcessor.Datas;
         public static ML.Engine.ABResources.ABJsonAssetProcessor<ProNodePanel> ABJAProcessor;
 
         private void InitUITextContents()

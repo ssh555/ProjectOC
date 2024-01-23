@@ -7,7 +7,7 @@ using Unity.VisualScripting;
 /// <summary>
 /// UI多边形
 /// </summary>
-public class UIPolygon : MaskableGraphic, ITickComponent
+public class UIPolygon : MaskableGraphic
 {
     [SerializeField]
     Texture m_Texture;
@@ -57,9 +57,6 @@ public class UIPolygon : MaskableGraphic, ITickComponent
         }
     }
 
-    public int tickPriority { get; set; }
-    public int fixedTickPriority { get; set; }
-    public int lateTickPriority { get; set; }
     #region 提供外部的接口
     public void DrawPolygon(int _sides)
     {
@@ -84,34 +81,20 @@ public class UIPolygon : MaskableGraphic, ITickComponent
     public List<float> datas = new List<float>();
     protected override void Start()
     {
-        ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
-
-        // 防御力
-        datas.Add(0.92f);
-        // 智力
-        datas.Add(0.31f);
-        // 灵巧
-        datas.Add(0.36f);
-        // 力量
-        datas.Add(0.28f);
-        // 敏捷
-        datas.Add(0.35f);
-        
-
-    }
 
 
-    public void Tick(float deltatime)
-    {
-        if (rectTransform == null) return;  
+        if (rectTransform == null) return;
         // 根据宽高适配尺寸
         size = rectTransform.rect.width;
         if (rectTransform.rect.width > rectTransform.rect.height)
             size = rectTransform.rect.height;
         else
             size = rectTransform.rect.width;
-        DrawPolygon(datas);
+        
+        
+
     }
+
 
     protected UIVertex[] SetVertexs(Vector2[] vertices, Vector2[] uvs)
     {

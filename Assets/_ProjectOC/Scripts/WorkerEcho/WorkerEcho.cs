@@ -24,7 +24,7 @@ namespace ProjectOC.WorkerEchoNS
         {
             this.WorkerID = WorkerID;
             timer = new CounterDownTimer(time);
-            GameManager.Instance.GetLocalManager<WorkerManager>().OnlyCostResource(GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory, WorkerID);
+
             timer.OnEndEvent += () =>
             {
                 this.worker = GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker(buildingPart.transform.position,Quaternion.identity,WorkerID);
@@ -50,6 +50,11 @@ namespace ProjectOC.WorkerEchoNS
             {
                 id = GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRandomID();
                 
+            }
+            if (!GameManager.Instance.GetLocalManager<WorkerManager>().OnlyCostResource(GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory, id))
+            {
+                Debug.Log("材料不足！无法召唤！");
+                return null;
             }
             ExternWorker externWorker = new ExternWorker(id, GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetTimeCost(id), BuildingPart,index);
             Workers[index] = externWorker;

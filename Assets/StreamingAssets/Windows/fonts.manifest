@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 166925773
+CRC: 1834001718
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 196b22ae776af9dcfafba3b3a8539df9
+    Hash: 64367485ec6c40d1d3e77e09d4bfe891
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 2172eb9bcb39b2bdaceec7c9e1d524e1
+    Hash: 8a919bcbcbff02d814de61b9664f6f0e
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 196b22ae776af9dcfafba3b3a8539df9
+    Hash: 64367485ec6c40d1d3e77e09d4bfe891
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -17,6 +17,8 @@ ClassTypes:
 - Class: 28
   Script: {instanceID: 0}
 - Class: 48
+  Script: {instanceID: 0}
+- Class: 49
   Script: {instanceID: 0}
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
@@ -56,4 +58,5 @@ Assets:
 - Assets/_ML/MLResources/Fonts/MSYHL.TTC
 - Assets/_ML/MLResources/Fonts/MSYH.TTC
 - Assets/_ML/MLResources/Fonts/MSYHBD.TTC
+- "Assets/_ML/MLResources/Fonts/\u5B57\u5E93.txt"
 Dependencies: []

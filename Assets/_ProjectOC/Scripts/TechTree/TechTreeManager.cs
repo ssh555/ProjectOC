@@ -504,7 +504,7 @@ namespace ProjectOC.TechTree
 
         #region TextContent
         public Dictionary<string, TextTip> CategoryDict = new Dictionary<string, TextTip>();
-        public TPPanel TPPanelTextContent => ABJAProcessor_TPPanel.Datas;
+        public TPPanel TPPanelTextContent_Main => ABJAProcessor_TPPanel.Datas;
 
         [System.Serializable]
         public struct TPPanel

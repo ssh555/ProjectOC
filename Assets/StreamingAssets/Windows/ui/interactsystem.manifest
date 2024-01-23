@@ -1,18 +1,20 @@
 ManifestFileVersion: 0
-CRC: 2672338704
+CRC: 2603215471
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f3fd1e60bfeb506f1e234023559ff4b9
+    Hash: 7a48a5f856f40826d024e3b869aec04e
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 1d23ff32f3f895f407383a1d2cb0dbb3
+    Hash: 414e45bb9820413195fe0d52fafdf436
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: f3fd1e60bfeb506f1e234023559ff4b9
+    Hash: 7a48a5f856f40826d024e3b869aec04e
 HashAppended: 0
 ClassTypes:
 - Class: 1
+  Script: {instanceID: 0}
+- Class: 21
   Script: {instanceID: 0}
 - Class: 28
   Script: {instanceID: 0}
@@ -40,4 +42,4 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/_ML/MLResources/InteractSystem/UI/InteractKeyTip.prefab
 Dependencies:
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/fonts
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/fonts

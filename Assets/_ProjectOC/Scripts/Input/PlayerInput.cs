@@ -1803,7 +1803,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""4b9ae05a-ec28-4681-b501-713418c67f96"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

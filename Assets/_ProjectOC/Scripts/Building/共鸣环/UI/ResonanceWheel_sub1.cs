@@ -2,8 +2,10 @@ using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
+using ML.Engine.UI;
 using Newtonsoft.Json;
 using ProjectOC.WorkerEchoNS;
+using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -11,6 +13,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Unity.Burst.CompilerServices;
+using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 using UnityEngine.Purchasing;
 using UnityEngine.Rendering;
@@ -36,14 +39,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public bool IsInit = false;
         private void Start()
         {
-
-            InitUITextContents();
-
             //BeastInfo
             var Info1 = this.transform.Find("HiddenBeastInfo1").Find("Info");
             Stamina = Info1.Find("PhysicalStrength").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             Speed = Info1.Find("MovingSpeed").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
-
+            StaminaNum = Info1.Find("PhysicalStrength").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
+            SpeedNum = Info1.Find("MovingSpeed").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
             var GInfo = Info1.Find("SkillGraph").Find("Viewport").Find("Content").Find("Ring");
             Cook = GInfo.Find("Skill1").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
             HandCraft = GInfo.Find("Skill6").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
@@ -52,7 +53,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             Transport = GInfo.Find("Skill3").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
             Collect = GInfo.Find("Skill2").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
 
-            var Info2 = this.transform.Find("HiddenBeastInfo2").Find("Info");
+            
             var btn1 = this.transform.Find("HiddenBeastInfo2").Find("btn1");
             expel = new UIKeyTip();
             expel.keytip = btn1.Find("KeyTip").Find("Image").Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
@@ -68,18 +69,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             BeastName= Info1.Find("Icon").Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
 
 
-            var Description1 = Info2.Find("Description1");
-            FeatureName1 = Description1.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>();
-            FeatureText1 = Description1.Find("Text2").GetComponent<TMPro.TextMeshProUGUI>();
-            EffectText1 = Description1.Find("Text3").GetComponent<TMPro.TextMeshProUGUI>();
-            var Description2 = Info2.Find("Description2");
-            FeatureName2 = Description1.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>();
-            FeatureText2 = Description1.Find("Text2").GetComponent<TMPro.TextMeshProUGUI>();
-            EffectText2 = Description1.Find("Text3").GetComponent<TMPro.TextMeshProUGUI>();
-            var Description3 = Info2.Find("Description3");
-            FeatureName3 = Description1.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>();
-            FeatureText3 = Description1.Find("Text2").GetComponent<TMPro.TextMeshProUGUI>();
-            EffectText3 = Description1.Find("Text3").GetComponent<TMPro.TextMeshProUGUI>();
+
 
             //BotKeyTips
             var kt = this.transform.Find("BotKeyTips").Find("KeyTips");
@@ -241,6 +231,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         //BeastInfo
         private TMPro.TextMeshProUGUI Stamina;
         private TMPro.TextMeshProUGUI Speed;
+        private TMPro.TextMeshProUGUI StaminaNum;
+        private TMPro.TextMeshProUGUI SpeedNum;
+
 
         private TMPro.TextMeshProUGUI Cook;
         private TMPro.TextMeshProUGUI HandCraft;
@@ -249,23 +242,17 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private TMPro.TextMeshProUGUI Transport;
         private TMPro.TextMeshProUGUI Collect;
 
+
+
+
+
         private UIKeyTip expel;
         private UIKeyTip receive;
 
          //需要调接口显示的隐兽信息
         private TMPro.TextMeshProUGUI BeastName;
 
-        private TMPro.TextMeshProUGUI FeatureName1;
-        private TMPro.TextMeshProUGUI FeatureText1;
-        private TMPro.TextMeshProUGUI EffectText1;
 
-        private TMPro.TextMeshProUGUI FeatureName2;
-        private TMPro.TextMeshProUGUI FeatureText2;
-        private TMPro.TextMeshProUGUI EffectText2;
-
-        private TMPro.TextMeshProUGUI FeatureName3;
-        private TMPro.TextMeshProUGUI FeatureText3;
-        private TMPro.TextMeshProUGUI EffectText3;
 
         //BotKeyTips
         private UIKeyTip KT_Back;
@@ -276,7 +263,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public void Refresh()
         {
 
-            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
+            if (ResonanceWheelUI.ABJAProcessorJson_sub1 == null || !ResonanceWheelUI.ABJAProcessorJson_sub1.IsLoaded || !IsInit)
             {
                 Debug.Log("ABJAProcessorJson is null");
                 return;
@@ -284,22 +271,60 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
             //BeastInfo
-            Stamina.text = PanelTextContent.Stamina;
-            Speed.text = PanelTextContent.Speed;
+            Stamina.text = ResonanceWheelUI.PanelTextContent_sub1.Stamina;
+            Speed.text = ResonanceWheelUI.PanelTextContent_sub1.Speed;
 
-            Cook.text = PanelTextContent.Cook;
-            HandCraft.text = PanelTextContent.HandCraft;
-            Industry.text = PanelTextContent.Industry;
-            Magic.text = PanelTextContent.Magic;
-            Transport.text = PanelTextContent.Transport;
-            Collect.text = PanelTextContent.Collect;
+            Cook.text = ResonanceWheelUI.PanelTextContent_sub1.Cook;
+            HandCraft.text = ResonanceWheelUI.PanelTextContent_sub1.HandCraft;
+            Industry.text = ResonanceWheelUI.PanelTextContent_sub1.Industry;
+            Magic.text = ResonanceWheelUI.PanelTextContent_sub1.Magic;
+            Transport.text = ResonanceWheelUI.PanelTextContent_sub1.Transport;
+            Collect.text = ResonanceWheelUI.PanelTextContent_sub1.Collect;
 
-            expel.ReWrite(PanelTextContent.expel);
-            receive.ReWrite(PanelTextContent.receive);
+            expel.ReWrite(ResonanceWheelUI.PanelTextContent_sub1.expel);
+            receive.ReWrite(ResonanceWheelUI.PanelTextContent_sub1.receive);
 
 
+
+            //更新隐兽详细信息
+            Debug.Log("更新隐兽详细信息 " + parentUI.Grids[parentUI.CurrentGridIndex].worker.worker.Name);
+            Worker worker = parentUI.Grids[parentUI.CurrentGridIndex].worker.worker;
+            StaminaNum.text = worker.APMax.ToString();
+            SpeedNum.text = worker.WalkSpeed.ToString();
+
+            
+
+            List<float> datas = new List<float>();
+            // 烹饪
+            datas.Add(worker.Skill[WorkType.Cook].Level / 10f);
+            // 轻工
+            datas.Add(worker.Skill[WorkType.HandCraft].Level / 10f);
+            // 精工
+            datas.Add(worker.Skill[WorkType.Industry].Level / 10f);
+            // 术法
+            datas.Add(worker.Skill[WorkType.Magic].Level / 10f);
+            // 搬运
+            datas.Add(worker.Skill[WorkType.Transport].Level / 10f);
+            // 采集
+            datas.Add(worker.Skill[WorkType.Collect].Level / 10f);
+
+            var radar = this.transform.Find("HiddenBeastInfo1").Find("Info").Find("SkillGraph").Find("Viewport").Find("Content").Find("Radar").GetComponent<UIPolygon>();
+            radar.DrawPolygon(datas);
+
+            
+            BeastName.text = worker.Name;
+
+
+            foreach (var feature in worker.Features)
+            {
+                var Info = this.transform.Find("HiddenBeastInfo2").Find("Info");
+                var DescriptionPrefab = Instantiate(parentUI.PrefabsAB.LoadAsset<GameObject>("Description"), Info);
+                DescriptionPrefab.transform.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;
+                DescriptionPrefab.transform.Find("Text2").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Description;
+                DescriptionPrefab.transform.Find("Text3").GetComponent<TMPro.TextMeshProUGUI>().text = feature.EffectsDescription;
+            }
             //BotKeyTips
-            KT_Back.ReWrite(PanelTextContent.back);
+            KT_Back.ReWrite(ResonanceWheelUI.PanelTextContent_sub1.back);
         }
         #endregion
 
@@ -325,23 +350,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             public KeyTip back;
         }
 
-        public static ResonanceWheel_sub1Struct PanelTextContent => ABJAProcessorJson.Datas;
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub1Struct> ABJAProcessorJson;
-
-        private void InitUITextContents()
-        {
-            if (ABJAProcessorJson == null)
-            {
-                ABJAProcessorJson = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub1Struct>("Binary/TextContent/ResonanceWheel_sub1", "ResonanceWheel_sub1", (datas) =>
-                {
-                    Refresh();
-                    this.enabled = false;
-                }, null, "UI共鸣轮Panel_sub1数据");
-                ABJAProcessorJson.StartLoadJsonAssetData();
-            }
-
-        }
         #endregion
+        
+
 
 
     }

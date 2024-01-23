@@ -101,7 +101,7 @@ namespace ML.Engine.InteractSystem
         public void Enable()
         {
             //Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
-            Debug.Log("12414122 " + Manager.GameManager.Instance.TickManager.RegisterTick(0, this)+" "+Time.frameCount);
+            Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
         }
         #endregion
 
@@ -112,7 +112,7 @@ namespace ML.Engine.InteractSystem
             InitUITextContents();
 
 
-            Debug.Log("12414123 "+Manager.GameManager.Instance.TickManager.RegisterTick(0, this) + " " + Time.frameCount);
+            Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
         }
 
         private void OnDestroy()

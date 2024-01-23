@@ -417,13 +417,13 @@ namespace ProjectOC.InventorySystem.UI
 
             #region TopTitle
             // 更新标题文本
-            this.TopTitleText.text = PanelTextContent.toptitle.GetText();
+            this.TopTitleText.text = PanelTextContent_Main.toptitle.GetText();
             #endregion
 
             #region ItemType
             // 更新按键提示
-            this.KT_LastTerm.ReWrite(PanelTextContent.lastterm);
-            this.KT_NextTerm.ReWrite(PanelTextContent.nextterm);
+            this.KT_LastTerm.ReWrite(PanelTextContent_Main.lastterm);
+            this.KT_NextTerm.ReWrite(PanelTextContent_Main.nextterm);
             // 刷新ItemType选择区域
             foreach(var itemtype in ItemTypes)
             {
@@ -449,7 +449,7 @@ namespace ProjectOC.InventorySystem.UI
                 }
                 
                 // 刷新显示文本
-                obj.transform.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.itemtype.FirstOrDefault(it => it.name == itemtype.ToString()).GetDescription();
+                obj.transform.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent_Main.itemtype.FirstOrDefault(it => it.name == itemtype.ToString()).GetDescription();
                 // 更新 Selected
                 var selected = obj.transform.Find("Selected").gameObject;
                 selected.SetActive(CurrentItemType == itemtype);
@@ -595,17 +595,17 @@ namespace ProjectOC.InventorySystem.UI
                 // 更新图标 => 必定是载入了的
                 Info_ItemIcon.sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(CurrentItem.ID));
                 // 更新单个重量: JsonText + Amount
-                Info_ItemWeight.text = PanelTextContent.weightprefix + ItemManager.Instance.GetWeight(CurrentItem.ID);
+                Info_ItemWeight.text = PanelTextContent_Main.weightprefix + ItemManager.Instance.GetWeight(CurrentItem.ID);
 
                 // 更新描述文本: JsonText + ItemDescription
-                Info_ItemDescription.text = PanelTextContent.descriptionprefix + "\n" + ItemManager.Instance.GetItemDescription(CurrentItem.ID);
+                Info_ItemDescription.text = PanelTextContent_Main.descriptionprefix + "\n" + ItemManager.Instance.GetItemDescription(CurrentItem.ID);
                 // 强制更新布局 => 更新文本高度 -> 用于更新父物体的高度，适配UI显示
                 LayoutRebuilder.ForceRebuildLayoutImmediate(Info_ItemDescription.GetComponent<RectTransform>());
                 // 更新父物体的高度
                 Info_ItemDescription.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(Info_ItemDescription.transform.parent.GetComponent<RectTransform>().sizeDelta.x, Info_ItemDescription.GetComponent<RectTransform>().sizeDelta.y);
 
 
-                Info_ItemEffectDescription.text = PanelTextContent.effectdescriptionprefix + "\n" + ItemManager.Instance.GetEffectDescription(CurrentItem.ID);
+                Info_ItemEffectDescription.text = PanelTextContent_Main.effectdescriptionprefix + "\n" + ItemManager.Instance.GetEffectDescription(CurrentItem.ID);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(Info_ItemEffectDescription.GetComponent<RectTransform>());
                 Info_ItemEffectDescription.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(Info_ItemEffectDescription.transform.parent.GetComponent<RectTransform>().sizeDelta.x, Info_ItemEffectDescription.GetComponent<RectTransform>().sizeDelta.y);
 
@@ -618,10 +618,10 @@ namespace ProjectOC.InventorySystem.UI
             #endregion
 
             #region BotKeyTips
-            KT_Use.ReWrite(PanelTextContent.use);
-            KT_Back.ReWrite(PanelTextContent.back);
-            KT_Drop.ReWrite(PanelTextContent.drop);
-            KT_Destroy.ReWrite(PanelTextContent.destroy);
+            KT_Use.ReWrite(PanelTextContent_Main.use);
+            KT_Back.ReWrite(PanelTextContent_Main.back);
+            KT_Drop.ReWrite(PanelTextContent_Main.drop);
+            KT_Destroy.ReWrite(PanelTextContent_Main.destroy);
             if (CurrentItem != null)
             {
                 KT_Use.img.transform.parent.gameObject.SetActive(CurrentItem.CanUse());
@@ -651,7 +651,7 @@ namespace ProjectOC.InventorySystem.UI
             public KeyTip destroy;
         }
 
-        public static InventoryPanel PanelTextContent => ABJAProcessor.Datas;
+        public static InventoryPanel PanelTextContent_Main => ABJAProcessor.Datas;
         public static ML.Engine.ABResources.ABJsonAssetProcessor<InventoryPanel> ABJAProcessor;
 
         private void InitUITextContents()

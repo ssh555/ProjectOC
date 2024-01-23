@@ -158,14 +158,14 @@ namespace ProjectOC.Player
                 yield return null;
             }
             //// to-do : to-delete
-            //// 仅测试用
-            //foreach (var id in ML.Engine.InventorySystem.ItemManager.Instance.GetAllItemID())
-            //{
-            //    var item = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(id, ML.Engine.InventorySystem.ItemManager.Instance.GetCanStack(id) ? UnityEngine.Random.Range(1, 999) : 1)[0];
-            //    Inventory.AddItem(item);
-            //}
+            // 仅测试用
+            foreach (var id in ML.Engine.InventorySystem.ItemManager.Instance.GetAllItemID())//ML.Engine.InventorySystem.ItemManager.Instance.GetCanStack(id) ? UnityEngine.Random.Range(1, 999) : 1
+            {
+               var item = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(id, 20)[0];
+                Inventory.AddItem(item);
+            }
 
-            //this.enabled = false;
+            this.enabled = false;
         }
 
         private void OnDestroy()

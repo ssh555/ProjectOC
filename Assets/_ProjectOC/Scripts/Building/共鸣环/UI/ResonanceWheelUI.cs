@@ -22,6 +22,8 @@ using UnityEngine.InputSystem;
 using UnityEngine.Purchasing;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
+using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub1;
+using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub2;
 //using static System.Net.Mime.MediaTypeNames;
 
 namespace ProjectOC.ResonanceWheelSystem.UI
@@ -50,6 +52,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //Debug.Log("121323 " + GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>());
             workerEcho = (GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
             //workerEcho = GameObject.Find("Cube").GetComponent<WorkerEchoBuilding>().workerEcho;
+            InitUIPrefabs();
             InitUITextContents();
             InitUITexture2D();
             //exclusivePart
@@ -149,6 +152,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         public void Tick(float deltatime)
         {
+
+            if (Grids == null) return;
+
             if (Grids[CurrentGridIndex].isNull)
             {
 
@@ -387,6 +393,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 Grids[CurrentGridIndex].worker = worker;
                 Grids[CurrentGridIndex].isNull = false;
                 Grids[CurrentGridIndex].isResonating = true;
+                Debug.Log("worker "+worker.worker);
             }
             else
             {
@@ -431,11 +438,13 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             if (Grids[CurrentGridIndex].isNull)
             {
                 //当前无共鸣
+                Debug.Log("当前无共鸣isNull=true");
                 return;
             }
             if(!Grids[CurrentGridIndex].isTiming)
             {
                 //当前无共鸣
+                Debug.Log("当前无共鸣isTiming=false");
                 return;
             }
 
@@ -655,19 +664,19 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         public void Refresh()
         {
-            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
+            if (ABJAProcessorJson_Main == null || !ABJAProcessorJson_Main.IsLoaded || !IsInit)
             {
                 Debug.Log("ABJAProcessorJson is null");
                 return;
             }
             
             #region TopPart
-            TopTitleText.text = PanelTextContent.toptitle;
+            TopTitleText.text = PanelTextContent_Main.toptitle;
 
-            Debug.Log("ABJAProcessorJson  " + PanelTextContent.toptitle);
+            Debug.Log("ABJAProcessorJson  " + PanelTextContent_Main.toptitle);
 
             #region FunctionType
-            this.KT_LastTerm.ReWrite(PanelTextContent.lastterm);
+            this.KT_LastTerm.ReWrite(PanelTextContent_Main.lastterm);
             GameObject HBR = HiddenBeastResonanceTemplate.Find("Selected").gameObject;
             GameObject SSB = SongofSeaBeastsTemplate.Find("Selected").gameObject;
 
@@ -682,17 +691,17 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 SSB.SetActive(false);
             }
 
-            this.KT_NextTerm.ReWrite(PanelTextContent.nextterm);
+            this.KT_NextTerm.ReWrite(PanelTextContent_Main.nextterm);
 
-            HiddenBeastResonanceText.text = PanelTextContent.HiddenBeastResonanceText;
-            SongofSeaBeastsText.text= PanelTextContent.SongofSeaBeastsText;
+            HiddenBeastResonanceText.text = PanelTextContent_Main.HiddenBeastResonanceText;
+            SongofSeaBeastsText.text= PanelTextContent_Main.SongofSeaBeastsText;
             #endregion
 
 
             #endregion
 
             #region Ring
-            this.KT_NextGrid.ReWrite(PanelTextContent.nextgrid);
+            this.KT_NextGrid.ReWrite(PanelTextContent_Main.nextgrid);
             if(Grids.Count==0) return;
 
             if (Grids[CurrentGridIndex].isNull)//空格子
@@ -715,7 +724,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 StopBtn.gameObject.SetActive(false);
 
 
-                StartResonanceText.ReWrite(PanelTextContent.StartResonanceText);
+                StartResonanceText.ReWrite(PanelTextContent_Main.StartResonanceText);
 
 
 
@@ -747,7 +756,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 StartBtn.gameObject.SetActive(false);
                 StopBtn.gameObject.SetActive(true);
 
-                StopResonanceText.ReWrite(PanelTextContent.StopResonanceText);
+                StopResonanceText.ReWrite(PanelTextContent_Main.StopResonanceText);
                 //取消选择对象功能
                 var SwitchTarget = exclusivePart.Find("ResonanceTarget").Find("Info").Find("SwitchTarget");
                 SwitchTarget.gameObject.SetActive(false);
@@ -767,7 +776,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     hasSub1nstance=true;
                 }
                 
-                //更新隐兽详细信息
+
 
             }
             //selected
@@ -783,38 +792,38 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 }
             }
 
-            Grid1Text.text = PanelTextContent.Grid1Text;
-            Grid2Text.text = PanelTextContent.Grid2Text;
-            Grid3Text.text = PanelTextContent.Grid3Text;
-            Grid4Text.text = PanelTextContent.Grid4Text;
-            Grid5Text.text = PanelTextContent.Grid5Text;
+            Grid1Text.text = PanelTextContent_Main.Grid1Text;
+            Grid2Text.text = PanelTextContent_Main.Grid2Text;
+            Grid3Text.text = PanelTextContent_Main.Grid3Text;
+            Grid4Text.text = PanelTextContent_Main.Grid4Text;
+            Grid5Text.text = PanelTextContent_Main.Grid5Text;
 
             #endregion
 
 
             #region ResonanceTarget
-            ResonanceTargetTitle.text = PanelTextContent.ResonanceTargetTitle;
-            RandomText.text=PanelTextContent.RandomText;
-            SwitchTargetText.ReWrite(PanelTextContent.SwitchTargetText);
-            //SwitchTargetText.text= PanelTextContent.SwitchTargetText;
+            ResonanceTargetTitle.text = PanelTextContent_Main.ResonanceTargetTitle;
+            RandomText.text=PanelTextContent_Main.RandomText;
+            SwitchTargetText.ReWrite(PanelTextContent_Main.SwitchTargetText);
+            //SwitchTargetText.text= PanelTextContent_Main.SwitchTargetText;
             #endregion
 
             #region ResonanceConsumpion
             if (Grids[CurrentGridIndex].isNull)
             {
-                ResonanceConsumpionTitle.text = PanelTextContent.ResonanceConsumpionTitle.description[0];//0 代表共鸣消耗
+                ResonanceConsumpionTitle.text = PanelTextContent_Main.ResonanceConsumpionTitle.description[0];//0 代表共鸣消耗
             }
             else if (Grids[CurrentGridIndex].isTiming)
             {
-                ResonanceConsumpionTitle.text = PanelTextContent.ResonanceConsumpionTitle.description[1];//1 代表共鸣中
+                ResonanceConsumpionTitle.text = PanelTextContent_Main.ResonanceConsumpionTitle.description[1];//1 代表共鸣中
             }
 
 
-            StartResonanceText.ReWrite(PanelTextContent.StartResonanceText);
+            StartResonanceText.ReWrite(PanelTextContent_Main.StartResonanceText);
             #endregion
 
             #region BotKeyTips
-            KT_Back.ReWrite(PanelTextContent.back);
+            KT_Back.ReWrite(PanelTextContent_Main.back);
             #endregion
 
         }
@@ -849,25 +858,50 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             public KeyTip back;
         }
 
-        public static ResonanceWheelPanel PanelTextContent => ABJAProcessorJson.Datas;
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheelPanel> ABJAProcessorJson;
-        private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
-        private string ResonanceWheelTexture2DPath = "ui/resonancewheel/texture2d";
+        public static ResonanceWheelPanel PanelTextContent_Main => ABJAProcessorJson_Main.Datas;
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheelPanel> ABJAProcessorJson_Main;
+
+        public static ResonanceWheel_sub1Struct PanelTextContent_sub1 => ABJAProcessorJson_sub1.Datas;
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub1Struct> ABJAProcessorJson_sub1;
+
+        public static ResonanceWheel_sub2Struct PanelTextContent_sub2 => ABJAProcessorJson_sub2.Datas;
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub2Struct> ABJAProcessorJson_sub2;
         private void InitUITextContents()
         {
-            if (ABJAProcessorJson == null)
+            if (ABJAProcessorJson_Main == null)
             {
-                ABJAProcessorJson = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheelPanel>("Binary/TextContent/ResonanceWheel", "ResonanceWheelPanel", (datas) =>
+                ABJAProcessorJson_Main = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheelPanel>("Binary/TextContent/ResonanceWheel", "ResonanceWheelPanel", (datas) =>
                 {
                     Refresh();
                     this.enabled = false;
-                }, null, "UI共鸣轮Panel数据");
-                ABJAProcessorJson.StartLoadJsonAssetData();
+                }, null, "UI共鸣轮Panel_Main数据");
+                ABJAProcessorJson_Main.StartLoadJsonAssetData();
+            }
+
+            if (ABJAProcessorJson_sub1 == null)
+            {
+                ABJAProcessorJson_sub1 = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub1Struct>("Binary/TextContent/ResonanceWheel_sub1", "ResonanceWheel_sub1", (datas) =>
+                {
+                    Refresh();
+                    this.enabled = false;
+                }, null, "UI共鸣轮Panel_sub1数据");
+                ABJAProcessorJson_sub1.StartLoadJsonAssetData();
+            }
+
+            if (ABJAProcessorJson_sub2 == null)
+            {
+                ABJAProcessorJson_sub2 = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub2Struct>("Binary/TextContent/ResonanceWheel_sub2", "ResonanceWheel_sub2", (datas) =>
+                {
+                    Refresh();
+                    this.enabled = false;
+                }, null, "UI共鸣轮Panel_sub2数据");
+                ABJAProcessorJson_sub2.StartLoadJsonAssetData();
             }
         }
         #endregion
         #region Texture2D
-
+        private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
+        private string ResonanceWheelTexture2DPath = "ui/resonancewheel/texture2d";
         private void InitUITexture2D()
         {
             Texture2D texture2D;
@@ -883,6 +917,20 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #endregion
 
+        #region Prefab
+        public AssetBundle PrefabsAB;
+        private IEnumerator InitUIPrefabs()
+        {
+            var abmgr = GameManager.Instance.ABResourceManager;
+            // 载入 keyTipPrefab
+            var crequest = abmgr.LoadLocalABAsync("ui/resonancewheel/resonancewheelprefabs", null, out var PrefabsAB);
+            yield return crequest;
+            if (crequest != null)
+            {
+                PrefabsAB = crequest.assetBundle;
+            }
+        }
+        #endregion
 
     }
 
