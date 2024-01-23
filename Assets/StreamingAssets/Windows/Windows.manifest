@@ -1,78 +1,76 @@
 ManifestFileVersion: 0
-CRC: 3069911117
+CRC: 4083481724
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: materials
-      Dependencies: {}
-    Info_1:
-      Name: ui/buildingsystem/prefabs
-      Dependencies:
-        Dependency_0: fonts
-        Dependency_1: ui/buildingsystem/texture2d/category
-        Dependency_2: ui/buildingsystem/texture2d/type
-        Dependency_3: ui/buildingsystem/texture2d/style
-        Dependency_4: assets/buildingsystem
-    Info_2:
-      Name: animation/character/player/model
-      Dependencies: {}
-    Info_3:
       Name: animation/character/player/playermove
       Dependencies: {}
-    Info_4:
-      Name: fonts
+    Info_1:
+      Name: animation/character/player/model
       Dependencies: {}
-    Info_5:
-      Name: ui/buildingsystem/texture2d/category
-      Dependencies: {}
-    Info_6:
+    Info_2:
       Name: testscene
       Dependencies:
-        Dependency_0: materials
+        Dependency_0: animation/character/player/model
+        Dependency_1: prefabs/character/player
+        Dependency_2: prefabs/buildingsystem/bpart
+        Dependency_3: materials
+    Info_3:
+      Name: prefabs/character/player
+      Dependencies:
+        Dependency_0: animation/character/player/playermove
         Dependency_1: animation/character/player/model
         Dependency_2: ui/uipanel
-        Dependency_3: prefabs/buildingsystem/bpart
-        Dependency_4: prefabs/character/player
-    Info_7:
-      Name: ui/buildingsystem/texture2d/type
-      Dependencies: {}
-    Info_8:
+    Info_4:
+      Name: scene
+      Dependencies:
+        Dependency_0: prefabs/character/player
+        Dependency_1: prefabs/buildingsystem/bpart
+    Info_5:
       Name: prefabs/item/worlditem
       Dependencies: {}
-    Info_9:
-      Name: ui/uipanel
+    Info_6:
+      Name: ui/buildingsystem/prefabs
       Dependencies:
-        Dependency_0: fonts
-        Dependency_1: ui/techpoint/texture2d
-        Dependency_2: ui/inventory/texture2d/itemtype
-        Dependency_3: ui/resonancewheel/texture2d
+        Dependency_0: ui/buildingsystem/texture2d/type
+        Dependency_1: fonts
+        Dependency_2: ui/buildingsystem/texture2d/style
+        Dependency_3: ui/buildingsystem/texture2d/category
+        Dependency_4: assets/buildingsystem
+    Info_7:
+      Name: prefabs/buildingsystem/bpart
+      Dependencies: {}
+    Info_8:
+      Name: materials
+      Dependencies: {}
+    Info_9:
+      Name: ui/buildingsystem/texture2d/type
+      Dependencies: {}
     Info_10:
-      Name: ui/techpoint/texture2d
+      Name: fonts
       Dependencies: {}
     Info_11:
       Name: ui/buildingsystem/texture2d/style
       Dependencies: {}
     Info_12:
-      Name: prefabs/buildingsystem/bpart
+      Name: ui/buildingsystem/texture2d/category
       Dependencies: {}
     Info_13:
       Name: ui/item/texture2d
       Dependencies: {}
     Info_14:
-      Name: scene
-      Dependencies:
-        Dependency_0: prefabs/buildingsystem/bpart
-        Dependency_1: prefabs/character/player
-    Info_15:
       Name: assets/buildingsystem
       Dependencies:
         Dependency_0: prefabs/buildingsystem/bpart
+    Info_15:
+      Name: ui/techpoint/texture2d
+      Dependencies: {}
     Info_16:
-      Name: prefabs/character/player
+      Name: ui/uipanel
       Dependencies:
-        Dependency_0: animation/character/player/model
-        Dependency_1: animation/character/player/playermove
-        Dependency_2: ui/uipanel
+        Dependency_0: fonts
+        Dependency_1: ui/techpoint/texture2d
+        Dependency_2: ui/inventory/texture2d/itemtype
     Info_17:
       Name: ui/interactsystem
       Dependencies:
@@ -81,16 +79,16 @@ AssetBundleManifest:
       Name: ui/inventory/texture2d/itemtype
       Dependencies: {}
     Info_19:
-      Name: binary/textcontent/interactsystem
+      Name: binary/textcontent/buildingsystem/ui
       Dependencies: {}
     Info_20:
-      Name: binary/textcontent/inventory
-      Dependencies: {}
-    Info_21:
       Name: binary/tabledata
       Dependencies: {}
+    Info_21:
+      Name: binary/textcontent/inventory
+      Dependencies: {}
     Info_22:
-      Name: binary/textcontent/buildingsystem/ui
+      Name: binary/textcontent/interactsystem
       Dependencies: {}
     Info_23:
       Name: binary/textcontent/techtree
@@ -99,24 +97,8 @@ AssetBundleManifest:
       Name: binary/textcontent/player
       Dependencies: {}
     Info_25:
-      Name: binary/textcontent/resonancewheel
-      Dependencies: {}
-    Info_26:
-      Name: ui/resonancewheel/texture2d
-      Dependencies: {}
-    Info_27:
-      Name: binary/textcontent/resonancewheel_sub1
-      Dependencies: {}
-    Info_28:
-      Name: binary/textcontent/resonancewheel_sub2
-      Dependencies: {}
-    Info_29:
       Name: prefabs/worker
       Dependencies: {}
-    Info_30:
+    Info_26:
       Name: ui/worker/texture2d
       Dependencies: {}
-    Info_31:
-      Name: ui/resonancewheel/resonanceprefabs
-      Dependencies:
-        Dependency_0: fonts

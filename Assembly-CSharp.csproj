@@ -587,6 +587,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetMinDistance.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Actions\StopBehaviorTree.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedRect.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\Worker\Gender.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Lerp.cs" />
     <Compile Include="Assets\_ML\Engine\BuildingSystem\UI\BSAppearancePanel.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\SetLookAtPosition.cs" />

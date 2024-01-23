@@ -5,7 +5,7 @@ using ML.Engine.FSM;
 using Sirenix.OdinInspector;
 using ProjectOC.Player.Terrain;
 using UnityEngine.InputSystem;
-
+using ML.Engine.InteractSystem;
 
 namespace ProjectOC.Player
 {
@@ -143,6 +143,9 @@ namespace ProjectOC.Player
                 Input.InputManager.PlayerInput.Player.Enable();
                 ProjectOC.Input.InputManager.PlayerInput.Player.Crouch.Disable();
                 ProjectOC.Input.InputManager.PlayerInput.Player.Jump.Disable();
+
+                // to-do : 待优化
+                this.GetComponentInChildren<InteractComponent>().Disable();
             };
             ML.Engine.BuildingSystem.BuildingManager.Instance.Placer.OnBuildingModeExit += () =>
             {
@@ -152,6 +155,8 @@ namespace ProjectOC.Player
                 {
                     Input.InputManager.PlayerInput.Player.Disable();
                 }
+                // to-do : 待优化
+                this.GetComponentInChildren<InteractComponent>().Enable();
             };
             while(!ML.Engine.InventorySystem.ItemManager.Instance.IsLoadOvered)
             {

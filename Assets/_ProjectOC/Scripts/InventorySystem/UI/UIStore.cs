@@ -148,15 +148,15 @@ namespace ProjectOC.InventorySystem.UI
                 {
                     case MissionNS.TransportPriority.Urgency:
                         Priority = PriorityUrgency;
-                        Text_Priority.text = PanelTextContent_Main.text_PriorityUrgency.GetText();
+                        Text_Priority.text = PanelTextContent.text_PriorityUrgency.GetText();
                         break;
                     case MissionNS.TransportPriority.Normal:
                         Priority = PriorityNormal;
-                        Text_Priority.text = PanelTextContent_Main.text_PriorityNormal.GetText();
+                        Text_Priority.text = PanelTextContent.text_PriorityNormal.GetText();
                         break;
                     case MissionNS.TransportPriority.Alternative:
                         Priority = PriorityAlternative;
-                        Text_Priority.text = PanelTextContent_Main.text_PriorityAlternative.GetText();
+                        Text_Priority.text = PanelTextContent.text_PriorityAlternative.GetText();
                         break;
                 }
                 Priority.Find("Selected").gameObject.SetActive(true);
@@ -314,16 +314,16 @@ namespace ProjectOC.InventorySystem.UI
         private void Enter()
         {
             this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Enable();
-            ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Enable();
+            //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
             Store.IsInteracting = true;
             this.Refresh();
         }
 
         private void Exit()
         {
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Disable();
-            ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Disable();
+            //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
             Store.IsInteracting = false;
             this.UnregisterInput();
         }
@@ -333,7 +333,7 @@ namespace ProjectOC.InventorySystem.UI
             // 切换Priority
             ProjectOC.Input.InputManager.PlayerInput.UIStore.NextPriority.performed -= NextPriority_performed;
             // 上下切换StoreData
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Alter.performed -= AlterStoreData_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Alter.performed -= Alter_performed;
             // 改变StoreData存储的Item
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeStoreData.performed -= ChangeStoreData_performed;
             // 快捷放入
@@ -344,11 +344,7 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove10.performed -= Remove10_performed;
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
-
-            // ChangeItem
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Alter.performed -= ChangeItem_Alter_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.performed -= ChangeItem_Confirm_performed;
-            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= ChangeItem_Back_performed;
         }
 
         private void RegisterInput()
@@ -356,7 +352,7 @@ namespace ProjectOC.InventorySystem.UI
             // 切换Priority
             ProjectOC.Input.InputManager.PlayerInput.UIStore.NextPriority.performed += NextPriority_performed;
             // 上下切换StoreData
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Alter.performed += AlterStoreData_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Alter.performed += Alter_performed;
             // 改变StoreData存储的Item
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeStoreData.performed += ChangeStoreData_performed;
             // 快捷放入
@@ -367,11 +363,7 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove10.performed += Remove10_performed;
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
-
-            // ChangeItem
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Alter.performed -= ChangeItem_Alter_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.performed += ChangeItem_Confirm_performed;
-            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += ChangeItem_Back_performed;
         }
 
         private void NextPriority_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -392,7 +384,7 @@ namespace ProjectOC.InventorySystem.UI
         }
 
         // Store
-        private void AlterStoreData_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void Alter_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (CurMode == Mode.Store)
             {
@@ -400,6 +392,13 @@ namespace ProjectOC.InventorySystem.UI
                 var offset = new Vector2Int(Mathf.RoundToInt(f_offset.x), Mathf.RoundToInt(f_offset.y));
                 var grid = GridLayout.GetGridSize();
                 this.CurrentDataIndex += -offset.y * grid.y + offset.x;
+            }
+            else if (CurMode == Mode.ChangeItem)
+            {
+                var f_offset = obj.ReadValue<Vector2>();
+                var offset = new Vector2Int(Mathf.RoundToInt(f_offset.x), Mathf.RoundToInt(f_offset.y));
+                var grid = ChangeItem_GridLayout.GetGridSize();
+                this.CurrentItemIndex += -offset.y * grid.y + offset.x;
             }
         }
         private void ChangeStoreData_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -440,17 +439,10 @@ namespace ProjectOC.InventorySystem.UI
             {
                 UIMgr.PopPanel();
             }
-        }
-
-        // ChangeItem
-        private void ChangeItem_Alter_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            if (CurMode == Mode.ChangeItem)
+            else if (CurMode == Mode.ChangeItem)
             {
-                var f_offset = obj.ReadValue<Vector2>();
-                var offset = new Vector2Int(Mathf.RoundToInt(f_offset.x), Mathf.RoundToInt(f_offset.y));
-                var grid = ChangeItem_GridLayout.GetGridSize();
-                this.CurrentItemIndex += -offset.y * grid.y + offset.x;
+                this.CurMode = Mode.Store;
+                Refresh();
             }
         }
         private void ChangeItem_Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -458,13 +450,6 @@ namespace ProjectOC.InventorySystem.UI
             if (CurMode == Mode.ChangeItem)
             {
                 Store.ChangeStoreData(CurrentDataIndex, CurrentItemData);
-                Refresh();
-            }
-        }
-        private void ChangeItem_Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            if (CurMode == Mode.ChangeItem)
-            {
                 this.CurMode = Mode.Store;
                 Refresh();
             }
@@ -533,12 +518,14 @@ namespace ProjectOC.InventorySystem.UI
                 this.ChangeItem.gameObject.SetActive(false);
                 this.BotKeyTips_ChangeItem.gameObject.SetActive(false);
                 this.BotKeyTips_KeyTips.gameObject.SetActive(true);
+                this.UIItemTemplate.gameObject.SetActive(false);
+                this.ChangeItem_UIItemTemplate.gameObject.SetActive(false);
 
                 StoreDatas = Store.StoreDatas;
                 #region TopTitle
-                Text_Title.text = PanelTextContent_Main.text_Title.GetText();
-                KT_ChangeItem.ReWrite(PanelTextContent_Main.kt_ChangeItem);
-                KT_NextPriority.ReWrite(PanelTextContent_Main.kt_NextPriority);
+                Text_Title.text = PanelTextContent.text_Title.GetText();
+                KT_ChangeItem.ReWrite(PanelTextContent.kt_ChangeItem);
+                KT_NextPriority.ReWrite(PanelTextContent.kt_NextPriority);
                 #endregion
 
                 #region Store
@@ -576,17 +563,17 @@ namespace ProjectOC.InventorySystem.UI
                     var storeData = StoreDatas[i];
                     // Active
                     uiStoreData.SetActive(true);
-                    // 更新Icon
-                    var img = uiStoreData.transform.Find("Icon").GetComponent<Image>();
-                    // 查找临时存储的Sprite
-                    var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(storeData.ItemID));
-                    // 不存在则生成
-                    if (sprite == null)
-                    {
-                        sprite = ItemManager.Instance.GetItemSprite(storeData.ItemID);
-                        tempSprite.Add(sprite);
-                    }
-                    img.sprite = sprite;
+                    //// 更新Icon
+                    //var img = uiStoreData.transform.Find("Icon").GetComponent<Image>();
+                    //// 查找临时存储的Sprite
+                    //var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(storeData.ItemID));
+                    //// 不存在则生成
+                    //if (sprite == null)
+                    //{
+                    //    sprite = ItemManager.Instance.GetItemSprite(storeData.ItemID);
+                    //    tempSprite.Add(sprite);
+                    //}
+                    //img.sprite = sprite;
                     // Name
                     var nametext = uiStoreData.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
                     if (storeData.ItemID != "")
@@ -595,7 +582,7 @@ namespace ProjectOC.InventorySystem.UI
                     }
                     else
                     {
-                        nametext.text = PanelTextContent_Main.text_Empty;
+                        nametext.text = PanelTextContent.text_Empty;
                     }
                     // Amount
                     int amount = storeData.StorageAll;
@@ -639,13 +626,13 @@ namespace ProjectOC.InventorySystem.UI
                     width2 = width2 >= 0 ? width2 : 0;
                     float width3 = amount >= 3 * amountEachLevel ? 1 : amount / amountMax - 2;
                     width3 = width3 >= 0 ? width3 : 0;
-                    progressBarRectCur1.sizeDelta = new Vector2(progressBarRectMax1.sizeDelta.x * width1, progressBarRectCur1.sizeDelta.y);
-                    progressBarRectCur2.sizeDelta = new Vector2(progressBarRectMax2.sizeDelta.x * width2, progressBarRectCur2.sizeDelta.y);
-                    progressBarRectCur3.sizeDelta = new Vector2(progressBarRectMax3.sizeDelta.x * width3, progressBarRectCur3.sizeDelta.y);
+                    progressBarRectCur1.sizeDelta = new Vector2(400 * width1, progressBarRectCur1.sizeDelta.y);
+                    progressBarRectCur2.sizeDelta = new Vector2(400 * width2, progressBarRectCur2.sizeDelta.y);
+                    progressBarRectCur3.sizeDelta = new Vector2(400 * width3, progressBarRectCur3.sizeDelta.y);
 
                     // Add and Remove
-                    uiStoreData.transform.Find("Add").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent_Main.text_Add.GetText();
-                    uiStoreData.transform.Find("Remove").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent_Main.text_Remove.GetText();
+                    uiStoreData.transform.Find("Add").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_Add.GetText();
+                    uiStoreData.transform.Find("Remove").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_Remove.GetText();
                     // Selected
                     var selected = uiStoreData.transform.Find("Selected");
                     if (CurrentStoreData == StoreDatas[i])
@@ -721,9 +708,9 @@ namespace ProjectOC.InventorySystem.UI
                 #endregion
 
                 #region BotKeyTips
-                KT_Remove1.ReWrite(PanelTextContent_Main.kt_Remove1);
-                KT_Remove10.ReWrite(PanelTextContent_Main.kt_Remove10);
-                KT_FastAdd.ReWrite(PanelTextContent_Main.kt_FastAdd);
+                KT_Remove1.ReWrite(PanelTextContent.kt_Remove1);
+                KT_Remove10.ReWrite(PanelTextContent.kt_Remove10);
+                KT_FastAdd.ReWrite(PanelTextContent.kt_FastAdd);
                 #endregion
             }
             else if(this.CurMode == Mode.ChangeItem)
@@ -731,6 +718,9 @@ namespace ProjectOC.InventorySystem.UI
                 this.ChangeItem.gameObject.SetActive(true);
                 this.BotKeyTips_ChangeItem.gameObject.SetActive(true);
                 this.BotKeyTips_KeyTips.gameObject.SetActive(false);
+                this.UIItemTemplate.gameObject.SetActive(false);
+                this.ChangeItem_UIItemTemplate.gameObject.SetActive(false);
+
                 ItemDatas = new List<string>() { "" };
                 ItemDatas.AddRange(ItemManager.Instance.GetAllItemID());
                 #region Item
@@ -768,17 +758,17 @@ namespace ProjectOC.InventorySystem.UI
                     string itemID = ItemDatas[i];
                     // Active
                     uiItemData.SetActive(true);
-                    // 更新Icon
-                    var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
-                    // 查找临时存储的Sprite
-                    var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(itemID));
-                    // 不存在则生成
-                    if (sprite == null)
-                    {
-                        sprite = ItemManager.Instance.GetItemSprite(itemID);
-                        tempSprite.Add(sprite);
-                    }
-                    img.sprite = sprite;
+                    //// 更新Icon
+                    //var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
+                    //// 查找临时存储的Sprite
+                    //var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(itemID));
+                    //// 不存在则生成
+                    //if (sprite == null)
+                    //{
+                    //    sprite = ItemManager.Instance.GetItemSprite(itemID);
+                    //    tempSprite.Add(sprite);
+                    //}
+                    //img.sprite = sprite;
                     // Name
                     var nametext = uiItemData.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
                     if (itemID != "")
@@ -787,7 +777,7 @@ namespace ProjectOC.InventorySystem.UI
                     }
                     else
                     {
-                        nametext.text = PanelTextContent_Main.text_Empty;
+                        nametext.text = PanelTextContent.text_Empty;
                     }
                     // Selected
                     var selected = uiItemData.transform.Find("Selected");
@@ -864,8 +854,8 @@ namespace ProjectOC.InventorySystem.UI
                 #endregion
 
                 #region BotKeyTips
-                KT_ChangeItem_Confirm.ReWrite(PanelTextContent_Main.kt_ChangeItem_Confirm);
-                KT_ChangeItem_Back.ReWrite(PanelTextContent_Main.kt_ChangeItem_Back);
+                KT_ChangeItem_Confirm.ReWrite(PanelTextContent.kt_ChangeItem_Confirm);
+                KT_ChangeItem_Back.ReWrite(PanelTextContent.kt_ChangeItem_Back);
                 #endregion
             }
         }
@@ -892,7 +882,7 @@ namespace ProjectOC.InventorySystem.UI
             public KeyTip kt_ChangeItem_Back;
         }
 
-        public static StorePanel PanelTextContent_Main => ABJAProcessor.Datas;
+        public static StorePanel PanelTextContent => ABJAProcessor.Datas;
         public static ML.Engine.ABResources.ABJsonAssetProcessor<StorePanel> ABJAProcessor;
 
         private void InitUITextContents()

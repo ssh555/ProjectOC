@@ -123,13 +123,16 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// жуж╧хннЯ
         /// </summary>
-        public void End()
+        public void End(bool remove=true)
         {
             foreach (Transport transport in this.Transports)
             {
-                transport?.End();
+                transport?.End(false);
             }
-            this.Initiator.RemoveMissionTranport(this);
+            if (remove)
+            {
+                this.Initiator.RemoveMissionTranport(this);
+            }
             MissionManager missionManager = GameManager.Instance.GetLocalManager<MissionManager>();
             missionManager?.MissionTransports?.Remove(this);
         }

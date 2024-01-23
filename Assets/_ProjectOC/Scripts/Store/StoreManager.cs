@@ -114,7 +114,6 @@ namespace ProjectOC.StoreNS
             Store store = SpawnStore(storeType);
             if (store != null)
             {
-                store.SetLevel(level);
 
                 if (worldStore.Store != null)
                 {
@@ -122,6 +121,8 @@ namespace ProjectOC.StoreNS
                 }
                 worldStore.Store = store;
                 store.WorldStore = worldStore;
+
+                store.SetLevel(level);
 
                 if (WorldStoreDict.ContainsKey(worldStore.InstanceID))
                 {

@@ -50,7 +50,7 @@ namespace ProjectOC.WorkerNS
 
         public Feature(FeatureTableData config)
         {
-            this.ID = config.ID;
+            this.ID = config.ID ?? "";
             this.Effects = new List<Effect>();
             foreach (var tuple in config.Effects)
             {

@@ -53,7 +53,8 @@ namespace ProjectOC.WorkerNS
 
         public Skill(SkillTableData config)
         {
-            this.ID = config.ID;
+            this.ID = config.ID ?? "";
+            LevelMax = 10;
             foreach (var tuple in config.Effects)
             {
                 Effect effect = LocalGameManager.Instance.EffectManager.SpawnEffect(tuple.Item1, tuple.Item2);

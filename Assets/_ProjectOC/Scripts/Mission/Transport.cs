@@ -172,7 +172,7 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// 强制结束搬运
         /// </summary>
-        public void End()
+        public void End(bool remove=true)
         {
             foreach (Item item in Worker.TransportItems)
             {
@@ -182,7 +182,10 @@ namespace ProjectOC.MissionNS
             Worker.TransportItems.Clear();
             Worker.Transport = null;
             Worker.ClearDestination();
-            Mission.Transports.Remove(this);
+            if (remove)
+            {
+                Mission.Transports.Remove(this);
+            }
             Source.RemoveTranport(this);
             Target.RemoveTranport(this);
         }
