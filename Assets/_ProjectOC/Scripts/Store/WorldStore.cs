@@ -30,9 +30,10 @@ namespace ProjectOC.StoreNS
             if(oldPos == newPos)
             {
                 // 生成逻辑对象
-                string actorID = BuildingManager.Instance.GetActorID(this.Classification.ToString());
+                string actorID = BuildingManager.Instance.GetActorID(this.Classification.ToString().Replace('-', '_'));
                 if (!string.IsNullOrEmpty(actorID) && actorID.Split('_').Length == 3)
                 {
+                    //Debug.Log($"{actorID}");
                     string[] split = actorID.Split("_");
                     StoreType storeType = (StoreType)Enum.Parse(typeof(StoreType), split[1]);
                     int level = int.Parse(split[2]);
@@ -44,11 +45,12 @@ namespace ProjectOC.StoreNS
         public void Interact(InteractComponent component)
         {
             // 实例化UIPanel
-            InventorySystem.UI.UIStore uiStorePanel = GameManager.Instance.ABResourceManager.LoadLocalAB("ui/uipanel").LoadAsset<InventorySystem.UI.UIStore>("UIStorePanel");
+            GameObject gameObject = GameManager.Instance.ABResourceManager.LoadLocalAB("ui/uipanel").LoadAsset<GameObject>("UIStorePanel");
+            InventorySystem.UI.UIStore uiPanel = GameObject.Instantiate(gameObject, GameObject.Find("Canvas").transform, false).GetComponent<InventorySystem.UI.UIStore>();
             // 初始化相关数据
-            uiStorePanel.Store = this.Store;
+            uiPanel.Store = this.Store;
             // Push
-            ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uiStorePanel);
+            GameManager.Instance.UIManager.PushPanel(uiPanel);
         }
     }
 }

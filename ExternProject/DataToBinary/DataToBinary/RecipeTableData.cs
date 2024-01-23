@@ -42,6 +42,7 @@ namespace ML.Engine.InventorySystem
             }
             else
             {
+                this.Product = new CompositeSystem.Formula();
                 return false;
             }
             // 6 -> TimeCost
