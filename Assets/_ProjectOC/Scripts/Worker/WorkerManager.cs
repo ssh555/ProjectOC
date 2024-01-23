@@ -83,7 +83,7 @@ namespace ProjectOC.WorkerNS
         }
 
         public const string Texture2DPath = "ui/Worker/texture2d";
-        public const string WorldObjPath = "prefabs/Worker";
+        public const string WorldObjPath = "prefabs/Character/Worker";
         public Texture2D GetTexture2D()
         {
             return GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>("Worker");

@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1452302374
+CRC: 2193876810
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 41b85f463e441d36fa2064bafe5fb650
+    Hash: 4ba5b9cbf87e1c24063e91f1766433a6
   TypeTreeHash:
     serializedVersion: 2
     Hash: 1ade8d772076e9f6fadd4dcfa36681ce
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 41b85f463e441d36fa2064bafe5fb650
+    Hash: 4ba5b9cbf87e1c24063e91f1766433a6
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -175,7 +175,8 @@ Assets:
 - Assets/_ProjectOC/Scene/_TEST/yangLe/_LandMassExpandTest.unity
 - Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/BuidlingSystemTest.unity
 Dependencies:
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/materials
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/animation/character/player/model
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials/other
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/prefabs/character/player
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/shader
