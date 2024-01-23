@@ -946,11 +946,11 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 {
                     this.SelectedPartInstance.Mode = BuildingMode.None;
                     // 拷贝一份
-                    var tmp = GameObject.Instantiate(this.SelectedPartInstance.gameObject).GetComponent<BuildingPart.BuildingPart>();
+                    var tmp = GameObject.Instantiate(this.SelectedPartInstance.gameObject).GetComponent<BuildingPart.IBuildingPart>();
 
                     // 新建建筑物 -> 赋予实例ID
                     this.SelectedPartInstance.InstanceID = BuildingManager.Instance.GetOneNewBPartInstanceID();
-                    this.SelectedPartInstance.OnChangePlaceEvent();
+                    this.SelectedPartInstance.OnChangePlaceEvent(this.SelectedPartInstance.gameObject.transform.position, this.SelectedPartInstance.gameObject.transform.position);
                     this.OnPlaceModeSuccess?.Invoke(this.SelectedPartInstance);
 
 
@@ -1116,7 +1116,8 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             // 确认 -> 放置于新位置, 回到InteractMode
             else if (this.SelectedPartInstance.CanPlaceInPlaceMode && this.comfirmInputAction.WasPressedThisFrame())
             {
-                this.SelectedPartInstance.OnChangePlaceEvent();
+
+                this.SelectedPartInstance.OnChangePlaceEvent(_editOldPos, this.SelectedPartInstance.gameObject.transform.position);
 
                 this.ExitEditMode();
             }

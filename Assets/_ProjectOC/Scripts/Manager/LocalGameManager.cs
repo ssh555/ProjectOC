@@ -1,29 +1,72 @@
-using ML.Engine.Manager.LocalManager;
-using ML.Engine.Manager;
 using ProjectOC.MissionNS;
 using UnityEngine;
 using ProjectOC.WorkerNS;
 using ProjectOC.StoreNS;
+using ProjectOC.WorkerEchoNS;
+using ProjectOC.ProNodeNS;
+using ML.Engine.InventorySystem;
 
 namespace ProjectOC.ManagerNS
 {
     [System.Serializable]
-    public sealed class LocalGameManager : MonoBehaviour, ILocalManager
+    public sealed class LocalGameManager : MonoBehaviour, ML.Engine.Manager.LocalManager.ILocalManager
     {
+        public static LocalGameManager Instance;
+        public ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
         public DispatchTimeManager DispatchTimeManager { get; private set; }
-        public MissionManager MissionBroadCastManager { get; private set; }
-        public WorkerManager WorkerManager { get; private set; }
+        public MissionManager MissionManager { get; private set; }
+        public ProNodeManager ProNodeManager { get; private set; }
+        public RecipeManager RecipeManager { get; private set; }
         public StoreManager StoreManager { get; private set; }
+        public WorkerManager WorkerManager { get; private set; }
+        public EffectManager EffectManager { get; private set; }
+        public FeatureManager FeatureManager { get; private set; }
+        public SkillManager SkillManager { get; private set; }
+        public WorkerEchoManager WorkerEchoManager { get; private set; }
 
-        void Start()
+        /// <summary>
+        /// 单例管理
+        /// </summary>
+        private void Awake()
         {
-            GameManager.Instance.RegisterLocalManager(this);
-            DispatchTimeManager = GameManager.Instance.RegisterLocalManager<DispatchTimeManager>();
-            MissionBroadCastManager = GameManager.Instance.RegisterLocalManager<MissionManager>();
-            WorkerManager = GameManager.Instance.RegisterLocalManager<WorkerManager>();
-            StoreManager = GameManager.Instance.RegisterLocalManager<StoreManager>();
-
+            if (Instance != null)
+            {
+                Destroy(this.gameObject);
+            }
+            Instance = this;
+        }
+        /// <summary>
+        /// 数据载入初始化
+        /// </summary>
+        private void Start()
+        {
+            GM.RegisterLocalManager(this);
+            DispatchTimeManager = GM.RegisterLocalManager<DispatchTimeManager>();
+            DispatchTimeManager.Init();
+            MissionManager = GM.RegisterLocalManager<MissionManager>();
+            MissionManager.Init();
+            ProNodeManager = GM.RegisterLocalManager<ProNodeManager>();
+            ProNodeManager.LoadTableData();
+            RecipeManager = GM.RegisterLocalManager<RecipeManager>();
+            RecipeManager.LoadTableData();
+            StoreManager = GM.RegisterLocalManager<StoreManager>();
+            WorkerManager = GM.RegisterLocalManager<WorkerManager>();
+            EffectManager = GM.RegisterLocalManager<EffectManager>();
+            EffectManager.LoadTableData();
+            FeatureManager = GM.RegisterLocalManager<FeatureManager>();
+            FeatureManager.LoadTableData();
+            SkillManager = GM.RegisterLocalManager<SkillManager>();
+            SkillManager.LoadTableData();
+            WorkerEchoManager = GM.RegisterLocalManager<WorkerEchoManager>();
+            WorkerEchoManager.LoadTableData();
             this.enabled = false;
+        }
+        private void OnDestroy()
+        {
+            if (Instance == this)
+            {
+                Instance = null;
+            }
         }
     }
 }

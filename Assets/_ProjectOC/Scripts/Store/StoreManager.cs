@@ -109,38 +109,30 @@ namespace ProjectOC.StoreNS
             Store store = new Store(storeType);
             return store;
         }
-
-        public WorldStore SpawnWorldStore(Store store, Vector3 pos, Quaternion rot)
+        public void WorldStoreSetData(WorldStore worldStore, StoreType storeType, int level)
         {
-            if (store == null)
+            Store store = SpawnStore(storeType);
+            if (store != null)
             {
-                return null;
-            }
-            GameObject obj = GameObject.Instantiate(GetObject(), pos, rot);
-            WorldStore worldstore = obj.AddComponent<WorldStore>();
-            worldstore.SetStore(store);
-            WorldStoreDict.Add(store.UID, worldstore);
-            return worldstore;
-        }
 
-        public const string Texture2DPath = "ui/Store/texture2d";
-        public const string WorldObjPath = "prefabs/Store/WorldStore";
-        public Texture2D GetTexture2D()
-        {
-            return GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>("Store");
-        }
-        public Sprite GetSprite()
-        {
-            var tex = GetTexture2D();
-            if (tex == null)
-            {
-                return null;
+                if (worldStore.Store != null)
+                {
+                    worldStore.Store.WorldStore = null;
+                }
+                worldStore.Store = store;
+                store.WorldStore = worldStore;
+
+                store.SetLevel(level);
+
+                if (WorldStoreDict.ContainsKey(worldStore.InstanceID))
+                {
+                    WorldStoreDict[worldStore.InstanceID] = worldStore;
+                }
+                else
+                {
+                    WorldStoreDict.Add(worldStore.InstanceID, worldStore);
+                }
             }
-            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-        }
-        public GameObject GetObject()
-        {
-            return GameManager.Instance.ABResourceManager.LoadLocalAB(WorldObjPath).LoadAsset<GameObject>("Store");
         }
     }
 }

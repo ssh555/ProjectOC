@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3267864574
+CRC: 529680164
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 212e4531a7ba195fdbd89600036d0f56
+    Hash: 770f040c7b8f41830fd93fd3c037b46e
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2d8df09e698f722ada1caa03d3413830
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 212e4531a7ba195fdbd89600036d0f56
+    Hash: 770f040c7b8f41830fd93fd3c037b46e
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -18,8 +18,25 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Quagrant.png
-- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Triangle.png
-- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Base.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Extra4.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Quagrant2.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Quagrant5.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Quagrant3.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Extra1.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Quagrant1.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Triangle1.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Base3.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Base4.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Extra3.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Extra2.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Base1.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Triangle3.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Quagrant4.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Triangle4.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Base5.png
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/None.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Triangle5.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Triangle2.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Base2.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Style/Extra5.png
 Dependencies: []

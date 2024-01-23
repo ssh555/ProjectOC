@@ -12,7 +12,7 @@ namespace ProjectOC.StoreNS
     /// 仓库
     /// </summary>
     [System.Serializable]
-    public class Store: IMission, IInventory
+    public class Store: IMissionObj, IInventory
     {
         public WorldStore WorldStore;
 
@@ -81,9 +81,17 @@ namespace ProjectOC.StoreNS
         /// 只要玩家正在与某一个仓库进行交互，就将此项设为true,生成任务时不能考虑此项为true的仓库
         /// </summary>
         public bool IsInteracting;
+        public event Action OnStoreDataChange;
 
         public Store(StoreType storeType)
         {
+            StoreDatas = new List<StoreData>();
+            Transports = new List<Transport>();
+            LevelMax = 2;
+            LevelStoreCapacity = new List<int>() { 2, 4, 8 };
+            LevelStoreDataCapacity = new List<int>() { 50, 100, 200 };
+            TransportPriority = TransportPriority.Normal;
+
             for (int i = 0; i < this.StoreCapacity; i++)
             {
                 this.StoreDatas.Add(new StoreData("", this.StoreDataCapacity));
@@ -175,6 +183,7 @@ namespace ProjectOC.StoreNS
                 if (data.Storage == 0 && data.StorageReserve == 0 && data.EmptyReserve == 0)
                 {
                     this.StoreDatas[index] = new StoreData(itemID, this.StoreDataCapacity);
+                    OnStoreDataChange?.Invoke();
                     return true;
                 }
             }
@@ -359,23 +368,79 @@ namespace ProjectOC.StoreNS
             return result;
         }
 
-        #region TODO
-        // TODO: 拆除。拆除仓库时，将所有物品传给玩家背包。
-        /// <summary>
-        /// 快捷存放，将玩家背包中可存放在该仓库的物品全部转移至仓库中；
-        /// 仓库空位不足时将其填满，剩余的留在背包中；
-        /// </summary>
-        public void FastAdd(Player.PlayerCharacter player)
+        #region UI接口
+        public void UIAdd(Player.PlayerCharacter player, StoreData storeData, int amount)
         {
-            
+            if (player != null && storeData != null && amount > 0)
+            {
+                if (ItemManager.Instance.IsValidItemID(storeData.ItemID) && storeData.Empty >= amount)
+                {
+                    if (player.Inventory.RemoveItem(storeData.ItemID, amount))
+                    {
+                        storeData.Storage += amount;
+                    }
+                }
+            }
         }
-
-        /// <summary>
-        /// 快捷取出 背包空位不足时将其填满，剩余的留在仓库中。
-        /// </summary>
-        public void FastRemove(Player.PlayerCharacter player, string itemID, int amount)
+        public void UIRemove(Player.PlayerCharacter player, StoreData storeData, int amount)
         {
-            
+            if (player != null && storeData != null && amount > 0)
+            {
+                if (ItemManager.Instance.IsValidItemID(storeData.ItemID) && storeData.Storage >= amount)
+                {
+                    List<Item> items = ItemManager.Instance.SpawnItems(storeData.ItemID, amount);
+                    foreach (Item item in items)
+                    {
+                        int itemAmount = item.Amount;
+                        if (player.Inventory.AddItem(item))
+                        {
+                            storeData.Storage -= itemAmount;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        public void UIFastAdd(Player.PlayerCharacter player, StoreData storeData)
+        {
+            if (player != null && storeData != null)
+            {
+                if (ItemManager.Instance.IsValidItemID(storeData.ItemID))
+                {
+                    int amount = player.Inventory.GetItemAllNum(storeData.ItemID);
+                    amount = amount >= storeData.Empty ? storeData.Empty : amount;
+                    if (player.Inventory.RemoveItem(storeData.ItemID, amount))
+                    {
+                        storeData.Storage += amount;
+                    }
+                }
+            }
+        }
+        public void UIFastRemove(Player.PlayerCharacter player, StoreData storeData)
+        {
+            if (player != null && storeData != null)
+            {
+                if (ItemManager.Instance.IsValidItemID(storeData.ItemID))
+                {
+                    int amount = storeData.Storage;
+                    List<Item> items = ItemManager.Instance.SpawnItems(storeData.ItemID, amount);
+                    foreach (Item item in items)
+                    {
+                        int itemAmount = item.Amount;
+                        if (player.Inventory.AddItem(item))
+                        {
+                            storeData.Storage -= itemAmount;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
         }
         #endregion
 
@@ -436,6 +501,7 @@ namespace ProjectOC.StoreNS
                     temp.EmptyReserve = 0;
                     amount = 0;
                 }
+                OnStoreDataChange?.Invoke();
                 return amount == 0;
             }
             return false;
@@ -465,6 +531,7 @@ namespace ProjectOC.StoreNS
                         }
                     }
                 }
+                OnStoreDataChange?.Invoke();
                 return amount - result;
             }
             return 0;
@@ -496,6 +563,7 @@ namespace ProjectOC.StoreNS
                     }
                 }
             }
+            OnStoreDataChange?.Invoke();
             return true;
         }
 
@@ -523,6 +591,7 @@ namespace ProjectOC.StoreNS
                     }
                 }
             }
+            OnStoreDataChange?.Invoke();
             return true;
         }
 
@@ -559,6 +628,7 @@ namespace ProjectOC.StoreNS
             {
                 Debug.LogError($"Item Amount Error ItemAmount: {result.Amount} Amount: {newAmount}");
             }
+            OnStoreDataChange?.Invoke();
             return result;
         }
 
@@ -585,6 +655,7 @@ namespace ProjectOC.StoreNS
                     }
                 }
             }
+            OnStoreDataChange?.Invoke();
             return true;
         }
 

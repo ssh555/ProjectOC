@@ -16,10 +16,21 @@ namespace ProjectOC.WorkerNS
                 {
                     if (machine is WorkerStateMachine workerMachine && workerMachine.Worker != null)
                     {
-                        workerMachine.Worker.Status = Status.Fishing;
+                        Worker worker = workerMachine.Worker;
+                        worker.Status = Status.Fishing;
+                        if (worker.ProNode != null)
+                        {
+                            worker.SetDestination(worker.ProNode.GetTransform(), ProNode_Action);
+                        }
                     }
                 }
             );
+        }
+
+        public void ProNode_Action(Worker worker)
+        {
+            worker.ArriveProNode = true;
+            worker.gameObject.SetActive(false);
         }
     }
 }

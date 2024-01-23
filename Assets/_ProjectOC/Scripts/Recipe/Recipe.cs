@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using ML.Engine.InventorySystem.CompositeSystem;
+using ProjectOC.ManagerNS;
 
 namespace ML.Engine.InventorySystem
 {
@@ -20,31 +21,31 @@ namespace ML.Engine.InventorySystem
         /// <summary>
         /// 序号用于排序
         /// </summary>
-        public int Sort { get => RecipeManager.Instance.GetSort(ID); }
+        public int Sort { get => LocalGameManager.Instance.RecipeManager.GetSort(ID); }
 
         /// <summary>
         /// 类目
         /// </summary>
-        public RecipeCategory Category { get => RecipeManager.Instance.GetCategory(ID); }
+        public RecipeCategory Category { get => LocalGameManager.Instance.RecipeManager.GetCategory(ID); }
         /// <summary>
         /// 原料
         /// </summary>
-        public Dictionary<string, int> Raw { get => RecipeManager.Instance.GetRaw(ID); }
+        public List<Formula> Raw { get => LocalGameManager.Instance.RecipeManager.GetRaw(ID); }
         /// <summary>
         /// 成品
         /// </summary>
-        public Dictionary<string, int> Product { get => RecipeManager.Instance.GetProduct(ID); }
+        public Formula Product { get => LocalGameManager.Instance.RecipeManager.GetProduct(ID); }
         /// <summary>
         /// 时间消耗，进行1次生产需要多少秒
         /// </summary>
-        public int TimeCost { get => RecipeManager.Instance.GetTimeCost(ID); }
+        public int TimeCost { get => LocalGameManager.Instance.RecipeManager.GetTimeCost(ID); }
         /// <summary>
         /// 配方经验，该配方制作完成时可获得的经验值
         /// </summary>
-        public int ExpRecipe { get => RecipeManager.Instance.GetExpRecipe(ID); }
+        public int ExpRecipe { get => LocalGameManager.Instance.RecipeManager.GetExpRecipe(ID); }
         #endregion
 
-        public Recipe(RecipeManager.RecipeTableJsonData config)
+        public Recipe(RecipeTableData config)
         {
             this.ID = config.ID;
         }
@@ -56,64 +57,43 @@ namespace ML.Engine.InventorySystem
 
         public string GetProductID()
         {
-            if (Product.Count == 1)
-            {
-                foreach (var kv in Product)
-                {
-                    return kv.Key;
-                }
-            }
-            Debug.LogError("Recipe Product Num is Error");
-            return "";
+            return Product.id ?? "";
         }
 
         public int GetProductNum()
         {
-            if (Product.Count == 1)
-            {
-                foreach (var kv in Product)
-                {
-                    return kv.Value;
-                }
-            }
-            Debug.LogError("Recipe Product Num is Error");
-            return 0;
+            return Product.num;
         }
 
         public int GetRawNum(string itemID)
         {
-            if (Raw.ContainsKey(itemID))
+            foreach (Formula raw in Raw)
             {
-                return Raw[itemID];
+                if (raw.id == itemID)
+                {
+                    return raw.num;
+                }
             }
-            else
-            {
-                Debug.LogError($"Raw {itemID} is not exist in recipe {ID}");
-                return 0;
-            }
+            Debug.LogError($"Raw {itemID} is not exist in recipe {ID}");
+            return 0;
         }
 
         public Item Composite(IInventory inventory)
         {
-            if (Product.Count == 1)
+            
+            CompositeManager.CompositionObjectType compObjType = CompositeManager.Instance.Composite(inventory, Product.id, out var composition);
+            switch (compObjType)
             {
-                foreach (var kv in Product)
-                {
-                    CompositeManager.CompositionObjectType compObjType = CompositeManager.Instance.Composite(inventory, kv.Key, out var composition);
-                    switch (compObjType)
+                case CompositeManager.CompositionObjectType.Item:
+                    Item item = composition as Item;
+                    if (item.Amount != GetProductNum())
                     {
-                        case CompositeManager.CompositionObjectType.Item:
-                            Item item = composition as Item;
-                            if (item.Amount != GetProductNum())
-                            {
-                                Debug.LogError($"Recipe {ID} Product {kv.Key} Item Num is Error");
-                            }
-                            return item;
-                        default:
-                            Debug.LogError($"Recipe {ID} Product {kv.Key} Composite {compObjType}");
-                            break;
+                        Debug.LogError($"Recipe {ID} Product {Product.id} Item Num is Error");
                     }
-                }
+                    return item;
+                default:
+                    Debug.LogError($"Recipe {ID} Product {Product.id} Composite {compObjType}");
+                    break;
             }
             Debug.LogError("Recipe Product Num is Error");
             return null;

@@ -1,4 +1,3 @@
-using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InventorySystem;
 using ML.Engine.TextContent;
 using Newtonsoft.Json;
@@ -6,12 +5,8 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using Unity.Burst.CompilerServices;
 using UnityEngine;
-using UnityEngine.Purchasing;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace ProjectOC.InventorySystem.UI
@@ -20,7 +15,6 @@ namespace ProjectOC.InventorySystem.UI
     {
 
         #region Input
-        /// <summary>
         /// 用于Drop和Destroy按键响应Cancel
         /// 长按响应了Destroy就置为true
         /// Cancel就不响应Drop 并 重置
@@ -487,7 +481,7 @@ namespace ProjectOC.InventorySystem.UI
                     tempUIItems.Add(uiitem.gameObject);
                 }
             }
-
+            
             // 用于更新滑动窗口
             // 当前选中的UIItem
             GameObject cur = null;
@@ -678,7 +672,7 @@ namespace ProjectOC.InventorySystem.UI
         [Button("生成测试文件")]
         void GenTESTFILE()
         {
-            List<ItemTableJsonData> datas = new List<ItemTableJsonData>();
+            List<ItemTableData> datas = new List<ItemTableData>();
 
             var itypes = Enum.GetValues(typeof(ML.Engine.InventorySystem.ItemType)).Cast<ML.Engine.InventorySystem.ItemType>().Where(e => (int)e > 0).ToArray();
             foreach(var itype in itypes)
@@ -686,7 +680,7 @@ namespace ProjectOC.InventorySystem.UI
                 int cnt = UnityEngine.Random.Range(50, 100);
                 for(int i = 0; i < cnt; ++i)
                 {
-                    var data = new ItemTableJsonData();
+                    var data = new ItemTableData();
                     // id
                     data.id = itype.ToString() + "_" + i;
                     // name
@@ -710,9 +704,13 @@ namespace ProjectOC.InventorySystem.UI
                     // worldobject
                     data.worldobject = "TESTWorldItem";
                     // description
-                    data.itemdescription = "TTTTTTTTTTTTTTTTTTTTTTTT\nXXXXXXXXXXXXXXXXXXXXXXXX\nTTTTTTTTTTTTTTTTTTTTTTTT";
+                    data.itemdescription = new TextContent();
+                    data.itemdescription.Chinese = "TTTTTTTTTTTTTTTTTTTTTTTT\nXXXXXXXXXXXXXXXXXXXXXXXX\nTTTTTTTTTTTTTTTTTTTTTTTT";
+                    data.itemdescription.English = "TTTTTTTTTTTTTTTTTTTTTTTT\nXXXXXXXXXXXXXXXXXXXXXXXX\nTTTTTTTTTTTTTTTTTTTTTTTT";
                     // effectsDescription
-                    data.effectsdescription = "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%金币掉落\n<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%攻击力持续300s</b></color>";
+                    data.effectsdescription = new TextContent();
+                    data.effectsdescription.Chinese = "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%金币掉落\n<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%攻击力持续300s</b></color>";
+                    data.effectsdescription.English = "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%金币掉落\n<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%攻击力持续300s</b></color>";
                     datas.Add(data);
                 }
             }

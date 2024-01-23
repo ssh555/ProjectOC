@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 910069893
+CRC: 2651932183
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f56778bd1c3dd77501c1e5794285bc42
+    Hash: 87c462f15f75d75fbf5788f325bc221e
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5ad585dd02dfb5016c0dad519eab8f49
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: f56778bd1c3dd77501c1e5794285bc42
+    Hash: 87c462f15f75d75fbf5788f325bc221e
 HashAppended: 0
 ClassTypes:
 - Class: 49
@@ -17,4 +17,6 @@ ClassTypes:
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/_ProjectOC/Resources/Binary/TextContent/Inventory/InventoryPanel.bytes
+- Assets/_ProjectOC/Resources/Binary/TextContent/Inventory/ProNodePanel.bytes
+- Assets/_ProjectOC/Resources/Binary/TextContent/Inventory/StorePanel.bytes
 Dependencies: []

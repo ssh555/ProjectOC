@@ -69,14 +69,14 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// 任务发起者
         /// </summary>
-        public IMission Initiator;
+        public IMissionObj Initiator;
 
         /// <summary>
         /// 分配的搬运
         /// </summary>
         public HashSet<Transport> Transports = new HashSet<Transport>();
 
-        public MissionTransport(MissionTransportType type, string itemID, int missionNum, IMission imission)
+        public MissionTransport(MissionTransportType type, string itemID, int missionNum, IMissionObj imission)
         {
             this.Type = type;
             this.ItemID = itemID;
@@ -123,13 +123,16 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// 终止任务
         /// </summary>
-        public void End()
+        public void End(bool remove=true)
         {
             foreach (Transport transport in this.Transports)
             {
-                transport?.End();
+                transport?.End(false);
             }
-            this.Initiator.RemoveMissionTranport(this);
+            if (remove)
+            {
+                this.Initiator.RemoveMissionTranport(this);
+            }
             MissionManager missionManager = GameManager.Instance.GetLocalManager<MissionManager>();
             missionManager?.MissionTransports?.Remove(this);
         }

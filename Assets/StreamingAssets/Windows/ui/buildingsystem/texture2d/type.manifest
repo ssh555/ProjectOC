@@ -1,33 +1,62 @@
 ManifestFileVersion: 0
-CRC: 1681016513
+CRC: 1597300508
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5d2c15b342928eba44ba4bfba46db557
+    Hash: b04b42da95c79ec9500d0bafaee32c9d
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 2d8df09e698f722ada1caa03d3413830
+    Hash: b90360021f95c293bf3f1bef88434a62
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 5d2c15b342928eba44ba4bfba46db557
+    Hash: b04b42da95c79ec9500d0bafaee32c9d
 HashAppended: 0
 ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
 - Class: 28
+  Script: {instanceID: 0}
+- Class: 48
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Beam.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Calculus.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Window.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Incubator.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Refine.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Aggregator.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/ElectAppliance.png
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Roof.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Materials/Pillar.mat
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Store.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/WaterCollector.png
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/CeilingLamp.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Projector.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Reservoir.png
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Foundation.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/LifeDiversion.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/DiversionNode.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Integrator.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Textile.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Sawn.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/WaterPurifier.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/EchoWheel.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Clock.png
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Pillar.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Processor.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Kitchen.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/PowerSub.png
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/FoundationEdge.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/PowerCore.png
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Floor.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/SeedPlot.png
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Chair.png
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Door.png
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/None.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/SeedBox.png
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Wall.png
-- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Window.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Detector.png
 Dependencies: []
