@@ -49,7 +49,7 @@ namespace ProjectOC.ManagerNS
         /// 时段更新事件
         /// </summary>
         public event Action<int> OnTimeFrameChanged;
-        public DispatchTimeManager()
+        public void Init()
         {
             this.Timer = new CounterDownTimer(this.TimeScale, true, false);
             this.Timer.OnEndEvent += EndActionForTimer;

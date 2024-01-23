@@ -6,7 +6,6 @@ using ProjectOC.TechTree.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static ML.Engine.BuildingSystem.MonoBuildingManager;
 
 namespace ProjectOC.Player.UI
 {
@@ -18,14 +17,13 @@ namespace ProjectOC.Player.UI
 
         public InventorySystem.UI.UIInfiniteInventory uIInfiniteInventory;
 
-        public ResonanceWheelSystem.UI.ResonanceWheelUI uIResonanceWheel;
-
         private IUISelected CurSelected;
 
         private SelectedButton EnterBuildBtn;
         private SelectedButton EnterTechTreeBtn;
         private SelectedButton EnterInventoryBtn;
-        private SelectedButton EnterResonanceWheelBtn;
+        private SelectedButton CreateWorkerBtn;
+
         private BuildingManager BM => BuildingManager.Instance;
 
         public int tickPriority { get; set; }
@@ -76,25 +74,14 @@ namespace ProjectOC.Player.UI
 
                 // Push
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
-                
             };
 
-
-            this.EnterResonanceWheelBtn = btnList.Find("EnterResonanceWheel").GetComponent<SelectedButton>();
-            this.EnterResonanceWheelBtn.OnInteract += () =>
+            this.CreateWorkerBtn = btnList.Find("CreateWorker").GetComponent<SelectedButton>();
+            this.CreateWorkerBtn.OnInteract += () =>
             {
-                Debug.Log("werwerw");
-                var panel = GameObject.Instantiate(uIResonanceWheel);
-                panel.transform.SetParent(this.transform.parent, false);
-                panel.inventory = this.player.Inventory;
-
-
-
-
-                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
-                Debug.Log("2 " + ML.Engine.Manager.GameManager.Instance.UIManager.GetTopUIPanel());
-
+                ProjectOC.ManagerNS.LocalGameManager.Instance.WorkerManager.SpawnWorker(player.transform.position, player.transform.rotation);
             };
+
 
             var btn = btnList.GetComponentsInChildren<SelectedButton>();
             
@@ -190,7 +177,6 @@ namespace ProjectOC.Player.UI
                 {
                     foreach (var tip in datas)
                     {
-                        Debug.Log(tip.name+tip);
                         TipDict.Add(tip.name, tip);
                     }
                     this.Refresh();
@@ -207,14 +193,12 @@ namespace ProjectOC.Player.UI
 
         private void Refresh()
         {
-            
-
             if(ABJAProcessor != null && ABJAProcessor.IsLoaded && IsInit)
             {
-                /*this.EnterBuildBtn.text.text = TipDict["enterbuild"].GetDescription();
-                this.EnterTechTreeBtn.text.text = TipDict["entertechtree"].GetDescription();
-                this.EnterInventoryBtn.text.text = TipDict["enterinventory"].GetDescription();
-                this.EnterResonanceWheelBtn.text.text = TipDict["enterresonancewheel"].GetDescription();*/
+                this.EnterBuildBtn.text.text = TipDict["enterbuild"].GetDescription();
+                this.EnterTechTreeBtn.text.text = TipDict["techtree"].GetDescription();
+                this.EnterInventoryBtn.text.text = TipDict["inventory"].GetDescription();
+                this.CreateWorkerBtn.text.text = TipDict["worker"].GetDescription();
             }
         }
     }

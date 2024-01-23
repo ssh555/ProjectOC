@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3907249219
+CRC: 854514760
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 2beaf2debfc01f8009c38466f03eea76
+    Hash: 306d6ab6b2313fb0cb84696f71048fc7
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2d8df09e698f722ada1caa03d3413830
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 2beaf2debfc01f8009c38466f03eea76
+    Hash: 306d6ab6b2313fb0cb84696f71048fc7
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -19,7 +19,8 @@ ClassTypes:
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Category/None.png
-- Assets/_ML/MLResources/BuildingSystem/Texture2D/Category/Room.png
-- Assets/_ML/MLResources/BuildingSystem/Texture2D/Category/ExternalFacility.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Category/House.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Category/ProNode.png
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Category/Furniture.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/Category/Interact.png
 Dependencies: []

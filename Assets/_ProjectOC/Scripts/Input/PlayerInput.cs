@@ -1521,7 +1521,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""a4b2f75f-7100-4ac2-bb32-f6566a8040b5"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1543,7 +1543,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""c6ba8d4b-99d5-4d61-ac2b-d55a9675ca86"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1586,8 +1586,30 @@ namespace ProjectOC.Input
                 },
                 {
                     ""name"": """",
+                    ""id"": ""a3fd9745-4663-47e8-a447-f54511980706"",
+                    ""path"": ""<Keyboard>/n"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeWorker"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""9a4a7946-7f31-4be2-9a55-e7c15f46fcf9"",
                     ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RemoveWorker"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ff1a270f-4e4b-46ba-9e16-c4276cdb319e"",
+                    ""path"": ""<Keyboard>/m"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
