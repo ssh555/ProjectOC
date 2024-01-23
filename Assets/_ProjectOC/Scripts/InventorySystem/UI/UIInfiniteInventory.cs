@@ -437,7 +437,7 @@ namespace ProjectOC.InventorySystem.UI
                     // 加入临时内存管理
                     tempItemType.Add(itemtype, obj);
                     // 载入ItemType对应的Texture2D
-                    var ab = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadLocalAB("UI/Inventory/Texture2D/ItemType");
+                    var ab = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadLocalAB("UI/Inventory/Texture2D");
                     var tex = ab.LoadAsset<Texture2D>(itemtype.ToString());
                     // 创建Sprite并加入临时内存管理
                     if(tex != null)

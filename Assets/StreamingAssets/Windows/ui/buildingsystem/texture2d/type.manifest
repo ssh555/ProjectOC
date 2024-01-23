@@ -1,22 +1,18 @@
 ManifestFileVersion: 0
-CRC: 1597300508
+CRC: 2232971502
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b04b42da95c79ec9500d0bafaee32c9d
+    Hash: abd76c50b3124014afbb9a8aebf2d749
   TypeTreeHash:
     serializedVersion: 2
-    Hash: b90360021f95c293bf3f1bef88434a62
+    Hash: 2d8df09e698f722ada1caa03d3413830
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: b04b42da95c79ec9500d0bafaee32c9d
+    Hash: abd76c50b3124014afbb9a8aebf2d749
 HashAppended: 0
 ClassTypes:
-- Class: 21
-  Script: {instanceID: 0}
 - Class: 28
-  Script: {instanceID: 0}
-- Class: 48
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
@@ -30,7 +26,6 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Aggregator.png
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/ElectAppliance.png
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Roof.png
-- Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Materials/Pillar.mat
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/Store.png
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/WaterCollector.png
 - Assets/_ML/MLResources/BuildingSystem/Texture2D/Type/CeilingLamp.png
