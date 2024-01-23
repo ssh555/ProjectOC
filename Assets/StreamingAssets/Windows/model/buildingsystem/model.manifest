@@ -3,13 +3,13 @@ CRC: 3894683618
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 49e2b33d16fdce666683893d13f8e3ba
+    Hash: 6a5f5be7357703593584f605bd816ca2
   TypeTreeHash:
     serializedVersion: 2
     Hash: 0f9fba26cbb38215f317d1fd6b1954a0
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 49e2b33d16fdce666683893d13f8e3ba
+    Hash: 6a5f5be7357703593584f605bd816ca2
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -108,4 +108,4 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Textile_2.mesh
 - Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_WaterPurifier_1.mesh
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
