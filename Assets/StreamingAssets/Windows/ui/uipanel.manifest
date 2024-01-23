@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1141937071
+CRC: 784043586
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 4f10798d46a6bbbe60ae2094cf7d7a85
+    Hash: f1185589672e0d34e44de746f095d184
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 78ea3cf392300231fcf550a46da1b812
+    Hash: b0197a3222ef4285bcc6b637d8b31945
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 4f10798d46a6bbbe60ae2094cf7d7a85
+    Hash: f1185589672e0d34e44de746f095d184
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -29,8 +29,6 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 9ea83b1ab433e514bb440b78e1a6f54a, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 902042dd59e50754a80bcc00d8654070, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
@@ -41,11 +39,9 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 122d184a229d7654389bc4921fdb6ac7, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: b5a75fe406490b1448c391e02cf791da, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 84a92b25f83d49b9bc132d206b370281, type: 3}
 - Class: 114
@@ -53,12 +49,22 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 18e0a5fd7f32347419b785bf00a72db7, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 8225f47635ce8874c8d32afa594ed0e2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: b5a75fe406490b1448c391e02cf791da, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d6224dbf1fdb21545862699544e83817, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 27e27c8eeb2d1554babedcc209602ac4, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 87badff79e1e54a4a9d68c74f002b591, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ba8a2ec004d09ff4a886c0a90da6574f, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9ea83b1ab433e514bb440b78e1a6f54a, type: 3}
 - Class: 115
-  Script: {instanceID: 0}
-- Class: 128
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
@@ -73,24 +79,8 @@ SerializeReferenceClassIdentifiers:
   ClassName: ProjectOC.ProNodeNS.ProNode
 - AssemblyName: Assembly-CSharp
   ClassName: ProjectOC.StoreNS.Store
-- AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.FaceInfo_Legacy
-- AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.FontAssetCreationSettings
-- AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.KerningTable
-- AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.TMP_Character
-- AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.TMP_FontFeatureTable
-- AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.TMP_FontWeightPair
-- AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.TMP_GlyphAdjustmentRecord
-- AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.TMP_GlyphPairAdjustmentRecord
-- AssemblyName: Unity.TextMeshPro
-  ClassName: TMPro.TMP_GlyphValueRecord
+- AssemblyName: Assembly-CSharp
+  ClassName: ProjectOC.WorkerEchoNS.WorkerEcho
 - AssemblyName: Unity.TextMeshPro
   ClassName: TMPro.TMP_Sprite
 - AssemblyName: Unity.TextMeshPro
@@ -105,8 +95,6 @@ SerializeReferenceClassIdentifiers:
   ClassName: UnityEngine.RectOffset
 - AssemblyName: UnityEngine.TextCoreFontEngineModule
   ClassName: UnityEngine.TextCore.FaceInfo
-- AssemblyName: UnityEngine.TextCoreFontEngineModule
-  ClassName: UnityEngine.TextCore.Glyph
 - AssemblyName: UnityEngine.TextCoreFontEngineModule
   ClassName: UnityEngine.TextCore.GlyphMetrics
 - AssemblyName: UnityEngine.TextCoreFontEngineModule
@@ -127,12 +115,17 @@ SerializeReferenceClassIdentifiers:
   ClassName: UnityEngine.UI.SpriteState
 Assets:
 - Assets/_ProjectOC/Resources/UIPanel/TechPointPanel.prefab
+- Assets/_ProjectOC/Resources/UIPanel/ResonanceWheelUI_sub2.prefab
 - Assets/_ProjectOC/Resources/UIPanel/UIInfiniteInventoryPanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/UIStorePanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIPanel.prefab
+- Assets/_ProjectOC/Resources/UIPanel/SkillGraph.prefab
+- Assets/_ProjectOC/Resources/UIPanel/ResonanceWheelUI.prefab
+- Assets/_ProjectOC/Resources/UIPanel/ResonanceWheelUI_sub1.prefab
 - Assets/_ProjectOC/Resources/UIPanel/UIProNodePanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIBotPanel.prefab
 Dependencies:
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/fonts
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/inventory/texture2d/itemtype
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/techpoint/texture2d
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/fonts
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/inventory/texture2d/itemtype
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/techpoint/texture2d

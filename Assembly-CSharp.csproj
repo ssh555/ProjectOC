@@ -834,7 +834,6 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\NoEditor\Sirenix.Utilities.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
-    <None Include="Assets\_ML\MLResources\Fonts\字库.txt" />
     <None Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\BehaviorDesigner.Runtime.dll" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\link.xml" />
@@ -847,6 +846,7 @@
     <None Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Shaders\GridUVScale.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
     <None Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Shaders\RangeVFXShader.shader" />
+    <None Include="Assets\_ML\MLResources\Fonts\3500汉字+符号+英文字符集.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\Sirenix.Serialization.dll" />
     <None Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\Sirenix.Serialization.xml" />

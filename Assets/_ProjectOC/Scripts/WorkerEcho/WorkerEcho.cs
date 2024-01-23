@@ -27,8 +27,10 @@ namespace ProjectOC.WorkerEchoNS
 
             timer.OnEndEvent += () =>
             {
+
                 this.worker = GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker(buildingPart.transform.position,Quaternion.identity,WorkerID);
                 this.worker.gameObject.transform.position = this.worker.gameObject.transform.position += new Vector3((float)(3 *Math.Cos(2 * 3.1415926 * index / 5)),0, (float)(3 * Math.Sin(2 * 3.1415926 * index / 5)));
+                (buildingPart as WorkerEchoBuilding).workerEcho.AddWorker(worker, index);          
             };
         }
     }
@@ -49,8 +51,14 @@ namespace ProjectOC.WorkerEchoNS
             if(this.Level==1)
             {
                 id = GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRandomID();
-                
+                foreach (var item in GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRaw(id))
+                {
+                    Debug.Log("GetRaw " + item.id);
+                }
+
             }
+            
+
             if (!GameManager.Instance.GetLocalManager<WorkerManager>().OnlyCostResource(GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory, id))
             {
                 Debug.Log("材料不足！无法召唤！");
@@ -115,6 +123,11 @@ namespace ProjectOC.WorkerEchoNS
 
             }
             Workers[index] = null;
+        }
+
+        public void AddWorker(Worker worker,int index)
+        {
+            this.Workers[index].worker = worker;
         }
     }
 }

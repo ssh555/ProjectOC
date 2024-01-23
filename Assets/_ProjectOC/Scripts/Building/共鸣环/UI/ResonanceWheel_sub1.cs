@@ -4,6 +4,7 @@ using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
 using Newtonsoft.Json;
+using ProjectOC.Player;
 using ProjectOC.WorkerEchoNS;
 using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
@@ -13,6 +14,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Unity.Burst.CompilerServices;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 using UnityEngine.Purchasing;
@@ -39,12 +41,18 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public bool IsInit = false;
         private void Start()
         {
+            parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
+            StartCoroutine(InitUIPrefabs());
             //BeastInfo
             var Info1 = this.transform.Find("HiddenBeastInfo1").Find("Info");
             Stamina = Info1.Find("PhysicalStrength").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             Speed = Info1.Find("MovingSpeed").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             StaminaNum = Info1.Find("PhysicalStrength").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
             SpeedNum = Info1.Find("MovingSpeed").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
+
+            GenderImage = Info1.Find("Icon").Find("GenderImage").GetComponent<Image>();
+
+
             var GInfo = Info1.Find("SkillGraph").Find("Viewport").Find("Content").Find("Ring");
             Cook = GInfo.Find("Skill1").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
             HandCraft = GInfo.Find("Skill6").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
@@ -234,6 +242,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private TMPro.TextMeshProUGUI StaminaNum;
         private TMPro.TextMeshProUGUI SpeedNum;
 
+        private Image GenderImage;
+
 
         private TMPro.TextMeshProUGUI Cook;
         private TMPro.TextMeshProUGUI HandCraft;
@@ -243,7 +253,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private TMPro.TextMeshProUGUI Collect;
 
 
-
+        private GameObject DescriptionPrefab;//预制体
 
 
         private UIKeyTip expel;
@@ -287,43 +297,59 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
             //更新隐兽详细信息
-            Debug.Log("更新隐兽详细信息 " + parentUI.Grids[parentUI.CurrentGridIndex].worker.worker.Name);
-            Worker worker = parentUI.Grids[parentUI.CurrentGridIndex].worker.worker;
+            WorkerEcho workerEcho = (GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
+            Debug.Log("更新隐兽详细信息 " + parentUI.CurrentGridIndex);
+
+            Worker worker = workerEcho.GetExternWorkers()[parentUI.CurrentGridIndex].worker;
             StaminaNum.text = worker.APMax.ToString();
             SpeedNum.text = worker.WalkSpeed.ToString();
 
-            
 
-            List<float> datas = new List<float>
+
+            /*            List<float> datas = new List<float>
+                        {
+                            // 烹饪
+                            worker.Skill[WorkType.Cook].Level / 10f,
+                            // 轻工
+                            worker.Skill[WorkType.HandCraft].Level / 10f,
+                            // 精工
+                            worker.Skill[WorkType.Industry].Level / 10f,
+                            // 术法
+                            worker.Skill[WorkType.Magic].Level / 10f,
+                            // 搬运
+                            worker.Skill[WorkType.Transport].Level / 10f,
+                            // 采集
+                            worker.Skill[WorkType.Collect].Level / 10f
+                        };
+
+                        var radar = this.transform.Find("HiddenBeastInfo1").Find("Info").Find("SkillGraph").Find("Viewport").Find("Content").Find("Radar").GetComponent<UIPolygon>();
+                        radar.DrawPolygon(datas);
+
+            //性别
+            if()
             {
-                // 烹饪
-                worker.Skill[WorkType.Cook].Level / 10f,
-                // 轻工
-                worker.Skill[WorkType.HandCraft].Level / 10f,
-                // 精工
-                worker.Skill[WorkType.Industry].Level / 10f,
-                // 术法
-                worker.Skill[WorkType.Magic].Level / 10f,
-                // 搬运
-                worker.Skill[WorkType.Transport].Level / 10f,
-                // 采集
-                worker.Skill[WorkType.Collect].Level / 10f
-            };
+                GenderImage.sprite = icon_gendermaleSprite;
+            }
+            else
+            {
+                GenderImage.sprite = icon_genderfemaleSprite;
+            }
+            */
 
-            var radar = this.transform.Find("HiddenBeastInfo1").Find("Info").Find("SkillGraph").Find("Viewport").Find("Content").Find("Radar").GetComponent<UIPolygon>();
-            radar.DrawPolygon(datas);
+            BeastName.text = worker.Name;
+            Debug.Log("go " + this.PrefabsAB == null);
 
             
-            BeastName.text = worker.Name;
 
 
+            if (this.PrefabsAB==null) return;
             foreach (var feature in worker.Features)
             {
                 var Info = this.transform.Find("HiddenBeastInfo2").Find("Info");
-                var DescriptionPrefab = Instantiate(parentUI.PrefabsAB.LoadAsset<GameObject>("Description"), Info);
-                DescriptionPrefab.transform.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;
-                DescriptionPrefab.transform.Find("Text2").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Description;
-                DescriptionPrefab.transform.Find("Text3").GetComponent<TMPro.TextMeshProUGUI>().text = feature.EffectsDescription;
+                var descriptionPrefab = Instantiate(DescriptionPrefab, Info);
+                descriptionPrefab.transform.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;
+                descriptionPrefab.transform.Find("Text2").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Description;
+                descriptionPrefab.transform.Find("Text3").GetComponent<TMPro.TextMeshProUGUI>().text = feature.EffectsDescription;
             }
             //BotKeyTips
             KT_Back.ReWrite(ResonanceWheelUI.PanelTextContent_sub1.back);
@@ -353,9 +379,58 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
 
         #endregion
-        
+
+        #region Prefab
+        public AssetBundle PrefabsAB;
+        public IEnumerator InitUIPrefabs()
+        {
+            this.PrefabsAB = null;
+            var abmgr = GameManager.Instance.ABResourceManager;
+            // 载入 keyTipPrefab
+            var crequest = abmgr.LoadLocalABAsync("ui/resonancewheel/resonancewheelprefabs", null, out var PrefabsAB);
+            
+            if (crequest != null)
+            {
+                yield return crequest;
+                PrefabsAB = crequest.assetBundle;
+            }
+
+            this.PrefabsAB = PrefabsAB;
+            DescriptionPrefab = this.PrefabsAB.LoadAsset<GameObject>("Description");
+            this.Refresh();
+        }
+        #endregion
+        #region temp
+        public Sprite icon_genderfemaleSprite, icon_gendermaleSprite;
+        #endregion
+
+        #region Texture2D
+        public static AssetBundle Texture2DAB;
+        private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
+        private string ResonanceWheelTexture2DPath = "ui/resonancewheel/texture2d";
+        private IEnumerator InitUITexture2D()
+        {
+
+            var crequest = GM.ABResourceManager.LoadLocalABAsync(ResonanceWheelTexture2DPath, null, out var Texture2DAB);
+            
+            if (crequest != null)
+            {
+                yield return crequest;
+                Texture2DAB = crequest.assetBundle;
+                Debug.Log("InitUITexture2D " + Texture2DAB);
+            }
+            Texture2D texture2D;
+
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("icon_genderfemale");
+            icon_genderfemaleSprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("icon_gendermale");
+            icon_gendermaleSprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
 
 
+
+        }
+
+        #endregion
 
     }
 

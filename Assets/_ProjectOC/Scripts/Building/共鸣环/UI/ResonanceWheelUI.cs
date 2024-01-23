@@ -16,6 +16,7 @@ using System.Drawing;
 using System.Linq;
 using TMPro;
 using Unity.Burst.CompilerServices;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -52,9 +53,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //Debug.Log("121323 " + GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>());
             workerEcho = (GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
             //workerEcho = GameObject.Find("Cube").GetComponent<WorkerEchoBuilding>().workerEcho;
-            InitUIPrefabs();
+
+            //StartCoroutine(InitUIPrefabs());
+            StartCoroutine(InitUITexture2D());
             InitUITextContents();
-            InitUITexture2D();
+            
             //exclusivePart
             exclusivePart = this.transform.Find("ExclusivePart");
             exclusivePart.gameObject.SetActive(true);
@@ -372,6 +375,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private void StartResonance_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             //检查背包
+
+
+
             Debug.Log("StartResonance_perfozqrmed!");
             Debug.Log(GameManager.Instance.GetLocalManager<WorkerManager>());
             //ExternWorker worker = new ExternWorker(null,5,null);
@@ -393,11 +399,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 Grids[CurrentGridIndex].worker = worker;
                 Grids[CurrentGridIndex].isNull = false;
                 Grids[CurrentGridIndex].isResonating = true;
+                
+                
+
                 Debug.Log("worker "+worker.worker);
             }
             else
             {
-                Debug.Log("材料不足！");
+                Debug.Log("worker is null！");
             }
 
 
@@ -772,6 +781,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 {
                     var panel = GameObject.Instantiate(resonanceWheel_Sub1);
                     panel.transform.SetParent(this.transform.parent, false);
+                    StartCoroutine(resonanceWheel_Sub1.InitUIPrefabs());
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
                     hasSub1nstance=true;
                 }
@@ -900,16 +910,26 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
         #endregion
         #region Texture2D
+        public static AssetBundle Texture2DAB;
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
         private string ResonanceWheelTexture2DPath = "ui/resonancewheel/texture2d";
-        private void InitUITexture2D()
+        private IEnumerator InitUITexture2D()
         {
+
+            var crequest = GM.ABResourceManager.LoadLocalABAsync(ResonanceWheelTexture2DPath, null, out var Texture2DAB);
+            yield return crequest;
+            if (crequest != null)
+            {
+                Texture2DAB = crequest.assetBundle;
+                Debug.Log("InitUITexture2D " + Texture2DAB);
+            }
             Texture2D texture2D;
-            texture2D  = GM.ABResourceManager.LoadAsset<Texture2D>(ResonanceWheelTexture2DPath, "icon_beast");
+            
+            texture2D  = Texture2DAB.LoadAsset<Texture2D>("icon_beast");
             sprite1 =  Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
-            texture2D = GM.ABResourceManager.LoadAsset<Texture2D>(ResonanceWheelTexture2DPath, "icon_timing");
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("icon_timing");
             sprite2 = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
-            texture2D = GM.ABResourceManager.LoadAsset<Texture2D>(ResonanceWheelTexture2DPath, "gray_background");
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("gray_background");
             sprite3 = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
 
 
@@ -917,20 +937,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #endregion
 
-        #region Prefab
-        public AssetBundle PrefabsAB;
-        private IEnumerator InitUIPrefabs()
-        {
-            var abmgr = GameManager.Instance.ABResourceManager;
-            // 载入 keyTipPrefab
-            var crequest = abmgr.LoadLocalABAsync("ui/resonancewheel/resonancewheelprefabs", null, out var PrefabsAB);
-            yield return crequest;
-            if (crequest != null)
-            {
-                PrefabsAB = crequest.assetBundle;
-            }
-        }
-        #endregion
+        
+
 
     }
 
