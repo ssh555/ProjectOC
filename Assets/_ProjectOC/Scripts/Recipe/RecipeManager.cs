@@ -129,7 +129,7 @@ namespace ML.Engine.InventorySystem
             {
                 return RecipeTableDict[id].Product;
             }
-            return new Formula();
+            return new Formula() { id = "", num = 0 };
         }
 
         public int GetTimeCost(string id)

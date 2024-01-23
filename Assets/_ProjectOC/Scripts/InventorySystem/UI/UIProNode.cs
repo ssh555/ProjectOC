@@ -1,4 +1,5 @@
 using ML.Engine.InventorySystem;
+using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.TextContent;
 using ProjectOC.ManagerNS;
 using ProjectOC.WorkerNS;
@@ -27,7 +28,7 @@ namespace ProjectOC.InventorySystem.UI
             Transform priority = transform.Find("TopTitle").Find("Priority");
             Text_Priority = priority.Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             KT_NextPriority = new UIKeyTip();
-            KT_NextPriority.img = priority.Find("KT_NextPriority").GetComponent<UnityEngine.UI.Image>();
+            KT_NextPriority.img = priority.Find("KT_NextPriority").Find("Image").GetComponent<UnityEngine.UI.Image>();
             KT_NextPriority.keytip = KT_NextPriority.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
             PriorityUrgency = priority.Find("Urgency");
             PriorityNormal = priority.Find("Normal");
@@ -51,6 +52,7 @@ namespace ProjectOC.InventorySystem.UI
             Recipe_UIItemTemplate = Recipe_GridLayout.transform.Find("UIItemTemplate");
             Recipe_Raw_GridLayout = ChangeRecipe.Find("Recipe").Find("Raw").Find("Viewport").Find("Content").GetComponent<GridLayoutGroup>();
             Recipe_Raw_UIItemTemplate = Recipe_Raw_GridLayout.transform.Find("UIItemTemplate");
+            Recipe_Product = ChangeRecipe.Find("Recipe").Find("Product");
 
             Recipe_UIItemTemplate.gameObject.SetActive(false);
             ChangeRecipe.gameObject.SetActive(false);
@@ -237,8 +239,7 @@ namespace ProjectOC.InventorySystem.UI
             }
         }
         #region ProNode Raw
-        [ShowInInspector]
-        private List<string> Raws = new List<string>();
+        private List<Formula> Raws => ProNode.Recipe?.Raw;
         /// <summary>
         /// 上一次选中的ItemIndex，用于移动滑动窗口
         /// </summary>
@@ -256,7 +257,7 @@ namespace ProjectOC.InventorySystem.UI
             set
             {
                 int last = currentRawIndex;
-                if(Raws.Count > 0)
+                if(Raws != null && Raws.Count > 0)
                 {
                     currentRawIndex = value;
                     if(currentRawIndex == -1)
@@ -307,9 +308,9 @@ namespace ProjectOC.InventorySystem.UI
         {
             get
             {
-                if(CurrentRawIndex < Raws.Count)
+                if(Raws != null && CurrentRawIndex < Raws.Count)
                 {
-                    return Raws[CurrentRawIndex];
+                    return Raws[CurrentRawIndex].id;
                 }
                 return null;
             }
@@ -457,15 +458,15 @@ namespace ProjectOC.InventorySystem.UI
         private void Enter()
         {
             this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Enable();
-            ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Enable();
+            //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
             this.Refresh();
         }
 
         private void Exit()
         {
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Disable();
-            ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Disable();
+            //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
             this.UnregisterInput();
         }
 
@@ -561,7 +562,7 @@ namespace ProjectOC.InventorySystem.UI
                 ProNode.ChangeWorker(CurrentWorker);
                 CurMode = Mode.ProNode;
             }
-            else if (CurMode == Mode.ChangeRecipe)
+            else if (CurMode == Mode.ChangeLevel)
             {
                 CurMode = Mode.ProNode;
             }
@@ -607,7 +608,7 @@ namespace ProjectOC.InventorySystem.UI
         }
         private void ChangeWorker_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurMode == Mode.ChangeWorker)
+            if (CurMode == Mode.ProNode)
             {
                 CurMode = Mode.ChangeWorker;
                 Refresh();
@@ -697,6 +698,7 @@ namespace ProjectOC.InventorySystem.UI
         private Transform Recipe_UIItemTemplate;
         private GridLayoutGroup Recipe_Raw_GridLayout;
         private Transform Recipe_Raw_UIItemTemplate;
+        private Transform Recipe_Product;
 
         private GridLayoutGroup Worker_GridLayout;
         private Transform Worker_UIItemTemplate;
@@ -727,37 +729,41 @@ namespace ProjectOC.InventorySystem.UI
                 this.BotKeyTips_Recipe.gameObject.SetActive(false);
                 this.BotKeyTips_Worker.gameObject.SetActive(false);
                 this.BotKeyTips_Level.gameObject.SetActive(false);
-
-                #region TopTitle
-                foreach (TextTip tp in PanelTextContent.proNodeType)
-                {
-                    if (tp.name == ProNode.Recipe.ToString())
-                    {
-                        Text_Title.text = tp.GetDescription();
-                        break;
-                    }
-                }
-                KT_Upgrade.ReWrite(PanelTextContent.ktUpgrade);
-                KT_NextPriority.ReWrite(PanelTextContent.ktNextPriority);
-                #endregion
+                this.Raw_UIItemTemplate.gameObject.SetActive(false);
 
                 #region ProNode
                 if (ProNode.Recipe != null)
                 {
+                    #region TopTitle
+                    foreach (TextTip tp in PanelTextContent.proNodeType)
+                    {
+                        if (tp.name == ProNode.Category.ToString())
+                        {
+                            Text_Title.text = tp.GetDescription();
+                            break;
+                        }
+                    }
+                    KT_Upgrade.ReWrite(PanelTextContent.ktUpgrade);
+                    KT_NextPriority.ReWrite(PanelTextContent.ktNextPriority);
+                    #endregion
+
                     #region Product
                     string productID = ProNode.Recipe.GetProductID();
                     var nameProduct = Product.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
                     nameProduct.text = ItemManager.Instance.GetItemName(productID);
-                    var imgProduct = Product.transform.Find("Icon").GetComponent<Image>();
-                    var spriteProduct = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(productID));
-                    if (spriteProduct == null)
-                    {
-                        spriteProduct = ItemManager.Instance.GetItemSprite(productID);
-                        tempSprite.Add(spriteProduct);
-                    }
-                    imgProduct.sprite = spriteProduct;
+                    //var imgProduct = Product.transform.Find("Icon").GetComponent<Image>();
+                    //var spriteProduct = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(productID));
+                    //if (spriteProduct == null)
+                    //{
+                    //    spriteProduct = ItemManager.Instance.GetItemSprite(productID);
+                    //    tempSprite.Add(spriteProduct);
+                    //}
+                    //imgProduct.sprite = spriteProduct;
                     var amountProduct = Product.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
                     amountProduct.text = ProNode.GetItemAllNum(productID).ToString();
+
+                    var tiemProduct = Product.transform.Find("Time").GetComponent<TMPro.TextMeshProUGUI>();
+                    tiemProduct.text = "Time: " + LocalGameManager.Instance.RecipeManager.GetTimeCost(ProNode.Recipe.ID).ToString();
                     #endregion
                     #region Raw
                     // 临时内存生成的UIItem数量(只增不减，多的隐藏掉即可) - 当前筛选出来的Item数量
@@ -788,24 +794,24 @@ namespace ProjectOC.InventorySystem.UI
                     // 遍历筛选的ItemList
                     for (int i = 0; i < Raws.Count; ++i)
                     {
-                        var itemID = Raws[i];
+                        var itemID = Raws[i].id;
                         var item = tempUIItems[i];
                         // Active
                         item.SetActive(true);
                         // Name
                         var name = item.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
                         name.text = ItemManager.Instance.GetItemName(itemID);
-                        // 更新Icon
-                        var img = item.transform.Find("Icon").GetComponent<Image>();
-                        // 查找临时存储的Sprite
-                        var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(itemID));
-                        // 不存在则生成
-                        if (sprite == null)
-                        {
-                            sprite = ItemManager.Instance.GetItemSprite(itemID);
-                            tempSprite.Add(sprite);
-                        }
-                        img.sprite = sprite;
+                        //// 更新Icon
+                        //var img = item.transform.Find("Icon").GetComponent<Image>();
+                        //// 查找临时存储的Sprite
+                        //var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(itemID));
+                        //// 不存在则生成
+                        //if (sprite == null)
+                        //{
+                        //    sprite = ItemManager.Instance.GetItemSprite(itemID);
+                        //    tempSprite.Add(sprite);
+                        //}
+                        //img.sprite = sprite;
                         // Amount
                         var amount = item.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
                         amount.text = ProNode.GetItemAllNum(itemID).ToString();
@@ -949,6 +955,8 @@ namespace ProjectOC.InventorySystem.UI
                 this.ChangeRecipe.gameObject.SetActive(true);
                 this.BotKeyTips_ProNode.gameObject.SetActive(false);
                 this.BotKeyTips_Recipe.gameObject.SetActive(true);
+                this.Recipe_UIItemTemplate.gameObject.SetActive(false);
+                this.Recipe_Raw_UIItemTemplate.gameObject.SetActive(false);
 
                 Recipes = new List<string>() { "" };
                 Recipes.AddRange(ProNode.GetCanProduceRecipe());
@@ -971,7 +979,7 @@ namespace ProjectOC.InventorySystem.UI
                     delta = -delta;
                     for (int i = 0; i < delta; ++i)
                     {
-                        var uiitem = Instantiate(Recipe_UIItemTemplate, Recipe_UIItemTemplate.transform, false);
+                        var uiitem = Instantiate(Recipe_UIItemTemplate, Recipe_GridLayout.transform, false);
                         tempUIItemsRecipe.Add(uiitem.gameObject);
                     }
                 }
@@ -995,17 +1003,17 @@ namespace ProjectOC.InventorySystem.UI
                     {
                         name.text = PanelTextContent.textEmpty;
                     }
-                    // 更新Icon
-                    var img = item.transform.Find("Icon").GetComponent<Image>();
-                    // 查找临时存储的Sprite
-                    var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(product.id));
-                    // 不存在则生成
-                    if (sprite == null)
-                    {
-                        sprite = ItemManager.Instance.GetItemSprite(product.id);
-                        tempSprite.Add(sprite);
-                    }
-                    img.sprite = sprite;
+                    //// 更新Icon
+                    //var img = item.transform.Find("Icon").GetComponent<Image>();
+                    //// 查找临时存储的Sprite
+                    //var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(product.id));
+                    //// 不存在则生成
+                    //if (sprite == null)
+                    //{
+                    //    sprite = ItemManager.Instance.GetItemSprite(product.id);
+                    //    tempSprite.Add(sprite);
+                    //}
+                    //img.sprite = sprite;
                     // Selected
                     var selected = item.transform.Find("Selected");
                     if (CurrentRecipe == recipeID)
@@ -1080,23 +1088,23 @@ namespace ProjectOC.InventorySystem.UI
 
                 #region Product
                 product = LocalGameManager.Instance.RecipeManager.GetProduct(CurrentRecipe);
-                var nameProduct = Product.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
+                var nameProduct = Recipe_Product.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
                 nameProduct.text = ItemManager.Instance.GetItemName(product.id);
                 if (nameProduct.text == "")
                 {
                     nameProduct.text = PanelTextContent.textEmpty;
                 }
-                var imgProduct = Product.transform.Find("Icon").GetComponent<Image>();
-                var spriteProduct = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(product.id));
-                if (spriteProduct == null)
-                {
-                    spriteProduct = ItemManager.Instance.GetItemSprite(product.id);
-                    tempSprite.Add(spriteProduct);
-                }
-                imgProduct.sprite = spriteProduct;
-                var amountProduct = Product.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
+                //var imgProduct = Product.transform.Find("Icon").GetComponent<Image>();
+                //var spriteProduct = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(product.id));
+                //if (spriteProduct == null)
+                //{
+                //    spriteProduct = ItemManager.Instance.GetItemSprite(product.id);
+                //    tempSprite.Add(spriteProduct);
+                //}
+                //imgProduct.sprite = spriteProduct;
+                var amountProduct = Recipe_Product.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
                 amountProduct.text = product.num.ToString();
-                var tiemProduct = Product.transform.Find("Time").GetComponent<TMPro.TextMeshProUGUI>();
+                var tiemProduct = Recipe_Product.transform.Find("Time").GetComponent<TMPro.TextMeshProUGUI>();
                 tiemProduct.text = LocalGameManager.Instance.RecipeManager.GetTimeCost(CurrentRecipe).ToString();
                 #endregion
 
@@ -1115,7 +1123,7 @@ namespace ProjectOC.InventorySystem.UI
                     delta = -delta;
                     for (int i = 0; i < delta; ++i)
                     {
-                        var uiitem = Instantiate(Recipe_Raw_UIItemTemplate, Recipe_Raw_UIItemTemplate.transform, false);
+                        var uiitem = Instantiate(Recipe_Raw_UIItemTemplate, Recipe_Raw_GridLayout.transform, false);
                         tempUIItemsRecipeRaw.Add(uiitem.gameObject);
                     }
                 }
@@ -1134,15 +1142,15 @@ namespace ProjectOC.InventorySystem.UI
                     // NeedAmount
                     var amount = item.transform.Find("NeedAmount").GetComponent<TMPro.TextMeshProUGUI>();
                     amount.text = recipeRaws[i].num.ToString();
-                    // 更新Icon
-                    var img = item.transform.Find("Icon").GetComponent<Image>();
-                    var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(itemID));
-                    if (sprite == null)
-                    {
-                        sprite = ItemManager.Instance.GetItemSprite(itemID);
-                        tempSprite.Add(sprite);
-                    }
-                    img.sprite = sprite;
+                    //// 更新Icon
+                    //var img = item.transform.Find("Icon").GetComponent<Image>();
+                    //var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(itemID));
+                    //if (sprite == null)
+                    //{
+                    //    sprite = ItemManager.Instance.GetItemSprite(itemID);
+                    //    tempSprite.Add(sprite);
+                    //}
+                    //img.sprite = sprite;
                 }
                 Recipe_Raw_GridLayout.transform.parent.parent.GetComponent<ScrollRect>().normalizedPosition = new Vector2(0, 1);
                 // 强制立即更新 GridLayoutGroup 的布局
@@ -1159,6 +1167,7 @@ namespace ProjectOC.InventorySystem.UI
                 this.ChangeWorker.gameObject.SetActive(true);
                 this.BotKeyTips_ProNode.gameObject.SetActive(false);
                 this.BotKeyTips_Worker.gameObject.SetActive(true);
+                this.Worker_UIItemTemplate.gameObject.SetActive(false);
                 Workers = new List<Worker>() { null };
                 Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
                 #region Select
@@ -1178,7 +1187,7 @@ namespace ProjectOC.InventorySystem.UI
                     delta = -delta;
                     for (int i = 0; i < delta; ++i)
                     {
-                        var uiitem = Instantiate(Worker_UIItemTemplate, Worker_UIItemTemplate.transform, false);
+                        var uiitem = Instantiate(Worker_UIItemTemplate, Worker_GridLayout.transform, false);
                         tempUIItemsWorker.Add(uiitem.gameObject);
                     }
                 }
@@ -1203,14 +1212,14 @@ namespace ProjectOC.InventorySystem.UI
                         {
                             name.text = PanelTextContent.textEmpty;
                         }
-                        var img = item.transform.Find("Icon").GetComponent<Image>();
-                        var sprite = tempSprite.Find(s => s.texture == LocalGameManager.Instance.WorkerManager.GetTexture2D());
-                        if (sprite == null)
-                        {
-                            sprite = LocalGameManager.Instance.WorkerManager.GetSprite();
-                            tempSprite.Add(sprite);
-                        }
-                        img.sprite = sprite;
+                        //var img = item.transform.Find("Icon").GetComponent<Image>();
+                        //var sprite = tempSprite.Find(s => s.texture == LocalGameManager.Instance.WorkerManager.GetTexture2D());
+                        //if (sprite == null)
+                        //{
+                        //    sprite = LocalGameManager.Instance.WorkerManager.GetSprite();
+                        //    tempSprite.Add(sprite);
+                        //}
+                        //img.sprite = sprite;
                         // State
                         var state = item.transform.Find("State").GetComponent<TMPro.TextMeshProUGUI>();
                         switch (worker.Status)
@@ -1231,7 +1240,7 @@ namespace ProjectOC.InventorySystem.UI
                         }
                         // PrograssBar
                         var rect = item.transform.Find("PrograssBar").Find("Cur").GetComponent<RectTransform>();
-                        rect.offsetMax = new Vector2(rect.offsetMax.x, -1 * (int)(100 - 100 * Worker.APCurrent / Worker.APMax));
+                        rect.offsetMax = new Vector2(rect.offsetMax.x, -1 * (int)(100 - 100 * worker.APCurrent / worker.APMax));
                         // Eff
                         var eff = item.transform.Find("Eff").GetComponent<TMPro.TextMeshProUGUI>();
                         eff.text = worker.Eff[ProNode.ExpType].ToString();
@@ -1340,6 +1349,7 @@ namespace ProjectOC.InventorySystem.UI
                 this.ChangeLevel.gameObject.SetActive(true);
                 this.BotKeyTips_ProNode.gameObject.SetActive(false);
                 this.BotKeyTips_Level.gameObject.SetActive(true);
+                this.Level_UIItemTemplate.gameObject.SetActive(true);
             }
         }
 
@@ -1354,9 +1364,8 @@ namespace ProjectOC.InventorySystem.UI
                     for (int i = 0; i < Raws.Count; ++i)
                     {
                         var amount = tempUIItems[i].transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
-                        amount.text = ProNode.GetItemAllNum(Raws[i]).ToString();
+                        amount.text = ProNode.GetItemAllNum(Raws[i].id).ToString();
                     }
-                    
                 }
                 if (Worker != null)
                 {
