@@ -3,8 +3,6 @@ using ML.Engine.BuildingSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ML.Engine.InventorySystem.CompositeSystem
 {
@@ -70,6 +68,19 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             this.texture2d = "";
             this.usage = new List<string>();
         }
+        public CompositionTableData(ProjectOC.WorkerEchoNS.WorkerEchoTableData data)
+        {
+            this.id = data.ID;
+            this.compositionnum = 1;
+            this.formula = data.Raw.ToArray();
+            this.name = new TextContent.TextContent();
+            this.name.Chinese = "";
+            this.name.English = "";
+            this.tag = new List<string>().ToArray();
+            this.texture2d = "";
+            this.usage = new List<string>();
+        }
+
         public bool GenData(string[] row)
         {
             if (row[0] == null || row[0] == "")

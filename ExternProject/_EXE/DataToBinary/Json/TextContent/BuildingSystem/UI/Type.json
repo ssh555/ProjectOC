@@ -77,7 +77,6 @@
         }
     },
     {
-    
         "name": "SeedBox",
         "description": {
             "Chinese": "种籽箱",
@@ -155,7 +154,6 @@
         }
     },
     {
-    
         "name": "Store",
         "description": {
             "Chinese": "仓库",
@@ -203,34 +201,5 @@
             "Chinese": "生态投影装置",
             "English": "Projector"
         }
-    },
-    {
-        "name": "Clock",
-        "description": {
-            "Chinese": "挂钟",
-            "English": "Clock"
-        }
-    },
-    {
-        "name": "PowerCore",
-        "description": {
-            "Chinese": "生命导流桩",
-            "English": "PowerCore"
-        }
-    },
-    {
-        "name": "PowerSub",
-        "description": {
-            "Chinese": "导流节点",
-            "English": "PowerSub"
-        }
-    },
-    {
-        "name": "ElectAppliance",
-        "description": {
-            "Chinese": "用电器",
-            "English": "ElectAppliance"
-        }
     }
-
 ]

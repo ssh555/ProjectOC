@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1767491516
+CRC: 942755333
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5774be55dc2f99b2c66baa730547fe3a
+    Hash: 2fdda914e0a94aee7c2a412947aca29f
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 58e24d8248a9d14f8ef7ab42ad58303e
+    Hash: 1ade8d772076e9f6fadd4dcfa36681ce
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 5774be55dc2f99b2c66baa730547fe3a
+    Hash: 2fdda914e0a94aee7c2a412947aca29f
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -129,6 +129,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fa7155796051b734daa718462081dc5f, type: 3}
@@ -139,7 +141,7 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: a79d93bee2b59d94fa12949e4c5e61d1, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  Script: {fileID: 11500000, guid: 7411b32275d93534cb08e4d96c084289, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -172,7 +174,6 @@ Assets:
 - Assets/_ProjectOC/Scene/_TEST/cwt/Cwt_TotalTest.unity
 - Assets/_ProjectOC/Scene/_TEST/yangLe/_LandMassExpandTest.unity
 - Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/BuidlingSystemTest.unity
-- Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity
 Dependencies:
 - D:/Github/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
 - D:/Github/projectoc/Assets/StreamingAssets/Windows/materials

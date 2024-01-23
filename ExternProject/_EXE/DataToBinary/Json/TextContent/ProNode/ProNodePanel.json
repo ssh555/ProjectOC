@@ -229,7 +229,8 @@
     "ktChangeRecipe" : {
         "keyname" : "ktChangeRecipe",
         "keymap" : {
-            "XBOX" : "A"
+            "XBOX" : "A",
+            "KeyBoard" : "E"
         },
         "description" : {
             "Chinese" : "变更生产项",
@@ -240,7 +241,7 @@
         "keyname" : "ktRemove1",
         "keymap" : {
             "XBOX" : "X",
-            "KeyBoard" : "E"
+            "KeyBoard" : "F"
         },
         "description" : {
             "Chinese" : "取出1",
@@ -251,7 +252,7 @@
         "keyname" : "ktRemove10",
         "keymap" : {
             "XBOX" : "X",
-            "KeyBoard" : "E"
+            "KeyBoard" : "F"
         },
         "description" : {
             "Chinese" : "取出10",
@@ -272,7 +273,8 @@
     "ktBack" : {
         "keyname" : "ktBack",
         "keymap" : {
-            "XBOX" : "B"
+            "XBOX" : "B",
+            "KeyBoard" : "Esc"
         },
         "description" : {
             "Chinese" : "退出",
@@ -282,7 +284,8 @@
     "ktChangeWorker" : {
         "keyname" : "ktChangeWorker",
         "keymap" : {
-            "XBOX" : "LB"
+            "XBOX" : "LB",
+            "KeyBoard" : "N"
         },
         "description" : {
             "Chinese" : "变更刁民",
@@ -292,7 +295,8 @@
     "ktRemoveWorker" : {
         "keyname" : "ktRemoveWorker",
         "keymap" : {
-            "XBOX" : "RB"
+            "XBOX" : "RB",
+            "KeyBoard" : "M"
         },
         "description" : {
             "Chinese" : "移除刁民",
@@ -302,7 +306,8 @@
     "ktConfirmRecipe" : {
         "keyname" : "ktConfirmRecipe",
         "keymap" : {
-            "XBOX" : "A"
+            "XBOX" : "A",
+            "KeyBoard" : "E"
         },
         "description" : {
             "Chinese" : "确认",
@@ -312,7 +317,8 @@
     "ktBackRecipe" : {
         "keyname" : "ktBackRecipe",
         "keymap" : {
-            "XBOX" : "B"
+            "XBOX" : "B",
+            "KeyBoard" : "Esc"
         },
         "description" : {
             "Chinese" : "返回",
@@ -322,7 +328,8 @@
     "ktConfirmWorker" : {
         "keyname" : "ktConfirmWorker",
         "keymap" : {
-            "XBOX" : "A"
+            "XBOX" : "A",
+            "KeyBoard" : "E"
         },
         "description" : {
             "Chinese" : "确认",
@@ -332,7 +339,8 @@
     "ktBackWorker" : {
         "keyname" : "ktBackWorker",
         "keymap" : {
-            "XBOX" : "B"
+            "XBOX" : "B",
+            "KeyBoard" : "Esc"
         },
         "description" : {
             "Chinese" : "返回",
@@ -342,7 +350,8 @@
     "ktConfirmLevel" : {
         "keyname" : "ktConfirmLevel",
         "keymap" : {
-            "XBOX" : "A"
+            "XBOX" : "A",
+            "KeyBoard" : "E"
         },
         "description" : {
             "Chinese" : "确认",
@@ -352,7 +361,8 @@
     "ktBackLevel" : {
         "keyname" : "ktBackLevel",
         "keymap" : {
-            "XBOX" : "B"
+            "XBOX" : "B",
+            "KeyBoard" : "Esc"
         },
         "description" : {
             "Chinese" : "返回",
