@@ -7,6 +7,7 @@ using ML.Engine.Manager;
 using ML.Engine.Timer;
 using ProjectOC.Player;
 using ProjectOC.WorkerNS;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -19,14 +20,15 @@ namespace ProjectOC.WorkerEchoNS
         public string WorkerID;
         public CounterDownTimer timer;
         public Worker worker;
-        public ExternWorker(string WorkerID, float time,BuildingPart buildingPart)
+        public ExternWorker(string WorkerID, float time,BuildingPart buildingPart,int index)
         {
-
+            this.WorkerID = WorkerID;
             timer = new CounterDownTimer(time);
             GameManager.Instance.GetLocalManager<WorkerManager>().OnlyCostResource(GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory, WorkerID);
             timer.OnEndEvent += () =>
             {
-                GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker(buildingPart.transform.position,Quaternion.identity,WorkerID);
+                this.worker = GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker(buildingPart.transform.position,Quaternion.identity,WorkerID);
+                this.worker.gameObject.transform.position = this.worker.gameObject.transform.position += new Vector3((float)(3 *Math.Cos(2 * 3.1415926 * index / 5)),0, (float)(3 * Math.Sin(2 * 3.1415926 * index / 5)));
             };
         }
     }
@@ -43,21 +45,28 @@ namespace ProjectOC.WorkerEchoNS
         }
         public ExternWorker SummonWorker(string id,int index)
         {
+            
             if(this.Level==1)
             {
                 id = GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRandomID();
+                
             }
-            ExternWorker externWorker = new ExternWorker(id, GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetTimeCost(id), BuildingPart);
+            ExternWorker externWorker = new ExternWorker(id, GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetTimeCost(id), BuildingPart,index);
+            Workers[index] = externWorker;
+           
             return externWorker;
         }
         public void SpawnWorker(int index)
         {
-            Workers[index].worker.transform.position = Vector3.zero;
+          
+        
+            Workers[index].worker.transform.position = new Vector3(2,2,2);
             Workers[index] = null;
         }
         public void ExpelWorker(int index)
         {
-            GameManager.Instance.GetLocalManager<WorkerManager>().RemoveWorker(Workers[index].worker);
+            GameObject.Destroy(Workers[index].worker.gameObject);
+           
             Workers[index] = null;
         }
         public void LevelUp()
@@ -86,6 +95,7 @@ namespace ProjectOC.WorkerEchoNS
         }
         public void StopEcho(int index)
         {
+            
             IInventory inventory = GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory;
             List<ML.Engine.InventorySystem.CompositeSystem.Formula> dict = GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRaw(Workers[index].WorkerID);
             foreach(var pair in dict)
@@ -99,7 +109,7 @@ namespace ProjectOC.WorkerEchoNS
                 }
 
             }
-
+            Workers[index] = null;
         }
     }
 }
