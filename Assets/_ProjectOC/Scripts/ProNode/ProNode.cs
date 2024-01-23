@@ -240,7 +240,14 @@ namespace ProjectOC.ProNodeNS
 
         public ProNode(ProNodeTableData config)
         {
-            this.ID = config.ID;
+            this.ID = config.ID ?? "";
+            EffBase = 100;
+            LevelMax = 2;
+            LevelUpgradeEff = new List<int>() { 50, 50, 50 };
+            MissionTransports = new List<MissionTransport>();
+            RawItems = new Dictionary<string, int>();
+            Level = 0;
+            TransportPriority = TransportPriority.Normal;
         }
 
         public bool SetLevel(int level)
@@ -312,7 +319,7 @@ namespace ProjectOC.ProNodeNS
             bool flag = false;
             List<Item> resItems = new List<Item>();
             // 堆放的成品
-            if (this.Recipe != null)
+            if (this.Recipe != null && !string.IsNullOrEmpty(ProductItem) && StackAll > 0)
             {
                 List<Item> items = ItemManager.Instance.SpawnItems(ProductItem, StackAll);
                 foreach (var item in items)
@@ -358,7 +365,7 @@ namespace ProjectOC.ProNodeNS
             // 清空数据
             foreach (MissionTransport mission in this.MissionTransports)
             {
-                mission.End();
+                mission.End(false);
             }
             this.MissionTransports.Clear();
             this.Stack = 0;

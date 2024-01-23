@@ -57,7 +57,7 @@ namespace ML.Engine.InventorySystem
 
         public string GetProductID()
         {
-            return Product.id;
+            return Product.id ?? "";
         }
 
         public int GetProductNum()

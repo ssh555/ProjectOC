@@ -15,7 +15,7 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// ID
         /// </summary>
-        public string ID;
+        public string ID = "";
         /// <summary>
         /// 效果参数1 string
         /// </summary>
@@ -42,7 +42,7 @@ namespace ProjectOC.WorkerNS
         public Effect(EffectTableData config, string value)
         {
             this.ID = config.ID;
-
+            ParamStr = "";
             switch (EffectType)
             {
                 #region int

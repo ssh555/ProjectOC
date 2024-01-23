@@ -33,7 +33,7 @@ namespace ProjectOC.ProNodeNS
             if (oldPos == newPos)
             {
                 // 生成逻辑对象
-                string actorID = BuildingManager.Instance.GetActorID(this.Classification.ToString());
+                string actorID = BuildingManager.Instance.GetActorID(this.Classification.ToString().Replace('-', '_'));
                 if (!string.IsNullOrEmpty(actorID))
                 {
                     LocalGameManager.Instance.ProNodeManager.WorldNodeSetData(this, actorID);
@@ -44,11 +44,12 @@ namespace ProjectOC.ProNodeNS
         public void Interact(InteractComponent component)
         {
             // 实例化UIPanel
-            InventorySystem.UI.UIProNode uiPanel = GameManager.Instance.ABResourceManager.LoadLocalAB("ui/uipanel").LoadAsset<InventorySystem.UI.UIProNode>("UIProNodePanel");
+            GameObject gameObject = GameManager.Instance.ABResourceManager.LoadLocalAB("ui/uipanel").LoadAsset<GameObject>("UIProNodePanel");
+            InventorySystem.UI.UIProNode uiPanel = GameObject.Instantiate(gameObject, GameObject.Find("Canvas").transform, false).GetComponent<InventorySystem.UI.UIProNode>();
             // 初始化相关数据
             uiPanel.ProNode = this.ProNode;
             // Push
-            ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uiPanel);
+            GameManager.Instance.UIManager.PushPanel(uiPanel);
         }
     }
 }

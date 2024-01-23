@@ -26,5 +26,12 @@
             "Chinese" : "刁民",
             "English" : "Worker"
         }
+    },
+    {
+        "name" : "additem",
+        "description" : {
+            "Chinese" : "添加物品",
+            "English" : "Add Item"
+        }
     }
 ]

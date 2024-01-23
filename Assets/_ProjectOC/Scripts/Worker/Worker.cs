@@ -20,6 +20,7 @@ namespace ProjectOC.WorkerNS
         #region 策划配置项
         [LabelText("名字")]
         public string Name = "Worker";
+        public Gender Gender = Gender.None;
         [LabelText("当前体力值")]
         public int APCurrent = 10;
         [LabelText("体力上限")]
@@ -66,7 +67,7 @@ namespace ProjectOC.WorkerNS
         public List<Feature> Features = new List<Feature>();
 
         [LabelText("每个时段的安排")]
-        public TimeArrangement TimeArrangement;
+        public TimeArrangement TimeArrangement = new TimeArrangement(24);
 
         [LabelText("当前时段的安排应该所处的状态")]
         public TimeStatus CurTimeFrameStatus 
@@ -164,6 +165,7 @@ namespace ProjectOC.WorkerNS
 
         public Worker()
         {
+            this.ExpRate.Add(WorkType.None, 0);
             this.ExpRate.Add(WorkType.Cook, 100);
             this.ExpRate.Add(WorkType.HandCraft, 100);
             this.ExpRate.Add(WorkType.Industry, 100);
@@ -171,6 +173,7 @@ namespace ProjectOC.WorkerNS
             this.ExpRate.Add(WorkType.Transport, 100);
             this.ExpRate.Add(WorkType.Collect, 100);
 
+            this.Eff.Add(WorkType.None, 0);
             this.Eff.Add(WorkType.Cook, 0);
             this.Eff.Add(WorkType.HandCraft, 0);
             this.Eff.Add(WorkType.Industry, 0);

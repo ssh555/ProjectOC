@@ -1,7 +1,9 @@
 using ML.Engine.BuildingSystem;
+using ML.Engine.InventorySystem;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
 using Newtonsoft.Json;
+using ProjectOC.StoreNS;
 using ProjectOC.TechTree.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,6 +25,7 @@ namespace ProjectOC.Player.UI
         private SelectedButton EnterTechTreeBtn;
         private SelectedButton EnterInventoryBtn;
         private SelectedButton CreateWorkerBtn;
+        private SelectedButton AddItemBtn;
 
         private BuildingManager BM => BuildingManager.Instance;
 
@@ -82,6 +85,21 @@ namespace ProjectOC.Player.UI
                 ProjectOC.ManagerNS.LocalGameManager.Instance.WorkerManager.SpawnWorker(player.transform.position, player.transform.rotation);
             };
 
+            this.AddItemBtn = btnList.Find("AddItem").GetComponent<SelectedButton>();
+            this.AddItemBtn.OnInteract += () =>
+            {
+                Player.PlayerCharacter Player = GameObject.Find("PlayerCharacter")?.GetComponent<Player.PlayerCharacter>();
+                string itemID = "Item_Material_17";
+                int amount = 100;
+                if (ItemManager.Instance.IsValidItemID(itemID))
+                {
+                    List<Item> items = ItemManager.Instance.SpawnItems(itemID, amount);
+                    foreach (Item item in items)
+                    {
+                        player.Inventory.AddItem(item);
+                    }
+                }
+            };
 
             var btn = btnList.GetComponentsInChildren<SelectedButton>();
             
@@ -199,6 +217,7 @@ namespace ProjectOC.Player.UI
                 this.EnterTechTreeBtn.text.text = TipDict["techtree"].GetDescription();
                 this.EnterInventoryBtn.text.text = TipDict["inventory"].GetDescription();
                 this.CreateWorkerBtn.text.text = TipDict["worker"].GetDescription();
+                this.AddItemBtn.text.text = TipDict["additem"].GetDescription();
             }
         }
     }

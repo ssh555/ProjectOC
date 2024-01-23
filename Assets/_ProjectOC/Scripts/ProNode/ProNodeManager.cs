@@ -85,9 +85,9 @@ namespace ProjectOC.ProNodeNS
             return null;
         }
 
-        public void WorldNodeSetData(WorldProNode worldNode, string storeID)
+        public void WorldNodeSetData(WorldProNode worldNode, string nodeID)
         {
-            ProNode node = SpawnProNode(storeID);
+            ProNode node = SpawnProNode(nodeID);
             if (node != null)
             {
                 if (worldNode.ProNode != null)
