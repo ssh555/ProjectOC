@@ -1320,7 +1320,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             this.OnExitAppearance?.Invoke(this.SelectedPartInstance);
         }
 
-        private const string MatPABPath = "Assets/BuildingSystem";
+        private const string MatPABPath = "Assets/BuildingSystem/MatPackage";
         protected IEnumerator LoadMatPackages()
         {
 #if UNITY_EDITOR
