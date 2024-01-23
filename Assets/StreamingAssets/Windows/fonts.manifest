@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3048198035
+CRC: 3900492078
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e2881ab3897e140516fd9c12411155fa
+    Hash: d803c8076c2f220acb321060d3d0450d
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2172eb9bcb39b2bdaceec7c9e1d524e1
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: e2881ab3897e140516fd9c12411155fa
+    Hash: d803c8076c2f220acb321060d3d0450d
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -57,4 +57,4 @@ Assets:
 - Assets/_ML/MLResources/Fonts/MSYH.TTC
 - Assets/_ML/MLResources/Fonts/MSYHBD.TTC
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/textmeshpro/shader
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/textmeshpro/shader

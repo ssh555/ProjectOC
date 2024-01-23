@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 124342732
+CRC: 1026721497
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ffba6fa5172cc371f4f4e52a7089053a
+    Hash: 3d62eff8a68049295a46e6d359b84693
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5ad585dd02dfb5016c0dad519eab8f49
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: ffba6fa5172cc371f4f4e52a7089053a
+    Hash: 3d62eff8a68049295a46e6d359b84693
 HashAppended: 0
 ClassTypes:
 - Class: 49
@@ -21,6 +21,7 @@ Assets:
 - Assets/_ProjectOC/Resources/Binary/TableData/ProNode.bytes
 - Assets/_ProjectOC/Resources/Binary/TableData/Building.bytes
 - Assets/_ProjectOC/Resources/Binary/TableData/Recipe.bytes
+- Assets/_ML/MLResources/Binary/TableData/LevelTableData.json
 - Assets/_ProjectOC/Resources/Binary/TableData/Composition.bytes
 - Assets/_ProjectOC/Resources/Binary/TableData/TechPoint.bytes
 - Assets/_ProjectOC/Resources/Binary/TableData/Skill.bytes
