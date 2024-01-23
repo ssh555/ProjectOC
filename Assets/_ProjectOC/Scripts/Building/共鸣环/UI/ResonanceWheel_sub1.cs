@@ -294,19 +294,21 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             
 
-            List<float> datas = new List<float>();
-            // 烹饪
-            datas.Add(worker.Skill[WorkType.Cook].Level / 10f);
-            // 轻工
-            datas.Add(worker.Skill[WorkType.HandCraft].Level / 10f);
-            // 精工
-            datas.Add(worker.Skill[WorkType.Industry].Level / 10f);
-            // 术法
-            datas.Add(worker.Skill[WorkType.Magic].Level / 10f);
-            // 搬运
-            datas.Add(worker.Skill[WorkType.Transport].Level / 10f);
-            // 采集
-            datas.Add(worker.Skill[WorkType.Collect].Level / 10f);
+            List<float> datas = new List<float>
+            {
+                // 烹饪
+                worker.Skill[WorkType.Cook].Level / 10f,
+                // 轻工
+                worker.Skill[WorkType.HandCraft].Level / 10f,
+                // 精工
+                worker.Skill[WorkType.Industry].Level / 10f,
+                // 术法
+                worker.Skill[WorkType.Magic].Level / 10f,
+                // 搬运
+                worker.Skill[WorkType.Transport].Level / 10f,
+                // 采集
+                worker.Skill[WorkType.Collect].Level / 10f
+            };
 
             var radar = this.transform.Find("HiddenBeastInfo1").Find("Info").Find("SkillGraph").Find("Viewport").Find("Content").Find("Radar").GetComponent<UIPolygon>();
             radar.DrawPolygon(datas);
