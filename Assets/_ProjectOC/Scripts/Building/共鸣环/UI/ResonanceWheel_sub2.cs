@@ -1,5 +1,6 @@
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InventorySystem;
+using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using Newtonsoft.Json;
 using Sirenix.OdinInspector;
@@ -49,12 +50,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             Grid4 = ring.Find("Grid4");
             Grid5 = ring.Find("Grid5");
             Grid6 = ring.Find("Grid6");
-            Grids.Add(new GridBeastType(Grid1.transform, "123"));
-            Grids.Add(new GridBeastType(Grid2.transform, "124"));
-            Grids.Add(new GridBeastType(Grid3.transform, "125"));
-            Grids.Add(new GridBeastType(Grid4.transform, "126"));
-            Grids.Add(new GridBeastType(Grid5.transform, "127"));
-            Grids.Add(new GridBeastType(Grid6.transform, "128"));
+            Grid7 = ring.Find("Grid7");
+            Grids.Add(new GridBeastType(Grid1.transform, ResonanceWheelUI.BeastType.WorkerEcho_Random));
+            Grids.Add(new GridBeastType(Grid2.transform, ResonanceWheelUI.BeastType.WorkerEcho_Cat));
+            Grids.Add(new GridBeastType(Grid3.transform, ResonanceWheelUI.BeastType.WorkerEcho_Deer));
+            Grids.Add(new GridBeastType(Grid4.transform, ResonanceWheelUI.BeastType.WorkerEcho_Fox));
+            Grids.Add(new GridBeastType(Grid5.transform, ResonanceWheelUI.BeastType.WorkerEcho_Rabbit));
+            Grids.Add(new GridBeastType(Grid6.transform, ResonanceWheelUI.BeastType.WorkerEcho_Dog));
+            Grids.Add(new GridBeastType(Grid7.transform, ResonanceWheelUI.BeastType.WorkerEcho_Seal));
 
             //BotKeyTips
             var kt = this.transform.Find("BotKeyTips").Find("KeyTips");
@@ -117,12 +120,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public class GridBeastType
         {
             public Transform transform;
-            public string beastID;
+            public ResonanceWheelUI.BeastType beastType;
 
-            public GridBeastType(Transform transform, string beastID)
+            public GridBeastType(Transform transform, ResonanceWheelUI.BeastType beastType)
             {
                 this.transform = transform;
-                this.beastID = beastID;
+                this.beastType = beastType;
             }
 
         }
@@ -212,7 +215,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             
             
-            parentUI.Grids[parentUI.CurrentGridIndex].id = Grids[CurrentGridIndex].beastID;
+            parentUI.Grids[parentUI.CurrentGridIndex].beastType = Grids[CurrentGridIndex].beastType;
+            parentUI.currentBeastType = Grids[CurrentGridIndex].beastType;
             UIMgr.PopPanel();
             
         }
@@ -250,7 +254,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         //ring
         [ShowInInspector]
         private List<GridBeastType> Grids = new List<GridBeastType>();
-        private Transform Grid1, Grid2, Grid3, Grid4, Grid5, Grid6;
+        private Transform Grid1, Grid2, Grid3, Grid4, Grid5, Grid6, Grid7;
         private int CurrentGridIndex = 0;//0µ½5
 
         //BotKeyTips
@@ -303,7 +307,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
         #endregion
 
-
+        
     }
 
 }

@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 214779166
+CRC: 1515440582
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -61,8 +61,9 @@ AssetBundleManifest:
     Info_14:
       Name: scene
       Dependencies:
-        Dependency_0: prefabs/buildingsystem/bpart
-        Dependency_1: prefabs/character/player
+        Dependency_0: ui/uipanel
+        Dependency_1: prefabs/buildingsystem/bpart
+        Dependency_2: prefabs/character/player
     Info_15:
       Name: assets/buildingsystem
       Dependencies:
@@ -120,3 +121,4 @@ AssetBundleManifest:
       Name: ui/resonancewheel/resonancewheelprefabs
       Dependencies:
         Dependency_0: fonts
+        Dependency_1: ui/resonancewheel/texture2d

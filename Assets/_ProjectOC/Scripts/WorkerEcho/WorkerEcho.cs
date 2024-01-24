@@ -6,6 +6,7 @@ using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.Manager;
 using ML.Engine.Timer;
 using ProjectOC.Player;
+using ProjectOC.ResonanceWheelSystem.UI;
 using ProjectOC.WorkerNS;
 using System;
 using System.Collections;
@@ -37,7 +38,7 @@ namespace ProjectOC.WorkerEchoNS
     [System.Serializable]
     public sealed class WorkerEcho : ML.Engine.Manager.LocalManager.ILocalManager
     {
-        public int Level = 1;
+        public int Level = 2;
         ExternWorker[] Workers = new ExternWorker[5];
         BuildingPart BuildingPart = null;
 
@@ -47,23 +48,29 @@ namespace ProjectOC.WorkerEchoNS
         }
         public ExternWorker SummonWorker(string id,int index)
         {
+            IInventory inventory = GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory;
             
-            if(this.Level==1)
+            if (this.Level==1)
             {
+                GameManager.Instance.GetLocalManager<WorkerManager>().OnlyCostResource(inventory, id);
                 id = GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRandomID();
+                
+            }
+            else
+            {
                 foreach (var item in GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRaw(id))
                 {
-                    Debug.Log("GetRaw " + item.id);
+                    if (item.num > inventory.GetItemAllNum(item.id))
+                    {
+                        Debug.Log("材料不足！无法召唤！");
+                        return null;
+                    }
                 }
-
+                GameManager.Instance.GetLocalManager<WorkerManager>().OnlyCostResource(inventory, id);
             }
+
             
-
-            if (!GameManager.Instance.GetLocalManager<WorkerManager>().OnlyCostResource(GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory, id))
-            {
-                Debug.Log("材料不足！无法召唤！");
-                return null;
-            }
+            
             ExternWorker externWorker = new ExternWorker(id, GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetTimeCost(id), BuildingPart,index);
             Workers[index] = externWorker;
            
@@ -115,11 +122,11 @@ namespace ProjectOC.WorkerEchoNS
             {
                 foreach (Item item in ItemManager.Instance.SpawnItems(pair.id, pair.num))
                 {
-                    if (inventory.AddItem(item))
-                    {
-                        inventory.AddItem(item);
-                    }
+                    inventory.AddItem(item);
                 }
+
+
+
 
             }
             Workers[index] = null;

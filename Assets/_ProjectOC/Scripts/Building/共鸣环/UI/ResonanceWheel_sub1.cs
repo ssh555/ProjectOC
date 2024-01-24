@@ -15,7 +15,7 @@ using System.Drawing;
 using System.Linq;
 using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
-using Unity.VisualScripting.Dependencies.Sqlite;
+
 using UnityEngine;
 using UnityEngine.Purchasing;
 using UnityEngine.Rendering;
@@ -43,6 +43,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
             StartCoroutine(InitUIPrefabs());
+            StartCoroutine(InitUITexture2D());
             //BeastInfo
             var Info1 = this.transform.Find("HiddenBeastInfo1").Find("Info");
             Stamina = Info1.Find("PhysicalStrength").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
@@ -197,7 +198,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             parentUI.workerEcho.ExpelWorker(parentUI.CurrentGridIndex);
 
             //ui
-
+            ResonanceWheelUI.RingGrid.Reset(parentUI.Grids[parentUI.CurrentGridIndex], parentUI.Grids[parentUI.CurrentGridIndex].transform);
+            UIMgr.PopPanel();
             Debug.Log("Expel_performed!");
         }
 
@@ -205,6 +207,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
             parentUI.workerEcho.SpawnWorker(parentUI.CurrentGridIndex);
+            
+            ResonanceWheelUI.RingGrid.Reset(parentUI.Grids[parentUI.CurrentGridIndex], parentUI.Grids[parentUI.CurrentGridIndex].transform);
+            UIMgr.PopPanel();
             Debug.Log("Receive_performed!");
         }
         #endregion
@@ -306,9 +311,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
 
-            /*            List<float> datas = new List<float>
+                        List<float> datas = new List<float>
                         {
-                            // 烹饪
+                            /*// 烹饪
                             worker.Skill[WorkType.Cook].Level / 10f,
                             // 轻工
                             worker.Skill[WorkType.HandCraft].Level / 10f,
@@ -319,12 +324,13 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                             // 搬运
                             worker.Skill[WorkType.Transport].Level / 10f,
                             // 采集
-                            worker.Skill[WorkType.Collect].Level / 10f
+                            worker.Skill[WorkType.Collect].Level / 10f*/
+                            0.2f,0.3f,0.5f,0.7f,0.8f,0.1f
                         };
 
                         var radar = this.transform.Find("HiddenBeastInfo1").Find("Info").Find("SkillGraph").Find("Viewport").Find("Content").Find("Radar").GetComponent<UIPolygon>();
                         radar.DrawPolygon(datas);
-
+            /*
             //性别
             if()
             {

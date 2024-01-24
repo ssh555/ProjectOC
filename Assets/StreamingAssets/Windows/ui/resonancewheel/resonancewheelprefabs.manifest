@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1043283460
+CRC: 769071941
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e18b840da1f0c013fa3e142a97fe6139
+    Hash: da1afcdadc313ff81293d3158fc3a314
   TypeTreeHash:
     serializedVersion: 2
     Hash: a260a14b532e02d4f31bdb9f9e7d1848
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: e18b840da1f0c013fa3e142a97fe6139
+    Hash: da1afcdadc313ff81293d3158fc3a314
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -57,5 +57,7 @@ SerializeReferenceClassIdentifiers:
   ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
 Assets:
 - Assets/_ProjectOC/Resources/UI/ResonanceWheel/ResonanceWheelPrefabs/Description.prefab
+- Assets/_ProjectOC/Resources/UI/ResonanceWheel/ResonanceWheelPrefabs/Slot.prefab
 Dependencies:
 - E:/OC/projectoc/Assets/StreamingAssets/Windows/fonts
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d

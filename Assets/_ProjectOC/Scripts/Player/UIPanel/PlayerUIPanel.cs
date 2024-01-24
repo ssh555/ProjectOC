@@ -88,6 +88,9 @@ namespace ProjectOC.Player.UI
             this.AddItemBtn = btnList.Find("AddItem").GetComponent<SelectedButton>();
             this.AddItemBtn.OnInteract += () =>
             {
+
+                Debug.Log($"Pre {player.Inventory.GetItemAllNum("Item_Material_1")} {player.Inventory.GetItemAllNum("Item_Material_37")}");
+
                 Player.PlayerCharacter Player = GameObject.Find("PlayerCharacter")?.GetComponent<Player.PlayerCharacter>();
                 string itemID = "Item_Material_1";
                 int amount = 100;
@@ -101,7 +104,7 @@ namespace ProjectOC.Player.UI
                         Player.Inventory.AddItem(item);
                     }
                 }
-                Debug.Log(itemID + ":100");
+
                 itemID = "Item_Material_37";
                 if (ItemManager.Instance.IsValidItemID(itemID))
                 {
@@ -112,10 +115,21 @@ namespace ProjectOC.Player.UI
                         Player.Inventory.AddItem(item);
                     }
                 }
-                Debug.Log(itemID + ":100");
 
-                IInventory inventory123 = GameObject.Find("PlayerCharacter")?.GetComponent<Player.PlayerCharacter>().Inventory;
+                Debug.Log($"Post {player.Inventory.GetItemAllNum("Item_Material_1")} {player.Inventory.GetItemAllNum("Item_Material_37")}");
+                IInventory inventory123 = player.Inventory;
                 Debug.Log("CanComposite " + inventory123.GetItemAllNum("Item_Material_1") + " " + inventory123.GetItemAllNum("Item_Material_37"));
+
+
+                foreach (var item in inventory123.GetItemList())
+                {
+                    if (item != null)
+                    {
+                        //Debug.Log(item.ID + ": " + inventory123.GetItemAllNum(item.ID));
+                        Debug.Log(item.ID + ": " + item.Amount);
+                    }
+                }
+
             };
 
             var btn = btnList.GetComponentsInChildren<SelectedButton>();
