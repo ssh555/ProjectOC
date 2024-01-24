@@ -225,6 +225,7 @@ namespace ML.Engine.InventorySystem
             }
             return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
         }
+
         public GameObject GetItemObject(string id)
         {
             if (!this.ItemTypeStrDict.ContainsKey(id))

@@ -20,15 +20,16 @@ namespace ProjectOC.WorkerNS
         #region 策划配置项
         [LabelText("名字")]
         public string Name = "Worker";
+        [LabelText("性别")]
         public Gender Gender = Gender.None;
         [LabelText("当前体力值")]
         public int APCurrent = 10;
         [LabelText("体力上限")]
         public int APMax = 10;
         [LabelText("体力工作阈值")]
-        public int APWorkThreshold = 3;
+        public int APWorkThreshold = 2;
         [LabelText("体力休息阈值")]
-        public int APRelaxThreshold = 5;
+        public int APRelaxThreshold = 8;
         [LabelText("完成一次任务消耗的体力值")]
         public int APCost = 1;
         [LabelText("完成一次搬运消耗的体力值")]
@@ -52,8 +53,8 @@ namespace ProjectOC.WorkerNS
         public int BURMax = 100;
         [LabelText("搬运经验值")]
         public int ExpTransport = 10;
-        [LabelText("技能类型")]
-        public WorkType SkillType;
+        [LabelText("刁民类型")]
+        public WorkType WorkType;
         public Dictionary<WorkType, string> SkillConfig = new Dictionary<WorkType, string>();
         [LabelText("技能")]
         public Dictionary<WorkType, Skill> Skill = new Dictionary<WorkType, Skill>();
@@ -67,7 +68,7 @@ namespace ProjectOC.WorkerNS
         public List<Feature> Features = new List<Feature>();
 
         [LabelText("每个时段的安排")]
-        public TimeArrangement TimeArrangement = new TimeArrangement(24);
+        public TimeArrangement TimeArrangement = new TimeArrangement();
 
         [LabelText("当前时段的安排应该所处的状态")]
         public TimeStatus CurTimeFrameStatus 
@@ -83,40 +84,87 @@ namespace ProjectOC.WorkerNS
                 return TimeStatus.None;
             } 
         }
-        
-        /// <summary>
-        /// 状态机控制器
-        /// </summary>
-        protected StateController StateController;
 
-        /// <summary>
-        /// 状态机
-        /// </summary>
+        [LabelText("状态机控制器")]
+        protected StateController StateController;
+        
+        [LabelText("状态机")]
         protected WorkerStateMachine StateMachine;
 
         [LabelText("当前实际状态")]
         public Status Status;
-
+        
         [LabelText("是否在值班")]
         public bool IsOnDuty { get { return this.ProNode != null && this.Status != Status.Relaxing && ArriveProNode; } }
-
+        
         [LabelText("生产节点")]
         public ProNode ProNode;
-
+        
+        [LabelText("是否到达生产节点")]
         public bool ArriveProNode = false;
-
+        
         [LabelText("搬运")]
         public Transport Transport;
-
+        
         [LabelText("搬运物品")]
         public List<Item> TransportItems = new List<Item>();
 
-        private Transform Target;
         private NavMeshAgent Agent;
-        public float Threshold = 0.5f;
+        public float Threshold = 1f;
+        private Transform Target;
         private event Action<Worker> OnArrival;
         private bool HasArrived = false;
+        public Worker()
+        {
+            this.ExpRate.Add(WorkType.None, 0);
+            this.ExpRate.Add(WorkType.Cook, 100);
+            this.ExpRate.Add(WorkType.HandCraft, 100);
+            this.ExpRate.Add(WorkType.Industry, 100);
+            this.ExpRate.Add(WorkType.Magic, 100);
+            this.ExpRate.Add(WorkType.Transport, 100);
+            this.ExpRate.Add(WorkType.Collect, 100);
 
+            this.Eff.Add(WorkType.None, 0);
+            this.Eff.Add(WorkType.Cook, 0);
+            this.Eff.Add(WorkType.HandCraft, 0);
+            this.Eff.Add(WorkType.Industry, 0);
+            this.Eff.Add(WorkType.Magic, 0);
+            this.Eff.Add(WorkType.Transport, 50);
+            this.Eff.Add(WorkType.Collect, 0);
+
+            this.Skill.Add(WorkType.None, new Skill());
+            this.Skill.Add(WorkType.Cook, new Skill());
+            this.Skill.Add(WorkType.HandCraft, new Skill());
+            this.Skill.Add(WorkType.Industry, new Skill());
+            this.Skill.Add(WorkType.Magic, new Skill());
+            this.Skill.Add(WorkType.Transport, new Skill());
+            this.Skill.Add(WorkType.Collect, new Skill());
+
+            this.Features = ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature();
+            foreach (Feature feature in this.Features)
+            {
+                feature.ApplyFeature(this);
+            }
+
+            foreach (var kv in SkillConfig)
+            {
+                Skill skill = ManagerNS.LocalGameManager.Instance.SkillManager.SpawnSkill(kv.Value);
+                if (skill != null)
+                {
+                    skill.ApplySkill(this);
+                    this.Skill[kv.Key] = skill;
+                }
+                else
+                {
+                    Debug.LogError($"Worker {Name} Skill {kv.Value} is Null");
+                }
+            }
+
+            // 初始化状态机
+            StateController = new StateController(0);
+            StateMachine = new WorkerStateMachine(this);
+            StateController.SetStateMachine(StateMachine);
+        }
 
         public void Start()
         {
@@ -154,58 +202,27 @@ namespace ProjectOC.WorkerNS
             }
             return false;
         }
-        public bool ClearDestination()
+
+        public void ClearDestination()
         {
-            this.Target = null;
+            Target = null;
             OnArrival = null;
             HasArrived = false;
-            return false;
         }
 
-
-        public Worker()
+        public void ChangeProNode(ProNode proNode)
         {
-            this.ExpRate.Add(WorkType.None, 0);
-            this.ExpRate.Add(WorkType.Cook, 100);
-            this.ExpRate.Add(WorkType.HandCraft, 100);
-            this.ExpRate.Add(WorkType.Industry, 100);
-            this.ExpRate.Add(WorkType.Magic, 100);
-            this.ExpRate.Add(WorkType.Transport, 100);
-            this.ExpRate.Add(WorkType.Collect, 100);
-
-            this.Eff.Add(WorkType.None, 0);
-            this.Eff.Add(WorkType.Cook, 0);
-            this.Eff.Add(WorkType.HandCraft, 0);
-            this.Eff.Add(WorkType.Industry, 0);
-            this.Eff.Add(WorkType.Magic, 0);
-            this.Eff.Add(WorkType.Transport, 50);
-            this.Eff.Add(WorkType.Collect, 0);
-
-            this.Features = ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature();
-            foreach (Feature feature in this.Features)
+            if (this.Transport != null)
             {
-                feature.ApplyFeature(this);
+                this.Transport.End();
             }
-
-            foreach (var kv in SkillConfig)
+            if (this.ProNode != null)
             {
-                Skill skill = ManagerNS.LocalGameManager.Instance.SkillManager.SpawnSkill(kv.Value);
-                if (skill != null)
-                {
-                    skill.ApplySkill(this);
-                    this.Skill.Add(kv.Key, skill);
-                }
-                else
-                {
-                    Debug.LogError($"Worker {Name} Skill {kv.Value} is Null");
-                }
+                this.ProNode.RemoveWorker();
             }
-
-            // 初始化状态机
-            StateController = new StateController(0);
-            StateMachine = new WorkerStateMachine(this);
-            StateController.SetStateMachine(StateMachine);
+            this.ProNode = proNode;
         }
+
 
         /// <summary>
         /// 修改经验值
@@ -255,19 +272,6 @@ namespace ProjectOC.WorkerNS
         public void SetTimeStatusAll(TimeStatus timeStatus)
         {
             this.TimeArrangement.SetTimeStatusAll(timeStatus);
-        }
-
-        public void ChangeProNode(ProNode proNode)
-        {
-            if (this.Transport != null)
-            {
-                this.Transport.End();
-            }
-            if (this.ProNode != null)
-            {
-                this.ProNode.RemoveWorker();
-            }
-            this.ProNode = proNode;
         }
     }
 }

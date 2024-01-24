@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1646532727
+CRC: 726323273
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 2f330283bc4ea084302ddc4243be6f4e
+    Hash: 2382b702bf819c686720f70e9d3889d8
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2d8df09e698f722ada1caa03d3413830
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 2f330283bc4ea084302ddc4243be6f4e
+    Hash: 2382b702bf819c686720f70e9d3889d8
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -71,14 +71,12 @@ Assets:
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_36.png
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_59.png
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_20.png
-- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/test/100001.png
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_66.png
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_29.png
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_62.png
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_55.png
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_90.png
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_85.png
-- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/test/100003.png
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_28.png
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_1.png
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_37.png
@@ -108,8 +106,8 @@ Assets:
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_70.png
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_65.png
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_49.png
+- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/test/ItemIcon.png
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_21.png
-- Assets/_ML/MLResources/InventorySystem/Item/Texture2D/test/100002.png
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_68.png
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_67.png
 - Assets/_ML/MLResources/InventorySystem/Item/Texture2D/MaterialItem/UI_Item_Icon_Material_46.png
