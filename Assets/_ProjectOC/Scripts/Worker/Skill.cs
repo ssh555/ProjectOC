@@ -11,9 +11,6 @@ namespace ProjectOC.WorkerNS
     [System.Serializable]
     public class Skill
     {
-        /// <summary>
-        /// 键，Skill_技能类型
-        /// </summary>
         public string ID = "";
         /// <summary>
         /// 效果
@@ -50,11 +47,12 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         public string EffectsDescription { get => LocalGameManager.Instance.SkillManager.GetEffectsDescription(ID); }
         #endregion
-
+        public Skill()
+        {
+        }
         public Skill(SkillTableData config)
         {
-            this.ID = config.ID ?? "";
-            LevelMax = 10;
+            this.ID = config.ID;
             foreach (var tuple in config.Effects)
             {
                 Effect effect = LocalGameManager.Instance.EffectManager.SpawnEffect(tuple.Item1, tuple.Item2);
@@ -67,28 +65,6 @@ namespace ProjectOC.WorkerNS
                     Debug.LogError($"Skill {this.ID} Effect {tuple.Item1} is Null");
                 }
             }
-            this.Level = 0;
-            this.LevelMax = 10;
-            this.Exp = 0;
-        }
-        public Skill(Skill skill)
-        {
-            this.ID = skill.ID;
-            this.Effects = new List<Effect>();
-            foreach (Effect effect in skill.Effects)
-            {
-                if (effect != null)
-                {
-                    this.Effects.Add(new Effect(effect));
-                }
-                else
-                {
-                    Debug.LogError($"Skill {skill.ID} effect is Null");
-                }
-            }
-            this.Level = skill.Level;
-            this.LevelMax = skill.LevelMax;
-            this.Exp = skill.Exp;
         }
         /// <summary>
         /// 等级增加

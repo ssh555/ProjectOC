@@ -21,7 +21,6 @@ namespace ProjectOC.StoreNS
 
         private void Start()
         {
-            // ²»ÐèÒª Update
             this.enabled = false;
         }
         public override void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
@@ -33,7 +32,6 @@ namespace ProjectOC.StoreNS
                 string actorID = BuildingManager.Instance.GetActorID(this.Classification.ToString().Replace('-', '_'));
                 if (!string.IsNullOrEmpty(actorID) && actorID.Split('_').Length == 3)
                 {
-                    //Debug.Log($"{actorID}");
                     string[] split = actorID.Split("_");
                     StoreType storeType = (StoreType)Enum.Parse(typeof(StoreType), split[1]);
                     int level = int.Parse(split[2]);

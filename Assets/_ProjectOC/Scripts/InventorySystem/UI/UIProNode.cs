@@ -748,7 +748,7 @@ namespace ProjectOC.InventorySystem.UI
                     #endregion
 
                     #region Product
-                    string productID = ProNode.Recipe.GetProductID();
+                    string productID = ProNode.Recipe.ProductID;
                     var nameProduct = Product.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
                     nameProduct.text = ItemManager.Instance.GetItemName(productID);
                     //var imgProduct = Product.transform.Find("Icon").GetComponent<Image>();
@@ -897,13 +897,13 @@ namespace ProjectOC.InventorySystem.UI
                     name.text = Worker.Name;
                     var img = UIWorker.transform.Find("Icon").GetComponent<Image>();
                     WorkerManager workerManager = ManagerNS.LocalGameManager.Instance.WorkerManager;
-                    var sprite = tempSprite.Find(s => s.texture == workerManager.GetTexture2D());
-                    if (sprite == null)
-                    {
-                        sprite = workerManager.GetSprite();
-                        tempSprite.Add(sprite);
-                    }
-                    img.sprite = sprite;
+                    //var sprite = tempSprite.Find(s => s.texture == workerManager.GetTexture2D());
+                    //if (sprite == null)
+                    //{
+                    //    sprite = workerManager.GetSprite();
+                    //    tempSprite.Add(sprite);
+                    //}
+                    //img.sprite = sprite;
                     var onDuty = UIWorker.transform.Find("OnDuty").GetComponent<TMPro.TextMeshProUGUI>();
                     switch (Worker.Status)
                     {
@@ -1360,7 +1360,7 @@ namespace ProjectOC.InventorySystem.UI
                 if (ProNode.Recipe != null)
                 {
                     var amountProduct = Product.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
-                    amountProduct.text = ProNode.GetItemAllNum(ProNode.Recipe.GetProductID()).ToString();
+                    amountProduct.text = ProNode.GetItemAllNum(ProNode.Recipe.ProductID).ToString();
                     for (int i = 0; i < Raws.Count; ++i)
                     {
                         var amount = tempUIItems[i].transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();

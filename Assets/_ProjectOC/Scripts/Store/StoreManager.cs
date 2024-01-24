@@ -1,4 +1,3 @@
-using ML.Engine.Manager;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,24 +16,13 @@ namespace ProjectOC.StoreNS
         /// </summary>
         private Dictionary<string, WorldStore> WorldStoreDict = new Dictionary<string, WorldStore>();
 
-        /// <summary>
-        /// 是否是有效的仓库UID
-        /// </summary>
         public bool IsValidUID(string uid)
         {
-            return WorldStoreDict.ContainsKey(uid);
-        }
-
-        /// <summary>
-        /// 根据UID获取WorldStore
-        /// </summary>
-        public WorldStore GetWorldStore(string uid)
-        {
-            if (this.WorldStoreDict.ContainsKey(uid))
+            if (!string.IsNullOrEmpty(uid))
             {
-                return this.WorldStoreDict[uid];
+                return WorldStoreDict.ContainsKey(uid);
             }
-            return null;
+            return false;
         }
 
         /// <summary>
@@ -49,19 +37,22 @@ namespace ProjectOC.StoreNS
             // 从头到尾遍历仓库(跳过玩家正在交互的仓库)
             foreach (WorldStore worldStore in this.WorldStoreDict.Values)
             {
-                Store store = worldStore.Store;
-                if (store != null && !store.IsInteracting && store.IsStoreHaveItem(itemID))
+                if (worldStore != null)
                 {
-                    // 优先寻找第一个可以一次性存完的仓库
-                    // 若没有，则寻找第一个可以存入的，可溢出存入
-                    if (result == null)
+                    Store store = worldStore.Store;
+                    if (!store.IsInteracting && store.IsStoreHaveItem(itemID))
                     {
-                        result = store;
-                    }
-                    if (store.IsStoreHaveEmpty(itemID, amount))
-                    {
-                        result = store;
-                        break;
+                        // 优先寻找第一个可以一次性存完的仓库
+                        // 若没有，则寻找第一个可以存入的，可溢出存入
+                        if (result == null)
+                        {
+                            result = store;
+                        }
+                        if (store.IsStoreHaveEmpty(itemID, amount))
+                        {
+                            result = store;
+                            break;
+                        }
                     }
                 }
             }
@@ -81,20 +72,23 @@ namespace ProjectOC.StoreNS
             // 从头到尾遍历仓库(跳过玩家正在交互的仓库)
             foreach (WorldStore worldStore in this.WorldStoreDict.Values)
             {
-                Store store = worldStore.Store;
-                if (store != null && !store.IsInteracting && store.IsStoreHaveItem(itemID))
-                {
-                    int storeAmount = store.GetStoreStorage(itemID);
-                    if (resultAmount + storeAmount >= amount)
+                if (worldStore != null)
+                { 
+                    Store store = worldStore.Store;
+                    if (!store.IsInteracting && store.IsStoreHaveItem(itemID))
                     {
-                        result.Add(store, amount - resultAmount);
-                        resultAmount = amount;
-                        break;
-                    }
-                    else
-                    {
-                        result.Add(store, storeAmount);
-                        resultAmount += storeAmount;
+                        int storeAmount = store.GetStoreStorage(itemID);
+                        if (resultAmount + storeAmount >= amount)
+                        {
+                            result.Add(store, amount - resultAmount);
+                            resultAmount = amount;
+                            break;
+                        }
+                        else
+                        {
+                            result.Add(store, storeAmount);
+                            resultAmount += storeAmount;
+                        }
                     }
                 }
             }
@@ -111,26 +105,30 @@ namespace ProjectOC.StoreNS
         }
         public void WorldStoreSetData(WorldStore worldStore, StoreType storeType, int level)
         {
-            Store store = SpawnStore(storeType);
-            if (store != null)
+            if (worldStore != null && level >= 0)
             {
-
-                if (worldStore.Store != null)
+                if (!WorldStoreDict.ContainsKey(worldStore.InstanceID))
                 {
-                    worldStore.Store.WorldStore = null;
-                }
-                worldStore.Store = store;
-                store.WorldStore = worldStore;
-
-                store.SetLevel(level);
-
-                if (WorldStoreDict.ContainsKey(worldStore.InstanceID))
-                {
-                    WorldStoreDict[worldStore.InstanceID] = worldStore;
+                    WorldStoreDict.Add(worldStore.InstanceID, worldStore);
                 }
                 else
                 {
-                    WorldStoreDict.Add(worldStore.InstanceID, worldStore);
+                    WorldStoreDict[worldStore.InstanceID] = worldStore;
+                }
+                Store store = SpawnStore(storeType);
+                if (store != null)
+                {
+                    if (worldStore.Store != null)
+                    {
+                        worldStore.Store.WorldStore = null;
+                    }
+                    worldStore.Store = store;
+                    store.WorldStore = worldStore;
+                    store.SetLevel(level);
+                }
+                else
+                {
+                    Debug.LogError($"StoreType {storeType} cannot create store");
                 }
             }
         }

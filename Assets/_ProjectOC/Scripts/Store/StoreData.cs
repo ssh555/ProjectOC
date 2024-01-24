@@ -10,7 +10,7 @@ namespace ProjectOC.StoreNS
     public class StoreData
     {
         [LabelText("存储的Item ID")]
-        public string ItemID;
+        public string ItemID = "";
         [LabelText("总存放量")]
         public int StorageAll { get { return Storage + StorageReserve; } }
         [LabelText("实际存放量")]
@@ -32,19 +32,11 @@ namespace ProjectOC.StoreNS
         public int MaxCapacity;
         public StoreData()
         {
-            this.ItemID = "";
-            this.MaxCapacity = 0;
-            this.Storage = 0;
-            this.StorageReserve = 0;
-            this.EmptyReserve = 0;
         }
         public StoreData(string itemID, int maxCapacity)
         {
             this.ItemID = itemID;
             this.MaxCapacity = maxCapacity;
-            this.Storage = 0;
-            this.StorageReserve = 0;
-            this.EmptyReserve = 0;
         }
     }
 }

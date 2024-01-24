@@ -97,11 +97,11 @@ namespace ProjectOC.ProNodeNS
         /// <summary>
         /// 生产物ID
         /// </summary>
-        public string ProductItem { get => Recipe?.GetProductID() ?? ""; }
+        public string ProductItem { get => Recipe?.ProductID ?? ""; }
         /// <summary>
         /// 一次生产的生产物数量
         /// </summary>
-        public int ProductNum { get => Recipe?.GetProductNum() ?? 0; }
+        public int ProductNum { get => Recipe?.ProductNum ?? 0; }
         /// <summary>
         /// 生产节点状态
         /// </summary>
@@ -241,13 +241,6 @@ namespace ProjectOC.ProNodeNS
         public ProNode(ProNodeTableData config)
         {
             this.ID = config.ID ?? "";
-            EffBase = 100;
-            LevelMax = 2;
-            LevelUpgradeEff = new List<int>() { 50, 50, 50 };
-            MissionTransports = new List<MissionTransport>();
-            RawItems = new Dictionary<string, int>();
-            Level = 0;
-            TransportPriority = TransportPriority.Normal;
         }
 
         public bool SetLevel(int level)
@@ -386,11 +379,20 @@ namespace ProjectOC.ProNodeNS
                 this.RemoveWorker();
                 worker.ChangeProNode(this);
                 worker.SetTimeStatusAll(TimeStatus.Work_OnDuty);
+                worker.ClearDestination();
                 this.Worker = worker;
+                worker.SetDestination(WorldProNode.transform, ProNode_Action);
                 this.StartProduce();
                 return true;
             }
             return false;
+        }
+
+        public void ProNode_Action(Worker worker)
+        {
+            worker.ArriveProNode = true;
+            worker.gameObject.SetActive(false);
+            worker.ClearDestination();
         }
 
         /// <summary>
@@ -561,10 +563,17 @@ namespace ProjectOC.ProNodeNS
             if (player != null && RawItems.ContainsKey(itemID) && amount > 0 && 
                 this.RawItems[itemID] + amount <= this.StackMaxNum * this.Recipe.GetRawNum(itemID))
             {
-                if (player.Inventory.RemoveItem(itemID, amount))
+                if (player.Inventory.GetItemAllNum(itemID) >= amount)
                 {
-                    RawItems[itemID] += amount;
-                    StartProduce();
+                    if (player.Inventory.RemoveItem(itemID, amount))
+                    {
+                        RawItems[itemID] += amount;
+                        StartProduce();
+                    }
+                    else
+                    {
+                        Debug.LogError("ProNode UIAdd Error");
+                    }
                 }
             }
         }
@@ -582,6 +591,7 @@ namespace ProjectOC.ProNodeNS
                     }
                     else
                     {
+                        Debug.LogError("ProNode UIRemove Error");
                         break;
                     }
                 }
@@ -600,6 +610,10 @@ namespace ProjectOC.ProNodeNS
                     RawItems[itemID] += amount;
                     StartProduce();
                 }
+                else
+                {
+                    Debug.LogError("ProNode UIFastAdd Error");
+                }
             }
         }
         public void UIFastRemove(Player.PlayerCharacter player)
@@ -616,6 +630,7 @@ namespace ProjectOC.ProNodeNS
                     }
                     else
                     {
+                        Debug.LogError("ProNode UIFastRemove Error");
                         break;
                     }
                 }
