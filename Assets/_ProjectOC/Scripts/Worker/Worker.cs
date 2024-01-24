@@ -111,9 +111,9 @@ namespace ProjectOC.WorkerNS
 
         private NavMeshAgent Agent;
         public float Threshold = 1f;
-        private Transform Target;
+        public Transform Target;
         private event Action<Worker> OnArrival;
-        private bool HasArrived = false;
+        public bool HasArrived = false;
         public Worker()
         {
             this.ExpRate.Add(WorkType.None, 0);

@@ -83,7 +83,6 @@ namespace ProjectOC.InventorySystem.UI
             #endregion
 
             CurPriority = MissionNS.TransportPriority.Normal;
-            Store.OnStoreDataChange += Refresh;
             IsInit = true;
             Refresh();
         }
@@ -313,6 +312,7 @@ namespace ProjectOC.InventorySystem.UI
 
         private void Enter()
         {
+            Store.OnStoreDataChange += Refresh;
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Enable();
             //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
@@ -322,6 +322,7 @@ namespace ProjectOC.InventorySystem.UI
 
         private void Exit()
         {
+            Store.OnStoreDataChange -= Refresh;
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Disable();
             //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
             Store.IsInteracting = false;
