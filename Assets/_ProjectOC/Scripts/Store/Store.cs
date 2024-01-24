@@ -85,13 +85,6 @@ namespace ProjectOC.StoreNS
 
         public Store(StoreType storeType)
         {
-            StoreDatas = new List<StoreData>();
-            Transports = new List<Transport>();
-            LevelMax = 2;
-            LevelStoreCapacity = new List<int>() { 2, 4, 8 };
-            LevelStoreDataCapacity = new List<int>() { 50, 100, 200 };
-            TransportPriority = TransportPriority.Normal;
-
             for (int i = 0; i < this.StoreCapacity; i++)
             {
                 this.StoreDatas.Add(new StoreData("", this.StoreDataCapacity));
@@ -375,9 +368,16 @@ namespace ProjectOC.StoreNS
             {
                 if (ItemManager.Instance.IsValidItemID(storeData.ItemID) && storeData.Empty >= amount)
                 {
-                    if (player.Inventory.RemoveItem(storeData.ItemID, amount))
+                    if (player.Inventory.GetItemAllNum(storeData.ItemID) >= amount)
                     {
-                        storeData.Storage += amount;
+                        if (player.Inventory.RemoveItem(storeData.ItemID, amount))
+                        {
+                            storeData.Storage += amount;
+                        }
+                        else
+                        {
+                            Debug.LogError("UIAdd Error");
+                        }
                     }
                 }
             }
@@ -398,6 +398,7 @@ namespace ProjectOC.StoreNS
                         }
                         else
                         {
+                            Debug.LogError("UIRemove Error");
                             break;
                         }
                     }
@@ -415,6 +416,10 @@ namespace ProjectOC.StoreNS
                     if (player.Inventory.RemoveItem(storeData.ItemID, amount))
                     {
                         storeData.Storage += amount;
+                    }
+                    else
+                    {
+                        Debug.LogError("UIFastAdd Error");
                     }
                 }
             }
@@ -436,6 +441,7 @@ namespace ProjectOC.StoreNS
                         }
                         else
                         {
+                            Debug.LogError("UIFastRemove Error");
                             break;
                         }
                     }

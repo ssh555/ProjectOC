@@ -1,20 +1,25 @@
 namespace ProjectOC.WorkerNS
 {
     [System.Serializable]
-    public struct TimeArrangement
+    public class TimeArrangement
     {
-        private TimeStatus[] Status;
-
-        public TimeArrangement(int time=24)
+        public TimeStatus[] Status = new TimeStatus[24];
+        public TimeArrangement()
         {
-            Status = new TimeStatus[24];
+        }
+        public TimeArrangement(TimeArrangement arrangement)
+        {
+            for (int i = 0; i < 24; i++)
+            {
+                Status[i] = arrangement[i];
+            }
         }
 
         public TimeStatus this[int index]
         {
             get
             {
-                if (index >= 0 && index < 24)
+                if (0 <= index && index < 24)
                 {
                     return Status[index];
                 }
@@ -25,7 +30,7 @@ namespace ProjectOC.WorkerNS
             }
             set
             {
-                if (index >= 0 && index < 24)
+                if (0 <= index && index < 24)
                 {
                     Status[index] = value;
                 }

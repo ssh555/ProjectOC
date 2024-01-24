@@ -17,7 +17,6 @@ namespace ProjectOC.WorkerNS
                     if (machine is WorkerStateMachine workerMachine && workerMachine.Worker != null)
                     {
                         workerMachine.Worker.Status = Status.Working;
-                        workerMachine.Worker.ProNode?.StartProduce();
                     }
                 }
             );

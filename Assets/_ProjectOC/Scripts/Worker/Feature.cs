@@ -12,13 +12,7 @@ namespace ProjectOC.WorkerNS
     [System.Serializable]
     public class Feature
     {
-        /// <summary>
-        /// ID
-        /// </summary>
         public string ID = "";
-        /// <summary>
-        /// 效果
-        /// </summary>
         public List<Effect> Effects = new List<Effect>();
 
         #region 读表属性
@@ -50,7 +44,7 @@ namespace ProjectOC.WorkerNS
 
         public Feature(FeatureTableData config)
         {
-            this.ID = config.ID ?? "";
+            this.ID = config.ID;
             this.Effects = new List<Effect>();
             foreach (var tuple in config.Effects)
             {
@@ -62,22 +56,6 @@ namespace ProjectOC.WorkerNS
                 else
                 {
                     Debug.LogError($"Feature {this.ID} Effect {tuple.Item1} is Null");
-                }
-            }
-        }
-        public Feature(Feature feature)
-        {
-            this.ID = feature.ID;
-            this.Effects = new List<Effect>();
-            foreach (Effect effect in feature.Effects)
-            {
-                if (effect != null)
-                {
-                    this.Effects.Add(new Effect(effect));
-                }
-                else
-                {
-                    Debug.LogError($"Feature {feature.ID} effect is Null");
                 }
             }
         }
