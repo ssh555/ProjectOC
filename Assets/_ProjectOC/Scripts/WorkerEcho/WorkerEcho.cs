@@ -114,11 +114,11 @@ namespace ProjectOC.WorkerEchoNS
         {
             return Workers;
         }
-        public void StopEcho(int index)
+        public void StopEcho(string id,int index)
         {
             
             IInventory inventory = GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory;
-            List<ML.Engine.InventorySystem.CompositeSystem.Formula> dict = GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRaw(Workers[index].WorkerID);
+            List<ML.Engine.InventorySystem.CompositeSystem.Formula> dict = GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRaw(id);
             foreach(var pair in dict)
             {
                 foreach (Item item in ItemManager.Instance.SpawnItems(pair.id, pair.num))

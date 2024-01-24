@@ -411,8 +411,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 Grids[CurrentGridIndex].worker = worker;
                 Grids[CurrentGridIndex].isNull = false;
                 Grids[CurrentGridIndex].isResonating = true;
-                
-                
+
+                Grids[CurrentGridIndex].beastType = currentBeastType;
 
                 Debug.Log("worker "+worker.worker);
             }
@@ -470,7 +470,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
 
 
-            workerEcho.StopEcho(CurrentGridIndex);
+            workerEcho.StopEcho(Grids[CurrentGridIndex].beastType.ToString(), CurrentGridIndex);
 
 
             Grids[CurrentGridIndex].isNull = true;
