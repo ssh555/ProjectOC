@@ -5288,6 +5288,8 @@ MonoBehaviour:
   IsInit: 0
   parentUI: {fileID: 0}
   PrefabsAB: {fileID: 0}
+  icon_genderfemaleSprite: {fileID: 0}
+  icon_gendermaleSprite: {fileID: 0}
 --- !u!1 &5502949076852284798
 GameObject:
   m_ObjectHideFlags: 0

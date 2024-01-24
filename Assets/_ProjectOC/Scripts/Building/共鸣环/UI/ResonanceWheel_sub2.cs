@@ -140,6 +140,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.Enable();
+            ML.Engine.Input.InputManager.Instance.Common.Enable();
             //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
             this.Refresh();
         }
@@ -147,6 +148,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private void Exit()
         {
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.Disable();
+            ML.Engine.Input.InputManager.Instance.Common.Disable();
             //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
             this.UnregisterInput();
             

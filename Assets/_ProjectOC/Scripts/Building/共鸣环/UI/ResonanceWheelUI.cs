@@ -269,7 +269,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Enable();
 
-
+            ML.Engine.Input.InputManager.Instance.Common.Enable();
 
             this.Refresh();
         }
@@ -278,7 +278,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             this.UnregisterInput();
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Disable();
-
+            ML.Engine.Input.InputManager.Instance.Common.Disable();
         }
 
         private void UnregisterInput()
@@ -388,7 +388,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             if (workerEcho.Level == 1) //GameManager.Instance.Level == 1
             {
                 //能否成功合成 判空
-                worker = workerEcho.SummonWorker(null,CurrentGridIndex);
+                worker = workerEcho.SummonWorker(cb,CurrentGridIndex);
 
             }
             else

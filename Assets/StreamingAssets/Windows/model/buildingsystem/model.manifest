@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3894683618
+CRC: 525644551
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6a5f5be7357703593584f605bd816ca2
+    Hash: 050c4f5c828e2332882100e522d75be8
   TypeTreeHash:
     serializedVersion: 2
     Hash: 0f9fba26cbb38215f317d1fd6b1954a0
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 6a5f5be7357703593584f605bd816ca2
+    Hash: 050c4f5c828e2332882100e522d75be8
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -108,4 +108,4 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Textile_2.mesh
 - Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_WaterPurifier_1.mesh
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart

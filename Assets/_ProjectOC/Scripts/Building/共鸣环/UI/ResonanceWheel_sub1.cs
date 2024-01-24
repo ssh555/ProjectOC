@@ -135,14 +135,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Enable();
-            
+            ML.Engine.Input.InputManager.Instance.Common.Enable();
             this.Refresh();
         }
 
         private void Exit()
         {
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Disable();
-            
+            ML.Engine.Input.InputManager.Instance.Common.Disable();
             this.UnregisterInput();
         }
 
@@ -187,6 +187,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
+            Debug.Log("sub1 Back_performed");
             UIMgr.PopPanel();
         }
 
@@ -313,7 +314,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                         List<float> datas = new List<float>
                         {
-                            /*// ≈Î‚ø
+/*                            // ≈Î‚ø
                             worker.Skill[WorkType.Cook].Level / 10f,
                             // «·π§
                             worker.Skill[WorkType.HandCraft].Level / 10f,
@@ -330,9 +331,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                         var radar = this.transform.Find("HiddenBeastInfo1").Find("Info").Find("SkillGraph").Find("Viewport").Find("Content").Find("Radar").GetComponent<UIPolygon>();
                         radar.DrawPolygon(datas);
-            /*
+            
             //–‘±
-            if()
+            if(worker.Gender == Gender.Male)
             {
                 GenderImage.sprite = icon_gendermaleSprite;
             }
@@ -340,7 +341,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             {
                 GenderImage.sprite = icon_genderfemaleSprite;
             }
-            */
+            
 
             BeastName.text = worker.Name;
             Debug.Log("go " + this.PrefabsAB == null);

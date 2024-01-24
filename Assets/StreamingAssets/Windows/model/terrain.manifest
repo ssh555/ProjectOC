@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3874835776
+CRC: 884554404
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 04d16a75f5c48ccf7523005d9c5783b3
+    Hash: 56802fa701ff27cf773cf56d43bc4055
   TypeTreeHash:
     serializedVersion: 2
     Hash: 0553ee1e25ef2ced9c37eaf50c35aae1
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 04d16a75f5c48ccf7523005d9c5783b3
+    Hash: 56802fa701ff27cf773cf56d43bc4055
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -91,5 +91,5 @@ Assets:
 - Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/rock_b.fbx
 - Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/rock_d.fbx
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/terrain
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/terrain
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/materials/terrain
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/prefabs/terrain
