@@ -156,7 +156,7 @@ namespace ML.Engine.InteractSystem
             var abmgr = Manager.GameManager.Instance.ABResourceManager;
 
             // ‘ÿ»Î keyTipPrefab
-            var crequest = abmgr.LoadLocalABAsync("UI/InteractSystem", null, out var ab);
+            var crequest = abmgr.LoadLocalABAsync("UI/InteractSystem/Prefabs", null, out var ab);
             yield return crequest;
             if (crequest != null)
             {

@@ -3,13 +3,13 @@ CRC: 2856977138
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 36b122591762ee01358a65ca26933c8e
+    Hash: b8123a33d959b6add1c3195f0c98f4a0
   TypeTreeHash:
     serializedVersion: 2
-    Hash: bd2ecb24811883304c488e367ea49710
+    Hash: 0287bfda912652c24057b57bf033285a
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 36b122591762ee01358a65ca26933c8e
+    Hash: b8123a33d959b6add1c3195f0c98f4a0
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -43,6 +43,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: b5a75fe406490b1448c391e02cf791da, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 84a92b25f83d49b9bc132d206b370281, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
@@ -52,8 +54,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 18e0a5fd7f32347419b785bf00a72db7, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 8225f47635ce8874c8d32afa594ed0e2, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: b5a75fe406490b1448c391e02cf791da, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 213
@@ -97,10 +97,10 @@ Assets:
 - Assets/_ProjectOC/Resources/UIPanel/UIProNodePanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIBotPanel.prefab
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/fonts
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/textmeshpro/font
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/inventory/texture2d
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/item/texture2d
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/techpoint/texture2d
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/fonts
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/textmeshpro/font
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/inventory/texture2d
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/item/texture2d
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/techpoint/texture2d
