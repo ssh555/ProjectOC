@@ -44,10 +44,6 @@ namespace ProjectOC.WorkerNS
             }
             return result;
         }
-        public void RemoveWorker(Worker worker)
-        {
-            this.Workers.Remove(worker);
-        }
 
         public bool OnlyCostResource(IInventory inventory, string workerID)
         {

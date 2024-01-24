@@ -1,5 +1,4 @@
 using ML.Engine.FSM;
-using System;
 
 namespace ProjectOC.WorkerNS
 {
@@ -17,24 +16,10 @@ namespace ProjectOC.WorkerNS
                 {
                     if (machine is WorkerStateMachine workerMachine && workerMachine.Worker != null)
                     {
-                        Worker worker = workerMachine.Worker;
-                        worker.Status = Status.Working;
-
-                        worker.SetDestination(worker.Transport.Source.GetTransform(), Transport_Source_Action);
+                        workerMachine.Worker.Status = Status.Working;
                     }
                 }
             );
-        }
-
-        private void Transport_Source_Action(Worker worker)
-        {
-            worker.Transport.PutOutSource();
-            worker.SetDestination(worker.Transport.Target.GetTransform(), Transport_Target_Action);
-        }
-        private void Transport_Target_Action(Worker worker)
-        {
-            worker.Transport.PutInTarget();
-            worker.ClearDestination();
         }
     }
 }

@@ -42,7 +42,11 @@ namespace ProjectOC.WorkerNS
         public Effect(EffectTableData config, string value)
         {
             this.ID = config.ID;
-            ParamStr = "";
+            if (string.IsNullOrEmpty(value))
+            {
+                Debug.LogError($"Effect Value {value} is empty or null");
+                return;
+            }
             switch (EffectType)
             {
                 #region int
@@ -72,10 +76,17 @@ namespace ProjectOC.WorkerNS
         }
         public Effect(Effect effect)
         {
-            this.ID = effect.ID;
-            this.ParamStr = effect.ParamStr;
-            this.ParamInt = effect.ParamInt;
-            this.ParamFloat = effect.ParamFloat;
+            if (effect != null)
+            {
+                this.ID = effect.ID;
+                this.ParamStr = effect.ParamStr;
+                this.ParamInt = effect.ParamInt;
+                this.ParamFloat = effect.ParamFloat;
+            }
+            else
+            {
+                Debug.LogError("Effect is null");
+            }
         }
 
         public void ApplyEffect(Worker worker)
@@ -101,13 +112,19 @@ namespace ProjectOC.WorkerNS
                     workTypeStr = this.EffectType.ToString().Split('_')[1];
                     if (Enum.TryParse(workTypeStr, out workType))
                     {
-                        worker.ExpRate[workType] = ParamInt;
+                        if (worker.ExpRate.ContainsKey(workType))
+                        {
+                            worker.ExpRate[workType] = ParamInt;
+                        }
+                        else
+                        {
+                            Debug.LogError($"Worker {worker} ExpRate not contains WorkType {workType}");
+                        }
                     }
                     break;
                 case EffectType.AlterWalkSpeed:
                     worker.WalkSpeed += ParamFloat;
                     break;
-
                 case EffectType.AlterBURMax:
                     worker.BURMax += ParamInt;
                     break;
@@ -120,7 +137,14 @@ namespace ProjectOC.WorkerNS
                     workTypeStr = this.EffectType.ToString().Split('_')[1];
                     if (Enum.TryParse(workTypeStr, out workType))
                     {
-                        worker.Eff[workType] += ParamInt;
+                        if (worker.ExpRate.ContainsKey(workType))
+                        {
+                            worker.ExpRate[workType] = ParamInt;
+                        }
+                        else
+                        {
+                            Debug.LogError($"Worker {worker} ExpRate not contains WorkType {workType}");
+                        }
                     }
                     break;
             }

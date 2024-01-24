@@ -103,6 +103,18 @@ namespace ProjectOC.MissionNS
             this.Target.AddTransport(this);
             this.Worker.Transport = this;
             this.Worker.SetTimeStatusAll(TimeStatus.Work_Transport);
+            this.Worker.SetDestination(this.Worker.Transport.Source.GetTransform(), Transport_Source_Action);
+        }
+        private void Transport_Source_Action(Worker worker)
+        {
+            worker.Transport.PutOutSource();
+            worker.SetDestination(worker.Transport.Target.GetTransform(), Transport_Target_Action);
+        }
+
+        private void Transport_Target_Action(Worker worker)
+        {
+            worker.Transport.PutInTarget();
+            worker.ClearDestination();
         }
 
         /// <summary>

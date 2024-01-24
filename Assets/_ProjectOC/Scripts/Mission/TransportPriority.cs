@@ -7,10 +7,10 @@ namespace ProjectOC.MissionNS
     /// </summary>
     public enum TransportPriority
     {
-        [LabelText("常规")]
-        Normal = 0,
         [LabelText("紧急")]
-        Urgency = 1,
+        Urgency = 0,
+        [LabelText("常规")]
+        Normal = 1,
         [LabelText("备选")]
         Alternative = 2
     }

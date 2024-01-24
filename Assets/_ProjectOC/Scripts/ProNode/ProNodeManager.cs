@@ -3,7 +3,6 @@ using UnityEngine;
 using ML.Engine.InventorySystem;
 using ProjectOC.WorkerNS;
 using ML.Engine.TextContent;
-using System.Linq;
 using System;
 
 namespace ProjectOC.ProNodeNS
@@ -58,10 +57,6 @@ namespace ProjectOC.ProNodeNS
 
         #region Spawn
         /// <summary>
-        /// 生成的生产节点，键为ID
-        /// </summary>
-        private Dictionary<string, List<ProNode>> ProNodeDict = new Dictionary<string, List<ProNode>>();
-        /// <summary>
         /// 实例化生成的生产节点，键为UID
         /// </summary>
         private Dictionary<string, WorldProNode> WorldProNodeDict = new Dictionary<string, WorldProNode>();
@@ -71,15 +66,9 @@ namespace ProjectOC.ProNodeNS
         /// </summary>
         public ProNode SpawnProNode(string id)
         {
-            if (ProNodeTableDict.TryGetValue(id, out ProNodeTableData row))
+            if (IsValidID(id))
             {
-                ProNode node = new ProNode(row);
-                if (!ProNodeDict.ContainsKey(node.ID))
-                {
-                    ProNodeDict.Add(node.ID, new List<ProNode>());
-                }
-                ProNodeDict[id].Add(node);
-                return node;
+                return new ProNode(ProNodeTableDict[id]);
             }
             Debug.LogError("没有对应ID为 " + id + " 的生产节点");
             return null;
@@ -87,55 +76,47 @@ namespace ProjectOC.ProNodeNS
 
         public void WorldNodeSetData(WorldProNode worldNode, string nodeID)
         {
-            ProNode node = SpawnProNode(nodeID);
-            if (node != null)
+            if (worldNode != null && IsValidID(nodeID))
             {
+                if (WorldProNodeDict.ContainsKey(worldNode.InstanceID))
+                {
+                    WorldProNodeDict[worldNode.InstanceID] = worldNode;
+                }
+                else
+                {
+                    WorldProNodeDict.Add(worldNode.InstanceID, worldNode);
+                }
+                ProNode node = SpawnProNode(nodeID);
                 if (worldNode.ProNode != null)
                 {
                     worldNode.ProNode.WorldProNode = null;
                 }
                 worldNode.ProNode = node;
                 node.WorldProNode = worldNode;
-                if (WorldProNodeDict.ContainsKey(worldNode.InstanceID))
-                {
-                    WorldProNodeDict[worldNode.InstanceID] =  worldNode;
-                }
-                else
-                {
-                    WorldProNodeDict.Add(worldNode.InstanceID, worldNode);
-                }
             }
         }
         #endregion
 
         #region Getter
-        public string[] GetAllProNodeID()
-        {
-            return ProNodeTableDict.Keys.ToArray();
-        }
-
         public bool IsValidID(string id)
         {
-            return ProNodeTableDict.ContainsKey(id);
+            if (!string.IsNullOrEmpty(id))
+            {
+                return ProNodeTableDict.ContainsKey(id);
+            }
+            return false;
         }
-
         public bool IsValidUID(string uid)
         {
-            return WorldProNodeDict.ContainsKey(uid);
-        }
-
-        public List<ProNode> GetProNode(string id)
-        {
-            if (this.ProNodeDict.ContainsKey(id))
+            if (!string.IsNullOrEmpty(uid))
             {
-                return this.ProNodeDict[id];
+                return WorldProNodeDict.ContainsKey(uid);
             }
-            return new List<ProNode>();
+            return false;
         }
-
         public WorldProNode GetWorldProNode(string uid)
         {
-            if (this.WorldProNodeDict.ContainsKey(uid))
+            if (IsValidUID(uid))
             {
                 return this.WorldProNodeDict[uid];
             }
@@ -144,74 +125,74 @@ namespace ProjectOC.ProNodeNS
 
         public string GetName(string id)
         {
-            if (!ProNodeTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return "";
+                return ProNodeTableDict[id].Name;
             }
-            return ProNodeTableDict[id].Name;
+            return "";
         }
 
         public ProNodeType GetProNodeType(string id)
         {
-            if (!ProNodeTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return ProNodeType.None;
+                return ProNodeTableDict[id].Type;
             }
-            return ProNodeTableDict[id].Type;
+            return ProNodeType.None;
         }
 
         public RecipeCategory GetCategory(string id)
         {
-            if (!ProNodeTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return RecipeCategory.None;
+                return ProNodeTableDict[id].Category;
             }
-            return ProNodeTableDict[id].Category;
+            return RecipeCategory.None;
         }
 
         public List<RecipeCategory> GetRecipeCategoryFilterd(string id)
         {
-            if (!ProNodeTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return new List<RecipeCategory>();
+                return ProNodeTableDict[id].RecipeCategoryFiltered;
             }
-            return ProNodeTableDict[id].RecipeCategoryFiltered;
+            return new List<RecipeCategory>();
         }
 
         public WorkType GetExpType(string id)
         {
-            if (!ProNodeTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return WorkType.None;
+                return ProNodeTableDict[id].ExpType;
             }
-            return ProNodeTableDict[id].ExpType;
+            return WorkType.None;
         }
 
         public int GetStack(string id)
         {
-            if (!ProNodeTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return 0;
+                return ProNodeTableDict[id].Stack;
             }
-            return ProNodeTableDict[id].Stack;
+            return 0;
         }
 
         public int GetStackThreshold(string id)
         {
-            if (!ProNodeTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return 0;
+                return ProNodeTableDict[id].StackThreshold;
             }
-            return ProNodeTableDict[id].StackThreshold;
+            return 0;
         }
 
         public int GetRawThreshold(string id)
         {
-            if (!ProNodeTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return 0;
+                return ProNodeTableDict[id].RawThreshold;
             }
-            return ProNodeTableDict[id].RawThreshold;
+            return 0;
         }
         #endregion
     }
