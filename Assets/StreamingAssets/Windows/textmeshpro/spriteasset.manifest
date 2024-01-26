@@ -3,13 +3,13 @@ CRC: 1470059863
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c0348428318fb21d623d043081de0142
+    Hash: c30d6e06df077069f9a091a48cc4e185
   TypeTreeHash:
     serializedVersion: 2
     Hash: 3a5d9d5398dd73d2d9271115afb4455f
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: c0348428318fb21d623d043081de0142
+    Hash: c30d6e06df077069f9a091a48cc4e185
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -48,4 +48,4 @@ Assets:
 - Assets/TextMesh Pro/Sprites/EmojiOne Attribution.txt
 - Assets/_ProjectOC/Resources/TextMeshPro/SpriteAsset/Texture2D/Triangle.png
 Dependencies:
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/textmeshpro/shader
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/textmeshpro/shader

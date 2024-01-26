@@ -220,6 +220,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetUpVector.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\CircleCollider2D\SetOffset.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Worker\WorkerStateMachine.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\Building\共鸣环\UI\ResonanceWheelUI.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Scripts\Tasks\Flock.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Worker\Skill.cs" />
     <Compile Include="Assets\_ML\Engine\BuildingSystem\MonoBuildingManager.cs" />
@@ -283,6 +284,7 @@
     <Compile Include="Assets\_ML\Engine\InventorySystem\Scripts\InfiniteInventory.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\LandMassExpand\IPowerBPart.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetVelocity.cs" />
+    <Compile Include="Assets\_ML\Engine\TextContent\MultiTextContent.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedGameObjectList.cs" />
     <Compile Include="Assets\_ML\Engine\InventorySystem\Scripts\Item.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector2\SetValue.cs" />
@@ -292,6 +294,7 @@
     <Compile Include="Assets\_ML\Engine\BuildingSystem\BuildingPlacer\BuildingPlacer.cs" />
     <Compile Include="Assets\_ML\Example\InventorySystem\CompositeSystem\UI\Usage\UsageItemBtn.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Identity.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\Building\共鸣环\UI\UIPolygon.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\MovePosition.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetStartColor.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetStartSize.cs" />
@@ -733,6 +736,7 @@
     <Compile Include="Assets\_ML\Engine\UI\UIInteractionItemController.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SphereCollider\SetCenter.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\Move.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\Building\共鸣环\UI\ResonanceWheel_sub1.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\GetGravityWeight.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector2\ClampMagnitude.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\Save.cs" />
@@ -782,6 +786,7 @@
     <Compile Include="Assets\_ML\Engine\InventorySystem\CompositeSystem\Formula.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\GetIntegerParameter.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Scripts\Tasks\Seek.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\Building\共鸣环\UI\ResonanceWheel_sub2.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetTime.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Quaternion\RotateTowards.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Actions\Log.cs" />
@@ -841,6 +846,7 @@
     <None Include="Assets\_ML\MLResources\Shaders\GridUVScale.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
     <None Include="Assets\_ML\MLResources\Shaders\RangeVFXShader.shader" />
+    <None Include="Assets\_ML\MLResources\Fonts\3500汉字+符号+英文字符集.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\Sirenix.Serialization.dll" />
     <None Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\Sirenix.Serialization.xml" />
