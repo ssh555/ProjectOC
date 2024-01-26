@@ -717,7 +717,7 @@ namespace ML.Engine.BuildingSystem
         #region Material
         // to-do :to-change
         [SerializeField]
-        private const string _ABMatPath = "materials";
+        private const string _ABMatPath = "materials/other";
         [SerializeField]
         private const string _ABMatName = "Transparent";
 
@@ -732,11 +732,11 @@ namespace ML.Engine.BuildingSystem
             {
                 if(this._buildingMaterial == null)
                 {
+                    bool tempiffull = false;
 #if UNITY_EDITOR
-                    _buildingMaterial = Manager.GameManager.Instance.ABResourceManager.LoadAsset<Material>(_ABMatPath, _ABMatName, true);
-#else
-                    _buildingMaterial = Manager.GameManager.Instance.ABResourceManager.LoadAsset<Material>(_ABMatPath, _ABMatName);
+                    tempiffull = true;
 #endif
+                    _buildingMaterial = Manager.GameManager.Instance.ABResourceManager.LoadAsset<Material>(_ABMatPath, _ABMatName, tempiffull);
                 }
                 return this._buildingMaterial;
             }
@@ -853,6 +853,9 @@ namespace ML.Engine.BuildingSystem
         #endregion
 
         #region ¶Á±í
+        public const string Tex2DABPath = "UI/BuildingSystem/Texture2D/BuildIcon";
+        // Materials/Character/Player
+
         public Dictionary<string, BuildingTableData> BPartTableDictOnID = new Dictionary<string, BuildingTableData>();
         public Dictionary<string, BuildingTableData> BPartTableDictOnClass = new Dictionary<string, BuildingTableData>();
         public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;

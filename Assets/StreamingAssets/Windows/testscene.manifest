@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1452302374
+CRC: 3143661285
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 41b85f463e441d36fa2064bafe5fb650
+    Hash: c82ec509a25da69bc52c4d800f5a4191
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 1ade8d772076e9f6fadd4dcfa36681ce
+    Hash: df9844c9d83f1ce038077d64afd5a24c
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 41b85f463e441d36fa2064bafe5fb650
+    Hash: c82ec509a25da69bc52c4d800f5a4191
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -73,11 +73,15 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 902042dd59e50754a80bcc00d8654070, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 0b2db86121404754db890f4c8dfe81b2, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 3e87641e6af1fb746a87cdc198aba595, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f4044717213e31446939f7bd49c896ea, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: d37d3d4c9a445db4dbea37f893d6ff3d, type: 3}
 - Class: 114
@@ -98,6 +102,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 6feb82b60c7707348a49cccd1c157035, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
 - Class: 114
@@ -125,6 +131,10 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 88dfd9a1d40070e45bc302b503615a5e, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 899c54efeace73346a0a16faa3afe726, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 97c23e3b12dc18c42a140437e53d3951, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
@@ -142,6 +152,10 @@ ClassTypes:
   Script: {fileID: 11500000, guid: a79d93bee2b59d94fa12949e4c5e61d1, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 7411b32275d93534cb08e4d96c084289, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 8233d90336aea43098adf6dbabd606a2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1ca002da428252441b92f28d83c8a65f, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -154,11 +168,19 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 143
   Script: {instanceID: 0}
+- Class: 154
+  Script: {instanceID: 0}
+- Class: 156
+  Script: {instanceID: 0}
 - Class: 157
   Script: {instanceID: 0}
 - Class: 196
   Script: {instanceID: 0}
+- Class: 205
+  Script: {instanceID: 0}
 - Class: 213
+  Script: {instanceID: 0}
+- Class: 218
   Script: {instanceID: 0}
 - Class: 222
   Script: {instanceID: 0}
@@ -174,8 +196,13 @@ Assets:
 - Assets/_ProjectOC/Scene/_TEST/cwt/Cwt_TotalTest.unity
 - Assets/_ProjectOC/Scene/_TEST/yangLe/_LandMassExpandTest.unity
 - Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/BuidlingSystemTest.unity
+- Assets/_ProjectOC/Scene/_TEST/wp/TerrainTest.unity
 Dependencies:
 - D:/Github/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/materials
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/materials/other
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/materials/terrain
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/model/terrain
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
 - D:/Github/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/prefabs/terrain
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/shader

@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 698569940
+CRC: 3184794512
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 50a5aab85e4e01c04a808bfbb50ab02c
+    Hash: 9807be4874921b9a775b12e74b968af3
   TypeTreeHash:
     serializedVersion: 2
     Hash: 96ca31a436a49416683b22e0c5854b98
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 50a5aab85e4e01c04a808bfbb50ab02c
+    Hash: 9807be4874921b9a775b12e74b968af3
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -164,5 +164,6 @@ Assets:
 - Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity
 - Assets/_ProjectOC/Scene/GameScene.unity
 Dependencies:
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/bpart
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
 - D:/Github/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/shader

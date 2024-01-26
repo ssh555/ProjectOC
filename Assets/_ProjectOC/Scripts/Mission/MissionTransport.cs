@@ -86,37 +86,10 @@ namespace ProjectOC.MissionNS
         }
 
         /// <summary>
-        /// 获取搬运优先级，优先级越大数字越小
-        /// </summary>
-        /// <returns></returns>
-        public int GetTransportPriority()
-        {
-            int priority = 3;
-            if (this.Initiator != null)
-            {
-                switch (this.Initiator.GetTransportPriority())
-                {
-                    case TransportPriority.Urgency:
-                        priority = 0;
-                        break;
-                    case TransportPriority.Normal:
-                        priority = 1;
-                        break;
-                    case TransportPriority.Alternative:
-                        priority = 2;
-                        break;
-                }
-            }
-            return priority;
-        }
-
-        /// <summary>
         /// 获取UID
         /// </summary>
-        /// <returns></returns>
         public string GetUID()
         {
-            // 为null则返回 ""
             return this.Initiator?.GetUID() ?? "";
         }
 
@@ -163,8 +136,8 @@ namespace ProjectOC.MissionNS
                 {
                     x.Type.CompareTo(y.Type);
                 }
-                int priorityX = x.GetTransportPriority();
-                int priorityY = y.GetTransportPriority();
+                int priorityX = (int)x.Initiator.GetTransportPriority();
+                int priorityY = (int)y.Initiator.GetTransportPriority();
                 if (priorityX != priorityY)
                 {
                     priorityX.CompareTo(priorityY);

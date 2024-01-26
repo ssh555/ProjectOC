@@ -1,0 +1,111 @@
+ManifestFileVersion: 0
+CRC: 2227545883
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 49e2b33d16fdce666683893d13f8e3ba
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 0f9fba26cbb38215f317d1fd6b1954a0
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 49e2b33d16fdce666683893d13f8e3ba
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/CeilingLamp.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/Roof_Triangle.fbx
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/PowerSub.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/FoundationEdge.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Refine_3.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/Clock.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/BaseCube.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_SeedBox_1.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/Roof_Quagrant.fbx
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/RangeVFX.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_SeedBox_3.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Detector_2.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Integrator_3.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/Interact/SM_Build_Interact_EchoWheel_2.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Refine_2.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Processor_2.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Textile_1.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/Triangle.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Aggregator_3.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/Interact/SM_Build_Interact_Reservoir_3.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/Interact/SM_Build_Interact_Reservoir_1.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/FoundationEdge_Quagrant.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/ElectricalAppliance.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_SeedPlot_1.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/AuxiliaryModel/CircleCollider.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Refine_1.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/Interact/SM_Build_Interact_Store_1.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/ApplianceVFX.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/Interact/SM_Build_Interact_DiversionNode_2.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/Interact/SM_Build_Interact_Incubator_3.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/Roof_Base.fbx
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/Interact/SM_Build_Interact_LifeDiversion_2.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Sawn_3.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/Interact/SM_Build_Interact_Incubator_1.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Aggregator_2.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_WaterPurifier_2.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Kitchen_3.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_SeedPlot_3.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Detector_1.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/Pillar.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Kitchen_1.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/Interact/SM_Build_Interact_LifeDiversion_3.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_SeedPlot_2.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/Interact/SM_Build_Interact_Store_3.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_WaterCollector.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/PowerCore.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Detector_3.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Calculus_2.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Processor_1.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Processor_3.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/Chair.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Calculus_3.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/Wall_Quagrant.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/Beam.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/Interact/SM_Build_Interact_Projector.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/Door.fbx
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Textile_3.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/Interact/SM_Build_Interact_DiversionNode_1.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Aggregator_1.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_WaterPurifier_3.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/Roof_BaseCorner.fbx
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/Interact/SM_Build_Interact_LifeDiversion_1.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/Interact/SM_Build_Interact_EchoWheel_3.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/Window.fbx
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Integrator_2.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Integrator_1.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/Interact/SM_Build_Interact_EchoWheel_1.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_SeedBox_2.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/TempModel/Quagrant.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Sawn_2.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Sawn_1.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/Interact/SM_Build_Interact_Reservoir_2.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/Interact/SM_Build_Interact_Incubator_2.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/Interact/SM_Build_Interact_DiversionNode_3.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/Interact/SM_Build_Interact_Store_2.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Kitchen_2.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Calculus_1.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_Textile_2.mesh
+- Assets/_ML/MLResources/BuildingSystem/OriginModel/ProNode/SM_Build_ProNode_WaterPurifier_1.mesh
+Dependencies:
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart

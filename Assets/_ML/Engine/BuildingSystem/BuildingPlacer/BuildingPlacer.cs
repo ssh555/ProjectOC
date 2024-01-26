@@ -393,7 +393,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     }
                     else
                     {
-                        pos = hitInfo.point - this.SelectedPartInstance.ActiveSocket.transform.position + this.SelectedPartInstance.transform.position;
+                        pos = hitInfo.point;
                         this.SelectedPartInstance.AttachedSocket = hitInfo.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
                         this.SelectedPartInstance.AttachedArea = hitInfo.collider.GetComponentInParent<BuildingArea.BuildingArea>();
 
@@ -423,7 +423,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 {
                     if (this.SelectedPartInstance.ActiveSocket.GetMatchTransformOnArea(pos, out tmpP, out tmpR))
                     {
-                        pos = tmpP;
+                        pos = tmpP - this.SelectedPartInstance.ActiveSocket.transform.localPosition;
                         rot = tmpR;
                         return true;
                     }
@@ -436,7 +436,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 {
                     if (this.SelectedPartInstance.ActiveSocket.GetMatchTransformOnSocket(out tmpP, out tmpR))
                     {
-                        pos = tmpP;
+                        pos = tmpP - this.SelectedPartInstance.ActiveSocket.transform.localPosition;
                         rot = tmpR;
                         return true;
                     }
@@ -1320,7 +1320,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             this.OnExitAppearance?.Invoke(this.SelectedPartInstance);
         }
 
-        private const string MatPABPath = "Assets/BuildingSystem";
+        private const string MatPABPath = "Assets/BuildingSystem/MatPackage";
         protected IEnumerator LoadMatPackages()
         {
 #if UNITY_EDITOR
