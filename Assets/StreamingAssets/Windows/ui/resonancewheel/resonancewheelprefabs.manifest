@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2514738265
+CRC: 2204011988
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a16e9c4fa36557bb10f5eb134bd31dba
+    Hash: 0c5d701c7c79fd64cb29cf3616a480a4
   TypeTreeHash:
     serializedVersion: 2
     Hash: a5a937e552e50d2766ec64a893ed9082
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: a16e9c4fa36557bb10f5eb134bd31dba
+    Hash: 0c5d701c7c79fd64cb29cf3616a480a4
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -47,6 +47,6 @@ Assets:
 - Assets/_ProjectOC/Resources/UI/ResonanceWheel/ResonanceWheelPrefabs/Description.prefab
 - Assets/_ProjectOC/Resources/UI/ResonanceWheel/ResonanceWheelPrefabs/Slot.prefab
 Dependencies:
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/fonts
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/fonts
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d
