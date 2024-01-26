@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{D6B3F911-A0B8-813E-7438-782F1A16C8F6}</ProjectGuid>
+    <ProjectGuid>{454C83ED-A1F0-39B1-851F-4CA130F3C755}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
@@ -53,7 +53,7 @@
     <UnityVersion>2022.3.8f1c1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
+    <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.8f1c1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.8f1c1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
@@ -987,15 +987,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{A43F54BC-59D1-C5B2-02BA-7C46496C9715}</Project>
+      <Project>{114B2E37-3A1A-A3DB-0860-6D0B3B67D754}</Project>
       <Name>Assembly-CSharp</Name>
     </ProjectReference>
     <ProjectReference Include="Sirenix.OdinInspector.Modules.UnityMathematics.csproj">
-      <Project>{95D32012-70E8-D86F-0614-4190F88F9787}</Project>
+      <Project>{4603630D-7F99-126A-C564-823B980AF85C}</Project>
       <Name>Sirenix.OdinInspector.Modules.UnityMathematics</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.AssetBundleBrowser.Editor.csproj">
-      <Project>{A313144B-2A4F-64AE-6055-F2CA979090E4}</Project>
+      <Project>{BDE352AE-2E52-21A1-EE90-22A19562D4A3}</Project>
       <Name>Unity.AssetBundleBrowser.Editor</Name>
     </ProjectReference>
   </ItemGroup>
