@@ -47,11 +47,19 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// 创建搬运任务
         /// </summary>
-        public MissionTransport CreateTransportMission(MissionTransportType transportType, string itemID, int missionNum, IMissionObj Initiator)
+        public MissionTransport CreateTransportMission(MissionTransportType transportType, string itemID, int missionNum, IMissionObj initiator)
         {
-            MissionTransport mission = new MissionTransport(transportType, itemID, missionNum, Initiator);
-            this.MissionTransports.Add(mission);
-            return mission;
+            if (!string.IsNullOrEmpty(itemID) && missionNum > 0 && initiator != null)
+            {
+                MissionTransport mission = new MissionTransport(transportType, itemID, missionNum, initiator);
+                this.MissionTransports.Add(mission);
+                return mission;
+            }
+            else
+            {
+                Debug.LogError($"{itemID} {missionNum} {initiator}");
+                return null;
+            }
         }
 
         /// <summary>

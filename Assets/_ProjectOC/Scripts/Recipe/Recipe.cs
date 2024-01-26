@@ -44,11 +44,14 @@ namespace ML.Engine.InventorySystem
 
         public int GetRawNum(string itemID)
         {
-            foreach (Formula raw in Raw)
+            if (!string.IsNullOrEmpty(itemID))
             {
-                if (raw.id == itemID)
+                foreach (Formula raw in Raw)
                 {
-                    return raw.num;
+                    if (raw.id == itemID)
+                    {
+                        return raw.num;
+                    }
                 }
             }
             Debug.LogError($"Raw {itemID} is not exist in recipe {ID}");

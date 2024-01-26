@@ -52,14 +52,22 @@ namespace ProjectOC.WorkerNS
         public Worker SpawnWorker(Vector3 pos, Quaternion rot)
         {
             GameObject obj = GameObject.Instantiate(GetObject(), pos, rot);
-            Worker worker = obj.AddComponent<Worker>();
+            Worker worker = obj.GetComponent<Worker>();
+            if (worker == null)
+            {
+                worker = obj.AddComponent<Worker>();
+            }
             Workers.Add(worker);
             return worker;
         }
         public Worker SpawnWorker(Vector3 pos, Quaternion rot, string workerID)
         {
             GameObject obj = GameObject.Instantiate(GetObject(), pos, rot);
-            Worker worker = obj.AddComponent<Worker>();
+            Worker worker = obj.GetComponent<Worker>();
+            if (worker == null)
+            {
+                worker = obj.AddComponent<Worker>();
+            }
             Workers.Add(worker);
             return worker;
         }
@@ -68,7 +76,11 @@ namespace ProjectOC.WorkerNS
             if (CompositeManager.Instance.OnlyCostResource(inventory, workerID))
             {
                 GameObject obj = GameObject.Instantiate(GetObject(), pos, rot);
-                Worker worker = obj.AddComponent<Worker>();
+                Worker worker = obj.GetComponent<Worker>();
+                if (worker == null)
+                {
+                    worker = obj.AddComponent<Worker>();
+                }
                 Workers.Add(worker);
                 return worker;
             }
