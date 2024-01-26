@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3948940586
+CRC: 4078493113
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e65112abc625fafa774a22cff8fa3705
+    Hash: 1ad6638f5c76db12be6ce6cec9934cfc
   TypeTreeHash:
     serializedVersion: 2
     Hash: e2194f6f833f64349a9602980eac2cdf
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: e65112abc625fafa774a22cff8fa3705
+    Hash: 1ad6638f5c76db12be6ce6cec9934cfc
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -73,10 +73,10 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/UIPrefabs/KT_KeyCom.prefab
 - Assets/_ML/MLResources/BuildingSystem/UIPrefabs/Panel/BSInteractMode_KeyCom.prefab
 Dependencies:
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/fonts
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/textmeshpro/font
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/category
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/matpackageicon
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/style
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/type
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/fonts
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/textmeshpro/font
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/category
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/matpackageicon
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/style
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/type
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex

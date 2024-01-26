@@ -53,5 +53,5 @@ Assets:
 - Assets/_ProjectOC/Resources/Prefabs/Prefabs/PowerCoreBuildSpace.prefab
 - Assets/_ProjectOC/Resources/Prefabs/Prefabs/BuildingArea.prefab
 Dependencies:
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/shader
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/shader

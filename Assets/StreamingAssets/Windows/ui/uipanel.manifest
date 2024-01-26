@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2856977138
+CRC: 1639172648
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b8123a33d959b6add1c3195f0c98f4a0
+    Hash: 3c4d22e9b08abf0c6dd9c8265426a118
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 0287bfda912652c24057b57bf033285a
+    Hash: e26485b7c2cc58d8f767bcc6b69ad5da
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: b8123a33d959b6add1c3195f0c98f4a0
+    Hash: 3c4d22e9b08abf0c6dd9c8265426a118
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -41,19 +41,27 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: b5a75fe406490b1448c391e02cf791da, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 84a92b25f83d49b9bc132d206b370281, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 18e0a5fd7f32347419b785bf00a72db7, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 8225f47635ce8874c8d32afa594ed0e2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: b5a75fe406490b1448c391e02cf791da, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 122d184a229d7654389bc4921fdb6ac7, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d6224dbf1fdb21545862699544e83817, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 27e27c8eeb2d1554babedcc209602ac4, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 87badff79e1e54a4a9d68c74f002b591, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ba8a2ec004d09ff4a886c0a90da6574f, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 213
@@ -69,6 +77,8 @@ SerializeReferenceClassIdentifiers:
   ClassName: ProjectOC.ProNodeNS.ProNode
 - AssemblyName: Assembly-CSharp
   ClassName: ProjectOC.StoreNS.Store
+- AssemblyName: Assembly-CSharp
+  ClassName: ProjectOC.WorkerEchoNS.WorkerEcho
 - AssemblyName: Unity.TextMeshPro
   ClassName: TMPro.VertexGradient
 - AssemblyName: UnityEngine.CoreModule
@@ -91,16 +101,21 @@ SerializeReferenceClassIdentifiers:
   ClassName: UnityEngine.UI.SpriteState
 Assets:
 - Assets/_ProjectOC/Resources/UIPanel/TechPointPanel.prefab
+- Assets/_ProjectOC/Resources/UIPanel/ResonanceWheelUI_sub2.prefab
 - Assets/_ProjectOC/Resources/UIPanel/UIInfiniteInventoryPanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/UIStorePanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIPanel.prefab
+- Assets/_ProjectOC/Resources/UIPanel/SkillGraph.prefab
+- Assets/_ProjectOC/Resources/UIPanel/ResonanceWheelUI.prefab
+- Assets/_ProjectOC/Resources/UIPanel/ResonanceWheelUI_sub1.prefab
 - Assets/_ProjectOC/Resources/UIPanel/UIProNodePanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIBotPanel.prefab
 Dependencies:
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/fonts
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/textmeshpro/font
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/inventory/texture2d
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/item/texture2d
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/techpoint/texture2d
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/fonts
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/textmeshpro/font
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/inventory/texture2d
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/item/texture2d
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/techpoint/texture2d
