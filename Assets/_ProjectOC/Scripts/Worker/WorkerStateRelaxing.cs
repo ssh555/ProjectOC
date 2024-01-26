@@ -38,7 +38,14 @@ namespace ProjectOC.WorkerNS
                         workerMachine.Worker.Status = Status.Relaxing;
                         this.Timer.OnEndEvent += () =>
                         {
-                            workerMachine.Worker.AlterAP((int)(workerMachine.Worker.APMax * 0.01));
+                            if (workerMachine.Worker.APMax * 0.01 >= 1)
+                            {
+                                workerMachine.Worker.AlterAP((int)(workerMachine.Worker.APMax * 0.01));
+                            }
+                            else
+                            {
+                                workerMachine.Worker.AlterAP(1);
+                            }
                         };
                         this.Timer.Start();
                     }

@@ -1,0 +1,20 @@
+ManifestFileVersion: 0
+CRC: 1455826634
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 02880f5f8f54882655a1517374e6e427
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5ad585dd02dfb5016c0dad519eab8f49
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 02880f5f8f54882655a1517374e6e427
+HashAppended: 0
+ClassTypes:
+- Class: 49
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/_ProjectOC/Resources/Binary/TextContent/ResonanceWheel_sub1/ResonanceWheel_sub1.bytes
+Dependencies: []

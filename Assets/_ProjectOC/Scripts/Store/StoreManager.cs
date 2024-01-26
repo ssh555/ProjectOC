@@ -68,26 +68,29 @@ namespace ProjectOC.StoreNS
         public Dictionary<Store, int> GetCanPutOutStore(string itemID, int amount)
         {
             Dictionary<Store, int> result = new Dictionary<Store, int>();
-            int resultAmount = 0;
-            // 从头到尾遍历仓库(跳过玩家正在交互的仓库)
-            foreach (WorldStore worldStore in this.WorldStoreDict.Values)
+            if (!string.IsNullOrEmpty(itemID) && amount > 0)
             {
-                if (worldStore != null)
-                { 
-                    Store store = worldStore.Store;
-                    if (!store.IsInteracting && store.IsStoreHaveItem(itemID))
+                int resultAmount = 0;
+                // 从头到尾遍历仓库(跳过玩家正在交互的仓库)
+                foreach (WorldStore worldStore in this.WorldStoreDict.Values)
+                {
+                    if (worldStore != null)
                     {
-                        int storeAmount = store.GetStoreStorage(itemID);
-                        if (resultAmount + storeAmount >= amount)
+                        Store store = worldStore.Store;
+                        if (!store.IsInteracting && store.IsStoreHaveItem(itemID))
                         {
-                            result.Add(store, amount - resultAmount);
-                            resultAmount = amount;
-                            break;
-                        }
-                        else
-                        {
-                            result.Add(store, storeAmount);
-                            resultAmount += storeAmount;
+                            int storeAmount = store.GetStoreStorage(itemID);
+                            if (resultAmount + storeAmount >= amount)
+                            {
+                                result.Add(store, amount - resultAmount);
+                                resultAmount = amount;
+                                break;
+                            }
+                            else
+                            {
+                                result.Add(store, storeAmount);
+                                resultAmount += storeAmount;
+                            }
                         }
                     }
                 }

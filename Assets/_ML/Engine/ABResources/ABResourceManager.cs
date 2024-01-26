@@ -421,6 +421,7 @@ namespace ML.Engine.ABResources
                 return null;
             }
             // Î´ÔØÈë
+            Debug.Log(System.IO.Path.Combine(ABPath, name));
             var ans = AssetBundle.LoadFromFileAsync(System.IO.Path.Combine(ABPath, name));
             this.localResourcesDict.Add(name, ans.assetBundle);
             ans.completed += (asyncOpt) =>
