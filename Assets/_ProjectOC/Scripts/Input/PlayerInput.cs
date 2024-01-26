@@ -1618,6 +1618,402 @@ namespace ProjectOC.Input
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""ResonanceWheelUI"",
+            ""id"": ""6e5ac5f4-d9f7-4c39-85c5-aecfe95acd57"",
+            ""actions"": [
+                {
+                    ""name"": ""NextTerm"",
+                    ""type"": ""Button"",
+                    ""id"": ""fb13e663-6ccd-48fe-9948-2c8dec5bbe5b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LastTerm"",
+                    ""type"": ""Button"",
+                    ""id"": ""0e80f366-5e9f-4eb3-9bc5-f5b1785dafef"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextGrid"",
+                    ""type"": ""Button"",
+                    ""id"": ""cfc9e177-6df9-4a6a-9a86-5672aa660108"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchTarget"",
+                    ""type"": ""Button"",
+                    ""id"": ""efa9df38-9634-49f3-8531-77c3bccb469a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""StartResonance"",
+                    ""type"": ""Button"",
+                    ""id"": ""fedda1c9-33da-44da-bd96-8919d1cc58c2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""StopResonance"",
+                    ""type"": ""Button"",
+                    ""id"": ""a02b23b3-2e37-4f0a-bea9-1d132ef4d9bb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""175a9304-8341-44ee-bbbd-6e7453d149cc"",
+                    ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""84ddafbc-be4b-48f6-9b6b-b4170507b3ef"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a26aa622-009a-4575-bafa-184e598c8f2c"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LastTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5a945e81-fd10-49d2-bd4e-966cb0b0b31e"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LastTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f4eceee8-e86d-4745-a3a0-cf7987a232f3"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aacf4e26-c234-4f5c-8d1f-acbf64e1a2b2"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""41355902-e9db-4246-94cf-2746fadbd5a1"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchTarget"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e8b9cab1-9d6d-41e6-8b6f-4f04d806f063"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchTarget"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d78eb896-4b50-4aa1-b909-083af217fa9c"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StartResonance"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6d7c1d8b-ccfa-43ee-b146-44c7d6ee3742"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StartResonance"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a7a70bf2-8ce2-43af-8ef7-3152a00706c8"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StopResonance"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4b9ae05a-ec28-4681-b501-713418c67f96"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StopResonance"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""ResonanceWheelUI_sub1"",
+            ""id"": ""fbf093c0-22ab-44b5-a7d6-9c52881e65c6"",
+            ""actions"": [
+                {
+                    ""name"": ""Expel"",
+                    ""type"": ""Button"",
+                    ""id"": ""e62efd25-6612-4367-b8b3-99d7c1dee753"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Receive"",
+                    ""type"": ""Button"",
+                    ""id"": ""73e621e0-7d69-46d0-8c2c-12a2dcbdfd39"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""6552300a-e62b-4b00-874c-609101b4ea13"",
+                    ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Expel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a719b9a2-1bbd-484f-aefe-375594e668a5"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Expel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""014e2025-3273-47ff-ac0c-e437291fe9e5"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Receive"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b337ffcf-f1cd-4e6c-8f39-3f8cd1f220e3"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Receive"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""ResonanceWheelUI_sub2"",
+            ""id"": ""f25047b5-b25f-4f74-b1f1-b45a7c8c5577"",
+            ""actions"": [
+                {
+                    ""name"": ""LastTerm"",
+                    ""type"": ""Button"",
+                    ""id"": ""a2022e66-af29-4c54-b541-2664aefd0f0a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextTerm"",
+                    ""type"": ""Button"",
+                    ""id"": ""ac1c3599-411a-43f5-a50e-c87b11839f6f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextGrid"",
+                    ""type"": ""Button"",
+                    ""id"": ""0bd5dbbc-da1f-4d19-acd3-6e725dcb6d4e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Confirm"",
+                    ""type"": ""Button"",
+                    ""id"": ""aee12242-8a13-4c00-85f6-6a6cae036d8d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""d3f51715-dc90-44f6-9055-a2a20924be4d"",
+                    ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5218c578-fe6d-4129-a255-64bfd7ec0ba9"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""169fd533-4f47-408a-9560-e2e964691150"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LastTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""534ee831-5158-4042-8edf-51c6725851d0"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LastTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""21821228-7600-45ca-9121-85525d1b3a8a"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3b8562af-4ec4-417d-8993-8ccb543d5ba7"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""008d807b-ad0c-4c3b-a630-0b57c7f16dcf"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b1269204-5736-414d-be58-24a3810a9d2b"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -1664,6 +2060,24 @@ namespace ProjectOC.Input
             m_UIProNode_ChangeWorker = m_UIProNode.FindAction("ChangeWorker", throwIfNotFound: true);
             m_UIProNode_RemoveWorker = m_UIProNode.FindAction("RemoveWorker", throwIfNotFound: true);
             m_UIProNode_AlterRawItem = m_UIProNode.FindAction("AlterRawItem", throwIfNotFound: true);
+            // ResonanceWheelUI
+            m_ResonanceWheelUI = asset.FindActionMap("ResonanceWheelUI", throwIfNotFound: true);
+            m_ResonanceWheelUI_NextTerm = m_ResonanceWheelUI.FindAction("NextTerm", throwIfNotFound: true);
+            m_ResonanceWheelUI_LastTerm = m_ResonanceWheelUI.FindAction("LastTerm", throwIfNotFound: true);
+            m_ResonanceWheelUI_NextGrid = m_ResonanceWheelUI.FindAction("NextGrid", throwIfNotFound: true);
+            m_ResonanceWheelUI_SwitchTarget = m_ResonanceWheelUI.FindAction("SwitchTarget", throwIfNotFound: true);
+            m_ResonanceWheelUI_StartResonance = m_ResonanceWheelUI.FindAction("StartResonance", throwIfNotFound: true);
+            m_ResonanceWheelUI_StopResonance = m_ResonanceWheelUI.FindAction("StopResonance", throwIfNotFound: true);
+            // ResonanceWheelUI_sub1
+            m_ResonanceWheelUI_sub1 = asset.FindActionMap("ResonanceWheelUI_sub1", throwIfNotFound: true);
+            m_ResonanceWheelUI_sub1_Expel = m_ResonanceWheelUI_sub1.FindAction("Expel", throwIfNotFound: true);
+            m_ResonanceWheelUI_sub1_Receive = m_ResonanceWheelUI_sub1.FindAction("Receive", throwIfNotFound: true);
+            // ResonanceWheelUI_sub2
+            m_ResonanceWheelUI_sub2 = asset.FindActionMap("ResonanceWheelUI_sub2", throwIfNotFound: true);
+            m_ResonanceWheelUI_sub2_LastTerm = m_ResonanceWheelUI_sub2.FindAction("LastTerm", throwIfNotFound: true);
+            m_ResonanceWheelUI_sub2_NextTerm = m_ResonanceWheelUI_sub2.FindAction("NextTerm", throwIfNotFound: true);
+            m_ResonanceWheelUI_sub2_NextGrid = m_ResonanceWheelUI_sub2.FindAction("NextGrid", throwIfNotFound: true);
+            m_ResonanceWheelUI_sub2_Confirm = m_ResonanceWheelUI_sub2.FindAction("Confirm", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -2189,6 +2603,216 @@ namespace ProjectOC.Input
             }
         }
         public UIProNodeActions @UIProNode => new UIProNodeActions(this);
+
+        // ResonanceWheelUI
+        private readonly InputActionMap m_ResonanceWheelUI;
+        private List<IResonanceWheelUIActions> m_ResonanceWheelUIActionsCallbackInterfaces = new List<IResonanceWheelUIActions>();
+        private readonly InputAction m_ResonanceWheelUI_NextTerm;
+        private readonly InputAction m_ResonanceWheelUI_LastTerm;
+        private readonly InputAction m_ResonanceWheelUI_NextGrid;
+        private readonly InputAction m_ResonanceWheelUI_SwitchTarget;
+        private readonly InputAction m_ResonanceWheelUI_StartResonance;
+        private readonly InputAction m_ResonanceWheelUI_StopResonance;
+        public struct ResonanceWheelUIActions
+        {
+            private @PlayerInput m_Wrapper;
+            public ResonanceWheelUIActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @NextTerm => m_Wrapper.m_ResonanceWheelUI_NextTerm;
+            public InputAction @LastTerm => m_Wrapper.m_ResonanceWheelUI_LastTerm;
+            public InputAction @NextGrid => m_Wrapper.m_ResonanceWheelUI_NextGrid;
+            public InputAction @SwitchTarget => m_Wrapper.m_ResonanceWheelUI_SwitchTarget;
+            public InputAction @StartResonance => m_Wrapper.m_ResonanceWheelUI_StartResonance;
+            public InputAction @StopResonance => m_Wrapper.m_ResonanceWheelUI_StopResonance;
+            public InputActionMap Get() { return m_Wrapper.m_ResonanceWheelUI; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(ResonanceWheelUIActions set) { return set.Get(); }
+            public void AddCallbacks(IResonanceWheelUIActions instance)
+            {
+                if (instance == null || m_Wrapper.m_ResonanceWheelUIActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_ResonanceWheelUIActionsCallbackInterfaces.Add(instance);
+                @NextTerm.started += instance.OnNextTerm;
+                @NextTerm.performed += instance.OnNextTerm;
+                @NextTerm.canceled += instance.OnNextTerm;
+                @LastTerm.started += instance.OnLastTerm;
+                @LastTerm.performed += instance.OnLastTerm;
+                @LastTerm.canceled += instance.OnLastTerm;
+                @NextGrid.started += instance.OnNextGrid;
+                @NextGrid.performed += instance.OnNextGrid;
+                @NextGrid.canceled += instance.OnNextGrid;
+                @SwitchTarget.started += instance.OnSwitchTarget;
+                @SwitchTarget.performed += instance.OnSwitchTarget;
+                @SwitchTarget.canceled += instance.OnSwitchTarget;
+                @StartResonance.started += instance.OnStartResonance;
+                @StartResonance.performed += instance.OnStartResonance;
+                @StartResonance.canceled += instance.OnStartResonance;
+                @StopResonance.started += instance.OnStopResonance;
+                @StopResonance.performed += instance.OnStopResonance;
+                @StopResonance.canceled += instance.OnStopResonance;
+            }
+
+            private void UnregisterCallbacks(IResonanceWheelUIActions instance)
+            {
+                @NextTerm.started -= instance.OnNextTerm;
+                @NextTerm.performed -= instance.OnNextTerm;
+                @NextTerm.canceled -= instance.OnNextTerm;
+                @LastTerm.started -= instance.OnLastTerm;
+                @LastTerm.performed -= instance.OnLastTerm;
+                @LastTerm.canceled -= instance.OnLastTerm;
+                @NextGrid.started -= instance.OnNextGrid;
+                @NextGrid.performed -= instance.OnNextGrid;
+                @NextGrid.canceled -= instance.OnNextGrid;
+                @SwitchTarget.started -= instance.OnSwitchTarget;
+                @SwitchTarget.performed -= instance.OnSwitchTarget;
+                @SwitchTarget.canceled -= instance.OnSwitchTarget;
+                @StartResonance.started -= instance.OnStartResonance;
+                @StartResonance.performed -= instance.OnStartResonance;
+                @StartResonance.canceled -= instance.OnStartResonance;
+                @StopResonance.started -= instance.OnStopResonance;
+                @StopResonance.performed -= instance.OnStopResonance;
+                @StopResonance.canceled -= instance.OnStopResonance;
+            }
+
+            public void RemoveCallbacks(IResonanceWheelUIActions instance)
+            {
+                if (m_Wrapper.m_ResonanceWheelUIActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IResonanceWheelUIActions instance)
+            {
+                foreach (var item in m_Wrapper.m_ResonanceWheelUIActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_ResonanceWheelUIActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public ResonanceWheelUIActions @ResonanceWheelUI => new ResonanceWheelUIActions(this);
+
+        // ResonanceWheelUI_sub1
+        private readonly InputActionMap m_ResonanceWheelUI_sub1;
+        private List<IResonanceWheelUI_sub1Actions> m_ResonanceWheelUI_sub1ActionsCallbackInterfaces = new List<IResonanceWheelUI_sub1Actions>();
+        private readonly InputAction m_ResonanceWheelUI_sub1_Expel;
+        private readonly InputAction m_ResonanceWheelUI_sub1_Receive;
+        public struct ResonanceWheelUI_sub1Actions
+        {
+            private @PlayerInput m_Wrapper;
+            public ResonanceWheelUI_sub1Actions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Expel => m_Wrapper.m_ResonanceWheelUI_sub1_Expel;
+            public InputAction @Receive => m_Wrapper.m_ResonanceWheelUI_sub1_Receive;
+            public InputActionMap Get() { return m_Wrapper.m_ResonanceWheelUI_sub1; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(ResonanceWheelUI_sub1Actions set) { return set.Get(); }
+            public void AddCallbacks(IResonanceWheelUI_sub1Actions instance)
+            {
+                if (instance == null || m_Wrapper.m_ResonanceWheelUI_sub1ActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_ResonanceWheelUI_sub1ActionsCallbackInterfaces.Add(instance);
+                @Expel.started += instance.OnExpel;
+                @Expel.performed += instance.OnExpel;
+                @Expel.canceled += instance.OnExpel;
+                @Receive.started += instance.OnReceive;
+                @Receive.performed += instance.OnReceive;
+                @Receive.canceled += instance.OnReceive;
+            }
+
+            private void UnregisterCallbacks(IResonanceWheelUI_sub1Actions instance)
+            {
+                @Expel.started -= instance.OnExpel;
+                @Expel.performed -= instance.OnExpel;
+                @Expel.canceled -= instance.OnExpel;
+                @Receive.started -= instance.OnReceive;
+                @Receive.performed -= instance.OnReceive;
+                @Receive.canceled -= instance.OnReceive;
+            }
+
+            public void RemoveCallbacks(IResonanceWheelUI_sub1Actions instance)
+            {
+                if (m_Wrapper.m_ResonanceWheelUI_sub1ActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IResonanceWheelUI_sub1Actions instance)
+            {
+                foreach (var item in m_Wrapper.m_ResonanceWheelUI_sub1ActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_ResonanceWheelUI_sub1ActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public ResonanceWheelUI_sub1Actions @ResonanceWheelUI_sub1 => new ResonanceWheelUI_sub1Actions(this);
+
+        // ResonanceWheelUI_sub2
+        private readonly InputActionMap m_ResonanceWheelUI_sub2;
+        private List<IResonanceWheelUI_sub2Actions> m_ResonanceWheelUI_sub2ActionsCallbackInterfaces = new List<IResonanceWheelUI_sub2Actions>();
+        private readonly InputAction m_ResonanceWheelUI_sub2_LastTerm;
+        private readonly InputAction m_ResonanceWheelUI_sub2_NextTerm;
+        private readonly InputAction m_ResonanceWheelUI_sub2_NextGrid;
+        private readonly InputAction m_ResonanceWheelUI_sub2_Confirm;
+        public struct ResonanceWheelUI_sub2Actions
+        {
+            private @PlayerInput m_Wrapper;
+            public ResonanceWheelUI_sub2Actions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @LastTerm => m_Wrapper.m_ResonanceWheelUI_sub2_LastTerm;
+            public InputAction @NextTerm => m_Wrapper.m_ResonanceWheelUI_sub2_NextTerm;
+            public InputAction @NextGrid => m_Wrapper.m_ResonanceWheelUI_sub2_NextGrid;
+            public InputAction @Confirm => m_Wrapper.m_ResonanceWheelUI_sub2_Confirm;
+            public InputActionMap Get() { return m_Wrapper.m_ResonanceWheelUI_sub2; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(ResonanceWheelUI_sub2Actions set) { return set.Get(); }
+            public void AddCallbacks(IResonanceWheelUI_sub2Actions instance)
+            {
+                if (instance == null || m_Wrapper.m_ResonanceWheelUI_sub2ActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_ResonanceWheelUI_sub2ActionsCallbackInterfaces.Add(instance);
+                @LastTerm.started += instance.OnLastTerm;
+                @LastTerm.performed += instance.OnLastTerm;
+                @LastTerm.canceled += instance.OnLastTerm;
+                @NextTerm.started += instance.OnNextTerm;
+                @NextTerm.performed += instance.OnNextTerm;
+                @NextTerm.canceled += instance.OnNextTerm;
+                @NextGrid.started += instance.OnNextGrid;
+                @NextGrid.performed += instance.OnNextGrid;
+                @NextGrid.canceled += instance.OnNextGrid;
+                @Confirm.started += instance.OnConfirm;
+                @Confirm.performed += instance.OnConfirm;
+                @Confirm.canceled += instance.OnConfirm;
+            }
+
+            private void UnregisterCallbacks(IResonanceWheelUI_sub2Actions instance)
+            {
+                @LastTerm.started -= instance.OnLastTerm;
+                @LastTerm.performed -= instance.OnLastTerm;
+                @LastTerm.canceled -= instance.OnLastTerm;
+                @NextTerm.started -= instance.OnNextTerm;
+                @NextTerm.performed -= instance.OnNextTerm;
+                @NextTerm.canceled -= instance.OnNextTerm;
+                @NextGrid.started -= instance.OnNextGrid;
+                @NextGrid.performed -= instance.OnNextGrid;
+                @NextGrid.canceled -= instance.OnNextGrid;
+                @Confirm.started -= instance.OnConfirm;
+                @Confirm.performed -= instance.OnConfirm;
+                @Confirm.canceled -= instance.OnConfirm;
+            }
+
+            public void RemoveCallbacks(IResonanceWheelUI_sub2Actions instance)
+            {
+                if (m_Wrapper.m_ResonanceWheelUI_sub2ActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IResonanceWheelUI_sub2Actions instance)
+            {
+                foreach (var item in m_Wrapper.m_ResonanceWheelUI_sub2ActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_ResonanceWheelUI_sub2ActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public ResonanceWheelUI_sub2Actions @ResonanceWheelUI_sub2 => new ResonanceWheelUI_sub2Actions(this);
         public interface IPlayerActions
         {
             void OnMove(InputAction.CallbackContext context);
@@ -2236,6 +2860,27 @@ namespace ProjectOC.Input
             void OnChangeWorker(InputAction.CallbackContext context);
             void OnRemoveWorker(InputAction.CallbackContext context);
             void OnAlterRawItem(InputAction.CallbackContext context);
+        }
+        public interface IResonanceWheelUIActions
+        {
+            void OnNextTerm(InputAction.CallbackContext context);
+            void OnLastTerm(InputAction.CallbackContext context);
+            void OnNextGrid(InputAction.CallbackContext context);
+            void OnSwitchTarget(InputAction.CallbackContext context);
+            void OnStartResonance(InputAction.CallbackContext context);
+            void OnStopResonance(InputAction.CallbackContext context);
+        }
+        public interface IResonanceWheelUI_sub1Actions
+        {
+            void OnExpel(InputAction.CallbackContext context);
+            void OnReceive(InputAction.CallbackContext context);
+        }
+        public interface IResonanceWheelUI_sub2Actions
+        {
+            void OnLastTerm(InputAction.CallbackContext context);
+            void OnNextTerm(InputAction.CallbackContext context);
+            void OnNextGrid(InputAction.CallbackContext context);
+            void OnConfirm(InputAction.CallbackContext context);
         }
     }
 }

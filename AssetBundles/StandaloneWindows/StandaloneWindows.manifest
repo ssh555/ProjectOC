@@ -1,0 +1,97 @@
+ManifestFileVersion: 0
+CRC: 2494376528
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: materials
+      Dependencies: {}
+    Info_1:
+      Name: ui/buildingsystem/prefabs
+      Dependencies:
+        Dependency_0: fonts
+        Dependency_1: ui/buildingsystem/texture2d/category
+        Dependency_2: ui/buildingsystem/texture2d/type
+        Dependency_3: ui/buildingsystem/texture2d/style
+        Dependency_4: assets/buildingsystem
+    Info_2:
+      Name: animation/character/player/model
+      Dependencies: {}
+    Info_3:
+      Name: animation/character/player/playermove
+      Dependencies: {}
+    Info_4:
+      Name: fonts
+      Dependencies: {}
+    Info_5:
+      Name: ui/buildingsystem/texture2d/category
+      Dependencies: {}
+    Info_6:
+      Name: testscene
+      Dependencies:
+        Dependency_0: materials
+        Dependency_1: animation/character/player/model
+        Dependency_2: prefabs/character/player
+    Info_7:
+      Name: ui/buildingsystem/texture2d/type
+      Dependencies: {}
+    Info_8:
+      Name: prefabs/item/worlditem
+      Dependencies: {}
+    Info_9:
+      Name: ui/uipanel
+      Dependencies:
+        Dependency_0: fonts
+        Dependency_1: ui/techpoint/texture2d
+    Info_10:
+      Name: json/tabledata
+      Dependencies: {}
+    Info_11:
+      Name: ui/techpoint/texture2d
+      Dependencies: {}
+    Info_12:
+      Name: json/textcontent/player
+      Dependencies: {}
+    Info_13:
+      Name: ui/buildingsystem/texture2d/style
+      Dependencies: {}
+    Info_14:
+      Name: prefabs/buildingsystem/bpart
+      Dependencies: {}
+    Info_15:
+      Name: ui/item/texture2d
+      Dependencies: {}
+    Info_16:
+      Name: scene
+      Dependencies: {}
+    Info_17:
+      Name: json/textcontent/techtree
+      Dependencies: {}
+    Info_18:
+      Name: assets/buildingsystem
+      Dependencies:
+        Dependency_0: prefabs/buildingsystem/bpart
+    Info_19:
+      Name: prefabs/character/player
+      Dependencies:
+        Dependency_0: animation/character/player/model
+        Dependency_1: animation/character/player/playermove
+        Dependency_2: ui/uipanel
+    Info_20:
+      Name: json/textcontent/buildingsystem/ui
+      Dependencies: {}
+    Info_21:
+      Name: json/textcontent/interactsystem
+      Dependencies: {}
+    Info_22:
+      Name: json/textcontent/inventory
+      Dependencies: {}
+    Info_23:
+      Name: ui/interactsystem
+      Dependencies:
+        Dependency_0: fonts
+    Info_24:
+      Name: ui/inventory/texture2d/itemtype
+      Dependencies: {}
+    Info_25:
+      Name: json/textcontent/resonancewheel
+      Dependencies: {}

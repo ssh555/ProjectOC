@@ -231,6 +231,14 @@ namespace ML.Engine.Timer
         {
             this.Speed = speed;
         }
+
+
+        public string ConvertToMinAndSec()
+        {
+            int min = (int)(this.currentTime) / 60;
+            int sec = (int)(this.currentTime) - min * 60;
+            return min.ToString() + "min" + sec.ToString() + "s";
+        }
         
     }
 }

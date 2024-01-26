@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace ML.Engine.InventorySystem.CompositeSystem
@@ -112,6 +113,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <returns></returns>
         public bool CanComposite(IInventory resource, string compositonID)
         {
+            
             if (!this.CompositeData.ContainsKey(compositonID) || this.CompositeData[compositonID].formula == null)
             {
                 return false;

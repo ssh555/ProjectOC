@@ -88,17 +88,48 @@ namespace ProjectOC.Player.UI
             this.AddItemBtn = btnList.Find("AddItem").GetComponent<SelectedButton>();
             this.AddItemBtn.OnInteract += () =>
             {
+
+                Debug.Log($"Pre {player.Inventory.GetItemAllNum("Item_Material_1")} {player.Inventory.GetItemAllNum("Item_Material_37")}");
+
                 Player.PlayerCharacter Player = GameObject.Find("PlayerCharacter")?.GetComponent<Player.PlayerCharacter>();
-                string itemID = "Item_Material_17";
+                string itemID = "Item_Material_1";
                 int amount = 100;
-                if (ItemManager.Instance.IsValidItemID(itemID))
+                Debug.Log($"AddItem1 {ItemManager.Instance.IsValidItemID(itemID)}");
+                if (ItemManager.Instance.IsValidItemID(itemID))//
                 {
+                    Debug.Log("AddItem2");
                     List<Item> items = ItemManager.Instance.SpawnItems(itemID, amount);
                     foreach (Item item in items)
                     {
-                        player.Inventory.AddItem(item);
+                        Player.Inventory.AddItem(item);
                     }
                 }
+
+                itemID = "Item_Material_37";
+                if (ItemManager.Instance.IsValidItemID(itemID))
+                {
+                    Debug.Log("AddItem3");
+                    List<Item> items = ItemManager.Instance.SpawnItems(itemID, amount);
+                    foreach (Item item in items)
+                    {
+                        Player.Inventory.AddItem(item);
+                    }
+                }
+
+                Debug.Log($"Post {player.Inventory.GetItemAllNum("Item_Material_1")} {player.Inventory.GetItemAllNum("Item_Material_37")}");
+                IInventory inventory123 = player.Inventory;
+                Debug.Log("CanComposite " + inventory123.GetItemAllNum("Item_Material_1") + " " + inventory123.GetItemAllNum("Item_Material_37"));
+
+
+                foreach (var item in inventory123.GetItemList())
+                {
+                    if (item != null)
+                    {
+                        //Debug.Log(item.ID + ": " + inventory123.GetItemAllNum(item.ID));
+                        Debug.Log(item.ID + ": " + item.Amount);
+                    }
+                }
+
             };
 
             var btn = btnList.GetComponentsInChildren<SelectedButton>();
