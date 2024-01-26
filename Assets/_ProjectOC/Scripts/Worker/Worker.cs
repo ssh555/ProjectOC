@@ -27,9 +27,9 @@ namespace ProjectOC.WorkerNS
         [LabelText("体力上限")]
         public int APMax = 10;
         [LabelText("体力工作阈值")]
-        public int APWorkThreshold = 2;
+        public int APWorkThreshold = 8;
         [LabelText("体力休息阈值")]
-        public int APRelaxThreshold = 8;
+        public int APRelaxThreshold = 9;
         [LabelText("完成一次任务消耗的体力值")]
         public int APCost = 1;
         [LabelText("完成一次搬运消耗的体力值")]
@@ -86,35 +86,46 @@ namespace ProjectOC.WorkerNS
         }
 
         [LabelText("状态机控制器")]
-        protected StateController StateController;
+        protected StateController StateController = null;
         
         [LabelText("状态机")]
-        protected WorkerStateMachine StateMachine;
+        protected WorkerStateMachine StateMachine = null;
 
+        public Status status;
         [LabelText("当前实际状态")]
-        public Status Status;
+        public Status Status
+        {
+            get { return status; }
+            set 
+            {
+                status = value;
+                StatusChangeAction?.Invoke(status);
+            }
+        }
+
+        public Action<Status> StatusChangeAction;
         
         [LabelText("是否在值班")]
         public bool IsOnDuty { get { return this.ProNode != null && this.Status != Status.Relaxing && ArriveProNode; } }
         
         [LabelText("生产节点")]
-        public ProNode ProNode;
+        public ProNode ProNode = null;
         
         [LabelText("是否到达生产节点")]
         public bool ArriveProNode = false;
         
         [LabelText("搬运")]
-        public Transport Transport;
+        public Transport Transport = null;
         
         [LabelText("搬运物品")]
         public List<Item> TransportItems = new List<Item>();
 
-        private NavMeshAgent Agent;
+        private NavMeshAgent Agent = null;
         public float Threshold = 1f;
-        public Transform Target;
+        public Transform Target = null;
         private event Action<Worker> OnArrival;
         public bool HasArrived = false;
-        public Worker()
+        public void Init()
         {
             this.ExpRate.Add(WorkType.None, 0);
             this.ExpRate.Add(WorkType.Cook, 100);
@@ -169,6 +180,7 @@ namespace ProjectOC.WorkerNS
         public void Start()
         {
             Agent = GetComponent<NavMeshAgent>();
+            this.Init();
             //this.enabled = false;
         }
 
