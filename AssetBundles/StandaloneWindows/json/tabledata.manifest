@@ -1,0 +1,23 @@
+ManifestFileVersion: 0
+CRC: 974539048
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 7831f1396b85a9298f91600f2ec733b2
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5ad585dd02dfb5016c0dad519eab8f49
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 7831f1396b85a9298f91600f2ec733b2
+HashAppended: 0
+ClassTypes:
+- Class: 49
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/_ML/MLResources/Json/TableData/CompositionTableData.json
+- Assets/_ProjectOC/Resources/Json/TableData/TechTree.json
+- Assets/_ML/MLResources/Json/TableData/ItemTableData.json
+- Assets/_ML/MLResources/Json/TableData/LevelTableData.json
+Dependencies: []

@@ -1,0 +1,112 @@
+ManifestFileVersion: 0
+CRC: 2521705954
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 4d12fff83114eda09fcb2a7223aab743
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: a7469a380d0ed91666bfb38c0fa7dd68
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 4d12fff83114eda09fcb2a7223aab743
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9a3d69288c4e74849bf87167e38be2b4, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 096992a5f2b3f8a40b2321c0d694d79c, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 078bdcd1957751f4d8eb7279e71c24f5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: cdccbc4b0d8d78b4680a054167d9663f, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: abbfd1c59c1d5bf4ea4732b9a1385457, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9cb7e6233a5cb6241ab3c42bce1c444e, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 394bf23c3227f814d832e6e85b0ae42f, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 351805d19c60d0846a11b8aecd012987, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.FaceInfo_Legacy
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.FontAssetCreationSettings
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.KerningTable
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_Character
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_FontFeatureTable
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_FontWeightPair
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_GlyphAdjustmentRecord
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_GlyphPairAdjustmentRecord
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_GlyphValueRecord
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.VertexGradient
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.RectOffset
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.FaceInfo
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.Glyph
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphMetrics
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphRect
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
+Assets:
+- Assets/_ML/MLResources/BuildingSystem/UIPrefabs/KeyTip.prefab
+- Assets/_ML/MLResources/BuildingSystem/UIPrefabs/Panel/BSSelectBPart.prefab
+- Assets/_ML/MLResources/BuildingSystem/UIPrefabs/Panel/BSAppearance.prefab
+- Assets/_ML/MLResources/BuildingSystem/UIPrefabs/Panel/BSEditMode_KeyCom.prefab
+- Assets/_ML/MLResources/BuildingSystem/UIPrefabs/Panel/BSEditMode.prefab
+- Assets/_ML/MLResources/BuildingSystem/UIPrefabs/Panel/BSInteractMode.prefab
+- Assets/_ML/MLResources/BuildingSystem/UIPrefabs/Panel/BSPlaceMode.prefab
+- Assets/_ML/MLResources/BuildingSystem/UIPrefabs/Panel/BSPlaceMode_KeyCom.prefab
+- Assets/_ML/MLResources/BuildingSystem/UIPrefabs/KT_KeyCom.prefab
+- Assets/_ML/MLResources/BuildingSystem/UIPrefabs/Panel/BSInteractMode_KeyCom.prefab
+Dependencies:
+- E:/OC/projectoc/AssetBundles/StandaloneWindows/assets/buildingsystem
+- E:/OC/projectoc/AssetBundles/StandaloneWindows/fonts
+- E:/OC/projectoc/AssetBundles/StandaloneWindows/ui/buildingsystem/texture2d/category
+- E:/OC/projectoc/AssetBundles/StandaloneWindows/ui/buildingsystem/texture2d/style
+- E:/OC/projectoc/AssetBundles/StandaloneWindows/ui/buildingsystem/texture2d/type

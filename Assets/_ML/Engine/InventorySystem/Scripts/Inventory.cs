@@ -60,7 +60,8 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public int AddItem(Item item, bool IsFillToNullItem = false)
         {
-            if(item == null ||(IsFillToNullItem && this.Size == this.MaxSize))
+            
+            if (item == null ||(IsFillToNullItem && this.Size == this.MaxSize))
             {
                 return -1;
             }
@@ -99,6 +100,9 @@ namespace ML.Engine.InventorySystem
             }
             this.OnItemListChanged?.Invoke(this);
             // 未完全装入
+
+
+            
             return 0;
         }
 

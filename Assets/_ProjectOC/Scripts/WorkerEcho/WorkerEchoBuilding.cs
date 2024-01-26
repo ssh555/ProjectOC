@@ -12,6 +12,8 @@ namespace ProjectOC.WorkerEchoNS
         public string InteractType { get; set; }
         public Vector3 PosOffset { get; set; }
 
+        public ResonanceWheelSystem.UI.ResonanceWheelUI uIResonanceWheel;
+
         public WorkerEcho workerEcho;
         private void Awake()
         {
@@ -25,9 +27,20 @@ namespace ProjectOC.WorkerEchoNS
         {
             //µ¯¹²ÃùÂÖUI
             Debug.Log("µ¯UI");
-            ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(null);
+            ML.Engine.Input.InputManager.Instance.Common.Disable();
+            var panel = GameObject.Instantiate(uIResonanceWheel);
+            panel.transform.SetParent(GameObject.Find("Canvas").transform, false);
+
+            ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+
+            
         }
-        
+
+        public void OnSelectedExit(InteractComponent component)
+        {
+            
+        }
+
         private bool CanEditOrDestroy(IBuildingPart buildingPart)
         {
             return (workerEcho.GetStatus() == EchoStatusType.Echoing || workerEcho.GetStatus() == EchoStatusType.Waiting);
