@@ -668,9 +668,9 @@ namespace ProjectOC.ProNodeNS
             {
                 RawItems[itemID] += amount;
                 StartProduce();
+                OnActionChange?.Invoke();
                 return true;
             }
-            OnActionChange?.Invoke();
             return false;
         }
         /// <summary>

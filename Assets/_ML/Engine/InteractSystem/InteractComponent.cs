@@ -1,5 +1,4 @@
 using ML.Engine.TextContent;
-using ML.Engine.Timer;
 using Newtonsoft.Json;
 using Sirenix.OdinInspector;
 using System.Collections;
@@ -64,9 +63,8 @@ namespace ML.Engine.InteractSystem
                 uiKeyTip.img.transform.parent.position = screenPosition;
 
                 // 确认交互
-                if (Input.InputManager.Instance.Common.Common.Comfirm.WasPerformedThisFrame())
+                if (Input.InputManager.Instance.Common.Common.Comfirm.WasPressedThisFrame())
                 {
-                    Debug.Log("WasPerformedThisFrame "+ Time.frameCount);
                     this.CurrentInteraction.Interact(this);
                 }
             }
@@ -100,7 +98,6 @@ namespace ML.Engine.InteractSystem
         }
         public void Enable()
         {
-            //Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
             Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
         }
         #endregion
@@ -110,7 +107,6 @@ namespace ML.Engine.InteractSystem
         {
             // 载入数据
             InitUITextContents();
-
 
             Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
         }
@@ -160,7 +156,7 @@ namespace ML.Engine.InteractSystem
             var abmgr = Manager.GameManager.Instance.ABResourceManager;
 
             // 载入 keyTipPrefab
-            var crequest = abmgr.LoadLocalABAsync("UI/InteractSystem/prefabs", null, out var ab);
+            var crequest = abmgr.LoadLocalABAsync("UI/InteractSystem/Prefabs", null, out var ab);
             yield return crequest;
             if (crequest != null)
             {

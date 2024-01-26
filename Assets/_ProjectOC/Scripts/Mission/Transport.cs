@@ -108,7 +108,7 @@ namespace ProjectOC.MissionNS
         private void Transport_Source_Action(Worker worker)
         {
             worker.Transport.PutOutSource();
-            worker.SetDestination(worker.Transport.Target.GetTransform(), Transport_Target_Action);
+            bool flag = worker.SetDestination(worker.Transport.Target.GetTransform(), Transport_Target_Action);
         }
 
         private void Transport_Target_Action(Worker worker)
@@ -160,9 +160,8 @@ namespace ProjectOC.MissionNS
             bool flagTarget = this.Target.PutIn(this.ItemID, num);
             if (flagTarget)
             {
-                this.FinishNum += num;
-                this.Mission.FinishNum += num;
                 this.Worker.TransportItems.Clear();
+                this.FinishNum += num;
                 // ÈÎÎñ½áÊø
                 if (this.FinishNum == this.MissionNum)
                 {
@@ -173,6 +172,7 @@ namespace ProjectOC.MissionNS
                 {
                     Debug.LogError($"FinishNum > MissionNum");
                 }
+                this.Mission.FinishNum += num;
             }
             else
             {

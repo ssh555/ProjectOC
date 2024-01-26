@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2559913953
+CRC: 3900492078
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 82fb21bd5eba0aedcb4d21e99dfa9e9f
+    Hash: 0741ab8543f7eb96ec390f39b7814498
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 8a919bcbcbff02d814de61b9664f6f0e
+    Hash: 2172eb9bcb39b2bdaceec7c9e1d524e1
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 82fb21bd5eba0aedcb4d21e99dfa9e9f
+    Hash: 0741ab8543f7eb96ec390f39b7814498
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -17,8 +17,6 @@ ClassTypes:
 - Class: 28
   Script: {instanceID: 0}
 - Class: 48
-  Script: {instanceID: 0}
-- Class: 49
   Script: {instanceID: 0}
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
@@ -39,6 +37,12 @@ SerializeReferenceClassIdentifiers:
   ClassName: TMPro.TMP_FontFeatureTable
 - AssemblyName: Unity.TextMeshPro
   ClassName: TMPro.TMP_FontWeightPair
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_GlyphAdjustmentRecord
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_GlyphPairAdjustmentRecord
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_GlyphValueRecord
 - AssemblyName: UnityEngine.TextCoreFontEngineModule
   ClassName: UnityEngine.TextCore.FaceInfo
 - AssemblyName: UnityEngine.TextCoreFontEngineModule
@@ -48,8 +52,9 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.TextCoreFontEngineModule
   ClassName: UnityEngine.TextCore.GlyphRect
 Assets:
-- Assets/_ML/MLResources/Fonts/SourceHanSans-Normal.ttc
-- "Assets/_ML/MLResources/Fonts/3500\u6C49\u5B57+\u7B26\u53F7+\u82F1\u6587\u5B57\u7B26\u96C6.txt"
-- Assets/_ML/MLResources/Fonts/SourceHanSans-Normal SDF.asset
+- Assets/_ML/MLResources/Fonts/MSYH SDF.asset
+- Assets/_ML/MLResources/Fonts/MSYHL.TTC
+- Assets/_ML/MLResources/Fonts/MSYH.TTC
+- Assets/_ML/MLResources/Fonts/MSYHBD.TTC
 Dependencies:
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/textmeshpro/shader
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/textmeshpro/shader

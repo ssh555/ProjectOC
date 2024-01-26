@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 904104005
+CRC: 3515617343
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 848e953b44dcb8d40a7a7729d7a8414c
+    Hash: 30c1ef95dd7ed5c3c1215f7d22d64a0a
   TypeTreeHash:
     serializedVersion: 2
     Hash: 8a919bcbcbff02d814de61b9664f6f0e
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 848e953b44dcb8d40a7a7729d7a8414c
+    Hash: 30c1ef95dd7ed5c3c1215f7d22d64a0a
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -61,4 +61,4 @@ Assets:
 - Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset
 - Assets/TextMesh Pro/Fonts/LiberationSans.ttf
 Dependencies:
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/textmeshpro/shader
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/textmeshpro/shader
