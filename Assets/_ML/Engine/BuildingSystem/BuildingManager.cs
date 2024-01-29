@@ -891,6 +891,24 @@ namespace ML.Engine.BuildingSystem
             return null;
         }
         #endregion
+
+
+        #region Gizmos
+        [System.Serializable]
+        public struct DrawGizmos
+        {
+            public bool IsDraw;
+            public Color color;
+        }
+        [LabelText("绘制Socket")]
+        public DrawGizmos DrawSocket;
+        [LabelText("绘制ActiveSocket")]
+        public DrawGizmos DrawActiveSocket;
+        [LabelText("绘制Area小格子")]
+        public DrawGizmos DrawAreaBaseGrid;
+        [LabelText("绘制Area大格子")]
+        public DrawGizmos DrawAreaBoundGrid;
+        #endregion
     }
 
 }

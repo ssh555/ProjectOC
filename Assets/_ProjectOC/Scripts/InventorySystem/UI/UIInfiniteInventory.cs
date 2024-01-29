@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using ML.Engine.Extension;
 
 namespace ProjectOC.InventorySystem.UI
 {
