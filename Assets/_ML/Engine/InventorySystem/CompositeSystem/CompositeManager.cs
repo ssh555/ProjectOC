@@ -62,7 +62,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<CompositionTableData[]>("Binary/TableData", "Composition", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<CompositionTableData[]>("Json/TableData", "Composition", (datas) =>
 
                 {
                     foreach (var data in datas)

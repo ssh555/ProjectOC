@@ -959,7 +959,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             if (ABJAProcessorJson_Main == null)
             {
-                ABJAProcessorJson_Main = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheelPanel>("Binary/TextContent/ResonanceWheel", "ResonanceWheelPanel", (datas) =>
+                ABJAProcessorJson_Main = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheelPanel>("Json/TextContent/ResonanceWheel", "ResonanceWheelPanel", (datas) =>
                 {
                     Refresh();
                     this.enabled = false;
@@ -969,7 +969,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             if (ABJAProcessorJson_sub1 == null)
             {
-                ABJAProcessorJson_sub1 = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub1Struct>("Binary/TextContent/ResonanceWheel_sub1", "ResonanceWheel_sub1", (datas) =>
+                ABJAProcessorJson_sub1 = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub1Struct>("Json/TextContent/ResonanceWheel", "ResonanceWheel_sub1", (datas) =>
                 {
                     Refresh();
                     this.enabled = false;
@@ -979,7 +979,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             if (ABJAProcessorJson_sub2 == null)
             {
-                ABJAProcessorJson_sub2 = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub2Struct>("Binary/TextContent/ResonanceWheel_sub2", "ResonanceWheel_sub2", (datas) =>
+                ABJAProcessorJson_sub2 = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub2Struct>("Json/TextContent/ResonanceWheel", "ResonanceWheel_sub2", (datas) =>
                 {
                     Refresh();
                     this.enabled = false;

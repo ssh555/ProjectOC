@@ -866,7 +866,7 @@ namespace ML.Engine.BuildingSystem
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]>("Binary/TableData", "Building", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]>("Json/TableData", "Building", (datas) =>
                 {
                     foreach (var data in datas)
                     {

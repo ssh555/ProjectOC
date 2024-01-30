@@ -69,7 +69,7 @@ namespace ExcelToJson
 
             #region EXCEL
             string excelFilePath = "./DataTable/Config_OC_数据表.xlsx";
-            string rootPath = "../../../Assets/_ProjectOC/Resources/Binary/TableData/";
+            string rootPath = "../../../Assets/_ProjectOC/Resources/Json/TableData/";
 
             // 在处理前或处理后需要根据Recipe表、Build表需要合成表Binary文件，用于合成系统
             List<CompositionTableData> compositionTableDatas = new List<CompositionTableData>();
@@ -96,21 +96,21 @@ namespace ExcelToJson
                 compositionTableDatas.Add(new CompositionTableData(data));
             }
             // 3. 将解析完成的数据存为对应的二进制文件
-            DBMgr.WriteBinaryFromExcel(buildingTableDatas, rootPath + "Building.bytes");
-            DBMgr.WriteBinaryFromExcel(buildingUpgradeTableDatas, rootPath + "BuildingUpgrade.bytes");
-            DBMgr.WriteBinaryFromExcel(recipeTableDatas, rootPath + "Recipe.bytes");
-            DBMgr.WriteBinaryFromExcel(compositionTableDatas, rootPath + "Composition.bytes");
-            DBMgr.WriteBinaryFromExcel(workerEchoTableDatas, rootPath + "WorkerEcho.bytes");
+            DBMgr.WriteJsonFromExcel(buildingTableDatas, rootPath + "Building.json");
+            DBMgr.WriteJsonFromExcel(buildingUpgradeTableDatas, rootPath + "BuildingUpgrade.json");
+            DBMgr.WriteJsonFromExcel(recipeTableDatas, rootPath + "Recipe.json");
+            DBMgr.WriteJsonFromExcel(compositionTableDatas, rootPath + "Composition.json");
+            DBMgr.WriteJsonFromExcel(workerEchoTableDatas, rootPath + "WorkerEcho.json");
 
             // 合成表二进制文件
-            // 必须是.bytes后缀
+            // 必须是.json后缀
             List<EBConfig> configs = new List<EBConfig>();
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 1,  BinaryFilePath = rootPath + "ProNode.bytes", type = typeof(ProjectOC.ProNodeNS.ProNodeTableData) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 3, BinaryFilePath = rootPath + "TechPoint.bytes", type = typeof(TechPoint) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 7,  BinaryFilePath = rootPath + "Item.bytes", type = typeof(ItemTableData) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 8,  BinaryFilePath = rootPath + "Feature.bytes", type = typeof(ProjectOC.WorkerNS.FeatureTableData) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 9,  BinaryFilePath = rootPath + "Effect.bytes", type = typeof(ProjectOC.WorkerNS.EffectTableData) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 10, BinaryFilePath = rootPath + "Skill.bytes", type = typeof(ProjectOC.WorkerNS.SkillTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 1,  BinaryFilePath = rootPath + "ProNode.json", type = typeof(ProjectOC.ProNodeNS.ProNodeTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 3, BinaryFilePath = rootPath + "TechPoint.json", type = typeof(TechPoint) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 7,  BinaryFilePath = rootPath + "Item.json", type = typeof(ItemTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 8,  BinaryFilePath = rootPath + "Feature.json", type = typeof(ProjectOC.WorkerNS.FeatureTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 9,  BinaryFilePath = rootPath + "Effect.json", type = typeof(ProjectOC.WorkerNS.EffectTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 10, BinaryFilePath = rootPath + "Skill.json", type = typeof(ProjectOC.WorkerNS.SkillTableData) });
 
             System.Threading.Tasks.Parallel.ForEach(configs, (config) =>
             {
@@ -123,7 +123,7 @@ namespace ExcelToJson
 
                     var datas = constructedMethod.Invoke(DBMgr, new object[] { config.ExcelFilePath, config.IBeginRow, config.IWorksheet });
 
-                    genericMethodDefinition = typeof(DataToBinaryManager).GetMethod("WriteBinaryFromExcel");
+                    genericMethodDefinition = typeof(DataToBinaryManager).GetMethod("WriteJsonFromExcel");
                     constructedMethod = genericMethodDefinition.MakeGenericMethod(config.type);
                     constructedMethod.Invoke(DBMgr, new object[] { datas, config.BinaryFilePath });
 
@@ -141,44 +141,45 @@ namespace ExcelToJson
             #endregion
 
             #region JSON
-            // 必须是.bytes后缀
-            List<JBConfig> jBConfigs = new List<JBConfig>();
-            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/PlayerUIPanel/PlayerUIPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/PlayerUIPanel/PlayerUIPanel.bytes", type = typeof(TextTip[]) });
-            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/BuildingSystem/UI/Category.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TextContent/BuildingSystem/UI/Category.bytes", type = typeof(TextTip[]) });
-            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/BuildingSystem/UI/Type.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TextContent/BuildingSystem/UI/Type.bytes", type = typeof(TextTip[]) });
-            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/BuildingSystem/UI/KeyTip.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TextContent/BuildingSystem/UI/KeyTip.bytes", type = typeof(KeyTip[]) });
-            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/InteractSystem/InteractKeyTip.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TextContent/InteractSystem/InteractKeyTip.bytes", type = typeof(KeyTip[]) });
-            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/Inventory/InventoryPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/Inventory/InventoryPanel.bytes", type = typeof(ProjectOC.InventorySystem.UI.UIInfiniteInventory.InventoryPanel) });
-            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/TechTree/TechPointPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/TechTree/TechPointPanel.bytes", type = typeof(ProjectOC.TechTree.TechTreeManager.TPPanel) });
-            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/Store/StorePanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/Inventory/StorePanel.bytes", type = typeof(ProjectOC.InventorySystem.UI.UIStore.StorePanel) });
-            jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/ProNode/ProNodePanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/Inventory/ProNodePanel.bytes", type = typeof(ProjectOC.InventorySystem.UI.UIProNode.ProNodePanel) });
+            //// 必须是.json后缀
+            //List<JBConfig> jBConfigs = new List<JBConfig>();
+            //jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/PlayerUIPanel/PlayerUIPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/PlayerUIPanel/PlayerUIPanel.json", type = typeof(TextTip[]) });
+            //jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/BuildingSystem/UI/Category.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TextContent/BuildingSystem/UI/Category.json", type = typeof(TextTip[]) });
+            //jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/BuildingSystem/UI/Type.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TextContent/BuildingSystem/UI/Type.json", type = typeof(TextTip[]) });
+            //jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/BuildingSystem/UI/KeyTip.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TextContent/BuildingSystem/UI/KeyTip.json", type = typeof(KeyTip[]) });
+            //jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/InteractSystem/InteractKeyTip.json", BinaryFilePath = "../../../Assets/_ML/MLResources/Binary/TextContent/InteractSystem/InteractKeyTip.json", type = typeof(KeyTip[]) });
+            //jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/Inventory/InventoryPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/Inventory/InventoryPanel.json", type = typeof(ProjectOC.InventorySystem.UI.UIInfiniteInventory.InventoryPanel) });
+            //jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/TechTree/TechPointPanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/TechTree/TechPointPanel.json", type = typeof(ProjectOC.TechTree.TechTreeManager.TPPanel) });
+            //jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/Store/StorePanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/Inventory/StorePanel.json", type = typeof(ProjectOC.InventorySystem.UI.UIStore.StorePanel) });
+            //jBConfigs.Add(new JBConfig { JsonFilePath = "./Json/TextContent/ProNode/ProNodePanel.json", BinaryFilePath = "../../../Assets/_ProjectOC/Resources/Binary/TextContent/Inventory/ProNodePanel.json", type = typeof(ProjectOC.InventorySystem.UI.UIProNode.ProNodePanel) });
 
-            System.Threading.Tasks.Parallel.ForEach(jBConfigs, (config) =>
-            {
-                try
-                {
-                    Console.WriteLine($"开始处理: {System.IO.Path.GetFullPath(config.JsonFilePath)} -> {System.IO.Path.GetFullPath(config.BinaryFilePath)}");
+            //System.Threading.Tasks.Parallel.ForEach(jBConfigs, (config) =>
+            //{
+            //    try
+            //    {
+            //        Console.WriteLine($"开始处理: {System.IO.Path.GetFullPath(config.JsonFilePath)} -> {System.IO.Path.GetFullPath(config.BinaryFilePath)}");
 
-                    MethodInfo genericMethodDefinition = typeof(DataToBinaryManager).GetMethod("ReadJson");
-                    MethodInfo constructedMethod = genericMethodDefinition.MakeGenericMethod(config.type);
+            //        MethodInfo genericMethodDefinition = typeof(DataToBinaryManager).GetMethod("ReadJson");
+            //        MethodInfo constructedMethod = genericMethodDefinition.MakeGenericMethod(config.type);
 
-                    var datas = constructedMethod.Invoke(DBMgr, new object[] { config.JsonFilePath });
+            //        var datas = constructedMethod.Invoke(DBMgr, new object[] { config.JsonFilePath });
 
-                    genericMethodDefinition = typeof(DataToBinaryManager).GetMethod("WriteBinaryFromJson");
-                    constructedMethod = genericMethodDefinition.MakeGenericMethod(config.type);
-                    constructedMethod.Invoke(DBMgr, new object[] { datas, config.BinaryFilePath });
+            //        genericMethodDefinition = typeof(DataToBinaryManager).GetMethod("WriteBinaryFromJson");
+            //        constructedMethod = genericMethodDefinition.MakeGenericMethod(config.type);
+            //        constructedMethod.Invoke(DBMgr, new object[] { datas, config.BinaryFilePath });
 
-                    Console.WriteLine($"转换完成: {System.IO.Path.GetFullPath(config.JsonFilePath)} -> {System.IO.Path.GetFullPath(config.BinaryFilePath)}");
-                }
-                catch (Exception e)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Error: 处理异常 {System.IO.Path.GetFullPath(config.JsonFilePath)} -> {System.IO.Path.GetFullPath(config.BinaryFilePath)} => {e.Message}");
-                    Console.ResetColor();
-                }
-            });
-            Console.WriteLine("\n----------------------------------------");
-            Console.WriteLine("JSON转换完成!!!");
+            //        Console.WriteLine($"转换完成: {System.IO.Path.GetFullPath(config.JsonFilePath)} -> {System.IO.Path.GetFullPath(config.BinaryFilePath)}");
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Console.ForegroundColor = ConsoleColor.Red;
+            //        Console.WriteLine($"Error: 处理异常 {System.IO.Path.GetFullPath(config.JsonFilePath)} -> {System.IO.Path.GetFullPath(config.BinaryFilePath)} => {e.Message}");
+            //        Console.ResetColor();
+            //    }
+            //});
+            //Console.WriteLine("\n----------------------------------------");
+            //Console.WriteLine("JSON转换完成!!!");
+            
             #endregion
 
             Console.WriteLine("\n----------------------------------------");

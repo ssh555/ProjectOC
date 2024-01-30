@@ -43,7 +43,7 @@ namespace ProjectOC.ProNodeNS
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ProNodeTableData[]>("Binary/TableData", "ProNode", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ProNodeTableData[]>("Json/TableData", "ProNode", (datas) =>
                 {
                     foreach (var data in datas)
                     {

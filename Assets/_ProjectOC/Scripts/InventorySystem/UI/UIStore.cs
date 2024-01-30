@@ -891,7 +891,7 @@ namespace ProjectOC.InventorySystem.UI
         {
             if(ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StorePanel>("Binary/TextContent/Inventory", "StorePanel", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StorePanel>("Json/TextContent/Inventory", "StorePanel", (datas) =>
                 {
                     Refresh();
                     this.enabled = false;

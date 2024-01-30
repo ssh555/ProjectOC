@@ -144,7 +144,7 @@ namespace ML.Engine.Level
 
         private DispatchGrids dispatchGrids;
 
-        public const string LevelTableDataABPath = "Binary/TableData";
+        public const string LevelTableDataABPath = "Json/TableData";
         public const string TableName = "LevelTableData";
 
         /// <summary>
