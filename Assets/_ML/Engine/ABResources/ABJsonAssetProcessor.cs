@@ -1,6 +1,10 @@
+using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
@@ -95,11 +99,8 @@ namespace ML.Engine.ABResources
             var request = ab.LoadAssetAsync<TextAsset>(this.ABName);
             yield return request;
 
-            using (MemoryStream ms = new MemoryStream((request.asset as TextAsset).bytes))
-            {
-                DataContractSerializer serializer = new DataContractSerializer(typeof(T));
-                Datas = (T)serializer.ReadObject(ms);
-            }
+            Datas = JsonConvert.DeserializeObject<T>((request.asset as TextAsset).text);
+
 
            IsLoaded = true;
 

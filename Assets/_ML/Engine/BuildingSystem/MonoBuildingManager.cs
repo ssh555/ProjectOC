@@ -44,7 +44,7 @@ namespace ML.Engine.BuildingSystem
             if (!IsLoading)
             {
                 IsLoading = true;
-                var KeyTip_ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<KeyTip[]>("Binary/TextContent/BuildingSystem/UI", "KeyTip", (datas) =>
+                var KeyTip_ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<KeyTip[]>("Json/TextContent/BuildingSystem/UI", "KeyTip", (datas) =>
                 {
                     foreach (var keytip in datas)
                     {
@@ -54,7 +54,7 @@ namespace ML.Engine.BuildingSystem
                 }, null, "建造系统按键提示");
                 KeyTip_ABJAProcessor.StartLoadJsonAssetData();
 
-                var Category_ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextTip[]>("Binary/TextContent/BuildingSystem/UI", "Category", (datas) =>
+                var Category_ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextTip[]>("Json/TextContent/BuildingSystem/UI", "Category", (datas) =>
                 {
                     foreach (var category in datas)
                     {
@@ -64,7 +64,7 @@ namespace ML.Engine.BuildingSystem
                 }, null, "建造系统Category1");
                 Category_ABJAProcessor.StartLoadJsonAssetData();
 
-                var Type_ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextTip[]>("Binary/TextContent/BuildingSystem/UI", "Type", (datas) =>
+                var Type_ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextTip[]>("Json/TextContent/BuildingSystem/UI", "Type", (datas) =>
                 {
                     foreach (var type in datas)
                     {

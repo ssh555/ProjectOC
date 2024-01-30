@@ -1,0 +1,137 @@
+{
+  //topPart
+  "toptitle": {
+    "Chinese": "共鸣轮",
+    "English": "ResonanceWheel"
+  },
+  "lastterm": {
+    "keyname": "lastterm",
+    "keymap": {
+      "KeyBoard": "Z",
+      "XBOX": "LB"
+    },
+    "description": {
+      "Chinese": "",
+      "English": ""
+    }
+  },
+  "nextterm": {
+    "keyname": "nextterm",
+    "keymap": {
+      "KeyBoard": "X",
+      "XBOX": "RB"
+    },
+    "description": {
+      "Chinese": "",
+      "English": ""
+    }
+  },
+  "HiddenBeastResonanceText": {
+    "Chinese": "隐兽共鸣",
+    "English": "HiddenBeastResonance"
+  },
+  "SongofSeaBeastsText": {
+    "Chinese": "海兽之歌",
+    "English": "SongofSeaBeasts"
+  },
+  //ring
+  "nextgrid": {
+    "keyname": "nextgrid",
+    "keymap": {
+      "KeyBoard": "LM",
+      "XBOX": "RB"
+    },
+    "description": {
+      "Chinese": "",
+      "English": ""
+    }
+  },
+  "Grid1Text": {
+    "Chinese": "空",
+    "English": "Empty"
+  },
+  "Grid2Text": {
+    "Chinese": "空",
+    "English": "Empty"
+  },
+  "Grid3Text": {
+    "Chinese": "空",
+    "English": "Empty"
+  },
+  "Grid4Text": {
+    "Chinese": "空",
+    "English": "Empty"
+  },
+  "Grid5Text": {
+    "Chinese": "空",
+    "English": "Empty"
+  },
+  //ResonanceTarget
+  "ResonanceTargetTitle": {
+    "Chinese": "共鸣对象",
+    "English": "ResonanceTarget"
+  },
+  "RandomText": {
+    "Chinese": "随机",
+    "English": "Random"
+  },
+  "SwitchTargetText": {
+    "keyname": "SwitchTarget",
+    "keymap": {
+      "KeyBoard": "R",
+      "XBOX": "Y"
+    },
+    "description": {
+      "Chinese": "切换对象",
+      "English": "SwitchTarget"
+    }
+  },
+  //ResonanceConsumpion
+  "ResonanceConsumpionTitle": {
+    "description": [
+      {
+        "Chinese": "共鸣消耗",
+        "English": "ResonanceConsumpion"
+      },
+      {
+        "Chinese": "共鸣中",
+        "English": "Resonancing"
+      }
+    ]
+  },
+  "StartResonanceText": {
+    "keyname": "StartResonance",
+    "keymap": {
+      "KeyBoard": "E",
+      "XBOX": "X"
+    },
+    "description": {
+      "Chinese": "开始共鸣",
+      "English": "StartResonance"
+    }
+  },
+  "StopResonanceText": {
+    "keyname": "StopResonance",
+    "keymap": {
+      "KeyBoard": "R",
+      "XBOX": "Y"
+    },
+    "description": {
+      "Chinese": "停止共鸣",
+      "English": "StopResonance"
+    }
+  },
+  //BotKeyTips
+  "back": {
+    "keyname": "back",
+    "keymap": {
+      "KeyBoard": "ESC",
+      "XBOX": "B"
+    },
+    "description": {
+      "Chinese": "返回",
+      "English": "Back"
+    }
+  }
+}
+

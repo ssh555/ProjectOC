@@ -72,6 +72,17 @@ namespace ExcelToJson
             return data;
         }
 
+        public void WriteJsonFromExcel<T>(List<T> data, string path)
+        {
+            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(path));
+            using (FileStream fs = new FileStream(path, FileMode.Create))
+            {
+                string jsonData = JsonConvert.SerializeObject(data);
+                StreamWriter writer = new StreamWriter(fs);
+                writer.Write(jsonData);
+                writer.Flush();
+            }
+        }
 
         ///// <summary>
         ///// 将数据写进指定的JSON文件中
@@ -91,9 +102,12 @@ namespace ExcelToJson
             System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(path));
             using (FileStream fs = new FileStream(path, FileMode.Create))
             {
-                DataContractSerializer serializer = new DataContractSerializer(typeof(List<T>));
+                //DataContractSerializer serializer = new DataContractSerializer(typeof(List<T>));
 
-                serializer.WriteObject(fs, data);
+                //serializer.WriteObject(fs, data);
+
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(fs, data);
             }
         }
 
@@ -110,9 +124,12 @@ namespace ExcelToJson
 
             using (FileStream fs = new FileStream(path, FileMode.Create))
             {
-                DataContractSerializer serializer = new DataContractSerializer(typeof(T));
+                //DataContractSerializer serializer = new DataContractSerializer(typeof(T));
 
-                serializer.WriteObject(fs, data);
+                //serializer.WriteObject(fs, data);
+
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(fs, data);
             }
         }
     }

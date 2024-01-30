@@ -40,7 +40,7 @@ namespace ML.Engine.InventorySystem
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]>("Binary/TableData", "Recipe", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]>("Json/TableData", "Recipe", (datas) =>
                 {
                     foreach (var data in datas)
                     {
