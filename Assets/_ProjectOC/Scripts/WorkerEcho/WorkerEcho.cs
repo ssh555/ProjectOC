@@ -46,6 +46,7 @@ namespace ProjectOC.WorkerEchoNS
         {
             this.BuildingPart = buildingPart;
         }
+
         public ExternWorker SummonWorker(string id,int index)
         {
             IInventory inventory = GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory;
@@ -77,24 +78,26 @@ namespace ProjectOC.WorkerEchoNS
            
             return externWorker;
         }
+
         public void SpawnWorker(int index)
         {
-          
-        
             Workers[index].worker.transform.position = new Vector3(2,2,2);
             Workers[index] = null;
         }
+
         public void ExpelWorker(int index)
         {
             GameObject.Destroy(Workers[index].worker.gameObject);
            
             Workers[index] = null;
         }
+
         public void LevelUp()
         {
             if (Level == 2) return;
             Level = 2;
         }
+
         public EchoStatusType GetStatus()
         {
             if (Workers == null)
@@ -110,13 +113,14 @@ namespace ProjectOC.WorkerEchoNS
             }
             return EchoStatusType.Waiting;
         }
+
         public ExternWorker[] GetExternWorkers()
         {
             return Workers;
         }
+
         public void StopEcho(string id,int index)
         {
-            
             IInventory inventory = GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory;
             List<ML.Engine.InventorySystem.CompositeSystem.Formula> dict = GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRaw(id);
             foreach(var pair in dict)
@@ -125,10 +129,6 @@ namespace ProjectOC.WorkerEchoNS
                 {
                     inventory.AddItem(item);
                 }
-
-
-
-
             }
             Workers[index] = null;
         }

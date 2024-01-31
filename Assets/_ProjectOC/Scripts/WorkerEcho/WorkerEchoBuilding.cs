@@ -15,7 +15,7 @@ namespace ProjectOC.WorkerEchoNS
         public ResonanceWheelSystem.UI.ResonanceWheelUI uIResonanceWheel;
 
         public WorkerEcho workerEcho;
-        private void Awake()
+        protected override void Awake()
         {
             this.workerEcho = new WorkerEcho(this);
             this.InteractType = "WorkerEcho";

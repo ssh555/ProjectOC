@@ -77,7 +77,7 @@ namespace ProjectOC.LandMassExpand
         }
 
         
-        public new void OnChangePlaceEvent(Vector3 oldPos,Vector3 newPos)
+        public override void OnChangePlaceEvent(Vector3 oldPos,Vector3 newPos)
         {
             //如果没有，说明刚建造则加入
             if (!BuildPowerIslandManager.Instance.powerSubs.Contains(this))
