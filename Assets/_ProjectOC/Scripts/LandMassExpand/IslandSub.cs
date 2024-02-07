@@ -12,10 +12,5 @@ namespace ProjectOC.LandMassExpand
         {
             islandMain = GetComponentInParent<IslandMain>();
         }
-
-        public override void IslandMove(Vector2Int centerPos)
-        {
-            base.IslandMove(centerPos + islandMapPos);
-        }
     }
 }
