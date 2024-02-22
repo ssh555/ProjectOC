@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3938719566
+CRC: 3015754124
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ea63c6e0c19dda7bbe18186c78b3d4f5
+    Hash: e60780072d0f18987231ad6968770647
   TypeTreeHash:
     serializedVersion: 2
-    Hash: d5c81d782665cd738b3ba9ffb34344f2
+    Hash: a9357ddbd43252667ec9ffacf1feef51
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: ea63c6e0c19dda7bbe18186c78b3d4f5
+    Hash: e60780072d0f18987231ad6968770647
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -58,8 +58,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
 - Class: 114
@@ -123,6 +121,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 39fa3d8997a24136984ca6e2c99902bc, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 87badff79e1e54a4a9d68c74f002b591, type: 3}
@@ -175,7 +175,7 @@ Assets:
 - Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity
 - Assets/_ProjectOC/Scene/GameScene.unity
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/shader
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/uipanel
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/shader
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/uipanel

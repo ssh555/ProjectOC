@@ -5,6 +5,7 @@ using UnityEngine;
 using ML.Engine.BuildingSystem.BuildingPart;
 using System.Linq;
 using System;
+using UnityEditor;
 
 namespace ML.Engine.BuildingSystem
 {
@@ -186,7 +187,7 @@ namespace ML.Engine.BuildingSystem
         {
             get
             {
-                if(instance == null)
+                if(instance == null && Manager.GameManager.Instance != null)
                 {
                     instance = Manager.GameManager.Instance.GetLocalManager<BuildingManager>();
                     if(instance != null)

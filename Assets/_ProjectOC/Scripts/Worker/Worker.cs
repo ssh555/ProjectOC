@@ -121,7 +121,7 @@ namespace ProjectOC.WorkerNS
         public List<Item> TransportItems = new List<Item>();
 
         private NavMeshAgent Agent = null;
-        public float Threshold = 1f;
+        public float Threshold = 2f;
         public Transform Target = null;
         private event Action<Worker> OnArrival;
         public bool HasArrived = false;
