@@ -80,7 +80,7 @@ namespace ProjectOC.WorkerNS
                 {
                     return TimeArrangement[timeManager.CurrentTimeFrame];
                 }
-                Debug.LogError("DispatchTimeManager is Null");
+                //Debug.LogError("DispatchTimeManager is Null");
                 return TimeStatus.None;
             } 
         }
@@ -167,7 +167,7 @@ namespace ProjectOC.WorkerNS
                 }
                 else
                 {
-                    Debug.LogError($"Worker {Name} Skill {kv.Value} is Null");
+                    //Debug.LogError($"Worker {Name} Skill {kv.Value} is Null");
                 }
             }
 

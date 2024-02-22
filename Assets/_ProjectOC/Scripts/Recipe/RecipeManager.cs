@@ -65,7 +65,7 @@ namespace ML.Engine.InventorySystem
             {
                 return new Recipe(RecipeTableDict[id]);
             }
-            Debug.LogError("没有对应ID为 " + id + " 的配方");
+            //Debug.LogError("没有对应ID为 " + id + " 的配方");
             return null;
         }
         #endregion

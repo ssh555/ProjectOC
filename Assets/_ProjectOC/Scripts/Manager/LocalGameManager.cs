@@ -32,6 +32,7 @@ namespace ProjectOC.ManagerNS
             if (Instance != null)
             {
                 Destroy(this.gameObject);
+                return;
             }
             Instance = this;
         }
@@ -65,6 +66,17 @@ namespace ProjectOC.ManagerNS
         {
             if (Instance == this)
             {
+                GM.UnregisterAllLocalManager<DispatchTimeManager>();
+                GM.UnregisterAllLocalManager<MissionManager>();
+                GM.UnregisterAllLocalManager<ProNodeManager>();
+                GM.UnregisterAllLocalManager<RecipeManager>();
+                GM.UnregisterAllLocalManager<StoreManager>();
+                GM.UnregisterAllLocalManager<WorkerManager>();
+                GM.UnregisterAllLocalManager<EffectManager>();
+                GM.UnregisterAllLocalManager<FeatureManager>();
+                GM.UnregisterAllLocalManager<SkillManager>();
+                GM.UnregisterAllLocalManager<WorkerEchoManager>();
+                GM.UnregisterAllLocalManager<LocalGameManager>();
                 Instance = null;
             }
         }

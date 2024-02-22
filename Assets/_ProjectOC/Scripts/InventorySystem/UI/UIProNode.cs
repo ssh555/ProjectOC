@@ -762,7 +762,7 @@ namespace ProjectOC.InventorySystem.UI
                     amountProduct.text = ProNode.GetItemAllNum(productID).ToString();
 
                     var tiemProduct = Product.transform.Find("Time").GetComponent<TMPro.TextMeshProUGUI>();
-                    tiemProduct.text = "Time: " + LocalGameManager.Instance.RecipeManager.GetTimeCost(ProNode.Recipe.ID).ToString();
+                    tiemProduct.text = "Time: " + ProNode.Recipe.TimeCost.ToString();
                     RectTransform rect = Product.transform.Find("Mask").GetComponent<RectTransform>();
                     rect.sizeDelta = new Vector2(rect.sizeDelta.x, 0);
                     #endregion

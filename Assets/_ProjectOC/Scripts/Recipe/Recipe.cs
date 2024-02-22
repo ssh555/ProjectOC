@@ -54,7 +54,7 @@ namespace ML.Engine.InventorySystem
                     }
                 }
             }
-            Debug.LogError($"Raw {itemID} is not exist in recipe {ID}");
+            //Debug.LogError($"Raw {itemID} is not exist in recipe {ID}");
             return 0;
         }
 
@@ -67,14 +67,14 @@ namespace ML.Engine.InventorySystem
                     Item item = composition as Item;
                     if (item.Amount != ProductNum)
                     {
-                        Debug.LogError($"Recipe {ID} Product {ProductID} Item Num is Error");
+                        //Debug.LogError($"Recipe {ID} Product {ProductID} Item Num is Error");
                     }
                     return item;
                 default:
-                    Debug.LogError($"Recipe {ID} Product {ProductID} Composite {compObjType}");
+                    //Debug.LogError($"Recipe {ID} Product {ProductID} Composite {compObjType}");
                     break;
             }
-            Debug.LogError("Recipe Product Num is Error");
+            //Debug.LogError("Recipe Product Num is Error");
             return null;
         }
     }

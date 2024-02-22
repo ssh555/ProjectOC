@@ -404,7 +404,7 @@ namespace ProjectOC.StoreNS
                         }
                         else
                         {
-                            Debug.LogError("UIAdd Error");
+                            //Debug.LogError("UIAdd Error");
                         }
                     }
                 }
@@ -426,7 +426,7 @@ namespace ProjectOC.StoreNS
                         }
                         else
                         {
-                            Debug.LogError("UIRemove Error");
+                            //Debug.LogError("UIRemove Error");
                             break;
                         }
                     }
@@ -447,7 +447,7 @@ namespace ProjectOC.StoreNS
                     }
                     else
                     {
-                        Debug.LogError("UIFastAdd Error");
+                        //Debug.LogError("UIFastAdd Error");
                     }
                 }
             }
@@ -469,7 +469,7 @@ namespace ProjectOC.StoreNS
                         }
                         else
                         {
-                            Debug.LogError("UIFastRemove Error");
+                            //Debug.LogError("UIFastRemove Error");
                             break;
                         }
                     }
@@ -660,7 +660,7 @@ namespace ProjectOC.StoreNS
             result.Amount = newAmount;
             if (item.Amount != newAmount)
             {
-                Debug.LogError($"Item Amount Error ItemAmount: {result.Amount} Amount: {newAmount}");
+                //Debug.LogError($"Item Amount Error ItemAmount: {result.Amount} Amount: {newAmount}");
             }
             OnStoreDataChange?.Invoke();
             return result;
