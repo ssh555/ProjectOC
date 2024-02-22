@@ -47,6 +47,6 @@ Assets:
 - Assets/_ProjectOC/Resources/UI/ResonanceWheel/ResonanceWheelPrefabs/Description.prefab
 - Assets/_ProjectOC/Resources/UI/ResonanceWheel/ResonanceWheelPrefabs/Slot.prefab
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/fonts
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/fonts
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d

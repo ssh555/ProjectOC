@@ -91,5 +91,5 @@ Assets:
 - Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/rock_b.fbx
 - Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/rock_d.fbx
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials/terrain
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/prefabs/terrain
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/terrain
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/terrain
