@@ -199,6 +199,27 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         {
             BuildingManager.Instance.BuildingSocketList.Remove(this);
         }
+
+
+        private void OnDrawGizmos()
+        {
+            if(BuildingManager.Instance.DrawActiveSocket.IsDraw)
+            {
+                var cols = this.GetComponentsInChildren<Collider>();
+                foreach(Collider col in cols)
+                {
+                    Extension.GizmosExtension.DrawWireCollider(col, BuildingManager.Instance.DrawActiveSocket.color);
+                }
+            }
+            else if (BuildingManager.Instance.DrawSocket.IsDraw)
+            {
+                var cols = this.GetComponentsInChildren<Collider>();
+                foreach (Collider col in cols)
+                {
+                    Extension.GizmosExtension.DrawWireCollider(col, BuildingManager.Instance.DrawSocket.color);
+                }
+            }
+        }
     }
 
 }

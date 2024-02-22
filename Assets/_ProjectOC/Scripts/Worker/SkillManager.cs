@@ -1,4 +1,3 @@
-using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using System;
 using System.Collections.Generic;
@@ -33,15 +32,13 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         private Dictionary<string, SkillTableData> SkillTableDict = new Dictionary<string, SkillTableData>();
 
-        public const string Texture2DPath = "ui/WorkerAbility/texture2d";
-
         public static ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableData[]>("Binary/TableData", "Skill", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableData[]>("Json/TableData", "Skill", (datas) =>
                 {
                     foreach (var data in datas)
                     {
@@ -56,10 +53,9 @@ namespace ProjectOC.WorkerNS
         #region Spawn
         public Skill SpawnSkill(string id)
         {
-            if (this.SkillTableDict.TryGetValue(id, out SkillTableData row))
+            if (IsValidID(id))
             {
-                Skill skill = new Skill(row);
-                return skill;
+                return new Skill(SkillTableDict[id]);
             }
             Debug.LogError("没有对应ID为 " + id + " 的Skill");
             return null;
@@ -67,69 +63,54 @@ namespace ProjectOC.WorkerNS
         #endregion
 
         #region Getter
-        public string[] GetAllSkillID()
+        public string[] GetAllID()
         {
             return SkillTableDict.Keys.ToArray();
         }
 
-        public bool IsValidSkillID(string id)
+        public bool IsValidID(string id)
         {
-            return SkillTableDict.ContainsKey(id);
+            if (!string.IsNullOrEmpty(id))
+            {
+                return SkillTableDict.ContainsKey(id);
+            }
+            return false;
         }
 
         public int GetSort(string id)
         {
-            if (!SkillTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return int.MaxValue;
+                return SkillTableDict[id].Sort;
             }
-            return SkillTableDict[id].Sort;
-        }
-
-        public Texture2D GetTexture2D(string id)
-        {
-            if (!SkillTableDict.ContainsKey(id))
-            {
-                return null;
-            }
-            return GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>(SkillTableDict[id].Icon);
-        }
-
-        public Sprite GetSprite(string id)
-        {
-            var tex = this.GetTexture2D(id);
-            if (tex == null)
-            {
-                return null;
-            }
-            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+            return int.MaxValue;
         }
 
         public WorkType GetSkillType(string id)
         {
-            if (!SkillTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return WorkType.None;
+                return SkillTableDict[id].AbilityType;
             }
-            return SkillTableDict[id].AbilityType;
+            return WorkType.None;
         }
 
         public string GetItemDescription(string id)
         {
-            if (!SkillTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return "";
+                return SkillTableDict[id].ItemDescription;
             }
-            return SkillTableDict[id].ItemDescription;
+            return "";
         }
 
         public string GetEffectsDescription(string id)
         {
-            if (!SkillTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return "";
+                return SkillTableDict[id].EffectsDescription;
             }
-            return SkillTableDict[id].EffectsDescription;
+            return "";
         }
         #endregion
     }

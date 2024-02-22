@@ -1,4 +1,3 @@
-using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using System;
 using System.Collections.Generic;
@@ -39,15 +38,13 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         private Dictionary<string, FeatureTableData> FeatureTableDict = new Dictionary<string, FeatureTableData>();
 
-        public const string Texture2DPath = "ui/Feature/texture2d";
-
         public static ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableData[]>("Binary/TableData", "Feature", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableData[]>("Json/TableData", "Feature", (datas) =>
                 {
                     foreach (var data in datas)
                     {
@@ -75,7 +72,7 @@ namespace ProjectOC.WorkerNS
         public List<Feature> CreateFeature(int maxFeatureNum)
         {
             List<Feature> result = new List<Feature>();
-            if (maxFeatureNum > 0 && maxFeatureNum < FeatureTableDict.Count)
+            if (0 < maxFeatureNum && maxFeatureNum < FeatureTableDict.Count)
             {
                 List<string> positiveFeature = FeatureTypeDict[FeatureType.Buff];
                 if (positiveFeature.Count > 0)
@@ -104,10 +101,9 @@ namespace ProjectOC.WorkerNS
         }
         public Feature SpawnFeature(string id)
         {
-            if (FeatureTableDict.TryGetValue(id, out FeatureTableData row))
+            if (IsValidID(id))
             {
-                Feature feature = new Feature(row);
-                return feature;
+                return new Feature(FeatureTableDict[id]);
             }
             Debug.LogError("没有对应ID为 " + id + " 的Feature");
             return null;
@@ -115,88 +111,71 @@ namespace ProjectOC.WorkerNS
         #endregion
 
         #region Getter
-        public string[] GetAllFeatureID()
+        public string[] GetAllID()
         {
             return FeatureTableDict.Keys.ToArray();
         }
 
         public bool IsValidID(string id)
         {
-            return FeatureTableDict.ContainsKey(id);
+            if (!string.IsNullOrEmpty(id))
+            {
+                return FeatureTableDict.ContainsKey(id);
+            }
+            return false;
         }
 
         public string GetIDExclude(string id)
         {
-            if (!FeatureTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return "";
+                return FeatureTableDict[id].IDExclude;
             }
-            return FeatureTableDict[id].IDExclude;
+            return "";
         }
 
         public int GetSort(string id)
         {
-            if (!FeatureTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return int.MaxValue;
+                return (int)FeatureTableDict[id].Type;
             }
-            return (int)FeatureTableDict[id].Type;
+            return int.MaxValue;
         }
 
         public string GetName(string id)
         {
-            if (!FeatureTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return "";
+                return FeatureTableDict[id].Name;
             }
-            return FeatureTableDict[id].Name;
+            return "";
         }
-
-        public Texture2D GetTexture2D(string id)
-        {
-            if (!FeatureTableDict.ContainsKey(id))
-            {
-                return null;
-            }
-
-            return GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>(FeatureTableDict[id].Icon);
-        }
-
-        public Sprite GetSprite(string id)
-        {
-            var tex = this.GetTexture2D(id);
-            if (tex == null)
-            {
-                return null;
-            }
-            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-        }
-
         public FeatureType GetFeatureType(string id)
         {
-            if (!FeatureTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return FeatureType.None;
+                return FeatureTableDict[id].Type;
             }
-            return FeatureTableDict[id].Type;
+            return FeatureType.None;
         }
 
         public string GetItemDescription(string id)
         {
-            if (!FeatureTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return "";
+                return FeatureTableDict[id].ItemDescription;
             }
-            return FeatureTableDict[id].ItemDescription;
+            return "";
         }
 
         public string GetEffectsDescription(string id)
         {
-            if (!FeatureTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return "";
+                return FeatureTableDict[id].EffectsDescription;
             }
-            return FeatureTableDict[id].EffectsDescription;
+            return "";
         }
         #endregion        
     }

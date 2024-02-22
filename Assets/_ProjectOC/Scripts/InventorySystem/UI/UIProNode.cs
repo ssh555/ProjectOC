@@ -2,6 +2,7 @@ using ML.Engine.InventorySystem;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.TextContent;
 using ProjectOC.ManagerNS;
+using ProjectOC.ProNodeNS;
 using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System;
@@ -9,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using ML.Engine.Extension;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -149,14 +151,6 @@ namespace ProjectOC.InventorySystem.UI
             BotKeyTips_Level.gameObject.SetActive(false);
 
             CurPriority = MissionNS.TransportPriority.Normal;
-            ProNode.OnActionChange += RefreshDynamic;
-            ProNode.OnProduceTimerUpdate += (double time) =>
-            {
-                RectTransform rect = Product.transform.Find("Mask").GetComponent<RectTransform>();
-                float percent = 1 - (float) (time / ProNode.TimeCost);
-                rect.sizeDelta = new Vector2(rect.sizeDelta.x, percent * Product.transform.Find("Icon").GetComponent<RectTransform>().sizeDelta.y);
-                Product.transform.Find("Time").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textPrefixTime + time.ToString("F2");
-            };
             IsInit = true;
             Refresh();
         }
@@ -190,14 +184,14 @@ namespace ProjectOC.InventorySystem.UI
         #endregion
 
         #region Internal
-        private enum Mode
+        public enum Mode
         {
             ProNode = 0,
             ChangeRecipe = 1,
             ChangeWorker = 2,
             ChangeLevel = 3,
         }
-        private Mode CurMode = Mode.ProNode;
+        public Mode CurMode = Mode.ProNode;
         public Worker Worker => ProNode.Worker;
         /// <summary>
         /// 对应的生产节点
@@ -457,6 +451,9 @@ namespace ProjectOC.InventorySystem.UI
 
         private void Enter()
         {
+            ProNode.OnActionChange += RefreshDynamic;
+            ProNode.OnProduceTimerUpdate += OnProduceTimerUpdateAction;
+            ProNode.OnProduceEnd += Refresh;
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Enable();
             //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
@@ -465,6 +462,9 @@ namespace ProjectOC.InventorySystem.UI
 
         private void Exit()
         {
+            ProNode.OnActionChange -= RefreshDynamic;
+            ProNode.OnProduceTimerUpdate -= OnProduceTimerUpdateAction;
+            ProNode.OnProduceEnd -= Refresh;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Disable();
             //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
             this.UnregisterInput();
@@ -616,7 +616,7 @@ namespace ProjectOC.InventorySystem.UI
         }
         private void RemoveWorker_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurMode == Mode.ChangeWorker)
+            if (CurMode == Mode.ProNode)
             {
                 ProNode.RemoveWorker();
                 Refresh();
@@ -731,6 +731,8 @@ namespace ProjectOC.InventorySystem.UI
                 this.BotKeyTips_Level.gameObject.SetActive(false);
                 this.Raw_UIItemTemplate.gameObject.SetActive(false);
 
+                KT_Upgrade.ReWrite(PanelTextContent.ktUpgrade);
+                KT_NextPriority.ReWrite(PanelTextContent.ktNextPriority);
                 #region ProNode
                 if (ProNode.Recipe != null)
                 {
@@ -743,12 +745,10 @@ namespace ProjectOC.InventorySystem.UI
                             break;
                         }
                     }
-                    KT_Upgrade.ReWrite(PanelTextContent.ktUpgrade);
-                    KT_NextPriority.ReWrite(PanelTextContent.ktNextPriority);
                     #endregion
 
                     #region Product
-                    string productID = ProNode.Recipe.GetProductID();
+                    string productID = ProNode.Recipe.ProductID;
                     var nameProduct = Product.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
                     nameProduct.text = ItemManager.Instance.GetItemName(productID);
                     //var imgProduct = Product.transform.Find("Icon").GetComponent<Image>();
@@ -764,6 +764,8 @@ namespace ProjectOC.InventorySystem.UI
 
                     var tiemProduct = Product.transform.Find("Time").GetComponent<TMPro.TextMeshProUGUI>();
                     tiemProduct.text = "Time: " + LocalGameManager.Instance.RecipeManager.GetTimeCost(ProNode.Recipe.ID).ToString();
+                    RectTransform rect = Product.transform.Find("Mask").GetComponent<RectTransform>();
+                    rect.sizeDelta = new Vector2(rect.sizeDelta.x, 0);
                     #endregion
                     #region Raw
                     // 临时内存生成的UIItem数量(只增不减，多的隐藏掉即可) - 当前筛选出来的Item数量
@@ -890,20 +892,34 @@ namespace ProjectOC.InventorySystem.UI
                     LayoutRebuilder.ForceRebuildLayoutImmediate(Raw_GridLayout.GetComponent<RectTransform>());
                     #endregion
                 }
+                else
+                {
+                    Text_Title.text = PanelTextContent.textEmpty;
+                    Product.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textEmpty;
+                    Product.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = "0";
+                    Product.transform.Find("Time").GetComponent<TMPro.TextMeshProUGUI>().text = "Time: 0";
+                    RectTransform rect = Product.transform.Find("Mask").GetComponent<RectTransform>();
+                    rect.sizeDelta = new Vector2(rect.sizeDelta.x, 0);
+                    for (int i = 0; i < tempUIItems.Count; ++i)
+                    {
+                        tempUIItems[tempUIItems.Count - 1 - i].SetActive(false);
+                    }
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(Raw_GridLayout.GetComponent<RectTransform>());
+                }
                 #region Worker
                 if (Worker != null)
                 {
                     var name = UIWorker.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
                     name.text = Worker.Name;
-                    var img = UIWorker.transform.Find("Icon").GetComponent<Image>();
-                    WorkerManager workerManager = ManagerNS.LocalGameManager.Instance.WorkerManager;
-                    var sprite = tempSprite.Find(s => s.texture == workerManager.GetTexture2D());
-                    if (sprite == null)
-                    {
-                        sprite = workerManager.GetSprite();
-                        tempSprite.Add(sprite);
-                    }
-                    img.sprite = sprite;
+                    //var img = UIWorker.transform.Find("Icon").GetComponent<Image>();
+                    //WorkerManager workerManager = ManagerNS.LocalGameManager.Instance.WorkerManager;
+                    //var sprite = tempSprite.Find(s => s.texture == workerManager.GetTexture2D());
+                    //if (sprite == null)
+                    //{
+                    //    sprite = workerManager.GetSprite();
+                    //    tempSprite.Add(sprite);
+                    //}
+                    //img.sprite = sprite;
                     var onDuty = UIWorker.transform.Find("OnDuty").GetComponent<TMPro.TextMeshProUGUI>();
                     switch (Worker.Status)
                     {
@@ -924,6 +940,14 @@ namespace ProjectOC.InventorySystem.UI
                     var rect = UIWorker.transform.Find("PrograssBar").Find("Cur").GetComponent<RectTransform>();
                     rect.offsetMax = new Vector2(rect.offsetMax.x, -1 * (int)(100 - 100 * Worker.APCurrent / Worker.APMax));
                     UIWorker.transform.Find("AP").GetComponent<TMPro.TextMeshProUGUI>().text = $"{Worker.APCurrent}/{Worker.APMax}";
+                }
+                else
+                {
+                    UIWorker.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textEmpty;
+                    UIWorker.transform.Find("OnDuty").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textEmpty;
+                    RectTransform rect = UIWorker.transform.Find("PrograssBar").Find("Cur").GetComponent<RectTransform>();
+                    rect.offsetMax = new Vector2(rect.offsetMax.x, -100);
+                    UIWorker.transform.Find("AP").GetComponent<TMPro.TextMeshProUGUI>().text = "0/0";
                 }
                 #endregion
                 #region Eff
@@ -1352,49 +1376,6 @@ namespace ProjectOC.InventorySystem.UI
                 this.Level_UIItemTemplate.gameObject.SetActive(true);
             }
         }
-
-        public void RefreshDynamic()
-        {
-            if (CurMode == Mode.ProNode)
-            {
-                if (ProNode.Recipe != null)
-                {
-                    var amountProduct = Product.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
-                    amountProduct.text = ProNode.GetItemAllNum(ProNode.Recipe.GetProductID()).ToString();
-                    for (int i = 0; i < Raws.Count; ++i)
-                    {
-                        var amount = tempUIItems[i].transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
-                        amount.text = ProNode.GetItemAllNum(Raws[i].id).ToString();
-                    }
-                }
-                if (Worker != null)
-                {
-                    var onDuty = UIWorker.transform.Find("OnDuty").GetComponent<TMPro.TextMeshProUGUI>();
-                    switch (Worker.Status)
-                    {
-                        case Status.Relaxing:
-                            onDuty.text = PanelTextContent.textWorkerStateRelax;
-                            break;
-                        case Status.Fishing:
-                            onDuty.text = PanelTextContent.textWorkerStateFish;
-                            if (Worker.IsOnDuty) 
-                            {
-                                onDuty.text = PanelTextContent.textWorkerOnDuty;
-                            }
-                            break;
-                        case Status.Working:
-                            onDuty.text = PanelTextContent.textWorkerStateWork;
-                            break;
-                    }
-                    Text_Eff.text = PanelTextContent.textPrefixEff + ": +" + ProNode.Eff.ToString() + "%";
-                    Text_EffProNode.text = ProNode.Name + ": +" + ProNode.EffBase.ToString() + "%";
-                    Text_EffWorker.text = Worker.Name + ": +" + (ProNode.Eff - ProNode.EffBase).ToString() + "%";
-                    var rect = UIWorker.transform.Find("PrograssBar").Find("Cur").GetComponent<RectTransform>();
-                    rect.offsetMax = new Vector2(rect.offsetMax.x, -1 * (int)(100 - 100 * Worker.APCurrent / Worker.APMax));
-                    UIWorker.transform.Find("AP").GetComponent<TMPro.TextMeshProUGUI>().text = $"{Worker.APCurrent}/{Worker.APMax}";
-                }
-            }
-        }
         #endregion
 
         #region TextContent
@@ -1441,7 +1422,7 @@ namespace ProjectOC.InventorySystem.UI
         {
             if(ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ProNodePanel>("Binary/TextContent/Inventory", "ProNodePanel", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ProNodePanel>("Json/TextContent/Inventory", "ProNodePanel", (datas) =>
                 {
                     Refresh();
                     this.enabled = false;
@@ -1450,5 +1431,62 @@ namespace ProjectOC.InventorySystem.UI
             }
         }
         #endregion
+
+        #region Action
+        private void OnProduceTimerUpdateAction(double time)
+        {
+            if (CurMode == Mode.ProNode)
+            {
+                RectTransform rect = Product.transform.Find("Mask").GetComponent<RectTransform>();
+                float percent = 1 - (float)(time / ProNode.TimeCost);
+                rect.sizeDelta = new Vector2(rect.sizeDelta.x, percent * Product.transform.Find("Icon").GetComponent<RectTransform>().sizeDelta.y);
+                Product.transform.Find("Time").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textPrefixTime + time.ToString("F2");
+            }
+        }
+
+        public void RefreshDynamic()
+        {
+            if (CurMode == Mode.ProNode)
+            {
+                if (ProNode.Recipe != null)
+                {
+                    var amountProduct = Product.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
+                    amountProduct.text = ProNode.GetItemAllNum(ProNode.Recipe.ProductID).ToString();
+                    for (int i = 0; i < Raws.Count; ++i)
+                    {
+                        var amount = tempUIItems[i].transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
+                        amount.text = ProNode.GetItemAllNum(Raws[i].id).ToString();
+                    }
+                }
+                if (Worker != null)
+                {
+                    var onDuty = UIWorker.transform.Find("OnDuty").GetComponent<TMPro.TextMeshProUGUI>();
+                    switch (Worker.Status)
+                    {
+                        case Status.Relaxing:
+                            onDuty.text = PanelTextContent.textWorkerStateRelax;
+                            break;
+                        case Status.Fishing:
+                            onDuty.text = PanelTextContent.textWorkerStateFish;
+                            if (Worker.IsOnDuty)
+                            {
+                                onDuty.text = PanelTextContent.textWorkerOnDuty;
+                            }
+                            break;
+                        case Status.Working:
+                            onDuty.text = PanelTextContent.textWorkerStateWork;
+                            break;
+                    }
+                    Text_Eff.text = PanelTextContent.textPrefixEff + ": +" + ProNode.Eff.ToString() + "%";
+                    Text_EffProNode.text = ProNode.Name + ": +" + ProNode.EffBase.ToString() + "%";
+                    Text_EffWorker.text = Worker.Name + ": +" + (ProNode.Eff - ProNode.EffBase).ToString() + "%";
+                    var rect = UIWorker.transform.Find("PrograssBar").Find("Cur").GetComponent<RectTransform>();
+                    rect.offsetMax = new Vector2(rect.offsetMax.x, -1 * (int)(100 - 100 * Worker.APCurrent / Worker.APMax));
+                    UIWorker.transform.Find("AP").GetComponent<TMPro.TextMeshProUGUI>().text = $"{Worker.APCurrent}/{Worker.APMax}";
+                }
+            }
+        }
+        #endregion
+
     }
 }

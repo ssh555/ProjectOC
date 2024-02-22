@@ -17,6 +17,7 @@ namespace ML.Engine.UI
         /// </summary>
         public UIBasePanel PopPanel()
         {
+            Debug.Log("PopPanel");
             // ×îµ×²ãUI->startÎÞ·¨ÒÆ³ý
             if (panelStack.Count < 2)
             {

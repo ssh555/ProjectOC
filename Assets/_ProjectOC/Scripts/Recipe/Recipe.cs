@@ -12,20 +12,10 @@ namespace ML.Engine.InventorySystem
     [System.Serializable]
     public class Recipe
     {
-        /// <summary>
-        /// ID
-        /// </summary>
         public string ID = "";
 
         #region 读表数据
-        /// <summary>
-        /// 序号用于排序
-        /// </summary>
         public int Sort { get => LocalGameManager.Instance.RecipeManager.GetSort(ID); }
-
-        /// <summary>
-        /// 类目
-        /// </summary>
         public RecipeCategory Category { get => LocalGameManager.Instance.RecipeManager.GetCategory(ID); }
         /// <summary>
         /// 原料
@@ -35,6 +25,8 @@ namespace ML.Engine.InventorySystem
         /// 成品
         /// </summary>
         public Formula Product { get => LocalGameManager.Instance.RecipeManager.GetProduct(ID); }
+        public string ProductID { get => LocalGameManager.Instance.RecipeManager.GetProduct(ID).id; }
+        public int ProductNum { get => LocalGameManager.Instance.RecipeManager.GetProduct(ID).num; }
         /// <summary>
         /// 时间消耗，进行1次生产需要多少秒
         /// </summary>
@@ -50,28 +42,16 @@ namespace ML.Engine.InventorySystem
             this.ID = config.ID;
         }
 
-        public Recipe(Recipe recipe)
-        {
-            this.ID = recipe.ID;
-        }
-
-        public string GetProductID()
-        {
-            return Product.id ?? "";
-        }
-
-        public int GetProductNum()
-        {
-            return Product.num;
-        }
-
         public int GetRawNum(string itemID)
         {
-            foreach (Formula raw in Raw)
+            if (!string.IsNullOrEmpty(itemID))
             {
-                if (raw.id == itemID)
+                foreach (Formula raw in Raw)
                 {
-                    return raw.num;
+                    if (raw.id == itemID)
+                    {
+                        return raw.num;
+                    }
                 }
             }
             Debug.LogError($"Raw {itemID} is not exist in recipe {ID}");
@@ -80,19 +60,18 @@ namespace ML.Engine.InventorySystem
 
         public Item Composite(IInventory inventory)
         {
-            
-            CompositeManager.CompositionObjectType compObjType = CompositeManager.Instance.Composite(inventory, Product.id, out var composition);
+            CompositeManager.CompositionObjectType compObjType = CompositeManager.Instance.Composite(inventory, ProductID, out var composition);
             switch (compObjType)
             {
                 case CompositeManager.CompositionObjectType.Item:
                     Item item = composition as Item;
-                    if (item.Amount != GetProductNum())
+                    if (item.Amount != ProductNum)
                     {
-                        Debug.LogError($"Recipe {ID} Product {Product.id} Item Num is Error");
+                        Debug.LogError($"Recipe {ID} Product {ProductID} Item Num is Error");
                     }
                     return item;
                 default:
-                    Debug.LogError($"Recipe {ID} Product {Product.id} Composite {compObjType}");
+                    Debug.LogError($"Recipe {ID} Product {ProductID} Composite {compObjType}");
                     break;
             }
             Debug.LogError("Recipe Product Num is Error");

@@ -1,0 +1,37 @@
+[
+    {
+        "name" : "enterbuild",
+        "description" : {
+            "Chinese" : "建造模式",
+            "English" : "EntetBuild"
+        }
+    },
+    {
+        "name" : "techtree",
+        "description" : {
+            "Chinese" : "科技树",
+            "English" : "TechTree"
+        }
+    },
+    {
+        "name" : "inventory",
+        "description" : {
+            "Chinese" : "背包",
+            "English" : "Inventory"
+        }
+    },
+    {
+        "name" : "worker",
+        "description" : {
+            "Chinese" : "刁民",
+            "English" : "Worker"
+        }
+    },
+    {
+        "name" : "additem",
+        "description" : {
+            "Chinese" : "添加物品",
+            "English" : "Add Item"
+        }
+    }
+]

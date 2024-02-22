@@ -85,13 +85,6 @@ namespace ProjectOC.StoreNS
 
         public Store(StoreType storeType)
         {
-            StoreDatas = new List<StoreData>();
-            Transports = new List<Transport>();
-            LevelMax = 2;
-            LevelStoreCapacity = new List<int>() { 2, 4, 8 };
-            LevelStoreDataCapacity = new List<int>() { 50, 100, 200 };
-            TransportPriority = TransportPriority.Normal;
-
             for (int i = 0; i < this.StoreCapacity; i++)
             {
                 this.StoreDatas.Add(new StoreData("", this.StoreDataCapacity));
@@ -177,6 +170,10 @@ namespace ProjectOC.StoreNS
         /// <returns></returns>
         public bool ChangeStoreData(int index, string itemID)
         {
+            if (itemID == null)
+            {
+                itemID = "";
+            }
             if (0 <= index && index < this.StoreCapacity)
             {
                 StoreData data = this.StoreDatas[index];
@@ -195,32 +192,35 @@ namespace ProjectOC.StoreNS
         /// </summary>
         public int ReserveEmptyToWorker(string itemID, int amount)
         {
-            foreach (StoreData data in this.StoreDatas)
-            {
-                if (data.ItemID != "" && data.ItemID == itemID)
-                {
-                    if (data.Empty >= amount)
-                    {
-                        data.EmptyReserve += amount;
-                        amount = 0;
-                        break;
-                    }
-                    else
-                    {
-                        amount -= data.Empty;
-                        data.EmptyReserve += data.Empty;
-                    }
-                }
-            }
-            if (amount > 0)
+            if (!string.IsNullOrEmpty(itemID))
             {
                 foreach (StoreData data in this.StoreDatas)
                 {
                     if (data.ItemID != "" && data.ItemID == itemID)
                     {
-                        data.EmptyReserve += amount;
-                        amount = 0;
-                        break;
+                        if (data.Empty >= amount)
+                        {
+                            data.EmptyReserve += amount;
+                            amount = 0;
+                            break;
+                        }
+                        else
+                        {
+                            amount -= data.Empty;
+                            data.EmptyReserve += data.Empty;
+                        }
+                    }
+                }
+                if (amount > 0)
+                {
+                    foreach (StoreData data in this.StoreDatas)
+                    {
+                        if (data.ItemID != "" && data.ItemID == itemID)
+                        {
+                            data.EmptyReserve += amount;
+                            amount = 0;
+                            break;
+                        }
                     }
                 }
             }
@@ -232,22 +232,25 @@ namespace ProjectOC.StoreNS
         /// </summary>
         public int ReserveStorageToWorker(string itemID, int amount)
         {
-            foreach (StoreData data in this.StoreDatas)
+            if (!string.IsNullOrEmpty(itemID))
             {
-                if (data.ItemID != "" && data.ItemID == itemID)
+                foreach (StoreData data in this.StoreDatas)
                 {
-                    if (data.Storage >= amount)
+                    if (data.ItemID != "" && data.ItemID == itemID)
                     {
-                        data.Storage -= amount;
-                        data.StorageReserve += amount;
-                        amount = 0;
-                        break;
-                    }
-                    else
-                    {
-                        data.StorageReserve += data.Storage;
-                        amount -= data.Storage;
-                        data.Storage = 0;
+                        if (data.Storage >= amount)
+                        {
+                            data.Storage -= amount;
+                            data.StorageReserve += amount;
+                            amount = 0;
+                            break;
+                        }
+                        else
+                        {
+                            data.StorageReserve += data.Storage;
+                            amount -= data.Storage;
+                            data.Storage = 0;
+                        }
                     }
                 }
             }
@@ -261,11 +264,14 @@ namespace ProjectOC.StoreNS
         /// <returns></returns>
         public bool IsStoreHaveItem(string itemID)
         {
-            foreach (StoreData data in this.StoreDatas)
+            if (!string.IsNullOrEmpty(itemID))
             {
-                if (data.ItemID == itemID)
+                foreach (StoreData data in this.StoreDatas)
                 {
-                    return true;
+                    if (data.ItemID == itemID)
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
@@ -296,11 +302,14 @@ namespace ProjectOC.StoreNS
         public int GetStoreStorageAll(string itemID)
         {
             int result = 0;
-            foreach (StoreData data in this.StoreDatas)
+            if (!string.IsNullOrEmpty(itemID))
             {
-                if (data.ItemID == itemID)
+                foreach (StoreData data in this.StoreDatas)
                 {
-                    result += data.StorageAll;
+                    if (data.ItemID == itemID)
+                    {
+                        result += data.StorageAll;
+                    }
                 }
             }
             return result;
@@ -314,11 +323,14 @@ namespace ProjectOC.StoreNS
         public int GetStoreStorage(string itemID)
         {
             int result = 0;
-            foreach (StoreData data in this.StoreDatas)
+            if (!string.IsNullOrEmpty(itemID))
             {
-                if (data.ItemID == itemID)
+                foreach (StoreData data in this.StoreDatas)
                 {
-                    result += data.Storage;
+                    if (data.ItemID == itemID)
+                    {
+                        result += data.Storage;
+                    }
                 }
             }
             return result;
@@ -327,11 +339,14 @@ namespace ProjectOC.StoreNS
         public int GetStoreStorageReserve(string itemID)
         {
             int result = 0;
-            foreach (StoreData data in this.StoreDatas)
+            if (!string.IsNullOrEmpty(itemID))
             {
-                if (data.ItemID == itemID)
+                foreach (StoreData data in this.StoreDatas)
                 {
-                    result += data.StorageReserve;
+                    if (data.ItemID == itemID)
+                    {
+                        result += data.StorageReserve;
+                    }
                 }
             }
             return result;
@@ -345,11 +360,14 @@ namespace ProjectOC.StoreNS
         public int GetStoreEmpty(string itemID)
         {
             int result = 0;
-            foreach (StoreData data in this.StoreDatas)
+            if (!string.IsNullOrEmpty(itemID))
             {
-                if (data.ItemID == itemID)
+                foreach (StoreData data in this.StoreDatas)
                 {
-                    result += data.Empty;
+                    if (data.ItemID == itemID)
+                    {
+                        result += data.Empty;
+                    }
                 }
             }
             return result;
@@ -358,11 +376,14 @@ namespace ProjectOC.StoreNS
         public int GetStoreEmptyReserve(string itemID)
         {
             int result = 0;
-            foreach (StoreData data in this.StoreDatas)
+            if (!string.IsNullOrEmpty(itemID))
             {
-                if (data.ItemID == itemID)
+                foreach (StoreData data in this.StoreDatas)
                 {
-                    result += data.EmptyReserve;
+                    if (data.ItemID == itemID)
+                    {
+                        result += data.EmptyReserve;
+                    }
                 }
             }
             return result;
@@ -375,9 +396,16 @@ namespace ProjectOC.StoreNS
             {
                 if (ItemManager.Instance.IsValidItemID(storeData.ItemID) && storeData.Empty >= amount)
                 {
-                    if (player.Inventory.RemoveItem(storeData.ItemID, amount))
+                    if (player.Inventory.GetItemAllNum(storeData.ItemID) >= amount)
                     {
-                        storeData.Storage += amount;
+                        if (player.Inventory.RemoveItem(storeData.ItemID, amount))
+                        {
+                            storeData.Storage += amount;
+                        }
+                        else
+                        {
+                            Debug.LogError("UIAdd Error");
+                        }
                     }
                 }
             }
@@ -398,6 +426,7 @@ namespace ProjectOC.StoreNS
                         }
                         else
                         {
+                            Debug.LogError("UIRemove Error");
                             break;
                         }
                     }
@@ -415,6 +444,10 @@ namespace ProjectOC.StoreNS
                     if (player.Inventory.RemoveItem(storeData.ItemID, amount))
                     {
                         storeData.Storage += amount;
+                    }
+                    else
+                    {
+                        Debug.LogError("UIFastAdd Error");
                     }
                 }
             }
@@ -436,6 +469,7 @@ namespace ProjectOC.StoreNS
                         }
                         else
                         {
+                            Debug.LogError("UIFastRemove Error");
                             break;
                         }
                     }
@@ -469,7 +503,7 @@ namespace ProjectOC.StoreNS
         public void RemoveMissionTranport(MissionTransport mission) {}
         public bool PutIn(string itemID, int amount)
         {
-            if (amount >= 0)
+            if (!string.IsNullOrEmpty(itemID) && amount >= 0)
             {
                 StoreData temp = null;
                 foreach (StoreData data in this.StoreDatas)
@@ -511,7 +545,7 @@ namespace ProjectOC.StoreNS
         /// </summary>
         public int PutOut(string itemID, int amount)
         {
-            if (amount > 0)
+            if (!string.IsNullOrEmpty(itemID) && amount > 0)
             {
                 int result = amount;
                 foreach (StoreData data in this.StoreDatas)
@@ -634,7 +668,7 @@ namespace ProjectOC.StoreNS
 
         public bool RemoveItem(string itemID, int amount)
         {
-            if (GetStoreStorage(itemID) < amount || amount < 0)
+            if (!string.IsNullOrEmpty(itemID) && GetStoreStorage(itemID) < amount || amount < 0)
             {
                 return false;
             }

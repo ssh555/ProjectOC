@@ -40,7 +40,7 @@ namespace ML.Engine.InventorySystem
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]>("Binary/TableData", "Recipe", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]>("Json/TableData", "Recipe", (datas) =>
                 {
                     foreach (var data in datas)
                     {
@@ -59,15 +59,11 @@ namespace ML.Engine.InventorySystem
         #endregion
 
         #region Spawn
-        /// <summary>
-        /// 根据id创建新的配方
-        /// </summary>
         public Recipe SpawnRecipe(string id)
         {
-            if (RecipeTableDict.TryGetValue(id, out RecipeTableData row))
+            if (IsValidID(id))
             {
-                Recipe recipe = new Recipe(row);
-                return recipe;
+                return new Recipe(RecipeTableDict[id]);
             }
             Debug.LogError("没有对应ID为 " + id + " 的配方");
             return null;
@@ -78,45 +74,49 @@ namespace ML.Engine.InventorySystem
         public List<string> GetRecipeIDsByCategory(RecipeCategory category)
         {
             List<string> result = new List<string>();
-            if (RecipeCategorys.ContainsKey(category) && RecipeCategorys.ContainsKey(category) && RecipeCategorys[category] != null)
+            if (RecipeCategorys.ContainsKey(category))
             {
                 result.AddRange(RecipeCategorys[category]);
             }
             return result;
         }
         
-        public string[] GetAllRecipeID()
+        public string[] GetAllID()
         {
             return RecipeTableDict.Keys.ToArray();
         }
 
         public bool IsValidID(string id)
         {
-            return RecipeTableDict.ContainsKey(id);
+            if (!string.IsNullOrEmpty(id))
+            {
+                return RecipeTableDict.ContainsKey(id);
+            }
+            return false;
         }
 
         public int GetSort(string id)
         {
-            if (!RecipeTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return int.MaxValue;
+                return RecipeTableDict[id].Sort;
             }
-            return RecipeTableDict[id].Sort;
+            return int.MaxValue;
         }
 
         public RecipeCategory GetCategory(string id)
         {
-            if (!RecipeTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return RecipeCategory.None;
+                return RecipeTableDict[id].Category;
             }
-            return RecipeTableDict[id].Category;
+            return RecipeCategory.None;
         }
 
         public List<Formula> GetRaw(string id)
         {
             List<Formula> result = new List<Formula>();
-            if (RecipeTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
                 result.AddRange(RecipeTableDict[id].Raw);
             }
@@ -125,7 +125,7 @@ namespace ML.Engine.InventorySystem
 
         public Formula GetProduct(string id)
         {
-            if (RecipeTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
                 return RecipeTableDict[id].Product;
             }
@@ -134,20 +134,20 @@ namespace ML.Engine.InventorySystem
 
         public int GetTimeCost(string id)
         {
-            if (!RecipeTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return 1;
+                return RecipeTableDict[id].TimeCost;
             }
-            return RecipeTableDict[id].TimeCost;
+            return 1;
         }
 
         public int GetExpRecipe(string id)
         {
-            if (!RecipeTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return 0;
+                return RecipeTableDict[id].ExpRecipe;
             }
-            return RecipeTableDict[id].ExpRecipe;
+            return 0;
         }
         #endregion
     }

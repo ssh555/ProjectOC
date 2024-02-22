@@ -97,11 +97,11 @@ namespace ProjectOC.ProNodeNS
         /// <summary>
         /// 生产物ID
         /// </summary>
-        public string ProductItem { get => Recipe?.GetProductID() ?? ""; }
+        public string ProductItem { get => Recipe?.ProductID ?? ""; }
         /// <summary>
         /// 一次生产的生产物数量
         /// </summary>
-        public int ProductNum { get => Recipe?.GetProductNum() ?? 0; }
+        public int ProductNum { get => Recipe?.ProductNum ?? 0; }
         /// <summary>
         /// 生产节点状态
         /// </summary>
@@ -152,7 +152,14 @@ namespace ProjectOC.ProNodeNS
             {
                 if (this.Recipe != null && this.Eff > 0)
                 {
-                    return (int)(this.Recipe.TimeCost / this.Eff) + 1;
+                    if ((100 * Recipe.TimeCost) % Eff == 0)
+                    {
+                        return (int)(100 * this.Recipe.TimeCost / this.Eff);
+                    }
+                    else
+                    {
+                        return (int)(100 * this.Recipe.TimeCost / this.Eff) + 1;
+                    }
                 }
                 return 0;
             }
@@ -194,7 +201,27 @@ namespace ProjectOC.ProNodeNS
         /// </summary>
         protected Dictionary<string, int> RawItems = new Dictionary<string, int>();
         public event Action OnActionChange;
-        public event Action<double> OnProduceTimerUpdate;
+        public event Action<double> onProduceTimerUpdate;
+        public event Action<double> OnProduceTimerUpdate
+        {
+            add 
+            { 
+                onProduceTimerUpdate += value;
+                if (timerForProduce != null)
+                {
+                    timerForProduce.OnUpdateEvent += value;
+                }
+            }
+            remove 
+            { 
+                onProduceTimerUpdate -= value;
+                if (timerForProduce != null)
+                {
+                    timerForProduce.OnUpdateEvent -= value;
+                }
+            }
+        }
+        public event Action OnProduceEnd;
         #region 计时器
         /// <summary>
         /// 生产计时器，时间为配方生产一次所需的时间
@@ -211,7 +238,7 @@ namespace ProjectOC.ProNodeNS
                 {
                     timerForProduce = new CounterDownTimer(this.TimeCost, false, false);
                     timerForProduce.OnEndEvent += EndActionForProduce;
-                    timerForProduce.OnUpdateEvent += OnProduceTimerUpdate;
+                    timerForProduce.OnUpdateEvent += onProduceTimerUpdate;
                 }
                 return timerForProduce;
             }
@@ -241,13 +268,6 @@ namespace ProjectOC.ProNodeNS
         public ProNode(ProNodeTableData config)
         {
             this.ID = config.ID ?? "";
-            EffBase = 100;
-            LevelMax = 2;
-            LevelUpgradeEff = new List<int>() { 50, 50, 50 };
-            MissionTransports = new List<MissionTransport>();
-            RawItems = new Dictionary<string, int>();
-            Level = 0;
-            TransportPriority = TransportPriority.Normal;
         }
 
         public bool SetLevel(int level)
@@ -294,17 +314,29 @@ namespace ProjectOC.ProNodeNS
         /// <returns>更改是否成功</returns>
         public bool ChangeRecipe(Player.PlayerCharacter player, string recipeID)
         {
-            Recipe recipe = ManagerNS.LocalGameManager.Instance.RecipeManager.SpawnRecipe(recipeID);
-            if (recipe != null)
+            if (player != null)
             {
-                this.RemoveRecipe(player);
-                this.Recipe = recipe;
-                foreach (Formula raw in this.Recipe.Raw)
+                if (!string.IsNullOrEmpty(recipeID))
                 {
-                    this.RawItems.Add(raw.id, 0);
+                    Recipe recipe = ManagerNS.LocalGameManager.Instance.RecipeManager.SpawnRecipe(recipeID);
+                    if (recipe != null)
+                    {
+                        this.RemoveRecipe(player);
+                        this.Recipe = recipe;
+                        foreach (Formula raw in this.Recipe.Raw)
+                        {
+                            this.RawItems.Add(raw.id, 0);
+                        }
+                        this.StartRun();
+                        return true;
+                    }
                 }
-                this.StartRun();
-                return true;
+                else
+                {
+                    this.RemoveRecipe(player);
+                    this.Recipe = null;
+                    return true;
+                }
             }
             return false;
         }
@@ -386,11 +418,21 @@ namespace ProjectOC.ProNodeNS
                 this.RemoveWorker();
                 worker.ChangeProNode(this);
                 worker.SetTimeStatusAll(TimeStatus.Work_OnDuty);
+                worker.ClearDestination();
                 this.Worker = worker;
-                this.StartProduce();
+                worker.SetDestination(WorldProNode.transform, ProNode_Action);
+                worker.StatusChangeAction += OnWorkerStatusChangeAction;
                 return true;
             }
             return false;
+        }
+
+        public void ProNode_Action(Worker worker)
+        {
+            worker.ArriveProNode = true;
+            worker.gameObject.SetActive(false);
+            worker.ClearDestination();
+            this.StartProduce();
         }
 
         /// <summary>
@@ -404,6 +446,7 @@ namespace ProjectOC.ProNodeNS
                 this.StopProduce();
                 if (this.Worker != null)
                 {
+                    this.Worker.StatusChangeAction -= OnWorkerStatusChangeAction;
                     this.Worker.SetTimeStatusAll(TimeStatus.Relax);
                     this.Worker.ClearDestination();
                     this.Worker.ProNode = null;
@@ -441,7 +484,7 @@ namespace ProjectOC.ProNodeNS
         /// </summary>
         public bool StartProduce()
         {
-            if (this.CanWorking())
+            if (this.CanWorking() && (timerForProduce == null || TimerForProduce.IsStoped))
             {
                 // 启动生产计时器
                 this.TimerForProduce.Reset(this.TimeCost);
@@ -530,6 +573,21 @@ namespace ProjectOC.ProNodeNS
                 StopProduce();
             }
             OnActionChange?.Invoke();
+            OnProduceEnd?.Invoke();
+        }
+
+        private void OnWorkerStatusChangeAction(Status status)
+        {
+            if (status != Status.Relaxing)
+            {
+                StartProduce();
+                OnActionChange?.Invoke();
+            }
+            else
+            {
+                StopProduce();
+                OnActionChange?.Invoke();
+            }
         }
 
         /// <summary>
@@ -541,14 +599,17 @@ namespace ProjectOC.ProNodeNS
         private int GetAssignNum(string itemID, bool isIn=true)
         {
             int result = 0;
-            foreach (MissionTransport mission in this.MissionTransports)
+            if (!string.IsNullOrEmpty(itemID))
             {
-                if (mission != null && mission.ItemID == itemID)
+                foreach (MissionTransport mission in this.MissionTransports)
                 {
-                    if ((isIn && mission.Type == MissionTransportType.Store_ProNode) || 
-                        (!isIn && mission.Type == MissionTransportType.ProNode_Store))
+                    if (mission != null && mission.ItemID == itemID)
                     {
-                        result += mission.MissionNum;
+                        if ((isIn && mission.Type == MissionTransportType.Store_ProNode) ||
+                            (!isIn && mission.Type == MissionTransportType.ProNode_Store))
+                        {
+                            result += mission.MissionNum;
+                        }
                     }
                 }
             }
@@ -558,13 +619,20 @@ namespace ProjectOC.ProNodeNS
         #region UI接口
         public void UIAdd(Player.PlayerCharacter player, string itemID, int amount)
         {
-            if (player != null && RawItems.ContainsKey(itemID) && amount > 0 && 
+            if (player != null && !string.IsNullOrEmpty(itemID) && RawItems.ContainsKey(itemID) && amount > 0 && 
                 this.RawItems[itemID] + amount <= this.StackMaxNum * this.Recipe.GetRawNum(itemID))
             {
-                if (player.Inventory.RemoveItem(itemID, amount))
+                if (player.Inventory.GetItemAllNum(itemID) >= amount)
                 {
-                    RawItems[itemID] += amount;
-                    StartProduce();
+                    if (player.Inventory.RemoveItem(itemID, amount))
+                    {
+                        RawItems[itemID] += amount;
+                        StartProduce();
+                    }
+                    else
+                    {
+                        Debug.LogError("ProNode UIAdd Error");
+                    }
                 }
             }
         }
@@ -582,6 +650,7 @@ namespace ProjectOC.ProNodeNS
                     }
                     else
                     {
+                        Debug.LogError("ProNode UIRemove Error");
                         break;
                     }
                 }
@@ -590,7 +659,7 @@ namespace ProjectOC.ProNodeNS
         }
         public void UIFastAdd(Player.PlayerCharacter player, string itemID)
         {
-            if (player != null && RawItems.ContainsKey(itemID))
+            if (player != null && !string.IsNullOrEmpty(itemID) && RawItems.ContainsKey(itemID))
             {
                 int amount = player.Inventory.GetItemAllNum(itemID);
                 int maxAmount = StackMaxNum * Recipe.GetRawNum(itemID) - RawItems[itemID];
@@ -599,6 +668,10 @@ namespace ProjectOC.ProNodeNS
                 {
                     RawItems[itemID] += amount;
                     StartProduce();
+                }
+                else
+                {
+                    Debug.LogError("ProNode UIFastAdd Error");
                 }
             }
         }
@@ -616,6 +689,7 @@ namespace ProjectOC.ProNodeNS
                     }
                     else
                     {
+                        Debug.LogError("ProNode UIFastRemove Error");
                         break;
                     }
                 }
@@ -649,13 +723,13 @@ namespace ProjectOC.ProNodeNS
         }
         public bool PutIn(string itemID, int amount)
         {
-            if (RawItems.ContainsKey(itemID) && amount >= 0)
+            if (!string.IsNullOrEmpty(itemID) && RawItems.ContainsKey(itemID) && amount >= 0)
             {
                 RawItems[itemID] += amount;
                 StartProduce();
+                OnActionChange?.Invoke();
                 return true;
             }
-            OnActionChange?.Invoke();
             return false;
         }
         /// <summary>
@@ -768,7 +842,7 @@ namespace ProjectOC.ProNodeNS
         }
         public bool RemoveItem(string itemID, int amount)
         {
-            if (amount >= 0)
+            if (!string.IsNullOrEmpty(itemID) && amount >= 0)
             {
                 if (RawItems.ContainsKey(itemID))
                 {
@@ -792,13 +866,16 @@ namespace ProjectOC.ProNodeNS
         }
         public int GetItemAllNum(string id)
         {
-            if (RawItems.ContainsKey(id))
+            if (!string.IsNullOrEmpty(id))
             {
-                return RawItems[id];
-            }
-            else if (ProductItem == id)
-            {
-                return StackAll;
+                if (RawItems.ContainsKey(id))
+                {
+                    return RawItems[id];
+                }
+                else if (ProductItem == id)
+                {
+                    return StackAll;
+                }
             }
             Debug.LogError($"Item {id} is not in ProNode {ID}");
             return 0;

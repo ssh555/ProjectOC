@@ -44,7 +44,7 @@ namespace ProjectOC.WorkerEchoNS
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<WorkerEchoTableData[]>("Binary/TableData", "WorkerEcho", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<WorkerEchoTableData[]>("Json/TableData", "WorkerEcho", (datas) =>
                 {
                     foreach (var data in datas)
                     {

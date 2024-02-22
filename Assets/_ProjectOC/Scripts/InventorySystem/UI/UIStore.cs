@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using ML.Engine.Extension;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -83,7 +84,6 @@ namespace ProjectOC.InventorySystem.UI
             #endregion
 
             CurPriority = MissionNS.TransportPriority.Normal;
-            Store.OnStoreDataChange += Refresh;
             IsInit = true;
             Refresh();
         }
@@ -313,6 +313,7 @@ namespace ProjectOC.InventorySystem.UI
 
         private void Enter()
         {
+            Store.OnStoreDataChange += Refresh;
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Enable();
             //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
@@ -322,6 +323,7 @@ namespace ProjectOC.InventorySystem.UI
 
         private void Exit()
         {
+            Store.OnStoreDataChange -= Refresh;
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Disable();
             //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
             Store.IsInteracting = false;
@@ -889,7 +891,7 @@ namespace ProjectOC.InventorySystem.UI
         {
             if(ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StorePanel>("Binary/TextContent/Inventory", "StorePanel", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StorePanel>("Json/TextContent/Inventory", "StorePanel", (datas) =>
                 {
                     Refresh();
                     this.enabled = false;

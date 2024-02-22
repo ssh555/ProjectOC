@@ -1,0 +1,52 @@
+ManifestFileVersion: 0
+CRC: 2204011988
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 0c5d701c7c79fd64cb29cf3616a480a4
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: a5a937e552e50d2766ec64a893ed9082
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 0c5d701c7c79fd64cb29cf3616a480a4
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 84a92b25f83d49b9bc132d206b370281, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.VertexGradient
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
+Assets:
+- Assets/_ProjectOC/Resources/UI/ResonanceWheel/ResonanceWheelPrefabs/Description.prefab
+- Assets/_ProjectOC/Resources/UI/ResonanceWheel/ResonanceWheelPrefabs/Slot.prefab
+Dependencies:
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/fonts
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d
