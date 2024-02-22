@@ -8,5 +8,7 @@ namespace ProjectOC.LandMassExpand
     public interface INeedPowerBpart : IPowerBPart
     {
         int PowerCount { get; set; }
+        bool InPower => PowerCount > 0;
+        public void RemoveFromAllPowerCores();
     }   
 }

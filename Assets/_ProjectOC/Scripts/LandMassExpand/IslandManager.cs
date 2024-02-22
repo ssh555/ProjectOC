@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
+using ML.Engine.Manager;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -11,26 +12,31 @@ namespace ProjectOC.LandMassExpand
 {
     public class IslandManager : MonoBehaviour, ML.Engine.Manager.LocalManager.ILocalManager
     {
-        public static IslandManager instance = null;
-        public static IslandManager Instance
+        public static IslandManager Instance = null;
+        private void Awake()
         {
-            get
+            if (Instance != null)
             {
-                if (instance == null)
-                {
-                    instance = new IslandManager();
-                    ML.Engine.Manager.GameManager.Instance.RegisterLocalManager(instance);
-                }
-
-                return instance;
+                Destroy(this.gameObject);
+                return;
             }
+            Instance = this;
+            
+            islandGrids = new IslandBase[maxSize.x,maxSize.y];
         }
-        
+
+        private void Start()
+        {
+            GameManager.Instance.RegisterLocalManager(this);
+        }
+
         void OnDestroy()
         {
-            if (instance == this)
+            if (Instance == this)
             {
-                instance = null;
+                if(ML.Engine.Manager.GameManager.Instance != null)
+                    ML.Engine.Manager.GameManager.Instance.UnregisterLocalManager<BuildPowerIslandManager>();
+                Instance = null;
             }    
         }
         [LabelText("大地图网格大小 m")]
@@ -55,10 +61,9 @@ namespace ProjectOC.LandMassExpand
         [Button(name: "移动岛屿"),PropertyOrder(-1)]
         public void AllIslandMove()
         {
-            islandGrids = new IslandBase[maxSize.x,maxSize.y];
             foreach (var islandMain in islandMains)
             {
-                islandMain.GenerateColliderBox();
+                islandMain.IslandMove();
             }
         }
         

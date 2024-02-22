@@ -1,6 +1,9 @@
+using System.Xml.Schema;
 using ML.Engine.BuildingSystem.BuildingPart;
 using Sirenix.OdinInspector;
+using Unity.VisualScripting;
 using UnityEngine;
+using ML.Engine.Extension;
 
 namespace ProjectOC.LandMassExpand
 {
@@ -41,6 +44,7 @@ namespace ProjectOC.LandMassExpand
             if (BuildPowerIslandManager.Instance != null  && BuildPowerIslandManager.Instance.electAppliances.Contains(this))
             {
                 BuildPowerIslandManager.Instance.electAppliances.Remove(this);
+                RemoveFromAllPowerCores();
             }
         }
 
@@ -51,6 +55,10 @@ namespace ProjectOC.LandMassExpand
             {
                 BuildPowerIslandManager.Instance.electAppliances.Add(this);
             }
+            //重置
+            PowerCount = 0;
+            RemoveFromAllPowerCores();
+            //重新计算
             RecalculatePowerCount();
         }
 
@@ -59,19 +67,43 @@ namespace ProjectOC.LandMassExpand
             int tempCount = 0;
             foreach (var powerCore in BuildPowerIslandManager.Instance.powerCores)
             {
-                if(BuildPowerIslandManager.Instance.CoverEachOther(this,powerCore))
+                if (BuildPowerIslandManager.Instance.CoverEachOther(this, powerCore))
+                {
+                    powerCore.needPowerBparts.Add(this);
                     tempCount++;
+                }
             }
             
             foreach (var powerSub in BuildPowerIslandManager.Instance.powerSubs)
             {
-                if(BuildPowerIslandManager.Instance.CoverEachOther(this,powerSub))
+                if (powerSub.InPower && BuildPowerIslandManager.Instance.CoverEachOther(this, powerSub))
+                {
+                    powerSub.needPowerBparts.Add(this);
                     tempCount++;                    
+                }
             }
 
             PowerCount = tempCount;
         }
+        
+        public void RemoveFromAllPowerCores()
+        {
+            foreach (var powerCore in BuildPowerIslandManager.Instance.powerCores)
+            {
+                powerCore.RemoveNeedPowerBpart(this);
+            }
 
-
+            foreach (var powerSub in BuildPowerIslandManager.Instance.powerSubs)
+            {
+                (powerSub as ISupportPowerBPart).RemoveNeedPowerBpart(this);
+            }
+        }
+    #if UNITY_EDITOR
+        void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(vfxTranf.transform.position,PowerSupportRange);
+        }
+    #endif
     }
 }

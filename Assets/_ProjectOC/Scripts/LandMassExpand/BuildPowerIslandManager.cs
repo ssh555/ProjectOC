@@ -17,6 +17,8 @@ namespace ProjectOC.LandMassExpand
         {
             if(Instance == this)
             {
+                if(GameManager.Instance != null)
+                    GameManager.Instance.UnregisterLocalManager<BuildPowerIslandManager>();
                 Instance = null;
             }
         }
@@ -26,6 +28,7 @@ namespace ProjectOC.LandMassExpand
             if (Instance != null)
             {
                 Destroy(this.gameObject);
+                return;
             }
             Instance = this;
         }
@@ -35,12 +38,14 @@ namespace ProjectOC.LandMassExpand
             GameManager.Instance.RegisterLocalManager(this);
         }
         
+        
+        
         [HideInInspector]
-        public List<BuildPowerCore> powerCores = new List<BuildPowerCore>();
+        public List<ISupportPowerBPart> powerCores = new List<ISupportPowerBPart>();
         [HideInInspector]
         public List<BuildPowerSub> powerSubs = new List<BuildPowerSub>();
         [HideInInspector]
-        public List<ElectAppliance> electAppliances = new List<ElectAppliance>();
+        public List<INeedPowerBpart> electAppliances = new List<INeedPowerBpart>();
         
 
         public bool CoverEachOther(IPowerBPart powerBPart1, IPowerBPart powerBPart2)
