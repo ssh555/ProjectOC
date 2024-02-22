@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1306086246
+CRC: 3580762065
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e2ca4285b9f55730c55ecc621497b606
+    Hash: 7f991a1387760d1efdde67fba1e2a011
   TypeTreeHash:
     serializedVersion: 2
     Hash: b30fce1a9ad74efb72be6c308c56e365
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: e2ca4285b9f55730c55ecc621497b606
+    Hash: 7f991a1387760d1efdde67fba1e2a011
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -20,19 +20,46 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/rocks_a.mat
-- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/red.mat
-- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/NaturePackLite_Texture_01.png
-- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/SimpleNaturePack_Texture_01.mat
-- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/RocksMaterial.mat
-- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/default.mat
-- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/GridBox_Default.png
-- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/green.mat
-- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/T_Rocks_01_Normal.png
-- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/rocks_albedo_a.png
-- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/T_Rocks_01_Base.png
-- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/TerrainLit.mat
-- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/M_StylizedRocks_01.mat
-- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/checker colored.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/BuildingA_mt3.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/BuildingA_mt3_D.tga
+- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/yellow.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/BuildingA_mt3_S.tga
+- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/BuildingA_mt1_D.tga
+- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/checker.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/Building-5.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/BuildingA_mt2_N.tga
+- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/BuildingA_mt4_D.tga
+- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/Building-3.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/BuildingA_mt4.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/FurnaceA_mt1_S.tga
+- Assets/_ProjectOC/Resources/Materials/Terrain/GridBox_Default.mat
 - Assets/_ProjectOC/Resources/Materials/Terrain/Materials/orange.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/green.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/p.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/BuildingA_mt1_S.tga
+- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/BuildingA_mt3_N.tga
+- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/BuildingA_mt2_D.tga
+- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/BuildingA_mt4_S.tga
+- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/BuildingA_mt2.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/FurnaceA_mt1_D.tga
+- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/BuildingA_mt1.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/BuildingA_mt2_S.tga
+- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/default grid.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/w.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/FurnaceA_mt2_S.tga
+- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/blue.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/s.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/purple.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/FurnitureE_mt1_D.tga
+- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/red.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/FurnaceA_mt1.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/FurnaceA_mt1_N.tga
+- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/Building-2.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/FurnaceA_mt2.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/BuildingA_mt1_N.tga
+- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/BuildingA_mt4_N.tga
+- Assets/_ProjectOC/Resources/Materials/Terrain/Materials/Building-1.mat
+- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/BuildingA_mt1_G.tga
+- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/FurnaceA_mt2_N.tga
+- Assets/_ProjectOC/Resources/Materials/Terrain/Texture3D/GridBox_Default.png
 Dependencies: []

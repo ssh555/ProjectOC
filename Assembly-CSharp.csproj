@@ -65,6 +65,7 @@
      <Compile Include="Assets\_ProjectOC\Scripts\Store\StoreData.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\Stop.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetMute.cs" />
+     <Compile Include="Assets\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Scripts\ExportGrass.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetMaxParticles.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetVolume.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedVector3.cs" />
@@ -187,6 +188,7 @@
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetUseGravity.cs" />
      <Compile Include="Assets\_ML\Engine\BuildingSystem\UI\BSInteractModePanel.cs" />
      <Compile Include="Assets\_ProjectOC\Scripts\Mission\TransportState.cs" />
+     <Compile Include="Assets\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Scripts\ExportMeshWithEdgeFall.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\AddForceAtPosition.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedBehaviour.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetIgnoreListenerPause.cs" />
@@ -219,6 +221,7 @@
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedRect.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\IsSleeping.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector2\Distance.cs" />
+     <Compile Include="Assets\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Scripts\ExportMesh.cs" />
      <Compile Include="Assets\_ML\Engine\CombatSystem\CombatSystem.cs" />
      <Compile Include="Assets\_ML\Engine\CombatSystem\CombatObject\Interface\IFreezeFrame.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Scripts\BehaviorSelection.cs" />
@@ -361,6 +364,7 @@
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\GetDeltaRotation.cs" />
      <Compile Include="Assets\_ProjectOC\Scripts\Player\UIPanel\SelectedButton.cs" />
      <Compile Include="Assets\_ML\Example\InventorySystem\InventoryOwner.cs" />
+     <Compile Include="Assets\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Scripts\ExportMeshAndBasemapByPositionIndex.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Math\IntAbs.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Actions\PerformInterruption.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\GameObject\Destroy.cs" />
@@ -382,6 +386,7 @@
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedVector4.cs" />
      <Compile Include="Assets\_ML\Engine\InteractSystem\IInteraction.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector3\Multiply.cs" />
+     <Compile Include="Assets\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Scripts\ExportMeshAndBasemap.cs" />
      <Compile Include="Assets\_ML\Engine\CombatSystem\Action\CombatTriggerAction.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\GetStringToHash.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Actions\Reflection\GetFieldValue.cs" />
@@ -514,7 +519,9 @@
      <Compile Include="Assets\_ML\Engine\Timer\CounterDownTimer.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Time\GetTimeScale.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetTimeSamples.cs" />
+     <Compile Include="Assets\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Scripts\ExportDetailMesh.cs" />
      <Compile Include="Assets\_ProjectOC\Scripts\ProNode\ProNodeManager.cs" />
+     <Compile Include="Assets\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Scripts\ExportMeshAndSplatmap.cs" />
      <Compile Include="Assets\_ML\Engine\BuildingSystem\BuildingPart\Classification\BuildingCategory1.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Input\IsMouseUp.cs" />
      <Compile Include="Assets\_ML\Engine\BuildingSystem\BuildingPart\Classification\BuildingCategory3.cs" />
@@ -536,6 +543,7 @@
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animation\Play.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\GetAngleToTarget.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\IsName.cs" />
+     <Compile Include="Assets\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Scripts\ExportTrees.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\GetDestination.cs" />
      <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Actions\Reflection\SetFieldValue.cs" />
      <Compile Include="Assets\_ProjectOC\Scripts\Worker\Effect.cs" />
@@ -800,8 +808,10 @@
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Scene" />
      <Folder Include="Assets\_ML\Example\InputAciton" />
      <Folder Include="Assets\_ML\Engine\FSM" />
+     <Folder Include="Assets\Amazing Assets" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <Folder Include="Assets\_ML\MLResources\BuildingSystem\BuildingPart\Interact" />
+     <Folder Include="Assets\Amazing Assets\Terrain To Mesh\Installer" />
      <Folder Include="Assets\StreamingAssets\Windows\ui\interactsystem" />
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Timeline" />
      <Folder Include="Assets\_ProjectOC" />
@@ -814,6 +824,7 @@
      <Folder Include="Assets\_ML\MLResources\BuildingSystem\Texture3D\ProNode" />
      <Folder Include="Assets\_ProjectOC\Scene\_TEST" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
+     <Folder Include="Assets\Amazing Assets\Terrain To Mesh\Shaders\All Terrain Textures" />
      <Folder Include="Assets\_ProjectOC\Scripts\Player\NoMono" />
      <Folder Include="Assets\_ML\MLResources\Fonts" />
      <Folder Include="Assets\_ML\Engine\InventorySystem\Scripts\Extensions" />
@@ -822,12 +833,15 @@
      <Folder Include="Assets\_ML\Engine\ABResources" />
      <Folder Include="Assets\_ProjectOC\Scripts\Terrain" />
      <Folder Include="Assets\_ML\Engine\GameManager\LocalManager" />
+     <Folder Include="Assets\Amazing Assets\Terrain To Mesh\Example Scenes" />
+     <Folder Include="Assets\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Terrain Data" />
      <None Include="Assets\_ProjectOC\Resources\Json\TableData\Feature.json" />
      <Folder Include="Assets\_ProjectOC\Scripts\TechTree" />
      <Folder Include="Assets\_ML\Engine\CombatSystem\CombatObject\Character" />
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Physics" />
      <Folder Include="Assets\_ML\Engine\CombatSystem\CombatObject\Interface" />
      <Folder Include="Assets\_ML\Example\InventorySystem\CompositeSystem" />
+     <Folder Include="Assets\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Free Rocks and Plants\Textures" />
      <Folder Include="Assets\_ML\MLResources\BuildingSystem\Texture3D" />
      <Folder Include="Assets\StreamingAssets\Windows\model\buildingsystem" />
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Integrations" />
@@ -838,12 +852,14 @@
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Behaviour" />
      <Folder Include="Assets\_ML\Engine" />
      <Folder Include="Assets\_ML\MLResources\BuildingSystem\OriginModel\Interact" />
+     <Folder Include="Assets\Amazing Assets\Terrain To Mesh\Shaders\cginc" />
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Actions" />
      <None Include="Assets\_ProjectOC\Resources\Json\TextContent\ResonanceWheel\ResonanceWheel_sub1.json" />
      <Folder Include="Assets\StreamingAssets\Windows\textmeshpro" />
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Debug" />
      <Folder Include="Assets\_ProjectOC\Resources\Prefabs" />
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\CircleCollider2D" />
+     <Folder Include="Assets\Amazing Assets\Terrain To Mesh\Shaders\Grass" />
      <Folder Include="Assets\_ML\Example\InventorySystem\CompositeSystem\UI\Catalogue" />
      <None Include="Assets\_ProjectOC\Resources\Json\TableData\ProNode.json" />
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\String" />
@@ -945,6 +961,7 @@
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables" />
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Conditionals\Physics" />
      <Folder Include="Assets\_ProjectOC\Resources\Animation\Player" />
+     <None Include="Assets\Amazing Assets\Terrain To Mesh\Shaders\Splatmap\Splatmap (Holes).shader" />
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody" />
      <Folder Include="Assets\TextMesh Pro" />
      <Folder Include="Assets\_ML\MLResources\BuildingSystem\Materials\Interact" />
@@ -956,10 +973,12 @@
      <Folder Include="Assets\_ML\Engine\Utility\Enum" />
      <None Include="Assets\_ML\MLResources\Json\TableData\LevelTableData.json" />
      <Folder Include="Assets\Resources" />
+     <Folder Include="Assets\Amazing Assets\Terrain To Mesh\Shaders" />
      <Folder Include="Assets\_ML\MLResources\InventorySystem\Item\Prefabs\WorldItem" />
      <Folder Include="Assets\_ProjectOC\Resources\Materials\Other" />
      <Folder Include="Assets\_ML\Engine\_Addons\AssetBundles-Browser\Documentation\images" />
      <None Include="Assets\_ProjectOC\Resources\Json\TextContent\PlayerUIPanel\PlayerUIPanel.json" />
+     <Folder Include="Assets\_ProjectOC\Resources\Meshes\TerrainMeshes\TerrainData\luo" />
      <Folder Include="Assets\_ProjectOC\Scripts\Player\UIPanel" />
      <None Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\Sirenix.OdinInspector.Attributes.xml" />
      <Folder Include="Assets\_ML\Engine\InventorySystem\Scripts" />
@@ -981,25 +1000,31 @@
      <Folder Include="Assets\_ProjectOC\Resources\TextMeshPro\SpriteAsset\Texture2D" />
      <Folder Include="Assets\_ML\Example\InventorySystem\CompositeSystem\UI\Classification" />
      <None Include="Assets\_ProjectOC\Resources\Json\TableData\Effect.json" />
+     <Folder Include="Assets\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Free Rocks and Plants\FBX" />
      <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Light" />
      <None Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\Sirenix.Utilities.xml" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
      <Folder Include="Assets\_ML\Engine\InventorySystem\Scripts\Items" />
-     <Folder Include="Assets\_ProjectOC\Scene\_TEST\wp\Settings" />
      <Folder Include="Assets\_ProjectOC\Resources\Json\TextContent\Store" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
      <Folder Include="Assets\_ML" />
+     <None Include="Assets\Amazing Assets\Terrain To Mesh\Shaders\cginc\Variables.cginc" />
+     <Folder Include="Assets\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Free Rocks and Plants\Materials" />
      <Folder Include="Assets\_ProjectOC\Scripts\Player\Mono" />
+     <Folder Include="Assets\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Shaders" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Materials" />
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Time" />
      <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
      <Folder Include="Assets\_ML\MLResources\Json\TableData" />
+     <None Include="Assets\Amazing Assets\Terrain To Mesh\Shaders\cginc\VariablesCBuffer.cginc" />
      <Folder Include="Assets\_ProjectOC\Resources\Json\TextContent\ProNode" />
      <Folder Include="Assets\_ProjectOC\Resources\UI\ResonanceWheel\Texture2D" />
      <None Include="Assets\_ProjectOC\Resources\Json\TextContent\Inventory\InventoryPanel.json" />
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Object Drawers" />
+     <Folder Include="Assets\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Scripts" />
+     <Folder Include="Assets\Amazing Assets\Terrain To Mesh\Scripts" />
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
      <None Include="Assets\_ProjectOC\Resources\Json\TextContent\Store\StorePanel.json" />
@@ -1013,6 +1038,7 @@
      <Folder Include="Assets\_ML\Engine\_Addons\Sirenix\Odin Inspector\Config" />
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SphereCollider" />
      <Folder Include="Assets\StreamingAssets\Windows\ui\techpoint" />
+     <Folder Include="Assets\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Textures" />
      <Folder Include="Assets\StreamingAssets\Windows\animation" />
      <Folder Include="Assets\StreamingAssets\Windows\ui" />
      <Folder Include="Assets\_ML\MLResources\InventorySystem" />
@@ -1022,6 +1048,8 @@
      <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
      <Folder Include="Assets\TextMesh Pro\Shaders" />
      <Folder Include="Assets\_ProjectOC\Scripts\EnumAsset" />
+     <None Include="Assets\Amazing Assets\Terrain To Mesh\Shaders\Splatmap\Splatmap.shader" />
+     <None Include="Assets\Amazing Assets\Terrain To Mesh\Shaders\cginc\Core.cginc" />
      <Folder Include="Assets\_ML\Example\InventorySystem\MainHUD" />
      <Folder Include="Assets\_ProjectOC\Scripts\Building\共鸣环" />
      <Folder Include="Assets\_ProjectOC\Scene\_TEST\ssh\BuidlingSystemTest" />
@@ -1034,12 +1062,15 @@
      <Folder Include="Assets\_ProjectOC\Resources\UIPanel" />
      <Folder Include="Assets\TextMesh Pro\Fonts" />
      <Folder Include="Assets\_ProjectOC\Scene\_TEST\ssh" />
+     <Folder Include="Assets\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Free Rocks and Plants\Prefabs" />
      <Folder Include="Assets\StreamingAssets\Windows" />
      <Folder Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\NoEditor" />
      <Folder Include="Assets\_ProjectOC\Resources\Meshes\TerrainMeshes\TerrainData" />
+     <Folder Include="Assets\Amazing Assets\Terrain To Mesh\Shaders\Fallback" />
      <Folder Include="Assets\_ProjectOC\Scripts\Manager" />
      <Folder Include="Assets\_ML\MLResources\BuildingSystem\OriginModel\AuxiliaryModel" />
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector2" />
+     <None Include="Assets\Amazing Assets\Terrain To Mesh\Documentation\Manual.txt" />
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animation" />
      <Folder Include="Assets\_ML\Engine\Input" />
      <Folder Include="Assets\_ProjectOC\Scene\_TEST\cwt" />
@@ -1048,8 +1079,10 @@
      <Folder Include="Assets\_ML\MLResources\InteractSystem\UI" />
      <Folder Include="Assets\_ProjectOC\Scripts\LandMassExpand" />
      <None Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\link.xml" />
+     <None Include="Assets\Amazing Assets\Terrain To Mesh\Shaders\All Terrain Textures\AllTerrainTextures.shader" />
      <Folder Include="Assets\_ProjectOC\Resources\Materials\Terrain\Texture3D" />
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\CharacterController" />
+     <Folder Include="Assets\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Free Rocks and Plants" />
      <Folder Include="Assets\_ProjectOC\Scripts\Building\共鸣环\UI" />
      <Folder Include="Assets\_ProjectOC\Resources\Meshes" />
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer" />
@@ -1087,13 +1120,19 @@
      <Folder Include="Assets\StreamingAssets\Windows\prefabs\buildingsystem" />
      <Folder Include="Assets\_ProjectOC\Scene\_TEST\yangLe" />
      <Folder Include="Assets\_ML\MLResources\BuildingSystem\Texture2D\Category" />
+     <Folder Include="Assets\Amazing Assets\Terrain To Mesh" />
      <Folder Include="Assets\_ML\MLResources\BuildingSystem\UIPrefabs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
      <Folder Include="Assets\_ML\Engine\CombatSystem\CombatObject\CombatObject" />
      <Folder Include="Assets\_ML\MLResources\BuildingSystem\BuildingPart\House" />
      <Folder Include="Assets\_ProjectOC\Resources\TextMeshPro\SpriteAsset" />
      <None Include="Assets\_ProjectOC\Resources\Json\TableData\Skill.json" />
+     <Folder Include="Assets\Amazing Assets\Terrain To Mesh\Documentation" />
+     <None Include="Assets\Amazing Assets\Terrain To Mesh\Shaders\cginc\Defines.cginc" />
      <Folder Include="Assets\_ProjectOC\Resources\UI\ResonanceWheel" />
+     <None Include="Assets\Amazing Assets\Terrain To Mesh\Shaders\Splatmap\Splatmap.cginc" />
+     <Folder Include="Assets\Amazing Assets\Terrain To Mesh\Shaders\Splatmap" />
+     <None Include="Assets\Amazing Assets\Terrain To Mesh\Installer\ReadMe.txt" />
      <Folder Include="Assets\_ProjectOC\Scripts\Store" />
      <Folder Include="Assets\_ML\Engine\_Addons\Sirenix" />
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource" />
@@ -1116,6 +1155,7 @@
      <Folder Include="Assets\StreamingAssets\Windows\ui\inventory" />
      <Folder Include="Assets\_ProjectOC\Scripts\WorkerEcho" />
      <Folder Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent" />
+     <None Include="Assets\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Free Rocks and Plants\Asset Store Link.txt" />
      <Folder Include="Assets\TextMesh Pro\Documentation" />
      <Folder Include="Assets\_ProjectOC\Scripts\Building" />
      <Folder Include="Assets\_ML\MLResources\BuildingSystem\Texture2D" />
@@ -1143,6 +1183,7 @@
      <Folder Include="Assets\_ProjectOC\Resources\UI\Inventory\Texture2D\ItemType" />
      <Folder Include="Assets\_ProjectOC\Resources\Json\TextContent" />
      <None Include="Assets\TextMesh Pro\Sprites\EmojiOne.json" />
+     <Folder Include="Assets\Amazing Assets\Terrain To Mesh\Example Scenes\Files" />
      <Folder Include="Assets\_ProjectOC\Resources\UI\TechPoint\Texture2D\Category" />
      <Folder Include="Assets\_ML\MLResources\BuildingSystem\Texture2D\Style" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
@@ -1437,6 +1478,9 @@
      </Reference>
      <Reference Include="Newtonsoft.Json">
      <HintPath>D:\AAAworkwork\Git\projectoc\Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.1\Runtime\Newtonsoft.Json.dll</HintPath>
+     </Reference>
+     <Reference Include="AmazingAssets.TerrainToMesh">
+     <HintPath>D:\AAAworkwork\Git\projectoc\Assets\Amazing Assets\Terrain To Mesh\Scripts\AmazingAssets.TerrainToMesh.dll</HintPath>
      </Reference>
      <Reference Include="Unity.Analytics.StandardEvents">
      <HintPath>D:\AAAworkwork\Git\projectoc\Library\PackageCache\com.unity.analytics@3.8.1\AnalyticsStandardEvents\Unity.Analytics.StandardEvents.dll</HintPath>

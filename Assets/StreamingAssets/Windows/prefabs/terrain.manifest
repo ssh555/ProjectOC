@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1780356189
+CRC: 278102668
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 56d2dc1fe1f9734f1312d1d5d76052bd
+    Hash: 96958ac49558a0850da0337222f098f4
   TypeTreeHash:
     serializedVersion: 2
-    Hash: e3642bdd7af609598ccb53a717f45762
+    Hash: 48d97ccccb04bdac3abf4cc9f847ceb3
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 56d2dc1fe1f9734f1312d1d5d76052bd
+    Hash: 96958ac49558a0850da0337222f098f4
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -24,53 +24,16 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 43
   Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
 - Class: 64
   Script: {instanceID: 0}
-- Class: 65
-  Script: {instanceID: 0}
-- Class: 205
+- Class: 136
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/Tree_03.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/rock_i.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/rock_f.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/rock_c.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/rock_k.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/SM_Rocks_03.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/rock_b.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/rock_d.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/Stalagmite3.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/Rock1.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/SM_Rocks_01.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/SM_Rocks_05.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/rock_g.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/rock_n.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/Stalagmite5.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/SM_Rocks_04.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/Tree_01.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/Rock2.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/rock_o.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/Rock3.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/rock_m.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/Rock11.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/rock_a.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/SM_Rocks_02.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/rock_e.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/rock_h.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/Rock8.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/Rock6.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/Rock10.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/Rock9.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/rock_l.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/rock_p.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/Stalagmite2.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/Rock7.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/Stalagmite4.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/Rock4.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/Rock5.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/Stalagmite1.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Terrain/rock_j.prefab
+- Assets/_ProjectOC/Resources/Prefabs/Terrain/Buildings_1.prefab
+- Assets/_ProjectOC/Resources/Prefabs/Terrain/BuildingA.prefab
 Dependencies:
 - D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/terrain
 - D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/model/terrain

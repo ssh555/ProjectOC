@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 76044932
+CRC: 4261786734
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -31,9 +31,6 @@ AssetBundleManifest:
         Dependency_3: prefabs/buildingsystem/prefab
         Dependency_4: materials/other
         Dependency_5: shader
-        Dependency_6: materials/terrain
-        Dependency_7: prefabs/terrain
-        Dependency_8: model/terrain
     Info_5:
       Name: ui/buildingsystem/prefabs
       Dependencies:
@@ -161,7 +158,6 @@ AssetBundleManifest:
       Name: model/terrain
       Dependencies:
         Dependency_0: materials/terrain
-        Dependency_1: prefabs/terrain
     Info_35:
       Name: json/textcontent/resonancewheel
       Dependencies: {}
