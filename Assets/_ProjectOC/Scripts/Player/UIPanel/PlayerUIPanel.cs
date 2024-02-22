@@ -222,7 +222,7 @@ namespace ProjectOC.Player.UI
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ML.Engine.TextContent.TextTip[]>("Binary/TextContent/Player", "PlayerUIPanel", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ML.Engine.TextContent.TextTip[]>("Json/TextContent/Player", "PlayerUIPanel", (datas) =>
                 {
                     foreach (var tip in datas)
                     {

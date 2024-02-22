@@ -35,7 +35,7 @@ namespace ProjectOC.WorkerNS
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<EffectTableData[]>("Binary/TableData", "Effect", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<EffectTableData[]>("Json/TableData", "Effect", (datas) =>
                 {
                     foreach (var data in datas)
                     {

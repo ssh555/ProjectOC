@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using ML.Engine.Extension;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -658,7 +659,7 @@ namespace ProjectOC.InventorySystem.UI
         {
             if(ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<InventoryPanel>("Binary/TextContent/Inventory", "InventoryPanel", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<InventoryPanel>("Json/TextContent/Inventory", "InventoryPanel", (datas) =>
                 {
                     Refresh();
                     this.enabled = false;

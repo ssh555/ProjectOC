@@ -128,6 +128,49 @@ namespace ML.Engine.BuildingSystem.BuildingArea
         {
             BuildingManager.Instance.BuildingAreaList.Remove(this);
         }
+
+        private void OnDrawGizmos()
+        {
+            float smallSize = BaseGridSideLength; // 小格子的大小
+            float largeSize = BoundGridSideLength; // 大格子的大小
+            float height = this.GetComponent<Collider>().bounds.size.y;
+
+            Vector3 pos = transform.position;
+
+            if(BuildingManager.Instance.DrawAreaBaseGrid.IsDraw)
+            {
+                // 绘制小格子
+                Gizmos.color = BuildingManager.Instance.DrawAreaBaseGrid.color;
+                for (float y = pos.y; y < pos.y + height; y += smallSize)
+                {
+                    for (float x = pos.x; x < pos.x + largeSize; x += smallSize)
+                    {
+                        for (float z = pos.z; z < pos.z + largeSize; z += smallSize)
+                        {
+                            Gizmos.DrawWireCube(new Vector3(x, y, z), new Vector3(smallSize, smallSize, smallSize));
+                        }
+                    }
+                }
+            }
+
+            if (BuildingManager.Instance.DrawAreaBoundGrid.IsDraw)
+            {
+                // 绘制大格子
+                Gizmos.color = BuildingManager.Instance.DrawAreaBoundGrid.color;
+                for (float y = pos.y; y < pos.y + height; y += largeSize)
+                {
+                    for (float x = pos.x; x < pos.x + largeSize; x += largeSize)
+                    {
+                        for (float z = pos.z; z < pos.z + largeSize; z += largeSize)
+                        {
+                            Gizmos.DrawWireCube(new Vector3(x, y, z), new Vector3(largeSize, largeSize, largeSize));
+                        }
+                    }
+                }
+            }
+
+
+        }
     }
 }
 
