@@ -144,10 +144,7 @@ public class UIPolygon : MaskableGraphic
         Vector2 prevX = Vector2.zero;
         // 前一个点Y
         Vector2 prevY = Vector2.zero;
-        Vector2 uv0 = new Vector2(0, 0);
-        Vector2 uv1 = new Vector2(0, 1);
-        Vector2 uv2 = new Vector2(1, 1);
-        Vector2 uv3 = new Vector2(1, 0);
+
         Vector2 pos0;
         Vector2 pos1;
         Vector2 pos2;
@@ -175,11 +172,7 @@ public class UIPolygon : MaskableGraphic
             float rad = Mathf.Deg2Rad * (i * degrees + rotation);
             float c = Mathf.Cos(rad);
             float s = Mathf.Sin(rad);
-            // 展UV
-            uv0 = new Vector2(0, 1);
-            uv1 = new Vector2(1, 1);
-            uv2 = new Vector2(1, 0);
-            uv3 = new Vector2(0, 0);
+
 
             // 计算绘制的四边形的四个顶点
             pos0 = prevX;
@@ -233,6 +226,17 @@ public class UIPolygon : MaskableGraphic
                 pos2 = new Vector2(inner * c, inner * s);
                 pos3 = prevY;
             }
+        
+            Vector2 uv0 = pos0/size ;
+            Vector2 uv1 = pos1/size ;
+            Vector2 uv2 = pos2/size;
+            Vector2 uv3 = pos3/size;
+            //我也不知道为什么是0.04f 阿巴阿巴，texture的wrap mode要设置成repeat
+            float offset = 0.04f;
+            uv0 += Vector2.one* size * offset;
+            uv1 += Vector2.one* size * offset;
+            uv2 += Vector2.one* size * offset;
+            uv3 += Vector2.one * size * offset;
 
             prevX = pos1;
             prevY = pos2;

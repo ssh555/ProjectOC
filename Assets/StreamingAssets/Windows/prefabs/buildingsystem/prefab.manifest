@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1647371194
+CRC: 2966650356
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b5239c65921c1a057bc347aae28b8195
+    Hash: 060b8a9c4031ffe8356d91b79e74093d
   TypeTreeHash:
     serializedVersion: 2
     Hash: a61f7b3a7d9165c225679598226092fb
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: b5239c65921c1a057bc347aae28b8195
+    Hash: 060b8a9c4031ffe8356d91b79e74093d
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -48,10 +48,10 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: Assembly-CSharp
   ClassName: ML.Engine.BuildingSystem.BuildingSocket.BuildingSocketType
 Assets:
-- Assets/_ProjectOC/Resources/Prefabs/Prefabs/IslandSubPrefab.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Prefabs/IslandMainPrefab.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Prefabs/PowerCoreBuildSpace.prefab
-- Assets/_ProjectOC/Resources/Prefabs/Prefabs/BuildingArea.prefab
+- Assets/_ProjectOC/Resources/Prefabs/BuildingSystem/Prefabs/IslandSubPrefab.prefab
+- Assets/_ProjectOC/Resources/Prefabs/BuildingSystem/Prefabs/IslandMainPrefab.prefab
+- Assets/_ProjectOC/Resources/Prefabs/BuildingSystem/Prefabs/PowerCoreBuildSpace.prefab
+- Assets/_ProjectOC/Resources/Prefabs/BuildingSystem/Prefabs/BuildingArea.prefab
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/shader
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/shader

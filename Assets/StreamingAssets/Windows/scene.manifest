@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2690503936
+CRC: 3938719566
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c51918475dab70f8e2b40db08f6a29c5
+    Hash: ea63c6e0c19dda7bbe18186c78b3d4f5
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 202103c9e976312b46b7370d32d6513b
+    Hash: d5c81d782665cd738b3ba9ffb34344f2
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: c51918475dab70f8e2b40db08f6a29c5
+    Hash: ea63c6e0c19dda7bbe18186c78b3d4f5
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -105,6 +105,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: a444fb26d79a4a94ebd9400ba547e490, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: eea3d28ffbcb4cd47a326cb08ba74d18, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
@@ -146,8 +148,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: a79d93bee2b59d94fa12949e4c5e61d1, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 7411b32275d93534cb08e4d96c084289, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: a444fb26d79a4a94ebd9400ba547e490, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 136
@@ -175,7 +175,7 @@ Assets:
 - Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity
 - Assets/_ProjectOC/Scene/GameScene.unity
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/prefabs/character/player
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/shader
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/uipanel
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/shader
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/uipanel

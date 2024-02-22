@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,9 +7,10 @@ namespace ProjectOC.LandMassExpand
 {
     public class IslandSub : IslandBase
     {
-        public override void IslandMove(Vector2Int centerPos)
+        public IslandMain islandMain;
+        private void Awake()
         {
-            base.IslandMove(centerPos + islandMapPos);
+            islandMain = GetComponentInParent<IslandMain>();
         }
     }
 }
