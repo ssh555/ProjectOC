@@ -5366,7 +5366,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7797933186809726021}
   m_Layer: 0
-  m_Name: LevelUp
+  m_Name: Upgrade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

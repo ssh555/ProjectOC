@@ -36,7 +36,7 @@ namespace ProjectOC.WorkerNS
             Worker result = null;
             foreach (Worker worker in this.Workers)
             {
-                if (worker != null && worker.Status == Status.Fishing && worker.ProNode == null)
+                if (worker != null && worker.Status == Status.Fishing && worker.ProNode == null && worker.Transport == null)
                 {
                     result = worker;
                     break;

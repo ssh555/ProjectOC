@@ -61,7 +61,8 @@ namespace ProjectOC.ProNodeNS
         /// <summary>
         /// 堆积搬运阈值，未分配给任务的份数达到此值，全部划分给任务，然后生成任务
         /// </summary>
-        public int StackThresholdNum { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetStackThreshold(ID); }
+        //public int StackThresholdNum { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetStackThreshold(ID); }
+        public int StackThresholdNum = 1;
         /// <summary>
         ///  当原材料可生产的Item份数低于此值时，发布搬运任务
         ///  搬运 MaxStackNum - 此值份量的原材料到此生产节点

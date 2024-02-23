@@ -65,7 +65,7 @@ namespace ProjectOC.InventorySystem.UI
             Worker_UIItemTemplate.gameObject.SetActive(false);
             ChangeWorker.gameObject.SetActive(false);
             // LevelUp
-            ChangeLevel = transform.Find("LevelUp");
+            ChangeLevel = transform.Find("Upgrade");
             Level_GridLayout = ChangeLevel.Find("Build").Find("Raw").Find("Viewport").Find("Content").GetComponent<GridLayoutGroup>();
             Level_UIItemTemplate = Level_GridLayout.transform.Find("UIItemTemplate");
             Level_UIItemTemplate.gameObject.SetActive(false);
@@ -137,7 +137,7 @@ namespace ProjectOC.InventorySystem.UI
 
             BotKeyTips_Worker.gameObject.SetActive(false);
             // BotKeyTips LevelUp
-            BotKeyTips_Level = this.transform.Find("BotKeyTips").Find("LevelUp");
+            BotKeyTips_Level = this.transform.Find("BotKeyTips").Find("Upgrade");
 
             KT_ConfirmLevel = new UIKeyTip();
             KT_ConfirmLevel.img = BotKeyTips_Level.Find("KT_ConfirmLevel").Find("Image").GetComponent<UnityEngine.UI.Image>();

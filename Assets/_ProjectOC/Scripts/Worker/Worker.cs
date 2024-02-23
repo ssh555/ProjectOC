@@ -285,5 +285,18 @@ namespace ProjectOC.WorkerNS
         {
             this.TimeArrangement.SetTimeStatusAll(timeStatus);
         }
+
+        public void OnDestroy()
+        {
+            this.ClearDestination();
+            if (this.Transport != null)
+            {
+                this.Transport.End();
+            }
+            if (this.ProNode != null)
+            {
+                this.ProNode.RemoveWorker();
+            }
+        }
     }
 }

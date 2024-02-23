@@ -5,6 +5,7 @@ using ProjectOC.StoreNS;
 using ProjectOC.WorkerEchoNS;
 using ProjectOC.ProNodeNS;
 using ML.Engine.InventorySystem;
+using Sirenix.OdinInspector;
 
 namespace ProjectOC.ManagerNS
 {
@@ -14,7 +15,8 @@ namespace ProjectOC.ManagerNS
         public static LocalGameManager Instance;
         public ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
         public DispatchTimeManager DispatchTimeManager { get; private set; }
-        public MissionManager MissionManager { get; private set; }
+        [ShowInInspector]
+        public MissionManager MissionManager;
         public ProNodeManager ProNodeManager { get; private set; }
         public RecipeManager RecipeManager { get; private set; }
         public StoreManager StoreManager { get; private set; }
