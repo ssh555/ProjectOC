@@ -34,11 +34,26 @@ MonoBehaviour:
     displayName: "\u683D\u57F9"
     value: 
   - name: Technology
-    displayName: "\u5DE5\u827A"
+    displayName: "\u79D1\u6280"
     value: 
   - name: Calculation
     displayName: "\u6F14\u7B97"
     value: 
   - name: Resonance
     displayName: "\u5171\u9E23"
+    value: 
+  - name: Smelt
+    displayName: "\u7194\u70BC"
+    value: 
+  - name: Storage
+    displayName: "\u50A8\u85CF"
+    value: 
+  - name: Craft
+    displayName: "\u5DE5\u827A"
+    value: 
+  - name: Echo
+    displayName: "\u9690\u517D"
+    value: 
+  - name: Cook
+    displayName: "\u53A8\u827A"
     value: 

@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1484605821
+CRC: 1297651088
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a52aabf2fc19462858c582474724825c
+    Hash: efa67f7aa3f874a7906d9958489a48ee
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 63aee01bf77de676dc7232b7d7089a0a
+    Hash: 9b6eeb4f8940362afbd6f120efe1c885
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: a52aabf2fc19462858c582474724825c
+    Hash: efa67f7aa3f874a7906d9958489a48ee
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -31,13 +31,13 @@ ClassTypes:
 - Class: 65
   Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 11500000, guid: d37d3d4c9a445db4dbea37f893d6ff3d, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: a79d93bee2b59d94fa12949e4c5e61d1, type: 3}
+  Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 88dfd9a1d40070e45bc302b503615a5e, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
+  Script: {fileID: 11500000, guid: d37d3d4c9a445db4dbea37f893d6ff3d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: a79d93bee2b59d94fa12949e4c5e61d1, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: af8d7691ad33d024bb987315792c6fb6, type: 3}
 - Class: 115
@@ -53,5 +53,5 @@ Assets:
 - Assets/_ProjectOC/Resources/Prefabs/BuildingSystem/Prefabs/PowerCoreBuildSpace.prefab
 - Assets/_ProjectOC/Resources/Prefabs/BuildingSystem/Prefabs/BuildingArea.prefab
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/shader
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/shader

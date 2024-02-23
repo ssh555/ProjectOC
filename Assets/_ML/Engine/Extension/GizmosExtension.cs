@@ -40,19 +40,20 @@ namespace ML.Engine.Extension
             {
                 MeshCollider meshCollider = collider as MeshCollider;
                 Mesh mesh = meshCollider.sharedMesh;
-                for (int i = 0; i < mesh.subMeshCount; i++)
-                {
-                    int[] triangles = mesh.GetTriangles(i);
-                    for (int j = 0; j < triangles.Length; j += 3)
-                    {
-                        Vector3 p1 = meshCollider.transform.TransformPoint(mesh.vertices[triangles[j]]);
-                        Vector3 p2 = meshCollider.transform.TransformPoint(mesh.vertices[triangles[j + 1]]);
-                        Vector3 p3 = meshCollider.transform.TransformPoint(mesh.vertices[triangles[j + 2]]);
-                        Gizmos.DrawLine(p1, p2);
-                        Gizmos.DrawLine(p2, p3);
-                        Gizmos.DrawLine(p3, p1);
-                    }
-                }
+                Gizmos.DrawWireMesh(mesh, collider.bounds.center, collider.transform.rotation, collider.transform.lossyScale);
+                //for (int i = 0; i < mesh.subMeshCount; i++)
+                //{
+                //    int[] triangles = mesh.GetTriangles(i);
+                //    for (int j = 0; j < triangles.Length; j += 3)
+                //    {
+                //        Vector3 p1 = meshCollider.transform.TransformPoint(mesh.vertices[triangles[j]]);
+                //        Vector3 p2 = meshCollider.transform.TransformPoint(mesh.vertices[triangles[j + 1]]);
+                //        Vector3 p3 = meshCollider.transform.TransformPoint(mesh.vertices[triangles[j + 2]]);
+                //        Gizmos.DrawLine(p1, p2);
+                //        Gizmos.DrawLine(p2, p3);
+                //        Gizmos.DrawLine(p3, p1);
+                //    }
+                //}
             }
             Gizmos.color = gcolor;
         }
