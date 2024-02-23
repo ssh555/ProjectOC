@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 330903795
+CRC: 155338595
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ee4d2a788d26234dfdb33282e8a42f64
+    Hash: 8969d081d8d66d75fb98bf42ce05712f
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 9e75b91cb0b8e6281f298e6a2d134ef4
+    Hash: 511c8b240b90c9c85d6585418a667811
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: ee4d2a788d26234dfdb33282e8a42f64
+    Hash: 8969d081d8d66d75fb98bf42ce05712f
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -27,21 +27,21 @@ ClassTypes:
 - Class: 65
   Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 11500000, guid: 1b69e2587bc92af46baf9b9c8a18bc47, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 1d70636ddcc0088439ec85c7af608e52, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 4eaeb81a05cd54643b2d664b64e8dc44, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: eb3d211586925844984e282ee1983188, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 84b45a722afc9f748bdef2e991e7ddaf, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 88dfd9a1d40070e45bc302b503615a5e, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 8a66f0dd625d0f74da1f89b119491b94, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1b69e2587bc92af46baf9b9c8a18bc47, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: eb3d211586925844984e282ee1983188, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4eaeb81a05cd54643b2d664b64e8dc44, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 135
@@ -165,7 +165,7 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/ProNode/ProNode_Integrator_Base1_1.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/ProNode/ProNode_Detector_Base1_1.prefab
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/character/player
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/model/buildingsystem/model
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/shader
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials/character/player
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/model/buildingsystem/model
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/shader
