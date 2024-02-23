@@ -131,10 +131,13 @@ namespace ML.Engine.BuildingSystem.BuildingArea
 
         private void OnDrawGizmos()
         {
+            if (BuildingManager.Instance == null)
+            {
+                return;
+            }
             float smallSize = BaseGridSideLength; // 小格子的大小
             float largeSize = BoundGridSideLength; // 大格子的大小
             float height = this.GetComponent<Collider>().bounds.size.y;
-
             Vector3 pos = transform.position;
 
             if(BuildingManager.Instance.DrawAreaBaseGrid.IsDraw)
