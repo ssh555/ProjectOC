@@ -591,7 +591,7 @@ MonoBehaviour:
     inAirAccSpeed: 100
   playerUIBotPanel: {fileID: 5715426156639872100, guid: 0f4895c0ccc062942944ba4cb41ec456, type: 3}
   playerUIPanel: {fileID: -2576469941936671822, guid: 54f99402f01f5f04cb5afe4947fed3f9, type: 3}
-  beastPanel: {fileID: 0}
+  beastPanel: {fileID: 2345996988867316266, guid: 7bffc79c46d39bd4b8c7c9845742fa6b, type: 3}
 --- !u!95 &8934122120899684266
 Animator:
   serializedVersion: 5

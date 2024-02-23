@@ -35,6 +35,7 @@ namespace ProjectOC.WorkerEchoNS
             };
         }
     }
+
     [System.Serializable]
     public sealed class WorkerEcho : ML.Engine.Manager.LocalManager.ILocalManager
     {
