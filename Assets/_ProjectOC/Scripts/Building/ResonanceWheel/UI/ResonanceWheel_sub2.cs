@@ -24,21 +24,13 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         public IInventory inventory;
 
-        #region Input
-        /// <summary>
-        /// 用于Drop和Destroy按键响应Cancel
-        /// 长按响应了Destroy就置为true
-        /// Cancel就不响应Drop 并 重置
-        /// </summary>
-        private bool ItemIsDestroyed = false;
-        #endregion
 
         #region Unity
         public bool IsInit = false;
         private void Start()
         {
 
-            parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
+            //parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
 
             //Ring
             var ringcontent = this.transform.Find("Ring").Find("Viewport").Find("Content");
@@ -88,7 +80,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             
             this.Enter();
 
-            GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>().MainToSub2();
+            parentUI.MainToSub2();
             
         }
 
@@ -99,7 +91,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             this.Exit();
             
             ClearTemp();
-            GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>().Sub2ToMain();
+            parentUI.Sub2ToMain();
 
         }
 
@@ -140,16 +132,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.Enable();
-            ML.Engine.Input.InputManager.Instance.Common.Enable();
-            //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
             this.Refresh();
         }
 
         private void Exit()
         {
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.Disable();
-            ML.Engine.Input.InputManager.Instance.Common.Disable();
-            //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
             this.UnregisterInput();
             
         }
@@ -195,10 +183,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            Debug.Log("sub2 Back_performed");
             UIMgr.PopPanel();
-            
-
         }
 
 

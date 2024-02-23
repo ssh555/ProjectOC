@@ -37,22 +37,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         
         
 
-        #region Input
-        /// <summary>
-        /// 用于Drop和Destroy按键响应Cancel
-        /// 长按响应了Destroy就置为true
-        /// Cancel就不响应Drop 并 重置
-        /// </summary>
 
-        #endregion
 
         #region Unity
         public bool IsInit = false;
         private void Start()
         {
-            //Debug.Log("121323 " + GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>());
+
             workerEcho = (GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
-            //workerEcho = GameObject.Find("Cube").GetComponent<WorkerEchoBuilding>().workerEcho;
 
             StartCoroutine(InitUIPrefabs());
             StartCoroutine(InitUITexture2D());
@@ -269,7 +261,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Enable();
 
-            ML.Engine.Input.InputManager.Instance.Common.Enable();
 
             this.Refresh();
         }
@@ -278,7 +269,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             this.UnregisterInput();
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Disable();
-            ML.Engine.Input.InputManager.Instance.Common.Disable();
         }
 
         private void UnregisterInput()
@@ -334,7 +324,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            Debug.Log("main Back_performed");
             UIMgr.PopPanel();
         }
 
@@ -356,7 +345,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void NextGrid_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            Debug.Log("NextGrid_performed!");
             CurrentGridIndex = (CurrentGridIndex + 1) % Grids.Count;
             this.Refresh();
         }
@@ -365,25 +353,24 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             var panel = GameObject.Instantiate(resonanceWheel_Sub2);
             panel.transform.SetParent(this.transform.parent, false);
-
+            panel.parentUI = this;
             
             ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
-            //ActiveSubUI();
-            Debug.Log("SwitchTarget_performed!");
-            
+
         }
 
         private void StartResonance_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
+
+
+            if (Grids[CurrentGridIndex].isNull == false) return;
+
+
             //检查背包
 
             string cb = currentBeastType.ToString();
 
             
-
-            Debug.Log("StartResonance_perfozqrmed!");
-            Debug.Log("cb "+cb);
-            //ExternWorker worker = new ExternWorker(null,5,null);
             ExternWorker worker = null;
             if (workerEcho.Level == 1) //GameManager.Instance.Level == 1
             {
@@ -397,13 +384,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 {
                     worker = workerEcho.SummonWorker(cb, CurrentGridIndex);
                 }
-                
-/*                if (!GameManager.Instance.GetLocalManager<WorkerManager>().OnlyCostResource(inventory123, cb))
-                {
-                    Debug.Log("材料不足！无法召唤！");
-                    return;
-                }*/
-                
+                   
             }
 
             if (worker != null)
@@ -414,11 +395,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                 Grids[CurrentGridIndex].beastType = currentBeastType;
 
-                Debug.Log("worker "+worker.worker);
             }
             else
             {
-                Debug.Log("worker is null！");
             }
 
 
@@ -459,13 +438,13 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             if (Grids[CurrentGridIndex].isNull)
             {
                 //当前无共鸣
-                Debug.Log("当前无共鸣isNull=true");
+
                 return;
             }
             if(!Grids[CurrentGridIndex].isTiming)
             {
                 //当前无共鸣
-                Debug.Log("当前无共鸣isTiming=false");
+
                 return;
             }
 
@@ -485,7 +464,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         public void MainToSub1()
         {
-            Debug.Log("MainToSub1");
             exclusivePart = this.transform.Find("ExclusivePart");
             var ReasonanceTarget = exclusivePart.Find("ResonanceTarget");
             var ResonanceConsumption = exclusivePart.Find("ResonanceConsumption");
@@ -515,7 +493,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         public void Sub1ToMain()
         {
-            Debug.Log("Sub1ToMain");
             exclusivePart = this.transform.Find("ExclusivePart");
             var ReasonanceTarget = exclusivePart.Find("ResonanceTarget");
             var ResonanceConsumption = exclusivePart.Find("ResonanceConsumption");
@@ -547,7 +524,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public void MainToSub2()
         {
             exclusivePart = this.transform.Find("ExclusivePart");
-            Debug.Log("MainToSub2");
             
             //setfalse 主ui的独有部分
             exclusivePart?.gameObject.SetActive(false);
@@ -709,7 +685,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             #region TopPart
             TopTitleText.text = PanelTextContent_Main.toptitle;
 
-            Debug.Log("ABJAProcessorJson  " + PanelTextContent_Main.toptitle);
+
 
             #region FunctionType
             this.KT_LastTerm.ReWrite(PanelTextContent_Main.lastterm);
@@ -808,6 +784,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 {
                     var panel = GameObject.Instantiate(resonanceWheel_Sub1);
                     panel.transform.SetParent(this.transform.parent, false);
+                    panel.parentUI = this;
                     Sub1nstance = panel;
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
                     hasSub1nstance=true;
@@ -865,8 +842,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 ResonanceConsumpionTitle.text = PanelTextContent_Main.ResonanceConsumpionTitle.description[0];//0 代表共鸣消耗
                 //显示消耗物品详细
 
-
-                Debug.Log("显示消耗物品详细 " + currentBeastType);
                 var Consumables = RCInfo.Find("Consumables");
                 if (Consumables.childCount > 0)
                 {
@@ -1000,7 +975,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             if (crequest != null)
             {
                 Texture2DAB = crequest.assetBundle;
-                Debug.Log("InitUITexture2D " + Texture2DAB);
             }
             Texture2D texture2D;
             

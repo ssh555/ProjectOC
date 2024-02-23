@@ -27,7 +27,7 @@ namespace ProjectOC.WorkerEchoNS
         {
             //µ¯¹²ÃùÂÖUI
             Debug.Log("µ¯UI");
-            ML.Engine.Input.InputManager.Instance.Common.Disable();
+            //ML.Engine.Input.InputManager.Instance.Common.Disable();
             var panel = GameObject.Instantiate(uIResonanceWheel);
             panel.transform.SetParent(GameObject.Find("Canvas").transform, false);
 
