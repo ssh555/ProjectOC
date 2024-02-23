@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3386301918
+CRC: 1774238476
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 057f474f27b6c10dea7c03eb89e78fec
+    Hash: 63eb27b45e5dff978b2daef3c53e5874
   TypeTreeHash:
     serializedVersion: 2
-    Hash: caa750a68bd804abb5f5530a08e2adb0
+    Hash: 9a86897a40af6e6d0d9ec182311314cc
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 057f474f27b6c10dea7c03eb89e78fec
+    Hash: 63eb27b45e5dff978b2daef3c53e5874
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -19,6 +19,8 @@ ClassTypes:
 - Class: 21
   Script: {instanceID: 0}
 - Class: 43
+  Script: {instanceID: 0}
+- Class: 48
   Script: {instanceID: 0}
 - Class: 74
   Script: {instanceID: 0}
@@ -45,5 +47,6 @@ Assets:
 - Assets/_ProjectOC/Resources/Animation/Player/PlayerModel/Clip/Motion/05 Crouch
   Idle.anim
 - Assets/_ProjectOC/Resources/Animation/Player/PlayerModel/Clip/Motion/04 Run.anim
+- "Assets/_ProjectOC/Resources/Animation/Player/PlayerModel/\u5B89\u8FF7\u4FEE.fbx"
 Dependencies:
 - D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/character/player

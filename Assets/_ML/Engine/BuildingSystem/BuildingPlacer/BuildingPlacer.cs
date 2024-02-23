@@ -527,27 +527,8 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         private void Start()
         {
             StartCoroutine(LoadMatPackages());
-            BuildingManager.Instance.Placer = this;
 
-            // 解析interactions字符串来获取hold的总时间值
-            var interactions = BInput.Build.KeyCom.interactions.Split(';');
-            foreach (var interaction in interactions)
-            {
-                if (interaction.StartsWith("Hold"))
-                {
-                    var parameters = interaction[4..interaction.Length].TrimStart('(').TrimEnd(')').Split(',');
-                    foreach (var parameter in parameters)
-                    {
-                        if (parameter.StartsWith("duration"))
-                        {
-                            var keyValue = parameter.Split('=');
-                            keyComTotalTime = float.Parse(keyValue[1]);
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
+
         }
 
 
@@ -1326,6 +1307,31 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 #if UNITY_EDITOR
             float startT = Time.realtimeSinceStartup;
 #endif
+            while (BuildingManager.Instance == null)
+            {
+                yield return null;
+            }
+            BuildingManager.Instance.Placer = this;
+            // 解析interactions字符串来获取hold的总时间值
+            var interactions = BInput.Build.KeyCom.interactions.Split(';');
+            foreach (var interaction in interactions)
+            {
+                if (interaction.StartsWith("Hold"))
+                {
+                    var parameters = interaction[4..interaction.Length].TrimStart('(').TrimEnd(')').Split(',');
+                    foreach (var parameter in parameters)
+                    {
+                        if (parameter.StartsWith("duration"))
+                        {
+                            var keyValue = parameter.Split('=');
+                            keyComTotalTime = float.Parse(keyValue[1]);
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+
             while (Manager.GameManager.Instance.ABResourceManager == null)
             {
                 yield return null;

@@ -3,13 +3,13 @@ CRC: 3809205986
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d0c83eb9052cb9d41ac5c70332ea0f43
+    Hash: 4168c25577ca5e07fcb6afb5e5b9e534
   TypeTreeHash:
     serializedVersion: 2
-    Hash: e75879529be14f97e9c7447b5bdfea9a
+    Hash: acbcba2b5efe1be4b8fc57af367dcf25
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: d0c83eb9052cb9d41ac5c70332ea0f43
+    Hash: 4168c25577ca5e07fcb6afb5e5b9e534
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -31,9 +31,13 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 5e626c9daacc88545836fc3016b72e0c, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 3e87641e6af1fb746a87cdc198aba595, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f4044717213e31446939f7bd49c896ea, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f371f36022d2b4244b195cf029a5205a, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 6feb82b60c7707348a49cccd1c157035, type: 3}
 - Class: 114
@@ -41,11 +45,7 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: fa7155796051b734daa718462081dc5f, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: f371f36022d2b4244b195cf029a5205a, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 5e626c9daacc88545836fc3016b72e0c, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 136
@@ -80,6 +80,6 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/_ProjectOC/Resources/Prefabs/Character/PlayerCharacter/PlayerCharacter.prefab
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/animation/character/player/model
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/animation/character/player/playermove
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/uipanel
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/animation/character/player/playermove
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/uipanel
