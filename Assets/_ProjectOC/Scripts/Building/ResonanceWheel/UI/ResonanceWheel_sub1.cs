@@ -25,11 +25,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 {
     public class ResonanceWheel_sub1 : ML.Engine.UI.UIBasePanel
     {
-
-        public IInventory inventory;
-
-
-
         #region Unity
         public bool IsInit = false;
         private void Start()
@@ -196,7 +191,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private void Receive_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             //parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
-            parentUI.workerEcho.SpawnWorker(parentUI.CurrentGridIndex);
+            parentUI.workerEcho.SpawnWorker(parentUI.CurrentGridIndex, Vector3.zero);
             
             ResonanceWheelUI.RingGrid.Reset(parentUI.Grids[parentUI.CurrentGridIndex], parentUI.Grids[parentUI.CurrentGridIndex].transform);
             UIMgr.PopPanel();

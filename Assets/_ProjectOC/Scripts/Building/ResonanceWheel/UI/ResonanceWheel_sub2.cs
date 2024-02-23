@@ -21,10 +21,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 {
     public class ResonanceWheel_sub2 : ML.Engine.UI.UIBasePanel
     {
-
-        public IInventory inventory;
-
-
         #region Unity
         public bool IsInit = false;
         private void Start()

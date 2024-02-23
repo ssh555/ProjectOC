@@ -45,7 +45,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //BeastInfo
             var Info1 = this.transform.Find("HiddenBeastInfo2").Find("Info");
             Speed = Info1.Find("MovingSpeed").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
-
+            SpeedNumText = Info1.Find("MovingSpeed").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
             GenderImage = Info1.Find("Icon").Find("GenderImage").GetComponent<Image>();
 
 
@@ -195,7 +195,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private void Expel_performed(InputAction.CallbackContext obj)
         {
             Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
-            WorkerEcho workerEcho = (GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
+            
             
         }
 
@@ -220,11 +220,13 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private GameObject BeastBioPrefab;//Ô¤ÖÆÌå
         private int CurrentBeastIndex = 0;
+
+        [ShowInInspector]
         List<Worker> Workers = new List<Worker>();
 
         //BeastInfo
         private TMPro.TextMeshProUGUI Speed;
-
+        private TMPro.TextMeshProUGUI SpeedNumText;
 
         private Image GenderImage;
 
@@ -291,6 +293,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 {
                     descriptionPrefab.transform.Find("Bio").Find("Selected").gameObject.SetActive(false);
                 }
+                descriptionPrefab.transform.Find("Bio").Find("mask").GetComponent<Image>().fillAmount = (float)Workers[i].APCurrent / Workers[i].APMax;
+
             }
 
             if(CurrentBeastIndex != -1)
@@ -298,7 +302,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 //BeastInfo
                 
                 Speed.text = PanelTextContent_BeastPanel.Speed;
-
                 Cook.text = PanelTextContent_BeastPanel.Cook;
                 HandCraft.text = PanelTextContent_BeastPanel.HandCraft;
                 Industry.text = PanelTextContent_BeastPanel.Industry;
@@ -340,17 +343,25 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     GenderImage.sprite = icon_genderfemaleSprite;
                 }
 
-
+                this.transform.Find("HiddenBeastInfo2").Find("Info").Find("Icon").Find("mask").GetComponent<Image>().fillAmount = (float)worker.APCurrent / worker.APMax; ;
                 BeastName.text = worker.Name;
 
 
 
 
+                SpeedNumText.text = worker.WalkSpeed.ToString();
+
 
                 if (this.PrefabsAB == null) return;
+                var Info = this.transform.Find("HiddenBeastInfo3").Find("Info");
+                for (int i = 0; i < Info.childCount; i++)
+                {
+                    Destroy(Info.GetChild(i).gameObject);
+                }
+
                 foreach (var feature in worker.Features)
                 {
-                    var Info = this.transform.Find("HiddenBeastInfo3").Find("Info");
+                    
                     var descriptionPrefab = Instantiate(DescriptionPrefab, Info);
                     descriptionPrefab.transform.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;
                     descriptionPrefab.transform.Find("Text2").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Description;
@@ -362,22 +373,28 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                 var schedule = this.transform.Find("BeastDuty").Find("Part1").Find("Info").Find("Schedule").Find("Time");
                 TimeStatus[] workerTimeStatus = worker.TimeArrangement.Status;
-
+                
                 for (int i = 0; i < workerTimeStatus.Length; i++)
                 {
-                    TMPro.TextMeshProUGUI textPro = schedule.Find("T" + i.ToString()).Find("Text (TMP)").GetComponent<TMPro.TextMeshProUGUI>();
+                    
+                    Image img = schedule.Find("T" + i.ToString()).GetComponent<Image>();
                     switch (workerTimeStatus[i])
                     {
                         case TimeStatus.None:
+                            Debug.Log("workerTimeStatus None");
+                            img.color = UnityEngine.Color.red;
                             break;
                         case TimeStatus.Relax:
-                            textPro.color = UnityEngine.Color.green;
+                            Debug.Log("workerTimeStatus Relax");
+                            img.color = UnityEngine.Color.green;
                             break;
                         case TimeStatus.Work_Transport:
-                            textPro.color = UnityEngine.Color.blue;
+                            Debug.Log("workerTimeStatus Work_Transport");
+                            img.color = UnityEngine.Color.blue;
                             break;
                         case TimeStatus.Work_OnDuty:
-                            textPro.color = UnityEngine.Color.blue;
+                            Debug.Log("workerTimeStatus Work_OnDuty");
+                            img.color = UnityEngine.Color.yellow;
                             break;
                     }
 

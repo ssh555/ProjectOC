@@ -375,14 +375,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             if (workerEcho.Level == 1) //GameManager.Instance.Level == 1
             {
                 //能否成功合成 判空
-                worker = workerEcho.SummonWorker(cb,CurrentGridIndex);
+                worker = workerEcho.SummonWorker(cb,CurrentGridIndex,inventory);
 
             }
             else
             {
                 if(currentBeastType!=BeastType.WorkerEcho_Null)
                 {
-                    worker = workerEcho.SummonWorker(cb, CurrentGridIndex);
+                    worker = workerEcho.SummonWorker(cb, CurrentGridIndex, inventory);
                 }
                    
             }
@@ -449,7 +449,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
 
 
-            workerEcho.StopEcho(Grids[CurrentGridIndex].beastType.ToString(), CurrentGridIndex);
+            workerEcho.StopEcho(Grids[CurrentGridIndex].beastType.ToString(), CurrentGridIndex, inventory);
 
 
             Grids[CurrentGridIndex].isNull = true;
