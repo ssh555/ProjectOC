@@ -186,7 +186,7 @@ namespace ML.Engine.BuildingSystem
         {
             get
             {
-                if(instance == null)
+                if(instance == null && Manager.GameManager.Instance != null)
                 {
                     instance = Manager.GameManager.Instance.GetLocalManager<BuildingManager>();
                     if(instance != null)

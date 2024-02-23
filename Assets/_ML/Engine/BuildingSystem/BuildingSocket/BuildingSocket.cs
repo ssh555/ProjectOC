@@ -203,6 +203,10 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 
         private void OnDrawGizmos()
         {
+            if (BuildingManager.Instance == null)
+            {
+                return;
+            }
             if(BuildingManager.Instance.DrawActiveSocket.IsDraw)
             {
                 var cols = this.GetComponentsInChildren<Collider>();
