@@ -138,11 +138,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// 退出EditMode
         /// </summary>
         public event System.Action<IBuildingPart> OnEditModeExit;
-        /// <summary>
-        /// 一次成功编辑移动
-        /// 旧位置, 新位置
-        /// </summary>
-        public event System.Action<IBuildingPart, Vector3, Vector3> OnEditModeSuccess;
 
         /// <summary>
         /// 流程1 : 一级二级分类选择UI交互
@@ -532,27 +527,8 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         private void Start()
         {
             StartCoroutine(LoadMatPackages());
-            BuildingManager.Instance.Placer = this;
 
-            // 解析interactions字符串来获取hold的总时间值
-            var interactions = BInput.Build.KeyCom.interactions.Split(';');
-            foreach (var interaction in interactions)
-            {
-                if (interaction.StartsWith("Hold"))
-                {
-                    var parameters = interaction[4..interaction.Length].TrimStart('(').TrimEnd(')').Split(',');
-                    foreach (var parameter in parameters)
-                    {
-                        if (parameter.StartsWith("duration"))
-                        {
-                            var keyValue = parameter.Split('=');
-                            keyComTotalTime = float.Parse(keyValue[1]);
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
+
         }
 
 
@@ -1124,8 +1100,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
                 this.SelectedPartInstance.OnChangePlaceEvent(_editOldPos, this.SelectedPartInstance.gameObject.transform.position);
 
-                this.OnEditModeSuccess?.Invoke(this.SelectedPartInstance, _editOldPos, this.SelectedPartInstance.gameObject.transform.position);
-
                 this.ExitEditMode();
             }
 
@@ -1333,6 +1307,31 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 #if UNITY_EDITOR
             float startT = Time.realtimeSinceStartup;
 #endif
+            while (BuildingManager.Instance == null)
+            {
+                yield return null;
+            }
+            BuildingManager.Instance.Placer = this;
+            // 解析interactions字符串来获取hold的总时间值
+            var interactions = BInput.Build.KeyCom.interactions.Split(';');
+            foreach (var interaction in interactions)
+            {
+                if (interaction.StartsWith("Hold"))
+                {
+                    var parameters = interaction[4..interaction.Length].TrimStart('(').TrimEnd(')').Split(',');
+                    foreach (var parameter in parameters)
+                    {
+                        if (parameter.StartsWith("duration"))
+                        {
+                            var keyValue = parameter.Split('=');
+                            keyComTotalTime = float.Parse(keyValue[1]);
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+
             while (Manager.GameManager.Instance.ABResourceManager == null)
             {
                 yield return null;

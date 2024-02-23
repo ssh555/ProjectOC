@@ -70,6 +70,3 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
-
-# Ignore the auto-generated AOT compatibility dll.
-/[Aa]ssets/_ML/Engine/_Addons/Sirenix/Assemblies/AOT/*

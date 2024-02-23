@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 4275903248
+CRC: 2375224384
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 56802fa701ff27cf773cf56d43bc4055
+    Hash: e9ccc1c8050c0d747b2f154215d1490f
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 0553ee1e25ef2ced9c37eaf50c35aae1
+    Hash: 59c03d2b98afd3e9e06e08bd517356db
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 56802fa701ff27cf773cf56d43bc4055
+    Hash: e9ccc1c8050c0d747b2f154215d1490f
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -20,6 +20,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 23
   Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
 - Class: 33
   Script: {instanceID: 0}
 - Class: 43
@@ -28,68 +30,35 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 64
   Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 1888829932, guid: 1e58abe93023a53429e1e77d566962aa, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
 - Class: 156
-  Script: {instanceID: 0}
-- Class: 205
-  Script: {instanceID: 0}
-- Class: 1953259897
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/TerrainData/New Terrain.asset
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/SM_Rocks_03.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/rock_g.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Stalagmite2.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Tree_03.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Rock3.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Rock6.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/rock_c.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/SM_Rocks_01.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/rock_o.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Rock2.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Slope_Bend_3x2x3.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/TerrainData/TerrainData_e2a86fcc-664b-4a3c-9058-278e4f5e0dc3.asset
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/rock_e.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/TerrainData/TerrainData_b7ad4ecf-254d-419b-9f4b-d4e1acd8458e.asset
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Rock11.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Rock8.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Stalagmite4.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/SM_Rocks_02.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Rock9.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/TerrainData/TerrainData_cf4732cc-69e2-4652-8955-f0437d4a3e8f.asset
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Tree_01.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Stalagmite5.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/rock_i.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/TerrainData/TerrainData_65c9faf4-8c7d-49a5-bcb7-81569c637d26.asset
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/rock_a.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Rock4.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/rock_m.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/rock_h.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/TerrainData/layer_pavementB_tiling_dirty_ApavementB_tiling_dirty_Nb956af97c33fc3d7.terrainlayer
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/SM_Rocks_05.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/TerrainData/layer_ground_sediment_Aground_sediment_N8f4cab80efbd9e3e.terrainlayer
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/rock_f.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Stalagmite3.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Rock5.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/TerrainData/layer_ground_redclay_Aground_redclay_N2023054508611406.terrainlayer
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/TerrainData/TerrainData_1446d771-b4f7-48c7-8b91-a1b6e8c987a7.asset
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Rock10.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/rock_p.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/SM_Rocks_04.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Rock7.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/rock_j.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Slope_Bend_4x3x4.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Stalagmite1.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/rock_k.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/rock_l.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Slope_2x3x6.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Slope_2x2x4.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Rock1.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/TerrainData/layer_pavementB_tiling_ApavementB_tiling_N300dce66a5689c80.terrainlayer
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/TerrainData/TerrainData_6a398bdd-a591-42a0-9c53-3baf7c734054.asset
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/rock_n.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/rock_b.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/rock_d.fbx
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/luo/luo Mesh.asset
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Slope_Bend_4x3x4.fbx
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/luo/luo Default.mat
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/BuildingA.FBX
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Materials/BuildingA_mt3.mat
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Materials/FurnaceA_mt1.mat
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Materials/FurnaceA_mt2.mat
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/Terrain.asset
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Slope_2x3x6.fbx
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/luo/luo Collider.asset
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Materials/BuildingA_mt2.mat
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Slope_Bend_3x2x3.fbx
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/Terrain/Terrain
+  Collider.obj
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/FurnaceA.FBX
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/Terrain/Terrain
+  Mesh.obj
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Materials/BuildingA_mt1.mat
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Slope_2x2x4.fbx
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Materials/BuildingA_mt4.mat
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/Terrain/Terrain.prefab
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/luo/luo.prefab
 Dependencies:
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/materials/terrain
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/prefabs/terrain
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/terrain

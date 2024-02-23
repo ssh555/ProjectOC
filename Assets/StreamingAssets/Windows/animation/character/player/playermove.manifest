@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 51978649
+CRC: 2488705601
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 9c6e3282ef61ff93c78b6a70e9649ad6
+    Hash: 8fcbc46092708b82a14e2618fcbfa4d4
   TypeTreeHash:
     serializedVersion: 2
     Hash: e8df1f9f82371e82de919a94edcc7dd6
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 9c6e3282ef61ff93c78b6a70e9649ad6
+    Hash: 8fcbc46092708b82a14e2618fcbfa4d4
 HashAppended: 0
 ClassTypes:
 - Class: 74
@@ -18,10 +18,10 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ProjectOC/Resources/Animation/Player/PlayerMove/AnimCtrl_PlayerMove.controller
-- Assets/_ProjectOC/Resources/Animation/Player/PlayerMove/PlayerInAir.anim
-- Assets/_ProjectOC/Resources/Animation/Player/PlayerMove/PlayerIdle.anim
-- Assets/_ProjectOC/Resources/Animation/Player/PlayerMove/PlayerWalk.anim
-- Assets/_ProjectOC/Resources/Animation/Player/PlayerMove/PlayerRun.anim
-- Assets/_ProjectOC/Resources/Animation/Player/PlayerMove/PlayerCrouch.anim
+- Assets/_ProjectOC/OCResources/Animation/Player/PlayerMove/AnimCtrl_PlayerMove.controller
+- Assets/_ProjectOC/OCResources/Animation/Player/PlayerMove/PlayerInAir.anim
+- Assets/_ProjectOC/OCResources/Animation/Player/PlayerMove/PlayerIdle.anim
+- Assets/_ProjectOC/OCResources/Animation/Player/PlayerMove/PlayerWalk.anim
+- Assets/_ProjectOC/OCResources/Animation/Player/PlayerMove/PlayerRun.anim
+- Assets/_ProjectOC/OCResources/Animation/Player/PlayerMove/PlayerCrouch.anim
 Dependencies: []

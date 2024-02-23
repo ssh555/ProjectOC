@@ -91,15 +91,6 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""OpenBeastPanel"",
-                    ""type"": ""Button"",
-                    ""id"": ""16e86569-9e57-4c4c-bdf1-c6e249ccca7b"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -430,28 +421,6 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""OpenBotUI"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""fb9c7c90-1f06-49ff-a6db-8671f6d73d56"",
-                    ""path"": ""<Keyboard>/o"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenBeastPanel"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""fa203a04-8944-4b80-b751-d3685db5851e"",
-                    ""path"": ""<XInputController>/leftTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenBeastPanel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -2045,118 +2014,6 @@ namespace ProjectOC.Input
                     ""isPartOfComposite"": false
                 }
             ]
-        },
-        {
-            ""name"": ""BeastPanel"",
-            ""id"": ""4967e72d-8fdc-4b8e-8be8-ea0880f7478e"",
-            ""actions"": [
-                {
-                    ""name"": ""SwitchBeast"",
-                    ""type"": ""Button"",
-                    ""id"": ""66cabf0f-f00a-465d-805b-458e6654fdf5"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Expel"",
-                    ""type"": ""Button"",
-                    ""id"": ""f239886f-7558-49c4-b7b9-1099b8fc7d9d"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Confirm"",
-                    ""type"": ""Button"",
-                    ""id"": ""12df18cd-3fdc-4fff-babf-07849920a155"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""d5231073-fee7-49bd-ad55-97fa2affe344"",
-                    ""path"": ""<XInputController>/leftStick/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Confirm"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""2801abe8-fa3f-43f4-aefb-7b7240bca3ed"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Confirm"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""1D Axis"",
-                    ""id"": ""bb7b65a4-a069-4735-aa17-365c98648bf1"",
-                    ""path"": ""1DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SwitchBeast"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""negative"",
-                    ""id"": ""717215ad-4981-4274-a86d-dcd4e21b3bc4"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SwitchBeast"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""positive"",
-                    ""id"": ""f5267953-e510-4e87-b889-54cc46e962e4"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""SwitchBeast"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3879aebe-59ae-4d3a-ac9a-883099cdd5d3"",
-                    ""path"": ""<XInputController>/rightShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Expel"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""de8f1017-e893-45bd-9bc2-92fe16a5f414"",
-                    ""path"": ""<Keyboard>/r"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Expel"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
         }
     ],
     ""controlSchemes"": []
@@ -2170,7 +2027,6 @@ namespace ProjectOC.Input
             m_Player_MouseX = m_Player.FindAction("MouseX", throwIfNotFound: true);
             m_Player_MouseY = m_Player.FindAction("MouseY", throwIfNotFound: true);
             m_Player_OpenBotUI = m_Player.FindAction("OpenBotUI", throwIfNotFound: true);
-            m_Player_OpenBeastPanel = m_Player.FindAction("OpenBeastPanel", throwIfNotFound: true);
             // TechTree
             m_TechTree = asset.FindActionMap("TechTree", throwIfNotFound: true);
             m_TechTree_LastTerm = m_TechTree.FindAction("LastTerm", throwIfNotFound: true);
@@ -2222,11 +2078,6 @@ namespace ProjectOC.Input
             m_ResonanceWheelUI_sub2_NextTerm = m_ResonanceWheelUI_sub2.FindAction("NextTerm", throwIfNotFound: true);
             m_ResonanceWheelUI_sub2_NextGrid = m_ResonanceWheelUI_sub2.FindAction("NextGrid", throwIfNotFound: true);
             m_ResonanceWheelUI_sub2_Confirm = m_ResonanceWheelUI_sub2.FindAction("Confirm", throwIfNotFound: true);
-            // BeastPanel
-            m_BeastPanel = asset.FindActionMap("BeastPanel", throwIfNotFound: true);
-            m_BeastPanel_SwitchBeast = m_BeastPanel.FindAction("SwitchBeast", throwIfNotFound: true);
-            m_BeastPanel_Expel = m_BeastPanel.FindAction("Expel", throwIfNotFound: true);
-            m_BeastPanel_Confirm = m_BeastPanel.FindAction("Confirm", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -2295,7 +2146,6 @@ namespace ProjectOC.Input
         private readonly InputAction m_Player_MouseX;
         private readonly InputAction m_Player_MouseY;
         private readonly InputAction m_Player_OpenBotUI;
-        private readonly InputAction m_Player_OpenBeastPanel;
         public struct PlayerActions
         {
             private @PlayerInput m_Wrapper;
@@ -2307,7 +2157,6 @@ namespace ProjectOC.Input
             public InputAction @MouseX => m_Wrapper.m_Player_MouseX;
             public InputAction @MouseY => m_Wrapper.m_Player_MouseY;
             public InputAction @OpenBotUI => m_Wrapper.m_Player_OpenBotUI;
-            public InputAction @OpenBeastPanel => m_Wrapper.m_Player_OpenBeastPanel;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -2338,9 +2187,6 @@ namespace ProjectOC.Input
                 @OpenBotUI.started += instance.OnOpenBotUI;
                 @OpenBotUI.performed += instance.OnOpenBotUI;
                 @OpenBotUI.canceled += instance.OnOpenBotUI;
-                @OpenBeastPanel.started += instance.OnOpenBeastPanel;
-                @OpenBeastPanel.performed += instance.OnOpenBeastPanel;
-                @OpenBeastPanel.canceled += instance.OnOpenBeastPanel;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -2366,9 +2212,6 @@ namespace ProjectOC.Input
                 @OpenBotUI.started -= instance.OnOpenBotUI;
                 @OpenBotUI.performed -= instance.OnOpenBotUI;
                 @OpenBotUI.canceled -= instance.OnOpenBotUI;
-                @OpenBeastPanel.started -= instance.OnOpenBeastPanel;
-                @OpenBeastPanel.performed -= instance.OnOpenBeastPanel;
-                @OpenBeastPanel.canceled -= instance.OnOpenBeastPanel;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -2970,68 +2813,6 @@ namespace ProjectOC.Input
             }
         }
         public ResonanceWheelUI_sub2Actions @ResonanceWheelUI_sub2 => new ResonanceWheelUI_sub2Actions(this);
-
-        // BeastPanel
-        private readonly InputActionMap m_BeastPanel;
-        private List<IBeastPanelActions> m_BeastPanelActionsCallbackInterfaces = new List<IBeastPanelActions>();
-        private readonly InputAction m_BeastPanel_SwitchBeast;
-        private readonly InputAction m_BeastPanel_Expel;
-        private readonly InputAction m_BeastPanel_Confirm;
-        public struct BeastPanelActions
-        {
-            private @PlayerInput m_Wrapper;
-            public BeastPanelActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
-            public InputAction @SwitchBeast => m_Wrapper.m_BeastPanel_SwitchBeast;
-            public InputAction @Expel => m_Wrapper.m_BeastPanel_Expel;
-            public InputAction @Confirm => m_Wrapper.m_BeastPanel_Confirm;
-            public InputActionMap Get() { return m_Wrapper.m_BeastPanel; }
-            public void Enable() { Get().Enable(); }
-            public void Disable() { Get().Disable(); }
-            public bool enabled => Get().enabled;
-            public static implicit operator InputActionMap(BeastPanelActions set) { return set.Get(); }
-            public void AddCallbacks(IBeastPanelActions instance)
-            {
-                if (instance == null || m_Wrapper.m_BeastPanelActionsCallbackInterfaces.Contains(instance)) return;
-                m_Wrapper.m_BeastPanelActionsCallbackInterfaces.Add(instance);
-                @SwitchBeast.started += instance.OnSwitchBeast;
-                @SwitchBeast.performed += instance.OnSwitchBeast;
-                @SwitchBeast.canceled += instance.OnSwitchBeast;
-                @Expel.started += instance.OnExpel;
-                @Expel.performed += instance.OnExpel;
-                @Expel.canceled += instance.OnExpel;
-                @Confirm.started += instance.OnConfirm;
-                @Confirm.performed += instance.OnConfirm;
-                @Confirm.canceled += instance.OnConfirm;
-            }
-
-            private void UnregisterCallbacks(IBeastPanelActions instance)
-            {
-                @SwitchBeast.started -= instance.OnSwitchBeast;
-                @SwitchBeast.performed -= instance.OnSwitchBeast;
-                @SwitchBeast.canceled -= instance.OnSwitchBeast;
-                @Expel.started -= instance.OnExpel;
-                @Expel.performed -= instance.OnExpel;
-                @Expel.canceled -= instance.OnExpel;
-                @Confirm.started -= instance.OnConfirm;
-                @Confirm.performed -= instance.OnConfirm;
-                @Confirm.canceled -= instance.OnConfirm;
-            }
-
-            public void RemoveCallbacks(IBeastPanelActions instance)
-            {
-                if (m_Wrapper.m_BeastPanelActionsCallbackInterfaces.Remove(instance))
-                    UnregisterCallbacks(instance);
-            }
-
-            public void SetCallbacks(IBeastPanelActions instance)
-            {
-                foreach (var item in m_Wrapper.m_BeastPanelActionsCallbackInterfaces)
-                    UnregisterCallbacks(item);
-                m_Wrapper.m_BeastPanelActionsCallbackInterfaces.Clear();
-                AddCallbacks(instance);
-            }
-        }
-        public BeastPanelActions @BeastPanel => new BeastPanelActions(this);
         public interface IPlayerActions
         {
             void OnMove(InputAction.CallbackContext context);
@@ -3041,7 +2822,6 @@ namespace ProjectOC.Input
             void OnMouseX(InputAction.CallbackContext context);
             void OnMouseY(InputAction.CallbackContext context);
             void OnOpenBotUI(InputAction.CallbackContext context);
-            void OnOpenBeastPanel(InputAction.CallbackContext context);
         }
         public interface ITechTreeActions
         {
@@ -3100,12 +2880,6 @@ namespace ProjectOC.Input
             void OnLastTerm(InputAction.CallbackContext context);
             void OnNextTerm(InputAction.CallbackContext context);
             void OnNextGrid(InputAction.CallbackContext context);
-            void OnConfirm(InputAction.CallbackContext context);
-        }
-        public interface IBeastPanelActions
-        {
-            void OnSwitchBeast(InputAction.CallbackContext context);
-            void OnExpel(InputAction.CallbackContext context);
             void OnConfirm(InputAction.CallbackContext context);
         }
     }
