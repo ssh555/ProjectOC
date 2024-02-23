@@ -1,4 +1,3 @@
-using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InventorySystem;
 using ML.Engine.TextContent;
 using Newtonsoft.Json;
@@ -6,13 +5,10 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using Unity.Burst.CompilerServices;
 using UnityEngine;
-using UnityEngine.Purchasing;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
+using ML.Engine.Extension;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -20,7 +16,6 @@ namespace ProjectOC.InventorySystem.UI
     {
 
         #region Input
-        /// <summary>
         /// 用于Drop和Destroy按键响应Cancel
         /// 长按响应了Destroy就置为true
         /// Cancel就不响应Drop 并 重置
@@ -423,13 +418,13 @@ namespace ProjectOC.InventorySystem.UI
 
             #region TopTitle
             // 更新标题文本
-            this.TopTitleText.text = PanelTextContent.toptitle.GetText();
+            this.TopTitleText.text = PanelTextContent_Main.toptitle.GetText();
             #endregion
 
             #region ItemType
             // 更新按键提示
-            this.KT_LastTerm.ReWrite(PanelTextContent.lastterm);
-            this.KT_NextTerm.ReWrite(PanelTextContent.nextterm);
+            this.KT_LastTerm.ReWrite(PanelTextContent_Main.lastterm);
+            this.KT_NextTerm.ReWrite(PanelTextContent_Main.nextterm);
             // 刷新ItemType选择区域
             foreach(var itemtype in ItemTypes)
             {
@@ -443,7 +438,7 @@ namespace ProjectOC.InventorySystem.UI
                     // 加入临时内存管理
                     tempItemType.Add(itemtype, obj);
                     // 载入ItemType对应的Texture2D
-                    var ab = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadLocalAB("UI/Inventory/Texture2D/ItemType");
+                    var ab = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadLocalAB("UI/Inventory/Texture2D");
                     var tex = ab.LoadAsset<Texture2D>(itemtype.ToString());
                     // 创建Sprite并加入临时内存管理
                     if(tex != null)
@@ -455,7 +450,7 @@ namespace ProjectOC.InventorySystem.UI
                 }
                 
                 // 刷新显示文本
-                obj.transform.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.itemtype.FirstOrDefault(it => it.name == itemtype.ToString()).GetDescription();
+                obj.transform.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent_Main.itemtype.FirstOrDefault(it => it.name == itemtype.ToString()).GetDescription();
                 // 更新 Selected
                 var selected = obj.transform.Find("Selected").gameObject;
                 selected.SetActive(CurrentItemType == itemtype);
@@ -487,7 +482,7 @@ namespace ProjectOC.InventorySystem.UI
                     tempUIItems.Add(uiitem.gameObject);
                 }
             }
-
+            
             // 用于更新滑动窗口
             // 当前选中的UIItem
             GameObject cur = null;
@@ -601,17 +596,17 @@ namespace ProjectOC.InventorySystem.UI
                 // 更新图标 => 必定是载入了的
                 Info_ItemIcon.sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(CurrentItem.ID));
                 // 更新单个重量: JsonText + Amount
-                Info_ItemWeight.text = PanelTextContent.weightprefix + ItemManager.Instance.GetWeight(CurrentItem.ID);
+                Info_ItemWeight.text = PanelTextContent_Main.weightprefix + ItemManager.Instance.GetWeight(CurrentItem.ID);
 
                 // 更新描述文本: JsonText + ItemDescription
-                Info_ItemDescription.text = PanelTextContent.descriptionprefix + "\n" + ItemManager.Instance.GetItemDescription(CurrentItem.ID);
+                Info_ItemDescription.text = PanelTextContent_Main.descriptionprefix + "\n" + ItemManager.Instance.GetItemDescription(CurrentItem.ID);
                 // 强制更新布局 => 更新文本高度 -> 用于更新父物体的高度，适配UI显示
                 LayoutRebuilder.ForceRebuildLayoutImmediate(Info_ItemDescription.GetComponent<RectTransform>());
                 // 更新父物体的高度
                 Info_ItemDescription.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(Info_ItemDescription.transform.parent.GetComponent<RectTransform>().sizeDelta.x, Info_ItemDescription.GetComponent<RectTransform>().sizeDelta.y);
 
 
-                Info_ItemEffectDescription.text = PanelTextContent.effectdescriptionprefix + "\n" + ItemManager.Instance.GetEffectDescription(CurrentItem.ID);
+                Info_ItemEffectDescription.text = PanelTextContent_Main.effectdescriptionprefix + "\n" + ItemManager.Instance.GetEffectDescription(CurrentItem.ID);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(Info_ItemEffectDescription.GetComponent<RectTransform>());
                 Info_ItemEffectDescription.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(Info_ItemEffectDescription.transform.parent.GetComponent<RectTransform>().sizeDelta.x, Info_ItemEffectDescription.GetComponent<RectTransform>().sizeDelta.y);
 
@@ -624,10 +619,10 @@ namespace ProjectOC.InventorySystem.UI
             #endregion
 
             #region BotKeyTips
-            KT_Use.ReWrite(PanelTextContent.use);
-            KT_Back.ReWrite(PanelTextContent.back);
-            KT_Drop.ReWrite(PanelTextContent.drop);
-            KT_Destroy.ReWrite(PanelTextContent.destroy);
+            KT_Use.ReWrite(PanelTextContent_Main.use);
+            KT_Back.ReWrite(PanelTextContent_Main.back);
+            KT_Drop.ReWrite(PanelTextContent_Main.drop);
+            KT_Destroy.ReWrite(PanelTextContent_Main.destroy);
             if (CurrentItem != null)
             {
                 KT_Use.img.transform.parent.gameObject.SetActive(CurrentItem.CanUse());
@@ -657,14 +652,14 @@ namespace ProjectOC.InventorySystem.UI
             public KeyTip destroy;
         }
 
-        public static InventoryPanel PanelTextContent => ABJAProcessor.Datas;
+        public static InventoryPanel PanelTextContent_Main => ABJAProcessor.Datas;
         public static ML.Engine.ABResources.ABJsonAssetProcessor<InventoryPanel> ABJAProcessor;
 
         private void InitUITextContents()
         {
             if(ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<InventoryPanel>("Binary/TextContent/Inventory", "InventoryPanel", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<InventoryPanel>("Json/TextContent/Inventory", "InventoryPanel", (datas) =>
                 {
                     Refresh();
                     this.enabled = false;
@@ -678,7 +673,7 @@ namespace ProjectOC.InventorySystem.UI
         [Button("生成测试文件")]
         void GenTESTFILE()
         {
-            List<ItemTableJsonData> datas = new List<ItemTableJsonData>();
+            List<ItemTableData> datas = new List<ItemTableData>();
 
             var itypes = Enum.GetValues(typeof(ML.Engine.InventorySystem.ItemType)).Cast<ML.Engine.InventorySystem.ItemType>().Where(e => (int)e > 0).ToArray();
             foreach(var itype in itypes)
@@ -686,7 +681,7 @@ namespace ProjectOC.InventorySystem.UI
                 int cnt = UnityEngine.Random.Range(50, 100);
                 for(int i = 0; i < cnt; ++i)
                 {
-                    var data = new ItemTableJsonData();
+                    var data = new ItemTableData();
                     // id
                     data.id = itype.ToString() + "_" + i;
                     // name
@@ -710,9 +705,13 @@ namespace ProjectOC.InventorySystem.UI
                     // worldobject
                     data.worldobject = "TESTWorldItem";
                     // description
-                    data.itemdescription = "TTTTTTTTTTTTTTTTTTTTTTTT\nXXXXXXXXXXXXXXXXXXXXXXXX\nTTTTTTTTTTTTTTTTTTTTTTTT";
+                    data.itemdescription = new TextContent();
+                    data.itemdescription.Chinese = "TTTTTTTTTTTTTTTTTTTTTTTT\nXXXXXXXXXXXXXXXXXXXXXXXX\nTTTTTTTTTTTTTTTTTTTTTTTT";
+                    data.itemdescription.English = "TTTTTTTTTTTTTTTTTTTTTTTT\nXXXXXXXXXXXXXXXXXXXXXXXX\nTTTTTTTTTTTTTTTTTTTTTTTT";
                     // effectsDescription
-                    data.effectsdescription = "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%金币掉落\n<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%攻击力持续300s</b></color>";
+                    data.effectsdescription = new TextContent();
+                    data.effectsdescription.Chinese = "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%金币掉落\n<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%攻击力持续300s</b></color>";
+                    data.effectsdescription.English = "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%金币掉落\n<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%攻击力持续300s</b></color>";
                     datas.Add(data);
                 }
             }

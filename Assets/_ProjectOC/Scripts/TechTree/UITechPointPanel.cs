@@ -77,7 +77,7 @@ namespace ProjectOC.TechTree.UI
                 TechPointList[grid[0] * GridRange.y + grid[1]] = id;
             }
             int[] g = TechTreeManager.Instance.GetTPGrid(TechPointList.First(id => (id != null && id != "")));
-            CurrentGrid = new Vector2Int(g[0], g[0]);
+            CurrentGrid = new Vector2Int(g[0], g[1]);
         }
 
         private static void RefreshCategory(int index)
@@ -88,9 +88,9 @@ namespace ProjectOC.TechTree.UI
 
         private static void AlterTP(Vector2Int offset)
         {
+            LastGrid = CurrentGrid;
             do
             {
-                LastGrid = CurrentGrid;
                 CurrentGrid.x = (CurrentGrid.x + GridRange.x - offset.y) % GridRange.x;
                 CurrentGrid.y = (CurrentGrid.y + GridRange.y + offset.x) % GridRange.y;
             } while (CurrentID == null || CurrentID == "");
@@ -462,11 +462,11 @@ namespace ProjectOC.TechTree.UI
                 ClearTemp();
             }
 
-            topTitle.text = TechTreeManager.Instance.TPPanelTextContent.toptitle.GetText();
+            topTitle.text = TechTreeManager.Instance.TPPanelTextContent_Main.toptitle.GetText();
 
             #region CategoryPanel
-            this.categoryLast.ReWrite(TechTreeManager.Instance.TPPanelTextContent.categorylast);
-            this.categoryNext.ReWrite(TechTreeManager.Instance.TPPanelTextContent.categorynext);
+            this.categoryLast.ReWrite(TechTreeManager.Instance.TPPanelTextContent_Main.categorylast);
+            this.categoryNext.ReWrite(TechTreeManager.Instance.TPPanelTextContent_Main.categorynext);
 
             foreach(var c in category)
             {
@@ -600,7 +600,7 @@ namespace ProjectOC.TechTree.UI
                 }
             }
             // 当前激活的TP四个边点有一个不位于窗口内 -> 更新窗口滑动
-            if (!allCornersVisible)
+            if (!allCornersVisible && LastID != null)
             {
                 // 将当前选中的这个放置于上一个激活TP的位置
 
@@ -686,9 +686,9 @@ namespace ProjectOC.TechTree.UI
             // Description
             this.TPDescription.text = TM.GetTPDescription(CurrentID);
             // DecipherTip
-            this.TPDecipherTip.text = tpStatus == 1 ? TM.TPPanelTextContent.unlockedtitletip.GetText() : TM.TPPanelTextContent.lockedtitletip.GetText();
+            this.TPDecipherTip.text = tpStatus == 1 ? TM.TPPanelTextContent_Main.unlockedtitletip.GetText() : TM.TPPanelTextContent_Main.lockedtitletip.GetText();
             // KTInspector
-            TPKTInspector.ReWrite(TM.TPPanelTextContent.inspector);
+            TPKTInspector.ReWrite(TM.TPPanelTextContent_Main.inspector);
 
             // 可解锁项
             foreach(var id in TM.GetTPCanUnlockedID(CurrentID))
@@ -718,7 +718,7 @@ namespace ProjectOC.TechTree.UI
                 this.TPUnlockingState.gameObject.SetActive(false);
 
                 // 破译按键提示
-                this.TPKT_Decipher.ReWrite(TM.TPPanelTextContent.decipher);
+                this.TPKT_Decipher.ReWrite(TM.TPPanelTextContent_Main.decipher);
 
                 // 是否可以破译
                 // to-do : UI
@@ -727,7 +727,7 @@ namespace ProjectOC.TechTree.UI
                 this.TPKT_Decipher.img.transform.parent.Find("Mask").GetComponent<Image>().gameObject.SetActive(!canDecipher);
 
                 // 时间消耗
-                this.TPTimeCost.text = TM.TPPanelTextContent.timecosttip + TM.GetTPTimeCost(CurrentID).ToString() + "s";
+                this.TPTimeCost.text = TM.TPPanelTextContent_Main.timecosttip + TM.GetTPTimeCost(CurrentID).ToString() + "s";
 
                 // Item 消耗
                 foreach(var f in TM.GetTPItemCost(CurrentID))
@@ -792,10 +792,10 @@ namespace ProjectOC.TechTree.UI
             #endregion
 
             #region BotPanel
-            this.KT_Back.ReWrite(TM.TPPanelTextContent.back);
+            this.KT_Back.ReWrite(TM.TPPanelTextContent_Main.back);
             #endregion
 
-            if(!this.IsUIInit)
+            if (!this.IsUIInit)
             {
                 if (this.TTTPGO.ContainsKey(CurrentID))
                 {

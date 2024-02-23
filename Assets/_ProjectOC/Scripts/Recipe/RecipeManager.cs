@@ -1,34 +1,27 @@
 using System.Collections.Generic;
 using UnityEngine;
-using ML.Engine.Manager;
 using System.Collections;
 using System;
 using System.Linq;
+using ML.Engine.InventorySystem.CompositeSystem;
 
 namespace ML.Engine.InventorySystem
 {
-    public sealed class RecipeManager : Manager.GlobalManager.IGlobalManager
+    [System.Serializable]
+    public struct RecipeTableData
     {
-        #region Instance
-        private RecipeManager(){}
+        public string ID;
+        public int Sort;
+        public RecipeCategory Category;
+        public TextContent.TextContent Name;
+        public List<Formula> Raw;
+        public Formula Product;
+        public int TimeCost;
+        public int ExpRecipe;
+    }
 
-        private static RecipeManager instance;
-
-        public static RecipeManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new RecipeManager();
-                    GameManager.Instance.RegisterGlobalManager(instance);
-                    instance.LoadTableData();
-                }
-                return instance;
-            }
-        }
-        #endregion
-
+    public sealed class RecipeManager : Manager.LocalManager.ILocalManager
+    {
         #region Load And Data
         /// <summary>
         /// 是否已加载完数据
@@ -39,26 +32,15 @@ namespace ML.Engine.InventorySystem
         /// <summary>
         /// Recipe 数据表
         /// </summary>
-        private Dictionary<string, RecipeTableJsonData> RecipeTableDict = new Dictionary<string, RecipeTableJsonData>();
+        private Dictionary<string, RecipeTableData> RecipeTableDict = new Dictionary<string, RecipeTableData>();
 
-        [System.Serializable]
-        public struct RecipeTableJsonData
-        {
-            public string ID;
-            public int Sort;
-            public RecipeCategory Category;
-            public Dictionary<string, int> Raw;
-            public Dictionary<string, int> Product;
-            public int TimeCost;
-            public int ExpRecipe;
-        }
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableJsonData[]> ABJAProcessor;
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableJsonData[]>("Json/TableData", "RecipeTableData", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]>("Json/TableData", "Recipe", (datas) =>
                 {
                     foreach (var data in datas)
                     {
@@ -77,17 +59,13 @@ namespace ML.Engine.InventorySystem
         #endregion
 
         #region Spawn
-        /// <summary>
-        /// 根据id创建新的配方
-        /// </summary>
         public Recipe SpawnRecipe(string id)
         {
-            if (RecipeTableDict.TryGetValue(id, out RecipeTableJsonData row))
+            if (IsValidID(id))
             {
-                Recipe recipe = new Recipe(row);
-                return recipe;
+                return new Recipe(RecipeTableDict[id]);
             }
-            Debug.LogError("没有对应ID为 " + id + " 的配方");
+            //Debug.LogError("没有对应ID为 " + id + " 的配方");
             return null;
         }
         #endregion
@@ -96,75 +74,80 @@ namespace ML.Engine.InventorySystem
         public List<string> GetRecipeIDsByCategory(RecipeCategory category)
         {
             List<string> result = new List<string>();
-            if (RecipeCategorys.ContainsKey(category) && RecipeCategorys.ContainsKey(category) && RecipeCategorys[category] != null)
+            if (RecipeCategorys.ContainsKey(category))
             {
                 result.AddRange(RecipeCategorys[category]);
             }
             return result;
         }
         
-        public string[] GetAllRecipeID()
+        public string[] GetAllID()
         {
             return RecipeTableDict.Keys.ToArray();
         }
 
         public bool IsValidID(string id)
         {
-            return RecipeTableDict.ContainsKey(id);
+            if (!string.IsNullOrEmpty(id))
+            {
+                return RecipeTableDict.ContainsKey(id);
+            }
+            return false;
         }
 
         public int GetSort(string id)
         {
-            if (!RecipeTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return int.MaxValue;
+                return RecipeTableDict[id].Sort;
             }
-            return RecipeTableDict[id].Sort;
+            return int.MaxValue;
         }
 
         public RecipeCategory GetCategory(string id)
         {
-            if (!RecipeTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return RecipeCategory.None;
+                return RecipeTableDict[id].Category;
             }
-            return RecipeTableDict[id].Category;
+            return RecipeCategory.None;
         }
 
-        public Dictionary<string, int> GetRaw(string id)
+        public List<Formula> GetRaw(string id)
         {
-            if (!RecipeTableDict.ContainsKey(id))
+            List<Formula> result = new List<Formula>();
+            if (IsValidID(id))
             {
-                return new Dictionary<string, int>();
+                result.AddRange(RecipeTableDict[id].Raw);
             }
-            return RecipeTableDict[id].Raw;
+            return result;
         }
 
-        public Dictionary<string, int> GetProduct(string id)
+        public Formula GetProduct(string id)
         {
-            if (!RecipeTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return new Dictionary<string, int>();
+                return RecipeTableDict[id].Product;
             }
-            return RecipeTableDict[id].Product;
+            return new Formula() { id = "", num = 0 };
         }
 
         public int GetTimeCost(string id)
         {
-            if (!RecipeTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return 1;
+                return RecipeTableDict[id].TimeCost;
             }
-            return RecipeTableDict[id].TimeCost;
+            return 1;
         }
 
         public int GetExpRecipe(string id)
         {
-            if (!RecipeTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return 0;
+                return RecipeTableDict[id].ExpRecipe;
             }
-            return RecipeTableDict[id].ExpRecipe;
+            return 0;
         }
         #endregion
     }

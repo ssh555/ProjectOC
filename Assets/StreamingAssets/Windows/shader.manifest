@@ -1,0 +1,29 @@
+ManifestFileVersion: 0
+CRC: 1732189280
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 471509b3a67e7b3529d6d81caea706b7
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: b30fce1a9ad74efb72be6c308c56e365
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 471509b3a67e7b3529d6d81caea706b7
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/_ML/MLResources/Shaders/GridBox_Default.png
+- Assets/_ML/MLResources/Shaders/RangeVFXShader.shader
+- Assets/_ML/MLResources/Shaders/RangeVFXMaterial.mat
+- Assets/_ML/MLResources/Shaders/GridMatUVScale.mat
+- Assets/_ML/MLResources/Shaders/GridUVScale.shader
+Dependencies:
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/matpackageicon

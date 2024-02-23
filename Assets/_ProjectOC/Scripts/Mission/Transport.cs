@@ -29,12 +29,12 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// 取货地
         /// </summary>
-        public IMission Source;
+        public IMissionObj Source;
 
         /// <summary>
         /// 送货地
         /// </summary>
-        public IMission Target;
+        public IMissionObj Target;
 
         /// <summary>
         /// 该任务的刁民
@@ -90,7 +90,7 @@ namespace ProjectOC.MissionNS
             }
         }
 
-        public Transport(MissionTransport mission, string itemID, int missionNum, IMission source, IMission destination, Worker worker)
+        public Transport(MissionTransport mission, string itemID, int missionNum, IMissionObj source, IMissionObj destination, Worker worker)
         {
             this.Mission = mission;
             this.ItemID = itemID;
@@ -102,6 +102,19 @@ namespace ProjectOC.MissionNS
             this.Source.AddTransport(this);
             this.Target.AddTransport(this);
             this.Worker.Transport = this;
+            this.Worker.SetTimeStatusAll(TimeStatus.Work_Transport);
+            this.Worker.SetDestination(this.Worker.Transport.Source.GetTransform(), Transport_Source_Action);
+        }
+        private void Transport_Source_Action(Worker worker)
+        {
+            worker.Transport.PutOutSource();
+            worker.SetDestination(worker.Transport.Target.GetTransform(), Transport_Target_Action);
+        }
+
+        private void Transport_Target_Action(Worker worker)
+        {
+            worker.Transport.PutInTarget();
+            worker.ClearDestination();
         }
 
         /// <summary>
@@ -134,7 +147,7 @@ namespace ProjectOC.MissionNS
             }
             if (flagSource)
             {
-                Debug.LogError("Source is not Enough");
+                //Debug.LogError("Source is not Enough");
             }
         }
 
@@ -147,9 +160,8 @@ namespace ProjectOC.MissionNS
             bool flagTarget = this.Target.PutIn(this.ItemID, num);
             if (flagTarget)
             {
-                this.FinishNum += num;
-                this.Mission.FinishNum += num;
                 this.Worker.TransportItems.Clear();
+                this.FinishNum += num;
                 // 任务结束
                 if (this.FinishNum == this.MissionNum)
                 {
@@ -158,12 +170,13 @@ namespace ProjectOC.MissionNS
                 }
                 else if (this.FinishNum > this.MissionNum)
                 {
-                    Debug.LogError($"FinishNum > MissionNum");
+                    //Debug.LogError($"FinishNum > MissionNum");
                 }
+                this.Mission.FinishNum += num;
             }
             else
             {
-                Debug.LogError($"Target Cannot Put In {ItemID} {num}");
+                //Debug.LogError($"Target Cannot Put In {ItemID} {num}");
                 this.End();
             }
         }
@@ -171,15 +184,20 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// 强制结束搬运
         /// </summary>
-        public void End()
+        public void End(bool remove=true)
         {
             foreach (Item item in Worker.TransportItems)
             {
                 ItemManager.Instance.SpawnWorldItem(item, Worker.transform.position, Worker.transform.rotation);
             }
+            Worker.SetTimeStatusAll(TimeStatus.Relax);
             Worker.TransportItems.Clear();
             Worker.Transport = null;
-            Mission.Transports.Remove(this);
+            Worker.ClearDestination();
+            if (remove)
+            {
+                Mission.Transports.Remove(this);
+            }
             Source.RemoveTranport(this);
             Target.RemoveTranport(this);
         }

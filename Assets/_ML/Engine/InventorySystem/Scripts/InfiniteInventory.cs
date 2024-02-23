@@ -80,7 +80,7 @@ namespace ML.Engine.InventorySystem
                     }
                     else
                     {
-                        item.Amount = ma - it.Amount - item.Amount;
+                        item.Amount = it.Amount + item.Amount - ma;
                         it.Amount = ma;
                         this.itemList.Add(item);
                     }

@@ -1,0 +1,20 @@
+ManifestFileVersion: 0
+CRC: 2328681185
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: e9d6a96e605e242971e012eb345bb83e
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5ad585dd02dfb5016c0dad519eab8f49
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: e9d6a96e605e242971e012eb345bb83e
+HashAppended: 0
+ClassTypes:
+- Class: 49
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/_ProjectOC/OCResources/Json/TextContent/TechTree/TechPointPanel.json
+Dependencies: []

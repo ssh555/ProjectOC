@@ -1,0 +1,145 @@
+{
+    "toptitle":{
+        "Chinese" : "科技树",
+        "English" : "Tech Tree"
+    },
+    "category" : [
+        {
+            "name" : "Energy",
+            "description" : {
+                "Chinese" : "能源",
+                "English" : "Energy"
+            }
+        },
+        {
+            "name" : "Plant",
+            "description" : {
+                "Chinese" : "栽培",
+                "English" : "Plant"
+            }
+        },
+        {
+            "name" : "Technology",
+            "description" : {
+                "Chinese" : "科技",
+                "English" : "Technology"
+            }
+        },
+        {
+            "name" : "Calculation",
+            "description" : {
+                "Chinese" : "演算",
+                "English" : "Calculation"
+            }
+        },
+        {
+            "name" : "Resonance",
+            "description" : {
+                "Chinese" : "共鸣",
+                "English" : "Resonance"
+            }
+        },
+        {
+            "name" : "Smelt",
+            "description" : {
+                "Chinese" : "熔炼",
+                "English" : "Smelt"
+            }
+        },
+        {
+            "name" : "Storage",
+            "description" : {
+                "Chinese" : "储藏",
+                "English" : "Storage"
+            }
+        },
+        {
+            "name" : "Craft",
+            "description" : {
+                "Chinese" : "工艺",
+                "English" : "Craft"
+            }
+        },
+        {
+            "name" : "Echo",
+            "description" : {
+                "Chinese" : "隐兽",
+                "English" : "Echo"
+            }
+        },
+        {
+            "name" : "Cook",
+            "description" : {
+                "Chinese" : "厨艺",
+                "English" : "Cook"
+            }
+        }
+    ],
+    "categorylast" : {
+        "keyname" : "categorylast",
+        "keymap" : {
+            "KeyBoard" : "Z",
+            "XBOX" : "LB"
+        },
+        "description" : {
+            "Chinese" : "",
+            "English" : ""
+        }
+    },
+    "categorynext" : {
+        "keyname" : "categorynext",
+        "keymap" : {
+            "KeyBoard" : "X",
+            "XBOX" : "RB"
+        },
+        "description" : {
+            "Chinese" : "",
+            "English" : ""
+        }
+    },
+    "lockedtitletip":{
+        "Chinese" : "可破译的数据项",
+        "English" : "Decipherable data items"
+    },
+    "unlockedtitletip":{
+        "Chinese" : "已破译的数据项",
+        "English" : "Deciphered data items"
+    },
+    "inspector" : {
+        "keyname" : "inspector",
+        "keymap" : {
+            "KeyBoard" : "E",
+            "XBOX" : "A"
+        },
+        "description" : {
+            "Chinese" : "查看",
+            "English" : "Inspector"
+        }
+    },
+    "timecosttip":{
+        "Chinese" : "时间消耗: ",
+        "English" : "Time Cost: "
+    },
+    "decipher" : {
+        "keyname" : "decipher",
+        "keymap" : {
+            "KeyBoard" : "F",
+            "XBOX" : "X"
+        },
+        "description" : {
+            "Chinese" : "破译",
+            "English" : "Decipher"
+        }
+    },
+    "back" : {
+        "keyname" : "back",
+        "keymap" : {
+            "KeyBoard" : "ESC",
+            "XBOX" : "B"
+        },
+        "description" : {
+            "Chinese" : "返回",
+            "English" : "Back"
+        }
+    }
+}

@@ -1,0 +1,37 @@
+[
+    {
+        "name" : "enterbuild",
+        "description" : {
+            "Chinese" : "建造模式",
+            "English" : "EntetBuild"
+        }
+    },
+    {
+        "name" : "techtree",
+        "description" : {
+            "Chinese" : "科技树",
+            "English" : "TechTree"
+        }
+    },
+    {
+        "name" : "inventory",
+        "description" : {
+            "Chinese" : "背包",
+            "English" : "Inventory"
+        }
+    },
+    {
+        "name" : "beastpanel",
+        "description" : {
+            "Chinese" : "查看隐兽",
+            "English" : "View Hidden Beasts"
+        }
+    },
+    {
+        "name" : "worker",
+        "description" : {
+            "Chinese" : "刁民",
+            "English" : "Worker"
+        }
+    }
+]

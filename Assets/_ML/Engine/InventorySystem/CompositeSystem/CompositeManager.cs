@@ -3,46 +3,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
-using static ML.Engine.InventorySystem.ItemManager;
 
 namespace ML.Engine.InventorySystem.CompositeSystem
 {
     [System.Serializable]
-    public class CompositionJsonData
+    public class CompositionTableData
     {
-        /// <summary>
-        /// 合成对象 -> Item | 建筑物 ID 引用
-        /// </summary>
         public string id;
-
-        /// <summary>
-        /// 合成物名称
-        /// </summary>
-        public TextContent.TextContent name;
-
-        /// <summary>
-        /// 标签分级
-        /// 1级|2级|3级
-        /// </summary>
-        public string[] tag; // Category
-
-        /// <summary>
-        /// 合成公式
-        /// 没有 num 则默认为 1
-        /// num 目前仅限 item
-        /// num = <1,2> | <1,2>
-        /// 1 -> ID 
-        /// 2 -> Num
-        /// </summary>
-        public Formula[] formula;
-        /// <summary>
-        /// 一次可合成数量
-        /// </summary>
         public int compositionnum;
-
+        public Formula[] formula;
+        public TextContent.TextContent name;
+        public string[] tag;
         public string texture2d;
-
         public List<string> usage;
     }
     public sealed class CompositeManager : Manager.GlobalManager.IGlobalManager
@@ -76,21 +50,26 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         {
             Error,
             Item,
-            BuildingPart,
+            BuildingPart
         }
 
 
 
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<CompositionJsonData[]> ABJAProcessor;
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<CompositionTableData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<CompositionJsonData[]>("Binary/TableData", "CompositionTableData", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<CompositionTableData[]>("Json/TableData", "Composition", (datas) =>
+
                 {
                     foreach (var data in datas)
                     {
+                        if (data.id == null || data == null)
+                        {
+                            Debug.Log($"{data?.id} {data == null} {data.name}");
+                        }
                         this.CompositeData.Add(data.id, data);
                     }
 
@@ -119,8 +98,8 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <summary>
         /// 合成表数据
         /// </summary>
-        private Dictionary<string, CompositionJsonData> CompositeData = new Dictionary<string, CompositionJsonData>();
-        public CompositionJsonData[] GetCompositionData()
+        private Dictionary<string, CompositionTableData> CompositeData = new Dictionary<string, CompositionTableData>();
+        public CompositionTableData[] GetCompositionData()
         {
             return this.CompositeData.Values.ToArray();
         }
@@ -133,6 +112,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <returns></returns>
         public bool CanComposite(IInventory resource, string compositonID)
         {
+            
             if (!this.CompositeData.ContainsKey(compositonID) || this.CompositeData[compositonID].formula == null)
             {
                 return false;

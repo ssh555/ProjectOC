@@ -91,6 +91,15 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenBeastPanel"",
+                    ""type"": ""Button"",
+                    ""id"": ""16e86569-9e57-4c4c-bdf1-c6e249ccca7b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -421,6 +430,28 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""OpenBotUI"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fb9c7c90-1f06-49ff-a6db-8671f6d73d56"",
+                    ""path"": ""<Keyboard>/o"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenBeastPanel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fa203a04-8944-4b80-b751-d3685db5851e"",
+                    ""path"": ""<XInputController>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenBeastPanel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -992,6 +1023,1202 @@ namespace ProjectOC.Input
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""UIStore"",
+            ""id"": ""6c9463f6-81a1-4ff6-ad81-9b25e52ed957"",
+            ""actions"": [
+                {
+                    ""name"": ""NextPriority"",
+                    ""type"": ""Button"",
+                    ""id"": ""127ae37f-8a08-4977-968a-aef14074cea4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChangeIcon"",
+                    ""type"": ""Button"",
+                    ""id"": ""e187d8c7-7825-440a-b954-9c52e6b1f573"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Upgrade"",
+                    ""type"": ""Button"",
+                    ""id"": ""d60d6ab9-0a0f-44d7-bf1e-e1b964f968b6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Alter"",
+                    ""type"": ""Value"",
+                    ""id"": ""a88c7458-1957-4bf2-8552-c159134b876a"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ChangeStoreData"",
+                    ""type"": ""Button"",
+                    ""id"": ""87b70b70-485e-43c4-8fe3-dee297ad547d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Remove1"",
+                    ""type"": ""Button"",
+                    ""id"": ""7de4161b-eba3-4eda-a0b5-8e5010edde9f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Remove10"",
+                    ""type"": ""Button"",
+                    ""id"": ""cdc16934-a633-4bc5-8f80-d0c33d8eb723"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FastAdd"",
+                    ""type"": ""Button"",
+                    ""id"": ""e2a803a8-3c5b-485c-8587-3b41d4f8ceb8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""2d152131-bfef-4ab4-938a-15fe3a0c3fce"",
+                    ""path"": ""<XInputController>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextPriority"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""188683a8-cf0d-4cb1-aa6c-a983cbd2891e"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextPriority"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e7840604-f4f3-4dd9-b617-28cf525b3c7f"",
+                    ""path"": ""<XInputController>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeIcon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""db8ad17a-856a-46cf-a9be-8d29947512c3"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeIcon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8e7db927-4ca8-4a74-b4a4-eea8f7f71bbe"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fff4c8a5-5012-4e6c-a787-8fa445766c9e"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a09f564f-a92d-479a-92ab-3b5abc3d9a8e"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove10"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""98ac3791-c45b-4c66-9fe1-a4aac0b72d8c"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove10"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3fa4ff71-f3de-4a1c-b6fa-88aed36a92d4"",
+                    ""path"": ""<XInputController>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FastAdd"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""90ab7934-3ce3-4621-83f6-63383b4af996"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FastAdd"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3ea772ae-eb77-4e95-a915-090a81beae3d"",
+                    ""path"": ""<XInputController>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeStoreData"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""69f3b08a-3774-47b3-8fa2-9f4b983b0397"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeStoreData"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""KeyBoard"",
+                    ""id"": ""02d150a4-d82f-4b8a-ba2b-1ace06b1f76b"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""45bd83b0-e9f7-4ce6-aa86-5115aca8fb3c"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""0678282e-ec10-46fb-83d6-5e2e38497284"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""3e10dbc0-1b67-476d-bf4b-068321a341ea"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""791b05b0-01d0-4317-a42b-8b65177398fd"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""471c472e-00cd-403d-a291-7c8711707230"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""8f23e198-6925-49f6-89a8-fff03911ba1d"",
+                    ""path"": ""<XInputController>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""5dadc7c7-33a6-4af0-a55e-514b8b0738ce"",
+                    ""path"": ""<XInputController>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""b8c497cd-c6a5-4a14-9141-a130a1334f67"",
+                    ""path"": ""<XInputController>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""102ae375-002d-4127-b73b-a8f8a027ea3a"",
+                    ""path"": ""<XInputController>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9146e27f-fc3f-4379-97fd-3535fc23c096"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Upgrade"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""34ccf2f4-fe5f-4b34-b387-4d304ee8d446"",
+                    ""path"": ""<Keyboard>/u"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Upgrade"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""UIProNode"",
+            ""id"": ""7be38ac4-f3e0-4298-af9f-bfb7129aba09"",
+            ""actions"": [
+                {
+                    ""name"": ""Upgrade"",
+                    ""type"": ""Button"",
+                    ""id"": ""9ba3f665-0544-44f4-81a5-e794d0b0601c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextPriority"",
+                    ""type"": ""Button"",
+                    ""id"": ""8c21e479-24d3-4141-8f2c-446832cf9133"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Remove1"",
+                    ""type"": ""Button"",
+                    ""id"": ""8973dd42-db36-411c-92bd-4827c8b757f7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Remove10"",
+                    ""type"": ""Button"",
+                    ""id"": ""a43d0ad0-d595-433d-8740-83ccafaa5e74"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FastAdd"",
+                    ""type"": ""Button"",
+                    ""id"": ""b072730b-87c6-4f53-a412-856a6f31d311"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ChangeWorker"",
+                    ""type"": ""Button"",
+                    ""id"": ""339699fa-04cc-4c40-be7d-e826a3bebd10"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RemoveWorker"",
+                    ""type"": ""Button"",
+                    ""id"": ""9426e949-b89a-46f1-97ba-88da48a782d9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AlterRawItem"",
+                    ""type"": ""Value"",
+                    ""id"": ""1a286c3e-5479-48e0-b312-c005d1204369"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""f0fe7934-c340-479c-a4c8-9e9432a93f07"",
+                    ""path"": ""<XInputController>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextPriority"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""53eb5514-2f08-44dc-9d84-165c1304659b"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextPriority"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""KeyBoard"",
+                    ""id"": ""6d7178fd-01ba-48e6-b80f-828911d1e752"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterRawItem"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""dd1e748f-0c49-4842-b66e-4efb47d2755c"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterRawItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""3441ff6c-86a2-4efd-b7c7-b325ae670dbe"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterRawItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""86cb4fc7-0b07-4576-894f-918f41218696"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterRawItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""cd4eee97-33df-4edf-805b-51ff54aec145"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterRawItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""bf3209ce-bec4-4238-b6da-e5185ba20c63"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterRawItem"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""9ef64ad6-1469-4941-bac3-1ad6d272b6ba"",
+                    ""path"": ""<XInputController>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterRawItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""10b6474b-d4a0-4f91-a7e7-9f7cf463d7ef"",
+                    ""path"": ""<XInputController>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterRawItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""9b2fafe2-13fa-42ec-9767-cb4124271758"",
+                    ""path"": ""<XInputController>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterRawItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""cdc2d751-844a-4136-9e66-745dd178a9c4"",
+                    ""path"": ""<XInputController>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterRawItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""46301721-3ba5-4558-b9c1-93926e954c30"",
+                    ""path"": ""<XInputController>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Upgrade"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6d63c30d-26b5-41c0-9c64-5a2db20ecda6"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Upgrade"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bffdff7c-5dda-47e9-ac11-d20cc139ffab"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a4b2f75f-7100-4ac2-bb32-f6566a8040b5"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8cdc6c39-36f7-4977-ac32-d5b22450f706"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove10"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c6ba8d4b-99d5-4d61-ac2b-d55a9675ca86"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove10"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eeb66f92-e2f3-4af7-bc1b-1a185c9ee96b"",
+                    ""path"": ""<XInputController>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FastAdd"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bc2c45bd-1644-44e8-acb6-caddd945b1b4"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FastAdd"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""73d82c5b-7d0b-42bc-a88b-3abdee935233"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeWorker"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a3fd9745-4663-47e8-a447-f54511980706"",
+                    ""path"": ""<Keyboard>/n"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeWorker"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9a4a7946-7f31-4be2-9a55-e7c15f46fcf9"",
+                    ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RemoveWorker"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ff1a270f-4e4b-46ba-9e16-c4276cdb319e"",
+                    ""path"": ""<Keyboard>/m"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RemoveWorker"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""ResonanceWheelUI"",
+            ""id"": ""6e5ac5f4-d9f7-4c39-85c5-aecfe95acd57"",
+            ""actions"": [
+                {
+                    ""name"": ""NextTerm"",
+                    ""type"": ""Button"",
+                    ""id"": ""fb13e663-6ccd-48fe-9948-2c8dec5bbe5b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LastTerm"",
+                    ""type"": ""Button"",
+                    ""id"": ""0e80f366-5e9f-4eb3-9bc5-f5b1785dafef"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextGrid"",
+                    ""type"": ""Button"",
+                    ""id"": ""cfc9e177-6df9-4a6a-9a86-5672aa660108"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchTarget"",
+                    ""type"": ""Button"",
+                    ""id"": ""efa9df38-9634-49f3-8531-77c3bccb469a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""StartResonance"",
+                    ""type"": ""Button"",
+                    ""id"": ""fedda1c9-33da-44da-bd96-8919d1cc58c2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""StopResonance"",
+                    ""type"": ""Button"",
+                    ""id"": ""a02b23b3-2e37-4f0a-bea9-1d132ef4d9bb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""175a9304-8341-44ee-bbbd-6e7453d149cc"",
+                    ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""84ddafbc-be4b-48f6-9b6b-b4170507b3ef"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a26aa622-009a-4575-bafa-184e598c8f2c"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LastTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5a945e81-fd10-49d2-bd4e-966cb0b0b31e"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LastTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f4eceee8-e86d-4745-a3a0-cf7987a232f3"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aacf4e26-c234-4f5c-8d1f-acbf64e1a2b2"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""41355902-e9db-4246-94cf-2746fadbd5a1"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchTarget"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e8b9cab1-9d6d-41e6-8b6f-4f04d806f063"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchTarget"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d78eb896-4b50-4aa1-b909-083af217fa9c"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StartResonance"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6d7c1d8b-ccfa-43ee-b146-44c7d6ee3742"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StartResonance"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a7a70bf2-8ce2-43af-8ef7-3152a00706c8"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StopResonance"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4b9ae05a-ec28-4681-b501-713418c67f96"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StopResonance"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""ResonanceWheelUI_sub1"",
+            ""id"": ""fbf093c0-22ab-44b5-a7d6-9c52881e65c6"",
+            ""actions"": [
+                {
+                    ""name"": ""Expel"",
+                    ""type"": ""Button"",
+                    ""id"": ""e62efd25-6612-4367-b8b3-99d7c1dee753"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Receive"",
+                    ""type"": ""Button"",
+                    ""id"": ""73e621e0-7d69-46d0-8c2c-12a2dcbdfd39"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""6552300a-e62b-4b00-874c-609101b4ea13"",
+                    ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Expel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a719b9a2-1bbd-484f-aefe-375594e668a5"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Expel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""014e2025-3273-47ff-ac0c-e437291fe9e5"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Receive"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b337ffcf-f1cd-4e6c-8f39-3f8cd1f220e3"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Receive"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""ResonanceWheelUI_sub2"",
+            ""id"": ""f25047b5-b25f-4f74-b1f1-b45a7c8c5577"",
+            ""actions"": [
+                {
+                    ""name"": ""LastTerm"",
+                    ""type"": ""Button"",
+                    ""id"": ""a2022e66-af29-4c54-b541-2664aefd0f0a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextTerm"",
+                    ""type"": ""Button"",
+                    ""id"": ""ac1c3599-411a-43f5-a50e-c87b11839f6f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextGrid"",
+                    ""type"": ""Button"",
+                    ""id"": ""0bd5dbbc-da1f-4d19-acd3-6e725dcb6d4e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Confirm"",
+                    ""type"": ""Button"",
+                    ""id"": ""aee12242-8a13-4c00-85f6-6a6cae036d8d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""d3f51715-dc90-44f6-9055-a2a20924be4d"",
+                    ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5218c578-fe6d-4129-a255-64bfd7ec0ba9"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""169fd533-4f47-408a-9560-e2e964691150"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LastTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""534ee831-5158-4042-8edf-51c6725851d0"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LastTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""21821228-7600-45ca-9121-85525d1b3a8a"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3b8562af-4ec4-417d-8993-8ccb543d5ba7"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""008d807b-ad0c-4c3b-a630-0b57c7f16dcf"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b1269204-5736-414d-be58-24a3810a9d2b"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""BeastPanel"",
+            ""id"": ""4967e72d-8fdc-4b8e-8be8-ea0880f7478e"",
+            ""actions"": [
+                {
+                    ""name"": ""SwitchBeast"",
+                    ""type"": ""Button"",
+                    ""id"": ""66cabf0f-f00a-465d-805b-458e6654fdf5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Expel"",
+                    ""type"": ""Button"",
+                    ""id"": ""f239886f-7558-49c4-b7b9-1099b8fc7d9d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Confirm"",
+                    ""type"": ""Button"",
+                    ""id"": ""12df18cd-3fdc-4fff-babf-07849920a155"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""d5231073-fee7-49bd-ad55-97fa2affe344"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2801abe8-fa3f-43f4-aefb-7b7240bca3ed"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""bb7b65a4-a069-4735-aa17-365c98648bf1"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchBeast"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""717215ad-4981-4274-a86d-dcd4e21b3bc4"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchBeast"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""f5267953-e510-4e87-b889-54cc46e962e4"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchBeast"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3879aebe-59ae-4d3a-ac9a-883099cdd5d3"",
+                    ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Expel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""de8f1017-e893-45bd-9bc2-92fe16a5f414"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Expel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -1005,6 +2232,7 @@ namespace ProjectOC.Input
             m_Player_MouseX = m_Player.FindAction("MouseX", throwIfNotFound: true);
             m_Player_MouseY = m_Player.FindAction("MouseY", throwIfNotFound: true);
             m_Player_OpenBotUI = m_Player.FindAction("OpenBotUI", throwIfNotFound: true);
+            m_Player_OpenBeastPanel = m_Player.FindAction("OpenBeastPanel", throwIfNotFound: true);
             // TechTree
             m_TechTree = asset.FindActionMap("TechTree", throwIfNotFound: true);
             m_TechTree_LastTerm = m_TechTree.FindAction("LastTerm", throwIfNotFound: true);
@@ -1020,6 +2248,49 @@ namespace ProjectOC.Input
             m_UIInventory_AlterItem = m_UIInventory.FindAction("AlterItem", throwIfNotFound: true);
             m_UIInventory_NextTerm = m_UIInventory.FindAction("NextTerm", throwIfNotFound: true);
             m_UIInventory_LastTerm = m_UIInventory.FindAction("LastTerm", throwIfNotFound: true);
+            // UIStore
+            m_UIStore = asset.FindActionMap("UIStore", throwIfNotFound: true);
+            m_UIStore_NextPriority = m_UIStore.FindAction("NextPriority", throwIfNotFound: true);
+            m_UIStore_ChangeIcon = m_UIStore.FindAction("ChangeIcon", throwIfNotFound: true);
+            m_UIStore_Upgrade = m_UIStore.FindAction("Upgrade", throwIfNotFound: true);
+            m_UIStore_Alter = m_UIStore.FindAction("Alter", throwIfNotFound: true);
+            m_UIStore_ChangeStoreData = m_UIStore.FindAction("ChangeStoreData", throwIfNotFound: true);
+            m_UIStore_Remove1 = m_UIStore.FindAction("Remove1", throwIfNotFound: true);
+            m_UIStore_Remove10 = m_UIStore.FindAction("Remove10", throwIfNotFound: true);
+            m_UIStore_FastAdd = m_UIStore.FindAction("FastAdd", throwIfNotFound: true);
+            // UIProNode
+            m_UIProNode = asset.FindActionMap("UIProNode", throwIfNotFound: true);
+            m_UIProNode_Upgrade = m_UIProNode.FindAction("Upgrade", throwIfNotFound: true);
+            m_UIProNode_NextPriority = m_UIProNode.FindAction("NextPriority", throwIfNotFound: true);
+            m_UIProNode_Remove1 = m_UIProNode.FindAction("Remove1", throwIfNotFound: true);
+            m_UIProNode_Remove10 = m_UIProNode.FindAction("Remove10", throwIfNotFound: true);
+            m_UIProNode_FastAdd = m_UIProNode.FindAction("FastAdd", throwIfNotFound: true);
+            m_UIProNode_ChangeWorker = m_UIProNode.FindAction("ChangeWorker", throwIfNotFound: true);
+            m_UIProNode_RemoveWorker = m_UIProNode.FindAction("RemoveWorker", throwIfNotFound: true);
+            m_UIProNode_AlterRawItem = m_UIProNode.FindAction("AlterRawItem", throwIfNotFound: true);
+            // ResonanceWheelUI
+            m_ResonanceWheelUI = asset.FindActionMap("ResonanceWheelUI", throwIfNotFound: true);
+            m_ResonanceWheelUI_NextTerm = m_ResonanceWheelUI.FindAction("NextTerm", throwIfNotFound: true);
+            m_ResonanceWheelUI_LastTerm = m_ResonanceWheelUI.FindAction("LastTerm", throwIfNotFound: true);
+            m_ResonanceWheelUI_NextGrid = m_ResonanceWheelUI.FindAction("NextGrid", throwIfNotFound: true);
+            m_ResonanceWheelUI_SwitchTarget = m_ResonanceWheelUI.FindAction("SwitchTarget", throwIfNotFound: true);
+            m_ResonanceWheelUI_StartResonance = m_ResonanceWheelUI.FindAction("StartResonance", throwIfNotFound: true);
+            m_ResonanceWheelUI_StopResonance = m_ResonanceWheelUI.FindAction("StopResonance", throwIfNotFound: true);
+            // ResonanceWheelUI_sub1
+            m_ResonanceWheelUI_sub1 = asset.FindActionMap("ResonanceWheelUI_sub1", throwIfNotFound: true);
+            m_ResonanceWheelUI_sub1_Expel = m_ResonanceWheelUI_sub1.FindAction("Expel", throwIfNotFound: true);
+            m_ResonanceWheelUI_sub1_Receive = m_ResonanceWheelUI_sub1.FindAction("Receive", throwIfNotFound: true);
+            // ResonanceWheelUI_sub2
+            m_ResonanceWheelUI_sub2 = asset.FindActionMap("ResonanceWheelUI_sub2", throwIfNotFound: true);
+            m_ResonanceWheelUI_sub2_LastTerm = m_ResonanceWheelUI_sub2.FindAction("LastTerm", throwIfNotFound: true);
+            m_ResonanceWheelUI_sub2_NextTerm = m_ResonanceWheelUI_sub2.FindAction("NextTerm", throwIfNotFound: true);
+            m_ResonanceWheelUI_sub2_NextGrid = m_ResonanceWheelUI_sub2.FindAction("NextGrid", throwIfNotFound: true);
+            m_ResonanceWheelUI_sub2_Confirm = m_ResonanceWheelUI_sub2.FindAction("Confirm", throwIfNotFound: true);
+            // BeastPanel
+            m_BeastPanel = asset.FindActionMap("BeastPanel", throwIfNotFound: true);
+            m_BeastPanel_SwitchBeast = m_BeastPanel.FindAction("SwitchBeast", throwIfNotFound: true);
+            m_BeastPanel_Expel = m_BeastPanel.FindAction("Expel", throwIfNotFound: true);
+            m_BeastPanel_Confirm = m_BeastPanel.FindAction("Confirm", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -1088,6 +2359,7 @@ namespace ProjectOC.Input
         private readonly InputAction m_Player_MouseX;
         private readonly InputAction m_Player_MouseY;
         private readonly InputAction m_Player_OpenBotUI;
+        private readonly InputAction m_Player_OpenBeastPanel;
         public struct PlayerActions
         {
             private @PlayerInput m_Wrapper;
@@ -1099,6 +2371,7 @@ namespace ProjectOC.Input
             public InputAction @MouseX => m_Wrapper.m_Player_MouseX;
             public InputAction @MouseY => m_Wrapper.m_Player_MouseY;
             public InputAction @OpenBotUI => m_Wrapper.m_Player_OpenBotUI;
+            public InputAction @OpenBeastPanel => m_Wrapper.m_Player_OpenBeastPanel;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1129,6 +2402,9 @@ namespace ProjectOC.Input
                 @OpenBotUI.started += instance.OnOpenBotUI;
                 @OpenBotUI.performed += instance.OnOpenBotUI;
                 @OpenBotUI.canceled += instance.OnOpenBotUI;
+                @OpenBeastPanel.started += instance.OnOpenBeastPanel;
+                @OpenBeastPanel.performed += instance.OnOpenBeastPanel;
+                @OpenBeastPanel.canceled += instance.OnOpenBeastPanel;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -1154,6 +2430,9 @@ namespace ProjectOC.Input
                 @OpenBotUI.started -= instance.OnOpenBotUI;
                 @OpenBotUI.performed -= instance.OnOpenBotUI;
                 @OpenBotUI.canceled -= instance.OnOpenBotUI;
+                @OpenBeastPanel.started -= instance.OnOpenBeastPanel;
+                @OpenBeastPanel.performed -= instance.OnOpenBeastPanel;
+                @OpenBeastPanel.canceled -= instance.OnOpenBeastPanel;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -1357,6 +2636,482 @@ namespace ProjectOC.Input
             }
         }
         public UIInventoryActions @UIInventory => new UIInventoryActions(this);
+
+        // UIStore
+        private readonly InputActionMap m_UIStore;
+        private List<IUIStoreActions> m_UIStoreActionsCallbackInterfaces = new List<IUIStoreActions>();
+        private readonly InputAction m_UIStore_NextPriority;
+        private readonly InputAction m_UIStore_ChangeIcon;
+        private readonly InputAction m_UIStore_Upgrade;
+        private readonly InputAction m_UIStore_Alter;
+        private readonly InputAction m_UIStore_ChangeStoreData;
+        private readonly InputAction m_UIStore_Remove1;
+        private readonly InputAction m_UIStore_Remove10;
+        private readonly InputAction m_UIStore_FastAdd;
+        public struct UIStoreActions
+        {
+            private @PlayerInput m_Wrapper;
+            public UIStoreActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @NextPriority => m_Wrapper.m_UIStore_NextPriority;
+            public InputAction @ChangeIcon => m_Wrapper.m_UIStore_ChangeIcon;
+            public InputAction @Upgrade => m_Wrapper.m_UIStore_Upgrade;
+            public InputAction @Alter => m_Wrapper.m_UIStore_Alter;
+            public InputAction @ChangeStoreData => m_Wrapper.m_UIStore_ChangeStoreData;
+            public InputAction @Remove1 => m_Wrapper.m_UIStore_Remove1;
+            public InputAction @Remove10 => m_Wrapper.m_UIStore_Remove10;
+            public InputAction @FastAdd => m_Wrapper.m_UIStore_FastAdd;
+            public InputActionMap Get() { return m_Wrapper.m_UIStore; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(UIStoreActions set) { return set.Get(); }
+            public void AddCallbacks(IUIStoreActions instance)
+            {
+                if (instance == null || m_Wrapper.m_UIStoreActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_UIStoreActionsCallbackInterfaces.Add(instance);
+                @NextPriority.started += instance.OnNextPriority;
+                @NextPriority.performed += instance.OnNextPriority;
+                @NextPriority.canceled += instance.OnNextPriority;
+                @ChangeIcon.started += instance.OnChangeIcon;
+                @ChangeIcon.performed += instance.OnChangeIcon;
+                @ChangeIcon.canceled += instance.OnChangeIcon;
+                @Upgrade.started += instance.OnUpgrade;
+                @Upgrade.performed += instance.OnUpgrade;
+                @Upgrade.canceled += instance.OnUpgrade;
+                @Alter.started += instance.OnAlter;
+                @Alter.performed += instance.OnAlter;
+                @Alter.canceled += instance.OnAlter;
+                @ChangeStoreData.started += instance.OnChangeStoreData;
+                @ChangeStoreData.performed += instance.OnChangeStoreData;
+                @ChangeStoreData.canceled += instance.OnChangeStoreData;
+                @Remove1.started += instance.OnRemove1;
+                @Remove1.performed += instance.OnRemove1;
+                @Remove1.canceled += instance.OnRemove1;
+                @Remove10.started += instance.OnRemove10;
+                @Remove10.performed += instance.OnRemove10;
+                @Remove10.canceled += instance.OnRemove10;
+                @FastAdd.started += instance.OnFastAdd;
+                @FastAdd.performed += instance.OnFastAdd;
+                @FastAdd.canceled += instance.OnFastAdd;
+            }
+
+            private void UnregisterCallbacks(IUIStoreActions instance)
+            {
+                @NextPriority.started -= instance.OnNextPriority;
+                @NextPriority.performed -= instance.OnNextPriority;
+                @NextPriority.canceled -= instance.OnNextPriority;
+                @ChangeIcon.started -= instance.OnChangeIcon;
+                @ChangeIcon.performed -= instance.OnChangeIcon;
+                @ChangeIcon.canceled -= instance.OnChangeIcon;
+                @Upgrade.started -= instance.OnUpgrade;
+                @Upgrade.performed -= instance.OnUpgrade;
+                @Upgrade.canceled -= instance.OnUpgrade;
+                @Alter.started -= instance.OnAlter;
+                @Alter.performed -= instance.OnAlter;
+                @Alter.canceled -= instance.OnAlter;
+                @ChangeStoreData.started -= instance.OnChangeStoreData;
+                @ChangeStoreData.performed -= instance.OnChangeStoreData;
+                @ChangeStoreData.canceled -= instance.OnChangeStoreData;
+                @Remove1.started -= instance.OnRemove1;
+                @Remove1.performed -= instance.OnRemove1;
+                @Remove1.canceled -= instance.OnRemove1;
+                @Remove10.started -= instance.OnRemove10;
+                @Remove10.performed -= instance.OnRemove10;
+                @Remove10.canceled -= instance.OnRemove10;
+                @FastAdd.started -= instance.OnFastAdd;
+                @FastAdd.performed -= instance.OnFastAdd;
+                @FastAdd.canceled -= instance.OnFastAdd;
+            }
+
+            public void RemoveCallbacks(IUIStoreActions instance)
+            {
+                if (m_Wrapper.m_UIStoreActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IUIStoreActions instance)
+            {
+                foreach (var item in m_Wrapper.m_UIStoreActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_UIStoreActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public UIStoreActions @UIStore => new UIStoreActions(this);
+
+        // UIProNode
+        private readonly InputActionMap m_UIProNode;
+        private List<IUIProNodeActions> m_UIProNodeActionsCallbackInterfaces = new List<IUIProNodeActions>();
+        private readonly InputAction m_UIProNode_Upgrade;
+        private readonly InputAction m_UIProNode_NextPriority;
+        private readonly InputAction m_UIProNode_Remove1;
+        private readonly InputAction m_UIProNode_Remove10;
+        private readonly InputAction m_UIProNode_FastAdd;
+        private readonly InputAction m_UIProNode_ChangeWorker;
+        private readonly InputAction m_UIProNode_RemoveWorker;
+        private readonly InputAction m_UIProNode_AlterRawItem;
+        public struct UIProNodeActions
+        {
+            private @PlayerInput m_Wrapper;
+            public UIProNodeActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Upgrade => m_Wrapper.m_UIProNode_Upgrade;
+            public InputAction @NextPriority => m_Wrapper.m_UIProNode_NextPriority;
+            public InputAction @Remove1 => m_Wrapper.m_UIProNode_Remove1;
+            public InputAction @Remove10 => m_Wrapper.m_UIProNode_Remove10;
+            public InputAction @FastAdd => m_Wrapper.m_UIProNode_FastAdd;
+            public InputAction @ChangeWorker => m_Wrapper.m_UIProNode_ChangeWorker;
+            public InputAction @RemoveWorker => m_Wrapper.m_UIProNode_RemoveWorker;
+            public InputAction @AlterRawItem => m_Wrapper.m_UIProNode_AlterRawItem;
+            public InputActionMap Get() { return m_Wrapper.m_UIProNode; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(UIProNodeActions set) { return set.Get(); }
+            public void AddCallbacks(IUIProNodeActions instance)
+            {
+                if (instance == null || m_Wrapper.m_UIProNodeActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_UIProNodeActionsCallbackInterfaces.Add(instance);
+                @Upgrade.started += instance.OnUpgrade;
+                @Upgrade.performed += instance.OnUpgrade;
+                @Upgrade.canceled += instance.OnUpgrade;
+                @NextPriority.started += instance.OnNextPriority;
+                @NextPriority.performed += instance.OnNextPriority;
+                @NextPriority.canceled += instance.OnNextPriority;
+                @Remove1.started += instance.OnRemove1;
+                @Remove1.performed += instance.OnRemove1;
+                @Remove1.canceled += instance.OnRemove1;
+                @Remove10.started += instance.OnRemove10;
+                @Remove10.performed += instance.OnRemove10;
+                @Remove10.canceled += instance.OnRemove10;
+                @FastAdd.started += instance.OnFastAdd;
+                @FastAdd.performed += instance.OnFastAdd;
+                @FastAdd.canceled += instance.OnFastAdd;
+                @ChangeWorker.started += instance.OnChangeWorker;
+                @ChangeWorker.performed += instance.OnChangeWorker;
+                @ChangeWorker.canceled += instance.OnChangeWorker;
+                @RemoveWorker.started += instance.OnRemoveWorker;
+                @RemoveWorker.performed += instance.OnRemoveWorker;
+                @RemoveWorker.canceled += instance.OnRemoveWorker;
+                @AlterRawItem.started += instance.OnAlterRawItem;
+                @AlterRawItem.performed += instance.OnAlterRawItem;
+                @AlterRawItem.canceled += instance.OnAlterRawItem;
+            }
+
+            private void UnregisterCallbacks(IUIProNodeActions instance)
+            {
+                @Upgrade.started -= instance.OnUpgrade;
+                @Upgrade.performed -= instance.OnUpgrade;
+                @Upgrade.canceled -= instance.OnUpgrade;
+                @NextPriority.started -= instance.OnNextPriority;
+                @NextPriority.performed -= instance.OnNextPriority;
+                @NextPriority.canceled -= instance.OnNextPriority;
+                @Remove1.started -= instance.OnRemove1;
+                @Remove1.performed -= instance.OnRemove1;
+                @Remove1.canceled -= instance.OnRemove1;
+                @Remove10.started -= instance.OnRemove10;
+                @Remove10.performed -= instance.OnRemove10;
+                @Remove10.canceled -= instance.OnRemove10;
+                @FastAdd.started -= instance.OnFastAdd;
+                @FastAdd.performed -= instance.OnFastAdd;
+                @FastAdd.canceled -= instance.OnFastAdd;
+                @ChangeWorker.started -= instance.OnChangeWorker;
+                @ChangeWorker.performed -= instance.OnChangeWorker;
+                @ChangeWorker.canceled -= instance.OnChangeWorker;
+                @RemoveWorker.started -= instance.OnRemoveWorker;
+                @RemoveWorker.performed -= instance.OnRemoveWorker;
+                @RemoveWorker.canceled -= instance.OnRemoveWorker;
+                @AlterRawItem.started -= instance.OnAlterRawItem;
+                @AlterRawItem.performed -= instance.OnAlterRawItem;
+                @AlterRawItem.canceled -= instance.OnAlterRawItem;
+            }
+
+            public void RemoveCallbacks(IUIProNodeActions instance)
+            {
+                if (m_Wrapper.m_UIProNodeActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IUIProNodeActions instance)
+            {
+                foreach (var item in m_Wrapper.m_UIProNodeActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_UIProNodeActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public UIProNodeActions @UIProNode => new UIProNodeActions(this);
+
+        // ResonanceWheelUI
+        private readonly InputActionMap m_ResonanceWheelUI;
+        private List<IResonanceWheelUIActions> m_ResonanceWheelUIActionsCallbackInterfaces = new List<IResonanceWheelUIActions>();
+        private readonly InputAction m_ResonanceWheelUI_NextTerm;
+        private readonly InputAction m_ResonanceWheelUI_LastTerm;
+        private readonly InputAction m_ResonanceWheelUI_NextGrid;
+        private readonly InputAction m_ResonanceWheelUI_SwitchTarget;
+        private readonly InputAction m_ResonanceWheelUI_StartResonance;
+        private readonly InputAction m_ResonanceWheelUI_StopResonance;
+        public struct ResonanceWheelUIActions
+        {
+            private @PlayerInput m_Wrapper;
+            public ResonanceWheelUIActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @NextTerm => m_Wrapper.m_ResonanceWheelUI_NextTerm;
+            public InputAction @LastTerm => m_Wrapper.m_ResonanceWheelUI_LastTerm;
+            public InputAction @NextGrid => m_Wrapper.m_ResonanceWheelUI_NextGrid;
+            public InputAction @SwitchTarget => m_Wrapper.m_ResonanceWheelUI_SwitchTarget;
+            public InputAction @StartResonance => m_Wrapper.m_ResonanceWheelUI_StartResonance;
+            public InputAction @StopResonance => m_Wrapper.m_ResonanceWheelUI_StopResonance;
+            public InputActionMap Get() { return m_Wrapper.m_ResonanceWheelUI; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(ResonanceWheelUIActions set) { return set.Get(); }
+            public void AddCallbacks(IResonanceWheelUIActions instance)
+            {
+                if (instance == null || m_Wrapper.m_ResonanceWheelUIActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_ResonanceWheelUIActionsCallbackInterfaces.Add(instance);
+                @NextTerm.started += instance.OnNextTerm;
+                @NextTerm.performed += instance.OnNextTerm;
+                @NextTerm.canceled += instance.OnNextTerm;
+                @LastTerm.started += instance.OnLastTerm;
+                @LastTerm.performed += instance.OnLastTerm;
+                @LastTerm.canceled += instance.OnLastTerm;
+                @NextGrid.started += instance.OnNextGrid;
+                @NextGrid.performed += instance.OnNextGrid;
+                @NextGrid.canceled += instance.OnNextGrid;
+                @SwitchTarget.started += instance.OnSwitchTarget;
+                @SwitchTarget.performed += instance.OnSwitchTarget;
+                @SwitchTarget.canceled += instance.OnSwitchTarget;
+                @StartResonance.started += instance.OnStartResonance;
+                @StartResonance.performed += instance.OnStartResonance;
+                @StartResonance.canceled += instance.OnStartResonance;
+                @StopResonance.started += instance.OnStopResonance;
+                @StopResonance.performed += instance.OnStopResonance;
+                @StopResonance.canceled += instance.OnStopResonance;
+            }
+
+            private void UnregisterCallbacks(IResonanceWheelUIActions instance)
+            {
+                @NextTerm.started -= instance.OnNextTerm;
+                @NextTerm.performed -= instance.OnNextTerm;
+                @NextTerm.canceled -= instance.OnNextTerm;
+                @LastTerm.started -= instance.OnLastTerm;
+                @LastTerm.performed -= instance.OnLastTerm;
+                @LastTerm.canceled -= instance.OnLastTerm;
+                @NextGrid.started -= instance.OnNextGrid;
+                @NextGrid.performed -= instance.OnNextGrid;
+                @NextGrid.canceled -= instance.OnNextGrid;
+                @SwitchTarget.started -= instance.OnSwitchTarget;
+                @SwitchTarget.performed -= instance.OnSwitchTarget;
+                @SwitchTarget.canceled -= instance.OnSwitchTarget;
+                @StartResonance.started -= instance.OnStartResonance;
+                @StartResonance.performed -= instance.OnStartResonance;
+                @StartResonance.canceled -= instance.OnStartResonance;
+                @StopResonance.started -= instance.OnStopResonance;
+                @StopResonance.performed -= instance.OnStopResonance;
+                @StopResonance.canceled -= instance.OnStopResonance;
+            }
+
+            public void RemoveCallbacks(IResonanceWheelUIActions instance)
+            {
+                if (m_Wrapper.m_ResonanceWheelUIActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IResonanceWheelUIActions instance)
+            {
+                foreach (var item in m_Wrapper.m_ResonanceWheelUIActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_ResonanceWheelUIActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public ResonanceWheelUIActions @ResonanceWheelUI => new ResonanceWheelUIActions(this);
+
+        // ResonanceWheelUI_sub1
+        private readonly InputActionMap m_ResonanceWheelUI_sub1;
+        private List<IResonanceWheelUI_sub1Actions> m_ResonanceWheelUI_sub1ActionsCallbackInterfaces = new List<IResonanceWheelUI_sub1Actions>();
+        private readonly InputAction m_ResonanceWheelUI_sub1_Expel;
+        private readonly InputAction m_ResonanceWheelUI_sub1_Receive;
+        public struct ResonanceWheelUI_sub1Actions
+        {
+            private @PlayerInput m_Wrapper;
+            public ResonanceWheelUI_sub1Actions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Expel => m_Wrapper.m_ResonanceWheelUI_sub1_Expel;
+            public InputAction @Receive => m_Wrapper.m_ResonanceWheelUI_sub1_Receive;
+            public InputActionMap Get() { return m_Wrapper.m_ResonanceWheelUI_sub1; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(ResonanceWheelUI_sub1Actions set) { return set.Get(); }
+            public void AddCallbacks(IResonanceWheelUI_sub1Actions instance)
+            {
+                if (instance == null || m_Wrapper.m_ResonanceWheelUI_sub1ActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_ResonanceWheelUI_sub1ActionsCallbackInterfaces.Add(instance);
+                @Expel.started += instance.OnExpel;
+                @Expel.performed += instance.OnExpel;
+                @Expel.canceled += instance.OnExpel;
+                @Receive.started += instance.OnReceive;
+                @Receive.performed += instance.OnReceive;
+                @Receive.canceled += instance.OnReceive;
+            }
+
+            private void UnregisterCallbacks(IResonanceWheelUI_sub1Actions instance)
+            {
+                @Expel.started -= instance.OnExpel;
+                @Expel.performed -= instance.OnExpel;
+                @Expel.canceled -= instance.OnExpel;
+                @Receive.started -= instance.OnReceive;
+                @Receive.performed -= instance.OnReceive;
+                @Receive.canceled -= instance.OnReceive;
+            }
+
+            public void RemoveCallbacks(IResonanceWheelUI_sub1Actions instance)
+            {
+                if (m_Wrapper.m_ResonanceWheelUI_sub1ActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IResonanceWheelUI_sub1Actions instance)
+            {
+                foreach (var item in m_Wrapper.m_ResonanceWheelUI_sub1ActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_ResonanceWheelUI_sub1ActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public ResonanceWheelUI_sub1Actions @ResonanceWheelUI_sub1 => new ResonanceWheelUI_sub1Actions(this);
+
+        // ResonanceWheelUI_sub2
+        private readonly InputActionMap m_ResonanceWheelUI_sub2;
+        private List<IResonanceWheelUI_sub2Actions> m_ResonanceWheelUI_sub2ActionsCallbackInterfaces = new List<IResonanceWheelUI_sub2Actions>();
+        private readonly InputAction m_ResonanceWheelUI_sub2_LastTerm;
+        private readonly InputAction m_ResonanceWheelUI_sub2_NextTerm;
+        private readonly InputAction m_ResonanceWheelUI_sub2_NextGrid;
+        private readonly InputAction m_ResonanceWheelUI_sub2_Confirm;
+        public struct ResonanceWheelUI_sub2Actions
+        {
+            private @PlayerInput m_Wrapper;
+            public ResonanceWheelUI_sub2Actions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @LastTerm => m_Wrapper.m_ResonanceWheelUI_sub2_LastTerm;
+            public InputAction @NextTerm => m_Wrapper.m_ResonanceWheelUI_sub2_NextTerm;
+            public InputAction @NextGrid => m_Wrapper.m_ResonanceWheelUI_sub2_NextGrid;
+            public InputAction @Confirm => m_Wrapper.m_ResonanceWheelUI_sub2_Confirm;
+            public InputActionMap Get() { return m_Wrapper.m_ResonanceWheelUI_sub2; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(ResonanceWheelUI_sub2Actions set) { return set.Get(); }
+            public void AddCallbacks(IResonanceWheelUI_sub2Actions instance)
+            {
+                if (instance == null || m_Wrapper.m_ResonanceWheelUI_sub2ActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_ResonanceWheelUI_sub2ActionsCallbackInterfaces.Add(instance);
+                @LastTerm.started += instance.OnLastTerm;
+                @LastTerm.performed += instance.OnLastTerm;
+                @LastTerm.canceled += instance.OnLastTerm;
+                @NextTerm.started += instance.OnNextTerm;
+                @NextTerm.performed += instance.OnNextTerm;
+                @NextTerm.canceled += instance.OnNextTerm;
+                @NextGrid.started += instance.OnNextGrid;
+                @NextGrid.performed += instance.OnNextGrid;
+                @NextGrid.canceled += instance.OnNextGrid;
+                @Confirm.started += instance.OnConfirm;
+                @Confirm.performed += instance.OnConfirm;
+                @Confirm.canceled += instance.OnConfirm;
+            }
+
+            private void UnregisterCallbacks(IResonanceWheelUI_sub2Actions instance)
+            {
+                @LastTerm.started -= instance.OnLastTerm;
+                @LastTerm.performed -= instance.OnLastTerm;
+                @LastTerm.canceled -= instance.OnLastTerm;
+                @NextTerm.started -= instance.OnNextTerm;
+                @NextTerm.performed -= instance.OnNextTerm;
+                @NextTerm.canceled -= instance.OnNextTerm;
+                @NextGrid.started -= instance.OnNextGrid;
+                @NextGrid.performed -= instance.OnNextGrid;
+                @NextGrid.canceled -= instance.OnNextGrid;
+                @Confirm.started -= instance.OnConfirm;
+                @Confirm.performed -= instance.OnConfirm;
+                @Confirm.canceled -= instance.OnConfirm;
+            }
+
+            public void RemoveCallbacks(IResonanceWheelUI_sub2Actions instance)
+            {
+                if (m_Wrapper.m_ResonanceWheelUI_sub2ActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IResonanceWheelUI_sub2Actions instance)
+            {
+                foreach (var item in m_Wrapper.m_ResonanceWheelUI_sub2ActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_ResonanceWheelUI_sub2ActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public ResonanceWheelUI_sub2Actions @ResonanceWheelUI_sub2 => new ResonanceWheelUI_sub2Actions(this);
+
+        // BeastPanel
+        private readonly InputActionMap m_BeastPanel;
+        private List<IBeastPanelActions> m_BeastPanelActionsCallbackInterfaces = new List<IBeastPanelActions>();
+        private readonly InputAction m_BeastPanel_SwitchBeast;
+        private readonly InputAction m_BeastPanel_Expel;
+        private readonly InputAction m_BeastPanel_Confirm;
+        public struct BeastPanelActions
+        {
+            private @PlayerInput m_Wrapper;
+            public BeastPanelActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @SwitchBeast => m_Wrapper.m_BeastPanel_SwitchBeast;
+            public InputAction @Expel => m_Wrapper.m_BeastPanel_Expel;
+            public InputAction @Confirm => m_Wrapper.m_BeastPanel_Confirm;
+            public InputActionMap Get() { return m_Wrapper.m_BeastPanel; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(BeastPanelActions set) { return set.Get(); }
+            public void AddCallbacks(IBeastPanelActions instance)
+            {
+                if (instance == null || m_Wrapper.m_BeastPanelActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_BeastPanelActionsCallbackInterfaces.Add(instance);
+                @SwitchBeast.started += instance.OnSwitchBeast;
+                @SwitchBeast.performed += instance.OnSwitchBeast;
+                @SwitchBeast.canceled += instance.OnSwitchBeast;
+                @Expel.started += instance.OnExpel;
+                @Expel.performed += instance.OnExpel;
+                @Expel.canceled += instance.OnExpel;
+                @Confirm.started += instance.OnConfirm;
+                @Confirm.performed += instance.OnConfirm;
+                @Confirm.canceled += instance.OnConfirm;
+            }
+
+            private void UnregisterCallbacks(IBeastPanelActions instance)
+            {
+                @SwitchBeast.started -= instance.OnSwitchBeast;
+                @SwitchBeast.performed -= instance.OnSwitchBeast;
+                @SwitchBeast.canceled -= instance.OnSwitchBeast;
+                @Expel.started -= instance.OnExpel;
+                @Expel.performed -= instance.OnExpel;
+                @Expel.canceled -= instance.OnExpel;
+                @Confirm.started -= instance.OnConfirm;
+                @Confirm.performed -= instance.OnConfirm;
+                @Confirm.canceled -= instance.OnConfirm;
+            }
+
+            public void RemoveCallbacks(IBeastPanelActions instance)
+            {
+                if (m_Wrapper.m_BeastPanelActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IBeastPanelActions instance)
+            {
+                foreach (var item in m_Wrapper.m_BeastPanelActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_BeastPanelActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public BeastPanelActions @BeastPanel => new BeastPanelActions(this);
         public interface IPlayerActions
         {
             void OnMove(InputAction.CallbackContext context);
@@ -1366,6 +3121,7 @@ namespace ProjectOC.Input
             void OnMouseX(InputAction.CallbackContext context);
             void OnMouseY(InputAction.CallbackContext context);
             void OnOpenBotUI(InputAction.CallbackContext context);
+            void OnOpenBeastPanel(InputAction.CallbackContext context);
         }
         public interface ITechTreeActions
         {
@@ -1384,6 +3140,55 @@ namespace ProjectOC.Input
             void OnAlterItem(InputAction.CallbackContext context);
             void OnNextTerm(InputAction.CallbackContext context);
             void OnLastTerm(InputAction.CallbackContext context);
+        }
+        public interface IUIStoreActions
+        {
+            void OnNextPriority(InputAction.CallbackContext context);
+            void OnChangeIcon(InputAction.CallbackContext context);
+            void OnUpgrade(InputAction.CallbackContext context);
+            void OnAlter(InputAction.CallbackContext context);
+            void OnChangeStoreData(InputAction.CallbackContext context);
+            void OnRemove1(InputAction.CallbackContext context);
+            void OnRemove10(InputAction.CallbackContext context);
+            void OnFastAdd(InputAction.CallbackContext context);
+        }
+        public interface IUIProNodeActions
+        {
+            void OnUpgrade(InputAction.CallbackContext context);
+            void OnNextPriority(InputAction.CallbackContext context);
+            void OnRemove1(InputAction.CallbackContext context);
+            void OnRemove10(InputAction.CallbackContext context);
+            void OnFastAdd(InputAction.CallbackContext context);
+            void OnChangeWorker(InputAction.CallbackContext context);
+            void OnRemoveWorker(InputAction.CallbackContext context);
+            void OnAlterRawItem(InputAction.CallbackContext context);
+        }
+        public interface IResonanceWheelUIActions
+        {
+            void OnNextTerm(InputAction.CallbackContext context);
+            void OnLastTerm(InputAction.CallbackContext context);
+            void OnNextGrid(InputAction.CallbackContext context);
+            void OnSwitchTarget(InputAction.CallbackContext context);
+            void OnStartResonance(InputAction.CallbackContext context);
+            void OnStopResonance(InputAction.CallbackContext context);
+        }
+        public interface IResonanceWheelUI_sub1Actions
+        {
+            void OnExpel(InputAction.CallbackContext context);
+            void OnReceive(InputAction.CallbackContext context);
+        }
+        public interface IResonanceWheelUI_sub2Actions
+        {
+            void OnLastTerm(InputAction.CallbackContext context);
+            void OnNextTerm(InputAction.CallbackContext context);
+            void OnNextGrid(InputAction.CallbackContext context);
+            void OnConfirm(InputAction.CallbackContext context);
+        }
+        public interface IBeastPanelActions
+        {
+            void OnSwitchBeast(InputAction.CallbackContext context);
+            void OnExpel(InputAction.CallbackContext context);
+            void OnConfirm(InputAction.CallbackContext context);
         }
     }
 }

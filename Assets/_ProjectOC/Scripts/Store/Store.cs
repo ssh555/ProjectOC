@@ -1,10 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ML.Engine.BuildingSystem;
 using ML.Engine.InventorySystem;
+using ML.Engine.InventorySystem.CompositeSystem;
 using ProjectOC.MissionNS;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using static ML.Engine.InventorySystem.CompositeSystem.CompositeManager;
 
 namespace ProjectOC.StoreNS
 {
@@ -12,7 +15,7 @@ namespace ProjectOC.StoreNS
     /// 仓库
     /// </summary>
     [System.Serializable]
-    public class Store: IMission, IInventory
+    public class Store: IMissionObj, IInventory
     {
         public WorldStore WorldStore;
 
@@ -51,11 +54,11 @@ namespace ProjectOC.StoreNS
                 return this.LevelStoreDataCapacity[this.Level];
             }
         }
-        
+
         /// <summary>
         /// 仓库等级
         /// </summary>
-        public int Level { get; private set; }
+        public int Level;
         
         /// <summary>
         /// 仓库最大等级
@@ -81,6 +84,7 @@ namespace ProjectOC.StoreNS
         /// 只要玩家正在与某一个仓库进行交互，就将此项设为true,生成任务时不能考虑此项为true的仓库
         /// </summary>
         public bool IsInteracting;
+        public event Action OnStoreDataChange;
 
         public Store(StoreType storeType)
         {
@@ -169,12 +173,17 @@ namespace ProjectOC.StoreNS
         /// <returns></returns>
         public bool ChangeStoreData(int index, string itemID)
         {
+            if (itemID == null)
+            {
+                itemID = "";
+            }
             if (0 <= index && index < this.StoreCapacity)
             {
                 StoreData data = this.StoreDatas[index];
                 if (data.Storage == 0 && data.StorageReserve == 0 && data.EmptyReserve == 0)
                 {
                     this.StoreDatas[index] = new StoreData(itemID, this.StoreDataCapacity);
+                    OnStoreDataChange?.Invoke();
                     return true;
                 }
             }
@@ -186,32 +195,35 @@ namespace ProjectOC.StoreNS
         /// </summary>
         public int ReserveEmptyToWorker(string itemID, int amount)
         {
-            foreach (StoreData data in this.StoreDatas)
-            {
-                if (data.ItemID != "" && data.ItemID == itemID)
-                {
-                    if (data.Empty >= amount)
-                    {
-                        data.EmptyReserve += amount;
-                        amount = 0;
-                        break;
-                    }
-                    else
-                    {
-                        amount -= data.Empty;
-                        data.EmptyReserve += data.Empty;
-                    }
-                }
-            }
-            if (amount > 0)
+            if (!string.IsNullOrEmpty(itemID))
             {
                 foreach (StoreData data in this.StoreDatas)
                 {
                     if (data.ItemID != "" && data.ItemID == itemID)
                     {
-                        data.EmptyReserve += amount;
-                        amount = 0;
-                        break;
+                        if (data.Empty >= amount)
+                        {
+                            data.EmptyReserve += amount;
+                            amount = 0;
+                            break;
+                        }
+                        else
+                        {
+                            amount -= data.Empty;
+                            data.EmptyReserve += data.Empty;
+                        }
+                    }
+                }
+                if (amount > 0)
+                {
+                    foreach (StoreData data in this.StoreDatas)
+                    {
+                        if (data.ItemID != "" && data.ItemID == itemID)
+                        {
+                            data.EmptyReserve += amount;
+                            amount = 0;
+                            break;
+                        }
                     }
                 }
             }
@@ -223,22 +235,25 @@ namespace ProjectOC.StoreNS
         /// </summary>
         public int ReserveStorageToWorker(string itemID, int amount)
         {
-            foreach (StoreData data in this.StoreDatas)
+            if (!string.IsNullOrEmpty(itemID))
             {
-                if (data.ItemID != "" && data.ItemID == itemID)
+                foreach (StoreData data in this.StoreDatas)
                 {
-                    if (data.Storage >= amount)
+                    if (data.ItemID != "" && data.ItemID == itemID)
                     {
-                        data.Storage -= amount;
-                        data.StorageReserve += amount;
-                        amount = 0;
-                        break;
-                    }
-                    else
-                    {
-                        data.StorageReserve += data.Storage;
-                        amount -= data.Storage;
-                        data.Storage = 0;
+                        if (data.Storage >= amount)
+                        {
+                            data.Storage -= amount;
+                            data.StorageReserve += amount;
+                            amount = 0;
+                            break;
+                        }
+                        else
+                        {
+                            data.StorageReserve += data.Storage;
+                            amount -= data.Storage;
+                            data.Storage = 0;
+                        }
                     }
                 }
             }
@@ -252,11 +267,14 @@ namespace ProjectOC.StoreNS
         /// <returns></returns>
         public bool IsStoreHaveItem(string itemID)
         {
-            foreach (StoreData data in this.StoreDatas)
+            if (!string.IsNullOrEmpty(itemID))
             {
-                if (data.ItemID == itemID)
+                foreach (StoreData data in this.StoreDatas)
                 {
-                    return true;
+                    if (data.ItemID == itemID)
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
@@ -287,11 +305,14 @@ namespace ProjectOC.StoreNS
         public int GetStoreStorageAll(string itemID)
         {
             int result = 0;
-            foreach (StoreData data in this.StoreDatas)
+            if (!string.IsNullOrEmpty(itemID))
             {
-                if (data.ItemID == itemID)
+                foreach (StoreData data in this.StoreDatas)
                 {
-                    result += data.StorageAll;
+                    if (data.ItemID == itemID)
+                    {
+                        result += data.StorageAll;
+                    }
                 }
             }
             return result;
@@ -305,11 +326,14 @@ namespace ProjectOC.StoreNS
         public int GetStoreStorage(string itemID)
         {
             int result = 0;
-            foreach (StoreData data in this.StoreDatas)
+            if (!string.IsNullOrEmpty(itemID))
             {
-                if (data.ItemID == itemID)
+                foreach (StoreData data in this.StoreDatas)
                 {
-                    result += data.Storage;
+                    if (data.ItemID == itemID)
+                    {
+                        result += data.Storage;
+                    }
                 }
             }
             return result;
@@ -318,11 +342,14 @@ namespace ProjectOC.StoreNS
         public int GetStoreStorageReserve(string itemID)
         {
             int result = 0;
-            foreach (StoreData data in this.StoreDatas)
+            if (!string.IsNullOrEmpty(itemID))
             {
-                if (data.ItemID == itemID)
+                foreach (StoreData data in this.StoreDatas)
                 {
-                    result += data.StorageReserve;
+                    if (data.ItemID == itemID)
+                    {
+                        result += data.StorageReserve;
+                    }
                 }
             }
             return result;
@@ -336,11 +363,14 @@ namespace ProjectOC.StoreNS
         public int GetStoreEmpty(string itemID)
         {
             int result = 0;
-            foreach (StoreData data in this.StoreDatas)
+            if (!string.IsNullOrEmpty(itemID))
             {
-                if (data.ItemID == itemID)
+                foreach (StoreData data in this.StoreDatas)
                 {
-                    result += data.Empty;
+                    if (data.ItemID == itemID)
+                    {
+                        result += data.Empty;
+                    }
                 }
             }
             return result;
@@ -349,33 +379,168 @@ namespace ProjectOC.StoreNS
         public int GetStoreEmptyReserve(string itemID)
         {
             int result = 0;
-            foreach (StoreData data in this.StoreDatas)
+            if (!string.IsNullOrEmpty(itemID))
             {
-                if (data.ItemID == itemID)
+                foreach (StoreData data in this.StoreDatas)
                 {
-                    result += data.EmptyReserve;
+                    if (data.ItemID == itemID)
+                    {
+                        result += data.EmptyReserve;
+                    }
                 }
             }
             return result;
         }
 
-        #region TODO
-        // TODO: 拆除。拆除仓库时，将所有物品传给玩家背包。
-        /// <summary>
-        /// 快捷存放，将玩家背包中可存放在该仓库的物品全部转移至仓库中；
-        /// 仓库空位不足时将其填满，剩余的留在背包中；
-        /// </summary>
-        public void FastAdd(Player.PlayerCharacter player)
+        #region UI接口
+        public void UIAdd(Player.PlayerCharacter player, StoreData storeData, int amount)
         {
-            
+            if (player != null && storeData != null && amount > 0)
+            {
+                if (ItemManager.Instance.IsValidItemID(storeData.ItemID) && storeData.Empty >= amount)
+                {
+                    if (player.Inventory.GetItemAllNum(storeData.ItemID) >= amount)
+                    {
+                        if (player.Inventory.RemoveItem(storeData.ItemID, amount))
+                        {
+                            storeData.Storage += amount;
+                        }
+                        else
+                        {
+                            //Debug.LogError("UIAdd Error");
+                        }
+                    }
+                }
+            }
+        }
+        public void UIRemove(Player.PlayerCharacter player, StoreData storeData, int amount)
+        {
+            if (player != null && storeData != null && amount > 0)
+            {
+                if (ItemManager.Instance.IsValidItemID(storeData.ItemID) && storeData.Storage >= amount)
+                {
+                    List<Item> items = ItemManager.Instance.SpawnItems(storeData.ItemID, amount);
+                    foreach (Item item in items)
+                    {
+                        int itemAmount = item.Amount;
+                        if (player.Inventory.AddItem(item))
+                        {
+                            storeData.Storage -= itemAmount;
+                        }
+                        else
+                        {
+                            //Debug.LogError("UIRemove Error");
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        public void UIFastAdd(Player.PlayerCharacter player, StoreData storeData)
+        {
+            if (player != null && storeData != null)
+            {
+                if (ItemManager.Instance.IsValidItemID(storeData.ItemID))
+                {
+                    int amount = player.Inventory.GetItemAllNum(storeData.ItemID);
+                    amount = amount >= storeData.Empty ? storeData.Empty : amount;
+                    if (player.Inventory.RemoveItem(storeData.ItemID, amount))
+                    {
+                        storeData.Storage += amount;
+                    }
+                    else
+                    {
+                        //Debug.LogError("UIFastAdd Error");
+                    }
+                }
+            }
+        }
+        public void UIFastRemove(Player.PlayerCharacter player, StoreData storeData)
+        {
+            if (player != null && storeData != null)
+            {
+                if (ItemManager.Instance.IsValidItemID(storeData.ItemID))
+                {
+                    int amount = storeData.Storage;
+                    List<Item> items = ItemManager.Instance.SpawnItems(storeData.ItemID, amount);
+                    foreach (Item item in items)
+                    {
+                        int itemAmount = item.Amount;
+                        if (player.Inventory.AddItem(item))
+                        {
+                            storeData.Storage -= itemAmount;
+                        }
+                        else
+                        {
+                            //Debug.LogError("UIFastRemove Error");
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        public List<Formula> GetUpgradeRaw()
+        {
+            List<Formula> result = new List<Formula>();
+            if (this.WorldStore != null)
+            {
+                string upgradeRawID = BuildingManager.Instance.GetUpgradeRaw(this.WorldStore.Classification.ToString().Replace('-', '_'));
+                Formula[] formulas = CompositeManager.Instance.GetCompositonFomula(upgradeRawID);
+                if (formulas != null)
+                {
+                    result.AddRange(formulas);
+                }
+            }
+            return result;
+        }
+        
+        public List<Formula> GetUpgradeRawCurrent(Player.PlayerCharacter player)
+        {
+            List<Formula> result = new List<Formula>();
+            if (this.WorldStore != null)
+            {
+                string upgradeRawID = BuildingManager.Instance.GetUpgradeRaw(this.WorldStore.Classification.ToString().Replace('-', '_'));
+                Formula[] formulas = CompositeManager.Instance.GetCompositonFomula(upgradeRawID);
+                if (formulas != null)
+                {
+                    foreach (Formula formula in formulas)
+                    {
+                        int num = player.Inventory.GetItemAllNum(formula.id);
+                        Formula newFormula = new Formula();
+                        newFormula.id = formula.id;
+                        newFormula.num = num;
+                        result.Add(newFormula);
+                    }
+                }
+            }
+            return result;
         }
 
-        /// <summary>
-        /// 快捷取出 背包空位不足时将其填满，剩余的留在仓库中。
-        /// </summary>
-        public void FastRemove(Player.PlayerCharacter player, string itemID, int amount)
+        public void Upgrade(Player.PlayerCharacter player)
         {
-            
+            if (this.WorldStore != null)
+            {
+                string upgradeRawID = BuildingManager.Instance.GetUpgradeRaw(this.WorldStore.Classification.ToString().Replace('-', '_'));
+                string upgradeID = BuildingManager.Instance.GetUpgrade(this.WorldStore.Classification.ToString().Replace('-', '_'));
+                string upgradeCID = BuildingManager.Instance.GetClassification(upgradeID);
+
+                if (!string.IsNullOrEmpty(upgradeRawID) 
+                    && !string.IsNullOrEmpty(upgradeCID)
+                    && BuildingManager.Instance.IsValidBPartID(upgradeCID) 
+                    && CompositeManager.Instance.OnlyCostResource(player.Inventory, upgradeRawID))
+                {
+                    if (BuildingManager.Instance.GetOneBPartInstance(upgradeCID) is WorldStore upgrade)
+                    {
+                        upgrade.InstanceID = this.WorldStore.InstanceID;
+                        upgrade.transform.position = this.WorldStore.transform.position;
+                        upgrade.transform.rotation = this.WorldStore.transform.rotation;
+                        UnityEngine.Object.Destroy(this.WorldStore.gameObject);
+                        this.WorldStore = upgrade;
+                        upgrade.Store = this;
+                        this.SetLevel(upgrade.Classification.Category4 - 1);
+                    }
+                }
+            }
         }
         #endregion
 
@@ -404,7 +569,7 @@ namespace ProjectOC.StoreNS
         public void RemoveMissionTranport(MissionTransport mission) {}
         public bool PutIn(string itemID, int amount)
         {
-            if (amount >= 0)
+            if (!string.IsNullOrEmpty(itemID) && amount >= 0)
             {
                 StoreData temp = null;
                 foreach (StoreData data in this.StoreDatas)
@@ -436,6 +601,7 @@ namespace ProjectOC.StoreNS
                     temp.EmptyReserve = 0;
                     amount = 0;
                 }
+                OnStoreDataChange?.Invoke();
                 return amount == 0;
             }
             return false;
@@ -445,7 +611,7 @@ namespace ProjectOC.StoreNS
         /// </summary>
         public int PutOut(string itemID, int amount)
         {
-            if (amount > 0)
+            if (!string.IsNullOrEmpty(itemID) && amount > 0)
             {
                 int result = amount;
                 foreach (StoreData data in this.StoreDatas)
@@ -465,6 +631,7 @@ namespace ProjectOC.StoreNS
                         }
                     }
                 }
+                OnStoreDataChange?.Invoke();
                 return amount - result;
             }
             return 0;
@@ -496,6 +663,7 @@ namespace ProjectOC.StoreNS
                     }
                 }
             }
+            OnStoreDataChange?.Invoke();
             return true;
         }
 
@@ -523,6 +691,7 @@ namespace ProjectOC.StoreNS
                     }
                 }
             }
+            OnStoreDataChange?.Invoke();
             return true;
         }
 
@@ -557,14 +726,15 @@ namespace ProjectOC.StoreNS
             result.Amount = newAmount;
             if (item.Amount != newAmount)
             {
-                Debug.LogError($"Item Amount Error ItemAmount: {result.Amount} Amount: {newAmount}");
+                //Debug.LogError($"Item Amount Error ItemAmount: {result.Amount} Amount: {newAmount}");
             }
+            OnStoreDataChange?.Invoke();
             return result;
         }
 
         public bool RemoveItem(string itemID, int amount)
         {
-            if (GetStoreStorage(itemID) < amount || amount < 0)
+            if (!string.IsNullOrEmpty(itemID) && GetStoreStorage(itemID) < amount || amount < 0)
             {
                 return false;
             }
@@ -585,6 +755,7 @@ namespace ProjectOC.StoreNS
                     }
                 }
             }
+            OnStoreDataChange?.Invoke();
             return true;
         }
 

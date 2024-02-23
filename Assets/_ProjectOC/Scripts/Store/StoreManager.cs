@@ -1,4 +1,3 @@
-using ML.Engine.Manager;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,24 +16,13 @@ namespace ProjectOC.StoreNS
         /// </summary>
         private Dictionary<string, WorldStore> WorldStoreDict = new Dictionary<string, WorldStore>();
 
-        /// <summary>
-        /// 是否是有效的仓库UID
-        /// </summary>
         public bool IsValidUID(string uid)
         {
-            return WorldStoreDict.ContainsKey(uid);
-        }
-
-        /// <summary>
-        /// 根据UID获取WorldStore
-        /// </summary>
-        public WorldStore GetWorldStore(string uid)
-        {
-            if (this.WorldStoreDict.ContainsKey(uid))
+            if (!string.IsNullOrEmpty(uid))
             {
-                return this.WorldStoreDict[uid];
+                return WorldStoreDict.ContainsKey(uid);
             }
-            return null;
+            return false;
         }
 
         /// <summary>
@@ -49,19 +37,22 @@ namespace ProjectOC.StoreNS
             // 从头到尾遍历仓库(跳过玩家正在交互的仓库)
             foreach (WorldStore worldStore in this.WorldStoreDict.Values)
             {
-                Store store = worldStore.Store;
-                if (store != null && !store.IsInteracting && store.IsStoreHaveItem(itemID))
+                if (worldStore != null)
                 {
-                    // 优先寻找第一个可以一次性存完的仓库
-                    // 若没有，则寻找第一个可以存入的，可溢出存入
-                    if (result == null)
+                    Store store = worldStore.Store;
+                    if (!store.IsInteracting && store.IsStoreHaveItem(itemID))
                     {
-                        result = store;
-                    }
-                    if (store.IsStoreHaveEmpty(itemID, amount))
-                    {
-                        result = store;
-                        break;
+                        // 优先寻找第一个可以一次性存完的仓库
+                        // 若没有，则寻找第一个可以存入的，可溢出存入
+                        if (result == null)
+                        {
+                            result = store;
+                        }
+                        if (store.IsStoreHaveEmpty(itemID, amount))
+                        {
+                            result = store;
+                            break;
+                        }
                     }
                 }
             }
@@ -77,24 +68,30 @@ namespace ProjectOC.StoreNS
         public Dictionary<Store, int> GetCanPutOutStore(string itemID, int amount)
         {
             Dictionary<Store, int> result = new Dictionary<Store, int>();
-            int resultAmount = 0;
-            // 从头到尾遍历仓库(跳过玩家正在交互的仓库)
-            foreach (WorldStore worldStore in this.WorldStoreDict.Values)
+            if (!string.IsNullOrEmpty(itemID) && amount > 0)
             {
-                Store store = worldStore.Store;
-                if (store != null && !store.IsInteracting && store.IsStoreHaveItem(itemID))
+                int resultAmount = 0;
+                // 从头到尾遍历仓库(跳过玩家正在交互的仓库)
+                foreach (WorldStore worldStore in this.WorldStoreDict.Values)
                 {
-                    int storeAmount = store.GetStoreStorage(itemID);
-                    if (resultAmount + storeAmount >= amount)
+                    if (worldStore != null)
                     {
-                        result.Add(store, amount - resultAmount);
-                        resultAmount = amount;
-                        break;
-                    }
-                    else
-                    {
-                        result.Add(store, storeAmount);
-                        resultAmount += storeAmount;
+                        Store store = worldStore.Store;
+                        if (!store.IsInteracting && store.IsStoreHaveItem(itemID))
+                        {
+                            int storeAmount = store.GetStoreStorage(itemID);
+                            if (resultAmount + storeAmount >= amount)
+                            {
+                                result.Add(store, amount - resultAmount);
+                                resultAmount = amount;
+                                break;
+                            }
+                            else
+                            {
+                                result.Add(store, storeAmount);
+                                resultAmount += storeAmount;
+                            }
+                        }
                     }
                 }
             }
@@ -109,38 +106,34 @@ namespace ProjectOC.StoreNS
             Store store = new Store(storeType);
             return store;
         }
-
-        public WorldStore SpawnWorldStore(Store store, Vector3 pos, Quaternion rot)
+        public void WorldStoreSetData(WorldStore worldStore, StoreType storeType, int level)
         {
-            if (store == null)
+            if (worldStore != null && level >= 0)
             {
-                return null;
+                if (!WorldStoreDict.ContainsKey(worldStore.InstanceID))
+                {
+                    WorldStoreDict.Add(worldStore.InstanceID, worldStore);
+                }
+                else
+                {
+                    WorldStoreDict[worldStore.InstanceID] = worldStore;
+                }
+                Store store = SpawnStore(storeType);
+                if (store != null)
+                {
+                    if (worldStore.Store != null)
+                    {
+                        worldStore.Store.WorldStore = null;
+                    }
+                    worldStore.Store = store;
+                    store.WorldStore = worldStore;
+                    store.SetLevel(level);
+                }
+                else
+                {
+                    //Debug.LogError($"StoreType {storeType} cannot create store");
+                }
             }
-            GameObject obj = GameObject.Instantiate(GetObject(), pos, rot);
-            WorldStore worldstore = obj.AddComponent<WorldStore>();
-            worldstore.SetStore(store);
-            WorldStoreDict.Add(store.UID, worldstore);
-            return worldstore;
-        }
-
-        public const string Texture2DPath = "ui/Store/texture2d";
-        public const string WorldObjPath = "prefabs/Store/WorldStore";
-        public Texture2D GetTexture2D()
-        {
-            return GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>("Store");
-        }
-        public Sprite GetSprite()
-        {
-            var tex = GetTexture2D();
-            if (tex == null)
-            {
-                return null;
-            }
-            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
-        }
-        public GameObject GetObject()
-        {
-            return GameManager.Instance.ABResourceManager.LoadLocalAB(WorldObjPath).LoadAsset<GameObject>("Store");
         }
     }
 }

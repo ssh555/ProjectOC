@@ -1,0 +1,31 @@
+ManifestFileVersion: 0
+CRC: 1762897781
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 76f0577b1c80d5fcac7383ea5c51db75
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5ad585dd02dfb5016c0dad519eab8f49
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 76f0577b1c80d5fcac7383ea5c51db75
+HashAppended: 0
+ClassTypes:
+- Class: 49
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/_ProjectOC/OCResources/Json/TableData/ProNode.json
+- Assets/_ProjectOC/OCResources/Json/TableData/Skill.json
+- Assets/_ProjectOC/OCResources/Json/TableData/Effect.json
+- Assets/_ProjectOC/OCResources/Json/TableData/Building.json
+- Assets/_ProjectOC/OCResources/Json/TableData/BuildingUpgrade.json
+- Assets/_ML/MLResources/Json/TableData/LevelTableData.json
+- Assets/_ProjectOC/OCResources/Json/TableData/Item.json
+- Assets/_ProjectOC/OCResources/Json/TableData/Composition.json
+- Assets/_ProjectOC/OCResources/Json/TableData/Recipe.json
+- Assets/_ProjectOC/OCResources/Json/TableData/TechPoint.json
+- Assets/_ProjectOC/OCResources/Json/TableData/Feature.json
+- Assets/_ProjectOC/OCResources/Json/TableData/WorkerEcho.json
+Dependencies: []

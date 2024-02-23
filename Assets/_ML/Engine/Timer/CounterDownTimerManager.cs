@@ -61,15 +61,23 @@ namespace ML.Engine.Timer
 
         public void AddTimer(CounterDownTimer countDownTimer, bool isFixed)
         {
+            if(this.destroyCounterDownTimers.Contains(countDownTimer))
+            {
+                destroyCounterDownTimers.Remove(countDownTimer);
+            }
             if (isFixed)
             {
                 if(!this.fixedCounterDownTimers.Contains(countDownTimer))
+                {
                     this.fixedCounterDownTimers.Add(countDownTimer);
+                }
             }
             else
             {
                 if (!this.updateCounterDownTimers.Contains(countDownTimer))
+                {
                     this.updateCounterDownTimers.Add(countDownTimer);
+                }
             }
         }
 

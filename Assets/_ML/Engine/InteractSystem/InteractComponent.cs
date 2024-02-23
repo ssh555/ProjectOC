@@ -138,7 +138,7 @@ namespace ML.Engine.InteractSystem
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextContent.KeyTip[]>("Binary/TextContent/InteractSystem", "InteractKeyTip", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextContent.KeyTip[]>("Json/TextContent/InteractSystem", "InteractKeyTip", (datas) =>
                 {
                     foreach (var tip in datas)
                     {
@@ -156,7 +156,7 @@ namespace ML.Engine.InteractSystem
             var abmgr = Manager.GameManager.Instance.ABResourceManager;
 
             // ‘ÿ»Î keyTipPrefab
-            var crequest = abmgr.LoadLocalABAsync("UI/InteractSystem", null, out var ab);
+            var crequest = abmgr.LoadLocalABAsync("UI/InteractSystem/Prefabs", null, out var ab);
             yield return crequest;
             if (crequest != null)
             {

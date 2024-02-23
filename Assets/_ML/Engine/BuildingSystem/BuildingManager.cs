@@ -4,11 +4,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using ML.Engine.BuildingSystem.BuildingPart;
 using System.Linq;
-using UnityEngine.Windows;
 using System;
+using UnityEditor;
 
 namespace ML.Engine.BuildingSystem
 {
+    [System.Serializable]
+    public struct BuildingTableData
+    {
+        public string id;
+        public TextContent.TextContent name;
+        public string icon;
+        public string category1;
+        public string category2;
+        public string category3;
+        public string category4;
+        public string actorID;
+        public List<InventorySystem.CompositeSystem.Formula> raw;
+        public string upgrade;
+        public string upgradeRaw;
+
+        public string GetClassificationString()
+        {
+            return $"{category1}_{category2}_{category3}_{category4}";
+        }
+
+        public BuildingPartClassification GetClassification()
+        {
+            return new BuildingPartClassification(GetClassificationString());
+        }
+    }
+    [System.Serializable]
+    public struct BuildingUpgradeTableData
+    {
+        public string id;
+        public TextContent.TextContent name;
+        public List<InventorySystem.CompositeSystem.Formula> upgradeRaw;
+    }
     [LabelText("建造模式")]
     public enum BuildingMode
     {
@@ -157,9 +189,14 @@ namespace ML.Engine.BuildingSystem
         {
             get
             {
-                if(instance == null)
+                if(instance == null && Manager.GameManager.Instance != null)
                 {
                     instance = Manager.GameManager.Instance.GetLocalManager<BuildingManager>();
+                    if(instance != null)
+                    {
+                        instance.LoadTableData();
+                    }
+
                 }
                 return instance;
             }
@@ -399,8 +436,8 @@ namespace ML.Engine.BuildingSystem
             }
             return BPart;
         }
-        
-        
+
+
         public BuildingCategory1[] GetRegisteredCategory()
         {
             return this.BPartClassificationOnStyle.Keys.ToArray();
@@ -683,7 +720,7 @@ namespace ML.Engine.BuildingSystem
         #region Material
         // to-do :to-change
         [SerializeField]
-        private const string _ABMatPath = "materials";
+        private const string _ABMatPath = "materials/other";
         [SerializeField]
         private const string _ABMatName = "Transparent";
 
@@ -698,11 +735,11 @@ namespace ML.Engine.BuildingSystem
             {
                 if(this._buildingMaterial == null)
                 {
+                    bool tempiffull = false;
 #if UNITY_EDITOR
-                    _buildingMaterial = Manager.GameManager.Instance.ABResourceManager.LoadAsset<Material>(_ABMatPath, _ABMatName, true);
-#else
-                    _buildingMaterial = Manager.GameManager.Instance.ABResourceManager.LoadAsset<Material>(_ABMatPath, _ABMatName);
+                    tempiffull = true;
 #endif
+                    _buildingMaterial = Manager.GameManager.Instance.ABResourceManager.LoadAsset<Material>(_ABMatPath, _ABMatName, tempiffull);
                 }
                 return this._buildingMaterial;
             }
@@ -818,7 +855,89 @@ namespace ML.Engine.BuildingSystem
 
         #endregion
 
+        #region 读表
+        public const string Tex2DABPath = "UI/BuildingSystem/Texture2D/BuildIcon";
+        // Materials/Character/Player
 
+        public Dictionary<string, BuildingTableData> BPartTableDictOnID = new Dictionary<string, BuildingTableData>();
+        public Dictionary<string, BuildingTableData> BPartTableDictOnClass = new Dictionary<string, BuildingTableData>();
+        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
+
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]> ABJAProcessor;
+
+        public void LoadTableData()
+        {
+            if (ABJAProcessor == null)
+            {
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]>("Json/TableData", "Building", (datas) =>
+                {
+                    foreach (var data in datas)
+                    {
+                        BPartTableDictOnID.Add(data.id, data);
+                        BPartTableDictOnClass.Add(data.GetClassificationString(), data);
+                    }
+                }, null, "建筑表数据");
+                ABJAProcessor.StartLoadJsonAssetData();
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="CID">4级分类ID</param>
+        /// <returns></returns>
+        public string GetActorID(string CID)
+        {
+            if (BPartTableDictOnClass.ContainsKey(CID))
+            {
+                return BPartTableDictOnClass[CID].actorID;
+            }
+            return null;
+        }
+        public string GetUpgradeRaw(string CID)
+        {
+            if (BPartTableDictOnClass.ContainsKey(CID))
+            {
+                return BPartTableDictOnClass[CID].upgradeRaw;
+            }
+            return null;
+        }
+
+        public string GetUpgrade(string CID)
+        {
+            if (BPartTableDictOnClass.ContainsKey(CID))
+            {
+                return BPartTableDictOnClass[CID].upgrade;
+            }
+            return null;
+        }
+
+        public string GetClassification(string ID)
+        {
+            if (!string.IsNullOrEmpty(ID) && BPartTableDictOnID.ContainsKey(ID))
+            {
+                return BPartTableDictOnID[ID].GetClassificationString();
+            }
+            return null;
+        }
+        #endregion
+
+
+        #region Gizmos
+        [System.Serializable]
+        public struct DrawGizmos
+        {
+            public bool IsDraw;
+            public Color color;
+        }
+        [LabelText("绘制Socket")]
+        public DrawGizmos DrawSocket;
+        [LabelText("绘制ActiveSocket")]
+        public DrawGizmos DrawActiveSocket;
+        [LabelText("绘制Area小格子")]
+        public DrawGizmos DrawAreaBaseGrid;
+        [LabelText("绘制Area大格子")]
+        public DrawGizmos DrawAreaBoundGrid;
+        #endregion
     }
 
 }

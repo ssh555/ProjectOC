@@ -4,6 +4,8 @@ using System.Linq;
 using UnityEngine;
 using System;
 using ML.Engine.Manager;
+using ML.Engine.InventorySystem.CompositeSystem;
+using ML.Engine.InventorySystem;
 
 namespace ProjectOC.WorkerNS
 {
@@ -26,6 +28,12 @@ namespace ProjectOC.WorkerNS
             return this.Workers.ToList();
         }
 
+        public bool DeleteWorker(Worker worker)
+        {
+            return this.Workers.Remove(worker);
+        }
+
+
         /// <summary>
         /// 获取能执行搬运任务的刁民
         /// </summary>
@@ -34,7 +42,7 @@ namespace ProjectOC.WorkerNS
             Worker result = null;
             foreach (Worker worker in this.Workers)
             {
-                if (worker != null && worker.Status == Status.Fishing && worker.ProNode == null)
+                if (worker != null && worker.Status == Status.Fishing && worker.ProNode == null && worker.Transport == null)
                 {
                     result = worker;
                     break;
@@ -43,24 +51,53 @@ namespace ProjectOC.WorkerNS
             return result;
         }
 
-        public void RemoveWorker(Worker worker)
+        public bool OnlyCostResource(IInventory inventory, string workerID)
         {
-            this.Workers.Remove(worker);
+            return CompositeManager.Instance.OnlyCostResource(inventory, workerID);
         }
-
-        /// <summary>
-        /// 创建新的刁民
-        /// </summary>
         public Worker SpawnWorker(Vector3 pos, Quaternion rot)
         {
             GameObject obj = GameObject.Instantiate(GetObject(), pos, rot);
-            Worker worker = obj.AddComponent<Worker>();
+            Worker worker = obj.GetComponent<Worker>();
+            if (worker == null)
+            {
+                worker = obj.AddComponent<Worker>();
+            }
             Workers.Add(worker);
             return worker;
         }
+        public Worker SpawnWorker(Vector3 pos, Quaternion rot, string workerID)
+        {
+            GameObject obj = GameObject.Instantiate(GetObject(), pos, rot);
+            Worker worker = obj.GetComponent<Worker>();
+            if (worker == null)
+            {
+                worker = obj.AddComponent<Worker>();
+            }
+            Workers.Add(worker);
+            return worker;
+        }
+        public Worker SpawnWorker(Vector3 pos, Quaternion rot, IInventory inventory, string workerID)
+        {
+            if (CompositeManager.Instance.OnlyCostResource(inventory, workerID))
+            {
+                GameObject obj = GameObject.Instantiate(GetObject(), pos, rot);
+                Worker worker = obj.GetComponent<Worker>();
+                if (worker == null)
+                {
+                    worker = obj.AddComponent<Worker>();
+                }
+                Workers.Add(worker);
+                return worker;
+            }
+            else
+            {
+                return null;
+            }
+        }
 
         public const string Texture2DPath = "ui/Worker/texture2d";
-        public const string WorldObjPath = "prefabs/Worker/WorldWorker";
+        public const string WorldObjPath = "prefabs/Character/Worker";
         public Texture2D GetTexture2D()
         {
             return GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>("Worker");

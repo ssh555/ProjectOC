@@ -1,5 +1,4 @@
 using ML.Engine.FSM;
-using ProjectOC.MissionNS;
 using ProjectOC.ProNodeNS;
 using UnityEngine;
 
@@ -14,57 +13,19 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// 状态机所属刁民
         /// </summary>
-        public Worker Worker 
-        {
-            get 
-            {
-                if (Worker == null)
-                {
-                    Debug.LogError("Worker is Null");
-                }
-                return Worker;
-            }
-            set 
-            { 
-                Worker = value; 
-            }
-        }
-        /// <summary>
-        /// 值班节点
-        /// </summary>
-        public ProNode ProNode { get { return this.Worker.ProNode; } }
-        /// <summary>
-        /// 搬运任务
-        /// </summary>
-        public Transport Transport { get { return this.Worker.Transport; } }
-        /// <summary>
-        /// 当前时段的安排
-        /// </summary>
-        public TimeStatus CurTimeFrameStatus { get { return this.Worker.CurTimeFrameStatus; } }
+        public Worker Worker;
         /// <summary>
         /// 体力是否高于工作阈值
         /// </summary>
-        public bool IsAPAboveWorkThreshold
-        { 
-            get
-            {
-                return this.Worker.APCurrent >= this.Worker.APWorkThreshold;
-            }
-        }
+        public bool IsAPAboveWorkThreshold { get => Worker.APCurrent >= Worker.APWorkThreshold; }
         /// <summary>
         /// 体力是否高于休息阈值
         /// </summary>
-        public bool IsAPAboveRelaxThreshold
-        {
-            get
-            {
-                if (this.Worker != null)
-                {
-                    return this.Worker.APCurrent >= this.Worker.APRelaxThreshold;
-                }
-                return false;
-            }
-        }
+        public bool IsAPAboveRelaxThreshold { get => Worker.APCurrent >= Worker.APRelaxThreshold; }
+        /// <summary>
+        /// 体力达到最大值
+        /// </summary>
+        public bool IsAPMax { get => Worker.APCurrent >= Worker.APMax; }
 
         private WorkerStateFishing StateFishing;
         private WorkerStateWorkingDuty StateWorkingDuty;
@@ -98,72 +59,80 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         private bool EdgeFishingToWorkingDuty(StateMachine stateMachine, State curState)
         {
-            if (curState == null || curState.Name != this.StateWorkingDuty.Name)
+            if (curState == null || curState.Name != StateFishing.Name)
             {
                 return false;
             }
-            // 体力高于工作阈值 && 有生产节点 && 生产节点在生产
-            return this.IsAPAboveWorkThreshold && this.ProNode != null && this.ProNode.State == ProNodeState.Production;
+            //Debug.Log($"{Time.frameCount} {IsAPAboveWorkThreshold} {Worker.IsOnDuty} {Worker.ProNode.State == ProNodeState.Production}");
+            // 体力高于工作阈值 && 在生产节点 && 生产节点在生产
+            return IsAPAboveWorkThreshold && Worker.IsOnDuty && Worker.ProNode != null && Worker.ProNode.State == ProNodeState.Production;
         }
         /// <summary>
         /// 生产节点工作到摸鱼
         /// </summary>
         private bool EdgeWorkingDutyToFishing(StateMachine stateMachine, State curState)
         {
-            if (curState == null || curState.Name != this.StateFishing.Name)
+            if (curState == null || curState.Name != StateWorkingDuty.Name)
             {
                 return false;
             }
-            // 体力低于工作阈值 || 没有生产节点 || 生产节点未在生产
-            return !this.IsAPAboveWorkThreshold || this.ProNode == null || this.ProNode.State != ProNodeState.Production;
+            //Debug.Log($"{Time.frameCount} {!IsAPAboveWorkThreshold} {!Worker.IsOnDuty} {Worker.ProNode.State != ProNodeState.Production}");
+            // 体力低于工作阈值 || 没在生产节点 || 生产节点未在生产
+            return !IsAPAboveWorkThreshold || !Worker.IsOnDuty || Worker.ProNode == null || Worker.ProNode.State != ProNodeState.Production;
         }
         /// <summary>
         /// 摸鱼到搬运
         /// </summary>
         private bool EdgeFishingToWorkingTransport(StateMachine stateMachine, State curState)
         {
-            if (curState == null || curState.Name != this.StateWorkingTransport.Name)
+            if (curState == null || curState.Name != StateFishing.Name)
             {
                 return false;
             }
-            // 体力高于工作阈值 && 没有生产节点 && 有任务
-            return this.IsAPAboveWorkThreshold && this.ProNode == null && this.Transport != null;
+            // 体力高于工作阈值 && 有任务
+            return IsAPAboveWorkThreshold && Worker.Transport != null;
         }
         /// <summary>
         /// 搬运到摸鱼
         /// </summary>
         private bool EdgeWorkingTransportToFishing(StateMachine stateMachine, State curState)
         {
-            if (curState == null || curState.Name != this.StateFishing.Name)
+            if (curState == null || curState.Name != StateWorkingTransport.Name)
             {
                 return false;
             }
-            // 体力低于工作阈值 || 有生产节点 || 没有任务
-            return !this.IsAPAboveWorkThreshold || this.ProNode != null || this.Transport == null;
+            // 体力低于工作阈值 || 没有任务
+            return !IsAPAboveWorkThreshold || Worker.Transport == null;
         }
         /// <summary>
         /// 摸鱼到休息
         /// </summary>
         private bool EdgeFishingToRelaxing(StateMachine stateMachine, State curState)
         {
-            if (curState == null || curState.Name != this.StateRelaxing.Name)
+            if (curState == null || curState.Name != StateFishing.Name)
             {
                 return false;
             }
-            // 体力低于工作阈值 || 处于休息时段
-            return !this.IsAPAboveWorkThreshold || this.CurTimeFrameStatus == TimeStatus.Relax;
+            //Debug.Log($"{Time.frameCount} {IsAPAboveWorkThreshold} {Worker.CurTimeFrameStatus == TimeStatus.Relax} {!IsAPAboveWorkThreshold}");
+            //return Worker.CurTimeFrameStatus == TimeStatus.Relax || !IsAPAboveWorkThreshold;
+            //// 休息时段，体力低于工作阈值 || 非休息阶段，体力低于休息阈值
+            return (Worker.CurTimeFrameStatus == TimeStatus.Relax && !IsAPAboveRelaxThreshold) || (Worker.CurTimeFrameStatus != TimeStatus.Relax && !IsAPAboveWorkThreshold);
         }
         /// <summary>
         /// 休息到摸鱼
         /// </summary>
         private bool EdgeRelaxingToFishing(StateMachine stateMachine, State curState)
         {
-            if (curState == null || curState.Name != this.StateFishing.Name)
+            if (curState == null || curState.Name != this.StateRelaxing.Name)
             {
                 return false;
             }
-            // 体力低于休息阈值 && 不处于休息时段
-            return this.IsAPAboveRelaxThreshold && this.CurTimeFrameStatus != TimeStatus.Relax;
+            // 如果是休息时段，结束的时候到达第一阈值就可以回去了，如果不到，就继续休息
+            // 如果当前不是休息时段，就休息到第二阈值
+            // 休息时段，体力高于工作阈值 || 非休息阶段，体力高于休息阈值
+            return (Worker.CurTimeFrameStatus == TimeStatus.Relax && IsAPAboveRelaxThreshold) || (Worker.CurTimeFrameStatus != TimeStatus.Relax && IsAPAboveWorkThreshold);
+            //Debug.Log($"{Time.frameCount} {IsAPAboveWorkThreshold} {Worker.CurTimeFrameStatus != TimeStatus.Relax} {IsAPAboveWorkThreshold}");
+            //return Worker.CurTimeFrameStatus != TimeStatus.Relax && IsAPAboveRelaxThreshold;
         }
     }
 }

@@ -69,14 +69,14 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// 任务发起者
         /// </summary>
-        public IMission Initiator;
+        public IMissionObj Initiator;
 
         /// <summary>
         /// 分配的搬运
         /// </summary>
-        public HashSet<Transport> Transports = new HashSet<Transport>();
+        public List<Transport> Transports = new List<Transport>();
 
-        public MissionTransport(MissionTransportType type, string itemID, int missionNum, IMission imission)
+        public MissionTransport(MissionTransportType type, string itemID, int missionNum, IMissionObj imission)
         {
             this.Type = type;
             this.ItemID = itemID;
@@ -86,50 +86,26 @@ namespace ProjectOC.MissionNS
         }
 
         /// <summary>
-        /// 获取搬运优先级，优先级越大数字越小
-        /// </summary>
-        /// <returns></returns>
-        public int GetTransportPriority()
-        {
-            int priority = 3;
-            if (this.Initiator != null)
-            {
-                switch (this.Initiator.GetTransportPriority())
-                {
-                    case TransportPriority.Urgency:
-                        priority = 0;
-                        break;
-                    case TransportPriority.Normal:
-                        priority = 1;
-                        break;
-                    case TransportPriority.Alternative:
-                        priority = 2;
-                        break;
-                }
-            }
-            return priority;
-        }
-
-        /// <summary>
         /// 获取UID
         /// </summary>
-        /// <returns></returns>
         public string GetUID()
         {
-            // 为null则返回 ""
             return this.Initiator?.GetUID() ?? "";
         }
 
         /// <summary>
         /// 终止任务
         /// </summary>
-        public void End()
+        public void End(bool remove=true)
         {
             foreach (Transport transport in this.Transports)
             {
-                transport?.End();
+                transport?.End(false);
             }
-            this.Initiator.RemoveMissionTranport(this);
+            if (remove)
+            {
+                this.Initiator.RemoveMissionTranport(this);
+            }
             MissionManager missionManager = GameManager.Instance.GetLocalManager<MissionManager>();
             missionManager?.MissionTransports?.Remove(this);
         }
@@ -160,8 +136,8 @@ namespace ProjectOC.MissionNS
                 {
                     x.Type.CompareTo(y.Type);
                 }
-                int priorityX = x.GetTransportPriority();
-                int priorityY = y.GetTransportPriority();
+                int priorityX = (int)x.Initiator.GetTransportPriority();
+                int priorityY = (int)y.Initiator.GetTransportPriority();
                 if (priorityX != priorityY)
                 {
                     priorityX.CompareTo(priorityY);

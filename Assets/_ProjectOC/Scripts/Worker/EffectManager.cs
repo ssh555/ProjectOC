@@ -1,4 +1,3 @@
-using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using System;
 using System.Collections.Generic;
@@ -9,28 +8,16 @@ using UnityEngine;
 namespace ProjectOC.WorkerNS
 {
     [System.Serializable]
-    public sealed class EffectManager : ML.Engine.Manager.GlobalManager.IGlobalManager
+    public struct EffectTableData
     {
-        #region Instance
-        private EffectManager(){}
+        public string ID;
+        public TextContent Name;
+        public EffectType Type;
+    }
 
-        private static EffectManager instance;
-
-        public static EffectManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new EffectManager();
-                    GameManager.Instance.RegisterGlobalManager(instance);
-                    instance.LoadTableData();
-                }
-                return instance;
-            }
-        }
-        #endregion
-
+    [System.Serializable]
+    public sealed class EffectManager : ML.Engine.Manager.LocalManager.ILocalManager
+    {
         #region Load And Data
         /// <summary>
         /// 是否已加载完数据
@@ -40,29 +27,19 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// 基础数据表
         /// </summary>
-        private Dictionary<string, EffectTableJsonData> EffectTableDict = new Dictionary<string, EffectTableJsonData>();
-
-        [System.Serializable]
-        public struct EffectTableJsonData
-        {
-            public string ID;
-            public TextContent Name;
-            public EffectType Type;
-            public string Param1;
-            public int Param2;
-            public float Param3;
-        }
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<EffectTableJsonData[]> ABJAProcessor;
+        private Dictionary<string, EffectTableData> EffectTableDict = new Dictionary<string, EffectTableData>();
+        
+        public static ML.Engine.ABResources.ABJsonAssetProcessor<EffectTableData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
             if (ABJAProcessor == null)
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<EffectTableJsonData[]>("Json/TableData", "EffectTableData", (datas) =>
+                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<EffectTableData[]>("Json/TableData", "Effect", (datas) =>
                 {
                     foreach (var data in datas)
                     {
-                        this.EffectTableDict.Add(data.ID, data);
+                        EffectTableDict.Add(data.ID, data);
                     }
                 }, null, "隐兽Effect表数据");
                 ABJAProcessor.StartLoadJsonAssetData();
@@ -71,42 +48,45 @@ namespace ProjectOC.WorkerNS
         #endregion
 
         #region Spawn
-        public Effect SpawnEffect(string id)
+        public Effect SpawnEffect(string id, string value)
         {
-            if (this.EffectTableDict.TryGetValue(id, out EffectTableJsonData row))
+            if (IsValidID(id) && !string.IsNullOrEmpty(value))
             {
-                Effect effect = new Effect(row);
-                return effect;
+                return new Effect(EffectTableDict[id], value);
             }
-            Debug.LogError("没有对应ID为 " + id + " 的Effect");
+            //Debug.LogError($"ID:{id} Value:{value} 无法创建Effect");
             return null;
         }
         #endregion
 
         #region Getter
-        public string[] GetAllEffectID()
+        public string[] GetAllID()
         {
             return EffectTableDict.Keys.ToArray();
         }
         public bool IsValidID(string id)
         {
-            return EffectTableDict.ContainsKey(id);
+            if (!string.IsNullOrEmpty(id))
+            {
+                return EffectTableDict.ContainsKey(id);
+            }
+            return false;
         }
         public string GetName(string id)
         {
-            if (!this.EffectTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return "";
+                return EffectTableDict[id].Name;
             }
-            return this.EffectTableDict[id].Name;
+            return "";
         }
         public EffectType GetEffectType(string id)
         {
-            if (!this.EffectTableDict.ContainsKey(id))
+            if (IsValidID(id))
             {
-                return EffectType.None;
+                return EffectTableDict[id].Type;
             }
-            return this.EffectTableDict[id].Type;
+            return EffectType.None;
         }
         #endregion
     }

@@ -393,7 +393,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     }
                     else
                     {
-                        pos = hitInfo.point - this.SelectedPartInstance.ActiveSocket.transform.position + this.SelectedPartInstance.transform.position;
+                        pos = hitInfo.point;
                         this.SelectedPartInstance.AttachedSocket = hitInfo.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
                         this.SelectedPartInstance.AttachedArea = hitInfo.collider.GetComponentInParent<BuildingArea.BuildingArea>();
 
@@ -423,7 +423,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 {
                     if (this.SelectedPartInstance.ActiveSocket.GetMatchTransformOnArea(pos, out tmpP, out tmpR))
                     {
-                        pos = tmpP;
+                        pos = tmpP - this.SelectedPartInstance.ActiveSocket.transform.localPosition;
                         rot = tmpR;
                         return true;
                     }
@@ -436,7 +436,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 {
                     if (this.SelectedPartInstance.ActiveSocket.GetMatchTransformOnSocket(out tmpP, out tmpR))
                     {
-                        pos = tmpP;
+                        pos = tmpP - this.SelectedPartInstance.ActiveSocket.transform.localPosition;
                         rot = tmpR;
                         return true;
                     }
@@ -527,27 +527,8 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         private void Start()
         {
             StartCoroutine(LoadMatPackages());
-            BuildingManager.Instance.Placer = this;
 
-            // 解析interactions字符串来获取hold的总时间值
-            var interactions = BInput.Build.KeyCom.interactions.Split(';');
-            foreach (var interaction in interactions)
-            {
-                if (interaction.StartsWith("Hold"))
-                {
-                    var parameters = interaction[4..interaction.Length].TrimStart('(').TrimEnd(')').Split(',');
-                    foreach (var parameter in parameters)
-                    {
-                        if (parameter.StartsWith("duration"))
-                        {
-                            var keyValue = parameter.Split('=');
-                            keyComTotalTime = float.Parse(keyValue[1]);
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
+
         }
 
 
@@ -946,11 +927,11 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 {
                     this.SelectedPartInstance.Mode = BuildingMode.None;
                     // 拷贝一份
-                    var tmp = GameObject.Instantiate(this.SelectedPartInstance.gameObject).GetComponent<BuildingPart.BuildingPart>();
+                    var tmp = GameObject.Instantiate(this.SelectedPartInstance.gameObject).GetComponent<BuildingPart.IBuildingPart>();
 
                     // 新建建筑物 -> 赋予实例ID
                     this.SelectedPartInstance.InstanceID = BuildingManager.Instance.GetOneNewBPartInstanceID();
-                    this.SelectedPartInstance.OnChangePlaceEvent();
+                    this.SelectedPartInstance.OnChangePlaceEvent(this.SelectedPartInstance.gameObject.transform.position, this.SelectedPartInstance.gameObject.transform.position);
                     this.OnPlaceModeSuccess?.Invoke(this.SelectedPartInstance);
 
 
@@ -1116,7 +1097,8 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             // 确认 -> 放置于新位置, 回到InteractMode
             else if (this.SelectedPartInstance.CanPlaceInPlaceMode && this.comfirmInputAction.WasPressedThisFrame())
             {
-                this.SelectedPartInstance.OnChangePlaceEvent();
+
+                this.SelectedPartInstance.OnChangePlaceEvent(_editOldPos, this.SelectedPartInstance.gameObject.transform.position);
 
                 this.ExitEditMode();
             }
@@ -1319,12 +1301,37 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             this.OnExitAppearance?.Invoke(this.SelectedPartInstance);
         }
 
-        private const string MatPABPath = "Assets/BuildingSystem";
+        private const string MatPABPath = "Assets/BuildingSystem/MatPackage";
         protected IEnumerator LoadMatPackages()
         {
 #if UNITY_EDITOR
             float startT = Time.realtimeSinceStartup;
 #endif
+            while (BuildingManager.Instance == null)
+            {
+                yield return null;
+            }
+            BuildingManager.Instance.Placer = this;
+            // 解析interactions字符串来获取hold的总时间值
+            var interactions = BInput.Build.KeyCom.interactions.Split(';');
+            foreach (var interaction in interactions)
+            {
+                if (interaction.StartsWith("Hold"))
+                {
+                    var parameters = interaction[4..interaction.Length].TrimStart('(').TrimEnd(')').Split(',');
+                    foreach (var parameter in parameters)
+                    {
+                        if (parameter.StartsWith("duration"))
+                        {
+                            var keyValue = parameter.Split('=');
+                            keyComTotalTime = float.Parse(keyValue[1]);
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+
             while (Manager.GameManager.Instance.ABResourceManager == null)
             {
                 yield return null;

@@ -1,4 +1,4 @@
-using ML.Engine.Manager;
+using ML.Engine.InventorySystem;
 using ML.Engine.Manager.LocalManager;
 using ML.Engine.Timer;
 using ProjectOC.StoreNS;
@@ -20,7 +20,8 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// 搬运任务列表
         /// </summary>
-        public SortedSet<MissionTransport> MissionTransports = new SortedSet<MissionTransport>(new MissionTransport.Sort());
+        public List<MissionTransport> MissionTransports = new List<MissionTransport>();
+        //public SortedSet<MissionTransport> MissionTransports = new SortedSet<MissionTransport>(new MissionTransport.Sort());
 
         private CounterDownTimer timer;
         /// <summary>
@@ -39,7 +40,7 @@ namespace ProjectOC.MissionNS
             }
         }
 
-        public MissionManager()
+        public void Init()
         {
             this.Timer.Start();
         }
@@ -47,50 +48,79 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// 创建搬运任务
         /// </summary>
-        public MissionTransport CreateTransportMission(MissionTransportType transportType, string itemID, int missionNum, IMission Initiator)
+        public MissionTransport CreateTransportMission(MissionTransportType transportType, string itemID, int missionNum, IMissionObj initiator)
         {
-            MissionTransport mission = new MissionTransport(transportType, itemID, missionNum, Initiator);
-            this.MissionTransports.Add(mission);
-            return mission;
+            if (!string.IsNullOrEmpty(itemID) && missionNum > 0 && initiator != null)
+            {
+                MissionTransport mission = new MissionTransport(transportType, itemID, missionNum, initiator);
+                this.MissionTransports.Add(mission);
+                return mission;
+            }
+            else
+            {
+                //Debug.LogError($"{itemID} {missionNum} {initiator}");
+                return null;
+            }
         }
 
         /// <summary>
         /// 发起者到仓库，存入仓库
         /// </summary>
-        private void InitiatorToStore(MissionTransport mission)
+        private int InitiatorToStore(MissionTransport mission)
         {
             int missionNum = mission.NeedAssignNum;
-            Store store = GameManager.Instance.GetLocalManager<StoreManager>()?.GetCanPutInStore(mission.ItemID, missionNum);
-            Worker worker = GameManager.Instance.GetLocalManager<WorkerManager>()?.GetCanTransportWorker();
-            if (worker != null && store != null)
+            if (missionNum > 0)
             {
-                Transport transport = new Transport(mission, mission.ItemID, missionNum, mission.Initiator, store, worker);
-                store.ReserveEmptyToWorker(mission.ItemID, missionNum);
+                Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
+                if (worker != null)
+                {
+                    int maxBurNum = (int)(worker.BURMax / ItemManager.Instance.GetWeight(mission.ItemID));
+                    missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
+                }
+                Store store = ManagerNS.LocalGameManager.Instance.StoreManager.GetCanPutInStore(mission.ItemID, missionNum);
+                if (worker != null && store != null && missionNum > 0)
+                {
+                    Transport transport = new Transport(mission, mission.ItemID, missionNum, mission.Initiator, store, worker);
+                    store.ReserveEmptyToWorker(mission.ItemID, missionNum);
+                }
+                else
+                {
+                    return worker == null ? -1 : -2;
+                }
             }
+            return 1;
         }
 
         /// <summary>
         /// 仓库到发起者，取出仓库
         /// </summary>
-        private void StoreToInitiator(MissionTransport mission)
+        private int StoreToInitiator(MissionTransport mission)
         {
-            Dictionary<Store, int> result = GameManager.Instance.GetLocalManager<StoreManager>()?.GetCanPutOutStore(mission.ItemID, mission.NeedAssignNum);
-            foreach (var kv in result)
+            if (mission.NeedAssignNum > 0)
             {
-                Store store = kv.Key;
-                int missionNum = kv.Value;
-                Worker worker = GameManager.Instance.GetLocalManager<WorkerManager>()?.GetCanTransportWorker();
-                if (worker != null && store != null)
-                { 
-                    Transport transport = new Transport(mission, mission.ItemID, missionNum, mission.Initiator, store, worker);
-                    store.ReserveStorageToWorker(mission.ItemID, missionNum);
-                }
-                // 没有空闲的Worker
-                if (worker == null)
+                Dictionary<Store, int> result = ManagerNS.LocalGameManager.Instance.StoreManager.GetCanPutOutStore(mission.ItemID, mission.NeedAssignNum);
+                foreach (var kv in result)
                 {
-                    break;
+                    Store store = kv.Key;
+                    int missionNum = kv.Value;
+                    Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
+                    if (worker != null)
+                    {
+                        int maxBurNum = (int)(worker.BURMax / ItemManager.Instance.GetWeight(mission.ItemID));
+                        missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
+                    }
+                    if (worker != null && store != null && missionNum > 0)
+                    {
+                        Transport transport = new Transport(mission, mission.ItemID, missionNum, store, mission.Initiator, worker);
+                        store.ReserveStorageToWorker(mission.ItemID, missionNum);
+                    }
+                    else
+                    {
+                        return worker == null ? -1 : -2;
+                    }
                 }
             }
+            return 1;
         }
 
         /// <summary>
@@ -100,17 +130,19 @@ namespace ProjectOC.MissionNS
         {
             foreach (MissionTransport mission in this.MissionTransports)
             {
-                switch (mission.Type)
+                if (mission.Type == MissionTransportType.ProNode_Store || mission.Type == MissionTransportType.Outside_Store)
                 {
-                    // 存入仓库
-                    case MissionTransportType.ProNode_Store:
-                    case MissionTransportType.Outside_Store:
-                        InitiatorToStore(mission);
-                        break;
-                    // 取出仓库
-                    case MissionTransportType.Store_ProNode:
-                        StoreToInitiator(mission);
-                        break;
+                    if (InitiatorToStore(mission) == -1)
+                    {
+                        return;
+                    }
+                }
+                else if(mission.Type == MissionTransportType.Store_ProNode)
+                {
+                    if (StoreToInitiator(mission) == -1)
+                    {
+                        return;
+                    }
                 }
             }
         }

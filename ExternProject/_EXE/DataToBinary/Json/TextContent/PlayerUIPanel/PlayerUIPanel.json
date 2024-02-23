@@ -19,5 +19,19 @@
             "Chinese" : "背包",
             "English" : "Inventory"
         }
+    },
+    {
+        "name" : "worker",
+        "description" : {
+            "Chinese" : "刁民",
+            "English" : "Worker"
+        }
+    },
+    {
+        "name" : "additem",
+        "description" : {
+            "Chinese" : "添加物品",
+            "English" : "Add Item"
+        }
     }
 ]

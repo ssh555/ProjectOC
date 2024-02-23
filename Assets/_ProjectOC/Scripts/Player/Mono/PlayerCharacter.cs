@@ -5,7 +5,7 @@ using ML.Engine.FSM;
 using Sirenix.OdinInspector;
 using ProjectOC.Player.Terrain;
 using UnityEngine.InputSystem;
-
+using ML.Engine.InteractSystem;
 
 namespace ProjectOC.Player
 {
@@ -59,6 +59,7 @@ namespace ProjectOC.Player
         public RectTransform playerUIBotPanel;
         [FoldoutGroup("UI")]
         public UI.PlayerUIPanel playerUIPanel;
+        public ProjectOC.ResonanceWheelSystem.UI.BeastPanel beastPanel;
         #endregion
 
         #region 背包 to-do : 临时测试使用
@@ -116,6 +117,7 @@ namespace ProjectOC.Player
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
 
             // 按下对应按键才会压入栈
+
             var botui = GameObject.Instantiate(this.playerUIBotPanel.gameObject, GameObject.Find("Canvas").transform, false).GetComponent<UI.PlayerUIBotPanel>();
             botui.player = this;
             ML.Engine.Manager.GameManager.Instance.UIManager.ChangeBotUIPanel(botui);
@@ -142,6 +144,9 @@ namespace ProjectOC.Player
                 Input.InputManager.PlayerInput.Player.Enable();
                 ProjectOC.Input.InputManager.PlayerInput.Player.Crouch.Disable();
                 ProjectOC.Input.InputManager.PlayerInput.Player.Jump.Disable();
+
+                // to-do : 待优化
+                this.GetComponentInChildren<InteractComponent>().Disable();
             };
             ML.Engine.BuildingSystem.BuildingManager.Instance.Placer.OnBuildingModeExit += () =>
             {
@@ -151,20 +156,22 @@ namespace ProjectOC.Player
                 {
                     Input.InputManager.PlayerInput.Player.Disable();
                 }
+                // to-do : 待优化
+                this.GetComponentInChildren<InteractComponent>().Enable();
             };
             while(!ML.Engine.InventorySystem.ItemManager.Instance.IsLoadOvered)
             {
                 yield return null;
             }
             //// to-do : to-delete
-            //// 仅测试用
-            //foreach (var id in ML.Engine.InventorySystem.ItemManager.Instance.GetAllItemID())
-            //{
-            //    var item = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(id, ML.Engine.InventorySystem.ItemManager.Instance.GetCanStack(id) ? UnityEngine.Random.Range(1, 999) : 1)[0];
-            //    Inventory.AddItem(item);
-            //}
+            // 仅测试用
+/*            foreach (var id in ML.Engine.InventorySystem.ItemManager.Instance.GetAllItemID())//ML.Engine.InventorySystem.ItemManager.Instance.GetCanStack(id) ? UnityEngine.Random.Range(1, 999) : 1
+            {
+               var item = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(id, 9999)[0];
+                Inventory.AddItem(item);
+            }*/
 
-            //this.enabled = false;
+            this.enabled = false;
         }
 
         private void OnDestroy()
@@ -183,6 +190,12 @@ namespace ProjectOC.Player
             {
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(GameObject.Instantiate(this.playerUIPanel.gameObject, GameObject.Find("Canvas").transform, false).GetComponent<ML.Engine.UI.UIBasePanel>());
                 (ML.Engine.Manager.GameManager.Instance.UIManager.GetTopUIPanel() as UI.PlayerUIPanel).player = this;
+            }
+
+            if (Input.InputManager.PlayerInput.Player.OpenBeastPanel.WasPressedThisFrame())
+            {
+                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(GameObject.Instantiate(this.beastPanel.gameObject, GameObject.Find("Canvas").transform, false).GetComponent<ML.Engine.UI.UIBasePanel>());
+                
             }
             //// In-Window
             //if (Application.isFocused)

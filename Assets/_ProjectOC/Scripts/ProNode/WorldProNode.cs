@@ -1,5 +1,10 @@
+using ML.Engine.BuildingSystem;
 using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.InteractSystem;
+using ML.Engine.Manager;
+using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,34 +12,44 @@ using UnityEngine;
 
 namespace ProjectOC.ProNodeNS
 {
-    public class WorldProNode : BuildingPart
+    public class WorldProNode : BuildingPart, IInteraction
     {
-        /// <summary>
-        /// 生产节点ID
-        /// </summary>
-        [SerializeField, ReadOnly]
-        protected string ProNodeID{ get { return this.ProNode?.ID ?? ""; }}
-
-        /// <summary>
-        /// 拥有的生产节点
-        /// </summary>
         [ShowInInspector, ReadOnly, SerializeField]
         public ProNode ProNode;
 
-        public void SetProNode(ProNode node)
-        {
-            if (this.ProNode != null)
-            {
-                this.ProNode.WorldProNode = null;
-            }
-            this.ProNode = node;
-            this.ProNode.WorldProNode = this;
-        }
+        public string InteractType { get; set; } = "WorldProNode";
+        public Vector3 PosOffset { get; set; } = Vector3.zero;
+
 
         private void Start()
         {
             // 不需要 Update
             this.enabled = false;
+        }
+
+        public override void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
+        {
+            // 第一次新建
+            if (oldPos == newPos)
+            {
+                // 生成逻辑对象
+                string actorID = BuildingManager.Instance.GetActorID(this.Classification.ToString().Replace('-', '_'));
+                if (!string.IsNullOrEmpty(actorID))
+                {
+                    LocalGameManager.Instance.ProNodeManager.WorldNodeSetData(this, actorID);
+                }
+            }
+        }
+
+        public void Interact(InteractComponent component)
+        {
+            // 实例化UIPanel
+            GameObject gameObject = GameManager.Instance.ABResourceManager.LoadLocalAB("ui/uipanel").LoadAsset<GameObject>("UIProNodePanel");
+            InventorySystem.UI.UIProNode uiPanel = GameObject.Instantiate(gameObject, GameObject.Find("Canvas").transform, false).GetComponent<InventorySystem.UI.UIProNode>();
+            // 初始化相关数据
+            uiPanel.ProNode = this.ProNode;
+            // Push
+            GameManager.Instance.UIManager.PushPanel(uiPanel);
         }
     }
 }

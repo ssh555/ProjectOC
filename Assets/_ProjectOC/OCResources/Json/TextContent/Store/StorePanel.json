@@ -1,0 +1,127 @@
+{
+    "text_Title" : {
+        "Chinese" : "仓库",
+        "English" : "Store"
+    },
+    "text_Empty" : {
+        "Chinese" : "空",
+        "English" : "Empty"
+    },
+    "text_PriorityUrgency" : {
+        "Chinese" : "紧急",
+        "English" : "Urgency"
+    },
+    "text_PriorityNormal" : {
+        "Chinese" : "常规",
+        "English" : "Normal"
+    },
+    "text_PriorityAlternative" : {
+        "Chinese" : "备选",
+        "English" : "Alternative"
+    },
+    "text_Add" : {
+        "Chinese" : "存入",
+        "English" : "Add"
+    },
+    "text_Remove" : {
+        "Chinese" : "取出",
+        "English" : "Remove"
+    },
+    "text_LvDesc1" : {
+        "Chinese" : "存储格子: ",
+        "English" : "StoreCapacity: "
+    },
+    "text_LvDesc2" : {
+        "Chinese" : "存储容量: ",
+        "English" : "StorageCapacity: "
+    },
+    "kt_NextPriority" : {
+        "keyname" : "kt_NextPriority",
+        "keymap" : {
+            "XBOX" : "RT",
+            "KeyBoard" : "Q"
+        },
+        "description" : {
+            "Chinese" : "",
+            "English" : ""
+        }
+    },
+    "kt_ChangeIcon" : {
+        "keyname" : "kt_ChangeIcon",
+        "keymap" : {
+            "XBOX" : "LT",
+            "KeyBoard" : "G"
+        },
+        "description" : {
+            "Chinese" : "",
+            "English" : ""
+        }
+    },
+    "kt_ChangeItem" : {
+        "keyname" : "kt_ChangeItem",
+        "keymap" : {
+            "XBOX" : "A",
+            "KeyBoard" : "E"
+        },
+        "description" : {
+            "Chinese" : "改变物品",
+            "English" : "Change Item"
+        }
+    },
+    "kt_Remove1" : {
+        "keyname" : "kt_Remove1",
+        "keymap" : {
+            "XBOX" : "X",
+            "KeyBoard" : "T"
+        },
+        "description" : {
+            "Chinese" : "取出1个",
+            "English" : "Remove 1"
+        }
+    },
+    "kt_Remove10" : {
+        "keyname" : "kt_Remove10",
+        "keymap" : {
+            "XBOX" : "X",
+            "KeyBoard" : "T"
+        },
+        "description" : {
+            "Chinese" : "取出10个",
+            "English" : "Remove 10"
+        }
+    },
+    "kt_FastAdd" : {
+        "keyname" : "kt_FastAdd",
+        "keymap" : {
+            "XBOX" : "Y",
+            "KeyBoard" : "R"
+        },
+        "description" : {
+            "Chinese" : "快捷存入",
+            "English" : "Fast Add"
+        }
+    },
+    "kt_Confirm" : {
+        "keyname" : "kt_Confirm",
+        "keymap" : {
+            "XBOX" : "A",
+            "KeyBoard" : "E"
+        },
+        "description" : {
+            "Chinese" : "确认",
+            "English" : "Confirm"
+        }
+    },
+    "kt_Back" : {
+        "keyname" : "kt_Back",
+        "keymap" : {
+            "XBOX" : "B",
+            "KeyBoard" : "Esc"
+        },
+        "description" : {
+            "Chinese" : "返回",
+            "English" : "Back"
+        }
+    }
+}
+
