@@ -74,7 +74,7 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// ∑÷≈‰µƒ∞·‘À
         /// </summary>
-        public HashSet<Transport> Transports = new HashSet<Transport>();
+        public List<Transport> Transports = new List<Transport>();
 
         public MissionTransport(MissionTransportType type, string itemID, int missionNum, IMissionObj imission)
         {

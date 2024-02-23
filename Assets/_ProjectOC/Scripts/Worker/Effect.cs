@@ -44,7 +44,7 @@ namespace ProjectOC.WorkerNS
             this.ID = config.ID;
             if (string.IsNullOrEmpty(value))
             {
-                Debug.LogError($"Effect Value {value} is empty or null");
+                //Debug.LogError($"Effect Value {value} is empty or null");
                 return;
             }
             switch (EffectType)
@@ -85,7 +85,7 @@ namespace ProjectOC.WorkerNS
             }
             else
             {
-                Debug.LogError("Effect is null");
+                //Debug.LogError("Effect is null");
             }
         }
 
@@ -93,7 +93,7 @@ namespace ProjectOC.WorkerNS
         {
             if (worker == null)
             {
-                Debug.LogError($"Effect {this.ID} Worker is Null");
+                //Debug.LogError($"Effect {this.ID} Worker is Null");
                 return;
             }
             string workTypeStr;
@@ -118,7 +118,7 @@ namespace ProjectOC.WorkerNS
                         }
                         else
                         {
-                            Debug.LogError($"Worker {worker} ExpRate not contains WorkType {workType}");
+                            //Debug.LogError($"Worker {worker} ExpRate not contains WorkType {workType}");
                         }
                     }
                     break;
@@ -143,7 +143,7 @@ namespace ProjectOC.WorkerNS
                         }
                         else
                         {
-                            Debug.LogError($"Worker {worker} ExpRate not contains WorkType {workType}");
+                            //Debug.LogError($"Worker {worker} ExpRate not contains WorkType {workType}");
                         }
                     }
                     break;

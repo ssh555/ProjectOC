@@ -5,6 +5,7 @@ using UnityEngine;
 using ML.Engine.BuildingSystem.BuildingPart;
 using System.Linq;
 using System;
+using UnityEditor;
 
 namespace ML.Engine.BuildingSystem
 {
@@ -20,6 +21,8 @@ namespace ML.Engine.BuildingSystem
         public string category4;
         public string actorID;
         public List<InventorySystem.CompositeSystem.Formula> raw;
+        public string upgrade;
+        public string upgradeRaw;
 
         public string GetClassificationString()
         {
@@ -433,8 +436,8 @@ namespace ML.Engine.BuildingSystem
             }
             return BPart;
         }
-        
-        
+
+
         public BuildingCategory1[] GetRegisteredCategory()
         {
             return this.BPartClassificationOnStyle.Keys.ToArray();
@@ -887,6 +890,32 @@ namespace ML.Engine.BuildingSystem
             if (BPartTableDictOnClass.ContainsKey(CID))
             {
                 return BPartTableDictOnClass[CID].actorID;
+            }
+            return null;
+        }
+        public string GetUpgradeRaw(string CID)
+        {
+            if (BPartTableDictOnClass.ContainsKey(CID))
+            {
+                return BPartTableDictOnClass[CID].upgradeRaw;
+            }
+            return null;
+        }
+
+        public string GetUpgrade(string CID)
+        {
+            if (BPartTableDictOnClass.ContainsKey(CID))
+            {
+                return BPartTableDictOnClass[CID].upgrade;
+            }
+            return null;
+        }
+
+        public string GetClassification(string ID)
+        {
+            if (!string.IsNullOrEmpty(ID) && BPartTableDictOnID.ContainsKey(ID))
+            {
+                return BPartTableDictOnID[ID].GetClassificationString();
             }
             return null;
         }
