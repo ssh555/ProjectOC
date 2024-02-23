@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3385063540
+CRC: 447580833
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 530aebee8f11f1107c15554bf28ec635
+    Hash: d6c68d09c72533387e9952c1b4d194cf
   TypeTreeHash:
     serializedVersion: 2
     Hash: 29038562ccf9f9104975b95d0cb8cba8
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 530aebee8f11f1107c15554bf28ec635
+    Hash: d6c68d09c72533387e9952c1b4d194cf
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -34,4 +34,4 @@ SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/_ProjectOC/OCResources/Prefabs/Character/Worker/Worker.prefab
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/model/character
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/model/character

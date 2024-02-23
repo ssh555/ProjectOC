@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2375224384
+CRC: 3772521533
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e9ccc1c8050c0d747b2f154215d1490f
+    Hash: 97a54d545e1a937afe0545bf02250537
   TypeTreeHash:
     serializedVersion: 2
     Hash: 59c03d2b98afd3e9e06e08bd517356db
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: e9ccc1c8050c0d747b2f154215d1490f
+    Hash: 97a54d545e1a937afe0545bf02250537
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -61,4 +61,5 @@ Assets:
 - Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/Terrain/Terrain.prefab
 - Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/luo/luo.prefab
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/terrain
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/materials/terrain
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/shader

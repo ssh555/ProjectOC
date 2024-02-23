@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3396146770
+CRC: 3361294478
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 17354b0356b52102237dc1efd985649a
+    Hash: b534324c2a581fe8379a45d21a37265d
   TypeTreeHash:
     serializedVersion: 2
     Hash: 48d97ccccb04bdac3abf4cc9f847ceb3
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 17354b0356b52102237dc1efd985649a
+    Hash: b534324c2a581fe8379a45d21a37265d
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -35,5 +35,5 @@ Assets:
 - Assets/_ProjectOC/OCResources/Prefabs/Terrain/Buildings_1.prefab
 - Assets/_ProjectOC/OCResources/Prefabs/Terrain/BuildingA.prefab
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/terrain
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/model/terrain
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/materials/terrain
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/model/terrain
