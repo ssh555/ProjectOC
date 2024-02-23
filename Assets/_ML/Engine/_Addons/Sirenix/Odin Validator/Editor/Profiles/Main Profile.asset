@@ -45,15 +45,87 @@ MonoBehaviour:
     Object: {fileID: 0}
     Scene:
       Type: 0
-      Value: Assets
+      Value: Assets/_ProjectOC/Scene
+      IncludeAssetDependencies: 1
+    AssetBundle: 
+    AddressableGroup: 
+  - Enabled: 1
+    Type: 0
+    Asset:
+      Path: Assets/_ML/MLResources
+      Filter: 
+    Object: {fileID: 0}
+    Scene:
+      Type: 0
+      Value: 
       IncludeAssetDependencies: 0
     AssetBundle: 
     AddressableGroup: 
   - Enabled: 1
     Type: 0
     Asset:
-      Path: Assets
+      Path: Assets/_ProjectOC/OCResources
       Filter: 
+    Object: {fileID: 0}
+    Scene:
+      Type: 0
+      Value: 
+      IncludeAssetDependencies: 0
+    AssetBundle: 
+    AddressableGroup: 
+  - Enabled: 1
+    Type: 0
+    Asset:
+      Path: Assets/Resources
+      Filter: 
+    Object: {fileID: 0}
+    Scene:
+      Type: 0
+      Value: 
+      IncludeAssetDependencies: 0
+    AssetBundle: 
+    AddressableGroup: 
+  - Enabled: 1
+    Type: 0
+    Asset:
+      Path: Assets/TextMesh Pro
+      Filter: 
+    Object: {fileID: 0}
+    Scene:
+      Type: 0
+      Value: 
+      IncludeAssetDependencies: 0
+    AssetBundle: 
+    AddressableGroup: 
+  - Enabled: 1
+    Type: 0
+    Asset:
+      Path: Assets/UniversalRenderPipelineGlobalSettings.asset
+      Filter: 
+    Object: {fileID: 0}
+    Scene:
+      Type: 0
+      Value: 
+      IncludeAssetDependencies: 0
+    AssetBundle: 
+    AddressableGroup: 
+  - Enabled: 1
+    Type: 0
+    Asset:
+      Path: Assets/_ML/Engine
+      Filter: t:script
+    Object: {fileID: 0}
+    Scene:
+      Type: 0
+      Value: 
+      IncludeAssetDependencies: 0
+    AssetBundle: 
+    AddressableGroup: 
+  - Enabled: 1
+    Type: 0
+    Asset:
+      Path: Assets/_ProjectOC/Scripts
+      Filter: t:script
     Object: {fileID: 0}
     Scene:
       Type: 0

@@ -30,7 +30,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         /// 长按响应了Destroy就置为true
         /// Cancel就不响应Drop 并 重置
         /// </summary>
-        private bool ItemIsDestroyed = false;
+        //private bool ItemIsDestroyed = false;
         #endregion
 
         #region Unity
