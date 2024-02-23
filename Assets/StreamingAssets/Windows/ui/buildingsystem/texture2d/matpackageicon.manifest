@@ -1,0 +1,34 @@
+ManifestFileVersion: 0
+CRC: 2635647797
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: c1c2d3b2ba0809dfe947515cb18992d4
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2d8df09e698f722ada1caa03d3413830
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: c1c2d3b2ba0809dfe947515cb18992d4
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/MatPackageIcon/TestTexture2D/Blue.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/MatPackageIcon/Texture_Wood3.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/MatPackageIcon/Texture_Stone1.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/MatPackageIcon/Arrow.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/MatPackageIcon/TestTexture2D/Purple.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/MatPackageIcon/Texture_Stone3.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/MatPackageIcon/Texture_Wood1.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/MatPackageIcon/TestTexture2D/Orange.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/MatPackageIcon/TestTexture2D/Yellow.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/MatPackageIcon/TestTexture2D/Green.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/MatPackageIcon/Texture_Wood2.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/MatPackageIcon/Texture_Stone2.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/MatPackageIcon/TestTexture2D/Red.png
+Dependencies: []

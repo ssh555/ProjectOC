@@ -212,7 +212,6 @@ namespace ML.Engine.InventorySystem
             {
                 return null;
             }
-            
             return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>(this.ItemTypeStrDict[id].icon);
         }
 

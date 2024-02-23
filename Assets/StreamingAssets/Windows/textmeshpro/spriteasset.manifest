@@ -1,0 +1,51 @@
+ManifestFileVersion: 0
+CRC: 1470059863
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: c30d6e06df077069f9a091a48cc4e185
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 3a5d9d5398dd73d2d9271115afb4455f
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: c30d6e06df077069f9a091a48cc4e185
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 84a92b25f83d49b9bc132d206b370281, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_Sprite
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_SpriteCharacter
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_SpriteGlyph
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.FaceInfo
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphMetrics
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphRect
+Assets:
+- Assets/_ProjectOC/Resources/TextMeshPro/SpriteAsset/Texture2D/Triangle.asset
+- Assets/TextMesh Pro/Sprites/EmojiOne.png
+- Assets/TextMesh Pro/Sprites/EmojiOne.json
+- Assets/_ProjectOC/Resources/TextMeshPro/SpriteAsset/TMPSprite.asset
+- Assets/TextMesh Pro/Resources/Sprite Assets/EmojiOne.asset
+- Assets/TextMesh Pro/Sprites/EmojiOne Attribution.txt
+- Assets/_ProjectOC/Resources/TextMeshPro/SpriteAsset/Texture2D/Triangle.png
+Dependencies:
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/textmeshpro/shader
