@@ -71,6 +71,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetPitch.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Physics2D\Raycast.cs" />
     <Compile Include="Assets\_ML\Example\InventorySystem\MainHUD\UIClassSwitchBtn.cs" />
+    <Compile Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Scripts\ExportMeshAndBasemap.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\AddForce.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetMaxDistance.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Scripts\Tasks\LeaderFollow.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Assets\_ML\Engine\TextContent\Config.cs" />
     <Compile Include="Assets\_ML\Engine\UI\UIBasePanel.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedObjectList.cs" />
+    <Compile Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Scripts\ExportMeshAndSplatmap.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetSpread.cs" />
     <Compile Include="Assets\_ML\Example\InputAciton\PlayerInputAction.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\CapsuleCollider\SetCenter.cs" />
@@ -371,6 +373,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Renderer\IsVisible.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\SetRotation.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetRightVector.cs" />
+    <Compile Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Scripts\ExportMeshAndBasemapByPositionIndex.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\GetDeltaRotation.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Player\UIPanel\SelectedButton.cs" />
     <Compile Include="Assets\_ML\Example\InventorySystem\InventoryOwner.cs" />
@@ -388,6 +391,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\Play.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\GetSpeed.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetDestination.cs" />
+    <Compile Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Scripts\ExportDetailMesh.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Decorators\ReturnSuccess.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Debug\LogFormat.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\GameObject\SetTag.cs" />
@@ -453,6 +457,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedGameObject.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Collider\GetEnabled.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Physics\Raycast.cs" />
+    <Compile Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Scripts\ExportMeshWithEdgeFall.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedAnimationCurve.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\GetRightVector.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Light\SetRange.cs" />
@@ -481,6 +486,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\GetFloatParameter.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedObject.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\ProNode\ProNodeType.cs" />
+    <Compile Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Scripts\ExportMesh.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector3\ClampMagnitude.cs" />
     <Compile Include="Assets\_ML\Engine\BuildingSystem\UI\BSPlaceMode_KeyComPanel.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetStartLifetime.cs" />
@@ -606,6 +612,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\BoxCollider2D\SetSize.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Mission\MissionTransport.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetPosition.cs" />
+    <Compile Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Scripts\ExportTrees.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasExitedTrigger.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Scripts\Tasks\Search.cs" />
     <Compile Include="Assets\_ML\Engine\Level\LevelSwitchManager.cs" />
@@ -688,6 +695,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Timeline\IsPaused.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetStartSpeed.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\ProNode\ProNodeState.cs" />
+    <Compile Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Scripts\ExportGrass.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Input\GetAxisRaw.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\GetParticleCount.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector2\GetMagnitude.cs" />
@@ -823,6 +831,7 @@
     <None Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\Sirenix.OdinInspector.Editor.xml" />
     <None Include="Assets\_ML\Engine\_Addons\Sirenix\Odin Validator\Readme.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
+    <None Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Shaders\Splatmap\Splatmap (Holes).shader" />
     <None Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\NoEditor\Sirenix.Serialization.dll" />
     <None Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\Sirenix.OdinInspector.Attributes.xml" />
     <None Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\Sirenix.OdinInspector.Attributes.dll" />
@@ -832,22 +841,33 @@
     <None Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\Sirenix.Utilities.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
+    <None Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Shaders\cginc\Variables.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
+    <None Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Shaders\cginc\VariablesCBuffer.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\NoEditor\Sirenix.Utilities.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
+    <None Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Shaders\Splatmap\Splatmap.shader" />
+    <None Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Shaders\cginc\Core.cginc" />
     <None Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\BehaviorDesigner.Runtime.dll" />
+    <None Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Documentation\Manual.txt" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\link.xml" />
+    <None Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Shaders\All Terrain Textures\AllTerrainTextures.shader" />
     <None Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\Sirenix.Utilities.Editor.xml" />
     <None Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\Sirenix.Utilities.Editor.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
+    <None Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Shaders\cginc\Defines.cginc" />
+    <None Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Shaders\Splatmap\Splatmap.cginc" />
+    <None Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Installer\ReadMe.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
+    <None Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Scripts\AmazingAssets.TerrainToMesh.dll" />
     <None Include="Assets\_ML\Engine\_Addons\Sirenix\Assemblies\NoEmitAndNoEditor\Sirenix.Utilities.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\_ML\MLResources\Shaders\GridUVScale.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
+    <None Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Free Rocks and Plants\Asset Store Link.txt" />
     <None Include="Assets\_ML\MLResources\Shaders\RangeVFXShader.shader" />
     <None Include="Assets\_ML\MLResources\Fonts\3500汉字+符号+英文字符集.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
@@ -1145,6 +1165,9 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.1\Runtime\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="AmazingAssets.TerrainToMesh">
+      <HintPath>Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Scripts\AmazingAssets.TerrainToMesh.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.StandardEvents">
       <HintPath>Library\PackageCache\com.unity.analytics@3.8.1\AnalyticsStandardEvents\Unity.Analytics.StandardEvents.dll</HintPath>

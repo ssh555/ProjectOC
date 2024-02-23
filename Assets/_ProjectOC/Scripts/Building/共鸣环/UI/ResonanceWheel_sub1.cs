@@ -127,8 +127,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
  
 
    
-        private int CurrentFuctionTypeIndex = 0;//0为HBR 1为SSB
-        private int CurrentGridIndex = 0;//0到4
+        //private int CurrentFuctionTypeIndex = 0;//0为HBR 1为SSB
+        //private int CurrentGridIndex = 0;//0到4
 
 
         private void Enter()
