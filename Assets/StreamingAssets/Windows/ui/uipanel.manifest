@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 57075237
+CRC: 3990065745
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 916389d4f80fdde8dc78f79e08343c88
+    Hash: 6968146389a49e28c481e4f555f4e28e
   TypeTreeHash:
     serializedVersion: 2
-    Hash: b5e4f77f8cc346f334120443c5197605
+    Hash: 6f1da60ef1f031a560bc9eabd58bafc4
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 916389d4f80fdde8dc78f79e08343c88
+    Hash: 6968146389a49e28c481e4f555f4e28e
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -28,8 +28,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 27e27c8eeb2d1554babedcc209602ac4, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 9ea83b1ab433e514bb440b78e1a6f54a, type: 3}
 - Class: 114
@@ -62,6 +60,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: d6224dbf1fdb21545862699544e83817, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 8225f47635ce8874c8d32afa594ed0e2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 27e27c8eeb2d1554babedcc209602ac4, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 213
@@ -111,11 +111,11 @@ Assets:
 - Assets/_ProjectOC/Resources/UIPanel/UIProNodePanel.prefab
 - Assets/_ProjectOC/Resources/UIPanel/PlayerUIBotPanel.prefab
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/fonts
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/textmeshpro/font
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/inventory/texture2d
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/item/texture2d
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/techpoint/texture2d
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/fonts
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/textmeshpro/font
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/inventory/texture2d
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/item/texture2d
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/techpoint/texture2d

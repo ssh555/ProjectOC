@@ -3,21 +3,20 @@ using ML.Engine.InventorySystem;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
 using Newtonsoft.Json;
+using ProjectOC.InventorySystem.UI;
 using ProjectOC.StoreNS;
 using ProjectOC.TechTree.UI;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace ProjectOC.Player.UI
 {
     public class PlayerUIPanel : UIBasePanel, ML.Engine.Timer.ITickComponent
     {
         public PlayerCharacter player;
-
-        public UITechPointPanel uITechPointPanel;
-
-        public InventorySystem.UI.UIInfiniteInventory uIInfiniteInventory;
 
         private IUISelected CurSelected;
 
@@ -60,23 +59,32 @@ namespace ProjectOC.Player.UI
             this.EnterTechTreeBtn = btnList.Find("EnterTechTree").GetComponent<SelectedButton>();
             this.EnterTechTreeBtn.OnInteract += () =>
             {
-                var panel = GameObject.Instantiate(uITechPointPanel);
-                panel.transform.SetParent(this.transform.parent, false);
-                panel.inventory = this.player.Inventory;
-                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+                AssetBundleRequest request = null;
+                request = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<GameObject>("UI/UIPanel", "TechPointPanel", (ao) =>
+                 {
+                     var panel = GameObject.Instantiate((request.asset as GameObject).GetComponent<UITechPointPanel>());
+                     panel.transform.SetParent(this.transform.parent, false);
+                     panel.inventory = this.player.Inventory;
+                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+                 });
             };
 
             this.EnterInventoryBtn = btnList.Find("EnterInventory").GetComponent<SelectedButton>();
             this.EnterInventoryBtn.OnInteract += () =>
             {
-                // 实例化
-                var panel = GameObject.Instantiate(uIInfiniteInventory, this.transform.parent, false);
+                AssetBundleRequest request = null;
+                request = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<GameObject>("UI/UIPanel", "UIInfiniteInventoryPanel", (ao) =>
+                {
+                    // 实例化
+                    var panel = GameObject.Instantiate((request.asset as GameObject).GetComponent<UIInfiniteInventory>());
 
-                // 初始化
-                panel.inventory = this.player.Inventory as ML.Engine.InventorySystem.InfiniteInventory;
+                    // 初始化
+                    panel.inventory = this.player.Inventory as ML.Engine.InventorySystem.InfiniteInventory;
 
-                // Push
-                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+                    // Push
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+                });
+
             };
 
             this.CreateWorkerBtn = btnList.Find("CreateWorker").GetComponent<SelectedButton>();

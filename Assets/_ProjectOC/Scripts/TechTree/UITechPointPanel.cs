@@ -77,7 +77,7 @@ namespace ProjectOC.TechTree.UI
                 TechPointList[grid[0] * GridRange.y + grid[1]] = id;
             }
             int[] g = TechTreeManager.Instance.GetTPGrid(TechPointList.First(id => (id != null && id != "")));
-            CurrentGrid = new Vector2Int(g[0], g[0]);
+            CurrentGrid = new Vector2Int(g[0], g[1]);
         }
 
         private static void RefreshCategory(int index)
@@ -88,9 +88,9 @@ namespace ProjectOC.TechTree.UI
 
         private static void AlterTP(Vector2Int offset)
         {
+            LastGrid = CurrentGrid;
             do
             {
-                LastGrid = CurrentGrid;
                 CurrentGrid.x = (CurrentGrid.x + GridRange.x - offset.y) % GridRange.x;
                 CurrentGrid.y = (CurrentGrid.y + GridRange.y + offset.x) % GridRange.y;
             } while (CurrentID == null || CurrentID == "");
@@ -600,7 +600,7 @@ namespace ProjectOC.TechTree.UI
                 }
             }
             // 当前激活的TP四个边点有一个不位于窗口内 -> 更新窗口滑动
-            if (!allCornersVisible)
+            if (!allCornersVisible && LastID != null)
             {
                 // 将当前选中的这个放置于上一个激活TP的位置
 
@@ -795,7 +795,7 @@ namespace ProjectOC.TechTree.UI
             this.KT_Back.ReWrite(TM.TPPanelTextContent_Main.back);
             #endregion
 
-            if(!this.IsUIInit)
+            if (!this.IsUIInit)
             {
                 if (this.TTTPGO.ContainsKey(CurrentID))
                 {
