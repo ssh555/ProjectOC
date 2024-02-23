@@ -140,8 +140,9 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         public event System.Action<IBuildingPart> OnEditModeExit;
         /// <summary>
         /// 一次成功编辑移动
+        /// 旧位置, 新位置
         /// </summary>
-        public event System.Action<IBuildingPart> OnEditModeSuccess;
+        public event System.Action<IBuildingPart, Vector3, Vector3> OnEditModeSuccess;
 
         /// <summary>
         /// 流程1 : 一级二级分类选择UI交互
@@ -1123,7 +1124,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
                 this.SelectedPartInstance.OnChangePlaceEvent(_editOldPos, this.SelectedPartInstance.gameObject.transform.position);
 
-                this.OnEditModeSuccess?.Invoke(this.SelectedPartInstance);
+                this.OnEditModeSuccess?.Invoke(this.SelectedPartInstance, _editOldPos, this.SelectedPartInstance.gameObject.transform.position);
 
                 this.ExitEditMode();
             }
