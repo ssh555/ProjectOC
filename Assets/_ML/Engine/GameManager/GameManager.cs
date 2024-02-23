@@ -426,8 +426,6 @@ namespace ML.Engine.Manager
         [LabelText(" ‰»Î…Ë±∏"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
         public Config.InputDevice inputDevice = Config.InputDevice.Keyboard;
         #endregion
-
-
     }
 }
 

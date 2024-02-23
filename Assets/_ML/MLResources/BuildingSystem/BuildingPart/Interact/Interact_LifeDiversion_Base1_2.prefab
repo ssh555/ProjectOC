@@ -132,6 +132,7 @@ MonoBehaviour:
   rotOffset: {x: 0, y: 0, z: 0, w: 0}
   activeSocketIndex: 0
   powerSupportVFX: {fileID: 1559227801019406495}
+  powerSupportRange: 20
 --- !u!1 &9122978137770692295
 GameObject:
   m_ObjectHideFlags: 0
@@ -199,7 +200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 4096
-  InTakeType: 0
+  InTakeType: 8
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}

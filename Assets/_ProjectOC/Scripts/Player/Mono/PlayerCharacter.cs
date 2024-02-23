@@ -59,7 +59,6 @@ namespace ProjectOC.Player
         public RectTransform playerUIBotPanel;
         [FoldoutGroup("UI")]
         public UI.PlayerUIPanel playerUIPanel;
-        public ProjectOC.ResonanceWheelSystem.UI.BeastPanel beastPanel;
         #endregion
 
         #region 背包 to-do : 临时测试使用
@@ -190,12 +189,6 @@ namespace ProjectOC.Player
             {
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(GameObject.Instantiate(this.playerUIPanel.gameObject, GameObject.Find("Canvas").transform, false).GetComponent<ML.Engine.UI.UIBasePanel>());
                 (ML.Engine.Manager.GameManager.Instance.UIManager.GetTopUIPanel() as UI.PlayerUIPanel).player = this;
-            }
-
-            if (Input.InputManager.PlayerInput.Player.OpenBeastPanel.WasPressedThisFrame())
-            {
-                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(GameObject.Instantiate(this.beastPanel.gameObject, GameObject.Find("Canvas").transform, false).GetComponent<ML.Engine.UI.UIBasePanel>());
-                
             }
             //// In-Window
             //if (Application.isFocused)

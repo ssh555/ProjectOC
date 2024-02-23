@@ -833,6 +833,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  uITechPointPanel: {fileID: 5111336925827994217, guid: 8786123fbf5a14947a2c74aa35d4b9a9, type: 3}
+  uIInfiniteInventory: {fileID: 3254062346144203716, guid: bcac956992e047c45a7a03bf87637604, type: 3}
   IsInit: 0
 --- !u!1 &5791167129079826881
 GameObject:

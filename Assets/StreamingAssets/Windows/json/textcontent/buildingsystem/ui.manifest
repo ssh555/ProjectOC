@@ -1,22 +1,22 @@
 ManifestFileVersion: 0
-CRC: 1192012702
+CRC: 597237485
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 25b54c346f02459bb76d1be0732e5ebe
+    Hash: f9d2bd5d03673e0dd9c3b7f94369b3b2
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5ad585dd02dfb5016c0dad519eab8f49
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 25b54c346f02459bb76d1be0732e5ebe
+    Hash: f9d2bd5d03673e0dd9c3b7f94369b3b2
 HashAppended: 0
 ClassTypes:
 - Class: 49
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ProjectOC/Resources/Json/TextContent/BuildingSystem/UI/Type.json
-- Assets/_ProjectOC/Resources/Json/TextContent/BuildingSystem/UI/Category.json
-- Assets/_ProjectOC/Resources/Json/TextContent/BuildingSystem/UI/KeyTip.json
+- Assets/_ProjectOC/OCResources/Json/TextContent/BuildingSystem/UI/Type.json
+- Assets/_ProjectOC/OCResources/Json/TextContent/BuildingSystem/UI/Category.json
+- Assets/_ProjectOC/OCResources/Json/TextContent/BuildingSystem/UI/KeyTip.json
 Dependencies: []

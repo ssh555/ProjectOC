@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3881968514
+CRC: 643791256
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 8fc262e2f9947e4d20cbb612e60a89f4
+    Hash: dd9da80f1ff49be2c1d23161bedb6ab1
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 66262acd5ac098f563f1c3099238ba09
+    Hash: acbcba2b5efe1be4b8fc57af367dcf25
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 8fc262e2f9947e4d20cbb612e60a89f4
+    Hash: dd9da80f1ff49be2c1d23161bedb6ab1
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -43,9 +43,9 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: fa7155796051b734daa718462081dc5f, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 136
@@ -78,8 +78,8 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.Events.PersistentCallGroup
 Assets:
-- Assets/_ProjectOC/Resources/Prefabs/Character/PlayerCharacter/PlayerCharacter.prefab
+- Assets/_ProjectOC/OCResources/Prefabs/Character/PlayerCharacter/PlayerCharacter.prefab
 Dependencies:
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/animation/character/player/playermove
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/uipanel
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/animation/character/player/playermove
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/uipanel
