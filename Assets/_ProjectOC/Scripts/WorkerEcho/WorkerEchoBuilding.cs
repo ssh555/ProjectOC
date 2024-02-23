@@ -15,7 +15,7 @@ namespace ProjectOC.WorkerEchoNS
         public ResonanceWheelSystem.UI.ResonanceWheelUI uIResonanceWheel;
 
         public WorkerEcho workerEcho;
-        private void Awake()
+        protected override void Awake()
         {
             this.workerEcho = new WorkerEcho(this);
             this.InteractType = "WorkerEcho";
@@ -32,18 +32,11 @@ namespace ProjectOC.WorkerEchoNS
             panel.transform.SetParent(GameObject.Find("Canvas").transform, false);
 
             ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
-
-            
-        }
-
-        public void OnSelectedExit(InteractComponent component)
-        {
-            
         }
 
         private bool CanEditOrDestroy(IBuildingPart buildingPart)
         {
-            return (workerEcho.GetStatus() == EchoStatusType.Echoing || workerEcho.GetStatus() == EchoStatusType.Waiting);
+            return (workerEcho.GetStatus() == EchoStatusType.None);
         }
         private IBuildingPart.CheckMode CheckCanDestroyOrEdit()
         {

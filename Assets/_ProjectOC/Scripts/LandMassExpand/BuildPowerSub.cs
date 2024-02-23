@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using BehaviorDesigner.Runtime.Tasks.Movement;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.BuildingSystem.BuildingPart;
 using Sirenix.OdinInspector;
@@ -7,7 +9,7 @@ namespace ProjectOC.LandMassExpand
 {
     //拷贝自BuildingPart，增加OnChangePlaceEvent，放置后更新用电数量
 
-    public class BuildPowerSub : BuildingPart, ISupportPowerBPart, IComposition
+    public class BuildPowerSub : BuildingPart, INeedPowerBpart, ISupportPowerBPart,IComposition
     {
         [Header("供电部分"),SerializeField,LabelText("供电范围")]
         private float powerSupportRange = 5;
@@ -26,32 +28,38 @@ namespace ProjectOC.LandMassExpand
         private GameObject powerSupportVFX;
         [SerializeField]
         private Material powerVFXMat;
-
+        //存储周围NeedPowerBpart
+        public List<INeedPowerBpart> needPowerBparts { get; private set; }
         #region IPowerBPart
 
         private int powerCount;
-        public int PowerCount 
-        { 
+        public int PowerCount
+        {
             get=>powerCount;
-            set => powerCount = value;
+            set
+            {
+                powerCount = value;
+                if (powerCount > 0)
+                    InPower = true;
+                else
+                    InPower = false;
+            }
         }
-  
+
         private bool inPower = false;
         [ShowInInspector]
         public bool InPower
         {
-            get=>this.inPower;
+            get => this.inPower;
             set
             {
                 if (value != inPower)
                 {
+                    ChangePowerCount(value);
                     inPower = value;
                     //更换颜色
                     Color32 vfxColor = (value ? new Color32(255, 178,126,255): new Color32(139, 167,236,255));
                     powerVFXMat.SetColor("_VFXColor",vfxColor);
-
-                    //在位置不变的情况下，计算附近用电器powercount情况，
-                    CalculatePowerCount(transform.position,InPower);
                 }
             }
         }
@@ -63,6 +71,7 @@ namespace ProjectOC.LandMassExpand
             powerVFXMat = powerSupportVFX.GetComponent<Renderer>().material;
             powerSupportVFX.GetComponent<Renderer>().sharedMaterial = powerVFXMat;
             powerVFXMat.SetColor("_VFXColor",new Color32(139, 167,236,255));
+            needPowerBparts = new List<INeedPowerBpart>();
             
             base.Awake();
         }
@@ -71,63 +80,69 @@ namespace ProjectOC.LandMassExpand
         {
             if (BuildPowerIslandManager.Instance != null && BuildPowerIslandManager.Instance.powerSubs.Contains(this))
             {
-                InPower = false;
+                PowerCount = 0;
+                RemoveFromAllPowerCores();
+  
                 BuildPowerIslandManager.Instance.powerSubs.Remove(this);
             }
         }
 
         
-        public new void OnChangePlaceEvent(Vector3 oldPos,Vector3 newPos)
+        public override void OnChangePlaceEvent(Vector3 oldPos,Vector3 newPos)
         {
             //如果没有，说明刚建造则加入
             if (!BuildPowerIslandManager.Instance.powerSubs.Contains(this))
             {
                 BuildPowerIslandManager.Instance.powerSubs.Add(this);
             }
-            //原地放
-            else if(oldPos == newPos)
-            {
-                return;
-            }
             
-
-            //说明是移动，不是建造
-            if (InPower)
-            {
-                inPower = false;
-                Color32 vfxColor = new Color32(139, 167,236,255);
-                powerVFXMat.SetColor("_VFXColor",vfxColor);
-                //原来的位置powerCount-1
-                CalculatePowerCount(oldPos,false);
-            }
-
+            //重置 powerCore.needPowers、PowerCount、needPowers
+            RemoveFromAllPowerCores();
+            PowerCount = 0;            
+            needPowerBparts.Clear();
+            
+            //重新计算powerCore
             foreach (var powerCore in BuildPowerIslandManager.Instance.powerCores)
             {
                 if(BuildPowerIslandManager.Instance.CoverEachOther(powerCore,this))
                 {
-                    InPower = true;
+                    powerCore.needPowerBparts.Add(this);
+                    PowerCount++;
                 }
             }
+            CalculatePowerCount();
         }
 
-        private void CalculatePowerCount(Vector3 pos,bool isAdd)
+        private void ChangePowerCount(bool isAdd)
         {
             int add;
             if (isAdd) 
                 add = 1;
             else 
                 add = -1;
-            
-            foreach (var electAppliance in BuildPowerIslandManager.Instance.electAppliances)
+
+            foreach (var needPowerBpart in needPowerBparts)
             {
-                if(BuildPowerIslandManager.Instance.CoverEachOther(electAppliance,PowerSupportRange,pos))
-                    electAppliance.PowerCount += add;
+                needPowerBpart.PowerCount += add;
             }
         }
         
-        public bool CoverEachOther(ElectAppliance electAppliance, Vector3 powerSubPos)
+        //重新计算附近
+        private void CalculatePowerCount()
         {
-
+            foreach (var electAppliance in BuildPowerIslandManager.Instance.electAppliances)
+            {
+                if (CoverEachOther(electAppliance,transform.position))
+                {
+                    needPowerBparts.Add(this);
+                    if(InPower)
+                        electAppliance.PowerCount++;
+                }
+            }
+        }
+        
+        public bool CoverEachOther(INeedPowerBpart electAppliance, Vector3 powerSubPos)
+        {
             return CoverEachOther(electAppliance.PowerSupportRange, PowerSupportRange, 
                 electAppliance.transform.position, powerSubPos);
         }
@@ -138,8 +153,14 @@ namespace ProjectOC.LandMassExpand
             float radiusSunSquared = (r1 + r2) * (r1 + r2);
             return radiusSunSquared >= distanceSquared;
         }
-        
 
+        public void RemoveFromAllPowerCores()
+        {
+            foreach (var powerCore in BuildPowerIslandManager.Instance.powerCores)
+            {
+                powerCore.RemoveNeedPowerBpart(this);
+            }
+        }
     }
     
 }

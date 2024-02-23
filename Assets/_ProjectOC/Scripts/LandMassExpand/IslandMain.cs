@@ -10,13 +10,13 @@ namespace ProjectOC.LandMassExpand
     [LabelText("附属岛屿")]
     public List<IslandSub> affiliatedIslands;
 
-    public override void IslandMove(Vector2Int centerPos)
+    public override void IslandMove()
     {
-        base.IslandMove(centerPos);
+        base.IslandMove();
         //同时修改子岛的碰撞、位置
         foreach (var affiliatedIsland in affiliatedIslands)
         {
-          affiliatedIsland.IslandMove(centerPos);
+          affiliatedIsland.IslandMove();
         }
     }
   }

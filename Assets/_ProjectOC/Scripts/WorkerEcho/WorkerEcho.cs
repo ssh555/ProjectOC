@@ -46,10 +46,9 @@ namespace ProjectOC.WorkerEchoNS
         {
             this.BuildingPart = buildingPart;
         }
-        public ExternWorker SummonWorker(string id,int index)
-        {
-            IInventory inventory = GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory;
-            
+
+        public ExternWorker SummonWorker(string id,int index,IInventory inventory)
+        {   
             if (this.Level==1)
             {
                 Debug.Log("id " + id);
@@ -77,30 +76,37 @@ namespace ProjectOC.WorkerEchoNS
            
             return externWorker;
         }
-        public void SpawnWorker(int index)
+
+        public void SpawnWorker(int index,Vector3 pos)
         {
-          
-        
-            Workers[index].worker.transform.position = new Vector3(2,2,2);
+            Workers[index].worker.transform.position = pos;
             Workers[index] = null;
         }
+
         public void ExpelWorker(int index)
         {
             GameObject.Destroy(Workers[index].worker.gameObject);
            
             Workers[index] = null;
         }
+
         public void LevelUp()
         {
             if (Level == 2) return;
             Level = 2;
         }
+
         public EchoStatusType GetStatus()
         {
-            if (Workers == null)
-            {
-                return EchoStatusType.None;
+            bool isNone = true;
+            for (int i = 0; i < 5; i++)
+            { 
+                if (Workers[i] != null)
+                {
+                    isNone = false;
+                }
             }
+            if (isNone) return EchoStatusType.None;
             foreach (ExternWorker worker in Workers)
             {
                 if (!worker.timer.IsTimeUp)
@@ -110,14 +116,14 @@ namespace ProjectOC.WorkerEchoNS
             }
             return EchoStatusType.Waiting;
         }
+
         public ExternWorker[] GetExternWorkers()
         {
             return Workers;
         }
-        public void StopEcho(string id,int index)
+
+        public void StopEcho(string id,int index,IInventory inventory)
         {
-            
-            IInventory inventory = GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory;
             List<ML.Engine.InventorySystem.CompositeSystem.Formula> dict = GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRaw(id);
             foreach(var pair in dict)
             {
@@ -125,10 +131,6 @@ namespace ProjectOC.WorkerEchoNS
                 {
                     inventory.AddItem(item);
                 }
-
-
-
-
             }
             Workers[index] = null;
         }

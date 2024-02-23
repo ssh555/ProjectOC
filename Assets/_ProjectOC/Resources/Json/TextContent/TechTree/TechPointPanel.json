@@ -21,7 +21,7 @@
         {
             "name" : "Technology",
             "description" : {
-                "Chinese" : "工艺",
+                "Chinese" : "科技",
                 "English" : "Technology"
             }
         },
@@ -37,6 +37,41 @@
             "description" : {
                 "Chinese" : "共鸣",
                 "English" : "Resonance"
+            }
+        },
+        {
+            "name" : "Smelt",
+            "description" : {
+                "Chinese" : "熔炼",
+                "English" : "Smelt"
+            }
+        },
+        {
+            "name" : "Storage",
+            "description" : {
+                "Chinese" : "储藏",
+                "English" : "Storage"
+            }
+        },
+        {
+            "name" : "Craft",
+            "description" : {
+                "Chinese" : "工艺",
+                "English" : "Craft"
+            }
+        },
+        {
+            "name" : "Echo",
+            "description" : {
+                "Chinese" : "隐兽",
+                "English" : "Echo"
+            }
+        },
+        {
+            "name" : "Cook",
+            "description" : {
+                "Chinese" : "厨艺",
+                "English" : "Cook"
             }
         }
     ],
