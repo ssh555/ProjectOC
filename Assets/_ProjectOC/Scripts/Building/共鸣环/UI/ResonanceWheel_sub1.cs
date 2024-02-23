@@ -25,7 +25,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 {
     public class ResonanceWheel_sub1 : ML.Engine.UI.UIBasePanel
     {
-
         public IInventory inventory;
 
         #region Input
@@ -124,9 +123,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region Internal
- 
 
-   
+
+
         //private int CurrentFuctionTypeIndex = 0;//0ÎªHBR 1ÎªSSB
         //private int CurrentGridIndex = 0;//0µ½4
 
@@ -203,11 +202,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             UIMgr.PopPanel();
             Debug.Log("Expel_performed!");
         }
-
+            
         private void Receive_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
-            parentUI.workerEcho.SpawnWorker(parentUI.CurrentGridIndex);
+            parentUI.workerEcho.SpawnWorker(parentUI.CurrentGridIndex, this.transform.position);
             
             ResonanceWheelUI.RingGrid.Reset(parentUI.Grids[parentUI.CurrentGridIndex], parentUI.Grids[parentUI.CurrentGridIndex].transform);
             UIMgr.PopPanel();

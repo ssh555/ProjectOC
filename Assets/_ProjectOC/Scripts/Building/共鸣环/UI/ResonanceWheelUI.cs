@@ -31,11 +31,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 {
     public class ResonanceWheelUI : ML.Engine.UI.UIBasePanel,ITickComponent
     {
-
         public IInventory inventory;
-
-        
-        
 
         #region Input
         /// <summary>
@@ -388,14 +384,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             if (workerEcho.Level == 1) //GameManager.Instance.Level == 1
             {
                 //能否成功合成 判空
-                worker = workerEcho.SummonWorker(cb,CurrentGridIndex);
+                worker = workerEcho.SummonWorker(cb,CurrentGridIndex, inventory);
 
             }
             else
             {
                 if(currentBeastType!=BeastType.WorkerEcho_Null)
                 {
-                    worker = workerEcho.SummonWorker(cb, CurrentGridIndex);
+                    worker = workerEcho.SummonWorker(cb, CurrentGridIndex, inventory);
                 }
                 
 /*                if (!GameManager.Instance.GetLocalManager<WorkerManager>().OnlyCostResource(inventory123, cb))
@@ -470,7 +466,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
 
 
-            workerEcho.StopEcho(Grids[CurrentGridIndex].beastType.ToString(), CurrentGridIndex);
+            workerEcho.StopEcho(Grids[CurrentGridIndex].beastType.ToString(), CurrentGridIndex, inventory);
 
 
             Grids[CurrentGridIndex].isNull = true;

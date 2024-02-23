@@ -26,11 +26,10 @@ namespace ProjectOC.WorkerEchoNS
         public void Interact(InteractComponent component)
         {
             //起慌貯態UI
-            Debug.Log("起UI");
+            //Debug.Log("起UI");
             ML.Engine.Input.InputManager.Instance.Common.Disable();
             var panel = GameObject.Instantiate(uIResonanceWheel);
             panel.transform.SetParent(GameObject.Find("Canvas").transform, false);
-
             ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
         }
 
