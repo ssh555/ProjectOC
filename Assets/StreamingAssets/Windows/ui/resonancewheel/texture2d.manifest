@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2137736658
+CRC: 512695269
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: cc66257fbb9eda72b780eccc2db6e847
+    Hash: aa9e8259f7df1f0cea87e2d875e51155
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2d8df09e698f722ada1caa03d3413830
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: cc66257fbb9eda72b780eccc2db6e847
+    Hash: aa9e8259f7df1f0cea87e2d875e51155
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -18,18 +18,17 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/icon_beast.png
-- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/green_background.png
-- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/blue_background.png
-- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/btn_switchtarget.png
-- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/yellow_background.png
-- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/gray_background.png
-- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/slectgrid.png
-- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/orange_background.png
-- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/icon_genderfemale.png
-- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/box.png
-- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/icon_gendermale.png
-- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/icon_timing.png
-- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/circle.png
-- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/StaminaBar.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/icon_beast.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/green_background.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/blue_background.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/btn_switchtarget.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/yellow_background.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/gray_background.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/slectgrid.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/orange_background.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/icon_genderfemale.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/box.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/icon_gendermale.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/icon_timing.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/circle.png
 Dependencies: []

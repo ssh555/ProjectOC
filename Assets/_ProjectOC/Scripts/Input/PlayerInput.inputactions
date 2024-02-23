@@ -67,15 +67,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "OpenBeastPanel",
-                    "type": "Button",
-                    "id": "16e86569-9e57-4c4c-bdf1-c6e249ccca7b",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -406,28 +397,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "OpenBotUI",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "fb9c7c90-1f06-49ff-a6db-8671f6d73d56",
-                    "path": "<Keyboard>/o",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "OpenBeastPanel",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "fa203a04-8944-4b80-b751-d3685db5851e",
-                    "path": "<XInputController>/leftTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "OpenBeastPanel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -2079,118 +2048,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Confirm",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "BeastPanel",
-            "id": "4967e72d-8fdc-4b8e-8be8-ea0880f7478e",
-            "actions": [
-                {
-                    "name": "SwitchBeast",
-                    "type": "Button",
-                    "id": "66cabf0f-f00a-465d-805b-458e6654fdf5",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Expel",
-                    "type": "Button",
-                    "id": "f239886f-7558-49c4-b7b9-1099b8fc7d9d",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Confirm",
-                    "type": "Button",
-                    "id": "12df18cd-3fdc-4fff-babf-07849920a155",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "d5231073-fee7-49bd-ad55-97fa2affe344",
-                    "path": "<XInputController>/leftStick/left",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Confirm",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "2801abe8-fa3f-43f4-aefb-7b7240bca3ed",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Confirm",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "1D Axis",
-                    "id": "bb7b65a4-a069-4735-aa17-365c98648bf1",
-                    "path": "1DAxis",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SwitchBeast",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "negative",
-                    "id": "717215ad-4981-4274-a86d-dcd4e21b3bc4",
-                    "path": "<Keyboard>/s",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SwitchBeast",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "positive",
-                    "id": "f5267953-e510-4e87-b889-54cc46e962e4",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SwitchBeast",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "",
-                    "id": "3879aebe-59ae-4d3a-ac9a-883099cdd5d3",
-                    "path": "<XInputController>/rightShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Expel",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "de8f1017-e893-45bd-9bc2-92fe16a5f414",
-                    "path": "<Keyboard>/r",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Expel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
