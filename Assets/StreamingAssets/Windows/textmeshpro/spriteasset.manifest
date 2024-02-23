@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1470059863
+CRC: 3037084342
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c0348428318fb21d623d043081de0142
+    Hash: ef75af546fb19af6abfe8edba1107dce
   TypeTreeHash:
     serializedVersion: 2
     Hash: 3a5d9d5398dd73d2d9271115afb4455f
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: c0348428318fb21d623d043081de0142
+    Hash: ef75af546fb19af6abfe8edba1107dce
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -40,12 +40,12 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.TextCoreFontEngineModule
   ClassName: UnityEngine.TextCore.GlyphRect
 Assets:
-- Assets/_ProjectOC/Resources/TextMeshPro/SpriteAsset/Texture2D/Triangle.asset
+- Assets/_ProjectOC/OCResources/TextMeshPro/SpriteAsset/Texture2D/Triangle.asset
 - Assets/TextMesh Pro/Sprites/EmojiOne.png
 - Assets/TextMesh Pro/Sprites/EmojiOne.json
-- Assets/_ProjectOC/Resources/TextMeshPro/SpriteAsset/TMPSprite.asset
+- Assets/_ProjectOC/OCResources/TextMeshPro/SpriteAsset/TMPSprite.asset
 - Assets/TextMesh Pro/Resources/Sprite Assets/EmojiOne.asset
 - Assets/TextMesh Pro/Sprites/EmojiOne Attribution.txt
-- Assets/_ProjectOC/Resources/TextMeshPro/SpriteAsset/Texture2D/Triangle.png
+- Assets/_ProjectOC/OCResources/TextMeshPro/SpriteAsset/Texture2D/Triangle.png
 Dependencies:
 - D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/textmeshpro/shader

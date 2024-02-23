@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 1010625569
+CRC: 2978673779
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -142,7 +142,8 @@ AssetBundleManifest:
         Dependency_0: materials/buildingsystem/bpart
     Info_30:
       Name: prefabs/character/worker
-      Dependencies: {}
+      Dependencies:
+        Dependency_0: model/character
     Info_31:
       Name: model/buildingsystem/texture3d
       Dependencies: {}
@@ -190,4 +191,7 @@ AssetBundleManifest:
       Dependencies: {}
     Info_44:
       Name: ui/buildingsystem/texture2d/buildicon
+      Dependencies: {}
+    Info_45:
+      Name: model/character
       Dependencies: {}

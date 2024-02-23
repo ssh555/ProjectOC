@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2429770544
+CRC: 2188743306
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: bdaaca9627a7940d2b79ce9b3c66b403
+    Hash: 20dc288a639c1244324b86c2032e65a9
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2d8df09e698f722ada1caa03d3413830
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: bdaaca9627a7940d2b79ce9b3c66b403
+    Hash: 20dc288a639c1244324b86c2032e65a9
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -18,12 +18,12 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ProjectOC/Resources/UI/Inventory/Texture2D/ItemType/Mission.png
-- Assets/_ProjectOC/Resources/UI/Inventory/Texture2D/UI/Selected.png
-- Assets/_ProjectOC/Resources/UI/Inventory/Texture2D/ItemType/Equip.png
-- Assets/_ProjectOC/Resources/UI/Inventory/Texture2D/ItemType/Material.png
-- Assets/_ProjectOC/Resources/UI/Inventory/Texture2D/UI/Info_Icon_Backgroud.png
-- Assets/_ProjectOC/Resources/UI/Inventory/Texture2D/ItemType/Selected.png
-- Assets/_ProjectOC/Resources/UI/Inventory/Texture2D/UI/Info_Icon_Frame.png
-- Assets/_ProjectOC/Resources/UI/Inventory/Texture2D/ItemType/Food.png
+- Assets/_ProjectOC/OCResources/UI/Inventory/Texture2D/ItemType/Mission.png
+- Assets/_ProjectOC/OCResources/UI/Inventory/Texture2D/UI/Selected.png
+- Assets/_ProjectOC/OCResources/UI/Inventory/Texture2D/ItemType/Equip.png
+- Assets/_ProjectOC/OCResources/UI/Inventory/Texture2D/ItemType/Material.png
+- Assets/_ProjectOC/OCResources/UI/Inventory/Texture2D/UI/Info_Icon_Backgroud.png
+- Assets/_ProjectOC/OCResources/UI/Inventory/Texture2D/ItemType/Selected.png
+- Assets/_ProjectOC/OCResources/UI/Inventory/Texture2D/UI/Info_Icon_Frame.png
+- Assets/_ProjectOC/OCResources/UI/Inventory/Texture2D/ItemType/Food.png
 Dependencies: []

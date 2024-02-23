@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1439965081
+CRC: 1856970596
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d75be082d9d8b81c094d83944d226c35
+    Hash: 8d1a61757614695455b8d03f7e973f72
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5e762ccb57c4caaabbb5a4199ac82c23
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: d75be082d9d8b81c094d83944d226c35
+    Hash: 8d1a61757614695455b8d03f7e973f72
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -18,6 +18,6 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ProjectOC/Resources/Materials/Other/Opaque.mat
-- Assets/_ProjectOC/Resources/Materials/Other/Transparent.mat
+- Assets/_ProjectOC/OCResources/Materials/Other/Opaque.mat
+- Assets/_ProjectOC/OCResources/Materials/Other/Transparent.mat
 Dependencies: []

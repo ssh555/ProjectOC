@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3275162032
+CRC: 2375224384
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 0231149fd021b3289d79eee728c05672
+    Hash: e9ccc1c8050c0d747b2f154215d1490f
   TypeTreeHash:
     serializedVersion: 2
-    Hash: e0c21352ebac1c1ed4953d7a55ff02ba
+    Hash: 59c03d2b98afd3e9e06e08bd517356db
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 0231149fd021b3289d79eee728c05672
+    Hash: e9ccc1c8050c0d747b2f154215d1490f
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -19,6 +19,8 @@ ClassTypes:
 - Class: 21
   Script: {instanceID: 0}
 - Class: 23
+  Script: {instanceID: 0}
+- Class: 28
   Script: {instanceID: 0}
 - Class: 33
   Script: {instanceID: 0}
@@ -36,16 +38,27 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/TerrainData/luo/luo Mesh.asset
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Slope_Bend_4x3x4.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/TerrainData/luo/luo Default.mat
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/BuildingA.FBX
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/TerrainData/luo.asset
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Slope_2x3x6.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/TerrainData/luo/luo Collider.asset
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Slope_Bend_3x2x3.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/FurnaceA.FBX
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/Slope_2x2x4.fbx
-- Assets/_ProjectOC/Resources/Meshes/TerrainMeshes/TerrainData/luo/luo.prefab
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/luo/luo Mesh.asset
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Slope_Bend_4x3x4.fbx
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/luo/luo Default.mat
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/BuildingA.FBX
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Materials/BuildingA_mt3.mat
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Materials/FurnaceA_mt1.mat
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Materials/FurnaceA_mt2.mat
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/Terrain.asset
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Slope_2x3x6.fbx
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/luo/luo Collider.asset
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Materials/BuildingA_mt2.mat
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Slope_Bend_3x2x3.fbx
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/Terrain/Terrain
+  Collider.obj
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/FurnaceA.FBX
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/Terrain/Terrain
+  Mesh.obj
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Materials/BuildingA_mt1.mat
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Slope_2x2x4.fbx
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Materials/BuildingA_mt4.mat
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/Terrain/Terrain.prefab
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/luo/luo.prefab
 Dependencies:
 - D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/terrain

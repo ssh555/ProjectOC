@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 775732418
+CRC: 525967618
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f47fc3b70c6779c550d313c70bfd84d2
+    Hash: 74aa849409739664364191dbb94257fb
   TypeTreeHash:
     serializedVersion: 2
     Hash: 802f07a1dca0deabb6f9b6cdbde2fb97
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: f47fc3b70c6779c550d313c70bfd84d2
+    Hash: 74aa849409739664364191dbb94257fb
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -100,16 +100,16 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.SpriteState
 Assets:
-- Assets/_ProjectOC/Resources/UIPanel/TechPointPanel.prefab
-- Assets/_ProjectOC/Resources/UIPanel/ResonanceWheelUI_sub2.prefab
-- Assets/_ProjectOC/Resources/UIPanel/UIInfiniteInventoryPanel.prefab
-- Assets/_ProjectOC/Resources/UIPanel/UIStorePanel.prefab
-- Assets/_ProjectOC/Resources/UIPanel/PlayerUIPanel.prefab
-- Assets/_ProjectOC/Resources/UIPanel/SkillGraph.prefab
-- Assets/_ProjectOC/Resources/UIPanel/ResonanceWheelUI.prefab
-- Assets/_ProjectOC/Resources/UIPanel/ResonanceWheelUI_sub1.prefab
-- Assets/_ProjectOC/Resources/UIPanel/UIProNodePanel.prefab
-- Assets/_ProjectOC/Resources/UIPanel/PlayerUIBotPanel.prefab
+- Assets/_ProjectOC/OCResources/UIPanel/TechPointPanel.prefab
+- Assets/_ProjectOC/OCResources/UIPanel/ResonanceWheelUI_sub2.prefab
+- Assets/_ProjectOC/OCResources/UIPanel/UIInfiniteInventoryPanel.prefab
+- Assets/_ProjectOC/OCResources/UIPanel/UIStorePanel.prefab
+- Assets/_ProjectOC/OCResources/UIPanel/PlayerUIPanel.prefab
+- Assets/_ProjectOC/OCResources/UIPanel/SkillGraph.prefab
+- Assets/_ProjectOC/OCResources/UIPanel/ResonanceWheelUI.prefab
+- Assets/_ProjectOC/OCResources/UIPanel/ResonanceWheelUI_sub1.prefab
+- Assets/_ProjectOC/OCResources/UIPanel/UIProNodePanel.prefab
+- Assets/_ProjectOC/OCResources/UIPanel/PlayerUIBotPanel.prefab
 Dependencies:
 - D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/fonts
 - D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/textmeshpro/font

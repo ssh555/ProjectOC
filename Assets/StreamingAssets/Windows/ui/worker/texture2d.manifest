@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 645229538
+CRC: 1260509399
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: dbea919f25e0a563035c16fba8c417bc
+    Hash: 5ac951db3229e127124513121d448c35
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2d8df09e698f722ada1caa03d3413830
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: dbea919f25e0a563035c16fba8c417bc
+    Hash: 5ac951db3229e127124513121d448c35
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -18,5 +18,5 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ProjectOC/Resources/UI/Worker/Texture2D/Worker.png
+- Assets/_ProjectOC/OCResources/UI/Worker/Texture2D/Worker.png
 Dependencies: []

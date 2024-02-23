@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3809205986
+CRC: 643791256
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 4168c25577ca5e07fcb6afb5e5b9e534
+    Hash: dd9da80f1ff49be2c1d23161bedb6ab1
   TypeTreeHash:
     serializedVersion: 2
     Hash: acbcba2b5efe1be4b8fc57af367dcf25
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 4168c25577ca5e07fcb6afb5e5b9e534
+    Hash: dd9da80f1ff49be2c1d23161bedb6ab1
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -78,7 +78,7 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.Events.PersistentCallGroup
 Assets:
-- Assets/_ProjectOC/Resources/Prefabs/Character/PlayerCharacter/PlayerCharacter.prefab
+- Assets/_ProjectOC/OCResources/Prefabs/Character/PlayerCharacter/PlayerCharacter.prefab
 Dependencies:
 - D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
 - D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/animation/character/player/playermove

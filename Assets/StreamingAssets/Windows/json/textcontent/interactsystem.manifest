@@ -1,20 +1,20 @@
 ManifestFileVersion: 0
-CRC: 4178409442
+CRC: 2143179379
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b20fbca219d97ab2d4061a39badf03c0
+    Hash: a6e8e7128253e2f84baf1ca2a0c3accb
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5ad585dd02dfb5016c0dad519eab8f49
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: b20fbca219d97ab2d4061a39badf03c0
+    Hash: a6e8e7128253e2f84baf1ca2a0c3accb
 HashAppended: 0
 ClassTypes:
 - Class: 49
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ProjectOC/Resources/Json/TextContent/InteractSystem/InteractKeyTip.json
+- Assets/_ProjectOC/OCResources/Json/TextContent/InteractSystem/InteractKeyTip.json
 Dependencies: []
