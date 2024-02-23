@@ -136,12 +136,12 @@ namespace ProjectOC.WorkerNS
             this.ExpRate.Add(WorkType.Collect, 100);
 
             this.Eff.Add(WorkType.None, 0);
-            this.Eff.Add(WorkType.Cook, 0);
-            this.Eff.Add(WorkType.HandCraft, 0);
-            this.Eff.Add(WorkType.Industry, 0);
-            this.Eff.Add(WorkType.Magic, 0);
+            this.Eff.Add(WorkType.Cook, 10);
+            this.Eff.Add(WorkType.HandCraft, 10);
+            this.Eff.Add(WorkType.Industry, 10);
+            this.Eff.Add(WorkType.Magic, 10);
             this.Eff.Add(WorkType.Transport, 50);
-            this.Eff.Add(WorkType.Collect, 0);
+            this.Eff.Add(WorkType.Collect, 10);
 
             this.Skill.Add(WorkType.None, new Skill());
             this.Skill.Add(WorkType.Cook, new Skill());

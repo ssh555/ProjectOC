@@ -5585,7 +5585,7 @@ GameObject:
   - component: {fileID: 8991672912059403677}
   - component: {fileID: 2531722457921879283}
   m_Layer: 0
-  m_Name: LevelUp
+  m_Name: Upgrade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5686,6 +5686,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsInit: 0
+  CurMode: 0
   ProNode:
     WorldProNode: {fileID: 0}
     ID: 

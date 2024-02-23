@@ -1,10 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ML.Engine.BuildingSystem;
 using ML.Engine.InventorySystem;
+using ML.Engine.InventorySystem.CompositeSystem;
 using ProjectOC.MissionNS;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using static ML.Engine.InventorySystem.CompositeSystem.CompositeManager;
 
 namespace ProjectOC.StoreNS
 {
@@ -51,11 +54,11 @@ namespace ProjectOC.StoreNS
                 return this.LevelStoreDataCapacity[this.Level];
             }
         }
-        
+
         /// <summary>
         /// 仓库等级
         /// </summary>
-        public int Level { get; private set; }
+        public int Level;
         
         /// <summary>
         /// 仓库最大等级
@@ -472,6 +475,69 @@ namespace ProjectOC.StoreNS
                             //Debug.LogError("UIFastRemove Error");
                             break;
                         }
+                    }
+                }
+            }
+        }
+        public List<Formula> GetUpgradeRaw()
+        {
+            List<Formula> result = new List<Formula>();
+            if (this.WorldStore != null)
+            {
+                string upgradeRawID = BuildingManager.Instance.GetUpgradeRaw(this.WorldStore.Classification.ToString().Replace('-', '_'));
+                Formula[] formulas = CompositeManager.Instance.GetCompositonFomula(upgradeRawID);
+                if (formulas != null)
+                {
+                    result.AddRange(formulas);
+                }
+            }
+            return result;
+        }
+        
+        public List<Formula> GetUpgradeRawCurrent(Player.PlayerCharacter player)
+        {
+            List<Formula> result = new List<Formula>();
+            if (this.WorldStore != null)
+            {
+                string upgradeRawID = BuildingManager.Instance.GetUpgradeRaw(this.WorldStore.Classification.ToString().Replace('-', '_'));
+                Formula[] formulas = CompositeManager.Instance.GetCompositonFomula(upgradeRawID);
+                if (formulas != null)
+                {
+                    foreach (Formula formula in formulas)
+                    {
+                        int num = player.Inventory.GetItemAllNum(formula.id);
+                        Formula newFormula = new Formula();
+                        newFormula.id = formula.id;
+                        newFormula.num = num;
+                        result.Add(newFormula);
+                    }
+                }
+            }
+            return result;
+        }
+
+        public void Upgrade(Player.PlayerCharacter player)
+        {
+            if (this.WorldStore != null)
+            {
+                string upgradeRawID = BuildingManager.Instance.GetUpgradeRaw(this.WorldStore.Classification.ToString().Replace('-', '_'));
+                string upgradeID = BuildingManager.Instance.GetUpgrade(this.WorldStore.Classification.ToString().Replace('-', '_'));
+                string upgradeCID = BuildingManager.Instance.GetClassification(upgradeID);
+
+                if (!string.IsNullOrEmpty(upgradeRawID) 
+                    && !string.IsNullOrEmpty(upgradeCID)
+                    && BuildingManager.Instance.IsValidBPartID(upgradeCID) 
+                    && CompositeManager.Instance.OnlyCostResource(player.Inventory, upgradeRawID))
+                {
+                    if (BuildingManager.Instance.GetOneBPartInstance(upgradeCID) is WorldStore upgrade)
+                    {
+                        upgrade.InstanceID = this.WorldStore.InstanceID;
+                        upgrade.transform.position = this.WorldStore.transform.position;
+                        upgrade.transform.rotation = this.WorldStore.transform.rotation;
+                        UnityEngine.Object.Destroy(this.WorldStore.gameObject);
+                        this.WorldStore = upgrade;
+                        upgrade.Store = this;
+                        this.SetLevel(upgrade.Classification.Category4 - 1);
                     }
                 }
             }

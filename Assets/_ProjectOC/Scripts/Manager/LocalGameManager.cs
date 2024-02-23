@@ -66,17 +66,17 @@ namespace ProjectOC.ManagerNS
         {
             if (Instance == this)
             {
-                GM.UnregisterAllLocalManager<DispatchTimeManager>();
-                GM.UnregisterAllLocalManager<MissionManager>();
-                GM.UnregisterAllLocalManager<ProNodeManager>();
-                GM.UnregisterAllLocalManager<RecipeManager>();
-                GM.UnregisterAllLocalManager<StoreManager>();
-                GM.UnregisterAllLocalManager<WorkerManager>();
-                GM.UnregisterAllLocalManager<EffectManager>();
-                GM.UnregisterAllLocalManager<FeatureManager>();
-                GM.UnregisterAllLocalManager<SkillManager>();
-                GM.UnregisterAllLocalManager<WorkerEchoManager>();
-                GM.UnregisterAllLocalManager<LocalGameManager>();
+                GM?.UnregisterLocalManager<DispatchTimeManager>();
+                GM?.UnregisterLocalManager<MissionManager>();
+                GM?.UnregisterLocalManager<ProNodeManager>();
+                GM?.UnregisterLocalManager<RecipeManager>();
+                GM?.UnregisterLocalManager<StoreManager>();
+                GM?.UnregisterLocalManager<WorkerManager>();
+                GM?.UnregisterLocalManager<EffectManager>();
+                GM?.UnregisterLocalManager<FeatureManager>();
+                GM?.UnregisterLocalManager<SkillManager>();
+                GM?.UnregisterLocalManager<WorkerEchoManager>();
+                GM?.UnregisterLocalManager<LocalGameManager>();
                 Instance = null;
             }
         }

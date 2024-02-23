@@ -27,6 +27,14 @@
         "Chinese" : "取出",
         "English" : "Remove"
     },
+    "text_LvDesc1" : {
+        "Chinese" : "存储格子: ",
+        "English" : "StoreCapacity: "
+    },
+    "text_LvDesc2" : {
+        "Chinese" : "存储容量: ",
+        "English" : "StorageCapacity: "
+    },
     "kt_NextPriority" : {
         "keyname" : "kt_NextPriority",
         "keymap" : {
@@ -38,8 +46,8 @@
             "English" : ""
         }
     },
-    "kt_ChangeItem" : {
-        "keyname" : "kt_ChangeItem",
+    "kt_ChangeIcon" : {
+        "keyname" : "kt_ChangeIcon",
         "keymap" : {
             "XBOX" : "LT",
             "KeyBoard" : "G"
@@ -49,11 +57,22 @@
             "English" : ""
         }
     },
+    "kt_ChangeItem" : {
+        "keyname" : "kt_ChangeItem",
+        "keymap" : {
+            "XBOX" : "A",
+            "KeyBoard" : "E"
+        },
+        "description" : {
+            "Chinese" : "改变物品",
+            "English" : "Change Item"
+        }
+    },
     "kt_Remove1" : {
         "keyname" : "kt_Remove1",
         "keymap" : {
             "XBOX" : "X",
-            "KeyBoard" : "E"
+            "KeyBoard" : "T"
         },
         "description" : {
             "Chinese" : "取出1个",
@@ -64,7 +83,7 @@
         "keyname" : "kt_Remove10",
         "keymap" : {
             "XBOX" : "X",
-            "KeyBoard" : "E"
+            "KeyBoard" : "T"
         },
         "description" : {
             "Chinese" : "取出10个",
@@ -82,20 +101,22 @@
             "English" : "Fast Add"
         }
     },
-    "kt_ChangeItem_Confirm" : {
-        "keyname" : "kt_ChangeItem_Confirm",
+    "kt_Confirm" : {
+        "keyname" : "kt_Confirm",
         "keymap" : {
-            "XBOX" : "A"
+            "XBOX" : "A",
+            "KeyBoard" : "E"
         },
         "description" : {
             "Chinese" : "确认",
             "English" : "Confirm"
         }
     },
-    "kt_ChangeItem_Back" : {
-        "keyname" : "kt_ChangeItem_Back",
+    "kt_Back" : {
+        "keyname" : "kt_Back",
         "keymap" : {
-            "XBOX" : "B"
+            "XBOX" : "B",
+            "KeyBoard" : "Esc"
         },
         "description" : {
             "Chinese" : "返回",

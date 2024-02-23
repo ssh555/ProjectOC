@@ -983,9 +983,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ChangeStoreData",
+                    "name": "ChangeIcon",
                     "type": "Button",
                     "id": "e187d8c7-7825-440a-b954-9c52e6b1f573",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Upgrade",
+                    "type": "Button",
+                    "id": "d60d6ab9-0a0f-44d7-bf1e-e1b964f968b6",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -999,6 +1008,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "ChangeStoreData",
+                    "type": "Button",
+                    "id": "87b70b70-485e-43c4-8fe3-dee297ad547d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Remove1",
@@ -1058,7 +1076,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ChangeStoreData",
+                    "action": "ChangeIcon",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1066,6 +1084,94 @@
                     "name": "",
                     "id": "db8ad17a-856a-46cf-a9be-8d29947512c3",
                     "path": "<Keyboard>/g",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeIcon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8e7db927-4ca8-4a74-b4a4-eea8f7f71bbe",
+                    "path": "<XInputController>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Remove1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fff4c8a5-5012-4e6c-a787-8fa445766c9e",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Remove1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a09f564f-a92d-479a-92ab-3b5abc3d9a8e",
+                    "path": "<XInputController>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Remove10",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "98ac3791-c45b-4c66-9fe1-a4aac0b72d8c",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Remove10",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3fa4ff71-f3de-4a1c-b6fa-88aed36a92d4",
+                    "path": "<XInputController>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FastAdd",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "90ab7934-3ce3-4621-83f6-63383b4af996",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FastAdd",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3ea772ae-eb77-4e95-a915-090a81beae3d",
+                    "path": "<XInputController>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeStoreData",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "69f3b08a-3774-47b3-8fa2-9f4b983b0397",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -1185,67 +1291,23 @@
                 },
                 {
                     "name": "",
-                    "id": "8e7db927-4ca8-4a74-b4a4-eea8f7f71bbe",
-                    "path": "<XInputController>/buttonWest",
+                    "id": "9146e27f-fc3f-4379-97fd-3535fc23c096",
+                    "path": "<XInputController>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Remove1",
+                    "action": "Upgrade",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "fff4c8a5-5012-4e6c-a787-8fa445766c9e",
-                    "path": "<Keyboard>/e",
+                    "id": "34ccf2f4-fe5f-4b34-b387-4d304ee8d446",
+                    "path": "<Keyboard>/u",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Remove1",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a09f564f-a92d-479a-92ab-3b5abc3d9a8e",
-                    "path": "<XInputController>/buttonWest",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Remove10",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "98ac3791-c45b-4c66-9fe1-a4aac0b72d8c",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Remove10",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "3fa4ff71-f3de-4a1c-b6fa-88aed36a92d4",
-                    "path": "<XInputController>/buttonNorth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "FastAdd",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "90ab7934-3ce3-4621-83f6-63383b4af996",
-                    "path": "<Keyboard>/r",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "FastAdd",
+                    "action": "Upgrade",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

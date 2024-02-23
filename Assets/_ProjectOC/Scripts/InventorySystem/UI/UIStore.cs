@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using ML.Engine.Extension;
+using ML.Engine.InventorySystem.CompositeSystem;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -21,9 +22,10 @@ namespace ProjectOC.InventorySystem.UI
 
             #region TopTitle
             Text_Title = transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_ChangeItem = new UIKeyTip();
-            KT_ChangeItem.img = transform.Find("TopTitle").Find("KT_ChangeItem").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_ChangeItem.keytip = KT_ChangeItem.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
+            KT_ChangeIcon = new UIKeyTip();
+            KT_ChangeIcon.img = transform.Find("TopTitle").Find("KT_ChangeIcon").Find("Image").GetComponent<UnityEngine.UI.Image>();
+            KT_ChangeIcon.keytip = KT_ChangeIcon.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
+            StoreIcon = transform.Find("TopTitle").Find("Icon");
 
             #region Priority
             Transform priority = transform.Find("TopTitle").Find("Priority");
@@ -53,8 +55,28 @@ namespace ProjectOC.InventorySystem.UI
             ChangeItem.gameObject.SetActive(false);
             #endregion
 
+            #region Upgrade
+            Upgrade = transform.Find("Upgrade");
+            Transform contentUpgrade = transform.Find("Upgrade").Find("Raw").Find("Viewport").Find("Content");
+            Upgrade_GridLayout = contentUpgrade.GetComponent<GridLayoutGroup>();
+            Upgrade_UIItemTemplate = contentUpgrade.Find("UIItemTemplate");
+            Upgrade_UIItemTemplate.gameObject.SetActive(false);
+            Transform level = transform.Find("Upgrade").Find("Level");
+            LvOld = level.Find("LvOld").GetComponent<TMPro.TextMeshProUGUI>();
+            LvNew = level.Find("LvNew").GetComponent<TMPro.TextMeshProUGUI>();
+            DescOld = level.Find("DescOld").GetComponent<TMPro.TextMeshProUGUI>();
+            DescNew = level.Find("DescNew").GetComponent<TMPro.TextMeshProUGUI>();
+            Upgrade.gameObject.SetActive(false);
+            #endregion
+
             #region BotKeyTips
             BotKeyTips_KeyTips = this.transform.Find("BotKeyTips").Find("KeyTips");
+            
+            KT_ChangeItem = new UIKeyTip();
+            KT_ChangeItem.img = BotKeyTips_KeyTips.Find("KT_ChangeItem").Find("Image").GetComponent<Image>();
+            KT_ChangeItem.keytip = KT_ChangeItem.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
+            KT_ChangeItem.description = KT_ChangeItem.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
+
             KT_Remove1 = new UIKeyTip();
             KT_Remove1.img = BotKeyTips_KeyTips.Find("KT_Remove1").Find("Image").GetComponent<Image>();
             KT_Remove1.keytip = KT_Remove1.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
@@ -120,7 +142,9 @@ namespace ProjectOC.InventorySystem.UI
         public enum Mode
         {
             Store = 0,
-            ChangeItem = 1
+            ChangeItem = 1,
+            ChangeIcon = 2,
+            Upgrade = 3
         }
         private Mode CurMode = Mode.Store;
         /// <summary>
@@ -316,7 +340,6 @@ namespace ProjectOC.InventorySystem.UI
             Store.OnStoreDataChange += Refresh;
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Enable();
-            //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
             Store.IsInteracting = true;
             this.Refresh();
         }
@@ -325,7 +348,6 @@ namespace ProjectOC.InventorySystem.UI
         {
             Store.OnStoreDataChange -= Refresh;
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Disable();
-            //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
             Store.IsInteracting = false;
             this.UnregisterInput();
         }
@@ -334,6 +356,8 @@ namespace ProjectOC.InventorySystem.UI
         {
             // 切换Priority
             ProjectOC.Input.InputManager.PlayerInput.UIStore.NextPriority.performed -= NextPriority_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeIcon.performed -= ChangeIcon_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Upgrade.performed -= Upgrade_performed;
             // 上下切换StoreData
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Alter.performed -= Alter_performed;
             // 改变StoreData存储的Item
@@ -346,13 +370,15 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove10.performed -= Remove10_performed;
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
-            ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.performed -= ChangeItem_Confirm_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.performed -= Confirm_performed;
         }
 
         private void RegisterInput()
         {
             // 切换Priority
             ProjectOC.Input.InputManager.PlayerInput.UIStore.NextPriority.performed += NextPriority_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeIcon.performed += ChangeIcon_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Upgrade.performed += Upgrade_performed;
             // 上下切换StoreData
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Alter.performed += Alter_performed;
             // 改变StoreData存储的Item
@@ -365,9 +391,24 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove10.performed += Remove10_performed;
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
-            ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.performed += ChangeItem_Confirm_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.performed += Confirm_performed;
         }
-
+        private void ChangeIcon_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            if (CurMode == Mode.Store)
+            {
+                CurMode = Mode.ChangeIcon;
+                Refresh();
+            }
+        }
+        private void Upgrade_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            if (CurMode == Mode.Store)
+            {
+                CurMode = Mode.Upgrade;
+                Refresh();
+            }
+        }
         private void NextPriority_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             MissionNS.TransportPriority temp = CurPriority;
@@ -395,7 +436,7 @@ namespace ProjectOC.InventorySystem.UI
                 var grid = GridLayout.GetGridSize();
                 this.CurrentDataIndex += -offset.y * grid.y + offset.x;
             }
-            else if (CurMode == Mode.ChangeItem)
+            else if (CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon)
             {
                 var f_offset = obj.ReadValue<Vector2>();
                 var offset = new Vector2Int(Mathf.RoundToInt(f_offset.x), Mathf.RoundToInt(f_offset.y));
@@ -441,18 +482,47 @@ namespace ProjectOC.InventorySystem.UI
             {
                 UIMgr.PopPanel();
             }
-            else if (CurMode == Mode.ChangeItem)
+            else if (CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon || CurMode == Mode.Upgrade)
             {
                 this.CurMode = Mode.Store;
+                this.ItemDatas.Clear();
+                this.lastItemIndex = 0;
+                this.currentItemIndex = 0;
                 Refresh();
             }
         }
-        private void ChangeItem_Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (CurMode == Mode.ChangeItem)
             {
                 Store.ChangeStoreData(CurrentDataIndex, CurrentItemData);
                 this.CurMode = Mode.Store;
+                Refresh();
+            }
+            else if (CurMode == Mode.ChangeIcon)
+            {
+                string itemID = CurrentItemData;
+                // 更新Icon
+                if (ItemManager.Instance.IsValidItemID(itemID))
+                {
+                    var img = StoreIcon.GetComponent<Image>();
+                    // 查找临时存储的Sprite
+                    var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(itemID));
+                    // 不存在则生成
+                    if (sprite == null)
+                    {
+                        sprite = ItemManager.Instance.GetItemSprite(itemID);
+                        tempSprite.Add(sprite);
+                    }
+                    img.sprite = sprite;
+                }
+                
+                this.CurMode = Mode.Store;
+                Refresh();
+            }
+            else if (CurMode == Mode.Upgrade)
+            {
+                this.Store.Upgrade(Player);
                 Refresh();
             }
         }
@@ -461,8 +531,9 @@ namespace ProjectOC.InventorySystem.UI
         #region UI
         #region Temp
         private List<Sprite> tempSprite = new List<Sprite>();
-        private List<GameObject> tempUIStoreDatas = new List<GameObject>();
+        private List<GameObject> uiStoreDatas = new List<GameObject>();
         private List<GameObject> tempUIItemDatas = new List<GameObject>();
+        private List<GameObject> tempUIItemDatasUpgrade = new List<GameObject>();
 
         private void ClearTemp()
         {
@@ -470,11 +541,15 @@ namespace ProjectOC.InventorySystem.UI
             {
                 Destroy(s);
             }
-            foreach (var s in tempUIStoreDatas)
+            foreach (var s in uiStoreDatas)
             {
                 Destroy(s);
             }
             foreach (var s in tempUIItemDatas)
+            {
+                Destroy(s);
+            }
+            foreach (var s in tempUIItemDatasUpgrade)
             {
                 Destroy(s);
             }
@@ -486,6 +561,7 @@ namespace ProjectOC.InventorySystem.UI
         private TMPro.TextMeshProUGUI Text_Priority;
 
         private UIKeyTip KT_NextPriority;
+        private UIKeyTip KT_ChangeIcon;
         private UIKeyTip KT_ChangeItem;
         private UIKeyTip KT_Remove1;
         private UIKeyTip KT_Remove10;
@@ -500,9 +576,19 @@ namespace ProjectOC.InventorySystem.UI
         private Transform PriorityNormal;
         private Transform PriorityAlternative;
 
+        private Transform StoreIcon;
+
         private Transform ChangeItem;
         private Transform ChangeItem_UIItemTemplate;
         private GridLayoutGroup ChangeItem_GridLayout;
+
+        private Transform Upgrade;
+        private Transform Upgrade_UIItemTemplate;
+        private GridLayoutGroup Upgrade_GridLayout;
+        private TMPro.TextMeshProUGUI LvOld;
+        private TMPro.TextMeshProUGUI LvNew;
+        private TMPro.TextMeshProUGUI DescOld;
+        private TMPro.TextMeshProUGUI DescNew;
 
         private Transform BotKeyTips_KeyTips;
         private Transform BotKeyTips_ChangeItem;
@@ -522,34 +608,21 @@ namespace ProjectOC.InventorySystem.UI
                 this.BotKeyTips_KeyTips.gameObject.SetActive(true);
                 this.UIItemTemplate.gameObject.SetActive(false);
                 this.ChangeItem_UIItemTemplate.gameObject.SetActive(false);
+                this.Upgrade.gameObject.SetActive(false);
+                this.Upgrade_UIItemTemplate.gameObject.SetActive(false);
 
                 StoreDatas = Store.StoreDatas;
                 #region TopTitle
                 Text_Title.text = PanelTextContent.text_Title.GetText();
-                KT_ChangeItem.ReWrite(PanelTextContent.kt_ChangeItem);
+                KT_ChangeIcon.ReWrite(PanelTextContent.kt_ChangeIcon);
                 KT_NextPriority.ReWrite(PanelTextContent.kt_NextPriority);
                 #endregion
 
                 #region Store
-                // 临时内存生成的UIStoreData数量(只增不减，多的隐藏掉即可) - 当前筛选出来的UIStoreData数量
-                int delta = tempUIStoreDatas.Count - StoreDatas.Count;
-                // > 0 => 有多余，隐藏
-                if (delta > 0)
+                for (int i = 0; i < StoreDatas.Count; i++)
                 {
-                    for (int i = 0; i < delta; ++i)
-                    {
-                        tempUIStoreDatas[tempUIStoreDatas.Count - 1 - i].SetActive(false);
-                    }
-                }
-                // < 0 => 不够， 增加
-                else if (delta < 0)
-                {
-                    delta = -delta;
-                    for (int i = 0; i < delta; ++i)
-                    {
-                        var uiitem = Instantiate(UIItemTemplate, GridLayout.transform, false);
-                        tempUIStoreDatas.Add(uiitem.gameObject);
-                    }
+                    var uiitem = Instantiate(UIItemTemplate, GridLayout.transform, false);
+                    uiStoreDatas.Add(uiitem.gameObject);
                 }
 
                 // 用于更新滑动窗口
@@ -561,21 +634,24 @@ namespace ProjectOC.InventorySystem.UI
                 // 遍历筛选的StoreDataList
                 for (int i = 0; i < StoreDatas.Count; ++i)
                 {
-                    var uiStoreData = tempUIStoreDatas[i];
+                    var uiStoreData = uiStoreDatas[i];
                     var storeData = StoreDatas[i];
                     // Active
                     uiStoreData.SetActive(true);
-                    //// 更新Icon
-                    //var img = uiStoreData.transform.Find("Icon").GetComponent<Image>();
-                    //// 查找临时存储的Sprite
-                    //var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(storeData.ItemID));
-                    //// 不存在则生成
-                    //if (sprite == null)
-                    //{
-                    //    sprite = ItemManager.Instance.GetItemSprite(storeData.ItemID);
-                    //    tempSprite.Add(sprite);
-                    //}
-                    //img.sprite = sprite;
+                    // 更新Icon
+                    if (ItemManager.Instance.IsValidItemID(storeData.ItemID))
+                    {
+                        var img = uiStoreData.transform.Find("Icon").GetComponent<Image>();
+                        // 查找临时存储的Sprite
+                        var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(storeData.ItemID));
+                        // 不存在则生成
+                        if (sprite == null)
+                        {
+                            sprite = ItemManager.Instance.GetItemSprite(storeData.ItemID);
+                            tempSprite.Add(sprite);
+                        }
+                        img.sprite = sprite;
+                    }
                     // Name
                     var nametext = uiStoreData.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
                     if (storeData.ItemID != "")
@@ -623,10 +699,10 @@ namespace ProjectOC.InventorySystem.UI
                         progressBar2.Find("None").gameObject.SetActive(false);
                         progressBar3.Find("None").gameObject.SetActive(false);
                     }
-                    float width1 = amount >= amountEachLevel ? 1 : amount / amountEachLevel;
-                    float width2 = amount >= 2 * amountEachLevel ? 1 : amount / amountEachLevel - 1;
+                    float width1 = amount >= amountEachLevel ? 1 : (float)amount / amountEachLevel;
+                    float width2 = amount >= 2 * amountEachLevel ? 1 : (float)amount / amountEachLevel - 1;
                     width2 = width2 >= 0 ? width2 : 0;
-                    float width3 = amount >= 3 * amountEachLevel ? 1 : amount / amountMax - 2;
+                    float width3 = amount >= 3 * amountEachLevel ? 1 : (float)amount / amountMax - 2;
                     width3 = width3 >= 0 ? width3 : 0;
                     progressBarRectCur1.sizeDelta = new Vector2(400 * width1, progressBarRectCur1.sizeDelta.y);
                     progressBarRectCur2.sizeDelta = new Vector2(400 * width2, progressBarRectCur2.sizeDelta.y);
@@ -710,18 +786,21 @@ namespace ProjectOC.InventorySystem.UI
                 #endregion
 
                 #region BotKeyTips
+                KT_ChangeItem.ReWrite(PanelTextContent.kt_ChangeItem);
                 KT_Remove1.ReWrite(PanelTextContent.kt_Remove1);
                 KT_Remove10.ReWrite(PanelTextContent.kt_Remove10);
                 KT_FastAdd.ReWrite(PanelTextContent.kt_FastAdd);
                 #endregion
             }
-            else if(this.CurMode == Mode.ChangeItem)
+            else if(this.CurMode == Mode.ChangeItem || this.CurMode == Mode.ChangeIcon)
             {
                 this.ChangeItem.gameObject.SetActive(true);
                 this.BotKeyTips_ChangeItem.gameObject.SetActive(true);
                 this.BotKeyTips_KeyTips.gameObject.SetActive(false);
                 this.UIItemTemplate.gameObject.SetActive(false);
                 this.ChangeItem_UIItemTemplate.gameObject.SetActive(false);
+                this.Upgrade.gameObject.SetActive(false);
+                this.Upgrade_UIItemTemplate.gameObject.SetActive(false);
 
                 ItemDatas = new List<string>() { "" };
                 ItemDatas.AddRange(ItemManager.Instance.GetAllItemID());
@@ -760,17 +839,20 @@ namespace ProjectOC.InventorySystem.UI
                     string itemID = ItemDatas[i];
                     // Active
                     uiItemData.SetActive(true);
-                    //// 更新Icon
-                    //var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
-                    //// 查找临时存储的Sprite
-                    //var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(itemID));
-                    //// 不存在则生成
-                    //if (sprite == null)
-                    //{
-                    //    sprite = ItemManager.Instance.GetItemSprite(itemID);
-                    //    tempSprite.Add(sprite);
-                    //}
-                    //img.sprite = sprite;
+                    // 更新Icon
+                    if (ItemManager.Instance.IsValidItemID(itemID))
+                    {
+                        var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
+                        // 查找临时存储的Sprite
+                        var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(itemID));
+                        // 不存在则生成
+                        if (sprite == null)
+                        {
+                            sprite = ItemManager.Instance.GetItemSprite(itemID);
+                            tempSprite.Add(sprite);
+                        }
+                        img.sprite = sprite;
+                    }
                     // Name
                     var nametext = uiItemData.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
                     if (itemID != "")
@@ -792,7 +874,7 @@ namespace ProjectOC.InventorySystem.UI
                     {
                         selected.gameObject.SetActive(false);
                     }
-                    if (i == lastDataIndex)
+                    if (i == lastItemIndex)
                     {
                         last = uiItemData;
                     }
@@ -856,8 +938,94 @@ namespace ProjectOC.InventorySystem.UI
                 #endregion
 
                 #region BotKeyTips
-                KT_ChangeItem_Confirm.ReWrite(PanelTextContent.kt_ChangeItem_Confirm);
-                KT_ChangeItem_Back.ReWrite(PanelTextContent.kt_ChangeItem_Back);
+                KT_ChangeItem_Confirm.ReWrite(PanelTextContent.kt_Confirm);
+                KT_ChangeItem_Back.ReWrite(PanelTextContent.kt_Back);
+                #endregion
+            }
+            else if (this.CurMode == Mode.Upgrade)
+            {
+                this.ChangeItem.gameObject.SetActive(false);
+                this.BotKeyTips_ChangeItem.gameObject.SetActive(true);
+                this.BotKeyTips_KeyTips.gameObject.SetActive(false);
+                this.UIItemTemplate.gameObject.SetActive(false);
+                this.ChangeItem_UIItemTemplate.gameObject.SetActive(false);
+                this.Upgrade.gameObject.SetActive(true);
+                this.Upgrade_UIItemTemplate.gameObject.SetActive(false);
+
+                List<Formula> raw = this.Store.GetUpgradeRaw();
+                List<Formula> rawCur = this.Store.GetUpgradeRawCurrent(Player);
+                #region Item
+                int delta = tempUIItemDatasUpgrade.Count - raw.Count;
+                if (delta > 0)
+                {
+                    for (int i = 0; i < delta; ++i)
+                    {
+                        tempUIItemDatasUpgrade[tempUIItemDatasUpgrade.Count - 1 - i].SetActive(false);
+                    }
+                }
+                else if (delta < 0)
+                {
+                    delta = -delta;
+                    for (int i = 0; i < delta; ++i)
+                    {
+                        var uiitem = Instantiate(Upgrade_UIItemTemplate, Upgrade_GridLayout.transform, false);
+                        tempUIItemDatasUpgrade.Add(uiitem.gameObject);
+                    }
+                }
+                for (int i = 0; i < raw.Count; ++i)
+                {
+                    var uiItemData = tempUIItemDatasUpgrade[i];
+                    string itemID = raw[i].id;
+                    int need = raw[i].num;
+                    int current = rawCur[i].num;
+                    // Active
+                    uiItemData.SetActive(true);
+                    // 更新Icon
+                    if (ItemManager.Instance.IsValidItemID(itemID))
+                    {
+                        var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
+                        // 查找临时存储的Sprite
+                        var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(itemID));
+                        // 不存在则生成
+                        if (sprite == null)
+                        {
+                            sprite = ItemManager.Instance.GetItemSprite(itemID);
+                            tempSprite.Add(sprite);
+                        }
+                        img.sprite = sprite;
+                    }
+                    var nametext = uiItemData.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
+                    var amounttext = uiItemData.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
+                    var needtext = uiItemData.transform.Find("NeedAmount").GetComponent<TMPro.TextMeshProUGUI>();
+                    if (itemID != "")
+                    {
+                        nametext.text = ItemManager.Instance.GetItemName(itemID);
+                        amounttext.text = current.ToString();
+                        needtext.text = need.ToString();
+                    }
+                    else
+                    {
+                        nametext.text = PanelTextContent.text_Empty;
+                        amounttext.text = "0";
+                        needtext.text = "0";
+                    }
+                }
+                LayoutRebuilder.ForceRebuildLayoutImmediate(ChangeItem_GridLayout.GetComponent<RectTransform>());
+                #endregion
+
+                #region Level
+                LvOld.text = "Lv: " + (this.Store.Level + 1).ToString();
+                DescOld.text = PanelTextContent.text_LvDesc1 + this.Store.StoreCapacity + "    " + PanelTextContent.text_LvDesc2 + this.Store.StoreDataCapacity;
+                if (this.Store.Level + 1 <= this.Store.LevelMax)
+                {
+                    LvNew.text = "Lv: " + (Store.Level + 2).ToString();
+                    DescNew.text = PanelTextContent.text_LvDesc1 + Store.LevelStoreCapacity[Store.Level + 1] + "    " + PanelTextContent.text_LvDesc2 + Store.LevelStoreDataCapacity[Store.Level + 1];
+                }
+                #endregion
+
+                #region BotKeyTips
+                KT_ChangeItem_Confirm.ReWrite(PanelTextContent.kt_Confirm);
+                KT_ChangeItem_Back.ReWrite(PanelTextContent.kt_Back);
                 #endregion
             }
         }
@@ -874,14 +1042,17 @@ namespace ProjectOC.InventorySystem.UI
             public TextContent text_PriorityAlternative;
             public TextContent text_Add;
             public TextContent text_Remove;
+            public TextContent text_LvDesc1;
+            public TextContent text_LvDesc2;
 
             public KeyTip kt_NextPriority;
+            public KeyTip kt_ChangeIcon;
             public KeyTip kt_ChangeItem;
             public KeyTip kt_Remove1;
             public KeyTip kt_Remove10;
             public KeyTip kt_FastAdd;
-            public KeyTip kt_ChangeItem_Confirm;
-            public KeyTip kt_ChangeItem_Back;
+            public KeyTip kt_Confirm;
+            public KeyTip kt_Back;
         }
 
         public static StorePanel PanelTextContent => ABJAProcessor.Datas;

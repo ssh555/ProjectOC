@@ -35,7 +35,7 @@ namespace ProjectOC.StoreNS
                     string[] split = actorID.Split("_");
                     StoreType storeType = (StoreType)Enum.Parse(typeof(StoreType), split[1]);
                     int level = int.Parse(split[2]);
-                    LocalGameManager.Instance.StoreManager.WorldStoreSetData(this, storeType, level);
+                    LocalGameManager.Instance.StoreManager.WorldStoreSetData(this, storeType, level-1);
                 }
             }
         }
@@ -50,6 +50,7 @@ namespace ProjectOC.StoreNS
             // Push
             GameManager.Instance.UIManager.PushPanel(uiPanel);
         }
+
     }
 }
 

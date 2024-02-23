@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using ML.Engine.InventorySystem.CompositeSystem;
+using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.BuildingSystem;
+using ProjectOC.StoreNS;
 
 namespace ProjectOC.ProNodeNS
 {
@@ -694,6 +697,25 @@ namespace ProjectOC.ProNodeNS
                     }
                 }
                 StartProduce();
+            }
+        }
+
+        public void Upgrade(Player.PlayerCharacter player)
+        {
+            if (this.WorldProNode != null)
+            {
+                string upgradeRawID = BuildingManager.Instance.GetUpgradeRaw(this.WorldProNode.Classification.ToString().Replace('-', '_'));
+                CompositeManager.CompositionObjectType compObjType = CompositeManager.Instance.Composite(player.Inventory, upgradeRawID, out var composition);
+                if (compObjType == CompositeManager.CompositionObjectType.BuildingPart && composition is WorldProNode upgrade)
+                {
+                    upgrade.InstanceID = this.WorldProNode.InstanceID;
+                    upgrade.transform.position = this.WorldProNode.transform.position;
+                    upgrade.transform.rotation = this.WorldProNode.transform.rotation;
+                    UnityEngine.Object.Destroy(this.WorldProNode.gameObject);
+                    this.WorldProNode = upgrade;
+                    upgrade.ProNode = this;
+                    this.SetLevel(upgrade.Classification.Category4 - 1);
+                }
             }
         }
         #endregion
