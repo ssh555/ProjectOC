@@ -195,6 +195,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private void Expel_performed(InputAction.CallbackContext obj)
         {
 
+            Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
+
+            if (Workers.Count == 0) return;
             LocalGameManager.Instance.WorkerManager.DeleteWorker(Workers[CurrentBeastIndex]);
 
             GameObject.Destroy(Workers[CurrentBeastIndex].gameObject);

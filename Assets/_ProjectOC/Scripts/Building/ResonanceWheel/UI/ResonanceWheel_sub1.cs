@@ -25,23 +25,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 {
     public class ResonanceWheel_sub1 : ML.Engine.UI.UIBasePanel
     {
-
-        public IInventory inventory;
-
-        #region Input
-        /// <summary>
-        /// 用于Drop和Destroy按键响应Cancel
-        /// 长按响应了Destroy就置为true
-        /// Cancel就不响应Drop 并 重置
-        /// </summary>
-
-        #endregion
-
         #region Unity
         public bool IsInit = false;
         private void Start()
         {
-            parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
+            //parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
             StartCoroutine(InitUIPrefabs());
             StartCoroutine(InitUITexture2D());
             //BeastInfo
@@ -98,7 +86,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             base.OnEnter();
             this.Enter();
-            GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>().MainToSub1();
+            parentUI.MainToSub1();
         }
 
         public override void OnExit()
@@ -106,7 +94,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             base.OnExit();
             this.Exit();
             ClearTemp();
-            GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>().Sub1ToMain();
+            parentUI.Sub1ToMain();
         }
 
         public override void OnPause()
@@ -127,22 +115,20 @@ namespace ProjectOC.ResonanceWheelSystem.UI
  
 
    
-        //private int CurrentFuctionTypeIndex = 0;//0为HBR 1为SSB
-        //private int CurrentGridIndex = 0;//0到4
+        private int CurrentFuctionTypeIndex = 0;//0为HBR 1为SSB
+        private int CurrentGridIndex = 0;//0到4
 
 
         private void Enter()
         {
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Enable();
-            ML.Engine.Input.InputManager.Instance.Common.Enable();
             this.Refresh();
         }
 
         private void Exit()
         {
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Disable();
-            ML.Engine.Input.InputManager.Instance.Common.Disable();
             this.UnregisterInput();
         }
 
@@ -187,7 +173,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            Debug.Log("sub1 Back_performed");
             UIMgr.PopPanel();
         }
 
@@ -195,23 +180,21 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void Expel_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
+            //parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
             parentUI.workerEcho.ExpelWorker(parentUI.CurrentGridIndex);
 
             //ui
             ResonanceWheelUI.RingGrid.Reset(parentUI.Grids[parentUI.CurrentGridIndex], parentUI.Grids[parentUI.CurrentGridIndex].transform);
             UIMgr.PopPanel();
-            Debug.Log("Expel_performed!");
         }
 
         private void Receive_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
-            parentUI.workerEcho.SpawnWorker(parentUI.CurrentGridIndex);
+            //parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
+            parentUI.workerEcho.SpawnWorker(parentUI.CurrentGridIndex, Vector3.zero);
             
             ResonanceWheelUI.RingGrid.Reset(parentUI.Grids[parentUI.CurrentGridIndex], parentUI.Grids[parentUI.CurrentGridIndex].transform);
             UIMgr.PopPanel();
-            Debug.Log("Receive_performed!");
         }
         #endregion
 
@@ -304,7 +287,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             //更新隐兽详细信息
             WorkerEcho workerEcho = (GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
-            Debug.Log("更新隐兽详细信息 " + parentUI.CurrentGridIndex);
+
 
             Worker worker = workerEcho.GetExternWorkers()[parentUI.CurrentGridIndex].worker;
             StaminaNum.text = worker.APMax.ToString();
@@ -312,25 +295,25 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
 
-                        List<float> datas = new List<float>
-                        {
+            List<float> datas = new List<float>
+            {
 /*                            // 烹饪
-                            worker.Skill[WorkType.Cook].Level / 10f,
-                            // 轻工
-                            worker.Skill[WorkType.HandCraft].Level / 10f,
-                            // 精工
-                            worker.Skill[WorkType.Industry].Level / 10f,
-                            // 术法
-                            worker.Skill[WorkType.Magic].Level / 10f,
-                            // 搬运
-                            worker.Skill[WorkType.Transport].Level / 10f,
-                            // 采集
-                            worker.Skill[WorkType.Collect].Level / 10f*/
-                            0.2f,0.3f,0.5f,0.7f,0.8f,0.1f
-                        };
+                worker.Skill[WorkType.Cook].Level / 10f,
+                // 轻工
+                worker.Skill[WorkType.HandCraft].Level / 10f,
+                // 精工
+                worker.Skill[WorkType.Industry].Level / 10f,
+                // 术法
+                worker.Skill[WorkType.Magic].Level / 10f,
+                // 搬运
+                worker.Skill[WorkType.Transport].Level / 10f,
+                // 采集
+                worker.Skill[WorkType.Collect].Level / 10f*/
+                0.2f,0.3f,0.5f,0.7f,0.8f,0.1f
+            };
 
-                        var radar = this.transform.Find("HiddenBeastInfo1").Find("Info").Find("SkillGraph").Find("Viewport").Find("Content").Find("Radar").GetComponent<UIPolygon>();
-                        radar.DrawPolygon(datas);
+            var radar = this.transform.Find("HiddenBeastInfo1").Find("Info").Find("SkillGraph").Find("Viewport").Find("Content").Find("Radar").GetComponent<UIPolygon>();
+            radar.DrawPolygon(datas);
             
             //性别
             if(worker.Gender == Gender.Male)
@@ -344,7 +327,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             
 
             BeastName.text = worker.Name;
-            Debug.Log("go " + this.PrefabsAB == null);
+
 
             
 
@@ -424,7 +407,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             {
                 yield return crequest;
                 Texture2DAB = crequest.assetBundle;
-                Debug.Log("InitUITexture2D " + Texture2DAB);
             }
             Texture2D texture2D;
 

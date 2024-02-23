@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1845519411
+CRC: 826288814
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 2dd3c74bfb020aad5af3926c1ab8c9d7
+    Hash: 9e3fd0d83b9ffd5d2485362924e0a71b
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 58ab435b266d9d3b0548ada13a865277
+    Hash: b4cff43f1cb2eeefc5d43451cddf0c3d
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 2dd3c74bfb020aad5af3926c1ab8c9d7
+    Hash: 9e3fd0d83b9ffd5d2485362924e0a71b
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -58,8 +58,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
 - Class: 114
@@ -119,6 +117,10 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 39fa3d8997a24136984ca6e2c99902bc, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 87badff79e1e54a4a9d68c74f002b591, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 84a92b25f83d49b9bc132d206b370281, type: 3}
@@ -142,8 +144,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: a79d93bee2b59d94fa12949e4c5e61d1, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 7411b32275d93534cb08e4d96c084289, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 135
@@ -175,9 +175,9 @@ Assets:
 - Assets/_ProjectOC/Scene/_TEST/yangLe/_LandMassExpandTest.unity
 - Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/BuidlingSystemTest.unity
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/other
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/shader
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/uipanel
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/materials/other
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/shader
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/uipanel
