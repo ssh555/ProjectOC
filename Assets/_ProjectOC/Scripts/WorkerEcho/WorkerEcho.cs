@@ -35,6 +35,7 @@ namespace ProjectOC.WorkerEchoNS
             };
         }
     }
+
     [System.Serializable]
     public sealed class WorkerEcho : ML.Engine.Manager.LocalManager.ILocalManager
     {
@@ -47,8 +48,10 @@ namespace ProjectOC.WorkerEchoNS
             this.BuildingPart = buildingPart;
         }
 
-        public ExternWorker SummonWorker(string id,int index,IInventory inventory)
-        {   
+        public ExternWorker SummonWorker(string id,int index)
+        {
+            IInventory inventory = GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory;
+            
             if (this.Level==1)
             {
                 Debug.Log("id " + id);
@@ -77,9 +80,9 @@ namespace ProjectOC.WorkerEchoNS
             return externWorker;
         }
 
-        public void SpawnWorker(int index,Vector3 pos)
+        public void SpawnWorker(int index)
         {
-            Workers[index].worker.transform.position = pos;
+            Workers[index].worker.transform.position = new Vector3(2,2,2);
             Workers[index] = null;
         }
 
@@ -98,15 +101,10 @@ namespace ProjectOC.WorkerEchoNS
 
         public EchoStatusType GetStatus()
         {
-            bool isNone = true;
-            for (int i = 0; i < 5; i++)
-            { 
-                if (Workers[i] != null)
-                {
-                    isNone = false;
-                }
+            if (Workers == null)
+            {
+                return EchoStatusType.None;
             }
-            if (isNone) return EchoStatusType.None;
             foreach (ExternWorker worker in Workers)
             {
                 if (!worker.timer.IsTimeUp)
@@ -122,8 +120,9 @@ namespace ProjectOC.WorkerEchoNS
             return Workers;
         }
 
-        public void StopEcho(string id,int index,IInventory inventory)
+        public void StopEcho(string id,int index)
         {
+            IInventory inventory = GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory;
             List<ML.Engine.InventorySystem.CompositeSystem.Formula> dict = GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRaw(id);
             foreach(var pair in dict)
             {

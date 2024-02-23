@@ -1,22 +1,22 @@
 ManifestFileVersion: 0
-CRC: 3741010342
+CRC: 3198927464
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 738f1920e599666db78b9717abb4d97f
+    Hash: e70b15032301e66d86a8e612fad80327
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5ad585dd02dfb5016c0dad519eab8f49
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 738f1920e599666db78b9717abb4d97f
+    Hash: e70b15032301e66d86a8e612fad80327
 HashAppended: 0
 ClassTypes:
 - Class: 49
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ProjectOC/Resources/Json/TextContent/Store/StorePanel.json
-- Assets/_ProjectOC/Resources/Json/TextContent/Inventory/InventoryPanel.json
-- Assets/_ProjectOC/Resources/Json/TextContent/ProNode/ProNodePanel.json
+- Assets/_ProjectOC/OCResources/Json/TextContent/Store/StorePanel.json
+- Assets/_ProjectOC/OCResources/Json/TextContent/Inventory/InventoryPanel.json
+- Assets/_ProjectOC/OCResources/Json/TextContent/ProNode/ProNodePanel.json
 Dependencies: []

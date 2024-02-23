@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3523305079
+CRC: 4057091487
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 2fbf9b8e87301fdecdb4acbb8fbbb4d0
+    Hash: ec363b4c789aab21a04553b71adef04b
   TypeTreeHash:
     serializedVersion: 2
-    Hash: caa750a68bd804abb5f5530a08e2adb0
+    Hash: 60e85f20dfc13800734f9d0dfd39173d
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 2fbf9b8e87301fdecdb4acbb8fbbb4d0
+    Hash: ec363b4c789aab21a04553b71adef04b
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -18,7 +18,11 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 21
   Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
 - Class: 43
+  Script: {instanceID: 0}
+- Class: 48
   Script: {instanceID: 0}
 - Class: 74
   Script: {instanceID: 0}
@@ -32,18 +36,20 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ProjectOC/Resources/Animation/Player/PlayerModel/Clip/Motion/09 Dodge.anim
-- Assets/_ProjectOC/Resources/Animation/Player/PlayerModel/player animator.controller
-- Assets/_ProjectOC/Resources/Animation/Player/PlayerModel/Clip/Motion/07 InAir.anim
-- Assets/_ProjectOC/Resources/Animation/Player/PlayerModel/Clip/Motion/06 PreJump.anim
-- Assets/_ProjectOC/Resources/Animation/Player/PlayerModel/Clip/Motion/05 Crouch
+- Assets/_ProjectOC/OCResources/Animation/Player/PlayerModel/Clip/Motion/09 Dodge.anim
+- Assets/_ProjectOC/OCResources/Animation/Player/PlayerModel/player animator.controller
+- Assets/_ProjectOC/OCResources/Animation/Player/PlayerModel/Clip/Motion/07 InAir.anim
+- Assets/_ProjectOC/OCResources/Animation/Player/PlayerModel/Clip/Motion/06 PreJump.anim
+- Assets/_ProjectOC/OCResources/Animation/Player/PlayerModel/Clip/Motion/05 Crouch
   walk.anim
-- Assets/_ProjectOC/Resources/Animation/Player/PlayerModel/Clip/Motion/02 Idle.anim
-- Assets/_ProjectOC/Resources/Animation/Player/PlayerModel/Clip/Motion/03 Walk.anim
-- Assets/_ProjectOC/Resources/Animation/Player/PlayerModel/Clip/Motion/08 FallDownGround.anim
-- Assets/_ProjectOC/Resources/Animation/Player/PlayerModel/Stable Sword Outward Slash.fbx
-- Assets/_ProjectOC/Resources/Animation/Player/PlayerModel/Clip/Motion/05 Crouch
+- Assets/_ProjectOC/OCResources/Animation/Player/PlayerModel/Clip/Motion/02 Idle.anim
+- Assets/_ProjectOC/OCResources/Animation/Player/PlayerModel/Clip/Motion/03 Walk.anim
+- Assets/_ProjectOC/OCResources/Animation/Player/PlayerModel/Clip/Motion/08 FallDownGround.anim
+- Assets/_ProjectOC/OCResources/Animation/Player/PlayerModel/Stable Sword Outward
+  Slash.fbx
+- Assets/_ProjectOC/OCResources/Animation/Player/PlayerModel/Clip/Motion/05 Crouch
   Idle.anim
-- Assets/_ProjectOC/Resources/Animation/Player/PlayerModel/Clip/Motion/04 Run.anim
+- Assets/_ProjectOC/OCResources/Animation/Player/PlayerModel/Clip/Motion/04 Run.anim
+- "Assets/_ProjectOC/OCResources/Meshes/Character/\u5B89\u8FF7\u4FEE.fbx"
 Dependencies:
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/materials/character/player
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/character/player

@@ -58,9 +58,9 @@ Shader "Universal Render Pipeline/GridUVScale"
 
 			float3 triplanar(float3 worldPos, float scale, float3 blendAxes) {
 				float3 scaledWorldPos = worldPos / scale;
-				float3 xProjection = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, float2(scaledWorldPos.y, scaledWorldPos.z)) * blendAxes.x;
-				float3 yProjection = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, float2(scaledWorldPos.x, scaledWorldPos.z)) * blendAxes.y;
-				float3 zProjection = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, float2(scaledWorldPos.x, scaledWorldPos.y)) * blendAxes.z;
+				float3 xProjection = (SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, float2(scaledWorldPos.y, scaledWorldPos.z)) * blendAxes.x).xyz;
+				float3 yProjection = (SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, float2(scaledWorldPos.x, scaledWorldPos.z)) * blendAxes.y).xyz;
+				float3 zProjection = (SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, float2(scaledWorldPos.x, scaledWorldPos.y)) * blendAxes.z).xyz;
 				return xProjection + yProjection + zProjection;
 			}
 

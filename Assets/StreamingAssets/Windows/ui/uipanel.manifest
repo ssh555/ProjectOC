@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 9962791
+CRC: 525967618
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d37716157d9885e6eed11c3b905b7dc4
+    Hash: 74aa849409739664364191dbb94257fb
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 7f9b8a35f9ecf80f2882f5022698c49a
+    Hash: 802f07a1dca0deabb6f9b6cdbde2fb97
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: d37716157d9885e6eed11c3b905b7dc4
+    Hash: 74aa849409739664364191dbb94257fb
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -25,11 +25,11 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 27e27c8eeb2d1554babedcc209602ac4, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 9ea83b1ab433e514bb440b78e1a6f54a, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: ba8a2ec004d09ff4a886c0a90da6574f, type: 3}
 - Class: 114
@@ -45,12 +45,6 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 122d184a229d7654389bc4921fdb6ac7, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 13e2ae5179f2850459864743df57cbdf, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 87badff79e1e54a4a9d68c74f002b591, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: b5a75fe406490b1448c391e02cf791da, type: 3}
@@ -61,11 +55,13 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 2a4db7a114972834c8e4117be1d82ba3, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: d6224dbf1fdb21545862699544e83817, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 8225f47635ce8874c8d32afa594ed0e2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9ea83b1ab433e514bb440b78e1a6f54a, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 213
@@ -100,30 +96,26 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.ScrollRect/ScrollRectEvent
 - AssemblyName: UnityEngine.UI
-  ClassName: UnityEngine.UI.Scrollbar/ScrollEvent
-- AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.Slider/SliderEvent
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.SpriteState
 Assets:
-- Assets/_ProjectOC/Resources/UIPanel/BeastPanel.prefab
-- Assets/_ProjectOC/Resources/UIPanel/TechPointPanel.prefab
-- Assets/_ProjectOC/Resources/UIPanel/ResonanceWheelUI_sub2.prefab
-- Assets/_ProjectOC/Resources/UIPanel/UIInfiniteInventoryPanel.prefab
-- Assets/_ProjectOC/Resources/UIPanel/BeastDuty.prefab
-- Assets/_ProjectOC/Resources/UIPanel/UIStorePanel.prefab
-- Assets/_ProjectOC/Resources/UIPanel/PlayerUIPanel.prefab
-- Assets/_ProjectOC/Resources/UIPanel/SkillGraph.prefab
-- Assets/_ProjectOC/Resources/UIPanel/ResonanceWheelUI.prefab
-- Assets/_ProjectOC/Resources/UIPanel/ResonanceWheelUI_sub1.prefab
-- Assets/_ProjectOC/Resources/UIPanel/UIProNodePanel.prefab
-- Assets/_ProjectOC/Resources/UIPanel/PlayerUIBotPanel.prefab
+- Assets/_ProjectOC/OCResources/UIPanel/TechPointPanel.prefab
+- Assets/_ProjectOC/OCResources/UIPanel/ResonanceWheelUI_sub2.prefab
+- Assets/_ProjectOC/OCResources/UIPanel/UIInfiniteInventoryPanel.prefab
+- Assets/_ProjectOC/OCResources/UIPanel/UIStorePanel.prefab
+- Assets/_ProjectOC/OCResources/UIPanel/PlayerUIPanel.prefab
+- Assets/_ProjectOC/OCResources/UIPanel/SkillGraph.prefab
+- Assets/_ProjectOC/OCResources/UIPanel/ResonanceWheelUI.prefab
+- Assets/_ProjectOC/OCResources/UIPanel/ResonanceWheelUI_sub1.prefab
+- Assets/_ProjectOC/OCResources/UIPanel/UIProNodePanel.prefab
+- Assets/_ProjectOC/OCResources/UIPanel/PlayerUIBotPanel.prefab
 Dependencies:
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/fonts
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/textmeshpro/font
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/inventory/texture2d
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/item/texture2d
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/techpoint/texture2d
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/fonts
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/textmeshpro/font
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/inventory/texture2d
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/item/texture2d
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/techpoint/texture2d
