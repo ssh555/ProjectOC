@@ -1,6 +1,8 @@
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InteractSystem;
 using ML.Engine.TextContent;
+using ProjectOC.Player;
+using ProjectOC.ResonanceWheelSystem.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,25 +27,20 @@ namespace ProjectOC.WorkerEchoNS
 
         public void Interact(InteractComponent component)
         {
+            
             //µ¯¹²ÃùÂÖUI
             Debug.Log("µ¯UI");
-            ML.Engine.Input.InputManager.Instance.Common.Disable();
+            //ML.Engine.Input.InputManager.Instance.Common.Disable();
             var panel = GameObject.Instantiate(uIResonanceWheel);
+            panel.GetComponentInParent<ResonanceWheelUI>().inventory = component.gameObject.GetComponentInParent<PlayerCharacter>().Inventory;
             panel.transform.SetParent(GameObject.Find("Canvas").transform, false);
 
             ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
-
-            
-        }
-
-        public void OnSelectedExit(InteractComponent component)
-        {
-            
         }
 
         private bool CanEditOrDestroy(IBuildingPart buildingPart)
         {
-            return (workerEcho.GetStatus() == EchoStatusType.Echoing || workerEcho.GetStatus() == EchoStatusType.Waiting);
+            return (workerEcho.GetStatus() == EchoStatusType.None);
         }
         private IBuildingPart.CheckMode CheckCanDestroyOrEdit()
         {

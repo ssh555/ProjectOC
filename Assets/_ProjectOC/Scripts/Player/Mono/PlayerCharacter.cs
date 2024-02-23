@@ -59,6 +59,7 @@ namespace ProjectOC.Player
         public RectTransform playerUIBotPanel;
         [FoldoutGroup("UI")]
         public UI.PlayerUIPanel playerUIPanel;
+        public ProjectOC.ResonanceWheelSystem.UI.BeastPanel beastPanel;
         #endregion
 
         #region 背包 to-do : 临时测试使用
@@ -164,11 +165,11 @@ namespace ProjectOC.Player
             }
             //// to-do : to-delete
             // 仅测试用
-            foreach (var id in ML.Engine.InventorySystem.ItemManager.Instance.GetAllItemID())//ML.Engine.InventorySystem.ItemManager.Instance.GetCanStack(id) ? UnityEngine.Random.Range(1, 999) : 1
+/*            foreach (var id in ML.Engine.InventorySystem.ItemManager.Instance.GetAllItemID())//ML.Engine.InventorySystem.ItemManager.Instance.GetCanStack(id) ? UnityEngine.Random.Range(1, 999) : 1
             {
                var item = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(id, 9999)[0];
                 Inventory.AddItem(item);
-            }
+            }*/
 
             this.enabled = false;
         }
@@ -189,6 +190,12 @@ namespace ProjectOC.Player
             {
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(GameObject.Instantiate(this.playerUIPanel.gameObject, GameObject.Find("Canvas").transform, false).GetComponent<ML.Engine.UI.UIBasePanel>());
                 (ML.Engine.Manager.GameManager.Instance.UIManager.GetTopUIPanel() as UI.PlayerUIPanel).player = this;
+            }
+
+            if (Input.InputManager.PlayerInput.Player.OpenBeastPanel.WasPressedThisFrame())
+            {
+                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(GameObject.Instantiate(this.beastPanel.gameObject, GameObject.Find("Canvas").transform, false).GetComponent<ML.Engine.UI.UIBasePanel>());
+                
             }
             //// In-Window
             //if (Application.isFocused)
