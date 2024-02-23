@@ -4,6 +4,7 @@ using ML.Engine.TextContent;
 using ML.Engine.UI;
 using Newtonsoft.Json;
 using ProjectOC.InventorySystem.UI;
+using ProjectOC.ResonanceWheelSystem.UI;
 using ProjectOC.StoreNS;
 using ProjectOC.TechTree.UI;
 using System.Collections;
@@ -22,6 +23,7 @@ namespace ProjectOC.Player.UI
         private SelectedButton EnterBuildBtn;
         private SelectedButton EnterTechTreeBtn;
         private SelectedButton EnterInventoryBtn;
+        private SelectedButton EnterBeastPanelBtn;
         private SelectedButton CreateWorkerBtn;
         private SelectedButton AddItemBtn;
 
@@ -85,6 +87,23 @@ namespace ProjectOC.Player.UI
                 });
 
             };
+
+            this.EnterBeastPanelBtn = btnList.Find("EnterBeastPanel").GetComponent<SelectedButton>();
+            this.EnterBeastPanelBtn.OnInteract += () =>
+            {
+                AssetBundleRequest request = null;
+                request = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<GameObject>("UI/UIPanel", "BeastPanel", (ao) =>
+                {
+                    // สตภýปฏ
+                    var panel = GameObject.Instantiate((request.asset as GameObject).GetComponent<BeastPanel>());
+
+                    // Push
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(GameObject.Instantiate(panel.gameObject, GameObject.Find("Canvas").transform, false).GetComponent<ML.Engine.UI.UIBasePanel>());
+                    //ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+                });
+
+            };
+
 
             this.CreateWorkerBtn = btnList.Find("CreateWorker").GetComponent<SelectedButton>();
             this.CreateWorkerBtn.OnInteract += () =>

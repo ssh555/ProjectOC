@@ -150,7 +150,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
             //ÇýÖð
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Expel.performed -= Expel_performed;
+            ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Expel.performed -= Expel_performed;
 
             // ·µ»Ø
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
@@ -167,7 +167,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.SwitchBeast.performed += SwitchBeast_performed;
 
             //ÇýÖð
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Expel.performed += Expel_performed;
+            ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Expel.performed += Expel_performed;
 
             // ·µ»Ø
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
@@ -194,9 +194,13 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void Expel_performed(InputAction.CallbackContext obj)
         {
-            Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
-            
-            
+
+            LocalGameManager.Instance.WorkerManager.DeleteWorker(Workers[CurrentBeastIndex]);
+
+            GameObject.Destroy(Workers[CurrentBeastIndex].gameObject);
+            this.Refresh();
+
+
         }
 
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -381,19 +385,19 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     switch (workerTimeStatus[i])
                     {
                         case TimeStatus.None:
-                            Debug.Log("workerTimeStatus None");
+                            //Debug.Log("workerTimeStatus None");
                             img.color = UnityEngine.Color.red;
                             break;
                         case TimeStatus.Relax:
-                            Debug.Log("workerTimeStatus Relax");
+                            //Debug.Log("workerTimeStatus Relax");
                             img.color = UnityEngine.Color.green;
                             break;
                         case TimeStatus.Work_Transport:
-                            Debug.Log("workerTimeStatus Work_Transport");
+                            //Debug.Log("workerTimeStatus Work_Transport");
                             img.color = UnityEngine.Color.blue;
                             break;
                         case TimeStatus.Work_OnDuty:
-                            Debug.Log("workerTimeStatus Work_OnDuty");
+                            //Debug.Log("workerTimeStatus Work_OnDuty");
                             img.color = UnityEngine.Color.yellow;
                             break;
                     }
@@ -403,7 +407,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
             else
             {
-                Debug.Log("ÎÞÒþÊÞ");
+                //Debug.Log("ÎÞÒþÊÞ");
             }
             //BotKeyTips
 

@@ -28,6 +28,12 @@ namespace ProjectOC.WorkerNS
             return this.Workers.ToList();
         }
 
+        public bool DeleteWorker(Worker worker)
+        {
+            return this.Workers.Remove(worker);
+        }
+
+
         /// <summary>
         /// 获取能执行搬运任务的刁民
         /// </summary>
