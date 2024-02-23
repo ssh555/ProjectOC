@@ -1,0 +1,23 @@
+ManifestFileVersion: 0
+CRC: 379730081
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 2bb81dce48b0396a2a26d54162d19537
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5e762ccb57c4caaabbb5a4199ac82c23
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 2bb81dce48b0396a2a26d54162d19537
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/_ProjectOC/Resources/Materials/Character/PlayerCharacter/Beta_Joints_MAT1.mat
+- Assets/_ProjectOC/Resources/Materials/Character/PlayerCharacter/Beta_HighLimbsGeoSG3.mat
+Dependencies: []
