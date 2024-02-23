@@ -149,6 +149,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\ExternalBehaviorTree.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Math\IntClamp.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\GetString.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\LandMassExpand\NavMeshManager.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetVelocity.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector3\Angle.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Conditionals\RandomProbability.cs" />
@@ -721,6 +722,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\SetEulerAngles.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\LandMassExpand\BuildPowerIslandManager.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\InventorySystem\UI\UIStore.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\Temp\TempNavmeshAgent.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedObject.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetDrag.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\GetParent.cs" />
