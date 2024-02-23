@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2204011988
+CRC: 116517309
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 0c5d701c7c79fd64cb29cf3616a480a4
+    Hash: 205f82d0aaa7a151813395aac78d56a8
   TypeTreeHash:
     serializedVersion: 2
     Hash: a5a937e552e50d2766ec64a893ed9082
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 0c5d701c7c79fd64cb29cf3616a480a4
+    Hash: 205f82d0aaa7a151813395aac78d56a8
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -45,8 +45,10 @@ SerializeReferenceClassIdentifiers:
   ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
 Assets:
 - Assets/_ProjectOC/Resources/UI/ResonanceWheel/ResonanceWheelPrefabs/Description.prefab
+- Assets/_ProjectOC/Resources/UI/ResonanceWheel/ResonanceWheelPrefabs/BeastBio.prefab
 - Assets/_ProjectOC/Resources/UI/ResonanceWheel/ResonanceWheelPrefabs/Slot.prefab
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/fonts
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/fonts
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/inventory/texture2d
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d

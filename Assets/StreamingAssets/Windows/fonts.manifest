@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3229978558
+CRC: 2559913953
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1db415c9acad064f32eb206aee7c6053
+    Hash: 82fb21bd5eba0aedcb4d21e99dfa9e9f
   TypeTreeHash:
     serializedVersion: 2
     Hash: 8a919bcbcbff02d814de61b9664f6f0e
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 1db415c9acad064f32eb206aee7c6053
+    Hash: 82fb21bd5eba0aedcb4d21e99dfa9e9f
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -52,4 +52,4 @@ Assets:
 - "Assets/_ML/MLResources/Fonts/3500\u6C49\u5B57+\u7B26\u53F7+\u82F1\u6587\u5B57\u7B26\u96C6.txt"
 - Assets/_ML/MLResources/Fonts/SourceHanSans-Normal SDF.asset
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/textmeshpro/shader
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/textmeshpro/shader

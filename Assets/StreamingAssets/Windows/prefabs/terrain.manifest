@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1780356189
+CRC: 114746876
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 56d2dc1fe1f9734f1312d1d5d76052bd
+    Hash: 5b50c3691752ac8371ec6ca35434e9a6
   TypeTreeHash:
     serializedVersion: 2
     Hash: e3642bdd7af609598ccb53a717f45762
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 56d2dc1fe1f9734f1312d1d5d76052bd
+    Hash: 5b50c3691752ac8371ec6ca35434e9a6
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -72,5 +72,5 @@ Assets:
 - Assets/_ProjectOC/Resources/Prefabs/Terrain/Stalagmite1.prefab
 - Assets/_ProjectOC/Resources/Prefabs/Terrain/rock_j.prefab
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/terrain
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/model/terrain
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/materials/terrain
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/model/terrain

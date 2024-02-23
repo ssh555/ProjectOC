@@ -68,6 +68,7 @@ namespace ProjectOC.WorkerNS
         public List<Feature> Features = new List<Feature>();
 
         [LabelText("每个时段的安排")]
+        // 数据
         public TimeArrangement TimeArrangement = new TimeArrangement();
 
         [LabelText("当前时段的安排应该所处的状态")]

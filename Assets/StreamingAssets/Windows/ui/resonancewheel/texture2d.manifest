@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2452417386
+CRC: 2137736658
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6cd3d38a810ef741a25dc563fc2b9327
+    Hash: cc66257fbb9eda72b780eccc2db6e847
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2d8df09e698f722ada1caa03d3413830
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 6cd3d38a810ef741a25dc563fc2b9327
+    Hash: cc66257fbb9eda72b780eccc2db6e847
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -31,4 +31,5 @@ Assets:
 - Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/icon_gendermale.png
 - Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/icon_timing.png
 - Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/circle.png
+- Assets/_ProjectOC/Resources/UI/ResonanceWheel/Texture2D/StaminaBar.png
 Dependencies: []
