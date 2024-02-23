@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3386301918
+CRC: 3523305079
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 057f474f27b6c10dea7c03eb89e78fec
+    Hash: 2fbf9b8e87301fdecdb4acbb8fbbb4d0
   TypeTreeHash:
     serializedVersion: 2
     Hash: caa750a68bd804abb5f5530a08e2adb0
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 057f474f27b6c10dea7c03eb89e78fec
+    Hash: 2fbf9b8e87301fdecdb4acbb8fbbb4d0
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -46,4 +46,4 @@ Assets:
   Idle.anim
 - Assets/_ProjectOC/Resources/Animation/Player/PlayerModel/Clip/Motion/04 Run.anim
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/character/player
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/materials/character/player

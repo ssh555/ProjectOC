@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 1470059863
+CRC: 3449425877
 Hashes:
   AssetFileHash:
     serializedVersion: 2
@@ -48,4 +48,4 @@ Assets:
 - Assets/TextMesh Pro/Sprites/EmojiOne Attribution.txt
 - Assets/_ProjectOC/Resources/TextMeshPro/SpriteAsset/Texture2D/Triangle.png
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/textmeshpro/shader
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/textmeshpro/shader
