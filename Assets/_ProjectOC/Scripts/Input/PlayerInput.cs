@@ -91,15 +91,6 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""OpenBeastPanel"",
-                    ""type"": ""Button"",
-                    ""id"": ""16e86569-9e57-4c4c-bdf1-c6e249ccca7b"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -430,28 +421,6 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""OpenBotUI"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""fb9c7c90-1f06-49ff-a6db-8671f6d73d56"",
-                    ""path"": ""<Keyboard>/o"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenBeastPanel"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""fa203a04-8944-4b80-b751-d3685db5851e"",
-                    ""path"": ""<XInputController>/leftTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenBeastPanel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -2232,7 +2201,6 @@ namespace ProjectOC.Input
             m_Player_MouseX = m_Player.FindAction("MouseX", throwIfNotFound: true);
             m_Player_MouseY = m_Player.FindAction("MouseY", throwIfNotFound: true);
             m_Player_OpenBotUI = m_Player.FindAction("OpenBotUI", throwIfNotFound: true);
-            m_Player_OpenBeastPanel = m_Player.FindAction("OpenBeastPanel", throwIfNotFound: true);
             // TechTree
             m_TechTree = asset.FindActionMap("TechTree", throwIfNotFound: true);
             m_TechTree_LastTerm = m_TechTree.FindAction("LastTerm", throwIfNotFound: true);
@@ -2359,7 +2327,6 @@ namespace ProjectOC.Input
         private readonly InputAction m_Player_MouseX;
         private readonly InputAction m_Player_MouseY;
         private readonly InputAction m_Player_OpenBotUI;
-        private readonly InputAction m_Player_OpenBeastPanel;
         public struct PlayerActions
         {
             private @PlayerInput m_Wrapper;
@@ -2371,7 +2338,6 @@ namespace ProjectOC.Input
             public InputAction @MouseX => m_Wrapper.m_Player_MouseX;
             public InputAction @MouseY => m_Wrapper.m_Player_MouseY;
             public InputAction @OpenBotUI => m_Wrapper.m_Player_OpenBotUI;
-            public InputAction @OpenBeastPanel => m_Wrapper.m_Player_OpenBeastPanel;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -2402,9 +2368,6 @@ namespace ProjectOC.Input
                 @OpenBotUI.started += instance.OnOpenBotUI;
                 @OpenBotUI.performed += instance.OnOpenBotUI;
                 @OpenBotUI.canceled += instance.OnOpenBotUI;
-                @OpenBeastPanel.started += instance.OnOpenBeastPanel;
-                @OpenBeastPanel.performed += instance.OnOpenBeastPanel;
-                @OpenBeastPanel.canceled += instance.OnOpenBeastPanel;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -2430,9 +2393,6 @@ namespace ProjectOC.Input
                 @OpenBotUI.started -= instance.OnOpenBotUI;
                 @OpenBotUI.performed -= instance.OnOpenBotUI;
                 @OpenBotUI.canceled -= instance.OnOpenBotUI;
-                @OpenBeastPanel.started -= instance.OnOpenBeastPanel;
-                @OpenBeastPanel.performed -= instance.OnOpenBeastPanel;
-                @OpenBeastPanel.canceled -= instance.OnOpenBeastPanel;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -3121,7 +3081,6 @@ namespace ProjectOC.Input
             void OnMouseX(InputAction.CallbackContext context);
             void OnMouseY(InputAction.CallbackContext context);
             void OnOpenBotUI(InputAction.CallbackContext context);
-            void OnOpenBeastPanel(InputAction.CallbackContext context);
         }
         public interface ITechTreeActions
         {

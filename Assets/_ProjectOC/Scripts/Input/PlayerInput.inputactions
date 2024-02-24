@@ -67,15 +67,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "OpenBeastPanel",
-                    "type": "Button",
-                    "id": "16e86569-9e57-4c4c-bdf1-c6e249ccca7b",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -406,28 +397,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "OpenBotUI",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "fb9c7c90-1f06-49ff-a6db-8671f6d73d56",
-                    "path": "<Keyboard>/o",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "OpenBeastPanel",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "fa203a04-8944-4b80-b751-d3685db5851e",
-                    "path": "<XInputController>/leftTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "OpenBeastPanel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
