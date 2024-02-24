@@ -380,6 +380,12 @@
     <Reference Include="Unity.VisualScripting.TextureAssets">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.0\Editor\VisualScripting.Core\EditorAssetResources\Unity.VisualScripting.TextureAssets.dll</HintPath>
     </Reference>
+    <Reference Include="AmazingAssets.TerrainToMeshEditor">
+      <HintPath>Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Editor\AmazingAssets.TerrainToMeshEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="AmazingAssets.TerrainToMesh">
+      <HintPath>Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Scripts\AmazingAssets.TerrainToMesh.dll</HintPath>
+    </Reference>
     <Reference Include="unityplastic">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@2.0.7\Lib\Editor\PlasticSCM\unityplastic.dll</HintPath>
     </Reference>
@@ -391,12 +397,6 @@
     </Reference>
     <Reference Include="Sirenix.OdinValidator.Editor">
       <HintPath>Assets\_ML\Engine\_Addons\Sirenix\Assemblies\Sirenix.OdinValidator.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="AmazingAssets.TerrainToMeshEditor">
-      <HintPath>Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Editor\AmazingAssets.TerrainToMeshEditor.dll</HintPath>
-    </Reference>
-    <Reference Include="AmazingAssets.TerrainToMesh">
-      <HintPath>Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Scripts\AmazingAssets.TerrainToMesh.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>Library\PackageCache\com.unity.ext.nunit@1.0.6\net35\unity-custom\nunit.framework.dll</HintPath>
