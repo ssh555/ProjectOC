@@ -91,15 +91,6 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""OpenBeastPanel"",
-                    ""type"": ""Button"",
-                    ""id"": ""16e86569-9e57-4c4c-bdf1-c6e249ccca7b"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -430,28 +421,6 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""OpenBotUI"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""fb9c7c90-1f06-49ff-a6db-8671f6d73d56"",
-                    ""path"": ""<Keyboard>/o"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenBeastPanel"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""fa203a04-8944-4b80-b751-d3685db5851e"",
-                    ""path"": ""<XInputController>/leftTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenBeastPanel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1038,9 +1007,18 @@ namespace ProjectOC.Input
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ChangeStoreData"",
+                    ""name"": ""ChangeIcon"",
                     ""type"": ""Button"",
                     ""id"": ""e187d8c7-7825-440a-b954-9c52e6b1f573"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Upgrade"",
+                    ""type"": ""Button"",
+                    ""id"": ""d60d6ab9-0a0f-44d7-bf1e-e1b964f968b6"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -1054,6 +1032,15 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ChangeStoreData"",
+                    ""type"": ""Button"",
+                    ""id"": ""87b70b70-485e-43c4-8fe3-dee297ad547d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""Remove1"",
@@ -1113,7 +1100,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeStoreData"",
+                    ""action"": ""ChangeIcon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1121,6 +1108,94 @@ namespace ProjectOC.Input
                     ""name"": """",
                     ""id"": ""db8ad17a-856a-46cf-a9be-8d29947512c3"",
                     ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeIcon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8e7db927-4ca8-4a74-b4a4-eea8f7f71bbe"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fff4c8a5-5012-4e6c-a787-8fa445766c9e"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a09f564f-a92d-479a-92ab-3b5abc3d9a8e"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove10"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""98ac3791-c45b-4c66-9fe1-a4aac0b72d8c"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove10"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3fa4ff71-f3de-4a1c-b6fa-88aed36a92d4"",
+                    ""path"": ""<XInputController>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FastAdd"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""90ab7934-3ce3-4621-83f6-63383b4af996"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FastAdd"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3ea772ae-eb77-4e95-a915-090a81beae3d"",
+                    ""path"": ""<XInputController>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeStoreData"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""69f3b08a-3774-47b3-8fa2-9f4b983b0397"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1240,67 +1315,23 @@ namespace ProjectOC.Input
                 },
                 {
                     ""name"": """",
-                    ""id"": ""8e7db927-4ca8-4a74-b4a4-eea8f7f71bbe"",
-                    ""path"": ""<XInputController>/buttonWest"",
+                    ""id"": ""9146e27f-fc3f-4379-97fd-3535fc23c096"",
+                    ""path"": ""<XInputController>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Remove1"",
+                    ""action"": ""Upgrade"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""fff4c8a5-5012-4e6c-a787-8fa445766c9e"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""id"": ""34ccf2f4-fe5f-4b34-b387-4d304ee8d446"",
+                    ""path"": ""<Keyboard>/u"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Remove1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a09f564f-a92d-479a-92ab-3b5abc3d9a8e"",
-                    ""path"": ""<XInputController>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Remove10"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""98ac3791-c45b-4c66-9fe1-a4aac0b72d8c"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Remove10"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3fa4ff71-f3de-4a1c-b6fa-88aed36a92d4"",
-                    ""path"": ""<XInputController>/buttonNorth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""FastAdd"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""90ab7934-3ce3-4621-83f6-63383b4af996"",
-                    ""path"": ""<Keyboard>/r"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""FastAdd"",
+                    ""action"": ""Upgrade"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -2170,7 +2201,6 @@ namespace ProjectOC.Input
             m_Player_MouseX = m_Player.FindAction("MouseX", throwIfNotFound: true);
             m_Player_MouseY = m_Player.FindAction("MouseY", throwIfNotFound: true);
             m_Player_OpenBotUI = m_Player.FindAction("OpenBotUI", throwIfNotFound: true);
-            m_Player_OpenBeastPanel = m_Player.FindAction("OpenBeastPanel", throwIfNotFound: true);
             // TechTree
             m_TechTree = asset.FindActionMap("TechTree", throwIfNotFound: true);
             m_TechTree_LastTerm = m_TechTree.FindAction("LastTerm", throwIfNotFound: true);
@@ -2189,8 +2219,10 @@ namespace ProjectOC.Input
             // UIStore
             m_UIStore = asset.FindActionMap("UIStore", throwIfNotFound: true);
             m_UIStore_NextPriority = m_UIStore.FindAction("NextPriority", throwIfNotFound: true);
-            m_UIStore_ChangeStoreData = m_UIStore.FindAction("ChangeStoreData", throwIfNotFound: true);
+            m_UIStore_ChangeIcon = m_UIStore.FindAction("ChangeIcon", throwIfNotFound: true);
+            m_UIStore_Upgrade = m_UIStore.FindAction("Upgrade", throwIfNotFound: true);
             m_UIStore_Alter = m_UIStore.FindAction("Alter", throwIfNotFound: true);
+            m_UIStore_ChangeStoreData = m_UIStore.FindAction("ChangeStoreData", throwIfNotFound: true);
             m_UIStore_Remove1 = m_UIStore.FindAction("Remove1", throwIfNotFound: true);
             m_UIStore_Remove10 = m_UIStore.FindAction("Remove10", throwIfNotFound: true);
             m_UIStore_FastAdd = m_UIStore.FindAction("FastAdd", throwIfNotFound: true);
@@ -2295,7 +2327,6 @@ namespace ProjectOC.Input
         private readonly InputAction m_Player_MouseX;
         private readonly InputAction m_Player_MouseY;
         private readonly InputAction m_Player_OpenBotUI;
-        private readonly InputAction m_Player_OpenBeastPanel;
         public struct PlayerActions
         {
             private @PlayerInput m_Wrapper;
@@ -2307,7 +2338,6 @@ namespace ProjectOC.Input
             public InputAction @MouseX => m_Wrapper.m_Player_MouseX;
             public InputAction @MouseY => m_Wrapper.m_Player_MouseY;
             public InputAction @OpenBotUI => m_Wrapper.m_Player_OpenBotUI;
-            public InputAction @OpenBeastPanel => m_Wrapper.m_Player_OpenBeastPanel;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -2338,9 +2368,6 @@ namespace ProjectOC.Input
                 @OpenBotUI.started += instance.OnOpenBotUI;
                 @OpenBotUI.performed += instance.OnOpenBotUI;
                 @OpenBotUI.canceled += instance.OnOpenBotUI;
-                @OpenBeastPanel.started += instance.OnOpenBeastPanel;
-                @OpenBeastPanel.performed += instance.OnOpenBeastPanel;
-                @OpenBeastPanel.canceled += instance.OnOpenBeastPanel;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -2366,9 +2393,6 @@ namespace ProjectOC.Input
                 @OpenBotUI.started -= instance.OnOpenBotUI;
                 @OpenBotUI.performed -= instance.OnOpenBotUI;
                 @OpenBotUI.canceled -= instance.OnOpenBotUI;
-                @OpenBeastPanel.started -= instance.OnOpenBeastPanel;
-                @OpenBeastPanel.performed -= instance.OnOpenBeastPanel;
-                @OpenBeastPanel.canceled -= instance.OnOpenBeastPanel;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -2577,8 +2601,10 @@ namespace ProjectOC.Input
         private readonly InputActionMap m_UIStore;
         private List<IUIStoreActions> m_UIStoreActionsCallbackInterfaces = new List<IUIStoreActions>();
         private readonly InputAction m_UIStore_NextPriority;
-        private readonly InputAction m_UIStore_ChangeStoreData;
+        private readonly InputAction m_UIStore_ChangeIcon;
+        private readonly InputAction m_UIStore_Upgrade;
         private readonly InputAction m_UIStore_Alter;
+        private readonly InputAction m_UIStore_ChangeStoreData;
         private readonly InputAction m_UIStore_Remove1;
         private readonly InputAction m_UIStore_Remove10;
         private readonly InputAction m_UIStore_FastAdd;
@@ -2587,8 +2613,10 @@ namespace ProjectOC.Input
             private @PlayerInput m_Wrapper;
             public UIStoreActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
             public InputAction @NextPriority => m_Wrapper.m_UIStore_NextPriority;
-            public InputAction @ChangeStoreData => m_Wrapper.m_UIStore_ChangeStoreData;
+            public InputAction @ChangeIcon => m_Wrapper.m_UIStore_ChangeIcon;
+            public InputAction @Upgrade => m_Wrapper.m_UIStore_Upgrade;
             public InputAction @Alter => m_Wrapper.m_UIStore_Alter;
+            public InputAction @ChangeStoreData => m_Wrapper.m_UIStore_ChangeStoreData;
             public InputAction @Remove1 => m_Wrapper.m_UIStore_Remove1;
             public InputAction @Remove10 => m_Wrapper.m_UIStore_Remove10;
             public InputAction @FastAdd => m_Wrapper.m_UIStore_FastAdd;
@@ -2604,12 +2632,18 @@ namespace ProjectOC.Input
                 @NextPriority.started += instance.OnNextPriority;
                 @NextPriority.performed += instance.OnNextPriority;
                 @NextPriority.canceled += instance.OnNextPriority;
-                @ChangeStoreData.started += instance.OnChangeStoreData;
-                @ChangeStoreData.performed += instance.OnChangeStoreData;
-                @ChangeStoreData.canceled += instance.OnChangeStoreData;
+                @ChangeIcon.started += instance.OnChangeIcon;
+                @ChangeIcon.performed += instance.OnChangeIcon;
+                @ChangeIcon.canceled += instance.OnChangeIcon;
+                @Upgrade.started += instance.OnUpgrade;
+                @Upgrade.performed += instance.OnUpgrade;
+                @Upgrade.canceled += instance.OnUpgrade;
                 @Alter.started += instance.OnAlter;
                 @Alter.performed += instance.OnAlter;
                 @Alter.canceled += instance.OnAlter;
+                @ChangeStoreData.started += instance.OnChangeStoreData;
+                @ChangeStoreData.performed += instance.OnChangeStoreData;
+                @ChangeStoreData.canceled += instance.OnChangeStoreData;
                 @Remove1.started += instance.OnRemove1;
                 @Remove1.performed += instance.OnRemove1;
                 @Remove1.canceled += instance.OnRemove1;
@@ -2626,12 +2660,18 @@ namespace ProjectOC.Input
                 @NextPriority.started -= instance.OnNextPriority;
                 @NextPriority.performed -= instance.OnNextPriority;
                 @NextPriority.canceled -= instance.OnNextPriority;
-                @ChangeStoreData.started -= instance.OnChangeStoreData;
-                @ChangeStoreData.performed -= instance.OnChangeStoreData;
-                @ChangeStoreData.canceled -= instance.OnChangeStoreData;
+                @ChangeIcon.started -= instance.OnChangeIcon;
+                @ChangeIcon.performed -= instance.OnChangeIcon;
+                @ChangeIcon.canceled -= instance.OnChangeIcon;
+                @Upgrade.started -= instance.OnUpgrade;
+                @Upgrade.performed -= instance.OnUpgrade;
+                @Upgrade.canceled -= instance.OnUpgrade;
                 @Alter.started -= instance.OnAlter;
                 @Alter.performed -= instance.OnAlter;
                 @Alter.canceled -= instance.OnAlter;
+                @ChangeStoreData.started -= instance.OnChangeStoreData;
+                @ChangeStoreData.performed -= instance.OnChangeStoreData;
+                @ChangeStoreData.canceled -= instance.OnChangeStoreData;
                 @Remove1.started -= instance.OnRemove1;
                 @Remove1.performed -= instance.OnRemove1;
                 @Remove1.canceled -= instance.OnRemove1;
@@ -3041,7 +3081,6 @@ namespace ProjectOC.Input
             void OnMouseX(InputAction.CallbackContext context);
             void OnMouseY(InputAction.CallbackContext context);
             void OnOpenBotUI(InputAction.CallbackContext context);
-            void OnOpenBeastPanel(InputAction.CallbackContext context);
         }
         public interface ITechTreeActions
         {
@@ -3064,8 +3103,10 @@ namespace ProjectOC.Input
         public interface IUIStoreActions
         {
             void OnNextPriority(InputAction.CallbackContext context);
-            void OnChangeStoreData(InputAction.CallbackContext context);
+            void OnChangeIcon(InputAction.CallbackContext context);
+            void OnUpgrade(InputAction.CallbackContext context);
             void OnAlter(InputAction.CallbackContext context);
+            void OnChangeStoreData(InputAction.CallbackContext context);
             void OnRemove1(InputAction.CallbackContext context);
             void OnRemove10(InputAction.CallbackContext context);
             void OnFastAdd(InputAction.CallbackContext context);

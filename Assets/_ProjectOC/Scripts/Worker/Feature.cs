@@ -55,7 +55,7 @@ namespace ProjectOC.WorkerNS
                 }
                 else
                 {
-                    Debug.LogError($"Feature {this.ID} Effect {tuple.Item1} is Null");
+                    //Debug.LogError($"Feature {this.ID} Effect {tuple.Item1} is Null");
                 }
             }
         }
@@ -71,7 +71,7 @@ namespace ProjectOC.WorkerNS
             }
             else
             {
-                Debug.LogError($"Feature {this.ID} Worker is Null");
+                //Debug.LogError($"Feature {this.ID} Worker is Null");
             }
         }
 

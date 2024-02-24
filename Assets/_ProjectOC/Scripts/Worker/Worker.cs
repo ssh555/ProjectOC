@@ -81,7 +81,7 @@ namespace ProjectOC.WorkerNS
                 {
                     return TimeArrangement[timeManager.CurrentTimeFrame];
                 }
-                Debug.LogError("DispatchTimeManager is Null");
+                //Debug.LogError("DispatchTimeManager is Null");
                 return TimeStatus.None;
             } 
         }
@@ -122,7 +122,7 @@ namespace ProjectOC.WorkerNS
         public List<Item> TransportItems = new List<Item>();
 
         private NavMeshAgent Agent = null;
-        public float Threshold = 1f;
+        public float Threshold = 2f;
         public Transform Target = null;
         private event Action<Worker> OnArrival;
         public bool HasArrived = false;
@@ -137,12 +137,12 @@ namespace ProjectOC.WorkerNS
             this.ExpRate.Add(WorkType.Collect, 100);
 
             this.Eff.Add(WorkType.None, 0);
-            this.Eff.Add(WorkType.Cook, 0);
-            this.Eff.Add(WorkType.HandCraft, 0);
-            this.Eff.Add(WorkType.Industry, 0);
-            this.Eff.Add(WorkType.Magic, 0);
+            this.Eff.Add(WorkType.Cook, 10);
+            this.Eff.Add(WorkType.HandCraft, 10);
+            this.Eff.Add(WorkType.Industry, 10);
+            this.Eff.Add(WorkType.Magic, 10);
             this.Eff.Add(WorkType.Transport, 50);
-            this.Eff.Add(WorkType.Collect, 0);
+            this.Eff.Add(WorkType.Collect, 10);
 
             this.Skill.Add(WorkType.None, new Skill());
             this.Skill.Add(WorkType.Cook, new Skill());
@@ -168,7 +168,7 @@ namespace ProjectOC.WorkerNS
                 }
                 else
                 {
-                    Debug.LogError($"Worker {Name} Skill {kv.Value} is Null");
+                    //Debug.LogError($"Worker {Name} Skill {kv.Value} is Null");
                 }
             }
 
@@ -285,6 +285,19 @@ namespace ProjectOC.WorkerNS
         public void SetTimeStatusAll(TimeStatus timeStatus)
         {
             this.TimeArrangement.SetTimeStatusAll(timeStatus);
+        }
+
+        public void OnDestroy()
+        {
+            this.ClearDestination();
+            if (this.Transport != null)
+            {
+                this.Transport.End();
+            }
+            if (this.ProNode != null)
+            {
+                this.ProNode.RemoveWorker();
+            }
         }
     }
 }

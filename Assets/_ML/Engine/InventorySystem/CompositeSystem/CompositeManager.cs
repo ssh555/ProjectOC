@@ -50,8 +50,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         {
             Error,
             Item,
-            BuildingPart,
-            Worker
+            BuildingPart
         }
 
 

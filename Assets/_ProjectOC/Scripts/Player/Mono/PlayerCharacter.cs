@@ -163,13 +163,13 @@ namespace ProjectOC.Player
             {
                 yield return null;
             }
-            //// to-do : to-delete
+            // to-do : to-delete
             // Ωˆ≤‚ ‘”√
-/*            foreach (var id in ML.Engine.InventorySystem.ItemManager.Instance.GetAllItemID())//ML.Engine.InventorySystem.ItemManager.Instance.GetCanStack(id) ? UnityEngine.Random.Range(1, 999) : 1
+            foreach (var id in ML.Engine.InventorySystem.ItemManager.Instance.GetAllItemID())//ML.Engine.InventorySystem.ItemManager.Instance.GetCanStack(id) ? UnityEngine.Random.Range(1, 999) : 1
             {
-               var item = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(id, 20)[0];
+               var item = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(id, 9999)[0];
                 Inventory.AddItem(item);
-            }*/
+            }
 
             this.enabled = false;
         }
@@ -192,11 +192,7 @@ namespace ProjectOC.Player
                 (ML.Engine.Manager.GameManager.Instance.UIManager.GetTopUIPanel() as UI.PlayerUIPanel).player = this;
             }
 
-            if (Input.InputManager.PlayerInput.Player.OpenBeastPanel.WasPressedThisFrame())
-            {
-                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(GameObject.Instantiate(this.beastPanel.gameObject, GameObject.Find("Canvas").transform, false).GetComponent<ML.Engine.UI.UIBasePanel>());
-                
-            }
+
             //// In-Window
             //if (Application.isFocused)
             //{

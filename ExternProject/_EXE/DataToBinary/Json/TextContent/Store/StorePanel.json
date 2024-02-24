@@ -38,8 +38,8 @@
             "English" : ""
         }
     },
-    "kt_ChangeItem" : {
-        "keyname" : "kt_ChangeItem",
+    "kt_Upgrade" : {
+        "keyname" : "kt_ChangeIcon",
         "keymap" : {
             "XBOX" : "LT",
             "KeyBoard" : "G"
@@ -49,11 +49,22 @@
             "English" : ""
         }
     },
+    "kt_ChangeItem" : {
+        "keyname" : "kt_ChangeItem",
+        "keymap" : {
+            "XBOX" : "A",
+            "KeyBoard" : "E"
+        },
+        "description" : {
+            "Chinese" : "改变物品",
+            "English" : "Change Item"
+        }
+    },
     "kt_Remove1" : {
         "keyname" : "kt_Remove1",
         "keymap" : {
             "XBOX" : "X",
-            "KeyBoard" : "E"
+            "KeyBoard" : "T"
         },
         "description" : {
             "Chinese" : "取出1个",
@@ -64,7 +75,7 @@
         "keyname" : "kt_Remove10",
         "keymap" : {
             "XBOX" : "X",
-            "KeyBoard" : "E"
+            "KeyBoard" : "T"
         },
         "description" : {
             "Chinese" : "取出10个",

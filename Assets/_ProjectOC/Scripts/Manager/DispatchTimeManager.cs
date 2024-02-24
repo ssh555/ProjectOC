@@ -32,15 +32,10 @@ namespace ProjectOC.ManagerNS
                 }
             }
         }
-        private int currentTimeFrame = 0;
         /// <summary>
         /// 当前所处时段 [0, 23]
         /// </summary>
-        public int CurrentTimeFrame 
-        { 
-            get { return currentTimeFrame; } 
-            private set {currentTimeFrame = value;} 
-        }
+        public int CurrentTimeFrame = 0;
         /// <summary>
         /// 计时器 => 时段更新(TimeScale确定) 一天循环24次，一个时段计时一次，计时结束时调用时段更新事件，Loop
         /// </summary>

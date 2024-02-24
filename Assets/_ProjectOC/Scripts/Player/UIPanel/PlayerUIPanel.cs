@@ -77,6 +77,7 @@ namespace ProjectOC.Player.UI
                 {
                     // 实例化
                     var panel = GameObject.Instantiate((request.asset as GameObject).GetComponent<UIInfiniteInventory>());
+                    panel.transform.SetParent(this.transform.parent, false);
 
                     // 初始化
                     panel.inventory = this.player.Inventory as ML.Engine.InventorySystem.InfiniteInventory;

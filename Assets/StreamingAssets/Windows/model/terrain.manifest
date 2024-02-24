@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3772521533
+CRC: 1213482309
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 97a54d545e1a937afe0545bf02250537
+    Hash: 6dcfe838c68875d24a8c8c72782aa6b4
   TypeTreeHash:
     serializedVersion: 2
     Hash: 59c03d2b98afd3e9e06e08bd517356db
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 97a54d545e1a937afe0545bf02250537
+    Hash: 6dcfe838c68875d24a8c8c72782aa6b4
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -38,16 +38,14 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/luo/luo Mesh.asset
 - Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Slope_Bend_4x3x4.fbx
-- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/luo/luo Default.mat
 - Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/BuildingA.FBX
 - Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Materials/BuildingA_mt3.mat
+- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Terrain.Part1.fbx
 - Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Materials/FurnaceA_mt1.mat
 - Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Materials/FurnaceA_mt2.mat
 - Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/Terrain.asset
 - Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Slope_2x3x6.fbx
-- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/luo/luo Collider.asset
 - Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Materials/BuildingA_mt2.mat
 - Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Slope_Bend_3x2x3.fbx
 - Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/Terrain/Terrain
@@ -59,7 +57,6 @@ Assets:
 - Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Slope_2x2x4.fbx
 - Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Materials/BuildingA_mt4.mat
 - Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/Terrain/Terrain.prefab
-- Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/luo/luo.prefab
 Dependencies:
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/materials/terrain
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/shader
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials/terrain
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/shader

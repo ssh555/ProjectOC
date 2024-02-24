@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using ML.Engine.InventorySystem.CompositeSystem;
+using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.BuildingSystem;
+using ProjectOC.StoreNS;
 
 namespace ProjectOC.ProNodeNS
 {
@@ -58,7 +61,8 @@ namespace ProjectOC.ProNodeNS
         /// <summary>
         /// 堆积搬运阈值，未分配给任务的份数达到此值，全部划分给任务，然后生成任务
         /// </summary>
-        public int StackThresholdNum { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetStackThreshold(ID); }
+        //public int StackThresholdNum { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetStackThreshold(ID); }
+        public int StackThresholdNum = 1;
         /// <summary>
         ///  当原材料可生产的Item份数低于此值时，发布搬运任务
         ///  搬运 MaxStackNum - 此值份量的原材料到此生产节点
@@ -631,7 +635,7 @@ namespace ProjectOC.ProNodeNS
                     }
                     else
                     {
-                        Debug.LogError("ProNode UIAdd Error");
+                        //Debug.LogError("ProNode UIAdd Error");
                     }
                 }
             }
@@ -650,7 +654,7 @@ namespace ProjectOC.ProNodeNS
                     }
                     else
                     {
-                        Debug.LogError("ProNode UIRemove Error");
+                        //Debug.LogError("ProNode UIRemove Error");
                         break;
                     }
                 }
@@ -671,7 +675,7 @@ namespace ProjectOC.ProNodeNS
                 }
                 else
                 {
-                    Debug.LogError("ProNode UIFastAdd Error");
+                    //Debug.LogError("ProNode UIFastAdd Error");
                 }
             }
         }
@@ -689,11 +693,30 @@ namespace ProjectOC.ProNodeNS
                     }
                     else
                     {
-                        Debug.LogError("ProNode UIFastRemove Error");
+                        //Debug.LogError("ProNode UIFastRemove Error");
                         break;
                     }
                 }
                 StartProduce();
+            }
+        }
+
+        public void Upgrade(Player.PlayerCharacter player)
+        {
+            if (this.WorldProNode != null)
+            {
+                string upgradeRawID = BuildingManager.Instance.GetUpgradeRaw(this.WorldProNode.Classification.ToString().Replace('-', '_'));
+                CompositeManager.CompositionObjectType compObjType = CompositeManager.Instance.Composite(player.Inventory, upgradeRawID, out var composition);
+                if (compObjType == CompositeManager.CompositionObjectType.BuildingPart && composition is WorldProNode upgrade)
+                {
+                    upgrade.InstanceID = this.WorldProNode.InstanceID;
+                    upgrade.transform.position = this.WorldProNode.transform.position;
+                    upgrade.transform.rotation = this.WorldProNode.transform.rotation;
+                    UnityEngine.Object.Destroy(this.WorldProNode.gameObject);
+                    this.WorldProNode = upgrade;
+                    upgrade.ProNode = this;
+                    this.SetLevel(upgrade.Classification.Category4 - 1);
+                }
             }
         }
         #endregion
@@ -835,7 +858,7 @@ namespace ProjectOC.ProNodeNS
             result.Amount = amount;
             if (result.Amount != amount)
             {
-                Debug.LogError($"Item Amount Error ItemAmount: {result.Amount} Amount: {amount}");
+                //Debug.LogError($"Item Amount Error ItemAmount: {result.Amount} Amount: {amount}");
             }
             OnActionChange?.Invoke();
             return result;
@@ -877,7 +900,7 @@ namespace ProjectOC.ProNodeNS
                     return StackAll;
                 }
             }
-            Debug.LogError($"Item {id} is not in ProNode {ID}");
+            //Debug.LogError($"Item {id} is not in ProNode {ID}");
             return 0;
         }
 
