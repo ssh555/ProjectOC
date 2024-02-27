@@ -306,8 +306,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             if(CurrentBeastIndex != -1)
             {
-                this.transform.Find("HiddenBeastInfo2").Find("Info").gameObject.SetActive(false);
-                this.transform.Find("HiddenBeastInfo3").Find("Info").gameObject.SetActive(false);
+                this.transform.Find("HiddenBeastInfo2").Find("Info").gameObject.SetActive(true);
+                this.transform.Find("HiddenBeastInfo3").Find("Info").gameObject.SetActive(true);
 
                 //BeastInfo
 
