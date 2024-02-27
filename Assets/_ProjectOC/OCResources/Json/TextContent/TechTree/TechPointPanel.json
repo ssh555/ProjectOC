@@ -19,37 +19,16 @@
             }
         },
         {
-            "name" : "Technology",
-            "description" : {
-                "Chinese" : "科技",
-                "English" : "Technology"
-            }
-        },
-        {
-            "name" : "Calculus",
-            "description" : {
-                "Chinese" : "演算",
-                "English" : "Calculation"
-            }
-        },
-        {
-            "name" : "Resonance",
-            "description" : {
-                "Chinese" : "共鸣",
-                "English" : "Resonance"
-            }
-        },
-        {
             "name" : "Smelt",
             "description" : {
-                "Chinese" : "熔炼",
+                "Chinese" : "冶炼",
                 "English" : "Smelt"
             }
         },
         {
             "name" : "Storage",
             "description" : {
-                "Chinese" : "储藏",
+                "Chinese" : "贮藏",
                 "English" : "Storage"
             }
         },
@@ -61,16 +40,23 @@
             }
         },
         {
+            "name" : "Calculus",
+            "description" : {
+                "Chinese" : "演算",
+                "English" : "Calculus"
+            }
+        },
+        {
             "name" : "Echo",
             "description" : {
-                "Chinese" : "隐兽",
+                "Chinese" : "共鸣",
                 "English" : "Echo"
             }
         },
         {
             "name" : "Cook",
             "description" : {
-                "Chinese" : "厨艺",
+                "Chinese" : "烹饪",
                 "English" : "Cook"
             }
         }
