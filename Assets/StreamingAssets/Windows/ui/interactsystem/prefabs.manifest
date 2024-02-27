@@ -3,13 +3,13 @@ CRC: 4254001156
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f18203074825f1088720b61cd05bd69d
+    Hash: a5c5bb4b761bb815f03c64a16b47f4da
   TypeTreeHash:
     serializedVersion: 2
     Hash: c51080c66bd63febf7ae13be0800649d
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: f18203074825f1088720b61cd05bd69d
+    Hash: a5c5bb4b761bb815f03c64a16b47f4da
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -40,5 +40,5 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/_ML/MLResources/InteractSystem/UI/InteractKeyTip.prefab
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/fonts
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/fonts
+- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex

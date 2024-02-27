@@ -86,7 +86,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuildingTableData.cs" />
-    <Compile Include="BuildingUpgradeTableData.cs" />
     <Compile Include="EffectTableData.cs" />
     <Compile Include="FeatureTableData.cs" />
     <Compile Include="ProNodeTableData.cs" />
