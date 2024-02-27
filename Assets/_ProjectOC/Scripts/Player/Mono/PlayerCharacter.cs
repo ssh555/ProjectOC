@@ -163,13 +163,7 @@ namespace ProjectOC.Player
             {
                 yield return null;
             }
-            // to-do : to-delete
-            // 仅测试用
-            foreach (var id in ML.Engine.InventorySystem.ItemManager.Instance.GetAllItemID())//ML.Engine.InventorySystem.ItemManager.Instance.GetCanStack(id) ? UnityEngine.Random.Range(1, 999) : 1
-            {
-               var item = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(id, 9999)[0];
-                Inventory.AddItem(item);
-            }
+
 
             this.enabled = false;
         }
@@ -221,6 +215,20 @@ namespace ProjectOC.Player
             this.moveAbility.UpdatePosition(deltatime, this.playerInputActions.Move.ReadValue<Vector2>());
         }
 
+        #endregion
+
+
+        #region to-delete
+        [Button("测试用: AddAllItems")]
+        private void __TEST__AddInventoryAllItem__()
+        {
+            // to-do : to-delete
+            // 仅测试用
+            foreach (var id in ML.Engine.InventorySystem.ItemManager.Instance.GetAllItemID())//ML.Engine.InventorySystem.ItemManager.Instance.GetCanStack(id) ? UnityEngine.Random.Range(1, 999) : 1
+            {
+                ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(id, 999).ForEach(item => Inventory.AddItem(item));
+            }
+        }
         #endregion
     }
 }

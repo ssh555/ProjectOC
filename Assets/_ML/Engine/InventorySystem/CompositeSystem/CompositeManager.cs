@@ -217,7 +217,6 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             {
                 return null;
             }
-
             return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(ItemManager.Texture2DPath).LoadAsset<Texture2D>(this.CompositeData[id].texture2d);
         }
 
