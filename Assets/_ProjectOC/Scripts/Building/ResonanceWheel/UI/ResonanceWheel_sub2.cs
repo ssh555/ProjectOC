@@ -190,7 +190,25 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void NextGrid_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            CurrentGridIndex = (CurrentGridIndex + 1) % Grids.Count;
+
+            Vector2 vector2 = obj.ReadValue<Vector2>();
+
+            float angle = Mathf.Atan2(vector2.x, vector2.y);
+
+            angle = angle * 180 / Mathf.PI;
+            if (angle < 0)
+            {
+                angle = angle + 360;
+            }
+
+            if (angle < 25.7 || angle > 334.3) CurrentGridIndex = 0;
+            else if (angle > 25.7 && angle < 77.1) CurrentGridIndex = 6;
+            else if (angle > 77.1 && angle < 128.5) CurrentGridIndex = 5;
+            else if (angle > 128.5 && angle < 179.9) CurrentGridIndex = 4;
+            else if (angle > 179.9 && angle < 231.3) CurrentGridIndex = 3;
+            else if (angle > 231.3 && angle < 282.7) CurrentGridIndex = 2;
+            else if (angle > 282.7 && angle < 334.3) CurrentGridIndex = 1;
+
             this.Refresh();
         }
 

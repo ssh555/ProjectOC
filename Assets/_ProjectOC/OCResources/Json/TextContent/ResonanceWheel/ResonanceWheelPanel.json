@@ -46,23 +46,7 @@
       "English": ""
     }
   },
-  "Grid1Text": {
-    "Chinese": "空",
-    "English": "Empty"
-  },
-  "Grid2Text": {
-    "Chinese": "空",
-    "English": "Empty"
-  },
-  "Grid3Text": {
-    "Chinese": "空",
-    "English": "Empty"
-  },
-  "Grid4Text": {
-    "Chinese": "空",
-    "English": "Empty"
-  },
-  "Grid5Text": {
+  "GridText": {
     "Chinese": "空",
     "English": "Empty"
   },

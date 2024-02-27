@@ -75,10 +75,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             SongofSeaBeastsText = SongofSeaBeastsTemplate.Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
 
             //Ring
-            var ringcontent = exclusivePart.Find("Ring").Find("Viewport").Find("Content");
+
+            var ring = exclusivePart.Find("Ring").Find("Ring");
             KT_NextGrid = new UIKeyTip();
-            KT_NextGrid.keytip= ringcontent.Find("SelectKey").GetComponent<TMPro.TextMeshProUGUI>();
-            var ring = ringcontent.Find("Ring");
+            KT_NextGrid.keytip= ring.Find("SelectKeyTip").GetComponent<TMPro.TextMeshProUGUI>();
+            
             Grid1 = ring.Find("Grid1");
             Grid2 = ring.Find("Grid2");
             Grid3 = ring.Find("Grid3");
@@ -345,7 +346,22 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void NextGrid_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            CurrentGridIndex = (CurrentGridIndex + 1) % Grids.Count;
+            Vector2 vector2 = obj.ReadValue<Vector2>();
+
+            float angle = Mathf.Atan2(vector2.x, vector2.y);
+
+            angle = angle * 180 / Mathf.PI;
+            if (angle<0)
+            {
+                angle = angle + 360;
+            }
+
+            if (angle < 36 || angle > 324) CurrentGridIndex = 0;
+            else if (angle > 36 && angle < 108) CurrentGridIndex = 4;
+            else if (angle > 108 && angle < 180) CurrentGridIndex = 3;
+            else if (angle > 180 && angle < 252) CurrentGridIndex = 2;
+            else if (angle > 252 && angle < 324) CurrentGridIndex = 1;
+
             this.Refresh();
         }
 
@@ -402,7 +418,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
             //给格子计时器加回调并刷新
-            foreach (var grid in Grids)
+            foreach (var grid in Grids) 
             {
                 if (grid.isNull)
                 {
@@ -416,14 +432,19 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                         grid.transform.Find("Image").GetComponent<Image>().sprite = sprite2;
                         grid.isTiming = true;
                     }
-                    
+
+
+
                     grid.worker.timer.OnEndEvent += () =>
                     {
                         //刷新素材
                         grid.transform.Find("Image").GetComponent<Image>().sprite = sprite1;
                         grid.isNull = false;
                         grid.isTiming = false;
+
+                        //此处有bug
                         this.Refresh();
+                        
                     };
                 }
             }
@@ -810,11 +831,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 }
             }
 
-            Grid1Text.text = PanelTextContent_Main.Grid1Text;
-            Grid2Text.text = PanelTextContent_Main.Grid2Text;
-            Grid3Text.text = PanelTextContent_Main.Grid3Text;
-            Grid4Text.text = PanelTextContent_Main.Grid4Text;
-            Grid5Text.text = PanelTextContent_Main.Grid5Text;
+            Grid1Text.text = PanelTextContent_Main.GridText;
+            Grid2Text.text = PanelTextContent_Main.GridText;
+            Grid3Text.text = PanelTextContent_Main.GridText;
+            Grid4Text.text = PanelTextContent_Main.GridText;
+            Grid5Text.text = PanelTextContent_Main.GridText;
 
             #endregion
 
@@ -906,7 +927,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             //ring
             public KeyTip nextgrid;
-            public TextContent Grid1Text, Grid2Text, Grid3Text, Grid4Text, Grid5Text;
+            public TextContent GridText;
 
             //ResonanceTarget
             public TextContent ResonanceTargetTitle;

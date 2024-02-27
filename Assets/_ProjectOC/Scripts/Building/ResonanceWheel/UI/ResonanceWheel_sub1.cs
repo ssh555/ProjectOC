@@ -5,6 +5,7 @@ using ML.Engine.TextContent;
 using ML.Engine.UI;
 using Newtonsoft.Json;
 using ProjectOC.Player;
+using ProjectOC.ProNodeNS;
 using ProjectOC.WorkerEchoNS;
 using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
@@ -270,16 +271,40 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
             //BeastInfo
-            Stamina.text = ResonanceWheelUI.PanelTextContent_sub1.Stamina;
-            Speed.text = ResonanceWheelUI.PanelTextContent_sub1.Speed;
 
-            Cook.text = ResonanceWheelUI.PanelTextContent_sub1.Cook;
-            HandCraft.text = ResonanceWheelUI.PanelTextContent_sub1.HandCraft;
-            Industry.text = ResonanceWheelUI.PanelTextContent_sub1.Industry;
-            Magic.text = ResonanceWheelUI.PanelTextContent_sub1.Magic;
-            Transport.text = ResonanceWheelUI.PanelTextContent_sub1.Transport;
-            Collect.text = ResonanceWheelUI.PanelTextContent_sub1.Collect;
+            foreach (TextTip tp in ResonanceWheelUI.PanelTextContent_sub1.SkillType)
+            {
+                switch (tp.name)
+                {
+                    case "Stamina":
+                        Stamina.text = tp.GetDescription();
+                        break;
+                    case "Speed":
+                        Speed.text = tp.GetDescription();
+                        break;
+                    case "Cook":
+                        Cook.text = tp.GetDescription();
+                        break;
+                    case "HandCraft":
+                        HandCraft.text = tp.GetDescription();
+                        break;
+                    case "Industry":
+                        Industry.text = tp.GetDescription();
+                        break;
+                    case "Magic":
+                        Magic.text = tp.GetDescription();
+                        break;
+                    case "Transport":
+                        Transport.text = tp.GetDescription();
+                        break;
+                    case "Collect":
+                        Collect.text = tp.GetDescription();
+                        break;
+                }
 
+
+            }
+            
             expel.ReWrite(ResonanceWheelUI.PanelTextContent_sub1.expel);
             receive.ReWrite(ResonanceWheelUI.PanelTextContent_sub1.receive);
 
@@ -335,7 +360,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             if (this.PrefabsAB==null) return;
             foreach (var feature in worker.Features)
             {
-                var Info = this.transform.Find("HiddenBeastInfo2").Find("Info");
+                var Info = this.transform.Find("HiddenBeastInfo2").Find("Info").Find("Scroll View").Find("Viewport").Find("Content");
                 var descriptionPrefab = Instantiate(DescriptionPrefab, Info);
                 descriptionPrefab.transform.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;
                 descriptionPrefab.transform.Find("Text2").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Description;
@@ -351,15 +376,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public struct ResonanceWheel_sub1Struct
         {
             //BeastInfo
-            public TextContent Stamina;
-            public TextContent Speed;
+            public TextTip[] SkillType;
 
-            public TextContent Cook;
-            public TextContent HandCraft;
-            public TextContent Industry;
-            public TextContent Magic;
-            public TextContent Transport;
-            public TextContent Collect;
 
             public KeyTip expel;
             public KeyTip receive;
