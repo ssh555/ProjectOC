@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 1400136021
+CRC: 3661210901
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -193,8 +193,6 @@ AssetBundleManifest:
       Name: json/textcontent/techtree
       Dependencies: {}
     Info_44:
-      Name: ui/buildingsystem/texture2d/buildicon
-      Dependencies: {}
-    Info_45:
       Name: model/character
-      Dependencies: {}
+      Dependencies:
+        Dependency_0: materials/other

@@ -1,9 +1,9 @@
 {
-  //BeastInfo
   "Speed": {
     "Chinese": "速度",
     "English": "Speed"
   },
+  
   "Cook": {
     "Chinese": "烹饪",
     "English": "Cook"
@@ -41,7 +41,6 @@
     }
   },
 
-  //BotKeyTips
   "back": {
     "keyname": "back",
     "keymap": {

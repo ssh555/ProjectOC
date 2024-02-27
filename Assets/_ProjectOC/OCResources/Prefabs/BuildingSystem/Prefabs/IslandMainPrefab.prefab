@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapGridSize: 100
-  maxSize: {x: 11, y: 11}
+  maxSize: {x: 15, y: 15}
   islandMains:
   - {fileID: 9085461861964717170}
 --- !u!114 &9085461861964717170
@@ -695,6 +695,7 @@ MonoBehaviour:
   - {x: -1, y: 0}
   - {x: -2, y: 0}
   islandMesh: {fileID: 2099034106723370416}
+  islandMain: {fileID: 0}
 --- !u!4 &2888845180813195178 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7041509127091483278, guid: c24c2c39e95c27941869058a4c175ddf, type: 3}

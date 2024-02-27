@@ -1,6 +1,4 @@
 {
-  //BeastInfo
-
   "Stamina": {
     "Chinese": "体力",
     "English": "Stamina"
@@ -9,6 +7,7 @@
     "Chinese": "速度",
     "English": "Speed"
   },
+
   "Cook": {
     "Chinese": "烹饪",
     "English": "Cook"
@@ -56,7 +55,6 @@
       "English": "Receive"
     }
   },
-  //BotKeyTips
   "back": {
     "keyname": "back",
     "keymap": {

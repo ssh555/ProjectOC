@@ -14,6 +14,7 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// 搬运所属的任务
         /// </summary>
+        [System.NonSerialized]
         public MissionTransport Mission;
 
         /// <summary>

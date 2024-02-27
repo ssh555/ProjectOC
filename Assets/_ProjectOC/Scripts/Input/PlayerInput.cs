@@ -70,7 +70,7 @@ namespace ProjectOC.Input
                     ""type"": ""Value"",
                     ""id"": ""021baf43-441a-4182-9a5a-596bacda70f3"",
                     ""expectedControlType"": ""Axis"",
-                    ""processors"": ""Scale(factor=0.1)"",
+                    ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },
@@ -79,7 +79,7 @@ namespace ProjectOC.Input
                     ""type"": ""Value"",
                     ""id"": ""5c05d374-0ee9-440f-868c-a312111bdd4e"",
                     ""expectedControlType"": ""Axis"",
-                    ""processors"": ""Scale(factor=0.1)"",
+                    ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },
