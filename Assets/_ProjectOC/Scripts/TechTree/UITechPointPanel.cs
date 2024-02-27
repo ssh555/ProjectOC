@@ -301,6 +301,7 @@ namespace ProjectOC.TechTree.UI
             {
                 Vector2Int offset = Vector2Int.RoundToInt(ProjectOC.Input.InputManager.PlayerInput.TechTree.AlterTP.ReadValue<Vector2>());
                 AlterTP(offset);
+                ClearTempOnAlterTP();
                 Refresh();
             }
         }
@@ -397,28 +398,9 @@ namespace ProjectOC.TechTree.UI
         private Dictionary<string, GameObject> TPCItemGO = new Dictionary<string, GameObject>();
 
         private int lastCIndex;
-        private void ClearTemp()
+
+        private void ClearTempOnAlterTP()
         {
-            foreach(var s in tempSprite)
-            {
-                Destroy(s);
-            }
-            tempSprite.Clear();
-            foreach (var s in TPCGO.Values)
-            {
-                Destroy(s);
-            }
-            TPCGO.Clear();
-            foreach (var s in TTTPGO.Values)
-            {
-                Destroy(s);
-            }
-            TTTPGO.Clear();
-            foreach (var s in TTTPEGO.Values)
-            {
-                Destroy(s);
-            }
-            TTTPEGO.Clear();
             foreach (var s in TPCItemGO.Values)
             {
                 Destroy(s);
@@ -429,6 +411,46 @@ namespace ProjectOC.TechTree.UI
                 Destroy(s);
             }
             TPUnlockGO.Clear();
+        }
+
+        private void ClearTemp()
+        {
+            // sprite
+            foreach(var s in tempSprite)
+            {
+                Destroy(s);
+            }
+            tempSprite.Clear();
+            // TPCategory
+            foreach (var s in TPCGO.Values)
+            {
+                Destroy(s);
+            }
+            TPCGO.Clear();
+            // TechTree
+            foreach (var s in TTTPGO.Values)
+            {
+                Destroy(s);
+            }
+            TTTPGO.Clear();
+            foreach (var s in TTTPEGO.Values)
+            {
+                Destroy(s);
+            }
+            TTTPEGO.Clear();
+            // TechPoint
+            foreach (var s in TPCItemGO.Values)
+            {
+                Destroy(s);
+            }
+            TPCItemGO.Clear();
+            foreach (var s in TPUnlockGO.Values)
+            {
+                Destroy(s);
+            }
+            TPUnlockGO.Clear();
+
+            // Temp
             foreach (var s in tempGO)
             {
                 Destroy(s);
@@ -706,7 +728,7 @@ namespace ProjectOC.TechTree.UI
                 }
 
                 // Text
-                unlock.GetComponentInChildren<TextMeshProUGUI>().text = CompositeManager.Instance.GetCompositonName(id);
+                unlock.GetComponentInChildren<TextMeshProUGUI>().text = CompositeManager.Instance.GetCompositonName(GetTPIconItemID(id));
             }
             
             // Ãæ°å×´Ì¬
