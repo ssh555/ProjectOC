@@ -47,6 +47,17 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             Grids.Add(new GridBeastType(Grid6.transform, ResonanceWheelUI.BeastType.WorkerEcho_Dog));
             Grids.Add(new GridBeastType(Grid7.transform, ResonanceWheelUI.BeastType.WorkerEcho_Seal));
 
+            Grid2.Find("Image").GetComponent<Image>().sprite = parentUI.sprite_Cat;
+            Grid3.Find("Image").GetComponent<Image>().sprite = parentUI.sprite_Deer;
+            Grid4.Find("Image").GetComponent<Image>().sprite = parentUI.sprite_Fox;
+            Grid5.Find("Image").GetComponent<Image>().sprite = parentUI.sprite_Rabbit;
+            Grid6.Find("Image").GetComponent<Image>().sprite = parentUI.sprite_Dog;
+            Grid7.Find("Image").GetComponent<Image>().sprite = parentUI.sprite_Seal;
+
+
+
+
+
             //BotKeyTips
             var kt = this.transform.Find("BotKeyTips").Find("KeyTips");
             KT_Back = new UIKeyTip();
@@ -308,7 +319,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
         #endregion
 
-        
+
+
     }
 
 }

@@ -386,24 +386,24 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 
                 for (int i = 0; i < workerTimeStatus.Length; i++)
                 {
-                    Debug.Log("34 " + i);
+                    //Debug.Log("34 " + i);
                     Image img = schedule.Find("T" + i.ToString()).GetComponent<Image>();
                     switch (workerTimeStatus[i])
                     {
                         case TimeStatus.None:
-                            Debug.Log("workerTimeStatus None");
+                            //Debug.Log("workerTimeStatus None");
                             img.color = UnityEngine.Color.red;
                             break;
                         case TimeStatus.Relax:
-                            Debug.Log("workerTimeStatus Relax");
+                            //Debug.Log("workerTimeStatus Relax");
                             img.color = UnityEngine.Color.green;
                             break;
                         case TimeStatus.Work_Transport:
-                            Debug.Log("workerTimeStatus Work_Transport");
+                            //Debug.Log("workerTimeStatus Work_Transport");
                             img.color = UnityEngine.Color.blue;
                             break;
                         case TimeStatus.Work_OnDuty:
-                            Debug.Log("workerTimeStatus Work_OnDuty");
+                            //Debug.Log("workerTimeStatus Work_OnDuty");
                             img.color = UnityEngine.Color.yellow;
                             break;
                     }
@@ -416,7 +416,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 this.transform.Find("HiddenBeastInfo2").Find("Info").gameObject.SetActive(false);
                 this.transform.Find("HiddenBeastInfo3").Find("Info").gameObject.SetActive(false);
 
-                Debug.Log("ÎÞÒþÊÞ");
+                //Debug.Log("ÎÞÒþÊÞ");
             }
             //BotKeyTips
 

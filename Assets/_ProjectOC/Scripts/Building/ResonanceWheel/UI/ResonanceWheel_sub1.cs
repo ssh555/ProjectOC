@@ -358,9 +358,16 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
             if (this.PrefabsAB==null) return;
+
+            var Info = this.transform.Find("HiddenBeastInfo2").Find("Info").Find("Scroll View").Find("Viewport").Find("Content");
+            for(int i=0;i<Info.childCount;i++)
+            {
+                Destroy(Info.GetChild(i).gameObject);
+            }
+
             foreach (var feature in worker.Features)
             {
-                var Info = this.transform.Find("HiddenBeastInfo2").Find("Info").Find("Scroll View").Find("Viewport").Find("Content");
+                
                 var descriptionPrefab = Instantiate(DescriptionPrefab, Info);
                 descriptionPrefab.transform.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;
                 descriptionPrefab.transform.Find("Text2").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Description;

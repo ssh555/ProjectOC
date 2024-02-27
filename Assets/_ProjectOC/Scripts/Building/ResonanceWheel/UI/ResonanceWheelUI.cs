@@ -3,6 +3,7 @@ using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.Timer;
+using ML.Engine.UI;
 using Newtonsoft.Json;
 using ProjectOC.Player;
 using ProjectOC.TechTree.UI;
@@ -45,6 +46,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
 
             workerEcho = (GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
+            
+
 
             StartCoroutine(InitUIPrefabs());
             StartCoroutine(InitUITexture2D());
@@ -53,6 +56,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //exclusivePart
             exclusivePart = this.transform.Find("ExclusivePart");
             exclusivePart.gameObject.SetActive(true);
+
+            
 
             // TopPart
             TopTitleText = this.transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
@@ -75,11 +80,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             SongofSeaBeastsText = SongofSeaBeastsTemplate.Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
 
             //Ring
-
             var ring = exclusivePart.Find("Ring").Find("Ring");
-            KT_NextGrid = new UIKeyTip();
-            KT_NextGrid.keytip= ring.Find("SelectKeyTip").GetComponent<TMPro.TextMeshProUGUI>();
-            
             Grid1 = ring.Find("Grid1");
             Grid2 = ring.Find("Grid2");
             Grid3 = ring.Find("Grid3");
@@ -90,6 +91,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             Grids.Add(new RingGrid(Grid3.transform));
             Grids.Add(new RingGrid(Grid4.transform));
             Grids.Add(new RingGrid(Grid5.transform));
+
+            KT_NextGrid = new UIKeyTip();
+            KT_NextGrid.keytip= ring.Find("SelectKeyTip").GetComponent<TMPro.TextMeshProUGUI>();
+            
 
             Grid1Text = Grid1.Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
             Grid2Text = Grid2.Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
@@ -180,7 +185,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
 
-            base.OnExit();
+            this.gameObject.SetActive(false);
             this.Exit();
             ClearTemp();
         }
@@ -693,6 +698,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #region temp
         public Sprite sprite1,sprite2,sprite3;
+
+        public Sprite sprite_Cat, sprite_Deer, sprite_Dog, sprite_Fox, sprite_Rabbit, sprite_Seal;
         #endregion
 
         public void Refresh()
@@ -766,6 +773,42 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 //取消停止共鸣功能
                 var SwitchTarget = exclusivePart.Find("ResonanceTarget").Find("Info").Find("SwitchTarget");
                 SwitchTarget.gameObject.SetActive(true);
+
+                if (workerEcho.Level == 1)
+                {
+                    SwitchTarget.gameObject.SetActive(false);
+                    //切换对象
+                    ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed -= SwitchTarget_performed;
+                }
+                else
+                {
+                    SwitchTarget.gameObject.SetActive(true);
+                    //切换对象
+                    ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed += SwitchTarget_performed;
+
+                    Image RandomImage = RTInfo.Find("Random").Find("Image").GetComponent<Image>();
+                    switch (currentBeastType)
+                    {
+                        case BeastType.WorkerEcho_Cat:
+                            RandomImage.sprite = sprite_Cat;
+                            break;
+                        case BeastType.WorkerEcho_Deer:
+                            RandomImage.sprite = sprite_Deer;
+                            break;
+                        case BeastType.WorkerEcho_Dog:
+                            RandomImage.sprite = sprite_Dog;
+                            break;
+                        case BeastType.WorkerEcho_Fox:
+                            RandomImage.sprite = sprite_Fox;
+                            break;
+                        case BeastType.WorkerEcho_Rabbit:
+                            RandomImage.sprite = sprite_Rabbit;
+                            break;
+                        case BeastType.WorkerEcho_Seal:
+                            RandomImage.sprite = sprite_Seal;
+                            break;
+                    }
+                }
 
                 //切换对象
                 ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed += SwitchTarget_performed;
@@ -846,14 +889,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             SwitchTargetText.ReWrite(PanelTextContent_Main.SwitchTargetText);
 
 
-            if(workerEcho.Level == 1)
-            {
-                RTInfo.Find("SwitchTarget").gameObject.SetActive(false);
-            }
-            else
-            {
-                RTInfo.Find("SwitchTarget").gameObject.SetActive(true);
-            }
+            
 
             #endregion
 
@@ -1006,6 +1042,18 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             texture2D = Texture2DAB.LoadAsset<Texture2D>("gray_background");
             sprite3 = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
 
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("Cat");
+            sprite_Cat = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("Deer");
+            sprite_Deer = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("Dog");
+            sprite_Dog = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("Fox");
+            sprite_Fox = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("Rabbit");
+            sprite_Rabbit = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("Seal");
+            sprite_Seal = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
 
         }
 
@@ -1031,6 +1079,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             this.Refresh();
         }
         #endregion
+
 
 
     }

@@ -4165,6 +4165,12 @@ MonoBehaviour:
   sprite1: {fileID: 0}
   sprite2: {fileID: 0}
   sprite3: {fileID: 0}
+  sprite_Cat: {fileID: 0}
+  sprite_Deer: {fileID: 0}
+  sprite_Dog: {fileID: 0}
+  sprite_Fox: {fileID: 0}
+  sprite_Rabbit: {fileID: 0}
+  sprite_Seal: {fileID: 0}
   PrefabsAB: {fileID: 0}
 --- !u!1 &5420639910669395283
 GameObject:

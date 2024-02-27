@@ -36,7 +36,7 @@
   "nextgrid": {
     "keyname": "nextgrid",
     "keymap": {
-      "KeyBoard": "LM",
+      "KeyBoard": "WASD",
       "XBOX": "RB"
     },
     "description": {
