@@ -8,20 +8,20 @@ namespace ProjectOC.TechTree
 		[LabelText("None")]
 		None,
 		[LabelText("能源")]
-		Energy,
+		Energy = 1,
 		[LabelText("栽培")]
-		Plant,
-		[LabelText("演算")]
-		Calculus,
+		Plant = 2,
 		[LabelText("冶炼")]
-		Smelt,
+		Smelt = 4,
 		[LabelText("贮藏")]
-		Storage,
+		Storage = 5,
 		[LabelText("工艺")]
-		Craft,
-		[LabelText("隐兽")]
-		Echo,
-		[LabelText("厨艺")]
-		Cook,
+		Craft = 6,
+		[LabelText("演算")]
+		Calculus = 3,
+		[LabelText("共鸣")]
+		Echo = 7,
+		[LabelText("烹饪")]
+		Cook = 8,
 	}
 }

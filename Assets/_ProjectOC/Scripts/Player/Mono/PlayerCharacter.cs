@@ -229,6 +229,13 @@ namespace ProjectOC.Player
                 ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(id, 999).ForEach(item => Inventory.AddItem(item));
             }
         }
+
+        [Button("²âÊÔÓÃ: AddItem")]
+        private void __TEST__AddInventoryItem__(string id, int amount)
+        {
+
+            ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(id, amount).ForEach(item => Inventory.AddItem(item));
+        }
         #endregion
     }
 }

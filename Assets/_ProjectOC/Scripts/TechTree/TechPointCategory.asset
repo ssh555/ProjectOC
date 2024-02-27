@@ -29,25 +29,25 @@ MonoBehaviour:
   EnumList:
   - name: Energy
     displayName: "\u80FD\u6E90"
-    value: 
+    value: 1
   - name: Plant
     displayName: "\u683D\u57F9"
-    value: 
-  - name: Calculus
-    displayName: "\u6F14\u7B97"
-    value: 
+    value: 2
   - name: Smelt
     displayName: "\u51B6\u70BC"
-    value: 
+    value: 3
   - name: Storage
     displayName: "\u8D2E\u85CF"
-    value: 
+    value: 4
   - name: Craft
     displayName: "\u5DE5\u827A"
-    value: 
+    value: 5
+  - name: Calculus
+    displayName: "\u6F14\u7B97"
+    value: 6
   - name: Echo
-    displayName: "\u9690\u517D"
-    value: 
+    displayName: "\u5171\u9E23"
+    value: 7
   - name: Cook
-    displayName: "\u53A8\u827A"
-    value: 
+    displayName: "\u70F9\u996A"
+    value: 8

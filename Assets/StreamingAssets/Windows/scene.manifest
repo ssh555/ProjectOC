@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3185569574
+CRC: 1655473040
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 7f01b90f6b524d3a43fae355fd39908c
+    Hash: d854e0b77ac78d963e4e63e72cc3864a
   TypeTreeHash:
     serializedVersion: 2
-    Hash: b928b1effe7415ef60e752b340a6986d
+    Hash: ccfd1831892d6c9b378301b971d390bb
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 7f01b90f6b524d3a43fae355fd39908c
+    Hash: d854e0b77ac78d963e4e63e72cc3864a
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -133,8 +133,6 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 2a4db7a114972834c8e4117be1d82ba3, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: fa7155796051b734daa718462081dc5f, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
@@ -173,7 +171,7 @@ Assets:
 - Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity
 - Assets/_ProjectOC/Scene/GameScene.unity
 Dependencies:
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/shader
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/uipanel
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/shader
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/ui/uipanel

@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1280042491
+CRC: 1844043907
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 82b32aff02a4d42c64f4b2129539d83f
+    Hash: c78d038ed7f67f7596239b07b9e90754
   TypeTreeHash:
     serializedVersion: 2
     Hash: 07dbff5af3f3ee537bb4d9ae4bc32160
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 82b32aff02a4d42c64f4b2129539d83f
+    Hash: c78d038ed7f67f7596239b07b9e90754
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -119,12 +119,12 @@ Assets:
 - Assets/_ProjectOC/OCResources/UIPanel/UIProNodePanel.prefab
 - Assets/_ProjectOC/OCResources/UIPanel/PlayerUIBotPanel.prefab
 Dependencies:
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/fonts
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/textmeshpro/font
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/style
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/inventory/texture2d
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/item/texture2d
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/techpoint/texture2d
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/fonts
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/textmeshpro/font
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/style
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/ui/inventory/texture2d
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/ui/item/texture2d
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/ui/techpoint/texture2d
