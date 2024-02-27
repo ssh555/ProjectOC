@@ -15,9 +15,8 @@ namespace ML.Engine.BuildingSystem
         public string category3;
         public string category4;
         public string actorID;
-        public List<ML.Engine.InventorySystem.CompositeSystem.Formula> raw;
-        public string upgrade;
-        public string upgradeRaw;
+        public List<InventorySystem.CompositeSystem.Formula> raw;
+        public List<InventorySystem.CompositeSystem.Formula> upgradeRaw;
 
         public bool GenData(string[] row)
         {
@@ -45,10 +44,8 @@ namespace ML.Engine.BuildingSystem
             this.actorID = !string.IsNullOrEmpty(row[7]) ? row[7] : "";
             // 8 -> raw
             this.raw = Program.ParseFormula(row[8]);
-            // 9 -> upgrade
-            this.upgrade = row[9];
-            // 10 -> upgradeRaw
-            this.upgradeRaw = row[10];
+            // 9 -> upgradeRaw
+            this.upgradeRaw = Program.ParseFormula(row[9]);
             return true;
         }
     }
