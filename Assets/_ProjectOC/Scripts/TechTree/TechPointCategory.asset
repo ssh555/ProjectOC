@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TechPointCategory
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
+    SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
@@ -29,25 +29,25 @@ MonoBehaviour:
   EnumList:
   - name: Energy
     displayName: "\u80FD\u6E90"
-    value: 
+    value: 1
   - name: Plant
     displayName: "\u683D\u57F9"
-    value: 
+    value: 2
   - name: Calculus
     displayName: "\u6F14\u7B97"
-    value: 
+    value: 3
   - name: Smelt
     displayName: "\u51B6\u70BC"
-    value: 
+    value: 4
   - name: Storage
     displayName: "\u8D2E\u85CF"
-    value: 
+    value: 5
   - name: Craft
     displayName: "\u5DE5\u827A"
-    value: 
+    value: 6
   - name: Echo
     displayName: "\u9690\u517D"
-    value: 
+    value: 7
   - name: Cook
     displayName: "\u53A8\u827A"
-    value: 
+    value: 8
