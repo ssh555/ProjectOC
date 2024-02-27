@@ -494,8 +494,8 @@ MonoBehaviour:
     VCamRotY: {fileID: 8934122119905390431}
     VCamRotZ: {fileID: 8934122121196313096}
     VCamViewer: {fileID: 8934122119657867356}
-    rotSpeedX: 10
-    rotSpeedY: 10
+    rotSpeedX: 0.3
+    rotSpeedY: 0.3
     rotXMin: -45
     rotXMax: 60
     bInVerseRotX: 1
@@ -505,7 +505,7 @@ MonoBehaviour:
     moveSetting:
       bCanMove: 1
       bCanMoveInAir: 1
-      MaxSpeed: 15
+      MaxSpeed: 10
       MinSpeed: 0.01
       AddAcceleration: 100
       UseDrag: 1
@@ -513,7 +513,7 @@ MonoBehaviour:
       TerrainDrag: {fileID: 0}
       UseGravity: 1
       UseGravityWeight: 0
-      GravityAcceleration: 9.81
+      GravityAcceleration: 20
       ForwardSpeedRate: 1
       BackwardSpeedRate: 0.4
       StrafeSpeedRate: 0.6
@@ -580,8 +580,8 @@ MonoBehaviour:
       m_SingletonActionBindings: []
       m_Flags: 0
     lowestWalkSpeed: 0.8
-    lowestRunSpeed: 10
-    maxRunSpeed: 20
+    lowestRunSpeed: 5
+    maxRunSpeed: 10
     walkAccSpeed: 20
     runAccSpeed: 100
     IsAcc: 0
