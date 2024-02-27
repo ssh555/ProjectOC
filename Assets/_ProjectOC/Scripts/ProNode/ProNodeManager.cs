@@ -16,7 +16,7 @@ namespace ProjectOC.ProNodeNS
         public RecipeCategory Category;
         public List<RecipeCategory> RecipeCategoryFiltered;
         public WorkType ExpType;
-        public int Stack;
+        public int MaxStack;
         public int StackThreshold;
         public int RawThreshold;
     }
@@ -172,7 +172,7 @@ namespace ProjectOC.ProNodeNS
         {
             if (IsValidID(id))
             {
-                return ProNodeTableDict[id].Stack;
+                return ProNodeTableDict[id].MaxStack;
             }
             return 0;
         }
