@@ -1,19 +1,17 @@
 
 namespace ProjectOC.TechTree
 {
-	[System.Serializable]
+    [System.Serializable]
     public enum TechPointCategory
     {
         None,
         Energy,
         Plant,
+        Calculus,
         Smelt,
         Storage,
         Craft,
         Echo,
         Cook,
-        Technology,
-        Calculus,
-        Resonance
     }
 }
