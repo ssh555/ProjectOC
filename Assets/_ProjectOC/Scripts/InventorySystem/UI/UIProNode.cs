@@ -767,6 +767,7 @@ namespace ProjectOC.InventorySystem.UI
                     RectTransform rect = Product.transform.Find("Mask").GetComponent<RectTransform>();
                     rect.sizeDelta = new Vector2(rect.sizeDelta.x, 0);
                     #endregion
+
                     #region Raw
                     // 临时内存生成的UIItem数量(只增不减，多的隐藏掉即可) - 当前筛选出来的Item数量
                     int delta = tempUIItems.Count - Raws.Count;

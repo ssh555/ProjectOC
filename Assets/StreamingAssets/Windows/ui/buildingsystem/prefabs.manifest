@@ -73,10 +73,10 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/UIPrefabs/KT_KeyCom.prefab
 - Assets/_ML/MLResources/BuildingSystem/UIPrefabs/Panel/BSInteractMode_KeyCom.prefab
 Dependencies:
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/fonts
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/textmeshpro/font
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/category
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/matpackageicon
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/style
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/type
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/fonts
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/textmeshpro/font
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/category
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/matpackageicon
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/style
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/type
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex

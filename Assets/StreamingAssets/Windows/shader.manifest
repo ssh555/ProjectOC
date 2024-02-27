@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 3909843261
+CRC: 3491915646
 Hashes:
   AssetFileHash:
     serializedVersion: 2
@@ -26,4 +26,4 @@ Assets:
 - Assets/_ML/MLResources/Shaders/GridMatUVScale.mat
 - Assets/_ML/MLResources/Shaders/GridUVScale.shader
 Dependencies:
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/matpackageicon
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/matpackageicon

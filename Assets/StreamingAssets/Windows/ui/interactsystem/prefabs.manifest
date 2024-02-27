@@ -40,5 +40,5 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/_ML/MLResources/InteractSystem/UI/InteractKeyTip.prefab
 Dependencies:
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/fonts
-- D:/Github/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/fonts
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex

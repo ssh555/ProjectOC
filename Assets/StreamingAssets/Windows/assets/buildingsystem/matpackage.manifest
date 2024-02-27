@@ -3,13 +3,13 @@ CRC: 4247487678
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1f913988b183348ca119904b1870e05a
+    Hash: 4bd83b9ca0c0090d2a60846e2db8bbb0
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2b2c1f0eb6559ef15afea4224636b60f
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 1f913988b183348ca119904b1870e05a
+    Hash: 4bd83b9ca0c0090d2a60846e2db8bbb0
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -71,5 +71,5 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/House/Room_FoundationEdge_Base_100.asset
 - Assets/_ML/MLResources/BuildingSystem/MatPackage/House/Room_Foundation_Base_20.asset
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/matpackageicon
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
+- F:/U3D/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/matpackageicon

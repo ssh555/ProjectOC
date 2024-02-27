@@ -72,6 +72,7 @@ namespace ExcelToJson
             List<BuildingTableData> buildingTableDatas = DBMgr.ReadExcel<BuildingTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 4);
             List<RecipeTableData> recipeTableDatas = DBMgr.ReadExcel<RecipeTableData>(path:excelFilePath, iBeginRow:5, iWorksheet:5);
             List<WorkerEchoTableData> workerEchoTableDatas = DBMgr.ReadExcel<WorkerEchoTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 10);
+            List<ItemTableData> itemTableDatas = DBMgr.ReadExcel<ItemTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 6);
             Dictionary<string, BuildingTableData> buildDict = new Dictionary<string, BuildingTableData>();
             // 2. 分别解析表格并将数据暂存在内存中
             foreach (BuildingTableData data in buildingTableDatas)
@@ -79,6 +80,7 @@ namespace ExcelToJson
                 buildDict.Add($"{data.category1}_{data.category2}_{data.category3}_{data.category4}", data);
                 compositionTableDatas.Add(new CompositionTableData(data));
             }
+
             foreach (BuildingTableData data in buildingTableDatas)
             {
                 int level;
@@ -91,9 +93,10 @@ namespace ExcelToJson
                     }
                 }
             }
+
             foreach (RecipeTableData data in recipeTableDatas)
             {
-                compositionTableDatas.Add(new CompositionTableData(data));
+                compositionTableDatas.Add(new CompositionTableData(data, itemTableDatas.Find(item => item.id == data.Product.id)));
             }
             foreach (WorkerEchoTableData data in workerEchoTableDatas)
             {

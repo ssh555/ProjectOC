@@ -333,7 +333,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8934122120462560558}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.111181535, y: 8.93685e-16, z: 4.3237866e-17, w: 0.99380016}
+  m_LocalRotation: {x: 0.111181475, y: -0.000000004274927, z: 4.7825777e-10, w: 0.99380016}
   m_LocalPosition: {x: 0, y: 0.75, z: -3.31}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -393,6 +393,7 @@ GameObject:
   - component: {fileID: 8934122120899684270}
   - component: {fileID: 8934122120899684264}
   - component: {fileID: 8934122120899684266}
+  - component: {fileID: 4377275060161506210}
   m_Layer: 6
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -493,8 +494,8 @@ MonoBehaviour:
     VCamRotY: {fileID: 8934122119905390431}
     VCamRotZ: {fileID: 8934122121196313096}
     VCamViewer: {fileID: 8934122119657867356}
-    rotSpeedX: 10
-    rotSpeedY: 10
+    rotSpeedX: 0.3
+    rotSpeedY: 0.3
     rotXMin: -45
     rotXMax: 60
     bInVerseRotX: 1
@@ -504,7 +505,7 @@ MonoBehaviour:
     moveSetting:
       bCanMove: 1
       bCanMoveInAir: 1
-      MaxSpeed: 15
+      MaxSpeed: 10
       MinSpeed: 0.01
       AddAcceleration: 100
       UseDrag: 1
@@ -512,7 +513,7 @@ MonoBehaviour:
       TerrainDrag: {fileID: 0}
       UseGravity: 1
       UseGravityWeight: 0
-      GravityAcceleration: 9.81
+      GravityAcceleration: 20
       ForwardSpeedRate: 1
       BackwardSpeedRate: 0.4
       StrafeSpeedRate: 0.6
@@ -579,8 +580,8 @@ MonoBehaviour:
       m_SingletonActionBindings: []
       m_Flags: 0
     lowestWalkSpeed: 0.8
-    lowestRunSpeed: 10
-    maxRunSpeed: 20
+    lowestRunSpeed: 5
+    maxRunSpeed: 10
     walkAccSpeed: 20
     runAccSpeed: 100
     IsAcc: 0
@@ -591,6 +592,7 @@ MonoBehaviour:
     inAirAccSpeed: 100
   playerUIBotPanel: {fileID: 5715426156639872100, guid: 0f4895c0ccc062942944ba4cb41ec456, type: 3}
   playerUIPanel: {fileID: -2576469941936671822, guid: 54f99402f01f5f04cb5afe4947fed3f9, type: 3}
+  beastPanel: {fileID: 0}
 --- !u!95 &8934122120899684266
 Animator:
   serializedVersion: 5
@@ -612,6 +614,32 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4377275060161506210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8934122120899684305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e367dd2e07af2b4f97450daa7280911, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsEnableGridSupport: 1
+  DisableGridRotRate: 10
+  EnableGridRotRate: 15
+  camera: {fileID: 0}
+  checkRadius: 20
+  checkLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  interactRadius: 10
+  interactLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  sphereRadius: 0.5
+  interactCheckInterval: 0.5
 --- !u!1 &8934122121196313103
 GameObject:
   m_ObjectHideFlags: 0

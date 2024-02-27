@@ -38,14 +38,14 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         public string texture2d;
         public List<string> usage;
 
-        public CompositionTableData(RecipeTableData data)
+        public CompositionTableData(RecipeTableData data, ItemTableData itemData)
         {
             this.id = data.Product.id;
             this.compositionnum = data.Product.num;
             this.formula = data.Raw.ToArray();
             this.name = data.Name;
             this.tag = new List<string>().ToArray();
-            this.texture2d = "";
+            this.texture2d = itemData.icon;
             this.usage = new List<string>();
         }
         public CompositionTableData(BuildingTableData data)
