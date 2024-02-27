@@ -701,21 +701,47 @@ namespace ProjectOC.ProNodeNS
             }
         }
 
+        //public void Upgrade(Player.PlayerCharacter player)
+        //{
+        //    if (this.WorldProNode != null)
+        //    {
+        //        string upgradeRawID = BuildingManager.Instance.GetUpgradeRaw(this.WorldProNode.Classification.ToString().Replace('-', '_'));
+        //        CompositeManager.CompositionObjectType compObjType = CompositeManager.Instance.Composite(player.Inventory, upgradeRawID, out var composition);
+        //        if (compObjType == CompositeManager.CompositionObjectType.BuildingPart && composition is WorldProNode upgrade)
+        //        {
+        //            upgrade.InstanceID = this.WorldProNode.InstanceID;
+        //            upgrade.transform.position = this.WorldProNode.transform.position;
+        //            upgrade.transform.rotation = this.WorldProNode.transform.rotation;
+        //            UnityEngine.Object.Destroy(this.WorldProNode.gameObject);
+        //            this.WorldProNode = upgrade;
+        //            upgrade.ProNode = this;
+        //            this.SetLevel(upgrade.Classification.Category4 - 1);
+        //        }
+        //    }
+        //}
         public void Upgrade(Player.PlayerCharacter player)
         {
             if (this.WorldProNode != null)
             {
-                string upgradeRawID = BuildingManager.Instance.GetUpgradeRaw(this.WorldProNode.Classification.ToString().Replace('-', '_'));
-                CompositeManager.CompositionObjectType compObjType = CompositeManager.Instance.Composite(player.Inventory, upgradeRawID, out var composition);
-                if (compObjType == CompositeManager.CompositionObjectType.BuildingPart && composition is WorldProNode upgrade)
+                string ID = BuildingManager.Instance.GetActorID(this.WorldProNode.Classification.ToString().Replace('-', '_'));
+                string upgradeID = BuildingManager.Instance.GetUpgradeID(this.WorldProNode.Classification.ToString().Replace('-', '_'));
+                string upgradeCID = BuildingManager.Instance.GetUpgradeCID(this.WorldProNode.Classification.ToString().Replace('-', '_'));
+
+                if (!string.IsNullOrEmpty(upgradeID)
+                    && !string.IsNullOrEmpty(upgradeCID)
+                    && BuildingManager.Instance.IsValidBPartID(upgradeCID)
+                    && CompositeManager.Instance.OnlyCostResource(player.Inventory, $"{ID}_{upgradeID}"))
                 {
-                    upgrade.InstanceID = this.WorldProNode.InstanceID;
-                    upgrade.transform.position = this.WorldProNode.transform.position;
-                    upgrade.transform.rotation = this.WorldProNode.transform.rotation;
-                    UnityEngine.Object.Destroy(this.WorldProNode.gameObject);
-                    this.WorldProNode = upgrade;
-                    upgrade.ProNode = this;
-                    this.SetLevel(upgrade.Classification.Category4 - 1);
+                    if (BuildingManager.Instance.GetOneBPartInstance(upgradeCID) is WorldProNode upgrade)
+                    {
+                        upgrade.InstanceID = this.WorldProNode.InstanceID;
+                        upgrade.transform.position = this.WorldProNode.transform.position;
+                        upgrade.transform.rotation = this.WorldProNode.transform.rotation;
+                        UnityEngine.Object.Destroy(this.WorldProNode.gameObject);
+                        this.WorldProNode = upgrade;
+                        upgrade.ProNode = this;
+                        this.SetLevel(upgrade.Classification.Category4 - 1);
+                    }
                 }
             }
         }

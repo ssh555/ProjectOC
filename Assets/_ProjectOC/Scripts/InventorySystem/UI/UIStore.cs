@@ -506,15 +506,19 @@ namespace ProjectOC.InventorySystem.UI
                 if (ItemManager.Instance.IsValidItemID(itemID))
                 {
                     var img = StoreIcon.GetComponent<Image>();
-                    // 查找临时存储的Sprite
-                    var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(itemID));
-                    // 不存在则生成
-                    if (sprite == null)
+                    var texture = ItemManager.Instance.GetItemTexture2D(itemID);
+                    if (texture != null)
                     {
-                        sprite = ItemManager.Instance.GetItemSprite(itemID);
-                        tempSprite.Add(sprite);
+                        // 查找临时存储的Sprite
+                        var sprite = tempSprite.Find(s => s.texture == texture);
+                        // 不存在则生成
+                        if (sprite == null)
+                        {
+                            sprite = ItemManager.Instance.GetItemSprite(itemID);
+                            tempSprite.Add(sprite);
+                        }
+                        img.sprite = sprite;
                     }
-                    img.sprite = sprite;
                 }
                 
                 this.CurMode = Mode.Store;
@@ -984,15 +988,19 @@ namespace ProjectOC.InventorySystem.UI
                     if (ItemManager.Instance.IsValidItemID(itemID))
                     {
                         var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
-                        // 查找临时存储的Sprite
-                        var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(itemID));
-                        // 不存在则生成
-                        if (sprite == null)
+                        var texture = ItemManager.Instance.GetItemTexture2D(itemID);
+                        if (texture != null)
                         {
-                            sprite = ItemManager.Instance.GetItemSprite(itemID);
-                            tempSprite.Add(sprite);
+                            // 查找临时存储的Sprite
+                            var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(itemID));
+                            // 不存在则生成
+                            if (sprite == null)
+                            {
+                                sprite = ItemManager.Instance.GetItemSprite(itemID);
+                                tempSprite.Add(sprite);
+                            }
+                            img.sprite = sprite;
                         }
-                        img.sprite = sprite;
                     }
                     var nametext = uiItemData.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
                     var amounttext = uiItemData.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();

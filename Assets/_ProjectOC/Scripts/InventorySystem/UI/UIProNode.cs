@@ -804,17 +804,24 @@ namespace ProjectOC.InventorySystem.UI
                         // Name
                         var name = item.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
                         name.text = ItemManager.Instance.GetItemName(itemID);
-                        //// 更新Icon
-                        //var img = item.transform.Find("Icon").GetComponent<Image>();
-                        //// 查找临时存储的Sprite
-                        //var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(itemID));
-                        //// 不存在则生成
-                        //if (sprite == null)
-                        //{
-                        //    sprite = ItemManager.Instance.GetItemSprite(itemID);
-                        //    tempSprite.Add(sprite);
-                        //}
-                        //img.sprite = sprite;
+                        if (ItemManager.Instance.IsValidItemID(itemID))
+                        {
+                            // 更新Icon
+                            var img = item.transform.Find("Icon").GetComponent<Image>();
+                            var texture = ItemManager.Instance.GetItemTexture2D(itemID);
+                            if (texture != null)
+                            {
+                                // 查找临时存储的Sprite
+                                var sprite = tempSprite.Find(s => s.texture == texture);
+                                // 不存在则生成
+                                if (sprite == null)
+                                {
+                                    sprite = ItemManager.Instance.GetItemSprite(itemID);
+                                    tempSprite.Add(sprite);
+                                }
+                                img.sprite = sprite;
+                            }
+                        }
                         // Amount
                         var amount = item.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
                         amount.text = ProNode.GetItemAllNum(itemID).ToString();
@@ -1028,17 +1035,21 @@ namespace ProjectOC.InventorySystem.UI
                     {
                         name.text = PanelTextContent.textEmpty;
                     }
-                    //// 更新Icon
-                    //var img = item.transform.Find("Icon").GetComponent<Image>();
-                    //// 查找临时存储的Sprite
-                    //var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(product.id));
-                    //// 不存在则生成
-                    //if (sprite == null)
-                    //{
-                    //    sprite = ItemManager.Instance.GetItemSprite(product.id);
-                    //    tempSprite.Add(sprite);
-                    //}
-                    //img.sprite = sprite;
+                    if (ItemManager.Instance.IsValidItemID(product.id))
+                    {
+                        var img = item.transform.Find("Icon").GetComponent<Image>();
+                        var texture = ItemManager.Instance.GetItemTexture2D(product.id);
+                        if (texture != null)
+                        {
+                            var sprite = tempSprite.Find(s => s.texture == texture);
+                            if (sprite == null)
+                            {
+                                sprite = ItemManager.Instance.GetItemSprite(product.id);
+                                tempSprite.Add(sprite);
+                            }
+                            img.sprite = sprite;
+                        }
+                    }
                     // Selected
                     var selected = item.transform.Find("Selected");
                     if (CurrentRecipe == recipeID)
@@ -1119,14 +1130,22 @@ namespace ProjectOC.InventorySystem.UI
                 {
                     nameProduct.text = PanelTextContent.textEmpty;
                 }
-                //var imgProduct = Product.transform.Find("Icon").GetComponent<Image>();
-                //var spriteProduct = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(product.id));
-                //if (spriteProduct == null)
-                //{
-                //    spriteProduct = ItemManager.Instance.GetItemSprite(product.id);
-                //    tempSprite.Add(spriteProduct);
-                //}
-                //imgProduct.sprite = spriteProduct;
+                if (ItemManager.Instance.IsValidItemID(product.id))
+                {
+                    var imgProduct = Product.transform.Find("Icon").GetComponent<Image>();
+                    var texture = ItemManager.Instance.GetItemTexture2D(product.id);
+                    if (texture != null)
+                    {
+                        var spriteProduct = tempSprite.Find(s => s.texture == texture);
+                        if (spriteProduct == null)
+                        {
+                            spriteProduct = ItemManager.Instance.GetItemSprite(product.id);
+                            tempSprite.Add(spriteProduct);
+                        }
+                        imgProduct.sprite = spriteProduct;
+                    }
+                }
+               
                 var amountProduct = Recipe_Product.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
                 amountProduct.text = product.num.ToString();
                 var tiemProduct = Recipe_Product.transform.Find("Time").GetComponent<TMPro.TextMeshProUGUI>();

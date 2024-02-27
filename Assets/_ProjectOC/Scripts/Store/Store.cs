@@ -484,8 +484,7 @@ namespace ProjectOC.StoreNS
             List<Formula> result = new List<Formula>();
             if (this.WorldStore != null)
             {
-                string upgradeRawID = BuildingManager.Instance.GetUpgradeRaw(this.WorldStore.Classification.ToString().Replace('-', '_'));
-                Formula[] formulas = CompositeManager.Instance.GetCompositonFomula(upgradeRawID);
+                List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(this.WorldStore.Classification.ToString().Replace('-', '_'));
                 if (formulas != null)
                 {
                     result.AddRange(formulas);
@@ -499,8 +498,7 @@ namespace ProjectOC.StoreNS
             List<Formula> result = new List<Formula>();
             if (this.WorldStore != null)
             {
-                string upgradeRawID = BuildingManager.Instance.GetUpgradeRaw(this.WorldStore.Classification.ToString().Replace('-', '_'));
-                Formula[] formulas = CompositeManager.Instance.GetCompositonFomula(upgradeRawID);
+                List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(this.WorldStore.Classification.ToString().Replace('-', '_'));
                 if (formulas != null)
                 {
                     foreach (Formula formula in formulas)
@@ -520,14 +518,14 @@ namespace ProjectOC.StoreNS
         {
             if (this.WorldStore != null)
             {
-                string upgradeRawID = BuildingManager.Instance.GetUpgradeRaw(this.WorldStore.Classification.ToString().Replace('-', '_'));
-                string upgradeID = BuildingManager.Instance.GetUpgrade(this.WorldStore.Classification.ToString().Replace('-', '_'));
-                string upgradeCID = BuildingManager.Instance.GetClassification(upgradeID);
+                string ID = BuildingManager.Instance.GetActorID(this.WorldStore.Classification.ToString().Replace('-', '_'));
+                string upgradeID = BuildingManager.Instance.GetUpgradeID(this.WorldStore.Classification.ToString().Replace('-', '_'));
+                string upgradeCID = BuildingManager.Instance.GetUpgradeCID(this.WorldStore.Classification.ToString().Replace('-', '_'));
 
-                if (!string.IsNullOrEmpty(upgradeRawID) 
+                if (!string.IsNullOrEmpty(upgradeID) 
                     && !string.IsNullOrEmpty(upgradeCID)
                     && BuildingManager.Instance.IsValidBPartID(upgradeCID) 
-                    && CompositeManager.Instance.OnlyCostResource(player.Inventory, upgradeRawID))
+                    && CompositeManager.Instance.OnlyCostResource(player.Inventory, $"{ID}_{upgradeID}"))
                 {
                     if (BuildingManager.Instance.GetOneBPartInstance(upgradeCID) is WorldStore upgrade)
                     {
