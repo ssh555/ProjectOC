@@ -69,27 +69,28 @@ namespace ExcelToJson
 
             #region EXCEL
             string excelFilePath = "./DataTable/Config_OC_数据表.xlsx";
-            string rootPath = "../../../Assets/_ProjectOC/Resources/Json/TableData/";
+            string rootPath = "../../../Assets/_ProjectOC/OCResources/Json/TableData/";
 
             // 在处理前或处理后需要根据Recipe表、Build表需要合成表Binary文件，用于合成系统
             List<CompositionTableData> compositionTableDatas = new List<CompositionTableData>();
             // 1. 读入需要的EXCEL表
             List<BuildingTableData> buildingTableDatas = DBMgr.ReadExcel<BuildingTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 4);
-            List<BuildingUpgradeTableData> buildingUpgradeTableDatas = DBMgr.ReadExcel<BuildingUpgradeTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 5);
-            List<RecipeTableData> recipeTableDatas = DBMgr.ReadExcel<RecipeTableData>(path:excelFilePath, iBeginRow:5, iWorksheet:6);
-            List<WorkerEchoTableData> workerEchoTableDatas = DBMgr.ReadExcel<WorkerEchoTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 11);
+            //List<BuildingUpgradeTableData> buildingUpgradeTableDatas = DBMgr.ReadExcel<BuildingUpgradeTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 5);
+            List<RecipeTableData> recipeTableDatas = DBMgr.ReadExcel<RecipeTableData>(path:excelFilePath, iBeginRow:5, iWorksheet:5);
+            List<WorkerEchoTableData> workerEchoTableDatas = DBMgr.ReadExcel<WorkerEchoTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 10);
+            List<ItemTableData> itemTableDatas = DBMgr.ReadExcel<ItemTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 6);
             // 2. 分别解析表格并将数据暂存在内存中
             foreach (BuildingTableData data in buildingTableDatas)
             {
                 compositionTableDatas.Add(new CompositionTableData(data));
             }
-            foreach (BuildingUpgradeTableData data in buildingUpgradeTableDatas)
-            {
-                compositionTableDatas.Add(new CompositionTableData(data));
-            }
+            //foreach (BuildingUpgradeTableData data in buildingUpgradeTableDatas)
+            //{
+            //    compositionTableDatas.Add(new CompositionTableData(data));
+            //}
             foreach (RecipeTableData data in recipeTableDatas)
             {
-                compositionTableDatas.Add(new CompositionTableData(data));
+                compositionTableDatas.Add(new CompositionTableData(data, itemTableDatas.Find(item => item.id == data.Product.id)));
             }
             foreach (WorkerEchoTableData data in workerEchoTableDatas)
             {
@@ -97,7 +98,7 @@ namespace ExcelToJson
             }
             // 3. 将解析完成的数据存为对应的二进制文件
             DBMgr.WriteJsonFromExcel(buildingTableDatas, rootPath + "Building.json");
-            DBMgr.WriteJsonFromExcel(buildingUpgradeTableDatas, rootPath + "BuildingUpgrade.json");
+            //DBMgr.WriteJsonFromExcel(buildingUpgradeTableDatas, rootPath + "BuildingUpgrade.json");
             DBMgr.WriteJsonFromExcel(recipeTableDatas, rootPath + "Recipe.json");
             DBMgr.WriteJsonFromExcel(compositionTableDatas, rootPath + "Composition.json");
             DBMgr.WriteJsonFromExcel(workerEchoTableDatas, rootPath + "WorkerEcho.json");
@@ -107,10 +108,10 @@ namespace ExcelToJson
             List<EBConfig> configs = new List<EBConfig>();
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 1,  BinaryFilePath = rootPath + "ProNode.json", type = typeof(ProjectOC.ProNodeNS.ProNodeTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 3, BinaryFilePath = rootPath + "TechPoint.json", type = typeof(TechPoint) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 7,  BinaryFilePath = rootPath + "Item.json", type = typeof(ItemTableData) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 8,  BinaryFilePath = rootPath + "Feature.json", type = typeof(ProjectOC.WorkerNS.FeatureTableData) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 9,  BinaryFilePath = rootPath + "Effect.json", type = typeof(ProjectOC.WorkerNS.EffectTableData) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 10, BinaryFilePath = rootPath + "Skill.json", type = typeof(ProjectOC.WorkerNS.SkillTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 6,  BinaryFilePath = rootPath + "Item.json", type = typeof(ItemTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 7,  BinaryFilePath = rootPath + "Feature.json", type = typeof(ProjectOC.WorkerNS.FeatureTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 8,  BinaryFilePath = rootPath + "Effect.json", type = typeof(ProjectOC.WorkerNS.EffectTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 9, BinaryFilePath = rootPath + "Skill.json", type = typeof(ProjectOC.WorkerNS.SkillTableData) });
 
             System.Threading.Tasks.Parallel.ForEach(configs, (config) =>
             {

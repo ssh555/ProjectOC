@@ -700,7 +700,7 @@ namespace ProjectOC.TechTree.UI
                     this.TPUnlockGO.Add(id, unlock);
 
                     // Image
-                    var s = CompositeManager.Instance.GetCompositonSprite(id);
+                    var s = CompositeManager.Instance.GetCompositonSprite(GetTPIconItemID(id));
                     tempSprite.Add(s);
                     unlock.GetComponentInChildren<Image>().sprite = s;
                 }
@@ -803,6 +803,19 @@ namespace ProjectOC.TechTree.UI
                 }
             }
             this.IsUIInit = true;
+        }
+
+        private string GetTPIconItemID(string id)
+        {
+            if(BuildingManager.Instance.BPartTableDictOnID.ContainsKey(id))
+            {
+                return id;
+            }
+            else if(ManagerNS.LocalGameManager.Instance.RecipeManager.IsValidID(id))
+            {
+                return ManagerNS.LocalGameManager.Instance.RecipeManager.GetProduct(id).id;
+            }
+            throw new Exception($"科技树配置中的可解锁项ID\"{id}\"既不是RecipeID，也不是BuildID");
         }
 
 

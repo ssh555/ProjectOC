@@ -1,23 +1,54 @@
 ManifestFileVersion: 0
-CRC: 1856970596
+CRC: 697774365
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 8d1a61757614695455b8d03f7e973f72
+    Hash: b34fa0df3432bd4c1bb6b112ddded8fe
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 5e762ccb57c4caaabbb5a4199ac82c23
+    Hash: b30fce1a9ad74efb72be6c308c56e365
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 8d1a61757614695455b8d03f7e973f72
+    Hash: b34fa0df3432bd4c1bb6b112ddded8fe
 HashAppended: 0
 ClassTypes:
 - Class: 21
+  Script: {instanceID: 0}
+- Class: 28
   Script: {instanceID: 0}
 - Class: 48
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/_ProjectOC/OCResources/Materials/Other/Opaque.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Mouth-Happy.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Eye-Blink.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Eye-Confused.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Eye-Sorrow.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/MainBody.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Eye-Anger.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Mouth-Default.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Texture/Expression_extra.png
 - Assets/_ProjectOC/OCResources/Materials/Other/Transparent.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Eye-Joy.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Mouth-Uh~.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Texture/T_PinkCat_Body_N.png
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Eye-@.@.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Shy.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Texture/T_PinkCat_eye_unique.png
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Texture/T_PinkCat_Eye_B1.png
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Texture/T_PinkCat_Mouth_B.png
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Eye-_._.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Eye-O.O.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Tears1.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Tears2.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Emotion+.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Mouth-Eh~.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Shocked.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Texture/Expression_ROemo.png
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/RagnarokEmotions.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Texture/T_PinkCat_Body_B.png
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Texture/Expression_exp.png
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Eye-Default.mat
+- Assets/_ProjectOC/OCResources/Materials/Character/Cattiva/Texture/T_PinkCat_Body_M.png
 Dependencies: []
