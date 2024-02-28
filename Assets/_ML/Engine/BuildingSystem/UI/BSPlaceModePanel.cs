@@ -307,7 +307,10 @@ namespace ML.Engine.BuildingSystem.UI
                 BM.Placer.SelectedPartInstance.CheckCanInPlaceMode += CheckCostResources;
             }
             BM.Placer.OnPlaceModeSuccess += OnPlaceModeSuccess;
+            BM.Placer.OnPlaceModeChangeBPart += Placer_OnPlaceModeChangeBPart;
         }
+
+
 
         public override void OnPause()
         {
@@ -319,6 +322,7 @@ namespace ML.Engine.BuildingSystem.UI
                 BM.Placer.SelectedPartInstance.CheckCanInPlaceMode -= CheckCostResources;
             }
             BM.Placer.OnPlaceModeSuccess -= OnPlaceModeSuccess;
+            BM.Placer.OnPlaceModeChangeBPart -= Placer_OnPlaceModeChangeBPart;
         }
 
         public override void OnRecovery()
@@ -330,6 +334,7 @@ namespace ML.Engine.BuildingSystem.UI
                 BM.Placer.SelectedPartInstance.CheckCanInPlaceMode += CheckCostResources;
             }
             BM.Placer.OnPlaceModeSuccess += OnPlaceModeSuccess;
+            BM.Placer.OnPlaceModeChangeBPart += Placer_OnPlaceModeChangeBPart;
         }
 
         public override void OnExit()
@@ -344,6 +349,7 @@ namespace ML.Engine.BuildingSystem.UI
                 BM.Placer.SelectedPartInstance.CheckCanInPlaceMode -= CheckCostResources;
             }
             BM.Placer.OnPlaceModeSuccess -= OnPlaceModeSuccess;
+            BM.Placer.OnPlaceModeChangeBPart -= Placer_OnPlaceModeChangeBPart;
         }
 
         #endregion
@@ -456,6 +462,8 @@ namespace ML.Engine.BuildingSystem.UI
             MonoBuildingManager.Instance.PushPanel<BSPlaceMode_KeyComPanel>();
         }
         #endregion
+
+        #region Event
         private bool CheckCostResources(IBuildingPart bpart)
         {
             if (CompositeManager.Instance.CanComposite(Player.Inventory, BuildingManager.Instance.GetID(bpart.Classification.ToString().Replace('-', '_'))))
@@ -475,6 +483,11 @@ namespace ML.Engine.BuildingSystem.UI
             BM.Placer.SelectedPartInstance.CheckCanInPlaceMode -= CheckCostResources;
         }
 
+        private void Placer_OnPlaceModeChangeBPart(IBuildingPart obj)
+        {
+            obj.CheckCanInPlaceMode += CheckCostResources;
+        }
+        #endregion
     }
 }
 

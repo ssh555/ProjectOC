@@ -758,42 +758,6 @@ namespace ML.Engine.BuildingSystem.Input
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ChangeStyleLast"",
-                    ""type"": ""Value"",
-                    ""id"": ""035e67e5-0893-431b-b953-680c84930d5b"",
-                    ""expectedControlType"": ""Axis"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""ChangeStyleNext"",
-                    ""type"": ""Value"",
-                    ""id"": ""333c8e9f-c765-4f87-a537-ba7840217617"",
-                    ""expectedControlType"": ""Axis"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""ChangeHeightLast"",
-                    ""type"": ""Button"",
-                    ""id"": ""a557c737-f9b2-48ca-8236-18139d472a0b"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""ChangeHeightNext"",
-                    ""type"": ""Button"",
-                    ""id"": ""a46ecf51-5d5f-410b-840b-29a28f0add91"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
                     ""name"": ""SwitchFrame_PreHold"",
                     ""type"": ""Button"",
                     ""id"": ""5d5c7fa2-49f4-4da3-a2bb-60f181dc8fcc"",
@@ -978,94 +942,6 @@ namespace ML.Engine.BuildingSystem.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""KeyCom"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1cca59e5-58ca-4fc6-ab25-95d4f1eed205"",
-                    ""path"": ""<Keyboard>/j"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeStyleLast"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""4f09f543-d671-4067-99cc-a6944d8a8b42"",
-                    ""path"": ""<XInputController>/dpad/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeStyleLast"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d41d0dba-e33e-4151-9d88-ef6901939d16"",
-                    ""path"": ""<Keyboard>/l"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeStyleNext"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""fcd4ba2d-7815-46e6-af92-b0f130c3f7f9"",
-                    ""path"": ""<XInputController>/dpad/right"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeStyleNext"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""c8fbb173-6136-4aaa-9b40-0244d8b6bea1"",
-                    ""path"": ""<Keyboard>/k"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeHeightLast"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""9f513321-5ee2-4866-a6ac-0fd473fda741"",
-                    ""path"": ""<XInputController>/dpad/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeHeightLast"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""c0ba611e-0103-43b5-84fa-188b6ce6a078"",
-                    ""path"": ""<Keyboard>/i"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeHeightNext"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""07b3fcbd-e0dc-4a0f-afd6-6d4cbf4c124d"",
-                    ""path"": ""<XInputController>/dpad/up"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeHeightNext"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1297,10 +1173,6 @@ namespace ML.Engine.BuildingSystem.Input
             m_BuildPlaceMode = asset.FindActionMap("BuildPlaceMode", throwIfNotFound: true);
             m_BuildPlaceMode_ChangeActiveSocket = m_BuildPlaceMode.FindAction("ChangeActiveSocket", throwIfNotFound: true);
             m_BuildPlaceMode_ChangeOutLook = m_BuildPlaceMode.FindAction("ChangeOutLook", throwIfNotFound: true);
-            m_BuildPlaceMode_ChangeStyleLast = m_BuildPlaceMode.FindAction("ChangeStyleLast", throwIfNotFound: true);
-            m_BuildPlaceMode_ChangeStyleNext = m_BuildPlaceMode.FindAction("ChangeStyleNext", throwIfNotFound: true);
-            m_BuildPlaceMode_ChangeHeightLast = m_BuildPlaceMode.FindAction("ChangeHeightLast", throwIfNotFound: true);
-            m_BuildPlaceMode_ChangeHeightNext = m_BuildPlaceMode.FindAction("ChangeHeightNext", throwIfNotFound: true);
             m_BuildPlaceMode_SwitchFrame_PreHold = m_BuildPlaceMode.FindAction("SwitchFrame_PreHold", throwIfNotFound: true);
             m_BuildPlaceMode_SwitchFrame_PostPress = m_BuildPlaceMode.FindAction("SwitchFrame_PostPress", throwIfNotFound: true);
             m_BuildPlaceMode_KeyCom = m_BuildPlaceMode.FindAction("KeyCom", throwIfNotFound: true);
@@ -1626,10 +1498,6 @@ namespace ML.Engine.BuildingSystem.Input
         private List<IBuildPlaceModeActions> m_BuildPlaceModeActionsCallbackInterfaces = new List<IBuildPlaceModeActions>();
         private readonly InputAction m_BuildPlaceMode_ChangeActiveSocket;
         private readonly InputAction m_BuildPlaceMode_ChangeOutLook;
-        private readonly InputAction m_BuildPlaceMode_ChangeStyleLast;
-        private readonly InputAction m_BuildPlaceMode_ChangeStyleNext;
-        private readonly InputAction m_BuildPlaceMode_ChangeHeightLast;
-        private readonly InputAction m_BuildPlaceMode_ChangeHeightNext;
         private readonly InputAction m_BuildPlaceMode_SwitchFrame_PreHold;
         private readonly InputAction m_BuildPlaceMode_SwitchFrame_PostPress;
         private readonly InputAction m_BuildPlaceMode_KeyCom;
@@ -1642,10 +1510,6 @@ namespace ML.Engine.BuildingSystem.Input
             public BuildPlaceModeActions(@BuildingInput wrapper) { m_Wrapper = wrapper; }
             public InputAction @ChangeActiveSocket => m_Wrapper.m_BuildPlaceMode_ChangeActiveSocket;
             public InputAction @ChangeOutLook => m_Wrapper.m_BuildPlaceMode_ChangeOutLook;
-            public InputAction @ChangeStyleLast => m_Wrapper.m_BuildPlaceMode_ChangeStyleLast;
-            public InputAction @ChangeStyleNext => m_Wrapper.m_BuildPlaceMode_ChangeStyleNext;
-            public InputAction @ChangeHeightLast => m_Wrapper.m_BuildPlaceMode_ChangeHeightLast;
-            public InputAction @ChangeHeightNext => m_Wrapper.m_BuildPlaceMode_ChangeHeightNext;
             public InputAction @SwitchFrame_PreHold => m_Wrapper.m_BuildPlaceMode_SwitchFrame_PreHold;
             public InputAction @SwitchFrame_PostPress => m_Wrapper.m_BuildPlaceMode_SwitchFrame_PostPress;
             public InputAction @KeyCom => m_Wrapper.m_BuildPlaceMode_KeyCom;
@@ -1667,18 +1531,6 @@ namespace ML.Engine.BuildingSystem.Input
                 @ChangeOutLook.started += instance.OnChangeOutLook;
                 @ChangeOutLook.performed += instance.OnChangeOutLook;
                 @ChangeOutLook.canceled += instance.OnChangeOutLook;
-                @ChangeStyleLast.started += instance.OnChangeStyleLast;
-                @ChangeStyleLast.performed += instance.OnChangeStyleLast;
-                @ChangeStyleLast.canceled += instance.OnChangeStyleLast;
-                @ChangeStyleNext.started += instance.OnChangeStyleNext;
-                @ChangeStyleNext.performed += instance.OnChangeStyleNext;
-                @ChangeStyleNext.canceled += instance.OnChangeStyleNext;
-                @ChangeHeightLast.started += instance.OnChangeHeightLast;
-                @ChangeHeightLast.performed += instance.OnChangeHeightLast;
-                @ChangeHeightLast.canceled += instance.OnChangeHeightLast;
-                @ChangeHeightNext.started += instance.OnChangeHeightNext;
-                @ChangeHeightNext.performed += instance.OnChangeHeightNext;
-                @ChangeHeightNext.canceled += instance.OnChangeHeightNext;
                 @SwitchFrame_PreHold.started += instance.OnSwitchFrame_PreHold;
                 @SwitchFrame_PreHold.performed += instance.OnSwitchFrame_PreHold;
                 @SwitchFrame_PreHold.canceled += instance.OnSwitchFrame_PreHold;
@@ -1707,18 +1559,6 @@ namespace ML.Engine.BuildingSystem.Input
                 @ChangeOutLook.started -= instance.OnChangeOutLook;
                 @ChangeOutLook.performed -= instance.OnChangeOutLook;
                 @ChangeOutLook.canceled -= instance.OnChangeOutLook;
-                @ChangeStyleLast.started -= instance.OnChangeStyleLast;
-                @ChangeStyleLast.performed -= instance.OnChangeStyleLast;
-                @ChangeStyleLast.canceled -= instance.OnChangeStyleLast;
-                @ChangeStyleNext.started -= instance.OnChangeStyleNext;
-                @ChangeStyleNext.performed -= instance.OnChangeStyleNext;
-                @ChangeStyleNext.canceled -= instance.OnChangeStyleNext;
-                @ChangeHeightLast.started -= instance.OnChangeHeightLast;
-                @ChangeHeightLast.performed -= instance.OnChangeHeightLast;
-                @ChangeHeightLast.canceled -= instance.OnChangeHeightLast;
-                @ChangeHeightNext.started -= instance.OnChangeHeightNext;
-                @ChangeHeightNext.performed -= instance.OnChangeHeightNext;
-                @ChangeHeightNext.canceled -= instance.OnChangeHeightNext;
                 @SwitchFrame_PreHold.started -= instance.OnSwitchFrame_PreHold;
                 @SwitchFrame_PreHold.performed -= instance.OnSwitchFrame_PreHold;
                 @SwitchFrame_PreHold.canceled -= instance.OnSwitchFrame_PreHold;
@@ -1783,10 +1623,6 @@ namespace ML.Engine.BuildingSystem.Input
         {
             void OnChangeActiveSocket(InputAction.CallbackContext context);
             void OnChangeOutLook(InputAction.CallbackContext context);
-            void OnChangeStyleLast(InputAction.CallbackContext context);
-            void OnChangeStyleNext(InputAction.CallbackContext context);
-            void OnChangeHeightLast(InputAction.CallbackContext context);
-            void OnChangeHeightNext(InputAction.CallbackContext context);
             void OnSwitchFrame_PreHold(InputAction.CallbackContext context);
             void OnSwitchFrame_PostPress(InputAction.CallbackContext context);
             void OnKeyCom(InputAction.CallbackContext context);

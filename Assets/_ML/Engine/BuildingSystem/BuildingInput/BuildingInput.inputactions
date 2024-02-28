@@ -734,42 +734,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ChangeStyleLast",
-                    "type": "Value",
-                    "id": "035e67e5-0893-431b-b953-680c84930d5b",
-                    "expectedControlType": "Axis",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "ChangeStyleNext",
-                    "type": "Value",
-                    "id": "333c8e9f-c765-4f87-a537-ba7840217617",
-                    "expectedControlType": "Axis",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "ChangeHeightLast",
-                    "type": "Button",
-                    "id": "a557c737-f9b2-48ca-8236-18139d472a0b",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "ChangeHeightNext",
-                    "type": "Button",
-                    "id": "a46ecf51-5d5f-410b-840b-29a28f0add91",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "SwitchFrame_PreHold",
                     "type": "Button",
                     "id": "5d5c7fa2-49f4-4da3-a2bb-60f181dc8fcc",
@@ -954,94 +918,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "KeyCom",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1cca59e5-58ca-4fc6-ab25-95d4f1eed205",
-                    "path": "<Keyboard>/j",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeStyleLast",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "4f09f543-d671-4067-99cc-a6944d8a8b42",
-                    "path": "<XInputController>/dpad/left",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeStyleLast",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d41d0dba-e33e-4151-9d88-ef6901939d16",
-                    "path": "<Keyboard>/l",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeStyleNext",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "fcd4ba2d-7815-46e6-af92-b0f130c3f7f9",
-                    "path": "<XInputController>/dpad/right",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeStyleNext",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "c8fbb173-6136-4aaa-9b40-0244d8b6bea1",
-                    "path": "<Keyboard>/k",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeHeightLast",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "9f513321-5ee2-4866-a6ac-0fd473fda741",
-                    "path": "<XInputController>/dpad/down",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeHeightLast",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "c0ba611e-0103-43b5-84fa-188b6ce6a078",
-                    "path": "<Keyboard>/i",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeHeightNext",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "07b3fcbd-e0dc-4a0f-afd6-6d4cbf4c124d",
-                    "path": "<XInputController>/dpad/up",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeHeightNext",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
