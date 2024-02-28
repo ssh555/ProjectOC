@@ -1,37 +1,72 @@
 {
-  "Stamina": {
-    "Chinese": "体力",
-    "English": "Stamina"
-  },
-  "Speed": {
-    "Chinese": "速度",
-    "English": "Speed"
-  },
+  //BeastInfo
 
-  "Cook": {
-    "Chinese": "烹饪",
-    "English": "Cook"
-  },
-  "HandCraft": {
-    "Chinese": "轻工",
-    "English": "HandCraft"
-  },
-  "Industry": {
-    "Chinese": "精工",
-    "English": "Industry"
-  },
-  "Magic": {
-    "Chinese": "术法",
-    "English": "Magic"
-  },
-  "Transport": {
-    "Chinese": "搬运",
-    "English": "Transport"
-  },
-  "Collect": {
-    "Chinese": "采集",
-    "English": "Collect"
-  },
+  "SkillType" : [
+    {
+        "name" : "None",
+        "description" : {
+            "Chinese" : "空",
+            "English" : "None"
+        }
+    },
+    {
+        "name" : "Stamina",
+        "description" : {
+            "Chinese" : "体力",
+            "English" : "Stamina"
+        }
+    },
+    {
+        "name" : "Speed",
+        "description" : {
+            "Chinese" : "速度",
+            "English" : "Speed"
+        }
+    },
+    {
+        "name" : "Cook",
+        "description" : {
+            "Chinese" : "烹饪",
+            "English" : "Cook"
+        }
+    },
+    {
+        "name" : "HandCraft",
+        "description" : {
+            "Chinese" : "轻工",
+            "English" : "HandCraft"
+        }
+    },
+    {
+        "name" : "Industry",
+        "description" : {
+            "Chinese" : "精工",
+            "English" : "Industry"
+        }
+    },
+    {
+        "name" : "Magic",
+        "description" : {
+            "Chinese" : "术法",
+            "English" : "Magic"
+        }
+    },
+    {
+        "name" : "Transport",
+        "description" : {
+            "Chinese" : "搬运",
+            "English" : "Transport"
+        }
+    },
+    {
+        "name" : "Collect",
+        "description" : {
+            "Chinese" : "采集",
+            "English" : "Collect"
+        }
+    }
+],
+
 
   "expel": {
     "keyname": "Expel",
@@ -55,6 +90,7 @@
       "English": "Receive"
     }
   },
+  //BotKeyTips
   "back": {
     "keyname": "back",
     "keymap": {

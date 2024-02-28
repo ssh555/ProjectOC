@@ -38,7 +38,7 @@ namespace ProjectOC.WorkerEchoNS
     [System.Serializable]
     public sealed class WorkerEcho : ML.Engine.Manager.LocalManager.ILocalManager
     {
-        public int Level = 1;
+        public int Level = 2;
         ExternWorker[] Workers = new ExternWorker[5];
         BuildingPart BuildingPart = null;
 
@@ -51,7 +51,7 @@ namespace ProjectOC.WorkerEchoNS
         {   
             if (this.Level==1)
             {
-                Debug.Log("id " + id);
+                
                 GameManager.Instance.GetLocalManager<WorkerManager>().OnlyCostResource(inventory, id);
                 id = GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRandomID();
                 

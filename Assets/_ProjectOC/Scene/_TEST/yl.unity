@@ -1046,7 +1046,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   language: 0
   platform: 0
-  inputDevice: 0
+  inputDevice: 1
 --- !u!4 &1117274809
 Transform:
   m_ObjectHideFlags: 0
@@ -1422,6 +1422,7 @@ MonoBehaviour:
   rotOffset: {x: 0, y: 0, z: 0, w: 0}
   activeSocketIndex: 0
   uIResonanceWheel: {fileID: 8098490139189892449, guid: e3cccacf36309724291b2682109de3e0, type: 3}
+  uIResonanceWheelInstance: {fileID: 0}
   workerEcho:
     Level: 0
 --- !u!65 &1545261037
@@ -1589,10 +1590,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -1951,6 +1952,7 @@ MonoBehaviour:
   rotOffset: {x: 0, y: 0, z: 0, w: 0}
   activeSocketIndex: 0
   uIResonanceWheel: {fileID: 8098490139189892449, guid: e3cccacf36309724291b2682109de3e0, type: 3}
+  uIResonanceWheelInstance: {fileID: 0}
   workerEcho:
     Level: 0
 --- !u!65 &1986620305
