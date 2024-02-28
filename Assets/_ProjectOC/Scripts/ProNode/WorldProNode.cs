@@ -46,6 +46,7 @@ namespace ProjectOC.ProNodeNS
             // 实例化UIPanel
             GameObject gameObject = GameManager.Instance.ABResourceManager.LoadLocalAB("ui/uipanel").LoadAsset<GameObject>("UIProNodePanel");
             InventorySystem.UI.UIProNode uiPanel = GameObject.Instantiate(gameObject, GameObject.Find("Canvas").transform, false).GetComponent<InventorySystem.UI.UIProNode>();
+            uiPanel.Player = component.GetComponentInParent<Player.PlayerCharacter>();
             // 初始化相关数据
             uiPanel.ProNode = this.ProNode;
             // Push

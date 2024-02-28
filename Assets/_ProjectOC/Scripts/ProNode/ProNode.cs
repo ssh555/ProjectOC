@@ -6,9 +6,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using ML.Engine.InventorySystem.CompositeSystem;
-using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.BuildingSystem;
-using ProjectOC.StoreNS;
 
 namespace ProjectOC.ProNodeNS
 {
@@ -61,8 +59,7 @@ namespace ProjectOC.ProNodeNS
         /// <summary>
         /// 堆积搬运阈值，未分配给任务的份数达到此值，全部划分给任务，然后生成任务
         /// </summary>
-        //public int StackThresholdNum { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetStackThreshold(ID); }
-        public int StackThresholdNum = 1;
+        public int StackThresholdNum { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetStackThreshold(ID); }
         /// <summary>
         ///  当原材料可生产的Item份数低于此值时，发布搬运任务
         ///  搬运 MaxStackNum - 此值份量的原材料到此生产节点
@@ -273,6 +270,15 @@ namespace ProjectOC.ProNodeNS
         {
             this.ID = config.ID ?? "";
         }
+        /// <summary>
+        /// 销毁时调用
+        /// </summary>
+        public void Destroy(Player.PlayerCharacter player = null)
+        {
+            this.StopRun();
+            this.RemoveRecipe(player);
+            this.RemoveWorker();
+        }
 
         public bool SetLevel(int level)
         {
@@ -366,7 +372,7 @@ namespace ProjectOC.ProNodeNS
                     }
                     else
                     {
-                        if (!player.Inventory.AddItem(item))
+                        if (player == null || !player.Inventory.AddItem(item))
                         {
                             flag = true;
                         }
@@ -386,7 +392,7 @@ namespace ProjectOC.ProNodeNS
                     }
                     else
                     {
-                        if (!player.Inventory.AddItem(item))
+                        if (player == null || !player.Inventory.AddItem(item))
                         {
                             flag = true;
                         }
@@ -569,8 +575,11 @@ namespace ProjectOC.ProNodeNS
             // 结算
             Item item = Recipe.Composite(this);
             AddItem(item);
-            Worker.AlterExp(ExpType, Recipe.ExpRecipe);
-            Worker.AlterAP(-1 * Worker.APCost);
+            if (this.ProNodeType == ProNodeType.Mannul)
+            {
+                Worker.AlterExp(ExpType, Recipe.ExpRecipe);
+                Worker.AlterAP(-1 * Worker.APCost);
+            }
             // 下一次生产
             if (!StartProduce())
             {
@@ -701,29 +710,11 @@ namespace ProjectOC.ProNodeNS
             }
         }
 
-        //public void Upgrade(Player.PlayerCharacter player)
-        //{
-        //    if (this.WorldProNode != null)
-        //    {
-        //        string upgradeRawID = BuildingManager.Instance.GetUpgradeRaw(this.WorldProNode.Classification.ToString().Replace('-', '_'));
-        //        CompositeManager.CompositionObjectType compObjType = CompositeManager.Instance.Composite(player.Inventory, upgradeRawID, out var composition);
-        //        if (compObjType == CompositeManager.CompositionObjectType.BuildingPart && composition is WorldProNode upgrade)
-        //        {
-        //            upgrade.InstanceID = this.WorldProNode.InstanceID;
-        //            upgrade.transform.position = this.WorldProNode.transform.position;
-        //            upgrade.transform.rotation = this.WorldProNode.transform.rotation;
-        //            UnityEngine.Object.Destroy(this.WorldProNode.gameObject);
-        //            this.WorldProNode = upgrade;
-        //            upgrade.ProNode = this;
-        //            this.SetLevel(upgrade.Classification.Category4 - 1);
-        //        }
-        //    }
-        //}
         public void Upgrade(Player.PlayerCharacter player)
         {
             if (this.WorldProNode != null)
             {
-                string ID = BuildingManager.Instance.GetActorID(this.WorldProNode.Classification.ToString().Replace('-', '_'));
+                string ID = BuildingManager.Instance.GetID(this.WorldProNode.Classification.ToString().Replace('-', '_'));
                 string upgradeID = BuildingManager.Instance.GetUpgradeID(this.WorldProNode.Classification.ToString().Replace('-', '_'));
                 string upgradeCID = BuildingManager.Instance.GetUpgradeCID(this.WorldProNode.Classification.ToString().Replace('-', '_'));
 

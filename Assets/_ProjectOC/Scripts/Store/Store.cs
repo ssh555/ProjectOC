@@ -97,6 +97,47 @@ namespace ProjectOC.StoreNS
         }
 
         /// <summary>
+        /// 销毁时调用
+        /// </summary>
+        public void Destroy(Player.PlayerCharacter player = null)
+        {
+            foreach (Transport transport in Transports)
+            {
+                transport?.End();
+            }
+            this.Transports.Clear();
+            // 将堆放的成品，素材，全部返还至玩家背包
+            bool flag = false;
+            List<Item> resItems = new List<Item>();
+            foreach (StoreData data in StoreDatas)
+            {
+                if (ItemManager.Instance.IsValidItemID(data.ItemID) && data.StorageAll > 0)
+                {
+                    List<Item> items = ItemManager.Instance.SpawnItems(data.ItemID, data.StorageAll);
+                    foreach (var item in items)
+                    {
+                        if (flag)
+                        {
+                            resItems.Add(item);
+                        }
+                        else
+                        {
+                            if (player == null || !player.Inventory.AddItem(item))
+                            {
+                                flag = true;
+                            }
+                        }
+                    }
+                }
+            }
+            // 没有加到玩家背包的都变成WorldItem
+            foreach (Item item in resItems)
+            {
+                ItemManager.Instance.SpawnWorldItem(item, WorldStore.transform.position, WorldStore.transform.rotation);
+            }
+        }
+
+        /// <summary>
         /// 修改等级
         /// </summary>
         public bool SetLevel(int newLevel)
@@ -518,7 +559,7 @@ namespace ProjectOC.StoreNS
         {
             if (this.WorldStore != null)
             {
-                string ID = BuildingManager.Instance.GetActorID(this.WorldStore.Classification.ToString().Replace('-', '_'));
+                string ID = BuildingManager.Instance.GetID(this.WorldStore.Classification.ToString().Replace('-', '_'));
                 string upgradeID = BuildingManager.Instance.GetUpgradeID(this.WorldStore.Classification.ToString().Replace('-', '_'));
                 string upgradeCID = BuildingManager.Instance.GetUpgradeCID(this.WorldStore.Classification.ToString().Replace('-', '_'));
 

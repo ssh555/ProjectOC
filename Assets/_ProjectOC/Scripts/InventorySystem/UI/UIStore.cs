@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using ML.Engine.Extension;
 using ML.Engine.InventorySystem.CompositeSystem;
+using UnityEngine.Purchasing;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -146,7 +147,7 @@ namespace ProjectOC.InventorySystem.UI
             ChangeIcon = 2,
             Upgrade = 3
         }
-        private Mode CurMode = Mode.Store;
+        public Mode CurMode = Mode.Store;
         /// <summary>
         /// 对应的逻辑仓库
         /// </summary>
@@ -333,7 +334,7 @@ namespace ProjectOC.InventorySystem.UI
                 return null;
             }
         }
-        private Player.PlayerCharacter Player => GameObject.Find("PlayerCharacter")?.GetComponent<Player.PlayerCharacter>();
+        public Player.PlayerCharacter Player;
 
         private void Enter()
         {
@@ -497,15 +498,17 @@ namespace ProjectOC.InventorySystem.UI
             {
                 Store.ChangeStoreData(CurrentDataIndex, CurrentItemData);
                 this.CurMode = Mode.Store;
-                Refresh();
+                this.ItemDatas.Clear();
+                this.lastItemIndex = 0;
+                this.currentItemIndex = 0;
             }
             else if (CurMode == Mode.ChangeIcon)
             {
                 string itemID = CurrentItemData;
                 // 更新Icon
+                var img = StoreIcon.GetComponent<Image>();
                 if (ItemManager.Instance.IsValidItemID(itemID))
                 {
-                    var img = StoreIcon.GetComponent<Image>();
                     var texture = ItemManager.Instance.GetItemTexture2D(itemID);
                     if (texture != null)
                     {
@@ -520,15 +523,17 @@ namespace ProjectOC.InventorySystem.UI
                         img.sprite = sprite;
                     }
                 }
-                
-                this.CurMode = Mode.Store;
-                Refresh();
+                else
+                {
+                    img.sprite = null;
+                }
             }
             else if (CurMode == Mode.Upgrade)
             {
                 this.Store.Upgrade(Player);
-                Refresh();
             }
+            Refresh();
+
         }
         #endregion
 
@@ -643,9 +648,9 @@ namespace ProjectOC.InventorySystem.UI
                     // Active
                     uiStoreData.SetActive(true);
                     // 更新Icon
+                    var img = uiStoreData.transform.Find("Icon").GetComponent<Image>();
                     if (ItemManager.Instance.IsValidItemID(storeData.ItemID))
                     {
-                        var img = uiStoreData.transform.Find("Icon").GetComponent<Image>();
                         // 查找临时存储的Sprite
                         var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(storeData.ItemID));
                         // 不存在则生成
@@ -655,6 +660,10 @@ namespace ProjectOC.InventorySystem.UI
                             tempSprite.Add(sprite);
                         }
                         img.sprite = sprite;
+                    }
+                    else
+                    {
+                        img.sprite = null;
                     }
                     // Name
                     var nametext = uiStoreData.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
@@ -844,9 +853,9 @@ namespace ProjectOC.InventorySystem.UI
                     // Active
                     uiItemData.SetActive(true);
                     // 更新Icon
+                    var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
                     if (ItemManager.Instance.IsValidItemID(itemID))
                     {
-                        var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
                         // 查找临时存储的Sprite
                         var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(itemID));
                         // 不存在则生成
@@ -856,6 +865,10 @@ namespace ProjectOC.InventorySystem.UI
                             tempSprite.Add(sprite);
                         }
                         img.sprite = sprite;
+                    }
+                    else
+                    {
+                        img.sprite = null;
                     }
                     // Name
                     var nametext = uiItemData.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
@@ -985,9 +998,9 @@ namespace ProjectOC.InventorySystem.UI
                     // Active
                     uiItemData.SetActive(true);
                     // 更新Icon
+                    var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
                     if (ItemManager.Instance.IsValidItemID(itemID))
                     {
-                        var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
                         var texture = ItemManager.Instance.GetItemTexture2D(itemID);
                         if (texture != null)
                         {
@@ -1001,6 +1014,10 @@ namespace ProjectOC.InventorySystem.UI
                             }
                             img.sprite = sprite;
                         }
+                    }
+                    else
+                    {
+                        img.sprite = null;
                     }
                     var nametext = uiItemData.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
                     var amounttext = uiItemData.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();

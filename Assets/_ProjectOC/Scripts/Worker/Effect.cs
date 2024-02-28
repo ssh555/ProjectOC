@@ -69,7 +69,7 @@ namespace ProjectOC.WorkerNS
                 #endregion
                 #region float
                 case EffectType.AlterWalkSpeed:
-                    ParamFloat = int.Parse(value);
+                    ParamFloat = float.Parse(value);
                     break;
                 #endregion
             }

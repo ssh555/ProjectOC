@@ -1,5 +1,9 @@
 using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.InventorySystem;
+using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.TextContent;
+using ProjectOC.ProNodeNS;
+using ProjectOC.StoreNS;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,6 +33,7 @@ namespace ML.Engine.BuildingSystem.UI
 
 
         private BuildingManager BM => BuildingManager.Instance;
+        private ProjectOC.Player.PlayerCharacter Player => GameObject.Find("PlayerCharacter")?.GetComponent<ProjectOC.Player.PlayerCharacter>();
 
         private Dictionary<BuildingCategory3, RectTransform> styleInstance = new Dictionary<BuildingCategory3, RectTransform>();
         private RectTransform styleParent;
@@ -267,6 +272,12 @@ namespace ML.Engine.BuildingSystem.UI
             base.OnEnter();
             BM.Placer.OnKeyComInProgress += Placer_OnKeyComInProgress;
             BM.Placer.OnKeyComCancel += Placer_OnKeyComCancel;
+
+            if (BM.Placer.SelectedPartInstance != null)
+            {
+                BM.Placer.SelectedPartInstance.CheckCanInPlaceMode += CheckCostResources;
+            }
+            BM.Placer.OnPlaceModeSuccess += OnPlaceModeSuccess;
             BM.Placer.OnPlaceModeChangeStyle += Placer_OnPlaceModeChangeStyle;
             BM.Placer.OnPlaceModeChangeHeight += Placer_OnPlaceModeChangeHeight;
         }
@@ -276,6 +287,12 @@ namespace ML.Engine.BuildingSystem.UI
             base.OnPause();
             BM.Placer.OnKeyComInProgress -= Placer_OnKeyComInProgress;
             BM.Placer.OnKeyComCancel -= Placer_OnKeyComCancel;
+
+            if (BM.Placer.SelectedPartInstance != null)
+            {
+                BM.Placer.SelectedPartInstance.CheckCanInPlaceMode -= CheckCostResources;
+            }
+            BM.Placer.OnPlaceModeSuccess -= OnPlaceModeSuccess;
             BM.Placer.OnPlaceModeChangeStyle -= Placer_OnPlaceModeChangeStyle;
             BM.Placer.OnPlaceModeChangeHeight -= Placer_OnPlaceModeChangeHeight;
         }
@@ -286,6 +303,12 @@ namespace ML.Engine.BuildingSystem.UI
             BM.Placer.OnKeyComInProgress += Placer_OnKeyComInProgress;
             BM.Placer.OnKeyComCancel += Placer_OnKeyComCancel;
             this.keyComFillImage.fillAmount = 0;
+
+            if (BM.Placer.SelectedPartInstance != null)
+            {
+                BM.Placer.SelectedPartInstance.CheckCanInPlaceMode += CheckCostResources;
+            }
+            BM.Placer.OnPlaceModeSuccess += OnPlaceModeSuccess;
             BM.Placer.OnPlaceModeChangeStyle += Placer_OnPlaceModeChangeStyle;
             BM.Placer.OnPlaceModeChangeHeight += Placer_OnPlaceModeChangeHeight;
         }
@@ -296,6 +319,11 @@ namespace ML.Engine.BuildingSystem.UI
             BM.Placer.OnKeyComInProgress -= Placer_OnKeyComInProgress;
             BM.Placer.OnKeyComCancel -= Placer_OnKeyComCancel;
 
+            if (BM.Placer.SelectedPartInstance != null)
+            {
+                BM.Placer.SelectedPartInstance.CheckCanInPlaceMode -= CheckCostResources;
+            }
+            BM.Placer.OnPlaceModeSuccess -= OnPlaceModeSuccess;
             BM.Placer.OnPlaceModeChangeStyle -= Placer_OnPlaceModeChangeStyle;
             BM.Placer.OnPlaceModeChangeHeight -= Placer_OnPlaceModeChangeHeight;
 
@@ -325,6 +353,26 @@ namespace ML.Engine.BuildingSystem.UI
             var heights = BM.GetAllHeightByBPartStyle(bpart);
             StartCoroutine(this.Init(styles, heights, Array.IndexOf(styles, bpart.Classification.Category3), Array.IndexOf(heights, bpart.Classification.Category4)));
         }
+
+        private bool CheckCostResources(IBuildingPart bpart)
+        {
+            if (CompositeManager.Instance.CanComposite(Player.Inventory, BuildingManager.Instance.GetID(bpart.Classification.ToString().Replace('-', '_'))))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+
+            }
+        }
+
+        private void OnPlaceModeSuccess(IBuildingPart bpart)
+        {
+            CompositeManager.Instance.OnlyCostResource(Player.Inventory, BuildingManager.Instance.GetID(bpart.Classification.ToString().Replace('-', '_')));
+            BM.Placer.SelectedPartInstance.CheckCanInPlaceMode -= CheckCostResources;
+        }
+
     }
 }
 

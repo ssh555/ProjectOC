@@ -1,4 +1,9 @@
+using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.InventorySystem.CompositeSystem;
+using ML.Engine.InventorySystem;
 using ML.Engine.TextContent;
+using ProjectOC.ProNodeNS;
+using ProjectOC.StoreNS;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -10,7 +15,7 @@ namespace ML.Engine.BuildingSystem.UI
     public class BSInteractModePanel : Engine.UI.UIBasePanel
     {
         private BuildingManager BM => BuildingManager.Instance;
-
+        private ProjectOC.Player.PlayerCharacter Player => GameObject.Find("PlayerCharacter")?.GetComponent<ProjectOC.Player.PlayerCharacter>();
         private Image keyComFillImage;
 
         #region KeyTip
@@ -95,6 +100,7 @@ namespace ML.Engine.BuildingSystem.UI
         public override void OnEnter()
         {
             base.OnEnter();
+            BM.Placer.OnDestroySelectedBPart += OnDestroySelectedBPart;
             BM.Placer.OnKeyComInProgress += Placer_OnKeyComInProgress;
             BM.Placer.OnKeyComCancel += Placer_OnKeyComCancel;
         }
@@ -103,6 +109,7 @@ namespace ML.Engine.BuildingSystem.UI
         public override void OnPause()
         {
             base.OnPause();
+            BM.Placer.OnDestroySelectedBPart -= OnDestroySelectedBPart;
             BM.Placer.OnKeyComInProgress -= Placer_OnKeyComInProgress;
             BM.Placer.OnKeyComCancel -= Placer_OnKeyComCancel;
         }
@@ -110,6 +117,7 @@ namespace ML.Engine.BuildingSystem.UI
         public override void OnRecovery()
         {
             base.OnRecovery();
+            BM.Placer.OnDestroySelectedBPart += OnDestroySelectedBPart;
             BM.Placer.OnKeyComInProgress += Placer_OnKeyComInProgress;
             BM.Placer.OnKeyComCancel += Placer_OnKeyComCancel;
             this.keyComFillImage.fillAmount = 0;
@@ -118,8 +126,50 @@ namespace ML.Engine.BuildingSystem.UI
         public override void OnExit()
         {
             Destroy(this.gameObject);
+            BM.Placer.OnDestroySelectedBPart -= OnDestroySelectedBPart;
             BM.Placer.OnKeyComInProgress -= Placer_OnKeyComInProgress;
             BM.Placer.OnKeyComCancel -= Placer_OnKeyComCancel;
+        }
+
+        private void OnDestroySelectedBPart(IBuildingPart bpart)
+        {
+            if (bpart is WorldStore worldStore)
+            {
+                worldStore.Store.Destroy(Player);
+            }
+            else if (bpart is WorldProNode worldProNode)
+            {
+                worldProNode.ProNode.Destroy(Player);
+            }
+
+            bool flag = false;
+            List<Item> resItems = new List<Item>();
+            foreach (Formula formula in CompositeManager.Instance.GetCompositonFomula(BuildingManager.Instance.GetID(bpart.Classification.ToString().Replace('-', '_'))))
+            {
+                if (ItemManager.Instance.IsValidItemID(formula.id) && formula.num > 0)
+                {
+                    List<Item> items = ItemManager.Instance.SpawnItems(formula.id, formula.num);
+                    foreach (var item in items)
+                    {
+                        if (flag)
+                        {
+                            resItems.Add(item);
+                        }
+                        else
+                        {
+                            if (!Player.Inventory.AddItem(item))
+                            {
+                                flag = true;
+                            }
+                        }
+                    }
+                }
+            }
+            // 没有加到玩家背包的都变成WorldItem
+            foreach (Item item in resItems)
+            {
+                ItemManager.Instance.SpawnWorldItem(item, bpart.transform.position, bpart.transform.rotation);
+            }
         }
     }
 }

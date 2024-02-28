@@ -880,6 +880,15 @@ namespace ML.Engine.BuildingSystem
                 ABJAProcessor.StartLoadJsonAssetData();
             }
         }
+
+        public string GetID(string CID)
+        {
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
+            {
+                return BPartTableDictOnClass[CID].id;
+            }
+            return null;
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -893,6 +902,16 @@ namespace ML.Engine.BuildingSystem
             }
             return null;
         }
+
+        public List<InventorySystem.CompositeSystem.Formula> GetRaw(string CID)
+        {
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
+            {
+                return BPartTableDictOnClass[CID].raw;
+            }
+            return null;
+        }
+
         public List<InventorySystem.CompositeSystem.Formula> GetUpgradeRaw(string CID)
         {
             if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
@@ -918,7 +937,7 @@ namespace ML.Engine.BuildingSystem
                 string upgradeCID = BPartTableDictOnClass[CID].upgradeCID;
                 if (!string.IsNullOrEmpty(upgradeCID) && BPartTableDictOnClass.ContainsKey(upgradeCID))
                 {
-                    return BPartTableDictOnClass[upgradeCID].actorID;
+                    return BPartTableDictOnClass[upgradeCID].id;
                 }
             }
             return null;
