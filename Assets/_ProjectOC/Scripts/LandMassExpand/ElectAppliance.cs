@@ -1,9 +1,11 @@
+using System;
 using System.Xml.Schema;
 using ML.Engine.BuildingSystem.BuildingPart;
 using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
 using ML.Engine.Extension;
+using ML.Engine.Manager;
 
 namespace ProjectOC.LandMassExpand
 {
@@ -39,11 +41,18 @@ namespace ProjectOC.LandMassExpand
         [SerializeField,LabelText("充电特效")]
         private GameObject vfxTranf;
 
+        private BuildPowerIslandManager bpIslandManager;
+
+        protected virtual void Start()
+        {
+            bpIslandManager = GameManager.Instance.GetLocalManager<BuildPowerIslandManager>();
+        }
+
         void OnDestroy()
         {
-            if (BuildPowerIslandManager.Instance != null  && BuildPowerIslandManager.Instance.electAppliances.Contains(this))
+            if (bpIslandManager != null  && bpIslandManager.electAppliances.Contains(this))
             {
-                BuildPowerIslandManager.Instance.electAppliances.Remove(this);
+                bpIslandManager.electAppliances.Remove(this);
                 RemoveFromAllPowerCores();
             }
         }
@@ -51,9 +60,9 @@ namespace ProjectOC.LandMassExpand
         public override void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
             //如果没有，说明刚建造则加入
-            if (!BuildPowerIslandManager.Instance.electAppliances.Contains(this))
+            if (!bpIslandManager.electAppliances.Contains(this))
             {
-                BuildPowerIslandManager.Instance.electAppliances.Add(this);
+                bpIslandManager.electAppliances.Add(this);
             }
             //重置
             PowerCount = 0;
@@ -65,18 +74,18 @@ namespace ProjectOC.LandMassExpand
         private void RecalculatePowerCount()
         {
             int tempCount = 0;
-            foreach (var powerCore in BuildPowerIslandManager.Instance.powerCores)
+            foreach (var powerCore in bpIslandManager.powerCores)
             {
-                if (BuildPowerIslandManager.Instance.CoverEachOther(this, powerCore))
+                if (bpIslandManager.CoverEachOther(this, powerCore))
                 {
                     powerCore.needPowerBparts.Add(this);
                     tempCount++;
                 }
             }
             
-            foreach (var powerSub in BuildPowerIslandManager.Instance.powerSubs)
+            foreach (var powerSub in bpIslandManager.powerSubs)
             {
-                if (powerSub.InPower && BuildPowerIslandManager.Instance.CoverEachOther(this, powerSub))
+                if (powerSub.InPower && bpIslandManager.CoverEachOther(this, powerSub))
                 {
                     powerSub.needPowerBparts.Add(this);
                     tempCount++;                    
@@ -88,12 +97,12 @@ namespace ProjectOC.LandMassExpand
         
         public void RemoveFromAllPowerCores()
         {
-            foreach (var powerCore in BuildPowerIslandManager.Instance.powerCores)
+            foreach (var powerCore in bpIslandManager.powerCores)
             {
                 powerCore.RemoveNeedPowerBpart(this);
             }
 
-            foreach (var powerSub in BuildPowerIslandManager.Instance.powerSubs)
+            foreach (var powerSub in bpIslandManager.powerSubs)
             {
                 (powerSub as ISupportPowerBPart).RemoveNeedPowerBpart(this);
             }

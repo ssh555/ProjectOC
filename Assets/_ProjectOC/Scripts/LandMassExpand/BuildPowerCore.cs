@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.Manager;
+using UnityEngine.Serialization;
 
 
 namespace ProjectOC.LandMassExpand
@@ -25,20 +28,27 @@ namespace ProjectOC.LandMassExpand
                 powerSupportVFX.transform.localScale = new Vector3(_localScale,1,_localScale);
             }
         }
-        public bool InPower { get; set; }
+
+        public bool InPower => true;
 
         public List<INeedPowerBpart> needPowerBparts { get; private set; }
-        
-        private new void Awake()
+        private BuildPowerIslandManager bPIslandManager;
+        protected override void Awake()
         {
             needPowerBparts = new List<INeedPowerBpart>();
             base.Awake();
         }
+
+        protected void Start()
+        {
+            bPIslandManager = GameManager.Instance.GetLocalManager<BuildPowerIslandManager>();
+        }
+
         void OnDestroy()
         {
-            if (BuildPowerIslandManager.Instance != null && BuildPowerIslandManager.Instance.powerCores.Contains(this))
+            if (bPIslandManager != null && bPIslandManager.powerCores.Contains(this))
             {
-                BuildPowerIslandManager.Instance.powerCores.Remove(this);
+                bPIslandManager.powerCores.Remove(this);
                 
                 foreach (var needPowerBpart in needPowerBparts)
                 {
@@ -51,9 +61,9 @@ namespace ProjectOC.LandMassExpand
         public override void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
             //如果List没有，说明刚建造则加入
-            if (!BuildPowerIslandManager.Instance.powerCores.Contains(this))
+            if (!bPIslandManager.powerCores.Contains(this))
             {
-                BuildPowerIslandManager.Instance.powerCores.Add(this);
+                bPIslandManager.powerCores.Add(this);
             }
             else
             {
@@ -67,17 +77,17 @@ namespace ProjectOC.LandMassExpand
             //移出
             needPowerBparts.Clear();
             //添加新的
-            foreach (var electAppliance in BuildPowerIslandManager.Instance.electAppliances)
+            foreach (var electAppliance in bPIslandManager.electAppliances)
             {
-                if (BuildPowerIslandManager.Instance.CoverEachOther(electAppliance, this))
+                if (bPIslandManager.CoverEachOther(electAppliance, this))
                 {
                     needPowerBparts.Add(electAppliance);
                     electAppliance.PowerCount++;
                 }
             }
-            foreach (var powerSub in BuildPowerIslandManager.Instance.powerSubs)
+            foreach (var powerSub in bPIslandManager.powerSubs)
             {
-                if (BuildPowerIslandManager.Instance.CoverEachOther(powerSub, this))
+                if (bPIslandManager.CoverEachOther(powerSub, this))
                 {
                     needPowerBparts.Add(powerSub);
                     powerSub.PowerCount++;

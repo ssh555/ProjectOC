@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ML.Engine.Manager;
 using Sirenix.OdinInspector;
+using Unity.AI.Navigation;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -20,15 +22,18 @@ namespace ProjectOC.LandMassExpand
 
         private IslandManager islandManager;        
         Vector2Int bigMapSize => islandManager.maxSize;
-
+        [SerializeField,LabelText("岛屿区域")] 
+        public List<IslandFieldPart> islandFieldParts;
         private void Start()
         {
-            islandManager = IslandManager.Instance;
-            ChangeIslandGrids(islandMapRanges, true);
+            islandManager = GameManager.Instance.GetLocalManager<IslandManager>();
+            //ChangeIslandGrids(islandMapRanges, true);
         }
 
         public virtual void OnUnlock()
         { }
+        
+        
         
         public virtual void IslandMove()
         {
@@ -103,7 +108,7 @@ namespace ProjectOC.LandMassExpand
                     return;
                 }
 
-                if (IslandManager.Instance.islandGrids[realBigMapPos.x, realBigMapPos.y] != null)
+                if (islandManager.islandGrids[realBigMapPos.x, realBigMapPos.y] != null)
                 {
                     //更改本地范围数据，更改世界范围数据
                     islandMapRanges = islandMapRangeData;
@@ -145,7 +150,7 @@ namespace ProjectOC.LandMassExpand
                 else
                     _islandBase = null;
                 Vector2Int worldIslandMapRange = LocalToWorldMapPos(islandMapRange);
-                IslandManager.Instance.islandGrids[worldIslandMapRange.x, worldIslandMapRange.y] = _islandBase;
+                islandManager.islandGrids[worldIslandMapRange.x, worldIslandMapRange.y] = _islandBase;
             }
         }
         
@@ -179,7 +184,27 @@ namespace ProjectOC.LandMassExpand
                 Gizmos.DrawWireCube(new Vector3(islandMapRanges[i].x, 0, islandMapRanges[i].y) * islandManager.mapGridSize + transform.position,
                     Vector3.one * islandManager.mapGridSize);
             }
+            
+            //Draw 区域包围盒Bounds
+            Gizmos.color = Color.blue;
+            foreach (var islandFieldPart in islandFieldParts)
+            {
+                foreach (var _bound in islandFieldPart.fieldBounds)
+                {
+                    Gizmos.DrawWireCube(transform.position+_bound.center,_bound.size);   
+                }   
+            }
         }
+
+        #region 区域划分
+        [Serializable]
+        public struct IslandFieldPart
+        {
+            public List<Bounds> fieldBounds;
+            public NavMeshSurface navMeshSurface;
+        }
+        #endregion
+
 
     }
 }
