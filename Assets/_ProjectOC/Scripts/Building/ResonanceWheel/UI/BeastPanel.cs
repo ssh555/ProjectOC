@@ -278,7 +278,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
             Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
-
+            
             if (Workers.Count == 0) CurrentBeastIndex = -1;
 
 
@@ -301,13 +301,16 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     descriptionPrefab.transform.Find("Bio").Find("Selected").gameObject.SetActive(false);
                 }
                 descriptionPrefab.transform.Find("Bio").Find("mask").GetComponent<Image>().fillAmount = (float)Workers[i].APCurrent / Workers[i].APMax;
-
+                
             }
 
             if(CurrentBeastIndex != -1)
             {
+                this.transform.Find("HiddenBeastInfo2").Find("Info").gameObject.SetActive(true);
+                this.transform.Find("HiddenBeastInfo3").Find("Info").gameObject.SetActive(true);
+
                 //BeastInfo
-                
+
                 Speed.text = PanelTextContent_BeastPanel.Speed;
                 Cook.text = PanelTextContent_BeastPanel.Cook;
                 HandCraft.text = PanelTextContent_BeastPanel.HandCraft;
@@ -339,7 +342,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 radar.DrawPolygon(datas);
 
                 Worker worker = Workers[CurrentBeastIndex];
-
+                
                 //ÐÔ±ð
                 if (worker.Gender == Gender.Male)
                 {
@@ -360,7 +363,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
                 if (this.PrefabsAB == null) return;
-                var Info = this.transform.Find("HiddenBeastInfo3").Find("Info");
+                var Info = this.transform.Find("HiddenBeastInfo3").Find("Info").Find("Scroll View").Find("Viewport").Find("Content");
                 for (int i = 0; i < Info.childCount; i++)
                 {
                     Destroy(Info.GetChild(i).gameObject);
@@ -383,7 +386,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 
                 for (int i = 0; i < workerTimeStatus.Length; i++)
                 {
-                    
+                    //Debug.Log("34 " + i);
                     Image img = schedule.Find("T" + i.ToString()).GetComponent<Image>();
                     switch (workerTimeStatus[i])
                     {
@@ -410,13 +413,16 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
             else
             {
+                this.transform.Find("HiddenBeastInfo2").Find("Info").gameObject.SetActive(false);
+                this.transform.Find("HiddenBeastInfo3").Find("Info").gameObject.SetActive(false);
+
                 //Debug.Log("ÎÞÒþÊÞ");
             }
             //BotKeyTips
 
             KT_Back.ReWrite(PanelTextContent_BeastPanel.back);
 
-
+            
         }
         #endregion
 

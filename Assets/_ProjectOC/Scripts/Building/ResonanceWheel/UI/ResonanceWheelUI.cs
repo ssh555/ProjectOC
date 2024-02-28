@@ -3,6 +3,7 @@ using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.Timer;
+using ML.Engine.UI;
 using Newtonsoft.Json;
 using ProjectOC.Player;
 using ProjectOC.TechTree.UI;
@@ -45,6 +46,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
 
             workerEcho = (GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
+            
+
 
             StartCoroutine(InitUIPrefabs());
             StartCoroutine(InitUITexture2D());
@@ -53,6 +56,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //exclusivePart
             exclusivePart = this.transform.Find("ExclusivePart");
             exclusivePart.gameObject.SetActive(true);
+
+            
 
             // TopPart
             TopTitleText = this.transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
@@ -75,10 +80,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             SongofSeaBeastsText = SongofSeaBeastsTemplate.Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
 
             //Ring
-            var ringcontent = exclusivePart.Find("Ring").Find("Viewport").Find("Content");
-            KT_NextGrid = new UIKeyTip();
-            KT_NextGrid.keytip= ringcontent.Find("SelectKey").GetComponent<TMPro.TextMeshProUGUI>();
-            var ring = ringcontent.Find("Ring");
+            var ring = exclusivePart.Find("Ring").Find("Ring");
             Grid1 = ring.Find("Grid1");
             Grid2 = ring.Find("Grid2");
             Grid3 = ring.Find("Grid3");
@@ -89,6 +91,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             Grids.Add(new RingGrid(Grid3.transform));
             Grids.Add(new RingGrid(Grid4.transform));
             Grids.Add(new RingGrid(Grid5.transform));
+
+            KT_NextGrid = new UIKeyTip();
+            KT_NextGrid.keytip= ring.Find("SelectKeyTip").GetComponent<TMPro.TextMeshProUGUI>();
+            
 
             Grid1Text = Grid1.Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
             Grid2Text = Grid2.Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
@@ -179,7 +185,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
 
-            base.OnExit();
+            this.gameObject.SetActive(false);
             this.Exit();
             ClearTemp();
         }
@@ -345,7 +351,22 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void NextGrid_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            CurrentGridIndex = (CurrentGridIndex + 1) % Grids.Count;
+            Vector2 vector2 = obj.ReadValue<Vector2>();
+
+            float angle = Mathf.Atan2(vector2.x, vector2.y);
+
+            angle = angle * 180 / Mathf.PI;
+            if (angle<0)
+            {
+                angle = angle + 360;
+            }
+
+            if (angle < 36 || angle > 324) CurrentGridIndex = 0;
+            else if (angle > 36 && angle < 108) CurrentGridIndex = 4;
+            else if (angle > 108 && angle < 180) CurrentGridIndex = 3;
+            else if (angle > 180 && angle < 252) CurrentGridIndex = 2;
+            else if (angle > 252 && angle < 324) CurrentGridIndex = 1;
+
             this.Refresh();
         }
 
@@ -402,7 +423,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
             //给格子计时器加回调并刷新
-            foreach (var grid in Grids)
+            foreach (var grid in Grids) 
             {
                 if (grid.isNull)
                 {
@@ -416,14 +437,19 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                         grid.transform.Find("Image").GetComponent<Image>().sprite = sprite2;
                         grid.isTiming = true;
                     }
-                    
+
+
+
                     grid.worker.timer.OnEndEvent += () =>
                     {
                         //刷新素材
                         grid.transform.Find("Image").GetComponent<Image>().sprite = sprite1;
                         grid.isNull = false;
                         grid.isTiming = false;
+
+                        //此处有bug
                         this.Refresh();
+                        
                     };
                 }
             }
@@ -672,6 +698,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #region temp
         public Sprite sprite1,sprite2,sprite3;
+
+        public Sprite sprite_Cat, sprite_Deer, sprite_Dog, sprite_Fox, sprite_Rabbit, sprite_Seal;
         #endregion
 
         public override void Refresh()
@@ -746,6 +774,42 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 var SwitchTarget = exclusivePart.Find("ResonanceTarget").Find("Info").Find("SwitchTarget");
                 SwitchTarget.gameObject.SetActive(true);
 
+                if (workerEcho.Level == 1)
+                {
+                    SwitchTarget.gameObject.SetActive(false);
+                    //切换对象
+                    ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed -= SwitchTarget_performed;
+                }
+                else
+                {
+                    SwitchTarget.gameObject.SetActive(true);
+                    //切换对象
+                    ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed += SwitchTarget_performed;
+
+                    Image RandomImage = RTInfo.Find("Random").Find("Image").GetComponent<Image>();
+                    switch (currentBeastType)
+                    {
+                        case BeastType.WorkerEcho_Cat:
+                            RandomImage.sprite = sprite_Cat;
+                            break;
+                        case BeastType.WorkerEcho_Deer:
+                            RandomImage.sprite = sprite_Deer;
+                            break;
+                        case BeastType.WorkerEcho_Dog:
+                            RandomImage.sprite = sprite_Dog;
+                            break;
+                        case BeastType.WorkerEcho_Fox:
+                            RandomImage.sprite = sprite_Fox;
+                            break;
+                        case BeastType.WorkerEcho_Rabbit:
+                            RandomImage.sprite = sprite_Rabbit;
+                            break;
+                        case BeastType.WorkerEcho_Seal:
+                            RandomImage.sprite = sprite_Seal;
+                            break;
+                    }
+                }
+
                 //切换对象
                 ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed += SwitchTarget_performed;
             }
@@ -810,11 +874,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 }
             }
 
-            Grid1Text.text = PanelTextContent_Main.Grid1Text;
-            Grid2Text.text = PanelTextContent_Main.Grid2Text;
-            Grid3Text.text = PanelTextContent_Main.Grid3Text;
-            Grid4Text.text = PanelTextContent_Main.Grid4Text;
-            Grid5Text.text = PanelTextContent_Main.Grid5Text;
+            Grid1Text.text = PanelTextContent_Main.GridText;
+            Grid2Text.text = PanelTextContent_Main.GridText;
+            Grid3Text.text = PanelTextContent_Main.GridText;
+            Grid4Text.text = PanelTextContent_Main.GridText;
+            Grid5Text.text = PanelTextContent_Main.GridText;
 
             #endregion
 
@@ -825,14 +889,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             SwitchTargetText.ReWrite(PanelTextContent_Main.SwitchTargetText);
 
 
-            if(workerEcho.Level == 1)
-            {
-                RTInfo.Find("SwitchTarget").gameObject.SetActive(false);
-            }
-            else
-            {
-                RTInfo.Find("SwitchTarget").gameObject.SetActive(true);
-            }
+            
 
             #endregion
 
@@ -906,7 +963,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             //ring
             public KeyTip nextgrid;
-            public TextContent Grid1Text, Grid2Text, Grid3Text, Grid4Text, Grid5Text;
+            public TextContent GridText;
 
             //ResonanceTarget
             public TextContent ResonanceTargetTitle;
@@ -985,6 +1042,18 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             texture2D = Texture2DAB.LoadAsset<Texture2D>("gray_background");
             sprite3 = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
 
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("Cat");
+            sprite_Cat = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("Deer");
+            sprite_Deer = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("Dog");
+            sprite_Dog = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("Fox");
+            sprite_Fox = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("Rabbit");
+            sprite_Rabbit = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("Seal");
+            sprite_Seal = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
 
         }
 
@@ -1010,6 +1079,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             this.Refresh();
         }
         #endregion
+
 
 
     }

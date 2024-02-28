@@ -1,4 +1,9 @@
+using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.InventorySystem.CompositeSystem;
+using ML.Engine.InventorySystem;
 using ML.Engine.TextContent;
+using ProjectOC.ProNodeNS;
+using ProjectOC.StoreNS;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -12,11 +17,8 @@ namespace ML.Engine.BuildingSystem.UI
     {
         #region Property|Field
         private BuildingManager BM => BuildingManager.Instance;
-
         private BuildingPlacer.BuildingPlacer Placer => BM.Placer;
-
-
-
+        private ProjectOC.Player.PlayerCharacter Player => GameObject.Find("PlayerCharacter")?.GetComponent<ProjectOC.Player.PlayerCharacter>();
 
         #region KeyTip
         private UIKeyTip keycom;
@@ -109,6 +111,7 @@ namespace ML.Engine.BuildingSystem.UI
         {
             base.OnEnter();
             this.RegisterInput();
+            BM.Placer.OnDestroySelectedBPart += OnDestroySelectedBPart;
         }
 
 
@@ -116,12 +119,14 @@ namespace ML.Engine.BuildingSystem.UI
         {
             base.OnPause();
             this.UnregisterInput();
+            BM.Placer.OnDestroySelectedBPart -= OnDestroySelectedBPart;
         }
 
         public override void OnRecovery()
         {
             base.OnRecovery();
             this.RegisterInput();
+            BM.Placer.OnDestroySelectedBPart += OnDestroySelectedBPart;
         }
 
         public override void OnExit()
@@ -230,6 +235,46 @@ namespace ML.Engine.BuildingSystem.UI
 
         #endregion
 
+        private void OnDestroySelectedBPart(IBuildingPart bpart)
+        {
+            if (bpart is WorldStore worldStore)
+            {
+                worldStore.Store.Destroy(Player);
+            }
+            else if (bpart is WorldProNode worldProNode)
+            {
+                worldProNode.ProNode.Destroy(Player);
+            }
+
+            bool flag = false;
+            List<Item> resItems = new List<Item>();
+            foreach (Formula formula in CompositeManager.Instance.GetCompositonFomula(BuildingManager.Instance.GetID(bpart.Classification.ToString().Replace('-', '_'))))
+            {
+                if (ItemManager.Instance.IsValidItemID(formula.id) && formula.num > 0)
+                {
+                    List<Item> items = ItemManager.Instance.SpawnItems(formula.id, formula.num);
+                    foreach (var item in items)
+                    {
+                        if (flag)
+                        {
+                            resItems.Add(item);
+                        }
+                        else
+                        {
+                            if (!Player.Inventory.AddItem(item))
+                            {
+                                flag = true;
+                            }
+                        }
+                    }
+                }
+            }
+            // 没有加到玩家背包的都变成WorldItem
+            foreach (Item item in resItems)
+            {
+                ItemManager.Instance.SpawnWorldItem(item, bpart.transform.position, bpart.transform.rotation);
+            }
+        }
     }
 }
 

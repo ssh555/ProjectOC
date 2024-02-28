@@ -1,6 +1,10 @@
 using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.InventorySystem;
+using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.TextContent;
 using Sirenix.OdinInspector;
+using ProjectOC.ProNodeNS;
+using ProjectOC.StoreNS;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,7 +25,7 @@ namespace ML.Engine.BuildingSystem.UI
 
         private BuildingManager BM => BuildingManager.Instance;
         private BuildingPlacer.BuildingPlacer Placer => BM.Placer;
-
+        private ProjectOC.Player.PlayerCharacter Player => GameObject.Find("PlayerCharacter")?.GetComponent<ProjectOC.Player.PlayerCharacter>();
 
 
         #region UIGOÒýÓÃ
@@ -297,18 +301,35 @@ namespace ML.Engine.BuildingSystem.UI
             base.OnEnter();
             this.RegisterInput();
             this.Placer.InteractBPartList.Clear();
+
+            if (BM.Placer.SelectedPartInstance != null)
+            {
+                BM.Placer.SelectedPartInstance.CheckCanInPlaceMode += CheckCostResources;
+            }
+            BM.Placer.OnPlaceModeSuccess += OnPlaceModeSuccess;
         }
 
         public override void OnPause()
         {
             base.OnPause();
             this.UnregisterInput();
+
+            if (BM.Placer.SelectedPartInstance != null)
+            {
+                BM.Placer.SelectedPartInstance.CheckCanInPlaceMode -= CheckCostResources;
+            }
+            BM.Placer.OnPlaceModeSuccess -= OnPlaceModeSuccess;
         }
 
         public override void OnRecovery()
         {
             base.OnRecovery();
             this.RegisterInput();
+            if (BM.Placer.SelectedPartInstance != null)
+            {
+                BM.Placer.SelectedPartInstance.CheckCanInPlaceMode += CheckCostResources;
+            }
+            BM.Placer.OnPlaceModeSuccess += OnPlaceModeSuccess;
         }
 
         public override void OnExit()
@@ -317,6 +338,12 @@ namespace ML.Engine.BuildingSystem.UI
             this.ClearInstance();
             this.UnregisterInput();
             this.UnloadAsset();
+
+            if (BM.Placer.SelectedPartInstance != null)
+            {
+                BM.Placer.SelectedPartInstance.CheckCanInPlaceMode -= CheckCostResources;
+            }
+            BM.Placer.OnPlaceModeSuccess -= OnPlaceModeSuccess;
         }
 
         #endregion
@@ -429,6 +456,25 @@ namespace ML.Engine.BuildingSystem.UI
             MonoBuildingManager.Instance.PushPanel<BSPlaceMode_KeyComPanel>();
         }
         #endregion
+        private bool CheckCostResources(IBuildingPart bpart)
+        {
+            if (CompositeManager.Instance.CanComposite(Player.Inventory, BuildingManager.Instance.GetID(bpart.Classification.ToString().Replace('-', '_'))))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+
+            }
+        }
+
+        private void OnPlaceModeSuccess(IBuildingPart bpart)
+        {
+            CompositeManager.Instance.OnlyCostResource(Player.Inventory, BuildingManager.Instance.GetID(bpart.Classification.ToString().Replace('-', '_')));
+            BM.Placer.SelectedPartInstance.CheckCanInPlaceMode -= CheckCostResources;
+        }
+
     }
 }
 
