@@ -7,6 +7,7 @@ using System;
 using UnityEngine;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.BuildingSystem;
+using ProjectOC.LandMassExpand;
 
 namespace ProjectOC.ProNodeNS
 {
@@ -197,6 +198,7 @@ namespace ProjectOC.ProNodeNS
         /// Worker只能拿取此项，第二个进度条
         /// </summary>
         public int StackReserve { get; protected set; }
+        public bool RequirePower = false;
         /// <summary>
         ///  原材料ID, 还有多少个
         /// </summary>
@@ -536,6 +538,10 @@ namespace ProjectOC.ProNodeNS
                     return false;
                 }
                 if (this.StackAllNum >= this.StackMaxNum)
+                {
+                    return false;
+                }
+                if (RequirePower && WorldProNode.PowerCount <= 0)
                 {
                     return false;
                 }

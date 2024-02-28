@@ -553,6 +553,14 @@ namespace ProjectOC.InventorySystem.UI
             else if (CurMode == Mode.ChangeRecipe)
             {
                 ProNode.ChangeRecipe(Player, CurrentRecipe);
+                if (ItemManager.Instance.IsValidItemID(ProNode.Recipe?.Product.id))
+                {
+                    var texture = ItemManager.Instance.GetItemTexture2D(ProNode.Recipe.Product.id);
+                    if (texture != null)
+                    {
+                        ItemManager.Instance.AddItemIconObject(ProNode.Recipe.Product.id, this.ProNode.WorldProNode.transform);
+                    }
+                }
                 CurMode = Mode.ProNode;
             }
             else if (CurMode == Mode.ChangeWorker)

@@ -521,6 +521,7 @@ namespace ProjectOC.InventorySystem.UI
                             tempSprite.Add(sprite);
                         }
                         img.sprite = sprite;
+                        ItemManager.Instance.AddItemIconObject(itemID, this.Store.WorldStore.transform);
                     }
                 }
                 else

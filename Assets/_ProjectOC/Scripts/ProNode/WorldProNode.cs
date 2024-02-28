@@ -2,6 +2,7 @@ using ML.Engine.BuildingSystem;
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InteractSystem;
 using ML.Engine.Manager;
+using ProjectOC.LandMassExpand;
 using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
 using System;
@@ -12,7 +13,7 @@ using UnityEngine;
 
 namespace ProjectOC.ProNodeNS
 {
-    public class WorldProNode : BuildingPart, IInteraction
+    public class WorldProNode : ElectAppliance, IInteraction
     {
         [ShowInInspector, ReadOnly, SerializeField]
         public ProNode ProNode;
