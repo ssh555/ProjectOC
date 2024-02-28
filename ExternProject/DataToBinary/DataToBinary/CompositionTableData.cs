@@ -38,14 +38,14 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         public string texture2d;
         public List<string> usage;
 
-        public CompositionTableData(RecipeTableData data)
+        public CompositionTableData(RecipeTableData data, ItemTableData itemData)
         {
             this.id = data.Product.id;
             this.compositionnum = data.Product.num;
             this.formula = data.Raw.ToArray();
             this.name = data.Name;
             this.tag = new List<string>().ToArray();
-            this.texture2d = "";
+            this.texture2d = itemData.icon;
             this.usage = new List<string>();
         }
         public CompositionTableData(BuildingTableData data)
@@ -58,14 +58,16 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             this.texture2d = data.icon;
             this.usage = new List<string>();
         }
-        public CompositionTableData(BuildingUpgradeTableData data)
+        public CompositionTableData(BuildingTableData data, BuildingTableData dataUpgrade)
         {
-            this.id = data.id;
+            this.id = data.id + "_" + dataUpgrade.id;
             this.compositionnum = 1;
             this.formula = data.upgradeRaw.ToArray();
-            this.name = data.name;
-            this.tag = new List<string>().ToArray();
-            this.texture2d = "";
+            this.name = new TextContent.TextContent();
+            this.name.Chinese = dataUpgrade.name.Chinese + "+";
+            this.name.English = dataUpgrade.name.English + "+";
+            this.tag = new string[] { dataUpgrade.category1, dataUpgrade.category2, dataUpgrade.category3, dataUpgrade.category4 };
+            this.texture2d = dataUpgrade.icon;
             this.usage = new List<string>();
         }
         public CompositionTableData(ProjectOC.WorkerEchoNS.WorkerEchoTableData data)

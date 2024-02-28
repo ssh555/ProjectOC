@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 4057091487
+CRC: 2531825064
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ec363b4c789aab21a04553b71adef04b
+    Hash: 4468acdf49a234a9f6195168a22b7083
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 60e85f20dfc13800734f9d0dfd39173d
+    Hash: caa750a68bd804abb5f5530a08e2adb0
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: ec363b4c789aab21a04553b71adef04b
+    Hash: 4468acdf49a234a9f6195168a22b7083
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -18,11 +18,7 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 21
   Script: {instanceID: 0}
-- Class: 28
-  Script: {instanceID: 0}
 - Class: 43
-  Script: {instanceID: 0}
-- Class: 48
   Script: {instanceID: 0}
 - Class: 74
   Script: {instanceID: 0}
@@ -52,4 +48,4 @@ Assets:
 - Assets/_ProjectOC/OCResources/Animation/Player/PlayerModel/Clip/Motion/04 Run.anim
 - "Assets/_ProjectOC/OCResources/Meshes/Character/\u5B89\u8FF7\u4FEE.fbx"
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials/character/player
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/materials/character/player

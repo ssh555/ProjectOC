@@ -1,5 +1,4 @@
 {
-  //topPart
   "toptitle": {
     "Chinese": "共鸣轮",
     "English": "ResonanceWheel"
@@ -34,11 +33,10 @@
     "Chinese": "海兽之歌",
     "English": "SongofSeaBeasts"
   },
-  //ring
   "nextgrid": {
     "keyname": "nextgrid",
     "keymap": {
-      "KeyBoard": "LM",
+      "KeyBoard": "WASD",
       "XBOX": "RB"
     },
     "description": {
@@ -46,27 +44,10 @@
       "English": ""
     }
   },
-  "Grid1Text": {
+  "GridText": {
     "Chinese": "空",
     "English": "Empty"
   },
-  "Grid2Text": {
-    "Chinese": "空",
-    "English": "Empty"
-  },
-  "Grid3Text": {
-    "Chinese": "空",
-    "English": "Empty"
-  },
-  "Grid4Text": {
-    "Chinese": "空",
-    "English": "Empty"
-  },
-  "Grid5Text": {
-    "Chinese": "空",
-    "English": "Empty"
-  },
-  //ResonanceTarget
   "ResonanceTargetTitle": {
     "Chinese": "共鸣对象",
     "English": "ResonanceTarget"
@@ -86,7 +67,6 @@
       "English": "SwitchTarget"
     }
   },
-  //ResonanceConsumpion
   "ResonanceConsumpionTitle": {
     "description": [
       {
@@ -121,7 +101,6 @@
       "English": "StopResonance"
     }
   },
-  //BotKeyTips
   "back": {
     "keyname": "back",
     "keymap": {
@@ -134,4 +113,3 @@
     }
   }
 }
-
