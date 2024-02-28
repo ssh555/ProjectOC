@@ -1705,12 +1705,12 @@ namespace ProjectOC.Input
                 },
                 {
                     ""name"": ""NextGrid"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""cfc9e177-6df9-4a6a-9a86-5672aa660108"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""SwitchTarget"",
@@ -1787,30 +1787,8 @@ namespace ProjectOC.Input
                 },
                 {
                     ""name"": """",
-                    ""id"": ""f4eceee8-e86d-4745-a3a0-cf7987a232f3"",
-                    ""path"": ""<XInputController>/leftStick/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""NextGrid"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""aacf4e26-c234-4f5c-8d1f-acbf64e1a2b2"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""NextGrid"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""41355902-e9db-4246-94cf-2746fadbd5a1"",
-                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""path"": ""<XInputController>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1832,7 +1810,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""d78eb896-4b50-4aa1-b909-083af217fa9c"",
-                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""path"": ""<XInputController>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1854,7 +1832,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""a7a70bf2-8ce2-43af-8ef7-3152a00706c8"",
-                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""path"": ""<XInputController>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1872,6 +1850,105 @@ namespace ProjectOC.Input
                     ""action"": ""StopResonance"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""86416eaa-55a1-40b9-be24-a46eede2daec"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""d2c32268-48b6-4d4a-b7e0-d610290ced1f"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""d08a9bf0-8aa4-4e15-bed2-0b61abbba1c9"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""6c552d7e-2280-4cb6-941a-e1ed26372a2f"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""f870a1f8-fb94-483e-ac40-67c1aebf5615"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""2cca8acd-88dd-4ae8-b7f4-6e001e13e5b0"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""d4ed186d-1086-49d1-96e6-70487d3b6ad5"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""b4d041df-62f8-466c-b74f-bb0af66087a8"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""1f7139f0-5a2d-4616-a40b-dbcef3f3161f"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -1902,17 +1979,6 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""6552300a-e62b-4b00-874c-609101b4ea13"",
-                    ""path"": ""<XInputController>/rightShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Expel"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a719b9a2-1bbd-484f-aefe-375594e668a5"",
                     ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -1923,8 +1989,19 @@ namespace ProjectOC.Input
                 },
                 {
                     ""name"": """",
+                    ""id"": ""a719b9a2-1bbd-484f-aefe-375594e668a5"",
+                    ""path"": ""<XInputController>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Expel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""014e2025-3273-47ff-ac0c-e437291fe9e5"",
-                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1935,7 +2012,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""b337ffcf-f1cd-4e6c-8f39-3f8cd1f220e3"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<XInputController>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1969,12 +2046,12 @@ namespace ProjectOC.Input
                 },
                 {
                     ""name"": ""NextGrid"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""0bd5dbbc-da1f-4d19-acd3-6e725dcb6d4e"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Confirm"",
@@ -2033,30 +2110,8 @@ namespace ProjectOC.Input
                 },
                 {
                     ""name"": """",
-                    ""id"": ""21821228-7600-45ca-9121-85525d1b3a8a"",
-                    ""path"": ""<XInputController>/leftStick/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""NextGrid"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3b8562af-4ec4-417d-8993-8ccb543d5ba7"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""NextGrid"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""008d807b-ad0c-4c3b-a630-0b57c7f16dcf"",
-                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""path"": ""<XInputController>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -2074,6 +2129,105 @@ namespace ProjectOC.Input
                     ""action"": ""Confirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""c5637abd-df5f-400e-9a41-acbab9c6777f"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""c6864867-4006-4877-9669-c020079510fc"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""8abefbde-8e03-4d35-b806-24c2b0fcc31b"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""34e6e505-5d81-4ccf-bcf9-259c50ab3da0"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""83c9cddd-d9ca-43f9-af44-76933fe7d4cd"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""8dcbb08d-1f68-4d34-83ae-d8078d0fe79e"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""06e013b3-69a5-458c-bd49-3f3567bf85e3"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""b1d8854e-4fe3-4d40-be8c-2eabe8a1571e"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""ac0bc67b-7a77-4a75-bafd-f10f430a39bc"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -2098,40 +2252,9 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Confirm"",
-                    ""type"": ""Button"",
-                    ""id"": ""12df18cd-3fdc-4fff-babf-07849920a155"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""d5231073-fee7-49bd-ad55-97fa2affe344"",
-                    ""path"": ""<XInputController>/leftStick/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Confirm"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""2801abe8-fa3f-43f4-aefb-7b7240bca3ed"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Confirm"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": ""1D Axis"",
                     ""id"": ""bb7b65a4-a069-4735-aa17-365c98648bf1"",
@@ -2155,6 +2278,17 @@ namespace ProjectOC.Input
                     ""isPartOfComposite"": true
                 },
                 {
+                    ""name"": ""negative"",
+                    ""id"": ""39b87b38-782a-4048-a601-1685d9d911be"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchBeast"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
                     ""name"": ""positive"",
                     ""id"": ""f5267953-e510-4e87-b889-54cc46e962e4"",
                     ""path"": ""<Keyboard>/w"",
@@ -2166,9 +2300,20 @@ namespace ProjectOC.Input
                     ""isPartOfComposite"": true
                 },
                 {
+                    ""name"": ""positive"",
+                    ""id"": ""61e27a76-29dd-4d9c-9063-f25561d9f5fe"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchBeast"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
                     ""name"": """",
                     ""id"": ""3879aebe-59ae-4d3a-ac9a-883099cdd5d3"",
-                    ""path"": ""<XInputController>/rightShoulder"",
+                    ""path"": ""<XInputController>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -2258,7 +2403,6 @@ namespace ProjectOC.Input
             m_BeastPanel = asset.FindActionMap("BeastPanel", throwIfNotFound: true);
             m_BeastPanel_SwitchBeast = m_BeastPanel.FindAction("SwitchBeast", throwIfNotFound: true);
             m_BeastPanel_Expel = m_BeastPanel.FindAction("Expel", throwIfNotFound: true);
-            m_BeastPanel_Confirm = m_BeastPanel.FindAction("Confirm", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -3016,14 +3160,12 @@ namespace ProjectOC.Input
         private List<IBeastPanelActions> m_BeastPanelActionsCallbackInterfaces = new List<IBeastPanelActions>();
         private readonly InputAction m_BeastPanel_SwitchBeast;
         private readonly InputAction m_BeastPanel_Expel;
-        private readonly InputAction m_BeastPanel_Confirm;
         public struct BeastPanelActions
         {
             private @PlayerInput m_Wrapper;
             public BeastPanelActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
             public InputAction @SwitchBeast => m_Wrapper.m_BeastPanel_SwitchBeast;
             public InputAction @Expel => m_Wrapper.m_BeastPanel_Expel;
-            public InputAction @Confirm => m_Wrapper.m_BeastPanel_Confirm;
             public InputActionMap Get() { return m_Wrapper.m_BeastPanel; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -3039,9 +3181,6 @@ namespace ProjectOC.Input
                 @Expel.started += instance.OnExpel;
                 @Expel.performed += instance.OnExpel;
                 @Expel.canceled += instance.OnExpel;
-                @Confirm.started += instance.OnConfirm;
-                @Confirm.performed += instance.OnConfirm;
-                @Confirm.canceled += instance.OnConfirm;
             }
 
             private void UnregisterCallbacks(IBeastPanelActions instance)
@@ -3052,9 +3191,6 @@ namespace ProjectOC.Input
                 @Expel.started -= instance.OnExpel;
                 @Expel.performed -= instance.OnExpel;
                 @Expel.canceled -= instance.OnExpel;
-                @Confirm.started -= instance.OnConfirm;
-                @Confirm.performed -= instance.OnConfirm;
-                @Confirm.canceled -= instance.OnConfirm;
             }
 
             public void RemoveCallbacks(IBeastPanelActions instance)
@@ -3147,7 +3283,6 @@ namespace ProjectOC.Input
         {
             void OnSwitchBeast(InputAction.CallbackContext context);
             void OnExpel(InputAction.CallbackContext context);
-            void OnConfirm(InputAction.CallbackContext context);
         }
     }
 }

@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2813431381
+CRC: 1524248614
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ed75ed3d480fe48a409d453f6941f7c6
+    Hash: b59748bbb1680aaf1829d2d54590e0c8
   TypeTreeHash:
     serializedVersion: 2
     Hash: be2e840414cdb9dd595a5e494f09898c
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: ed75ed3d480fe48a409d453f6941f7c6
+    Hash: b59748bbb1680aaf1829d2d54590e0c8
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -165,7 +165,7 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/ProNode/ProNode_Integrator_Base1_1.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/ProNode/ProNode_Detector_Base1_1.prefab
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials/character/player
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/model/buildingsystem/model
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/shader
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/materials/character/player
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/model/buildingsystem/model
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/shader

@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 357653439
+CRC: 1898640641
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 107dd5cf9964f54eb52b0cae22a7ed87
+    Hash: d76b799d1f6a2076e9350939244f6350
   TypeTreeHash:
     serializedVersion: 2
-    Hash: a5a937e552e50d2766ec64a893ed9082
+    Hash: 63e11b1caf2ba2f0bb15b72825a7d0c3
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 107dd5cf9964f54eb52b0cae22a7ed87
+    Hash: d76b799d1f6a2076e9350939244f6350
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -18,8 +18,6 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 28
   Script: {instanceID: 0}
-- Class: 114
-  Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
@@ -48,7 +46,7 @@ Assets:
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/ResonanceWheelPrefabs/BeastBio.prefab
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/ResonanceWheelPrefabs/Slot.prefab
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/fonts
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/inventory/texture2d
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/fonts
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/inventory/texture2d
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d

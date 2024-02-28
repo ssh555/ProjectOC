@@ -47,6 +47,17 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             Grids.Add(new GridBeastType(Grid6.transform, ResonanceWheelUI.BeastType.WorkerEcho_Dog));
             Grids.Add(new GridBeastType(Grid7.transform, ResonanceWheelUI.BeastType.WorkerEcho_Seal));
 
+            Grid2.Find("Image").GetComponent<Image>().sprite = parentUI.sprite_Cat;
+            Grid3.Find("Image").GetComponent<Image>().sprite = parentUI.sprite_Deer;
+            Grid4.Find("Image").GetComponent<Image>().sprite = parentUI.sprite_Fox;
+            Grid5.Find("Image").GetComponent<Image>().sprite = parentUI.sprite_Rabbit;
+            Grid6.Find("Image").GetComponent<Image>().sprite = parentUI.sprite_Dog;
+            Grid7.Find("Image").GetComponent<Image>().sprite = parentUI.sprite_Seal;
+
+
+
+
+
             //BotKeyTips
             var kt = this.transform.Find("BotKeyTips").Find("KeyTips");
             KT_Back = new UIKeyTip();
@@ -190,7 +201,25 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void NextGrid_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            CurrentGridIndex = (CurrentGridIndex + 1) % Grids.Count;
+
+            Vector2 vector2 = obj.ReadValue<Vector2>();
+
+            float angle = Mathf.Atan2(vector2.x, vector2.y);
+
+            angle = angle * 180 / Mathf.PI;
+            if (angle < 0)
+            {
+                angle = angle + 360;
+            }
+
+            if (angle < 25.7 || angle > 334.3) CurrentGridIndex = 0;
+            else if (angle > 25.7 && angle < 77.1) CurrentGridIndex = 6;
+            else if (angle > 77.1 && angle < 128.5) CurrentGridIndex = 5;
+            else if (angle > 128.5 && angle < 179.9) CurrentGridIndex = 4;
+            else if (angle > 179.9 && angle < 231.3) CurrentGridIndex = 3;
+            else if (angle > 231.3 && angle < 282.7) CurrentGridIndex = 2;
+            else if (angle > 282.7 && angle < 334.3) CurrentGridIndex = 1;
+
             this.Refresh();
         }
 
@@ -290,7 +319,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
         #endregion
 
-        
+
+
     }
 
 }
