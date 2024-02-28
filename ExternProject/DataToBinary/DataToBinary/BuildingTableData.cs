@@ -16,7 +16,13 @@ namespace ML.Engine.BuildingSystem
         public string category4;
         public string actorID;
         public List<InventorySystem.CompositeSystem.Formula> raw;
+        public string upgradeCID;
         public List<InventorySystem.CompositeSystem.Formula> upgradeRaw;
+
+        public string GetClassificationString()
+        {
+            return $"{category1}_{category2}_{category3}_{category4}";
+        }
 
         public bool GenData(string[] row)
         {
@@ -45,7 +51,16 @@ namespace ML.Engine.BuildingSystem
             // 8 -> raw
             this.raw = Program.ParseFormula(row[8]);
             // 9 -> upgradeRaw
-            this.upgradeRaw = Program.ParseFormula(row[9]);
+            this.upgradeRaw = !string.IsNullOrEmpty(row[9]) ? Program.ParseFormula(row[9]) : new List<InventorySystem.CompositeSystem.Formula>();
+            int level;
+            if (this.upgradeRaw.Count > 0 && int.TryParse(category4, out level))
+            {
+                this.upgradeCID = $"{category1}_{category2}_{category3}_{level + 1}";
+            }
+            else
+            {
+                this.upgradeCID = "";
+            }
             return true;
         }
     }

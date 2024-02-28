@@ -21,8 +21,8 @@ namespace ML.Engine.BuildingSystem
         public string category4;
         public string actorID;
         public List<InventorySystem.CompositeSystem.Formula> raw;
-        public string upgrade;
-        public string upgradeRaw;
+        public string upgradeCID;
+        public List<InventorySystem.CompositeSystem.Formula> upgradeRaw;
 
         public string GetClassificationString()
         {
@@ -880,6 +880,15 @@ namespace ML.Engine.BuildingSystem
                 ABJAProcessor.StartLoadJsonAssetData();
             }
         }
+
+        public string GetID(string CID)
+        {
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
+            {
+                return BPartTableDictOnClass[CID].id;
+            }
+            return null;
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -887,26 +896,49 @@ namespace ML.Engine.BuildingSystem
         /// <returns></returns>
         public string GetActorID(string CID)
         {
-            if (BPartTableDictOnClass.ContainsKey(CID))
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
             {
                 return BPartTableDictOnClass[CID].actorID;
             }
             return null;
         }
-        public string GetUpgradeRaw(string CID)
+
+        public List<InventorySystem.CompositeSystem.Formula> GetRaw(string CID)
         {
-            if (BPartTableDictOnClass.ContainsKey(CID))
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
+            {
+                return BPartTableDictOnClass[CID].raw;
+            }
+            return null;
+        }
+
+        public List<InventorySystem.CompositeSystem.Formula> GetUpgradeRaw(string CID)
+        {
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
             {
                 return BPartTableDictOnClass[CID].upgradeRaw;
             }
             return null;
         }
 
-        public string GetUpgrade(string CID)
+        public string GetUpgradeCID(string CID)
         {
-            if (BPartTableDictOnClass.ContainsKey(CID))
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
             {
-                return BPartTableDictOnClass[CID].upgrade;
+                return BPartTableDictOnClass[CID].upgradeCID;
+            }
+            return null;
+        }
+
+        public string GetUpgradeID(string CID)
+        {
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
+            {
+                string upgradeCID = BPartTableDictOnClass[CID].upgradeCID;
+                if (!string.IsNullOrEmpty(upgradeCID) && BPartTableDictOnClass.ContainsKey(upgradeCID))
+                {
+                    return BPartTableDictOnClass[upgradeCID].id;
+                }
             }
             return null;
         }
