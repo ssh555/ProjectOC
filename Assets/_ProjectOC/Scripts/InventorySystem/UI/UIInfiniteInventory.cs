@@ -9,6 +9,12 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using ML.Engine.Extension;
+using ML.Engine.Timer;
+using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.Manager;
+using ProjectOC.WorkerEchoNS;
+using ProjectOC.WorkerNS;
+using ML.Engine.UI;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -237,14 +243,14 @@ namespace ProjectOC.InventorySystem.UI
         {
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.Enable();
-            ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
+            //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
             this.Refresh();
         }
 
         private void Exit()
         {
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.Disable();
-            ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
+            //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
             this.UnregisterInput();
         }
 
@@ -254,7 +260,10 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.LastTerm.performed -= LastTerm_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.NextTerm.performed -= NextTerm_performed;
             // 切换Item
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.AlterItem.performed -= AlterItem_performed;
+           
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.AlterItem.started -= AlterItem_started;
+
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.AlterItem.canceled -= AlterItem_canceled;
             // 使用
             ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.performed -= Comfirm_performed;
             // 返回
@@ -271,7 +280,8 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.LastTerm.performed += LastTerm_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.NextTerm.performed += NextTerm_performed;
             // 切换Item
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.AlterItem.performed += AlterItem_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.AlterItem.started += AlterItem_started;
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.AlterItem.canceled += AlterItem_canceled;
             // 使用
             ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.performed += Comfirm_performed;
             // 返回
@@ -314,14 +324,34 @@ namespace ProjectOC.InventorySystem.UI
             }
         }
 
-        private void AlterItem_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            var f_offset = obj.ReadValue<Vector2>();
-            var offset = new Vector2Int(Mathf.RoundToInt(f_offset.x), Mathf.RoundToInt(f_offset.y));
-            var grid = Inventory_GridLayout.GetGridSize();
-            this.CurrentItemIndex += -offset.y * grid.y + offset.x;
+        #region AlterItem_performed
+        private float TimeInterval = 0.2f;
+        private float startTime;
+        CounterDownTimer timer;
+        #endregion
 
+
+        private void AlterItem_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
+            timer = new CounterDownTimer(TimeInterval, true, true, 1, true);
+            timer.OnEndEvent += () =>
+            {
+                var f_offset = obj.ReadValue<Vector2>();
+                var offset = new Vector2Int(Mathf.RoundToInt(f_offset.x), Mathf.RoundToInt(f_offset.y));
+
+                var grid = Inventory_GridLayout.GetGridSize();
+                this.CurrentItemIndex += -offset.y * grid.y + offset.x;
+
+            };
+            GameManager.Instance.CounterDownTimerManager.AddTimer(timer,true);
         }
+
+        private void AlterItem_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
+        }
+        
 
         private void LastTerm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {

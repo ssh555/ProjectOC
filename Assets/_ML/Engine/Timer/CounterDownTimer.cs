@@ -130,9 +130,12 @@ namespace ML.Engine.Timer
                 else
                 {
                     this.IsStoped = true;
+                    currentTime = 0;
                 }
-                currentTime = 0;
+
                 this.OnUpdateEvent?.Invoke(currentTime);
+
+                
                 this.OnEndEvent?.Invoke();
                 return currentTime;
             }

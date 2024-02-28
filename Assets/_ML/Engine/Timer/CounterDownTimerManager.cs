@@ -29,8 +29,10 @@ namespace ML.Engine.Timer
             deltaTime *= TimeScale;
             foreach (var timer in this.updateCounterDownTimers)
             {
+                
                 timer.UpdateCurrentTime(deltaTime);
             }
+            
         }
 
         public void FixedUpdate(float deltaTime)

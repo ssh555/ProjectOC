@@ -164,8 +164,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 TimerUI.GetComponentInChildren<TextMeshProUGUI>().text = Grids[CurrentGridIndex].worker.timer.ConvertToMinAndSec();
             }
 
-
-
+            if(ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.LastTerm.IsPressed())
+            
+            {
+                Debug.Log("123");
+            }
         }
 
         #endregion
