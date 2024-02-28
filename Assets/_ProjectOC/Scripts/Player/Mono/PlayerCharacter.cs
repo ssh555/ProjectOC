@@ -90,7 +90,6 @@ namespace ProjectOC.Player
             this.InternalInit();
         }
 
-        private bool _lastInputEnable = true;
         private void InternalInit()
         {
             this.playerModelStateController = new PlayerModelStateController(0, this.playerModel.GetComponentInChildren<Animator>(), this.GetComponent<Animator>(), this);
@@ -140,22 +139,13 @@ namespace ProjectOC.Player
             // 进入建造系统要可移动
             ML.Engine.BuildingSystem.BuildingManager.Instance.Placer.OnBuildingModeEnter += () =>
             {
-                _lastInputEnable = Input.InputManager.PlayerInput.Player.enabled;
-                Input.InputManager.PlayerInput.Player.Enable();
-                ProjectOC.Input.InputManager.PlayerInput.Player.Crouch.Disable();
-                ProjectOC.Input.InputManager.PlayerInput.Player.Jump.Disable();
-
                 // to-do : 待优化
                 this.GetComponentInChildren<InteractComponent>().Disable();
             };
             ML.Engine.BuildingSystem.BuildingManager.Instance.Placer.OnBuildingModeExit += () =>
             {
-                ProjectOC.Input.InputManager.PlayerInput.Player.Crouch.Enable();
-                ProjectOC.Input.InputManager.PlayerInput.Player.Jump.Enable();
-                if (!_lastInputEnable)
-                {
-                    Input.InputManager.PlayerInput.Player.Disable();
-                }
+                ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
+
                 // to-do : 待优化
                 this.GetComponentInChildren<InteractComponent>().Enable();
             };

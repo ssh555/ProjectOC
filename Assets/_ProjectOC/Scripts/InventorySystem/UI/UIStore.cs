@@ -594,7 +594,7 @@ namespace ProjectOC.InventorySystem.UI
         private Transform BotKeyTips_ChangeItem;
         #endregion
 
-        public void Refresh()
+        public override void Refresh()
         {
             // 加载完成JSON数据 & 查找完所有引用
             if(ABJAProcessor == null || !ABJAProcessor.IsLoaded || !IsInit)

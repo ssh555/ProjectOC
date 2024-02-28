@@ -63,10 +63,13 @@ namespace ML.Engine.UI
         /// </summary>
         public virtual void OnExit()
         {
-            Debug.Log("destroy "+this.gameObject.name);
             Destroy(this.gameObject);
         }
 
+        public virtual void Refresh()
+        {
+
+        }
     }
 
 }

@@ -674,7 +674,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public Sprite sprite1,sprite2,sprite3;
         #endregion
 
-        public void Refresh()
+        public override void Refresh()
         {
             if (ABJAProcessorJson_Main == null || !ABJAProcessorJson_Main.IsLoaded || !IsInit)
             {

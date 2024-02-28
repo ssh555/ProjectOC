@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2922693233
+CRC: 1468000443
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 05628cbe2074ee606ca7325fb95b223d
+    Hash: 1bf881a642157cdbb9d557af63141f00
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5ad585dd02dfb5016c0dad519eab8f49
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 05628cbe2074ee606ca7325fb95b223d
+    Hash: 1bf881a642157cdbb9d557af63141f00
 HashAppended: 0
 ClassTypes:
 - Class: 49
@@ -20,7 +20,6 @@ Assets:
 - Assets/_ProjectOC/OCResources/Json/TableData/Skill.json
 - Assets/_ProjectOC/OCResources/Json/TableData/Effect.json
 - Assets/_ProjectOC/OCResources/Json/TableData/Building.json
-- Assets/_ProjectOC/OCResources/Json/TableData/BuildingUpgrade.json
 - Assets/_ML/MLResources/Json/TableData/LevelTableData.json
 - Assets/_ProjectOC/OCResources/Json/TableData/Item.json
 - Assets/_ProjectOC/OCResources/Json/TableData/Composition.json

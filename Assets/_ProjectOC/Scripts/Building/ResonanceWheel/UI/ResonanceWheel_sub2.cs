@@ -246,7 +246,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #endregion
 
-        public void Refresh()
+        public override void Refresh()
         {
             if (ResonanceWheelUI.ABJAProcessorJson_sub2 == null || !ResonanceWheelUI.ABJAProcessorJson_sub2.IsLoaded || !IsInit)
             {

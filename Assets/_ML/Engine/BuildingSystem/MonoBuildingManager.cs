@@ -17,6 +17,7 @@ namespace ML.Engine.BuildingSystem
 
     public class MonoBuildingManager : MonoBehaviour
     {
+        #region Property|Field
         public static MonoBuildingManager Instance;
         public BuildingManager BM;
         private int IsInit = 5;
@@ -25,6 +26,7 @@ namespace ML.Engine.BuildingSystem
         /// </summary>
         public bool IsLoadOvered => IsInit == 0;
 
+        #endregion
 
         #region TextContent
         #region KeyTip
@@ -105,14 +107,14 @@ namespace ML.Engine.BuildingSystem
             return null;
         }
 
-        private void PushPanel<T>() where T : UIBasePanel
+        public void PushPanel<T>() where T : UIBasePanel
         {
             var panel = this.GetPanel<T>();
             Manager.GameManager.Instance.UIManager.PushPanel(panel);
             panel.transform.SetParent(this.Canvas, false);
         }
 
-        private void PopPanel()
+        public void PopPanel()
         {
             Manager.GameManager.Instance.UIManager.PopPanel();
         }
@@ -235,8 +237,6 @@ namespace ML.Engine.BuildingSystem
 #endif
         }
 
-
-
         private IEnumerator AddTestEvent()
         {
             while (BM.Placer == null)
@@ -246,94 +246,13 @@ namespace ML.Engine.BuildingSystem
             
             BM.Placer.OnBuildingModeEnter += () =>
             {
-
-
                 // to-delete
                 if(area != null)
                 {
                     area.gameObject.SetActive(IsEnableArea);
                 }
-
-                this.PushPanel<UI.BSInteractModePanel>();
-            };
-            BM.Placer.OnBuildingModeExit += () =>
-            {
-
-                this.PopPanel();
             };
 
-            BM.Placer.OnKeyComComplete += () =>
-            {
-                if(BM.Mode == BuildingMode.Interact)
-                {
-                    this.PushPanel<UI.BSInteractMode_KeyComPanel>();
-                }
-                else if(BM.Mode == BuildingMode.Place)
-                {
-                    this.PushPanel<UI.BSPlaceMode_KeyComPanel>();
-                }
-                else if(BM.Mode == BuildingMode.Edit)
-                {
-                    this.PushPanel<UI.BSEditMode_KeyComPanel>();
-                }
-            };
-
-            BM.Placer.OnKeyComExit += () =>
-            {
-                this.PopPanel();
-            };
-
-            BM.Placer.OnEnterAppearance += (bpart, texs, mats, index) =>
-            {
-                this.PushPanel<UI.BSAppearancePanel>();
-                StartCoroutine((this.GetPeekPanel() as UI.BSAppearancePanel).Init(texs, mats, index));
-                // to-do
-                ProjectOC.Input.InputManager.PlayerInput.Disable();
-            };
-            BM.Placer.OnExitAppearance += (bpart) =>
-            {
-                this.PopPanel();
-                // to-do
-                ProjectOC.Input.InputManager.PlayerInput.Enable();
-                ProjectOC.Input.InputManager.PlayerInput.Player.Crouch.Disable();
-                ProjectOC.Input.InputManager.PlayerInput.Player.Jump.Disable();
-            };
-
-            BM.Placer.OnEditModeEnter += (bpart) =>
-            {
-                this.PushPanel<UI.BSEditModePanel>();
-            };
-            BM.Placer.OnEditModeExit += (bpart) =>
-            {
-                this.PopPanel();
-            };
-
-            BM.Placer.OnBuildSelectionEnter += (BuildingCategory1[] c, int ic, BuildingCategory2[] t, int it) =>
-            {
-                this.PushPanel<UI.BSSelectBPartPanel>();
-                StartCoroutine((this.GetPeekPanel() as UI.BSSelectBPartPanel).Init(c, t, ic, it));
-            };
-
-            BM.Placer.OnBuildSelectionComfirm += (bpart) =>
-            {
-                this.PopPanel();
-            };
-            BM.Placer.OnBuildSelectionCancel += () =>
-            {
-                this.PopPanel();
-            };
-
-            BM.Placer.OnPlaceModeEnter += (bpart) =>
-            {
-                this.PushPanel<UI.BSPlaceModePanel>();
-                var styles = BM.GetAllStyleByBPartHeight(bpart);
-                var heights = BM.GetAllHeightByBPartStyle(bpart);
-                StartCoroutine((this.GetPeekPanel() as UI.BSPlaceModePanel).Init(styles, heights, Array.IndexOf(styles, bpart.Classification.Category3), Array.IndexOf(heights, bpart.Classification.Category4))) ;
-            };
-            BM.Placer.OnPlaceModeExit += () =>
-            {
-                this.PopPanel();
-            };
         }
 
 
