@@ -2,44 +2,36 @@ using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InventorySystem;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.TextContent;
+using Sirenix.OdinInspector;
 using ProjectOC.ProNodeNS;
 using ProjectOC.StoreNS;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Windows;
 
 namespace ML.Engine.BuildingSystem.UI
 {
-    public class BSPlaceModePanel : Engine.UI.UIBasePanel
+    /// <summary>
+    /// 放置的三级
+    /// </summary>
+    public class BSPlaceModePanel : Engine.UI.UIBasePanel, Timer.ITickComponent
     {
-        public const string TStyleABPath = "UI/BuildingSystem/Texture2D/Style";
-
-        public static Dictionary<BuildingCategory3, Texture2D> TStyleDict = null;
-        public static bool IsInit = false;
-
-        public static Sprite GetStyleSprite(BuildingCategory3 style)
-        {
-            if (!TStyleDict.ContainsKey(style))
-            {
-                style = BuildingCategory3.None;
-            }
-            Texture2D texture = TStyleDict[style];
-            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-            return sprite;
-        }
-
+        #region Property|Field
 
         private BuildingManager BM => BuildingManager.Instance;
+        private BuildingPlacer.BuildingPlacer Placer => BM.Placer;
         private ProjectOC.Player.PlayerCharacter Player => GameObject.Find("PlayerCharacter")?.GetComponent<ProjectOC.Player.PlayerCharacter>();
 
+
+        #region UIGO引用
         private Dictionary<BuildingCategory3, RectTransform> styleInstance = new Dictionary<BuildingCategory3, RectTransform>();
         private RectTransform styleParent;
         private RectTransform templateStyle;
-
-        private Image keyComFillImage;
 
         #region KeyTip
         private UIKeyTip place;
@@ -55,19 +47,20 @@ namespace ML.Engine.BuildingSystem.UI
         private UIKeyTip heightnext;
 
         #endregion
+
+        #endregion
+
+        #endregion
+
+        #region Unity
+
         private void Awake()
         {
-            if (TStyleDict == null)
-            {
-                StartCoroutine(InitStyleTexture2D());
-            }
+            this.StartCoroutine(InitStyleTexture2D());
 
             this.styleParent = this.transform.Find("KT_AlterHeight").Find("KT_AlterStyle").Find("Content") as RectTransform;
             this.templateStyle = this.styleParent.Find("StyleTemplate") as RectTransform;
             this.templateStyle.gameObject.SetActive(false);
-
-
-            this.keyComFillImage = this.transform.Find("KT_KeyCom").Find("Image").Find("T_KeyComTipFill").GetComponent<Image>();
 
             Transform keytips = this.transform.Find("KeyTip");
 
@@ -149,14 +142,18 @@ namespace ML.Engine.BuildingSystem.UI
             stylenext.ReWrite(MonoBuildingManager.Instance.KeyTipDict["stylenext"]);
         }
 
-        private static bool IsLoading = false;
+        #endregion
+
+        #region 载入资产
+        public const string TStyleABPath = "UI/BuildingSystem/Texture2D/Style";
+
+        public Dictionary<BuildingCategory3, Texture2D> TStyleDict = null;
+        /// <summary>
+        /// 资产是否完成载入
+        /// </summary>
+        public bool IsInit = false;
         private IEnumerator InitStyleTexture2D()
         {
-            if(IsLoading)
-            {
-                yield break;
-            }
-            IsLoading = true;
 #if UNITY_EDITOR
             float startT = Time.time;
 #endif
@@ -171,6 +168,10 @@ namespace ML.Engine.BuildingSystem.UI
             AssetBundle ab;
             var crequest = abmgr.LoadLocalABAsync(TStyleABPath, null, out ab);
             yield return crequest;
+            if(crequest != null)
+            {
+                ab = crequest.assetBundle;
+            }
 
             var request = ab.LoadAllAssetsAsync<Texture2D>();
             yield return request;
@@ -185,18 +186,51 @@ namespace ML.Engine.BuildingSystem.UI
             }
 
             IsInit = true;
+            this.enabled = false;
+
+            this.Refresh();
 #if UNITY_EDITOR
             Debug.Log("InitStyleTexture2D cost time: " + (Time.time - startT));
 #endif
         }
 
-        public IEnumerator Init(BuildingCategory3[] styles, short[] heights, int sIndex, int hIndex)
+        private IEnumerator UnloadAsset()
         {
-            while (!IsInit)
+            var abmgr = Manager.GameManager.Instance.ABResourceManager;
+            AssetBundle ab;
+            var crequest = abmgr.LoadLocalABAsync(TStyleABPath, null, out ab);
+            yield return crequest;
+            if (crequest != null)
             {
-                yield return null;
+                ab = crequest.assetBundle;
             }
+            ab.UnloadAsync(true);
+        }
 
+        public Sprite GetStyleSprite(BuildingCategory3 style)
+        {
+            if (!TStyleDict.ContainsKey(style))
+            {
+                style = BuildingCategory3.None;
+            }
+            Texture2D texture = TStyleDict[style];
+            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+            return sprite;
+        }
+
+        #endregion
+
+        #region Refresh
+        public override void Refresh()
+        {
+            if (!IsInit)
+            {
+                return;
+            }
+            var styles = BM.GetAllStyleByBPartHeight(this.Placer.SelectedPartInstance);
+            var heights = BM.GetAllHeightByBPartStyle(this.Placer.SelectedPartInstance);
+            int sIndex = Array.IndexOf(styles, this.Placer.SelectedPartInstance.Classification.Category3);
+            int hIndex = Array.IndexOf(heights, this.Placer.SelectedPartInstance.Classification.Category4);
             this.ClearInstance();
 
             var s = styles[sIndex];
@@ -213,18 +247,12 @@ namespace ML.Engine.BuildingSystem.UI
                 go.SetActive(true);
                 this.styleInstance.Add(style, go.transform as RectTransform);
             }
-
-            StartCoroutine(this.ShowStyleAndHeight(s, h));
-        }
-
-
-        private IEnumerator ShowStyleAndHeight(BuildingCategory3 style, short height)
-        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(this.styleParent.parent.GetComponent<RectTransform>());
             // 更换 Style
             foreach (var instance in this.styleInstance)
             {
                 var img = instance.Value.GetComponentInChildren<Image>();
-                if (instance.Key != style)
+                if (instance.Key != s)
                 {
                     Disactive(img);
                 }
@@ -235,8 +263,6 @@ namespace ML.Engine.BuildingSystem.UI
             }
 
             // 更换 Height
-
-            yield break;
         }
 
         /// <summary>
@@ -267,93 +293,177 @@ namespace ML.Engine.BuildingSystem.UI
             this.styleInstance.Clear();
         }
 
+        #endregion
+
+        #region Override
         public override void OnEnter()
         {
             base.OnEnter();
-            BM.Placer.OnKeyComInProgress += Placer_OnKeyComInProgress;
-            BM.Placer.OnKeyComCancel += Placer_OnKeyComCancel;
+            this.RegisterInput();
+            this.Placer.InteractBPartList.Clear();
 
             if (BM.Placer.SelectedPartInstance != null)
             {
                 BM.Placer.SelectedPartInstance.CheckCanInPlaceMode += CheckCostResources;
             }
             BM.Placer.OnPlaceModeSuccess += OnPlaceModeSuccess;
-            BM.Placer.OnPlaceModeChangeStyle += Placer_OnPlaceModeChangeStyle;
-            BM.Placer.OnPlaceModeChangeHeight += Placer_OnPlaceModeChangeHeight;
+            BM.Placer.OnPlaceModeChangeBPart += Placer_OnPlaceModeChangeBPart;
         }
+
+
 
         public override void OnPause()
         {
             base.OnPause();
-            BM.Placer.OnKeyComInProgress -= Placer_OnKeyComInProgress;
-            BM.Placer.OnKeyComCancel -= Placer_OnKeyComCancel;
+            this.UnregisterInput();
 
             if (BM.Placer.SelectedPartInstance != null)
             {
                 BM.Placer.SelectedPartInstance.CheckCanInPlaceMode -= CheckCostResources;
             }
             BM.Placer.OnPlaceModeSuccess -= OnPlaceModeSuccess;
-            BM.Placer.OnPlaceModeChangeStyle -= Placer_OnPlaceModeChangeStyle;
-            BM.Placer.OnPlaceModeChangeHeight -= Placer_OnPlaceModeChangeHeight;
+            BM.Placer.OnPlaceModeChangeBPart -= Placer_OnPlaceModeChangeBPart;
         }
 
         public override void OnRecovery()
         {
             base.OnRecovery();
-            BM.Placer.OnKeyComInProgress += Placer_OnKeyComInProgress;
-            BM.Placer.OnKeyComCancel += Placer_OnKeyComCancel;
-            this.keyComFillImage.fillAmount = 0;
-
+            this.RegisterInput();
             if (BM.Placer.SelectedPartInstance != null)
             {
                 BM.Placer.SelectedPartInstance.CheckCanInPlaceMode += CheckCostResources;
             }
             BM.Placer.OnPlaceModeSuccess += OnPlaceModeSuccess;
-            BM.Placer.OnPlaceModeChangeStyle += Placer_OnPlaceModeChangeStyle;
-            BM.Placer.OnPlaceModeChangeHeight += Placer_OnPlaceModeChangeHeight;
+            BM.Placer.OnPlaceModeChangeBPart += Placer_OnPlaceModeChangeBPart;
         }
 
         public override void OnExit()
         {
+            base.OnExit();
             this.ClearInstance();
-            BM.Placer.OnKeyComInProgress -= Placer_OnKeyComInProgress;
-            BM.Placer.OnKeyComCancel -= Placer_OnKeyComCancel;
+            this.UnregisterInput();
+            this.UnloadAsset();
 
             if (BM.Placer.SelectedPartInstance != null)
             {
                 BM.Placer.SelectedPartInstance.CheckCanInPlaceMode -= CheckCostResources;
             }
             BM.Placer.OnPlaceModeSuccess -= OnPlaceModeSuccess;
-            BM.Placer.OnPlaceModeChangeStyle -= Placer_OnPlaceModeChangeStyle;
-            BM.Placer.OnPlaceModeChangeHeight -= Placer_OnPlaceModeChangeHeight;
-
-            Destroy(this.gameObject);
+            BM.Placer.OnPlaceModeChangeBPart -= Placer_OnPlaceModeChangeBPart;
         }
 
-        private void Placer_OnKeyComCancel(float cur, float total)
+        #endregion
+
+        #region TickComponent
+        public int tickPriority { get; set; }
+        public int fixedTickPriority { get; set; }
+        public int lateTickPriority { get; set; }
+
+
+        public virtual void FixedTick(float deltatime)
         {
-            this.keyComFillImage.fillAmount = 0;
+            // 实时更新落点的位置和旋转以及是否可放置
+            this.Placer.TransformSelectedPartInstance();
         }
 
-        private void Placer_OnKeyComInProgress(float cur, float total)
+        #endregion
+
+        #region KeyFunction
+        private void UnregisterInput()
         {
-            this.keyComFillImage.fillAmount = cur / total;
+            this.Placer.DisablePlayerInput();
+
+            this.Placer.BInput.BuildPlaceMode.Disable();
+
+            Manager.GameManager.Instance.TickManager.UnregisterFixedTick(this);
+            this.Placer.BInput.BuildPlaceMode.KeyCom.performed -= Placer_EnterKeyCom;
+            this.Placer.backInputAction.performed -= Placer_CancelPlace;
+            this.Placer.BInput.BuildPlaceMode.Rotate.performed -= Placer_RotateBPart;
+            this.Placer.BInput.BuildPlaceMode.ChangeActiveSocket.performed -= Placer_ChangeActiveSocket;
+            this.Placer.BInput.BuildPlaceMode.ChangeStyle.performed -= Placer_ChangeBPartStyle;
+            this.Placer.BInput.BuildPlaceMode.ChangeHeight.performed -= Placer_ChangeBPartHeight;
+            this.Placer.BInput.BuildPlaceMode.ChangeOutLook.performed -= Placer_EnterAppearance;
+            this.Placer.comfirmInputAction.performed -= Placer_ComfirmPlaceBPart;
         }
 
-        private void Placer_OnPlaceModeChangeHeight(IBuildingPart bpart, bool arg2)
+        private void RegisterInput()
         {
-            var styles = BM.GetAllStyleByBPartHeight(bpart);
-            var heights = BM.GetAllHeightByBPartStyle(bpart);
-            StartCoroutine(this.Init(styles, heights, Array.IndexOf(styles, bpart.Classification.Category3), Array.IndexOf(heights, bpart.Classification.Category4)));
+            this.Placer.EnablePlayerInput();
+
+            this.Placer.BInput.BuildPlaceMode.Enable();
+            this.Placer.BInput.BuildPlaceMode.ChangeOutLook.Enable();
+            this.Placer.BInput.BuildPlaceMode.ChangeStyle.Enable();
+            this.Placer.BInput.BuildPlaceMode.ChangeHeight.Enable();
+            this.Placer.BInput.BuildPlaceMode.KeyCom.Enable();
+
+            Manager.GameManager.Instance.TickManager.RegisterFixedTick(0, this);
+            this.Placer.BInput.BuildPlaceMode.KeyCom.performed += Placer_EnterKeyCom;
+            this.Placer.backInputAction.performed += Placer_CancelPlace;
+            this.Placer.BInput.BuildPlaceMode.Rotate.performed += Placer_RotateBPart;
+            this.Placer.BInput.BuildPlaceMode.ChangeActiveSocket.performed += Placer_ChangeActiveSocket;
+            this.Placer.BInput.BuildPlaceMode.ChangeStyle.performed += Placer_ChangeBPartStyle;
+            this.Placer.BInput.BuildPlaceMode.ChangeHeight.performed += Placer_ChangeBPartHeight;
+            this.Placer.BInput.BuildPlaceMode.ChangeOutLook.performed += Placer_EnterAppearance;
+            this.Placer.comfirmInputAction.performed += Placer_ComfirmPlaceBPart;
         }
 
-        private void Placer_OnPlaceModeChangeStyle(IBuildingPart bpart, bool arg2)
+        private void Placer_ComfirmPlaceBPart(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            var styles = BM.GetAllStyleByBPartHeight(bpart);
-            var heights = BM.GetAllHeightByBPartStyle(bpart);
-            StartCoroutine(this.Init(styles, heights, Array.IndexOf(styles, bpart.Classification.Category3), Array.IndexOf(heights, bpart.Classification.Category4)));
+            this.Placer.ComfirmPlaceBPart();
         }
 
+        private void Placer_EnterAppearance(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            MonoBuildingManager.Instance.PushPanel<BSAppearancePanel>();
+        }
+
+        private void Placer_ChangeBPartStyle(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            this.Placer.AlternateBPartOnHeight(obj.ReadValue<float>() > 0);
+           this.Refresh();
+        }
+
+        private void Placer_ChangeBPartHeight(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            this.Placer.AlternateBPartOnStyle(obj.ReadValue<float>() > 0);
+            this.Refresh();
+        }
+
+        private void Placer_ChangeActiveSocket(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            this.Placer.SelectedPartInstance.AlternativeActiveSocket();
+        }
+
+        private void Placer_RotateBPart(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            int offset = obj.ReadValue<float>() > 0 ? 1 : -1;
+
+            if(this.Placer.IsEnableGridSupport)
+            {
+                this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, this.Placer.SelectedPartInstance.transform.up);
+            }
+            else
+            {
+                this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.DisableGridRotRate * Time.deltaTime * offset, this.Placer.SelectedPartInstance.transform.up);
+            }
+        }
+
+        private void Placer_CancelPlace(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            this.Placer.ResetBPart();
+
+            this.Placer.Mode = BuildingMode.Interact;
+
+            MonoBuildingManager.Instance.PopPanel();
+        }
+
+        private void Placer_EnterKeyCom(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            MonoBuildingManager.Instance.PushPanel<BSPlaceMode_KeyComPanel>();
+        }
+        #endregion
+
+        #region Event
         private bool CheckCostResources(IBuildingPart bpart)
         {
             if (CompositeManager.Instance.CanComposite(Player.Inventory, BuildingManager.Instance.GetID(bpart.Classification.ToString().Replace('-', '_'))))
@@ -373,6 +483,11 @@ namespace ML.Engine.BuildingSystem.UI
             BM.Placer.SelectedPartInstance.CheckCanInPlaceMode -= CheckCostResources;
         }
 
+        private void Placer_OnPlaceModeChangeBPart(IBuildingPart obj)
+        {
+            obj.CheckCanInPlaceMode += CheckCostResources;
+        }
+        #endregion
     }
 }
 

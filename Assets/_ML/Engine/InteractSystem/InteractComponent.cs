@@ -95,6 +95,7 @@ namespace ML.Engine.InteractSystem
         public void Disable()
         {
             Manager.GameManager.Instance.TickManager.UnregisterTick(this);
+            uiKeyTip.img.transform.parent.gameObject.SetActive(false);
         }
         public void Enable()
         {

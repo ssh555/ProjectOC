@@ -69,7 +69,7 @@ namespace ML.Engine.InventorySystem
             this.amount = initAmount;
 
             // 默认添加数量为0时从Inventory移除并销毁
-            this.OnAmountToZero += (IInventory inventory,Item item) =>
+            this.OnAmountToZero += (IInventory inventory, Item item) =>
             {
                 if(inventory != null)
                     inventory.RemoveItem(this);
