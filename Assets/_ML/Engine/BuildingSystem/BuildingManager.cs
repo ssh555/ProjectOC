@@ -34,13 +34,6 @@ namespace ML.Engine.BuildingSystem
             return new BuildingPartClassification(GetClassificationString());
         }
     }
-    [System.Serializable]
-    public struct BuildingUpgradeTableData
-    {
-        public string id;
-        public TextContent.TextContent name;
-        public List<InventorySystem.CompositeSystem.Formula> upgradeRaw;
-    }
     [LabelText("建造模式")]
     public enum BuildingMode
     {
