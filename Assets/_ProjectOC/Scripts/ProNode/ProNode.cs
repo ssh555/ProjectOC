@@ -716,6 +716,41 @@ namespace ProjectOC.ProNodeNS
             }
         }
 
+        public List<Formula> GetUpgradeRaw()
+        {
+            List<Formula> result = new List<Formula>();
+            if (this.WorldProNode != null)
+            {
+                List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(this.WorldProNode.Classification.ToString().Replace('-', '_'));
+                if (formulas != null)
+                {
+                    result.AddRange(formulas);
+                }
+            }
+            return result;
+        }
+
+        public List<Formula> GetUpgradeRawCurrent(Player.PlayerCharacter player)
+        {
+            List<Formula> result = new List<Formula>();
+            if (this.WorldProNode != null)
+            {
+                List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(this.WorldProNode.Classification.ToString().Replace('-', '_'));
+                if (formulas != null)
+                {
+                    foreach (Formula formula in formulas)
+                    {
+                        int num = player.Inventory.GetItemAllNum(formula.id);
+                        Formula newFormula = new Formula();
+                        newFormula.id = formula.id;
+                        newFormula.num = num;
+                        result.Add(newFormula);
+                    }
+                }
+            }
+            return result;
+        }
+
         public void Upgrade(Player.PlayerCharacter player)
         {
             if (this.WorldProNode != null)

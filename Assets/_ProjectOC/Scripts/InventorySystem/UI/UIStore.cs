@@ -1040,11 +1040,11 @@ namespace ProjectOC.InventorySystem.UI
                 #endregion
 
                 #region Level
-                LvOld.text = "Lv: " + (this.Store.Level + 1).ToString();
+                LvOld.text = "Lv: " + this.Store.Level.ToString();
                 DescOld.text = PanelTextContent.text_LvDesc1 + this.Store.StoreCapacity + "    " + PanelTextContent.text_LvDesc2 + this.Store.StoreDataCapacity;
                 if (this.Store.Level + 1 <= this.Store.LevelMax)
                 {
-                    LvNew.text = "Lv: " + (Store.Level + 2).ToString();
+                    LvNew.text = "Lv: " + (Store.Level + 1).ToString();
                     DescNew.text = PanelTextContent.text_LvDesc1 + Store.LevelStoreCapacity[Store.Level + 1] + "    " + PanelTextContent.text_LvDesc2 + Store.LevelStoreDataCapacity[Store.Level + 1];
                 }
                 #endregion

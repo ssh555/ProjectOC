@@ -930,7 +930,7 @@ namespace ML.Engine.BuildingSystem
         {
             if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
             {
-                //return BPartTableDictOnClass[CID].upgradeRaw;
+                return BPartTableDictOnClass[CID].upgradeRaw;
             }
             return null;
         }

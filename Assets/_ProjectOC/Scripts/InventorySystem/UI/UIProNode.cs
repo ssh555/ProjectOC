@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using ML.Engine.Extension;
 
+
 namespace ProjectOC.InventorySystem.UI
 {
     public class UIProNode : ML.Engine.UI.UIBasePanel
@@ -66,9 +67,15 @@ namespace ProjectOC.InventorySystem.UI
             ChangeWorker.gameObject.SetActive(false);
             // LevelUp
             ChangeLevel = transform.Find("Upgrade");
-            Level_GridLayout = ChangeLevel.Find("Build").Find("Raw").Find("Viewport").Find("Content").GetComponent<GridLayoutGroup>();
-            Level_UIItemTemplate = Level_GridLayout.transform.Find("UIItemTemplate");
+            Transform contentUpgrade = ChangeLevel.Find("Raw").Find("Viewport").Find("Content");
+            Level_GridLayout = contentUpgrade.GetComponent<GridLayoutGroup>();
+            Level_UIItemTemplate = contentUpgrade.Find("UIItemTemplate");
             Level_UIItemTemplate.gameObject.SetActive(false);
+            Transform level = transform.Find("Upgrade").Find("Level");
+            LvOld = level.Find("LvOld").GetComponent<TMPro.TextMeshProUGUI>();
+            LvNew = level.Find("LvNew").GetComponent<TMPro.TextMeshProUGUI>();
+            DescOld = level.Find("DescOld").GetComponent<TMPro.TextMeshProUGUI>();
+            DescNew = level.Find("DescNew").GetComponent<TMPro.TextMeshProUGUI>();
             ChangeLevel.gameObject.SetActive(false);
 
             // BotKeyTips
@@ -570,7 +577,7 @@ namespace ProjectOC.InventorySystem.UI
             }
             else if (CurMode == Mode.ChangeLevel)
             {
-                CurMode = Mode.ProNode;
+                this.ProNode.Upgrade(Player);
             }
             Refresh();
         }
@@ -674,6 +681,10 @@ namespace ProjectOC.InventorySystem.UI
         private TMPro.TextMeshProUGUI Text_Eff;
         private TMPro.TextMeshProUGUI Text_EffProNode;
         private TMPro.TextMeshProUGUI Text_EffWorker;
+        private TMPro.TextMeshProUGUI LvOld;
+        private TMPro.TextMeshProUGUI LvNew;
+        private TMPro.TextMeshProUGUI DescOld;
+        private TMPro.TextMeshProUGUI DescNew;
 
         private UIKeyTip KT_Upgrade;
         private UIKeyTip KT_NextPriority;
@@ -1458,7 +1469,92 @@ namespace ProjectOC.InventorySystem.UI
                 this.ChangeLevel.gameObject.SetActive(true);
                 this.BotKeyTips_ProNode.gameObject.SetActive(false);
                 this.BotKeyTips_Level.gameObject.SetActive(true);
-                this.Level_UIItemTemplate.gameObject.SetActive(true);
+                this.Level_UIItemTemplate.gameObject.SetActive(false);
+
+                List<Formula> raw = this.ProNode.GetUpgradeRaw();
+                List<Formula> rawCur = this.ProNode.GetUpgradeRawCurrent(Player);
+                #region Item
+                int delta = tempUIItemsLevel.Count - raw.Count;
+                if (delta > 0)
+                {
+                    for (int i = 0; i < delta; ++i)
+                    {
+                        tempUIItemsLevel[tempUIItemsLevel.Count - 1 - i].SetActive(false);
+                    }
+                }
+                else if (delta < 0)
+                {
+                    delta = -delta;
+                    for (int i = 0; i < delta; ++i)
+                    {
+                        var uiitem = Instantiate(Level_UIItemTemplate, Level_GridLayout.transform, false);
+                        tempUIItemsLevel.Add(uiitem.gameObject);
+                    }
+                }
+                for (int i = 0; i < raw.Count; ++i)
+                {
+                    var uiItemData = tempUIItemsLevel[i];
+                    string itemID = raw[i].id;
+                    int need = raw[i].num;
+                    int current = rawCur[i].num;
+                    // Active
+                    uiItemData.SetActive(true);
+                    // 更新Icon
+                    var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
+                    if (ItemManager.Instance.IsValidItemID(itemID))
+                    {
+                        var texture = ItemManager.Instance.GetItemTexture2D(itemID);
+                        if (texture != null)
+                        {
+                            // 查找临时存储的Sprite
+                            var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(itemID));
+                            // 不存在则生成
+                            if (sprite == null)
+                            {
+                                sprite = ItemManager.Instance.GetItemSprite(itemID);
+                                tempSprite.Add(sprite);
+                            }
+                            img.sprite = sprite;
+                        }
+                    }
+                    else
+                    {
+                        img.sprite = null;
+                    }
+                    var nametext = uiItemData.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
+                    var amounttext = uiItemData.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
+                    var needtext = uiItemData.transform.Find("NeedAmount").GetComponent<TMPro.TextMeshProUGUI>();
+                    if (itemID != "")
+                    {
+                        nametext.text = ItemManager.Instance.GetItemName(itemID);
+                        amounttext.text = current.ToString();
+                        needtext.text = need.ToString();
+                    }
+                    else
+                    {
+                        nametext.text = PanelTextContent.textEmpty;
+                        amounttext.text = "0";
+                        needtext.text = "0";
+                    }
+                }
+                LayoutRebuilder.ForceRebuildLayoutImmediate(Level_GridLayout.GetComponent<RectTransform>());
+                #endregion
+
+                #region Level
+                LvOld.text = "Lv: " + this.ProNode.Level.ToString();
+                DescOld.text = PanelTextContent.text_LvDesc + this.ProNode.EffBase;
+                if (this.ProNode.Level + 1 <= this.ProNode.LevelMax)
+                {
+                    LvNew.text = "Lv: " + (ProNode.Level + 1).ToString();
+                    DescNew.text = PanelTextContent.text_LvDesc + (ProNode.LevelUpgradeEff[ProNode.Level + 1] + this.ProNode.EffBase);
+                }
+                #endregion
+
+                #region BotKeyTips
+                KT_ConfirmLevel.ReWrite(PanelTextContent.ktConfirmLevel);
+                KT_BackLevel.ReWrite(PanelTextContent.ktBack);
+                #endregion
+
             }
         }
         #endregion
@@ -1482,6 +1578,7 @@ namespace ProjectOC.InventorySystem.UI
             public TextContent textWorkerOnDuty;
             public TextContent textPrefixTime;
             public TextContent textPrefixEff;
+            public TextContent text_LvDesc;
 
             public KeyTip ktUpgrade;
             public KeyTip ktNextPriority;
