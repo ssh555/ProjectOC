@@ -1,17 +1,24 @@
+using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.InventorySystem.CompositeSystem;
+using ML.Engine.InventorySystem;
 using ML.Engine.TextContent;
+using ProjectOC.ProNodeNS;
+using ProjectOC.StoreNS;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Windows;
 
 namespace ML.Engine.BuildingSystem.UI
 {
-    public class BSInteractModePanel : Engine.UI.UIBasePanel
+    public class BSInteractModePanel : Engine.UI.UIBasePanel, Timer.ITickComponent
     {
+        #region Property|Field
         private BuildingManager BM => BuildingManager.Instance;
-
-        private Image keyComFillImage;
+        private BuildingPlacer.BuildingPlacer Placer => BM.Placer;
+        private ProjectOC.Player.PlayerCharacter Player => GameObject.Find("PlayerCharacter")?.GetComponent<ProjectOC.Player.PlayerCharacter>();
 
         #region KeyTip
         private UIKeyTip keycom;
@@ -24,8 +31,25 @@ namespace ML.Engine.BuildingSystem.UI
 
         #endregion
 
+        #endregion
+
+        #region TickComponent
+        public int tickPriority { get; set; }
+        public int fixedTickPriority { get; set; }
+        public int lateTickPriority { get; set; }
+
+        public virtual void FixedTick(float deltatime)
+        {
+            this.Placer.CheckInteractBPart(deltatime);
+        }
+
+        #endregion
+
+        #region Unity
         private void Awake()
         {
+            this.enabled = false;
+
             Transform keytip = this.transform.Find("BPartInteractTip");
 
             keycom = new UIKeyTip();
@@ -78,48 +102,178 @@ namespace ML.Engine.BuildingSystem.UI
             back.description = back.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
             back.ReWrite(MonoBuildingManager.Instance.KeyTipDict["back"]);
 
-            this.keyComFillImage = this.transform.Find("BPartInteractTip").Find("KT_KeyCom").Find("Image").Find("T_KeyComTipFill").GetComponent<Image>();
         }
 
+        #endregion
 
-        private void Placer_OnKeyComCancel(float cur, float total)
-        {
-            this.keyComFillImage.fillAmount = 0;
-        }
-
-        private void Placer_OnKeyComInProgress(float cur, float total)
-        {
-            this.keyComFillImage.fillAmount = cur / total;
-        }
-
+        #region Override
         public override void OnEnter()
         {
             base.OnEnter();
-            BM.Placer.OnKeyComInProgress += Placer_OnKeyComInProgress;
-            BM.Placer.OnKeyComCancel += Placer_OnKeyComCancel;
+            this.RegisterInput();
+            BM.Placer.OnDestroySelectedBPart += OnDestroySelectedBPart;
         }
 
 
         public override void OnPause()
         {
             base.OnPause();
-            BM.Placer.OnKeyComInProgress -= Placer_OnKeyComInProgress;
-            BM.Placer.OnKeyComCancel -= Placer_OnKeyComCancel;
+            this.UnregisterInput();
+            BM.Placer.OnDestroySelectedBPart -= OnDestroySelectedBPart;
         }
 
         public override void OnRecovery()
         {
             base.OnRecovery();
-            BM.Placer.OnKeyComInProgress += Placer_OnKeyComInProgress;
-            BM.Placer.OnKeyComCancel += Placer_OnKeyComCancel;
-            this.keyComFillImage.fillAmount = 0;
+            this.RegisterInput();
+            BM.Placer.OnDestroySelectedBPart += OnDestroySelectedBPart;
         }
 
         public override void OnExit()
         {
-            Destroy(this.gameObject);
-            BM.Placer.OnKeyComInProgress -= Placer_OnKeyComInProgress;
-            BM.Placer.OnKeyComCancel -= Placer_OnKeyComCancel;
+            base.OnExit();
+            this.UnregisterInput();
+        }
+
+        public override void Refresh()
+        {
+            keycom.ReWrite(MonoBuildingManager.Instance.KeyTipDict["keycom"]);
+            movebuild.ReWrite(MonoBuildingManager.Instance.KeyTipDict["movebuild"]);
+            destroybuild.ReWrite(MonoBuildingManager.Instance.KeyTipDict["destroybuild"]);
+            altermat.ReWrite(MonoBuildingManager.Instance.KeyTipDict["altermat"]);
+            selectbpart.ReWrite(MonoBuildingManager.Instance.KeyTipDict["selectbpart"]);
+            back.ReWrite(MonoBuildingManager.Instance.KeyTipDict["back"]);
+        }
+        #endregion
+
+        #region KeyFunction
+        private void UnregisterInput()
+        {
+            this.Placer.BInput.Build.Disable();
+
+            Manager.GameManager.Instance.TickManager.UnregisterFixedTick(this);
+
+            this.Placer.DisablePlayerInput();
+
+            this.Placer.BInput.Build.KeyCom.performed -= Placer_EnterKeyCom;
+            this.Placer.BInput.Build.ChangeOutLook.performed -= Placer_EnterAppearance;
+            this.Placer.BInput.Build.MoveBuild.performed -= Placer_EnterEdit;
+            this.Placer.BInput.Build.DestroyBuild.performed -= Placer_DestroyBPart;
+            this.Placer.BInput.Build.ChangeInteractiveActor.performed -= Placer_ChangeInteractiveActor;
+            this.Placer.BInput.Build.SelectBuild.performed -= Placer_EnterPlace;
+            this.Placer.backInputAction.performed -= Placer_ExitBuild;
+        }
+
+        private void RegisterInput()
+        {
+            this.Placer.BInput.Build.Enable();
+
+            Manager.GameManager.Instance.TickManager.RegisterFixedTick(0, this);
+
+            this.Placer.EnablePlayerInput();
+
+            this.Placer.BInput.Build.KeyCom.performed += Placer_EnterKeyCom;
+            this.Placer.BInput.Build.ChangeOutLook.performed += Placer_EnterAppearance;
+            this.Placer.BInput.Build.MoveBuild.performed += Placer_EnterEdit;
+            this.Placer.BInput.Build.DestroyBuild.performed += Placer_DestroyBPart;
+            this.Placer.BInput.Build.ChangeInteractiveActor.performed += Placer_ChangeInteractiveActor;
+            this.Placer.BInput.Build.SelectBuild.performed += Placer_EnterPlace;
+            this.Placer.backInputAction.performed += Placer_ExitBuild;
+        }
+
+        private void Placer_EnterKeyCom(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            if (this.Placer.SelectedPartInstance != null)
+            {
+                MonoBuildingManager.Instance.PushPanel<BSInteractMode_KeyComPanel>();
+            }
+        }
+
+        private void Placer_EnterAppearance(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            if (this.Placer.SelectedPartInstance != null)
+            {
+                MonoBuildingManager.Instance.PushPanel<BSAppearancePanel>();
+            }
+        }
+
+        private void Placer_EnterEdit(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            if (this.Placer.SelectedPartInstance != null && this.Placer.SelectedPartInstance.CanEnterEditMode())
+            {
+                MonoBuildingManager.Instance.PushPanel<BSEditModePanel>();
+            }
+        }
+
+        private void Placer_ChangeInteractiveActor(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            if (this.Placer.SelectedPartInstance != null)
+            {
+                this.Placer.SwitchInteractBPart(obj.ReadValue<float>() > 0 ? 1 : -1);
+            }
+        }
+
+        private void Placer_DestroyBPart(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            if (this.Placer.SelectedPartInstance != null && this.Placer.SelectedPartInstance.CanEnterEditMode())
+            {
+                this.Placer.DestroySelectedBPart();
+            }
+        }
+
+
+        private void Placer_EnterPlace(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            MonoBuildingManager.Instance.PushPanel<BSSelectBPartPanel>();
+        }
+
+        private void Placer_ExitBuild(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            //MonoBuildingManager.Instance.PopPanel();
+            this.Placer.Mode = BuildingMode.None;
+        }
+
+        #endregion
+
+        private void OnDestroySelectedBPart(IBuildingPart bpart)
+        {
+            if (bpart is WorldStore worldStore)
+            {
+                worldStore.Store.Destroy(Player);
+            }
+            else if (bpart is WorldProNode worldProNode)
+            {
+                worldProNode.ProNode.Destroy(Player);
+            }
+
+            bool flag = false;
+            List<Item> resItems = new List<Item>();
+            foreach (Formula formula in CompositeManager.Instance.GetCompositonFomula(BuildingManager.Instance.GetID(bpart.Classification.ToString().Replace('-', '_'))))
+            {
+                if (ItemManager.Instance.IsValidItemID(formula.id) && formula.num > 0)
+                {
+                    List<Item> items = ItemManager.Instance.SpawnItems(formula.id, formula.num);
+                    foreach (var item in items)
+                    {
+                        if (flag)
+                        {
+                            resItems.Add(item);
+                        }
+                        else
+                        {
+                            if (!Player.Inventory.AddItem(item))
+                            {
+                                flag = true;
+                            }
+                        }
+                    }
+                }
+            }
+            // 没有加到玩家背包的都变成WorldItem
+            foreach (Item item in resItems)
+            {
+                ItemManager.Instance.SpawnWorldItem(item, bpart.transform.position, bpart.transform.rotation);
+            }
         }
     }
 }

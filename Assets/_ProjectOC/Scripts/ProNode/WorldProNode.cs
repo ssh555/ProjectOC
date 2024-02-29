@@ -2,6 +2,7 @@ using ML.Engine.BuildingSystem;
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InteractSystem;
 using ML.Engine.Manager;
+using ProjectOC.LandMassExpand;
 using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
 using System;
@@ -12,7 +13,7 @@ using UnityEngine;
 
 namespace ProjectOC.ProNodeNS
 {
-    public class WorldProNode : BuildingPart, IInteraction
+    public class WorldProNode : ElectAppliance, IInteraction
     {
         [ShowInInspector, ReadOnly, SerializeField]
         public ProNode ProNode;
@@ -46,6 +47,7 @@ namespace ProjectOC.ProNodeNS
             // 实例化UIPanel
             GameObject gameObject = GameManager.Instance.ABResourceManager.LoadLocalAB("ui/uipanel").LoadAsset<GameObject>("UIProNodePanel");
             InventorySystem.UI.UIProNode uiPanel = GameObject.Instantiate(gameObject, GameObject.Find("Canvas").transform, false).GetComponent<InventorySystem.UI.UIProNode>();
+            uiPanel.Player = component.GetComponentInParent<Player.PlayerCharacter>();
             // 初始化相关数据
             uiPanel.ProNode = this.ProNode;
             // Push

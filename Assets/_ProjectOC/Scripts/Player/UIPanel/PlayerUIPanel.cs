@@ -220,7 +220,7 @@ namespace ProjectOC.Player.UI
             }
         }
 
-        private void Refresh()
+        public override void Refresh()
         {
             if(ABJAProcessor != null && ABJAProcessor.IsLoaded && IsInit)
             {

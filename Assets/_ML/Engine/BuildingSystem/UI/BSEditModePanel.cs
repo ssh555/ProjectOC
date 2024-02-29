@@ -4,15 +4,19 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Windows;
 
 namespace ML.Engine.BuildingSystem.UI
 {
-    public class BSEditModePanel : Engine.UI.UIBasePanel
+    public class BSEditModePanel : Engine.UI.UIBasePanel, Timer.ITickComponent
     {
+        #region Property|Field
         private BuildingManager BM => BuildingManager.Instance;
+        private BuildingPlacer.BuildingPlacer Placer => BM.Placer;
 
-        private Image keyComFillImage;
 
+
+        #region UIGO引用
         #region KeyTip
         private UIKeyTip place;
         private UIKeyTip altersocket;
@@ -22,8 +26,29 @@ namespace ML.Engine.BuildingSystem.UI
         private UIKeyTip keycom;
 
         #endregion
+
+        #endregion
+
+        #endregion
+
+        #region TickComponent
+        public int tickPriority { get; set; }
+        public int fixedTickPriority { get; set; }
+        public int lateTickPriority { get; set; }
+
+        public virtual void FixedTick(float deltatime)
+        {
+            // 实时更新落点的位置和旋转以及是否可放置
+            this.Placer.TransformSelectedPartInstance();
+        }
+
+        #endregion
+
+        #region Unity
         private void Awake()
         {
+            this.enabled = false;
+
             Transform keytips = this.transform.Find("KeyTip");
 
             place = new UIKeyTip();
@@ -67,52 +92,147 @@ namespace ML.Engine.BuildingSystem.UI
             keycom.keytip = keycom.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             keycom.description = keycom.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
             keycom.ReWrite(MonoBuildingManager.Instance.KeyTipDict["keycom"]);
-
-            this.keyComFillImage = this.transform.Find("KT_KeyCom").Find("Image").Find("T_KeyComTipFill").GetComponent<Image>();
         }
 
+        #endregion
 
-        private void Placer_OnKeyComCancel(float cur, float total)
-        {
-            this.keyComFillImage.fillAmount = 0;
-        }
-
-        private void Placer_OnKeyComInProgress(float cur, float total)
-        {
-            this.keyComFillImage.fillAmount = cur / total;
-        }
-
+        #region Override
         public override void OnEnter()
         {
             base.OnEnter();
-            BM.Placer.OnKeyComInProgress += Placer_OnKeyComInProgress;
-            BM.Placer.OnKeyComCancel += Placer_OnKeyComCancel;
+            this.RegisterInput();
+
+            // 记录原 Transform
+            this._editOldPos = this.Placer.SelectedPartInstance.transform.position;
+            this._editOldRotation = this.Placer.SelectedPartInstance.transform.rotation;
         }
 
 
         public override void OnPause()
         {
             base.OnPause();
-            BM.Placer.OnKeyComInProgress -= Placer_OnKeyComInProgress;
-            BM.Placer.OnKeyComCancel -= Placer_OnKeyComCancel;
+            this.UnregisterInput();
         }
 
         public override void OnRecovery()
         {
             base.OnRecovery();
-            BM.Placer.OnKeyComInProgress += Placer_OnKeyComInProgress;
-            BM.Placer.OnKeyComCancel += Placer_OnKeyComCancel;
-            this.keyComFillImage.fillAmount = 0;
+            this.RegisterInput();
         }
 
 
 
         public override void OnExit()
         {
-            Destroy(this.gameObject);
-            BM.Placer.OnKeyComInProgress -= Placer_OnKeyComInProgress;
-            BM.Placer.OnKeyComCancel -= Placer_OnKeyComCancel;
+            base.OnExit();
+            this.UnregisterInput();
+            this.Placer.SelectedPartInstance = null;
         }
+        #endregion
+
+        #region Refresh
+        public override void Refresh()
+        {
+            place.ReWrite(MonoBuildingManager.Instance.KeyTipDict["place"]);
+            altersocket.ReWrite(MonoBuildingManager.Instance.KeyTipDict["altersocket"]);
+            rotateright.ReWrite(MonoBuildingManager.Instance.KeyTipDict["rotateright"]);
+            rotateleft.ReWrite(MonoBuildingManager.Instance.KeyTipDict["rotateleft"]);
+            back.ReWrite(MonoBuildingManager.Instance.KeyTipDict["back"]);
+            keycom.ReWrite(MonoBuildingManager.Instance.KeyTipDict["keycom"]);
+        }
+        #endregion
+
+        #region KeyFunction
+        private void UnregisterInput()
+        {
+            Manager.GameManager.Instance.TickManager.UnregisterFixedTick(this);
+
+            this.Placer.DisablePlayerInput();
+
+            this.Placer.BInput.BuildPlaceMode.Disable();
+            // 禁用 Input.Edit
+            this.Placer.BInput.BuildPlaceMode.Disable();
+
+            this.Placer.BInput.BuildPlaceMode.KeyCom.performed -= Placer_EnterKeyCom;
+            this.Placer.backInputAction.performed -= Placer_CancelEdit;
+            this.Placer.BInput.BuildPlaceMode.Rotate.performed -= Placer_RotateBPart;
+            this.Placer.BInput.BuildPlaceMode.ChangeActiveSocket.performed -= Placer_ChangeActiveSocket;
+            this.Placer.comfirmInputAction.performed -= Placer_ComfirmEdit;
+        }
+
+        private void RegisterInput()
+        {
+            Manager.GameManager.Instance.TickManager.RegisterFixedTick(0, this);
+
+            this.Placer.EnablePlayerInput();
+
+            this.Placer.Mode = BuildingMode.Edit;
+            // 启用 Input.Edit
+            this.Placer.BInput.BuildPlaceMode.Enable();
+            this.Placer.BInput.BuildPlaceMode.ChangeOutLook.Disable();
+            this.Placer.BInput.BuildPlaceMode.ChangeStyle.Disable();
+            this.Placer.BInput.BuildPlaceMode.ChangeHeight.Disable();
+
+            this.Placer.BInput.BuildPlaceMode.KeyCom.performed += Placer_EnterKeyCom;
+            this.Placer.backInputAction.performed += Placer_CancelEdit;
+            this.Placer.BInput.BuildPlaceMode.Rotate.performed += Placer_RotateBPart;
+            this.Placer.BInput.BuildPlaceMode.ChangeActiveSocket.performed += Placer_ChangeActiveSocket;
+            this.Placer.comfirmInputAction.performed += Placer_ComfirmEdit;
+        }
+
+        private void Placer_ComfirmEdit(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            if(this.Placer.ComfirmEditBPart(this._editOldPos))
+            {
+                MonoBuildingManager.Instance.PopPanel();
+            }
+        }
+
+        private void Placer_ChangeActiveSocket(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            this.Placer.SelectedPartInstance.AlternativeActiveSocket();
+        }
+
+        private void Placer_RotateBPart(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            int offset = obj.ReadValue<float>() > 0 ? 1 : -1;
+
+            if (this.Placer.IsEnableGridSupport)
+            {
+                this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, this.Placer.SelectedPartInstance.transform.up);
+            }
+            else
+            {
+                this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.DisableGridRotRate * Time.deltaTime * offset, this.Placer.SelectedPartInstance.transform.up);
+            }
+        }
+
+
+        private void Placer_CancelEdit(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            this.Placer.SelectedPartInstance.transform.position = this._editOldPos;
+            this.Placer.SelectedPartInstance.transform.rotation = this._editOldRotation;
+            MonoBuildingManager.Instance.PopPanel();
+        }
+
+        private void Placer_EnterKeyCom(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            MonoBuildingManager.Instance.PushPanel<BSEditMode_KeyComPanel>();
+        }
+
+        #endregion
+        
+        #region Edit
+        /// <summary>
+        /// 移动前的BPart位置
+        /// </summary>
+        protected Vector3 _editOldPos;
+        /// <summary>
+        /// 移动前的BPart旋转
+        /// </summary>
+        protected Quaternion _editOldRotation;
+
+        #endregion
     }
 }
 

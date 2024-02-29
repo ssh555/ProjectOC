@@ -705,7 +705,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public Sprite sprite_Cat, sprite_Deer, sprite_Dog, sprite_Fox, sprite_Rabbit, sprite_Seal;
         #endregion
 
-        public void Refresh()
+        public override void Refresh()
         {
             if (ABJAProcessorJson_Main == null || !ABJAProcessorJson_Main.IsLoaded || !IsInit)
             {

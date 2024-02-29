@@ -260,7 +260,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #endregion
 
-        public void Refresh()
+        public override void Refresh()
         {
             if (ABJAProcessorJson_BeastPanel == null || !ABJAProcessorJson_BeastPanel.IsLoaded || !IsInit)
             {
