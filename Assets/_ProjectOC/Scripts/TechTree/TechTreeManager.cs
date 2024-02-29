@@ -160,7 +160,6 @@ namespace ProjectOC.TechTree
 
         public Texture2D GetTPCategoryTexture2D(TechPointCategory category)
         {
-            Debug.Log(category.ToString());
             var tex = GM.ABResourceManager.LoadAsset<Texture2D>(TPIconTexture2DABPath, category.ToString());
             if(tex == null)
             {

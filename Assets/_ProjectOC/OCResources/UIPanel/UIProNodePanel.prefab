@@ -5690,7 +5690,6 @@ MonoBehaviour:
   ProNode:
     WorldProNode: {fileID: 0}
     ID: 
-    StackThresholdNum: 0
     LevelUpgradeEff: 
     Level: 0
     TransportPriority: 0
@@ -5698,6 +5697,7 @@ MonoBehaviour:
       ID: 
     Worker: {fileID: 0}
     MissionTransports: []
+    RequirePower: 0
   Player: {fileID: 0}
 --- !u!1 &5567993366674110167
 GameObject:

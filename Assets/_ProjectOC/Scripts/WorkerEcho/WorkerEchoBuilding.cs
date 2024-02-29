@@ -34,15 +34,9 @@ namespace ProjectOC.WorkerEchoNS
         {
             if (this.uIResonanceWheelInstance == null)
             {
-                //µ¯¹²ÃùÂÖUI
-
-                Debug.Log("µ¯UI");
-                //ML.Engine.Input.InputManager.Instance.Common.Disable();
                 uIResonanceWheelInstance = GameObject.Instantiate(uIResonanceWheel);
                 uIResonanceWheelInstance.GetComponentInParent<ResonanceWheelUI>().inventory = component.gameObject.GetComponentInParent<PlayerCharacter>().Inventory;
                 uIResonanceWheelInstance.transform.SetParent(GameObject.Find("Canvas").transform, false);
-
-                
             }
             else
             {
@@ -50,6 +44,7 @@ namespace ProjectOC.WorkerEchoNS
             }
             ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uIResonanceWheelInstance);
 
+            Debug.Log("Interact");
         }
 
 

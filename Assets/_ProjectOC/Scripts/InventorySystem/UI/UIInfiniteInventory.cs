@@ -243,14 +243,14 @@ namespace ProjectOC.InventorySystem.UI
         {
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.Enable();
-            //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
+            ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
             this.Refresh();
         }
 
         private void Exit()
         {
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.Disable();
-            //ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
+            ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
             this.UnregisterInput();
         }
 
@@ -325,8 +325,7 @@ namespace ProjectOC.InventorySystem.UI
         }
 
         #region AlterItem_performed
-        private float TimeInterval = 0.2f;
-        private float startTime;
+        private float TimeInterval = 0.1f;
         CounterDownTimer timer;
         #endregion
 
@@ -334,7 +333,7 @@ namespace ProjectOC.InventorySystem.UI
         private void AlterItem_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
-            timer = new CounterDownTimer(TimeInterval, true, true, 1, true);
+            timer = new CounterDownTimer(TimeInterval, true, true, 1, 2);
             timer.OnEndEvent += () =>
             {
                 var f_offset = obj.ReadValue<Vector2>();
@@ -344,7 +343,7 @@ namespace ProjectOC.InventorySystem.UI
                 this.CurrentItemIndex += -offset.y * grid.y + offset.x;
 
             };
-            GameManager.Instance.CounterDownTimerManager.AddTimer(timer,true);
+            GameManager.Instance.CounterDownTimerManager.AddTimer(timer,2);
         }
 
         private void AlterItem_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
