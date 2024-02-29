@@ -33,6 +33,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
             StartCoroutine(InitUIPrefabs());
             StartCoroutine(InitUITexture2D());
+
+
             //BeastInfo
             var Info1 = this.transform.Find("HiddenBeastInfo1").Find("Info");
             Stamina = Info1.Find("PhysicalStrength").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
@@ -44,12 +46,15 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
             var GInfo = Info1.Find("SkillGraph").Find("Viewport").Find("Content").Find("Ring");
-            Cook = GInfo.Find("Skill1").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
-            HandCraft = GInfo.Find("Skill6").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
-            Industry = GInfo.Find("Skill5").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
-            Magic = GInfo.Find("Skill4").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
-            Transport = GInfo.Find("Skill3").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
-            Collect = GInfo.Find("Skill2").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
+            beastSkills = new BeastSkill[GInfo.childCount];
+
+
+            for (int i = 0; i < GInfo.childCount; i++)
+            {
+                beastSkills[i].skillText = GInfo.GetChild(i).Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
+                beastSkills[i].workType = (WorkType)Enum.Parse(typeof(WorkType), GInfo.GetChild(i).name);
+            }
+
 
             
             var btn1 = this.transform.Find("HiddenBeastInfo2").Find("btn1");
@@ -113,11 +118,16 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region Internal
- 
 
-   
-        //private int CurrentFuctionTypeIndex = 0;//0为HBR 1为SSB
-        //private int CurrentGridIndex = 0;//0到4
+         private struct BeastSkill
+        {
+            public WorkType workType;
+            public TMPro.TextMeshProUGUI skillText;
+        
+        }
+
+
+
 
 
         private void Enter()
@@ -235,12 +245,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private Image GenderImage;
 
 
-        private TMPro.TextMeshProUGUI Cook;
-        private TMPro.TextMeshProUGUI HandCraft;
-        private TMPro.TextMeshProUGUI Industry;
-        private TMPro.TextMeshProUGUI Magic;
-        private TMPro.TextMeshProUGUI Transport;
-        private TMPro.TextMeshProUGUI Collect;
+        private BeastSkill[] beastSkills;
+
 
 
         private GameObject DescriptionPrefab;//预制体
@@ -274,36 +280,22 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             foreach (TextTip tp in ResonanceWheelUI.PanelTextContent_sub1.SkillType)
             {
-                switch (tp.name)
+
+
+                for (int i = 0; i < beastSkills.Length; i++) 
                 {
-                    case "Stamina":
-                        Stamina.text = tp.GetDescription();
-                        break;
-                    case "Speed":
-                        Speed.text = tp.GetDescription();
-                        break;
-                    case "Cook":
-                        Cook.text = tp.GetDescription();
-                        break;
-                    case "HandCraft":
-                        HandCraft.text = tp.GetDescription();
-                        break;
-                    case "Industry":
-                        Industry.text = tp.GetDescription();
-                        break;
-                    case "Magic":
-                        Magic.text = tp.GetDescription();
-                        break;
-                    case "Transport":
-                        Transport.text = tp.GetDescription();
-                        break;
-                    case "Collect":
-                        Collect.text = tp.GetDescription();
-                        break;
+                    if(tp.name == beastSkills[i].workType.ToString())
+                    {
+                        beastSkills[i].skillText.text = tp.GetDescription();
+                    }
                 }
 
 
             }
+
+            
+
+
             
             expel.ReWrite(ResonanceWheelUI.PanelTextContent_sub1.expel);
             receive.ReWrite(ResonanceWheelUI.PanelTextContent_sub1.receive);
@@ -378,6 +370,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
         #endregion
 
+
+
         #region TextContent
         [System.Serializable]
         public struct ResonanceWheel_sub1Struct
@@ -445,6 +439,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
 
         #endregion
+
+
 
     }
 
