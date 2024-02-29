@@ -368,14 +368,14 @@ namespace ML.Engine.Manager
 
         private void LateUpdate()
         {
-            if(IsPause)
+            this.CounterDownTimerManager.LateUpdate(Time.deltaTime);
+
+            if (IsPause)
             {
                 this.TickManager.UpdateLateTickComponentList();
             }
             else
             {
-                this.CounterDownTimerManager.LateUpdate(Time.deltaTime);
-
                 this.TickManager.LateTick(Time.deltaTime);
 
                 this.TickManager.UpdateLateTickComponentList();
