@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2136647112
+CRC: 573678366
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 8c3b67211591a85c334b5f675b6b2a99
+    Hash: 9111a298007255262d77478e71bf6591
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2d8df09e698f722ada1caa03d3413830
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 8c3b67211591a85c334b5f675b6b2a99
+    Hash: 9111a298007255262d77478e71bf6591
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -18,18 +18,24 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/Seal.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/Rabbit.png
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/icon_beast.png
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/green_background.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/Deer.png
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/blue_background.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/Cat.png
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/btn_switchtarget.png
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/yellow_background.png
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/gray_background.png
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/slectgrid.png
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/orange_background.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/Dog.png
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/icon_genderfemale.png
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/box.png
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/icon_gendermale.png
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/icon_timing.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/Fox.png
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/circle.png
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/StaminaBar.png
 Dependencies: []

@@ -3,9 +3,11 @@ using ML.Engine.InteractSystem;
 using ML.Engine.TextContent;
 using ProjectOC.Player;
 using ProjectOC.ResonanceWheelSystem.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace ProjectOC.WorkerEchoNS
 {
@@ -16,6 +18,8 @@ namespace ProjectOC.WorkerEchoNS
 
         public ResonanceWheelSystem.UI.ResonanceWheelUI uIResonanceWheel;
 
+        public ResonanceWheelSystem.UI.ResonanceWheelUI uIResonanceWheelInstance;
+
         public WorkerEcho workerEcho;
         protected override void Awake()
         {
@@ -23,20 +27,31 @@ namespace ProjectOC.WorkerEchoNS
             this.InteractType = "WorkerEcho";
             this.PosOffset = Vector3.zero;
             this.CheckCanDestory += CheckCanDestroyOrEdit();
+            this.uIResonanceWheelInstance = null;
         }
 
         public void Interact(InteractComponent component)
         {
-            
-            //µ¯¹²ÃùÂÖUI
-            Debug.Log("µ¯UI");
-            //ML.Engine.Input.InputManager.Instance.Common.Disable();
-            var panel = GameObject.Instantiate(uIResonanceWheel);
-            panel.GetComponentInParent<ResonanceWheelUI>().inventory = component.gameObject.GetComponentInParent<PlayerCharacter>().Inventory;
-            panel.transform.SetParent(GameObject.Find("Canvas").transform, false);
+            if (this.uIResonanceWheelInstance == null)
+            {
+                //µ¯¹²ÃùÂÖUI
 
-            ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+                Debug.Log("µ¯UI");
+                //ML.Engine.Input.InputManager.Instance.Common.Disable();
+                uIResonanceWheelInstance = GameObject.Instantiate(uIResonanceWheel);
+                uIResonanceWheelInstance.GetComponentInParent<ResonanceWheelUI>().inventory = component.gameObject.GetComponentInParent<PlayerCharacter>().Inventory;
+                uIResonanceWheelInstance.transform.SetParent(GameObject.Find("Canvas").transform, false);
+
+                
+            }
+            else
+            {
+                uIResonanceWheelInstance.gameObject.SetActive(true);
+            }
+            ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uIResonanceWheelInstance);
+
         }
+
 
         private bool CanEditOrDestroy(IBuildingPart buildingPart)
         {

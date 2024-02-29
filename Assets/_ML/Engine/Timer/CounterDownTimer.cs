@@ -15,13 +15,14 @@ namespace ML.Engine.Timer
 
         /// <summary>
         /// 构造倒计时器
+        /// tType -> 0 Fixed, 1 Update, 2 Real
         /// </summary>
         /// <param name="duration">起始时间</param>
         /// <param name="autocycle">是否自动循环</param>
-        public CounterDownTimer(float duration, bool autocycle = false, bool autoStart = true, double speed = 1f, bool isFixed = true)
+        public CounterDownTimer(float duration, bool autocycle = false, bool autoStart = true, double speed = 1f, int tType = 0)
         {
             Duration = Mathf.Max(0f, duration);
-            IsFixed = isFixed;
+            TimerType = tType;
             IsAutoCycle = autocycle;
             Speed = speed;
             Reset(duration, !autoStart);
@@ -50,7 +51,7 @@ namespace ML.Engine.Timer
                 // 启动
                 if (!this._isStoped)
                 {
-                    CDMInstance.AddTimer(this, this.IsFixed);
+                    CDMInstance.AddTimer(this, this.TimerType);
                 }
                 // 暂停
                 else
@@ -93,6 +94,7 @@ namespace ML.Engine.Timer
         /// 倒计时结束时运行事件
         /// </summary>
         public event Action OnEndEvent;
+
         private bool IsEnd = false;
 
         /// <summary>
@@ -102,7 +104,7 @@ namespace ML.Engine.Timer
         /// <summary>
         /// 计时器更新是fixedupdate还是update
         /// </summary>
-        public bool IsFixed { get; private set; }
+        public int TimerType { get; private set; }
 
         /// <summary>
         /// 更新计时器时间

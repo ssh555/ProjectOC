@@ -72,7 +72,7 @@ namespace ML.Engine.InventorySystem
         public const string WorldObjPath = "prefabs/Item/WorldItem";
 
 
-        
+
         public static ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableData[]> ABJAProcessor;
 
         public void LoadTableData()
@@ -223,6 +223,27 @@ namespace ML.Engine.InventorySystem
                 return null;
             }
             return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+        }
+
+        public void AddItemIconObject(string itemID, Transform parent, Vector3 pos, Quaternion rot, Vector3 scale, bool isLocal = true)
+        {
+            if (parent.GetComponentInChildren<SpriteRenderer>() == null)
+            {
+                GameObject obj = GameObject.Instantiate(Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(WorldObjPath).LoadAsset<GameObject>("ItemIcon"), parent);
+                if (isLocal)
+                {
+                    obj.transform.localPosition = pos;
+                    obj.transform.localRotation = rot;
+                }
+                else
+                {
+                    obj.transform.position = pos;
+                    obj.transform.rotation = rot;
+                }
+                obj.transform.localScale = scale;
+            }
+            SpriteRenderer spriteRenderer = parent.GetComponentInChildren<SpriteRenderer>();
+            spriteRenderer.sprite = GetItemSprite(itemID);
         }
 
         public GameObject GetItemObject(string id)

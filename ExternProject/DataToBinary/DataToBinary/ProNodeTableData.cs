@@ -15,7 +15,7 @@ namespace ProjectOC.ProNodeNS
         public ML.Engine.InventorySystem.RecipeCategory Category;
         public List<ML.Engine.InventorySystem.RecipeCategory> RecipeCategoryFiltered;
         public WorkerNS.WorkType ExpType;
-        public int Stack;
+        public int MaxStack;
         public int StackThreshold;
         public int RawThreshold;
 
@@ -50,8 +50,8 @@ namespace ProjectOC.ProNodeNS
             {
                 this.ExpType = WorkerNS.WorkType.None;
             }
-            // 6 -> Stack
-            this.Stack = int.Parse(row[6]);
+            // 6 -> MaxStack
+            this.MaxStack = int.Parse(row[6]);
             // 7 -> StackThreshold
             this.StackThreshold = int.Parse(row[7]);
             // 8 -> RawThreshold

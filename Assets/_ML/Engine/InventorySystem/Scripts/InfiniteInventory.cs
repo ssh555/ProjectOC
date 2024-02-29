@@ -63,6 +63,7 @@ namespace ML.Engine.InventorySystem
             // 不可以堆叠
             if(!ItemManager.Instance.GetCanStack(item.ID))
             {
+                item.OwnInventory = this;
                 this.itemList.Add(item);
             }
             // 可以堆叠
@@ -82,11 +83,13 @@ namespace ML.Engine.InventorySystem
                     {
                         item.Amount = it.Amount + item.Amount - ma;
                         it.Amount = ma;
+                        item.OwnInventory = this;
                         this.itemList.Add(item);
                     }
                 }
                 else
                 {
+                    item.OwnInventory = this;
                     this.itemList.Add(item);
                 }
             }

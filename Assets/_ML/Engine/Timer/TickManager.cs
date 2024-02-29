@@ -164,7 +164,12 @@ namespace ML.Engine.Timer
         }
         public bool UnregisterTick(ITickComponent tickComponent)
         {
-            if(this.tickComponents.ContainsKey(tickComponent.tickPriority) && this.tickComponents[tickComponent.tickPriority].Contains(tickComponent) && !this.removeTick.Contains(tickComponent))
+            if (this.addTick.Contains(tickComponent))
+            {
+                this.addTick.Remove(tickComponent);
+                return true;
+            }
+            if (this.tickComponents.ContainsKey(tickComponent.tickPriority) && this.tickComponents[tickComponent.tickPriority].Contains(tickComponent) && !this.removeTick.Contains(tickComponent))
             {
                 this.removeTick.Add(tickComponent);
                 return true;
@@ -203,14 +208,19 @@ namespace ML.Engine.Timer
                 return true;
             }
         }
-        public ITickComponent UnregisterFixedTick(ITickComponent tickComponent)
+        public bool UnregisterFixedTick(ITickComponent tickComponent)
         {
+            if(this.addFixedTick.Contains(tickComponent))
+            {
+                this.addFixedTick.Remove(tickComponent);
+                return true;
+            }
             if (this.fixedTickComponents.ContainsKey(tickComponent.fixedTickPriority) && this.fixedTickComponents[tickComponent.fixedTickPriority].Contains(tickComponent) && !this.removeFixedTick.Contains(tickComponent))
             {
                 this.removeFixedTick.Add(tickComponent);
-                return tickComponent;
+                return true;
             }
-            return null;
+            return false;
         }
         #endregion
 
@@ -244,14 +254,19 @@ namespace ML.Engine.Timer
                 return true;
             }
         }
-        public ITickComponent UnregisterLateTick(ITickComponent tickComponent)
+        public bool UnregisterLateTick(ITickComponent tickComponent)
         {
+            if (this.addLateTick.Contains(tickComponent))
+            {
+                this.addLateTick.Remove(tickComponent);
+                return true;
+            }
             if (this.lateTickComponents.ContainsKey(tickComponent.lateTickPriority) && this.lateTickComponents[tickComponent.lateTickPriority].Contains(tickComponent) && !this.removeLateTick.Contains(tickComponent))
             {
                 this.removeLateTick.Add(tickComponent);
-                return tickComponent;
+                return true;
             }
-            return null;
+            return false;
         }
         #endregion
         #endregion

@@ -45,12 +45,12 @@ namespace ProjectOC.StoreNS
             // 实例化UIPanel
             GameObject gameObject = GameManager.Instance.ABResourceManager.LoadLocalAB("ui/uipanel").LoadAsset<GameObject>("UIStorePanel");
             InventorySystem.UI.UIStore uiPanel = GameObject.Instantiate(gameObject, GameObject.Find("Canvas").transform, false).GetComponent<InventorySystem.UI.UIStore>();
+            uiPanel.Player = component.GetComponentInParent<Player.PlayerCharacter>();
             // 初始化相关数据
             uiPanel.Store = this.Store;
             // Push
             GameManager.Instance.UIManager.PushPanel(uiPanel);
         }
-
     }
 }
 

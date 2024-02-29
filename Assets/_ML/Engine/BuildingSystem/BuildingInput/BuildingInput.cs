@@ -455,24 +455,6 @@ namespace ML.Engine.BuildingSystem.Input
             ""id"": ""86e742eb-f156-4860-bd12-95a9e81c2e4b"",
             ""actions"": [
                 {
-                    ""name"": ""LastCategory"",
-                    ""type"": ""Button"",
-                    ""id"": ""e3c0aa0b-a15b-4fdb-adf1-f3b3c1992ed5"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""NextCategory"",
-                    ""type"": ""Button"",
-                    ""id"": ""810f89a4-3daf-41ae-ae3d-4f3c7efba4e4"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""AlternativeType"",
                     ""type"": ""Value"",
                     ""id"": ""67ae47b2-4c19-417b-93c9-707ae97533ad"",
@@ -480,53 +462,18 @@ namespace ML.Engine.BuildingSystem.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""AlterCategory"",
+                    ""type"": ""Value"",
+                    ""id"": ""9ae20fe6-35b4-4fb5-a192-9b08c4d8ca95"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""be2cfebc-ebe4-466a-99b8-dc87b07c83a9"",
-                    ""path"": ""<Keyboard>/z"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LastCategory"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""92bbc80e-1d0f-4eab-8c7b-6172459dcb3f"",
-                    ""path"": ""<XInputController>/leftShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LastCategory"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d550b5f3-5bc0-4f95-a2fc-a22aec890568"",
-                    ""path"": ""<Keyboard>/x"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""NextCategory"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e2359e85-aa58-4887-ad16-9f6242a26704"",
-                    ""path"": ""<XInputController>/rightShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""NextCategory"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": ""Keyboard"",
                     ""id"": ""483e0ab8-30fc-4e49-b75a-08665e70ae94"",
@@ -590,6 +537,72 @@ namespace ML.Engine.BuildingSystem.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""AlternativeType"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""317f5eb9-b917-410a-bf5b-a032cba51be9"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterCategory"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""d0360d64-dd8c-4fe4-8da9-698ad6c1fbeb"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterCategory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""287ce11f-1364-46eb-8997-e36a4ec69a8e"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterCategory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""0ecc47bd-618c-47c0-af98-66cb35ba617d"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterCategory"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""5578801c-95ba-4f8e-ae51-ee6bdff8c9bd"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterCategory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""456c1169-c1ad-40e2-ac16-e29ef9ceb748"",
+                    ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AlterCategory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -745,60 +758,6 @@ namespace ML.Engine.BuildingSystem.Input
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""RotateLeft"",
-                    ""type"": ""Button"",
-                    ""id"": ""a9f7c934-8f8e-4dbd-b849-75afefd6b60d"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""RotateRight"",
-                    ""type"": ""Button"",
-                    ""id"": ""5b3304a4-fdf0-4a77-9626-6c55dc6b9c1a"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""ChangeStyleLast"",
-                    ""type"": ""Value"",
-                    ""id"": ""035e67e5-0893-431b-b953-680c84930d5b"",
-                    ""expectedControlType"": ""Axis"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""ChangeStyleNext"",
-                    ""type"": ""Value"",
-                    ""id"": ""333c8e9f-c765-4f87-a537-ba7840217617"",
-                    ""expectedControlType"": ""Axis"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""ChangeHeightLast"",
-                    ""type"": ""Button"",
-                    ""id"": ""a557c737-f9b2-48ca-8236-18139d472a0b"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""ChangeHeightNext"",
-                    ""type"": ""Button"",
-                    ""id"": ""a46ecf51-5d5f-410b-840b-29a28f0add91"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
                     ""name"": ""SwitchFrame_PreHold"",
                     ""type"": ""Button"",
                     ""id"": ""5d5c7fa2-49f4-4da3-a2bb-60f181dc8fcc"",
@@ -822,8 +781,35 @@ namespace ML.Engine.BuildingSystem.Input
                     ""id"": ""d7842ae6-4dc9-4acc-92f7-1eb82b90848a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Hold"",
+                    ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Rotate"",
+                    ""type"": ""Value"",
+                    ""id"": ""65e49564-5e6a-4c1f-8389-0250ad83431c"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ChangeHeight"",
+                    ""type"": ""Value"",
+                    ""id"": ""55f3e379-f28e-4ffa-bf5b-71aed9bec33f"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ChangeStyle"",
+                    ""type"": ""Value"",
+                    ""id"": ""ad1ffcee-6ec1-4ab7-8133-c09eea93d35c"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -868,50 +854,6 @@ namespace ML.Engine.BuildingSystem.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ChangeOutLook"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a0362fcf-4fa9-40e0-82c6-b7687764facf"",
-                    ""path"": ""<Keyboard>/1"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""RotateLeft"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""cdf241a5-7f1f-420c-baac-1665859b680c"",
-                    ""path"": ""<XInputController>/leftTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""RotateLeft"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1f46cfd9-b37a-44c3-a71f-94f84f2f757d"",
-                    ""path"": ""<Keyboard>/3"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""RotateRight"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""b087e6b5-8a63-4684-a8f2-413b1d54e809"",
-                    ""path"": ""<XInputController>/rightTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""RotateRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1004,92 +946,202 @@ namespace ML.Engine.BuildingSystem.Input
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""1cca59e5-58ca-4fc6-ab25-95d4f1eed205"",
-                    ""path"": ""<Keyboard>/j"",
+                    ""name"": ""Keyboard"",
+                    ""id"": ""1e9b1061-d28f-4cc7-be9a-0a0a565e4b84"",
+                    ""path"": ""1DAxis"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeStyleLast"",
-                    ""isComposite"": false,
+                    ""action"": ""Rotate"",
+                    ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""4f09f543-d671-4067-99cc-a6944d8a8b42"",
-                    ""path"": ""<XInputController>/dpad/left"",
+                    ""name"": ""negative"",
+                    ""id"": ""5768cd4a-1a14-42f6-8929-4d508cc659f1"",
+                    ""path"": ""<Keyboard>/1"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeStyleLast"",
+                    ""action"": ""Rotate"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""d41d0dba-e33e-4151-9d88-ef6901939d16"",
-                    ""path"": ""<Keyboard>/l"",
+                    ""name"": ""positive"",
+                    ""id"": ""81057847-24f7-4a92-8b22-289517189228"",
+                    ""path"": ""<Keyboard>/3"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeStyleNext"",
+                    ""action"": ""Rotate"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""fcd4ba2d-7815-46e6-af92-b0f130c3f7f9"",
-                    ""path"": ""<XInputController>/dpad/right"",
+                    ""name"": ""XBOX"",
+                    ""id"": ""5c324f79-97b8-43d4-aa78-6e1f1a88b612"",
+                    ""path"": ""1DAxis"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeStyleNext"",
-                    ""isComposite"": false,
+                    ""action"": ""Rotate"",
+                    ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""c8fbb173-6136-4aaa-9b40-0244d8b6bea1"",
+                    ""name"": ""negative"",
+                    ""id"": ""c5be6e3b-7a62-4671-8e22-d8e55ff37bb0"",
+                    ""path"": ""<XInputController>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""db5cc0f1-b403-4cde-aaf6-571f37e31d9a"",
+                    ""path"": ""<XInputController>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""1a9dc6aa-52c1-4c5f-9ee1-299c5c335ab2"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeHeight"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""50e9a65b-8685-4a34-82c1-1919fa513122"",
                     ""path"": ""<Keyboard>/k"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeHeightLast"",
+                    ""action"": ""ChangeHeight"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""9f513321-5ee2-4866-a6ac-0fd473fda741"",
-                    ""path"": ""<XInputController>/dpad/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeHeightLast"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""c0ba611e-0103-43b5-84fa-188b6ce6a078"",
+                    ""name"": ""positive"",
+                    ""id"": ""cf43c287-a25c-44c3-b80f-15046a6e0160"",
                     ""path"": ""<Keyboard>/i"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeHeightNext"",
+                    ""action"": ""ChangeHeight"",
                     ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""ed341dac-7e29-493b-8217-75e73bd6ab89"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeHeight"",
+                    ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""07b3fcbd-e0dc-4a0f-afd6-6d4cbf4c124d"",
+                    ""name"": ""negative"",
+                    ""id"": ""59c765ff-bd42-4e3d-b86f-bf456f666513"",
+                    ""path"": ""<XInputController>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeHeight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""350e4a3a-e6c8-423e-a32b-80fde4c64c89"",
                     ""path"": ""<XInputController>/dpad/up"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ChangeHeightNext"",
+                    ""action"": ""ChangeHeight"",
                     ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Keyboard"",
+                    ""id"": ""9c9c7df7-27ec-462c-be55-5c371b4fcf07"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeStyle"",
+                    ""isComposite"": true,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""9843507c-ca24-4a92-af0b-89dbd48e04b2"",
+                    ""path"": ""<Keyboard>/j"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeStyle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""6a031366-6d2d-4128-9122-b3005ca64a4d"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeStyle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""4816162b-6f85-4046-b18d-8a19bdc0e876"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeStyle"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""5a84f459-823e-4238-b26b-3b6cdf2f8002"",
+                    ""path"": ""<XInputController>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeStyle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""60b0a9c4-8d51-4d31-8ced-8e0c78fdac6d"",
+                    ""path"": ""<XInputController>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeStyle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -1112,9 +1164,8 @@ namespace ML.Engine.BuildingSystem.Input
             m_BuildKeyCom_CopyOutLook = m_BuildKeyCom.FindAction("CopyOutLook", throwIfNotFound: true);
             // BuildSelection
             m_BuildSelection = asset.FindActionMap("BuildSelection", throwIfNotFound: true);
-            m_BuildSelection_LastCategory = m_BuildSelection.FindAction("LastCategory", throwIfNotFound: true);
-            m_BuildSelection_NextCategory = m_BuildSelection.FindAction("NextCategory", throwIfNotFound: true);
             m_BuildSelection_AlternativeType = m_BuildSelection.FindAction("AlternativeType", throwIfNotFound: true);
+            m_BuildSelection_AlterCategory = m_BuildSelection.FindAction("AlterCategory", throwIfNotFound: true);
             // BuildingAppearance
             m_BuildingAppearance = asset.FindActionMap("BuildingAppearance", throwIfNotFound: true);
             m_BuildingAppearance_AlterMaterial = m_BuildingAppearance.FindAction("AlterMaterial", throwIfNotFound: true);
@@ -1122,15 +1173,12 @@ namespace ML.Engine.BuildingSystem.Input
             m_BuildPlaceMode = asset.FindActionMap("BuildPlaceMode", throwIfNotFound: true);
             m_BuildPlaceMode_ChangeActiveSocket = m_BuildPlaceMode.FindAction("ChangeActiveSocket", throwIfNotFound: true);
             m_BuildPlaceMode_ChangeOutLook = m_BuildPlaceMode.FindAction("ChangeOutLook", throwIfNotFound: true);
-            m_BuildPlaceMode_RotateLeft = m_BuildPlaceMode.FindAction("RotateLeft", throwIfNotFound: true);
-            m_BuildPlaceMode_RotateRight = m_BuildPlaceMode.FindAction("RotateRight", throwIfNotFound: true);
-            m_BuildPlaceMode_ChangeStyleLast = m_BuildPlaceMode.FindAction("ChangeStyleLast", throwIfNotFound: true);
-            m_BuildPlaceMode_ChangeStyleNext = m_BuildPlaceMode.FindAction("ChangeStyleNext", throwIfNotFound: true);
-            m_BuildPlaceMode_ChangeHeightLast = m_BuildPlaceMode.FindAction("ChangeHeightLast", throwIfNotFound: true);
-            m_BuildPlaceMode_ChangeHeightNext = m_BuildPlaceMode.FindAction("ChangeHeightNext", throwIfNotFound: true);
             m_BuildPlaceMode_SwitchFrame_PreHold = m_BuildPlaceMode.FindAction("SwitchFrame_PreHold", throwIfNotFound: true);
             m_BuildPlaceMode_SwitchFrame_PostPress = m_BuildPlaceMode.FindAction("SwitchFrame_PostPress", throwIfNotFound: true);
             m_BuildPlaceMode_KeyCom = m_BuildPlaceMode.FindAction("KeyCom", throwIfNotFound: true);
+            m_BuildPlaceMode_Rotate = m_BuildPlaceMode.FindAction("Rotate", throwIfNotFound: true);
+            m_BuildPlaceMode_ChangeHeight = m_BuildPlaceMode.FindAction("ChangeHeight", throwIfNotFound: true);
+            m_BuildPlaceMode_ChangeStyle = m_BuildPlaceMode.FindAction("ChangeStyle", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -1348,16 +1396,14 @@ namespace ML.Engine.BuildingSystem.Input
         // BuildSelection
         private readonly InputActionMap m_BuildSelection;
         private List<IBuildSelectionActions> m_BuildSelectionActionsCallbackInterfaces = new List<IBuildSelectionActions>();
-        private readonly InputAction m_BuildSelection_LastCategory;
-        private readonly InputAction m_BuildSelection_NextCategory;
         private readonly InputAction m_BuildSelection_AlternativeType;
+        private readonly InputAction m_BuildSelection_AlterCategory;
         public struct BuildSelectionActions
         {
             private @BuildingInput m_Wrapper;
             public BuildSelectionActions(@BuildingInput wrapper) { m_Wrapper = wrapper; }
-            public InputAction @LastCategory => m_Wrapper.m_BuildSelection_LastCategory;
-            public InputAction @NextCategory => m_Wrapper.m_BuildSelection_NextCategory;
             public InputAction @AlternativeType => m_Wrapper.m_BuildSelection_AlternativeType;
+            public InputAction @AlterCategory => m_Wrapper.m_BuildSelection_AlterCategory;
             public InputActionMap Get() { return m_Wrapper.m_BuildSelection; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1367,28 +1413,22 @@ namespace ML.Engine.BuildingSystem.Input
             {
                 if (instance == null || m_Wrapper.m_BuildSelectionActionsCallbackInterfaces.Contains(instance)) return;
                 m_Wrapper.m_BuildSelectionActionsCallbackInterfaces.Add(instance);
-                @LastCategory.started += instance.OnLastCategory;
-                @LastCategory.performed += instance.OnLastCategory;
-                @LastCategory.canceled += instance.OnLastCategory;
-                @NextCategory.started += instance.OnNextCategory;
-                @NextCategory.performed += instance.OnNextCategory;
-                @NextCategory.canceled += instance.OnNextCategory;
                 @AlternativeType.started += instance.OnAlternativeType;
                 @AlternativeType.performed += instance.OnAlternativeType;
                 @AlternativeType.canceled += instance.OnAlternativeType;
+                @AlterCategory.started += instance.OnAlterCategory;
+                @AlterCategory.performed += instance.OnAlterCategory;
+                @AlterCategory.canceled += instance.OnAlterCategory;
             }
 
             private void UnregisterCallbacks(IBuildSelectionActions instance)
             {
-                @LastCategory.started -= instance.OnLastCategory;
-                @LastCategory.performed -= instance.OnLastCategory;
-                @LastCategory.canceled -= instance.OnLastCategory;
-                @NextCategory.started -= instance.OnNextCategory;
-                @NextCategory.performed -= instance.OnNextCategory;
-                @NextCategory.canceled -= instance.OnNextCategory;
                 @AlternativeType.started -= instance.OnAlternativeType;
                 @AlternativeType.performed -= instance.OnAlternativeType;
                 @AlternativeType.canceled -= instance.OnAlternativeType;
+                @AlterCategory.started -= instance.OnAlterCategory;
+                @AlterCategory.performed -= instance.OnAlterCategory;
+                @AlterCategory.canceled -= instance.OnAlterCategory;
             }
 
             public void RemoveCallbacks(IBuildSelectionActions instance)
@@ -1458,30 +1498,24 @@ namespace ML.Engine.BuildingSystem.Input
         private List<IBuildPlaceModeActions> m_BuildPlaceModeActionsCallbackInterfaces = new List<IBuildPlaceModeActions>();
         private readonly InputAction m_BuildPlaceMode_ChangeActiveSocket;
         private readonly InputAction m_BuildPlaceMode_ChangeOutLook;
-        private readonly InputAction m_BuildPlaceMode_RotateLeft;
-        private readonly InputAction m_BuildPlaceMode_RotateRight;
-        private readonly InputAction m_BuildPlaceMode_ChangeStyleLast;
-        private readonly InputAction m_BuildPlaceMode_ChangeStyleNext;
-        private readonly InputAction m_BuildPlaceMode_ChangeHeightLast;
-        private readonly InputAction m_BuildPlaceMode_ChangeHeightNext;
         private readonly InputAction m_BuildPlaceMode_SwitchFrame_PreHold;
         private readonly InputAction m_BuildPlaceMode_SwitchFrame_PostPress;
         private readonly InputAction m_BuildPlaceMode_KeyCom;
+        private readonly InputAction m_BuildPlaceMode_Rotate;
+        private readonly InputAction m_BuildPlaceMode_ChangeHeight;
+        private readonly InputAction m_BuildPlaceMode_ChangeStyle;
         public struct BuildPlaceModeActions
         {
             private @BuildingInput m_Wrapper;
             public BuildPlaceModeActions(@BuildingInput wrapper) { m_Wrapper = wrapper; }
             public InputAction @ChangeActiveSocket => m_Wrapper.m_BuildPlaceMode_ChangeActiveSocket;
             public InputAction @ChangeOutLook => m_Wrapper.m_BuildPlaceMode_ChangeOutLook;
-            public InputAction @RotateLeft => m_Wrapper.m_BuildPlaceMode_RotateLeft;
-            public InputAction @RotateRight => m_Wrapper.m_BuildPlaceMode_RotateRight;
-            public InputAction @ChangeStyleLast => m_Wrapper.m_BuildPlaceMode_ChangeStyleLast;
-            public InputAction @ChangeStyleNext => m_Wrapper.m_BuildPlaceMode_ChangeStyleNext;
-            public InputAction @ChangeHeightLast => m_Wrapper.m_BuildPlaceMode_ChangeHeightLast;
-            public InputAction @ChangeHeightNext => m_Wrapper.m_BuildPlaceMode_ChangeHeightNext;
             public InputAction @SwitchFrame_PreHold => m_Wrapper.m_BuildPlaceMode_SwitchFrame_PreHold;
             public InputAction @SwitchFrame_PostPress => m_Wrapper.m_BuildPlaceMode_SwitchFrame_PostPress;
             public InputAction @KeyCom => m_Wrapper.m_BuildPlaceMode_KeyCom;
+            public InputAction @Rotate => m_Wrapper.m_BuildPlaceMode_Rotate;
+            public InputAction @ChangeHeight => m_Wrapper.m_BuildPlaceMode_ChangeHeight;
+            public InputAction @ChangeStyle => m_Wrapper.m_BuildPlaceMode_ChangeStyle;
             public InputActionMap Get() { return m_Wrapper.m_BuildPlaceMode; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1497,24 +1531,6 @@ namespace ML.Engine.BuildingSystem.Input
                 @ChangeOutLook.started += instance.OnChangeOutLook;
                 @ChangeOutLook.performed += instance.OnChangeOutLook;
                 @ChangeOutLook.canceled += instance.OnChangeOutLook;
-                @RotateLeft.started += instance.OnRotateLeft;
-                @RotateLeft.performed += instance.OnRotateLeft;
-                @RotateLeft.canceled += instance.OnRotateLeft;
-                @RotateRight.started += instance.OnRotateRight;
-                @RotateRight.performed += instance.OnRotateRight;
-                @RotateRight.canceled += instance.OnRotateRight;
-                @ChangeStyleLast.started += instance.OnChangeStyleLast;
-                @ChangeStyleLast.performed += instance.OnChangeStyleLast;
-                @ChangeStyleLast.canceled += instance.OnChangeStyleLast;
-                @ChangeStyleNext.started += instance.OnChangeStyleNext;
-                @ChangeStyleNext.performed += instance.OnChangeStyleNext;
-                @ChangeStyleNext.canceled += instance.OnChangeStyleNext;
-                @ChangeHeightLast.started += instance.OnChangeHeightLast;
-                @ChangeHeightLast.performed += instance.OnChangeHeightLast;
-                @ChangeHeightLast.canceled += instance.OnChangeHeightLast;
-                @ChangeHeightNext.started += instance.OnChangeHeightNext;
-                @ChangeHeightNext.performed += instance.OnChangeHeightNext;
-                @ChangeHeightNext.canceled += instance.OnChangeHeightNext;
                 @SwitchFrame_PreHold.started += instance.OnSwitchFrame_PreHold;
                 @SwitchFrame_PreHold.performed += instance.OnSwitchFrame_PreHold;
                 @SwitchFrame_PreHold.canceled += instance.OnSwitchFrame_PreHold;
@@ -1524,6 +1540,15 @@ namespace ML.Engine.BuildingSystem.Input
                 @KeyCom.started += instance.OnKeyCom;
                 @KeyCom.performed += instance.OnKeyCom;
                 @KeyCom.canceled += instance.OnKeyCom;
+                @Rotate.started += instance.OnRotate;
+                @Rotate.performed += instance.OnRotate;
+                @Rotate.canceled += instance.OnRotate;
+                @ChangeHeight.started += instance.OnChangeHeight;
+                @ChangeHeight.performed += instance.OnChangeHeight;
+                @ChangeHeight.canceled += instance.OnChangeHeight;
+                @ChangeStyle.started += instance.OnChangeStyle;
+                @ChangeStyle.performed += instance.OnChangeStyle;
+                @ChangeStyle.canceled += instance.OnChangeStyle;
             }
 
             private void UnregisterCallbacks(IBuildPlaceModeActions instance)
@@ -1534,24 +1559,6 @@ namespace ML.Engine.BuildingSystem.Input
                 @ChangeOutLook.started -= instance.OnChangeOutLook;
                 @ChangeOutLook.performed -= instance.OnChangeOutLook;
                 @ChangeOutLook.canceled -= instance.OnChangeOutLook;
-                @RotateLeft.started -= instance.OnRotateLeft;
-                @RotateLeft.performed -= instance.OnRotateLeft;
-                @RotateLeft.canceled -= instance.OnRotateLeft;
-                @RotateRight.started -= instance.OnRotateRight;
-                @RotateRight.performed -= instance.OnRotateRight;
-                @RotateRight.canceled -= instance.OnRotateRight;
-                @ChangeStyleLast.started -= instance.OnChangeStyleLast;
-                @ChangeStyleLast.performed -= instance.OnChangeStyleLast;
-                @ChangeStyleLast.canceled -= instance.OnChangeStyleLast;
-                @ChangeStyleNext.started -= instance.OnChangeStyleNext;
-                @ChangeStyleNext.performed -= instance.OnChangeStyleNext;
-                @ChangeStyleNext.canceled -= instance.OnChangeStyleNext;
-                @ChangeHeightLast.started -= instance.OnChangeHeightLast;
-                @ChangeHeightLast.performed -= instance.OnChangeHeightLast;
-                @ChangeHeightLast.canceled -= instance.OnChangeHeightLast;
-                @ChangeHeightNext.started -= instance.OnChangeHeightNext;
-                @ChangeHeightNext.performed -= instance.OnChangeHeightNext;
-                @ChangeHeightNext.canceled -= instance.OnChangeHeightNext;
                 @SwitchFrame_PreHold.started -= instance.OnSwitchFrame_PreHold;
                 @SwitchFrame_PreHold.performed -= instance.OnSwitchFrame_PreHold;
                 @SwitchFrame_PreHold.canceled -= instance.OnSwitchFrame_PreHold;
@@ -1561,6 +1568,15 @@ namespace ML.Engine.BuildingSystem.Input
                 @KeyCom.started -= instance.OnKeyCom;
                 @KeyCom.performed -= instance.OnKeyCom;
                 @KeyCom.canceled -= instance.OnKeyCom;
+                @Rotate.started -= instance.OnRotate;
+                @Rotate.performed -= instance.OnRotate;
+                @Rotate.canceled -= instance.OnRotate;
+                @ChangeHeight.started -= instance.OnChangeHeight;
+                @ChangeHeight.performed -= instance.OnChangeHeight;
+                @ChangeHeight.canceled -= instance.OnChangeHeight;
+                @ChangeStyle.started -= instance.OnChangeStyle;
+                @ChangeStyle.performed -= instance.OnChangeStyle;
+                @ChangeStyle.canceled -= instance.OnChangeStyle;
             }
 
             public void RemoveCallbacks(IBuildPlaceModeActions instance)
@@ -1596,9 +1612,8 @@ namespace ML.Engine.BuildingSystem.Input
         }
         public interface IBuildSelectionActions
         {
-            void OnLastCategory(InputAction.CallbackContext context);
-            void OnNextCategory(InputAction.CallbackContext context);
             void OnAlternativeType(InputAction.CallbackContext context);
+            void OnAlterCategory(InputAction.CallbackContext context);
         }
         public interface IBuildingAppearanceActions
         {
@@ -1608,15 +1623,12 @@ namespace ML.Engine.BuildingSystem.Input
         {
             void OnChangeActiveSocket(InputAction.CallbackContext context);
             void OnChangeOutLook(InputAction.CallbackContext context);
-            void OnRotateLeft(InputAction.CallbackContext context);
-            void OnRotateRight(InputAction.CallbackContext context);
-            void OnChangeStyleLast(InputAction.CallbackContext context);
-            void OnChangeStyleNext(InputAction.CallbackContext context);
-            void OnChangeHeightLast(InputAction.CallbackContext context);
-            void OnChangeHeightNext(InputAction.CallbackContext context);
             void OnSwitchFrame_PreHold(InputAction.CallbackContext context);
             void OnSwitchFrame_PostPress(InputAction.CallbackContext context);
             void OnKeyCom(InputAction.CallbackContext context);
+            void OnRotate(InputAction.CallbackContext context);
+            void OnChangeHeight(InputAction.CallbackContext context);
+            void OnChangeStyle(InputAction.CallbackContext context);
         }
     }
 }

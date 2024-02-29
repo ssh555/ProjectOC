@@ -1,16 +1,13 @@
 ﻿using ML.Engine.BuildingSystem;
 using ML.Engine.InventorySystem;
 using ML.Engine.InventorySystem.CompositeSystem;
-using ML.Engine.TextContent;
 using ProjectOC.TechTree;
 using ProjectOC.WorkerEchoNS;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
 
 namespace ExcelToJson
 {
@@ -63,8 +60,6 @@ namespace ExcelToJson
 
         static void Main(string[] args)
         {
-
-
             DataToBinaryManager DBMgr = new DataToBinaryManager();
 
             #region EXCEL
@@ -75,19 +70,25 @@ namespace ExcelToJson
             List<CompositionTableData> compositionTableDatas = new List<CompositionTableData>();
             // 1. 读入需要的EXCEL表
             List<BuildingTableData> buildingTableDatas = DBMgr.ReadExcel<BuildingTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 4);
-            //List<BuildingUpgradeTableData> buildingUpgradeTableDatas = DBMgr.ReadExcel<BuildingUpgradeTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 5);
             List<RecipeTableData> recipeTableDatas = DBMgr.ReadExcel<RecipeTableData>(path:excelFilePath, iBeginRow:5, iWorksheet:5);
             List<WorkerEchoTableData> workerEchoTableDatas = DBMgr.ReadExcel<WorkerEchoTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 10);
             List<ItemTableData> itemTableDatas = DBMgr.ReadExcel<ItemTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 6);
+            Dictionary<string, BuildingTableData> buildDict = new Dictionary<string, BuildingTableData>();
             // 2. 分别解析表格并将数据暂存在内存中
             foreach (BuildingTableData data in buildingTableDatas)
             {
+                buildDict.Add(data.GetClassificationString(), data);
                 compositionTableDatas.Add(new CompositionTableData(data));
             }
-            //foreach (BuildingUpgradeTableData data in buildingUpgradeTableDatas)
-            //{
-            //    compositionTableDatas.Add(new CompositionTableData(data));
-            //}
+
+            foreach (BuildingTableData data in buildingTableDatas)
+            {
+                if (data.upgradeRaw.Count > 0 && buildDict.ContainsKey(data.upgradeCID))
+                {
+                    compositionTableDatas.Add(new CompositionTableData(data, buildDict[data.upgradeCID]));
+                }
+            }
+
             foreach (RecipeTableData data in recipeTableDatas)
             {
                 compositionTableDatas.Add(new CompositionTableData(data, itemTableDatas.Find(item => item.id == data.Product.id)));
@@ -98,7 +99,6 @@ namespace ExcelToJson
             }
             // 3. 将解析完成的数据存为对应的二进制文件
             DBMgr.WriteJsonFromExcel(buildingTableDatas, rootPath + "Building.json");
-            //DBMgr.WriteJsonFromExcel(buildingUpgradeTableDatas, rootPath + "BuildingUpgrade.json");
             DBMgr.WriteJsonFromExcel(recipeTableDatas, rootPath + "Recipe.json");
             DBMgr.WriteJsonFromExcel(compositionTableDatas, rootPath + "Composition.json");
             DBMgr.WriteJsonFromExcel(workerEchoTableDatas, rootPath + "WorkerEcho.json");
@@ -190,7 +190,6 @@ namespace ExcelToJson
 
         public static List<ML.Engine.InventorySystem.CompositeSystem.Formula> ParseFormula(string data)
         {
-            // 100001,3;100002,1
             List<ML.Engine.InventorySystem.CompositeSystem.Formula> formulas = new List<ML.Engine.InventorySystem.CompositeSystem.Formula>();
             if (!string.IsNullOrEmpty(data))
             {

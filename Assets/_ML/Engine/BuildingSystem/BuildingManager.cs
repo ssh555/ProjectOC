@@ -21,8 +21,8 @@ namespace ML.Engine.BuildingSystem
         public string category4;
         public string actorID;
         public List<InventorySystem.CompositeSystem.Formula> raw;
-        public string upgrade;
-        public string upgradeRaw;
+        public string upgradeCID;
+        public List<InventorySystem.CompositeSystem.Formula> upgradeRaw;
 
         public string GetClassificationString()
         {
@@ -33,13 +33,6 @@ namespace ML.Engine.BuildingSystem
         {
             return new BuildingPartClassification(GetClassificationString());
         }
-    }
-    [System.Serializable]
-    public struct BuildingUpgradeTableData
-    {
-        public string id;
-        public TextContent.TextContent name;
-        public List<InventorySystem.CompositeSystem.Formula> upgradeRaw;
     }
     [LabelText("建造模式")]
     public enum BuildingMode
@@ -280,18 +273,15 @@ namespace ML.Engine.BuildingSystem
         /// </summary>
         public BuildingPlacer.BuildingPlacer Placer
         {
-            get => this.placer;
-            set
+            get
             {
-                if(this.placer)
+                if(this.placer == null)
                 {
-                    this.OnModeChanged -= this.placer.OnModeChanged;
+                    // to-do
+                    placer = UnityEngine.Object.FindFirstObjectByType<BuildingPlacer.BuildingPlacer>();
+                    this.OnModeChanged += placer.OnModeChanged;
                 }
-                this.placer = value;
-                if (this.placer)
-                {
-                    this.OnModeChanged += this.placer.OnModeChanged;
-                }
+                return placer;
             }
         }
 
@@ -548,6 +538,10 @@ namespace ML.Engine.BuildingSystem
                 {
                     var BPartQueue = this.BPartClassificationOnStyle[category][type][style];
                     var ret = BPartQueue.PeekFront();
+                    if (BPartQueue.Count == 1)
+                    {
+                        return GameObject.Instantiate<GameObject>(ret.gameObject).GetComponent<IBuildingPart>();
+                    }
                     BPartQueue.DequeueFront();
                     BPartQueue.EnqueueBack(ret);
                     ret = BPartQueue.PeekFront();
@@ -557,6 +551,10 @@ namespace ML.Engine.BuildingSystem
                 {
                     var BPartQueue = this.BPartClassificationOnStyle[category][type][style];
                     var ret = BPartQueue.PeekBack();
+                    if (BPartQueue.Count == 1)
+                    {
+                        return GameObject.Instantiate<GameObject>(ret.gameObject).GetComponent<IBuildingPart>();
+                    }
                     BPartQueue.DequeueBack();
                     BPartQueue.EnqueueFront(ret);
                     return GameObject.Instantiate<GameObject>(ret.gameObject).GetComponent<IBuildingPart>();
@@ -682,7 +680,12 @@ namespace ML.Engine.BuildingSystem
                 if(isForward)
                 {
                     var BPartQueue = this.BPartClassificationOnHeight[category][type][height];
+
                     var ret = BPartQueue.PeekFront();
+                    if (BPartQueue.Count == 1)
+                    {
+                        return GameObject.Instantiate<GameObject>(ret.gameObject).GetComponent<IBuildingPart>();
+                    }
                     BPartQueue.DequeueFront();
                     BPartQueue.EnqueueBack(ret);
                     ret = BPartQueue.PeekFront();
@@ -692,6 +695,10 @@ namespace ML.Engine.BuildingSystem
                 {
                     var BPartQueue = this.BPartClassificationOnHeight[category][type][height];
                     var ret = BPartQueue.PeekBack();
+                    if (BPartQueue.Count == 1)
+                    {
+                        return GameObject.Instantiate<GameObject>(ret.gameObject).GetComponent<IBuildingPart>();
+                    }
                     BPartQueue.DequeueBack();
                     BPartQueue.EnqueueFront(ret);
                     return GameObject.Instantiate<GameObject>(ret.gameObject).GetComponent<IBuildingPart>();
@@ -880,6 +887,15 @@ namespace ML.Engine.BuildingSystem
                 ABJAProcessor.StartLoadJsonAssetData();
             }
         }
+
+        public string GetID(string CID)
+        {
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
+            {
+                return BPartTableDictOnClass[CID].id;
+            }
+            return null;
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -887,26 +903,49 @@ namespace ML.Engine.BuildingSystem
         /// <returns></returns>
         public string GetActorID(string CID)
         {
-            if (BPartTableDictOnClass.ContainsKey(CID))
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
             {
                 return BPartTableDictOnClass[CID].actorID;
             }
             return null;
         }
-        public string GetUpgradeRaw(string CID)
+
+        public List<InventorySystem.CompositeSystem.Formula> GetRaw(string CID)
         {
-            if (BPartTableDictOnClass.ContainsKey(CID))
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
+            {
+                return BPartTableDictOnClass[CID].raw;
+            }
+            return null;
+        }
+
+        public List<InventorySystem.CompositeSystem.Formula> GetUpgradeRaw(string CID)
+        {
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
             {
                 return BPartTableDictOnClass[CID].upgradeRaw;
             }
             return null;
         }
 
-        public string GetUpgrade(string CID)
+        public string GetUpgradeCID(string CID)
         {
-            if (BPartTableDictOnClass.ContainsKey(CID))
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
             {
-                return BPartTableDictOnClass[CID].upgrade;
+                return BPartTableDictOnClass[CID].upgradeCID;
+            }
+            return null;
+        }
+
+        public string GetUpgradeID(string CID)
+        {
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
+            {
+                string upgradeCID = BPartTableDictOnClass[CID].upgradeCID;
+                if (!string.IsNullOrEmpty(upgradeCID) && BPartTableDictOnClass.ContainsKey(upgradeCID))
+                {
+                    return BPartTableDictOnClass[upgradeCID].id;
+                }
             }
             return null;
         }

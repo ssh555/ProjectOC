@@ -204,11 +204,15 @@
         "Chinese" : "效率",
         "English" : "Eff"
     },
+    "text_LvDesc" : {
+        "Chinese" : "生产效率: ",
+        "English" : "Eff: "
+    },
     "ktUpgrade" : {
         "keyname" : "ktUpgrade",
         "keymap" : {
             "XBOX" : "LT",
-            "KeyBoard" : "G"
+            "KeyBoard" : "U"
         },
         "description" : {
             "Chinese" : "建筑升级",
