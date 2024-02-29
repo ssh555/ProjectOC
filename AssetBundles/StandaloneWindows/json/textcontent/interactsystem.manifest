@@ -1,0 +1,20 @@
+ManifestFileVersion: 0
+CRC: 211495195
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: d32918feb7271d7266b1bb270abd74c6
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5ad585dd02dfb5016c0dad519eab8f49
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: d32918feb7271d7266b1bb270abd74c6
+HashAppended: 0
+ClassTypes:
+- Class: 49
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/_ProjectOC/OCResources/Json/TextContent/InteractSystem/InteractKeyTip.json
+Dependencies: []

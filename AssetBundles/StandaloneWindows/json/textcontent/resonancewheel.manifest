@@ -1,0 +1,23 @@
+ManifestFileVersion: 0
+CRC: 1499323594
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: e9d16b5b8b240fb9b786c59753c148cd
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5ad585dd02dfb5016c0dad519eab8f49
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: e9d16b5b8b240fb9b786c59753c148cd
+HashAppended: 0
+ClassTypes:
+- Class: 49
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/_ProjectOC/OCResources/Json/TextContent/ResonanceWheel/ResonanceWheel_sub2.json
+- Assets/_ProjectOC/OCResources/Json/TextContent/ResonanceWheel/BeastPanel.json
+- Assets/_ProjectOC/OCResources/Json/TextContent/ResonanceWheel/ResonanceWheel_sub1.json
+- Assets/_ProjectOC/OCResources/Json/TextContent/ResonanceWheel/ResonanceWheelPanel.json
+Dependencies: []

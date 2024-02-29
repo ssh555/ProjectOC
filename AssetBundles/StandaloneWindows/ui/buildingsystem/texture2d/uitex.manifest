@@ -1,0 +1,25 @@
+ManifestFileVersion: 0
+CRC: 2691357907
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: a39fc8d3e6a8ee022135845e3690684f
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2d8df09e698f722ada1caa03d3413830
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: a39fc8d3e6a8ee022135845e3690684f
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/UITexture/T_KeyComCircle.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/UITexture/T_KeyComTipFill.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/UITexture/T_KeyTip.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/UITexture/T_KeyComTip.png
+Dependencies: []

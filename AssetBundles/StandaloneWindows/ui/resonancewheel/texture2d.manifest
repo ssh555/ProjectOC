@@ -1,0 +1,41 @@
+ManifestFileVersion: 0
+CRC: 1834610215
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 41fc21e0957a9fec843f3dfb21e2c4e8
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2d8df09e698f722ada1caa03d3413830
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 41fc21e0957a9fec843f3dfb21e2c4e8
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/Seal.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/Rabbit.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/icon_beast.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/green_background.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/Deer.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/blue_background.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/Cat.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/btn_switchtarget.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/yellow_background.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/gray_background.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/slectgrid.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/orange_background.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/Dog.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/icon_genderfemale.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/box.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/icon_gendermale.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/icon_timing.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/Fox.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/circle.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/StaminaBar.png
+Dependencies: []

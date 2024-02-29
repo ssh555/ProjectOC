@@ -1,0 +1,29 @@
+ManifestFileVersion: 0
+CRC: 3129342697
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 88e9182348f0f679e9ea7492ebd57f73
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 316162263003d3ca5b3ffec5afe24edf
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 88e9182348f0f679e9ea7492ebd57f73
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/_ProjectOC/OCResources/Meshes/Character/Cattiva.fbx
+Dependencies:
+- D:/AAAworkwork/Git/projectoc/AssetBundles/StandaloneWindows/materials/other

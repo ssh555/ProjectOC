@@ -202,6 +202,7 @@ namespace ProjectOC.LandMassExpand
         {
             public List<Bounds> fieldBounds;
             public NavMeshSurface navMeshSurface;
+            public Transform buildingPartsTransf;
         }
         #endregion
 

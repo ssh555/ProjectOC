@@ -97,7 +97,8 @@ namespace ML.Engine.BuildingSystem.BuildingArea
         private void Awake()
         {
             this.collider = this.GetComponent<Collider>();
-            this.collider.isTrigger = true;
+            if(this.collider.GetType() != typeof(MeshCollider))
+                this.collider.isTrigger = true;
         }
 
         private void Start()

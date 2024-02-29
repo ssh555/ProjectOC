@@ -1,0 +1,62 @@
+ManifestFileVersion: 0
+CRC: 1726218941
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 8e123890536c4f5a37489da9814441e2
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 63e11b1caf2ba2f0bb15b72825a7d0c3
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 8e123890536c4f5a37489da9814441e2
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 84a92b25f83d49b9bc132d206b370281, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_SpriteCharacter
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_SpriteGlyph
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.VertexGradient
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.FaceInfo
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphMetrics
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphRect
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
+Assets:
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/ResonanceWheelPrefabs/Description.prefab
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/ResonanceWheelPrefabs/BeastBio.prefab
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/ResonanceWheelPrefabs/Slot.prefab
+Dependencies:
+- D:/AAAworkwork/Git/projectoc/AssetBundles/StandaloneWindows/fonts
+- D:/AAAworkwork/Git/projectoc/AssetBundles/StandaloneWindows/textmeshpro/spriteasset
+- D:/AAAworkwork/Git/projectoc/AssetBundles/StandaloneWindows/ui/inventory/texture2d
+- D:/AAAworkwork/Git/projectoc/AssetBundles/StandaloneWindows/ui/resonancewheel/texture2d
