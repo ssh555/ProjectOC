@@ -565,7 +565,11 @@ namespace ProjectOC.InventorySystem.UI
                     var texture = ItemManager.Instance.GetItemTexture2D(ProNode.Recipe.Product.id);
                     if (texture != null)
                     {
-                        ItemManager.Instance.AddItemIconObject(ProNode.Recipe.Product.id, this.ProNode.WorldProNode.transform);
+                        ItemManager.Instance.AddItemIconObject(ProNode.Recipe.Product.id, 
+                                                               this.ProNode.WorldProNode.transform, 
+                                                               new Vector3(0, this.ProNode.WorldProNode.transform.GetComponent<Collider>().bounds.size.y / 2, 0), 
+                                                               Quaternion.Euler(new Vector3(90, 0, 0)), 
+                                                               Vector3.one);
                     }
                 }
                 CurMode = Mode.ProNode;
