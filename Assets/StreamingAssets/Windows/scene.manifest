@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 944648672
+CRC: 790432121
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 21808d621815f970226c55b1fb87be34
+    Hash: 5dcdeb25f20f4952d36030ca728b6471
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 88ee7d003cb2c10120d06f6faf430776
+    Hash: 66b387c81cc07ac29978947808efbf82
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 21808d621815f970226c55b1fb87be34
+    Hash: 5dcdeb25f20f4952d36030ca728b6471
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -58,6 +58,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
 - Class: 114
@@ -115,8 +117,6 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 39fa3d8997a24136984ca6e2c99902bc, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 87badff79e1e54a4a9d68c74f002b591, type: 3}
@@ -132,8 +132,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 2a4db7a114972834c8e4117be1d82ba3, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fa7155796051b734daa718462081dc5f, type: 3}
 - Class: 114
@@ -164,8 +162,6 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 224
   Script: {instanceID: 0}
-- Class: 238
-  Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/_ProjectOC/Scene/PlayerEnterScene.unity
@@ -173,7 +169,7 @@ Assets:
 - Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity
 - Assets/_ProjectOC/Scene/GameScene.unity
 Dependencies:
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/shader
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/uipanel
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/prefabs/character/player
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/shader
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/uipanel

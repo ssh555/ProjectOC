@@ -1,17 +1,24 @@
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.TextContent;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Windows;
 
 namespace ML.Engine.BuildingSystem.UI
 {
     public class BSAppearancePanel : Engine.UI.UIBasePanel
     {
+        #region Property|Field
         private BuildingManager BM => BuildingManager.Instance;
+        private BuildingPlacer.BuildingPlacer Placer => BM.Placer;
 
+        #region UIGO引用
         private UnityEngine.UI.Image[] matInstance;
         private int activeIndex;
         private RectTransform matParent;
@@ -22,8 +29,15 @@ namespace ML.Engine.BuildingSystem.UI
         private UIKeyTip matlast;
         private UIKeyTip matnext;
 
+        #endregion
+
+        #endregion
+
+        #region Unity
         private void Awake()
         {
+            StartCoroutine(LoadMatPackages());
+
             matParent = this.transform.Find("KT_AlterMat").Find("KT_AlterStyle").Find("Content") as RectTransform;
             this.templateMat = matParent.Find("MatTemplate") as RectTransform;
             templateMat.gameObject.SetActive(false);
@@ -56,38 +70,93 @@ namespace ML.Engine.BuildingSystem.UI
             matnext.img = matnext.root.Find("Image").GetComponent<Image>();
             matnext.keytip = matnext.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             matnext.ReWrite(MonoBuildingManager.Instance.KeyTipDict["matnext"]);
+
+        }
+        #endregion
+
+        #region Override
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            this.RegisterInput();
         }
 
-        public IEnumerator Init(Texture2D[] texs, BuildingCopiedMaterial[] mats, int index)
+        public override void OnPause()
         {
+            throw new Exception("建造系统外观UI面板不允许存在叠加其他UI面板的情况");
+        }
+
+        public override void OnRecovery()
+        {
+            throw new Exception("建造系统外观UI面板不允许存在叠加其他UI面板的情况");
+        }
+
+        public override void OnExit()
+        {
+            this.UnregisterInput();
             ClearInstance();
 
-            matInstance = new UnityEngine.UI.Image[texs.Length];
-            for(int i = 0; i < texs.Length; ++i)
-            {
-                Sprite sprite = Sprite.Create(texs[i], new Rect(0, 0, texs[i].width, texs[i].height), new Vector2(0.5f, 0.5f));
-                var img = Instantiate<GameObject>(templateMat.gameObject, matParent, false).GetComponent<UnityEngine.UI.Image>();
-                img.sprite = sprite;
+            Destroy(this.gameObject);
+        }
+        #endregion
 
-                Disactive(img);
+        #region Internal
+        #region KeyFunction
+        public void UnregisterInput()
+        {
+            this.Placer.BInput.BuildingAppearance.Disable();
 
-                img.gameObject.SetActive(true);
-                matInstance[i] = img;
-            }
+            this.Placer.comfirmInputAction.performed += Placer_ComfirmAppearance;
+            this.Placer.backInputAction.performed -= Placer_CancelAppearance;
+            this.Placer.BInput.BuildingAppearance.AlterMaterial.performed -= Placer_OnChangeAppearance;
 
-            activeIndex = index;
-
-            StartCoroutine(Show(texs, mats, index));
-
-            yield break;
+            //// to-do
+            //ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
+            //ProjectOC.Input.InputManager.PlayerInput.Player.Crouch.Disable();
+            //ProjectOC.Input.InputManager.PlayerInput.Player.Jump.Disable();
         }
 
-        private IEnumerator Show(Texture2D[] texs, BuildingCopiedMaterial[] mats, int index)
+        private void RegisterInput()
+        {
+            this.Placer.BInput.BuildingAppearance.Enable();
+
+            this.Placer.comfirmInputAction.performed += Placer_ComfirmAppearance;
+            this.Placer.backInputAction.performed += Placer_CancelAppearance;
+            this.Placer.BInput.BuildingAppearance.AlterMaterial.performed += Placer_OnChangeAppearance;
+
+            //// to-do
+            //ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
+        }
+
+        private void Placer_OnChangeAppearance(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            Vector2 offset = obj.ReadValue<Vector2>();
+            int of = offset.x > 0 ? 1 : -1;
+            this._aCurrentIndex = (this._aCurrentIndex + of + _aCurrentTexs.Length) % _aCurrentTexs.Length;
+            this.Placer.SelectedPartInstance.SetCopiedMaterial(this._aCurrentMatPackages[this._aCurrentIndex]);
+            Refresh();
+        }
+
+        private void Placer_CancelAppearance(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            // 回退到之前的Mat
+            this.Placer.SelectedPartInstance.SetCopiedMaterial(this._aMat);
+            this.ExitAppearancePanel();
+        }
+
+        private void Placer_ComfirmAppearance(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            this.ExitAppearancePanel();
+        }
+
+        #endregion
+
+        #region Refresh
+        public override void Refresh()
         {
             Disactive(this.matInstance[activeIndex]);
-            activeIndex = index;
+            activeIndex = _aCurrentIndex;
             Active(this.matInstance[activeIndex]);
-            yield break;
         }
 
         /// <summary>
@@ -111,7 +180,7 @@ namespace ML.Engine.BuildingSystem.UI
 
         private void ClearInstance()
         {
-            if(matInstance != null)
+            if (matInstance != null)
             {
                 foreach (var img in matInstance)
                 {
@@ -121,43 +190,124 @@ namespace ML.Engine.BuildingSystem.UI
             }
 
         }
+        #endregion
 
-        public override void OnEnter()
+        #region Appearance
+        /// <summary>
+        /// 用于UI显示的Mat-Texture2D
+        /// </summary>
+        private Texture2D[] _aCurrentTexs;
+        /// <summary>
+        /// 用于替换的Mat
+        /// </summary>
+        private BuildingCopiedMaterial[] _aCurrentMatPackages;
+        /// <summary>
+        /// 当前选择的MatIndex
+        /// </summary>
+        private int _aCurrentIndex;
+        /// <summary>
+        /// 所有的材质包
+        /// </summary>
+        private Dictionary<BuildingPartClassification, Engine.BuildingSystem.BSBPartMatPackage> _allMatPackages;
+
+        /// <summary>
+        /// 进入时选中的建筑物的Mode
+        /// </summary>
+        private BuildingMode _aMode;
+        /// <summary>
+        /// 进入时选中的建筑物的Mat
+        /// </summary>
+        private BuildingCopiedMaterial _aMat;
+
+        /// <summary>
+        /// 进入外观选择界面
+        /// </summary>
+        protected void EnterAppearancePanel()
         {
-            base.OnEnter();
-            BM.Placer.OnChangeAppearance += Placer_OnChangeAppearance;
-        }
+            this._aMode = this.Placer.SelectedPartInstance.Mode;
+            this._aMat = this.Placer.SelectedPartInstance.GetCopiedMaterial();
+            this.Placer.SelectedPartInstance.Mode = BuildingMode.None;
 
+            var kv = _allMatPackages[this.Placer.SelectedPartInstance.Classification].ToMatPackage();
 
+            this._aCurrentTexs = kv.Keys.ToArray();
+            this._aCurrentMatPackages = kv.Values.ToArray();
+            var mat = this.Placer.SelectedPartInstance.GetCopiedMaterial();
+            this._aCurrentIndex = System.Array.IndexOf(this._aCurrentMatPackages, mat);
 
-        public override void OnPause()
-        {
-            base.OnPause();
-            BM.Placer.OnChangeAppearance -= Placer_OnChangeAppearance;
-
-        }
-
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-
-            BM.Placer.OnChangeAppearance += Placer_OnChangeAppearance;
-        }
-
-        public override void OnExit()
-        {
-            BM.Placer.OnChangeAppearance -= Placer_OnChangeAppearance;
-
+            // Init & Refresh
             ClearInstance();
 
-            Destroy(this.gameObject);
+            matInstance = new UnityEngine.UI.Image[this._aCurrentTexs.Length];
+            for (int i = 0; i < this._aCurrentTexs.Length; ++i)
+            {
+                Sprite sprite = Sprite.Create(this._aCurrentTexs[i], new Rect(0, 0, this._aCurrentTexs[i].width, this._aCurrentTexs[i].height), new Vector2(0.5f, 0.5f));
+                var img = Instantiate<GameObject>(templateMat.gameObject, matParent, false).GetComponent<UnityEngine.UI.Image>();
+                img.sprite = sprite;
+
+                Disactive(img);
+
+                img.gameObject.SetActive(true);
+                matInstance[i] = img;
+            }
+
+            activeIndex = _aCurrentIndex;
+
+            Refresh();
+
+
         }
 
-        private void Placer_OnChangeAppearance(Texture2D[] texs, BuildingCopiedMaterial[] mats, int index)
+        protected void ExitAppearancePanel()
         {
-            StartCoroutine(Show(texs, mats, index));
+            // 弹出外观UI
+            MonoBuildingManager.Instance.PopPanel();
+            // 禁用 Input.Appearance
+            this.Placer.BInput.BuildingAppearance.Disable();
+            this.Placer.SelectedPartInstance.Mode = this._aMode;
         }
+
+        private const string MatPABPath = "Assets/BuildingSystem/MatPackage";
+        protected IEnumerator LoadMatPackages()
+        {
+#if UNITY_EDITOR
+            float startT = Time.realtimeSinceStartup;
+#endif
+
+            while (Manager.GameManager.Instance.ABResourceManager == null)
+            {
+                yield return null;
+            }
+            var abmgr = Manager.GameManager.Instance.ABResourceManager;
+            AssetBundle ab;
+            var crequest = abmgr.LoadLocalABAsync(MatPABPath, null, out ab);
+            yield return crequest;
+            if (crequest != null)
+            {
+                ab = crequest.assetBundle;
+            }
+
+            var packages = ab.LoadAllAssetsAsync<BSBPartMatPackage>();
+            yield return packages;
+            _allMatPackages = new Dictionary<BuildingPartClassification, BSBPartMatPackage>();
+            foreach (BSBPartMatPackage package in packages.allAssets)
+            {
+                this._allMatPackages.Add(package.Classification, package);
+            }
+
+            //abmgr.UnLoadLocalABAsync(TextContentABPath, false, null);
+            EnterAppearancePanel();
+
+#if UNITY_EDITOR
+            Debug.Log("LoadMatPackages cost time: " + (Time.realtimeSinceStartup - startT));
+#endif
+
+            this.enabled = false;
+        }
+
+        #endregion
+
+        #endregion
     }
 
 }

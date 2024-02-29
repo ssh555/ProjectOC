@@ -1,5 +1,6 @@
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.TextContent;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,19 +9,24 @@ using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Windows;
 
 namespace ML.Engine.BuildingSystem.UI
 {
+    /// <summary>
+    /// 放置的一级
+    /// </summary>
     public class BSSelectBPartPanel : Engine.UI.UIBasePanel
     {
+        #region 载入资源
         public const string TCategoryABPath = "UI/BuildingSystem/Texture2D/Category";
         public const string TTypeABPath = "UI/BuildingSystem/Texture2D/Type";
 
-        public static Dictionary<BuildingCategory1, Texture2D> TCategoryDict = null;
-        public static Dictionary<BuildingCategory2, Texture2D> TTypeDict = null;
-        public static int IsInit = -1;
+        public Dictionary<BuildingCategory1, Texture2D> TCategoryDict = null;
+        public Dictionary<BuildingCategory2, Texture2D> TTypeDict = null;
+        public int IsInit = -1;
 
-        public static Sprite GetCategorySprite(BuildingCategory1 category)
+        public Sprite GetCategorySprite(BuildingCategory1 category)
         {
             if(!TCategoryDict.ContainsKey(category))
             {
@@ -30,7 +36,7 @@ namespace ML.Engine.BuildingSystem.UI
             Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
             return sprite;
         }
-        public static Sprite GetTypeSprite(BuildingCategory2 type)
+        public Sprite GetTypeSprite(BuildingCategory2 type)
         {
             if (!TTypeDict.ContainsKey(type))
             {
@@ -41,8 +47,155 @@ namespace ML.Engine.BuildingSystem.UI
             return sprite;
         }
 
-        private BuildingManager BM => BuildingManager.Instance;
 
+        private IEnumerator InitCategoryTexture2D()
+        {
+#if UNITY_EDITOR
+            float startT = Time.time;
+#endif
+            TCategoryDict = new Dictionary<BuildingCategory1, Texture2D>();
+
+            while (Manager.GameManager.Instance.ABResourceManager == null)
+            {
+                yield return null;
+            }
+
+
+            var abmgr = Manager.GameManager.Instance.ABResourceManager;
+            AssetBundle ab;
+            var crequest = abmgr.LoadLocalABAsync(TCategoryABPath, null, out ab);
+            yield return crequest;
+            if(crequest != null)
+            {
+                ab = crequest.assetBundle;
+            }
+
+            var request = ab.LoadAllAssetsAsync<Texture2D>();
+            yield return request;
+
+            CanSelectCategory1 = BuildingManager.Instance.GetRegisteredCategory();
+            foreach (var obj in request.allAssets)
+            {
+                var tex = (obj as Texture2D);
+                if (tex != null && Enum.IsDefined(typeof(BuildingCategory1), tex.name))
+                {
+                    TCategoryDict.Add((BuildingCategory1)Enum.Parse(typeof(BuildingCategory1), tex.name), tex);
+                }
+            }
+
+            ++IsInit;
+            if (IsInit >= 1)
+            {
+                InitAsset();
+            }
+#if UNITY_EDITOR
+            Debug.Log("InitCategoryTexture2D cost time: " + (Time.time - startT));
+#endif
+        }
+
+        private IEnumerator InitTypeTexture2D()
+        {
+#if UNITY_EDITOR
+            float startT = Time.time;
+#endif
+            TTypeDict = new Dictionary<BuildingCategory2, Texture2D>();
+
+            while (Manager.GameManager.Instance.ABResourceManager == null)
+            {
+                yield return null;
+            }
+
+
+            var abmgr = Manager.GameManager.Instance.ABResourceManager;
+            AssetBundle ab;
+            var crequest = abmgr.LoadLocalABAsync(TTypeABPath, null, out ab);
+            yield return crequest;
+            if(crequest != null)
+            {
+                ab = crequest.assetBundle;
+            }
+
+            var request = ab.LoadAllAssetsAsync<Texture2D>();
+            yield return request;
+            CanSelectCategory2 = BuildingManager.Instance.GetRegisteredType();
+
+            foreach (var obj in request.allAssets)
+            {
+                var tex = (obj as Texture2D);
+                if (tex != null && Enum.IsDefined(typeof(BuildingCategory2), tex.name))
+                {
+                    TTypeDict.Add((BuildingCategory2)Enum.Parse(typeof(BuildingCategory2), tex.name), tex);
+                }
+            }
+
+            ++IsInit;
+
+            if(IsInit >= 1)
+            {
+                InitAsset();
+            }
+
+#if UNITY_EDITOR
+            Debug.Log("InitTypeTexture2D cost time: " + (Time.time - startT));
+#endif
+        }
+
+
+        private IEnumerator UnloadAsset()
+        {
+            var abmgr = Manager.GameManager.Instance.ABResourceManager;
+            AssetBundle tab;
+            var trequest = abmgr.LoadLocalABAsync(TTypeABPath, null, out tab);
+            AssetBundle cab;
+            var crequest = abmgr.LoadLocalABAsync(TCategoryABPath, null, out cab);
+
+            yield return trequest;
+            if(trequest != null)
+            {
+                tab = trequest.assetBundle;
+            }
+            tab.UnloadAsync(true);
+
+            yield return crequest;
+            if (crequest != null)
+            {
+                cab = crequest.assetBundle;
+            }
+            cab.UnloadAsync(true);
+        }
+
+        private void InitAsset()
+        {
+            if (S_LastSelectedCategory1Index != -1)
+            {
+                this.SelectedCategory1Index = S_LastSelectedCategory1Index;
+            }
+            this.UpdatePlaceBuildingType(this.CanSelectCategory1[this.SelectedCategory1Index]);
+            if (S_LastSelectedCategory2Index != -1)
+            {
+                this.SelectedCategory2Index = S_LastSelectedCategory2Index;
+            }
+
+            this.ClearInstance();
+
+            foreach (var category in this.CanSelectCategory1)
+            {
+                var go = Instantiate<GameObject>(this.templateCategory.gameObject, this.categoryParent, false);
+                go.GetComponentInChildren<Image>().sprite = GetCategorySprite(category);
+                go.GetComponentInChildren<TextMeshProUGUI>().text = MonoBuildingManager.Instance.Category1Dict[category.ToString()].GetDescription();
+                go.SetActive(true);
+                this.categoryInstance.Add(category, go.transform as RectTransform);
+            }
+
+            this.Refresh();
+        }
+        #endregion
+
+        #region Property|Field
+        private BuildingManager BM => BuildingManager.Instance;
+        private BuildingPlacer.BuildingPlacer Placer => BM.Placer;
+
+        #region UIGO引用
         private Dictionary<BuildingCategory1, RectTransform> categoryInstance = new Dictionary<BuildingCategory1, RectTransform>();
         private Dictionary<BuildingCategory2, RectTransform> typeInstance = new Dictionary<BuildingCategory2, RectTransform>();
 
@@ -58,28 +211,15 @@ namespace ML.Engine.BuildingSystem.UI
         private UIKeyTip comfirm;
         private UIKeyTip back;
 
-        private static bool IsLoading = false;
+        #endregion
+
+        #endregion
+
+        #region Unity
         private void Awake()
         {
-            //    if (ABJAProcessor == null)
-            //    {
-            //        ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextContent.KeyTip[]>("JSON/TextContent/InteractSystem", "InteractKeyTip", (datas) =>
-            //        {
-            //            foreach (var tip in datas)
-            //            {
-            //                STATIC_KTDict.Add(tip.keyname, tip);
-            //            }
-
-            //        }, null);
-            //    }
-            //    ABJAProcessor.StartLoadJsonAssetData();
-            if (!IsLoading)
-            {
-                IsLoading = true;
-
-                StartCoroutine(InitCategoryTexture2D());
-                StartCoroutine(InitTypeTexture2D());
-            }
+            StartCoroutine(InitCategoryTexture2D());
+            StartCoroutine(InitTypeTexture2D());
 
             this.categoryParent = this.transform.Find("SelectCategory").Find("Content") as RectTransform;
             this.templateCategory = this.categoryParent.Find("CategoryTemplate") as RectTransform;
@@ -134,112 +274,18 @@ namespace ML.Engine.BuildingSystem.UI
             typenext.ReWrite(MonoBuildingManager.Instance.KeyTipDict["typenext"]);
         }
 
+        #endregion
 
-        private IEnumerator InitCategoryTexture2D()
+        #region Refresh
+        public override void Refresh()
         {
-#if UNITY_EDITOR
-            float startT = Time.time;
-#endif
-            TCategoryDict = new Dictionary<BuildingCategory1, Texture2D>();
+            this.ClearCategory2Instance();
 
-            while (Manager.GameManager.Instance.ABResourceManager == null)
-            {
-                yield return null;
-            }
-
-
-            var abmgr = Manager.GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(TCategoryABPath, null, out ab);
-            yield return crequest;
-
-            var request = ab.LoadAllAssetsAsync<Texture2D>();
-            yield return request;
-
-            foreach (var obj in request.allAssets)
-            {
-                var tex = (obj as Texture2D);
-                if (tex != null && Enum.IsDefined(typeof(BuildingCategory1), tex.name))
-                {
-                    TCategoryDict.Add((BuildingCategory1)Enum.Parse(typeof(BuildingCategory1), tex.name), tex);
-                }
-            }
-
-            ++IsInit;
-#if UNITY_EDITOR
-            Debug.Log("InitCategoryTexture2D cost time: " + (Time.time - startT));
-#endif
-        }
-
-        private IEnumerator InitTypeTexture2D()
-        {
-#if UNITY_EDITOR
-            float startT = Time.time;
-#endif
-            TTypeDict = new Dictionary<BuildingCategory2, Texture2D>();
-
-            while (Manager.GameManager.Instance.ABResourceManager == null)
-            {
-                yield return null;
-            }
-
-
-            var abmgr = Manager.GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(TTypeABPath, null, out ab);
-            yield return crequest;
-
-            var request = ab.LoadAllAssetsAsync<Texture2D>();
-            yield return request;
-
-            foreach (var obj in request.allAssets)
-            {
-                var tex = (obj as Texture2D);
-                if (tex != null && Enum.IsDefined(typeof(BuildingCategory2), tex.name))
-                {
-                    TTypeDict.Add((BuildingCategory2)Enum.Parse(typeof(BuildingCategory2), tex.name), tex);
-                }
-            }
-
-            ++IsInit;
-
-#if UNITY_EDITOR
-            Debug.Log("InitTypeTexture2D cost time: " + (Time.time - startT));
-#endif
-        }
-
-
-
-        public IEnumerator Init(BuildingCategory1[] categorys, BuildingCategory2[] types, int cIndex, int tIndex)
-        {
-            while(IsInit < 1)
-            {
-                yield return null;
-            }
-
-            this.ClearInstance();
-
-            foreach (var category in categorys)
-            {
-                var go = Instantiate<GameObject>(this.templateCategory.gameObject, this.categoryParent, false);
-                go.GetComponentInChildren<Image>().sprite = GetCategorySprite(category);
-                go.GetComponentInChildren<TextMeshProUGUI>().text = MonoBuildingManager.Instance.Category1Dict[category.ToString()].GetDescription();
-                go.SetActive(true);
-                this.categoryInstance.Add(category, go.transform as RectTransform);
-            }
-
-            StartCoroutine(this.ShowCategoryAndType(categorys[cIndex], types, tIndex));
-        }
-
-        private IEnumerator ShowCategoryAndType(BuildingCategory1 category, BuildingCategory2[] types, int tIndex)
-        {
-            this.ClearTypeInstance();
-
-            // 更换 Category
+            // 更换 Category1
             foreach (var instance in this.categoryInstance)
             {
                 var img = instance.Value.GetComponentInChildren<Image>();
-                if(instance.Key != category)
+                if(instance.Key != this.SelectedCategory1)
                 {
                     Disactive(img);
                 }
@@ -249,24 +295,23 @@ namespace ML.Engine.BuildingSystem.UI
                 }
             }
 
-            // 更换 Type
-            foreach (var type in types)
+            // 更换 Category2
+            foreach (var category2 in this.CanSelectCategory2)
             {
                 var go = Instantiate<GameObject>(this.templateType.gameObject, this.typeParent, false);
-                go.GetComponentInChildren<Image>().sprite = GetTypeSprite(type);
-                go.GetComponentInChildren<TextMeshProUGUI>().text = MonoBuildingManager.Instance.Category2Dict[type.ToString()].GetDescription();
+                go.GetComponentInChildren<Image>().sprite = GetTypeSprite(category2);
+                go.GetComponentInChildren<TextMeshProUGUI>().text = MonoBuildingManager.Instance.Category2Dict[category2.ToString()].GetDescription();
                 go.SetActive(true);
 
-                this.typeInstance.Add(type, go.transform as RectTransform);
+                this.typeInstance.Add(category2, go.transform as RectTransform);
 
-                if(type == types[tIndex])
+                if(category2 == this.SelectedCategory2)
                 {
                     Active(go.GetComponentInChildren<Image>());
                 }
             }
             LayoutRebuilder.ForceRebuildLayoutImmediate(this.templateCategory.parent.GetComponent<RectTransform>());
             LayoutRebuilder.ForceRebuildLayoutImmediate(this.templateType.parent.GetComponent<RectTransform>());
-            yield break;
         }
 
         /// <summary>
@@ -287,7 +332,6 @@ namespace ML.Engine.BuildingSystem.UI
             img.transform.localScale = Vector3.one;
         }
 
-
         private void ClearInstance()
         {
             foreach (var instance in this.categoryInstance.Values)
@@ -304,7 +348,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.typeInstance.Clear();
         }
 
-        private void ClearTypeInstance()
+        private void ClearCategory2Instance()
         {
             foreach (var instance in this.typeInstance.Values)
             {
@@ -313,45 +357,134 @@ namespace ML.Engine.BuildingSystem.UI
             }
             this.typeInstance.Clear();
         }
+        #endregion
 
-
+        #region Override
         public override void OnEnter()
         {
             base.OnEnter();
-            BM.Placer.OnBuildSelectionTypeChanged += Placer_OnBuildSelectionTypeChanged;
-        }
+            this.RegisterInput();
+            this.Placer.Mode = BuildingMode.Place;
+            this.Placer.InteractBPartList.Clear();
+            this.Placer.SelectedPartInstance = null;
 
-        private void Placer_OnBuildSelectionTypeChanged(BuildingCategory1 category, BuildingCategory2[] types, int tIndex)
-        {
-            StartCoroutine(this.ShowCategoryAndType(category, types, tIndex));
         }
 
         public override void OnPause()
         {
             base.OnPause();
-            BM.Placer.OnBuildSelectionTypeChanged -= Placer_OnBuildSelectionTypeChanged;
+            this.UnregisterInput();
         }
 
         public override void OnRecovery()
         {
-            BM.Placer.OnBuildSelectionTypeChanged += Placer_OnBuildSelectionTypeChanged;
-
             base.OnRecovery();
+            this.RegisterInput();
         }
 
         public override void OnExit()
         {
-            BM.Placer.OnBuildSelectionTypeChanged -= Placer_OnBuildSelectionTypeChanged;
-
-            Destroy(this.gameObject);
-        }
-
-        private void OnDestroy()
-        {
-
+            S_LastSelectedCategory1Index = this.SelectedCategory1Index;
+            S_LastSelectedCategory2Index = this.SelectedCategory2Index;
+            base.OnExit();
             this.ClearInstance();
+            this.UnregisterInput();
+            this.UnloadAsset();
+        }
+        #endregion
+
+        #region KeyFunction
+        private void UnregisterInput()
+        {
+            this.Placer.BInput.BuildSelection.Disable();
+
+            this.Placer.comfirmInputAction.performed -= Placer_ComfirmSelection;
+            this.Placer.backInputAction.performed -= Placer_CancelSelection;
+            this.Placer.BInput.BuildSelection.AlterCategory.performed -= Placer_AlterCategory1;
+            this.Placer.BInput.BuildSelection.AlternativeType.performed -= Placer_AlterCategory2;
         }
 
+        private void RegisterInput()
+        {
+            this.Placer.BInput.BuildSelection.Enable();
+
+            this.Placer.comfirmInputAction.performed += Placer_ComfirmSelection;
+            this.Placer.backInputAction.performed += Placer_CancelSelection;
+            this.Placer.BInput.BuildSelection.AlterCategory.performed += Placer_AlterCategory1;
+            this.Placer.BInput.BuildSelection.AlternativeType.performed += Placer_AlterCategory2;
+        }
+
+        private void Placer_AlterCategory2(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            int offset = obj.ReadValue<float>() > 0 ? 1 : -1;
+            this.SelectedCategory2Index = (this.SelectedCategory2Index + offset + this.CanSelectCategory2.Length) % this.CanSelectCategory2.Length;
+
+            this.Refresh();
+        }
+
+        private void Placer_AlterCategory1(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            int offset = obj.ReadValue<float>() > 0 ? 1 : -1;
+            this.SelectedCategory1Index = (this.SelectedCategory1Index + this.CanSelectCategory1.Length + offset) % this.CanSelectCategory1.Length;
+            this.UpdatePlaceBuildingType(this.CanSelectCategory1[this.SelectedCategory1Index]);
+        }
+
+        private void Placer_CancelSelection(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            this.Placer.Mode = BuildingMode.Interact;
+            MonoBuildingManager.Instance.PopPanel();
+        }
+
+        private void Placer_ComfirmSelection(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(this.CanSelectCategory1[this.SelectedCategory1Index], this.CanSelectCategory2[this.SelectedCategory2Index]);
+            MonoBuildingManager.Instance.PopPanel();
+            MonoBuildingManager.Instance.PushPanel<BSPlaceModePanel>();
+        }
+        #endregion
+
+        #region Select
+        public static int S_LastSelectedCategory1Index = -1;
+        public static int S_LastSelectedCategory2Index = -1;
+
+        /// <summary>
+        /// 当前选中的Category1Index
+        /// </summary>
+        [ShowInInspector, LabelText("Category1Index"), FoldoutGroup("PlaceMode")]
+        protected int SelectedCategory1Index = 0;
+        /// <summary>
+        /// 当前选中的Category2Index
+        /// </summary>
+        [ShowInInspector, LabelText("Category2Index"), FoldoutGroup("PlaceMode")]
+        protected int SelectedCategory2Index = 0;
+        /// <summary>
+        /// 当前可选的Category1
+        /// </summary>
+        [ShowInInspector, LabelText("Category1Array"), FoldoutGroup("PlaceMode")]
+        protected BuildingCategory1[] CanSelectCategory1;
+        /// <summary>
+        /// 当前可选的Category2
+        /// </summary>
+        [ShowInInspector, LabelText("Category2Array"), FoldoutGroup("PlaceMode")]
+        protected BuildingCategory2[] CanSelectCategory2;
+        /// <summary>
+        /// 选择的Category1
+        /// </summary>
+        public BuildingCategory1 SelectedCategory1 => this.CanSelectCategory1[this.SelectedCategory1Index];
+        /// <summary>
+        /// 选择的Category2
+        /// </summary>
+        public BuildingCategory2 SelectedCategory2 => this.CanSelectCategory2[this.SelectedCategory2Index];
+
+        protected void UpdatePlaceBuildingType(BuildingCategory1 category)
+        {
+            this.CanSelectCategory2 = BuildingManager.Instance.GetRegisteredType().Where(type => (int)type >= ((int)category * 100) && (int)type < ((int)category * 100 + 100)).ToArray();
+
+            this.SelectedCategory2Index = 0;
+
+            this.Refresh();
+        }
+        #endregion
     }
 
 }

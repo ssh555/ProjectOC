@@ -98,8 +98,16 @@ namespace ML.Engine.ABResources
 
             var request = ab.LoadAssetAsync<TextAsset>(this.ABName);
             yield return request;
-
             Datas = JsonConvert.DeserializeObject<T>((request.asset as TextAsset).text);
+
+            //try
+            //{
+            //    Datas = JsonConvert.DeserializeObject<T>((request.asset as TextAsset).text);
+            //}
+            //catch
+            //{
+            //    Debug.LogError($"LoadJsonAssetData {description} Error");
+            //}
 
 
            IsLoaded = true;

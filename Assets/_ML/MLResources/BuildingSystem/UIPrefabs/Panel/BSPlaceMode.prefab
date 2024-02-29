@@ -155,7 +155,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 318.875, y: 0}
+  m_AnchoredPosition: {x: 241.875, y: 0}
   m_SizeDelta: {x: 392.26, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5937474262270356899
@@ -1838,6 +1838,10 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1003675609277667741, guid: 392bdbfed3e501a4ba0db76ef29c1a60, type: 3}
+      propertyPath: m_FillAmount
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1007180301956927400, guid: 392bdbfed3e501a4ba0db76ef29c1a60, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 0
@@ -1927,7 +1931,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3447033374076342874, guid: 392bdbfed3e501a4ba0db76ef29c1a60, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 392bdbfed3e501a4ba0db76ef29c1a60, type: 3}

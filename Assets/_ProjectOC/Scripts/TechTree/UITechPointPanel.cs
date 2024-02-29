@@ -464,7 +464,7 @@ namespace ProjectOC.TechTree.UI
             tempTimer.Clear();
         }
 
-        private void Refresh()
+        public override void Refresh()
         {
             if(lastCIndex != cIndex)
             {

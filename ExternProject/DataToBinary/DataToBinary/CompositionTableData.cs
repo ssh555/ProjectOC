@@ -64,8 +64,8 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             this.compositionnum = 1;
             this.formula = data.upgradeRaw.ToArray();
             this.name = new TextContent.TextContent();
-            this.name.Chinese = dataUpgrade.name.Chinese + "+";
-            this.name.English = dataUpgrade.name.English + "+";
+            this.name.Chinese = dataUpgrade.name.Chinese;
+            this.name.English = dataUpgrade.name.English;
             this.tag = new string[] { dataUpgrade.category1, dataUpgrade.category2, dataUpgrade.category3, dataUpgrade.category4 };
             this.texture2d = dataUpgrade.icon;
             this.usage = new List<string>();

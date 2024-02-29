@@ -77,20 +77,15 @@ namespace ExcelToJson
             // 2. 分别解析表格并将数据暂存在内存中
             foreach (BuildingTableData data in buildingTableDatas)
             {
-                buildDict.Add($"{data.category1}_{data.category2}_{data.category3}_{data.category4}", data);
+                buildDict.Add(data.GetClassificationString(), data);
                 compositionTableDatas.Add(new CompositionTableData(data));
             }
 
             foreach (BuildingTableData data in buildingTableDatas)
             {
-                int level;
-                if (int.TryParse(data.category4, out level))
+                if (data.upgradeRaw.Count > 0 && buildDict.ContainsKey(data.upgradeCID))
                 {
-                    string upgradeCID = $"{data.category1}_{data.category2}_{data.category3}_{level+1}";
-                    if (buildDict.ContainsKey(upgradeCID) && data.upgradeRaw.Count > 0)
-                    {
-                        compositionTableDatas.Add(new CompositionTableData(data, buildDict[upgradeCID]));
-                    }
+                    compositionTableDatas.Add(new CompositionTableData(data, buildDict[data.upgradeCID]));
                 }
             }
 
