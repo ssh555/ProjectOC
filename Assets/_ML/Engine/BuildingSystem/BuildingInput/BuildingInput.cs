@@ -521,7 +521,7 @@ namespace ML.Engine.BuildingSystem.Input
                 {
                     ""name"": ""negative"",
                     ""id"": ""a3cc6455-741e-4b65-8b06-b255da69c815"",
-                    ""path"": ""<XInputController>/leftTrigger"",
+                    ""path"": ""<XInputController>/leftStick/left"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -532,7 +532,7 @@ namespace ML.Engine.BuildingSystem.Input
                 {
                     ""name"": ""positive"",
                     ""id"": ""cf6182e9-e02b-4c1e-ae83-95d98d75fb07"",
-                    ""path"": ""<XInputController>/rightTrigger"",
+                    ""path"": ""<XInputController>/leftStick/right"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
