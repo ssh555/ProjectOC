@@ -689,6 +689,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #region temp
         public Sprite sprite1,sprite2,sprite3;
+        [ShowInInspector]
         public Dictionary<BeastType,Sprite> beastTypeDic = new Dictionary<BeastType, Sprite>();
         #endregion
 
@@ -780,10 +781,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                     Image RandomImage = RTInfo.Find("Random").Find("Image").GetComponent<Image>();
 
-
-                    RandomImage.sprite = beastTypeDic[currentBeastType];
-                    
-                    
+                    if(beastTypeDic.ContainsKey(currentBeastType))
+                    {
+                        RandomImage.sprite = beastTypeDic[currentBeastType];
+                    }
                    
                 }
 
@@ -831,18 +832,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                         Sub1nstance = panel;
                         ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
                         hasSub1nstance = true;
-                        Debug.Log("donthasSub1nstance");
                     }
                     else
                     {
                         Sub1nstance.Refresh();
-                        Debug.Log("hasSub1nstance");
                     }
                 } 
-                else
-                {
-                    Debug.Log("isQuit");
-                }
             }
             //selected
             for (int i = 0; i < Grids.Length; i++) 
@@ -1004,6 +999,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public static AssetBundle Texture2DAB;
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
         private string ResonanceWheelTexture2DPath = "ui/resonancewheel/texture2d";
+
         private IEnumerator InitUITexture2D()
         {
 

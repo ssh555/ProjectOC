@@ -177,9 +177,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
 
         #region SwitchBeast_performed
-        private float TimeInterval = 0.1f;
+        private float TimeInterval = 0.2f;
         CounterDownTimer timer;
-        private Transform cur, last;
+        private int curIndex=-1, lastIndex=-1;
 
         #endregion
         private void SwitchBeast_started(InputAction.CallbackContext obj)
@@ -191,7 +191,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
                 if (Workers.Count == 0) return;
 
-
+                
                 if (obj.ReadValue<float>() > 0)//上
                 {
                     CurrentBeastIndex = (CurrentBeastIndex + Workers.Count - 1) % Workers.Count;
@@ -200,6 +200,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 {
                     CurrentBeastIndex = (CurrentBeastIndex + 1) % Workers.Count;
                 }
+                lastIndex = curIndex;
+                curIndex = CurrentBeastIndex;
 
                 this.Refresh();
 
@@ -435,6 +437,62 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 }
 
                 #region 更新滑动窗口
+
+                if (lastIndex != -1 && curIndex != -1)
+                {
+                    var cur = Content.GetChild(curIndex);
+                    var last = Content.GetChild(lastIndex);
+
+                    if (cur != null && last != null)
+                    {
+                        // 当前激活的TP四个边点有一个不位于窗口内 -> 更新窗口滑动
+                        RectTransform uiRectTransform = cur.GetComponent<RectTransform>();
+                        RectTransform scrollRectTransform = cur.transform.parent.parent.parent.GetComponent<RectTransform>();
+                        // 获取 ScrollRect 组件
+                        ScrollRect scrollRect = scrollRectTransform.GetComponent<ScrollRect>();
+                        // 获取 Content 的 RectTransform 组件
+                        RectTransform contentRect = scrollRect.content;
+
+                        // 获取 UI 元素的四个角点
+                        Vector3[] corners = new Vector3[4];
+                        uiRectTransform.GetWorldCorners(corners);
+                        bool allCornersVisible = true;
+                        for (int i = 0; i < 4; ++i)
+                        {
+                            // 将世界空间的点转换为屏幕空间的点
+                            Vector3 screenPoint = RectTransformUtility.WorldToScreenPoint(null, corners[i]);
+                            // 判断 ScrollRect 是否包含这个点
+                            if (!RectTransformUtility.RectangleContainsScreenPoint(scrollRectTransform, screenPoint, null))
+                            {
+                                allCornersVisible = false;
+                                break;
+                            }
+                        }
+
+                        // 当前激活的TP四个边点有一个不位于窗口内 -> 更新窗口滑动
+                        if (!allCornersVisible)
+                        {
+                            // 将当前选中的这个放置于上一个激活TP的位置
+
+                            // 设置滑动位置
+
+                            // 获取点 A 和点 B 在 Content 中的位置
+                            Vector2 positionA = (last.transform as RectTransform).anchoredPosition;
+                            Vector2 positionB = (cur.transform as RectTransform).anchoredPosition;
+
+                            // 计算点 B 相对于点 A 的偏移量
+                            Vector2 offset = positionB - positionA;
+
+                            // 根据偏移量更新 ScrollRect 的滑动位置
+                            Vector2 normalizedPosition = scrollRect.normalizedPosition;
+                            normalizedPosition += new Vector2(offset.x / (contentRect.rect.width - (contentRect.parent as RectTransform).rect.width), offset.y / (contentRect.rect.height - (contentRect.parent as RectTransform).rect.height));
+                            scrollRect.normalizedPosition = normalizedPosition;
+                        }
+
+
+                    }
+                }
+
                 
                 #endregion
 

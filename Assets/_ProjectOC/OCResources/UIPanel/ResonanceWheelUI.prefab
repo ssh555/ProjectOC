@@ -494,7 +494,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 109.6576, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 69.8704}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6540191838890502345
@@ -3118,7 +3118,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 229.6576, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 69.8704}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7972875082982285161
@@ -6113,6 +6113,7 @@ MonoBehaviour:
   resonanceWheel_Sub1: {fileID: 4346256780039477983, guid: 14063b2a06011cf4db5a1177bd684494, type: 3}
   resonanceWheel_Sub2: {fileID: 8740659704077288989, guid: 7b7b8f15c588fb84d88ad150f98d0912, type: 3}
   exclusivePart: {fileID: 0}
+  isQuit: 0
   CurrentGridIndex: 0
   currentBeastType: 0
   sprite1: {fileID: 0}
