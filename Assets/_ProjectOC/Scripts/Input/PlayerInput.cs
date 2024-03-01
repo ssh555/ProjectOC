@@ -1561,7 +1561,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""6d63c30d-26b5-41c0-9c64-5a2db20ecda6"",
-                    ""path"": ""<Keyboard>/g"",
+                    ""path"": ""<Keyboard>/u"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

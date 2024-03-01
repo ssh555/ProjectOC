@@ -113,7 +113,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         public bool CanComposite(IInventory resource, string compositonID)
         {
             
-            if (!this.CompositeData.ContainsKey(compositonID) || this.CompositeData[compositonID].formula == null)
+            if (string.IsNullOrEmpty(compositonID) || !this.CompositeData.ContainsKey(compositonID) || this.CompositeData[compositonID].formula == null)
             {
                 return false;
             }

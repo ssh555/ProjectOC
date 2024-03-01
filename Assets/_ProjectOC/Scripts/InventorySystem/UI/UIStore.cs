@@ -10,6 +10,7 @@ using UnityEngine.UI;
 using ML.Engine.Extension;
 using ML.Engine.InventorySystem.CompositeSystem;
 using UnityEngine.Purchasing;
+using ProjectOC.ProNodeNS;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -521,7 +522,12 @@ namespace ProjectOC.InventorySystem.UI
                             tempSprite.Add(sprite);
                         }
                         img.sprite = sprite;
-                        ItemManager.Instance.AddItemIconObject(itemID, this.Store.WorldStore.transform);
+
+                        ItemManager.Instance.AddItemIconObject(itemID,
+                                                               this.Store.WorldStore.transform,
+                                                               new Vector3(0, this.Store.WorldStore.transform.GetComponent<Collider>().bounds.size.y / 2, 0),
+                                                               Quaternion.Euler(90, 0, 0),
+                                                               Vector3.one);
                     }
                 }
                 else
@@ -1040,11 +1046,11 @@ namespace ProjectOC.InventorySystem.UI
                 #endregion
 
                 #region Level
-                LvOld.text = "Lv: " + (this.Store.Level + 1).ToString();
+                LvOld.text = "Lv: " + this.Store.Level.ToString();
                 DescOld.text = PanelTextContent.text_LvDesc1 + this.Store.StoreCapacity + "    " + PanelTextContent.text_LvDesc2 + this.Store.StoreDataCapacity;
                 if (this.Store.Level + 1 <= this.Store.LevelMax)
                 {
-                    LvNew.text = "Lv: " + (Store.Level + 2).ToString();
+                    LvNew.text = "Lv: " + (Store.Level + 1).ToString();
                     DescNew.text = PanelTextContent.text_LvDesc1 + Store.LevelStoreCapacity[Store.Level + 1] + "    " + PanelTextContent.text_LvDesc2 + Store.LevelStoreDataCapacity[Store.Level + 1];
                 }
                 #endregion
