@@ -12,7 +12,9 @@ namespace ProjectOC.LandMassExpand
 {
     public class IslandManager : MonoBehaviour, ML.Engine.Manager.LocalManager.ILocalManager
     {
-        public static IslandManager Instance = null;
+        private static IslandManager Instance = null;
+        [SerializeField] 
+        public IslandBase currentIsland;
         private void Awake()
         {
             if (Instance != null)
