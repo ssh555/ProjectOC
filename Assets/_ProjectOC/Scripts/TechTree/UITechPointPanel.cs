@@ -310,7 +310,6 @@ namespace ProjectOC.TechTree.UI
         {
             InitStaticData();
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
-
             base.OnEnter();
             ProjectOC.Input.InputManager.PlayerInput.TechTree.Enable();
             Refresh();
