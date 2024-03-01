@@ -144,8 +144,6 @@ namespace ProjectOC.Player
             };
             ML.Engine.BuildingSystem.BuildingManager.Instance.Placer.OnBuildingModeExit += () =>
             {
-                ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
-
                 // to-do : ´ıÓÅ»¯
                 this.GetComponentInChildren<InteractComponent>().Enable();
             };
