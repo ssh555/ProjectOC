@@ -8,7 +8,7 @@ namespace ProjectOC.LandMassExpand
     public interface ISupportPowerBPart : IPowerBPart
     {
         public List<INeedPowerBpart> needPowerBparts { get; }
-
+        public bool InPower { get; }
         public void RemoveNeedPowerBpart(INeedPowerBpart iNeedPowerBpart)
         {
             if (needPowerBparts.Contains(iNeedPowerBpart))

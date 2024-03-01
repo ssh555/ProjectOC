@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3361294478
+CRC: 1039589577
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b534324c2a581fe8379a45d21a37265d
+    Hash: 4fe5b1178c3124d61d83866aae837297
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 48d97ccccb04bdac3abf4cc9f847ceb3
+    Hash: d97a5737ee205879d9025a5f195b9bc2
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: b534324c2a581fe8379a45d21a37265d
+    Hash: 4fe5b1178c3124d61d83866aae837297
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -28,12 +28,23 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 64
   Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 88dfd9a1d40070e45bc302b503615a5e, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
 - Class: 136
   Script: {instanceID: 0}
-SerializeReferenceClassIdentifiers: []
+- Class: 238
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: ML.Engine.BuildingSystem.BuildingSocket.BuildingSocketType
 Assets:
 - Assets/_ProjectOC/OCResources/Prefabs/Terrain/Buildings_1.prefab
+- Assets/_ProjectOC/OCResources/Prefabs/Terrain/TerrainPart.prefab
 - Assets/_ProjectOC/OCResources/Prefabs/Terrain/BuildingA.prefab
 Dependencies:
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/materials/terrain
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/model/terrain
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/terrain
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/model/terrain

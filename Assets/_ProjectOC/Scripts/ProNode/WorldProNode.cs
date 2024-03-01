@@ -34,7 +34,7 @@ namespace ProjectOC.ProNodeNS
             if (oldPos == newPos)
             {
                 // 生成逻辑对象
-                string actorID = BuildingManager.Instance.GetActorID(this.Classification.ToString().Replace('-', '_'));
+                string actorID = BuildingManager.Instance.GetActorID(this.Classification.ToString());
                 if (!string.IsNullOrEmpty(actorID))
                 {
                     LocalGameManager.Instance.ProNodeManager.WorldNodeSetData(this, actorID);
