@@ -2,9 +2,8 @@ namespace ProjectOC.WorkerNS
 {
     public enum TimeStatus
     {
-        None = 0,
-        Relax = 1,
-        Work_Transport = 2,
-        Work_OnDuty = 3
+        Relax = 0,
+        Work_Transport = 1,
+        Work_OnDuty = 2
     }
 }
