@@ -54,7 +54,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
         public override string ToString()
         {
-            return $"{Category1}-{Category2}-{Category3}-{Category4}";
+            return $"{Category1}_{Category2}_{Category3}_{Category4}";
         }
 
 

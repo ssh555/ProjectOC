@@ -716,12 +716,13 @@ namespace ProjectOC.ProNodeNS
             }
         }
 
+
         public List<Formula> GetUpgradeRaw()
         {
             List<Formula> result = new List<Formula>();
             if (this.WorldProNode != null)
             {
-                List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(this.WorldProNode.Classification.ToString().Replace('-', '_'));
+                List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(this.WorldProNode.Classification.ToString());
                 if (formulas != null)
                 {
                     result.AddRange(formulas);
@@ -735,7 +736,7 @@ namespace ProjectOC.ProNodeNS
             List<Formula> result = new List<Formula>();
             if (this.WorldProNode != null)
             {
-                List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(this.WorldProNode.Classification.ToString().Replace('-', '_'));
+                List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(this.WorldProNode.Classification.ToString());
                 if (formulas != null)
                 {
                     foreach (Formula formula in formulas)
@@ -755,9 +756,9 @@ namespace ProjectOC.ProNodeNS
         {
             if (this.WorldProNode != null)
             {
-                string ID = BuildingManager.Instance.GetID(this.WorldProNode.Classification.ToString().Replace('-', '_'));
-                string upgradeID = BuildingManager.Instance.GetUpgradeID(this.WorldProNode.Classification.ToString().Replace('-', '_'));
-                string upgradeCID = BuildingManager.Instance.GetUpgradeCID(this.WorldProNode.Classification.ToString().Replace('-', '_'));
+                string ID = BuildingManager.Instance.GetID(this.WorldProNode.Classification.ToString());
+                string upgradeID = BuildingManager.Instance.GetUpgradeID(this.WorldProNode.Classification.ToString());
+                string upgradeCID = BuildingManager.Instance.GetUpgradeCID(this.WorldProNode.Classification.ToString());
 
                 if (!string.IsNullOrEmpty(upgradeID)
                     && !string.IsNullOrEmpty(upgradeCID)

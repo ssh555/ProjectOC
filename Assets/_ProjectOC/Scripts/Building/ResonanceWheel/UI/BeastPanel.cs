@@ -416,10 +416,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     Image img = schedule.Find("T" + i.ToString()).GetComponent<Image>();
                     switch (workerTimeStatus[i])
                     {
-                        case TimeStatus.None:
-                            //Debug.Log("workerTimeStatus None");
-                            img.color = UnityEngine.Color.red;
-                            break;
                         case TimeStatus.Relax:
                             //Debug.Log("workerTimeStatus Relax");
                             img.color = UnityEngine.Color.green;

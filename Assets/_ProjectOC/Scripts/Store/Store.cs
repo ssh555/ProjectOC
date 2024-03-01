@@ -525,7 +525,7 @@ namespace ProjectOC.StoreNS
             List<Formula> result = new List<Formula>();
             if (this.WorldStore != null)
             {
-                List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(this.WorldStore.Classification.ToString().Replace('-', '_'));
+                List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(this.WorldStore.Classification.ToString());
                 if (formulas != null)
                 {
                     result.AddRange(formulas);
@@ -539,7 +539,7 @@ namespace ProjectOC.StoreNS
             List<Formula> result = new List<Formula>();
             if (this.WorldStore != null)
             {
-                List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(this.WorldStore.Classification.ToString().Replace('-', '_'));
+                List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(this.WorldStore.Classification.ToString());
                 if (formulas != null)
                 {
                     foreach (Formula formula in formulas)
@@ -559,9 +559,9 @@ namespace ProjectOC.StoreNS
         {
             if (this.WorldStore != null)
             {
-                string ID = BuildingManager.Instance.GetID(this.WorldStore.Classification.ToString().Replace('-', '_'));
-                string upgradeID = BuildingManager.Instance.GetUpgradeID(this.WorldStore.Classification.ToString().Replace('-', '_'));
-                string upgradeCID = BuildingManager.Instance.GetUpgradeCID(this.WorldStore.Classification.ToString().Replace('-', '_'));
+                string ID = BuildingManager.Instance.GetID(this.WorldStore.Classification.ToString());
+                string upgradeID = BuildingManager.Instance.GetUpgradeID(this.WorldStore.Classification.ToString());
+                string upgradeCID = BuildingManager.Instance.GetUpgradeCID(this.WorldStore.Classification.ToString());
 
                 if (!string.IsNullOrEmpty(upgradeID) 
                     && !string.IsNullOrEmpty(upgradeCID)
