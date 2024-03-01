@@ -29,19 +29,19 @@ public class NavMeshManager : MonoBehaviour, ML.Engine.Manager.LocalManager.ILoc
     {
         GameManager.Instance.RegisterLocalManager(this);
         //BuildingPlacer BP = BuildingManager.Instance.Placer;
-        // BuildingPlacer BP = FindObjectOfType<BuildingPlacer>();
-        // BP.OnPlaceModeSuccess += (bpart) =>
-        // {
-        //     JudgeNVSPosition(BP.SelectedPartInstance.transform);
-        // };
-        // BP.OnEditModeExit += (bpart) =>
-        // {
-        //     JudgeNVSPosition(BP.SelectedPartInstance.transform);
-        // };
-        // BP.OnBuildingModeExit += () =>
-        // {
-        //     UpdateNaveMeshSurfaces();
-        // };
+         BuildingPlacer BP = FindObjectOfType<BuildingPlacer>();
+         BP.OnPlaceModeSuccess += (bpart) =>
+         {
+             JudgeNVSPosition(bpart.transform);
+         };
+         BP.OnEditModeSuccess += (bpart,pos1,pos2) =>
+         {
+             JudgeNVSPosition(bpart.transform);
+         };
+         BP.OnBuildingModeExit += () =>
+         {
+             UpdateNaveMeshSurfaces();
+         };
     }
     
     void OnDestroy()
@@ -62,11 +62,14 @@ public class NavMeshManager : MonoBehaviour, ML.Engine.Manager.LocalManager.ILoc
             _nvs.UpdateNavMesh(_nvs.navMeshData);
         }
         surfacesToReBake.Clear();
-        Debug.Log($"time cost: {Time.realtimeSinceStartup-startT}");
+        Debug.Log($"navmesh bake time cost: {Time.realtimeSinceStartup-startT}");
     }
     
     public void JudgeNVSPosition(Transform _transf)
     {
+        // MeshCollider _collider = new MeshCollider();
+        // _collider.sharedMesh.isReadable = false;
+
         {
             NavMeshSurface _navMeshSurface = _transf.GetComponentInParent<NavMeshSurface>();
             //如果没有父节点，说明是新建，不用管老位置
@@ -92,7 +95,7 @@ public class NavMeshManager : MonoBehaviour, ML.Engine.Manager.LocalManager.ILoc
             }
         } 
         
-        Debug.LogWarning("Can't find islandArea");
+        Debug.LogWarning(_transf.name+ "Can't find islandArea");
     }
     
     public void AddNVSToUpdate(NavMeshSurface navMeshSurface)

@@ -32,14 +32,11 @@ namespace ProjectOC.LandMassExpand
                 powerCount = value;
                 
                 bool inPower = powerCount > 0;
-                if(vfxTranf != null)
-                    vfxTranf.SetActive(inPower);
             }
         }
         
 
-        [SerializeField,LabelText("³äµçÌØÐ§")]
-        private GameObject vfxTranf;
+
 
         private BuildPowerIslandManager bpIslandManager;
 
@@ -111,7 +108,7 @@ namespace ProjectOC.LandMassExpand
         void OnDrawGizmos()
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(vfxTranf.transform.position,PowerSupportRange);
+            Gizmos.DrawWireSphere(transform.position,PowerSupportRange);
         }
     #endif
     }

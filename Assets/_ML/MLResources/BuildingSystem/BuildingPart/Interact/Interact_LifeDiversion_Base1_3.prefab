@@ -200,11 +200,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 4096
-  InTakeType: 8
+  InTakeType: 0
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  CanPlaceAreaType: 4096
+  CanPlaceAreaType: 0
 --- !u!1 &9221427871961979008
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1844043907
+CRC: 3844902193
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: dc48ace06779be36c1be5d10f03dfb0c
+    Hash: 5e3e57b33c6a3bd2e0d908b40ed29d25
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 45077e462bbec115cb83b621fa0363e6
+    Hash: ea29092b95050a8df4067b664ba48054
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: dc48ace06779be36c1be5d10f03dfb0c
+    Hash: 5e3e57b33c6a3bd2e0d908b40ed29d25
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -24,8 +24,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
@@ -48,6 +46,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 122d184a229d7654389bc4921fdb6ac7, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 13e2ae5179f2850459864743df57cbdf, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
 - Class: 114
@@ -84,11 +84,23 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: Assembly-CSharp
   ClassName: ProjectOC.WorkerEchoNS.WorkerEcho
 - AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_Sprite
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_SpriteCharacter
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_SpriteGlyph
+- AssemblyName: Unity.TextMeshPro
   ClassName: TMPro.VertexGradient
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.Events.PersistentCallGroup
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.RectOffset
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.FaceInfo
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphMetrics
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphRect
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.AnimationTriggers
 - AssemblyName: UnityEngine.UI
@@ -119,12 +131,12 @@ Assets:
 - Assets/_ProjectOC/OCResources/UIPanel/UIProNodePanel.prefab
 - Assets/_ProjectOC/OCResources/UIPanel/PlayerUIBotPanel.prefab
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/fonts
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/textmeshpro/font
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/style
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/inventory/texture2d
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/item/texture2d
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/techpoint/texture2d
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/fonts
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/textmeshpro/font
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/style
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/inventory/texture2d
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/item/texture2d
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/techpoint/texture2d
