@@ -33,6 +33,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
             StartCoroutine(InitUIPrefabs());
             StartCoroutine(InitUITexture2D());
+
+
             //BeastInfo
             var Info1 = this.transform.Find("HiddenBeastInfo1").Find("Info");
             Stamina = Info1.Find("PhysicalStrength").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
@@ -44,12 +46,15 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
             var GInfo = Info1.Find("SkillGraph").Find("Viewport").Find("Content").Find("Ring");
-            Cook = GInfo.Find("Skill1").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
-            HandCraft = GInfo.Find("Skill6").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
-            Industry = GInfo.Find("Skill5").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
-            Magic = GInfo.Find("Skill4").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
-            Transport = GInfo.Find("Skill3").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
-            Collect = GInfo.Find("Skill2").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
+            beastSkills = new BeastSkill[GInfo.childCount];
+
+
+            for (int i = 0; i < GInfo.childCount; i++)
+            {
+                beastSkills[i].skillText = GInfo.GetChild(i).Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
+                beastSkills[i].workType = (WorkType)Enum.Parse(typeof(WorkType), GInfo.GetChild(i).name);
+            }
+
 
             
             var btn1 = this.transform.Find("HiddenBeastInfo2").Find("btn1");
@@ -113,11 +118,16 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region Internal
- 
 
-   
-        //private int CurrentFuctionTypeIndex = 0;//0为HBR 1为SSB
-        //private int CurrentGridIndex = 0;//0到4
+         private struct BeastSkill
+        {
+            public WorkType workType;
+            public TMPro.TextMeshProUGUI skillText;
+        
+        }
+
+
+
 
 
         private void Enter()
@@ -146,7 +156,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Receive.performed -= Receive_performed;
 
             // 返回
-            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
+            //ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
 
             
 
@@ -164,7 +174,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Receive.performed += Receive_performed;
 
             // 返回
-            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
+            //ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
 
         }
 
@@ -174,6 +184,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
+            
             UIMgr.PopPanel();
         }
 
@@ -185,7 +196,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             parentUI.workerEcho.ExpelWorker(parentUI.CurrentGridIndex);
 
             //ui
-            ResonanceWheelUI.RingGrid.Reset(parentUI.Grids[parentUI.CurrentGridIndex], parentUI.Grids[parentUI.CurrentGridIndex].transform);
+            ResonanceWheelUI.RingGrid.Reset(parentUI.Grids[parentUI.CurrentGridIndex]);
+            
             UIMgr.PopPanel();
         }
 
@@ -194,7 +206,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
             parentUI.workerEcho.SpawnWorker(parentUI.CurrentGridIndex, Vector3.zero);
             
-            ResonanceWheelUI.RingGrid.Reset(parentUI.Grids[parentUI.CurrentGridIndex], parentUI.Grids[parentUI.CurrentGridIndex].transform);
+            ResonanceWheelUI.RingGrid.Reset(parentUI.Grids[parentUI.CurrentGridIndex]);
             UIMgr.PopPanel();
         }
         #endregion
@@ -235,12 +247,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private Image GenderImage;
 
 
-        private TMPro.TextMeshProUGUI Cook;
-        private TMPro.TextMeshProUGUI HandCraft;
-        private TMPro.TextMeshProUGUI Industry;
-        private TMPro.TextMeshProUGUI Magic;
-        private TMPro.TextMeshProUGUI Transport;
-        private TMPro.TextMeshProUGUI Collect;
+        private BeastSkill[] beastSkills;
+
 
 
         private GameObject DescriptionPrefab;//预制体
@@ -274,36 +282,22 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             foreach (TextTip tp in ResonanceWheelUI.PanelTextContent_sub1.SkillType)
             {
-                switch (tp.name)
+
+
+                for (int i = 0; i < beastSkills.Length; i++) 
                 {
-                    case "Stamina":
-                        Stamina.text = tp.GetDescription();
-                        break;
-                    case "Speed":
-                        Speed.text = tp.GetDescription();
-                        break;
-                    case "Cook":
-                        Cook.text = tp.GetDescription();
-                        break;
-                    case "HandCraft":
-                        HandCraft.text = tp.GetDescription();
-                        break;
-                    case "Industry":
-                        Industry.text = tp.GetDescription();
-                        break;
-                    case "Magic":
-                        Magic.text = tp.GetDescription();
-                        break;
-                    case "Transport":
-                        Transport.text = tp.GetDescription();
-                        break;
-                    case "Collect":
-                        Collect.text = tp.GetDescription();
-                        break;
+                    if(tp.name == beastSkills[i].workType.ToString())
+                    {
+                        beastSkills[i].skillText.text = tp.GetDescription();
+                    }
                 }
 
 
             }
+
+            
+
+
             
             expel.ReWrite(ResonanceWheelUI.PanelTextContent_sub1.expel);
             receive.ReWrite(ResonanceWheelUI.PanelTextContent_sub1.receive);
@@ -314,69 +308,74 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             WorkerEcho workerEcho = (GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
 
 
-            Worker worker = workerEcho.GetExternWorkers()[parentUI.CurrentGridIndex].worker;
-            StaminaNum.text = worker.APMax.ToString();
-            SpeedNum.text = worker.WalkSpeed.ToString();
 
-
-
-            List<float> datas = new List<float>
+            Worker worker = workerEcho.GetExternWorkers()[parentUI.CurrentGridIndex]?.worker;
+            if (worker != null)
             {
-/*                            // 烹饪
-                worker.Skill[WorkType.Cook].Level / 10f,
-                // 轻工
-                worker.Skill[WorkType.HandCraft].Level / 10f,
-                // 精工
-                worker.Skill[WorkType.Industry].Level / 10f,
-                // 术法
-                worker.Skill[WorkType.Magic].Level / 10f,
-                // 搬运
-                worker.Skill[WorkType.Transport].Level / 10f,
-                // 采集
-                worker.Skill[WorkType.Collect].Level / 10f*/
-                0.2f,0.3f,0.5f,0.7f,0.8f,0.1f
-            };
+                StaminaNum.text = worker.APMax.ToString();
+                SpeedNum.text = worker.WalkSpeed.ToString();
 
-            var radar = this.transform.Find("HiddenBeastInfo1").Find("Info").Find("SkillGraph").Find("Viewport").Find("Content").Find("Radar").GetComponent<UIPolygon>();
-            radar.DrawPolygon(datas);
+
+
+                List<float> datas = new List<float>
+                {
+                                // 烹饪
+                    worker.Skill[WorkType.Cook].Level / 10f,
+                    // 轻工
+                    worker.Skill[WorkType.HandCraft].Level / 10f,
+                    // 精工
+                    worker.Skill[WorkType.Industry].Level / 10f,
+                    // 术法
+                    worker.Skill[WorkType.Magic].Level / 10f,
+                    // 搬运
+                    worker.Skill[WorkType.Transport].Level / 10f,
+                    // 采集
+                    worker.Skill[WorkType.Collect].Level / 10f
+                    //0.2f,0.3f,0.5f,0.7f,0.8f,0.1f
+                };
+
+                var radar = this.transform.Find("HiddenBeastInfo1").Find("Info").Find("SkillGraph").Find("Viewport").Find("Content").Find("Radar").GetComponent<UIPolygon>();
+                radar.DrawPolygon(datas);
+
+                //性别
+                if (worker.Gender == Gender.Male)
+                {
+                    GenderImage.sprite = icon_gendermaleSprite;
+                }
+                else
+                {
+                    GenderImage.sprite = icon_genderfemaleSprite;
+                }
+
+
+                BeastName.text = worker.Name;
+
+
+                if (this.PrefabsAB == null) return;
+
+                var Info = this.transform.Find("HiddenBeastInfo2").Find("Info").Find("Scroll View").Find("Viewport").Find("Content");
+                for (int i = 0; i < Info.childCount; i++)
+                {
+                    Destroy(Info.GetChild(i).gameObject);
+                }
+
+                foreach (var feature in worker.Features)
+                {
+
+                    var descriptionPrefab = Instantiate(DescriptionPrefab, Info);
+                    descriptionPrefab.transform.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;
+                    descriptionPrefab.transform.Find("Text2").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Description;
+                    descriptionPrefab.transform.Find("Text3").GetComponent<TMPro.TextMeshProUGUI>().text =
+                    "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>" + feature.EffectsDescription + "</b></color>";
+                }
+            }
             
-            //性别
-            if(worker.Gender == Gender.Male)
-            {
-                GenderImage.sprite = icon_gendermaleSprite;
-            }
-            else
-            {
-                GenderImage.sprite = icon_genderfemaleSprite;
-            }
-            
-
-            BeastName.text = worker.Name;
-
-
-            
-
-
-            if (this.PrefabsAB==null) return;
-
-            var Info = this.transform.Find("HiddenBeastInfo2").Find("Info").Find("Scroll View").Find("Viewport").Find("Content");
-            for(int i=0;i<Info.childCount;i++)
-            {
-                Destroy(Info.GetChild(i).gameObject);
-            }
-
-            foreach (var feature in worker.Features)
-            {
-                
-                var descriptionPrefab = Instantiate(DescriptionPrefab, Info);
-                descriptionPrefab.transform.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;
-                descriptionPrefab.transform.Find("Text2").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Description;
-                descriptionPrefab.transform.Find("Text3").GetComponent<TMPro.TextMeshProUGUI>().text = feature.EffectsDescription;
-            }
             //BotKeyTips
             KT_Back.ReWrite(ResonanceWheelUI.PanelTextContent_sub1.back);
         }
         #endregion
+
+
 
         #region TextContent
         [System.Serializable]
@@ -445,6 +444,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
 
         #endregion
+
+
 
     }
 

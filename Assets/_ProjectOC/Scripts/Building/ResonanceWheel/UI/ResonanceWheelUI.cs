@@ -46,12 +46,13 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
 
             workerEcho = (GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
-            
 
 
+            this.GetComponent<ResonanceWheelUI>().enabled = true;
             StartCoroutine(InitUIPrefabs());
             StartCoroutine(InitUITexture2D());
             InitUITextContents();
+            
             
             //exclusivePart
             exclusivePart = this.transform.Find("ExclusivePart");
@@ -81,26 +82,23 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             //Ring
             var ring = exclusivePart.Find("Ring").Find("Ring");
-            Grid1 = ring.Find("Grid1");
-            Grid2 = ring.Find("Grid2");
-            Grid3 = ring.Find("Grid3");
-            Grid4 = ring.Find("Grid4");
-            Grid5 = ring.Find("Grid5");
-            Grids.Add(new RingGrid(Grid1.transform));
-            Grids.Add(new RingGrid(Grid2.transform));
-            Grids.Add(new RingGrid(Grid3.transform));
-            Grids.Add(new RingGrid(Grid4.transform));
-            Grids.Add(new RingGrid(Grid5.transform));
+            Grids = new RingGrid[ring.childCount];
+
+            for(int i = 0;i < ring.childCount; i++)
+            {
+                Grids[i] = new RingGrid();
+                Grids[i].transform = ring.GetChild(i).transform;
+                Grids[i].RingGridText = Grids[i].transform.Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
+                Grids[i].isNull = true;
+                Grids[i].isTiming = false;
+                Grids[i].isResonating = false;
+
+            }
+
 
             KT_NextGrid = new UIKeyTip();
-            KT_NextGrid.keytip= ring.Find("SelectKeyTip").GetComponent<TMPro.TextMeshProUGUI>();
+            KT_NextGrid.keytip= exclusivePart.Find("Ring").Find("SelectKeyTip").GetComponent<TMPro.TextMeshProUGUI>();
             
-
-            Grid1Text = Grid1.Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
-            Grid2Text = Grid2.Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
-            Grid3Text = Grid3.Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
-            Grid4Text = Grid4.Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
-            Grid5Text = Grid5.Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
 
             //ResonanceTarget
             var ResonanceTarget = exclusivePart.Find("ResonanceTarget");
@@ -133,11 +131,18 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
             //BotKeyTips
-            var kt = this.exclusivePart.Find("BotKeyTips").Find("KeyTips");
+            var kt = this.transform.Find("BotKeyTips").Find("KeyTips");
             KT_Back = new UIKeyTip();
             KT_Back.img = kt.Find("KT_Back").Find("Image").GetComponent<Image>();
             KT_Back.keytip = KT_Back.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
             KT_Back.description = KT_Back.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
+
+
+            //sub1
+
+
+
+
 
             IsInit = true;
             Refresh();
@@ -164,8 +169,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 TimerUI.GetComponentInChildren<TextMeshProUGUI>().text = Grids[CurrentGridIndex].worker.timer.ConvertToMinAndSec();
             }
 
-
-
         }
 
         #endregion
@@ -185,6 +188,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
 
+            //TODO: 共鸣轮建筑存在时只隐藏不销毁
             this.gameObject.SetActive(false);
             this.Exit();
             ClearTemp();
@@ -224,6 +228,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public class RingGrid
         {
             public Sprite sprite;//隐兽显示贴图
+            public TMPro.TextMeshProUGUI RingGridText;
             public bool isNull;//是否为空
             public bool isTiming;//是否正在计时
             public bool isResonating;//是否共鸣完成
@@ -233,42 +238,23 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             public string id;
             public BeastType beastType;
 
-
-            public RingGrid(Transform transform)
+            internal static void Reset(RingGrid ringGrid)
             {
-                this.sprite = null;
-                this.isNull = true;
-                this.isTiming = false;
-                this.isResonating = false;
-
-                this.worker = null;
-                this.transform = transform;
-                this.id = null;
-                this.beastType = BeastType.WorkerEcho_Null;
-            }
-            public static void Reset(RingGrid grid,Transform transform)
-            {
-                grid.sprite = null;
-                grid.isNull = true;
-                grid.isTiming = false;
-                grid.isResonating = false;
-                grid.worker = null;
-                grid.transform = transform;
-                grid.id = null;
-                grid.beastType = BeastType.WorkerEcho_Null;
+                ringGrid.isNull = true;
+                ringGrid.isTiming = false;
+                ringGrid.isResonating = false;
             }
         }
-
-
-
 
         private void Enter()
         {
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Enable();
+            isQuit = false;
+            hasSub1nstance = false;
 
-
-            this.Refresh();
+            Invoke("Refresh", 0.01f);
+            //this.Refresh();
         }
 
         private void Exit()
@@ -330,6 +316,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
+
+            if(hasSub1nstance)
+            {
+                isQuit = true;
+                UIMgr.PopPanel();
+                
+            }
+
             UIMgr.PopPanel();
         }
 
@@ -423,7 +417,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
             //给格子计时器加回调并刷新
-            foreach (var grid in Grids) 
+            foreach (var grid in Grids)  
             {
                 if (grid.isNull)
                 {
@@ -438,8 +432,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                         grid.isTiming = true;
                     }
 
-
-
                     grid.worker.timer.OnEndEvent += () =>
                     {
                         //刷新素材
@@ -447,7 +439,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                         grid.isNull = false;
                         grid.isTiming = false;
 
-                        //此处有bug
+                        
                         this.Refresh();
                         
                     };
@@ -493,11 +485,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             exclusivePart = this.transform.Find("ExclusivePart");
             var ReasonanceTarget = exclusivePart.Find("ResonanceTarget");
             var ResonanceConsumption = exclusivePart.Find("ResonanceConsumption");
-            var BotKeyTips = exclusivePart.Find("BotKeyTips");
+            
 
             ReasonanceTarget.gameObject.SetActive(false);
             ResonanceConsumption.gameObject.SetActive(false);
-            BotKeyTips.gameObject.SetActive(false);
+            
 
             // 切换类目
 
@@ -513,7 +505,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.StopResonance.performed -= StopResonance_performed;
 
             // 返回
-            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
+            
         }
 
 
@@ -522,11 +514,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             exclusivePart = this.transform.Find("ExclusivePart");
             var ReasonanceTarget = exclusivePart.Find("ResonanceTarget");
             var ResonanceConsumption = exclusivePart.Find("ResonanceConsumption");
-            var BotKeyTips = exclusivePart.Find("BotKeyTips");
+            
 
             ReasonanceTarget.gameObject.SetActive(true);
             ResonanceConsumption.gameObject.SetActive(true);
-            BotKeyTips.gameObject.SetActive(true);
+            
 
             // 切换类目
             
@@ -542,7 +534,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.StopResonance.performed += StopResonance_performed;
 
             // 返回
-            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
+            
 
             hasSub1nstance = false;
         }
@@ -639,6 +631,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private ResonanceWheel_sub1 Sub1nstance = null;
         private bool hasSub1nstance = false;//是否有sub1的单一生成实例
+        public bool isQuit = false;
 
         //topPart
         private TMPro.TextMeshProUGUI TopTitleText;
@@ -652,11 +645,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         //ring
         [ShowInInspector]
-        public List<RingGrid> Grids = new List<RingGrid>();
-        private Transform Grid1, Grid2, Grid3, Grid4, Grid5;
-        public int CurrentGridIndex = 0;//0到4
+        public RingGrid[] Grids;
+        public int CurrentGridIndex = 0;
         private UIKeyTip KT_NextGrid;
-        private TMPro.TextMeshProUGUI Grid1Text, Grid2Text, Grid3Text, Grid4Text, Grid5Text;
 
         //ResonanceTarget
         private Transform RTInfo;
@@ -698,12 +689,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #region temp
         public Sprite sprite1,sprite2,sprite3;
-
-        public Sprite sprite_Cat, sprite_Deer, sprite_Dog, sprite_Fox, sprite_Rabbit, sprite_Seal;
+        [ShowInInspector]
+        public Dictionary<BeastType,Sprite> beastTypeDic = new Dictionary<BeastType, Sprite>();
         #endregion
 
         public override void Refresh()
         {
+            if (!this.gameObject.activeInHierarchy) return;
+
             if (ABJAProcessorJson_Main == null || !ABJAProcessorJson_Main.IsLoaded || !IsInit)
             {
                 Debug.Log("ABJAProcessorJson is null");
@@ -742,11 +735,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             #region Ring
             this.KT_NextGrid.ReWrite(PanelTextContent_Main.nextgrid);
-            if(Grids.Count==0) return;
+            if(Grids.Length==0) return;
 
             if (Grids[CurrentGridIndex].isNull)//空格子
             {
-                if(hasSub1nstance)
+                if (hasSub1nstance)
                 {
                     UIMgr.PopPanel();
                     hasSub1nstance=false;
@@ -787,27 +780,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed += SwitchTarget_performed;
 
                     Image RandomImage = RTInfo.Find("Random").Find("Image").GetComponent<Image>();
-                    switch (currentBeastType)
+
+                    if(beastTypeDic.ContainsKey(currentBeastType))
                     {
-                        case BeastType.WorkerEcho_Cat:
-                            RandomImage.sprite = sprite_Cat;
-                            break;
-                        case BeastType.WorkerEcho_Deer:
-                            RandomImage.sprite = sprite_Deer;
-                            break;
-                        case BeastType.WorkerEcho_Dog:
-                            RandomImage.sprite = sprite_Dog;
-                            break;
-                        case BeastType.WorkerEcho_Fox:
-                            RandomImage.sprite = sprite_Fox;
-                            break;
-                        case BeastType.WorkerEcho_Rabbit:
-                            RandomImage.sprite = sprite_Rabbit;
-                            break;
-                        case BeastType.WorkerEcho_Seal:
-                            RandomImage.sprite = sprite_Seal;
-                            break;
+                        RandomImage.sprite = beastTypeDic[currentBeastType];
                     }
+                   
                 }
 
                 //切换对象
@@ -823,11 +801,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 }
 
                 //更新为共鸣中
-                var Name = RCInfo.Find("Name");
+                //var Name = RCInfo.Find("Name");
                 var Consumables = RCInfo.Find("Consumables");
                 var StartBtn = RCInfo.Find("StartResonance");
                 var StopBtn = RCInfo.Find("StopResonance");
-                Name.GetComponentInChildren<TextMeshProUGUI>().text = "共鸣中";
+                //Name.GetComponentInChildren<TextMeshProUGUI>().text = "共鸣中";
                 Consumables.gameObject.SetActive(false);
                 StartBtn.gameObject.SetActive(false);
                 StopBtn.gameObject.SetActive(true);
@@ -844,25 +822,25 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
             else//计时完成格子
             {
-                if(!hasSub1nstance)
+                if(!isQuit)
                 {
-                    var panel = GameObject.Instantiate(resonanceWheel_Sub1);
-                    panel.transform.SetParent(this.transform.parent, false);
-                    panel.parentUI = this;
-                    Sub1nstance = panel;
-                    ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
-                    hasSub1nstance=true;
-                }
-                else
-                {
-                    Sub1nstance.Refresh();
-                }
-                
-
-
+                    if (!hasSub1nstance)
+                    {
+                        var panel = GameObject.Instantiate(resonanceWheel_Sub1);
+                        panel.transform.SetParent(this.transform.parent, false);
+                        panel.parentUI = this;
+                        Sub1nstance = panel;
+                        ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+                        hasSub1nstance = true;
+                    }
+                    else
+                    {
+                        Sub1nstance.Refresh();
+                    }
+                } 
             }
             //selected
-            for (int i = 0; i < Grids.Count; i++) 
+            for (int i = 0; i < Grids.Length; i++) 
             {
                 if (CurrentGridIndex == i)
                 {
@@ -872,13 +850,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 {
                     Grids[i].transform.Find("Selected").gameObject.SetActive(false);
                 }
+
+                Grids[i].RingGridText.text = PanelTextContent_Main.GridText;
             }
 
-            Grid1Text.text = PanelTextContent_Main.GridText;
-            Grid2Text.text = PanelTextContent_Main.GridText;
-            Grid3Text.text = PanelTextContent_Main.GridText;
-            Grid4Text.text = PanelTextContent_Main.GridText;
-            Grid5Text.text = PanelTextContent_Main.GridText;
 
             #endregion
 
@@ -1024,6 +999,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public static AssetBundle Texture2DAB;
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
         private string ResonanceWheelTexture2DPath = "ui/resonancewheel/texture2d";
+
         private IEnumerator InitUITexture2D()
         {
 
@@ -1043,18 +1019,25 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             sprite3 = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
 
             texture2D = Texture2DAB.LoadAsset<Texture2D>("Cat");
-            sprite_Cat = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
-            texture2D = Texture2DAB.LoadAsset<Texture2D>("Deer");
-            sprite_Deer = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
-            texture2D = Texture2DAB.LoadAsset<Texture2D>("Dog");
-            sprite_Dog = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
-            texture2D = Texture2DAB.LoadAsset<Texture2D>("Fox");
-            sprite_Fox = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
-            texture2D = Texture2DAB.LoadAsset<Texture2D>("Rabbit");
-            sprite_Rabbit = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
-            texture2D = Texture2DAB.LoadAsset<Texture2D>("Seal");
-            sprite_Seal = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
+            beastTypeDic.Add(BeastType.WorkerEcho_Cat, Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f)));
 
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("Deer");
+            beastTypeDic.Add(BeastType.WorkerEcho_Deer, Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f)));
+
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("Dog");
+            beastTypeDic.Add(BeastType.WorkerEcho_Dog, Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f)));
+
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("Fox");
+            beastTypeDic.Add(BeastType.WorkerEcho_Fox, Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f)));
+
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("Rabbit");
+            beastTypeDic.Add(BeastType.WorkerEcho_Rabbit, Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f)));
+
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("Seal");
+            beastTypeDic.Add(BeastType.WorkerEcho_Seal, Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f)));
+
+            texture2D = Texture2DAB.LoadAsset<Texture2D>("Random");
+            beastTypeDic.Add(BeastType.WorkerEcho_Random, Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f)));
         }
 
         #endregion

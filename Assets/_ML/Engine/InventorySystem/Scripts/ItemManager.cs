@@ -225,12 +225,22 @@ namespace ML.Engine.InventorySystem
             return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
         }
 
-        public void AddItemIconObject(string itemID, Transform parent)
+        public void AddItemIconObject(string itemID, Transform parent, Vector3 pos, Quaternion rot, Vector3 scale, bool isLocal = true)
         {
             if (parent.GetComponentInChildren<SpriteRenderer>() == null)
             {
                 GameObject obj = GameObject.Instantiate(Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(WorldObjPath).LoadAsset<GameObject>("ItemIcon"), parent);
-                obj.transform.position = parent.transform.position + new Vector3(0, parent.GetComponent<Collider>().bounds.size.y / 2, 0);
+                if (isLocal)
+                {
+                    obj.transform.localPosition = pos;
+                    obj.transform.localRotation = rot;
+                }
+                else
+                {
+                    obj.transform.position = pos;
+                    obj.transform.rotation = rot;
+                }
+                obj.transform.localScale = scale;
             }
             SpriteRenderer spriteRenderer = parent.GetComponentInChildren<SpriteRenderer>();
             spriteRenderer.sprite = GetItemSprite(itemID);

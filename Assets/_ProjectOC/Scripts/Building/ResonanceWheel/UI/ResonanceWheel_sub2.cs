@@ -3,6 +3,7 @@ using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using Newtonsoft.Json;
+using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -31,32 +32,16 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //Ring
             var ringcontent = this.transform.Find("Ring").Find("Viewport").Find("Content");
 
-            var ring = ringcontent.Find("Ring");
-            Grid1 = ring.Find("Grid1");
-            Grid2 = ring.Find("Grid2");
-            Grid3 = ring.Find("Grid3");
-            Grid4 = ring.Find("Grid4");
-            Grid5 = ring.Find("Grid5");
-            Grid6 = ring.Find("Grid6");
-            Grid7 = ring.Find("Grid7");
-            Grids.Add(new GridBeastType(Grid1.transform, ResonanceWheelUI.BeastType.WorkerEcho_Random));
-            Grids.Add(new GridBeastType(Grid2.transform, ResonanceWheelUI.BeastType.WorkerEcho_Cat));
-            Grids.Add(new GridBeastType(Grid3.transform, ResonanceWheelUI.BeastType.WorkerEcho_Deer));
-            Grids.Add(new GridBeastType(Grid4.transform, ResonanceWheelUI.BeastType.WorkerEcho_Fox));
-            Grids.Add(new GridBeastType(Grid5.transform, ResonanceWheelUI.BeastType.WorkerEcho_Rabbit));
-            Grids.Add(new GridBeastType(Grid6.transform, ResonanceWheelUI.BeastType.WorkerEcho_Dog));
-            Grids.Add(new GridBeastType(Grid7.transform, ResonanceWheelUI.BeastType.WorkerEcho_Seal));
+            var ring = ringcontent.Find("Ring").Find("ring");
 
-            Grid2.Find("Image").GetComponent<Image>().sprite = parentUI.sprite_Cat;
-            Grid3.Find("Image").GetComponent<Image>().sprite = parentUI.sprite_Deer;
-            Grid4.Find("Image").GetComponent<Image>().sprite = parentUI.sprite_Fox;
-            Grid5.Find("Image").GetComponent<Image>().sprite = parentUI.sprite_Rabbit;
-            Grid6.Find("Image").GetComponent<Image>().sprite = parentUI.sprite_Dog;
-            Grid7.Find("Image").GetComponent<Image>().sprite = parentUI.sprite_Seal;
-
-
-
-
+            Grids = new GridBeastType[ring.childCount];
+            for (int i = 0; i < ring.childCount; i++)
+            {
+                Grids[i].transform  = ring.GetChild(i);
+                Grids[i].beastType = (BeastType)Enum.Parse(typeof(BeastType), ring.GetChild(i).name);
+                Grids[i].image = Grids[i].transform.Find("Image").GetComponent<Image>();
+                Grids[i].image.sprite = parentUI.beastTypeDic[Grids[i].beastType];
+            }
 
             //BotKeyTips
             var kt = this.transform.Find("BotKeyTips").Find("KeyTips");
@@ -116,15 +101,17 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #endregion
 
-        public class GridBeastType
+        private struct GridBeastType
         {
             public Transform transform;
             public ResonanceWheelUI.BeastType beastType;
+            public Image image;
 
-            public GridBeastType(Transform transform, ResonanceWheelUI.BeastType beastType)
+            public GridBeastType(Transform transform, ResonanceWheelUI.BeastType beastType,Image image)
             {
                 this.transform = transform;
                 this.beastType = beastType;
+                this.image = image;
             }
 
         }
@@ -265,7 +252,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         
         //ring
         [ShowInInspector]
-        private List<GridBeastType> Grids = new List<GridBeastType>();
+        private GridBeastType[] Grids;
         private Transform Grid1, Grid2, Grid3, Grid4, Grid5, Grid6, Grid7;
         private int CurrentGridIndex = 0;//0µ½5
 
@@ -286,7 +273,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             //ring
 
-            for (int i = 0; i < Grids.Count; i++)
+            for (int i = 0; i < Grids.Length; i++)
             {
                 if (CurrentGridIndex == i)
                 {

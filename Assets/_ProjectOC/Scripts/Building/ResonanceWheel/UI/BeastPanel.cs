@@ -2,6 +2,7 @@ using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
+using ML.Engine.Timer;
 using Newtonsoft.Json;
 using ProjectOC.ManagerNS;
 using ProjectOC.Player;
@@ -13,6 +14,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using Unity.Burst.CompilerServices;
 using UnityEditor;
 using UnityEngine;
@@ -50,12 +52,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
             var GInfo = Info1.Find("SkillGraph").Find("Viewport").Find("Content").Find("Ring");
-            Cook = GInfo.Find("Skill1").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
-            HandCraft = GInfo.Find("Skill6").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
-            Industry = GInfo.Find("Skill5").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
-            Magic = GInfo.Find("Skill4").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
-            Transport = GInfo.Find("Skill3").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
-            Collect = GInfo.Find("Skill2").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
+            Cook = GInfo.Find("Cook").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
+            HandCraft = GInfo.Find("HandCraft").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
+            Industry = GInfo.Find("Industry").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
+            Magic = GInfo.Find("Magic").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
+            Transport = GInfo.Find("Transport").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
+            Collect = GInfo.Find("Collect").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
 
 
             var btn1 = this.transform.Find("HiddenBeastInfo3").Find("btn1");
@@ -146,9 +148,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
 
-            ProjectOC.Input.InputManager.PlayerInput.BeastPanel.SwitchBeast.performed -= SwitchBeast_performed;
-
-
+            ProjectOC.Input.InputManager.PlayerInput.BeastPanel.SwitchBeast.started -= SwitchBeast_started;
+            ProjectOC.Input.InputManager.PlayerInput.BeastPanel.SwitchBeast.canceled -= SwitchBeast_canceled;
             //驱逐
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Expel.performed -= Expel_performed;
 
@@ -164,7 +165,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private void RegisterInput()
         {
 
-            ProjectOC.Input.InputManager.PlayerInput.BeastPanel.SwitchBeast.performed += SwitchBeast_performed;
+            ProjectOC.Input.InputManager.PlayerInput.BeastPanel.SwitchBeast.started += SwitchBeast_started;
+            ProjectOC.Input.InputManager.PlayerInput.BeastPanel.SwitchBeast.canceled += SwitchBeast_canceled;
 
             //驱逐
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Expel.performed += Expel_performed;
@@ -174,21 +176,43 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         }
 
+        #region SwitchBeast_performed
+        private float TimeInterval = 0.2f;
+        CounterDownTimer timer;
+        private int curIndex=-1, lastIndex=-1;
 
-        private void SwitchBeast_performed(InputAction.CallbackContext obj)
+        #endregion
+        private void SwitchBeast_started(InputAction.CallbackContext obj)
         {
-            Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
-            if (Workers.Count == 0) return;
-            if (obj.ReadValue<float>() > 0)//上
+            GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
+            timer = new CounterDownTimer(TimeInterval, true, true, 1, 2);
+            timer.OnEndEvent += () =>
             {
-                CurrentBeastIndex = (CurrentBeastIndex + Workers.Count - 1) % Workers.Count;
-            }
-            else//下
-            {
-                CurrentBeastIndex = (CurrentBeastIndex + 1) % Workers.Count;
-            }
-            this.Refresh();
+                Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
+                if (Workers.Count == 0) return;
 
+                
+                if (obj.ReadValue<float>() > 0)//上
+                {
+                    CurrentBeastIndex = (CurrentBeastIndex + Workers.Count - 1) % Workers.Count;
+                }
+                else//下
+                {
+                    CurrentBeastIndex = (CurrentBeastIndex + 1) % Workers.Count;
+                }
+                lastIndex = curIndex;
+                curIndex = CurrentBeastIndex;
+
+                this.Refresh();
+
+            };
+            GameManager.Instance.CounterDownTimerManager.AddTimer(timer, 2);
+
+        }
+
+        private void SwitchBeast_canceled(InputAction.CallbackContext obj)
+        {
+            GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
         }
 
 
@@ -321,9 +345,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                 expel.ReWrite(PanelTextContent_BeastPanel.expel);
 
+                Worker worker = Workers[CurrentBeastIndex];
                 List<float> datas = new List<float>
                 {
-    /*                            // 烹饪
+                               // 烹饪
                     worker.Skill[WorkType.Cook].Level / 10f,
                     // 轻工
                     worker.Skill[WorkType.HandCraft].Level / 10f,
@@ -334,14 +359,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     // 搬运
                     worker.Skill[WorkType.Transport].Level / 10f,
                     // 采集
-                    worker.Skill[WorkType.Collect].Level / 10f*/
-                    0.2f,0.3f,0.5f,0.7f,0.8f,0.1f
+                    worker.Skill[WorkType.Collect].Level / 10f
+                    //0.2f,0.3f,0.5f,0.7f,0.8f,0.1f
                 };
 
                 var radar = this.transform.Find("HiddenBeastInfo2").Find("Info").Find("SkillGraph").Find("Viewport").Find("Content").Find("Radar").GetComponent<UIPolygon>();
                 radar.DrawPolygon(datas);
 
-                Worker worker = Workers[CurrentBeastIndex];
+                
                 
                 //性别
                 if (worker.Gender == Gender.Male)
@@ -375,7 +400,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     var descriptionPrefab = Instantiate(DescriptionPrefab, Info);
                     descriptionPrefab.transform.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;
                     descriptionPrefab.transform.Find("Text2").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Description;
-                    descriptionPrefab.transform.Find("Text3").GetComponent<TMPro.TextMeshProUGUI>().text = feature.EffectsDescription;
+                    descriptionPrefab.transform.Find("Text3").GetComponent<TMPro.TextMeshProUGUI>().text =
+                "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>" + feature.EffectsDescription + "</b></color>";
                 }
 
 
@@ -410,13 +436,79 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                 }
 
+                #region 更新滑动窗口
+
+                if (lastIndex != -1 && curIndex != -1)
+                {
+                    var cur = Content.GetChild(curIndex);
+                    var last = Content.GetChild(lastIndex);
+
+                    if (cur != null && last != null)
+                    {
+                        // 当前激活的TP四个边点有一个不位于窗口内 -> 更新窗口滑动
+                        RectTransform uiRectTransform = cur.GetComponent<RectTransform>();
+                        RectTransform scrollRectTransform = cur.transform.parent.parent.parent.GetComponent<RectTransform>();
+                        // 获取 ScrollRect 组件
+                        ScrollRect scrollRect = scrollRectTransform.GetComponent<ScrollRect>();
+                        // 获取 Content 的 RectTransform 组件
+                        RectTransform contentRect = scrollRect.content;
+
+                        // 获取 UI 元素的四个角点
+                        Vector3[] corners = new Vector3[4];
+                        uiRectTransform.GetWorldCorners(corners);
+                        bool allCornersVisible = true;
+                        for (int i = 0; i < 4; ++i)
+                        {
+                            // 将世界空间的点转换为屏幕空间的点
+                            Vector3 screenPoint = RectTransformUtility.WorldToScreenPoint(null, corners[i]);
+                            // 判断 ScrollRect 是否包含这个点
+                            if (!RectTransformUtility.RectangleContainsScreenPoint(scrollRectTransform, screenPoint, null))
+                            {
+                                allCornersVisible = false;
+                                break;
+                            }
+                        }
+
+                        // 当前激活的TP四个边点有一个不位于窗口内 -> 更新窗口滑动
+                        if (!allCornersVisible)
+                        {
+                            // 将当前选中的这个放置于上一个激活TP的位置
+
+                            // 设置滑动位置
+
+                            // 获取点 A 和点 B 在 Content 中的位置
+                            Vector2 positionA = (last.transform as RectTransform).anchoredPosition;
+                            Vector2 positionB = (cur.transform as RectTransform).anchoredPosition;
+
+                            // 计算点 B 相对于点 A 的偏移量
+                            Vector2 offset = positionB - positionA;
+
+                            // 根据偏移量更新 ScrollRect 的滑动位置
+                            Vector2 normalizedPosition = scrollRect.normalizedPosition;
+                            normalizedPosition += new Vector2(offset.x / (contentRect.rect.width - (contentRect.parent as RectTransform).rect.width), offset.y / (contentRect.rect.height - (contentRect.parent as RectTransform).rect.height));
+                            scrollRect.normalizedPosition = normalizedPosition;
+                        }
+
+
+                    }
+                }
+
+                
+                #endregion
+
+
+
+
+
+
+
             }
             else
             {
                 this.transform.Find("HiddenBeastInfo2").Find("Info").gameObject.SetActive(false);
                 this.transform.Find("HiddenBeastInfo3").Find("Info").gameObject.SetActive(false);
 
-                //Debug.Log("无隐兽");
+                Debug.Log("无隐兽");
             }
             //BotKeyTips
 
@@ -496,6 +588,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
 
+        
         #region Texture2D
         public static AssetBundle Texture2DAB;
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;

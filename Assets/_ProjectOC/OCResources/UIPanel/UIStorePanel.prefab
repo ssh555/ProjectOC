@@ -4273,6 +4273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsInit: 0
+  CurMode: 0
   Store:
     WorldStore: {fileID: 0}
     Name: 
@@ -4285,6 +4286,7 @@ MonoBehaviour:
     LevelStoreDataCapacity: 
     TransportPriority: 0
     IsInteracting: 0
+  Player: {fileID: 0}
 --- !u!222 &257790905731768433
 CanvasRenderer:
   m_ObjectHideFlags: 0
