@@ -863,7 +863,7 @@ namespace ML.Engine.BuildingSystem
         #endregion
 
         #region ¶Á±í
-        public const string Tex2DABPath = "UI/BuildingSystem/Texture2D/BuildIcon";
+        public const string Tex2DABPath = "UI/BuildingSystem/Texture2D/type";
         // Materials/Character/Player
 
         public Dictionary<string, BuildingTableData> BPartTableDictOnID = new Dictionary<string, BuildingTableData>();
@@ -896,6 +896,26 @@ namespace ML.Engine.BuildingSystem
             }
             return null;
         }
+
+        public Texture2D GetTexture2D(string CID)
+        {
+            if (!string.IsNullOrEmpty(CID) && !this.BPartTableDictOnClass.ContainsKey(CID))
+            {
+                return null;
+            }
+            return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(Tex2DABPath).LoadAsset<Texture2D>(this.BPartTableDictOnClass[CID].icon);
+        }
+
+        public Sprite GetSprite(string CID)
+        {
+            var tex = this.GetTexture2D(CID);
+            if (tex == null)
+            {
+                return null;
+            }
+            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -906,6 +926,15 @@ namespace ML.Engine.BuildingSystem
             if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
             {
                 return BPartTableDictOnClass[CID].actorID;
+            }
+            return null;
+        }
+
+        public string GetName(string CID)
+        {
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
+            {
+                return BPartTableDictOnClass[CID].name;
             }
             return null;
         }

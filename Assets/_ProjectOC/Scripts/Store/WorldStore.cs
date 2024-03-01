@@ -29,7 +29,7 @@ namespace ProjectOC.StoreNS
             if(oldPos == newPos)
             {
                 // 生成逻辑对象
-                string actorID = BuildingManager.Instance.GetActorID(this.Classification.ToString().Replace('-', '_'));
+                string actorID = BuildingManager.Instance.GetActorID(this.Classification.ToString());
                 if (!string.IsNullOrEmpty(actorID) && actorID.Split('_').Length == 3)
                 {
                     string[] split = actorID.Split("_");

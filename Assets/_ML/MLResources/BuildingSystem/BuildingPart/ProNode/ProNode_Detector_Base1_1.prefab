@@ -85,7 +85,7 @@ GameObject:
   - component: {fileID: 6736365939124491212}
   - component: {fileID: 696786700147558266}
   - component: {fileID: 7726414522168789734}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ProNode_Detector_Base1_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -202,6 +202,8 @@ MonoBehaviour:
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 0, z: 0, w: 0}
   activeSocketIndex: 0
+  powerSupportRange: 0
+  vfxTranf: {fileID: 0}
   ProNode:
     WorldProNode: {fileID: 0}
     ID: 
@@ -212,3 +214,4 @@ MonoBehaviour:
       ID: 
     Worker: {fileID: 0}
     MissionTransports: []
+    RequirePower: 0

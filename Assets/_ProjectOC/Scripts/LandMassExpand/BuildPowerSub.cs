@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks.Movement;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.Manager;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -30,6 +32,8 @@ namespace ProjectOC.LandMassExpand
         private Material powerVFXMat;
         //存储周围NeedPowerBpart
         public List<INeedPowerBpart> needPowerBparts { get; private set; }
+        private BuildPowerIslandManager bpIslandManager;
+        
         #region IPowerBPart
 
         private int powerCount;
@@ -51,7 +55,7 @@ namespace ProjectOC.LandMassExpand
         public bool InPower
         {
             get => this.inPower;
-            set
+            protected set
             {
                 if (value != inPower)
                 {
@@ -66,7 +70,7 @@ namespace ProjectOC.LandMassExpand
 
         #endregion
 
-        private new void Awake()
+        protected override void Awake()
         {
             powerVFXMat = powerSupportVFX.GetComponent<Renderer>().material;
             powerSupportVFX.GetComponent<Renderer>().sharedMaterial = powerVFXMat;
@@ -76,14 +80,19 @@ namespace ProjectOC.LandMassExpand
             base.Awake();
         }
 
+        protected virtual void Start()
+        {
+            bpIslandManager = GameManager.Instance.GetLocalManager<BuildPowerIslandManager>();
+        }
+
         void OnDestroy()
         {
-            if (BuildPowerIslandManager.Instance != null && BuildPowerIslandManager.Instance.powerSubs.Contains(this))
+            if (bpIslandManager != null && bpIslandManager.powerSubs.Contains(this))
             {
                 PowerCount = 0;
                 RemoveFromAllPowerCores();
   
-                BuildPowerIslandManager.Instance.powerSubs.Remove(this);
+                bpIslandManager.powerSubs.Remove(this);
             }
         }
 
@@ -91,9 +100,9 @@ namespace ProjectOC.LandMassExpand
         public override void OnChangePlaceEvent(Vector3 oldPos,Vector3 newPos)
         {
             //如果没有，说明刚建造则加入
-            if (!BuildPowerIslandManager.Instance.powerSubs.Contains(this))
+            if (!bpIslandManager.powerSubs.Contains(this))
             {
-                BuildPowerIslandManager.Instance.powerSubs.Add(this);
+                bpIslandManager.powerSubs.Add(this);
             }
             
             //重置 powerCore.needPowers、PowerCount、needPowers
@@ -102,9 +111,9 @@ namespace ProjectOC.LandMassExpand
             needPowerBparts.Clear();
             
             //重新计算powerCore
-            foreach (var powerCore in BuildPowerIslandManager.Instance.powerCores)
+            foreach (var powerCore in bpIslandManager.powerCores)
             {
-                if(BuildPowerIslandManager.Instance.CoverEachOther(powerCore,this))
+                if(bpIslandManager.CoverEachOther(powerCore,this))
                 {
                     powerCore.needPowerBparts.Add(this);
                     PowerCount++;
@@ -130,7 +139,7 @@ namespace ProjectOC.LandMassExpand
         //重新计算附近
         private void CalculatePowerCount()
         {
-            foreach (var electAppliance in BuildPowerIslandManager.Instance.electAppliances)
+            foreach (var electAppliance in bpIslandManager.electAppliances)
             {
                 if (CoverEachOther(electAppliance,transform.position))
                 {
@@ -156,7 +165,7 @@ namespace ProjectOC.LandMassExpand
 
         public void RemoveFromAllPowerCores()
         {
-            foreach (var powerCore in BuildPowerIslandManager.Instance.powerCores)
+            foreach (var powerCore in bpIslandManager.powerCores)
             {
                 powerCore.RemoveNeedPowerBpart(this);
             }

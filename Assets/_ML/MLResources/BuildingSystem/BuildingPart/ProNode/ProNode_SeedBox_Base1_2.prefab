@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4567047457417951801}
   - component: {fileID: 4073699552340808635}
   - component: {fileID: 6198633219779956922}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ProNode_SeedBox_Base1_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,6 +130,8 @@ MonoBehaviour:
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 0, z: 0, w: 0}
   activeSocketIndex: 0
+  powerSupportRange: 0
+  vfxTranf: {fileID: 0}
   ProNode:
     WorldProNode: {fileID: 0}
     ID: 
@@ -140,6 +142,7 @@ MonoBehaviour:
       ID: 
     Worker: {fileID: 0}
     MissionTransports: []
+    RequirePower: 0
 --- !u!1 &1582292135895741295
 GameObject:
   m_ObjectHideFlags: 0
