@@ -11,7 +11,7 @@ namespace ProjectOC.LandMassExpand
 {
     public class BuildPowerIslandManager : MonoBehaviour, ML.Engine.Manager.LocalManager.ILocalManager
     {
-        public static BuildPowerIslandManager Instance = null;
+        private static BuildPowerIslandManager Instance = null;
 
         void OnDestroy()
         {

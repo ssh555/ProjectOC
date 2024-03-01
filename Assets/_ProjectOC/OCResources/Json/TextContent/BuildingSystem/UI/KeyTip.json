@@ -256,7 +256,7 @@
         "keyname": "typelast",
         "keymap": {
             "KeyBoard": "C",
-            "XBOX": "LT"
+            "XBOX": "LS"
         },
         "description": {
             "Chinese": "",
@@ -267,7 +267,7 @@
         "keyname": "typenext",
         "keymap": {
             "KeyBoard": "V",
-            "XBOX": "RT"
+            "XBOX": "RS"
         },
         "description": {
             "Chinese": "",

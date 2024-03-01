@@ -127,13 +127,18 @@ namespace ML.Engine.Timer
                 if (IsAutoCycle)
                 {
                     Reset(Duration, false);
+                    this.OnUpdateEvent?.Invoke(currentTime);
                 }
                 else
                 {
                     this.IsStoped = true;
+                    currentTime = 0;
+                    this.OnUpdateEvent?.Invoke(currentTime);
                 }
-                currentTime = 0;
-                this.OnUpdateEvent?.Invoke(currentTime);
+
+                
+
+                
                 this.OnEndEvent?.Invoke();
                 return currentTime;
             }

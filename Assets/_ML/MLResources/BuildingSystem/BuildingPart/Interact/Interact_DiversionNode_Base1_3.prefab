@@ -145,7 +145,7 @@ GameObject:
   - component: {fileID: 4647023277956315210}
   - component: {fileID: 1983969499031655130}
   - component: {fileID: 6842113949390650654}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: RangeVfx
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -288,4 +288,4 @@ MonoBehaviour:
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  CanPlaceAreaType: 8192
+  CanPlaceAreaType: 8
