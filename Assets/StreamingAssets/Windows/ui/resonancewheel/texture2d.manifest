@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 573678366
+CRC: 3041237033
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 9111a298007255262d77478e71bf6591
+    Hash: 7a63f05f76b69f1e24c7b41e340b71bc
   TypeTreeHash:
     serializedVersion: 2
     Hash: 2d8df09e698f722ada1caa03d3413830
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 9111a298007255262d77478e71bf6591
+    Hash: 7a63f05f76b69f1e24c7b41e340b71bc
 HashAppended: 0
 ClassTypes:
 - Class: 28
@@ -32,6 +32,7 @@ Assets:
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/orange_background.png
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/Dog.png
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/icon_genderfemale.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/Random.png
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/box.png
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/icon_gendermale.png
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/icon_timing.png

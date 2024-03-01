@@ -96,9 +96,9 @@ namespace ProjectOC.Player.UI
                 {
                     // สตภýปฏ
                     var panel = GameObject.Instantiate((request.asset as GameObject).GetComponent<BeastPanel>());
-
+                    panel.transform.SetParent(this.transform.parent, false);
                     // Push
-                    ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(GameObject.Instantiate(panel.gameObject, GameObject.Find("Canvas").transform, false).GetComponent<ML.Engine.UI.UIBasePanel>());
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
                     //ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
                 });
 
