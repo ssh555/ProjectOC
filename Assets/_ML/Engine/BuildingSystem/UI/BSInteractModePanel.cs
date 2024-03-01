@@ -248,7 +248,7 @@ namespace ML.Engine.BuildingSystem.UI
 
             bool flag = false;
             List<Item> resItems = new List<Item>();
-            foreach (Formula formula in CompositeManager.Instance.GetCompositonFomula(BuildingManager.Instance.GetID(bpart.Classification.ToString().Replace('-', '_'))))
+            foreach (Formula formula in CompositeManager.Instance.GetCompositonFomula(BuildingManager.Instance.GetID(bpart.Classification.ToString())))
             {
                 if (ItemManager.Instance.IsValidItemID(formula.id) && formula.num > 0)
                 {

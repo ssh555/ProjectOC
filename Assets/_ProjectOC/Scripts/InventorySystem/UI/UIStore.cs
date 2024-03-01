@@ -1053,6 +1053,11 @@ namespace ProjectOC.InventorySystem.UI
                     LvNew.text = "Lv: " + (Store.Level + 1).ToString();
                     DescNew.text = PanelTextContent.text_LvDesc1 + Store.LevelStoreCapacity[Store.Level + 1] + "    " + PanelTextContent.text_LvDesc2 + Store.LevelStoreDataCapacity[Store.Level + 1];
                 }
+                else
+                {
+                    LvNew.text = "";
+                    DescNew.text = "";
+                }
                 #endregion
 
                 #region BotKeyTips

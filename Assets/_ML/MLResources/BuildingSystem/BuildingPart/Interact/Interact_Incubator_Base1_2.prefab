@@ -136,6 +136,7 @@ MonoBehaviour:
     StoreType: 0
     StoreDatas: []
     Transports: []
+    Level: 0
     LevelMax: 0
     LevelStoreCapacity: 
     LevelStoreDataCapacity: 
@@ -212,4 +213,4 @@ MonoBehaviour:
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  CanPlaceAreaType: 8192
+  CanPlaceAreaType: 8
