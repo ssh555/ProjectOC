@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2903704127
+CRC: 2677922985
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5a85cf2d2b6a8530bb4357c440812909
+    Hash: 634327eda2e0fd3d801f4ca6914f8f9a
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 19eaeedfd47e0dd1152a018f29cf4de8
+    Hash: cbba4982a0d0fe2ab401098fb3c4b747
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 5a85cf2d2b6a8530bb4357c440812909
+    Hash: 634327eda2e0fd3d801f4ca6914f8f9a
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -37,9 +37,13 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: eb3d211586925844984e282ee1983188, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 87badff79e1e54a4a9d68c74f002b591, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 84b45a722afc9f748bdef2e991e7ddaf, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 88dfd9a1d40070e45bc302b503615a5e, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 39885ced2427947418fd575b5d2b3bde, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 8a66f0dd625d0f74da1f89b119491b94, type: 3}
 - Class: 115
@@ -65,6 +69,8 @@ SerializeReferenceClassIdentifiers:
   ClassName: ProjectOC.ProNodeNS.ProNode
 - AssemblyName: Assembly-CSharp
   ClassName: ProjectOC.StoreNS.Store
+- AssemblyName: Assembly-CSharp
+  ClassName: ProjectOC.WorkerEchoNS.WorkerEcho
 Assets:
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/ProNode/ProNode_Calculus_Base1_2.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/ProNode/ProNode_Aggregator_Base1_2.prefab
@@ -165,6 +171,7 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/ProNode/ProNode_Integrator_Base1_1.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/ProNode/ProNode_Detector_Base1_1.prefab
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/model/buildingsystem/model
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/shader
+- E:/Project/projectoc/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
+- E:/Project/projectoc/Assets/StreamingAssets/Windows/model/buildingsystem/model
+- E:/Project/projectoc/Assets/StreamingAssets/Windows/shader
+- E:/Project/projectoc/Assets/StreamingAssets/Windows/ui/uipanel

@@ -23,6 +23,7 @@ namespace ProjectOC.WorkerEchoNS
         public WorkerEcho workerEcho;
         protected override void Awake()
         {
+            base.Awake();
             this.workerEcho = new WorkerEcho(this);
             this.InteractType = "WorkerEcho";
             this.PosOffset = Vector3.zero;

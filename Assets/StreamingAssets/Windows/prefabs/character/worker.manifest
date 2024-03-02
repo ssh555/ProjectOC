@@ -30,4 +30,4 @@ SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/_ProjectOC/OCResources/Prefabs/Character/Worker/Worker.prefab
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/model/character
+- E:/Project/projectoc/Assets/StreamingAssets/Windows/model/character
