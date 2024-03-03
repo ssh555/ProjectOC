@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 3646624780
+CRC: 2568287387
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -144,16 +144,9 @@ AssetBundleManifest:
       Dependencies:
         Dependency_0: materials/other
     Info_36:
-      Name: ui/resonancewheel/resonancewheelprefabs
-      Dependencies:
-        Dependency_0: textmeshpro/spriteasset
-        Dependency_1: fonts
-        Dependency_2: ui/resonancewheel/texture2d
-        Dependency_3: ui/inventory/texture2d
-    Info_37:
       Name: ui/buildingsystem/texture2d/matpackageicon
       Dependencies: {}
-    Info_38:
+    Info_37:
       Name: ui/buildingsystem/prefabs
       Dependencies:
         Dependency_0: ui/buildingsystem/texture2d/type
@@ -163,35 +156,36 @@ AssetBundleManifest:
         Dependency_4: textmeshpro/font
         Dependency_5: ui/buildingsystem/texture2d/category
         Dependency_6: ui/buildingsystem/texture2d/matpackageicon
-    Info_39:
+    Info_38:
       Name: json/textcontent/resonancewheel
       Dependencies: {}
-    Info_40:
+    Info_39:
       Name: model/terrain
       Dependencies:
         Dependency_0: shader
         Dependency_1: materials/terrain
-    Info_41:
+    Info_40:
       Name: prefabs/character/worker
       Dependencies:
         Dependency_0: model/character
-    Info_42:
+    Info_41:
       Name: ui/interactsystem/prefabs
       Dependencies:
         Dependency_0: fonts
         Dependency_1: ui/buildingsystem/texture2d/uitex
-    Info_43:
+    Info_42:
       Name: model/buildingsystem/texture3d
       Dependencies: {}
-    Info_44:
+    Info_43:
       Name: ui/uipanel
       Dependencies:
         Dependency_0: textmeshpro/spriteasset
         Dependency_1: fonts
         Dependency_2: ui/buildingsystem/texture2d/uitex
         Dependency_3: ui/buildingsystem/texture2d/style
-        Dependency_4: ui/resonancewheel/texture2d
-        Dependency_5: ui/techpoint/texture2d
-        Dependency_6: textmeshpro/font
-        Dependency_7: ui/item/texture2d
-        Dependency_8: ui/inventory/texture2d
+        Dependency_4: textmeshpro/font
+    Info_44:
+      Name: ui/resonancewheel/resonancewheelprefabs
+      Dependencies:
+        Dependency_0: textmeshpro/spriteasset
+        Dependency_1: fonts

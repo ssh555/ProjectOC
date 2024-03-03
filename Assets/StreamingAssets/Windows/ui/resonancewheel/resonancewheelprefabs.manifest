@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1726218941
+CRC: 2629289667
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 8e123890536c4f5a37489da9814441e2
+    Hash: d544d7a16076e180560e4415713b7e2b
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 63e11b1caf2ba2f0bb15b72825a7d0c3
+    Hash: 61bcb4f99683ab44ba63c631debcc09f
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 8e123890536c4f5a37489da9814441e2
+    Hash: d544d7a16076e180560e4415713b7e2b
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -33,6 +33,8 @@ ClassTypes:
 - Class: 222
   Script: {instanceID: 0}
 - Class: 224
+  Script: {instanceID: 0}
+- Class: 687078895
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
 - AssemblyName: Unity.TextMeshPro
@@ -58,5 +60,3 @@ Assets:
 Dependencies:
 - D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/fonts
 - D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/inventory/texture2d
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d
