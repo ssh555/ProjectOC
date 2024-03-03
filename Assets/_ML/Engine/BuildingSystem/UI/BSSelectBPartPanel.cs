@@ -404,8 +404,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.backInputAction.performed -= Placer_CancelSelection;
             this.Placer.BInput.BuildSelection.AlterCategory.performed -= Placer_AlterCategory1;
 
-            this.Placer.BInput.BuildSelection.AlternativeType.started -= Placer_AlterCategory2Started;
-            this.Placer.BInput.BuildSelection.AlternativeType.canceled -= Placer_AlterCategory2Cancled;
+            this.Placer.BInput.BuildSelection.AlternativeType.started -= Placer_AlterCategory2;
         }
 
         private void RegisterInput()
@@ -416,32 +415,15 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.backInputAction.performed += Placer_CancelSelection;
             this.Placer.BInput.BuildSelection.AlterCategory.performed += Placer_AlterCategory1;
 
-            this.Placer.BInput.BuildSelection.AlternativeType.started += Placer_AlterCategory2Started;
-            this.Placer.BInput.BuildSelection.AlternativeType.canceled += Placer_AlterCategory2Cancled;
-        }
-        #region Placer_AlterCategory2
-        private float TimeInterval = 0.1f;
-        CounterDownTimer timer;
-        #endregion
-        private void Placer_AlterCategory2Started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
-            timer = new CounterDownTimer(TimeInterval, true, true, 1, 2);
-            timer.OnEndEvent += () =>
-            {
-                int offset = obj.ReadValue<float>() > 0 ? 1 : -1;
-                this.SelectedCategory2Index = (this.SelectedCategory2Index + offset + this.CanSelectCategory2.Length) % this.CanSelectCategory2.Length;
-
-                this.Refresh();
-
-            };
-            GameManager.Instance.CounterDownTimerManager.AddTimer(timer, 2);
+            this.Placer.BInput.BuildSelection.AlternativeType.started += Placer_AlterCategory2;
         }
 
-
-        private void Placer_AlterCategory2Cancled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void Placer_AlterCategory2(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
+            int offset = obj.ReadValue<float>() > 0 ? 1 : -1;
+            this.SelectedCategory2Index = (this.SelectedCategory2Index + offset + this.CanSelectCategory2.Length) % this.CanSelectCategory2.Length;
+
+            this.Refresh();
         }
 
         private void Placer_AlterCategory1(UnityEngine.InputSystem.InputAction.CallbackContext obj)

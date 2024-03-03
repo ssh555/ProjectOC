@@ -82,7 +82,7 @@ namespace ProjectOC.WorkerNS
                     return TimeArrangement[timeManager.CurrentTimeFrame];
                 }
                 //Debug.LogError("DispatchTimeManager is Null");
-                return TimeStatus.None;
+                return TimeStatus.Relax;
             } 
         }
 

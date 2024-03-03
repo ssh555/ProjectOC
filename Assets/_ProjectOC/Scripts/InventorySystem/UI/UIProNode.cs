@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using ML.Engine.Extension;
-
+using ML.Engine.BuildingSystem;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -36,6 +36,8 @@ namespace ProjectOC.InventorySystem.UI
             PriorityUrgency = priority.Find("Urgency");
             PriorityNormal = priority.Find("Normal");
             PriorityAlternative = priority.Find("Alternative");
+            // ProNode
+            ProNodeUI = transform.Find("ProNode");
             // ProNode Recipe
             Transform recipe = transform.Find("ProNode").Find("Recipe");
             Product = recipe.Find("Product");
@@ -76,6 +78,7 @@ namespace ProjectOC.InventorySystem.UI
             LvNew = level.Find("LvNew").GetComponent<TMPro.TextMeshProUGUI>();
             DescOld = level.Find("DescOld").GetComponent<TMPro.TextMeshProUGUI>();
             DescNew = level.Find("DescNew").GetComponent<TMPro.TextMeshProUGUI>();
+            Level_Build = ChangeLevel.Find("Raw").Find("Build");
             ChangeLevel.gameObject.SetActive(false);
 
             // BotKeyTips
@@ -726,7 +729,9 @@ namespace ProjectOC.InventorySystem.UI
         private Transform Worker_UIItemTemplate;
         private GridLayoutGroup Level_GridLayout;
         private Transform Level_UIItemTemplate;
+        private Transform Level_Build;
 
+        private Transform ProNodeUI;
         private Transform ChangeRecipe;
         private Transform ChangeWorker;
         private Transform ChangeLevel;
@@ -744,6 +749,7 @@ namespace ProjectOC.InventorySystem.UI
             }
             if (CurMode == Mode.ProNode)
             {
+                this.ProNodeUI.gameObject.SetActive(true);
                 this.ChangeRecipe.gameObject.SetActive(false);
                 this.ChangeWorker.gameObject.SetActive(false);
                 this.ChangeLevel.gameObject.SetActive(false);
@@ -1471,9 +1477,18 @@ namespace ProjectOC.InventorySystem.UI
             else if (CurMode == Mode.ChangeLevel)
             {
                 this.ChangeLevel.gameObject.SetActive(true);
+                this.ProNodeUI.gameObject.SetActive(false);
                 this.BotKeyTips_ProNode.gameObject.SetActive(false);
                 this.BotKeyTips_Level.gameObject.SetActive(true);
                 this.Level_UIItemTemplate.gameObject.SetActive(false);
+
+                string cid = this.ProNode.WorldProNode.Classification.ToString();
+                string cidUpgrade = BuildingManager.Instance.GetUpgradeCID(cid);
+                if (string.IsNullOrEmpty(cidUpgrade))
+                {
+                    cidUpgrade = cid;
+                }
+                this.Level_Build.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = BuildingManager.Instance.GetName(cidUpgrade);
 
                 List<Formula> raw = this.ProNode.GetUpgradeRaw();
                 List<Formula> rawCur = this.ProNode.GetUpgradeRawCurrent(Player);
@@ -1551,6 +1566,11 @@ namespace ProjectOC.InventorySystem.UI
                 {
                     LvNew.text = "Lv: " + (ProNode.Level + 1).ToString();
                     DescNew.text = PanelTextContent.text_LvDesc + (ProNode.LevelUpgradeEff[ProNode.Level + 1] + this.ProNode.EffBase);
+                }
+                else
+                {
+                    LvNew.text = "";
+                    DescNew.text = "";
                 }
                 #endregion
 

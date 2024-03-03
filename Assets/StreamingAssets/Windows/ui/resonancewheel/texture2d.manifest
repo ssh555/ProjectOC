@@ -1,24 +1,42 @@
 ManifestFileVersion: 0
-CRC: 4275847916
+CRC: 3041237033
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f6a25e2431ae949155caeb592ee56770
+    Hash: 7a63f05f76b69f1e24c7b41e340b71bc
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 033fafe2c9f6c610c3a734393882fd4c
+    Hash: 2d8df09e698f722ada1caa03d3413830
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: f6a25e2431ae949155caeb592ee56770
+    Hash: 7a63f05f76b69f1e24c7b41e340b71bc
 HashAppended: 0
 ClassTypes:
 - Class: 28
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
-- Class: 687078895
-  Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/SA_ResonanceWheel_UI.spriteatlasv2
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/Seal.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/Rabbit.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/icon_beast.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/green_background.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/Deer.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/blue_background.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/Cat.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/btn_switchtarget.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/yellow_background.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/gray_background.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/slectgrid.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/orange_background.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/Dog.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/icon_genderfemale.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/Random.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/box.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/icon_gendermale.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/icon_timing.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/Fox.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/circle.png
+- Assets/_ProjectOC/OCResources/UI/ResonanceWheel/Texture2D/StaminaBar.png
 Dependencies: []

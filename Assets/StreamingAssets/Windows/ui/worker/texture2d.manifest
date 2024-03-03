@@ -1,24 +1,22 @@
 ManifestFileVersion: 0
-CRC: 2122982745
+CRC: 2187436391
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b6121fee45e3168c49d5a8134876b671
+    Hash: 0aa745218935106472fd9a4e26964ec0
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 033fafe2c9f6c610c3a734393882fd4c
+    Hash: 2d8df09e698f722ada1caa03d3413830
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: b6121fee45e3168c49d5a8134876b671
+    Hash: 0aa745218935106472fd9a4e26964ec0
 HashAppended: 0
 ClassTypes:
 - Class: 28
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
-- Class: 687078895
-  Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ProjectOC/OCResources/UI/Worker/SA_Worker_UI.spriteatlasv2
+- Assets/_ProjectOC/OCResources/UI/Worker/Texture2D/Category/Worker.png
 Dependencies: []

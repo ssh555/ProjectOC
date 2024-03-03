@@ -113,10 +113,7 @@ namespace ProjectOC.WorkerNS
             {
                 return false;
             }
-            //Debug.Log($"{Time.frameCount} {IsAPAboveWorkThreshold} {Worker.CurTimeFrameStatus == TimeStatus.Relax} {!IsAPAboveWorkThreshold}");
-            //return Worker.CurTimeFrameStatus == TimeStatus.Relax || !IsAPAboveWorkThreshold;
-            //// 休息时段，体力低于工作阈值 || 非休息阶段，体力低于休息阈值
-            return (Worker.CurTimeFrameStatus == TimeStatus.Relax && !IsAPAboveRelaxThreshold) || (Worker.CurTimeFrameStatus != TimeStatus.Relax && !IsAPAboveWorkThreshold);
+            return Worker.CurTimeFrameStatus == TimeStatus.Relax || !IsAPAboveWorkThreshold;
         }
         /// <summary>
         /// 休息到摸鱼
@@ -127,12 +124,7 @@ namespace ProjectOC.WorkerNS
             {
                 return false;
             }
-            // 如果是休息时段，结束的时候到达第一阈值就可以回去了，如果不到，就继续休息
-            // 如果当前不是休息时段，就休息到第二阈值
-            // 休息时段，体力高于工作阈值 || 非休息阶段，体力高于休息阈值
-            return (Worker.CurTimeFrameStatus == TimeStatus.Relax && IsAPAboveRelaxThreshold) || (Worker.CurTimeFrameStatus != TimeStatus.Relax && IsAPAboveWorkThreshold);
-            //Debug.Log($"{Time.frameCount} {IsAPAboveWorkThreshold} {Worker.CurTimeFrameStatus != TimeStatus.Relax} {IsAPAboveWorkThreshold}");
-            //return Worker.CurTimeFrameStatus != TimeStatus.Relax && IsAPAboveRelaxThreshold;
+            return Worker.CurTimeFrameStatus != TimeStatus.Relax && IsAPAboveRelaxThreshold;
         }
     }
 }
