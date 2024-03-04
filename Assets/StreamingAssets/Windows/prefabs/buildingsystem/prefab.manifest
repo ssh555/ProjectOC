@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3813949141
+CRC: 3033065650
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: bf02e1c899933e1a18ac85dcc10fe55a
+    Hash: 31a1e6c548cc26e860c5c9f635e74e60
   TypeTreeHash:
     serializedVersion: 2
     Hash: 571469ca389c6b337cd461fa0b8bdd4b
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: bf02e1c899933e1a18ac85dcc10fe55a
+    Hash: 31a1e6c548cc26e860c5c9f635e74e60
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -53,5 +53,5 @@ Assets:
 - Assets/_ProjectOC/OCResources/Prefabs/BuildingSystem/Prefabs/PowerCoreBuildSpace.prefab
 - Assets/_ProjectOC/OCResources/Prefabs/BuildingSystem/Prefabs/BuildingArea.prefab
 Dependencies:
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/shader
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/shader

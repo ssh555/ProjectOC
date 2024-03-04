@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2858421654
+CRC: 3317923341
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: eb7052d842c38d4e7e55c20edf608324
+    Hash: 5987885708612d76e28a881ca5fee7a7
   TypeTreeHash:
     serializedVersion: 2
     Hash: 59c03d2b98afd3e9e06e08bd517356db
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: eb7052d842c38d4e7e55c20edf608324
+    Hash: 5987885708612d76e28a881ca5fee7a7
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -63,5 +63,5 @@ Assets:
 - Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Materials/BuildingA_mt4.mat
 - Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/Terrain/Terrain.prefab
 Dependencies:
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/materials/terrain
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/shader
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/terrain
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/shader
