@@ -109,7 +109,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 }
                 else if (value != null)
                 {
-                    if (value.Type.HasFlag(this.ActiveSocket.CanPlaceAreaType))
+                    if ((value.Type & this.ActiveSocket.CanPlaceAreaType) != 0)
                     {
                         this.attachedArea = value;
                     }
@@ -132,7 +132,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 }
                 else if(value != null)
                 {
-                    if (value.InTakeType.HasFlag(this.ActiveSocket.Type))
+                    if ((value.InTakeType & this.ActiveSocket.Type) != 0)
                     {
                         this.attachedSocket = value;
                     }
