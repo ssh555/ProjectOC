@@ -788,9 +788,9 @@ namespace ProjectOC.Input
                 },
                 {
                     ""name"": ""AlterItem"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""3c54a2cf-a79c-4d0c-b90f-c38578702cc5"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -2237,12 +2237,12 @@ namespace ProjectOC.Input
             ""actions"": [
                 {
                     ""name"": ""SwitchBeast"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""66cabf0f-f00a-465d-805b-458e6654fdf5"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Expel"",

@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using Sirenix.OdinInspector;
 namespace ML.Engine.Manager
 {
     public sealed class GameManager : MonoBehaviour
@@ -31,6 +31,7 @@ namespace ML.Engine.Manager
         /// <summary>
         /// 内置的计时器Manager
         /// </summary>
+        [ShowInInspector]
         public Timer.CounterDownTimerManager CounterDownTimerManager { get; private set; }
 
         /// <summary>
