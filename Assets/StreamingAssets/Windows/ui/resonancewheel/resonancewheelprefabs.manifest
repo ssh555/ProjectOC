@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1898640641
+CRC: 2629289667
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d76b799d1f6a2076e9350939244f6350
+    Hash: d544d7a16076e180560e4415713b7e2b
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 63e11b1caf2ba2f0bb15b72825a7d0c3
+    Hash: 61bcb4f99683ab44ba63c631debcc09f
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: d76b799d1f6a2076e9350939244f6350
+    Hash: d544d7a16076e180560e4415713b7e2b
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -34,11 +34,23 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 224
   Script: {instanceID: 0}
+- Class: 687078895
+  Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_SpriteCharacter
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_SpriteGlyph
 - AssemblyName: Unity.TextMeshPro
   ClassName: TMPro.VertexGradient
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.FaceInfo
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphMetrics
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphRect
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
 Assets:
@@ -46,7 +58,5 @@ Assets:
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/ResonanceWheelPrefabs/BeastBio.prefab
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/ResonanceWheelPrefabs/Slot.prefab
 Dependencies:
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/fonts
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/inventory/texture2d
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/resonancewheel/texture2d
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/fonts
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset

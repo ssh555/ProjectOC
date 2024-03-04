@@ -84,7 +84,7 @@ GameObject:
   - component: {fileID: 1316944732851621082}
   - component: {fileID: 1641871215162052128}
   - component: {fileID: 5696085337571120987}
-  - component: {fileID: 3908783947142754641}
+  - component: {fileID: 345288411200826418}
   m_Layer: 7
   m_Name: Interact_EchoWheel_Base1_2
   m_TagString: Untagged
@@ -179,7 +179,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 7.657976, y: 0.6761554, z: 7.7761126}
   m_Center: {x: 0.00000011920929, y: 0.3379738, z: 0}
---- !u!114 &3908783947142754641
+--- !u!114 &345288411200826418
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -188,7 +188,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6255720643049910108}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb3d211586925844984e282ee1983188, type: 3}
+  m_Script: {fileID: 11500000, guid: 39885ced2427947418fd575b5d2b3bde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
@@ -202,4 +202,7 @@ MonoBehaviour:
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 0, z: 0, w: 0}
   activeSocketIndex: 0
-  powerSupportRange: 3
+  uIResonanceWheel: {fileID: 0}
+  uIResonanceWheelInstance: {fileID: 0}
+  workerEcho:
+    Level: 1
