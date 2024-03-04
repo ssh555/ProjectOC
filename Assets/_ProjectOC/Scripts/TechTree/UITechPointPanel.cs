@@ -13,6 +13,7 @@ using ML.Engine.InventorySystem;
 using ML.Engine.Timer;
 using ML.Engine.InventorySystem.CompositeSystem;
 using BehaviorDesigner.Runtime.Tasks.Movement;
+using UnityEngine.Audio;
 
 namespace ProjectOC.TechTree.UI
 {
@@ -50,7 +51,15 @@ namespace ProjectOC.TechTree.UI
         {
             get
             {
-                return TechPointList[LastGrid.x * GridRange.y + LastGrid.y];
+                try
+                {
+                    return TechPointList[LastGrid.x * GridRange.y + LastGrid.y];
+                }
+                catch
+                {
+                    return null;
+                }
+                
             }
         }
 
@@ -531,7 +540,7 @@ namespace ProjectOC.TechTree.UI
                         obj.transform.SetParent(this.TechPointTemplate.parent);
 
                         obj.AddComponent<RectTransform>();
-
+                        obj.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
                         tempGO.Add(obj);
                     }
                 }
@@ -542,6 +551,8 @@ namespace ProjectOC.TechTree.UI
                         obj = GameObject.Instantiate(this.TechPointTemplate.gameObject);
                         obj.transform.SetParent(this.TechPointTemplate.parent);
                         obj.SetActive(true);
+                        obj.name = id;
+                        obj.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
                         this.TTTPGO.Add(id, obj);
 
                         // Icon
@@ -641,52 +652,20 @@ namespace ProjectOC.TechTree.UI
             }
             #endregion
 
+
+
+
+
             // 强制立即更新 GridLayoutGroup 的布局
-            LayoutRebuilder.ForceRebuildLayoutImmediate(gridlayout.GetComponent<RectTransform>());
-            // Edge : 动态调整 Width Rotation.z, Height固定为10
-            foreach (var kv in tpPoint)
-            {
-                var edgeTemplate = kv.Value.transform.Find("EdgeParent").Find("EdgeTemplate");
-                edgeTemplate.gameObject.SetActive(false);
-                var preTP = TechTreeManager.Instance.GetPreTechPoints(kv.Key);
-                Color32 color = TechTreeManager.Instance.IsUnlockedTP(kv.Key) ? new Color32(255, 165, 0, 255) : Color.white;
-                foreach (var tp in preTP)
-                {
-                    Transform edge = null;
-                    if (!this.TTTPEGO.TryGetValue(kv.Key + tp, out var edgeGO))
-                    {
-                        edge = GameObject.Instantiate(edgeTemplate, edgeTemplate.parent);
+            
 
-                        TTTPEGO.Add(kv.Key + tp, edge.gameObject);
+            
 
-                        edge.gameObject.SetActive(true);
 
-                        var obj = tpPoint[tp];
+            
 
-                        // 旋转 -> Self to Target
-                        RectTransform UIA = edge.transform as RectTransform;
-                        RectTransform UIB = obj.transform as RectTransform;
-                        UIA.rotation = Quaternion.Euler(0, 0, Vector3.Angle(new Vector3(1, 0, 0), UIB.position - UIA.position));
+            StartCoroutine(ForceRebuildLayoutImmediateEnumerator(tpPoint, gridlayout));
 
-                        // Width : Distance(Self, Target) - Size
-                        float dis = Vector3.Distance(UIB.position, (UIA.parent.parent as RectTransform).position) - gridlayout.cellSize.x;
-
-                        var e = (edge as RectTransform);
-                        e.sizeDelta = new Vector2(dis, e.sizeDelta.y);
-
-                        // 位置
-                        UIA.localPosition = UIA.rotation * new Vector3(50, 0, 0);
-                    }
-                    else
-                    {
-                        edge = TTTPEGO[kv.Key + tp].transform;
-                    }
-
-                    // IsUnlocked
-                    edge.GetComponent<Image>().color = color;
-                }
-
-            }
             #endregion
 
             #region TechPointPanel
@@ -837,6 +816,67 @@ namespace ProjectOC.TechTree.UI
                 return ManagerNS.LocalGameManager.Instance.RecipeManager.GetProduct(id).id;
             }
             throw new Exception($"科技树配置中的可解锁项ID\"{id}\"既不是RecipeID，也不是BuildID");
+        }
+
+        private IEnumerator ForceRebuildLayoutImmediateEnumerator(Dictionary<string, GameObject> tpPoint, GridLayoutGroup gridlayout)
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(gridlayout.GetComponent<RectTransform>());
+
+            yield return null;
+            
+            // Edge : 动态调整 Width Rotation.z, Height固定为10
+            foreach (var kv in tpPoint)
+            {
+                var edgeTemplate = kv.Value.transform.Find("EdgeParent").Find("EdgeTemplate");
+                edgeTemplate.gameObject.SetActive(false);
+                var preTP = TechTreeManager.Instance.GetPreTechPoints(kv.Key);
+                Color32 color = TechTreeManager.Instance.IsUnlockedTP(kv.Key) ? new Color32(255, 165, 0, 255) : Color.white;
+                foreach (var tp in preTP)
+                {
+
+                    Transform edge = null;
+                    if (!this.TTTPEGO.TryGetValue(kv.Key + tp, out var edgeGO))
+                    {
+                        edge = GameObject.Instantiate(edgeTemplate, edgeTemplate.parent);
+
+                        TTTPEGO.Add(kv.Key + tp, edge.gameObject);
+
+                        edge.gameObject.SetActive(true);
+
+                        var obj = tpPoint[tp];
+
+                        // 旋转 -> Self to Target
+                        RectTransform UIA = edge.transform as RectTransform;
+                        RectTransform UIB = obj.transform as RectTransform;
+                        
+                        Vector3 v1 = UIB.anchoredPosition;//target
+                        Vector3 v2 = (UIA.parent.parent as RectTransform).anchoredPosition;//self
+                        Vector3 v3 = new Vector3(1, 0, 0);
+                        Vector3 v4 = v1 - v2;
+                        float angle = Vector3.Angle(v4, v3);
+                        angle = v1.y < v2.y ? -angle : angle;
+
+                        UIA.rotation = Quaternion.Euler(0, 0, angle);
+
+                        // Width : Distance(Self, Target) - Size
+                        float dis = Vector3.Distance(UIB.anchoredPosition, (UIA.parent.parent as RectTransform).anchoredPosition) - gridlayout.cellSize.x;// 
+
+                        var e = (edge as RectTransform);
+                        e.sizeDelta = new Vector2(dis, e.sizeDelta.y);
+
+                        // 位置
+                        UIA.localPosition = UIA.rotation * new Vector3(50, 0, 0);
+                    }
+                    else
+                    {
+                        edge = TTTPEGO[kv.Key + tp].transform;
+                    }
+
+                    // IsUnlocked
+                    edge.GetComponent<Image>().color = color;
+                }
+
+            }
         }
 
 
