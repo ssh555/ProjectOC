@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2217910958
+CRC: 2159296389
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c4604f891345f929dbf3e0f44353cfd1
+    Hash: 2df380e4c4075de527f6f95219777740
   TypeTreeHash:
     serializedVersion: 2
-    Hash: a18ea03347241218416eb2a92d6d155d
+    Hash: 8c63c21adfb93846fb7d0d9709c3c51e
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: c4604f891345f929dbf3e0f44353cfd1
+    Hash: 2df380e4c4075de527f6f95219777740
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -164,14 +164,16 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 224
   Script: {instanceID: 0}
+- Class: 687078895
+  Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/_ProjectOC/Scene/PlayerEnterScene.unity
-- Assets/_ProjectOC/Scene/_TEST/yl/yl.unity
+- Assets/_ProjectOC/Scene/_TEST/yl.unity
 - Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity
 - Assets/_ProjectOC/Scene/GameScene.unity
 Dependencies:
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/shader
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/uipanel
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/shader
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/uipanel

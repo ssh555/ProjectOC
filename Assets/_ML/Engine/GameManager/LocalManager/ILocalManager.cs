@@ -9,7 +9,15 @@ namespace ML.Engine.Manager.LocalManager
     /// </summary>
     public interface ILocalManager
     {
+        public virtual void OnRegister()
+        {
 
+        }
+
+        public virtual void OnUnregister()
+        {
+
+        }
     }
 
 }

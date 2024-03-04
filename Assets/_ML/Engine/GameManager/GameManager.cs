@@ -105,6 +105,7 @@ namespace ML.Engine.Manager
         {
             T manager = new T();
             this.globalManagers.Add(manager);
+            manager.OnRegister();
             return manager;
         }
 
@@ -120,6 +121,7 @@ namespace ML.Engine.Manager
                 return false;
             }
             this.globalManagers.Add(manager);
+            manager.OnRegister();
             return true;
         }
         
@@ -141,6 +143,7 @@ namespace ML.Engine.Manager
                 }
             }
             this.globalManagers.Remove(manager);
+            manager.OnUnregister();
             return manager;
         }
 
@@ -162,6 +165,7 @@ namespace ML.Engine.Manager
                         managers = new List<T>();
                     }
                     managers.Add((T)m);
+                    m.OnUnregister();
                 }
             }
             this.globalManagers.RemoveAll(manager => managers.Contains((T)manager));
@@ -223,6 +227,7 @@ namespace ML.Engine.Manager
         {
             T manager = new T();
             this.localManagers.Add(manager);
+            manager.OnRegister();
             return manager;
         }
 
@@ -238,6 +243,7 @@ namespace ML.Engine.Manager
                 return false;
             }
             this.localManagers.Add(manager);
+            manager.OnRegister();
             return true;
         }
 
@@ -259,6 +265,7 @@ namespace ML.Engine.Manager
                 }
             }
             this.localManagers.Remove(manager);
+            manager.OnUnregister();
             return manager;
         }
 
@@ -280,10 +287,17 @@ namespace ML.Engine.Manager
                         managers = new List<T>();
                     }
                     managers.Add((T)m);
+                    m.OnUnregister();
                 }
             }
             this.localManagers.RemoveAll(manager => managers.Contains((T)manager));
             return managers;
+        }
+
+        public void UnregisterAllLocalManager()
+        {
+            this.localManagers.ForEach(m => m.OnUnregister());
+            this.localManagers.Clear();
         }
 
         /// <summary>

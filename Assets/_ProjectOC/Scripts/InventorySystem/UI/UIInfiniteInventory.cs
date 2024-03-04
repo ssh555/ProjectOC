@@ -15,6 +15,7 @@ using ML.Engine.Manager;
 using ProjectOC.WorkerEchoNS;
 using ProjectOC.WorkerNS;
 using ML.Engine.UI;
+using UnityEngine.U2D;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -470,11 +471,12 @@ namespace ProjectOC.InventorySystem.UI
                     tempItemType.Add(itemtype, obj);
                     // 载入ItemType对应的Texture2D
                     var ab = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadLocalAB("UI/Inventory/Texture2D");
-                    var tex = ab.LoadAsset<Texture2D>(itemtype.ToString());
+                    SpriteAtlas sa = ab.LoadAsset<SpriteAtlas>("SA_Inventory_UI");
+                    var sprite = sa.GetSprite(itemtype.ToString());
+                    //var tex = ab.LoadAsset<Texture2D>(itemtype.ToString());
                     // 创建Sprite并加入临时内存管理
-                    if(tex != null)
+                    if(sprite != null)
                     {
-                        var sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
                         obj.transform.Find("Image").GetComponent<Image>().sprite = sprite;
                         tempSprite.Add(sprite);
                     }

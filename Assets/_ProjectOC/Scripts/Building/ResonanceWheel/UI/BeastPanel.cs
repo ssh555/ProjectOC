@@ -21,6 +21,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Purchasing;
 using UnityEngine.Rendering;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub1;
 using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub2;
@@ -602,13 +603,20 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 Debug.Log("InitUITexture2D ");
                 Texture2DAB = crequest.assetBundle;
             }
-            Texture2D texture2D;
 
-            texture2D = Texture2DAB.LoadAsset<Texture2D>("icon_genderfemale");
-            icon_genderfemaleSprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
-            texture2D = Texture2DAB.LoadAsset<Texture2D>("icon_gendermale");
-            icon_gendermaleSprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
-
+            //SpriteAtlas resonanceWheelAtlas = BeastPanel.Texture2DAB.LoadAsset<SpriteAtlas>("SA_ResonanceWheel_UI");
+            SpriteAtlas resonanceWheelAtlas = GM.ABResourceManager.LoadLocalAB(ResonanceWheelTexture2DPath)
+                .LoadAsset<SpriteAtlas>("SA_ResonanceWheel_UI");;
+            icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite("icon_genderfemale");
+            icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite("icon_gendermale");
+            
+            // Texture2D texture2D;
+            //
+            // texture2D = Texture2DAB.LoadAsset<Texture2D>("icon_genderfemale");
+            // icon_genderfemaleSprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
+            // texture2D = Texture2DAB.LoadAsset<Texture2D>("icon_gendermale");
+            // icon_gendermaleSprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
+            
 
 
         }
