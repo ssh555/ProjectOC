@@ -45,7 +45,7 @@ namespace ProjectOC.WorkerEchoNS
             }
             ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uIResonanceWheelInstance);
 
-            Debug.Log("Interact");
+            //Debug.Log("Interact");
         }
 
 

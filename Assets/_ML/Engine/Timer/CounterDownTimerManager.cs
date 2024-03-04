@@ -79,12 +79,12 @@ namespace ML.Engine.Timer
                 }
                 else if (this.realCounterDownTimers.Contains(item))
                 {
-                    Debug.Log("destroyrealCounterDownTimers " + item + " " + Time.frameCount);
+                    //Debug.Log("destroyrealCounterDownTimers " + item + " " + Time.frameCount);
                     this.realCounterDownTimers.Remove(item);
                 }
             }
-            if(destroyCounterDownTimers.Count>0)
-                Debug.Log("realCounterDownTimers " + realCounterDownTimers.Count +" "+ Time.frameCount);
+            /*if(destroyCounterDownTimers.Count>0)
+                Debug.Log("realCounterDownTimers " + realCounterDownTimers.Count +" "+ Time.frameCount);*/
             destroyCounterDownTimers.Clear();
         }
 
@@ -95,8 +95,8 @@ namespace ML.Engine.Timer
         /// <param name="tType"></param>
         public void AddTimer(CounterDownTimer countDownTimer, int tType)
         {
-            if(tType == 2)
-                Debug.Log("AddTimer " + countDownTimer + " " + Time.frameCount);
+            /*if(tType == 2)
+                Debug.Log("AddTimer " + countDownTimer + " " + Time.frameCount);*/
             if (this.destroyCounterDownTimers.Contains(countDownTimer))
             {
                 destroyCounterDownTimers.Remove(countDownTimer);
@@ -120,7 +120,7 @@ namespace ML.Engine.Timer
                 
                 if (!this.realCounterDownTimers.Contains(countDownTimer))
                 {
-                    Debug.Log("AddrealCounterDownTimers " + countDownTimer + " " + Time.frameCount);
+                    //Debug.Log("AddrealCounterDownTimers " + countDownTimer + " " + Time.frameCount);
                     this.realCounterDownTimers.Add(countDownTimer);
                 }
             }
@@ -132,10 +132,10 @@ namespace ML.Engine.Timer
             if (fixedCounterDownTimers.Contains(countDownTimer) || this.updateCounterDownTimers.Contains(countDownTimer) || this.realCounterDownTimers.Contains(countDownTimer))
             {
                 this.destroyCounterDownTimers.Add(countDownTimer);
-                Debug.Log("RemoveTimer true " + countDownTimer + " " + Time.frameCount);
+                //Debug.Log("RemoveTimer true " + countDownTimer + " " + Time.frameCount);
                 return true;
             }
-            Debug.Log("RemoveTimer false " + countDownTimer + " " + Time.frameCount);
+            //Debug.Log("RemoveTimer false " + countDownTimer + " " + Time.frameCount);
             return false;
         }
     }
