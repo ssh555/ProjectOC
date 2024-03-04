@@ -1,3 +1,4 @@
+using ML.Engine.Timer;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,7 @@ using UnityEngine;
 
 namespace ProjectOC.PlayerCharacterNS
 {
-    public class PlayerController : IController
+    public class PlayerController : IController,ITickComponent
     {
         public List<ICharacter> SpawnedCharacters { get; set; }
         public IControllerState State { get; set; }
@@ -27,5 +28,23 @@ namespace ProjectOC.PlayerCharacterNS
         {
             this.SpawnedCharacters.Clear();
         }
+
+        #region ITickComponent
+        public int tickPriority { get; set; }
+        public int fixedTickPriority { get; set; }
+        public int lateTickPriority { get; set; }
+        public virtual void Tick(float deltatime)
+        {
+
+        }
+        public virtual void FixedTick(float deltatime)
+        {
+
+        }
+        public virtual void LateTick(float deltatime)
+        {
+
+        }
+        #endregion
     }
 }

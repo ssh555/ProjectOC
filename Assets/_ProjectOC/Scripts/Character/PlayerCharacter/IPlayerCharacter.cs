@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace ProjectOC.PlayerCharacterNS
 {
-    //public interface IPlayerCharacter : ICharacter
-    //{
+    public interface IPlayerCharacter : ICharacter
+    {
 
-    //}
+    }
 }
