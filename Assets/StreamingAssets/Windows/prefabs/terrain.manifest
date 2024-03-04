@@ -46,5 +46,5 @@ Assets:
 - Assets/_ProjectOC/OCResources/Prefabs/Terrain/TerrainPart.prefab
 - Assets/_ProjectOC/OCResources/Prefabs/Terrain/BuildingA.prefab
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/terrain
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/model/terrain
+- E:/Project/projectoc/Assets/StreamingAssets/Windows/materials/terrain
+- E:/Project/projectoc/Assets/StreamingAssets/Windows/model/terrain

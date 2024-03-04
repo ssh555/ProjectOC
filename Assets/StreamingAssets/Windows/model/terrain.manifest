@@ -63,5 +63,5 @@ Assets:
 - Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Materials/BuildingA_mt4.mat
 - Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/Terrain/Terrain.prefab
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/terrain
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/shader
+- E:/Project/projectoc/Assets/StreamingAssets/Windows/materials/terrain
+- E:/Project/projectoc/Assets/StreamingAssets/Windows/shader
