@@ -504,7 +504,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 this.transform.Find("HiddenBeastInfo2").Find("Info").gameObject.SetActive(false);
                 this.transform.Find("HiddenBeastInfo3").Find("Info").gameObject.SetActive(false);
 
-                Debug.Log("ÎÞÒþÊÞ");
+                //Debug.Log("ÎÞÒþÊÞ");
             }
             //BotKeyTips
 
