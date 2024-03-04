@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,8 @@ using Newtonsoft.Json;
 using static ProjectOC.WorkerNS.EffectManager;
 using System.Runtime.Serialization;
 using Sirenix.Serialization;
+using UnityEngine.U2D;
+using Random = UnityEngine.Random;
 
 namespace ProjectOC.TechTree
 {
@@ -74,6 +77,7 @@ namespace ProjectOC.TechTree
         /// </summary>
         private Dictionary<string, TechPoint> registerTechPoints = new Dictionary<string, TechPoint>();
 
+        private SpriteAtlas techAtlas;
         public string[] GetAllTPID()
         {
             return this.registerTechPoints.Keys.ToArray();
@@ -106,8 +110,9 @@ namespace ProjectOC.TechTree
 
         public Sprite GetTPSprite(string ID)
         {
-            var tex = this.GetTPTexture2D(ID);
-            return tex != null ? Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(tex.width / 2, tex.height / 2)) : null;
+            return this.registerTechPoints.ContainsKey(ID)? GM.ABResourceManager.
+                LoadAsset<SpriteAtlas>(TPIconTexture2DABPath, "SA_TechPoint_UI").
+                GetSprite(this.registerTechPoints[ID].Icon) : null;
         }
 
         public string GetTPDescription(string ID)
@@ -170,8 +175,21 @@ namespace ProjectOC.TechTree
         
         public Sprite GetTPCategorySprite(TechPointCategory category)
         {
-            var tex = this.GetTPCategoryTexture2D(category);
-            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(tex.width / 2, tex.height / 2));
+            
+            Sprite _res = null;
+            SpriteAtlas sa = GM.ABResourceManager.LoadLocalAB(TPIconTexture2DABPath)
+                .LoadAsset<SpriteAtlas>("SA_TechPoint_UI");
+            // SpriteAtlas sa = GM.ABResourceManager.LoadAsset<SpriteAtlas>(TPIconTexture2DABPath, "SA_TechPoint_UI");
+            _res =   sa.GetSprite(category.ToString());
+
+            if (_res == null)
+            {
+                _res = GM.ABResourceManager.LoadLocalAB(TPIconTexture2DABPath)
+                    .LoadAsset<SpriteAtlas>("SA_TechPoint_UI")
+                    .GetSprite("None");
+            }
+
+            return _res;
         }
         #endregion
 
@@ -530,6 +548,7 @@ namespace ProjectOC.TechTree
         {
             ML.Engine.InventorySystem.ItemManager.Instance.LoadTableData();
             ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.LoadTableData();
+            ItemManager.Instance.LoadItemAtlas();
         }
 
         [Button("生成测试文件")]

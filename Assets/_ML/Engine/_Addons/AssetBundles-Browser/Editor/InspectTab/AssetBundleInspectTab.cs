@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEditor.IMGUI.Controls;
@@ -216,7 +217,17 @@ namespace AssetBundleBrowser
                 List<AssetBundleRecord> records = new List<AssetBundleRecord>(m_loadedAssetBundles.Values);
                 foreach (AssetBundleRecord record in records)
                 {
-                    record.bundle.Unload(true);
+                    try
+                    {
+                        record.bundle.Unload(true);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError(record.path);
+
+                        Debug.LogError(e);
+                        throw;
+                    }
                 }
 
                 m_loadedAssetBundles.Clear();

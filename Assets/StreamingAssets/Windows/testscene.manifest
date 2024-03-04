@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3328003760
+CRC: 720128750
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5c706f3a4a6e03fc146f7eecbba665e0
+    Hash: 6b4fd6d303a334aceb1e0d8c01f925e3
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 701bf2e8ecf2ce0b8b01793eb7fb977d
+    Hash: e3f8f2d83d41716a15aa90e2970e1aaa
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 5c706f3a4a6e03fc146f7eecbba665e0
+    Hash: 6b4fd6d303a334aceb1e0d8c01f925e3
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -168,6 +168,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 224
   Script: {instanceID: 0}
+- Class: 687078895
+  Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/_ProjectOC/Scene/_TEST/yangLe/_TASceneTest.unity
@@ -175,9 +177,9 @@ Assets:
 - Assets/_ProjectOC/Scene/_TEST/yangLe/_LandMassExpandTest.unity
 - Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/BuidlingSystemTest.unity
 Dependencies:
-- E:/Project/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
-- E:/Project/projectoc/Assets/StreamingAssets/Windows/materials/other
-- E:/Project/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
-- E:/Project/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
-- E:/Project/projectoc/Assets/StreamingAssets/Windows/shader
-- E:/Project/projectoc/Assets/StreamingAssets/Windows/ui/uipanel
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/other
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/shader
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/uipanel
