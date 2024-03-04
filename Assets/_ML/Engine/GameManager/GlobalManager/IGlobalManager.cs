@@ -9,7 +9,15 @@ namespace ML.Engine.Manager.GlobalManager
     /// </summary>
     public interface IGlobalManager
     {
+        public virtual void OnRegister()
+        {
 
+        }
+
+        public virtual void OnUnregister()
+        {
+
+        }
     }
 }
 
