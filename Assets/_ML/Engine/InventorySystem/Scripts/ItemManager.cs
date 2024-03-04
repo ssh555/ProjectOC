@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using ML.Engine.TextContent;
+using Unity.VisualScripting;
+using UnityEngine.U2D;
 
 namespace ML.Engine.InventorySystem
 {
@@ -195,6 +197,27 @@ namespace ML.Engine.InventorySystem
         }
         #endregion
 
+        #region SpriteAtlas
+
+        private SpriteAtlas itemAtlas;
+        public void LoadItemAtlas(bool _isLoad = true)
+        {
+            float startT = Time.realtimeSinceStartup;
+            if (_isLoad)
+            {
+                itemAtlas = Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath)
+                    .LoadAsset<SpriteAtlas>("SA_Item_UI");
+            }
+            else
+            {
+                itemAtlas = null;
+            }
+            //Debug.Log("LoadItemAtlas" + _isLoad + ":" + itemAtlas.IsUnityNull());
+            Debug.Log($"ItemAtlas: {itemAtlas != null}  {Time.realtimeSinceStartup-startT}");
+        }
+        
+
+        #endregion
         #region Getter
         public string[] GetAllItemID()
         {
@@ -217,12 +240,11 @@ namespace ML.Engine.InventorySystem
 
         public Sprite GetItemSprite(string id)
         {
-            var tex = this.GetItemTexture2D(id);
-            if(tex == null)
-            {
-                return null;
-            }
-            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+             if (!this.ItemTypeStrDict.ContainsKey(id))
+             {
+                 return null;
+             }
+            return itemAtlas.GetSprite(this.ItemTypeStrDict[id].icon);
         }
 
         public void AddItemIconObject(string itemID, Transform parent, Vector3 pos, Quaternion rot, Vector3 scale, bool isLocal = true)

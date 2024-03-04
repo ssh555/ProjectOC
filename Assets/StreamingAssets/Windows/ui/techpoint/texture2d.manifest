@@ -1,125 +1,24 @@
 ManifestFileVersion: 0
-CRC: 3857655625
+CRC: 829086460
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 0a0a3fa73e9c3eff432ce2a27338bbb7
+    Hash: c6ab1befd2fca5f5cf39c5f8de62a7de
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 2d8df09e698f722ada1caa03d3413830
+    Hash: 033fafe2c9f6c610c3a734393882fd4c
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 0a0a3fa73e9c3eff432ce2a27338bbb7
+    Hash: c6ab1befd2fca5f5cf39c5f8de62a7de
 HashAppended: 0
 ClassTypes:
 - Class: 28
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
+- Class: 687078895
+  Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Plant_10.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Plant_9.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Craft_10.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Echo_8.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Echo_6.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Energy_2.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Plant_5.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Storage_6.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Smelt_11.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/Category/Cook.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Plant_4.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Craft_11.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Energy_7.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Calculus_8.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Smelt_3.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/Category/Energy.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Smelt_6.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Kitchen_2.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Storage_2.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Plant_14.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Energy_6.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Calculus_13.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Echo_7.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Energy_3.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Kitchen_5.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Calculus_1.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Craft_4.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/Mask.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Storage_5.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/Category/Plant.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Plant_15.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Kitchen_3.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Plant_16.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Craft_13.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Kitchen_4.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Plant_8.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Craft_8.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Craft_7.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Calculus_4.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Energy_1.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Echo_9.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Smelt_13.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Smelt_1.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/Category/Storage.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Craft_1.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Calculus_14.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Energy_8.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Smelt_5.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Craft_17.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Calculus_2.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Echo_5.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Energy_10.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Storage_4.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Craft_15.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/Category/Craft.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Calculus_7.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Calculus_6.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Energy_4.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Plant_11.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/Category/Smelt.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Craft_9.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Energy_11.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Craft_6.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Smelt_9.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Echo_3.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Craft_5.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Energy_5.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Plant_13.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Plant_3.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Calculus_12.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Craft_3.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Smelt_10.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Storage_3.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/Category/Calculus.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Kitchen_1.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Smelt_2.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Calculus_5.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Energy_9.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Plant_6.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Plant_12.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Echo_4.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Plant_7.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Craft_18.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Craft_16.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Echo_1.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/DownTimer.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Calculus_10.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Craft_14.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Smelt_7.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/Selected.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/Category/Echo.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Calculus_11.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Echo_2.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Storage_1.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Calculus_3.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Smelt_8.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Plant_2.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Plant_1.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Craft_2.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Craft_12.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Calculus_9.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Smelt_4.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Smelt_12.png
-- Assets/_ProjectOC/OCResources/UI/TechPoint/Texture2D/UI_TechPoint_Icon_Energy_12.png
+- Assets/_ProjectOC/OCResources/UI/TechPoint/SA_TechPoint_UI.spriteatlasv2
 Dependencies: []
