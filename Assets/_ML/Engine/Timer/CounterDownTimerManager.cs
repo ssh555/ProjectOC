@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-
+using Sirenix.OdinInspector;
 namespace ML.Engine.Timer
 {
     public sealed class CounterDownTimerManager : Manager.GlobalManager.IGlobalManager
@@ -12,18 +12,22 @@ namespace ML.Engine.Timer
         /// <summary>
         /// Update 计时器
         /// </summary>
+        [ShowInInspector]
         private List<CounterDownTimer> updateCounterDownTimers = new List<CounterDownTimer>();
         /// <summary>
         /// FixedUpdate 计时器
         /// </summary>
+        [ShowInInspector]
         private List<CounterDownTimer> fixedCounterDownTimers = new List<CounterDownTimer>();
         /// <summary>
         /// 不受影响的真实时间计时器
         /// </summary>
+        [ShowInInspector]
         private List<CounterDownTimer> realCounterDownTimers = new List<CounterDownTimer>();
         /// <summary>
         /// 销毁列表
         /// </summary>
+        [ShowInInspector]
         private List<CounterDownTimer> destroyCounterDownTimers = new List<CounterDownTimer>();
 
         public float TimeScale = 1;
@@ -75,9 +79,12 @@ namespace ML.Engine.Timer
                 }
                 else if (this.realCounterDownTimers.Contains(item))
                 {
+                    //Debug.Log("destroyrealCounterDownTimers " + item + " " + Time.frameCount);
                     this.realCounterDownTimers.Remove(item);
                 }
             }
+            /*if(destroyCounterDownTimers.Count>0)
+                Debug.Log("realCounterDownTimers " + realCounterDownTimers.Count +" "+ Time.frameCount);*/
             destroyCounterDownTimers.Clear();
         }
 
@@ -88,7 +95,9 @@ namespace ML.Engine.Timer
         /// <param name="tType"></param>
         public void AddTimer(CounterDownTimer countDownTimer, int tType)
         {
-            if(this.destroyCounterDownTimers.Contains(countDownTimer))
+            /*if(tType == 2)
+                Debug.Log("AddTimer " + countDownTimer + " " + Time.frameCount);*/
+            if (this.destroyCounterDownTimers.Contains(countDownTimer))
             {
                 destroyCounterDownTimers.Remove(countDownTimer);
             }
@@ -108,8 +117,10 @@ namespace ML.Engine.Timer
             }
             else if(tType == 2)
             {
+                
                 if (!this.realCounterDownTimers.Contains(countDownTimer))
                 {
+                    //Debug.Log("AddrealCounterDownTimers " + countDownTimer + " " + Time.frameCount);
                     this.realCounterDownTimers.Add(countDownTimer);
                 }
             }
@@ -117,11 +128,14 @@ namespace ML.Engine.Timer
 
         public bool RemoveTimer(CounterDownTimer countDownTimer)
         {
+            
             if (fixedCounterDownTimers.Contains(countDownTimer) || this.updateCounterDownTimers.Contains(countDownTimer) || this.realCounterDownTimers.Contains(countDownTimer))
             {
                 this.destroyCounterDownTimers.Add(countDownTimer);
+                //Debug.Log("RemoveTimer true " + countDownTimer + " " + Time.frameCount);
                 return true;
             }
+            //Debug.Log("RemoveTimer false " + countDownTimer + " " + Time.frameCount);
             return false;
         }
     }
