@@ -107,6 +107,9 @@ namespace ML.Engine.Level
             // 场景切换 && 资源调度
             var loadResource = Manager.GameManager.Instance.StartCoroutine(DispatchLevelResources(preSceneName, CurSceneName));
 
+            // 注销所有LocalGameManager
+            Manager.GameManager.Instance.UnregisterAllLocalManager();
+
             ao = SceneManager.LoadSceneAsync(CurSceneName, LoadSceneMode.Single);
             ao.allowSceneActivation = false;
             // 等待场景加载完成
