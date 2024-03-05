@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 720128750
+CRC: 2528872599
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6b4fd6d303a334aceb1e0d8c01f925e3
+    Hash: 3345d4fb44af1a1e772ecdbbaba756bd
   TypeTreeHash:
     serializedVersion: 2
-    Hash: e3f8f2d83d41716a15aa90e2970e1aaa
+    Hash: 3aa07727e63afdd6570470ed82e06094
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 6b4fd6d303a334aceb1e0d8c01f925e3
+    Hash: 3345d4fb44af1a1e772ecdbbaba756bd
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -81,11 +81,7 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: f6da62ef2a40c0440adb4f3243b15be8, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: f371f36022d2b4244b195cf029a5205a, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 80f4609fd17e74645a998bf2488865f2, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
 - Class: 114
@@ -146,6 +142,10 @@ ClassTypes:
   Script: {fileID: 11500000, guid: a79d93bee2b59d94fa12949e4c5e61d1, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 7411b32275d93534cb08e4d96c084289, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 80f4609fd17e74645a998bf2488865f2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f6da62ef2a40c0440adb4f3243b15be8, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 135
@@ -177,9 +177,9 @@ Assets:
 - Assets/_ProjectOC/Scene/_TEST/yangLe/_LandMassExpandTest.unity
 - Assets/_ProjectOC/Scene/_TEST/ssh/BuidlingSystemTest/BuidlingSystemTest.unity
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/other
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/shader
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/uipanel
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/materials/other
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/shader
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/uipanel

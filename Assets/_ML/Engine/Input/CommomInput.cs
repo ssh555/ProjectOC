@@ -105,6 +105,133 @@ namespace ML.Engine.Input
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""StartMenu"",
+            ""id"": ""e78faf79-61ff-4aa7-9146-7a172679e32f"",
+            ""actions"": [
+                {
+                    ""name"": ""SwichBtn"",
+                    ""type"": ""Value"",
+                    ""id"": ""494e2f86-7710-441e-833a-6464f6b2b25c"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""KeyBoard"",
+                    ""id"": ""a211c9b0-0fba-4a28-a3e5-e4128642b797"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""361ae183-da8c-4e50-adef-086f99a04432"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""364684de-ce04-4f46-86d2-9ba52ea58c76"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""a3ed8003-098d-4c53-ade2-768d68fa8fde"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""062fb8f0-1c55-4c94-bfb5-49ba2f96c844"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""cc97dda1-f207-49e2-b095-8146cbbf4b49"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""84c8a198-84e4-469e-8d98-9d054a6b3430"",
+                    ""path"": ""<XInputController>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""e48ad3b3-6b8c-40e4-bc59-8ccb2142d381"",
+                    ""path"": ""<XInputController>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""b3d4b36f-5631-4d08-9b4b-58f869970754"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""dfe97926-a7f4-4ccc-a230-c656b660ae98"",
+                    ""path"": ""<XInputController>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -113,6 +240,9 @@ namespace ML.Engine.Input
             m_Common = asset.FindActionMap("Common", throwIfNotFound: true);
             m_Common_Comfirm = m_Common.FindAction("Comfirm", throwIfNotFound: true);
             m_Common_Back = m_Common.FindAction("Back", throwIfNotFound: true);
+            // StartMenu
+            m_StartMenu = asset.FindActionMap("StartMenu", throwIfNotFound: true);
+            m_StartMenu_SwichBtn = m_StartMenu.FindAction("SwichBtn", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -224,10 +354,60 @@ namespace ML.Engine.Input
             }
         }
         public CommonActions @Common => new CommonActions(this);
+
+        // StartMenu
+        private readonly InputActionMap m_StartMenu;
+        private List<IStartMenuActions> m_StartMenuActionsCallbackInterfaces = new List<IStartMenuActions>();
+        private readonly InputAction m_StartMenu_SwichBtn;
+        public struct StartMenuActions
+        {
+            private @CommomInput m_Wrapper;
+            public StartMenuActions(@CommomInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @SwichBtn => m_Wrapper.m_StartMenu_SwichBtn;
+            public InputActionMap Get() { return m_Wrapper.m_StartMenu; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(StartMenuActions set) { return set.Get(); }
+            public void AddCallbacks(IStartMenuActions instance)
+            {
+                if (instance == null || m_Wrapper.m_StartMenuActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_StartMenuActionsCallbackInterfaces.Add(instance);
+                @SwichBtn.started += instance.OnSwichBtn;
+                @SwichBtn.performed += instance.OnSwichBtn;
+                @SwichBtn.canceled += instance.OnSwichBtn;
+            }
+
+            private void UnregisterCallbacks(IStartMenuActions instance)
+            {
+                @SwichBtn.started -= instance.OnSwichBtn;
+                @SwichBtn.performed -= instance.OnSwichBtn;
+                @SwichBtn.canceled -= instance.OnSwichBtn;
+            }
+
+            public void RemoveCallbacks(IStartMenuActions instance)
+            {
+                if (m_Wrapper.m_StartMenuActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IStartMenuActions instance)
+            {
+                foreach (var item in m_Wrapper.m_StartMenuActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_StartMenuActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public StartMenuActions @StartMenu => new StartMenuActions(this);
         public interface ICommonActions
         {
             void OnComfirm(InputAction.CallbackContext context);
             void OnBack(InputAction.CallbackContext context);
+        }
+        public interface IStartMenuActions
+        {
+            void OnSwichBtn(InputAction.CallbackContext context);
         }
     }
 }

@@ -8,6 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity
     guid: 498514f2a81e71444a5903b99dc20011
+  - enabled: 1
+    path: Assets/_ProjectOC/Scene/GameScene.unity
+    guid: c14098454720c4e4eaf2737ca2b9304c
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 2f7381b21e61027428017a5ef566c8b3, type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: a92ad17f4b81c184faa5ad7cae4f6e93, type: 2}

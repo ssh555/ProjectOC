@@ -89,12 +89,14 @@ namespace ML.Engine.Level
         #endregion
 
         #region 场景切换
-        private AsyncOperation ao = null;
+        public AsyncOperation ao = null;
         /// <summary>
         /// 异步加载场景
         /// </summary>
         public IEnumerator LoadSceneAsync(string sceneName, System.Action<string, string> preCallback = null, System.Action<string, string> postCallback = null)
         {
+            yield return null;
+
             string preSceneName = this.CurSceneName;
             this.CurSceneName = sceneName;
 
@@ -109,7 +111,6 @@ namespace ML.Engine.Level
 
             // 注销所有LocalGameManager
             Manager.GameManager.Instance.UnregisterAllLocalManager();
-
             ao = SceneManager.LoadSceneAsync(CurSceneName, LoadSceneMode.Single);
             ao.allowSceneActivation = false;
             // 等待场景加载完成
@@ -121,7 +122,7 @@ namespace ML.Engine.Level
                 }
                 yield return null;
             }
-
+            yield return new WaitForSeconds(2.0f);
             // 等待资源加载完成
             yield return loadResource;
             // PostCallback

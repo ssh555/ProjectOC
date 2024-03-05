@@ -730,7 +730,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": ""up"",
                     ""id"": ""9889cd8e-043e-42e7-ba19-f951e21e4b41"",
-                    ""path"": ""<XInputController>/dpad/up"",
+                    ""path"": ""<XInputController>/leftStick/up"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -741,7 +741,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": ""down"",
                     ""id"": ""cce319de-2849-4f21-86df-6db00449bc26"",
-                    ""path"": ""<XInputController>/dpad/down"",
+                    ""path"": ""<XInputController>/leftStick/down"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -752,7 +752,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": ""left"",
                     ""id"": ""4b0ebd66-b18e-4e94-b8ce-1e52b4a7984f"",
-                    ""path"": ""<XInputController>/dpad/left"",
+                    ""path"": ""<XInputController>/leftStick/left"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -763,7 +763,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": ""right"",
                     ""id"": ""ecc2ff30-566f-4481-b51b-cc3a2fbcd67a"",
-                    ""path"": ""<XInputController>/dpad/right"",
+                    ""path"": ""<XInputController>/leftStick/right"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

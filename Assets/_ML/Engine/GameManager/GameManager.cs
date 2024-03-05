@@ -48,6 +48,12 @@ namespace ML.Engine.Manager
         /// 内置的全局InputManager
         /// </summary>
         public Input.InputManager InputManager { get; private set; }
+
+
+        /// <summary>
+        /// 内置的EnterPoint
+        /// </summary>
+        public EnterPoint EnterPoint { get; private set; }
         #endregion
 
         #region 单例管理
@@ -64,6 +70,13 @@ namespace ML.Engine.Manager
             Instance = this;
             DontDestroyOnLoad(this.gameObject);
             this.Init();
+
+            EnterPoint = new EnterPoint();
+
+            //while (!EnterPoint.EnterGame()) ;
+
+            //EnterPoint.EnterGame();
+
         }
 
         /// <summary>
@@ -82,6 +95,7 @@ namespace ML.Engine.Manager
 
             this.UIManager = this.RegisterGlobalManager<UI.UIManager>();
             this.InputManager = this.RegisterGlobalManager<Input.InputManager>();
+
         }
         
         private void OnDestroy()
@@ -431,7 +445,7 @@ namespace ML.Engine.Manager
 
         #endregion
 
-
+        
 
         #region Config
         [LabelText("语言"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]

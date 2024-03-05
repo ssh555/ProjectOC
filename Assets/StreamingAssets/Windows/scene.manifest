@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2159296389
+CRC: 1542578274
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 2df380e4c4075de527f6f95219777740
+    Hash: c256948e64ed2f1ccba24c9019aad020
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 8c63c21adfb93846fb7d0d9709c3c51e
+    Hash: 8fe69cb5f0a579ccbde89571ba45406a
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 2df380e4c4075de527f6f95219777740
+    Hash: c256948e64ed2f1ccba24c9019aad020
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -81,11 +81,7 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: f6da62ef2a40c0440adb4f3243b15be8, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: f371f36022d2b4244b195cf029a5205a, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 80f4609fd17e74645a998bf2488865f2, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
 - Class: 114
@@ -133,6 +129,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 2a4db7a114972834c8e4117be1d82ba3, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fa7155796051b734daa718462081dc5f, type: 3}
@@ -144,6 +142,10 @@ ClassTypes:
   Script: {fileID: 11500000, guid: a79d93bee2b59d94fa12949e4c5e61d1, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 7411b32275d93534cb08e4d96c084289, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 80f4609fd17e74645a998bf2488865f2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f6da62ef2a40c0440adb4f3243b15be8, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 136
@@ -168,12 +170,12 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ProjectOC/Scene/PlayerEnterScene.unity
-- Assets/_ProjectOC/Scene/_TEST/yl.unity
+- Assets/_ML/Scene/EnterPointScene.unity
+- Assets/_ProjectOC/Scene/_TEST/yl/yl.unity
 - Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity
 - Assets/_ProjectOC/Scene/GameScene.unity
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/shader
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/uipanel
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/shader
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/uipanel
