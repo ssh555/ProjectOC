@@ -179,41 +179,46 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #region SwitchBeast_performed
         private float TimeInterval = 0.2f;
-        CounterDownTimer timer;
+        CounterDownTimer timer = null;
         private int curIndex=-1, lastIndex=-1;
 
         #endregion
         private void SwitchBeast_started(InputAction.CallbackContext obj)
         {
-            GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
-            timer = new CounterDownTimer(TimeInterval, true, true, 1, 2);
-            timer.OnEndEvent += () =>
+            Debug.Log("SwitchBeast_started "+Time.frameCount);
+            if(timer == null)
             {
-                Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
-                if (Workers.Count == 0) return;
-
-                
-                if (obj.ReadValue<float>() > 0)//上
+                timer = new CounterDownTimer(TimeInterval, true, true, 1, 2);
+                timer.OnEndEvent += () =>
                 {
-                    CurrentBeastIndex = (CurrentBeastIndex + Workers.Count - 1) % Workers.Count;
-                }
-                else//下
-                {
-                    CurrentBeastIndex = (CurrentBeastIndex + 1) % Workers.Count;
-                }
-                lastIndex = curIndex;
-                curIndex = CurrentBeastIndex;
+                    //Debug.Log("OnEndEvent");
+                    Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
+                    if (Workers.Count == 0) return;
 
-                this.Refresh();
 
-            };
-            GameManager.Instance.CounterDownTimerManager.AddTimer(timer, 2);
+                    if (obj.ReadValue<float>() > 0)//上
+                    {
+                        CurrentBeastIndex = (CurrentBeastIndex + Workers.Count - 1) % Workers.Count;
+                    }
+                    else//下
+                    {
+                        CurrentBeastIndex = (CurrentBeastIndex + 1) % Workers.Count;
+                    }
+                    lastIndex = curIndex;
+                    curIndex = CurrentBeastIndex;
 
+                    this.Refresh();
+
+                };
+            }
+            
         }
 
         private void SwitchBeast_canceled(InputAction.CallbackContext obj)
         {
+            Debug.Log("SwitchBeast_canceled "+ Time.frameCount);
             GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
+            timer = null;
         }
 
 
@@ -226,6 +231,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             LocalGameManager.Instance.WorkerManager.DeleteWorker(Workers[CurrentBeastIndex]);
 
             GameObject.Destroy(Workers[CurrentBeastIndex].gameObject);
+
+            CurrentBeastIndex = (CurrentBeastIndex + Workers.Count - 1) % Workers.Count;
+
+
             this.Refresh();
 
 
@@ -347,22 +356,15 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 expel.ReWrite(PanelTextContent_BeastPanel.expel);
 
                 Worker worker = Workers[CurrentBeastIndex];
-                List<float> datas = new List<float>
+                List<float> datas = new List<float>();
+
+
+                Dictionary<WorkType,Skill> skillDic = worker.Skill;
+                foreach (var skill in skillDic)
                 {
-                               // 烹饪
-                    worker.Skill[WorkType.Cook].Level / 10f,
-                    // 轻工
-                    worker.Skill[WorkType.HandCraft].Level / 10f,
-                    // 精工
-                    worker.Skill[WorkType.Industry].Level / 10f,
-                    // 术法
-                    worker.Skill[WorkType.Magic].Level / 10f,
-                    // 搬运
-                    worker.Skill[WorkType.Transport].Level / 10f,
-                    // 采集
-                    worker.Skill[WorkType.Collect].Level / 10f
-                    //0.2f,0.3f,0.5f,0.7f,0.8f,0.1f
-                };
+                    datas.Add(skillDic[skill.Key].Level / 10f);
+                }
+
 
                 var radar = this.transform.Find("HiddenBeastInfo2").Find("Info").Find("SkillGraph").Find("Viewport").Find("Content").Find("Radar").GetComponent<UIPolygon>();
                 radar.DrawPolygon(datas);

@@ -318,22 +318,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
 
-                List<float> datas = new List<float>
+                List<float> datas = new List<float>();
+
+
+                Dictionary<WorkType, Skill> skillDic = worker.Skill;
+                foreach (var skill in skillDic)
                 {
-                                // 烹饪
-                    worker.Skill[WorkType.Cook].Level / 10f,
-                    // 轻工
-                    worker.Skill[WorkType.HandCraft].Level / 10f,
-                    // 精工
-                    worker.Skill[WorkType.Industry].Level / 10f,
-                    // 术法
-                    worker.Skill[WorkType.Magic].Level / 10f,
-                    // 搬运
-                    worker.Skill[WorkType.Transport].Level / 10f,
-                    // 采集
-                    worker.Skill[WorkType.Collect].Level / 10f
-                    //0.2f,0.3f,0.5f,0.7f,0.8f,0.1f
-                };
+                    datas.Add(skillDic[skill.Key].Level / 10f);
+                }
 
                 var radar = this.transform.Find("HiddenBeastInfo1").Find("Info").Find("SkillGraph").Find("Viewport").Find("Content").Find("Radar").GetComponent<UIPolygon>();
                 radar.DrawPolygon(datas);
