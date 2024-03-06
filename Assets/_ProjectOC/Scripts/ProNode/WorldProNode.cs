@@ -22,14 +22,16 @@ namespace ProjectOC.ProNodeNS
         public Vector3 PosOffset { get; set; } = Vector3.zero;
 
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             // 不需要 Update
             this.enabled = false;
         }
 
         public override void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
+            base.OnChangePlaceEvent(oldPos, newPos);
             // 第一次新建
             if (oldPos == newPos)
             {
