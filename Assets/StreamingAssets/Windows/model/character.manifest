@@ -26,4 +26,4 @@ SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/_ProjectOC/OCResources/Meshes/Character/Cattiva.fbx
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/other
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials/other

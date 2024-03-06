@@ -6,7 +6,7 @@ Hashes:
     Hash: 31a1e6c548cc26e860c5c9f635e74e60
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 571469ca389c6b337cd461fa0b8bdd4b
+    Hash: df5c6456e03e0e773b774c84a8c08bb7
   IncrementalBuildHash:
     serializedVersion: 2
     Hash: 31a1e6c548cc26e860c5c9f635e74e60
@@ -31,8 +31,6 @@ ClassTypes:
 - Class: 65
   Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 11500000, guid: d37d3d4c9a445db4dbea37f893d6ff3d, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: af8d7691ad33d024bb987315792c6fb6, type: 3}
@@ -40,6 +38,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 88dfd9a1d40070e45bc302b503615a5e, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: a79d93bee2b59d94fa12949e4c5e61d1, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d37d3d4c9a445db4dbea37f893d6ff3d, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 135
@@ -53,5 +53,5 @@ Assets:
 - Assets/_ProjectOC/OCResources/Prefabs/BuildingSystem/Prefabs/PowerCoreBuildSpace.prefab
 - Assets/_ProjectOC/OCResources/Prefabs/BuildingSystem/Prefabs/BuildingArea.prefab
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/shader
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/shader

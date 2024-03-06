@@ -1,185 +1,184 @@
 ManifestFileVersion: 0
-CRC: 1449586585
+CRC: 3495013178
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: textmeshpro/spriteasset
-      Dependencies:
-        Dependency_0: textmeshpro/shader
-    Info_1:
-      Name: ui/buildingsystem/texture2d/type
-      Dependencies: {}
-    Info_2:
       Name: animation/character/player/model
       Dependencies:
         Dependency_0: materials/character/player
-    Info_3:
-      Name: json/textcontent/interactsystem
-      Dependencies: {}
-    Info_4:
-      Name: assets/buildingsystem/matpackage
-      Dependencies:
-        Dependency_0: materials/buildingsystem/bpart
-        Dependency_1: ui/buildingsystem/texture2d/matpackageicon
-    Info_5:
-      Name: prefabs/buildingsystem/prefab
-      Dependencies:
-        Dependency_0: shader
-        Dependency_1: materials/buildingsystem/bpart
-    Info_6:
-      Name: model/buildingsystem/model
-      Dependencies:
-        Dependency_0: materials/buildingsystem/bpart
-    Info_7:
-      Name: fonts
-      Dependencies:
-        Dependency_0: textmeshpro/shader
-    Info_8:
-      Name: materials/other
-      Dependencies: {}
-    Info_9:
-      Name: ui/buildingsystem/texture2d/uitex
-      Dependencies: {}
-    Info_10:
+    Info_1:
       Name: animation/character/player/playermove
       Dependencies: {}
-    Info_11:
-      Name: json/textcontent/inventory
-      Dependencies: {}
-    Info_12:
+    Info_2:
       Name: prefabs/character/player
       Dependencies:
         Dependency_0: animation/character/player/model
         Dependency_1: animation/character/player/playermove
         Dependency_2: ui/uipanel
-    Info_13:
-      Name: ui/buildingsystem/texture2d/style
-      Dependencies: {}
-    Info_14:
+    Info_3:
       Name: scene
       Dependencies:
-        Dependency_0: prefabs/buildingsystem/prefab
-        Dependency_1: prefabs/character/player
+        Dependency_0: prefabs/character/player
+        Dependency_1: ui/uipanel
         Dependency_2: shader
-        Dependency_3: ui/uipanel
+        Dependency_3: prefabs/buildingsystem/prefab
+    Info_4:
+      Name: testscene
+      Dependencies:
+        Dependency_0: animation/character/player/model
+        Dependency_1: prefabs/character/player
+        Dependency_2: materials/other
+        Dependency_3: shader
+        Dependency_4: prefabs/buildingsystem/prefab
+    Info_5:
+      Name: ui/buildingsystem/prefabs
+      Dependencies:
+        Dependency_0: fonts
+        Dependency_1: ui/buildingsystem/texture2d/matpackageicon
+        Dependency_2: textmeshpro/font
+    Info_6:
+      Name: prefabs/buildingsystem/bpart
+      Dependencies:
+        Dependency_0: ui/uipanel
+        Dependency_1: materials/buildingsystem/bpart
+        Dependency_2: model/buildingsystem/model
+        Dependency_3: shader
+    Info_7:
+      Name: ui/buildingsystem/texture2d/category
+      Dependencies: {}
+    Info_8:
+      Name: ui/buildingsystem/texture2d/type
+      Dependencies: {}
+    Info_9:
+      Name: ui/buildingsystem/texture2d/style
+      Dependencies: {}
+    Info_10:
+      Name: fonts
+      Dependencies:
+        Dependency_0: textmeshpro/shader
+    Info_11:
+      Name: ui/item/texture2d
+      Dependencies: {}
+    Info_12:
+      Name: prefabs/item/worlditem
+      Dependencies: {}
+    Info_13:
+      Name: ui/techpoint/texture2d
+      Dependencies: {}
+    Info_14:
+      Name: ui/uipanel
+      Dependencies:
+        Dependency_0: fonts
+        Dependency_1: textmeshpro/spriteasset
+        Dependency_2: textmeshpro/font
     Info_15:
       Name: ui/worker/texture2d
       Dependencies: {}
     Info_16:
-      Name: ui/resonancewheel/texture2d
+      Name: materials/other
       Dependencies: {}
     Info_17:
-      Name: shader
+      Name: materials/buildingsystem/bpart
       Dependencies:
         Dependency_0: ui/buildingsystem/texture2d/matpackageicon
+        Dependency_1: model/buildingsystem/texture3d
+        Dependency_2: shader
     Info_18:
-      Name: ui/techpoint/texture2d
-      Dependencies: {}
-    Info_19:
-      Name: textmeshpro/font
+      Name: assets/buildingsystem/matpackage
       Dependencies:
-        Dependency_0: textmeshpro/shader
+        Dependency_0: materials/buildingsystem/bpart
+        Dependency_1: ui/buildingsystem/texture2d/matpackageicon
+    Info_19:
+      Name: ui/buildingsystem/texture2d/matpackageicon
+      Dependencies: {}
     Info_20:
-      Name: json/textcontent/techtree
+      Name: ui/buildingsystem/texture2d/uitex
       Dependencies: {}
     Info_21:
-      Name: ui/item/texture2d
-      Dependencies: {}
+      Name: model/buildingsystem/model
+      Dependencies:
+        Dependency_0: materials/buildingsystem/bpart
     Info_22:
-      Name: testscene
-      Dependencies:
-        Dependency_0: animation/character/player/model
-        Dependency_1: prefabs/buildingsystem/prefab
-        Dependency_2: materials/other
-        Dependency_3: prefabs/character/player
-        Dependency_4: shader
-        Dependency_5: ui/uipanel
-    Info_23:
-      Name: json/textcontent/player
+      Name: model/buildingsystem/texture3d
       Dependencies: {}
-    Info_24:
-      Name: prefabs/buildingsystem/bpart
+    Info_23:
+      Name: ui/interactsystem/prefabs
       Dependencies:
-        Dependency_0: model/buildingsystem/model
-        Dependency_1: shader
-        Dependency_2: materials/buildingsystem/bpart
-        Dependency_3: ui/uipanel
+        Dependency_0: fonts
+    Info_24:
+      Name: prefabs/character/worker
+      Dependencies:
+        Dependency_0: model/character
     Info_25:
-      Name: materials/terrain
+      Name: ui/inventory/texture2d
       Dependencies: {}
     Info_26:
       Name: materials/character/player
       Dependencies: {}
     Info_27:
-      Name: ui/inventory/texture2d
-      Dependencies: {}
+      Name: shader
+      Dependencies:
+        Dependency_0: ui/buildingsystem/texture2d/matpackageicon
     Info_28:
+      Name: textmeshpro/spriteasset
+      Dependencies:
+        Dependency_0: textmeshpro/shader
+    Info_29:
       Name: textmeshpro/shader
       Dependencies: {}
-    Info_29:
-      Name: json/textcontent/buildingsystem/ui
-      Dependencies: {}
     Info_30:
-      Name: json/tabledata
-      Dependencies: {}
-    Info_31:
-      Name: prefabs/terrain
+      Name: textmeshpro/font
       Dependencies:
-        Dependency_0: materials/terrain
-        Dependency_1: materials/buildingsystem/bpart
-        Dependency_2: model/terrain
+        Dependency_0: textmeshpro/shader
+    Info_31:
+      Name: prefabs/buildingsystem/prefab
+      Dependencies:
+        Dependency_0: materials/buildingsystem/bpart
+        Dependency_1: shader
     Info_32:
-      Name: prefabs/item/worlditem
+      Name: materials/terrain
       Dependencies: {}
     Info_33:
-      Name: materials/buildingsystem/bpart
+      Name: prefabs/terrain
       Dependencies:
-        Dependency_0: shader
-        Dependency_1: ui/buildingsystem/texture2d/matpackageicon
-        Dependency_2: model/buildingsystem/texture3d
+        Dependency_0: materials/buildingsystem/bpart
+        Dependency_1: materials/terrain
+        Dependency_2: model/terrain
     Info_34:
-      Name: ui/buildingsystem/texture2d/category
-      Dependencies: {}
-    Info_35:
-      Name: model/character
-      Dependencies:
-        Dependency_0: materials/other
-    Info_36:
-      Name: ui/buildingsystem/texture2d/matpackageicon
-      Dependencies: {}
-    Info_37:
-      Name: ui/buildingsystem/prefabs
-      Dependencies:
-        Dependency_0: fonts
-        Dependency_1: textmeshpro/font
-        Dependency_2: ui/buildingsystem/texture2d/matpackageicon
-    Info_38:
-      Name: json/textcontent/resonancewheel
-      Dependencies: {}
-    Info_39:
       Name: model/terrain
       Dependencies:
         Dependency_0: shader
         Dependency_1: materials/terrain
-    Info_40:
-      Name: prefabs/character/worker
-      Dependencies:
-        Dependency_0: model/character
-    Info_41:
-      Name: ui/interactsystem/prefabs
-      Dependencies:
-        Dependency_0: fonts
-    Info_42:
-      Name: model/buildingsystem/texture3d
+    Info_35:
+      Name: ui/resonancewheel/texture2d
       Dependencies: {}
-    Info_43:
-      Name: ui/uipanel
-      Dependencies:
-        Dependency_0: textmeshpro/spriteasset
-        Dependency_1: fonts
-        Dependency_2: textmeshpro/font
-    Info_44:
+    Info_36:
       Name: ui/resonancewheel/resonancewheelprefabs
       Dependencies:
-        Dependency_0: textmeshpro/spriteasset
-        Dependency_1: fonts
+        Dependency_0: fonts
+        Dependency_1: textmeshpro/spriteasset
+    Info_37:
+      Name: json/tabledata
+      Dependencies: {}
+    Info_38:
+      Name: json/textcontent/buildingsystem/ui
+      Dependencies: {}
+    Info_39:
+      Name: json/textcontent/interactsystem
+      Dependencies: {}
+    Info_40:
+      Name: json/textcontent/resonancewheel
+      Dependencies: {}
+    Info_41:
+      Name: json/textcontent/inventory
+      Dependencies: {}
+    Info_42:
+      Name: json/textcontent/player
+      Dependencies: {}
+    Info_43:
+      Name: json/textcontent/techtree
+      Dependencies: {}
+    Info_44:
+      Name: model/character
+      Dependencies:
+        Dependency_0: materials/other
