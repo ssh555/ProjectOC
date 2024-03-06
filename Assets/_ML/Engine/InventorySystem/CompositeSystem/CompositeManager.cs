@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.U2D;
 
 namespace ML.Engine.InventorySystem.CompositeSystem
 {
@@ -56,13 +57,16 @@ namespace ML.Engine.InventorySystem.CompositeSystem
 
 
         public static ML.Engine.ABResources.ABJsonAssetProcessor<CompositionTableData[]> ABJAProcessor;
-
+        private SpriteAtlas compositeAtlas;
         public void LoadTableData()
         {
+            compositeAtlas = Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(ItemManager.Texture2DPath)
+                .LoadAsset<SpriteAtlas>("SA_Build_Icon");
+            
             if (ABJAProcessor == null)
             {
                 ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<CompositionTableData[]>("Json/TableData", "Composition", (datas) =>
-
+                
                 {
                     foreach (var data in datas)
                     {
@@ -222,12 +226,11 @@ namespace ML.Engine.InventorySystem.CompositeSystem
 
         public Sprite GetCompositonSprite(string id)
         {
-            var tex = this.GetCompositonTexture2D(id);
-            if (tex == null)
+            if (!this.CompositeData.ContainsKey(id))
             {
                 return null;
             }
-            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+            return compositeAtlas.GetSprite(CompositeData[id].texture2d);
         }
 
         public string GetCompositonName(string id)

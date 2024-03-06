@@ -30,6 +30,7 @@ namespace ProjectOC.LandMassExpand
         private void Start()
         {
             GameManager.Instance.RegisterLocalManager(this);
+            this.enabled = false;
         }
 
         void OnDestroy()
@@ -41,9 +42,9 @@ namespace ProjectOC.LandMassExpand
                 Instance = null;
             }    
         }
-        [LabelText("大地图网格大小 m")]
-        public int mapGridSize = 100;
-        [LabelText("大地图网格大小")]
+        [LabelText("单个网格大小")]
+        public int mapGridSize;
+        [LabelText("大地图网格范围")]
         public Vector2Int maxSize;
         [SerializeField,LabelText("主岛屿")]
         private List<IslandMain> islandMains;

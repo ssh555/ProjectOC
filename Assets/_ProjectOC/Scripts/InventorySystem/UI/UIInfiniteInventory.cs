@@ -32,6 +32,7 @@ namespace ProjectOC.InventorySystem.UI
 
         #region Unity
         public bool IsInit = false;
+        public SpriteAtlas inventoryAtlas;
         private void Start()
         {
             InitUITextContents();
@@ -91,8 +92,9 @@ namespace ProjectOC.InventorySystem.UI
 
             ItemTypes = Enum.GetValues(typeof(ML.Engine.InventorySystem.ItemType)).Cast<ML.Engine.InventorySystem.ItemType>().Where(e => (int)e > 0).ToArray();
             CurrentItemTypeIndex = 0;
-
-
+            
+            StartCoroutine(LoadInventoryAtlas());
+            
             IsInit = true;
             Refresh();
         }
@@ -468,9 +470,7 @@ namespace ProjectOC.InventorySystem.UI
                     // 加入临时内存管理
                     tempItemType.Add(itemtype, obj);
                     // 载入ItemType对应的Texture2D
-                    var ab = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadLocalAB("UI/Inventory/Texture2D");
-                    SpriteAtlas sa = ab.LoadAsset<SpriteAtlas>("SA_Inventory_UI");
-                    var sprite = sa.GetSprite(itemtype.ToString());
+                    var sprite = inventoryAtlas.GetSprite(itemtype.ToString());
                     //var tex = ab.LoadAsset<Texture2D>(itemtype.ToString());
                     // 创建Sprite并加入临时内存管理
                     if(sprite != null)
@@ -700,6 +700,18 @@ namespace ProjectOC.InventorySystem.UI
         }
         #endregion
 
+        IEnumerator LoadInventoryAtlas()
+        {
+            AssetBundle ab;
+            var crequest = GameManager.Instance.ABResourceManager.LoadLocalABAsync("UI/Inventory/Texture2D",null,out ab);
+            yield return crequest;
+            if (crequest != null)
+            {
+                ab = crequest.assetBundle;
+            }
+            inventoryAtlas = ab.LoadAsset<SpriteAtlas>("SA_Inventory_UI");
+
+        }
         #region to-delete
         [Button("生成测试文件")]
         void GenTESTFILE()

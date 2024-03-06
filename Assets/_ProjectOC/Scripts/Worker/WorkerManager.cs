@@ -6,6 +6,7 @@ using System;
 using ML.Engine.Manager;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.InventorySystem;
+using UnityEngine.U2D;
 
 namespace ProjectOC.WorkerNS
 {
@@ -98,18 +99,18 @@ namespace ProjectOC.WorkerNS
 
         public const string Texture2DPath = "ui/Worker/texture2d";
         public const string WorldObjPath = "prefabs/Character/Worker";
+        private SpriteAtlas workerAtlas = null;
         public Texture2D GetTexture2D()
         {
             return GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>("Worker");
         }
         public Sprite GetSprite()
         {
-            var tex = this.GetTexture2D();
-            if (tex == null)
+            if (workerAtlas == null)
             {
-                return null;
+                workerAtlas = GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<SpriteAtlas>("SA_Worker_UI");
             }
-            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+            return workerAtlas.GetSprite("Worker");
         }
         public GameObject GetObject()
         {

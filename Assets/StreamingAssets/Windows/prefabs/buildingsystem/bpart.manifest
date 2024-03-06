@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2903704127
+CRC: 1437316299
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 94923d4da42e2116908515908bd19fba
+    Hash: 37319de66b81beec0d9bccd71de684df
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 19eaeedfd47e0dd1152a018f29cf4de8
+    Hash: be8a050197a97f73a71655351fdd9247
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 94923d4da42e2116908515908bd19fba
+    Hash: 37319de66b81beec0d9bccd71de684df
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -35,11 +35,13 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: eb3d211586925844984e282ee1983188, type: 3}
+  Script: {fileID: 11500000, guid: 87badff79e1e54a4a9d68c74f002b591, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 84b45a722afc9f748bdef2e991e7ddaf, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 88dfd9a1d40070e45bc302b503615a5e, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 39885ced2427947418fd575b5d2b3bde, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 8a66f0dd625d0f74da1f89b119491b94, type: 3}
 - Class: 115
@@ -65,6 +67,8 @@ SerializeReferenceClassIdentifiers:
   ClassName: ProjectOC.ProNodeNS.ProNode
 - AssemblyName: Assembly-CSharp
   ClassName: ProjectOC.StoreNS.Store
+- AssemblyName: Assembly-CSharp
+  ClassName: ProjectOC.WorkerEchoNS.WorkerEcho
 Assets:
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/ProNode/ProNode_Calculus_Base1_2.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/ProNode/ProNode_Aggregator_Base1_2.prefab
@@ -168,3 +172,4 @@ Dependencies:
 - D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
 - D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/model/buildingsystem/model
 - D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/shader
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/uipanel

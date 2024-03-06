@@ -204,6 +204,19 @@ namespace ProjectOC.LandMassExpand
             public NavMeshSurface navMeshSurface;
             public Transform buildingPartsTransf;
         }
+
+        
+        public void SetSurfacesTrigger(List<NavMeshSurface> _NMSes,bool _isTrue = true)
+        {
+            foreach (var _nms in _NMSes)
+            {
+                MeshCollider[] meshColliders = _nms.transform.Find("TerrainPartCollider").GetComponentsInChildren<MeshCollider>();
+                foreach (var meshCollider in meshColliders)
+                {
+                    meshCollider.isTrigger = _isTrue;
+                }
+            }
+        }
         #endregion
 
 

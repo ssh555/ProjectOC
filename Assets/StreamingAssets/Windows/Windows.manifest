@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 112655520
+CRC: 1449586585
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -103,6 +103,7 @@ AssetBundleManifest:
         Dependency_0: model/buildingsystem/model
         Dependency_1: shader
         Dependency_2: materials/buildingsystem/bpart
+        Dependency_3: ui/uipanel
     Info_25:
       Name: materials/terrain
       Dependencies: {}
@@ -125,17 +126,17 @@ AssetBundleManifest:
       Name: prefabs/terrain
       Dependencies:
         Dependency_0: materials/terrain
-        Dependency_1: model/terrain
+        Dependency_1: materials/buildingsystem/bpart
+        Dependency_2: model/terrain
     Info_32:
       Name: prefabs/item/worlditem
       Dependencies: {}
     Info_33:
       Name: materials/buildingsystem/bpart
       Dependencies:
-        Dependency_0: ui/buildingsystem/texture2d/type
-        Dependency_1: shader
-        Dependency_2: ui/buildingsystem/texture2d/matpackageicon
-        Dependency_3: model/buildingsystem/texture3d
+        Dependency_0: shader
+        Dependency_1: ui/buildingsystem/texture2d/matpackageicon
+        Dependency_2: model/buildingsystem/texture3d
     Info_34:
       Name: ui/buildingsystem/texture2d/category
       Dependencies: {}
@@ -149,13 +150,9 @@ AssetBundleManifest:
     Info_37:
       Name: ui/buildingsystem/prefabs
       Dependencies:
-        Dependency_0: ui/buildingsystem/texture2d/type
-        Dependency_1: fonts
-        Dependency_2: ui/buildingsystem/texture2d/uitex
-        Dependency_3: ui/buildingsystem/texture2d/style
-        Dependency_4: textmeshpro/font
-        Dependency_5: ui/buildingsystem/texture2d/category
-        Dependency_6: ui/buildingsystem/texture2d/matpackageicon
+        Dependency_0: fonts
+        Dependency_1: textmeshpro/font
+        Dependency_2: ui/buildingsystem/texture2d/matpackageicon
     Info_38:
       Name: json/textcontent/resonancewheel
       Dependencies: {}
@@ -172,7 +169,6 @@ AssetBundleManifest:
       Name: ui/interactsystem/prefabs
       Dependencies:
         Dependency_0: fonts
-        Dependency_1: ui/buildingsystem/texture2d/uitex
     Info_42:
       Name: model/buildingsystem/texture3d
       Dependencies: {}
@@ -181,9 +177,7 @@ AssetBundleManifest:
       Dependencies:
         Dependency_0: textmeshpro/spriteasset
         Dependency_1: fonts
-        Dependency_2: ui/buildingsystem/texture2d/uitex
-        Dependency_3: ui/buildingsystem/texture2d/style
-        Dependency_4: textmeshpro/font
+        Dependency_2: textmeshpro/font
     Info_44:
       Name: ui/resonancewheel/resonancewheelprefabs
       Dependencies:
