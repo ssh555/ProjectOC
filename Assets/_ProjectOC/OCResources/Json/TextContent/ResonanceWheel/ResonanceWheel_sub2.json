@@ -2,8 +2,8 @@
   "confirm": {
     "keyname": "confirm",
     "keymap": {
-      "KeyBoard": "F",
-      "XBOX": "A"
+      "ActionMapName": "F",
+      "ActionName": "A"
     },
     "description": {
       "Chinese": "确认",
@@ -13,8 +13,8 @@
   "back": {
     "keyname": "back",
     "keymap": {
-      "KeyBoard": "ESC",
-      "XBOX": "B"
+      "ActionMapName": "ESC",
+      "ActionName": "B"
     },
     "description": {
       "Chinese": "返回",

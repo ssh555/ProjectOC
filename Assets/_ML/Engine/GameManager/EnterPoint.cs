@@ -10,6 +10,7 @@ namespace ML.Engine.Manager
     {
         private GameObject StartMenuPanelPrefab;
         public GameObject LoadingScenePanelPrefab;
+        public GameObject OptionPanelPrefab;
         private bool isInit;
 
         public EnterPoint()
@@ -52,7 +53,7 @@ namespace ML.Engine.Manager
                 this.PrefabsAB = PrefabsAB;
                 StartMenuPanelPrefab = this.PrefabsAB.LoadAsset<GameObject>("StartMenuPanel");
                 LoadingScenePanelPrefab = this.PrefabsAB.LoadAsset<GameObject>("LoadingScenePanel");
-                
+                OptionPanelPrefab = this.PrefabsAB.LoadAsset<GameObject>("OptionPanel");
                 this.isInit = true;
                 EnterGame();
             }  

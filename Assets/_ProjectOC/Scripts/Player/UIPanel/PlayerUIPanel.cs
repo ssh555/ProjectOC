@@ -112,19 +112,28 @@ namespace ProjectOC.Player.UI
             };
 
 
-            var btn = btnList.GetComponentsInChildren<SelectedButton>();
-            
-            for(int i = 0; i < btn.Length; ++i)
-            {
-                int last = (i - 1 + btn.Length) % btn.Length;
-                int next = (i + 1 + btn.Length) % btn.Length;
+            var btns = btnList.GetComponentsInChildren<SelectedButton>();
 
-                btn[i].UpUI = btn[last];
-                btn[i].DownUI = btn[next];
+            for (int i = 0; i < btns.Length; ++i)
+            {
+                int last = (i - 1 + btns.Length) % btns.Length;
+                int next = (i + 1 + btns.Length) % btns.Length;
+
+                btns[i].UpUI = btns[last];
+                btns[i].DownUI = btns[next];
+
+
+
+            }
+
+            foreach (var btn in btns)
+            {
+                btn.OnSelectedEnter += () => { btn.image.color = Color.red; };
+                btn.OnSelectedExit += () => { btn.image.color = Color.white; };
             }
 
             this.CurSelected = EnterBuildBtn;
-            this.CurSelected.OnSelectedEnter();
+            this.CurSelected.SelectedEnter();
 
             IsInit = true;
 
@@ -142,15 +151,15 @@ namespace ProjectOC.Player.UI
                 var vec2 = Input.InputManager.PlayerInput.PlayerUI.AlterSelected.ReadValue<Vector2>();
                 if(vec2.y > 0.1f)
                 {
-                    this.CurSelected.OnSelectedExit();
+                    this.CurSelected.SelectedExit();
                     this.CurSelected = this.CurSelected.UpUI;
-                    this.CurSelected.OnSelectedEnter();
+                    this.CurSelected.SelectedEnter();
                 }
                 else if(vec2.y < -0.1f)
                 {
-                    this.CurSelected.OnSelectedExit();
+                    this.CurSelected.SelectedExit();
                     this.CurSelected = this.CurSelected.DownUI;
-                    this.CurSelected.OnSelectedEnter();
+                    this.CurSelected.SelectedEnter();
                 }
             }
             if (ML.Engine.Input.InputManager.Instance.Common.Common.Back.WasPressedThisFrame())

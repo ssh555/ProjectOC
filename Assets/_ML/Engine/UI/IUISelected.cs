@@ -11,8 +11,8 @@ namespace ML.Engine.UI
         public IUISelected UpUI { get; set; }
         public IUISelected DownUI { get; set; }
         
-        public abstract void OnSelectedEnter();
-        public abstract void OnSelectedExit();
+        public abstract void SelectedEnter();
+        public abstract void SelectedExit();
 
         public abstract void Interact();
     }

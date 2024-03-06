@@ -333,7 +333,6 @@ namespace ProjectOC.InventorySystem.UI
 
         private void AlterItem_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            Debug.Log("AlterItem_started " + Time.frameCount);
             GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
             timer = new CounterDownTimer(TimeInterval, true, true, 1, 2);
             timer.OnEndEvent += () =>
@@ -349,7 +348,6 @@ namespace ProjectOC.InventorySystem.UI
 
         private void AlterItem_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            Debug.Log("AlterItem_canceled " + Time.frameCount);
             GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
         }
 

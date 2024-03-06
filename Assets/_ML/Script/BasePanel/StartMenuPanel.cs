@@ -56,7 +56,13 @@ namespace ML.Engine.UI
             this.OptionBtnText = OptionBtn.transform.Find("BtnText").GetComponent<TextMeshProUGUI>();
             this.OptionBtn.OnInteract += () =>
             {
- 
+                // สตภýปฏ
+                var panel = GameObject.Instantiate(GameManager.Instance.EnterPoint.OptionPanelPrefab).GetComponent<OptionPanel>();
+
+                panel.transform.SetParent(GameObject.Find("Canvas").transform, false);
+
+                // Push
+                GameManager.Instance.UIManager.PushPanel(panel);
             };
 
             this.QuitGameBtn = btnList.Find("QuitGameBtn").GetComponent<SelectedButton>();
@@ -66,19 +72,29 @@ namespace ML.Engine.UI
 
             };
 
-            var btn = btnList.GetComponentsInChildren<SelectedButton>();
+            var btns = btnList.GetComponentsInChildren<SelectedButton>();
 
-            for (int i = 0; i < btn.Length; ++i)
+            for (int i = 0; i < btns.Length; ++i)
             {
-                int last = (i - 1 + btn.Length) % btn.Length;
-                int next = (i + 1 + btn.Length) % btn.Length;
+                int last = (i - 1 + btns.Length) % btns.Length;
+                int next = (i + 1 + btns.Length) % btns.Length;
 
-                btn[i].UpUI = btn[last];
-                btn[i].DownUI = btn[next];
+                btns[i].UpUI = btns[last];
+                btns[i].DownUI = btns[next];
+
+                
+
             }
 
+            foreach (var btn in btns)
+            {
+                btn.OnSelectedEnter += () => { btn.image.color = Color.red; };
+                btn.OnSelectedExit += () => { btn.image.color = Color.white; };
+            }
+
+
             this.CurSelected = NewGameBtn;
-            this.CurSelected.OnSelectedEnter();
+            this.CurSelected.SelectedEnter();
             IsInit = true;
 
 
@@ -184,15 +200,15 @@ namespace ML.Engine.UI
             var vec2 = obj.ReadValue<Vector2>();
             if (vec2.y > 0.1f)
             {
-                this.CurSelected.OnSelectedExit();
+                this.CurSelected.SelectedExit();
                 this.CurSelected = this.CurSelected.UpUI;
-                this.CurSelected.OnSelectedEnter();
+                this.CurSelected.SelectedEnter();
             }
             else if (vec2.y < -0.1f)
             {
-                this.CurSelected.OnSelectedExit();
+                this.CurSelected.SelectedExit();
                 this.CurSelected = this.CurSelected.DownUI;
-                this.CurSelected.OnSelectedEnter();
+                this.CurSelected.SelectedEnter();
             }
         }
 

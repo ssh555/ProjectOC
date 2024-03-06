@@ -31,7 +31,6 @@ namespace ML.Engine.Manager
         /// <summary>
         /// 内置的计时器Manager
         /// </summary>
-        [ShowInInspector]
         public Timer.CounterDownTimerManager CounterDownTimerManager { get; private set; }
 
         /// <summary>
@@ -47,6 +46,7 @@ namespace ML.Engine.Manager
         /// <summary>
         /// 内置的全局InputManager
         /// </summary>
+        [ShowInInspector]
         public Input.InputManager InputManager { get; private set; }
 
 
@@ -71,11 +71,7 @@ namespace ML.Engine.Manager
             DontDestroyOnLoad(this.gameObject);
             this.Init();
 
-            EnterPoint = new EnterPoint();
-
-            //while (!EnterPoint.EnterGame()) ;
-
-            //EnterPoint.EnterGame();
+            //EnterPoint = new EnterPoint();
 
         }
 

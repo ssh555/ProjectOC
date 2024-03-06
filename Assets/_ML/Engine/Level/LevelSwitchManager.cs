@@ -122,7 +122,7 @@ namespace ML.Engine.Level
                 }
                 yield return null;
             }
-            yield return new WaitForSeconds(2.0f);
+
             // 等待资源加载完成
             yield return loadResource;
             // PostCallback

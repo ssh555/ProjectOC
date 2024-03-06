@@ -1,12 +1,22 @@
+using ML.Engine.Manager;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.InputSystem;
+using Sirenix.OdinInspector;
+using System.Reflection;
+using System;
+using ML.Engine.TextContent;
+using UnityEngine.UIElements;
 namespace ML.Engine.Input
 {
     public class InputManager : Manager.GlobalManager.IGlobalManager
     {
         private static InputManager instance = null;
+
+        [ShowInInspector]
+        private Dictionary<(string actionMapName, string actionName), InputAction> actionDictionary = new Dictionary<(string, string), InputAction>();
+
         public static InputManager Instance
         {
             get
@@ -39,7 +49,144 @@ namespace ML.Engine.Input
         public InputManager()
         {
             this.Common.Enable();
+            GameManager.Instance.StartCoroutine(InitUIInputActionAssets());
         }
+
+
+        #region InputActionAsset
+        public AssetBundle InputActionAssetAB;
+        public IEnumerator InitUIInputActionAssets()
+        {
+            this.InputActionAssetAB = null;
+            var abmgr = GameManager.Instance.ABResourceManager;
+
+            var crequest = abmgr.LoadLocalABAsync("input/inputactionasset", null, out var InputActionAssetAB);
+
+            if (crequest != null)
+            {
+                yield return crequest;
+                InputActionAssetAB = crequest.assetBundle;
+
+                this.InputActionAssetAB = InputActionAssetAB;
+
+
+                // 加载 AssetBundle 中所有的 InputActionAsset
+                InputActionAsset[] inputActionAssets = InputActionAssetAB.LoadAllAssets<InputActionAsset>();
+
+                // 遍历所有的 InputActionAsset
+                foreach (InputActionAsset inputActionAsset in inputActionAssets)
+                {
+                    // 遍历所有的 Input Actions
+                    foreach (InputActionMap actionMap in inputActionAsset.actionMaps)
+                    {
+                        // 遍历当前 actionMap 中的所有 Input Actions
+                        foreach (InputAction action in actionMap.actions)
+                        {
+                            (string, string) key = (actionMap.name, action.name);
+                            actionDictionary[key] = action;
+                        }
+                    }
+                }
+
+            }
+        }
+
+        public InputAction GetInputAction((string, string) key)
+        {
+            if(this.actionDictionary.ContainsKey(key))
+            {
+                return this.actionDictionary[key];
+            }
+            return null;
+        }
+
+        public string GetInputActionBindText(InputAction inputAction)
+        {
+            HashSet<string> keys = new HashSet<string>();
+            string t = "";
+            // 遍历当前 InputAction 的所有绑定
+            foreach (InputBinding binding in inputAction.bindings)
+            {
+
+                if (Config.inputDevice == Config.InputDevice.Keyboard && binding.path.StartsWith("<Keyboard>"))
+                {
+                    keys.Add(ExtractString(binding.path));
+                }
+                else if (Config.inputDevice == Config.InputDevice.XBOX && binding.path.StartsWith("<XInputController>"))
+                {
+                    keys.Add(ExtractString(binding.path));
+                }
+                
+            }
+
+            foreach (var item in keys)
+            {
+                t += item;
+            }
+
+
+            Debug.Log("Current inputAction: " + inputAction.name + " " + t);
+
+            return t;
+        }
+
+        private string ExtractString(string input)
+        {
+            // 查找第一个斜杠的索引
+            int firstSlashIndex = input.IndexOf('/');
+
+            // 如果没有斜杠，直接返回原始字符串
+            if (firstSlashIndex == -1)
+            {
+                return input;
+            }
+
+            // 查找第二个斜杠的索引
+            int secondSlashIndex = input.IndexOf('/', firstSlashIndex + 1);
+
+            // 如果没有第二个斜杠，直接返回第一个/以后的字符串
+            if (secondSlashIndex == -1)
+            {
+                return input.Substring(firstSlashIndex + 1);
+            }
+
+            // 提取第一个斜杠和第二个斜杠之间的字符串
+            string extractedString = input.Substring(firstSlashIndex + 1, secondSlashIndex - firstSlashIndex - 1);
+
+            return extractedString;
+        }
+
+        public KeyTip[] ExportKeyTipValues<T>(T StructT)
+        {
+            // 获取结构体类型
+            Type structType = typeof(T);
+
+            // 获取结构体中的所有字段
+            FieldInfo[] fields = structType.GetFields();
+
+            // 创建一个用于存储KeyTip的列表
+            List<KeyTip> KeyTipValues = new List<KeyTip>();
+
+            // 遍历所有字段
+            foreach (FieldInfo field in fields)
+            {
+                // 如果字段类型是KeyTip类型，则将其值添加到列表中
+                if (field.FieldType == typeof(KeyTip))
+                {
+                    KeyTip value = (KeyTip)field.GetValue(StructT);
+                    KeyTipValues.Add(value);
+                }
+            }
+
+            // 将列表转换为数组并返回
+            return KeyTipValues.ToArray();
+        }
+
+
+        #endregion
+
+
+
     }
 
 }

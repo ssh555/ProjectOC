@@ -115,7 +115,8 @@ namespace ML.Engine.ABResources
             this.onLoadOver?.Invoke(Datas);
 
 #if UNITY_EDITOR
-            Debug.Log($"LoadJsonAssetData {description} cost time: {Time.realtimeSinceStartup - startT}");
+            //Debug.Log($"LoadJsonAssetData {description} cost time: {Time.realtimeSinceStartup - startT}");
+            Debug.Log(this.ABPath + " " + this.ABName);
 #endif
         }
     }

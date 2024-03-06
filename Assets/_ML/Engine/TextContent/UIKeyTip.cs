@@ -19,10 +19,10 @@ namespace ML.Engine.TextContent
 
         public void ReWrite(KeyTip keyTip)
         {
-            if (this.keytip)
+/*            if (this.keytip)
             {
                 this.keytip.text = keyTip.GetKeyMapText();
-            }
+            }*/
                 
             if (this.description)
             {

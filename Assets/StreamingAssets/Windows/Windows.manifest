@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 2574209718
+CRC: 3091493649
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -197,6 +197,14 @@ AssetBundleManifest:
       Name: ui/baseuipanel
       Dependencies:
         Dependency_0: fonts
+        Dependency_1: ui/buildingsystem/texture2d/uitex
+        Dependency_2: input/inputactionasset
     Info_47:
       Name: json/textcontent/loadingscenepanel
+      Dependencies: {}
+    Info_48:
+      Name: json/textcontent/optionpanel
+      Dependencies: {}
+    Info_49:
+      Name: input/inputactionasset
       Dependencies: {}

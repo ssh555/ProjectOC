@@ -1865,7 +1865,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": ""up"",
                     ""id"": ""d2c32268-48b6-4d4a-b7e0-d610290ced1f"",
-                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""path"": ""<XInputController>/leftStick/up"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1887,7 +1887,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": ""down"",
                     ""id"": ""6c552d7e-2280-4cb6-941a-e1ed26372a2f"",
-                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""path"": ""<XInputController>/leftStick/down"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1909,7 +1909,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": ""left"",
                     ""id"": ""2cca8acd-88dd-4ae8-b7f4-6e001e13e5b0"",
-                    ""path"": ""<Gamepad>/leftStick/left"",
+                    ""path"": ""<XInputController>/leftStick/left"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1931,7 +1931,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": ""right"",
                     ""id"": ""b4d041df-62f8-466c-b74f-bb0af66087a8"",
-                    ""path"": ""<Gamepad>/leftStick/right"",
+                    ""path"": ""<XInputController>/leftStick/right"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

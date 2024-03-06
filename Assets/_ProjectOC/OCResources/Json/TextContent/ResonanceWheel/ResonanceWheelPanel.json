@@ -3,22 +3,22 @@
     "Chinese": "共鸣轮",
     "English": "ResonanceWheel"
   },
-  "lastterm": {
-    "keyname": "lastterm",
+  "LastTerm": {
+    "keyname": "KT_LastTerm",
     "keymap": {
-      "KeyBoard": "Z",
-      "XBOX": "LB"
+      "ActionMapName": "ResonanceWheelUI",
+      "ActionName": "LastTerm"
     },
     "description": {
       "Chinese": "",
       "English": ""
     }
   },
-  "nextterm": {
-    "keyname": "nextterm",
+  "NextTerm": {
+    "keyname": "KT_NextTerm",
     "keymap": {
-      "KeyBoard": "X",
-      "XBOX": "RB"
+      "ActionMapName": "ResonanceWheelUI",
+      "ActionName": "NextTerm"
     },
     "description": {
       "Chinese": "",
@@ -33,11 +33,11 @@
     "Chinese": "海兽之歌",
     "English": "SongofSeaBeasts"
   },
-  "nextgrid": {
-    "keyname": "nextgrid",
+  "NextGrid": {
+    "keyname": "KT_NextGrid",
     "keymap": {
-      "KeyBoard": "WASD",
-      "XBOX": "LS"
+      "ActionMapName": "ResonanceWheelUI",
+      "ActionName": "NextGrid"
     },
     "description": {
       "Chinese": "",
@@ -57,10 +57,10 @@
     "English": "Random"
   },
   "SwitchTargetText": {
-    "keyname": "SwitchTarget",
+    "keyname": "KT_SwitchTarget",
     "keymap": {
-      "KeyBoard": "R",
-      "XBOX": "Y"
+      "ActionMapName": "ResonanceWheelUI",
+      "ActionName": "SwitchTarget"
     },
     "description": {
       "Chinese": "切换对象",
@@ -80,10 +80,10 @@
     ]
   },
   "StartResonanceText": {
-    "keyname": "StartResonance",
+    "keyname": "KT_StartResonance",
     "keymap": {
-      "KeyBoard": "E",
-      "XBOX": "X"
+      "ActionMapName": "ResonanceWheelUI",
+      "ActionName": "StartResonance"
     },
     "description": {
       "Chinese": "开始共鸣",
@@ -91,21 +91,21 @@
     }
   },
   "StopResonanceText": {
-    "keyname": "StopResonance",
+    "keyname": "KT_StopResonance",
     "keymap": {
-      "KeyBoard": "R",
-      "XBOX": "Y"
+      "ActionMapName": "ResonanceWheelUI",
+      "ActionName": "StopResonance"
     },
     "description": {
       "Chinese": "停止共鸣",
       "English": "StopResonance"
     }
   },
-  "back": {
-    "keyname": "back",
+  "Back": {
+    "keyname": "KT_Back",
     "keymap": {
-      "KeyBoard": "ESC",
-      "XBOX": "B"
+      "ActionMapName": "Common",
+      "ActionName": "Back"
     },
     "description": {
       "Chinese": "返回",
