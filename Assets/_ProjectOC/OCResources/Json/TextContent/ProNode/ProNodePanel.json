@@ -3,8 +3,8 @@
         {
             "name" : "None",
             "description" : {
-                "Chinese" : "空",
-                "English" : "None"
+                "Chinese" : "生产节点",
+                "English" : "ProNode"
             }
         },
         {
@@ -152,6 +152,10 @@
         "Chinese" : "空",
         "English" : "Empty"
     },
+    "textLack" : {
+        "Chinese" : "空缺",
+        "English" : "Lack"
+    },
     "textUrgency" : {
         "Chinese" : "紧急",
         "English" : "Urgency"
@@ -176,35 +180,35 @@
         "Chinese" : "生产",
         "English" : "Production"
     },
-    "textWorkerStateWork" : {
+    "textWork" : {
         "Chinese" : "工作",
         "English" : "Work"
     },
-    "textWorkerStateTransport" : {
+    "textTransport" : {
         "Chinese" : "搬运",
         "English" : "Transport"
     },
-    "textWorkerStateFish" : {
+    "textFish" : {
         "Chinese" : "摸鱼",
         "English" : "Fish"
     },
-    "textWorkerStateRelax" : {
+    "textRelax" : {
         "Chinese" : "休息",
         "English" : "Relax"
     },
-    "textWorkerOnDuty" : {
+    "textOnDuty" : {
         "Chinese" : "在岗",
         "English" : "OnDuty"
     },
-    "textPrefixTime" : {
+    "textTime" : {
         "Chinese" : "时间",
         "English" : "Time"
     },
-    "textPrefixEff" : {
+    "textEff" : {
         "Chinese" : "效率",
         "English" : "Eff"
     },
-    "text_LvDesc" : {
+    "textLvDesc" : {
         "Chinese" : "生产效率: ",
         "English" : "Eff: "
     },
@@ -212,7 +216,7 @@
         "keyname" : "ktUpgrade",
         "keymap" : {
             "XBOX" : "LT",
-            "KeyBoard" : "U"
+            "KeyBoard" : "G"
         },
         "description" : {
             "Chinese" : "建筑升级",
@@ -274,6 +278,39 @@
             "English" : "Fast Add"
         }
     },
+    "ktChangeWorker" : {
+        "keyname" : "ktChangeWorker",
+        "keymap" : {
+            "XBOX" : "A",
+            "KeyBoard" : "E"
+        },
+        "description" : {
+            "Chinese" : "变更派遣",
+            "English" : "Change Worker"
+        }
+    },
+    "ktRemoveWorker" : {
+        "keyname" : "ktRemoveWorker",
+        "keymap" : {
+            "XBOX" : "Y",
+            "KeyBoard" : "R"
+        },
+        "description" : {
+            "Chinese" : "移除派遣",
+            "English" : "Remove Worker"
+        }
+    },
+    "ktConfirm" : {
+        "keyname" : "ktConfirm",
+        "keymap" : {
+            "XBOX" : "A",
+            "KeyBoard" : "E"
+        },
+        "description" : {
+            "Chinese" : "确认",
+            "English" : "Confirm"
+        }
+    },
     "ktBack" : {
         "keyname" : "ktBack",
         "keymap" : {
@@ -281,96 +318,19 @@
             "KeyBoard" : "Esc"
         },
         "description" : {
+            "Chinese" : "返回",
+            "English" : "Back"
+        }
+    },
+    "ktReturn" : {
+        "keyname" : "ktReturn",
+        "keymap" : {
+            "XBOX" : "B",
+            "KeyBoard" : "Esc"
+        },
+        "description" : {
             "Chinese" : "退出",
-            "English" : "Back"
-        }
-    },
-    "ktChangeWorker" : {
-        "keyname" : "ktChangeWorker",
-        "keymap" : {
-            "XBOX" : "LB",
-            "KeyBoard" : "N"
-        },
-        "description" : {
-            "Chinese" : "变更刁民",
-            "English" : "Change Worker"
-        }
-    },
-    "ktRemoveWorker" : {
-        "keyname" : "ktRemoveWorker",
-        "keymap" : {
-            "XBOX" : "RB",
-            "KeyBoard" : "M"
-        },
-        "description" : {
-            "Chinese" : "移除刁民",
-            "English" : "Remove Worker"
-        }
-    },
-    "ktConfirmRecipe" : {
-        "keyname" : "ktConfirmRecipe",
-        "keymap" : {
-            "XBOX" : "A",
-            "KeyBoard" : "E"
-        },
-        "description" : {
-            "Chinese" : "确认",
-            "English" : "Confirm"
-        }
-    },
-    "ktBackRecipe" : {
-        "keyname" : "ktBackRecipe",
-        "keymap" : {
-            "XBOX" : "B",
-            "KeyBoard" : "Esc"
-        },
-        "description" : {
-            "Chinese" : "返回",
-            "English" : "Back"
-        }
-    },
-    "ktConfirmWorker" : {
-        "keyname" : "ktConfirmWorker",
-        "keymap" : {
-            "XBOX" : "A",
-            "KeyBoard" : "E"
-        },
-        "description" : {
-            "Chinese" : "确认",
-            "English" : "Confirm"
-        }
-    },
-    "ktBackWorker" : {
-        "keyname" : "ktBackWorker",
-        "keymap" : {
-            "XBOX" : "B",
-            "KeyBoard" : "Esc"
-        },
-        "description" : {
-            "Chinese" : "返回",
-            "English" : "Back"
-        }
-    },
-    "ktConfirmLevel" : {
-        "keyname" : "ktConfirmLevel",
-        "keymap" : {
-            "XBOX" : "A",
-            "KeyBoard" : "E"
-        },
-        "description" : {
-            "Chinese" : "确认",
-            "English" : "Confirm"
-        }
-    },
-    "ktBackLevel" : {
-        "keyname" : "ktBackLevel",
-        "keymap" : {
-            "XBOX" : "B",
-            "KeyBoard" : "Esc"
-        },
-        "description" : {
-            "Chinese" : "返回",
-            "English" : "Back"
+            "English" : "Return"
         }
     }
 }
