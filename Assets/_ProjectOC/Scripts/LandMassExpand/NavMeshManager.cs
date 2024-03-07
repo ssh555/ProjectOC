@@ -52,9 +52,6 @@ public class NavMeshManager :ML.Engine.Manager.LocalManager.ILocalManager
     
     public void JudgeNVSPosition(Transform _transf)
     {
-        // MeshCollider _collider = new MeshCollider();
-        // _collider.sharedMesh.isReadable = false;
-
         {
             NavMeshSurface _navMeshSurface = _transf.GetComponentInParent<NavMeshSurface>();
             //如果没有父节点，说明是新建，不用管老位置
