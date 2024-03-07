@@ -72,7 +72,7 @@
         "keyname" : "kt_Remove1",
         "keymap" : {
             "XBOX" : "X",
-            "KeyBoard" : "T"
+            "KeyBoard" : "F"
         },
         "description" : {
             "Chinese" : "取出1个",
@@ -83,7 +83,7 @@
         "keyname" : "kt_Remove10",
         "keymap" : {
             "XBOX" : "X",
-            "KeyBoard" : "T"
+            "KeyBoard" : "F"
         },
         "description" : {
             "Chinese" : "取出10个",

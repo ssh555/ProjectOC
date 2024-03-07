@@ -1105,7 +1105,7 @@
                 {
                     "name": "",
                     "id": "fff4c8a5-5012-4e6c-a787-8fa445766c9e",
-                    "path": "<Keyboard>/t",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -1127,7 +1127,7 @@
                 {
                     "name": "",
                     "id": "98ac3791-c45b-4c66-9fe1-a4aac0b72d8c",
-                    "path": "<Keyboard>/t",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -1354,7 +1354,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "FastAdd",
+                    "name": "FastAdd_RemoveWorker",
                     "type": "Button",
                     "id": "b072730b-87c6-4f53-a412-856a6f31d311",
                     "expectedControlType": "Button",
@@ -1363,25 +1363,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ChangeWorker",
-                    "type": "Button",
-                    "id": "339699fa-04cc-4c40-be7d-e826a3bebd10",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "RemoveWorker",
-                    "type": "Button",
-                    "id": "9426e949-b89a-46f1-97ba-88da48a782d9",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "AlterRawItem",
+                    "name": "Alter",
                     "type": "Value",
                     "id": "1a286c3e-5479-48e0-b312-c005d1204369",
                     "expectedControlType": "Vector2",
@@ -1420,7 +1402,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AlterRawItem",
+                    "action": "Alter",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -1431,7 +1413,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AlterRawItem",
+                    "action": "Alter",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1442,7 +1424,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AlterRawItem",
+                    "action": "Alter",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1453,7 +1435,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AlterRawItem",
+                    "action": "Alter",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1464,7 +1446,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AlterRawItem",
+                    "action": "Alter",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1475,7 +1457,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AlterRawItem",
+                    "action": "Alter",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -1486,7 +1468,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AlterRawItem",
+                    "action": "Alter",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1497,7 +1479,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AlterRawItem",
+                    "action": "Alter",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1508,7 +1490,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AlterRawItem",
+                    "action": "Alter",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1519,7 +1501,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AlterRawItem",
+                    "action": "Alter",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1537,7 +1519,7 @@
                 {
                     "name": "",
                     "id": "6d63c30d-26b5-41c0-9c64-5a2db20ecda6",
-                    "path": "<Keyboard>/u",
+                    "path": "<Keyboard>/g",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -1596,7 +1578,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "FastAdd",
+                    "action": "FastAdd_RemoveWorker",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1607,51 +1589,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "FastAdd",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "73d82c5b-7d0b-42bc-a88b-3abdee935233",
-                    "path": "<XInputController>/leftShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeWorker",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a3fd9745-4663-47e8-a447-f54511980706",
-                    "path": "<Keyboard>/n",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeWorker",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "9a4a7946-7f31-4be2-9a55-e7c15f46fcf9",
-                    "path": "<XInputController>/rightShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RemoveWorker",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ff1a270f-4e4b-46ba-9e16-c4276cdb319e",
-                    "path": "<Keyboard>/m",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RemoveWorker",
+                    "action": "FastAdd_RemoveWorker",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
