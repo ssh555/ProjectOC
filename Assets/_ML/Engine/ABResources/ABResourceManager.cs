@@ -411,6 +411,7 @@ namespace ML.Engine.ABResources
             // 查询 Global | 查询 Local
             if (abStatus == ABStatus.Global || abStatus == ABStatus.Local)
             {
+                callback?.Invoke(null);
                 return null;
             }
             // 查询 Dependency
@@ -418,11 +419,13 @@ namespace ML.Engine.ABResources
             {
                 this.dependedResourcesDict.Remove(name);
                 this.localResourcesDict.Add(name, assetBundle);
+                callback?.Invoke(null);
                 return null;
             }
             // 未载入
             var ans = AssetBundle.LoadFromFileAsync(System.IO.Path.Combine(ABPath, name));
             this.localResourcesDict.Add(name, ans.assetBundle);
+            assetBundle = ans.assetBundle;
             ans.completed += (asyncOpt) =>
             {
                 this.localResourcesDict[name] = ans.assetBundle;
@@ -430,8 +433,6 @@ namespace ML.Engine.ABResources
             };
             if(callback != null)
                 ans.completed += callback;
-
-            assetBundle = null;
 
             return ans;
         }
