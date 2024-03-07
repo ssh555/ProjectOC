@@ -70,7 +70,7 @@ namespace ProjectOC.ManagerNS
             NavMeshManager = GM.RegisterLocalManager<NavMeshManager>();
             IslandManager = GM.RegisterLocalManager<IslandManager>();
             BuildPowerIslandManager = GM.RegisterLocalManager<BuildPowerIslandManager>();
-            StartCoroutine("DelayStart");
+            StartCoroutine(DelayStart());
             this.enabled = false;
         }
         private void OnDestroy()

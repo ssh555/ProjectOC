@@ -15,6 +15,7 @@ public class NavMeshManager :ML.Engine.Manager.LocalManager.ILocalManager
 
     public void DelayInit()
     {
+        GameManager.Instance.RegisterLocalManager(this);
          BuildingPlacer BP = BuildingManager.Instance.Placer;
          //BuildingPlacer BP = FindObjectOfType<BuildingPlacer>();
          BP.OnPlaceModeSuccess += (bpart) =>
@@ -89,18 +90,6 @@ public class NavMeshManager :ML.Engine.Manager.LocalManager.ILocalManager
             surfacesToReBake.Add(navMeshSurface);
         }
     }
-    
-    // [Button()]
-    // private void GEN()
-    // {
-    //     Debug.Log($"Start: {Time.realtimeSinceStartup}");
-    //     var ao = navMeshSurface.UpdateNavMesh(navMeshSurface.navMeshData);
-    //     ao.completed += (operation =>
-    //     {
-    //         Debug.Log($"End: {Time.realtimeSinceStartup}");
-    //     });
-    //     Debug.Log("QWQ");
-    // }
-    
+
 
 }
