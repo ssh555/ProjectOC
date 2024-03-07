@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using TMPro;
 using UnityEngine;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 using UnityEngine.Windows;
 
@@ -24,28 +25,27 @@ namespace ML.Engine.BuildingSystem.UI
         public const string TCategoryABPath = "UI/BuildingSystem/Texture2D/Category";
         public const string TTypeABPath = "UI/BuildingSystem/Texture2D/Type";
 
-        public Dictionary<BuildingCategory1, Texture2D> TCategoryDict = null;
-        public Dictionary<BuildingCategory2, Texture2D> TTypeDict = null;
+
         public int IsInit = -1;
 
+        private SpriteAtlas typeAtlas = null,categoryAtlas = null;
+        
         public Sprite GetCategorySprite(BuildingCategory1 category)
         {
-            if(!TCategoryDict.ContainsKey(category))
+            Sprite sprite = categoryAtlas.GetSprite(category.ToString());;
+            if (sprite == null)
             {
-                category = BuildingCategory1.None;
+                sprite = categoryAtlas.GetSprite("None");
             }
-            Texture2D texture = TCategoryDict[category];
-            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
             return sprite;
         }
         public Sprite GetTypeSprite(BuildingCategory2 type)
         {
-            if (!TTypeDict.ContainsKey(type))
+            Sprite sprite = typeAtlas.GetSprite(type.ToString());;
+            if (sprite == null)
             {
-                type = BuildingCategory2.None;
+                sprite = typeAtlas.GetSprite("None");
             }
-            Texture2D texture = TTypeDict[type];
-            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
             return sprite;
         }
 
@@ -55,13 +55,10 @@ namespace ML.Engine.BuildingSystem.UI
 #if UNITY_EDITOR
             float startT = Time.time;
 #endif
-            TCategoryDict = new Dictionary<BuildingCategory1, Texture2D>();
-
             while (Manager.GameManager.Instance.ABResourceManager == null)
             {
                 yield return null;
             }
-
 
             var abmgr = Manager.GameManager.Instance.ABResourceManager;
             AssetBundle ab;
@@ -72,19 +69,9 @@ namespace ML.Engine.BuildingSystem.UI
                 ab = crequest.assetBundle;
             }
 
-            var request = ab.LoadAllAssetsAsync<Texture2D>();
-            yield return request;
-
+            categoryAtlas = ab.LoadAsset<SpriteAtlas>("SA_Build_Category");
             CanSelectCategory1 = BuildingManager.Instance.GetRegisteredCategory();
-            foreach (var obj in request.allAssets)
-            {
-                var tex = (obj as Texture2D);
-                if (tex != null && Enum.IsDefined(typeof(BuildingCategory1), tex.name))
-                {
-                    TCategoryDict.Add((BuildingCategory1)Enum.Parse(typeof(BuildingCategory1), tex.name), tex);
-                }
-            }
-
+            
             ++IsInit;
             if (IsInit >= 1)
             {
@@ -100,7 +87,6 @@ namespace ML.Engine.BuildingSystem.UI
 #if UNITY_EDITOR
             float startT = Time.time;
 #endif
-            TTypeDict = new Dictionary<BuildingCategory2, Texture2D>();
 
             while (Manager.GameManager.Instance.ABResourceManager == null)
             {
@@ -116,19 +102,9 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 ab = crequest.assetBundle;
             }
-
-            var request = ab.LoadAllAssetsAsync<Texture2D>();
-            yield return request;
+            
+            typeAtlas = ab.LoadAsset<SpriteAtlas>("SA_Build_Type");    
             CanSelectCategory2 = BuildingManager.Instance.GetRegisteredType();
-
-            foreach (var obj in request.allAssets)
-            {
-                var tex = (obj as Texture2D);
-                if (tex != null && Enum.IsDefined(typeof(BuildingCategory2), tex.name))
-                {
-                    TTypeDict.Add((BuildingCategory2)Enum.Parse(typeof(BuildingCategory2), tex.name), tex);
-                }
-            }
 
             ++IsInit;
 

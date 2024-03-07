@@ -200,20 +200,25 @@ namespace ML.Engine.InventorySystem
         #region SpriteAtlas
 
         private SpriteAtlas itemAtlas;
-        public void LoadItemAtlas(bool _isLoad = true)
+        public IEnumerator LoadItemAtlas(bool _isLoad = true)
         {
-            float startT = Time.realtimeSinceStartup;
             if (_isLoad)
             {
-                itemAtlas = Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath)
-                    .LoadAsset<SpriteAtlas>("SA_Item_UI");
+                AssetBundle ab;
+                var crequest = Manager.GameManager.Instance.ABResourceManager.LoadLocalABAsync(Texture2DPath,null,out ab);
+                yield return crequest;
+                if (crequest != null)
+                {
+                    ab = crequest.assetBundle;
+                }
+                itemAtlas = ab.LoadAsset<SpriteAtlas>("SA_Item_UI");
             }
             else
             {
                 itemAtlas = null;
+                yield return null;
             }
-            //Debug.Log("LoadItemAtlas" + _isLoad + ":" + itemAtlas.IsUnityNull());
-            Debug.Log($"ItemAtlas: {itemAtlas != null}  {Time.realtimeSinceStartup-startT}");
+            Debug.Log($"ab:{itemAtlas != null}");
         }
         
 

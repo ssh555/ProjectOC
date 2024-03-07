@@ -110,9 +110,7 @@ namespace ProjectOC.TechTree
 
         public Sprite GetTPSprite(string ID)
         {
-            return this.registerTechPoints.ContainsKey(ID)? GM.ABResourceManager.
-                LoadAsset<SpriteAtlas>(TPIconTexture2DABPath, "SA_TechPoint_UI").
-                GetSprite(this.registerTechPoints[ID].Icon) : null;
+            return this.registerTechPoints.ContainsKey(ID)? techAtlas.GetSprite(this.registerTechPoints[ID].Icon) : null;
         }
 
         public string GetTPDescription(string ID)
@@ -177,16 +175,11 @@ namespace ProjectOC.TechTree
         {
             
             Sprite _res = null;
-            SpriteAtlas sa = GM.ABResourceManager.LoadLocalAB(TPIconTexture2DABPath)
-                .LoadAsset<SpriteAtlas>("SA_TechPoint_UI");
-            // SpriteAtlas sa = GM.ABResourceManager.LoadAsset<SpriteAtlas>(TPIconTexture2DABPath, "SA_TechPoint_UI");
-            _res =   sa.GetSprite(category.ToString());
+            _res = techAtlas.GetSprite(category.ToString());
 
             if (_res == null)
             {
-                _res = GM.ABResourceManager.LoadLocalAB(TPIconTexture2DABPath)
-                    .LoadAsset<SpriteAtlas>("SA_TechPoint_UI")
-                    .GetSprite("None");
+                _res = techAtlas.GetSprite("None");
             }
 
             return _res;
@@ -548,7 +541,8 @@ namespace ProjectOC.TechTree
         {
             ML.Engine.InventorySystem.ItemManager.Instance.LoadTableData();
             ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.LoadTableData();
-            ItemManager.Instance.LoadItemAtlas();
+            StartCoroutine(LoadTechAtlas());
+            StartCoroutine(ItemManager.Instance.LoadItemAtlas());
         }
 
         [Button("生成测试文件")]
@@ -619,6 +613,18 @@ namespace ProjectOC.TechTree
         }
         #endregion
 
+        private IEnumerator LoadTechAtlas()
+        {
+            AssetBundle ab;
+            var crequest = GM.ABResourceManager.LoadLocalABAsync(TPIconTexture2DABPath,null,out ab);
+            yield return crequest;
+            if (crequest != null)
+            {
+                ab = crequest.assetBundle;
+            }
+            techAtlas = ab.LoadAsset<SpriteAtlas>("SA_TechPoint_UI");
+        }
+        
     }
 
 }

@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 325152014
+CRC: 1171765425
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 2e28ac6551e169412afa99f133407c46
+    Hash: c275bb3bb333de807534b15f713128ea
   TypeTreeHash:
     serializedVersion: 2
     Hash: b30fce1a9ad74efb72be6c308c56e365
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 2e28ac6551e169412afa99f133407c46
+    Hash: c275bb3bb333de807534b15f713128ea
 HashAppended: 0
 ClassTypes:
 - Class: 21
@@ -93,7 +93,6 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/Materials/Materials/Mat_Stone2.mat
 - Assets/_ML/MLResources/BuildingSystem/Materials/ProNode/M_Build_ProNode_Processor_1.mat
 Dependencies:
-- E:/Project/projectoc/Assets/StreamingAssets/Windows/model/buildingsystem/texture3d
-- E:/Project/projectoc/Assets/StreamingAssets/Windows/shader
-- E:/Project/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/matpackageicon
-- E:/Project/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/type
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/model/buildingsystem/texture3d
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/shader
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/matpackageicon

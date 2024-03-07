@@ -23,6 +23,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Purchasing;
 using UnityEngine.Rendering;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub1;
 using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub2;
@@ -34,7 +35,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
     {
 
         public IInventory inventory;
-
+        private SpriteAtlas resonanceAtlas;
         
         
 
@@ -50,7 +51,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             this.GetComponent<ResonanceWheelUI>().enabled = true;
             StartCoroutine(InitUIPrefabs());
-            StartCoroutine(InitUITexture2D());
+             StartCoroutine(InitUITexture2D());
             InitUITextContents();
             
             
@@ -1002,42 +1003,26 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private IEnumerator InitUITexture2D()
         {
-
             var crequest = GM.ABResourceManager.LoadLocalABAsync(ResonanceWheelTexture2DPath, null, out var Texture2DAB);
             yield return crequest;
             if (crequest != null)
             {
                 Texture2DAB = crequest.assetBundle;
             }
-            Texture2D texture2D;
+
+            resonanceAtlas = Texture2DAB.LoadAsset<SpriteAtlas>("SA_ResonanceWheel_UI");
+
+            sprite1 = resonanceAtlas.GetSprite("icon_beast");
+            sprite2 = resonanceAtlas.GetSprite("icon_timing");
+            sprite3 = resonanceAtlas.GetSprite("gray_background");
             
-            texture2D  = Texture2DAB.LoadAsset<Texture2D>("icon_beast");
-            sprite1 =  Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
-            texture2D = Texture2DAB.LoadAsset<Texture2D>("icon_timing");
-            sprite2 = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
-            texture2D = Texture2DAB.LoadAsset<Texture2D>("gray_background");
-            sprite3 = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
-
-            texture2D = Texture2DAB.LoadAsset<Texture2D>("Cat");
-            beastTypeDic.Add(BeastType.WorkerEcho_Cat, Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f)));
-
-            texture2D = Texture2DAB.LoadAsset<Texture2D>("Deer");
-            beastTypeDic.Add(BeastType.WorkerEcho_Deer, Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f)));
-
-            texture2D = Texture2DAB.LoadAsset<Texture2D>("Dog");
-            beastTypeDic.Add(BeastType.WorkerEcho_Dog, Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f)));
-
-            texture2D = Texture2DAB.LoadAsset<Texture2D>("Fox");
-            beastTypeDic.Add(BeastType.WorkerEcho_Fox, Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f)));
-
-            texture2D = Texture2DAB.LoadAsset<Texture2D>("Rabbit");
-            beastTypeDic.Add(BeastType.WorkerEcho_Rabbit, Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f)));
-
-            texture2D = Texture2DAB.LoadAsset<Texture2D>("Seal");
-            beastTypeDic.Add(BeastType.WorkerEcho_Seal, Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f)));
-
-            texture2D = Texture2DAB.LoadAsset<Texture2D>("Random");
-            beastTypeDic.Add(BeastType.WorkerEcho_Random, Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f)));
+            beastTypeDic.Add(BeastType.WorkerEcho_Cat, resonanceAtlas.GetSprite("Cat"));
+            beastTypeDic.Add(BeastType.WorkerEcho_Deer, resonanceAtlas.GetSprite("Deer"));
+            beastTypeDic.Add(BeastType.WorkerEcho_Dog, resonanceAtlas.GetSprite("Dog"));
+            beastTypeDic.Add(BeastType.WorkerEcho_Fox, resonanceAtlas.GetSprite("Fox"));
+            beastTypeDic.Add(BeastType.WorkerEcho_Rabbit, resonanceAtlas.GetSprite("Rabbit"));
+            beastTypeDic.Add(BeastType.WorkerEcho_Seal, resonanceAtlas.GetSprite("Seal"));
+            beastTypeDic.Add(BeastType.WorkerEcho_Random, resonanceAtlas.GetSprite("Random"));
         }
 
         #endregion

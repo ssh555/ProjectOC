@@ -20,6 +20,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Purchasing;
 using UnityEngine.Rendering;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 
 namespace ProjectOC.ResonanceWheelSystem.UI
@@ -424,13 +425,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 yield return crequest;
                 Texture2DAB = crequest.assetBundle;
             }
-            Texture2D texture2D;
 
-            texture2D = Texture2DAB.LoadAsset<Texture2D>("icon_genderfemale");
-            icon_genderfemaleSprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
-            texture2D = Texture2DAB.LoadAsset<Texture2D>("icon_gendermale");
-            icon_gendermaleSprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
-
+            SpriteAtlas atlas = Texture2DAB.LoadAsset<SpriteAtlas>("SA_ResonanceWheel_UI");
+            icon_genderfemaleSprite = atlas.GetSprite("icon_genderfemale");
+            icon_gendermaleSprite = atlas.GetSprite("icon_gendermale");
 
 
         }

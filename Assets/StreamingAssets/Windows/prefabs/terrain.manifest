@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1039589577
+CRC: 1538343690
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 4fe5b1178c3124d61d83866aae837297
+    Hash: 64002e7c63defbd0eebf63a5d9ce4a3c
   TypeTreeHash:
     serializedVersion: 2
-    Hash: d97a5737ee205879d9025a5f195b9bc2
+    Hash: 75fb59fe47b57f8d9fa70534da226838
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 4fe5b1178c3124d61d83866aae837297
+    Hash: 64002e7c63defbd0eebf63a5d9ce4a3c
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -28,11 +28,17 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 64
   Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 88dfd9a1d40070e45bc302b503615a5e, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
 - Class: 115
+  Script: {instanceID: 0}
+- Class: 135
   Script: {instanceID: 0}
 - Class: 136
   Script: {instanceID: 0}
@@ -46,5 +52,6 @@ Assets:
 - Assets/_ProjectOC/OCResources/Prefabs/Terrain/TerrainPart.prefab
 - Assets/_ProjectOC/OCResources/Prefabs/Terrain/BuildingA.prefab
 Dependencies:
-- E:/Project/projectoc/Assets/StreamingAssets/Windows/materials/terrain
-- E:/Project/projectoc/Assets/StreamingAssets/Windows/model/terrain
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials/terrain
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/model/terrain

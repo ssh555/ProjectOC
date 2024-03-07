@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2159296389
+CRC: 2131451379
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 2df380e4c4075de527f6f95219777740
+    Hash: 8b7233bc697717709e56fa853896faad
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 8c63c21adfb93846fb7d0d9709c3c51e
+    Hash: b19e2fda25b0e39ac5f60d9d888c616f
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 2df380e4c4075de527f6f95219777740
+    Hash: 8b7233bc697717709e56fa853896faad
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -55,11 +55,11 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
@@ -69,19 +69,11 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 5e626c9daacc88545836fc3016b72e0c, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 7420625f8e02bfc4989af02feaf21d4e, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: ba8a2ec004d09ff4a886c0a90da6574f, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 3e87641e6af1fb746a87cdc198aba595, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f4044717213e31446939f7bd49c896ea, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: d37d3d4c9a445db4dbea37f893d6ff3d, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: f6da62ef2a40c0440adb4f3243b15be8, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f371f36022d2b4244b195cf029a5205a, type: 3}
 - Class: 114
@@ -96,8 +88,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 6feb82b60c7707348a49cccd1c157035, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: a444fb26d79a4a94ebd9400ba547e490, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: eea3d28ffbcb4cd47a326cb08ba74d18, type: 3}
 - Class: 114
@@ -119,13 +109,9 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 1d0293bf739c77d4ab476757dfcf305d, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 87badff79e1e54a4a9d68c74f002b591, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 84a92b25f83d49b9bc132d206b370281, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 88dfd9a1d40070e45bc302b503615a5e, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 39885ced2427947418fd575b5d2b3bde, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
@@ -143,7 +129,19 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: a79d93bee2b59d94fa12949e4c5e61d1, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: d37d3d4c9a445db4dbea37f893d6ff3d, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 7411b32275d93534cb08e4d96c084289, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: a444fb26d79a4a94ebd9400ba547e490, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f6da62ef2a40c0440adb4f3243b15be8, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 87badff79e1e54a4a9d68c74f002b591, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 39885ced2427947418fd575b5d2b3bde, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ba8a2ec004d09ff4a886c0a90da6574f, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 136
@@ -169,11 +167,11 @@ ClassTypes:
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/_ProjectOC/Scene/PlayerEnterScene.unity
-- Assets/_ProjectOC/Scene/_TEST/yl.unity
+- Assets/_ProjectOC/Scene/_TEST/yl/yl.unity
 - Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity
 - Assets/_ProjectOC/Scene/GameScene.unity
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/shader
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/uipanel
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/prefabs/character/player
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/shader
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/uipanel

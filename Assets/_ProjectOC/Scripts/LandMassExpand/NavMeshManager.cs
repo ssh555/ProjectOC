@@ -9,27 +9,15 @@ using ML.Engine.Manager;
 using ProjectOC.LandMassExpand;
 using Sirenix.OdinInspector;
 
-public class NavMeshManager : MonoBehaviour, ML.Engine.Manager.LocalManager.ILocalManager
+public class NavMeshManager :ML.Engine.Manager.LocalManager.ILocalManager
 {
-    private static NavMeshManager Instance = null;
-    
     private List<NavMeshSurface> surfacesToReBake = new List<NavMeshSurface>();
 
-    private void Awake()
-    {
-        if (Instance != null)
-        {
-            Destroy(this.gameObject);
-            return;
-        }
-        Instance = this;
-    }
-
-    private void Start()
+    public void DelayInit()
     {
         GameManager.Instance.RegisterLocalManager(this);
-        //BuildingPlacer BP = BuildingManager.Instance.Placer;
-         BuildingPlacer BP = FindObjectOfType<BuildingPlacer>();
+         BuildingPlacer BP = BuildingManager.Instance.Placer;
+         //BuildingPlacer BP = FindObjectOfType<BuildingPlacer>();
          BP.OnPlaceModeSuccess += (bpart) =>
          {
              JudgeNVSPosition(bpart.transform);
@@ -44,25 +32,22 @@ public class NavMeshManager : MonoBehaviour, ML.Engine.Manager.LocalManager.ILoc
          };
     }
     
-    void OnDestroy()
-    {
-        if (Instance == this)
-        {
-            if(ML.Engine.Manager.GameManager.Instance != null)
-                ML.Engine.Manager.GameManager.Instance.UnregisterLocalManager<NavMeshManager>();
-            Instance = null;
-        }    
-    }
-    
     public void UpdateNaveMeshSurfaces()
     {
+        GameManager.Instance.GetLocalManager<IslandManager>().currentIsland.SetSurfacesTrigger(surfacesToReBake,false);
+#if UNITY_EDITOR
         float startT = Time.realtimeSinceStartup;
+#endif
         foreach (var _nvs in surfacesToReBake)
         {
             _nvs.UpdateNavMesh(_nvs.navMeshData);
         }
+
+        GameManager.Instance.GetLocalManager<IslandManager>().currentIsland.SetSurfacesTrigger(surfacesToReBake);
         surfacesToReBake.Clear();
+#if  UNITY_EDITOR
         Debug.Log($"navmesh bake time cost: {Time.realtimeSinceStartup-startT}");
+#endif
     }
     
     public void JudgeNVSPosition(Transform _transf)
@@ -105,18 +90,6 @@ public class NavMeshManager : MonoBehaviour, ML.Engine.Manager.LocalManager.ILoc
             surfacesToReBake.Add(navMeshSurface);
         }
     }
-    
-    // [Button()]
-    // private void GEN()
-    // {
-    //     Debug.Log($"Start: {Time.realtimeSinceStartup}");
-    //     var ao = navMeshSurface.UpdateNavMesh(navMeshSurface.navMeshData);
-    //     ao.completed += (operation =>
-    //     {
-    //         Debug.Log($"End: {Time.realtimeSinceStartup}");
-    //     });
-    //     Debug.Log("QWQ");
-    // }
-    
+
 
 }

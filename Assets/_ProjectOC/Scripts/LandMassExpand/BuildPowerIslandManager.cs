@@ -9,37 +9,8 @@ using UnityEngine;
 
 namespace ProjectOC.LandMassExpand
 {
-    public class BuildPowerIslandManager : MonoBehaviour, ML.Engine.Manager.LocalManager.ILocalManager
+    public class BuildPowerIslandManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
-        private static BuildPowerIslandManager Instance = null;
-
-        void OnDestroy()
-        {
-            if(Instance == this)
-            {
-                if(GameManager.Instance != null)
-                    GameManager.Instance.UnregisterLocalManager<BuildPowerIslandManager>();
-                Instance = null;
-            }
-        }
-        
-        private void Awake()
-        {
-            if (Instance != null)
-            {
-                Destroy(this.gameObject);
-                return;
-            }
-            Instance = this;
-        }
-
-        private void Start()
-        {
-            GameManager.Instance.RegisterLocalManager(this);
-        }
-        
-        
-        
         [HideInInspector]
         public List<ISupportPowerBPart> powerCores = new List<ISupportPowerBPart>();
         [HideInInspector]

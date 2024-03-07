@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 5c0d78abb8602fa4fb08ad5931f815f3
+guid: ec92c2c9848afe14cb4c24969d8e04b7
 SpriteAtlasImporter:
   externalObjects: {}
   textureSettings:
@@ -16,7 +16,7 @@ SpriteAtlasImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 1024
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -29,15 +29,15 @@ SpriteAtlasImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   packingSettings:
     serializedVersion: 2
-    padding: 4
+    padding: 8
     blockOffset: 1
     allowAlphaSplitting: 0
     enableRotation: 0
     enableTightPacking: 0
-    enableAlphaDilation: 0
+    enableAlphaDilation: 1
   secondaryTextureSettings: {}
   variantMultiplier: 1
   bindAsDefault: 1
   userData: 
-  assetBundleName: 
+  assetBundleName: ui/buildingsystem/texture2d/type
   assetBundleVariant: 

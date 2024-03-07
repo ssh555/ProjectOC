@@ -1,26 +1,24 @@
 ManifestFileVersion: 0
-CRC: 854514760
+CRC: 60007331
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a1ba64f4cfa922787c4354a5ed3bf047
+    Hash: fc5bc734a07bca8ad073dc05c310f7d1
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 2d8df09e698f722ada1caa03d3413830
+    Hash: 033fafe2c9f6c610c3a734393882fd4c
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: a1ba64f4cfa922787c4354a5ed3bf047
+    Hash: fc5bc734a07bca8ad073dc05c310f7d1
 HashAppended: 0
 ClassTypes:
 - Class: 28
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
+- Class: 687078895
+  Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ML/MLResources/BuildingSystem/Texture2D/Category/None.png
-- Assets/_ML/MLResources/BuildingSystem/Texture2D/Category/House.png
-- Assets/_ML/MLResources/BuildingSystem/Texture2D/Category/ProNode.png
-- Assets/_ML/MLResources/BuildingSystem/Texture2D/Category/Furniture.png
-- Assets/_ML/MLResources/BuildingSystem/Texture2D/Category/Interact.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/SA_Build_Category.spriteatlasv2
 Dependencies: []

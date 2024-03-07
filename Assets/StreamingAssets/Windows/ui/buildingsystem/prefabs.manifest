@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2808113101
+CRC: 3829288165
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5597fa516c8aea06e79e88a893f8934f
+    Hash: e34fa9dc5c4e401235dfa43d5b61ebb8
   TypeTreeHash:
     serializedVersion: 2
-    Hash: ae2cd3f1777115bbbc832c06298e8e23
+    Hash: 69079b92b73e1b36a369c8118c1edd89
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 5597fa516c8aea06e79e88a893f8934f
+    Hash: e34fa9dc5c4e401235dfa43d5b61ebb8
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -27,8 +27,6 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 096992a5f2b3f8a40b2321c0d694d79c, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 078bdcd1957751f4d8eb7279e71c24f5, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: cdccbc4b0d8d78b4680a054167d9663f, type: 3}
@@ -37,13 +35,15 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 9cb7e6233a5cb6241ab3c42bce1c444e, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 394bf23c3227f814d832e6e85b0ae42f, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 351805d19c60d0846a11b8aecd012987, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 078bdcd1957751f4d8eb7279e71c24f5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9cb7e6233a5cb6241ab3c42bce1c444e, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 213
@@ -51,6 +51,8 @@ ClassTypes:
 - Class: 222
   Script: {instanceID: 0}
 - Class: 224
+  Script: {instanceID: 0}
+- Class: 687078895
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
 - AssemblyName: Unity.TextMeshPro
@@ -73,10 +75,6 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/UIPrefabs/KT_KeyCom.prefab
 - Assets/_ML/MLResources/BuildingSystem/UIPrefabs/Panel/BSInteractMode_KeyCom.prefab
 Dependencies:
-- E:/Project/projectoc/Assets/StreamingAssets/Windows/fonts
-- E:/Project/projectoc/Assets/StreamingAssets/Windows/textmeshpro/font
-- E:/Project/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/category
-- E:/Project/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/matpackageicon
-- E:/Project/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/style
-- E:/Project/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/type
-- E:/Project/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/fonts
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/textmeshpro/font
+- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/matpackageicon
