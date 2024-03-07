@@ -1,7 +1,9 @@
 using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.Input;
 using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
+using ML.Engine.UI;
 using Newtonsoft.Json;
 using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
@@ -13,6 +15,7 @@ using System.Linq;
 using Unity.Burst.CompilerServices;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Purchasing;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
@@ -27,7 +30,13 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private void Start()
         {
 
-            //parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
+            //KeyTips
+            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
+            foreach (var item in UIKeyTipComponents)
+            {
+                item.InitData();
+                uiKeyTipDic.Add(item.InputActionName, item);
+            }
 
             //Ring
             var ringcontent = this.transform.Find("Ring").Find("Viewport").Find("Content");
@@ -126,6 +135,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.Enable();
+            UikeyTipIsInit = false;
             this.Refresh();
         }
 
@@ -227,7 +237,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private Dictionary<ML.Engine.InventorySystem.ItemType, GameObject> tempItemType = new Dictionary<ML.Engine.InventorySystem.ItemType, GameObject>();
         private List<GameObject> tempUIItems = new List<GameObject>();
 
-
+        private Dictionary<string, UIKeyTipComponent> uiKeyTipDic = new Dictionary<string, UIKeyTipComponent>();
+        private bool UikeyTipIsInit;
+        private InputManager inputManager => GameManager.Instance.InputManager;
         private void ClearTemp()
         {
             foreach (var s in tempSprite)
@@ -242,11 +254,15 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             {
                 Destroy(s);
             }
+
+            uiKeyTipDic = null;
         }
 
         #endregion
 
         #region UI对象引用
+        private UIKeyTipComponent[] UIKeyTipComponents;
+
         public ResonanceWheelUI parentUI;
 
         
@@ -270,6 +286,21 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 return;
             }
 
+            if (UikeyTipIsInit == false)
+            {
+                KeyTip[] keyTips = inputManager.ExportKeyTipValues(ResonanceWheelUI.PanelTextContent_sub2);
+                foreach (var keyTip in keyTips)
+                {
+                    InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
+                    inputManager.GetInputActionBindText(inputAction);
+
+                    UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
+                    uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
+                    uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+
+                }
+                UikeyTipIsInit = true;
+            }
 
             //ring
 
@@ -285,12 +316,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 }
             }
 
-
-            //BotKeyTips
-            KT_Confirm.ReWrite(ResonanceWheelUI.PanelTextContent_sub2.confirm);
-            KT_Back.ReWrite(ResonanceWheelUI.PanelTextContent_sub2.back);
-
-
     }
         #endregion
 
@@ -301,8 +326,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public struct ResonanceWheel_sub2Struct
         {
             //BotKeyTips
-            public KeyTip confirm;
-            public KeyTip back;
+            public KeyTip Confirm;
+            public KeyTip Back;
         }
         #endregion
 

@@ -12,6 +12,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using ML.Engine.Extension;
 using ML.Engine.BuildingSystem;
+using ML.Engine.UI;
+using ML.Engine.Manager;
+using ML.Engine.Input;
+using UnityEngine.InputSystem;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -22,17 +26,22 @@ namespace ProjectOC.InventorySystem.UI
         private void Start()
         {
             InitUITextContents();
+
+            //KeyTips
+            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
+            foreach (var item in UIKeyTipComponents)
+            {
+                item.InitData();
+                uiKeyTipDic.Add(item.InputActionName, item);
+            }
+
+
             // TopTitle
             Text_Title = transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_Upgrade = new UIKeyTip();
-            KT_Upgrade.img = transform.Find("TopTitle").Find("KT_Upgrade").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_Upgrade.keytip = KT_Upgrade.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_Upgrade.description = KT_Upgrade.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
+
             Transform priority = transform.Find("TopTitle").Find("Priority");
             Text_Priority = priority.Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_NextPriority = new UIKeyTip();
-            KT_NextPriority.img = priority.Find("KT_NextPriority").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_NextPriority.keytip = KT_NextPriority.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
+
             PriorityUrgency = priority.Find("Urgency");
             PriorityNormal = priority.Find("Normal");
             PriorityAlternative = priority.Find("Alternative");
@@ -84,80 +93,18 @@ namespace ProjectOC.InventorySystem.UI
             // BotKeyTips
             BotKeyTips_ProNode = this.transform.Find("BotKeyTips").Find("KeyTips");
 
-            KT_ChangeRecipe = new UIKeyTip();
-            KT_ChangeRecipe.img = BotKeyTips_ProNode.Find("KT_ChangeRecipe").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_ChangeRecipe.keytip = KT_ChangeRecipe.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_ChangeRecipe.description = KT_ChangeRecipe.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_Remove1 = new UIKeyTip();
-            KT_Remove1.img = BotKeyTips_ProNode.Find("KT_Remove1").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_Remove1.keytip = KT_Remove1.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_Remove1.description = KT_Remove1.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_Remove10 = new UIKeyTip();
-            KT_Remove10.img = BotKeyTips_ProNode.Find("KT_Remove10").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_Remove10.keytip = KT_Remove10.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_Remove10.description = KT_Remove10.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_FastAdd = new UIKeyTip();
-            KT_FastAdd.img = BotKeyTips_ProNode.Find("KT_FastAdd").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_FastAdd.keytip = KT_FastAdd.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_FastAdd.description = KT_FastAdd.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_Back = new UIKeyTip();
-            KT_Back.img = BotKeyTips_ProNode.Find("KT_Back").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_Back.keytip = KT_Back.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_Back.description = KT_Back.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_ChangeWorker = new UIKeyTip();
-            KT_ChangeWorker.img = BotKeyTips_ProNode.Find("KT_ChangeWorker").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_ChangeWorker.keytip = KT_ChangeWorker.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_ChangeWorker.description = KT_ChangeWorker.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_RemoveWorker = new UIKeyTip();
-            KT_RemoveWorker.img = BotKeyTips_ProNode.Find("KT_RemoveWorker").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_RemoveWorker.keytip = KT_RemoveWorker.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_RemoveWorker.description = KT_RemoveWorker.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
+            
             // BotKeyTips ChangeRecipe
             BotKeyTips_Recipe = this.transform.Find("BotKeyTips").Find("ChangeRecipe");
-
-            KT_ConfirmRecipe = new UIKeyTip();
-            KT_ConfirmRecipe.img = BotKeyTips_Recipe.Find("KT_ConfirmRecipe").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_ConfirmRecipe.keytip = KT_ConfirmRecipe.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_ConfirmRecipe.description = KT_ConfirmRecipe.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_BackRecipe = new UIKeyTip();
-            KT_BackRecipe.img = BotKeyTips_Recipe.Find("KT_BackRecipe").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_BackRecipe.keytip = KT_BackRecipe.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_BackRecipe.description = KT_BackRecipe.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
 
             BotKeyTips_Recipe.gameObject.SetActive(false);
             // BotKeyTips ChangeWorker
             BotKeyTips_Worker = this.transform.Find("BotKeyTips").Find("ChangeWorker");
 
-            KT_ConfirmWorker = new UIKeyTip();
-            KT_ConfirmWorker.img = BotKeyTips_Worker.Find("KT_ConfirmWorker").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_ConfirmWorker.keytip = KT_ConfirmWorker.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_ConfirmWorker.description = KT_ConfirmWorker.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_BackWorker = new UIKeyTip();
-            KT_BackWorker.img = BotKeyTips_Worker.Find("KT_BackWorker").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_BackWorker.keytip = KT_BackWorker.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_BackWorker.description = KT_BackWorker.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
             BotKeyTips_Worker.gameObject.SetActive(false);
             // BotKeyTips LevelUp
             BotKeyTips_Level = this.transform.Find("BotKeyTips").Find("Upgrade");
 
-            KT_ConfirmLevel = new UIKeyTip();
-            KT_ConfirmLevel.img = BotKeyTips_Level.Find("KT_ConfirmLevel").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_ConfirmLevel.keytip = KT_ConfirmLevel.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_ConfirmLevel.description = KT_ConfirmLevel.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_BackLevel = new UIKeyTip();
-            KT_BackLevel.img = BotKeyTips_Level.Find("KT_BackLevel").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_BackLevel.keytip = KT_BackLevel.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_BackLevel.description = KT_BackLevel.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
             BotKeyTips_Level.gameObject.SetActive(false);
 
             CurPriority = MissionNS.TransportPriority.Normal;
@@ -466,6 +413,7 @@ namespace ProjectOC.InventorySystem.UI
             ProNode.OnProduceEnd += Refresh;
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Enable();
+            UikeyTipIsInit = false;
             this.Refresh();
         }
 
@@ -653,6 +601,9 @@ namespace ProjectOC.InventorySystem.UI
         private List<GameObject> tempUIItemsWorker = new List<GameObject>();
         private List<GameObject> tempUIItemsLevel = new List<GameObject>();
 
+        private Dictionary<string, UIKeyTipComponent> uiKeyTipDic = new Dictionary<string, UIKeyTipComponent>();
+        private bool UikeyTipIsInit;
+        private InputManager inputManager => GameManager.Instance.InputManager;
         private void ClearTemp()
         {
             foreach(var s in tempSprite)
@@ -679,10 +630,14 @@ namespace ProjectOC.InventorySystem.UI
             {
                 Destroy(s);
             }
+            uiKeyTipDic = null;
         }
         #endregion
 
         #region UI对象引用
+
+        private UIKeyTipComponent[] UIKeyTipComponents;
+
         private TMPro.TextMeshProUGUI Text_Title;
         private TMPro.TextMeshProUGUI Text_Priority;
         private TMPro.TextMeshProUGUI Text_Eff;
@@ -692,22 +647,6 @@ namespace ProjectOC.InventorySystem.UI
         private TMPro.TextMeshProUGUI LvNew;
         private TMPro.TextMeshProUGUI DescOld;
         private TMPro.TextMeshProUGUI DescNew;
-
-        private UIKeyTip KT_Upgrade;
-        private UIKeyTip KT_NextPriority;
-        private UIKeyTip KT_ChangeRecipe;
-        private UIKeyTip KT_Remove1;
-        private UIKeyTip KT_Remove10;
-        private UIKeyTip KT_FastAdd;
-        private UIKeyTip KT_Back;
-        private UIKeyTip KT_ChangeWorker;
-        private UIKeyTip KT_RemoveWorker;
-        private UIKeyTip KT_ConfirmRecipe;
-        private UIKeyTip KT_BackRecipe;
-        private UIKeyTip KT_ConfirmWorker;
-        private UIKeyTip KT_BackWorker;
-        private UIKeyTip KT_ConfirmLevel;
-        private UIKeyTip KT_BackLevel;
 
         private Transform Priority;
         private Transform PriorityUrgency;
@@ -747,6 +686,29 @@ namespace ProjectOC.InventorySystem.UI
             {
                 return;
             }
+
+            if (UikeyTipIsInit == false)
+            {
+                KeyTip[] keyTips = inputManager.ExportKeyTipValues(PanelTextContent);
+                foreach (var keyTip in keyTips)
+                {
+                    InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
+                    inputManager.GetInputActionBindText(inputAction);
+                    if (uiKeyTipDic.ContainsKey(keyTip.keyname))
+                    {
+                        UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
+                        uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
+                        uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+                    }
+                    else
+                    {
+                        Debug.Log("keyTip.keyname " + keyTip.keyname);
+                    }
+                }
+                UikeyTipIsInit = true;
+            }
+
+
             if (CurMode == Mode.ProNode)
             {
                 this.ProNodeUI.gameObject.SetActive(true);
@@ -758,10 +720,6 @@ namespace ProjectOC.InventorySystem.UI
                 this.BotKeyTips_Worker.gameObject.SetActive(false);
                 this.BotKeyTips_Level.gameObject.SetActive(false);
                 this.Raw_UIItemTemplate.gameObject.SetActive(false);
-
-                KT_Upgrade.ReWrite(PanelTextContent.ktUpgrade);
-                KT_NextPriority.ReWrite(PanelTextContent.ktNextPriority);
-
 
                 #region ProNode
                 #region TopTitle
@@ -1038,13 +996,6 @@ namespace ProjectOC.InventorySystem.UI
                 #endregion
 
                 #region BotKeyTips
-                KT_ChangeRecipe.ReWrite(PanelTextContent.ktChangeRecipe);
-                KT_Remove1.ReWrite(PanelTextContent.ktRemove1);
-                KT_Remove10.ReWrite(PanelTextContent.ktRemove10);
-                KT_FastAdd.ReWrite(PanelTextContent.ktFastAdd);
-                KT_Back.ReWrite(PanelTextContent.ktBack);
-                KT_ChangeWorker.ReWrite(PanelTextContent.ktChangeWorker);
-                KT_RemoveWorker.ReWrite(PanelTextContent.ktRemoveWorker);
                 if (this.ProNode.ProNodeType == ProNodeType.Auto)
                 {
                     BotKeyTips_ProNode.Find("KT_ChangeWorker").gameObject.SetActive(false);
@@ -1288,8 +1239,6 @@ namespace ProjectOC.InventorySystem.UI
                 #endregion
 
                 #region BotKeyTips
-                KT_ConfirmRecipe.ReWrite(PanelTextContent.ktConfirmRecipe);
-                KT_BackRecipe.ReWrite(PanelTextContent.ktBackRecipe);
                 #endregion
             }
             else if (CurMode == Mode.ChangeWorker)
@@ -1470,8 +1419,7 @@ namespace ProjectOC.InventorySystem.UI
                 #endregion
 
                 #region BotKeyTips
-                KT_ConfirmWorker.ReWrite(PanelTextContent.ktConfirmWorker);
-                KT_BackWorker.ReWrite(PanelTextContent.ktBackWorker);
+
                 #endregion
             }
             else if (CurMode == Mode.ChangeLevel)
@@ -1575,8 +1523,6 @@ namespace ProjectOC.InventorySystem.UI
                 #endregion
 
                 #region BotKeyTips
-                KT_ConfirmLevel.ReWrite(PanelTextContent.ktConfirmLevel);
-                KT_BackLevel.ReWrite(PanelTextContent.ktBack);
                 #endregion
 
             }
@@ -1604,21 +1550,21 @@ namespace ProjectOC.InventorySystem.UI
             public TextContent textPrefixEff;
             public TextContent text_LvDesc;
 
-            public KeyTip ktUpgrade;
-            public KeyTip ktNextPriority;
-            public KeyTip ktChangeRecipe;
-            public KeyTip ktRemove1;
-            public KeyTip ktRemove10;
-            public KeyTip ktFastAdd;
-            public KeyTip ktBack;
-            public KeyTip ktChangeWorker;
-            public KeyTip ktRemoveWorker;
-            public KeyTip ktConfirmRecipe;
-            public KeyTip ktBackRecipe;
-            public KeyTip ktConfirmWorker;
-            public KeyTip ktBackWorker;
-            public KeyTip ktConfirmLevel;
-            public KeyTip ktBackLevel;
+            public KeyTip Upgrade;
+            public KeyTip NextPriority;
+            public KeyTip ChangeRecipe;
+            public KeyTip Remove1;
+            public KeyTip Remove10;
+            public KeyTip FastAdd;
+            public KeyTip Back;
+            public KeyTip ChangeWorker;
+            public KeyTip RemoveWorker;
+            public KeyTip ConfirmRecipe;
+            public KeyTip BackRecipe;
+            public KeyTip ConfirmWorker;
+            public KeyTip BackWorker;
+            public KeyTip ConfirmLevel;
+            public KeyTip BackLevel;
         }
 
         public static ProNodePanel PanelTextContent => ABJAProcessor.Datas;

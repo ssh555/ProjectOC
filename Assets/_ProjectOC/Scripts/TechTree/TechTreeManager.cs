@@ -512,14 +512,14 @@ namespace ProjectOC.TechTree
         {
             public TextContent toptitle;
             public TextTip[] category;
-            public KeyTip categorylast;
-            public KeyTip categorynext;
+            public KeyTip LastTerm;
+            public KeyTip NextTerm;
             public TextContent lockedtitletip;
             public TextContent unlockedtitletip;
-            public KeyTip inspector;
+            public KeyTip Inspect;
             public TextContent timecosttip;
-            public KeyTip decipher;
-            public KeyTip back;
+            public KeyTip Decipher;
+            public KeyTip Back;
         }
         public static ML.Engine.ABResources.ABJsonAssetProcessor<TPPanel> ABJAProcessor_TPPanel;
 

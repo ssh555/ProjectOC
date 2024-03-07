@@ -16,6 +16,8 @@ using ProjectOC.WorkerEchoNS;
 using ProjectOC.WorkerNS;
 using ML.Engine.UI;
 using UnityEngine.U2D;
+using ML.Engine.Input;
+using UnityEngine.InputSystem;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -23,11 +25,7 @@ namespace ProjectOC.InventorySystem.UI
     {
 
         #region Input
-        /// 用于Drop和Destroy按键响应Cancel
-        /// 长按响应了Destroy就置为true
-        /// Cancel就不响应Drop 并 重置
-        /// </summary>
-        private bool ItemIsDestroyed = false;
+
         #endregion
 
         #region Unity
@@ -36,20 +34,19 @@ namespace ProjectOC.InventorySystem.UI
         {
             InitUITextContents();
 
-
+            //KeyTips
+            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
+            foreach (var item in UIKeyTipComponents)
+            {
+                item.InitData();
+                uiKeyTipDic.Add(item.InputActionName, item);
+            }
 
             // TopTitle
             TopTitleText = this.transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
 
             // ItemType
             var content = this.transform.Find("ItemType").Find("Content");
-            KT_LastTerm = new UIKeyTip();
-            KT_LastTerm.img = content.Find("KT_LastTerm").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_LastTerm.keytip = KT_LastTerm.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_NextTerm = new UIKeyTip();
-            KT_NextTerm.img = content.Find("KT_NextTerm").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_NextTerm.keytip = KT_NextTerm.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
 
             ItemTypeTemplate = content.Find("ItemTypeContainer").Find("ItemTypeTemplate");
             ItemTypeTemplate.gameObject.SetActive(false);
@@ -67,27 +64,6 @@ namespace ProjectOC.InventorySystem.UI
             Info_ItemDescription = info.Find("ItemDescription").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             Info_ItemEffectDescription = info.Find("EffectDescription").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
 
-            // BotKeyTips
-            var kt = this.transform.Find("BotKeyTips").Find("KeyTips");
-            KT_Use = new UIKeyTip();
-            KT_Use.img = kt.Find("KT_Use").Find("Image").GetComponent<Image>();
-            KT_Use.keytip = KT_Use.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_Use.description = KT_Use.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_Back = new UIKeyTip();
-            KT_Back.img = kt.Find("KT_Back").Find("Image").GetComponent<Image>();
-            KT_Back.keytip = KT_Back.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_Back.description = KT_Back.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_Drop = new UIKeyTip();
-            KT_Drop.img = kt.Find("KT_Drop").Find("Image").GetComponent<Image>();
-            KT_Drop.keytip = KT_Drop.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_Drop.description = KT_Drop.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_Destroy = new UIKeyTip();
-            KT_Destroy.img = kt.Find("KT_Destroy").Find("Image").GetComponent<Image>();
-            KT_Destroy.keytip = KT_Destroy.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_Destroy.description = KT_Destroy.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
 
             ItemTypes = Enum.GetValues(typeof(ML.Engine.InventorySystem.ItemType)).Cast<ML.Engine.InventorySystem.ItemType>().Where(e => (int)e > 0).ToArray();
             CurrentItemTypeIndex = 0;
@@ -245,6 +221,7 @@ namespace ProjectOC.InventorySystem.UI
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.Enable();
             ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
+            UikeyTipIsInit = false;
             this.Refresh();
         }
 
@@ -269,9 +246,9 @@ namespace ProjectOC.InventorySystem.UI
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
             // 丢弃
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.DropAndDestroy.canceled -= DropAndDestroy_canceled;
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Drop.started -= Drop_started;
             // 销毁
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.DropAndDestroy.performed -= DropAndDestroy_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.started -= Destroy_started;
         }
 
         private void RegisterInput()
@@ -288,9 +265,11 @@ namespace ProjectOC.InventorySystem.UI
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
             // 丢弃
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.DropAndDestroy.canceled += DropAndDestroy_canceled;
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Drop.started += Drop_started;
+
             // 销毁
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.DropAndDestroy.performed += DropAndDestroy_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.started += Destroy_started;
+
         }
 
         public void DropItem()
@@ -363,29 +342,22 @@ namespace ProjectOC.InventorySystem.UI
             CurrentItemTypeIndex = (CurrentItemTypeIndex + 1 + ItemTypes.Length) % ItemTypes.Length;
         }
 
+
         /// <summary>
         /// Drop
         /// </summary>
         /// <param name="obj"></param>
-        private void DropAndDestroy_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void Drop_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (this.ItemIsDestroyed)
-            {
-                this.ItemIsDestroyed = false;
-            }
-            else
-            {
-                DropItem();
-            }
+            DropItem();
         }
 
         /// <summary>
         /// Destroy
         /// </summary>
         /// <param name="obj"></param>
-        private void DropAndDestroy_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void Destroy_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            this.ItemIsDestroyed = true;
             DestroyItem();
         }
 
@@ -397,7 +369,9 @@ namespace ProjectOC.InventorySystem.UI
         private Dictionary<ML.Engine.InventorySystem.ItemType, GameObject> tempItemType = new Dictionary<ML.Engine.InventorySystem.ItemType, GameObject>();
         private List<GameObject> tempUIItems = new List<GameObject>();
 
-
+        private Dictionary<string, UIKeyTipComponent> uiKeyTipDic = new Dictionary<string, UIKeyTipComponent>();
+        private bool UikeyTipIsInit;
+        private InputManager inputManager => GameManager.Instance.InputManager;
         private void ClearTemp()
         {
             foreach(var s in tempSprite)
@@ -412,16 +386,19 @@ namespace ProjectOC.InventorySystem.UI
             {
                 Destroy(s);
             }
+
+            uiKeyTipDic = null;
         }
 
         #endregion
 
         #region UI对象引用
+
+        private UIKeyTipComponent[] UIKeyTipComponents;
+
         private TMPro.TextMeshProUGUI TopTitleText;
 
-        private UIKeyTip KT_LastTerm;
         private Transform ItemTypeTemplate;
-        private UIKeyTip KT_NextTerm;
 
         private GridLayoutGroup Inventory_GridLayout;
         private Transform UIItemTemplate;
@@ -432,12 +409,14 @@ namespace ProjectOC.InventorySystem.UI
         private TMPro.TextMeshProUGUI Info_ItemDescription;
         private TMPro.TextMeshProUGUI Info_ItemEffectDescription;
 
+        //有特殊表现
         private UIKeyTip KT_Use;
-        private UIKeyTip KT_Back;
         private UIKeyTip KT_Drop;
         private UIKeyTip KT_Destroy;
+
+
         #endregion
-        
+
         public override void Refresh()
         {
             // 加载完成JSON数据 & 查找完所有引用
@@ -446,15 +425,34 @@ namespace ProjectOC.InventorySystem.UI
                 return;
             }
 
+
+            if (UikeyTipIsInit == false)
+            {
+                KeyTip[] keyTips = inputManager.ExportKeyTipValues(PanelTextContent_Main);
+                foreach (var keyTip in keyTips)
+                {
+                    InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
+                    inputManager.GetInputActionBindText(inputAction);
+                    if (uiKeyTipDic.ContainsKey(keyTip.keyname))
+                    {
+                        UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
+                        uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
+                        uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+                    }
+                    else
+                    {
+                        Debug.Log("keyTip.keyname " + keyTip.keyname);
+                    }
+                }
+                UikeyTipIsInit = true;
+            }
+
             #region TopTitle
             // 更新标题文本
             this.TopTitleText.text = PanelTextContent_Main.toptitle.GetText();
             #endregion
 
             #region ItemType
-            // 更新按键提示
-            this.KT_LastTerm.ReWrite(PanelTextContent_Main.lastterm);
-            this.KT_NextTerm.ReWrite(PanelTextContent_Main.nextterm);
             // 刷新ItemType选择区域
             foreach(var itemtype in ItemTypes)
             {
@@ -650,10 +648,6 @@ namespace ProjectOC.InventorySystem.UI
             #endregion
 
             #region BotKeyTips
-            KT_Use.ReWrite(PanelTextContent_Main.use);
-            KT_Back.ReWrite(PanelTextContent_Main.back);
-            KT_Drop.ReWrite(PanelTextContent_Main.drop);
-            KT_Destroy.ReWrite(PanelTextContent_Main.destroy);
             if (CurrentItem != null)
             {
                 KT_Use.img.transform.parent.gameObject.SetActive(CurrentItem.CanUse());
@@ -672,15 +666,15 @@ namespace ProjectOC.InventorySystem.UI
         {
             public TextContent toptitle;
             public TextTip[] itemtype;
-            public KeyTip lastterm;
-            public KeyTip nextterm;
+            public KeyTip LastTerm;
+            public KeyTip NextTerm;
             public TextContent weightprefix;
             public TextContent descriptionprefix;
             public TextContent effectdescriptionprefix;
-            public KeyTip use;
-            public KeyTip back;
-            public KeyTip drop;
-            public KeyTip destroy;
+            public KeyTip Use;
+            public KeyTip Back;
+            public KeyTip Drop;
+            public KeyTip Destroy;
         }
 
         public static InventoryPanel PanelTextContent_Main => ABJAProcessor.Datas;

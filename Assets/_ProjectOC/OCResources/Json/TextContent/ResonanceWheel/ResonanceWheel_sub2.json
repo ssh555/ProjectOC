@@ -1,20 +1,20 @@
 {
-  "confirm": {
-    "keyname": "confirm",
+  "Confirm": {
+    "keyname": "KT_Confirm",
     "keymap": {
-      "ActionMapName": "F",
-      "ActionName": "A"
+      "ActionMapName": "Common",
+      "ActionName": "Confirm"
     },
     "description": {
       "Chinese": "确认",
       "English": "Confirm"
     }
   },
-  "back": {
-    "keyname": "back",
+  "Back": {
+    "keyname": "KT_Back",
     "keymap": {
-      "ActionMapName": "ESC",
-      "ActionName": "B"
+      "ActionMapName": "Common",
+      "ActionName": "Back"
     },
     "description": {
       "Chinese": "返回",

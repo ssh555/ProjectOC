@@ -49,7 +49,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             StartCoroutine(InitUITexture2D());
             InitUITextContents();
 
-
+            //KeyTips
             UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
             foreach (var item in UIKeyTipComponents)
             {
@@ -181,7 +181,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             this.Refresh();
 
             //base.OnRecovery();
-            //this.Enter();
+            this.Enter();
         }
 
 
@@ -664,8 +664,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public Dictionary<BeastType,Sprite> beastTypeDic = new Dictionary<BeastType, Sprite>();
         [ShowInInspector]
         private Dictionary<string,UIKeyTipComponent> uiKeyTipDic = new Dictionary<string,UIKeyTipComponent>();
-
         private bool UikeyTipIsInit;
+        private InputManager inputManager => GameManager.Instance.InputManager;
         #endregion
 
         public override void Refresh()
@@ -685,14 +685,21 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 {
                     InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
                     inputManager.GetInputActionBindText(inputAction);
-
-                    UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
-                    uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
-                    uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+                    if(uiKeyTipDic.ContainsKey(keyTip.keyname))
+                    {
+                        UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
+                        uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
+                        uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+                    }
+                    else
+                    {
+                        Debug.Log("keyTip.keyname " + keyTip.keyname);
+                    }
+                    
+                    
 
                 }
                 UikeyTipIsInit = true;
-
             }
             
 
@@ -956,9 +963,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         public static ResonanceWheel_sub2Struct PanelTextContent_sub2 => ABJAProcessorJson_sub2.Datas;
         public static ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub2Struct> ABJAProcessorJson_sub2;
-
-        private InputManager inputManager => GameManager.Instance.InputManager;
-
         private void InitUITextContents()
         {
             if (ABJAProcessorJson_Main == null)

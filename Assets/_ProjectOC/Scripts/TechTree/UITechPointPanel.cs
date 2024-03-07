@@ -14,6 +14,9 @@ using ML.Engine.Timer;
 using ML.Engine.InventorySystem.CompositeSystem;
 using BehaviorDesigner.Runtime.Tasks.Movement;
 using UnityEngine.Audio;
+using ML.Engine.Manager;
+using ML.Engine.Input;
+using UnityEngine.InputSystem;
 
 namespace ProjectOC.TechTree.UI
 {
@@ -113,12 +116,12 @@ namespace ProjectOC.TechTree.UI
         /// </summary>
         private bool CanDecipher => TechTreeManager.Instance.CanUnlockTechPoint(inventory, CurrentID);
 
+        private UIKeyTipComponent[] UIKeyTipComponents;
+
         private TextMeshProUGUI topTitle;
 
         #region CategoryPanel
-        private UIKeyTip categoryLast;
         private Transform categoryTemplate;
-        private UIKeyTip categoryNext;
         #endregion
 
         #region TechTreePanel
@@ -127,6 +130,7 @@ namespace ProjectOC.TechTree.UI
         #endregion
 
         #region TechPointPanel
+
         private Image TPIcon;
 
         private TextMeshProUGUI TPName;
@@ -137,8 +141,6 @@ namespace ProjectOC.TechTree.UI
         /// 可破译项不同语言的提示
         /// </summary>
         private TextMeshProUGUI TPDecipherTip;
-
-        private UIKeyTip TPKTInspector;
 
         /// <summary>
         /// 破译后可以解锁项的UI模板
@@ -153,7 +155,7 @@ namespace ProjectOC.TechTree.UI
         /// <summary>
         /// 破译按键提示
         /// </summary>
-        private UIKeyTip TPKT_Decipher;
+        private UIKeyTip TPKT_Decipher;//有特殊表现
 
         /// <summary>
         /// 破译的时间消耗
@@ -187,29 +189,22 @@ namespace ProjectOC.TechTree.UI
 
         #endregion
 
-        #region BotPanel
-        private UIKeyTip KT_Back;
-        #endregion
-
         #region Unity
         private void Awake()
         {
+            //KeyTips
+            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
+            foreach (var item in UIKeyTipComponents)
+            {
+                item.InitData();
+                uiKeyTipDic.Add(item.InputActionName, item);
+            }
 
             topTitle = this.transform.Find("TopPanel").GetComponentInChildren<TextMeshProUGUI>();
 
             Transform ContentPanel = this.transform.Find("ContentPanel");
             #region CategoryPanel
             Transform categoryPanel = ContentPanel.Find("CategoryPanel");
-
-            Transform clast = categoryPanel.Find("Last");
-            this.categoryLast = new UIKeyTip();
-            this.categoryLast.img = clast.GetComponentInChildren<Image>();
-            this.categoryLast.keytip = this.categoryLast.img.GetComponentInChildren<TextMeshProUGUI>();
-
-            Transform cnext = categoryPanel.Find("Next");
-            this.categoryNext = new UIKeyTip();
-            this.categoryNext.img = cnext.GetComponentInChildren<Image>();
-            this.categoryNext.keytip = this.categoryNext.img.GetComponentInChildren<TextMeshProUGUI>();
 
             this.categoryTemplate = categoryPanel.Find("Content").Find("CategoryTemplate");
             this.categoryTemplate.gameObject.SetActive(false);
@@ -229,20 +224,10 @@ namespace ProjectOC.TechTree.UI
             this.TPName = ContentPanel.Find("Name").GetComponent<TextMeshProUGUI>();
             this.TPDescription = ContentPanel.Find("Description").GetComponent<TextMeshProUGUI>();
 
-            this.TPDecipherTip = ContentPanel.Find("TitleTip").Find("TipText").GetComponent<TextMeshProUGUI>();
-            this.TPKTInspector = new UIKeyTip();
-            this.TPKTInspector.img = ContentPanel.Find("TitleTip").Find("KT_Inspect").Find("Image").GetComponent<Image>();
-            this.TPKTInspector.keytip = this.TPKTInspector.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            this.TPKTInspector.description = this.TPKTInspector.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-
             this.TPUnlockTemplate = ContentPanel.Find("UnlockIDList").Find("Viewport").Find("Content").Find("UnlockTemplate");
             this.TPUnlockTemplate.gameObject.SetActive(false);
 
             this.TPLockedState = ContentPanel.Find("InformationInspector").Find("Locked");
-            this.TPKT_Decipher = new UIKeyTip();
-            this.TPKT_Decipher.img = this.TPLockedState.Find("Viewport").Find("Content").Find("KT_Decipher").Find("Image").GetComponent<Image>();
-            this.TPKT_Decipher.keytip = this.TPKT_Decipher.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            this.TPKT_Decipher.description = this.TPKT_Decipher.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
             this.TPTimeCost = this.TPLockedState.Find("Viewport").Find("Content").Find("TimeCost").GetComponent<TextMeshProUGUI>();
             this.TPItemCostTemplate = this.TPLockedState.Find("Viewport").Find("Content").Find("ItemCostTemplate");
             this.TPItemCostTemplate.gameObject.SetActive(false);
@@ -254,14 +239,6 @@ namespace ProjectOC.TechTree.UI
             this.TPUnlockingTimeCost = this.TPUnlockingState.Find("DownTimer").Find("Time").GetComponent<TextMeshProUGUI>();
             this.TPUnlockingProgressBar = this.TPUnlockingState.Find("ProgressBar").GetComponent<Slider>();
             this.TPUnlockingState.gameObject.SetActive(false);
-            #endregion
-
-            #region BackPanel
-            ContentPanel = this.transform.Find("ContentPanel").Find("BotPanel").Find("KT_Back");
-            this.KT_Back = new UIKeyTip();
-            this.KT_Back.img = ContentPanel.Find("Image").GetComponent<Image>();
-            this.KT_Back.keytip = this.KT_Back.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            this.KT_Back.description = this.KT_Back.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
             #endregion
         }
 
@@ -320,6 +297,7 @@ namespace ProjectOC.TechTree.UI
             InitStaticData();
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
             base.OnEnter();
+            UikeyTipIsInit = false;
             ProjectOC.Input.InputManager.PlayerInput.TechTree.Enable();
             Refresh();
 
@@ -344,6 +322,7 @@ namespace ProjectOC.TechTree.UI
         {
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
             base.OnRecovery();
+            UikeyTipIsInit = false;
             ProjectOC.Input.InputManager.PlayerInput.TechTree.Enable();
             Refresh();
         }
@@ -407,6 +386,10 @@ namespace ProjectOC.TechTree.UI
 
         private int lastCIndex;
 
+        private Dictionary<string, UIKeyTipComponent> uiKeyTipDic = new Dictionary<string, UIKeyTipComponent>();
+        private bool UikeyTipIsInit;
+        private InputManager inputManager => GameManager.Instance.InputManager;
+
         private void ClearTempOnAlterTP()
         {
             foreach (var s in TPCItemGO.Values)
@@ -419,6 +402,8 @@ namespace ProjectOC.TechTree.UI
                 Destroy(s);
             }
             TPUnlockGO.Clear();
+
+            uiKeyTipDic = null;
         }
 
         private void ClearTemp()
@@ -474,7 +459,31 @@ namespace ProjectOC.TechTree.UI
 
         public override void Refresh()
         {
-            if(lastCIndex != cIndex)
+
+
+            if (UikeyTipIsInit == false)
+            {
+                KeyTip[] keyTips = inputManager.ExportKeyTipValues(TechTreeManager.Instance.TPPanelTextContent_Main);
+                foreach (var keyTip in keyTips)
+                {
+                    InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
+                    inputManager.GetInputActionBindText(inputAction);
+                    if (uiKeyTipDic.ContainsKey(keyTip.keyname))
+                    {
+                        UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
+                        uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
+                        uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+                    }
+                    else
+                    {
+                        Debug.Log("keyTip.keyname " + keyTip.keyname);
+                    }
+                }
+                UikeyTipIsInit = true;
+            }
+
+
+            if (lastCIndex != cIndex)
             {
                 lastCIndex = cIndex;
                 this.IsUIInit = false;
@@ -495,8 +504,6 @@ namespace ProjectOC.TechTree.UI
             topTitle.text = TechTreeManager.Instance.TPPanelTextContent_Main.toptitle.GetText();
 
             #region CategoryPanel
-            this.categoryLast.ReWrite(TechTreeManager.Instance.TPPanelTextContent_Main.categorylast);
-            this.categoryNext.ReWrite(TechTreeManager.Instance.TPPanelTextContent_Main.categorynext);
 
             foreach(var c in category)
             {
@@ -652,18 +659,8 @@ namespace ProjectOC.TechTree.UI
             }
             #endregion
 
-
-
-
-
             // 强制立即更新 GridLayoutGroup 的布局
             
-
-            
-
-
-            
-
             StartCoroutine(ForceRebuildLayoutImmediateEnumerator(tpPoint, gridlayout));
 
             #endregion
@@ -687,8 +684,6 @@ namespace ProjectOC.TechTree.UI
             this.TPDescription.text = TM.GetTPDescription(CurrentID);
             // DecipherTip
             this.TPDecipherTip.text = tpStatus == 1 ? TM.TPPanelTextContent_Main.unlockedtitletip.GetText() : TM.TPPanelTextContent_Main.lockedtitletip.GetText();
-            // KTInspector
-            TPKTInspector.ReWrite(TM.TPPanelTextContent_Main.inspector);
 
             // 可解锁项
             foreach(var id in TM.GetTPCanUnlockedID(CurrentID))
@@ -716,9 +711,6 @@ namespace ProjectOC.TechTree.UI
                 this.TPLockedState.gameObject.SetActive(true);
                 this.TPUnlockedState.gameObject.SetActive(false);
                 this.TPUnlockingState.gameObject.SetActive(false);
-
-                // 破译按键提示
-                this.TPKT_Decipher.ReWrite(TM.TPPanelTextContent_Main.decipher);
 
                 // 是否可以破译
                 // to-do : UI
@@ -789,10 +781,6 @@ namespace ProjectOC.TechTree.UI
                 // 不需要加入，因为前面 TechTree 时已经加入了
                 //tempTimer.Add(timer);
             }
-            #endregion
-
-            #region BotPanel
-            this.KT_Back.ReWrite(TM.TPPanelTextContent_Main.back);
             #endregion
 
             if (!this.IsUIInit)

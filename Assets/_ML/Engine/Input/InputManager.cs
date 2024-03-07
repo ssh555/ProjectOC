@@ -8,6 +8,8 @@ using System.Reflection;
 using System;
 using ML.Engine.TextContent;
 using UnityEngine.UIElements;
+using System.IO;
+using UnityEngine.InputSystem.Controls;
 namespace ML.Engine.Input
 {
     public class InputManager : Manager.GlobalManager.IGlobalManager
@@ -105,18 +107,20 @@ namespace ML.Engine.Input
             HashSet<string> keys = new HashSet<string>();
             string t = "";
             // 遍历当前 InputAction 的所有绑定
+            var options = InputControlPath.HumanReadableStringOptions.OmitDevice | InputControlPath.HumanReadableStringOptions.UseShortNames;
+            string humanReadableString;
             foreach (InputBinding binding in inputAction.bindings)
             {
 
+                humanReadableString = InputControlPath.ToHumanReadableString(binding.path, options);
                 if (Config.inputDevice == Config.InputDevice.Keyboard && binding.path.StartsWith("<Keyboard>"))
                 {
-                    keys.Add(ExtractString(binding.path));
+                    keys.Add(ExtractString(humanReadableString));
                 }
                 else if (Config.inputDevice == Config.InputDevice.XBOX && binding.path.StartsWith("<XInputController>"))
                 {
-                    keys.Add(ExtractString(binding.path));
+                    keys.Add(ExtractString(humanReadableString));
                 }
-                
             }
 
             foreach (var item in keys)
@@ -124,14 +128,15 @@ namespace ML.Engine.Input
                 t += item;
             }
 
-
-            Debug.Log("Current inputAction: " + inputAction.name + " " + t);
+            //Debug.Log("Current inputAction: " + inputAction.name + " " + t);
 
             return t;
         }
 
         private string ExtractString(string input)
         {
+
+            if (input.StartsWith("2DVector")) return null;
             // 查找第一个斜杠的索引
             int firstSlashIndex = input.IndexOf('/');
 
@@ -141,17 +146,10 @@ namespace ML.Engine.Input
                 return input;
             }
 
-            // 查找第二个斜杠的索引
-            int secondSlashIndex = input.IndexOf('/', firstSlashIndex + 1);
 
-            // 如果没有第二个斜杠，直接返回第一个/以后的字符串
-            if (secondSlashIndex == -1)
-            {
-                return input.Substring(firstSlashIndex + 1);
-            }
 
-            // 提取第一个斜杠和第二个斜杠之间的字符串
-            string extractedString = input.Substring(firstSlashIndex + 1, secondSlashIndex - firstSlashIndex - 1);
+            // 提取第一个斜杠之前的字符串
+            string extractedString = input.Substring(0, firstSlashIndex);
 
             return extractedString;
         }

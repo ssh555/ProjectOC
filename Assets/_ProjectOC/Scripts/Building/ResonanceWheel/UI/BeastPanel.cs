@@ -1,8 +1,10 @@
 using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.Input;
 using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.Timer;
+using ML.Engine.UI;
 using Newtonsoft.Json;
 using ProjectOC.ManagerNS;
 using ProjectOC.Player;
@@ -45,6 +47,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             StartCoroutine(InitUIPrefabs());
             StartCoroutine(InitUITexture2D());
 
+            //KeyTips
+            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
+            foreach (var item in UIKeyTipComponents)
+            {
+                item.InitData();
+                uiKeyTipDic.Add(item.InputActionName, item);
+            }
+
             //BeastInfo
             var Info1 = this.transform.Find("HiddenBeastInfo2").Find("Info");
             Speed = Info1.Find("MovingSpeed").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
@@ -60,29 +70,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             Transport = GInfo.Find("Transport").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
             Collect = GInfo.Find("Collect").Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
 
-
-            var btn1 = this.transform.Find("HiddenBeastInfo3").Find("btn1");
-            expel = new UIKeyTip();
-            expel.keytip = btn1.Find("KeyTip").Find("Image").Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            expel.description = btn1.Find("KeyTip").Find("Image").Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            
-
             //需要调接口显示的隐兽信息
 
             BeastName = Info1.Find("Icon").Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
-
-
-            //BotKeyTips
-            var kt = this.transform.Find("BotKeyTips").Find("KeyTips");
-            KT_Back = new UIKeyTip();
-
-            KT_Back.keytip = kt.Find("KT_Back").Find("Image").Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_Back.description = kt.Find("KT_Back").Find("Image").Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-
-
-
 
         IsInit = true;
 
@@ -134,6 +124,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Enable();
+            UikeyTipIsInit = false;
             this.Refresh();
         }
 
@@ -250,14 +241,18 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
         #region temp
+        private Dictionary<string, UIKeyTipComponent> uiKeyTipDic = new Dictionary<string, UIKeyTipComponent>();
+        private bool UikeyTipIsInit;
+        private InputManager inputManager => GameManager.Instance.InputManager;
         private void ClearTemp()
         {
-
+            uiKeyTipDic = null;
         }
 
         #endregion
 
         #region UI对象引用
+        private UIKeyTipComponent[] UIKeyTipComponents;
 
         private GameObject BeastBioPrefab;//预制体
         private int CurrentBeastIndex = 0;
@@ -282,15 +277,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private GameObject DescriptionPrefab;//预制体
 
-
-        private UIKeyTip expel;
-
         //需要调接口显示的隐兽信息
         private TMPro.TextMeshProUGUI BeastName;
 
-        //BotKeyTips
 
-        private UIKeyTip KT_Back;
+
 
         #endregion
 
@@ -302,7 +293,21 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 return;
             }
 
+            if (UikeyTipIsInit == false)
+            {
+                KeyTip[] keyTips = inputManager.ExportKeyTipValues(PanelTextContent_BeastPanel);
+                foreach (var keyTip in keyTips)
+                {
+                    InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
+                    inputManager.GetInputActionBindText(inputAction);
 
+                    UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
+                    uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
+                    uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+
+                }
+                UikeyTipIsInit = true;
+            }
 
 
             var Content = this.transform.Find("HiddenBeastInfo1").Find("Info").Find("Scroll View").Find("Viewport").Find("Content");
@@ -352,8 +357,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 Magic.text = PanelTextContent_BeastPanel.Magic;
                 Transport.text = PanelTextContent_BeastPanel.Transport;
                 Collect.text = PanelTextContent_BeastPanel.Collect;
-
-                expel.ReWrite(PanelTextContent_BeastPanel.expel);
 
                 Worker worker = Workers[CurrentBeastIndex];
                 List<float> datas = new List<float>();
@@ -508,12 +511,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 this.transform.Find("HiddenBeastInfo3").Find("Info").gameObject.SetActive(false);
 
                 //Debug.Log("无隐兽");
-            }
-            //BotKeyTips
-
-            KT_Back.ReWrite(PanelTextContent_BeastPanel.back);
-
-            
+            }  
         }
         #endregion
 
@@ -533,11 +531,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             public TextContent Transport;
             public TextContent Collect;
 
-            public KeyTip expel;
+            public KeyTip Expel;
 
 
             //BotKeyTips
-            public KeyTip back;
+            public KeyTip Back;
         }
         public static BeastPanelStruct PanelTextContent_BeastPanel => ABJAProcessorJson_BeastPanel.Datas;
         public static ML.Engine.ABResources.ABJsonAssetProcessor<BeastPanelStruct> ABJAProcessorJson_BeastPanel;

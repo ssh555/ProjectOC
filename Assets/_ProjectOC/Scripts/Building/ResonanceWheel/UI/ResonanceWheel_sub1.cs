@@ -1,4 +1,5 @@
 using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.Input;
 using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
@@ -18,6 +19,7 @@ using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Purchasing;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
@@ -34,6 +36,13 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             StartCoroutine(InitUIPrefabs());
             StartCoroutine(InitUITexture2D());
 
+            //KeyTips
+            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
+            foreach (var item in UIKeyTipComponents)
+            {
+                item.InitData();
+                uiKeyTipDic.Add(item.InputActionName, item);
+            }
 
             //BeastInfo
             var Info1 = this.transform.Find("HiddenBeastInfo1").Find("Info");
@@ -55,31 +64,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 beastSkills[i].workType = (WorkType)Enum.Parse(typeof(WorkType), GInfo.GetChild(i).name);
             }
 
-
-            
-            var btn1 = this.transform.Find("HiddenBeastInfo2").Find("btn1");
-            expel = new UIKeyTip();
-            expel.keytip = btn1.Find("KeyTip").Find("Image").Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            expel.description = btn1.Find("KeyTip").Find("Image").Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            var btn2 = this.transform.Find("HiddenBeastInfo2").Find("btn2");
-            receive = new UIKeyTip();
-            receive.keytip = btn2.Find("KeyTip").Find("Image").Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            receive.description = btn2.Find("KeyTip").Find("Image").Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
             //需要调接口显示的隐兽信息
 
             BeastName= Info1.Find("Icon").Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
-
-
-
-
-            //BotKeyTips
-            var kt = this.transform.Find("BotKeyTips").Find("KeyTips");
-            KT_Back = new UIKeyTip();
-            KT_Back.img = kt.Find("KT_Back").Find("Image").GetComponent<Image>();
-            KT_Back.keytip = KT_Back.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_Back.description = KT_Back.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
 
             IsInit = true;
             Refresh();
@@ -134,6 +121,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Enable();
+            UikeyTipIsInit = false;
             this.Refresh();
         }
 
@@ -216,7 +204,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private List<Sprite> tempSprite = new List<Sprite>();
         private Dictionary<ML.Engine.InventorySystem.ItemType, GameObject> tempItemType = new Dictionary<ML.Engine.InventorySystem.ItemType, GameObject>();
         private List<GameObject> tempUIItems = new List<GameObject>();
-
+        private Dictionary<string, UIKeyTipComponent> uiKeyTipDic = new Dictionary<string, UIKeyTipComponent>();
+        private bool UikeyTipIsInit;
+        private InputManager inputManager => GameManager.Instance.InputManager;
 
         private void ClearTemp()
         {
@@ -232,11 +222,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             {
                 Destroy(s);
             }
+            uiKeyTipDic = null;
         }
 
         #endregion
 
         #region UI对象引用
+        private UIKeyTipComponent[] UIKeyTipComponents;
+
         public ResonanceWheelUI parentUI;
         //BeastInfo
         private TMPro.TextMeshProUGUI Stamina;
@@ -249,22 +242,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private BeastSkill[] beastSkills;
 
-
-
         private GameObject DescriptionPrefab;//预制体
-
-
-        private UIKeyTip expel;
-        private UIKeyTip receive;
 
          //需要调接口显示的隐兽信息
         private TMPro.TextMeshProUGUI BeastName;
-
-
-
-        //BotKeyTips
-        private UIKeyTip KT_Back;
-
 
         #endregion
 
@@ -277,6 +258,21 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 return;
             }
 
+            if (UikeyTipIsInit == false)
+            {
+                KeyTip[] keyTips = inputManager.ExportKeyTipValues(ResonanceWheelUI.PanelTextContent_sub1);
+                foreach (var keyTip in keyTips)
+                {
+                    InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
+                    inputManager.GetInputActionBindText(inputAction);
+
+                    UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
+                    uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
+                    uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+
+                }
+                UikeyTipIsInit = true;
+            }
 
             //BeastInfo
 
@@ -295,19 +291,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             }
 
-            
-
-
-            
-            expel.ReWrite(ResonanceWheelUI.PanelTextContent_sub1.expel);
-            receive.ReWrite(ResonanceWheelUI.PanelTextContent_sub1.receive);
-
-
-
             //更新隐兽详细信息
             WorkerEcho workerEcho = (GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
 
 
+            Stamina.text = (ResonanceWheelUI.PanelTextContent_sub1.SkillType.Where(tag => tag.name == "Stamina") as TextTip).GetDescription();
+            Speed.text = (ResonanceWheelUI.PanelTextContent_sub1.SkillType.Where(tag => tag.name == "Speed") as TextTip).GetDescription();
 
             Worker worker = workerEcho.GetExternWorkers()[parentUI.CurrentGridIndex]?.worker;
             if (worker != null)
@@ -361,9 +350,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>" + feature.EffectsDescription + "</b></color>";
                 }
             }
-            
-            //BotKeyTips
-            KT_Back.ReWrite(ResonanceWheelUI.PanelTextContent_sub1.back);
         }
         #endregion
 
@@ -377,11 +363,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             public TextTip[] SkillType;
 
 
-            public KeyTip expel;
-            public KeyTip receive;
+            public KeyTip Expel;
+            public KeyTip Receive;
 
-            //BotKeyTips
-            public KeyTip back;
         }
 
         #endregion
