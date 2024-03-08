@@ -695,9 +695,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     {
                         Debug.Log("keyTip.keyname " + keyTip.keyname);
                     }
-                    
-                    
-
                 }
                 UikeyTipIsInit = true;
             }
