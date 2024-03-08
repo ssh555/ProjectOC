@@ -302,8 +302,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     inputManager.GetInputActionBindText(inputAction);
 
                     UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
-                    uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
-                    uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+                    if (uIKeyTipComponent.uiKeyTip.keytip != null)
+                    {
+                        uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
+                    }
+                    if (uIKeyTipComponent.uiKeyTip.description != null)
+                    {
+                        uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+                    }
 
                 }
                 UikeyTipIsInit = true;

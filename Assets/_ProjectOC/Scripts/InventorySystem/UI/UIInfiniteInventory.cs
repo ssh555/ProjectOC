@@ -18,6 +18,7 @@ using ML.Engine.UI;
 using UnityEngine.U2D;
 using ML.Engine.Input;
 using UnityEngine.InputSystem;
+using Unity.VisualScripting;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -34,7 +35,7 @@ namespace ProjectOC.InventorySystem.UI
         private void Start()
         {
             InitUITextContents();
-
+            
             //KeyTips
             UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
             foreach (var item in UIKeyTipComponents)
@@ -68,9 +69,12 @@ namespace ProjectOC.InventorySystem.UI
 
             ItemTypes = Enum.GetValues(typeof(ML.Engine.InventorySystem.ItemType)).Cast<ML.Engine.InventorySystem.ItemType>().Where(e => (int)e > 0).ToArray();
             CurrentItemTypeIndex = 0;
-            
-            StartCoroutine(LoadInventoryAtlas());
-            
+
+            var kt = this.transform.Find("BotKeyTips").Find("KeyTips");
+            KT_Use = kt.Find("KT_Use");
+            KT_Drop = kt.Find("KT_Drop");
+            KT_Destroy = kt.Find("KT_Destroy");
+
             IsInit = true;
             Refresh();
         }
@@ -244,7 +248,7 @@ namespace ProjectOC.InventorySystem.UI
             //ProjectOC.Input.InputManager.PlayerInput.UIInventory.AlterItem.performed -= AlterItem_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.AlterItem.canceled -= AlterItem_canceled;
             // 使用
-            ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.performed -= Comfirm_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Comfirm_performed;
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
             // 丢弃
@@ -263,7 +267,7 @@ namespace ProjectOC.InventorySystem.UI
             //ProjectOC.Input.InputManager.PlayerInput.UIInventory.AlterItem.performed += AlterItem_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.AlterItem.canceled += AlterItem_canceled;
             // 使用
-            ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.performed += Comfirm_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Comfirm_performed;
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
             // 丢弃
@@ -411,10 +415,9 @@ namespace ProjectOC.InventorySystem.UI
         private TMPro.TextMeshProUGUI Info_ItemDescription;
         private TMPro.TextMeshProUGUI Info_ItemEffectDescription;
 
-        //有特殊表现
-        private UIKeyTip KT_Use;
-        private UIKeyTip KT_Drop;
-        private UIKeyTip KT_Destroy;
+        private Transform KT_Use;
+        private Transform KT_Drop;
+        private Transform KT_Destroy;
 
 
         #endregion
@@ -438,8 +441,14 @@ namespace ProjectOC.InventorySystem.UI
                     if (uiKeyTipDic.ContainsKey(keyTip.keyname))
                     {
                         UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
-                        uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
-                        uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+                        if (uIKeyTipComponent.uiKeyTip.keytip != null)
+                        {
+                            uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
+                        }
+                        if (uIKeyTipComponent.uiKeyTip.description != null)
+                        {
+                            uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+                        }
                     }
                     else
                     {
@@ -650,9 +659,9 @@ namespace ProjectOC.InventorySystem.UI
             #region BotKeyTips
             if (CurrentItem != null)
             {
-                KT_Use.img.transform.parent.gameObject.SetActive(CurrentItem.CanUse());
-                KT_Drop.img.transform.parent.gameObject.SetActive(CurrentItem.CanDrop());
-                KT_Destroy.img.transform.parent.gameObject.SetActive(CurrentItem.CanDestroy());
+                KT_Use.gameObject.SetActive(CurrentItem.CanUse());
+                KT_Drop.gameObject.SetActive(CurrentItem.CanDrop());
+                KT_Destroy.gameObject.SetActive(CurrentItem.CanDestroy());
             }
             #endregion
 

@@ -170,7 +170,7 @@ namespace ML.Engine.UI
             ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn.started -= SwichBtn_started;
 
             //确认
-            ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.performed -= Confirm_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
 
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
@@ -186,7 +186,7 @@ namespace ML.Engine.UI
             ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn.started += SwichBtn_started;
 
             //确认
-            ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.performed += Confirm_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
 
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;

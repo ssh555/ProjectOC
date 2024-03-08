@@ -6,7 +6,7 @@
             "id": "7f866e33-da0f-46d4-9574-607634f09ada",
             "actions": [
                 {
-                    "name": "Comfirm",
+                    "name": "Confirm",
                     "type": "Button",
                     "id": "3b005375-d1a3-4413-91d0-31adb0879d8b",
                     "expectedControlType": "Button",
@@ -32,7 +32,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Comfirm",
+                    "action": "Confirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -43,7 +43,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Comfirm",
+                    "action": "Confirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

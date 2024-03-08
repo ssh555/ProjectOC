@@ -63,7 +63,7 @@ namespace ML.Engine.InteractSystem
                 uiKeyTip.img.transform.parent.position = screenPosition;
 
                 // »∑»œΩªª•
-                if (Input.InputManager.Instance.Common.Common.Comfirm.WasPressedThisFrame())
+                if (Input.InputManager.Instance.Common.Common.Confirm.WasPressedThisFrame())
                 {
                     this.CurrentInteraction.Interact(this);
                 }

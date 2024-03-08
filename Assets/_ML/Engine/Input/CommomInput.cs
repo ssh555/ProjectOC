@@ -30,7 +30,7 @@ namespace ML.Engine.Input
             ""id"": ""7f866e33-da0f-46d4-9574-607634f09ada"",
             ""actions"": [
                 {
-                    ""name"": ""Comfirm"",
+                    ""name"": ""Confirm"",
                     ""type"": ""Button"",
                     ""id"": ""3b005375-d1a3-4413-91d0-31adb0879d8b"",
                     ""expectedControlType"": ""Button"",
@@ -56,7 +56,7 @@ namespace ML.Engine.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Comfirm"",
+                    ""action"": ""Confirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -67,7 +67,7 @@ namespace ML.Engine.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Comfirm"",
+                    ""action"": ""Confirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -365,7 +365,7 @@ namespace ML.Engine.Input
 }");
             // Common
             m_Common = asset.FindActionMap("Common", throwIfNotFound: true);
-            m_Common_Comfirm = m_Common.FindAction("Comfirm", throwIfNotFound: true);
+            m_Common_Confirm = m_Common.FindAction("Confirm", throwIfNotFound: true);
             m_Common_Back = m_Common.FindAction("Back", throwIfNotFound: true);
             // StartMenu
             m_StartMenu = asset.FindActionMap("StartMenu", throwIfNotFound: true);
@@ -434,13 +434,13 @@ namespace ML.Engine.Input
         // Common
         private readonly InputActionMap m_Common;
         private List<ICommonActions> m_CommonActionsCallbackInterfaces = new List<ICommonActions>();
-        private readonly InputAction m_Common_Comfirm;
+        private readonly InputAction m_Common_Confirm;
         private readonly InputAction m_Common_Back;
         public struct CommonActions
         {
             private @CommomInput m_Wrapper;
             public CommonActions(@CommomInput wrapper) { m_Wrapper = wrapper; }
-            public InputAction @Comfirm => m_Wrapper.m_Common_Comfirm;
+            public InputAction @Confirm => m_Wrapper.m_Common_Confirm;
             public InputAction @Back => m_Wrapper.m_Common_Back;
             public InputActionMap Get() { return m_Wrapper.m_Common; }
             public void Enable() { Get().Enable(); }
@@ -451,9 +451,9 @@ namespace ML.Engine.Input
             {
                 if (instance == null || m_Wrapper.m_CommonActionsCallbackInterfaces.Contains(instance)) return;
                 m_Wrapper.m_CommonActionsCallbackInterfaces.Add(instance);
-                @Comfirm.started += instance.OnComfirm;
-                @Comfirm.performed += instance.OnComfirm;
-                @Comfirm.canceled += instance.OnComfirm;
+                @Confirm.started += instance.OnConfirm;
+                @Confirm.performed += instance.OnConfirm;
+                @Confirm.canceled += instance.OnConfirm;
                 @Back.started += instance.OnBack;
                 @Back.performed += instance.OnBack;
                 @Back.canceled += instance.OnBack;
@@ -461,9 +461,9 @@ namespace ML.Engine.Input
 
             private void UnregisterCallbacks(ICommonActions instance)
             {
-                @Comfirm.started -= instance.OnComfirm;
-                @Comfirm.performed -= instance.OnComfirm;
-                @Comfirm.canceled -= instance.OnComfirm;
+                @Confirm.started -= instance.OnConfirm;
+                @Confirm.performed -= instance.OnConfirm;
+                @Confirm.canceled -= instance.OnConfirm;
                 @Back.started -= instance.OnBack;
                 @Back.performed -= instance.OnBack;
                 @Back.canceled -= instance.OnBack;
@@ -578,7 +578,7 @@ namespace ML.Engine.Input
         public OptionActions @Option => new OptionActions(this);
         public interface ICommonActions
         {
-            void OnComfirm(InputAction.CallbackContext context);
+            void OnConfirm(InputAction.CallbackContext context);
             void OnBack(InputAction.CallbackContext context);
         }
         public interface IStartMenuActions

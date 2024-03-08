@@ -572,7 +572,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// </summary>
         public Input.BuildingInput BInput => BuildingManager.Instance.BInput;
 
-        public UnityEngine.InputSystem.InputAction comfirmInputAction => ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm;
+        public UnityEngine.InputSystem.InputAction comfirmInputAction => ML.Engine.Input.InputManager.Instance.Common.Common.Confirm;
 
         public UnityEngine.InputSystem.InputAction backInputAction => ML.Engine.Input.InputManager.Instance.Common.Common.Back;
         #endregion

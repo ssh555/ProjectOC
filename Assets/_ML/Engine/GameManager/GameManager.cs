@@ -71,7 +71,7 @@ namespace ML.Engine.Manager
             DontDestroyOnLoad(this.gameObject);
             this.Init();
 
-            //EnterPoint = new EnterPoint();
+            EnterPoint = new EnterPoint();
 
         }
 

@@ -16,7 +16,9 @@ namespace ML.Engine.Manager
         public EnterPoint()
         {
             this.isInit = false;
-            GameManager.Instance.StartCoroutine(InitUIPrefabs());
+            InitUIPrefabs();
+
+            GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("EnterPointScene", null, null));
         }
 
         public bool EnterGame()
@@ -38,25 +40,22 @@ namespace ML.Engine.Manager
 
         #region Prefab
         public AssetBundle PrefabsAB;
-        public IEnumerator InitUIPrefabs()
+        public void InitUIPrefabs()
         {
             this.PrefabsAB = null;
             var abmgr = GameManager.Instance.ABResourceManager;
 
             var crequest = abmgr.LoadLocalABAsync("ui/baseuipanel", null, out var PrefabsAB);
 
-            if (crequest != null)
-            {
-                yield return crequest;
-                PrefabsAB = crequest.assetBundle;
 
-                this.PrefabsAB = PrefabsAB;
-                StartMenuPanelPrefab = this.PrefabsAB.LoadAsset<GameObject>("StartMenuPanel");
-                LoadingScenePanelPrefab = this.PrefabsAB.LoadAsset<GameObject>("LoadingScenePanel");
-                OptionPanelPrefab = this.PrefabsAB.LoadAsset<GameObject>("OptionPanel");
-                this.isInit = true;
-                EnterGame();
-            }  
+            PrefabsAB = crequest.assetBundle;
+
+            this.PrefabsAB = PrefabsAB;
+            StartMenuPanelPrefab = this.PrefabsAB.LoadAsset<GameObject>("StartMenuPanel");
+            LoadingScenePanelPrefab = this.PrefabsAB.LoadAsset<GameObject>("LoadingScenePanel");
+            OptionPanelPrefab = this.PrefabsAB.LoadAsset<GameObject>("OptionPanel");
+            this.isInit = true;
+           
         }
         #endregion
     }

@@ -56,7 +56,7 @@
     "Chinese": "随机",
     "English": "Random"
   },
-  "SwitchTargetText": {
+  "SwitchTarget": {
     "keyname": "KT_SwitchTarget",
     "keymap": {
       "ActionMapName": "ResonanceWheelUI",
@@ -79,7 +79,7 @@
       }
     ]
   },
-  "StartResonanceText": {
+  "StartResonance": {
     "keyname": "KT_StartResonance",
     "keymap": {
       "ActionMapName": "ResonanceWheelUI",
@@ -90,7 +90,7 @@
       "English": "StartResonance"
     }
   },
-  "StopResonanceText": {
+  "StopResonance": {
     "keyname": "KT_StopResonance",
     "keymap": {
       "ActionMapName": "ResonanceWheelUI",

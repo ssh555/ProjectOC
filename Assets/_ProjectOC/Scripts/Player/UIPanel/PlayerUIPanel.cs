@@ -41,7 +41,7 @@ namespace ProjectOC.Player.UI
             this.EnterBuildBtn = btnList.Find("EnterBuild").GetComponent<SelectedButton>();
             this.EnterBuildBtn.OnInteract += () =>
             {
-                if (ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.WasPressedThisFrame() && BM.Mode == BuildingMode.None)
+                if (ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.WasPressedThisFrame() && BM.Mode == BuildingMode.None)
                 {
                     if (BM.GetRegisterBPartCount() > 0)
                     {
@@ -142,7 +142,7 @@ namespace ProjectOC.Player.UI
 
         public void Tick(float deltatime)
         {
-            if(ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.WasPressedThisFrame())
+            if(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.WasPressedThisFrame())
             {
                 this.CurSelected.Interact();
             }

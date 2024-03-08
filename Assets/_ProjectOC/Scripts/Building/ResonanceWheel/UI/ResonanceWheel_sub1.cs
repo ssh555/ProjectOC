@@ -268,8 +268,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     inputManager.GetInputActionBindText(inputAction);
 
                     UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
-                    uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
-                    uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+                    if (uIKeyTipComponent.uiKeyTip.keytip != null)
+                    {
+                        uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
+                    }
+                    if (uIKeyTipComponent.uiKeyTip.description != null)
+                    {
+                        uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+                    }
 
                 }
                 UikeyTipIsInit = true;
@@ -296,8 +302,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             WorkerEcho workerEcho = (GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
 
 
-            Stamina.text = (ResonanceWheelUI.PanelTextContent_sub1.SkillType.Where(tag => tag.name == "Stamina") as TextTip).GetDescription();
-            Speed.text = (ResonanceWheelUI.PanelTextContent_sub1.SkillType.Where(tag => tag.name == "Speed") as TextTip).GetDescription();
+/*            Stamina.text = (ResonanceWheelUI.PanelTextContent_sub1.SkillType.Where(tag => tag.name == "Stamina") as TextTip).GetDescription();
+            Speed.text = (ResonanceWheelUI.PanelTextContent_sub1.SkillType.Where(tag => tag.name == "Speed") as TextTip).GetDescription();*/
 
             Worker worker = workerEcho.GetExternWorkers()[parentUI.CurrentGridIndex]?.worker;
             if (worker != null)
@@ -305,10 +311,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 StaminaNum.text = worker.APMax.ToString();
                 SpeedNum.text = worker.WalkSpeed.ToString();
 
-
-
                 List<float> datas = new List<float>();
-
 
                 Dictionary<WorkType, Skill> skillDic = worker.Skill;
                 foreach (var skill in skillDic)

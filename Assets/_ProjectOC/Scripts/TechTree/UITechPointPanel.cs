@@ -155,7 +155,7 @@ namespace ProjectOC.TechTree.UI
         /// <summary>
         /// 破译按键提示
         /// </summary>
-        private UIKeyTip TPKT_Decipher;//有特殊表现
+        private Transform TPKT_Decipher;
 
         /// <summary>
         /// 破译的时间消耗
@@ -224,10 +224,14 @@ namespace ProjectOC.TechTree.UI
             this.TPName = ContentPanel.Find("Name").GetComponent<TextMeshProUGUI>();
             this.TPDescription = ContentPanel.Find("Description").GetComponent<TextMeshProUGUI>();
 
+            this.TPDecipherTip = ContentPanel.Find("TitleTip").Find("TipText").GetComponent<TextMeshProUGUI>();
+
             this.TPUnlockTemplate = ContentPanel.Find("UnlockIDList").Find("Viewport").Find("Content").Find("UnlockTemplate");
             this.TPUnlockTemplate.gameObject.SetActive(false);
 
             this.TPLockedState = ContentPanel.Find("InformationInspector").Find("Locked");
+            this.TPKT_Decipher = this.TPLockedState.Find("Viewport").Find("Content").Find("KT_Decipher");
+
             this.TPTimeCost = this.TPLockedState.Find("Viewport").Find("Content").Find("TimeCost").GetComponent<TextMeshProUGUI>();
             this.TPItemCostTemplate = this.TPLockedState.Find("Viewport").Find("Content").Find("ItemCostTemplate");
             this.TPItemCostTemplate.gameObject.SetActive(false);
@@ -471,8 +475,15 @@ namespace ProjectOC.TechTree.UI
                     if (uiKeyTipDic.ContainsKey(keyTip.keyname))
                     {
                         UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
-                        uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
-                        uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+                        if (uIKeyTipComponent.uiKeyTip.keytip != null) 
+                        {
+                            uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
+                        }
+                        if (uIKeyTipComponent.uiKeyTip.description != null) 
+                        {
+                            uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+                        }
+                        
                     }
                     else
                     {
@@ -715,8 +726,8 @@ namespace ProjectOC.TechTree.UI
                 // 是否可以破译
                 // to-do : UI
                 bool canDecipher = CanDecipher;
-                this.TPKT_Decipher.img.transform.parent.Find("CanDecipherImg").GetComponent<Image>().color = canDecipher ? new Color32(77, 233, 16, 255) : Color.gray;
-                this.TPKT_Decipher.img.transform.parent.Find("Mask").GetComponent<Image>().gameObject.SetActive(!canDecipher);
+                this.TPKT_Decipher.Find("CanDecipherImg").GetComponent<Image>().color = canDecipher ? new Color32(77, 233, 16, 255) : Color.gray;
+                this.TPKT_Decipher.Find("Mask").GetComponent<Image>().gameObject.SetActive(!canDecipher);
 
                 // 时间消耗
                 this.TPTimeCost.text = TM.TPPanelTextContent_Main.timecosttip + TM.GetTPTimeCost(CurrentID).ToString() + "s";

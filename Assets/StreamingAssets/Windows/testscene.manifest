@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 2975419155
+CRC: 1977331446
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 69517241ffab3e7ab2ae59753bb28c69
+    Hash: 8f36252d378eb6a3eb8262baaaeeeae6
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 0679a5c560c947fc20611353e63b4668
+    Hash: a34c2f958bd637d45fe52c446104b82d
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 69517241ffab3e7ab2ae59753bb28c69
+    Hash: 8f36252d378eb6a3eb8262baaaeeeae6
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -137,8 +137,8 @@ Assets:
 - Assets/_ProjectOC/Scene/_TEST/yangLe/_TASceneTest.unity
 - Assets/_ProjectOC/Scene/_TEST/cwt/Cwt_TotalTest.unity
 Dependencies:
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/other
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
-- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/shader
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/materials/other
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
+- E:/OC/projectoc/Assets/StreamingAssets/Windows/shader

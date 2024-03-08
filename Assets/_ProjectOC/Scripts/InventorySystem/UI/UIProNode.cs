@@ -428,7 +428,7 @@ namespace ProjectOC.InventorySystem.UI
 
         private void UnregisterInput()
         {
-            ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.performed -= Confirm_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Upgrade.performed -= Upgrade_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.NextPriority.performed -= NextPriority_performed;
@@ -442,7 +442,7 @@ namespace ProjectOC.InventorySystem.UI
 
         private void RegisterInput()
         {
-            ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.performed += Confirm_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Upgrade.performed += Upgrade_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.NextPriority.performed += NextPriority_performed;
@@ -697,8 +697,14 @@ namespace ProjectOC.InventorySystem.UI
                     if (uiKeyTipDic.ContainsKey(keyTip.keyname))
                     {
                         UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
-                        uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
-                        uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+                        if (uIKeyTipComponent.uiKeyTip.keytip != null)
+                        {
+                            uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
+                        }
+                        if (uIKeyTipComponent.uiKeyTip.description != null)
+                        {
+                            uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+                        }
                     }
                     else
                     {
