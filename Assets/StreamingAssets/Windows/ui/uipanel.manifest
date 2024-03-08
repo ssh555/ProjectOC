@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3881954173
+CRC: 3438392338
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1a87e7b1f23ecef5c73dfc627fb7bc35
+    Hash: e6be2eb1a76ed665d486305e6f2593ea
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 882e4de90c77de055d83278eca9dc856
+    Hash: cbdce861b4a615a8e25ccad91e7a8e02
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 1a87e7b1f23ecef5c73dfc627fb7bc35
+    Hash: e6be2eb1a76ed665d486305e6f2593ea
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -32,8 +32,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 9ea83b1ab433e514bb440b78e1a6f54a, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: ba8a2ec004d09ff4a886c0a90da6574f, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 28c718fd109765847930b26a3c43df22, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 902042dd59e50754a80bcc00d8654070, type: 3}
 - Class: 114
@@ -88,11 +86,23 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: Assembly-CSharp
   ClassName: ProjectOC.WorkerEchoNS.WorkerEcho
 - AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_Sprite
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_SpriteCharacter
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_SpriteGlyph
+- AssemblyName: Unity.TextMeshPro
   ClassName: TMPro.VertexGradient
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.Events.PersistentCallGroup
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.RectOffset
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.FaceInfo
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphMetrics
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphRect
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.AnimationTriggers
 - AssemblyName: UnityEngine.UI
@@ -123,8 +133,6 @@ Assets:
 - Assets/_ProjectOC/OCResources/UIPanel/UIProNodePanel.prefab
 - Assets/_ProjectOC/OCResources/UIPanel/PlayerUIBotPanel.prefab
 Dependencies:
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/fonts
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/textmeshpro/font
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/style
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/fonts
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/textmeshpro/font
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset

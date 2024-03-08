@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3434349474
+CRC: 3100248974
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 549c783033c302f496dfaf41dae2a3ab
+    Hash: 7927eecfc7e12000f6bddd03b3c24c05
   TypeTreeHash:
     serializedVersion: 2
-    Hash: c51080c66bd63febf7ae13be0800649d
+    Hash: 379c78504e1807d29a7e1ddce5478375
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 549c783033c302f496dfaf41dae2a3ab
+    Hash: 7927eecfc7e12000f6bddd03b3c24c05
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -30,6 +30,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 224
   Script: {instanceID: 0}
+- Class: 687078895
+  Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
 - AssemblyName: Unity.TextMeshPro
   ClassName: TMPro.VertexGradient
@@ -40,5 +42,4 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/_ML/MLResources/InteractSystem/UI/InteractKeyTip.prefab
 Dependencies:
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/fonts
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/fonts

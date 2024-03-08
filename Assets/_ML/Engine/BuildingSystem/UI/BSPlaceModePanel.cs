@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 using UnityEngine.Windows;
 
@@ -146,8 +147,7 @@ namespace ML.Engine.BuildingSystem.UI
 
         #region 载入资产
         public const string TStyleABPath = "UI/BuildingSystem/Texture2D/Style";
-
-        public Dictionary<BuildingCategory3, Texture2D> TStyleDict = null;
+        private SpriteAtlas styleAtlas = null;
         /// <summary>
         /// 资产是否完成载入
         /// </summary>
@@ -162,8 +162,6 @@ namespace ML.Engine.BuildingSystem.UI
                 yield return null;
             }
 
-            TStyleDict = new Dictionary<BuildingCategory3, Texture2D>();
-
             var abmgr = Manager.GameManager.Instance.ABResourceManager;
             AssetBundle ab;
             var crequest = abmgr.LoadLocalABAsync(TStyleABPath, null, out ab);
@@ -172,18 +170,9 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 ab = crequest.assetBundle;
             }
-
-            var request = ab.LoadAllAssetsAsync<Texture2D>();
-            yield return request;
-
-            foreach (var obj in request.allAssets)
-            {
-                var tex = (obj as Texture2D);
-                if (tex != null && Enum.IsDefined(typeof(BuildingCategory3), tex.name))
-                {
-                    TStyleDict.Add((BuildingCategory3)Enum.Parse(typeof(BuildingCategory3), tex.name), tex);
-                }
-            }
+            
+            styleAtlas = ab.LoadAsset<SpriteAtlas>("SA_Build_Style");    
+            
 
             IsInit = true;
             this.enabled = false;
@@ -209,12 +198,11 @@ namespace ML.Engine.BuildingSystem.UI
 
         public Sprite GetStyleSprite(BuildingCategory3 style)
         {
-            if (!TStyleDict.ContainsKey(style))
+            Sprite sprite = styleAtlas.GetSprite(style.ToString());;
+            if (sprite == null)
             {
-                style = BuildingCategory3.None;
+                sprite = styleAtlas.GetSprite("None");
             }
-            Texture2D texture = TStyleDict[style];
-            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
             return sprite;
         }
 

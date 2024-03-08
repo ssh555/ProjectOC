@@ -202,7 +202,7 @@ MonoBehaviour:
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 0, z: 0, w: 0}
   activeSocketIndex: 0
-  powerSupportRange: 0
+  powerSupportRange: 1.6
   ProNode:
     WorldProNode: {fileID: 0}
     ID: 

@@ -705,7 +705,7 @@ namespace ProjectOC.TechTree.UI
             }
             
             // Ãæ°å×´Ì¬
-            // Î´½âËø
+            // Î´½âËøu
             if(tpStatus == 0)
             {
                 this.TPLockedState.gameObject.SetActive(true);

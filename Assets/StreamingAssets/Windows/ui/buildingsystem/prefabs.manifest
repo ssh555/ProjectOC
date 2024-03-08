@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1741880180
+CRC: 3829288165
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6e4af819488506cc131235663875e9cd
+    Hash: cd4e4a714ff03203147beb79ef7743cb
   TypeTreeHash:
     serializedVersion: 2
-    Hash: ae2cd3f1777115bbbc832c06298e8e23
+    Hash: af0b179c2b92f8604c7461f6f42e566c
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 6e4af819488506cc131235663875e9cd
+    Hash: cd4e4a714ff03203147beb79ef7743cb
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -52,6 +52,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 224
   Script: {instanceID: 0}
+- Class: 687078895
+  Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
 - AssemblyName: Unity.TextMeshPro
   ClassName: TMPro.VertexGradient
@@ -73,10 +75,6 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/UIPrefabs/KT_KeyCom.prefab
 - Assets/_ML/MLResources/BuildingSystem/UIPrefabs/Panel/BSInteractMode_KeyCom.prefab
 Dependencies:
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/fonts
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/textmeshpro/font
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/category
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/matpackageicon
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/style
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/type
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/uitex
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/fonts
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/textmeshpro/font
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/buildingsystem/texture2d/matpackageicon

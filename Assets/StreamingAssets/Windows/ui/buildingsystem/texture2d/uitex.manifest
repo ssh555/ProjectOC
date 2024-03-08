@@ -1,25 +1,24 @@
 ManifestFileVersion: 0
-CRC: 3563366182
+CRC: 948043247
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 095bda183d9c18e194911a0ec92a0579
+    Hash: e740c83afd0617bd2415269d643c0699
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 2d8df09e698f722ada1caa03d3413830
+    Hash: 033fafe2c9f6c610c3a734393882fd4c
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 095bda183d9c18e194911a0ec92a0579
+    Hash: e740c83afd0617bd2415269d643c0699
 HashAppended: 0
 ClassTypes:
 - Class: 28
   Script: {instanceID: 0}
 - Class: 213
   Script: {instanceID: 0}
+- Class: 687078895
+  Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/_ML/MLResources/BuildingSystem/Texture2D/UITexture/T_KeyComCircle.png
-- Assets/_ML/MLResources/BuildingSystem/Texture2D/UITexture/T_KeyComTipFill.png
-- Assets/_ML/MLResources/BuildingSystem/Texture2D/UITexture/T_KeyTip.png
-- Assets/_ML/MLResources/BuildingSystem/Texture2D/UITexture/T_KeyComTip.png
+- Assets/_ML/MLResources/BuildingSystem/Texture2D/SA_Build_UITexture.spriteatlasv2
 Dependencies: []

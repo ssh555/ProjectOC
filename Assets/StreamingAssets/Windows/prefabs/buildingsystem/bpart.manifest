@@ -1,15 +1,15 @@
 ManifestFileVersion: 0
-CRC: 3186553164
+CRC: 1437316299
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 218d74521cbcdb9b1176ca829b8f4052
+    Hash: 37319de66b81beec0d9bccd71de684df
   TypeTreeHash:
     serializedVersion: 2
-    Hash: cbba4982a0d0fe2ab401098fb3c4b747
+    Hash: be8a050197a97f73a71655351fdd9247
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 218d74521cbcdb9b1176ca829b8f4052
+    Hash: 37319de66b81beec0d9bccd71de684df
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -34,8 +34,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 4eaeb81a05cd54643b2d664b64e8dc44, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: eb3d211586925844984e282ee1983188, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 87badff79e1e54a4a9d68c74f002b591, type: 3}
 - Class: 114
@@ -171,7 +169,7 @@ Assets:
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/ProNode/ProNode_Integrator_Base1_1.prefab
 - Assets/_ML/MLResources/BuildingSystem/BuildingPart/ProNode/ProNode_Detector_Base1_1.prefab
 Dependencies:
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/model/buildingsystem/model
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/shader
-- E:/OC/projectoc/Assets/StreamingAssets/Windows/ui/uipanel
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/buildingsystem/bpart
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/model/buildingsystem/model
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/shader
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/ui/uipanel
