@@ -90,6 +90,25 @@ namespace ML.Engine.InventorySystem
                 }, null, "背包系统物品Item表数据");
                 ABJAProcessor.StartLoadJsonAssetData();
             }
+            
+            if (itemAtlas == null)
+            {
+                AssetBundle ab = null;
+                AssetBundleCreateRequest request = null;
+                request = Manager.GameManager.Instance.ABResourceManager
+                .LoadLocalABAsync(Texture2DPath, (asop) =>
+                {
+                    if (request != null)
+                    {
+                        ab = request.assetBundle;
+                    }
+                    AssetBundleRequest request2 = ab.LoadAssetAsync<SpriteAtlas>("SA_Item_UI");
+                    if(request2 != null)
+                    {
+                        itemAtlas = request2.asset as SpriteAtlas;
+                    }
+                },out ab);
+            }
         }
         #endregion
 
@@ -200,31 +219,7 @@ namespace ML.Engine.InventorySystem
         #region SpriteAtlas
 
         private SpriteAtlas itemAtlas;
-        public IEnumerator LoadItemAtlas(bool _isLoad = true)
-        {
-            if (_isLoad)
-            {
-                AssetBundle ab;
-                var crequest = Manager.GameManager.Instance.ABResourceManager.LoadLocalABAsync(Texture2DPath,null,out ab);
-                yield return crequest;
-                if (crequest != null)
-                {
-                    ab = crequest.assetBundle;
-                }
-                var crequest2 = ab.LoadAssetAsync<SpriteAtlas>("SA_Item_UI");
-                yield return crequest2;
-
-                itemAtlas = crequest2.asset as SpriteAtlas;
-            }
-            else
-            {
-                itemAtlas = null;
-                yield return null;
-            }
-            Debug.Log($"ab:{itemAtlas != null}");
-        }
         
-
         #endregion
         #region Getter
         public string[] GetAllItemID()

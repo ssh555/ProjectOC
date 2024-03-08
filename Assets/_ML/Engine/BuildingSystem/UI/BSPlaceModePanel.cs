@@ -152,6 +152,7 @@ namespace ML.Engine.BuildingSystem.UI
         /// 资产是否完成载入
         /// </summary>
         public bool IsInit = false;
+        
         private IEnumerator InitStyleTexture2D()
         {
 #if UNITY_EDITOR

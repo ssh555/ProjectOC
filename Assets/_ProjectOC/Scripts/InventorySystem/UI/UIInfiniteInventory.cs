@@ -93,7 +93,6 @@ namespace ProjectOC.InventorySystem.UI
             ItemTypes = Enum.GetValues(typeof(ML.Engine.InventorySystem.ItemType)).Cast<ML.Engine.InventorySystem.ItemType>().Where(e => (int)e > 0).ToArray();
             CurrentItemTypeIndex = 0;
             
-            StartCoroutine(LoadInventoryAtlas());
             
             IsInit = true;
             Refresh();
@@ -699,20 +698,26 @@ namespace ProjectOC.InventorySystem.UI
                 }, null, "UI背包Panel数据");
                 ABJAProcessor.StartLoadJsonAssetData();
             }
+            
+            AssetBundle ab = null;
+            AssetBundleCreateRequest request = null;
+            request = GameManager.Instance.ABResourceManager
+                .LoadLocalABAsync("UI/Inventory/Texture2D", (asop) =>
+                {
+                    if (request != null)
+                    {
+                        ab = request.assetBundle;
+                    }
+
+                    AssetBundleRequest request2 = ab.LoadAssetAsync<SpriteAtlas>("SA_Inventory_UI");
+                    if (request2 != null)
+                    {
+                        inventoryAtlas = request2.asset as SpriteAtlas;
+                    }
+                },out ab);
         }
         #endregion
-
-        IEnumerator LoadInventoryAtlas()
-        {
-            AssetBundle ab;
-            var crequest = GameManager.Instance.ABResourceManager.LoadLocalABAsync("UI/Inventory/Texture2D",null,out ab);
-            yield return crequest;
-            if (crequest != null)
-            {
-                ab = crequest.assetBundle;
-            }
-            inventoryAtlas = ab.LoadAsset<SpriteAtlas>("SA_Inventory_UI");
-        }
+        
         #region to-delete
         [Button("生成测试文件")]
         void GenTESTFILE()

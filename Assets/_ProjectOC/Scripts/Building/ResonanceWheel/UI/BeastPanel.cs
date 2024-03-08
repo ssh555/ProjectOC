@@ -43,7 +43,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             InitUITextContents();
             StartCoroutine(InitUIPrefabs());
-            StartCoroutine(InitUITexture2D());
+            InitUITexture2D();
 
             //BeastInfo
             var Info1 = this.transform.Find("HiddenBeastInfo2").Find("Info");
@@ -592,33 +592,27 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public static AssetBundle Texture2DAB;
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
         private string ResonanceWheelTexture2DPath = "ui/resonancewheel/texture2d";
-        private IEnumerator InitUITexture2D()
+        private SpriteAtlas resonanceWheelAtlas;
+        private void InitUITexture2D()
         {
-
-            var crequest = GM.ABResourceManager.LoadLocalABAsync(ResonanceWheelTexture2DPath, null, out var Texture2DAB);
-
-            if (crequest != null)
+            AssetBundle ab = null;
+            AssetBundleCreateRequest request = null;
+            
+            request = GM.ABResourceManager.LoadLocalABAsync(ResonanceWheelTexture2DPath, (asop =>
             {
-                yield return crequest;
-                Debug.Log("InitUITexture2D ");
-                Texture2DAB = crequest.assetBundle;
-            }
-
-            //SpriteAtlas resonanceWheelAtlas = BeastPanel.Texture2DAB.LoadAsset<SpriteAtlas>("SA_ResonanceWheel_UI");
-            SpriteAtlas resonanceWheelAtlas = GM.ABResourceManager.LoadLocalAB(ResonanceWheelTexture2DPath)
-                .LoadAsset<SpriteAtlas>("SA_ResonanceWheel_UI");;
+                if (request != null)
+                {
+                    ab = request.assetBundle;
+                }
+                AssetBundleRequest request2 = ab.LoadAssetAsync<SpriteAtlas>("SA_ResonanceWheel_UI");
+                if (request2 != null)
+                {
+                    this.resonanceWheelAtlas = request2.asset as SpriteAtlas;
+                }
+            }), out ab);
+            
             icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite("icon_genderfemale");
             icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite("icon_gendermale");
-            
-            // Texture2D texture2D;
-            //
-            // texture2D = Texture2DAB.LoadAsset<Texture2D>("icon_genderfemale");
-            // icon_genderfemaleSprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
-            // texture2D = Texture2DAB.LoadAsset<Texture2D>("icon_gendermale");
-            // icon_gendermaleSprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0.5f, 0.5f));
-            
-
-
         }
 
         #endregion

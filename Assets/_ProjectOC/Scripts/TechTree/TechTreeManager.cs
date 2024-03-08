@@ -541,8 +541,7 @@ namespace ProjectOC.TechTree
         {
             ML.Engine.InventorySystem.ItemManager.Instance.LoadTableData();
             ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.LoadTableData();
-            StartCoroutine(LoadTechAtlas());
-            StartCoroutine(ItemManager.Instance.LoadItemAtlas());
+            this.LoadTechAtlas();
         }
 
         [Button("生成测试文件")]
@@ -613,21 +612,23 @@ namespace ProjectOC.TechTree
         }
         #endregion
 
-        private IEnumerator LoadTechAtlas()
+        private void LoadTechAtlas()
         {
-            AssetBundle ab;
-            var crequest = GM.ABResourceManager.LoadLocalABAsync(TPIconTexture2DABPath,null,out ab);
-            yield return crequest;
-            if (crequest != null)
+            AssetBundle ab = null;
+            AssetBundleCreateRequest request = null;
+            request = GM.ABResourceManager
+            .LoadLocalABAsync(TPIconTexture2DABPath, (asop) =>
             {
-                ab = crequest.assetBundle;
-            }
-            var crequest2 = ab.LoadAssetAsync<SpriteAtlas>("SA_TechPoint_UI");
-            yield return crequest2;
-            if (crequest2 != null)
-            {
-                techAtlas = crequest2.asset as SpriteAtlas;
-            }
+                if (request != null)
+                {
+                    ab = request.assetBundle;
+                }
+                AssetBundleRequest request2 = ab.LoadAssetAsync<SpriteAtlas>("SA_TechPoint_UI");
+                if (request2 != null)
+                {
+                    techAtlas = request2.asset as SpriteAtlas;
+                }
+            },out ab);
         }
         
     }

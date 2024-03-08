@@ -108,7 +108,7 @@ namespace ML.Engine.BuildingSystem.UI
 
             ++IsInit;
 
-            if(IsInit >= 1)
+            if(IsInit >= 1) 
             {
                 InitAsset();
             }
