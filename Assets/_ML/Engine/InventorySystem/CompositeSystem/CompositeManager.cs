@@ -60,8 +60,37 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         private SpriteAtlas compositeAtlas;
         public void LoadTableData()
         {
-            compositeAtlas = Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(ItemManager.Texture2DPath)
-                .LoadAsset<SpriteAtlas>("SA_Build_Icon");
+            AssetBundleCreateRequest request = null;
+            AssetBundle ab = null;
+            request = Manager.GameManager.Instance.ABResourceManager.LoadLocalABAsync(ItemManager.Texture2DPath, null,out ab);
+            request.completed += (asop) =>
+            {
+                if (request != null)
+                {
+                    ab = request.assetBundle;
+                    
+                    var t = ab.LoadAssetAsync<SpriteAtlas>("SA_Build_Icon");
+                    t.completed += (asop) =>
+                    {
+                        compositeAtlas = t.asset as SpriteAtlas;
+                    };
+                }
+            };
+            
+            //Á½ÖÖ¶¼Ok
+            // request = Manager.GameManager.Instance.ABResourceManager.LoadLocalABAsync(ItemManager.Texture2DPath, (asop) =>
+            // {
+            //     if (request != null)
+            //     {
+            //         ab = request.assetBundle;
+            //     }
+            //     AssetBundleRequest request2 = ab.LoadAssetAsync<SpriteAtlas>("SA_Build_Icon");
+            //     if (request2 != null)
+            //     {
+            //         compositeAtlas = request2.asset as SpriteAtlas;
+            //     }
+            // }, out ab);
+            
             
             if (ABJAProcessor == null)
             {

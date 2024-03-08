@@ -622,7 +622,12 @@ namespace ProjectOC.TechTree
             {
                 ab = crequest.assetBundle;
             }
-            techAtlas = ab.LoadAsset<SpriteAtlas>("SA_TechPoint_UI");
+            var crequest2 = ab.LoadAssetAsync<SpriteAtlas>("SA_TechPoint_UI");
+            yield return crequest2;
+            if (crequest2 != null)
+            {
+                techAtlas = crequest2.asset as SpriteAtlas;
+            }
         }
         
     }

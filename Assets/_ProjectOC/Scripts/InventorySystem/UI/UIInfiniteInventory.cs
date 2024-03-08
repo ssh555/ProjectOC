@@ -712,7 +712,6 @@ namespace ProjectOC.InventorySystem.UI
                 ab = crequest.assetBundle;
             }
             inventoryAtlas = ab.LoadAsset<SpriteAtlas>("SA_Inventory_UI");
-
         }
         #region to-delete
         [Button("生成测试文件")]

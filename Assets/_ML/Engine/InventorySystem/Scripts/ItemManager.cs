@@ -211,7 +211,10 @@ namespace ML.Engine.InventorySystem
                 {
                     ab = crequest.assetBundle;
                 }
-                itemAtlas = ab.LoadAsset<SpriteAtlas>("SA_Item_UI");
+                var crequest2 = ab.LoadAssetAsync<SpriteAtlas>("SA_Item_UI");
+                yield return crequest2;
+
+                itemAtlas = crequest2.asset as SpriteAtlas;
             }
             else
             {

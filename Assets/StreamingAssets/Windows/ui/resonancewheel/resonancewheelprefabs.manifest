@@ -3,13 +3,13 @@ CRC: 2629289667
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a88dec99f48ab25c7de8c1d0e06d6853
+    Hash: d544d7a16076e180560e4415713b7e2b
   TypeTreeHash:
     serializedVersion: 2
     Hash: 61bcb4f99683ab44ba63c631debcc09f
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: a88dec99f48ab25c7de8c1d0e06d6853
+    Hash: d544d7a16076e180560e4415713b7e2b
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -38,9 +38,19 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
 - AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_SpriteCharacter
+- AssemblyName: Unity.TextMeshPro
+  ClassName: TMPro.TMP_SpriteGlyph
+- AssemblyName: Unity.TextMeshPro
   ClassName: TMPro.VertexGradient
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.FaceInfo
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphMetrics
+- AssemblyName: UnityEngine.TextCoreFontEngineModule
+  ClassName: UnityEngine.TextCore.GlyphRect
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
 Assets:
@@ -48,5 +58,5 @@ Assets:
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/ResonanceWheelPrefabs/BeastBio.prefab
 - Assets/_ProjectOC/OCResources/UI/ResonanceWheel/ResonanceWheelPrefabs/Slot.prefab
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/fonts
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/textmeshpro/spriteasset
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/fonts
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/textmeshpro/spriteasset

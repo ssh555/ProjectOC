@@ -3,13 +3,13 @@ CRC: 2435144168
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 80492c5d2118d3fd8a5a33991d25cd50
+    Hash: 39a601395a97755bd2262551a64abbd5
   TypeTreeHash:
     serializedVersion: 2
     Hash: 59c03d2b98afd3e9e06e08bd517356db
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: 80492c5d2118d3fd8a5a33991d25cd50
+    Hash: 39a601395a97755bd2262551a64abbd5
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -63,5 +63,5 @@ Assets:
 - Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/Materials/BuildingA_mt4.mat
 - Assets/_ProjectOC/OCResources/Meshes/TerrainMeshes/TerrainData/Terrain/Terrain.prefab
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials/terrain
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/shader
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/terrain
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/shader

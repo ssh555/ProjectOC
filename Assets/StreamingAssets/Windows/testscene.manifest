@@ -3,13 +3,13 @@ CRC: 2975419155
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ff1fd97e5705f08251c96b602160197f
+    Hash: 69517241ffab3e7ab2ae59753bb28c69
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 6aef7dc0ca0d02db7fcbb10ddacfa2a8
+    Hash: 0679a5c560c947fc20611353e63b4668
   IncrementalBuildHash:
     serializedVersion: 2
-    Hash: ff1fd97e5705f08251c96b602160197f
+    Hash: 69517241ffab3e7ab2ae59753bb28c69
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -67,6 +67,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: f6da62ef2a40c0440adb4f3243b15be8, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: f371f36022d2b4244b195cf029a5205a, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 80f4609fd17e74645a998bf2488865f2, type: 3}
@@ -80,6 +82,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 6feb82b60c7707348a49cccd1c157035, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: a444fb26d79a4a94ebd9400ba547e490, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: eea3d28ffbcb4cd47a326cb08ba74d18, type: 3}
 - Class: 114
@@ -110,10 +114,6 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 7411b32275d93534cb08e4d96c084289, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: a444fb26d79a4a94ebd9400ba547e490, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: f6da62ef2a40c0440adb4f3243b15be8, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 136
@@ -137,8 +137,8 @@ Assets:
 - Assets/_ProjectOC/Scene/_TEST/yangLe/_TASceneTest.unity
 - Assets/_ProjectOC/Scene/_TEST/cwt/Cwt_TotalTest.unity
 Dependencies:
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/animation/character/player/model
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/materials/other
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/prefabs/character/player
-- C:/Github/Unity/ProjectOC/Assets/StreamingAssets/Windows/shader
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/animation/character/player/model
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/materials/other
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/prefabs/character/player
+- D:/AAAworkwork/Git/projectoc/Assets/StreamingAssets/Windows/shader
