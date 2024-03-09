@@ -195,11 +195,20 @@ namespace ML.Engine.BuildingSystem
             }
         }
 
+        public void OnRegister()
+        {
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<Material>(_ABMatName).Completed += (handle) =>
+            {
+                _buildingMaterial = handle.Result;
+            };
+        }
+
         ~BuildingManager()
         {
             if(instance == this)
             {
                 instance = null;
+                Manager.GameManager.Instance.ABResourceManager.Release(_buildingMaterial);
             }
         }
 
@@ -727,9 +736,7 @@ namespace ML.Engine.BuildingSystem
         #region Material
         // to-do :to-change
         [SerializeField]
-        private const string _ABMatPath = "materials/other";
-        [SerializeField]
-        private const string _ABMatName = "Transparent";
+        private const string _ABMatName = "ML/Mat/Transparent";
 
         /// <summary>
         /// 建造模式下所用的Material (Place, Edit, Destroy, Interact)
@@ -740,14 +747,6 @@ namespace ML.Engine.BuildingSystem
         {
             get
             {
-                if(this._buildingMaterial == null)
-                {
-                    bool tempiffull = false;
-#if UNITY_EDITOR
-                    tempiffull = true;
-#endif
-                    _buildingMaterial = Manager.GameManager.Instance.ABResourceManager.LoadAsset<Material>(_ABMatPath, _ABMatName, tempiffull);
-                }
                 return this._buildingMaterial;
             }
         }
@@ -870,22 +869,19 @@ namespace ML.Engine.BuildingSystem
         public Dictionary<string, BuildingTableData> BPartTableDictOnClass = new Dictionary<string, BuildingTableData>();
         public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
 
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]> ABJAProcessor;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
-            if (ABJAProcessor == null)
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]>("OC/Json/TableData", "Building", (datas) =>
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]>("Json/TableData", "Building", (datas) =>
+                foreach (var data in datas)
                 {
-                    foreach (var data in datas)
-                    {
-                        BPartTableDictOnID.Add(data.id, data);
-                        BPartTableDictOnClass.Add(data.GetClassificationString(), data);
-                    }
-                }, null, "建筑表数据");
-                ABJAProcessor.StartLoadJsonAssetData();
-            }
+                    BPartTableDictOnID.Add(data.id, data);
+                    BPartTableDictOnClass.Add(data.GetClassificationString(), data);
+                }
+            }, "建筑表数据");
+            ABJAProcessor.StartLoadJsonAssetData();
         }
 
         public string GetID(string CID)
@@ -895,25 +891,6 @@ namespace ML.Engine.BuildingSystem
                 return BPartTableDictOnClass[CID].id;
             }
             return null;
-        }
-
-        public Texture2D GetTexture2D(string CID)
-        {
-            if (!string.IsNullOrEmpty(CID) && !this.BPartTableDictOnClass.ContainsKey(CID))
-            {
-                return null;
-            }
-            return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(Tex2DABPath).LoadAsset<Texture2D>(this.BPartTableDictOnClass[CID].icon);
-        }
-
-        public Sprite GetSprite(string CID)
-        {
-            var tex = this.GetTexture2D(CID);
-            if (tex == null)
-            {
-                return null;
-            }
-            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
         }
 
         /// <summary>

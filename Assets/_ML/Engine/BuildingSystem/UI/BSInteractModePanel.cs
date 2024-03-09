@@ -272,7 +272,10 @@ namespace ML.Engine.BuildingSystem.UI
             // 没有加到玩家背包的都变成WorldItem
             foreach (Item item in resItems)
             {
+                // 不需要，就异步同时执行
+#pragma warning disable CS4014
                 ItemManager.Instance.SpawnWorldItem(item, bpart.transform.position, bpart.transform.rotation);
+#pragma warning restore CS4014
             }
         }
     }

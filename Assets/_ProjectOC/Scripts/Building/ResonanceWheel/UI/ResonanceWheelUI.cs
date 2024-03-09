@@ -23,11 +23,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Purchasing;
 using UnityEngine.Rendering;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub1;
 using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub2;
-//using static System.Net.Mime.MediaTypeNames;
 
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
@@ -36,10 +36,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         public IInventory inventory;
         private SpriteAtlas resonanceAtlas;
-        
-        
-
-
 
         #region Unity
         public bool IsInit = false;
@@ -50,8 +46,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
             this.GetComponent<ResonanceWheelUI>().enabled = true;
-            StartCoroutine(InitUIPrefabs());
-             StartCoroutine(InitUITexture2D());
+            InitUITexture2D();
             InitUITextContents();
             
             
@@ -142,13 +137,22 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //sub1
 
 
-
-
-
             IsInit = true;
             Refresh();
         }
 
+        private AsyncOperationHandle spriteatlasHandle;
+        private List<AsyncOperationHandle<GameObject>> goHandle = new List<AsyncOperationHandle<GameObject>>();
+        private void OnDestroy()
+        {
+            ClearTemp();
+            (this as ITickComponent).DisposeTick();
+            GM.ABResourceManager.Release(spriteatlasHandle);
+            foreach(var handle in goHandle)
+            {
+                GM.ABResourceManager.ReleaseInstance(handle);
+            }
+        }
         #endregion
 
         #region Tick
@@ -173,9 +177,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
 
         #endregion
-
-
-
 
         #region Override
         public override void OnEnter()
@@ -213,13 +214,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             //base.OnRecovery();
             //this.Enter();
-        }
-
-
-        private void OnDestroy()
-        {
-            ClearTemp();
-            (this as ITickComponent).DisposeTick();
         }
 
         #endregion
@@ -608,15 +602,15 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             foreach (var s in tempSprite)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             foreach (var s in tempItemType.Values)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             foreach (var s in tempUIItems)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
         }
 
@@ -679,9 +673,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private UIKeyTip StartResonanceText;
         private UIKeyTip StopResonanceText;
 
-        private GameObject SlotPrefab;
-
-
         //BotKeyTips
         private UIKeyTip KT_Back;
 
@@ -700,7 +691,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             if (ABJAProcessorJson_Main == null || !ABJAProcessorJson_Main.IsLoaded || !IsInit)
             {
-                Debug.Log("ABJAProcessorJson is null");
                 return;
             }
             
@@ -880,7 +870,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 {
                     for (int i = 0; i < Consumables.childCount; i++)
                     {
-                        Destroy(Consumables.GetChild(i).gameObject);
+                        ML.Engine.Manager.GameManager.DestroyObj(Consumables.GetChild(i).gameObject);
                     }
                 }
 
@@ -893,16 +883,22 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                     foreach (var item in GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRaw(cb))
                     {
-                        var descriptionPrefab = Instantiate(SlotPrefab, Consumables);
-                        int needNum = item.num;
-                        int haveNum = GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory.GetItemAllNum(item.id);
-                        descriptionPrefab.transform.Find("ItemNumber").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = needNum.ToString() + "/" + haveNum.ToString();
-                        if (needNum > haveNum)
+                        GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/Slot", Consumables).Completed += (handle) =>
                         {
-                            descriptionPrefab.transform.Find("ItemNumber").Find("Background").GetComponent<Image>().color = UnityEngine.Color.red;
-                        }
+                            this.goHandle.Add(handle);
+                            var descriptionPrefab = handle.Result;
+                            int needNum = item.num;
+                            // TODO
+                            int haveNum = GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory.GetItemAllNum(item.id);
+                            descriptionPrefab.transform.Find("ItemNumber").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = needNum.ToString() + "/" + haveNum.ToString();
+                            if (needNum > haveNum)
+                            {
+                                descriptionPrefab.transform.Find("ItemNumber").Find("Background").GetComponent<Image>().color = UnityEngine.Color.red;
+                            }
 
-                        descriptionPrefab.transform.Find("ItemName").GetComponent<TMPro.TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(item.id);
+                            descriptionPrefab.transform.Find("ItemName").GetComponent<TMPro.TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(item.id);
+                        };
+
                     }
                 }
 
@@ -955,97 +951,63 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             public KeyTip back;
         }
 
-        public static ResonanceWheelPanel PanelTextContent_Main => ABJAProcessorJson_Main.Datas;
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheelPanel> ABJAProcessorJson_Main;
+        public ResonanceWheelPanel PanelTextContent_Main => ABJAProcessorJson_Main.Datas;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheelPanel> ABJAProcessorJson_Main;
 
-        public static ResonanceWheel_sub1Struct PanelTextContent_sub1 => ABJAProcessorJson_sub1.Datas;
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub1Struct> ABJAProcessorJson_sub1;
+        public ResonanceWheel_sub1Struct PanelTextContent_sub1 => ABJAProcessorJson_sub1.Datas;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub1Struct> ABJAProcessorJson_sub1;
 
-        public static ResonanceWheel_sub2Struct PanelTextContent_sub2 => ABJAProcessorJson_sub2.Datas;
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub2Struct> ABJAProcessorJson_sub2;
+        public ResonanceWheel_sub2Struct PanelTextContent_sub2 => ABJAProcessorJson_sub2.Datas;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub2Struct> ABJAProcessorJson_sub2;
         private void InitUITextContents()
         {
-            if (ABJAProcessorJson_Main == null)
+            ABJAProcessorJson_Main = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheelPanel>("OC/Json/TextContent/ResonanceWheel", "ResonanceWheelPanel", (datas) =>
             {
-                ABJAProcessorJson_Main = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheelPanel>("Json/TextContent/ResonanceWheel", "ResonanceWheelPanel", (datas) =>
-                {
-                    Refresh();
-                    this.enabled = false;
-                }, null, "UI共鸣轮Panel_Main数据");
-                ABJAProcessorJson_Main.StartLoadJsonAssetData();
-            }
+                Refresh();
+                this.enabled = false;
+            }, "UI共鸣轮Panel_Main数据");
+            ABJAProcessorJson_Main.StartLoadJsonAssetData();
 
-            if (ABJAProcessorJson_sub1 == null)
+            ABJAProcessorJson_sub1 = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub1Struct>("OC/Json/TextContent/ResonanceWheel", "ResonanceWheel_sub1", (datas) =>
             {
-                ABJAProcessorJson_sub1 = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub1Struct>("Json/TextContent/ResonanceWheel", "ResonanceWheel_sub1", (datas) =>
-                {
-                    Refresh();
-                    this.enabled = false;
-                }, null, "UI共鸣轮Panel_sub1数据");
-                ABJAProcessorJson_sub1.StartLoadJsonAssetData();
-            }
+                Refresh();
+                this.enabled = false;
+            }, "UI共鸣轮Panel_sub1数据");
+            ABJAProcessorJson_sub1.StartLoadJsonAssetData();
 
-            if (ABJAProcessorJson_sub2 == null)
+            ABJAProcessorJson_sub2 = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub2Struct>("OC/Json/TextContent/ResonanceWheel", "ResonanceWheel_sub2", (datas) =>
             {
-                ABJAProcessorJson_sub2 = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub2Struct>("Json/TextContent/ResonanceWheel", "ResonanceWheel_sub2", (datas) =>
-                {
-                    Refresh();
-                    this.enabled = false;
-                }, null, "UI共鸣轮Panel_sub2数据");
-                ABJAProcessorJson_sub2.StartLoadJsonAssetData();
-            }
+                Refresh();
+                this.enabled = false;
+            }, "UI共鸣轮Panel_sub2数据");
+            ABJAProcessorJson_sub2.StartLoadJsonAssetData();
         }
         #endregion
+
         #region Texture2D
-        public static AssetBundle Texture2DAB;
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
-        private string ResonanceWheelTexture2DPath = "ui/resonancewheel/texture2d";
+        private string ResonanceWheelSpriteAtlasPath = "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI";
 
-        private IEnumerator InitUITexture2D()
+        private void InitUITexture2D()
         {
-            var crequest = GM.ABResourceManager.LoadLocalABAsync(ResonanceWheelTexture2DPath, null, out var Texture2DAB);
-            yield return crequest;
-            if (crequest != null)
+            GM.ABResourceManager.LoadAssetAsync<SpriteAtlas>(ResonanceWheelSpriteAtlasPath).Completed += (handle) =>
             {
-                Texture2DAB = crequest.assetBundle;
-            }
+                this.spriteatlasHandle = handle;
+                var resonanceAtlas = handle.Result as SpriteAtlas;
+                sprite1 = resonanceAtlas.GetSprite("icon_beast");
+                sprite2 = resonanceAtlas.GetSprite("icon_timing");
+                sprite3 = resonanceAtlas.GetSprite("gray_background");
 
-            resonanceAtlas = Texture2DAB.LoadAsset<SpriteAtlas>("SA_ResonanceWheel_UI");
-
-            sprite1 = resonanceAtlas.GetSprite("icon_beast");
-            sprite2 = resonanceAtlas.GetSprite("icon_timing");
-            sprite3 = resonanceAtlas.GetSprite("gray_background");
-            
-            beastTypeDic.Add(BeastType.WorkerEcho_Cat, resonanceAtlas.GetSprite("Cat"));
-            beastTypeDic.Add(BeastType.WorkerEcho_Deer, resonanceAtlas.GetSprite("Deer"));
-            beastTypeDic.Add(BeastType.WorkerEcho_Dog, resonanceAtlas.GetSprite("Dog"));
-            beastTypeDic.Add(BeastType.WorkerEcho_Fox, resonanceAtlas.GetSprite("Fox"));
-            beastTypeDic.Add(BeastType.WorkerEcho_Rabbit, resonanceAtlas.GetSprite("Rabbit"));
-            beastTypeDic.Add(BeastType.WorkerEcho_Seal, resonanceAtlas.GetSprite("Seal"));
-            beastTypeDic.Add(BeastType.WorkerEcho_Random, resonanceAtlas.GetSprite("Random"));
+                beastTypeDic.Add(BeastType.WorkerEcho_Cat, resonanceAtlas.GetSprite("Cat"));
+                beastTypeDic.Add(BeastType.WorkerEcho_Deer, resonanceAtlas.GetSprite("Deer"));
+                beastTypeDic.Add(BeastType.WorkerEcho_Dog, resonanceAtlas.GetSprite("Dog"));
+                beastTypeDic.Add(BeastType.WorkerEcho_Fox, resonanceAtlas.GetSprite("Fox"));
+                beastTypeDic.Add(BeastType.WorkerEcho_Rabbit, resonanceAtlas.GetSprite("Rabbit"));
+                beastTypeDic.Add(BeastType.WorkerEcho_Seal, resonanceAtlas.GetSprite("Seal"));
+                beastTypeDic.Add(BeastType.WorkerEcho_Random, resonanceAtlas.GetSprite("Random"));
+            };
         }
 
-        #endregion
-
-        #region Prefab
-        public AssetBundle PrefabsAB;
-        public IEnumerator InitUIPrefabs()
-        {
-            this.PrefabsAB = null;
-            var abmgr = GameManager.Instance.ABResourceManager;
-            // 载入 keyTipPrefab
-            var crequest = abmgr.LoadLocalABAsync("ui/resonancewheel/resonancewheelprefabs", null, out var PrefabsAB);
-
-            if (crequest != null)
-            {
-                yield return crequest;
-                PrefabsAB = crequest.assetBundle;
-            }
-
-            this.PrefabsAB = PrefabsAB;
-            SlotPrefab = this.PrefabsAB.LoadAsset<GameObject>("Slot");
-            this.Refresh();
-        }
         #endregion
 
 

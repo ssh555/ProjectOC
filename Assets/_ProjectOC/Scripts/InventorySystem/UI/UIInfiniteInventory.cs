@@ -36,6 +36,7 @@ namespace ProjectOC.InventorySystem.UI
         private void Start()
         {
             InitUITextContents();
+            LoadInventoryAtlas();
 
 
 
@@ -93,12 +94,16 @@ namespace ProjectOC.InventorySystem.UI
             ItemTypes = Enum.GetValues(typeof(ML.Engine.InventorySystem.ItemType)).Cast<ML.Engine.InventorySystem.ItemType>().Where(e => (int)e > 0).ToArray();
             CurrentItemTypeIndex = 0;
             
-            StartCoroutine(LoadInventoryAtlas());
             
             IsInit = true;
             Refresh();
         }
 
+        private void OnDestroy()
+        {
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.Release(this.gameObject);
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.Release(this.inventoryAtlas);
+        }
         #endregion
 
         #region Override
@@ -302,7 +307,9 @@ namespace ProjectOC.InventorySystem.UI
             SelectedItems.Remove(item);
             this.CurrentItemIndex = this.CurrentItemIndex;
             // 将Item生成为世界物体
+#pragma warning disable CS4014
             ItemManager.Instance.SpawnWorldItem(item, this.inventory.Owner.position, this.inventory.Owner.rotation);
+#pragma warning restore CS4014
         }
 
         public void DestroyItem()
@@ -406,15 +413,15 @@ namespace ProjectOC.InventorySystem.UI
         {
             foreach(var s in tempSprite)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             foreach (var s in tempItemType.Values)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             foreach (var s in tempUIItems)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
         }
 
@@ -685,88 +692,28 @@ namespace ProjectOC.InventorySystem.UI
             public KeyTip destroy;
         }
 
-        public static InventoryPanel PanelTextContent_Main => ABJAProcessor.Datas;
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<InventoryPanel> ABJAProcessor;
+        public InventoryPanel PanelTextContent_Main => ABJAProcessor.Datas;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<InventoryPanel> ABJAProcessor;
 
         private void InitUITextContents()
         {
-            if(ABJAProcessor == null)
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<InventoryPanel>("OC/Json/TextContent/Inventory", "InventoryPanel", (datas) =>
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<InventoryPanel>("Json/TextContent/Inventory", "InventoryPanel", (datas) =>
-                {
-                    Refresh();
-                    this.enabled = false;
-                }, null, "UI背包Panel数据");
-                ABJAProcessor.StartLoadJsonAssetData();
-            }
+                Refresh();
+                this.enabled = false;
+            }, "UI背包Panel数据");
+            ABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
 
-        IEnumerator LoadInventoryAtlas()
+        private void LoadInventoryAtlas()
         {
-            AssetBundle ab;
-            var crequest = GameManager.Instance.ABResourceManager.LoadLocalABAsync("UI/Inventory/Texture2D",null,out ab);
-            yield return crequest;
-            if (crequest != null)
+            GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>("OC/UI/Inventory/Texture/SA_Inventory_UI").Completed += (handle) =>
             {
-                ab = crequest.assetBundle;
-            }
-            inventoryAtlas = ab.LoadAsset<SpriteAtlas>("SA_Inventory_UI");
+                inventoryAtlas = handle.Result as SpriteAtlas;
+            };
         }
-        #region to-delete
-        [Button("生成测试文件")]
-        void GenTESTFILE()
-        {
-            List<ItemTableData> datas = new List<ItemTableData>();
 
-            var itypes = Enum.GetValues(typeof(ML.Engine.InventorySystem.ItemType)).Cast<ML.Engine.InventorySystem.ItemType>().Where(e => (int)e > 0).ToArray();
-            foreach(var itype in itypes)
-            {
-                int cnt = UnityEngine.Random.Range(50, 100);
-                for(int i = 0; i < cnt; ++i)
-                {
-                    var data = new ItemTableData();
-                    // id
-                    data.id = itype.ToString() + "_" + i;
-                    // name
-                    data.name = new TextContent();
-                    data.name.Chinese = data.id;
-                    data.name.English = data.id;
-                    // type
-                    data.type = "ResourceItem";
-                    // sort
-                    data.sort = i;
-                    // itemtype
-                    data.itemtype = itype;
-                    // weight
-                    data.weight = UnityEngine.Random.Range(1, 10);
-                    // bcanstack
-                    data.bcanstack = UnityEngine.Random.Range(1, 10) < 9;
-                    // maxamount
-                    data.maxamount = 999;
-                    // texture2d
-                    data.icon = "100001";
-                    // worldobject
-                    data.worldobject = "TESTWorldItem";
-                    // description
-                    data.itemdescription = new TextContent();
-                    data.itemdescription.Chinese = "TTTTTTTTTTTTTTTTTTTTTTTT\nXXXXXXXXXXXXXXXXXXXXXXXX\nTTTTTTTTTTTTTTTTTTTTTTTT";
-                    data.itemdescription.English = "TTTTTTTTTTTTTTTTTTTTTTTT\nXXXXXXXXXXXXXXXXXXXXXXXX\nTTTTTTTTTTTTTTTTTTTTTTTT";
-                    // effectsDescription
-                    data.effectsdescription = new TextContent();
-                    data.effectsdescription.Chinese = "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%金币掉落\n<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%攻击力持续300s</b></color>";
-                    data.effectsdescription.English = "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%金币掉落\n<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%攻击力持续300s</b></color>";
-                    datas.Add(data);
-                }
-            }
-
-            string json = JsonConvert.SerializeObject(datas.ToArray(), Formatting.Indented);
-
-            System.IO.File.WriteAllText(Application.streamingAssetsPath + "/../../../t.json", json);
-            Debug.Log("输出路径: " + System.IO.Path.GetFullPath(Application.streamingAssetsPath + "/../../../t.json"));
-        }
-        
-        #endregion
     }
 
 }

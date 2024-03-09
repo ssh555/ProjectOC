@@ -1,6 +1,7 @@
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InteractSystem;
 using ML.Engine.TextContent;
+using ML.Engine.UI;
 using ProjectOC.Player;
 using ProjectOC.ResonanceWheelSystem.UI;
 using System;
@@ -37,7 +38,7 @@ namespace ProjectOC.WorkerEchoNS
             {
                 uIResonanceWheelInstance = GameObject.Instantiate(uIResonanceWheel);
                 uIResonanceWheelInstance.GetComponentInParent<ResonanceWheelUI>().inventory = component.gameObject.GetComponentInParent<PlayerCharacter>().Inventory;
-                uIResonanceWheelInstance.transform.SetParent(GameObject.Find("Canvas").transform, false);
+                uIResonanceWheelInstance.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
             }
             else
             {

@@ -2,6 +2,7 @@ using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
+using ML.Engine.UI;
 using Newtonsoft.Json;
 using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
@@ -232,15 +233,15 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             foreach (var s in tempSprite)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             foreach (var s in tempItemType.Values)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             foreach (var s in tempUIItems)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
         }
 
@@ -264,7 +265,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         public override void Refresh()
         {
-            if (ResonanceWheelUI.ABJAProcessorJson_sub2 == null || !ResonanceWheelUI.ABJAProcessorJson_sub2.IsLoaded || !IsInit)
+            if (this.parentUI.ABJAProcessorJson_sub2 == null || !this.parentUI.ABJAProcessorJson_sub2.IsLoaded || !IsInit)
             {
                 Debug.Log("ABJAProcessorJson is null");
                 return;
@@ -287,8 +288,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
             //BotKeyTips
-            KT_Confirm.ReWrite(ResonanceWheelUI.PanelTextContent_sub2.confirm);
-            KT_Back.ReWrite(ResonanceWheelUI.PanelTextContent_sub2.back);
+            KT_Confirm.ReWrite(this.parentUI.PanelTextContent_sub2.confirm);
+            KT_Back.ReWrite(this.parentUI.PanelTextContent_sub2.back);
 
 
     }

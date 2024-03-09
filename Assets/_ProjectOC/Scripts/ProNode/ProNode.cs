@@ -8,6 +8,7 @@ using UnityEngine;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.BuildingSystem;
 using ProjectOC.LandMassExpand;
+using ML.Engine.UI;
 
 namespace ProjectOC.ProNodeNS
 {
@@ -404,7 +405,9 @@ namespace ProjectOC.ProNodeNS
             // 没有加到玩家背包的都变成WorldItem
             foreach (Item item in resItems)
             {
+#pragma warning disable CS4014
                 ItemManager.Instance.SpawnWorldItem(item, WorldProNode.transform.position, WorldProNode.transform.rotation);
+#pragma warning restore CS4014
             }
             // 清空数据
             foreach (MissionTransport mission in this.MissionTransports)
@@ -770,7 +773,7 @@ namespace ProjectOC.ProNodeNS
                         upgrade.InstanceID = this.WorldProNode.InstanceID;
                         upgrade.transform.position = this.WorldProNode.transform.position;
                         upgrade.transform.rotation = this.WorldProNode.transform.rotation;
-                        UnityEngine.Object.Destroy(this.WorldProNode.gameObject);
+                        ML.Engine.Manager.GameManager.DestroyObj(this.WorldProNode.gameObject);
                         this.WorldProNode = upgrade;
                         upgrade.ProNode = this;
                         this.SetLevel(upgrade.Classification.Category4 - 1);

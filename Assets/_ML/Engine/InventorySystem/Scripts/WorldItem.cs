@@ -63,7 +63,7 @@ namespace ML.Engine.InventorySystem
 
             inventory.AddItem(item);
 
-            Destroy(this.gameObject);
+            Manager.GameManager.DestroyObj(this.gameObject);
         }
 
         #region IInteraction
@@ -77,6 +77,7 @@ namespace ML.Engine.InventorySystem
             PickUp(component.gameObject.GetComponentInParent<ProjectOC.Player.PlayerCharacter>().Inventory);
         }
         #endregion
+
     }
 
 }

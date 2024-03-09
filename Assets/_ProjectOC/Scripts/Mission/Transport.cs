@@ -189,7 +189,9 @@ namespace ProjectOC.MissionNS
         {
             foreach (Item item in Worker.TransportItems)
             {
+#pragma warning disable CS4014
                 ItemManager.Instance.SpawnWorldItem(item, Worker.transform.position, Worker.transform.rotation);
+#pragma warning restore CS4014
             }
             Worker.SetTimeStatusAll(TimeStatus.Relax);
             Worker.TransportItems.Clear();
