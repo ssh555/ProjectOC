@@ -23,30 +23,22 @@ namespace ProjectOC.WorkerNS
     {
         #region Load And Data
         /// <summary>
-        /// 是否已加载完数据
-        /// </summary>
-        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
-
-        /// <summary>
         /// Skill 数据表
         /// </summary>
         private Dictionary<string, SkillTableData> SkillTableDict = new Dictionary<string, SkillTableData>();
 
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableData[]> ABJAProcessor;
+        private ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
-            if (ABJAProcessor == null)
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableData[]>("OC/Json/TableData", "Skill", (datas) =>
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableData[]>("Json/TableData", "Skill", (datas) =>
+                foreach (var data in datas)
                 {
-                    foreach (var data in datas)
-                    {
-                        this.SkillTableDict.Add(data.ID, data);
-                    }
-                }, null, "隐兽Skill表数据");
-                ABJAProcessor.StartLoadJsonAssetData();
-            }
+                    this.SkillTableDict.Add(data.ID, data);
+                }
+            }, "隐兽Skill表数据");
+            ABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
 

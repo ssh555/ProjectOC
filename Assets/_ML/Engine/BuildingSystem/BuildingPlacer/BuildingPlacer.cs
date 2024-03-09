@@ -182,7 +182,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         {
             if (this.SelectedPartInstance != null)
             {
-                Destroy(this.SelectedPartInstance.gameObject);
+                Manager.GameManager.DestroyObj(this.SelectedPartInstance.gameObject);
                 this.SelectedPartInstance = null;
             }
         }
@@ -264,7 +264,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             this.OnDestroySelectedBPart?.Invoke(tmp);
 
             // to-do :后续可能会更改销毁调用
-            Destroy(tmp.gameObject);
+            Manager.GameManager.DestroyObj(tmp.gameObject);
         }
 
         public void EnablePlayerInput()

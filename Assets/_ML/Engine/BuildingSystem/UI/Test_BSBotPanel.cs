@@ -29,7 +29,7 @@ namespace ML.Engine.BuildingSystem.UI
 
         public override void OnExit()
         {
-            Destroy(this.gameObject);
+            Manager.GameManager.DestroyObj(this.gameObject);
         }
     }
 }

@@ -676,27 +676,27 @@ namespace ProjectOC.InventorySystem.UI
         {
             foreach(var s in tempSprite)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             foreach (var s in tempUIItems)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             foreach (var s in tempUIItemsRecipe)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             foreach (var s in tempUIItemsRecipeRaw)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             foreach (var s in tempUIItemsWorker)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             foreach (var s in tempUIItemsLevel)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
         }
         #endregion
@@ -1658,20 +1658,17 @@ namespace ProjectOC.InventorySystem.UI
             public KeyTip ktBack;
         }
 
-        public static ProNodePanel PanelTextContent => ABJAProcessor.Datas;
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<ProNodePanel> ABJAProcessor;
+        public ProNodePanel PanelTextContent => ABJAProcessor.Datas;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<ProNodePanel> ABJAProcessor;
 
         private void InitUITextContents()
         {
-            if(ABJAProcessor == null)
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ProNodePanel>("OC/Json/TextContent/ProNode", "ProNodePanel", (datas) =>
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ProNodePanel>("Json/TextContent/Inventory", "ProNodePanel", (datas) =>
-                {
-                    Refresh();
-                    this.enabled = false;
-                }, null, "UI生产节点Panel数据");
-                ABJAProcessor.StartLoadJsonAssetData();
-            }
+                Refresh();
+                this.enabled = false;
+            }, "UI生产节点Panel数据");
+            ABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
 

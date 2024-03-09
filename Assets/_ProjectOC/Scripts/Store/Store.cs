@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using ML.Engine.BuildingSystem;
 using ML.Engine.InventorySystem;
 using ML.Engine.InventorySystem.CompositeSystem;
+using ML.Engine.UI;
 using ProjectOC.MissionNS;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -133,7 +134,9 @@ namespace ProjectOC.StoreNS
             // 没有加到玩家背包的都变成WorldItem
             foreach (Item item in resItems)
             {
+#pragma warning disable CS4014
                 ItemManager.Instance.SpawnWorldItem(item, WorldStore.transform.position, WorldStore.transform.rotation);
+#pragma warning restore CS4014
             }
         }
 
@@ -197,7 +200,9 @@ namespace ProjectOC.StoreNS
                     List<Item> items = ItemManager.Instance.SpawnItems(kv.Key, kv.Value);
                     foreach (Item item in items)
                     {
+#pragma warning disable CS4014
                         ItemManager.Instance.SpawnWorldItem(item, WorldStore.transform.position, WorldStore.transform.rotation);
+#pragma warning restore CS4014
                     }
                 }
                 Level = newLevel;
@@ -573,7 +578,7 @@ namespace ProjectOC.StoreNS
                         upgrade.InstanceID = this.WorldStore.InstanceID;
                         upgrade.transform.position = this.WorldStore.transform.position;
                         upgrade.transform.rotation = this.WorldStore.transform.rotation;
-                        UnityEngine.Object.Destroy(this.WorldStore.gameObject);
+                        ML.Engine.Manager.GameManager.DestroyObj(this.WorldStore.gameObject);
                         this.WorldStore = upgrade;
                         upgrade.Store = this;
                         this.SetLevel(upgrade.Classification.Category4 - 1);

@@ -6,6 +6,7 @@ using Sirenix.OdinInspector;
 using ProjectOC.Player.Terrain;
 using UnityEngine.InputSystem;
 using ML.Engine.InteractSystem;
+using ML.Engine.UI;
 
 namespace ProjectOC.Player
 {
@@ -117,7 +118,7 @@ namespace ProjectOC.Player
 
             // 按下对应按键才会压入栈
 
-            var botui = GameObject.Instantiate(this.playerUIBotPanel.gameObject, GameObject.Find("Canvas").transform, false).GetComponent<UI.PlayerUIBotPanel>();
+            var botui = GameObject.Instantiate(this.playerUIBotPanel.gameObject, ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).GetComponent<UI.PlayerUIBotPanel>();
             botui.player = this;
             ML.Engine.Manager.GameManager.Instance.UIManager.ChangeBotUIPanel(botui);
 
@@ -170,7 +171,7 @@ namespace ProjectOC.Player
 
             if(Input.InputManager.PlayerInput.Player.OpenBotUI.WasPressedThisFrame())
             {
-                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(GameObject.Instantiate(this.playerUIPanel.gameObject, GameObject.Find("Canvas").transform, false).GetComponent<ML.Engine.UI.UIBasePanel>());
+                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(GameObject.Instantiate(this.playerUIPanel.gameObject, ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).GetComponent<ML.Engine.UI.UIBasePanel>());
                 (ML.Engine.Manager.GameManager.Instance.UIManager.GetTopUIPanel() as UI.PlayerUIPanel).player = this;
             }
 

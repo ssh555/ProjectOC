@@ -29,21 +29,18 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         private Dictionary<string, EffectTableData> EffectTableDict = new Dictionary<string, EffectTableData>();
         
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<EffectTableData[]> ABJAProcessor;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<EffectTableData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
-            if (ABJAProcessor == null)
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<EffectTableData[]>("OC/Json/TableData", "Effect", (datas) =>
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<EffectTableData[]>("Json/TableData", "Effect", (datas) =>
+                foreach (var data in datas)
                 {
-                    foreach (var data in datas)
-                    {
-                        EffectTableDict.Add(data.ID, data);
-                    }
-                }, null, "隐兽Effect表数据");
-                ABJAProcessor.StartLoadJsonAssetData();
-            }
+                    EffectTableDict.Add(data.ID, data);
+                }
+            }, "隐兽Effect表数据");
+            ABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
 

@@ -59,49 +59,33 @@ namespace ProjectOC.Player.UI
             this.EnterTechTreeBtn = btnList.Find("EnterTechTree").GetComponent<SelectedButton>();
             this.EnterTechTreeBtn.OnInteract += () =>
             {
-                AssetBundleRequest request = null;
-                request = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<GameObject>("UI/UIPanel", "TechPointPanel", (ao) =>
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/TechPointPanel", this.transform.parent, true).Completed += (handle) =>
                  {
-                     var panel = GameObject.Instantiate((request.asset as GameObject).GetComponent<UITechPointPanel>());
-                     panel.transform.SetParent(this.transform.parent, false);
+                     var panel = handle.Result.GetComponent<UITechPointPanel>();
                      panel.inventory = this.player.Inventory;
                      ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
-                 });
+                 };
             };
 
             this.EnterInventoryBtn = btnList.Find("EnterInventory").GetComponent<SelectedButton>();
             this.EnterInventoryBtn.OnInteract += () =>
             {
-                AssetBundleRequest request = null;
-                request = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<GameObject>("UI/UIPanel", "UIInfiniteInventoryPanel", (ao) =>
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIInfiniteInventoryPanel", this.transform.parent, true).Completed += (handle) =>
                 {
-                    // 实例化
-                    var panel = GameObject.Instantiate((request.asset as GameObject).GetComponent<UIInfiniteInventory>());
-                    panel.transform.SetParent(this.transform.parent, false);
-
-                    // 初始化
+                    var panel = handle.Result.GetComponent<UIInfiniteInventory>();
                     panel.inventory = this.player.Inventory as ML.Engine.InventorySystem.InfiniteInventory;
-
-                    // Push
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
-                });
-
+                };
             };
 
             this.EnterBeastPanelBtn = btnList.Find("EnterBeastPanel").GetComponent<SelectedButton>();
             this.EnterBeastPanelBtn.OnInteract += () =>
             {
-                AssetBundleRequest request = null;
-                request = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<GameObject>("UI/UIPanel", "BeastPanel", (ao) =>
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/BeastPanel", this.transform.parent, true).Completed += (handle) =>
                 {
-                    // 实例化
-                    var panel = GameObject.Instantiate((request.asset as GameObject).GetComponent<BeastPanel>());
-                    panel.transform.SetParent(this.transform.parent, false);
-                    // Push
+                    var panel = handle.Result.GetComponent<BeastPanel>();
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
-                    //ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
-                });
-
+                };
             };
 
 
@@ -194,30 +178,22 @@ namespace ProjectOC.Player.UI
             Input.InputManager.PlayerInput.PlayerUI.Disable();
         }
 
-        public static Dictionary<string, TextTip> TipDict = new Dictionary<string, TextTip>();
+        public Dictionary<string, TextTip> TipDict = new Dictionary<string, TextTip>();
 
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<ML.Engine.TextContent.TextTip[]> ABJAProcessor;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<ML.Engine.TextContent.TextTip[]> ABJAProcessor;
 
         public void InitUITextContents()
         {
-            if (ABJAProcessor == null)
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ML.Engine.TextContent.TextTip[]>("OC/Json/TextContent/Player", "PlayerUIPanel", (datas) =>
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ML.Engine.TextContent.TextTip[]>("Json/TextContent/Player", "PlayerUIPanel", (datas) =>
+                foreach (var tip in datas)
                 {
-                    foreach (var tip in datas)
-                    {
-                        TipDict.Add(tip.name, tip);
-                    }
-                    this.Refresh();
-                    this.enabled = false;
-                }, null, "PlayerUIPanel");
-                ABJAProcessor.StartLoadJsonAssetData();
-            }
-            else
-            {
+                    TipDict.Add(tip.name, tip);
+                }
                 this.Refresh();
                 this.enabled = false;
-            }
+            }, "PlayerUIPanel");
+            ABJAProcessor.StartLoadJsonAssetData();
         }
 
         public override void Refresh()

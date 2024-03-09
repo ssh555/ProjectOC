@@ -30,29 +30,23 @@ namespace ProjectOC.WorkerEchoNS
     public sealed class WorkerEchoManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         /// <summary>
-        /// 是否已加载完数据
-        /// </summary>
-        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
-        /// <summary>
         /// 基础数据表
         /// </summary>
         private Dictionary<string, WorkerEchoTableData> EffectTableDict = new Dictionary<string, WorkerEchoTableData>();
         
         private Dictionary<string, WorkerEchoTableData> WorkerEchoTableDict = new Dictionary<string, WorkerEchoTableData>();
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<WorkerEchoTableData[]> ABJAProcessor;
+
+        private ML.Engine.ABResources.ABJsonAssetProcessor<WorkerEchoTableData[]> ABJAProcessor;
         public void LoadTableData()
         {
-            if (ABJAProcessor == null)
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<WorkerEchoTableData[]>("OC/Json/TableData", "WorkerEcho", (datas) =>
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<WorkerEchoTableData[]>("Json/TableData", "WorkerEcho", (datas) =>
+                foreach (var data in datas)
                 {
-                    foreach (var data in datas)
-                    {
-                        this.WorkerEchoTableDict.Add(data.ID, data);
-                    }
-                }, null, "隐兽共鸣表数据");
-                ABJAProcessor.StartLoadJsonAssetData();
-            }
+                    this.WorkerEchoTableDict.Add(data.ID, data);
+                }
+            }, "隐兽共鸣表数据");
+            ABJAProcessor.StartLoadJsonAssetData();
         }
         public string GetRandomID()
         {

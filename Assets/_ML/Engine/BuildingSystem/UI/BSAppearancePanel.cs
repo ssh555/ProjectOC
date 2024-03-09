@@ -7,6 +7,7 @@ using System.Linq;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 using UnityEngine.Windows;
 
@@ -36,7 +37,7 @@ namespace ML.Engine.BuildingSystem.UI
         #region Unity
         private void Awake()
         {
-            StartCoroutine(LoadMatPackages());
+            LoadMatPackages();
 
             matParent = this.transform.Find("KT_AlterMat").Find("KT_AlterStyle").Find("Content") as RectTransform;
             this.templateMat = matParent.Find("MatTemplate") as RectTransform;
@@ -72,6 +73,11 @@ namespace ML.Engine.BuildingSystem.UI
             matnext.ReWrite(MonoBuildingManager.Instance.KeyTipDict["matnext"]);
 
         }
+
+        private void OnDestroy()
+        {
+            Manager.GameManager.Instance.ABResourceManager.Release(matHandle);
+        }
         #endregion
 
         #region Override
@@ -96,7 +102,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.UnregisterInput();
             ClearInstance();
 
-            Destroy(this.gameObject);
+            Manager.GameManager.DestroyObj(this.gameObject);
         }
         #endregion
 
@@ -184,8 +190,8 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 foreach (var img in matInstance)
                 {
-                    Destroy(img.sprite);
-                    Destroy(img.gameObject);
+                    Manager.GameManager.DestroyObj(img.sprite);
+                    Manager.GameManager.DestroyObj(img.gameObject);
                 }
             }
 
@@ -267,42 +273,24 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.SelectedPartInstance.Mode = this._aMode;
         }
 
-        private const string MatPABPath = "Assets/BuildingSystem/MatPackage";
-        protected IEnumerator LoadMatPackages()
+        private const string MatPABPath = "ML/BuildingSystem/MatPackage";
+        private AsyncOperationHandle matHandle;
+        protected void LoadMatPackages()
         {
-#if UNITY_EDITOR
-            float startT = Time.realtimeSinceStartup;
-#endif
-
-            while (Manager.GameManager.Instance.ABResourceManager == null)
-            {
-                yield return null;
-            }
-            var abmgr = Manager.GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(MatPABPath, null, out ab);
-            yield return crequest;
-            if (crequest != null)
-            {
-                ab = crequest.assetBundle;
-            }
-
-            var packages = ab.LoadAllAssetsAsync<BSBPartMatPackage>();
-            yield return packages;
             _allMatPackages = new Dictionary<BuildingPartClassification, BSBPartMatPackage>();
-            foreach (BSBPartMatPackage package in packages.allAssets)
+            matHandle = Manager.GameManager.Instance.ABResourceManager.LoadAssetsAsync<BSBPartMatPackage>(MatPABPath, (matP) =>
             {
-                this._allMatPackages.Add(package.Classification, package);
-            }
+                lock(_allMatPackages)
+                {
+                    this._allMatPackages.Add(matP.Classification, matP);
+                }
+            });
+            matHandle.Completed += (handle) =>
+            {
+                EnterAppearancePanel();
 
-            //abmgr.UnLoadLocalABAsync(TextContentABPath, false, null);
-            EnterAppearancePanel();
-
-#if UNITY_EDITOR
-            Debug.Log("LoadMatPackages cost time: " + (Time.realtimeSinceStartup - startT));
-#endif
-
-            this.enabled = false;
+                this.enabled = false;
+            };
         }
 
         #endregion

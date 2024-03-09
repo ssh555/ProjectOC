@@ -1,11 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.UI;
+using UnityEngine.UI;
 using static UnityEngine.Rendering.DebugUI;
 namespace ML.Engine.UI
 {
     public sealed class UIManager : Manager.GlobalManager.IGlobalManager
     {
+        public UIManager()
+        {
+            GetCanvas = CreateCanvas();
+        }
+
+        public Canvas GetCanvas
+        {
+            get;
+            private set;
+        }
+
         #region UI栈管理
         /// <summary>
         /// 当前显示的UI栈
@@ -78,6 +91,32 @@ namespace ML.Engine.UI
         }
 
         #endregion
+
+        private Canvas CreateCanvas()
+        {
+            // 创建一个新的GameObject，并将Canvas组件附加到它
+            GameObject canvasObject = new GameObject("Canvas");
+            GameObject.DontDestroyOnLoad(canvasObject);
+            Canvas canvas = canvasObject.AddComponent<Canvas>();
+
+            // 设置Canvas的属性
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+
+            // 添加CanvasScaler组件，确保UI在不同分辨率下保持一致
+            canvasObject.AddComponent<CanvasScaler>().uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+
+            // 添加GraphicRaycaster组件，确保Canvas可以与鼠标和触摸交互
+            canvasObject.AddComponent<GraphicRaycaster>();
+
+            // 创建一个新的EventSystem对象，并将其设置为Canvas的子对象
+            GameObject eventSystem = new GameObject("EventSystem");
+            GameObject.DontDestroyOnLoad(eventSystem);
+            eventSystem.AddComponent<UnityEngine.EventSystems.EventSystem>();
+            eventSystem.AddComponent<InputSystemUIInputModule>();
+            eventSystem.transform.SetParent(canvasObject.transform);
+
+            return canvas;
+        }
     }
 
 }
