@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sirenix.OdinInspector.Modul
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{454C83ED-A1F0-39B1-851F-4CA130F3C755}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.AssetBundleBrowser.Editor", "Unity.AssetBundleBrowser.Editor.csproj", "{BDE352AE-2E52-21A1-EE90-22A19562D4A3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sirenix.OdinInspector.Modules.UnityMathematics", "Sirenix.OdinInspector.Modules.UnityMathematics.csproj", "{4603630D-7F99-126A-C564-823B980AF85C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataToBinary", "ExternProject\DataToBinary\DataToBinary\DataToBinary.csproj", "{9F51A3E8-60A9-468D-874A-2C4AADAE7372}"
@@ -31,10 +29,6 @@ Global
 		{454C83ED-A1F0-39B1-851F-4CA130F3C755}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{454C83ED-A1F0-39B1-851F-4CA130F3C755}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{454C83ED-A1F0-39B1-851F-4CA130F3C755}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BDE352AE-2E52-21A1-EE90-22A19562D4A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BDE352AE-2E52-21A1-EE90-22A19562D4A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BDE352AE-2E52-21A1-EE90-22A19562D4A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BDE352AE-2E52-21A1-EE90-22A19562D4A3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4603630D-7F99-126A-C564-823B980AF85C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4603630D-7F99-126A-C564-823B980AF85C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4603630D-7F99-126A-C564-823B980AF85C}.Release|Any CPU.ActiveCfg = Release|Any CPU
