@@ -35,89 +35,89 @@
         "Chinese" : "存储容量: ",
         "English" : "StorageCapacity: "
     },
-    "kt_NextPriority" : {
-        "keyname" : "kt_NextPriority",
-        "keymap" : {
-            "XBOX" : "RT",
-            "KeyBoard" : "Q"
-        },
+    "NextPriority" : {
+        "keyname" : "KT_NextPriority",
+        "keymap": {
+            "ActionMapName": "UIStore",
+            "ActionName": "NextPriority"
+          },
         "description" : {
             "Chinese" : "",
             "English" : ""
         }
     },
-    "kt_ChangeIcon" : {
-        "keyname" : "kt_ChangeIcon",
-        "keymap" : {
-            "XBOX" : "LT",
-            "KeyBoard" : "G"
-        },
+    "ChangeIcon" : {
+        "keyname" : "KT_ChangeIcon",
+        "keymap": {
+            "ActionMapName": "UIStore",
+            "ActionName": "ChangeIcon"
+          },
         "description" : {
             "Chinese" : "",
             "English" : ""
         }
     },
-    "kt_ChangeItem" : {
-        "keyname" : "kt_ChangeItem",
-        "keymap" : {
-            "XBOX" : "A",
-            "KeyBoard" : "E"
-        },
+    "ChangeItem" : {
+        "keyname" : "KT_ChangeItem",
+        "keymap": {
+            "ActionMapName": "UIStore",
+            "ActionName": "ChangeItem"
+          },
         "description" : {
             "Chinese" : "改变物品",
             "English" : "Change Item"
         }
     },
-    "kt_Remove1" : {
-        "keyname" : "kt_Remove1",
-        "keymap" : {
-            "XBOX" : "X",
-            "KeyBoard" : "T"
-        },
+    "Remove1" : {
+        "keyname" : "KT_Remove1",
+        "keymap": {
+            "ActionMapName": "UIStore",
+            "ActionName": "Remove1"
+          },
         "description" : {
             "Chinese" : "取出1个",
             "English" : "Remove 1"
         }
     },
-    "kt_Remove10" : {
-        "keyname" : "kt_Remove10",
-        "keymap" : {
-            "XBOX" : "X",
-            "KeyBoard" : "T"
-        },
+    "Remove10" : {
+        "keyname" : "KT_Remove10",
+        "keymap": {
+            "ActionMapName": "UIStore",
+            "ActionName": "Remove10"
+          },
         "description" : {
             "Chinese" : "取出10个",
             "English" : "Remove 10"
         }
     },
-    "kt_FastAdd" : {
-        "keyname" : "kt_FastAdd",
-        "keymap" : {
-            "XBOX" : "Y",
-            "KeyBoard" : "R"
-        },
+    "FastAdd" : {
+        "keyname" : "KT_FastAdd",
+        "keymap": {
+            "ActionMapName": "UIStore",
+            "ActionName": "FastAdd"
+          },
         "description" : {
             "Chinese" : "快捷存入",
             "English" : "Fast Add"
         }
     },
-    "kt_Confirm" : {
-        "keyname" : "kt_Confirm",
-        "keymap" : {
-            "XBOX" : "A",
-            "KeyBoard" : "E"
+    "Confirm": {
+        "keyname": "KT_Confirm",
+        "keymap": {
+          "ActionMapName": "Common",
+          "ActionName": "Confirm"
         },
-        "description" : {
-            "Chinese" : "确认",
-            "English" : "Confirm"
+        "description": {
+          "Chinese": "确认",
+          "English": "Confirm"
         }
-    },
-    "kt_Back" : {
-        "keyname" : "kt_Back",
-        "keymap" : {
-            "XBOX" : "B",
-            "KeyBoard" : "Esc"
-        },
+      },
+    "Back" : {
+        "keyname" : "KT_Back",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
         "description" : {
             "Chinese" : "返回",
             "English" : "Back"

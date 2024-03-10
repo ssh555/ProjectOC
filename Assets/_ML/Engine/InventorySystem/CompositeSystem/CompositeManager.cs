@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.U2D;
 
 namespace ML.Engine.InventorySystem.CompositeSystem
 {
@@ -55,44 +56,40 @@ namespace ML.Engine.InventorySystem.CompositeSystem
 
 
 
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<CompositionTableData[]> ABJAProcessor;
-
+        public ML.Engine.ABResources.ABJsonAssetProcessor<CompositionTableData[]> ABJAProcessor;
         public void LoadTableData()
         {
-            if (ABJAProcessor == null)
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<CompositionTableData[]>("OC/Json/TableData", "Composition", (datas) =>
+                
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<CompositionTableData[]>("Json/TableData", "Composition", (datas) =>
-
+                foreach (var data in datas)
                 {
-                    foreach (var data in datas)
+                    if (data.id == null || data == null)
                     {
-                        if (data.id == null || data == null)
-                        {
-                            Debug.Log($"{data?.id} {data == null} {data.name}");
-                        }
-                        this.CompositeData.Add(data.id, data);
+                        Debug.Log($"{data?.id} {data == null} {data.name}");
                     }
+                    this.CompositeData.Add(data.id, data);
+                }
 
-                    // to-do : 暂时取消Usage功能
-                    //// 加入 Usage
-                    //foreach (var data in this.CompositeData.Values)
-                    //{
-                    //    if (data.formula != null)
-                    //    {
-                    //        foreach (var usage in data.formula)
-                    //        {
-                    //            if (this.CompositeData[usage.id].usage == null)
-                    //            {
-                    //                this.CompositeData[usage.id].usage = new List<string>();
-                    //            }
-                    //            this.CompositeData[usage.id].usage.Add(data.id);
-                    //        }
+                // to-do : 暂时取消Usage功能
+                //// 加入 Usage
+                //foreach (var data in this.CompositeData.Values)
+                //{
+                //    if (data.formula != null)
+                //    {
+                //        foreach (var usage in data.formula)
+                //        {
+                //            if (this.CompositeData[usage.id].usage == null)
+                //            {
+                //                this.CompositeData[usage.id].usage = new List<string>();
+                //            }
+                //            this.CompositeData[usage.id].usage.Add(data.id);
+                //        }
 
-                    //    }
-                    //}
-                }, null, "合成系统表数据");
-                ABJAProcessor.StartLoadJsonAssetData();
-            }
+                //    }
+                //}
+            }, "合成系统表数据");
+            ABJAProcessor.StartLoadJsonAssetData();
         }
 
         /// <summary>
@@ -217,17 +214,16 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             {
                 return null;
             }
-            return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(ItemManager.Texture2DPath).LoadAsset<Texture2D>(this.CompositeData[id].texture2d);
+            return InventorySystem.ItemManager.Instance.GetItemTexture2D(this.CompositeData[id].texture2d);
         }
 
         public Sprite GetCompositonSprite(string id)
         {
-            var tex = this.GetCompositonTexture2D(id);
-            if (tex == null)
+            if (!this.CompositeData.ContainsKey(id))
             {
                 return null;
             }
-            return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+            return InventorySystem.ItemManager.Instance.GetItemSprite(id);
         }
 
         public string GetCompositonName(string id)

@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace ML.Engine.InteractSystem
 {
@@ -63,7 +64,7 @@ namespace ML.Engine.InteractSystem
                 uiKeyTip.img.transform.parent.position = screenPosition;
 
                 // 确认交互
-                if (Input.InputManager.Instance.Common.Common.Comfirm.WasPressedThisFrame())
+                if (Input.InputManager.Instance.Common.Common.Confirm.WasPressedThisFrame())
                 {
                     this.CurrentInteraction.Interact(this);
                 }
@@ -115,6 +116,8 @@ namespace ML.Engine.InteractSystem
         private void OnDestroy()
         {
             (this as Timer.ITickComponent).DisposeTick();
+            if(Manager.GameManager.Instance != null)
+                Manager.GameManager.Instance.ABResourceManager.ReleaseInstance(ktHandle);
         }
         #endregion
 
@@ -122,7 +125,7 @@ namespace ML.Engine.InteractSystem
         /// <summary>
         /// keyname -> key -> IInteraction.InteractType
         /// </summary>
-        private static Dictionary<string, TextContent.KeyTip> STATIC_KTDict = new Dictionary<string, TextContent.KeyTip>();
+        private Dictionary<string, TextContent.KeyTip> STATIC_KTDict = new Dictionary<string, TextContent.KeyTip>();
 
         private KeyTip GetKeyTip(string key)
         {
@@ -133,53 +136,47 @@ namespace ML.Engine.InteractSystem
             return STATIC_KTDict["Interaction"];
         }
 
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<TextContent.KeyTip[]> ABJAProcessor;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<TextContent.KeyTip[]> ABJAProcessor;
 
         public void InitUITextContents()
         {
-            if (ABJAProcessor == null)
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextContent.KeyTip[]>("OC/Json/TextContent/InteractSystem", "InteractKeyTip", (datas) =>
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextContent.KeyTip[]>("Json/TextContent/InteractSystem", "InteractKeyTip", (datas) =>
+                foreach (var tip in datas)
                 {
-                    foreach (var tip in datas)
-                    {
-                        STATIC_KTDict.Add(tip.keyname, tip);
-                    }
+                    STATIC_KTDict.Add(tip.keyname, tip);
+                }
 
-                }, null, "交互组件按键提示");
-                ABJAProcessor.StartLoadJsonAssetData();
-            }
-            StartCoroutine(OnLoadOver());
+            }, "交互组件按键提示");
+            ABJAProcessor.StartLoadJsonAssetData();
+
+            OnLoadOver();
         }
 
-        private IEnumerator OnLoadOver()
+        private void OnLoadOver()
         {
-            var abmgr = Manager.GameManager.Instance.ABResourceManager;
+            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/InteractSystem/UI/InteractKeyTip.prefab").Completed += (handle) =>
+             {
+                 this.ktHandle = handle;
+                 var keyTipInstance = handle.Result;
+                 uiKeyTip = new UIKeyTip();
+                 uiKeyTip.img = keyTipInstance.transform.Find("Image").GetComponent<UnityEngine.UI.Image>();
+                 uiKeyTip.keytip = uiKeyTip.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
+                 uiKeyTip.description = uiKeyTip.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
+                 uiKeyTip.img.transform.parent.gameObject.SetActive(false);
 
-            // 载入 keyTipPrefab
-            var crequest = abmgr.LoadLocalABAsync("UI/InteractSystem/Prefabs", null, out var ab);
-            yield return crequest;
-            if (crequest != null)
-            {
-                ab = crequest.assetBundle;
-            }
-            var keyTipPrefab = Instantiate(ab.LoadAsset<GameObject>("InteractKeyTip"));
-            uiKeyTip = new UIKeyTip();
-            uiKeyTip.img = keyTipPrefab.transform.Find("Image").GetComponent<UnityEngine.UI.Image>();
-            uiKeyTip.keytip = uiKeyTip.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            uiKeyTip.description = uiKeyTip.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            uiKeyTip.img.transform.parent.gameObject.SetActive(false);
+                 // TODO
+                 uiKeyTip.img.transform.parent.SetParent(Manager.GameManager.Instance.UIManager.GetCanvas.transform);
 
-            uiKeyTip.img.transform.parent.SetParent(GameObject.Find("Canvas").transform);
+                 // 禁用 Mono
+                 this.enabled = false;
+             };
 
-            while(!ABJAProcessor.IsLoaded)
-            {
-                yield return null;
-            }
-            // 禁用 Mono
-            this.enabled = false;
+
+
         }
 
+        private AsyncOperationHandle ktHandle;
         private TextContent.UIKeyTip uiKeyTip;
 
         #endregion

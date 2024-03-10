@@ -34,27 +34,24 @@ namespace ML.Engine.InventorySystem
         /// </summary>
         private Dictionary<string, RecipeTableData> RecipeTableDict = new Dictionary<string, RecipeTableData>();
 
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]> ABJAProcessor;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
-            if (ABJAProcessor == null)
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]>("OC/Json/TableData", "Recipe", (datas) =>
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]>("Json/TableData", "Recipe", (datas) =>
+                foreach (var data in datas)
                 {
-                    foreach (var data in datas)
-                    {
-                        this.RecipeTableDict.Add(data.ID, data);
+                    this.RecipeTableDict.Add(data.ID, data);
 
-                        if (!this.RecipeCategorys.ContainsKey(data.Category))
-                        {
-                            this.RecipeCategorys[data.Category] = new List<string>();
-                        }
-                        this.RecipeCategorys[data.Category].Add(data.ID);
+                    if (!this.RecipeCategorys.ContainsKey(data.Category))
+                    {
+                        this.RecipeCategorys[data.Category] = new List<string>();
                     }
-                }, null, "配方表数据");
-                ABJAProcessor.StartLoadJsonAssetData();
-            }
+                    this.RecipeCategorys[data.Category].Add(data.ID);
+                }
+            }, "配方表数据");
+            ABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
 

@@ -104,12 +104,11 @@ namespace ProjectOC.LandMassExpand
                 (powerSub as ISupportPowerBPart).RemoveNeedPowerBpart(this);
             }
         }
-    #if UNITY_EDITOR
+
         void OnDrawGizmos()
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position,PowerSupportRange);
         }
-    #endif
     }
 }

@@ -20,6 +20,8 @@ using System.Runtime.Serialization;
 using Sirenix.Serialization;
 using UnityEngine.U2D;
 using Random = UnityEngine.Random;
+using ML.Engine.UI;
+using UnityEditor.PackageManager.Requests;
 
 namespace ProjectOC.TechTree
 {
@@ -37,7 +39,7 @@ namespace ProjectOC.TechTree
         {
             if (Instance != null)
             {
-                Destroy(this.gameObject);
+                ML.Engine.Manager.GameManager.DestroyObj(this.gameObject);
             }
             Instance = this;
         }
@@ -54,7 +56,7 @@ namespace ProjectOC.TechTree
             LoadResource();
 
             // 载入科技树表格数据 以及 恢复存档
-            StartCoroutine(LoadTableData());
+            LoadTableData();
 
             // 载入UI数据
             InitUITextContents();
@@ -65,12 +67,14 @@ namespace ProjectOC.TechTree
             if (Instance == this)
             {
                 Instance = null;
+                if(ML.Engine.Manager.GameManager.Instance != null)
+                    ML.Engine.Manager.GameManager.Instance.ABResourceManager.Release(this.techAtlas);
             }
         }
         #endregion
 
         #region TechPoint
-        public const string TPIconTexture2DABPath = "UI/TechPoint/Texture2D";
+        public const string TPIconSpriteAtlasPath = "OC/UI/TechPoint/Texture/SA_TechPoint_UI.spriteatlasv2";
 
         /// <summary>
         /// 载入的科技点表格数据
@@ -90,7 +94,8 @@ namespace ProjectOC.TechTree
 
         public Texture2D GetTPTexture2D(string ID)
         {
-            return this.registerTechPoints.ContainsKey(ID)? GM.ABResourceManager.LoadAsset<Texture2D>(TPIconTexture2DABPath, this.registerTechPoints[ID].Icon) : null;
+
+            return this.registerTechPoints.ContainsKey(ID) ? this.techAtlas.GetSprite(this.registerTechPoints[ID].Icon).texture : null;
         }
 
         public string GetTPName(string ID)
@@ -110,9 +115,7 @@ namespace ProjectOC.TechTree
 
         public Sprite GetTPSprite(string ID)
         {
-            return this.registerTechPoints.ContainsKey(ID)? GM.ABResourceManager.
-                LoadAsset<SpriteAtlas>(TPIconTexture2DABPath, "SA_TechPoint_UI").
-                GetSprite(this.registerTechPoints[ID].Icon) : null;
+            return this.registerTechPoints.ContainsKey(ID)? techAtlas.GetSprite(this.registerTechPoints[ID].Icon) : null;
         }
 
         public string GetTPDescription(string ID)
@@ -165,28 +168,17 @@ namespace ProjectOC.TechTree
 
         public Texture2D GetTPCategoryTexture2D(TechPointCategory category)
         {
-            var tex = GM.ABResourceManager.LoadAsset<Texture2D>(TPIconTexture2DABPath, category.ToString());
-            if(tex == null)
-            {
-                tex = GM.ABResourceManager.LoadAsset<Texture2D>(TPIconTexture2DABPath, "None");
-            }
-            return tex;
+            return this.techAtlas.GetSprite(category.ToString()).texture;
         }
         
         public Sprite GetTPCategorySprite(TechPointCategory category)
         {
-            
             Sprite _res = null;
-            SpriteAtlas sa = GM.ABResourceManager.LoadLocalAB(TPIconTexture2DABPath)
-                .LoadAsset<SpriteAtlas>("SA_TechPoint_UI");
-            // SpriteAtlas sa = GM.ABResourceManager.LoadAsset<SpriteAtlas>(TPIconTexture2DABPath, "SA_TechPoint_UI");
-            _res =   sa.GetSprite(category.ToString());
+            _res = techAtlas.GetSprite(category.ToString());
 
             if (_res == null)
             {
-                _res = GM.ABResourceManager.LoadLocalAB(TPIconTexture2DABPath)
-                    .LoadAsset<SpriteAtlas>("SA_TechPoint_UI")
-                    .GetSprite("None");
+                _res = techAtlas.GetSprite("None");
             }
 
             return _res;
@@ -213,9 +205,6 @@ namespace ProjectOC.TechTree
         #endregion
 
         #region Data
-        [ReadOnly]
-        public bool IsLoadOvered = false;
-
         /// <summary>
         /// 科技树存档
         /// </summary>
@@ -262,14 +251,10 @@ namespace ProjectOC.TechTree
         #endregion
 
         #region Load
-        private IEnumerator LoadTableData()
+        private void LoadTableData()
         {
-#if UNITY_EDITOR
-            float startT = Time.realtimeSinceStartup;
-#endif
-
             #region Load TPJsonData
-            ML.Engine.ABResources.ABJsonAssetProcessor<TechPoint[]> ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TechPoint[]>("Json/TableData", "TechPoint", (datas) =>
+            ML.Engine.ABResources.ABJsonAssetProcessor<TechPoint[]> ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TechPoint[]>("OC/Json/TableData", "TechPoint", (datas) =>
             {
                 foreach (var data in datas)
                 {
@@ -291,65 +276,52 @@ namespace ProjectOC.TechTree
                         }
                     }
                 }
-            }, () => {
-                return (ML.Engine.InventorySystem.ItemManager.Instance.IsLoadOvered == false || ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.IsLoadOvered == false || ML.Engine.BuildingSystem.MonoBuildingManager.Instance.IsLoadOvered == false);
-            }, "科技树数据");
-            ABJAProcessor.StartLoadJsonAssetData();
-            while(!ABJAProcessor.IsLoaded)
-            {
-                yield return null;
-            }
-            #endregion
 
-            #region Load UnlockingTPData
-            if (System.IO.File.Exists(System.IO.Path.Combine(Application.persistentDataPath, SaveUnlockingTPJsonDataPath)))
-            {
-                var str = File.ReadAllText(System.IO.Path.Combine(Application.persistentDataPath, SaveUnlockingTPJsonDataPath));
-                UnlockingTechPoint[] datas = JsonConvert.DeserializeObject<UnlockingTechPoint[]>(str);
-
-                foreach (var data in datas)
+                #region Load UnlockingTPData
+                if (System.IO.File.Exists(System.IO.Path.Combine(Application.persistentDataPath, SaveUnlockingTPJsonDataPath)))
                 {
-                    // 剔除更新数据后不存在的节点
-                    if (this.registerTechPoints.ContainsKey(data.id))
+                    var str = File.ReadAllText(System.IO.Path.Combine(Application.persistentDataPath, SaveUnlockingTPJsonDataPath));
+                    UnlockingTechPoint[] datas1 = JsonConvert.DeserializeObject<UnlockingTechPoint[]>(str);
+
+                    foreach (var data in datas1)
                     {
-                        this.UnlockingTechPointDict.Add(data.id, data);
+                        // 剔除更新数据后不存在的节点
+                        if (this.registerTechPoints.ContainsKey(data.id))
+                        {
+                            this.UnlockingTechPointDict.Add(data.id, data);
+                        }
                     }
                 }
-            }
-            // 更新存档
-            SaveData();
-            #endregion
+                // 更新存档
+                SaveData();
+                #endregion
 
-
-            // 恢复存档数据
-            #region TPJsonData
-            foreach (var tp in this.registerTechPoints.Values)
-            {
-                if(tp.IsUnlocked)
+                // 恢复存档数据
+                #region TPJsonData
+                foreach (var tp in this.registerTechPoints.Values)
                 {
-                    __Intenal__UnlockTechPoint(tp.ID);
+                    if (tp.IsUnlocked)
+                    {
+                        __Intenal__UnlockTechPoint(tp.ID);
+                    }
                 }
-            }
-            #endregion
+                #endregion
 
-            #region UnlockingTPData
-            foreach(var utp in UnlockingTechPointDict.Values)
-            {
-                var timer = new CounterDownTimer(utp.time);
-                OnTimerStart(timer, utp.id, false);
-                timer.OnEndEvent += () =>
+                #region UnlockingTPData
+                foreach (var utp in UnlockingTechPointDict.Values)
                 {
-                    OnTimerEnd(timer, utp.id);
-                };
-            }
+                    var timer = new CounterDownTimer(utp.time);
+                    OnTimerStart(timer, utp.id, false);
+                    timer.OnEndEvent += () =>
+                    {
+                        OnTimerEnd(timer, utp.id);
+                    };
+                }
+                #endregion
+            }, "科技树数据");
+            ABJAProcessor.StartLoadJsonAssetData();
+
             #endregion
-
-            IsLoadOvered = true;
-
-#if UNITY_EDITOR
-            Debug.Log("LoadTableData cost time: " + (Time.realtimeSinceStartup - startT));
-            Debug.Log($"存储路径: {Application.persistentDataPath}");
-#endif
         }
         #endregion
 
@@ -512,30 +484,27 @@ namespace ProjectOC.TechTree
         {
             public TextContent toptitle;
             public TextTip[] category;
-            public KeyTip categorylast;
-            public KeyTip categorynext;
+            public KeyTip LastTerm;
+            public KeyTip NextTerm;
             public TextContent lockedtitletip;
             public TextContent unlockedtitletip;
-            public KeyTip inspector;
+            public KeyTip Inspect;
             public TextContent timecosttip;
-            public KeyTip decipher;
-            public KeyTip back;
+            public KeyTip Decipher;
+            public KeyTip Back;
         }
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<TPPanel> ABJAProcessor_TPPanel;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<TPPanel> ABJAProcessor_TPPanel;
 
         public void InitUITextContents()
         {
-            if (ABJAProcessor_TPPanel == null)
+            ABJAProcessor_TPPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<TPPanel>("OC/Json/TextContent/TechTree", "TechPointPanel", (datas) =>
             {
-                ABJAProcessor_TPPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<TPPanel>("Json/TextContent/TechTree", "TechPointPanel", (datas) =>
+                foreach (var tip in datas.category)
                 {
-                    foreach (var tip in datas.category)
-                    {
-                        this.CategoryDict.Add(tip.name, tip);
-                    }
-                }, null, "科技树UIPanel");
-                ABJAProcessor_TPPanel.StartLoadJsonAssetData();
-            }
+                    this.CategoryDict.Add(tip.name, tip);
+                }
+            }, "科技树UIPanel");
+            ABJAProcessor_TPPanel.StartLoadJsonAssetData();
         }
         #endregion
 
@@ -548,77 +517,21 @@ namespace ProjectOC.TechTree
         {
             ML.Engine.InventorySystem.ItemManager.Instance.LoadTableData();
             ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.LoadTableData();
+            LoadTechAtlas();
             ItemManager.Instance.LoadItemAtlas();
         }
 
-        [Button("生成测试文件")]
-        void GenTESTFILE()
-        {
-            List<TechPoint> datas = new List<TechPoint>();
-
-            for (int c = 1; c < 6; ++c)
-            {
-                for (int row = 0; row < 10; ++row)
-                {
-                    for (int col = 0; col < 16; ++col)
-                    {
-                        var tp = new TechPoint();
-
-                        tp.Category = (TechPointCategory)c;
-
-                        tp.ID = tp.Category.ToString() + "_" + row.ToString() + "_" + col.ToString();
-                        tp.Name.Chinese = "测试" + tp.ID;
-                        tp.Name.English = "Test" + tp.ID;
-                        tp.Grid = new int[2] { row, col };
-                        tp.Icon = row.ToString() + "_" + col.ToString();
-                        tp.IsUnlocked = false;
-                        tp.Description.Chinese = "测试";
-                        tp.Description.English = "Test";
-
-                        tp.UnLockBuild = new string[0];
-                        tp.UnLockRecipe = new string[0];
-                        // to-do
-                        int num = Random.Range(1, 3);
-                        tp.ItemCost = new ML.Engine.InventorySystem.CompositeSystem.Formula[num];
-                        for(int i = 0; i < tp.ItemCost.Length; ++i)
-                        {
-                            Formula f = new Formula();
-                            f.id = i == 0 ? "100001" : (i == 1 ? "100002" : "100003");
-                            f.num = Random.Range(1, 5);
-                            tp.ItemCost[i] = f;
-                        }
-                        tp.TimeCost = Random.Range(5, 60);
-
-                        if (row == 0 && col == 0)
-                        {
-                            tp.PrePoint = new string[0];
-                        }
-                        else if (row != 0 && col == 0)
-                        {
-                            tp.PrePoint = new string[1] { tp.Category.ToString() + "_" + (row - 1).ToString() + "_" + col.ToString() };
-                        }
-                        else if (row == 0 && col != 0)
-                        {
-                            tp.PrePoint = new string[1] { tp.Category.ToString() + "_" + row.ToString() + "_" + (col - 1).ToString() };
-                        }
-                        else if (row != 0 && col != 0)
-                        {
-                            tp.PrePoint = new string[2] { tp.Category.ToString() + "_" + row.ToString() + "_" + (col - 1).ToString(), tp.Category.ToString() + "_" + (row - 1).ToString() + "_" + col.ToString() };
-                        }
-
-
-                        datas.Add(tp);
-                    }
-                }
-            }
-
-
-            string json = JsonConvert.SerializeObject(datas.ToArray());
-            System.IO.File.WriteAllText(Application.streamingAssetsPath + "/../../../t.json", json);
-            Debug.Log("输出路径: " + Application.streamingAssetsPath + "/../../../t.json");
-        }
+        
         #endregion
 
+        private void LoadTechAtlas()
+        {
+            GM.ABResourceManager.LoadAssetAsync<SpriteAtlas>(TPIconSpriteAtlasPath).Completed += (handle) =>
+                {
+                    techAtlas = handle.Result as SpriteAtlas;
+                };
+        }
+        
     }
 
 }

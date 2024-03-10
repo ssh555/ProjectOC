@@ -2,6 +2,7 @@ using ML.Engine.BuildingSystem;
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InteractSystem;
 using ML.Engine.Manager;
+using ML.Engine.UI;
 using ProjectOC.LandMassExpand;
 using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
@@ -22,14 +23,16 @@ namespace ProjectOC.ProNodeNS
         public Vector3 PosOffset { get; set; } = Vector3.zero;
 
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             // 不需要 Update
             this.enabled = false;
         }
 
         public override void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
+            base.OnChangePlaceEvent(oldPos, newPos);
             // 第一次新建
             if (oldPos == newPos)
             {
@@ -45,13 +48,16 @@ namespace ProjectOC.ProNodeNS
         public void Interact(InteractComponent component)
         {
             // 实例化UIPanel
-            GameObject gameObject = GameManager.Instance.ABResourceManager.LoadLocalAB("ui/uipanel").LoadAsset<GameObject>("UIProNodePanel");
-            InventorySystem.UI.UIProNode uiPanel = GameObject.Instantiate(gameObject, GameObject.Find("Canvas").transform, false).GetComponent<InventorySystem.UI.UIProNode>();
-            uiPanel.Player = component.GetComponentInParent<Player.PlayerCharacter>();
-            // 初始化相关数据
-            uiPanel.ProNode = this.ProNode;
-            // Push
-            GameManager.Instance.UIManager.PushPanel(uiPanel);
+            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIProNodePanel.prefab", GameManager.Instance.UIManager.GetCanvas.transform, true).Completed += (handle) =>
+            {
+                InventorySystem.UI.UIProNode uiPanel = handle.Result.GetComponent<InventorySystem.UI.UIProNode>();
+                uiPanel.Player = component.GetComponentInParent<Player.PlayerCharacter>();
+                // 初始化相关数据
+                uiPanel.ProNode = this.ProNode;
+                // Push
+                GameManager.Instance.UIManager.PushPanel(uiPanel);
+            };
+
         }
     }
 }

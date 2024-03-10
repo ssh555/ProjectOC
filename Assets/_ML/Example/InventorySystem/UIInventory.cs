@@ -178,24 +178,26 @@ namespace ML.Example.InventorySystem
             }
             //int index = UIItem.CurActiveItem.ItemIndex;
             Transform owner = this.inventory.Owner;
+#pragma warning disable CS4014
             ItemManager.Instance.SpawnWorldItem(this.inventory.RemoveItem(UIItem.CurActiveItem.item, 1), owner.position, Quaternion.identity);
+#pragma warning restore CS4014
             //if (this.inventory.GetItemList()[index] != null)
             //{
             //    UIItem.ActiveUIItem(this.itemSlotContainer.GetChild(this.inventory.MaxSize + index + 1).GetComponent<UIItem>());
             //}
         }
-    
-        public WorldItem DropAllActivedItem()
+
+        public void DropAllActivedItem()
         {
             Item item = UIItem.CurActiveItem.item;
             bool ans = this.inventory.RemoveItem(UIItem.CurActiveItem.item);
             if (ans)
             {
                 Transform owner = this.inventory.Owner;
-                return ItemManager.Instance.SpawnWorldItem(item, owner.position, Quaternion.identity);
+#pragma warning disable CS4014
+                ItemManager.Instance.SpawnWorldItem(item, owner.position, Quaternion.identity);
+#pragma warning restore CS4014
             }
-
-            return null;
         }
     
         public bool SwapItem(UIItem A, UIItem B)

@@ -5,7 +5,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Sirenix.OdinInspector;
 namespace ML.Engine.Manager
 {
     public sealed class GameManager : MonoBehaviour
@@ -31,7 +30,6 @@ namespace ML.Engine.Manager
         /// <summary>
         /// 内置的计时器Manager
         /// </summary>
-        [ShowInInspector]
         public Timer.CounterDownTimerManager CounterDownTimerManager { get; private set; }
 
         /// <summary>
@@ -42,12 +40,16 @@ namespace ML.Engine.Manager
         /// <summary>
         /// 内置的全局UIManager
         /// </summary>
+        [ShowInInspector]
         public UI.UIManager UIManager { get; private set; }
 
         /// <summary>
         /// 内置的全局InputManager
         /// </summary>
         public Input.InputManager InputManager { get; private set; }
+
+
+        public EnterPoint EnterPoint { get; private set; }
         #endregion
 
         #region 单例管理
@@ -64,6 +66,7 @@ namespace ML.Engine.Manager
             Instance = this;
             DontDestroyOnLoad(this.gameObject);
             this.Init();
+            EnterPoint = new EnterPoint();
         }
 
         /// <summary>
@@ -431,7 +434,49 @@ namespace ML.Engine.Manager
 
         #endregion
 
+        #region Destroy
+        /// <summary>
+        /// SetEnablelTrue为true时，会将obj上面的所有mono.enabled设置为true，然后销毁时就会自动调用OnDestroy
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="SetEnablelTrue"></param>
+        /// <param name="t"></param>
+        public static void DestroyObj(Object obj, bool SetEnablelTrue = true, float t = 0.0f)
+        {
+            if(SetEnablelTrue)
+            {
+                if (obj is MonoBehaviour)
+                {
+                    MonoBehaviour mono = obj as MonoBehaviour;
+                    mono.enabled = true;
+                }
+                else if (obj is GameObject)
+                {
+                    GameObject go = obj as GameObject;
+                    go.SetActive(true);
+                    // 获取游戏对象上的所有 MonoBehaviour
+                    MonoBehaviour[] monos = go.GetComponents<MonoBehaviour>();
 
+                    // 遍历所有 MonoBehaviour
+                    foreach (MonoBehaviour mono in monos)
+                    {
+                        // 启用 MonoBehaviour
+                        mono.enabled = true;
+                    }
+                }
+
+            }
+
+            if (obj is GameObject)
+            {
+                GameObject go = obj as GameObject;
+                Instance.ABResourceManager.ReleaseInstance(go);
+            }
+
+             Object.Destroy(obj, t);
+        }
+
+        #endregion
 
         #region Config
         [LabelText("语言"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]

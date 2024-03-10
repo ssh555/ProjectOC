@@ -11,8 +11,10 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 using UnityEngine.Windows;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace ML.Engine.BuildingSystem.UI
 {
@@ -56,7 +58,7 @@ namespace ML.Engine.BuildingSystem.UI
 
         private void Awake()
         {
-            this.StartCoroutine(InitStyleTexture2D());
+            InitStyleTexture2D();
 
             this.styleParent = this.transform.Find("KT_AlterHeight").Find("KT_AlterStyle").Find("Content") as RectTransform;
             this.templateStyle = this.styleParent.Find("StyleTemplate") as RectTransform;
@@ -145,76 +147,40 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region 载入资产
-        public const string TStyleABPath = "UI/BuildingSystem/Texture2D/Style";
-
-        public Dictionary<BuildingCategory3, Texture2D> TStyleDict = null;
+        public const string TStyleSpriteAtlasPath = "ML/BuildingSystem/Style/SA_Build_Style.spriteatlasv2";
+        private SpriteAtlas styleAtlas = null;
+        private AsyncOperationHandle SAHandle;
         /// <summary>
         /// 资产是否完成载入
         /// </summary>
         public bool IsInit = false;
-        private IEnumerator InitStyleTexture2D()
+        private void InitStyleTexture2D()
         {
-#if UNITY_EDITOR
-            float startT = Time.time;
-#endif
-            while (Manager.GameManager.Instance.ABResourceManager == null)
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>(TStyleSpriteAtlasPath).Completed += (handle) =>
             {
-                yield return null;
-            }
+                SAHandle = handle;
+                styleAtlas = handle.Result;
 
-            TStyleDict = new Dictionary<BuildingCategory3, Texture2D>();
 
-            var abmgr = Manager.GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(TStyleABPath, null, out ab);
-            yield return crequest;
-            if(crequest != null)
-            {
-                ab = crequest.assetBundle;
-            }
+                IsInit = true;
+                this.enabled = false;
 
-            var request = ab.LoadAllAssetsAsync<Texture2D>();
-            yield return request;
-
-            foreach (var obj in request.allAssets)
-            {
-                var tex = (obj as Texture2D);
-                if (tex != null && Enum.IsDefined(typeof(BuildingCategory3), tex.name))
-                {
-                    TStyleDict.Add((BuildingCategory3)Enum.Parse(typeof(BuildingCategory3), tex.name), tex);
-                }
-            }
-
-            IsInit = true;
-            this.enabled = false;
-
-            this.Refresh();
-#if UNITY_EDITOR
-            Debug.Log("InitStyleTexture2D cost time: " + (Time.time - startT));
-#endif
+                this.Refresh();
+            };
         }
 
-        private IEnumerator UnloadAsset()
+        private void UnloadAsset()
         {
-            var abmgr = Manager.GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(TStyleABPath, null, out ab);
-            yield return crequest;
-            if (crequest != null)
-            {
-                ab = crequest.assetBundle;
-            }
-            ab.UnloadAsync(true);
+            Manager.GameManager.Instance.ABResourceManager.Release(SAHandle);
         }
 
         public Sprite GetStyleSprite(BuildingCategory3 style)
         {
-            if (!TStyleDict.ContainsKey(style))
+            Sprite sprite = styleAtlas.GetSprite(style.ToString());;
+            if (sprite == null)
             {
-                style = BuildingCategory3.None;
+                sprite = styleAtlas.GetSprite("None");
             }
-            Texture2D texture = TStyleDict[style];
-            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
             return sprite;
         }
 
@@ -287,8 +253,8 @@ namespace ML.Engine.BuildingSystem.UI
         {
             foreach (var instance in this.styleInstance.Values)
             {
-                Destroy(instance.GetComponentInChildren<Image>().sprite);
-                Destroy(instance.gameObject);
+                Manager.GameManager.DestroyObj(instance.GetComponentInChildren<Image>().sprite);
+                Manager.GameManager.DestroyObj(instance.gameObject);
             }
             this.styleInstance.Clear();
         }

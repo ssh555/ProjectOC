@@ -12,38 +12,22 @@ namespace ProjectOC.LandMassExpand
 {
     public class IslandManager : MonoBehaviour, ML.Engine.Manager.LocalManager.ILocalManager
     {
-        private static IslandManager Instance = null;
         [SerializeField] 
         public IslandBase currentIsland;
         private void Awake()
         {
-            if (Instance != null)
-            {
-                Destroy(this.gameObject);
-                return;
-            }
-            Instance = this;
-            
             islandGrids = new IslandBase[maxSize.x,maxSize.y];
         }
 
         private void Start()
         {
             GameManager.Instance.RegisterLocalManager(this);
+            this.enabled = false;
         }
-
-        void OnDestroy()
-        {
-            if (Instance == this)
-            {
-                if(ML.Engine.Manager.GameManager.Instance != null)
-                    ML.Engine.Manager.GameManager.Instance.UnregisterLocalManager<BuildPowerIslandManager>();
-                Instance = null;
-            }    
-        }
-        [LabelText("大地图网格大小 m")]
-        public int mapGridSize = 100;
-        [LabelText("大地图网格大小")]
+        
+        [LabelText("单个网格大小")]
+        public int mapGridSize;
+        [LabelText("大地图网格范围")]
         public Vector2Int maxSize;
         [SerializeField,LabelText("主岛屿")]
         private List<IslandMain> islandMains;

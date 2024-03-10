@@ -208,166 +208,166 @@
         "Chinese" : "生产效率: ",
         "English" : "Eff: "
     },
-    "ktUpgrade" : {
-        "keyname" : "ktUpgrade",
-        "keymap" : {
-            "XBOX" : "LT",
-            "KeyBoard" : "U"
-        },
+    "Upgrade" : {
+        "keyname" : "KT_Upgrade",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "Upgrade"
+          },
         "description" : {
             "Chinese" : "建筑升级",
             "English" : "LevelUp"
         }
     },
-    "ktNextPriority" : {
-        "keyname" : "ktNextPriority",
-        "keymap" : {
-            "XBOX" : "RT",
-            "KeyBoard" : "Q"
-        },
+    "NextPriority" : {
+        "keyname" : "KT_NextPriority",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "NextPriority"
+          },
         "description" : {
             "Chinese" : "",
             "English" : ""
         }
     },
-    "ktChangeRecipe" : {
-        "keyname" : "ktChangeRecipe",
-        "keymap" : {
-            "XBOX" : "A",
-            "KeyBoard" : "E"
-        },
+    "ChangeRecipe" : {
+        "keyname" : "KT_ChangeRecipe",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "ChangeRecipe"
+          },
         "description" : {
             "Chinese" : "变更生产项",
             "English" : "Change Recipe"
         }
     },
-    "ktRemove1" : {
-        "keyname" : "ktRemove1",
-        "keymap" : {
-            "XBOX" : "X",
-            "KeyBoard" : "F"
-        },
+    "Remove1" : {
+        "keyname" : "KT_Remove1",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "Remove1"
+          },
         "description" : {
             "Chinese" : "取出1",
             "English" : "Remove 1"
         }
     },
-    "ktRemove10" : {
-        "keyname" : "ktRemove10",
-        "keymap" : {
-            "XBOX" : "X",
-            "KeyBoard" : "F"
-        },
+    "Remove10" : {
+        "keyname" : "KT_Remove10",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "Remove10"
+          },
         "description" : {
             "Chinese" : "取出10",
             "English" : "Remove 10"
         }
     },
-    "ktFastAdd" : {
-        "keyname" : "ktFastAdd",
-        "keymap" : {
-            "XBOX" : "Y",
-            "KeyBoard" : "R"
-        },
+    "FastAdd" : {
+        "keyname" : "KT_FastAdd",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "FastAdd"
+          },
         "description" : {
             "Chinese" : "快捷投入",
             "English" : "Fast Add"
         }
     },
-    "ktBack" : {
-        "keyname" : "ktBack",
-        "keymap" : {
-            "XBOX" : "B",
-            "KeyBoard" : "Esc"
-        },
+    "Back" : {
+        "keyname" : "KT_Back",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
         "description" : {
-            "Chinese" : "退出",
+            "Chinese" : "返回",
             "English" : "Back"
         }
     },
-    "ktChangeWorker" : {
-        "keyname" : "ktChangeWorker",
-        "keymap" : {
-            "XBOX" : "LB",
-            "KeyBoard" : "N"
-        },
+    "ChangeWorker" : {
+        "keyname" : "KT_ChangeWorker",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "ChangeWorker"
+          },
         "description" : {
             "Chinese" : "变更刁民",
             "English" : "Change Worker"
         }
     },
-    "ktRemoveWorker" : {
-        "keyname" : "ktRemoveWorker",
-        "keymap" : {
-            "XBOX" : "RB",
-            "KeyBoard" : "M"
-        },
+    "RemoveWorker" : {
+        "keyname" : "KT_RemoveWorker",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "RemoveWorker"
+          },
         "description" : {
             "Chinese" : "移除刁民",
             "English" : "Remove Worker"
         }
     },
-    "ktConfirmRecipe" : {
-        "keyname" : "ktConfirmRecipe",
-        "keymap" : {
-            "XBOX" : "A",
-            "KeyBoard" : "E"
-        },
+    "ConfirmRecipe" : {
+        "keyname" : "KT_ConfirmRecipe",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "ConfirmRecipe"
+          },
         "description" : {
             "Chinese" : "确认",
             "English" : "Confirm"
         }
     },
-    "ktBackRecipe" : {
-        "keyname" : "ktBackRecipe",
-        "keymap" : {
-            "XBOX" : "B",
-            "KeyBoard" : "Esc"
-        },
+    "BackRecipe" : {
+        "keyname" : "KT_BackRecipe",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "BackRecipe"
+          },
         "description" : {
             "Chinese" : "返回",
             "English" : "Back"
         }
     },
-    "ktConfirmWorker" : {
-        "keyname" : "ktConfirmWorker",
-        "keymap" : {
-            "XBOX" : "A",
-            "KeyBoard" : "E"
-        },
+    "ConfirmWorker" : {
+        "keyname" : "KT_ConfirmWorker",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "ConfirmWorker"
+          },
         "description" : {
             "Chinese" : "确认",
             "English" : "Confirm"
         }
     },
-    "ktBackWorker" : {
-        "keyname" : "ktBackWorker",
-        "keymap" : {
-            "XBOX" : "B",
-            "KeyBoard" : "Esc"
-        },
+    "BackWorker" : {
+        "keyname" : "KT_BackWorker",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "BackWorker"
+          },
         "description" : {
             "Chinese" : "返回",
             "English" : "Back"
         }
     },
-    "ktConfirmLevel" : {
-        "keyname" : "ktConfirmLevel",
-        "keymap" : {
-            "XBOX" : "A",
-            "KeyBoard" : "E"
-        },
+    "ConfirmLevel" : {
+        "keyname" : "KT_ConfirmLevel",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "ConfirmLevel"
+          },
         "description" : {
             "Chinese" : "确认",
             "English" : "Confirm"
         }
     },
-    "ktBackLevel" : {
-        "keyname" : "ktBackLevel",
-        "keymap" : {
-            "XBOX" : "B",
-            "KeyBoard" : "Esc"
-        },
+    "BackLevel" : {
+        "keyname" : "KT_BackLevel",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "BackLevel"
+          },
         "description" : {
             "Chinese" : "返回",
             "English" : "Back"

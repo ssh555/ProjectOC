@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using TMPro;
 using UnityEngine;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 using UnityEngine.Windows;
 
@@ -21,149 +22,69 @@ namespace ML.Engine.BuildingSystem.UI
     public class BSSelectBPartPanel : Engine.UI.UIBasePanel
     {
         #region ‘ÿ»Î◊ ‘¥
-        public const string TCategoryABPath = "UI/BuildingSystem/Texture2D/Category";
-        public const string TTypeABPath = "UI/BuildingSystem/Texture2D/Type";
+        public const string TCategorySpriteAtlasPath = "ML/BuildingSystem/Category/SA_Build_Category.spriteatlasv2";
+        public const string TTypeABPath = "ML/BuildingSystem/Type/SA_Build_Type.spriteatlasv2";
 
-        public Dictionary<BuildingCategory1, Texture2D> TCategoryDict = null;
-        public Dictionary<BuildingCategory2, Texture2D> TTypeDict = null;
         public int IsInit = -1;
 
+        private SpriteAtlas typeAtlas = null,categoryAtlas = null;
+        
         public Sprite GetCategorySprite(BuildingCategory1 category)
         {
-            if(!TCategoryDict.ContainsKey(category))
+            Sprite sprite = categoryAtlas.GetSprite(category.ToString());;
+            if (sprite == null)
             {
-                category = BuildingCategory1.None;
+                sprite = categoryAtlas.GetSprite("None");
             }
-            Texture2D texture = TCategoryDict[category];
-            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
             return sprite;
         }
         public Sprite GetTypeSprite(BuildingCategory2 type)
         {
-            if (!TTypeDict.ContainsKey(type))
+            Sprite sprite = typeAtlas.GetSprite(type.ToString());;
+            if (sprite == null)
             {
-                type = BuildingCategory2.None;
+                sprite = typeAtlas.GetSprite("None");
             }
-            Texture2D texture = TTypeDict[type];
-            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
             return sprite;
         }
 
 
-        private IEnumerator InitCategoryTexture2D()
+        private void InitCategoryTexture2D()
         {
-#if UNITY_EDITOR
-            float startT = Time.time;
-#endif
-            TCategoryDict = new Dictionary<BuildingCategory1, Texture2D>();
-
-            while (Manager.GameManager.Instance.ABResourceManager == null)
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>(TCategorySpriteAtlasPath).Completed += (handle) =>
             {
-                yield return null;
-            }
+                categoryAtlas = handle.Result as SpriteAtlas;
+                CanSelectCategory1 = BuildingManager.Instance.GetRegisteredCategory();
 
-
-            var abmgr = Manager.GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(TCategoryABPath, null, out ab);
-            yield return crequest;
-            if(crequest != null)
-            {
-                ab = crequest.assetBundle;
-            }
-
-            var request = ab.LoadAllAssetsAsync<Texture2D>();
-            yield return request;
-
-            CanSelectCategory1 = BuildingManager.Instance.GetRegisteredCategory();
-            foreach (var obj in request.allAssets)
-            {
-                var tex = (obj as Texture2D);
-                if (tex != null && Enum.IsDefined(typeof(BuildingCategory1), tex.name))
+                ++IsInit;
+                if (IsInit >= 1)
                 {
-                    TCategoryDict.Add((BuildingCategory1)Enum.Parse(typeof(BuildingCategory1), tex.name), tex);
+                    InitAsset();
                 }
-            }
-
-            ++IsInit;
-            if (IsInit >= 1)
-            {
-                InitAsset();
-            }
-#if UNITY_EDITOR
-            Debug.Log("InitCategoryTexture2D cost time: " + (Time.time - startT));
-#endif
+            };
         }
 
-        private IEnumerator InitTypeTexture2D()
+        private void InitTypeTexture2D()
         {
-#if UNITY_EDITOR
-            float startT = Time.time;
-#endif
-            TTypeDict = new Dictionary<BuildingCategory2, Texture2D>();
-
-            while (Manager.GameManager.Instance.ABResourceManager == null)
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>(TTypeABPath).Completed += (handle) =>
             {
-                yield return null;
-            }
+                typeAtlas = handle.Result as SpriteAtlas;
+                CanSelectCategory2 = BuildingManager.Instance.GetRegisteredType();
 
-
-            var abmgr = Manager.GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(TTypeABPath, null, out ab);
-            yield return crequest;
-            if(crequest != null)
-            {
-                ab = crequest.assetBundle;
-            }
-
-            var request = ab.LoadAllAssetsAsync<Texture2D>();
-            yield return request;
-            CanSelectCategory2 = BuildingManager.Instance.GetRegisteredType();
-
-            foreach (var obj in request.allAssets)
-            {
-                var tex = (obj as Texture2D);
-                if (tex != null && Enum.IsDefined(typeof(BuildingCategory2), tex.name))
+                ++IsInit;
+                if (IsInit >= 1)
                 {
-                    TTypeDict.Add((BuildingCategory2)Enum.Parse(typeof(BuildingCategory2), tex.name), tex);
+                    InitAsset();
                 }
-            }
-
-            ++IsInit;
-
-            if(IsInit >= 1)
-            {
-                InitAsset();
-            }
-
-#if UNITY_EDITOR
-            Debug.Log("InitTypeTexture2D cost time: " + (Time.time - startT));
-#endif
+            };
         }
 
 
-        private IEnumerator UnloadAsset()
+        private void UnloadAsset()
         {
             var abmgr = Manager.GameManager.Instance.ABResourceManager;
-            AssetBundle tab;
-            var trequest = abmgr.LoadLocalABAsync(TTypeABPath, null, out tab);
-            AssetBundle cab;
-            var crequest = abmgr.LoadLocalABAsync(TCategoryABPath, null, out cab);
-
-            yield return trequest;
-            if(trequest != null)
-            {
-                tab = trequest.assetBundle;
-            }
-            tab.UnloadAsync(true);
-
-            yield return crequest;
-            if (crequest != null)
-            {
-                cab = crequest.assetBundle;
-            }
-            cab.UnloadAsync(true);
+            abmgr.Release(this.categoryAtlas);
+            abmgr.Release(this.typeAtlas);
         }
 
         private void InitAsset()
@@ -220,8 +141,8 @@ namespace ML.Engine.BuildingSystem.UI
         #region Unity
         private void Awake()
         {
-            StartCoroutine(InitCategoryTexture2D());
-            StartCoroutine(InitTypeTexture2D());
+            InitCategoryTexture2D();
+            InitTypeTexture2D();
 
             this.categoryParent = this.transform.Find("SelectCategory").Find("Content") as RectTransform;
             this.templateCategory = this.categoryParent.Find("CategoryTemplate") as RectTransform;
@@ -338,14 +259,14 @@ namespace ML.Engine.BuildingSystem.UI
         {
             foreach (var instance in this.categoryInstance.Values)
             {
-                Destroy(instance.GetComponentInChildren<Image>().sprite);
-                Destroy(instance.gameObject);
+                Manager.GameManager.DestroyObj(instance.GetComponentInChildren<Image>().sprite);
+                Manager.GameManager.DestroyObj(instance.gameObject);
             }
             this.categoryInstance.Clear();
             foreach (var instance in this.typeInstance.Values)
             {
-                Destroy(instance.GetComponentInChildren<Image>().sprite);
-                Destroy(instance.gameObject);
+                Manager.GameManager.DestroyObj(instance.GetComponentInChildren<Image>().sprite);
+                Manager.GameManager.DestroyObj(instance.gameObject);
             }
             this.typeInstance.Clear();
         }
@@ -354,8 +275,8 @@ namespace ML.Engine.BuildingSystem.UI
         {
             foreach (var instance in this.typeInstance.Values)
             {
-                Destroy(instance.GetComponentInChildren<Image>().sprite);
-                Destroy(instance.gameObject);
+                Manager.GameManager.DestroyObj(instance.GetComponentInChildren<Image>().sprite);
+                Manager.GameManager.DestroyObj(instance.gameObject);
             }
             this.typeInstance.Clear();
         }
@@ -442,8 +363,7 @@ namespace ML.Engine.BuildingSystem.UI
         private void Placer_ComfirmSelection(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(this.CanSelectCategory1[this.SelectedCategory1Index], this.CanSelectCategory2[this.SelectedCategory2Index]);
-            MonoBuildingManager.Instance.PopPanel();
-            MonoBuildingManager.Instance.PushPanel<BSPlaceModePanel>();
+            MonoBuildingManager.Instance.PopAndPushPanel<BSPlaceModePanel>();
         }
         #endregion
 

@@ -30,7 +30,7 @@ namespace ML.Engine.Input
             ""id"": ""7f866e33-da0f-46d4-9574-607634f09ada"",
             ""actions"": [
                 {
-                    ""name"": ""Comfirm"",
+                    ""name"": ""Confirm"",
                     ""type"": ""Button"",
                     ""id"": ""3b005375-d1a3-4413-91d0-31adb0879d8b"",
                     ""expectedControlType"": ""Button"",
@@ -56,7 +56,7 @@ namespace ML.Engine.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Comfirm"",
+                    ""action"": ""Confirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -67,7 +67,7 @@ namespace ML.Engine.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Comfirm"",
+                    ""action"": ""Confirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -105,14 +105,274 @@ namespace ML.Engine.Input
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""StartMenu"",
+            ""id"": ""e78faf79-61ff-4aa7-9146-7a172679e32f"",
+            ""actions"": [
+                {
+                    ""name"": ""SwichBtn"",
+                    ""type"": ""Value"",
+                    ""id"": ""494e2f86-7710-441e-833a-6464f6b2b25c"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""KeyBoard"",
+                    ""id"": ""a211c9b0-0fba-4a28-a3e5-e4128642b797"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""361ae183-da8c-4e50-adef-086f99a04432"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""364684de-ce04-4f46-86d2-9ba52ea58c76"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""a3ed8003-098d-4c53-ade2-768d68fa8fde"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""062fb8f0-1c55-4c94-bfb5-49ba2f96c844"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""cc97dda1-f207-49e2-b095-8146cbbf4b49"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""84c8a198-84e4-469e-8d98-9d054a6b3430"",
+                    ""path"": ""<XInputController>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""e48ad3b3-6b8c-40e4-bc59-8ccb2142d381"",
+                    ""path"": ""<XInputController>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""b3d4b36f-5631-4d08-9b4b-58f869970754"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""dfe97926-a7f4-4ccc-a230-c656b660ae98"",
+                    ""path"": ""<XInputController>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
+        },
+        {
+            ""name"": ""Option"",
+            ""id"": ""59dd38bc-4fa4-4454-b3ee-406519cf2987"",
+            ""actions"": [
+                {
+                    ""name"": ""SwichBtn"",
+                    ""type"": ""Value"",
+                    ""id"": ""ea6bfa20-4ae4-42ba-9b8f-782e06470c05"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""KeyBoard"",
+                    ""id"": ""d1423c03-ce1e-4ac4-8bdf-0c76eaa61d73"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""324f7f9c-040f-4b70-9005-c77f11deea0c"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""b60c8e68-a90d-42b2-8848-56cd0f3ad975"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""5e4d293f-b815-49f2-9bdb-870aa1f36bad"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""c7db456c-5b6b-4740-b9c9-44c9dd3b0a08"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""a1062fd6-2dd8-4676-b575-36d22196fed9"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""7df6f870-1300-42a9-86bc-4ebbe4f8e168"",
+                    ""path"": ""<XInputController>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""374809fa-49ee-44b8-886a-4957688cbe00"",
+                    ""path"": ""<XInputController>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""7afcaf99-8f9f-4e70-84f7-71f6c978709e"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""8d87755a-374e-40c7-97e4-4c9a2573b757"",
+                    ""path"": ""<XInputController>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
 }");
             // Common
             m_Common = asset.FindActionMap("Common", throwIfNotFound: true);
-            m_Common_Comfirm = m_Common.FindAction("Comfirm", throwIfNotFound: true);
+            m_Common_Confirm = m_Common.FindAction("Confirm", throwIfNotFound: true);
             m_Common_Back = m_Common.FindAction("Back", throwIfNotFound: true);
+            // StartMenu
+            m_StartMenu = asset.FindActionMap("StartMenu", throwIfNotFound: true);
+            m_StartMenu_SwichBtn = m_StartMenu.FindAction("SwichBtn", throwIfNotFound: true);
+            // Option
+            m_Option = asset.FindActionMap("Option", throwIfNotFound: true);
+            m_Option_SwichBtn = m_Option.FindAction("SwichBtn", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -174,13 +434,13 @@ namespace ML.Engine.Input
         // Common
         private readonly InputActionMap m_Common;
         private List<ICommonActions> m_CommonActionsCallbackInterfaces = new List<ICommonActions>();
-        private readonly InputAction m_Common_Comfirm;
+        private readonly InputAction m_Common_Confirm;
         private readonly InputAction m_Common_Back;
         public struct CommonActions
         {
             private @CommomInput m_Wrapper;
             public CommonActions(@CommomInput wrapper) { m_Wrapper = wrapper; }
-            public InputAction @Comfirm => m_Wrapper.m_Common_Comfirm;
+            public InputAction @Confirm => m_Wrapper.m_Common_Confirm;
             public InputAction @Back => m_Wrapper.m_Common_Back;
             public InputActionMap Get() { return m_Wrapper.m_Common; }
             public void Enable() { Get().Enable(); }
@@ -191,9 +451,9 @@ namespace ML.Engine.Input
             {
                 if (instance == null || m_Wrapper.m_CommonActionsCallbackInterfaces.Contains(instance)) return;
                 m_Wrapper.m_CommonActionsCallbackInterfaces.Add(instance);
-                @Comfirm.started += instance.OnComfirm;
-                @Comfirm.performed += instance.OnComfirm;
-                @Comfirm.canceled += instance.OnComfirm;
+                @Confirm.started += instance.OnConfirm;
+                @Confirm.performed += instance.OnConfirm;
+                @Confirm.canceled += instance.OnConfirm;
                 @Back.started += instance.OnBack;
                 @Back.performed += instance.OnBack;
                 @Back.canceled += instance.OnBack;
@@ -201,9 +461,9 @@ namespace ML.Engine.Input
 
             private void UnregisterCallbacks(ICommonActions instance)
             {
-                @Comfirm.started -= instance.OnComfirm;
-                @Comfirm.performed -= instance.OnComfirm;
-                @Comfirm.canceled -= instance.OnComfirm;
+                @Confirm.started -= instance.OnConfirm;
+                @Confirm.performed -= instance.OnConfirm;
+                @Confirm.canceled -= instance.OnConfirm;
                 @Back.started -= instance.OnBack;
                 @Back.performed -= instance.OnBack;
                 @Back.canceled -= instance.OnBack;
@@ -224,10 +484,110 @@ namespace ML.Engine.Input
             }
         }
         public CommonActions @Common => new CommonActions(this);
+
+        // StartMenu
+        private readonly InputActionMap m_StartMenu;
+        private List<IStartMenuActions> m_StartMenuActionsCallbackInterfaces = new List<IStartMenuActions>();
+        private readonly InputAction m_StartMenu_SwichBtn;
+        public struct StartMenuActions
+        {
+            private @CommomInput m_Wrapper;
+            public StartMenuActions(@CommomInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @SwichBtn => m_Wrapper.m_StartMenu_SwichBtn;
+            public InputActionMap Get() { return m_Wrapper.m_StartMenu; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(StartMenuActions set) { return set.Get(); }
+            public void AddCallbacks(IStartMenuActions instance)
+            {
+                if (instance == null || m_Wrapper.m_StartMenuActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_StartMenuActionsCallbackInterfaces.Add(instance);
+                @SwichBtn.started += instance.OnSwichBtn;
+                @SwichBtn.performed += instance.OnSwichBtn;
+                @SwichBtn.canceled += instance.OnSwichBtn;
+            }
+
+            private void UnregisterCallbacks(IStartMenuActions instance)
+            {
+                @SwichBtn.started -= instance.OnSwichBtn;
+                @SwichBtn.performed -= instance.OnSwichBtn;
+                @SwichBtn.canceled -= instance.OnSwichBtn;
+            }
+
+            public void RemoveCallbacks(IStartMenuActions instance)
+            {
+                if (m_Wrapper.m_StartMenuActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IStartMenuActions instance)
+            {
+                foreach (var item in m_Wrapper.m_StartMenuActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_StartMenuActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public StartMenuActions @StartMenu => new StartMenuActions(this);
+
+        // Option
+        private readonly InputActionMap m_Option;
+        private List<IOptionActions> m_OptionActionsCallbackInterfaces = new List<IOptionActions>();
+        private readonly InputAction m_Option_SwichBtn;
+        public struct OptionActions
+        {
+            private @CommomInput m_Wrapper;
+            public OptionActions(@CommomInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @SwichBtn => m_Wrapper.m_Option_SwichBtn;
+            public InputActionMap Get() { return m_Wrapper.m_Option; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(OptionActions set) { return set.Get(); }
+            public void AddCallbacks(IOptionActions instance)
+            {
+                if (instance == null || m_Wrapper.m_OptionActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_OptionActionsCallbackInterfaces.Add(instance);
+                @SwichBtn.started += instance.OnSwichBtn;
+                @SwichBtn.performed += instance.OnSwichBtn;
+                @SwichBtn.canceled += instance.OnSwichBtn;
+            }
+
+            private void UnregisterCallbacks(IOptionActions instance)
+            {
+                @SwichBtn.started -= instance.OnSwichBtn;
+                @SwichBtn.performed -= instance.OnSwichBtn;
+                @SwichBtn.canceled -= instance.OnSwichBtn;
+            }
+
+            public void RemoveCallbacks(IOptionActions instance)
+            {
+                if (m_Wrapper.m_OptionActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IOptionActions instance)
+            {
+                foreach (var item in m_Wrapper.m_OptionActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_OptionActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public OptionActions @Option => new OptionActions(this);
         public interface ICommonActions
         {
-            void OnComfirm(InputAction.CallbackContext context);
+            void OnConfirm(InputAction.CallbackContext context);
             void OnBack(InputAction.CallbackContext context);
+        }
+        public interface IStartMenuActions
+        {
+            void OnSwichBtn(InputAction.CallbackContext context);
+        }
+        public interface IOptionActions
+        {
+            void OnSwichBtn(InputAction.CallbackContext context);
         }
     }
 }

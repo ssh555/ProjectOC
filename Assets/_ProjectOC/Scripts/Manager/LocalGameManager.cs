@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using ProjectOC.MissionNS;
 using UnityEngine;
 using ProjectOC.WorkerNS;
@@ -5,7 +7,9 @@ using ProjectOC.StoreNS;
 using ProjectOC.WorkerEchoNS;
 using ProjectOC.ProNodeNS;
 using ML.Engine.InventorySystem;
+using ProjectOC.LandMassExpand;
 using Sirenix.OdinInspector;
+using ML.Engine.UI;
 
 namespace ProjectOC.ManagerNS
 {
@@ -25,7 +29,9 @@ namespace ProjectOC.ManagerNS
         public FeatureManager FeatureManager { get; private set; }
         public SkillManager SkillManager { get; private set; }
         public WorkerEchoManager WorkerEchoManager { get; private set; }
-
+        public NavMeshManager NavMeshManager { get; private set; }
+        public BuildPowerIslandManager BuildPowerIslandManager { get; private set; }
+        public IslandManager IslandManager { get; private set; }
         /// <summary>
         /// µ¥Àý¹ÜÀí
         /// </summary>
@@ -33,7 +39,7 @@ namespace ProjectOC.ManagerNS
         {
             if (Instance != null)
             {
-                Destroy(this.gameObject);
+                ML.Engine.Manager.GameManager.DestroyObj(this.gameObject);
                 return;
             }
             Instance = this;
@@ -62,6 +68,10 @@ namespace ProjectOC.ManagerNS
             SkillManager.LoadTableData();
             WorkerEchoManager = GM.RegisterLocalManager<WorkerEchoManager>();
             WorkerEchoManager.LoadTableData();
+            NavMeshManager = GM.RegisterLocalManager<NavMeshManager>();
+            IslandManager = GM.RegisterLocalManager<IslandManager>();
+            BuildPowerIslandManager = GM.RegisterLocalManager<BuildPowerIslandManager>();
+            StartCoroutine(DelayStart());
             this.enabled = false;
         }
         private void OnDestroy()
@@ -79,8 +89,17 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<SkillManager>();
                 GM?.UnregisterLocalManager<WorkerEchoManager>();
                 GM?.UnregisterLocalManager<LocalGameManager>();
+                GM?.UnregisterLocalManager<NavMeshManager>();
+                GM?.UnregisterLocalManager<IslandManager>();
+                GM?.UnregisterLocalManager<BuildPowerIslandManager>();
                 Instance = null;
             }
+        }
+
+        IEnumerator DelayStart()
+        {
+            yield return null;
+            NavMeshManager.DelayInit();
         }
     }
 }

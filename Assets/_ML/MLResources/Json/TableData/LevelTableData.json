@@ -3,5 +3,20 @@
         "scenename": "TestScene",
         "globalres": [],
         "localres": []
+    },
+    {
+        "scenename": "GameScene",
+        "globalres": ["Prefabs/BuildingSystem/BPart",
+        "Prefabs/BuildingSystem/BPart",
+        "Json/TextContent/BuildingSystem/UI",
+        "Json/TableData",
+        "Json/TextContent/TechTree",
+        "Shader"
+
+
+    
+    
+    ],
+        "localres": []
     }
 ]

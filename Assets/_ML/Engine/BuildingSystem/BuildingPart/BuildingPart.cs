@@ -256,7 +256,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             }
             else if(isTrigger == false)
             {
-                Destroy(this.GetComponent<Rigidbody>());
+                Manager.GameManager.DestroyObj(this.GetComponent<Rigidbody>());
             }
         }
 
