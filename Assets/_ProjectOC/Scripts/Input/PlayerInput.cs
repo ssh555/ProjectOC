@@ -427,6 +427,360 @@ namespace ProjectOC.Input
             ]
         },
         {
+            ""name"": ""PlayerUIBot"",
+            ""id"": ""9e3fc58b-0ad1-4776-be41-29664b9240d0"",
+            ""actions"": [
+                {
+                    ""name"": ""OpenMenu"",
+                    ""type"": ""Value"",
+                    ""id"": ""27f7a73d-11b8-4591-bf27-2e94d794c16a"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""OpenMap"",
+                    ""type"": ""Value"",
+                    ""id"": ""a35a7b80-5fec-414f-9f2f-9a910333ff29"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""SelectGrid"",
+                    ""type"": ""Value"",
+                    ""id"": ""ae36565b-a263-4e67-b282-ab5c3b19fb44"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""KeyBoard"",
+                    ""id"": ""1adacd95-25e0-4edd-a425-6db4e7f7bd17"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMenu"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""5836ff54-6452-41b9-a363-4f69a4610dbb"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""d4450875-9d93-4c9d-b97c-d8c338f08699"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""027cdfe5-8078-408d-b155-db9c2476ba24"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""c66336e6-b160-4e7c-957d-fde0cf35b8b4"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""79b67ef4-ee4a-478e-9381-dd6f10b5ddce"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMenu"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""63a11067-52aa-4eb0-81cf-f9a2470a922d"",
+                    ""path"": ""<XInputController>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""c78126b0-3016-4e11-8e03-33df6df4e11a"",
+                    ""path"": ""<XInputController>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""2f6f7e49-3f27-4f48-83cf-0732f7131584"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""b36b6f32-933b-4dc9-9108-c3bc4523e3a5"",
+                    ""path"": ""<XInputController>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""KeyBoard"",
+                    ""id"": ""e76a8523-725b-4a44-9f79-434fb82dbdab"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMap"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""d0b59f2c-2140-45b5-9aa5-95f007378fbc"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""7725d727-cad0-4ce0-ab0f-345a948468a4"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""be35a41b-6519-4864-b9bf-6dc782b0a718"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""4842660e-704d-4afd-a8b2-aaee8dd0731e"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""f5a5c866-c8dd-42c1-acdc-20103acde4fe"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMap"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""32228e47-968e-4fe7-ba11-e6c0e7c0280e"",
+                    ""path"": ""<XInputController>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""3a0ddb83-90dc-4edc-ae77-44657859c41e"",
+                    ""path"": ""<XInputController>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""0b1e457b-9485-46bc-b585-1c22786c8798"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""b33b087d-289d-4893-9bbe-32c59fa7b583"",
+                    ""path"": ""<XInputController>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""2475cd1a-209b-47f2-915f-f284bac44061"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectGrid"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""0f875b4f-6b2b-4773-8adc-8ae0d5b89f34"",
+                    ""path"": ""<XInputController>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""001aa6bf-3eef-4014-a73c-f832140e6a9e"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""78c1ee5b-ea6d-4dc8-86d6-21e65cfee659"",
+                    ""path"": ""<XInputController>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""7d3d09cf-cc4f-4568-b369-ff901c05576c"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""4fb86ed1-8a40-4613-bb0f-907666e31ea4"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""a4d29b8b-e3be-4bf4-845d-4326dff63720"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""e0d551e6-d1cf-4236-ba16-64c0b5eb7ef7"",
+                    ""path"": ""<XInputController>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""c04c303b-c884-436a-8cda-3c49601b32e0"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
+        },
+        {
             ""name"": ""TechTree"",
             ""id"": ""2c61ba0d-549f-46fb-9ae4-3a551b982404"",
             ""actions"": [
@@ -2656,6 +3010,11 @@ namespace ProjectOC.Input
             m_Player_MouseX = m_Player.FindAction("MouseX", throwIfNotFound: true);
             m_Player_MouseY = m_Player.FindAction("MouseY", throwIfNotFound: true);
             m_Player_OpenBotUI = m_Player.FindAction("OpenBotUI", throwIfNotFound: true);
+            // PlayerUIBot
+            m_PlayerUIBot = asset.FindActionMap("PlayerUIBot", throwIfNotFound: true);
+            m_PlayerUIBot_OpenMenu = m_PlayerUIBot.FindAction("OpenMenu", throwIfNotFound: true);
+            m_PlayerUIBot_OpenMap = m_PlayerUIBot.FindAction("OpenMap", throwIfNotFound: true);
+            m_PlayerUIBot_SelectGrid = m_PlayerUIBot.FindAction("SelectGrid", throwIfNotFound: true);
             // TechTree
             m_TechTree = asset.FindActionMap("TechTree", throwIfNotFound: true);
             m_TechTree_LastTerm = m_TechTree.FindAction("LastTerm", throwIfNotFound: true);
@@ -2874,6 +3233,68 @@ namespace ProjectOC.Input
             }
         }
         public PlayerActions @Player => new PlayerActions(this);
+
+        // PlayerUIBot
+        private readonly InputActionMap m_PlayerUIBot;
+        private List<IPlayerUIBotActions> m_PlayerUIBotActionsCallbackInterfaces = new List<IPlayerUIBotActions>();
+        private readonly InputAction m_PlayerUIBot_OpenMenu;
+        private readonly InputAction m_PlayerUIBot_OpenMap;
+        private readonly InputAction m_PlayerUIBot_SelectGrid;
+        public struct PlayerUIBotActions
+        {
+            private @PlayerInput m_Wrapper;
+            public PlayerUIBotActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @OpenMenu => m_Wrapper.m_PlayerUIBot_OpenMenu;
+            public InputAction @OpenMap => m_Wrapper.m_PlayerUIBot_OpenMap;
+            public InputAction @SelectGrid => m_Wrapper.m_PlayerUIBot_SelectGrid;
+            public InputActionMap Get() { return m_Wrapper.m_PlayerUIBot; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(PlayerUIBotActions set) { return set.Get(); }
+            public void AddCallbacks(IPlayerUIBotActions instance)
+            {
+                if (instance == null || m_Wrapper.m_PlayerUIBotActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_PlayerUIBotActionsCallbackInterfaces.Add(instance);
+                @OpenMenu.started += instance.OnOpenMenu;
+                @OpenMenu.performed += instance.OnOpenMenu;
+                @OpenMenu.canceled += instance.OnOpenMenu;
+                @OpenMap.started += instance.OnOpenMap;
+                @OpenMap.performed += instance.OnOpenMap;
+                @OpenMap.canceled += instance.OnOpenMap;
+                @SelectGrid.started += instance.OnSelectGrid;
+                @SelectGrid.performed += instance.OnSelectGrid;
+                @SelectGrid.canceled += instance.OnSelectGrid;
+            }
+
+            private void UnregisterCallbacks(IPlayerUIBotActions instance)
+            {
+                @OpenMenu.started -= instance.OnOpenMenu;
+                @OpenMenu.performed -= instance.OnOpenMenu;
+                @OpenMenu.canceled -= instance.OnOpenMenu;
+                @OpenMap.started -= instance.OnOpenMap;
+                @OpenMap.performed -= instance.OnOpenMap;
+                @OpenMap.canceled -= instance.OnOpenMap;
+                @SelectGrid.started -= instance.OnSelectGrid;
+                @SelectGrid.performed -= instance.OnSelectGrid;
+                @SelectGrid.canceled -= instance.OnSelectGrid;
+            }
+
+            public void RemoveCallbacks(IPlayerUIBotActions instance)
+            {
+                if (m_Wrapper.m_PlayerUIBotActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IPlayerUIBotActions instance)
+            {
+                foreach (var item in m_Wrapper.m_PlayerUIBotActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_PlayerUIBotActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public PlayerUIBotActions @PlayerUIBot => new PlayerUIBotActions(this);
 
         // TechTree
         private readonly InputActionMap m_TechTree;
@@ -3617,6 +4038,12 @@ namespace ProjectOC.Input
             void OnMouseX(InputAction.CallbackContext context);
             void OnMouseY(InputAction.CallbackContext context);
             void OnOpenBotUI(InputAction.CallbackContext context);
+        }
+        public interface IPlayerUIBotActions
+        {
+            void OnOpenMenu(InputAction.CallbackContext context);
+            void OnOpenMap(InputAction.CallbackContext context);
+            void OnSelectGrid(InputAction.CallbackContext context);
         }
         public interface ITechTreeActions
         {

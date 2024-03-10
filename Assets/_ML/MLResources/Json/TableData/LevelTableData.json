@@ -10,7 +10,8 @@
         "Prefabs/BuildingSystem/BPart",
         "Json/TextContent/BuildingSystem/UI",
         "Json/TableData",
-        "Json/TextContent/TechTree"
+        "Json/TextContent/TechTree",
+        "Shader"
 
 
     

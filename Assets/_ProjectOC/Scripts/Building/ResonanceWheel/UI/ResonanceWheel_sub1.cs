@@ -299,7 +299,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
 
             //更新隐兽详细信息
-            WorkerEcho workerEcho = (GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
+            WorkerEcho workerEcho = parentUI.workerEcho;
 
 
 /*            Stamina.text = (ResonanceWheelUI.PanelTextContent_sub1.SkillType.Where(tag => tag.name == "Stamina") as TextTip).GetDescription();

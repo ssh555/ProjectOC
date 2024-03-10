@@ -313,15 +313,16 @@ namespace ML.Engine.ABResources
 
             // Î´ÔØÈë
             var ans = AssetBundle.LoadFromFileAsync(System.IO.Path.Combine(ABPath, name));
+            assetBundle = ans.assetBundle;
             this.globalResourcesDict.Add(name, ans.assetBundle);
             ans.completed += (asyncOpt) =>
             {
                 this.globalResourcesDict[name] = ans.assetBundle;
                 Internal_LoadDependencies(name);
             };
-            ans.completed += callback;
+            if(callback != null)
+                ans.completed += callback;
 
-            assetBundle = null;
 
             return ans;
         }
@@ -620,6 +621,7 @@ namespace ML.Engine.ABResources
             foreach(var ab in abs)
             {
                 this.LoadGlobalAB(ab.Trim());
+                Debug.Log(ab);
             }
         }
     }

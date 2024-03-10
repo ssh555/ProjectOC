@@ -1,6 +1,8 @@
+using ML.Engine.ABResources;
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.Input;
 using ML.Engine.InventorySystem;
+using ML.Engine.Level;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.Timer;
@@ -875,7 +877,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     {
                         var descriptionPrefab = Instantiate(SlotPrefab, Consumables);
                         int needNum = item.num;
-                        int haveNum = GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory.GetItemAllNum(item.id);
+                        int haveNum = this.inventory.GetItemAllNum(item.id);
                         descriptionPrefab.transform.Find("ItemNumber").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = needNum.ToString() + "/" + haveNum.ToString();
                         if (needNum > haveNum)
                         {
