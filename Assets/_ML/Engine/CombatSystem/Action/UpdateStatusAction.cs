@@ -57,7 +57,7 @@ namespace ML.Engine.CombatSystem.Action
                 this._liveTime += Time.deltaTime;
                 if (this._liveTime >= this.buff.duration)
                 {
-                    Destroy(this);
+                    Manager.GameManager.DestroyObj(this);
                     this.enabled = false;
                     return;
                 }

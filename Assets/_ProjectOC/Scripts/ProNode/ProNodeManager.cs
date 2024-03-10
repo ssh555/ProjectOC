@@ -37,21 +37,18 @@ namespace ProjectOC.ProNodeNS
         /// </summary>
         private Dictionary<string, ProNodeTableData> ProNodeTableDict = new Dictionary<string, ProNodeTableData>();
 
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<ProNodeTableData[]> ABJAProcessor;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<ProNodeTableData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
-            if (ABJAProcessor == null)
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ProNodeTableData[]>("OC/Json/TableData", "ProNode", (datas) =>
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ProNodeTableData[]>("Json/TableData", "ProNode", (datas) =>
+                foreach (var data in datas)
                 {
-                    foreach (var data in datas)
-                    {
-                        this.ProNodeTableDict.Add(data.ID, data);
-                    }
-                }, null, "生产节点表数据");
-                ABJAProcessor.StartLoadJsonAssetData();
-            }
+                    this.ProNodeTableDict.Add(data.ID, data);
+                }
+            }, "生产节点表数据");
+            ABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
 

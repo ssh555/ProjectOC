@@ -41,7 +41,7 @@ namespace ProjectOC.Player.UI
             this.EnterBuildBtn = btnList.Find("EnterBuild").GetComponent<SelectedButton>();
             this.EnterBuildBtn.OnInteract += () =>
             {
-                if (ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.WasPressedThisFrame() && BM.Mode == BuildingMode.None)
+                if (ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.WasPressedThisFrame() && BM.Mode == BuildingMode.None)
                 {
                     if (BM.GetRegisterBPartCount() > 0)
                     {
@@ -59,49 +59,39 @@ namespace ProjectOC.Player.UI
             this.EnterTechTreeBtn = btnList.Find("EnterTechTree").GetComponent<SelectedButton>();
             this.EnterTechTreeBtn.OnInteract += () =>
             {
-                AssetBundleRequest request = null;
-                request = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<GameObject>("UI/UIPanel", "TechPointPanel", (ao) =>
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/TechPointPanel.prefab", this.transform.parent, true).Completed += (handle) =>
                  {
-                     var panel = GameObject.Instantiate((request.asset as GameObject).GetComponent<UITechPointPanel>());
-                     panel.transform.SetParent(this.transform.parent, false);
+                     var panel = handle.Result.GetComponent<UITechPointPanel>();
+                     panel.transform.localScale = Vector3.one;
+                     panel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
                      panel.inventory = this.player.Inventory;
                      ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
-                 });
+                 };
             };
 
             this.EnterInventoryBtn = btnList.Find("EnterInventory").GetComponent<SelectedButton>();
             this.EnterInventoryBtn.OnInteract += () =>
             {
-                AssetBundleRequest request = null;
-                request = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<GameObject>("UI/UIPanel", "UIInfiniteInventoryPanel", (ao) =>
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIInfiniteInventoryPanel.prefab", this.transform.parent, true).Completed += (handle) =>
                 {
-                    // 实例化
-                    var panel = GameObject.Instantiate((request.asset as GameObject).GetComponent<UIInfiniteInventory>());
-                    panel.transform.SetParent(this.transform.parent, false);
-
-                    // 初始化
+                    var panel = handle.Result.GetComponent<UIInfiniteInventory>();
+                    panel.transform.localScale = Vector3.one;
+                    panel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
                     panel.inventory = this.player.Inventory as ML.Engine.InventorySystem.InfiniteInventory;
-
-                    // Push
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
-                });
-
+                };
             };
 
             this.EnterBeastPanelBtn = btnList.Find("EnterBeastPanel").GetComponent<SelectedButton>();
             this.EnterBeastPanelBtn.OnInteract += () =>
             {
-                AssetBundleRequest request = null;
-                request = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<GameObject>("UI/UIPanel", "BeastPanel", (ao) =>
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/BeastPanel.prefab", this.transform.parent, true).Completed += (handle) =>
                 {
-                    // 实例化
-                    var panel = GameObject.Instantiate((request.asset as GameObject).GetComponent<BeastPanel>());
-                    panel.transform.SetParent(this.transform.parent, false);
-                    // Push
+                    var panel = handle.Result.GetComponent<BeastPanel>();
+                    panel.transform.localScale = Vector3.one;
+                    panel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
-                    //ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
-                });
-
+                };
             };
 
 
@@ -112,19 +102,28 @@ namespace ProjectOC.Player.UI
             };
 
 
-            var btn = btnList.GetComponentsInChildren<SelectedButton>();
-            
-            for(int i = 0; i < btn.Length; ++i)
-            {
-                int last = (i - 1 + btn.Length) % btn.Length;
-                int next = (i + 1 + btn.Length) % btn.Length;
+            var btns = btnList.GetComponentsInChildren<SelectedButton>();
 
-                btn[i].UpUI = btn[last];
-                btn[i].DownUI = btn[next];
+            for (int i = 0; i < btns.Length; ++i)
+            {
+                int last = (i - 1 + btns.Length) % btns.Length;
+                int next = (i + 1 + btns.Length) % btns.Length;
+
+                btns[i].UpUI = btns[last];
+                btns[i].DownUI = btns[next];
+
+
+
+            }
+
+            foreach (var btn in btns)
+            {
+                btn.OnSelectedEnter += () => { btn.image.color = Color.red; };
+                btn.OnSelectedExit += () => { btn.image.color = Color.white; };
             }
 
             this.CurSelected = EnterBuildBtn;
-            this.CurSelected.OnSelectedEnter();
+            this.CurSelected.SelectedEnter();
 
             IsInit = true;
 
@@ -133,7 +132,7 @@ namespace ProjectOC.Player.UI
 
         public void Tick(float deltatime)
         {
-            if(ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.WasPressedThisFrame())
+            if(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.WasPressedThisFrame())
             {
                 this.CurSelected.Interact();
             }
@@ -142,15 +141,15 @@ namespace ProjectOC.Player.UI
                 var vec2 = Input.InputManager.PlayerInput.PlayerUI.AlterSelected.ReadValue<Vector2>();
                 if(vec2.y > 0.1f)
                 {
-                    this.CurSelected.OnSelectedExit();
+                    this.CurSelected.SelectedExit();
                     this.CurSelected = this.CurSelected.UpUI;
-                    this.CurSelected.OnSelectedEnter();
+                    this.CurSelected.SelectedEnter();
                 }
                 else if(vec2.y < -0.1f)
                 {
-                    this.CurSelected.OnSelectedExit();
+                    this.CurSelected.SelectedExit();
                     this.CurSelected = this.CurSelected.DownUI;
-                    this.CurSelected.OnSelectedEnter();
+                    this.CurSelected.SelectedEnter();
                 }
             }
             if (ML.Engine.Input.InputManager.Instance.Common.Common.Back.WasPressedThisFrame())
@@ -194,30 +193,22 @@ namespace ProjectOC.Player.UI
             Input.InputManager.PlayerInput.PlayerUI.Disable();
         }
 
-        public static Dictionary<string, TextTip> TipDict = new Dictionary<string, TextTip>();
+        public Dictionary<string, TextTip> TipDict = new Dictionary<string, TextTip>();
 
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<ML.Engine.TextContent.TextTip[]> ABJAProcessor;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<ML.Engine.TextContent.TextTip[]> ABJAProcessor;
 
         public void InitUITextContents()
         {
-            if (ABJAProcessor == null)
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ML.Engine.TextContent.TextTip[]>("OC/Json/TextContent/PlayerUIPanel", "PlayerUIPanel", (datas) =>
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ML.Engine.TextContent.TextTip[]>("Json/TextContent/Player", "PlayerUIPanel", (datas) =>
+                foreach (var tip in datas)
                 {
-                    foreach (var tip in datas)
-                    {
-                        TipDict.Add(tip.name, tip);
-                    }
-                    this.Refresh();
-                    this.enabled = false;
-                }, null, "PlayerUIPanel");
-                ABJAProcessor.StartLoadJsonAssetData();
-            }
-            else
-            {
+                    TipDict.Add(tip.name, tip);
+                }
                 this.Refresh();
                 this.enabled = false;
-            }
+            }, "PlayerUIPanel");
+            ABJAProcessor.StartLoadJsonAssetData();
         }
 
         public override void Refresh()

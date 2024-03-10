@@ -38,27 +38,24 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         private Dictionary<string, FeatureTableData> FeatureTableDict = new Dictionary<string, FeatureTableData>();
 
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableData[]> ABJAProcessor;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
-            if (ABJAProcessor == null)
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableData[]>("OC/Json/TableData", "Feature", (datas) =>
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableData[]>("Json/TableData", "Feature", (datas) =>
+                foreach (var data in datas)
                 {
-                    foreach (var data in datas)
-                    {
-                        this.FeatureTableDict.Add(data.ID, data);
+                    this.FeatureTableDict.Add(data.ID, data);
 
-                        if (!FeatureTypeDict.ContainsKey(data.Type))
-                        {
-                            this.FeatureTypeDict.Add(data.Type, new List<string>());
-                        }
-                        this.FeatureTypeDict[data.Type].Add(data.ID);
+                    if (!FeatureTypeDict.ContainsKey(data.Type))
+                    {
+                        this.FeatureTypeDict.Add(data.Type, new List<string>());
                     }
-                }, null, "隐兽Feature表数据");
-                ABJAProcessor.StartLoadJsonAssetData();
-            }
+                    this.FeatureTypeDict[data.Type].Add(data.ID);
+                }
+            }, "隐兽Feature表数据");
+            ABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
 

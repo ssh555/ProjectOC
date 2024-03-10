@@ -200,7 +200,10 @@ namespace ML.Engine.CombatSystem.CombatObject.Character
                 ML.Engine.InventorySystem.Item item = drop.TryGetDroppedItem();
                 if (item != null)
                 {
+
+#pragma warning disable CS4014
                     ML.Engine.InventorySystem.ItemManager.Instance.SpawnWorldItem(item, this.transform.position, this.transform.rotation);
+#pragma warning restore CS4014
                 }
             }
         }

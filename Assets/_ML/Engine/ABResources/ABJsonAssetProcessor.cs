@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace ML.Engine.ABResources
 {
@@ -48,75 +49,46 @@ namespace ML.Engine.ABResources
         /// </summary>
         public readonly string ABName;
         private readonly OnLoadOver onLoadOver;
-        private readonly LoadStartCondition condition;
         private readonly string description;
+        private AsyncOperationHandle handle;
 
-        public ABJsonAssetProcessor(string abpath, string abname, OnLoadOver onLoadOver = null, LoadStartCondition condition = null, string description = "")
+        public ABJsonAssetProcessor(string abpath, string abname, OnLoadOver onLoadOver = null, string description = "")
         {
             this.ABPath = abpath;
             this.ABName = abname;
             this.onLoadOver = onLoadOver;
-            this.condition = condition;
             this.description = description;
         }
 
-        public void StartLoadJsonAssetData()
+        ~ABJsonAssetProcessor()
         {
-            Manager.GameManager.Instance.StartCoroutine(LoadData());
+            Manager.GameManager.Instance.ABResourceManager.Release(this.handle);
         }
 
-        private IEnumerator LoadData()
+        public AsyncOperationHandle StartLoadJsonAssetData()
         {
             if (IsLoading)
             {
-                yield break;
+                return handle;
             }
             IsLoading = true;
-            while (ML.Engine.Manager.GameManager.Instance.ABResourceManager == null)
-            {
-                yield return null;
-            }
-            if (condition != null)
-            {
-                while (condition())
-                {
-                    yield return null;
-                }
-            }
-
-#if UNITY_EDITOR
-            float startT = Time.realtimeSinceStartup;
-#endif
 
             var abmgr = ML.Engine.Manager.GameManager.Instance.ABResourceManager;
-            var crequest = abmgr.LoadLocalABAsync(this.ABPath, null, out AssetBundle ab);
-            yield return crequest;
-            if (crequest != null)
+            handle = abmgr.LoadAssetAsync<TextAsset>(this.ABPath + "/" + this.ABName + ".json");
+            handle.Completed += (asHandle) =>
             {
-                ab = crequest.assetBundle;
-            }
+                Datas = JsonConvert.DeserializeObject<T>((handle.Result as TextAsset).text);
 
-            var request = ab.LoadAssetAsync<TextAsset>(this.ABName);
-            yield return request;
-            Datas = JsonConvert.DeserializeObject<T>((request.asset as TextAsset).text);
+                IsLoaded = true;
 
-            //try
-            //{
-            //    Datas = JsonConvert.DeserializeObject<T>((request.asset as TextAsset).text);
-            //}
-            //catch
-            //{
-            //    Debug.LogError($"LoadJsonAssetData {description} Error");
-            //}
-
-
-           IsLoaded = true;
-
-            this.onLoadOver?.Invoke(Datas);
+                this.onLoadOver?.Invoke(Datas);
 
 #if UNITY_EDITOR
-            Debug.Log($"LoadJsonAssetData {description} cost time: {Time.realtimeSinceStartup - startT}");
+                Debug.Log(this.description + " JSONText已加载完成");
 #endif
+            };
+
+            return handle;
         }
     }
 

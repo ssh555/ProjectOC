@@ -287,6 +287,7 @@ namespace ProjectOC.WorkerNS
             this.TimeArrangement.SetTimeStatusAll(timeStatus);
         }
 
+
         public void OnDestroy()
         {
             this.ClearDestination();

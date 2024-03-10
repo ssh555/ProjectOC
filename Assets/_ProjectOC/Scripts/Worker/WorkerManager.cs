@@ -7,12 +7,35 @@ using ML.Engine.Manager;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.InventorySystem;
 using UnityEngine.U2D;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using ML.Engine.UI;
 
 namespace ProjectOC.WorkerNS
 {
     [System.Serializable]
     public sealed class WorkerManager: ML.Engine.Manager.LocalManager.ILocalManager
     {
+        public void OnRegister()
+        {
+            spriteAtalsHandle = GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>(SpriteAtlasPath);
+            spriteAtalsHandle.Completed += (handle) =>
+            {
+                if (handle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    this.workerAtlas = handle.Result as SpriteAtlas;
+                }
+                else
+                {
+                    throw new Exception($"WorkerSpriteAtlas 不存在，Addressable Path为: {SpriteAtlasPath}");
+                }
+            };
+        }
+
+        ~WorkerManager()
+        {
+            GameManager.Instance.ABResourceManager.Release(spriteAtalsHandle);
+        }
+
         /// <summary>
         /// 刁民数量
         /// </summary>
@@ -31,6 +54,9 @@ namespace ProjectOC.WorkerNS
 
         public bool DeleteWorker(Worker worker)
         {
+            ML.Engine.Manager.GameManager.DestroyObj(worker.gameObject);
+            // 通过ManagerSpawn的Worker都是这个流程产生的，所以必须Release
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.ReleaseInstance(worker.gameObject);
             return this.Workers.Remove(worker);
         }
 
@@ -56,65 +82,63 @@ namespace ProjectOC.WorkerNS
         {
             return CompositeManager.Instance.OnlyCostResource(inventory, workerID);
         }
-        public Worker SpawnWorker(Vector3 pos, Quaternion rot)
+        public AsyncOperationHandle<GameObject> SpawnWorker(Vector3 pos, Quaternion rot, string name = "Worker")
         {
-            GameObject obj = GameObject.Instantiate(GetObject(), pos, rot);
-            Worker worker = obj.GetComponent<Worker>();
-            if (worker == null)
+            var handle = GetObject(name, pos, rot);
+            handle.Completed += (asHandle) =>
             {
-                worker = obj.AddComponent<Worker>();
-            }
-            Workers.Add(worker);
-            return worker;
+                if(asHandle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    GameObject obj = asHandle.Result;
+                    Worker worker = obj.GetComponent<Worker>();
+                    if (worker == null)
+                    {
+                        worker = obj.AddComponent<Worker>();
+                    }
+                    Workers.Add(worker);
+                }
+                else
+                {
+                    Debug.Log($"实例化隐兽 {name} 失败");
+                }
+            };
+            return handle;
         }
-        public Worker SpawnWorker(Vector3 pos, Quaternion rot, string workerID)
-        {
-            GameObject obj = GameObject.Instantiate(GetObject(), pos, rot);
-            Worker worker = obj.GetComponent<Worker>();
-            if (worker == null)
-            {
-                worker = obj.AddComponent<Worker>();
-            }
-            Workers.Add(worker);
-            return worker;
-        }
-        public Worker SpawnWorker(Vector3 pos, Quaternion rot, IInventory inventory, string workerID)
+
+        public AsyncOperationHandle<GameObject> SpawnWorker(Vector3 pos, Quaternion rot, IInventory inventory, string workerID, string name = "Worker")
         {
             if (CompositeManager.Instance.OnlyCostResource(inventory, workerID))
             {
-                GameObject obj = GameObject.Instantiate(GetObject(), pos, rot);
-                Worker worker = obj.GetComponent<Worker>();
-                if (worker == null)
-                {
-                    worker = obj.AddComponent<Worker>();
-                }
-                Workers.Add(worker);
-                return worker;
+                return SpawnWorker(pos, rot, name);
             }
             else
             {
-                return null;
+                return default(AsyncOperationHandle<GameObject>);
             }
         }
 
-        public const string Texture2DPath = "ui/Worker/texture2d";
-        public const string WorldObjPath = "prefabs/Character/Worker";
+        public const string SpriteAtlasPath = "OC/UI/Worker/Texture/SA_Worker_UI.spriteatlasv2";
+        public const string WorldObjPath = "OC/Character/Worker/Prefabs/";
         private SpriteAtlas workerAtlas = null;
-        public Texture2D GetTexture2D()
+        private AsyncOperationHandle spriteAtalsHandle;
+
+        public Texture2D GetTexture2D(string name)
         {
-            return GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>("Worker");
+            return this.workerAtlas.GetSprite(name).texture;
         }
-        public Sprite GetSprite()
+        public Sprite GetSprite(string name)
         {
-            if (workerAtlas == null)
-            {
-                workerAtlas = GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<SpriteAtlas>("SA_Worker_UI");
-            }
-            return workerAtlas.GetSprite("Worker");
+            return workerAtlas.GetSprite(name);
         }
-        public GameObject GetObject()
+
+        /// <summary>
+        /// 所有调用的地方，都必须维护好GameObject或者Handle，在不使用GameObejct的时候，除了destroy之外还需要Release(handle)
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public AsyncOperationHandle<GameObject> GetObject(string name, Vector3 pos, Quaternion rot)
         {
-            return GameManager.Instance.ABResourceManager.LoadLocalAB(WorldObjPath).LoadAsset<GameObject>("Worker");
+            return GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjPath + name +".prefab", pos, rot);
         }
     }
 }

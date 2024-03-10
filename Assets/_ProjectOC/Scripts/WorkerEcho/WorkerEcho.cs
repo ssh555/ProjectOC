@@ -5,6 +5,7 @@ using ML.Engine.InventorySystem;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.Manager;
 using ML.Engine.Timer;
+using ML.Engine.UI;
 using ProjectOC.Player;
 using ProjectOC.ResonanceWheelSystem.UI;
 using ProjectOC.WorkerNS;
@@ -28,10 +29,13 @@ namespace ProjectOC.WorkerEchoNS
 
             timer.OnEndEvent += () =>
             {
-
-                this.worker = GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker(buildingPart.transform.position,Quaternion.identity,WorkerID);
-                this.worker.gameObject.transform.position = this.worker.gameObject.transform.position += new Vector3((float)(3 *Math.Cos(2 * 3.1415926 * index / 5)),0, (float)(3 * Math.Sin(2 * 3.1415926 * index / 5)));
-                (buildingPart as WorkerEchoBuilding).workerEcho.AddWorker(worker, index);          
+                GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker(buildingPart.transform.position, Quaternion.identity, WorkerID).Completed += (handle) =>
+                  {
+                      this.worker = handle.Result.GetComponent<Worker>();
+                      this.worker.gameObject.transform.position = this.worker.gameObject.transform.position += new Vector3((float)(3 * Math.Cos(2 * 3.1415926 * index / 5)), 0, (float)(3 * Math.Sin(2 * 3.1415926 * index / 5)));
+                      (buildingPart as WorkerEchoBuilding).workerEcho.AddWorker(worker, index);
+                  };
+        
             };
         }
     }
@@ -85,7 +89,7 @@ namespace ProjectOC.WorkerEchoNS
 
         public void ExpelWorker(int index)
         {
-            GameObject.Destroy(Workers[index].worker.gameObject);
+            ML.Engine.Manager.GameManager.DestroyObj(Workers[index].worker.gameObject);
            
             Workers[index] = null;
         }

@@ -7,6 +7,8 @@ using UnityEngine;
 using ML.Engine.TextContent;
 using Unity.VisualScripting;
 using UnityEngine.U2D;
+using System.Threading.Tasks;
+using UnityEngine.AddressableAssets;
 
 namespace ML.Engine.InventorySystem
 {
@@ -34,6 +36,14 @@ namespace ML.Engine.InventorySystem
     {
         #region Instance
         private ItemManager() { }
+
+        ~ItemManager()
+        {
+            foreach(var sa in this.itemAtlasList)
+            {
+                Manager.GameManager.Instance.ABResourceManager.Release(sa);
+            }
+        }
 
         private static ItemManager instance;
 
@@ -70,45 +80,23 @@ namespace ML.Engine.InventorySystem
 
         #region to-do : 需读表导入所有所需的 Item 数据
         public const string TypePath = "ML.Engine.InventorySystem.";
-        public const string Texture2DPath = "ui/Item/texture2d";
-        public const string WorldObjPath = "prefabs/Item/WorldItem";
+        public const string ItemIconLabel = "ItemTexture2D";
+        public const string WorldObjLabel = "ItemWorldPrefabs";
 
 
 
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableData[]> ABJAProcessor;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableData[]> ABJAProcessor;
 
         public void LoadTableData()
         {
-            if (ABJAProcessor == null)
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableData[]>("OC/Json/TableData", "Item", (datas) =>
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableData[]>("Json/TableData", "Item", (datas) =>
+                foreach (var data in datas)
                 {
-                    foreach (var data in datas)
-                    {
-                        this.ItemTypeStrDict.Add(data.id, data);
-                    }
-                }, null, "背包系统物品Item表数据");
-                ABJAProcessor.StartLoadJsonAssetData();
-            }
-            
-            if (itemAtlas == null)
-            {
-                AssetBundle ab = null;
-                AssetBundleCreateRequest request = null;
-                request = Manager.GameManager.Instance.ABResourceManager
-                .LoadLocalABAsync(Texture2DPath, (asop) =>
-                {
-                    if (request != null)
-                    {
-                        ab = request.assetBundle;
-                    }
-                    AssetBundleRequest request2 = ab.LoadAssetAsync<SpriteAtlas>("SA_Item_UI");
-                    if(request2 != null)
-                    {
-                        itemAtlas = request2.asset as SpriteAtlas;
-                    }
-                },out ab);
-            }
+                    this.ItemTypeStrDict.Add(data.id, data);
+                }
+            }, "背包系统物品Item表数据");
+            ABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
 
@@ -170,16 +158,20 @@ namespace ML.Engine.InventorySystem
             return res;
         }
 
-
-        public WorldItem SpawnWorldItem(Item item, Vector3 pos, Quaternion rot)
+        public async Task<WorldItem> SpawnWorldItem(Item item, Vector3 pos, Quaternion rot)
         {
-            
             if (item == null)
             {
                 return null;
             }
             // to-do : 可采用对象池形式
-            GameObject obj = GameObject.Instantiate(Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(WorldObjPath).LoadAsset<GameObject>(this.ItemTypeStrDict[item.ID].worldobject), pos, rot);
+            Debug.Log(WorldObjLabel + "/" + this.ItemTypeStrDict[item.ID].worldobject);
+            var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjLabel + "/" + this.ItemTypeStrDict[item.ID].worldobject + ".prefab", pos, rot);
+
+            await handle.Task;
+
+            GameObject obj = handle.Result;
+
             WorldItem worldItem = obj.GetComponent<WorldItem>();
             if (worldItem == null)
             {
@@ -218,8 +210,20 @@ namespace ML.Engine.InventorySystem
 
         #region SpriteAtlas
 
-        private SpriteAtlas itemAtlas;
+        private List<SpriteAtlas> itemAtlasList;
+        public void LoadItemAtlas()
+        {
+            itemAtlasList = new List<SpriteAtlas>();
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetsAsync<SpriteAtlas>(ItemIconLabel, (asList) =>
+            {
+                lock(itemAtlasList)
+                {
+                    itemAtlasList.Add(asList);
+                }
+            });
+        }
         
+
         #endregion
         #region Getter
         public string[] GetAllItemID()
@@ -238,7 +242,15 @@ namespace ML.Engine.InventorySystem
             {
                 return null;
             }
-            return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(Texture2DPath).LoadAsset<Texture2D>(this.ItemTypeStrDict[id].icon);
+            foreach(var sa in this.itemAtlasList)
+            {
+                var s = sa.GetSprite(this.ItemTypeStrDict[id].icon);
+                if(s != null)
+                {
+                    return s.texture;
+                }
+            }
+            return null;
         }
 
         public Sprite GetItemSprite(string id)
@@ -247,14 +259,29 @@ namespace ML.Engine.InventorySystem
              {
                  return null;
              }
-            return itemAtlas.GetSprite(this.ItemTypeStrDict[id].icon);
+            foreach (var sa in this.itemAtlasList)
+            {
+                var s = sa.GetSprite(this.ItemTypeStrDict[id].icon);
+                if (s != null)
+                {
+                    return s;
+                }
+            }
+            return null;
         }
 
-        public void AddItemIconObject(string itemID, Transform parent, Vector3 pos, Quaternion rot, Vector3 scale, bool isLocal = true)
+        public async void AddItemIconObject(string itemID, Transform parent, Vector3 pos, Quaternion rot, Vector3 scale, bool isLocal = true)
         {
             if (parent.GetComponentInChildren<SpriteRenderer>() == null)
             {
-                GameObject obj = GameObject.Instantiate(Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(WorldObjPath).LoadAsset<GameObject>("ItemIcon"), parent);
+                // 异步加载资源
+                var handle = Addressables.InstantiateAsync(WorldObjLabel + "/ItemIcon", parent);
+
+                // 等待加载完成
+                await handle.Task;
+
+                var obj = handle.Result;
+
                 if (isLocal)
                 {
                     obj.transform.localPosition = pos;
@@ -269,16 +296,6 @@ namespace ML.Engine.InventorySystem
             }
             SpriteRenderer spriteRenderer = parent.GetComponentInChildren<SpriteRenderer>();
             spriteRenderer.sprite = GetItemSprite(itemID);
-        }
-
-        public GameObject GetItemObject(string id)
-        {
-            if (!this.ItemTypeStrDict.ContainsKey(id))
-            {
-                return null;
-            }
-
-            return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(WorldObjPath).LoadAsset<GameObject>(this.ItemTypeStrDict[id].worldobject);
         }
 
         public string GetItemName(string id)
