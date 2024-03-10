@@ -111,8 +111,6 @@ namespace ML.Engine.Input
                 t += item;
             }
 
-            //Debug.Log("Current inputAction: " + inputAction.name + " " + t);
-
             return t;
         }
 
