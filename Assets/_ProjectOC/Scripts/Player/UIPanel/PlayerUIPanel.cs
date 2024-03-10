@@ -1,5 +1,6 @@
 using ML.Engine.BuildingSystem;
 using ML.Engine.InventorySystem;
+using ML.Engine.SaveSystem;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
 using Newtonsoft.Json;
@@ -25,6 +26,7 @@ namespace ProjectOC.Player.UI
         private SelectedButton EnterInventoryBtn;
         private SelectedButton EnterBeastPanelBtn;
         private SelectedButton CreateWorkerBtn;
+        private SelectedButton SaveSystemBtn;
 
         private BuildingManager BM => BuildingManager.Instance;
 
@@ -109,6 +111,25 @@ namespace ProjectOC.Player.UI
             this.CreateWorkerBtn.OnInteract += () =>
             {
                 ProjectOC.ManagerNS.LocalGameManager.Instance.WorkerManager.SpawnWorker(player.transform.position, player.transform.rotation);
+            };
+
+            this.SaveSystemBtn = btnList.Find("SaveSystem").GetComponent<SelectedButton>();
+            this.SaveSystemBtn.OnInteract += () =>
+            {
+                bool flag = true;
+                foreach (ISaveData data in ML.Engine.Manager.GameManager.Instance.SaveManager.SaveController.datas)
+                {
+                    if (data is TestSaveData)
+                    {
+                        flag = false;
+                    }
+                }
+                if (flag)
+                {
+                    TestSaveData data = new TestSaveData();
+                    data.AddToSaveSystem();
+                }
+                ML.Engine.Manager.GameManager.Instance.SaveManager.SaveController.SaveSaveDataFolder(null);
             };
 
 
@@ -229,6 +250,7 @@ namespace ProjectOC.Player.UI
                 this.EnterInventoryBtn.text.text = TipDict["inventory"].GetDescription();
                 this.EnterBeastPanelBtn.text.text = TipDict["beastpanel"].GetDescription();
                 this.CreateWorkerBtn.text.text = TipDict["worker"].GetDescription();
+                this.SaveSystemBtn.text.text = TipDict["save"].GetDescription();
             }
         }
     }

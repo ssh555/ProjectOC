@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dde8b323d970e3f4dad2cf99c14c9055, type: 3}
+  m_Name: SaveSystemConfig
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 0
+    SerializedBytes: 01010600000043006f006e006600690067002f0000000001300000004d004c002e0045006e00670069006e0065002e005300610076006500530079007300740065006d002e00530061007600650043006f006e006600690067002c00200041007300730065006d0062006c0079002d00430053006800610072007000000000001d01080000005300610076006500540079007000650000000000000000002b010c00000055007300650045006e00630072007000740069006f006e0000052d0104000000540065006d007000
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
