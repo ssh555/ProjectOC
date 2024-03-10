@@ -255,7 +255,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             if (this.parentUI.ABJAProcessorJson_sub1 == null || !this.parentUI.ABJAProcessorJson_sub1.IsLoaded || !IsInit)
             {
-                Debug.Log("ABJAProcessorJson is null");
                 return;
             }
 
@@ -338,7 +337,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                 foreach (var feature in worker.Features)
                 {
-                    GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/Description", Info).Completed += (handle) =>
+                    GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/Description.prefab", Info).Completed += (handle) =>
                         {
                             this.descriptionHandle.Add(handle);
                             var descriptionPrefab = handle.Result;
@@ -370,7 +369,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #region Texture2D
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
-        private string ResonanceWheelSpriteAtlasPath = "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI";
+        private string ResonanceWheelSpriteAtlasPath = "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2";
         private void InitUITexture2D()
         {
             GM.ABResourceManager.LoadAssetAsync<SpriteAtlas>(ResonanceWheelSpriteAtlasPath).Completed += (handle) =>

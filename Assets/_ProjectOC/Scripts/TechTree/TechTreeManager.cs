@@ -67,13 +67,14 @@ namespace ProjectOC.TechTree
             if (Instance == this)
             {
                 Instance = null;
-                ML.Engine.Manager.GameManager.Instance.ABResourceManager.Release(this.techAtlas);
+                if(ML.Engine.Manager.GameManager.Instance != null)
+                    ML.Engine.Manager.GameManager.Instance.ABResourceManager.Release(this.techAtlas);
             }
         }
         #endregion
 
         #region TechPoint
-        public const string TPIconSpriteAtlasPath = "OC/UI/TechPoint/Texture/SA_TechPoint_UI";
+        public const string TPIconSpriteAtlasPath = "OC/UI/TechPoint/Texture/SA_TechPoint_UI.spriteatlasv2";
 
         /// <summary>
         /// 载入的科技点表格数据

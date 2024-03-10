@@ -76,15 +76,15 @@ namespace ML.Engine.BuildingSystem
         #endregion
 
         #region Internal
-        public const string UIPanelABPath = "ML/BuildingSystem/UI/Panels";
+        public const string UIPanelABPath = "ML/BuildingSystem/UI/Panel";
 
-        public const string BPartABPath = "ML/BuildingSystem/BuildingPart";
+        public const string BPartABPath = "BuildingPart";
 
         [ShowInInspector]
         private RectTransform Canvas => Manager.GameManager.Instance.UIManager.GetCanvas.GetComponent<RectTransform>();
         public async System.Threading.Tasks.Task<T> GetPanel<T>() where T : UIBasePanel
         {
-            var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(UIPanelABPath + "/" + typeof(T).Name);
+            var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(UIPanelABPath + "/" + typeof(T).Name + ".prefab");
             await handle.Task;
             T panel = handle.Result.GetComponent<T>();
             return panel;
@@ -100,6 +100,14 @@ namespace ML.Engine.BuildingSystem
         public void PopPanel()
         {
             Manager.GameManager.Instance.UIManager.PopPanel();
+        }
+
+        public async void PopAndPushPanel<T>() where T : UIBasePanel
+        {
+            var panel = await this.GetPanel<T>();
+            Manager.GameManager.Instance.UIManager.PopPanel();
+            Manager.GameManager.Instance.UIManager.PushPanel(panel);
+            panel.transform.SetParent(this.Canvas, false);
         }
 
         private UIBasePanel GetPeekPanel()
@@ -163,7 +171,8 @@ namespace ML.Engine.BuildingSystem
             if(Instance == this)
             {
                 Instance = null;
-                Manager.GameManager.Instance.ABResourceManager.Release(BPartHandle);
+                if(Manager.GameManager.Instance != null)
+                    Manager.GameManager.Instance.ABResourceManager.Release(BPartHandle);
             }
         }
 

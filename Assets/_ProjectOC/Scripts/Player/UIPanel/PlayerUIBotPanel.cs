@@ -22,7 +22,6 @@ namespace ProjectOC.Player.UI
         private void Start()
         {
 
-            InitUITextContents();
 
             
 
@@ -207,16 +206,15 @@ namespace ProjectOC.Player.UI
 
         public override void Refresh()
         {
-            if (ABJAProcessorJson_StartMenuPanel == null || !ABJAProcessorJson_StartMenuPanel.IsLoaded || !IsInit)
+            /*if (ABJAProcessorJson_StartMenuPanel == null || !ABJAProcessorJson_StartMenuPanel.IsLoaded || !IsInit)
             {
-                Debug.Log("ABJAProcessorJson is null");
                 return;
             }
 
             NewGameBtnText.text = PanelTextContent_StartMenuPanel.NewGameBtn;
             ContinueGameBtnText.text = PanelTextContent_StartMenuPanel.ContinueGameBtn;
             OptionBtnText.text = PanelTextContent_StartMenuPanel.OptionBtn;
-            QuitGameBtnText.text = PanelTextContent_StartMenuPanel.QuitGameBtn;
+            QuitGameBtnText.text = PanelTextContent_StartMenuPanel.QuitGameBtn;*/
 
         }
         #endregion
@@ -224,26 +222,7 @@ namespace ProjectOC.Player.UI
 
 
         #region TextContent
-        [System.Serializable]
-        public struct StartMenuPanelStruct
-        {
-            public ML.Engine.TextContent.TextContent NewGameBtn;
-            public ML.Engine.TextContent.TextContent ContinueGameBtn;
-            public ML.Engine.TextContent.TextContent OptionBtn;
-            public ML.Engine.TextContent.TextContent QuitGameBtn;
-        }
 
-        public StartMenuPanelStruct PanelTextContent_StartMenuPanel => ABJAProcessorJson_StartMenuPanel.Datas;
-        public ML.Engine.ABResources.ABJsonAssetProcessor<StartMenuPanelStruct> ABJAProcessorJson_StartMenuPanel;
-        private void InitUITextContents()
-        {
-            ABJAProcessorJson_StartMenuPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<StartMenuPanelStruct>("OC/Json/TextContent/StartMenuPanel", "StartMenuPanel", (datas) =>
-            {
-                Refresh();
-                this.enabled = false;
-            }, "StartMenuPanelÊý¾Ý");
-            ABJAProcessorJson_StartMenuPanel.StartLoadJsonAssetData();
-        }
         #endregion
 
 

@@ -59,9 +59,11 @@ namespace ProjectOC.Player.UI
             this.EnterTechTreeBtn = btnList.Find("EnterTechTree").GetComponent<SelectedButton>();
             this.EnterTechTreeBtn.OnInteract += () =>
             {
-                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/TechPointPanel", this.transform.parent, true).Completed += (handle) =>
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/TechPointPanel.prefab", this.transform.parent, true).Completed += (handle) =>
                  {
                      var panel = handle.Result.GetComponent<UITechPointPanel>();
+                     panel.transform.localScale = Vector3.one;
+                     panel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
                      panel.inventory = this.player.Inventory;
                      ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
                  };
@@ -70,9 +72,11 @@ namespace ProjectOC.Player.UI
             this.EnterInventoryBtn = btnList.Find("EnterInventory").GetComponent<SelectedButton>();
             this.EnterInventoryBtn.OnInteract += () =>
             {
-                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIInfiniteInventoryPanel", this.transform.parent, true).Completed += (handle) =>
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIInfiniteInventoryPanel.prefab", this.transform.parent, true).Completed += (handle) =>
                 {
                     var panel = handle.Result.GetComponent<UIInfiniteInventory>();
+                    panel.transform.localScale = Vector3.one;
+                    panel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
                     panel.inventory = this.player.Inventory as ML.Engine.InventorySystem.InfiniteInventory;
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
                 };
@@ -81,9 +85,11 @@ namespace ProjectOC.Player.UI
             this.EnterBeastPanelBtn = btnList.Find("EnterBeastPanel").GetComponent<SelectedButton>();
             this.EnterBeastPanelBtn.OnInteract += () =>
             {
-                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/BeastPanel", this.transform.parent, true).Completed += (handle) =>
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/BeastPanel.prefab", this.transform.parent, true).Completed += (handle) =>
                 {
                     var panel = handle.Result.GetComponent<BeastPanel>();
+                    panel.transform.localScale = Vector3.one;
+                    panel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
                 };
             };
@@ -193,7 +199,7 @@ namespace ProjectOC.Player.UI
 
         public void InitUITextContents()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ML.Engine.TextContent.TextTip[]>("OC/Json/TextContent/Player", "PlayerUIPanel", (datas) =>
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ML.Engine.TextContent.TextTip[]>("OC/Json/TextContent/PlayerUIPanel", "PlayerUIPanel", (datas) =>
             {
                 foreach (var tip in datas)
                 {

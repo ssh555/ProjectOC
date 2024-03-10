@@ -9,9 +9,9 @@ namespace ML.Engine.Manager
 {
     public class EnterPoint
     {
-        private string StartMenuPanelPrefab = "";
-        private string LoadingScenePanelPrefab = "";
-        private string OptionPanelPrefab = "";
+        private string StartMenuPanelPrefab = "ML/BaseUIPanel/StartMenuPanel.prefab";
+        private string LoadingScenePanelPrefab = "ML/BaseUIPanel/LoadingScenePanel.prefab";
+        private string OptionPanelPrefab = "ML/BaseUIPanel/OptionPanel.prefab";
 
         public EnterPoint()
         {
@@ -26,8 +26,7 @@ namespace ML.Engine.Manager
 
                     panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
 
-                    // Push
-                    GameManager.Instance.UIManager.PushPanel(panel);
+                    panel.OnEnter();
                 };
 
             };

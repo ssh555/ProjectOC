@@ -49,7 +49,6 @@ namespace ML.Engine.UI
             this.Enter();
 
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
-
         }
 
         public override void OnExit()
@@ -162,15 +161,14 @@ namespace ML.Engine.UI
         public ML.Engine.ABResources.ABJsonAssetProcessor<LoadingScenePanelStruct> ABJAProcessorJson_StartMenuPanel;
         private void InitUITextContents()
         {
-
-            ABJAProcessorJson_StartMenuPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<LoadingScenePanelStruct>("ML/Json/TextContent/LoadingScenePanel", "LoadingScenePanel", (datas) =>
+            ABJAProcessorJson_StartMenuPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<LoadingScenePanelStruct>("ML/Json/TextContent", "LoadingScenePanel", (datas) =>
             {
+                if (this.IsDestroyed())
+                    return;
                 Refresh();
                 this.enabled = false;
             }, "LoadingScenePanelÊý¾Ý");
             ABJAProcessorJson_StartMenuPanel.StartLoadJsonAssetData();
-            
-
         }
         #endregion
 

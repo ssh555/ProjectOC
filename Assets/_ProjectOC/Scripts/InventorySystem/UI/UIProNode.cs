@@ -708,7 +708,7 @@ namespace ProjectOC.InventorySystem.UI
                     }
                     else
                     {
-                        Debug.Log("keyTip.keyname " + keyTip.keyname);
+                        //Debug.Log("keyTip.keyname " + keyTip.keyname);
                     }
                 }
                 UikeyTipIsInit = true;

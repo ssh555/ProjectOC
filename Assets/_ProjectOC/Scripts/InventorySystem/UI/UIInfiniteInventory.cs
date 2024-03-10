@@ -462,7 +462,7 @@ namespace ProjectOC.InventorySystem.UI
                     }
                     else
                     {
-                        Debug.Log("keyTip.keyname " + keyTip.keyname);
+                        //Debug.Log("keyTip.keyname " + keyTip.keyname);
                     }
                 }
                 UikeyTipIsInit = true;
@@ -712,7 +712,7 @@ namespace ProjectOC.InventorySystem.UI
 
         private void LoadInventoryAtlas()
         {
-            GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>("OC/UI/Inventory/Texture/SA_Inventory_UI").Completed += (handle) =>
+            GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>("OC/UI/Inventory/Texture/SA_Inventory_UI.spriteatlasv2").Completed += (handle) =>
             {
                 inventoryAtlas = handle.Result as SpriteAtlas;
             };

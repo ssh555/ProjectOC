@@ -866,7 +866,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                     foreach (var item in GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRaw(cb))
                     {
-                        GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/Slot", Consumables).Completed += (handle) =>
+                        GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/Slot.prefab", Consumables).Completed += (handle) =>
                         {
                             this.goHandle.Add(handle);
                             var descriptionPrefab = handle.Result;
@@ -964,7 +964,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #region Texture2D
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
-        private string ResonanceWheelSpriteAtlasPath = "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI";
+        private string ResonanceWheelSpriteAtlasPath = "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2";
 
         private void InitUITexture2D()
         {
