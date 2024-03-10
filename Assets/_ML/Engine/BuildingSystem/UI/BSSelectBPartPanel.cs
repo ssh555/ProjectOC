@@ -22,8 +22,8 @@ namespace ML.Engine.BuildingSystem.UI
     public class BSSelectBPartPanel : Engine.UI.UIBasePanel
     {
         #region ‘ÿ»Î◊ ‘¥
-        public const string TCategorySpriteAtlasPath = "ML/BuildingSystem/Category/SA_Build_Category";
-        public const string TTypeABPath = "ML/BuildingSystem/Type/SA_Build_Type";
+        public const string TCategorySpriteAtlasPath = "ML/BuildingSystem/Category/SA_Build_Category.spriteatlasv2";
+        public const string TTypeABPath = "ML/BuildingSystem/Type/SA_Build_Type.spriteatlasv2";
 
         public int IsInit = -1;
 
@@ -363,8 +363,7 @@ namespace ML.Engine.BuildingSystem.UI
         private void Placer_ComfirmSelection(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(this.CanSelectCategory1[this.SelectedCategory1Index], this.CanSelectCategory2[this.SelectedCategory2Index]);
-            MonoBuildingManager.Instance.PopPanel();
-            MonoBuildingManager.Instance.PushPanel<BSPlaceModePanel>();
+            MonoBuildingManager.Instance.PopAndPushPanel<BSPlaceModePanel>();
         }
         #endregion
 

@@ -68,39 +68,28 @@
 ],
 
 
-  "expel": {
-    "keyname": "Expel",
+  "Expel": {
+    "keyname": "KT_Expel",
     "keymap": {
-      "KeyBoard": "R",
-      "XBOX": "Y"
+      "ActionMapName": "ResonanceWheelUI_sub1",
+      "ActionName": "Expel"
     },
     "description": {
       "Chinese": "驱逐",
       "English": "Deport"
     }
   },
-  "receive": {
-    "keyname": "Receive",
+  "Receive": {
+    "keyname": "KT_Receive",
     "keymap": {
-      "KeyBoard": "E",
-      "XBOX": "X"
+      "ActionMapName": "ResonanceWheelUI_sub1",
+      "ActionName": "Receive"
     },
     "description": {
       "Chinese": "收留",
       "English": "Receive"
     }
-  },
-  //BotKeyTips
-  "back": {
-    "keyname": "back",
-    "keymap": {
-      "KeyBoard": "ESC",
-      "XBOX": "B"
-    },
-    "description": {
-      "Chinese": "返回",
-      "English": "Back"
-    }
   }
+  
 }
 

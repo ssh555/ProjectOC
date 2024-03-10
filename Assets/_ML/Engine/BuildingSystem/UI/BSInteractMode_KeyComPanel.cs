@@ -136,8 +136,7 @@ namespace ML.Engine.BuildingSystem.UI
             var bpart = BuildingManager.Instance.GetOneBPartCopyInstance(this.Placer.SelectedPartInstance);
             if (bpart == this.Placer.SelectedPartInstance)
             {
-                MonoBuildingManager.Instance.PopPanel();
-                MonoBuildingManager.Instance.PushPanel<BSPlaceModePanel>();
+                MonoBuildingManager.Instance.PopAndPushPanel<BSPlaceModePanel>();
             }
         }
         #endregion

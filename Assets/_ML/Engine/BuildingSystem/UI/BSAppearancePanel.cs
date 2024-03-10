@@ -273,7 +273,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.SelectedPartInstance.Mode = this._aMode;
         }
 
-        private const string MatPABPath = "ML/BuildingSystem/MatPackage";
+        private const string MatPABPath = "BPartMatPackage";
         private AsyncOperationHandle matHandle;
         protected void LoadMatPackages()
         {

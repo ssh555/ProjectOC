@@ -403,6 +403,360 @@
             ]
         },
         {
+            "name": "PlayerUIBot",
+            "id": "9e3fc58b-0ad1-4776-be41-29664b9240d0",
+            "actions": [
+                {
+                    "name": "OpenMenu",
+                    "type": "Value",
+                    "id": "27f7a73d-11b8-4591-bf27-2e94d794c16a",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "OpenMap",
+                    "type": "Value",
+                    "id": "a35a7b80-5fec-414f-9f2f-9a910333ff29",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "SelectGrid",
+                    "type": "Value",
+                    "id": "ae36565b-a263-4e67-b282-ab5c3b19fb44",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "KeyBoard",
+                    "id": "1adacd95-25e0-4edd-a425-6db4e7f7bd17",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenMenu",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "5836ff54-6452-41b9-a363-4f69a4610dbb",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "d4450875-9d93-4c9d-b97c-d8c338f08699",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "027cdfe5-8078-408d-b155-db9c2476ba24",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "c66336e6-b160-4e7c-957d-fde0cf35b8b4",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "XBOX",
+                    "id": "79b67ef4-ee4a-478e-9381-dd6f10b5ddce",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenMenu",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "63a11067-52aa-4eb0-81cf-f9a2470a922d",
+                    "path": "<XInputController>/leftStick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "c78126b0-3016-4e11-8e03-33df6df4e11a",
+                    "path": "<XInputController>/leftStick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "2f6f7e49-3f27-4f48-83cf-0732f7131584",
+                    "path": "<XInputController>/leftStick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "b36b6f32-933b-4dc9-9108-c3bc4523e3a5",
+                    "path": "<XInputController>/leftStick/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "KeyBoard",
+                    "id": "e76a8523-725b-4a44-9f79-434fb82dbdab",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenMap",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "d0b59f2c-2140-45b5-9aa5-95f007378fbc",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenMap",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "7725d727-cad0-4ce0-ab0f-345a948468a4",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenMap",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "be35a41b-6519-4864-b9bf-6dc782b0a718",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenMap",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "4842660e-704d-4afd-a8b2-aaee8dd0731e",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenMap",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "XBOX",
+                    "id": "f5a5c866-c8dd-42c1-acdc-20103acde4fe",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenMap",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "32228e47-968e-4fe7-ba11-e6c0e7c0280e",
+                    "path": "<XInputController>/leftStick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenMap",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "3a0ddb83-90dc-4edc-ae77-44657859c41e",
+                    "path": "<XInputController>/leftStick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenMap",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "0b1e457b-9485-46bc-b585-1c22786c8798",
+                    "path": "<XInputController>/leftStick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenMap",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "b33b087d-289d-4893-9bbe-32c59fa7b583",
+                    "path": "<XInputController>/leftStick/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenMap",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "2D Vector",
+                    "id": "2475cd1a-209b-47f2-915f-f284bac44061",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGrid",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "0f875b4f-6b2b-4773-8adc-8ae0d5b89f34",
+                    "path": "<XInputController>/leftStick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGrid",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "up",
+                    "id": "001aa6bf-3eef-4014-a73c-f832140e6a9e",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGrid",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "78c1ee5b-ea6d-4dc8-86d6-21e65cfee659",
+                    "path": "<XInputController>/leftStick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGrid",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "7d3d09cf-cc4f-4568-b369-ff901c05576c",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGrid",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "4fb86ed1-8a40-4613-bb0f-907666e31ea4",
+                    "path": "<XInputController>/leftStick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGrid",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "a4d29b8b-e3be-4bf4-845d-4326dff63720",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGrid",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "e0d551e6-d1cf-4236-ba16-64c0b5eb7ef7",
+                    "path": "<XInputController>/leftStick/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGrid",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "c04c303b-c884-436a-8cda-3c49601b32e0",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGrid",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
+        },
+        {
             "name": "TechTree",
             "id": "2c61ba0d-549f-46fb-9ae4-3a551b982404",
             "actions": [
@@ -441,6 +795,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Inspect",
+                    "type": "Button",
+                    "id": "c7c3180c-7c05-442e-b58e-d7963a379abc",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -619,6 +982,28 @@
                     "action": "AlterTP",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "f2e399bd-8e02-4da6-9e1b-de27ebdb7d07",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Inspect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f688b7d8-4b09-4939-9006-b9ed57af7e64",
+                    "path": "<XInputController>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Inspect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -706,7 +1091,7 @@
                 {
                     "name": "up",
                     "id": "9889cd8e-043e-42e7-ba19-f951e21e4b41",
-                    "path": "<XInputController>/dpad/up",
+                    "path": "<XInputController>/leftStick/up",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -717,7 +1102,7 @@
                 {
                     "name": "down",
                     "id": "cce319de-2849-4f21-86df-6db00449bc26",
-                    "path": "<XInputController>/dpad/down",
+                    "path": "<XInputController>/leftStick/down",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -728,7 +1113,7 @@
                 {
                     "name": "left",
                     "id": "4b0ebd66-b18e-4e94-b8ce-1e52b4a7984f",
-                    "path": "<XInputController>/dpad/left",
+                    "path": "<XInputController>/leftStick/left",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -739,7 +1124,7 @@
                 {
                     "name": "right",
                     "id": "ecc2ff30-566f-4481-b51b-cc3a2fbcd67a",
-                    "path": "<XInputController>/dpad/right",
+                    "path": "<XInputController>/leftStick/right",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -754,9 +1139,27 @@
             "id": "7057597f-dd83-480d-a439-81cedab5aa7f",
             "actions": [
                 {
-                    "name": "DropAndDestroy",
+                    "name": "Drop",
                     "type": "Button",
                     "id": "bd543c13-a674-4748-aa09-6d0702ba6f93",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Destroy",
+                    "type": "Button",
+                    "id": "4bc8699e-a9f0-4c4a-befd-86e7e5c79a09",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Use",
+                    "type": "Button",
+                    "id": "0f2c2a2f-76a5-4bb3-862b-17bf201eafa9",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Hold",
@@ -798,7 +1201,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "DropAndDestroy",
+                    "action": "Drop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -809,7 +1212,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "DropAndDestroy",
+                    "action": "Drop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -966,6 +1369,50 @@
                     "action": "AlterItem",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "76a8f7bc-2bdf-4e22-9edc-339e128eff82",
+                    "path": "<XInputController>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Destroy",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bb781c6a-9a4c-4543-96e9-fe34724a1ee4",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Destroy",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9b0dca4e-d1de-4836-8aef-2d84b49d645f",
+                    "path": "<XInputController>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Use",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ad42e9a8-e8ef-43e2-ad7d-c52ad70dff33",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Use",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -973,15 +1420,6 @@
             "name": "UIStore",
             "id": "6c9463f6-81a1-4ff6-ad81-9b25e52ed957",
             "actions": [
-                {
-                    "name": "NextPriority",
-                    "type": "Button",
-                    "id": "127ae37f-8a08-4977-968a-aef14074cea4",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
                 {
                     "name": "ChangeIcon",
                     "type": "Button",
@@ -992,31 +1430,22 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Upgrade",
+                    "name": "NextPriority",
                     "type": "Button",
-                    "id": "d60d6ab9-0a0f-44d7-bf1e-e1b964f968b6",
+                    "id": "127ae37f-8a08-4977-968a-aef14074cea4",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Alter",
+                    "name": "ChangeItem",
                     "type": "Value",
                     "id": "a88c7458-1957-4bf2-8552-c159134b876a",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
-                },
-                {
-                    "name": "ChangeStoreData",
-                    "type": "Button",
-                    "id": "87b70b70-485e-43c4-8fe3-dee297ad547d",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 },
                 {
                     "name": "Remove1",
@@ -1040,6 +1469,24 @@
                     "name": "FastAdd",
                     "type": "Button",
                     "id": "e2a803a8-3c5b-485c-8587-3b41d4f8ceb8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Upgrade",
+                    "type": "Button",
+                    "id": "d60d6ab9-0a0f-44d7-bf1e-e1b964f968b6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ChangeStoreData",
+                    "type": "Button",
+                    "id": "87b70b70-485e-43c4-8fe3-dee297ad547d",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -1071,6 +1518,50 @@
                 },
                 {
                     "name": "",
+                    "id": "3ea772ae-eb77-4e95-a915-090a81beae3d",
+                    "path": "<XInputController>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeStoreData",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "69f3b08a-3774-47b3-8fa2-9f4b983b0397",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeStoreData",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9146e27f-fc3f-4379-97fd-3535fc23c096",
+                    "path": "<XInputController>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Upgrade",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "34ccf2f4-fe5f-4b34-b387-4d304ee8d446",
+                    "path": "<Keyboard>/u",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Upgrade",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "e7840604-f4f3-4dd9-b617-28cf525b3c7f",
                     "path": "<XInputController>/leftTrigger",
                     "interactions": "",
@@ -1092,6 +1583,116 @@
                     "isPartOfComposite": false
                 },
                 {
+                    "name": "KeyBoard",
+                    "id": "02d150a4-d82f-4b8a-ba2b-1ace06b1f76b",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeItem",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "45bd83b0-e9f7-4ce6-aa86-5115aca8fb3c",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeItem",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "0678282e-ec10-46fb-83d6-5e2e38497284",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeItem",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "3e10dbc0-1b67-476d-bf4b-068321a341ea",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeItem",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "791b05b0-01d0-4317-a42b-8b65177398fd",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeItem",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "XBOX",
+                    "id": "471c472e-00cd-403d-a291-7c8711707230",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeItem",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "8f23e198-6925-49f6-89a8-fff03911ba1d",
+                    "path": "<XInputController>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeItem",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "5dadc7c7-33a6-4af0-a55e-514b8b0738ce",
+                    "path": "<XInputController>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeItem",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "b8c497cd-c6a5-4a14-9141-a130a1334f67",
+                    "path": "<XInputController>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeItem",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "102ae375-002d-4127-b73b-a8f8a027ea3a",
+                    "path": "<XInputController>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeItem",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
                     "name": "",
                     "id": "8e7db927-4ca8-4a74-b4a4-eea8f7f71bbe",
                     "path": "<XInputController>/buttonWest",
@@ -1105,7 +1706,7 @@
                 {
                     "name": "",
                     "id": "fff4c8a5-5012-4e6c-a787-8fa445766c9e",
-                    "path": "<Keyboard>/f",
+                    "path": "<Keyboard>/t",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -1127,7 +1728,7 @@
                 {
                     "name": "",
                     "id": "98ac3791-c45b-4c66-9fe1-a4aac0b72d8c",
-                    "path": "<Keyboard>/f",
+                    "path": "<Keyboard>/t",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -1156,160 +1757,6 @@
                     "action": "FastAdd",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "3ea772ae-eb77-4e95-a915-090a81beae3d",
-                    "path": "<XInputController>/buttonSouth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeStoreData",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "69f3b08a-3774-47b3-8fa2-9f4b983b0397",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeStoreData",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "KeyBoard",
-                    "id": "02d150a4-d82f-4b8a-ba2b-1ace06b1f76b",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Alter",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "45bd83b0-e9f7-4ce6-aa86-5115aca8fb3c",
-                    "path": "<Keyboard>/upArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Alter",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "0678282e-ec10-46fb-83d6-5e2e38497284",
-                    "path": "<Keyboard>/downArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Alter",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "3e10dbc0-1b67-476d-bf4b-068321a341ea",
-                    "path": "<Keyboard>/leftArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Alter",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "791b05b0-01d0-4317-a42b-8b65177398fd",
-                    "path": "<Keyboard>/rightArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Alter",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "XBOX",
-                    "id": "471c472e-00cd-403d-a291-7c8711707230",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Alter",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "8f23e198-6925-49f6-89a8-fff03911ba1d",
-                    "path": "<XInputController>/dpad/up",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Alter",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "5dadc7c7-33a6-4af0-a55e-514b8b0738ce",
-                    "path": "<XInputController>/dpad/down",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Alter",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "b8c497cd-c6a5-4a14-9141-a130a1334f67",
-                    "path": "<XInputController>/dpad/left",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Alter",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "102ae375-002d-4127-b73b-a8f8a027ea3a",
-                    "path": "<XInputController>/dpad/right",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Alter",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "",
-                    "id": "9146e27f-fc3f-4379-97fd-3535fc23c096",
-                    "path": "<XInputController>/leftShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Upgrade",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "34ccf2f4-fe5f-4b34-b387-4d304ee8d446",
-                    "path": "<Keyboard>/u",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Upgrade",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 }
             ]
         },
@@ -1336,6 +1783,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "ChangeRecipe",
+                    "type": "Button",
+                    "id": "0817c063-c7ed-4b4b-82a0-e4d37ce286d9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Remove1",
                     "type": "Button",
                     "id": "8973dd42-db36-411c-92bd-4827c8b757f7",
@@ -1354,7 +1810,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "FastAdd_RemoveWorker",
+                    "name": "FastAdd",
                     "type": "Button",
                     "id": "b072730b-87c6-4f53-a412-856a6f31d311",
                     "expectedControlType": "Button",
@@ -1363,7 +1819,79 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Alter",
+                    "name": "ChangeWorker",
+                    "type": "Button",
+                    "id": "339699fa-04cc-4c40-be7d-e826a3bebd10",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RemoveWorker",
+                    "type": "Button",
+                    "id": "9426e949-b89a-46f1-97ba-88da48a782d9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ConfirmRecipe",
+                    "type": "Button",
+                    "id": "fd5d01eb-32dc-42c3-a74e-2d3fc4fc426f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "BackRecipe",
+                    "type": "Button",
+                    "id": "3b3e28f6-fc56-4a07-a4c2-0ebcef9e458c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ConfirmWorker",
+                    "type": "Button",
+                    "id": "9eb65a06-9fdb-4a75-8aad-e659ba859fc1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "BackWorker",
+                    "type": "Button",
+                    "id": "d63f1d02-aa3b-47bc-8a02-8f72cb0d393c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ConfirmLevel",
+                    "type": "Button",
+                    "id": "95b157b0-36c0-4b96-9f42-27c8dd5713b3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "BackLevel",
+                    "type": "Button",
+                    "id": "d1cac56f-bbc4-4d16-ac00-56575b3e126b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "AlterRawItem",
                     "type": "Value",
                     "id": "1a286c3e-5479-48e0-b312-c005d1204369",
                     "expectedControlType": "Vector2",
@@ -1402,7 +1930,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Alter",
+                    "action": "AlterRawItem",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -1413,7 +1941,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Alter",
+                    "action": "AlterRawItem",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1424,7 +1952,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Alter",
+                    "action": "AlterRawItem",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1435,7 +1963,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Alter",
+                    "action": "AlterRawItem",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1446,7 +1974,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Alter",
+                    "action": "AlterRawItem",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1457,7 +1985,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Alter",
+                    "action": "AlterRawItem",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -1468,7 +1996,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Alter",
+                    "action": "AlterRawItem",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1479,7 +2007,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Alter",
+                    "action": "AlterRawItem",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1490,7 +2018,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Alter",
+                    "action": "AlterRawItem",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1501,7 +2029,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Alter",
+                    "action": "AlterRawItem",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1519,7 +2047,7 @@
                 {
                     "name": "",
                     "id": "6d63c30d-26b5-41c0-9c64-5a2db20ecda6",
-                    "path": "<Keyboard>/g",
+                    "path": "<Keyboard>/u",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -1578,7 +2106,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "FastAdd_RemoveWorker",
+                    "action": "FastAdd",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1589,7 +2117,205 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "FastAdd_RemoveWorker",
+                    "action": "FastAdd",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "73d82c5b-7d0b-42bc-a88b-3abdee935233",
+                    "path": "<XInputController>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeWorker",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a3fd9745-4663-47e8-a447-f54511980706",
+                    "path": "<Keyboard>/n",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeWorker",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9a4a7946-7f31-4be2-9a55-e7c15f46fcf9",
+                    "path": "<XInputController>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RemoveWorker",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ff1a270f-4e4b-46ba-9e16-c4276cdb319e",
+                    "path": "<Keyboard>/m",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RemoveWorker",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ab8c2549-8f91-4fbd-814d-b8e13a71ef2b",
+                    "path": "<XInputController>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeRecipe",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b5240a5e-bc65-4453-a8e6-cab9c610b992",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeRecipe",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b1d4327d-0947-4821-8306-11bbd3ad5ec4",
+                    "path": "<XInputController>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ConfirmRecipe",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d0e9b740-5876-45c0-9469-ece72c872769",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ConfirmRecipe",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "abeb6d6a-a0fa-4f97-ba24-c407f6899864",
+                    "path": "<XInputController>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BackRecipe",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "94b48943-e528-4fcd-9687-3e283fe24ea2",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BackRecipe",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5931685b-b23f-4a2f-8c47-8cc5a6d58516",
+                    "path": "<XInputController>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ConfirmWorker",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "52d13c55-58dc-472c-a253-7efc5722d719",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ConfirmWorker",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "579fb096-2c7f-4fd7-83d9-fff713515c07",
+                    "path": "<XInputController>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BackWorker",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9bb071e3-30ed-4d21-99a7-80bff389a1c1",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BackWorker",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2b62aa97-e370-4cc7-b5c4-fa13d11b08fd",
+                    "path": "<XInputController>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ConfirmLevel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9aed1072-d7f1-4097-b077-8426a8206fd5",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ConfirmLevel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5edafa2e-4170-4ec5-99be-345f3b4201fc",
+                    "path": "<XInputController>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BackLevel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9efe0372-7775-49e9-a98a-d58562b89d92",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BackLevel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -1779,7 +2505,7 @@
                 {
                     "name": "up",
                     "id": "d2c32268-48b6-4d4a-b7e0-d610290ced1f",
-                    "path": "<Gamepad>/leftStick/up",
+                    "path": "<XInputController>/leftStick/up",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -1801,7 +2527,7 @@
                 {
                     "name": "down",
                     "id": "6c552d7e-2280-4cb6-941a-e1ed26372a2f",
-                    "path": "<Gamepad>/leftStick/down",
+                    "path": "<XInputController>/leftStick/down",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -1823,7 +2549,7 @@
                 {
                     "name": "left",
                     "id": "2cca8acd-88dd-4ae8-b7f4-6e001e13e5b0",
-                    "path": "<Gamepad>/leftStick/left",
+                    "path": "<XInputController>/leftStick/left",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -1845,7 +2571,7 @@
                 {
                     "name": "right",
                     "id": "b4d041df-62f8-466c-b74f-bb0af66087a8",
-                    "path": "<Gamepad>/leftStick/right",
+                    "path": "<XInputController>/leftStick/right",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

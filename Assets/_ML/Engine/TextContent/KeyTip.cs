@@ -9,22 +9,9 @@ namespace ML.Engine.TextContent
     [System.Serializable]
     public struct KeyMap
     {
-        public string KeyBoard;
+        public string ActionMapName;
 
-        public string XBOX;
-
-        public string GetKeyMapText()
-        {
-            if (Config.inputDevice == Config.InputDevice.XBOX)
-            {
-                return XBOX;
-            }
-            else if (Config.inputDevice == Config.InputDevice.Keyboard)
-            {
-                return KeyBoard;
-            }
-            return "";
-        }
+        public string ActionName;
     }
 
     [System.Serializable]
@@ -34,10 +21,6 @@ namespace ML.Engine.TextContent
         public KeyMap keymap;
         public TextContent description;
 
-        public string GetKeyMapText()
-        {
-            return this.keymap.GetKeyMapText();
-        }
 
         public string GetDescription()
         {

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ProjectOC.Player.UI
+namespace ML.Engine.UI
 {
     public class SelectedButton : MonoBehaviour, IUISelected
     {
@@ -18,14 +18,16 @@ namespace ProjectOC.Player.UI
             OnInteract?.Invoke();
         }
 
-        public void OnSelectedEnter()
+        public void SelectedEnter()
         {
-            this.image.color = Color.red;
+            OnSelectedEnter?.Invoke();
+            //this.image.color = Color.red;
         }
 
-        public void OnSelectedExit()
+        public void SelectedExit()
         {
-            this.image.color = Color.white;
+            OnSelectedExit?.Invoke();
+            //this.image.color = Color.white;
         }
         #endregion
 
@@ -33,6 +35,8 @@ namespace ProjectOC.Player.UI
         public TMPro.TextMeshProUGUI text;
 
         public event System.Action OnInteract;
+        public event System.Action OnSelectedEnter;
+        public event System.Action OnSelectedExit;
 
         private void Awake()
         {

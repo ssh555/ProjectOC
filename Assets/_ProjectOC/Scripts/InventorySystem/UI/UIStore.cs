@@ -11,6 +11,10 @@ using ML.Engine.Extension;
 using ML.Engine.InventorySystem.CompositeSystem;
 using UnityEngine.Purchasing;
 using ProjectOC.ProNodeNS;
+using ML.Engine.UI;
+using ML.Engine.Manager;
+using ML.Engine.Input;
+using UnityEngine.InputSystem;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -22,19 +26,21 @@ namespace ProjectOC.InventorySystem.UI
         {
             InitUITextContents();
 
+            //KeyTips
+            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
+            foreach (var item in UIKeyTipComponents)
+            {
+                item.InitData();
+                uiKeyTipDic.Add(item.InputActionName, item);
+            }
+
             #region TopTitle
             Text_Title = transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_ChangeIcon = new UIKeyTip();
-            KT_ChangeIcon.img = transform.Find("TopTitle").Find("KT_ChangeIcon").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_ChangeIcon.keytip = KT_ChangeIcon.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
             StoreIcon = transform.Find("TopTitle").Find("Icon");
 
             #region Priority
             Transform priority = transform.Find("TopTitle").Find("Priority");
             Text_Priority = priority.Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_NextPriority = new UIKeyTip();
-            KT_NextPriority.img = priority.Find("KT_NextPriority").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_NextPriority.keytip = KT_NextPriority.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
             PriorityUrgency = priority.Find("Urgency");
             PriorityNormal = priority.Find("Normal");
             PriorityAlternative = priority.Find("Alternative");
@@ -74,36 +80,8 @@ namespace ProjectOC.InventorySystem.UI
             #region BotKeyTips
             BotKeyTips_KeyTips = this.transform.Find("BotKeyTips").Find("KeyTips");
             
-            KT_ChangeItem = new UIKeyTip();
-            KT_ChangeItem.img = BotKeyTips_KeyTips.Find("KT_ChangeItem").Find("Image").GetComponent<Image>();
-            KT_ChangeItem.keytip = KT_ChangeItem.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_ChangeItem.description = KT_ChangeItem.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_Remove1 = new UIKeyTip();
-            KT_Remove1.img = BotKeyTips_KeyTips.Find("KT_Remove1").Find("Image").GetComponent<Image>();
-            KT_Remove1.keytip = KT_Remove1.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_Remove1.description = KT_Remove1.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_Remove10 = new UIKeyTip();
-            KT_Remove10.img = BotKeyTips_KeyTips.Find("KT_Remove10").Find("Image").GetComponent<Image>();
-            KT_Remove10.keytip = KT_Remove10.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_Remove10.description = KT_Remove10.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_FastAdd = new UIKeyTip();
-            KT_FastAdd.img = BotKeyTips_KeyTips.Find("KT_FastAdd").Find("Image").GetComponent<Image>();
-            KT_FastAdd.keytip = KT_FastAdd.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_FastAdd.description = KT_FastAdd.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
             BotKeyTips_ChangeItem = this.transform.Find("BotKeyTips").Find("ChangeItem");
-            KT_ChangeItem_Confirm = new UIKeyTip();
-            KT_ChangeItem_Confirm.img = BotKeyTips_ChangeItem.Find("KT_Confirm").Find("Image").GetComponent<Image>();
-            KT_ChangeItem_Confirm.keytip = KT_ChangeItem_Confirm.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_ChangeItem_Confirm.description = KT_ChangeItem_Confirm.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_ChangeItem_Back = new UIKeyTip();
-            KT_ChangeItem_Back.img = BotKeyTips_ChangeItem.Find("KT_Back").Find("Image").GetComponent<Image>();
-            KT_ChangeItem_Back.keytip = KT_ChangeItem_Back.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_ChangeItem_Back.description = KT_ChangeItem_Back.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
+            
             BotKeyTips_ChangeItem.gameObject.SetActive(false);
             #endregion
 
@@ -343,6 +321,7 @@ namespace ProjectOC.InventorySystem.UI
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Enable();
             Store.IsInteracting = true;
+            UikeyTipIsInit = false;
             this.Refresh();
         }
 
@@ -361,7 +340,7 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeIcon.performed -= ChangeIcon_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Upgrade.performed -= Upgrade_performed;
             // 上下切换StoreData
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Alter.performed -= Alter_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeItem.performed -= ChangeItem_performed;
             // 改变StoreData存储的Item
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeStoreData.performed -= ChangeStoreData_performed;
             // 快捷放入
@@ -372,7 +351,7 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove10.performed -= Remove10_performed;
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
-            ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.performed -= Confirm_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
         }
 
         private void RegisterInput()
@@ -382,7 +361,7 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeIcon.performed += ChangeIcon_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Upgrade.performed += Upgrade_performed;
             // 上下切换StoreData
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Alter.performed += Alter_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeItem.performed += ChangeItem_performed;
             // 改变StoreData存储的Item
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeStoreData.performed += ChangeStoreData_performed;
             // 快捷放入
@@ -393,7 +372,7 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove10.performed += Remove10_performed;
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
-            ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.performed += Confirm_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
         }
         private void ChangeIcon_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
@@ -429,7 +408,7 @@ namespace ProjectOC.InventorySystem.UI
         }
 
         // Store
-        private void Alter_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void ChangeItem_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (CurMode == Mode.Store)
             {
@@ -551,6 +530,10 @@ namespace ProjectOC.InventorySystem.UI
         private List<GameObject> tempUIItemDatas = new List<GameObject>();
         private List<GameObject> tempUIItemDatasUpgrade = new List<GameObject>();
 
+        private Dictionary<string, UIKeyTipComponent> uiKeyTipDic = new Dictionary<string, UIKeyTipComponent>();
+        private bool UikeyTipIsInit;
+        private InputManager inputManager => GameManager.Instance.InputManager;
+
         private void ClearTemp()
         {
             foreach(var s in tempSprite)
@@ -569,21 +552,16 @@ namespace ProjectOC.InventorySystem.UI
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s);
             }
+            uiKeyTipDic = null;
         }
         #endregion
 
         #region UI对象引用
+        private UIKeyTipComponent[] UIKeyTipComponents;
+
+
         private TMPro.TextMeshProUGUI Text_Title;
         private TMPro.TextMeshProUGUI Text_Priority;
-
-        private UIKeyTip KT_NextPriority;
-        private UIKeyTip KT_ChangeIcon;
-        private UIKeyTip KT_ChangeItem;
-        private UIKeyTip KT_Remove1;
-        private UIKeyTip KT_Remove10;
-        private UIKeyTip KT_FastAdd;
-        private UIKeyTip KT_ChangeItem_Confirm;
-        private UIKeyTip KT_ChangeItem_Back;
 
         private Transform UIItemTemplate;
         private GridLayoutGroup GridLayout;
@@ -617,6 +595,35 @@ namespace ProjectOC.InventorySystem.UI
             {
                 return;
             }
+
+            if (UikeyTipIsInit == false)
+            {
+                KeyTip[] keyTips = inputManager.ExportKeyTipValues(PanelTextContent);
+                foreach (var keyTip in keyTips)
+                {
+                    InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
+                    inputManager.GetInputActionBindText(inputAction);
+                    if (uiKeyTipDic.ContainsKey(keyTip.keyname))
+                    {
+                        UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
+                        if (uIKeyTipComponent.uiKeyTip.keytip != null)
+                        {
+                            uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
+                        }
+                        if (uIKeyTipComponent.uiKeyTip.description != null)
+                        {
+                            uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+                        }
+                    }
+                    else
+                    {
+                        //Debug.Log("keyTip.keyname " + keyTip.keyname);
+                    }
+                }
+                UikeyTipIsInit = true;
+            }
+
+
             if (this.CurMode == Mode.Store)
             {
                 this.ChangeItem.gameObject.SetActive(false);
@@ -630,8 +637,6 @@ namespace ProjectOC.InventorySystem.UI
                 StoreDatas = Store.StoreDatas;
                 #region TopTitle
                 Text_Title.text = PanelTextContent.text_Title.GetText();
-                KT_ChangeIcon.ReWrite(PanelTextContent.kt_ChangeIcon);
-                KT_NextPriority.ReWrite(PanelTextContent.kt_NextPriority);
                 #endregion
 
                 #region Store
@@ -806,10 +811,7 @@ namespace ProjectOC.InventorySystem.UI
                 #endregion
 
                 #region BotKeyTips
-                KT_ChangeItem.ReWrite(PanelTextContent.kt_ChangeItem);
-                KT_Remove1.ReWrite(PanelTextContent.kt_Remove1);
-                KT_Remove10.ReWrite(PanelTextContent.kt_Remove10);
-                KT_FastAdd.ReWrite(PanelTextContent.kt_FastAdd);
+
                 #endregion
             }
             else if(this.CurMode == Mode.ChangeItem || this.CurMode == Mode.ChangeIcon)
@@ -962,8 +964,7 @@ namespace ProjectOC.InventorySystem.UI
                 #endregion
 
                 #region BotKeyTips
-                KT_ChangeItem_Confirm.ReWrite(PanelTextContent.kt_Confirm);
-                KT_ChangeItem_Back.ReWrite(PanelTextContent.kt_Back);
+
                 #endregion
             }
             else if (this.CurMode == Mode.Upgrade)
@@ -1061,8 +1062,7 @@ namespace ProjectOC.InventorySystem.UI
                 #endregion
 
                 #region BotKeyTips
-                KT_ChangeItem_Confirm.ReWrite(PanelTextContent.kt_Confirm);
-                KT_ChangeItem_Back.ReWrite(PanelTextContent.kt_Back);
+
                 #endregion
             }
         }
@@ -1082,14 +1082,14 @@ namespace ProjectOC.InventorySystem.UI
             public TextContent text_LvDesc1;
             public TextContent text_LvDesc2;
 
-            public KeyTip kt_NextPriority;
-            public KeyTip kt_ChangeIcon;
-            public KeyTip kt_ChangeItem;
-            public KeyTip kt_Remove1;
-            public KeyTip kt_Remove10;
-            public KeyTip kt_FastAdd;
-            public KeyTip kt_Confirm;
-            public KeyTip kt_Back;
+            public KeyTip NextPriority;
+            public KeyTip ChangeIcon;
+            public KeyTip ChangeItem;
+            public KeyTip Remove1;
+            public KeyTip Remove10;
+            public KeyTip FastAdd;
+            public KeyTip Confirm;
+            public KeyTip Back;
         }
 
         public StorePanel PanelTextContent => ABJAProcessor.Datas;

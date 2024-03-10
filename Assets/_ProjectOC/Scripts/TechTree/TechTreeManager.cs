@@ -67,13 +67,14 @@ namespace ProjectOC.TechTree
             if (Instance == this)
             {
                 Instance = null;
-                ML.Engine.Manager.GameManager.Instance.ABResourceManager.Release(this.techAtlas);
+                if(ML.Engine.Manager.GameManager.Instance != null)
+                    ML.Engine.Manager.GameManager.Instance.ABResourceManager.Release(this.techAtlas);
             }
         }
         #endregion
 
         #region TechPoint
-        public const string TPIconSpriteAtlasPath = "OC/UI/TechPoint/Texture/SA_TechPoint_UI";
+        public const string TPIconSpriteAtlasPath = "OC/UI/TechPoint/Texture/SA_TechPoint_UI.spriteatlasv2";
 
         /// <summary>
         /// 载入的科技点表格数据
@@ -483,14 +484,14 @@ namespace ProjectOC.TechTree
         {
             public TextContent toptitle;
             public TextTip[] category;
-            public KeyTip categorylast;
-            public KeyTip categorynext;
+            public KeyTip LastTerm;
+            public KeyTip NextTerm;
             public TextContent lockedtitletip;
             public TextContent unlockedtitletip;
-            public KeyTip inspector;
+            public KeyTip Inspect;
             public TextContent timecosttip;
-            public KeyTip decipher;
-            public KeyTip back;
+            public KeyTip Decipher;
+            public KeyTip Back;
         }
         public ML.Engine.ABResources.ABJsonAssetProcessor<TPPanel> ABJAProcessor_TPPanel;
 

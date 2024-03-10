@@ -1,5 +1,8 @@
+using ML.Engine.ABResources;
 using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.Input;
 using ML.Engine.InventorySystem;
+using ML.Engine.Level;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.Timer;
@@ -48,8 +51,17 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             this.GetComponent<ResonanceWheelUI>().enabled = true;
             InitUITexture2D();
             InitUITextContents();
-            
-            
+
+
+            //KeyTips
+            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
+            foreach (var item in UIKeyTipComponents)
+            {
+                item.InitData();
+                uiKeyTipDic.Add(item.InputActionName, item);
+            }
+
+
             //exclusivePart
             exclusivePart = this.transform.Find("ExclusivePart");
             exclusivePart.gameObject.SetActive(true);
@@ -62,16 +74,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 //FuctionType
 
             var content = this.transform.Find("FunctionType").Find("Content");
-            KT_LastTerm = new UIKeyTip();
-            KT_LastTerm.img = content.Find("KT_LastTerm").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_LastTerm.keytip = KT_LastTerm.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
 
             HiddenBeastResonanceTemplate = content.Find("HiddenBeastResonanceContainer").Find("HiddenBeastResonanceTemplate");
             SongofSeaBeastsTemplate = content.Find("SongofSeaBeastsContainer").Find("SongofSeaBeastsTemplate");
-
-            KT_NextTerm = new UIKeyTip();
-            KT_NextTerm.img = content.Find("KT_NextTerm").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_NextTerm.keytip = KT_NextTerm.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
 
             HiddenBeastResonanceText = HiddenBeastResonanceTemplate.Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             SongofSeaBeastsText = SongofSeaBeastsTemplate.Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
@@ -91,20 +96,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             }
 
-
-            KT_NextGrid = new UIKeyTip();
-            KT_NextGrid.keytip= exclusivePart.Find("Ring").Find("SelectKeyTip").GetComponent<TMPro.TextMeshProUGUI>();
-            
-
             //ResonanceTarget
             var ResonanceTarget = exclusivePart.Find("ResonanceTarget");
             RTInfo = ResonanceTarget.Find("Info");
             ResonanceTargetTitle = RTInfo.Find("Name").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             RandomText = RTInfo.Find("Random").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
 
-            SwitchTargetText = new UIKeyTip();
-            SwitchTargetText.keytip = RTInfo.Find("SwitchTarget").Find("Image").Find("KeyTip").Find("Image").Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            SwitchTargetText.description = RTInfo.Find("SwitchTarget").Find("Image").Find("KeyTip").Find("Image").Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
             //ResonanceConsumpion
             currentBeastType = BeastType.WorkerEcho_Random;//初始化为Random
             var ResonanceConsumpion = exclusivePart.Find("ResonanceConsumption");
@@ -112,28 +109,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             TimerUI = RCInfo.Find("Timer");
             ResonanceConsumpionTitle = RCInfo.Find("Name").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
 
-
-            StartResonanceText = new UIKeyTip();
-            StartResonanceText.keytip = RCInfo.Find("StartResonance").Find("Image").Find("KeyTip").Find("Image").Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            StartResonanceText.description = RCInfo.Find("StartResonance").Find("Image").Find("KeyTip").Find("Image").Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            StopResonanceText = new UIKeyTip();
-            StopResonanceText.keytip = RCInfo.Find("StopResonance").Find("Image").Find("KeyTip").Find("Image").Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            StopResonanceText.description = RCInfo.Find("StopResonance").Find("Image").Find("KeyTip").Find("Image").Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
             
-            
-
-
-
-            //BotKeyTips
-            var kt = this.transform.Find("BotKeyTips").Find("KeyTips");
-            KT_Back = new UIKeyTip();
-            KT_Back.img = kt.Find("KT_Back").Find("Image").GetComponent<Image>();
-            KT_Back.keytip = KT_Back.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_Back.description = KT_Back.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-
             //sub1
 
 
@@ -247,7 +223,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Enable();
             isQuit = false;
             hasSub1nstance = false;
-
+            UikeyTipIsInit = false;
             Invoke("Refresh", 0.01f);
             //this.Refresh();
         }
@@ -597,7 +573,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private Dictionary<ML.Engine.InventorySystem.ItemType, GameObject> tempItemType = new Dictionary<ML.Engine.InventorySystem.ItemType, GameObject>();
         private List<GameObject> tempUIItems = new List<GameObject>();
 
-
+        private Dictionary<string, UIKeyTipComponent> uiKeyTipDic = new Dictionary<string, UIKeyTipComponent>();
+        private bool UikeyTipIsInit;
+        private InputManager inputManager => GameManager.Instance.InputManager;
         private void ClearTemp()
         {
             foreach (var s in tempSprite)
@@ -612,11 +590,15 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s);
             }
+
+            uiKeyTipDic = null;
         }
 
         #endregion
 
         #region UI对象引用
+        private UIKeyTipComponent[] UIKeyTipComponents;
+
         public WorkerEcho workerEcho;
         public ResonanceWheel_sub1 resonanceWheel_Sub1;//详细隐兽界面 prefab
         public ResonanceWheel_sub2 resonanceWheel_Sub2;//随机选择隐兽界面 prefab
@@ -630,11 +612,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         //topPart
         private TMPro.TextMeshProUGUI TopTitleText;
-        private UIKeyTip KT_LastTerm;
         private Transform HiddenBeastResonanceTemplate;
         private Transform SongofSeaBeastsTemplate;
         private int CurrentFuctionTypeIndex = 0;//0为HBR 1为SSB
-        private UIKeyTip KT_NextTerm;
         private TMPro.TextMeshProUGUI HiddenBeastResonanceText;
         private TMPro.TextMeshProUGUI SongofSeaBeastsText;
 
@@ -642,13 +622,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         [ShowInInspector]
         public RingGrid[] Grids;
         public int CurrentGridIndex = 0;
-        private UIKeyTip KT_NextGrid;
 
         //ResonanceTarget
         private Transform RTInfo;
         private TMPro.TextMeshProUGUI ResonanceTargetTitle;
         private TMPro.TextMeshProUGUI RandomText;
-        private UIKeyTip SwitchTargetText;
 
         //ResonanceConsumpion
 
@@ -670,12 +648,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private Transform RCInfo;
         private Transform TimerUI;
         private TMPro.TextMeshProUGUI ResonanceConsumpionTitle;
-        private UIKeyTip StartResonanceText;
-        private UIKeyTip StopResonanceText;
-
-        //BotKeyTips
-        private UIKeyTip KT_Back;
-
 
         #endregion
 
@@ -693,14 +665,37 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             {
                 return;
             }
-            
+
+
+            if (UikeyTipIsInit == false)
+            {
+                KeyTip[] keyTips = inputManager.ExportKeyTipValues(PanelTextContent_Main);
+                foreach (var keyTip in keyTips)
+                {
+                    InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
+                    inputManager.GetInputActionBindText(inputAction);
+
+                    UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
+                    if (uIKeyTipComponent.uiKeyTip.keytip != null)
+                    {
+                        uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
+                    }
+                    if (uIKeyTipComponent.uiKeyTip.description != null)
+                    {
+                        uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+                    }
+
+                }
+                UikeyTipIsInit = true;
+            }
+
+
             #region TopPart
             TopTitleText.text = PanelTextContent_Main.toptitle;
 
 
 
             #region FunctionType
-            this.KT_LastTerm.ReWrite(PanelTextContent_Main.lastterm);
             GameObject HBR = HiddenBeastResonanceTemplate.Find("Selected").gameObject;
             GameObject SSB = SongofSeaBeastsTemplate.Find("Selected").gameObject;
 
@@ -715,7 +710,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 SSB.SetActive(false);
             }
 
-            this.KT_NextTerm.ReWrite(PanelTextContent_Main.nextterm);
 
             HiddenBeastResonanceText.text = PanelTextContent_Main.HiddenBeastResonanceText;
             SongofSeaBeastsText.text= PanelTextContent_Main.SongofSeaBeastsText;
@@ -725,7 +719,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             #endregion
 
             #region Ring
-            this.KT_NextGrid.ReWrite(PanelTextContent_Main.nextgrid);
             if(Grids.Length==0) return;
 
             if (Grids[CurrentGridIndex].isNull)//空格子
@@ -746,11 +739,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 Consumables.gameObject.SetActive(true);
                 StartBtn.gameObject.SetActive(true);
                 StopBtn.gameObject.SetActive(false);
-
-
-                StartResonanceText.ReWrite(PanelTextContent_Main.StartResonanceText);
-
-
 
                 Grids[CurrentGridIndex].transform.Find("Image").GetComponent<Image>().sprite = sprite3;
 
@@ -801,7 +789,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 StartBtn.gameObject.SetActive(false);
                 StopBtn.gameObject.SetActive(true);
 
-                StopResonanceText.ReWrite(PanelTextContent_Main.StopResonanceText);
                 //取消选择对象功能
                 var SwitchTarget = exclusivePart.Find("ResonanceTarget").Find("Info").Find("SwitchTarget");
                 SwitchTarget.gameObject.SetActive(false);
@@ -851,11 +838,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             #region ResonanceTarget
             ResonanceTargetTitle.text = PanelTextContent_Main.ResonanceTargetTitle;
-            RandomText.text=PanelTextContent_Main.RandomText;
-            SwitchTargetText.ReWrite(PanelTextContent_Main.SwitchTargetText);
-
-
-            
+            RandomText.text=PanelTextContent_Main.RandomText;      
 
             #endregion
 
@@ -883,13 +866,13 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                     foreach (var item in GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRaw(cb))
                     {
-                        GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/Slot", Consumables).Completed += (handle) =>
+                        GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/Slot.prefab", Consumables).Completed += (handle) =>
                         {
                             this.goHandle.Add(handle);
                             var descriptionPrefab = handle.Result;
                             int needNum = item.num;
                             // TODO
-                            int haveNum = GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().Inventory.GetItemAllNum(item.id);
+                            int haveNum = this.inventory.GetItemAllNum(item.id);
                             descriptionPrefab.transform.Find("ItemNumber").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = needNum.ToString() + "/" + haveNum.ToString();
                             if (needNum > haveNum)
                             {
@@ -911,12 +894,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 ResonanceConsumpionTitle.text = PanelTextContent_Main.ResonanceConsumpionTitle.description[1];//1 代表共鸣中
             }
 
-
-            StartResonanceText.ReWrite(PanelTextContent_Main.StartResonanceText);
-            #endregion
-
-            #region BotKeyTips
-            KT_Back.ReWrite(PanelTextContent_Main.back);
             #endregion
 
         }
@@ -928,27 +905,28 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             //topPart
             public TextContent toptitle;
-            public KeyTip lastterm;
-            public KeyTip nextterm;
+            public KeyTip Lastterm;
+            public KeyTip Nextterm;
             public TextContent HiddenBeastResonanceText;
             public TextContent SongofSeaBeastsText;
 
             //ring
-            public KeyTip nextgrid;
+            public KeyTip Nextgrid;
             public TextContent GridText;
 
             //ResonanceTarget
             public TextContent ResonanceTargetTitle;
             public TextContent RandomText;
-            public KeyTip SwitchTargetText;
+            public KeyTip SwitchTarget;
 
             //ResonanceConsumpion
             public MultiTextContent ResonanceConsumpionTitle;
-            public KeyTip StartResonanceText;
-            public KeyTip StopResonanceText;
+            public KeyTip StartResonance;
+            public KeyTip StopResonance;
 
             //BotKeyTips
-            public KeyTip back;
+            public KeyTip Back;
+
         }
 
         public ResonanceWheelPanel PanelTextContent_Main => ABJAProcessorJson_Main.Datas;
@@ -986,7 +964,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #region Texture2D
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
-        private string ResonanceWheelSpriteAtlasPath = "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI";
+        private string ResonanceWheelSpriteAtlasPath = "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2";
 
         private void InitUITexture2D()
         {

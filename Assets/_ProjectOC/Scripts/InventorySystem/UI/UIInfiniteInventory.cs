@@ -16,6 +16,9 @@ using ProjectOC.WorkerEchoNS;
 using ProjectOC.WorkerNS;
 using ML.Engine.UI;
 using UnityEngine.U2D;
+using ML.Engine.Input;
+using UnityEngine.InputSystem;
+using Unity.VisualScripting;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -23,11 +26,7 @@ namespace ProjectOC.InventorySystem.UI
     {
 
         #region Input
-        /// ÓÃÓÚDropºÍDestroy°´¼üÏìÓ¦Cancel
-        /// ³¤°´ÏìÓ¦ÁËDestroy¾ÍÖÃÎªtrue
-        /// Cancel¾Í²»ÏìÓ¦Drop ²¢ ÖØÖÃ
-        /// </summary>
-        private bool ItemIsDestroyed = false;
+
         #endregion
 
         #region Unity
@@ -37,6 +36,14 @@ namespace ProjectOC.InventorySystem.UI
         {
             InitUITextContents();
             LoadInventoryAtlas();
+            //KeyTips
+            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
+            foreach (var item in UIKeyTipComponents)
+            {
+                item.InitData();
+                uiKeyTipDic.Add(item.InputActionName, item);
+            }
+
 
 
 
@@ -45,13 +52,6 @@ namespace ProjectOC.InventorySystem.UI
 
             // ItemType
             var content = this.transform.Find("ItemType").Find("Content");
-            KT_LastTerm = new UIKeyTip();
-            KT_LastTerm.img = content.Find("KT_LastTerm").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_LastTerm.keytip = KT_LastTerm.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_NextTerm = new UIKeyTip();
-            KT_NextTerm.img = content.Find("KT_NextTerm").Find("Image").GetComponent<UnityEngine.UI.Image>();
-            KT_NextTerm.keytip = KT_NextTerm.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
 
             ItemTypeTemplate = content.Find("ItemTypeContainer").Find("ItemTypeTemplate");
             ItemTypeTemplate.gameObject.SetActive(false);
@@ -69,32 +69,15 @@ namespace ProjectOC.InventorySystem.UI
             Info_ItemDescription = info.Find("ItemDescription").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             Info_ItemEffectDescription = info.Find("EffectDescription").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
 
-            // BotKeyTips
-            var kt = this.transform.Find("BotKeyTips").Find("KeyTips");
-            KT_Use = new UIKeyTip();
-            KT_Use.img = kt.Find("KT_Use").Find("Image").GetComponent<Image>();
-            KT_Use.keytip = KT_Use.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_Use.description = KT_Use.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_Back = new UIKeyTip();
-            KT_Back.img = kt.Find("KT_Back").Find("Image").GetComponent<Image>();
-            KT_Back.keytip = KT_Back.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_Back.description = KT_Back.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_Drop = new UIKeyTip();
-            KT_Drop.img = kt.Find("KT_Drop").Find("Image").GetComponent<Image>();
-            KT_Drop.keytip = KT_Drop.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_Drop.description = KT_Drop.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_Destroy = new UIKeyTip();
-            KT_Destroy.img = kt.Find("KT_Destroy").Find("Image").GetComponent<Image>();
-            KT_Destroy.keytip = KT_Destroy.img.transform.Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_Destroy.description = KT_Destroy.img.transform.Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
 
             ItemTypes = Enum.GetValues(typeof(ML.Engine.InventorySystem.ItemType)).Cast<ML.Engine.InventorySystem.ItemType>().Where(e => (int)e > 0).ToArray();
             CurrentItemTypeIndex = 0;
-            
-            
+
+            var kt = this.transform.Find("BotKeyTips").Find("KeyTips");
+            KT_Use = kt.Find("KT_Use");
+            KT_Drop = kt.Find("KT_Drop");
+            KT_Destroy = kt.Find("KT_Destroy");
+
             IsInit = true;
             Refresh();
         }
@@ -136,24 +119,24 @@ namespace ProjectOC.InventorySystem.UI
 
         #region Internal
         /// <summary>
-        /// ¶ÔÓ¦µÄÂß¼­±³°ü
+        /// ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ß¼ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public ML.Engine.InventorySystem.InfiniteInventory inventory;
 
         /// <summary>
-        /// UIÏÔÊ¾µÄItemTypeÃ¶¾Ù
+        /// UIï¿½ï¿½Ê¾ï¿½ï¿½ItemTypeÃ¶ï¿½ï¿½
         /// </summary>
         private ItemType[] ItemTypes;
         /// <summary>
-        /// µ±Ç°Ñ¡ÖÐµÄItemTypesµÄIndex
+        /// ï¿½ï¿½Ç°Ñ¡ï¿½Ðµï¿½ItemTypesï¿½ï¿½Index
         /// </summary>
         private int _currentItemTypeIndex = 0;
         /// <summary>
-        /// µ±Ç°Ñ¡ÖÐµÄItemType
+        /// ï¿½ï¿½Ç°Ñ¡ï¿½Ðµï¿½ItemType
         /// </summary>
         private ItemType CurrentItemType => ItemTypes[CurrentItemTypeIndex];
         /// <summary>
-        /// ·â×°µÄItemTypeIndex£¬±ãÓÚÔÚ¸üÐÂÖµÊ±Ò»²¢¸üÐÂÆäËûÊý¾Ý²¢Refresh
+        /// ï¿½ï¿½×°ï¿½ï¿½ItemTypeIndexï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¸ï¿½ï¿½ï¿½ÖµÊ±Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý²ï¿½Refresh
         /// </summary>
         private int CurrentItemTypeIndex
         {
@@ -167,20 +150,20 @@ namespace ProjectOC.InventorySystem.UI
             }
         }
         /// <summary>
-        /// UIPanel.InventoryÇøÓò¿ØÖÆ´¦ÀíµÄItemÁÐ±í(¸ù¾ÝÑ¡ÖÐµÄItemTypeÉ¸Ñ¡³öÀ´µÄ)
+        /// UIPanel.Inventoryï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ´ï¿½ï¿½ï¿½ï¿½ï¿½Itemï¿½Ð±ï¿½(ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½Ðµï¿½ItemTypeÉ¸Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
         /// </summary>
         [ShowInInspector]
         private List<Item> SelectedItems = new List<Item>();
         /// <summary>
-        /// ÉÏÒ»´ÎÑ¡ÖÐµÄItemIndex£¬ÓÃÓÚÒÆ¶¯»¬¶¯´°¿Ú
+        /// ï¿½ï¿½Ò»ï¿½ï¿½Ñ¡ï¿½Ðµï¿½ItemIndexï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         private int _lastItemIndex = 0;
         /// <summary>
-        /// µ±Ç°Ñ¡ÖÐµÄItemIndex
+        /// ï¿½ï¿½Ç°Ñ¡ï¿½Ðµï¿½ItemIndex
         /// </summary>
         private int _currentItemIndex = 0;
         /// <summary>
-        /// ·â×°£¬·½±ã¸üÐÂÊý¾ÝºÍRefresh
+        /// ï¿½ï¿½×°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ýºï¿½Refresh
         /// </summary>
         private int CurrentItemIndex
         {
@@ -214,7 +197,7 @@ namespace ProjectOC.InventorySystem.UI
                                 _currentItemIndex += grid.y;
                             }
                         }
-                        // ²»¼ÆËãÒþ²ØµÄÄ£°å
+                        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½Ä£ï¿½ï¿½
                         while (this._currentItemIndex >= SelectedItems.Count)
                         {
                             this._currentItemIndex -= grid.y;
@@ -233,7 +216,7 @@ namespace ProjectOC.InventorySystem.UI
             }
         }
         /// <summary>
-        /// µ±Ç°Ñ¡ÖÐµÄItem
+        /// ï¿½ï¿½Ç°Ñ¡ï¿½Ðµï¿½Item
         /// </summary>
         private Item CurrentItem
         {
@@ -252,6 +235,7 @@ namespace ProjectOC.InventorySystem.UI
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.Enable();
             ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
+            UikeyTipIsInit = false;
             this.Refresh();
         }
 
@@ -264,40 +248,42 @@ namespace ProjectOC.InventorySystem.UI
 
         private void UnregisterInput()
         {
-            // ÇÐ»»ÀàÄ¿
+            // ï¿½Ð»ï¿½ï¿½ï¿½Ä¿
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.LastTerm.performed -= LastTerm_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.NextTerm.performed -= NextTerm_performed;
-            // ÇÐ»»Item
+            // ï¿½Ð»ï¿½Item
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.AlterItem.started -= AlterItem_started;
             //ProjectOC.Input.InputManager.PlayerInput.UIInventory.AlterItem.performed -= AlterItem_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.AlterItem.canceled -= AlterItem_canceled;
-            // Ê¹ÓÃ
-            ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.performed -= Comfirm_performed;
-            // ·µ»Ø
+            // Ê¹ï¿½ï¿½
+            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Comfirm_performed;
+            // ï¿½ï¿½ï¿½ï¿½
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
-            // ¶ªÆú
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.DropAndDestroy.canceled -= DropAndDestroy_canceled;
-            // Ïú»Ù
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.DropAndDestroy.performed -= DropAndDestroy_performed;
+            // ï¿½ï¿½ï¿½ï¿½
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Drop.started -= Drop_started;
+            // ï¿½ï¿½ï¿½ï¿½
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.started -= Destroy_started;
         }
 
         private void RegisterInput()
         {
-            // ÇÐ»»ÀàÄ¿
+            // ï¿½Ð»ï¿½ï¿½ï¿½Ä¿
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.LastTerm.performed += LastTerm_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.NextTerm.performed += NextTerm_performed;
-            // ÇÐ»»Item
+            // ï¿½Ð»ï¿½Item
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.AlterItem.started += AlterItem_started;
             //ProjectOC.Input.InputManager.PlayerInput.UIInventory.AlterItem.performed += AlterItem_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.AlterItem.canceled += AlterItem_canceled;
-            // Ê¹ÓÃ
-            ML.Engine.Input.InputManager.Instance.Common.Common.Comfirm.performed += Comfirm_performed;
-            // ·µ»Ø
+            // Ê¹ï¿½ï¿½
+            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Comfirm_performed;
+            // ï¿½ï¿½ï¿½ï¿½
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
-            // ¶ªÆú
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.DropAndDestroy.canceled += DropAndDestroy_canceled;
-            // Ïú»Ù
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.DropAndDestroy.performed += DropAndDestroy_performed;
+            // ï¿½ï¿½ï¿½ï¿½
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Drop.started += Drop_started;
+
+            // ï¿½ï¿½ï¿½ï¿½
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.started += Destroy_started;
+
         }
 
         public void DropItem()
@@ -306,7 +292,7 @@ namespace ProjectOC.InventorySystem.UI
             this.inventory.RemoveItem(item);
             SelectedItems.Remove(item);
             this.CurrentItemIndex = this.CurrentItemIndex;
-            // ½«ItemÉú³ÉÎªÊÀ½çÎïÌå
+            // ï¿½ï¿½Itemï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #pragma warning disable CS4014
             ItemManager.Instance.SpawnWorldItem(item, this.inventory.Owner.position, this.inventory.Owner.rotation);
 #pragma warning restore CS4014
@@ -342,7 +328,6 @@ namespace ProjectOC.InventorySystem.UI
 
         private void AlterItem_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            Debug.Log("AlterItem_started " + Time.frameCount);
             GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
             timer = new CounterDownTimer(TimeInterval, true, true, 1, 2);
             timer.OnEndEvent += () =>
@@ -358,7 +343,6 @@ namespace ProjectOC.InventorySystem.UI
 
         private void AlterItem_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            Debug.Log("AlterItem_canceled " + Time.frameCount);
             GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
         }
 
@@ -374,29 +358,22 @@ namespace ProjectOC.InventorySystem.UI
             CurrentItemTypeIndex = (CurrentItemTypeIndex + 1 + ItemTypes.Length) % ItemTypes.Length;
         }
 
+
         /// <summary>
         /// Drop
         /// </summary>
         /// <param name="obj"></param>
-        private void DropAndDestroy_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void Drop_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (this.ItemIsDestroyed)
-            {
-                this.ItemIsDestroyed = false;
-            }
-            else
-            {
-                DropItem();
-            }
+            DropItem();
         }
 
         /// <summary>
         /// Destroy
         /// </summary>
         /// <param name="obj"></param>
-        private void DropAndDestroy_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void Destroy_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            this.ItemIsDestroyed = true;
             DestroyItem();
         }
 
@@ -408,7 +385,9 @@ namespace ProjectOC.InventorySystem.UI
         private Dictionary<ML.Engine.InventorySystem.ItemType, GameObject> tempItemType = new Dictionary<ML.Engine.InventorySystem.ItemType, GameObject>();
         private List<GameObject> tempUIItems = new List<GameObject>();
 
-
+        private Dictionary<string, UIKeyTipComponent> uiKeyTipDic = new Dictionary<string, UIKeyTipComponent>();
+        private bool UikeyTipIsInit;
+        private InputManager inputManager => GameManager.Instance.InputManager;
         private void ClearTemp()
         {
             foreach(var s in tempSprite)
@@ -423,16 +402,19 @@ namespace ProjectOC.InventorySystem.UI
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s);
             }
+
+            uiKeyTipDic = null;
         }
 
         #endregion
 
-        #region UI¶ÔÏóÒýÓÃ
+        #region UIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+
+        private UIKeyTipComponent[] UIKeyTipComponents;
+
         private TMPro.TextMeshProUGUI TopTitleText;
 
-        private UIKeyTip KT_LastTerm;
         private Transform ItemTypeTemplate;
-        private UIKeyTip KT_NextTerm;
 
         private GridLayoutGroup Inventory_GridLayout;
         private Transform UIItemTemplate;
@@ -443,45 +425,71 @@ namespace ProjectOC.InventorySystem.UI
         private TMPro.TextMeshProUGUI Info_ItemDescription;
         private TMPro.TextMeshProUGUI Info_ItemEffectDescription;
 
-        private UIKeyTip KT_Use;
-        private UIKeyTip KT_Back;
-        private UIKeyTip KT_Drop;
-        private UIKeyTip KT_Destroy;
+        private Transform KT_Use;
+        private Transform KT_Drop;
+        private Transform KT_Destroy;
+
+
         #endregion
-        
+
         public override void Refresh()
         {
-            // ¼ÓÔØÍê³ÉJSONÊý¾Ý & ²éÕÒÍêËùÓÐÒýÓÃ
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½JSONï¿½ï¿½ï¿½ï¿½ & ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if(ABJAProcessor == null || !ABJAProcessor.IsLoaded || !IsInit)
             {
                 return;
             }
 
+
+            if (UikeyTipIsInit == false)
+            {
+                KeyTip[] keyTips = inputManager.ExportKeyTipValues(PanelTextContent_Main);
+                foreach (var keyTip in keyTips)
+                {
+                    InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
+                    inputManager.GetInputActionBindText(inputAction);
+                    if (uiKeyTipDic.ContainsKey(keyTip.keyname))
+                    {
+                        UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
+                        if (uIKeyTipComponent.uiKeyTip.keytip != null)
+                        {
+                            uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
+                        }
+                        if (uIKeyTipComponent.uiKeyTip.description != null)
+                        {
+                            uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+                        }
+                    }
+                    else
+                    {
+                        //Debug.Log("keyTip.keyname " + keyTip.keyname);
+                    }
+                }
+                UikeyTipIsInit = true;
+            }
+
             #region TopTitle
-            // ¸üÐÂ±êÌâÎÄ±¾
+            // ï¿½ï¿½ï¿½Â±ï¿½ï¿½ï¿½ï¿½Ä±ï¿½
             this.TopTitleText.text = PanelTextContent_Main.toptitle.GetText();
             #endregion
 
             #region ItemType
-            // ¸üÐÂ°´¼üÌáÊ¾
-            this.KT_LastTerm.ReWrite(PanelTextContent_Main.lastterm);
-            this.KT_NextTerm.ReWrite(PanelTextContent_Main.nextterm);
-            // Ë¢ÐÂItemTypeÑ¡ÔñÇøÓò
+            // Ë¢ï¿½ï¿½ItemTypeÑ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             foreach(var itemtype in ItemTypes)
             {
-                // ¶ÔÓ¦µÄItemTypeÏÔÊ¾¶ÔÏó²»´æÔÚ£¬ÔòÊµÀý»¯Éú³É
+                // ï¿½ï¿½Ó¦ï¿½ï¿½ItemTypeï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ó²»´ï¿½ï¿½Ú£ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 if(!tempItemType.TryGetValue(itemtype, out var obj))
                 {
-                    // ÊµÀý»¯
+                    // Êµï¿½ï¿½ï¿½ï¿½
                     obj = Instantiate(ItemTypeTemplate.gameObject, ItemTypeTemplate.parent, false);
-                    // Ä£°åÊÇfalse,ÐèÒªÉèÖÃÎªtrue
+                    // Ä£ï¿½ï¿½ï¿½ï¿½false,ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Îªtrue
                     obj.SetActive(true);
-                    // ¼ÓÈëÁÙÊ±ÄÚ´æ¹ÜÀí
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½Ú´ï¿½ï¿½ï¿½ï¿?
                     tempItemType.Add(itemtype, obj);
-                    // ÔØÈëItemType¶ÔÓ¦µÄTexture2D
+                    // ï¿½ï¿½ï¿½ï¿½ItemTypeï¿½ï¿½Ó¦ï¿½ï¿½Texture2D
                     var sprite = inventoryAtlas.GetSprite(itemtype.ToString());
                     //var tex = ab.LoadAsset<Texture2D>(itemtype.ToString());
-                    // ´´½¨Sprite²¢¼ÓÈëÁÙÊ±ÄÚ´æ¹ÜÀí
+                    // ï¿½ï¿½ï¿½ï¿½Spriteï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½Ú´ï¿½ï¿½ï¿½ï¿?
                     if(sprite != null)
                     {
                         obj.transform.Find("Image").GetComponent<Image>().sprite = sprite;
@@ -489,22 +497,22 @@ namespace ProjectOC.InventorySystem.UI
                     }
                 }
                 
-                // Ë¢ÐÂÏÔÊ¾ÎÄ±¾
+                // Ë¢ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½Ä±ï¿½
                 obj.transform.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent_Main.itemtype.FirstOrDefault(it => it.name == itemtype.ToString()).GetDescription();
-                // ¸üÐÂ Selected
+                // ï¿½ï¿½ï¿½ï¿½ Selected
                 var selected = obj.transform.Find("Selected").gameObject;
                 selected.SetActive(CurrentItemType == itemtype);
             }
 
-            // Ç¿ÖÆË¢ÐÂLayout²¼¾Ö
-            // Unity µ×²ã²»»á×Ô¶¯¸üÐÂ£¬ÐèÒªÊÖ¶¯µ÷ÓÃ
+            // Ç¿ï¿½ï¿½Ë¢ï¿½ï¿½Layoutï¿½ï¿½ï¿½ï¿½
+            // Unity ï¿½×²ã²»ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Â£ï¿½ï¿½ï¿½Òªï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½
             LayoutRebuilder.ForceRebuildLayoutImmediate(this.ItemTypeTemplate.parent.GetComponent<RectTransform>());
             #endregion
 
             #region Inventory
-            // ÁÙÊ±ÄÚ´æÉú³ÉµÄUIItemÊýÁ¿(Ö»Ôö²»¼õ£¬¶àµÄÒþ²Øµô¼´¿É) - µ±Ç°É¸Ñ¡³öÀ´µÄItemÊýÁ¿
+            // ï¿½ï¿½Ê±ï¿½Ú´ï¿½ï¿½ï¿½ï¿½Éµï¿½UIItemï¿½ï¿½ï¿½ï¿½(Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿?) - ï¿½ï¿½Ç°É¸Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Itemï¿½ï¿½ï¿½ï¿½
             int delta = tempUIItems.Count - SelectedItems.Count;
-            // > 0 => ÓÐ¶àÓà£¬Òþ²Ø
+            // > 0 => ï¿½Ð¶ï¿½ï¿½à£¬ï¿½ï¿½ï¿½ï¿½
             if(delta > 0)
             {
                 for(int i = 0; i < delta; ++i)
@@ -512,7 +520,7 @@ namespace ProjectOC.InventorySystem.UI
                     tempUIItems[tempUIItems.Count - 1 - i].SetActive(false);
                 }
             }
-            // < 0 => ²»¹»£¬ Ôö¼Ó
+            // < 0 => ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             else if (delta < 0)
             {
                 delta = -delta;
@@ -523,23 +531,23 @@ namespace ProjectOC.InventorySystem.UI
                 }
             }
             
-            // ÓÃÓÚ¸üÐÂ»¬¶¯´°¿Ú
-            // µ±Ç°Ñ¡ÖÐµÄUIItem
+            // ï¿½ï¿½ï¿½Ú¸ï¿½ï¿½Â»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            // ï¿½ï¿½Ç°Ñ¡ï¿½Ðµï¿½UIItem
             GameObject cur = null;
-            // ÉÏÒ»¸öUIItem
+            // ï¿½ï¿½Ò»ï¿½ï¿½UIItem
             GameObject last = null;
 
-            // ±éÀúÉ¸Ñ¡µÄItemList
+            // ï¿½ï¿½ï¿½ï¿½É¸Ñ¡ï¿½ï¿½ItemList
             for (int i = 0; i < SelectedItems.Count; ++i)
             {
                 var item = tempUIItems[i];
                 // Active
                 item.SetActive(true);
-                // ¸üÐÂIcon
+                // ï¿½ï¿½ï¿½ï¿½Icon
                 var img = item.transform.Find("Icon").GetComponent<Image>();
-                // ²éÕÒÁÙÊ±´æ´¢µÄSprite
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½æ´¢ï¿½ï¿½Sprite
                 var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(SelectedItems[i].ID));
-                // ²»´æÔÚÔòÉú³É
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 if(sprite == null)
                 {
                     sprite = ItemManager.Instance.GetItemSprite(SelectedItems[i].ID);
@@ -567,26 +575,26 @@ namespace ProjectOC.InventorySystem.UI
                 }
             }
 
-            #region ¸üÐÂ»¬¶¯´°¿Ú
+            #region ï¿½ï¿½ï¿½Â»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if(cur != null && last != null)
             {
-                // µ±Ç°¼¤»îµÄTPËÄ¸ö±ßµãÓÐÒ»¸ö²»Î»ÓÚ´°¿ÚÄÚ -> ¸üÐÂ´°¿Ú»¬¶¯
+                // ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½TPï¿½Ä¸ï¿½ï¿½ßµï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ú´ï¿½ï¿½ï¿½ï¿½ï¿½ -> ï¿½ï¿½ï¿½Â´ï¿½ï¿½Ú»ï¿½ï¿½ï¿½
                 RectTransform uiRectTransform = cur.GetComponent<RectTransform>();
                 RectTransform scrollRectTransform = cur.transform.parent.parent.parent.GetComponent<RectTransform>();
-                // »ñÈ¡ ScrollRect ×é¼þ
+                // ï¿½ï¿½È¡ ScrollRect ï¿½ï¿½ï¿?
                 ScrollRect scrollRect = scrollRectTransform.GetComponent<ScrollRect>();
-                // »ñÈ¡ Content µÄ RectTransform ×é¼þ
+                // ï¿½ï¿½È¡ Content ï¿½ï¿½ RectTransform ï¿½ï¿½ï¿?
                 RectTransform contentRect = scrollRect.content;
 
-                // »ñÈ¡ UI ÔªËØµÄËÄ¸ö½Çµã
+                // ï¿½ï¿½È¡ UI Ôªï¿½Øµï¿½ï¿½Ä¸ï¿½ï¿½Çµï¿½
                 Vector3[] corners = new Vector3[4];
                 uiRectTransform.GetWorldCorners(corners);
                 bool allCornersVisible = true;
                 for (int i = 0; i < 4; ++i)
                 {
-                    // ½«ÊÀ½ç¿Õ¼äµÄµã×ª»»ÎªÆÁÄ»¿Õ¼äµÄµã
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¼ï¿½Äµï¿½×ªï¿½ï¿½Îªï¿½ï¿½Ä»ï¿½Õ¼ï¿½Äµï¿?
                     Vector3 screenPoint = RectTransformUtility.WorldToScreenPoint(null, corners[i]);
-                    // ÅÐ¶Ï ScrollRect ÊÇ·ñ°üº¬Õâ¸öµã
+                    // ï¿½Ð¶ï¿½ ScrollRect ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     if (!RectTransformUtility.RectangleContainsScreenPoint(scrollRectTransform, screenPoint, null))
                     {
                         allCornersVisible = false;
@@ -594,21 +602,21 @@ namespace ProjectOC.InventorySystem.UI
                     }
                 }
                 
-                // µ±Ç°¼¤»îµÄTPËÄ¸ö±ßµãÓÐÒ»¸ö²»Î»ÓÚ´°¿ÚÄÚ -> ¸üÐÂ´°¿Ú»¬¶¯
+                // ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½TPï¿½Ä¸ï¿½ï¿½ßµï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ú´ï¿½ï¿½ï¿½ï¿½ï¿½ -> ï¿½ï¿½ï¿½Â´ï¿½ï¿½Ú»ï¿½ï¿½ï¿½
                 if (!allCornersVisible)
                 {
-                    // ½«µ±Ç°Ñ¡ÖÐµÄÕâ¸ö·ÅÖÃÓÚÉÏÒ»¸ö¼¤»îTPµÄÎ»ÖÃ
+                    // ï¿½ï¿½ï¿½ï¿½Ç°Ñ¡ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½TPï¿½ï¿½Î»ï¿½ï¿½
 
-                    // ÉèÖÃ»¬¶¯Î»ÖÃ
+                    // ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Î»ï¿½ï¿½
 
-                    // »ñÈ¡µã A ºÍµã B ÔÚ Content ÖÐµÄÎ»ÖÃ
+                    // ï¿½ï¿½È¡ï¿½ï¿½ A ï¿½Íµï¿½ B ï¿½ï¿½ Content ï¿½Ðµï¿½Î»ï¿½ï¿½
                     Vector2 positionA = (last.transform as RectTransform).anchoredPosition;
                     Vector2 positionB = (cur.transform as RectTransform).anchoredPosition;
 
-                    // ¼ÆËãµã B Ïà¶ÔÓÚµã A µÄÆ«ÒÆÁ¿
+                    // ï¿½ï¿½ï¿½ï¿½ï¿? B ï¿½ï¿½ï¿½ï¿½Úµï¿? A ï¿½ï¿½Æ«ï¿½ï¿½ï¿½ï¿½
                     Vector2 offset = positionB - positionA;
 
-                    // ¸ù¾ÝÆ«ÒÆÁ¿¸üÐÂ ScrollRect µÄ»¬¶¯Î»ÖÃ
+                    // ï¿½ï¿½ï¿½ï¿½Æ«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ScrollRect ï¿½Ä»ï¿½ï¿½ï¿½Î»ï¿½ï¿½
                     Vector2 normalizedPosition = scrollRect.normalizedPosition;
                     normalizedPosition += new Vector2(offset.x / (contentRect.rect.width - (contentRect.parent as RectTransform).rect.width), offset.y / (contentRect.rect.height - (contentRect.parent as RectTransform).rect.height));
                     scrollRect.normalizedPosition = normalizedPosition;
@@ -622,27 +630,27 @@ namespace ProjectOC.InventorySystem.UI
             }
             #endregion
             
-            // Ç¿ÖÆÁ¢¼´¸üÐÂ GridLayoutGroup µÄ²¼¾Ö
+            // Ç¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ GridLayoutGroup ï¿½Ä²ï¿½ï¿½ï¿½
             LayoutRebuilder.ForceRebuildLayoutImmediate(Inventory_GridLayout.GetComponent<RectTransform>());
             #endregion
 
             #region ItemInfo
             if(CurrentItem != null)
             {
-                // ÏÔÊ¾ItemInfo
+                // ï¿½ï¿½Ê¾ItemInfo
                 this.transform.Find("ItemInfo").gameObject.SetActive(true);
-                // ¸üÐÂItemÃû³Æ
+                // ï¿½ï¿½ï¿½ï¿½Itemï¿½ï¿½ï¿½ï¿½
                 Info_ItemName.text = ItemManager.Instance.GetItemName(CurrentItem.ID);
-                // ¸üÐÂÍ¼±ê => ±Ø¶¨ÊÇÔØÈëÁËµÄ
+                // ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ => ï¿½Ø¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ëµï¿½
                 Info_ItemIcon.sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(CurrentItem.ID));
-                // ¸üÐÂµ¥¸öÖØÁ¿: JsonText + Amount
+                // ï¿½ï¿½ï¿½Âµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: JsonText + Amount
                 Info_ItemWeight.text = PanelTextContent_Main.weightprefix + ItemManager.Instance.GetWeight(CurrentItem.ID);
 
-                // ¸üÐÂÃèÊöÎÄ±¾: JsonText + ItemDescription
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½: JsonText + ItemDescription
                 Info_ItemDescription.text = PanelTextContent_Main.descriptionprefix + "\n" + ItemManager.Instance.GetItemDescription(CurrentItem.ID);
-                // Ç¿ÖÆ¸üÐÂ²¼¾Ö => ¸üÐÂÎÄ±¾¸ß¶È -> ÓÃÓÚ¸üÐÂ¸¸ÎïÌåµÄ¸ß¶È£¬ÊÊÅäUIÏÔÊ¾
+                // Ç¿ï¿½Æ¸ï¿½ï¿½Â²ï¿½ï¿½ï¿½ => ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ß¶ï¿½ -> ï¿½ï¿½ï¿½Ú¸ï¿½ï¿½Â¸ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ß¶È£ï¿½ï¿½ï¿½ï¿½ï¿½UIï¿½ï¿½Ê¾
                 LayoutRebuilder.ForceRebuildLayoutImmediate(Info_ItemDescription.GetComponent<RectTransform>());
-                // ¸üÐÂ¸¸ÎïÌåµÄ¸ß¶È
+                // ï¿½ï¿½ï¿½Â¸ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ß¶ï¿?
                 Info_ItemDescription.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(Info_ItemDescription.transform.parent.GetComponent<RectTransform>().sizeDelta.x, Info_ItemDescription.GetComponent<RectTransform>().sizeDelta.y);
 
 
@@ -659,15 +667,11 @@ namespace ProjectOC.InventorySystem.UI
             #endregion
 
             #region BotKeyTips
-            KT_Use.ReWrite(PanelTextContent_Main.use);
-            KT_Back.ReWrite(PanelTextContent_Main.back);
-            KT_Drop.ReWrite(PanelTextContent_Main.drop);
-            KT_Destroy.ReWrite(PanelTextContent_Main.destroy);
             if (CurrentItem != null)
             {
-                KT_Use.img.transform.parent.gameObject.SetActive(CurrentItem.CanUse());
-                KT_Drop.img.transform.parent.gameObject.SetActive(CurrentItem.CanDrop());
-                KT_Destroy.img.transform.parent.gameObject.SetActive(CurrentItem.CanDestroy());
+                KT_Use.gameObject.SetActive(CurrentItem.CanUse());
+                KT_Drop.gameObject.SetActive(CurrentItem.CanDrop());
+                KT_Destroy.gameObject.SetActive(CurrentItem.CanDestroy());
             }
             #endregion
 
@@ -681,15 +685,15 @@ namespace ProjectOC.InventorySystem.UI
         {
             public TextContent toptitle;
             public TextTip[] itemtype;
-            public KeyTip lastterm;
-            public KeyTip nextterm;
+            public KeyTip LastTerm;
+            public KeyTip NextTerm;
             public TextContent weightprefix;
             public TextContent descriptionprefix;
             public TextContent effectdescriptionprefix;
-            public KeyTip use;
-            public KeyTip back;
-            public KeyTip drop;
-            public KeyTip destroy;
+            public KeyTip Use;
+            public KeyTip Back;
+            public KeyTip Drop;
+            public KeyTip Destroy;
         }
 
         public InventoryPanel PanelTextContent_Main => ABJAProcessor.Datas;
@@ -701,14 +705,14 @@ namespace ProjectOC.InventorySystem.UI
             {
                 Refresh();
                 this.enabled = false;
-            }, "UI±³°üPanelÊý¾Ý");
+            }, "UIï¿½ï¿½ï¿½ï¿½Panelï¿½ï¿½ï¿½ï¿½");
             ABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
 
         private void LoadInventoryAtlas()
         {
-            GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>("OC/UI/Inventory/Texture/SA_Inventory_UI").Completed += (handle) =>
+            GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>("OC/UI/Inventory/Texture/SA_Inventory_UI.spriteatlasv2").Completed += (handle) =>
             {
                 inventoryAtlas = handle.Result as SpriteAtlas;
             };
