@@ -4,60 +4,69 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.ResourceManagement.AsyncOperations;
 namespace ML.Engine.Manager
 {
     public class EnterPoint
     {
-        private GameObject StartMenuPanelPrefab;
-        public GameObject LoadingScenePanelPrefab;
-        public GameObject OptionPanelPrefab;
-        private bool isInit;
+        private string StartMenuPanelPrefab = "";
+        private string LoadingScenePanelPrefab = "";
+        private string OptionPanelPrefab = "";
 
         public EnterPoint()
         {
-            this.isInit = false;
-            InitUIPrefabs();
+            //InitUIPrefabs();
 
-            GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("EnterPointScene", null, null));
-        }
 
-        public bool EnterGame()
-        {
-            if(isInit == false) 
-            {
-                return false;
-            }
+            System.Action<string, string> postCallback = (string s1,string s2) => {
+                this.GetStartMenuPanelInstance().Completed += (handle) =>
+                {
+                    // 实例化
+                    var panel = handle.Result.GetComponent<StartMenuPanel>();
 
-            // 实例化
-            var panel = GameObject.Instantiate(StartMenuPanelPrefab).GetComponent<StartMenuPanel>();
+                    panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
 
-            panel.transform.SetParent(GameObject.Find("Canvas").transform, false);
+                    // Push
+                    GameManager.Instance.UIManager.PushPanel(panel);
+                };
 
-            // Push
-            GameManager.Instance.UIManager.PushPanel(panel);
-            return true;
+            };
+
+            GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("EnterPointScene", null, postCallback));
         }
 
         #region Prefab
-        public AssetBundle PrefabsAB;
-        public void InitUIPrefabs()
-        {
-            this.PrefabsAB = null;
-            var abmgr = GameManager.Instance.ABResourceManager;
+        //public void InitUIPrefabs()
+        //{
+        //    this.PrefabsAB = null;
+        //    var abmgr = GameManager.Instance.ABResourceManager;
 
-            var crequest = abmgr.LoadLocalABAsync("ui/baseuipanel", null, out var PrefabsAB);
+        //    var crequest = abmgr.LoadLocalABAsync("ui/baseuipanel", null, out var PrefabsAB);
 
 
-            PrefabsAB = crequest.assetBundle;
+        //    PrefabsAB = crequest.assetBundle;
 
-            this.PrefabsAB = PrefabsAB;
-            StartMenuPanelPrefab = this.PrefabsAB.LoadAsset<GameObject>("StartMenuPanel");
-            LoadingScenePanelPrefab = this.PrefabsAB.LoadAsset<GameObject>("LoadingScenePanel");
-            OptionPanelPrefab = this.PrefabsAB.LoadAsset<GameObject>("OptionPanel");
-            this.isInit = true;
+        //    this.PrefabsAB = PrefabsAB;
+        //    StartMenuPanelPrefab = this.PrefabsAB.LoadAsset<GameObject>("StartMenuPanel");
+        //    LoadingScenePanelPrefab = this.PrefabsAB.LoadAsset<GameObject>("LoadingScenePanel");
+        //    OptionPanelPrefab = this.PrefabsAB.LoadAsset<GameObject>("OptionPanel");
+        //    this.isInit = true;
            
-        }
+        //}
         #endregion
+
+        public AsyncOperationHandle<GameObject> GetStartMenuPanelInstance()
+        {
+            return Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.StartMenuPanelPrefab);
+        }
+        public AsyncOperationHandle<GameObject> GetLoadingScenePanelInstance()
+        {
+            return Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.LoadingScenePanelPrefab);
+        }
+        public AsyncOperationHandle<GameObject> GetOptionPanelInstance()
+        {
+            return Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.OptionPanelPrefab);
+        }
     }
 
 }

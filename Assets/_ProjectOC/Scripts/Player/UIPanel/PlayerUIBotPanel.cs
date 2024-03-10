@@ -129,13 +129,17 @@ namespace ProjectOC.Player.UI
 
         private void OpenOption_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            // 实例化
-            var panel = GameObject.Instantiate(GameManager.Instance.EnterPoint.OptionPanelPrefab).GetComponent<OptionPanel>();
 
-            panel.transform.SetParent(GameObject.Find("Canvas").transform, false);
+            GameManager.Instance.EnterPoint.GetOptionPanelInstance().Completed += (handle) =>
+            {
+                // 实例化
+                var panel = handle.Result.GetComponent<OptionPanel>();
 
-            // Push
-            GameManager.Instance.UIManager.PushPanel(panel);
+                panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+
+                // Push
+                GameManager.Instance.UIManager.PushPanel(panel);
+            };
         }
 
         private void SelectGrid_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -229,20 +233,16 @@ namespace ProjectOC.Player.UI
             public ML.Engine.TextContent.TextContent QuitGameBtn;
         }
 
-        public static StartMenuPanelStruct PanelTextContent_StartMenuPanel => ABJAProcessorJson_StartMenuPanel.Datas;
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<StartMenuPanelStruct> ABJAProcessorJson_StartMenuPanel;
+        public StartMenuPanelStruct PanelTextContent_StartMenuPanel => ABJAProcessorJson_StartMenuPanel.Datas;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<StartMenuPanelStruct> ABJAProcessorJson_StartMenuPanel;
         private void InitUITextContents()
         {
-            if (ABJAProcessorJson_StartMenuPanel == null)
+            ABJAProcessorJson_StartMenuPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<StartMenuPanelStruct>("OC/Json/TextContent/StartMenuPanel", "StartMenuPanel", (datas) =>
             {
-                ABJAProcessorJson_StartMenuPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<StartMenuPanelStruct>("Json/TextContent/StartMenuPanel", "StartMenuPanel", (datas) =>
-                {
-                    Refresh();
-                    this.enabled = false;
-                }, null, "StartMenuPanel数据");
-                ABJAProcessorJson_StartMenuPanel.StartLoadJsonAssetData();
-            }
-
+                Refresh();
+                this.enabled = false;
+            }, "StartMenuPanel数据");
+            ABJAProcessorJson_StartMenuPanel.StartLoadJsonAssetData();
         }
         #endregion
 

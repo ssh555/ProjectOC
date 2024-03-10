@@ -27,21 +27,19 @@ namespace ML.Engine.UI
             this.NewGameBtn.OnInteract += () =>
             {
 
-                // 实例化
-                var panel = GameObject.Instantiate(GameManager.Instance.EnterPoint.LoadingScenePanelPrefab).GetComponent<LoadingScenePanel>();
+                GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("GameScene", null, null));
+                GameManager.Instance.UIManager.ChangeBotUIPanel(null);
 
-                panel.transform.SetParent(GameObject.Find("Canvas").transform, false);
-
-                // Push
-                GameManager.Instance.UIManager.PushPanel(panel);
-                GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("GameScene",null,
-                (string s1, string s2) =>
+                GameManager.Instance.EnterPoint.GetLoadingScenePanelInstance().Completed += (handle) =>
                 {
-                    // Pop
-                    GameManager.Instance.UIManager.PopPanel();
-                }));
+                    // 实例化
+                    var panel = handle.Result.GetComponent<LoadingScenePanel>();
 
+                    panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
 
+                    // Push
+                    GameManager.Instance.UIManager.PushPanel(panel);
+                };
 
             };
 
@@ -56,13 +54,17 @@ namespace ML.Engine.UI
             this.OptionBtnText = OptionBtn.transform.Find("BtnText").GetComponent<TextMeshProUGUI>();
             this.OptionBtn.OnInteract += () =>
             {
-                // 实例化
-                var panel = GameObject.Instantiate(GameManager.Instance.EnterPoint.OptionPanelPrefab).GetComponent<OptionPanel>();
 
-                panel.transform.SetParent(GameObject.Find("Canvas").transform, false);
+                GameManager.Instance.EnterPoint.GetOptionPanelInstance().Completed += (handle) =>
+                {
+                    // 实例化
+                    var panel = handle.Result.GetComponent<OptionPanel>();
 
-                // Push
-                GameManager.Instance.UIManager.PushPanel(panel);
+                    panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+
+                    // Push
+                    GameManager.Instance.UIManager.PushPanel(panel);
+                };
             };
 
             this.QuitGameBtn = btnList.Find("QuitGameBtn").GetComponent<SelectedButton>();
@@ -292,19 +294,16 @@ namespace ML.Engine.UI
             public ML.Engine.TextContent.TextContent QuitGameBtn;
         }
 
-        public static StartMenuPanelStruct PanelTextContent_StartMenuPanel => ABJAProcessorJson_StartMenuPanel.Datas;
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<StartMenuPanelStruct> ABJAProcessorJson_StartMenuPanel;
+        public StartMenuPanelStruct PanelTextContent_StartMenuPanel => ABJAProcessorJson_StartMenuPanel.Datas;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<StartMenuPanelStruct> ABJAProcessorJson_StartMenuPanel;
         private void InitUITextContents()
         {
-            if (ABJAProcessorJson_StartMenuPanel == null)
+            ABJAProcessorJson_StartMenuPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<StartMenuPanelStruct>("OC/Json/TextContent/StartMenuPanel", "StartMenuPanel", (datas) =>
             {
-                ABJAProcessorJson_StartMenuPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<StartMenuPanelStruct>("Json/TextContent/StartMenuPanel", "StartMenuPanel", (datas) =>
-                {
-                    Refresh();
-                    this.enabled = false;
-                }, null, "StartMenuPanel数据");
-                ABJAProcessorJson_StartMenuPanel.StartLoadJsonAssetData();
-            }
+                Refresh();
+                this.enabled = false;
+            }, "StartMenuPanel数据");
+            ABJAProcessorJson_StartMenuPanel.StartLoadJsonAssetData();
 
         }
         #endregion

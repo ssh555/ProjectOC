@@ -51,35 +51,19 @@ namespace ML.Engine.Input
         public InputManager()
         {
             this.Common.Enable();
-            GameManager.Instance.StartCoroutine(InitUIInputActionAssets());
+            InitUIInputActionAssets();
         }
 
 
         #region InputActionAsset
-        public AssetBundle InputActionAssetAB;
-        public IEnumerator InitUIInputActionAssets()
+        public void InitUIInputActionAssets()
         {
-            this.InputActionAssetAB = null;
-            var abmgr = GameManager.Instance.ABResourceManager;
-
-            var crequest = abmgr.LoadLocalABAsync("input/inputactionasset", null, out var InputActionAssetAB);
-
-            if (crequest != null)
+            GameManager.Instance.ABResourceManager.LoadAssetsAsync<InputActionAsset>("InputActionAssets", (ia) =>
             {
-                yield return crequest;
-                InputActionAssetAB = crequest.assetBundle;
-
-                this.InputActionAssetAB = InputActionAssetAB;
-
-
-                // 加载 AssetBundle 中所有的 InputActionAsset
-                InputActionAsset[] inputActionAssets = InputActionAssetAB.LoadAllAssets<InputActionAsset>();
-
-                // 遍历所有的 InputActionAsset
-                foreach (InputActionAsset inputActionAsset in inputActionAssets)
+                lock (actionDictionary)
                 {
                     // 遍历所有的 Input Actions
-                    foreach (InputActionMap actionMap in inputActionAsset.actionMaps)
+                    foreach (InputActionMap actionMap in ia.actionMaps)
                     {
                         // 遍历当前 actionMap 中的所有 Input Actions
                         foreach (InputAction action in actionMap.actions)
@@ -89,8 +73,7 @@ namespace ML.Engine.Input
                         }
                     }
                 }
-
-            }
+            });
         }
 
         public InputAction GetInputAction((string, string) key)

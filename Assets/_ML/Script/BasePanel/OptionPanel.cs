@@ -383,19 +383,18 @@ namespace ML.Engine.UI
             public KeyTip back;
         }
 
-        public static OptionPanelStruct PanelTextContent_OptionPanel => ABJAProcessorJson_OptionPanel.Datas;
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<OptionPanelStruct> ABJAProcessorJson_OptionPanel;
+        public OptionPanelStruct PanelTextContent_OptionPanel => ABJAProcessorJson_OptionPanel.Datas;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<OptionPanelStruct> ABJAProcessorJson_OptionPanel;
         private void InitUITextContents()
         {
-            if (ABJAProcessorJson_OptionPanel == null)
+
+            ABJAProcessorJson_OptionPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<OptionPanelStruct>("ML/Json/TextContent/OptionPanel", "OptionPanel", (datas) =>
             {
-                ABJAProcessorJson_OptionPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<OptionPanelStruct>("Json/TextContent/OptionPanel", "OptionPanel", (datas) =>
-                {
-                    Refresh();
-                    this.enabled = false;
-                }, null, "OptionPanel数据");
-                ABJAProcessorJson_OptionPanel.StartLoadJsonAssetData();
-            }
+                Refresh();
+                this.enabled = false;
+            }, "OptionPanel数据");
+            ABJAProcessorJson_OptionPanel.StartLoadJsonAssetData();
+            
 
         }
         #endregion

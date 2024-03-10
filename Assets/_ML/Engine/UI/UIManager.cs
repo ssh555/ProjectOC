@@ -30,7 +30,6 @@ namespace ML.Engine.UI
         /// </summary>
         public UIBasePanel PopPanel()
         {
-            Debug.Log("PopPanel");
             // 最底层UI->start无法移除
             if (panelStack.Count < 2)
             {
@@ -103,8 +102,11 @@ namespace ML.Engine.UI
             // 设置Canvas的属性
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
 
+
             // 添加CanvasScaler组件，确保UI在不同分辨率下保持一致
-            canvasObject.AddComponent<CanvasScaler>().uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            var cscalar = canvasObject.AddComponent<CanvasScaler>();
+            cscalar.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            cscalar.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
 
             // 添加GraphicRaycaster组件，确保Canvas可以与鼠标和触摸交互
             canvasObject.AddComponent<GraphicRaycaster>();

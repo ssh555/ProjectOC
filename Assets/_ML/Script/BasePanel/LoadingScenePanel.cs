@@ -84,10 +84,9 @@ namespace ML.Engine.UI
 
         public void Tick(float deltatime)
         {
-
-            if (GameManager.Instance.LevelSwitchManager.ao != null)
+            if (GameManager.Instance.LevelSwitchManager.SceneHandle.IsValid())
             {
-                float progress = Mathf.Clamp01(GameManager.Instance.LevelSwitchManager.ao.progress / 0.9f);
+                float progress = Mathf.Clamp01(GameManager.Instance.LevelSwitchManager.SceneHandle.PercentComplete / 0.9f);
                 ProgressText.text = ((int)progress * 100).ToString() + "%";
                 slider.value = progress;
             }
@@ -159,19 +158,18 @@ namespace ML.Engine.UI
             public ML.Engine.TextContent.TextContent LoadText;
         }
 
-        public static LoadingScenePanelStruct PanelTextContent_StartMenuPanel => ABJAProcessorJson_StartMenuPanel.Datas;
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<LoadingScenePanelStruct> ABJAProcessorJson_StartMenuPanel;
+        public LoadingScenePanelStruct PanelTextContent_StartMenuPanel => ABJAProcessorJson_StartMenuPanel.Datas;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<LoadingScenePanelStruct> ABJAProcessorJson_StartMenuPanel;
         private void InitUITextContents()
         {
-            if (ABJAProcessorJson_StartMenuPanel == null)
+
+            ABJAProcessorJson_StartMenuPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<LoadingScenePanelStruct>("ML/Json/TextContent/LoadingScenePanel", "LoadingScenePanel", (datas) =>
             {
-                ABJAProcessorJson_StartMenuPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<LoadingScenePanelStruct>("Json/TextContent/LoadingScenePanel", "LoadingScenePanel", (datas) =>
-                {
-                    Refresh();
-                    this.enabled = false;
-                }, null, "LoadingScenePanel数据");
-                ABJAProcessorJson_StartMenuPanel.StartLoadJsonAssetData();
-            }
+                Refresh();
+                this.enabled = false;
+            }, "LoadingScenePanel数据");
+            ABJAProcessorJson_StartMenuPanel.StartLoadJsonAssetData();
+            
 
         }
         #endregion
