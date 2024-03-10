@@ -56,76 +56,40 @@ namespace ML.Engine.InventorySystem.CompositeSystem
 
 
 
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<CompositionTableData[]> ABJAProcessor;
-        private SpriteAtlas compositeAtlas;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<CompositionTableData[]> ABJAProcessor;
         public void LoadTableData()
         {
-            AssetBundleCreateRequest request = null;
-            AssetBundle ab = null;
-            request = Manager.GameManager.Instance.ABResourceManager.LoadLocalABAsync(ItemManager.Texture2DPath, null,out ab);
-            request.completed += (asop) =>
-            {
-                if (request != null)
-                {
-                    ab = request.assetBundle;
-                    
-                    var t = ab.LoadAssetAsync<SpriteAtlas>("SA_Build_Icon");
-                    t.completed += (asop) =>
-                    {
-                        compositeAtlas = t.asset as SpriteAtlas;
-                    };
-                }
-            };
-            
-            //两种都Ok
-            // request = Manager.GameManager.Instance.ABResourceManager.LoadLocalABAsync(ItemManager.Texture2DPath, (asop) =>
-            // {
-            //     if (request != null)
-            //     {
-            //         ab = request.assetBundle;
-            //     }
-            //     AssetBundleRequest request2 = ab.LoadAssetAsync<SpriteAtlas>("SA_Build_Icon");
-            //     if (request2 != null)
-            //     {
-            //         compositeAtlas = request2.asset as SpriteAtlas;
-            //     }
-            // }, out ab);
-            
-            
-            if (ABJAProcessor == null)
-            {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<CompositionTableData[]>("Json/TableData", "Composition", (datas) =>
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<CompositionTableData[]>("OC/Json/TableData", "Composition", (datas) =>
                 
+            {
+                foreach (var data in datas)
                 {
-                    foreach (var data in datas)
+                    if (data.id == null || data == null)
                     {
-                        if (data.id == null || data == null)
-                        {
-                            Debug.Log($"{data?.id} {data == null} {data.name}");
-                        }
-                        this.CompositeData.Add(data.id, data);
+                        Debug.Log($"{data?.id} {data == null} {data.name}");
                     }
+                    this.CompositeData.Add(data.id, data);
+                }
 
-                    // to-do : 暂时取消Usage功能
-                    //// 加入 Usage
-                    //foreach (var data in this.CompositeData.Values)
-                    //{
-                    //    if (data.formula != null)
-                    //    {
-                    //        foreach (var usage in data.formula)
-                    //        {
-                    //            if (this.CompositeData[usage.id].usage == null)
-                    //            {
-                    //                this.CompositeData[usage.id].usage = new List<string>();
-                    //            }
-                    //            this.CompositeData[usage.id].usage.Add(data.id);
-                    //        }
+                // to-do : 暂时取消Usage功能
+                //// 加入 Usage
+                //foreach (var data in this.CompositeData.Values)
+                //{
+                //    if (data.formula != null)
+                //    {
+                //        foreach (var usage in data.formula)
+                //        {
+                //            if (this.CompositeData[usage.id].usage == null)
+                //            {
+                //                this.CompositeData[usage.id].usage = new List<string>();
+                //            }
+                //            this.CompositeData[usage.id].usage.Add(data.id);
+                //        }
 
-                    //    }
-                    //}
-                }, null, "合成系统表数据");
-                ABJAProcessor.StartLoadJsonAssetData();
-            }
+                //    }
+                //}
+            }, "合成系统表数据");
+            ABJAProcessor.StartLoadJsonAssetData();
         }
 
         /// <summary>
@@ -250,7 +214,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             {
                 return null;
             }
-            return Manager.GameManager.Instance.ABResourceManager.LoadLocalAB(ItemManager.Texture2DPath).LoadAsset<Texture2D>(this.CompositeData[id].texture2d);
+            return InventorySystem.ItemManager.Instance.GetItemTexture2D(this.CompositeData[id].texture2d);
         }
 
         public Sprite GetCompositonSprite(string id)
@@ -259,7 +223,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             {
                 return null;
             }
-            return compositeAtlas.GetSprite(CompositeData[id].texture2d);
+            return InventorySystem.ItemManager.Instance.GetItemSprite(id);
         }
 
         public string GetCompositonName(string id)

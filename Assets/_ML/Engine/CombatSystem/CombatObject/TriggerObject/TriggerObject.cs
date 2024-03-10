@@ -219,7 +219,7 @@ namespace ML.Engine.CombatSystem.CombatObject
             }
             else
             {
-                GameObject.Destroy(this.gameObject);
+                Manager.GameManager.DestroyObj(this.gameObject);
             }
         }
     }

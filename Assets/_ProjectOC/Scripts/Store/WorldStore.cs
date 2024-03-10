@@ -2,6 +2,7 @@ using ML.Engine.BuildingSystem;
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InteractSystem;
 using ML.Engine.Manager;
+using ML.Engine.UI;
 using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
 using System;
@@ -42,14 +43,17 @@ namespace ProjectOC.StoreNS
 
         public void Interact(InteractComponent component)
         {
-            // 实例化UIPanel
-            GameObject gameObject = GameManager.Instance.ABResourceManager.LoadLocalAB("ui/uipanel").LoadAsset<GameObject>("UIStorePanel");
-            InventorySystem.UI.UIStore uiPanel = GameObject.Instantiate(gameObject, GameObject.Find("Canvas").transform, false).GetComponent<InventorySystem.UI.UIStore>();
-            uiPanel.Player = component.GetComponentInParent<Player.PlayerCharacter>();
-            // 初始化相关数据
-            uiPanel.Store = this.Store;
-            // Push
-            GameManager.Instance.UIManager.PushPanel(uiPanel);
+            // TODO
+            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIStorePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, true).Completed += (handle) =>
+            {
+                InventorySystem.UI.UIStore uiPanel = (handle.Result).GetComponent<InventorySystem.UI.UIStore>();
+                uiPanel.Player = component.GetComponentInParent<Player.PlayerCharacter>();
+                // 初始化相关数据
+                uiPanel.Store = this.Store;
+                // Push
+                GameManager.Instance.UIManager.PushPanel(uiPanel);
+            };
+
         }
     }
 }

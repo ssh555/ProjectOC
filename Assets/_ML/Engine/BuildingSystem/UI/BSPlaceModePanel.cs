@@ -14,6 +14,7 @@ using UnityEngine;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 using UnityEngine.Windows;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace ML.Engine.BuildingSystem.UI
 {
@@ -57,7 +58,7 @@ namespace ML.Engine.BuildingSystem.UI
 
         private void Awake()
         {
-            this.StartCoroutine(InitStyleTexture2D());
+            InitStyleTexture2D();
 
             this.styleParent = this.transform.Find("KT_AlterHeight").Find("KT_AlterStyle").Find("Content") as RectTransform;
             this.templateStyle = this.styleParent.Find("StyleTemplate") as RectTransform;
@@ -146,54 +147,31 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region 载入资产
-        public const string TStyleABPath = "UI/BuildingSystem/Texture2D/Style";
+        public const string TStyleSpriteAtlasPath = "ML/BuildingSystem/Style/SA_Build_Style.spriteatlasv2";
         private SpriteAtlas styleAtlas = null;
+        private AsyncOperationHandle SAHandle;
         /// <summary>
         /// 资产是否完成载入
         /// </summary>
         public bool IsInit = false;
-        private IEnumerator InitStyleTexture2D()
+        private void InitStyleTexture2D()
         {
-#if UNITY_EDITOR
-            float startT = Time.time;
-#endif
-            while (Manager.GameManager.Instance.ABResourceManager == null)
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>(TStyleSpriteAtlasPath).Completed += (handle) =>
             {
-                yield return null;
-            }
+                SAHandle = handle;
+                styleAtlas = handle.Result;
 
-            var abmgr = Manager.GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(TStyleABPath, null, out ab);
-            yield return crequest;
-            if(crequest != null)
-            {
-                ab = crequest.assetBundle;
-            }
-            
-            styleAtlas = ab.LoadAsset<SpriteAtlas>("SA_Build_Style");    
-            
 
-            IsInit = true;
-            this.enabled = false;
+                IsInit = true;
+                this.enabled = false;
 
-            this.Refresh();
-#if UNITY_EDITOR
-            Debug.Log("InitStyleTexture2D cost time: " + (Time.time - startT));
-#endif
+                this.Refresh();
+            };
         }
 
-        private IEnumerator UnloadAsset()
+        private void UnloadAsset()
         {
-            var abmgr = Manager.GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(TStyleABPath, null, out ab);
-            yield return crequest;
-            if (crequest != null)
-            {
-                ab = crequest.assetBundle;
-            }
-            ab.UnloadAsync(true);
+            Manager.GameManager.Instance.ABResourceManager.Release(SAHandle);
         }
 
         public Sprite GetStyleSprite(BuildingCategory3 style)
@@ -275,8 +253,8 @@ namespace ML.Engine.BuildingSystem.UI
         {
             foreach (var instance in this.styleInstance.Values)
             {
-                Destroy(instance.GetComponentInChildren<Image>().sprite);
-                Destroy(instance.gameObject);
+                Manager.GameManager.DestroyObj(instance.GetComponentInChildren<Image>().sprite);
+                Manager.GameManager.DestroyObj(instance.gameObject);
             }
             this.styleInstance.Clear();
         }

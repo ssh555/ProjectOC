@@ -61,23 +61,23 @@
             }
         }
     ],
-    "categorylast" : {
-        "keyname" : "categorylast",
-        "keymap" : {
-            "KeyBoard" : "Z",
-            "XBOX" : "LB"
-        },
+    "LastTerm" : {
+        "keyname" : "KT_LastTerm",
+        "keymap": {
+            "ActionMapName": "TechTree",
+            "ActionName": "LastTerm"
+          },
         "description" : {
             "Chinese" : "",
             "English" : ""
         }
     },
-    "categorynext" : {
-        "keyname" : "categorynext",
-        "keymap" : {
-            "KeyBoard" : "X",
-            "XBOX" : "RB"
-        },
+    "NextTerm" : {
+        "keyname" : "KT_NextTerm",
+        "keymap": {
+            "ActionMapName": "TechTree",
+            "ActionName": "NextTerm"
+          },
         "description" : {
             "Chinese" : "",
             "English" : ""
@@ -91,38 +91,38 @@
         "Chinese" : "已破译的数据项",
         "English" : "Deciphered data items"
     },
-    "inspector" : {
-        "keyname" : "inspector",
-        "keymap" : {
-            "KeyBoard" : "E",
-            "XBOX" : "A"
-        },
+    "Inspect" : {
+        "keyname" : "KT_Inspect",
+        "keymap": {
+            "ActionMapName": "TechTree",
+            "ActionName": "Inspect"
+          },
         "description" : {
             "Chinese" : "查看",
-            "English" : "Inspector"
+            "English" : "Inspect"
         }
     },
     "timecosttip":{
         "Chinese" : "时间消耗: ",
         "English" : "Time Cost: "
     },
-    "decipher" : {
-        "keyname" : "decipher",
-        "keymap" : {
-            "KeyBoard" : "F",
-            "XBOX" : "X"
-        },
+    "Decipher" : {
+        "keyname" : "KT_Decipher",
+        "keymap": {
+            "ActionMapName": "TechTree",
+            "ActionName": "Decipher"
+          },
         "description" : {
             "Chinese" : "破译",
             "English" : "Decipher"
         }
     },
-    "back" : {
-        "keyname" : "back",
-        "keymap" : {
-            "KeyBoard" : "ESC",
-            "XBOX" : "B"
-        },
+    "Back" : {
+        "keyname" : "KT_Back",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
         "description" : {
             "Chinese" : "返回",
             "English" : "Back"

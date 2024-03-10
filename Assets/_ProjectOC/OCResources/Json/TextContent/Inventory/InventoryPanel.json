@@ -33,23 +33,23 @@
             }
         }
     ],
-    "lastterm" : {
-        "keyname" : "lastterm",
-        "keymap" : {
-            "KeyBoard" : "Z",
-            "XBOX" : "LB"
-        },
+    "LastTerm" : {
+        "keyname" : "KT_LastTerm",
+        "keymap": {
+            "ActionMapName": "UIInventory",
+            "ActionName": "LastTerm"
+          },
         "description" : {
             "Chinese" : "",
             "English" : ""
         }
     },
-    "nextterm" : {
-        "keyname" : "nextterm",
-        "keymap" : {
-            "KeyBoard" : "X",
-            "XBOX" : "RB"
-        },
+    "NextTerm" : {
+        "keyname" : "KT_NextTerm",
+        "keymap": {
+            "ActionMapName": "UIInventory",
+            "ActionName": "NextTerm"
+          },
         "description" : {
             "Chinese" : "",
             "English" : ""
@@ -67,45 +67,45 @@
         "Chinese" : "效果描述：",
         "English" : "Effect Description: "
     },
-    "back" : {
-        "keyname" : "back",
-        "keymap" : {
-            "KeyBoard" : "ESC",
-            "XBOX" : "B"
-        },
+    "Back" : {
+        "keyname" : "KT_Back",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
         "description" : {
             "Chinese" : "返回",
             "English" : "Back"
         }
     },
-    "use" : {
-        "keyname" : "use",
-        "keymap" : {
-            "KeyBoard" : "E",
-            "XBOX" : "A"
-        },
+    "Use" : {
+        "keyname" : "KT_Use",
+        "keymap": {
+            "ActionMapName": "UIInventory",
+            "ActionName": "Use"
+          },
         "description" : {
             "Chinese" : "使用",
             "English" : "Use"
         }
     },
-    "drop" : {
-        "keyname" : "drop",
-        "keymap" : {
-            "KeyBoard" : "F",
-            "XBOX" : "X"
-        },
+    "Drop" : {
+        "keyname" : "KT_Drop",
+        "keymap": {
+            "ActionMapName": "UIInventory",
+            "ActionName": "Drop"
+          },
         "description" : {
             "Chinese" : "丢弃",
             "English" : "Drop"
         }
     },
-    "destroy" : {
-        "keyname" : "destroy",
-        "keymap" : {
-            "KeyBoard" : "F",
-            "XBOX" : "X"
-        },
+    "Destroy" : {
+        "keyname" : "KT_Destroy",
+        "keymap": {
+            "ActionMapName": "UIInventory",
+            "ActionName": "Destroy"
+          },
         "description" : {
             "Chinese" : "销毁",
             "English" : "Destroy"

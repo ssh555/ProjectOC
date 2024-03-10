@@ -10,6 +10,7 @@ using TMPro;
 using ML.Engine.TextContent;
 using Unity.VisualScripting;
 using Newtonsoft.Json;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace ML.Engine.BuildingSystem
 {
@@ -39,77 +40,59 @@ namespace ML.Engine.BuildingSystem
 
         #endregion
        
-        public static bool IsLoading = false;
-
         public void InitUITextContents()
         {
-            if (!IsLoading)
+            var KeyTip_ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<KeyTip[]>("OC/Json/TextContent/BuildingSystem/UI", "KeyTip", (datas) =>
             {
-                IsLoading = true;
-                var KeyTip_ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<KeyTip[]>("Json/TextContent/BuildingSystem/UI", "KeyTip", (datas) =>
+                foreach (var keytip in datas)
                 {
-                    foreach (var keytip in datas)
-                    {
-                        this.KeyTipDict.Add(keytip.keyname, keytip);
-                    }
-                    IsInit--;
-                }, null, "建造系统按键提示");
-                KeyTip_ABJAProcessor.StartLoadJsonAssetData();
+                    this.KeyTipDict.Add(keytip.keyname, keytip);
+                }
+                IsInit--;
+            }, "建造系统按键提示");
+            KeyTip_ABJAProcessor.StartLoadJsonAssetData();
 
-                var Category_ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextTip[]>("Json/TextContent/BuildingSystem/UI", "Category", (datas) =>
+            var Category_ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextTip[]>("OC/Json/TextContent/BuildingSystem/UI", "Category", (datas) =>
+            {
+                foreach (var category in datas)
                 {
-                    foreach (var category in datas)
-                    {
-                        this.Category1Dict.Add(category.name, category);
-                    }
-                    IsInit--;
-                }, null, "建造系统Category1");
-                Category_ABJAProcessor.StartLoadJsonAssetData();
+                    this.Category1Dict.Add(category.name, category);
+                }
+                IsInit--;
+            }, "建造系统Category1");
+            Category_ABJAProcessor.StartLoadJsonAssetData();
 
-                var Type_ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextTip[]>("Json/TextContent/BuildingSystem/UI", "Type", (datas) =>
+            var Type_ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextTip[]>("OC/Json/TextContent/BuildingSystem/UI", "Type", (datas) =>
+            {
+                foreach (var type in datas)
                 {
-                    foreach (var type in datas)
-                    {
-                        this.Category2Dict.Add(type.name, type);
-                    }
-                    IsInit--;
-                }, null, "建造系统Category2");
-                Type_ABJAProcessor.StartLoadJsonAssetData();
-            }
+                    this.Category2Dict.Add(type.name, type);
+                }
+                IsInit--;
+            }, "建造系统Category2");
+            Type_ABJAProcessor.StartLoadJsonAssetData();
         }
 
         #endregion
 
         #region Internal
-        public const string UIPanelABPath = "UI/BuildingSystem/Prefabs";
+        public const string UIPanelABPath = "ML/BuildingSystem/UI/Panel";
 
-        public const string BPartABPath = "Prefabs/BuildingSystem/BPart";
-
-
-        private Dictionary<Type, UIBasePanel> uiBasePanelDict = new Dictionary<Type, UIBasePanel>();
+        public const string BPartABPath = "BuildingPart";
 
         [ShowInInspector]
-        private RectTransform Canvas;
-
-        /// <summary>
-        /// to-do : to-delete
-        /// </summary>
-        public BuildingArea.BuildingArea area;
-        public bool IsEnableArea = true;
-
-        public T GetPanel<T>() where T : UIBasePanel
+        private RectTransform Canvas => Manager.GameManager.Instance.UIManager.GetCanvas.GetComponent<RectTransform>();
+        public async System.Threading.Tasks.Task<T> GetPanel<T>() where T : UIBasePanel
         {
-            if(this.uiBasePanelDict.ContainsKey(typeof(T)))
-            {
-                T panel = Instantiate<GameObject>(this.uiBasePanelDict[typeof(T)].gameObject).GetComponent<T>();
-                return panel;
-            }
-            return null;
+            var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(UIPanelABPath + "/" + typeof(T).Name + ".prefab");
+            await handle.Task;
+            T panel = handle.Result.GetComponent<T>();
+            return panel;
         }
 
-        public void PushPanel<T>() where T : UIBasePanel
+        public async void PushPanel<T>() where T : UIBasePanel
         {
-            var panel = this.GetPanel<T>();
+            var panel = await this.GetPanel<T>();
             Manager.GameManager.Instance.UIManager.PushPanel(panel);
             panel.transform.SetParent(this.Canvas, false);
         }
@@ -117,6 +100,14 @@ namespace ML.Engine.BuildingSystem
         public void PopPanel()
         {
             Manager.GameManager.Instance.UIManager.PopPanel();
+        }
+
+        public async void PopAndPushPanel<T>() where T : UIBasePanel
+        {
+            var panel = await this.GetPanel<T>();
+            Manager.GameManager.Instance.UIManager.PopPanel();
+            Manager.GameManager.Instance.UIManager.PushPanel(panel);
+            panel.transform.SetParent(this.Canvas, false);
         }
 
         private UIBasePanel GetPeekPanel()
@@ -128,7 +119,7 @@ namespace ML.Engine.BuildingSystem
         {
             if(Instance != null)
             {
-                Destroy(this.gameObject);
+                Manager.GameManager.DestroyObj(this.gameObject);
             }
             Instance = this;
         }
@@ -137,135 +128,60 @@ namespace ML.Engine.BuildingSystem
         {
             ML.Engine.Manager.GameManager.Instance.RegisterLocalManager(BM);
 
-            this.Canvas = GameObject.Find("Canvas").transform as RectTransform;
-
-            StartCoroutine(RegisterBPartPrefab());
-            StartCoroutine(RigisterUIPanelPrefab());
-
-            StartCoroutine(AddTestEvent());
+            RegisterBPartPrefab();
 
             InitUITextContents();
         }
 
         public Dictionary<BuildingPartClassification, IBuildingPart> LoadedBPart = new Dictionary<BuildingPartClassification, IBuildingPart>();
-#if UNITY_EDITOR
-        [LabelText("加载建筑物时是否标记为可用"), SerializeField]
-        private bool IsAddBPartOnRegister = true;
-#endif
-        private IEnumerator RegisterBPartPrefab()
-        {
-#if UNITY_EDITOR
-            float startT = Time.realtimeSinceStartup;
-#endif
-            while (Manager.GameManager.Instance.ABResourceManager == null)
-            {
-                yield return null;
-            }
-            var abmgr = Manager.GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(BPartABPath, null, out ab);
-            yield return crequest;
-            if(crequest != null)
-                ab = crequest.assetBundle;
-            
-            var request = ab.LoadAllAssetsAsync<GameObject>();
-            yield return request;
 
-            foreach (var obj in request.allAssets)
+
+
+        private AsyncOperationHandle BPartHandle;
+        private void RegisterBPartPrefab()
+        {
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetsAsync<GameObject>(BPartABPath, (obj) =>
             {
-                var bpart = (obj as GameObject).GetComponent<IBuildingPart>();
-                if (bpart != null)
+                lock(this.LoadedBPart)
                 {
-                    this.LoadedBPart.Add(bpart.Classification, bpart);
-                    // to-do : 仅测试用，后续接入科技树后需注释掉
-#if UNITY_EDITOR
-                    if (IsAddBPartOnRegister) 
+                    var bpart = obj.GetComponent<IBuildingPart>();
+                    if (bpart != null)
                     {
-                        BM.RegisterBPartPrefab(bpart);
+                        this.LoadedBPart.Add(bpart.Classification, bpart);
+                        // to-do : 仅测试用，后续接入科技树后需注释掉
+#if UNITY_EDITOR
+                        if (IsAddBPartOnRegister)
+                        {
+                            BM.RegisterBPartPrefab(bpart);
 
+                        }
+#endif
                     }
-#endif
                 }
-            }
 
-            // to-do : 暂时材质有用，不能UnLoad
-            //abmgr.UnLoadLocalABAsync(BPartABPath, false, null);
-            IsInit--;
-#if UNITY_EDITOR
-            Debug.Log("RegisterBPartPrefab cost time: " + (Time.realtimeSinceStartup - startT));
-#endif
-
-        }
-
-        private IEnumerator RigisterUIPanelPrefab()
-        {
-#if UNITY_EDITOR
-            float startT = Time.realtimeSinceStartup;
-#endif
-
-            while (Manager.GameManager.Instance.ABResourceManager == null)
+            }).Completed += (handle) =>
             {
-                yield return null;
-            }
-            var abmgr = Manager.GameManager.Instance.ABResourceManager;
-            AssetBundle ab;
-            var crequest = abmgr.LoadLocalABAsync(UIPanelABPath, null, out ab);
-            yield return crequest;
-            ab = crequest.assetBundle;
-
-            var request = ab.LoadAllAssetsAsync<GameObject>();
-            yield return request;
-
-            foreach (var obj in request.allAssets)
-            {
-                var panel = (obj as GameObject).GetComponent<UIBasePanel>();
-                if(panel)
-                {
-                    this.uiBasePanelDict.Add(panel.GetType(), panel);
-                }
-            }
-
-            // to-do : 暂时材质有用，不能UnLoad
-            //abmgr.UnLoadLocalABAsync(BPartABPath, false, null);
-
-            //var botPanel = this.GetPanel<UI.Test_BSBotPanel>();
-            //botPanel.transform.SetParent(this.Canvas, false);
-            //Manager.GameManager.Instance.UIManager.ChangeBotUIPanel(botPanel);
-            IsInit--;
-#if UNITY_EDITOR
-            Debug.Log("RigisterUIPanelPrefab cost time: " + (Time.realtimeSinceStartup - startT));
-#endif
-        }
-
-        private IEnumerator AddTestEvent()
-        {
-            while (BM.Placer == null)
-            {
-                yield return null;
-            }
-            
-            BM.Placer.OnBuildingModeEnter += () =>
-            {
-                // to-delete
-                if(area != null)
-                {
-                    area.gameObject.SetActive(IsEnableArea);
-                }
+                BPartHandle = handle;
+                IsInit--;
             };
-
         }
-
-
 
         private void OnDestroy()
         {
             if(Instance == this)
             {
                 Instance = null;
+                if(Manager.GameManager.Instance != null)
+                    Manager.GameManager.Instance.ABResourceManager.Release(BPartHandle);
             }
         }
 
         #endregion
+
+#if UNITY_EDITOR
+        [LabelText("加载建筑物时是否标记为可用"), SerializeField]
+        private bool IsAddBPartOnRegister = true;
+#endif
     }
 
 }
