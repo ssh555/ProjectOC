@@ -173,15 +173,6 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 
         private void Start()
         {
-            StartCoroutine(__DelayInit__());
-        }
-
-        private IEnumerator __DelayInit__()
-        {
-            while (BuildingManager.Instance == null || BuildingManager.Instance.BuildingSocketList == null)
-            {
-                yield return null;
-            }
             BuildingManager.Instance.BuildingSocketList.Add(this);
         }
 

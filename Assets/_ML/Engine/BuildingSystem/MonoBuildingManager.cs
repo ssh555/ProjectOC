@@ -120,12 +120,9 @@ namespace ML.Engine.BuildingSystem
             if(Instance != null)
             {
                 Manager.GameManager.DestroyObj(this.gameObject);
+                return;
             }
             Instance = this;
-        }
-
-        void Start()
-        {
             ML.Engine.Manager.GameManager.Instance.RegisterLocalManager(BM);
 
             RegisterBPartPrefab();
