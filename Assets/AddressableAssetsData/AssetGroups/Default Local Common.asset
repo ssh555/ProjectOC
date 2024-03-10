@@ -30,12 +30,14 @@ MonoBehaviour:
   - m_GUID: 607bb880f443a8641b41f67c05a733fe
     m_Address: ML/BuildingSystem/MatPackage
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - BPartMatPackage
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d4b3af60db9e5324ea3c4caa5627d5f6
     m_Address: ML/BuildingSystem/BuildingPart
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - BuildingPart
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b024a016c71745549b704377774e4c49
     m_Address: ML/Fonts
@@ -120,13 +122,13 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c14098454720c4e4eaf2737ca2b9304c
-    m_Address: OC/Scene/GameScene
+    m_Address: GameScene
     m_ReadOnly: 0
     m_SerializedLabels:
     - Scene
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0e312e372058df04eaac5e35104c56f3
-    m_Address: OC/Scene/EnterPoint
+    m_Address: EnterPointScene
     m_ReadOnly: 0
     m_SerializedLabels:
     - Scene
@@ -155,6 +157,41 @@ MonoBehaviour:
     m_Address: OC/UI/Inventory/Texture
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 15527fce55c7d7047b1839153d4bf7ac
+    m_Address: Assets/_ProjectOC/Scripts/Input/PlayerInput.inputactions
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - InputActionAssets
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d09ba243ba2394b4e9a9bc3924362578
+    m_Address: Assets/_ML/Engine/BuildingSystem/BuildingInput/BuildingInput.inputactions
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - InputActionAssets
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b852133c4d4345d419e8355b3f4ddc9f
+    m_Address: Assets/_ML/Engine/Input/CommomInput.inputactions
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - InputActionAssets
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4d8e67c31d8280c418fea4346d451dc4
+    m_Address: PreScene
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scene
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd360a45dbd59144da89a30283c7064c
+    m_Address: ML/BaseUIPanel
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fb0ecd8ab3c48844d8e7c3cd060c65ed
+    m_Address: ML/Json/TextContent
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Json/TextContent
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 72d1a89784032c94ea3b026b42e20dcf, type: 2}

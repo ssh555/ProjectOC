@@ -21,22 +21,8 @@ namespace ML.Engine.UI
         #region Unity
         public bool IsInit = false;
 
-        public InputActionAsset inputActions;
         private void Start()
         {
-
-            // 遍历所有的 Input Actions
-            foreach (InputActionMap actionMap in inputActions.actionMaps)
-            {
-                Debug.Log("Action Map: " + actionMap.name);
-
-                // 遍历当前 actionMap 中的所有 Input Actions
-                foreach (InputAction action in actionMap.actions)
-                {
-                    Debug.Log("  Action Name: " + action.name);
-                }
-            }
-
             InitUITextContents();
 
             ToptitleText = this.transform.Find("TopTitle").Find("Text").GetComponent<TextMeshProUGUI>();
@@ -48,35 +34,35 @@ namespace ML.Engine.UI
             this.GraphicBtnText = GraphicBtn.transform.Find("BtnText").GetComponent<TextMeshProUGUI>();
             this.GraphicBtn.OnInteract += () =>
             {
-                Debug.Log("GraphicBtn");
+
             };
 
             this.AudioBtn = btnList.Find("AudioBtn").GetComponent<SelectedButton>();
             this.AudioBtnText = AudioBtn.transform.Find("BtnText").GetComponent<TextMeshProUGUI>();
             this.AudioBtn.OnInteract += () =>
             {
-                Debug.Log("AudioBtn");
+
             };
 
             this.ControllerBtn = btnList.Find("ControllerBtn").GetComponent<SelectedButton>();
             this.ControllerBtnText = ControllerBtn.transform.Find("BtnText").GetComponent<TextMeshProUGUI>();
             this.ControllerBtn.OnInteract += () =>
             {
-                Debug.Log("ControllerBtn");
+
             };
 
             this.TutorialBtn = btnList.Find("TutorialBtn").GetComponent<SelectedButton>();
             this.TutorialBtnText = TutorialBtn.transform.Find("BtnText").GetComponent<TextMeshProUGUI>();
             this.TutorialBtn.OnInteract += () =>
             {
-                Debug.Log("TutorialBtn");
+
             };
 
             this.BackBtn = btnList.Find("BackBtn").GetComponent<SelectedButton>();
             this.BackBtnText = BackBtn.transform.Find("BtnText").GetComponent<TextMeshProUGUI>();
             this.BackBtn.OnInteract += () =>
             {
-                Debug.Log("BackBtn");
+
             };
 
 
@@ -84,7 +70,7 @@ namespace ML.Engine.UI
             this.QuitGameBtnText = QuitGameBtn.transform.Find("BtnText").GetComponent<TextMeshProUGUI>();
             this.QuitGameBtn.OnInteract += () =>
             {
-                Debug.Log("QuitGameBtn");
+
             };
 
             var btns = btnList.GetComponentsInChildren<SelectedButton>();
@@ -236,10 +222,6 @@ namespace ML.Engine.UI
             // 使用 ReadValue<T>() 方法获取附加数据
             string actionMapName = obj.action.actionMap.name;
 
-            Debug.Log("Action name: " + actionName);
-            Debug.Log("Action map name: " + actionMapName);
-
-
             var vector2 = obj.ReadValue<UnityEngine.Vector2>();
             float angle = Mathf.Atan2(vector2.x, vector2.y);
 
@@ -344,7 +326,6 @@ namespace ML.Engine.UI
         {
             if (ABJAProcessorJson_OptionPanel == null || !ABJAProcessorJson_OptionPanel.IsLoaded || !IsInit)
             {
-                Debug.Log("ABJAProcessorJson is null");
                 return;
             }
 
@@ -388,7 +369,7 @@ namespace ML.Engine.UI
         private void InitUITextContents()
         {
 
-            ABJAProcessorJson_OptionPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<OptionPanelStruct>("ML/Json/TextContent/OptionPanel", "OptionPanel", (datas) =>
+            ABJAProcessorJson_OptionPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<OptionPanelStruct>("ML/Json/TextContent", "OptionPanel", (datas) =>
             {
                 Refresh();
                 this.enabled = false;

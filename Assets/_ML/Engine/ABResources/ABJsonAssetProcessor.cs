@@ -74,7 +74,7 @@ namespace ML.Engine.ABResources
             IsLoading = true;
 
             var abmgr = ML.Engine.Manager.GameManager.Instance.ABResourceManager;
-            handle = abmgr.LoadAssetAsync<TextAsset>(this.ABPath + "/" + this.ABName);
+            handle = abmgr.LoadAssetAsync<TextAsset>(this.ABPath + "/" + this.ABName + ".json");
             handle.Completed += (asHandle) =>
             {
                 Datas = JsonConvert.DeserializeObject<T>((handle.Result as TextAsset).text);

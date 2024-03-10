@@ -182,13 +182,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
         private void SwitchBeast_started(InputAction.CallbackContext obj)
         {
-            Debug.Log("SwitchBeast_started "+Time.frameCount);
             if(timer == null)
             {
                 timer = new CounterDownTimer(TimeInterval, true, true, 1, 2);
                 timer.OnEndEvent += () =>
                 {
-                    //Debug.Log("OnEndEvent");
                     Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
                     if (Workers.Count == 0) return;
 
@@ -213,7 +211,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void SwitchBeast_canceled(InputAction.CallbackContext obj)
         {
-            Debug.Log("SwitchBeast_canceled "+ Time.frameCount);
             GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
             timer = null;
         }
@@ -330,7 +327,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             for (int i = 0;i < Workers.Count;i++)
             {
-                GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/BeastBio", Content).Completed += (handle) =>
+                GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/BeastBio.prefab", Content).Completed += (handle) =>
                 {
                     this.goHandle.Add(handle);
                     var descriptionPrefab = handle.Result;
@@ -404,7 +401,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                 foreach (var feature in worker.Features)
                 {
-                    GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/Description", Info).Completed += (handle) =>
+                    GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/Description.prefab", Info).Completed += (handle) =>
                     {
                         this.goHandle.Add(handle);
                         var descriptionPrefab = handle.Result;
@@ -558,7 +555,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #region Texture2D
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
-        private string ResonanceWheelSpriteAtlasPath = "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI";
+        private string ResonanceWheelSpriteAtlasPath = "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2";
         private void InitUITexture2D()
         {
             GM.ABResourceManager.LoadAssetAsync<SpriteAtlas>(ResonanceWheelSpriteAtlasPath).Completed += (handle) =>

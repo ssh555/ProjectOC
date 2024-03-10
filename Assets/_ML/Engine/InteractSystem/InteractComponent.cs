@@ -116,7 +116,8 @@ namespace ML.Engine.InteractSystem
         private void OnDestroy()
         {
             (this as Timer.ITickComponent).DisposeTick();
-            Manager.GameManager.Instance.ABResourceManager.ReleaseInstance(ktHandle);
+            if(Manager.GameManager.Instance != null)
+                Manager.GameManager.Instance.ABResourceManager.ReleaseInstance(ktHandle);
         }
         #endregion
 
@@ -154,7 +155,7 @@ namespace ML.Engine.InteractSystem
 
         private void OnLoadOver()
         {
-            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/InteractSystem/UI/InteractKeyTip").Completed += (handle) =>
+            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/InteractSystem/UI/InteractKeyTip.prefab").Completed += (handle) =>
              {
                  this.ktHandle = handle;
                  var keyTipInstance = handle.Result;

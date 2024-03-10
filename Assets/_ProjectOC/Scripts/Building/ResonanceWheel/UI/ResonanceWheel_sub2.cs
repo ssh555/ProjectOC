@@ -282,7 +282,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             if (this.parentUI.ABJAProcessorJson_sub2 == null || !this.parentUI.ABJAProcessorJson_sub2.IsLoaded || !IsInit)
             {
-                Debug.Log("ABJAProcessorJson is null");
                 return;
             }
 
@@ -293,7 +292,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 {
                     
                     InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
-                    if (inputAction == null) Debug.Log(keyTip.keymap.ActionMapName + " " + keyTip.keymap.ActionName);
                     inputManager.GetInputActionBindText(inputAction);
 
                     UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];

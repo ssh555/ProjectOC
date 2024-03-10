@@ -26,21 +26,34 @@ namespace ML.Engine.UI
             this.NewGameBtnText = NewGameBtn.transform.Find("BtnText").GetComponent<TextMeshProUGUI>();
             this.NewGameBtn.OnInteract += () =>
             {
+                UIBasePanel panel = null;
+                System.Action<string, string> preCallback = (string s1, string s2) => {
+                    GameManager.Instance.EnterPoint.GetLoadingScenePanelInstance().Completed += (handle) =>
+                    {
+                        // 实例化
+                        panel = handle.Result.GetComponent<LoadingScenePanel>();
 
-                GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("GameScene", null, null));
-                GameManager.Instance.UIManager.ChangeBotUIPanel(null);
+                        panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
 
-                GameManager.Instance.EnterPoint.GetLoadingScenePanelInstance().Completed += (handle) =>
-                {
-                    // 实例化
-                    var panel = handle.Result.GetComponent<LoadingScenePanel>();
+                        panel.OnEnter();
 
-                    panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
 
-                    // Push
-                    GameManager.Instance.UIManager.PushPanel(panel);
+                    };
+
                 };
 
+                System.Action<string, string> postCallback = async (string s1, string s2) => {
+                    await System.Threading.Tasks.Task.Run(() =>
+                    {
+                        while (panel == null) ;
+                    });
+                    panel.OnExit();
+                };
+
+                GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("GameScene", preCallback, postCallback));
+
+
+                this.OnExit();
             };
 
             this.ContinueGameBtn = btnList.Find("ContinueGameBtn").GetComponent<SelectedButton>();
@@ -270,7 +283,6 @@ namespace ML.Engine.UI
         {
             if (ABJAProcessorJson_StartMenuPanel == null || !ABJAProcessorJson_StartMenuPanel.IsLoaded || !IsInit)
             {
-                Debug.Log("ABJAProcessorJson is null");
                 return;
             }
 
@@ -298,7 +310,7 @@ namespace ML.Engine.UI
         public ML.Engine.ABResources.ABJsonAssetProcessor<StartMenuPanelStruct> ABJAProcessorJson_StartMenuPanel;
         private void InitUITextContents()
         {
-            ABJAProcessorJson_StartMenuPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<StartMenuPanelStruct>("OC/Json/TextContent/StartMenuPanel", "StartMenuPanel", (datas) =>
+            ABJAProcessorJson_StartMenuPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<StartMenuPanelStruct>("ML/Json/TextContent", "StartMenuPanel", (datas) =>
             {
                 Refresh();
                 this.enabled = false;

@@ -48,7 +48,7 @@ namespace ProjectOC.ProNodeNS
         public void Interact(InteractComponent component)
         {
             // ÊµÀý»¯UIPanel
-            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIProNodePanel", GameManager.Instance.UIManager.GetCanvas.transform, true).Completed += (handle) =>
+            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIProNodePanel.prefab", GameManager.Instance.UIManager.GetCanvas.transform, true).Completed += (handle) =>
             {
                 InventorySystem.UI.UIProNode uiPanel = handle.Result.GetComponent<InventorySystem.UI.UIProNode>();
                 uiPanel.Player = component.GetComponentInParent<Player.PlayerCharacter>();

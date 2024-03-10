@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,6 +24,7 @@ namespace ML.Engine.UI
         /// <summary>
         /// 当前显示的UI栈
         /// </summary>
+        [ShowInInspector]
         private Stack<UIBasePanel> panelStack = new Stack<UIBasePanel>();
 
         /// <summary>
@@ -101,12 +103,14 @@ namespace ML.Engine.UI
 
             // 设置Canvas的属性
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-
+            
 
             // 添加CanvasScaler组件，确保UI在不同分辨率下保持一致
             var cscalar = canvasObject.AddComponent<CanvasScaler>();
             cscalar.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             cscalar.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
+            cscalar.referenceResolution = new Vector2(1920, 1080);
+
 
             // 添加GraphicRaycaster组件，确保Canvas可以与鼠标和触摸交互
             canvasObject.AddComponent<GraphicRaycaster>();
