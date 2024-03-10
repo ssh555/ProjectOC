@@ -244,15 +244,15 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             foreach (var s in tempSprite)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             foreach (var s in tempItemType.Values)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             foreach (var s in tempUIItems)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
 
             uiKeyTipDic = null;
@@ -280,7 +280,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         public override void Refresh()
         {
-            if (ResonanceWheelUI.ABJAProcessorJson_sub2 == null || !ResonanceWheelUI.ABJAProcessorJson_sub2.IsLoaded || !IsInit)
+            if (this.parentUI.ABJAProcessorJson_sub2 == null || !this.parentUI.ABJAProcessorJson_sub2.IsLoaded || !IsInit)
             {
                 Debug.Log("ABJAProcessorJson is null");
                 return;

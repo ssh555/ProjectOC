@@ -1,5 +1,6 @@
 using ML.Engine.InventorySystem;
 using ML.Engine.InventorySystem.CompositeSystem;
+using ML.Engine.UI;
 using ML.Example.InventorySystem.CompositeSystem.UI;
 using Sirenix.OdinInspector;
 using System.Collections;
@@ -180,37 +181,41 @@ namespace ML.Example.InventorySystem
         {
             if (Canvas == null)
             {
-                Canvas = GameObject.Find("Canvas").transform;
+                Canvas = Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform;
             }
-
-            this.MainHUD = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<GameObject>("ui/prefabs", "MainHUD", (asyncOpt) =>
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<GameObject>("ui/prefabs/MainHUD").Completed += (handle) =>
             {
+                this.MainHUD = handle.Result;
+
                 this.openMainHUD = UnityEngine.Object.Instantiate(this.MainHUD.transform, Canvas) as RectTransform;
                 this.hudChildInventoryUI = this.openMainHUD.Find("UIClassificationContainer") as RectTransform;
 
                 this.hudChildInventoryUI.gameObject.SetActive(false);
                 this.hudSocket = this.openMainHUD.Find("UIClassificationContainer").Find("Socket");
-            }).asset as GameObject;
+            };
 
             var btnList = this.openMainHUD.GetChild(0).GetComponent<InventorySystem.MainHUD.UI.UIClassificationContainer>();
             btnList.inventoryBtn.gameObject.SetActive(false);
             btnList.compositeBtn.gameObject.SetActive(false);
-            this.uIInventory = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<GameObject>("ui/prefabs", "UI_Inventory", (asyncOpt) =>
+
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<GameObject>("ui/prefabs/UI_Inventory").Completed += (handle) =>
             {
+                this.uIInventory = handle.Result;
                 btnList.inventoryBtn.OnActiveListener += (pre, post) =>
                 {
                     this.CreateUIInventory();
                 };
                 btnList.inventoryBtn.gameObject.SetActive(true);
-            }).asset as GameObject;
-            this.uICompositeSystem = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<GameObject>("ui/prefabs", "UICompositePanel", (asyncOpt) =>
+            };
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<GameObject>("ui/prefabs/UICompositePanel").Completed += (handle) =>
             {
+                this.uICompositeSystem = handle.Result;
                 btnList.compositeBtn.OnActiveListener += (pre, post) =>
                 {
                     this.CreateUICompositeSystem();
                 };
                 btnList.compositeBtn.gameObject.SetActive(true);
-            }).asset as GameObject;
+            };
         }
 
         public void CloseInventory()

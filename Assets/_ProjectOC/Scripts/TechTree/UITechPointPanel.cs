@@ -255,6 +255,8 @@ namespace ProjectOC.TechTree.UI
         {
             ClearTemp();
             (this as ITickComponent).DisposeTick();
+            // 肯定是通过实例化的形式产生的
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.ReleaseInstance(this.gameObject);
         }
         #endregion
 
@@ -398,12 +400,12 @@ namespace ProjectOC.TechTree.UI
         {
             foreach (var s in TPCItemGO.Values)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             TPCItemGO.Clear();
             foreach (var s in TPUnlockGO.Values)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             TPUnlockGO.Clear();
 
@@ -415,42 +417,42 @@ namespace ProjectOC.TechTree.UI
             // sprite
             foreach(var s in tempSprite)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             tempSprite.Clear();
             // TPCategory
             foreach (var s in TPCGO.Values)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             TPCGO.Clear();
             // TechTree
             foreach (var s in TTTPGO.Values)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             TTTPGO.Clear();
             foreach (var s in TTTPEGO.Values)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             TTTPEGO.Clear();
             // TechPoint
             foreach (var s in TPCItemGO.Values)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             TPCItemGO.Clear();
             foreach (var s in TPUnlockGO.Values)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             TPUnlockGO.Clear();
 
             // Temp
             foreach (var s in tempGO)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             tempGO.Clear();
             foreach (var s in tempTimer)

@@ -538,19 +538,19 @@ namespace ProjectOC.InventorySystem.UI
         {
             foreach(var s in tempSprite)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             foreach (var s in uiStoreDatas)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             foreach (var s in tempUIItemDatas)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             foreach (var s in tempUIItemDatasUpgrade)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             uiKeyTipDic = null;
         }
@@ -1092,20 +1092,17 @@ namespace ProjectOC.InventorySystem.UI
             public KeyTip Back;
         }
 
-        public static StorePanel PanelTextContent => ABJAProcessor.Datas;
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<StorePanel> ABJAProcessor;
+        public StorePanel PanelTextContent => ABJAProcessor.Datas;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<StorePanel> ABJAProcessor;
 
         private void InitUITextContents()
         {
-            if(ABJAProcessor == null)
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StorePanel>("OC/Json/TextContent/Store", "StorePanel", (datas) =>
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StorePanel>("Json/TextContent/Inventory", "StorePanel", (datas) =>
-                {
-                    Refresh();
-                    this.enabled = false;
-                }, null, "UI仓库Panel数据");
-                ABJAProcessor.StartLoadJsonAssetData();
-            }
+                Refresh();
+                this.enabled = false;
+            }, "UI仓库Panel数据");
+            ABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
     }

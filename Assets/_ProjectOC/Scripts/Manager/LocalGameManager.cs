@@ -9,6 +9,7 @@ using ProjectOC.ProNodeNS;
 using ML.Engine.InventorySystem;
 using ProjectOC.LandMassExpand;
 using Sirenix.OdinInspector;
+using ML.Engine.UI;
 
 namespace ProjectOC.ManagerNS
 {
@@ -38,7 +39,7 @@ namespace ProjectOC.ManagerNS
         {
             if (Instance != null)
             {
-                Destroy(this.gameObject);
+                ML.Engine.Manager.GameManager.DestroyObj(this.gameObject);
                 return;
             }
             Instance = this;

@@ -22,6 +22,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Purchasing;
 using UnityEngine.Rendering;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 
@@ -33,9 +34,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public bool IsInit = false;
         private void Start()
         {
-            //parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
-            StartCoroutine(InitUIPrefabs());
-            StartCoroutine(InitUITexture2D());
+            InitUITexture2D();
 
             //KeyTips
             UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
@@ -73,6 +72,19 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             Refresh();
         }
 
+        private List<AsyncOperationHandle> descriptionHandle = new List<AsyncOperationHandle>();
+        private AsyncOperationHandle spriteatlasHandle;
+        private void OnDestroy()
+        {
+            var abmgr = GameManager.Instance.ABResourceManager;
+            foreach(var handle in descriptionHandle)
+            {
+                abmgr.ReleaseInstance(handle);
+            }
+            GameManager.DestroyObj(icon_genderfemaleSprite);
+            GameManager.DestroyObj(icon_gendermaleSprite);
+            abmgr.Release(spriteatlasHandle);
+        }
         #endregion
 
         #region Override
@@ -106,17 +118,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region Internal
-
-         private struct BeastSkill
+        private struct BeastSkill
         {
             public WorkType workType;
             public TMPro.TextMeshProUGUI skillText;
         
         }
-
-
-
-
 
         private void Enter()
         {
@@ -167,17 +174,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         }
 
-
-
-
-
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             
             UIMgr.PopPanel();
         }
-
-
 
         private void Expel_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
@@ -202,6 +203,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #region UI
         #region Temp
+        private Sprite icon_genderfemaleSprite, icon_gendermaleSprite;
+
         private List<Sprite> tempSprite = new List<Sprite>();
         private Dictionary<ML.Engine.InventorySystem.ItemType, GameObject> tempItemType = new Dictionary<ML.Engine.InventorySystem.ItemType, GameObject>();
         private List<GameObject> tempUIItems = new List<GameObject>();
@@ -213,15 +216,15 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             foreach (var s in tempSprite)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             foreach (var s in tempItemType.Values)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             foreach (var s in tempUIItems)
             {
-                Destroy(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             uiKeyTipDic = null;
         }
@@ -243,8 +246,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private BeastSkill[] beastSkills;
 
-        private GameObject DescriptionPrefab;//预制体
-
          //需要调接口显示的隐兽信息
         private TMPro.TextMeshProUGUI BeastName;
 
@@ -252,8 +253,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         public override void Refresh()
         {
-
-            if (ResonanceWheelUI.ABJAProcessorJson_sub1 == null || !ResonanceWheelUI.ABJAProcessorJson_sub1.IsLoaded || !IsInit)
+            if (this.parentUI.ABJAProcessorJson_sub1 == null || !this.parentUI.ABJAProcessorJson_sub1.IsLoaded || !IsInit)
             {
                 Debug.Log("ABJAProcessorJson is null");
                 return;
@@ -282,11 +282,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
 
             //BeastInfo
-
-            foreach (TextTip tp in ResonanceWheelUI.PanelTextContent_sub1.SkillType)
+            foreach (TextTip tp in this.parentUI.PanelTextContent_sub1.SkillType)
             {
-
-
                 for (int i = 0; i < beastSkills.Length; i++) 
                 {
                     if(tp.name == beastSkills[i].workType.ToString())
@@ -294,8 +291,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                         beastSkills[i].skillText.text = tp.GetDescription();
                     }
                 }
-
-
             }
 
             //更新隐兽详细信息
@@ -335,29 +330,28 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                 BeastName.text = worker.Name;
 
-
-                if (this.PrefabsAB == null) return;
-
                 var Info = this.transform.Find("HiddenBeastInfo2").Find("Info").Find("Scroll View").Find("Viewport").Find("Content");
                 for (int i = 0; i < Info.childCount; i++)
                 {
-                    Destroy(Info.GetChild(i).gameObject);
+                    ML.Engine.Manager.GameManager.DestroyObj(Info.GetChild(i).gameObject);
                 }
 
                 foreach (var feature in worker.Features)
                 {
+                    GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/Description", Info).Completed += (handle) =>
+                        {
+                            this.descriptionHandle.Add(handle);
+                            var descriptionPrefab = handle.Result;
+                            descriptionPrefab.transform.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;
+                            descriptionPrefab.transform.Find("Text2").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Description;
+                            descriptionPrefab.transform.Find("Text3").GetComponent<TMPro.TextMeshProUGUI>().text =
+                            "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>" + feature.EffectsDescription + "</b></color>";
 
-                    var descriptionPrefab = Instantiate(DescriptionPrefab, Info);
-                    descriptionPrefab.transform.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;
-                    descriptionPrefab.transform.Find("Text2").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Description;
-                    descriptionPrefab.transform.Find("Text3").GetComponent<TMPro.TextMeshProUGUI>().text =
-                    "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>" + feature.EffectsDescription + "</b></color>";
+                        };
                 }
             }
         }
         #endregion
-
-
 
         #region TextContent
         [System.Serializable]
@@ -374,56 +368,20 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #endregion
 
-        #region Prefab
-        public AssetBundle PrefabsAB;
-        public IEnumerator InitUIPrefabs()
-        {
-            this.PrefabsAB = null;
-            var abmgr = GameManager.Instance.ABResourceManager;
-            // 载入 keyTipPrefab
-            var crequest = abmgr.LoadLocalABAsync("ui/resonancewheel/resonancewheelprefabs", null, out var PrefabsAB);
-            
-            if (crequest != null)
-            {
-                yield return crequest;
-                PrefabsAB = crequest.assetBundle;
-            }
-
-            this.PrefabsAB = PrefabsAB;
-            DescriptionPrefab = this.PrefabsAB.LoadAsset<GameObject>("Description");
-            this.Refresh();
-        }
-        #endregion
-        #region temp
-        public Sprite icon_genderfemaleSprite, icon_gendermaleSprite;
-        #endregion
-
         #region Texture2D
-        public static AssetBundle Texture2DAB;
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
-        private string ResonanceWheelTexture2DPath = "ui/resonancewheel/texture2d";
-        private IEnumerator InitUITexture2D()
+        private string ResonanceWheelSpriteAtlasPath = "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI";
+        private void InitUITexture2D()
         {
-
-            var crequest = GM.ABResourceManager.LoadLocalABAsync(ResonanceWheelTexture2DPath, null, out var Texture2DAB);
-            
-            if (crequest != null)
+            GM.ABResourceManager.LoadAssetAsync<SpriteAtlas>(ResonanceWheelSpriteAtlasPath).Completed += (handle) =>
             {
-                yield return crequest;
-                Texture2DAB = crequest.assetBundle;
-            }
-
-            SpriteAtlas atlas = Texture2DAB.LoadAsset<SpriteAtlas>("SA_ResonanceWheel_UI");
-            icon_genderfemaleSprite = atlas.GetSprite("icon_genderfemale");
-            icon_gendermaleSprite = atlas.GetSprite("icon_gendermale");
-
-
+                spriteatlasHandle = handle;
+                var atlas = handle.Result as SpriteAtlas;
+                icon_genderfemaleSprite = atlas.GetSprite("icon_genderfemale");
+                icon_gendermaleSprite = atlas.GetSprite("icon_gendermale");
+            };
         }
-
         #endregion
-
-
-
     }
 
 }

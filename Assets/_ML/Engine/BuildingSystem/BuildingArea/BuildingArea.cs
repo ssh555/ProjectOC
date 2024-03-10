@@ -55,9 +55,11 @@ namespace ML.Engine.BuildingSystem.BuildingArea
 
                 // 最近网格点局部坐标
                 Vector3 localNearestGP = new Vector3(Mathf.RoundToInt(localPoint.x / BaseGridSideLength), localPoint.y, Mathf.RoundToInt(localPoint.z / BaseGridSideLength)) * BaseGridSideLength;
+                localNearestGP.y = localPoint.y;
 
                 // 不启用网格辅助 && 不在范围内 ? 返回原点 : 返回网格点
                 pos =(!BuildingManager.Instance.Placer.IsEnableGridSupport && Vector3.Distance(localPoint, localNearestGP) > radius) ? point : this.transform.TransformPoint(localNearestGP);
+
                 // 使用Area.Rotation
                 rot = this.transform.rotation;
                 this.transform.localScale = scale;
