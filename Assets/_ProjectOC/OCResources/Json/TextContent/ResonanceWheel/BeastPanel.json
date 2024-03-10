@@ -29,11 +29,11 @@
     "English": "Collect"
   },
 
-  "expel": {
-    "keyname": "Expel",
+  "Expel": {
+    "keyname": "KT_Expel",
     "keymap": {
-      "KeyBoard": "R",
-      "XBOX": "Y"
+      "ActionMapName": "BeastPanel",
+      "ActionName": "Expel"
     },
     "description": {
       "Chinese": "驱逐",
@@ -41,11 +41,11 @@
     }
   },
 
-  "back": {
-    "keyname": "back",
+  "Back": {
+    "keyname": "KT_Back",
     "keymap": {
-      "KeyBoard": "ESC",
-      "XBOX": "B"
+      "ActionMapName": "Common",
+      "ActionName": "Back"
     },
     "description": {
       "Chinese": "返回",

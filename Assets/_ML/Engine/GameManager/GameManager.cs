@@ -30,7 +30,6 @@ namespace ML.Engine.Manager
         /// <summary>
         /// 内置的计时器Manager
         /// </summary>
-        [ShowInInspector]
         public Timer.CounterDownTimerManager CounterDownTimerManager { get; private set; }
 
         /// <summary>
@@ -41,12 +40,16 @@ namespace ML.Engine.Manager
         /// <summary>
         /// 内置的全局UIManager
         /// </summary>
+        [ShowInInspector]
         public UI.UIManager UIManager { get; private set; }
 
         /// <summary>
         /// 内置的全局InputManager
         /// </summary>
         public Input.InputManager InputManager { get; private set; }
+
+
+        public EnterPoint EnterPoint { get; private set; }
         #endregion
 
         #region 单例管理
@@ -63,6 +66,7 @@ namespace ML.Engine.Manager
             Instance = this;
             DontDestroyOnLoad(this.gameObject);
             this.Init();
+            EnterPoint = new EnterPoint();
         }
 
         /// <summary>

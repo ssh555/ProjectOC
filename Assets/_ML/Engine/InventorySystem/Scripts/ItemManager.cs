@@ -165,7 +165,8 @@ namespace ML.Engine.InventorySystem
                 return null;
             }
             // to-do : 可采用对象池形式
-            var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjLabel + "/" + this.ItemTypeStrDict[item.ID].worldobject, pos, rot);
+            Debug.Log(WorldObjLabel + "/" + this.ItemTypeStrDict[item.ID].worldobject);
+            var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjLabel + "/" + this.ItemTypeStrDict[item.ID].worldobject + ".prefab", pos, rot);
 
             await handle.Task;
 

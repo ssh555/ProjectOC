@@ -326,15 +326,16 @@ namespace ML.Engine.ABResources
 
             // Î´ÔØÈë
             var ans = AssetBundle.LoadFromFileAsync(System.IO.Path.Combine(ABPath, name));
+            assetBundle = ans.assetBundle;
             this.globalResourcesDict.Add(name, ans.assetBundle);
             ans.completed += (asyncOpt) =>
             {
                 this.globalResourcesDict[name] = ans.assetBundle;
                 Internal_LoadDependencies(name);
             };
-            ans.completed += callback;
+            if(callback != null)
+                ans.completed += callback;
 
-            assetBundle = null;
 
             return ans;
         }
@@ -633,6 +634,7 @@ namespace ML.Engine.ABResources
             foreach(var ab in abs)
             {
                 this.LoadGlobalAB(ab.Trim());
+                Debug.Log(ab);
             }
         }
 #else
@@ -692,11 +694,11 @@ namespace ML.Engine.ABResources
             {
                 if (isGlobal)
                 {
-                    this.globalHandles.Add(handle, handle.Result);
+                    this.globalHandles.TryAdd(handle, handle.Result);
                 }
                 else
                 {
-                    this.localInstances.Add(handle, handle.Result);
+                    this.localInstances.TryAdd(handle, handle.Result);
                 }
             };
             return handle;
@@ -708,11 +710,11 @@ namespace ML.Engine.ABResources
             {
                 if (isGlobal)
                 {
-                    this.globalHandles.Add(handle, handle.Result);
+                    this.globalHandles.TryAdd(handle, handle.Result);
                 }
                 else
                 {
-                    this.localInstances.Add(handle, handle.Result);
+                    this.localInstances.TryAdd(handle, handle.Result);
                 }
             };
             return handle;
@@ -724,11 +726,11 @@ namespace ML.Engine.ABResources
             {
                 if (isGlobal)
                 {
-                    this.globalHandles.Add(handle, handle.Result);
+                    this.globalHandles.TryAdd(handle, handle.Result);
                 }
                 else
                 {
-                    this.localInstances.Add(handle, handle.Result);
+                    this.localInstances.TryAdd(handle, handle.Result);
                 }
             };
             return handle;
@@ -740,11 +742,11 @@ namespace ML.Engine.ABResources
             {
                 if (isGlobal)
                 {
-                    this.globalHandles.Add(handle, handle.Result);
+                    this.globalHandles.TryAdd(handle, handle.Result);
                 }
                 else
                 {
-                    this.localInstances.Add(handle, handle.Result);
+                    this.localInstances.TryAdd(handle, handle.Result);
                 }
             };
             return handle;
@@ -756,11 +758,11 @@ namespace ML.Engine.ABResources
             {
                 if (isGlobal)
                 {
-                    this.globalHandles.Add(handle, handle.Result);
+                    this.globalHandles.TryAdd(handle, handle.Result);
                 }
                 else
                 {
-                    this.localInstances.Add(handle, handle.Result);
+                    this.localInstances.TryAdd(handle, handle.Result);
                 }
             };
             return handle;
@@ -772,11 +774,11 @@ namespace ML.Engine.ABResources
             {
                 if (isGlobal)
                 {
-                    this.globalHandles.Add(handle, handle.Result);
+                    this.globalHandles.TryAdd(handle, handle.Result);
                 }
                 else
                 {
-                    this.localInstances.Add(handle, handle.Result);
+                    this.localInstances.TryAdd(handle, handle.Result);
                 }
             };
             return handle;
@@ -785,13 +787,13 @@ namespace ML.Engine.ABResources
         public bool ReleaseInstance(GameObject instance)
         {
             var b = Addressables.ReleaseInstance(instance);
-            if(b)
+            if (b)
             {
-                if(this.localInstances.ContainsValue(instance))
+                if (this.localInstances.ContainsValue(instance))
                 {
                     this.RemoveFromDictionary<AsyncOperationHandle>(this.localInstances, instance);
                 }
-                else if(this.globalInstances.ContainsValue(instance))
+                else if (this.globalInstances.ContainsValue(instance))
                 {
                     this.RemoveFromDictionary<AsyncOperationHandle>(this.globalInstances, instance);
                 }
@@ -832,11 +834,11 @@ namespace ML.Engine.ABResources
             {
                 if (isGlobal)
                 {
-                    this.globalHandles.Add(handle, handle.Result);
+                    this.globalHandles.TryAdd(handle, handle.Result);
                 }
                 else
                 {
-                    this.localHandles.Add(handle, handle.Result);
+                    this.localHandles.TryAdd(handle, handle.Result);
                 }
             };
             return handle;
@@ -848,11 +850,11 @@ namespace ML.Engine.ABResources
             {
                 if (isGlobal)
                 {
-                    this.globalHandles.Add(handle, handle.Result);
+                    this.globalHandles.TryAdd(handle, handle.Result);
                 }
                 else
                 {
-                    this.localHandles.Add(handle, handle.Result);
+                    this.localHandles.TryAdd(handle, handle.Result);
                 }
             };
             return handle;
@@ -865,11 +867,11 @@ namespace ML.Engine.ABResources
             {
                 if (isGlobal)
                 {
-                    this.globalHandles.Add(handle, handle.Result);
+                    this.globalHandles.TryAdd(handle, handle.Result);
                 }
                 else
                 {
-                    this.localHandles.Add(handle, handle.Result);
+                    this.localHandles.TryAdd(handle, handle.Result);
                 }
             };
             return handle;
@@ -881,11 +883,11 @@ namespace ML.Engine.ABResources
             {
                 if (isGlobal)
                 {
-                    this.globalHandles.Add(handle, handle.Result);
+                    this.globalHandles.TryAdd(handle, handle.Result);
                 }
                 else
                 {
-                    this.localHandles.Add(handle, handle.Result);
+                    this.localHandles.TryAdd(handle, handle.Result);
                 }
             };
             return handle;
@@ -897,11 +899,11 @@ namespace ML.Engine.ABResources
             {
                 if (isGlobal)
                 {
-                    this.globalHandles.Add(handle, handle.Result);
+                    this.globalHandles.TryAdd(handle, handle.Result);
                 }
                 else
                 {
-                    this.localHandles.Add(handle, handle.Result);
+                    this.localHandles.TryAdd(handle, handle.Result);
                 }
             };
             return handle;
@@ -913,11 +915,11 @@ namespace ML.Engine.ABResources
             {
                 if (isGlobal)
                 {
-                    this.globalHandles.Add(handle, handle.Result);
+                    this.globalHandles.TryAdd(handle, handle.Result);
                 }
                 else
                 {
-                    this.localHandles.Add(handle, handle.Result);
+                    this.localHandles.TryAdd(handle, handle.Result);
                 }
             };
             return handle;
@@ -929,11 +931,11 @@ namespace ML.Engine.ABResources
             {
                 if (isGlobal)
                 {
-                    this.globalHandles.Add(handle, handle.Result);
+                    this.globalHandles.TryAdd(handle, handle.Result);
                 }
                 else
                 {
-                    this.localHandles.Add(handle, handle.Result);
+                    this.localHandles.TryAdd(handle, handle.Result);
                 }
             };
             return handle;
@@ -945,11 +947,11 @@ namespace ML.Engine.ABResources
             {
                 if (isGlobal)
                 {
-                    this.globalHandles.Add(handle, handle.Result);
+                    this.globalHandles.TryAdd(handle, handle.Result);
                 }
                 else
                 {
-                    this.localHandles.Add(handle, handle.Result);
+                    this.localHandles.TryAdd(handle, handle.Result);
                 }
             };
             return handle;
@@ -961,7 +963,7 @@ namespace ML.Engine.ABResources
         public void Release<TObject>(TObject obj)
         {
             Addressables.Release<TObject>(obj);
-            if(this.localHandles.ContainsValue(obj))
+            if (this.localHandles.ContainsValue(obj))
             {
                 this.RemoveFromDictionary(this.localHandles, obj);
             }
@@ -1026,7 +1028,7 @@ namespace ML.Engine.ABResources
 
         public void ReleaseAllLocal()
         {
-            foreach(var instance in this.localInstances)
+            foreach (var instance in this.localInstances)
             {
                 Addressables.ReleaseInstance(instance.Key);
             }

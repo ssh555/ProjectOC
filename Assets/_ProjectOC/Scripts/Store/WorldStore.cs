@@ -44,7 +44,7 @@ namespace ProjectOC.StoreNS
         public void Interact(InteractComponent component)
         {
             // TODO
-            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIStorePanel", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, true).Completed += (handle) =>
+            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIStorePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, true).Completed += (handle) =>
             {
                 InventorySystem.UI.UIStore uiPanel = (handle.Result).GetComponent<InventorySystem.UI.UIStore>();
                 uiPanel.Player = component.GetComponentInParent<Player.PlayerCharacter>();

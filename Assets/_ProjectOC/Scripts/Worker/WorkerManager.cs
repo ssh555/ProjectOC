@@ -117,7 +117,7 @@ namespace ProjectOC.WorkerNS
             }
         }
 
-        public const string SpriteAtlasPath = "OC/UI/Worker/Texture/SA_Worker_UI";
+        public const string SpriteAtlasPath = "OC/UI/Worker/Texture/SA_Worker_UI.spriteatlasv2";
         public const string WorldObjPath = "OC/Character/Worker/Prefabs/";
         private SpriteAtlas workerAtlas = null;
         private AsyncOperationHandle spriteAtalsHandle;
@@ -138,7 +138,7 @@ namespace ProjectOC.WorkerNS
         /// <returns></returns>
         public AsyncOperationHandle<GameObject> GetObject(string name, Vector3 pos, Quaternion rot)
         {
-            return GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjPath + name, pos, rot);
+            return GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjPath + name +".prefab", pos, rot);
         }
     }
 }

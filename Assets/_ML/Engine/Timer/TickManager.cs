@@ -54,9 +54,22 @@ namespace ML.Engine.Timer
                 this.tickComponents[tick.tickPriority].Remove(tick);
             }
             this.removeTick.Clear();
-            foreach (var tick in this.tickComponents.Values)
+            foreach (var list in this.tickComponents.Values)
             {
-                tick.RemoveAll(item => item == null);
+                // 移除所有null项，不产生额外开销
+                int writeIndex = 0;
+                for (int i = 0; i < list.Count; i++)
+                {
+                    if (list[i] != null)
+                    {
+                        if (writeIndex != i)
+                        {
+                            list[writeIndex] = list[i];
+                        }
+                        writeIndex++;
+                    }
+                }
+                list.RemoveRange(writeIndex, list.Count - writeIndex);
             }
         }
         public void UpdateFixedTickComponentList()
@@ -71,9 +84,22 @@ namespace ML.Engine.Timer
                 this.fixedTickComponents[tick.fixedTickPriority].Remove(tick);
             }
             this.removeFixedTick.Clear();
-            foreach (var tick in this.fixedTickComponents.Values)
+            foreach (var list in this.fixedTickComponents.Values)
             {
-                tick.RemoveAll(item => item ==null);
+                // 移除所有null项，不产生额外开销
+                int writeIndex = 0;
+                for (int i = 0; i < list.Count; i++)
+                {
+                    if (list[i] != null)
+                    {
+                        if (writeIndex != i)
+                        {
+                            list[writeIndex] = list[i];
+                        }
+                        writeIndex++;
+                    }
+                }
+                list.RemoveRange(writeIndex, list.Count - writeIndex);
             }
 
         }
@@ -89,9 +115,22 @@ namespace ML.Engine.Timer
                 this.lateTickComponents[tick.lateTickPriority].Remove(tick);
             }
             this.removeLateTick.Clear();
-            foreach (var tick in this.lateTickComponents.Values)
+            foreach (var list in this.lateTickComponents.Values)
             {
-                tick.RemoveAll(item => item == null);
+                // 移除所有null项，不产生额外开销
+                int writeIndex = 0;
+                for (int i = 0; i < list.Count; i++)
+                {
+                    if (list[i] != null)
+                    {
+                        if (writeIndex != i)
+                        {
+                            list[writeIndex] = list[i];
+                        }
+                        writeIndex++;
+                    }
+                }
+                list.RemoveRange(writeIndex, list.Count - writeIndex);
             }
         }
 
@@ -166,6 +205,7 @@ namespace ML.Engine.Timer
         {
             if (this.addTick.Contains(tickComponent))
             {
+                Debug.Log("QWQ");
                 this.addTick.Remove(tickComponent);
                 return true;
             }
