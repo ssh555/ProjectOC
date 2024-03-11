@@ -17,7 +17,7 @@ namespace ML.Engine.BuildingSystem
 {
 
 
-    public class MonoBuildingManager : MonoBehaviour
+    public class MonoBuildingManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         #region Property|Field
         public BuildingManager BM;
