@@ -70,6 +70,11 @@ namespace ML.Engine.UI
         {
 
         }
+
+        protected virtual void Start()
+        {
+            this.enabled = false;
+        }
     }
 
 }

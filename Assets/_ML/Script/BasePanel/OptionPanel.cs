@@ -21,7 +21,7 @@ namespace ML.Engine.UI
         #region Unity
         public bool IsInit = false;
 
-        private void Start()
+        private void Awake()
         {
             InitUITextContents();
 
@@ -86,7 +86,7 @@ namespace ML.Engine.UI
                 btns[i].LeftUI = i % ConstraintCount - 1 >= 0 ? btns[i - 1] : btns[i / ConstraintCount * ConstraintCount + ConstraintCount - 1];
             }
 
-            
+
 
             foreach (var btn in btns)
             {
@@ -113,6 +113,11 @@ namespace ML.Engine.UI
             KT_Confirm = new UIKeyTip();
             KT_Confirm.keytip = kt.Find("KT_Confirm").Find("Image").Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
             KT_Confirm.description = kt.Find("KT_Back").Find("Image").Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
+        }
+
+        protected override void Start()
+        {
+
 
 
             IsInit = true;
@@ -120,6 +125,8 @@ namespace ML.Engine.UI
 
 
             Refresh();
+
+            base.Start();
         }
 
         #endregion

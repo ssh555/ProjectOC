@@ -246,10 +246,6 @@ namespace ProjectOC.TechTree.UI
             #endregion
         }
 
-        private void Start()
-        {
-            this.enabled = false;
-        }
 
         private void OnDestroy()
         {

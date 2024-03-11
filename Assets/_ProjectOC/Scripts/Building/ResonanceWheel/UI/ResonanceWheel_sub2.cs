@@ -27,9 +27,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
     {
         #region Unity
         public bool IsInit = false;
-        private void Start()
-        {
 
+        private void Awake()
+        {
             //KeyTips
             UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
             foreach (var item in UIKeyTipComponents)
@@ -46,7 +46,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             Grids = new GridBeastType[ring.childCount];
             for (int i = 0; i < ring.childCount; i++)
             {
-                Grids[i].transform  = ring.GetChild(i);
+                Grids[i].transform = ring.GetChild(i);
                 Grids[i].beastType = (BeastType)Enum.Parse(typeof(BeastType), ring.GetChild(i).name);
                 Grids[i].image = Grids[i].transform.Find("Image").GetComponent<Image>();
                 Grids[i].image.sprite = parentUI.beastTypeDic[Grids[i].beastType];
@@ -62,14 +62,21 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             KT_Confirm = new UIKeyTip();
             KT_Confirm.keytip = kt.Find("KT_Confirm").Find("Image").Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
             KT_Confirm.description = kt.Find("KT_Back").Find("Image").Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
+        }
+        protected override void Start()
+        {
 
 
 
-        IsInit = true;
+
+
+            IsInit = true;
 
           
 
             Refresh();
+
+            base.Start();
         }
 
         #endregion
