@@ -28,6 +28,7 @@ namespace ProjectOC.LandMassExpand
         {
             islandManager = GameManager.Instance.GetLocalManager<IslandManager>();
             //ChangeIslandGrids(islandMapRanges, true);
+            this.enabled = false;
         }
 
         public virtual void OnUnlock()
