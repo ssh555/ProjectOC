@@ -30,6 +30,7 @@ namespace ML.Engine.Manager
         /// <summary>
         /// 内置的计时器Manager
         /// </summary>
+        [ShowInInspector]
         public Timer.CounterDownTimerManager CounterDownTimerManager { get; private set; }
 
         /// <summary>

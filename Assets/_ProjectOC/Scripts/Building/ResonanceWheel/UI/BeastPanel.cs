@@ -42,7 +42,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             InitUITextContents();
             InitUITexture2D();
-
+            InitPrefabs();
             //KeyTips
             UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
             foreach (var item in UIKeyTipComponents)
@@ -182,6 +182,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
         private void SwitchBeast_started(InputAction.CallbackContext obj)
         {
+            Debug.Log("SwitchBeast_started");
             if(timer == null)
             {
                 timer = new CounterDownTimer(TimeInterval, true, true, 1, 2);
@@ -211,6 +212,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void SwitchBeast_canceled(InputAction.CallbackContext obj)
         {
+            Debug.Log("SwitchBeast_canceled");
             GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
             timer = null;
         }
@@ -279,7 +281,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         //需要调接口显示的隐兽信息
         private TMPro.TextMeshProUGUI BeastName;
 
-
+        //Prefabs
+        private GameObject descriptionPrefab;
+        private GameObject beastBioPrefab;
 
 
         #endregion
@@ -325,23 +329,23 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 ML.Engine.Manager.GameManager.DestroyObj(Content.GetChild(i).gameObject);
             }
 
-            for (int i = 0;i < Workers.Count;i++)
+            Debug.Log("Workers " + Workers.Count);
+
+            for (int i = 0; i < Workers.Count; i++)
             {
-                GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/BeastBio.prefab", Content).Completed += (handle) =>
+
+                var tPrefab = GameObject.Instantiate(this.beastBioPrefab, Content);
+                //worker.TimeArrangement[10] = TimeStatus.Relax;
+                if (i == CurrentBeastIndex)
                 {
-                    this.goHandle.Add(handle);
-                    var descriptionPrefab = handle.Result;
-                    //Workers[i].TimeArrangement[10] = TimeStatus.Relax;
-                    if (i == CurrentBeastIndex)
-                    {
-                        descriptionPrefab.transform.Find("Bio").Find("Selected").gameObject.SetActive(true);
-                    }
-                    else
-                    {
-                        descriptionPrefab.transform.Find("Bio").Find("Selected").gameObject.SetActive(false);
-                    }
-                    descriptionPrefab.transform.Find("Bio").Find("mask").GetComponent<Image>().fillAmount = (float)Workers[i].APCurrent / Workers[i].APMax;
-                };
+                    tPrefab.transform.Find("Bio").Find("Selected").gameObject.SetActive(true);
+                }
+                else
+                {
+                    tPrefab.transform.Find("Bio").Find("Selected").gameObject.SetActive(false);
+                }
+
+                tPrefab.transform.Find("Bio").Find("mask").GetComponent<Image>().fillAmount = (float)Workers[i].APCurrent / Workers[i].APMax;
             }
 
             if(CurrentBeastIndex != -1)
@@ -401,15 +405,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                 foreach (var feature in worker.Features)
                 {
-                    GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/Description.prefab", Info).Completed += (handle) =>
-                    {
-                        this.goHandle.Add(handle);
-                        var descriptionPrefab = handle.Result;
-                        descriptionPrefab.transform.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;
-                        descriptionPrefab.transform.Find("Text2").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Description;
-                        descriptionPrefab.transform.Find("Text3").GetComponent<TMPro.TextMeshProUGUI>().text =
-                    "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>" + feature.EffectsDescription + "</b></color>";
-                    };
+
+
+                    var tPrefab = GameObject.Instantiate(this.descriptionPrefab, Info);
+                    tPrefab.transform.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;
+                    tPrefab.transform.Find("Text2").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Description;
+                    tPrefab.transform.Find("Text3").GetComponent<TMPro.TextMeshProUGUI>().text =
+                "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>" + feature.EffectsDescription + "</b></color>";
+                    
                 }
 
 
@@ -568,6 +571,25 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
 
         #endregion
+
+        #region Prefab
+        private void InitPrefabs()
+        {
+            GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/BeastBio.prefab").Completed += (handle) =>
+            {
+                this.goHandle.Add(handle);
+                this.beastBioPrefab = handle.Result;
+            };
+
+            GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/Description.prefab").Completed += (handle) =>
+            {
+                this.goHandle.Add(handle);
+                this.descriptionPrefab = handle.Result;
+            };
+        }
+
+        #endregion
+
 
     }
 
