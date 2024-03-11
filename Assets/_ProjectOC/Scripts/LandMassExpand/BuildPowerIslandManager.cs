@@ -11,11 +11,8 @@ namespace ProjectOC.LandMassExpand
 {
     public class BuildPowerIslandManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
-        [HideInInspector]
         public List<ISupportPowerBPart> powerCores = new List<ISupportPowerBPart>();
-        [HideInInspector]
         public List<BuildPowerSub> powerSubs = new List<BuildPowerSub>();
-        [HideInInspector]
         public List<INeedPowerBpart> electAppliances = new List<INeedPowerBpart>();
         
 
