@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using ProjectOC.MissionNS;
@@ -70,6 +71,7 @@ namespace ProjectOC.ManagerNS
             WorkerEchoManager.LoadTableData();
             NavMeshManager = GM.RegisterLocalManager<NavMeshManager>();
             IslandManager = GM.RegisterLocalManager<IslandManager>();
+            IslandManager.Init();
             BuildPowerIslandManager = GM.RegisterLocalManager<BuildPowerIslandManager>();
             StartCoroutine(DelayStart());
             this.enabled = false;
@@ -100,6 +102,11 @@ namespace ProjectOC.ManagerNS
         {
             yield return null;
             NavMeshManager.DelayInit();
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            //IslandManager.OnDrawGizmosSelected();
         }
     }
 }
