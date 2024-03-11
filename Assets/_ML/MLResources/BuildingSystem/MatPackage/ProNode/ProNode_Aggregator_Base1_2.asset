@@ -22,8 +22,8 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   Classification:
-    Category1: 1
-    Category2: 104
+    Category1: 0
+    Category2: 9
     Category3: 100
     Category4: 2
   MatStruct: ffffffff
