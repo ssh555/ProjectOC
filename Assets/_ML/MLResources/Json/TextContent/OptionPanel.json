@@ -4,47 +4,69 @@
     "English": "Option"
   },
 
+  "Btns" : [
+    {
+        "name" : "GraphicBtn",
+        "description" : {
+            "Chinese": "图像",
+            "English": "Graphic"
+        }
+    },
+    {
+        "name" : "AudioBtn",
+        "description" : {
+            "Chinese": "音频",
+            "English": "Audio"
+        }
+    },
+    {
+        "name" : "ControllerBtn",
+        "description" : {
+            "Chinese": "控制器",
+            "English": "Controller"
+        }
+    },
+    {
+        "name" : "TutorialBtn",
+          "description" : {
+            "Chinese": "教程",
+            "English": "Tutorial"
+          }
+    },
+    {
+      "name" : "BackBtn",
+        "description" : {
+          "Chinese": "退出游戏",
+          "English": "Quit Game"
+        }
+  },
+  {
+    "name" : "QuitGameBtn",
+      "description" : {
+        "Chinese": "教程",
+        "English": "Tutorial"
+      }
+}
+    
+],
 
-  "GraphicBtn": {
-    "Chinese": "图像",
-    "English": "Graphic"
-  },
-  "AudioBtn": {
-    "Chinese": "音频",
-    "English": "Audio"
-  },
-  "ControllerBtn": {
-    "Chinese": "控制器",
-    "English": "Controller"
-  },
-  "TutorialBtn": {
-    "Chinese": "退出游戏",
-    "English": "Tutorial"
-  },
-  "BackBtn": {
-    "Chinese": "返回标题",
-    "English": "Back To Title"
-  },
-  "QuitGameBtn": {
-    "Chinese": "退出游戏",
-    "English": "Quit Game"
-  },
-  "confirm": {
-    "keyname": "confirm",
+
+  "Confirm": {
+    "keyname": "KT_Confirm",
     "keymap": {
-      "KeyBoard": "F",
-      "XBOX": "A"
+      "ActionMapName": "Common",
+      "ActionName": "Confirm"
     },
     "description": {
       "Chinese": "确认",
       "English": "Confirm"
     }
   },
-  "back": {
-    "keyname": "back",
+  "Back": {
+    "keyname": "KT_Back",
     "keymap": {
-      "KeyBoard": "ESC",
-      "XBOX": "B"
+      "ActionMapName": "Common",
+      "ActionName": "Back"
     },
     "description": {
       "Chinese": "返回",

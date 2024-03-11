@@ -26,7 +26,9 @@ namespace ML.Engine.Manager
 
                     panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
 
-                    panel.OnEnter();
+                    GameManager.Instance.UIManager.PushPanel(panel);
+
+                    //panel.OnEnter();
                 };
 
             };
@@ -52,7 +54,7 @@ namespace ML.Engine.Manager
         //    this.isInit = true;
            
         //}
-        #endregion
+        
 
         public AsyncOperationHandle<GameObject> GetStartMenuPanelInstance()
         {
@@ -66,6 +68,7 @@ namespace ML.Engine.Manager
         {
             return Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.OptionPanelPrefab);
         }
+        #endregion
     }
 
 }

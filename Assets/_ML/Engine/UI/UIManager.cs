@@ -68,15 +68,24 @@ namespace ML.Engine.UI
         {
             if(this.panelStack.Count > 2)
             {
+                Debug.Log("2");
                 return false;
             }
             if (this.panelStack.Count == 1)
             {
-                this.panelStack.Pop().OnExit();
+                if(GetTopUIPanel() != null)
+                {
+                    this.panelStack.Pop().OnExit();
+                }
+                else//场景切换导致UIPanel为空却占用一个栈位，强行pop
+                {
+                    panelStack.Pop();
+                }
             }
 
             if(panel != null)
             {
+                Debug.Log("pushpanel " + panel.name);
                 this.PushPanel(panel);
             }
 

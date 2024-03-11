@@ -1,19 +1,36 @@
 {
-  "NewGameBtn": {
-    "Chinese": "新游戏",
-    "English": "New Game"
-  },
-  "ContinueGameBtn": {
-    "Chinese": "继续游戏",
-    "English": "Continue Game"
-  },
-  "OptionBtn": {
-    "Chinese": "选项",
-    "English": "Option"
-  },
-  "QuitGameBtn": {
-    "Chinese": "退出游戏",
-    "English": "Quit Game"
-  }
+  
+  "Btns" : [
+    {
+        "name" : "NewGameBtn",
+        "description" : {
+            "Chinese" : "新游戏",
+            "English" : "NewGame"
+        }
+    },
+    {
+        "name" : "ContinueGameBtn",
+        "description" : {
+            "Chinese" : "继续游戏",
+            "English" : "ContinueGame"
+        }
+    },
+    {
+        "name" : "OptionBtn",
+        "description" : {
+            "Chinese" : "选项",
+            "English" : "Option"
+        }
+    },
+    {
+        "name" : "QuitGameBtn",
+        "description" : {
+            "Chinese" : "退出游戏",
+            "English" : "QuitGame"
+        }
+    }
+]
+
+  
   
 }

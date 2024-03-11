@@ -21,107 +21,17 @@ namespace ML.Engine.UI
 
         private void Awake()
         {
-            InitUITextContents();
+            
             //InitPrefabs();
-
-            var btnList = this.transform.Find("ButtonList");
-            this.NewGameBtn = new UISelectedButtonComponent(btnList, "NewGameBtn");
-            this.NewGameBtn.selectedButton.OnInteract += () =>
-            {
-                UIBasePanel panel = null;
-                System.Action<string, string> preCallback = (string s1, string s2) =>
-                {
-                    GameManager.Instance.EnterPoint.GetLoadingScenePanelInstance().Completed += (handle) =>
-                    {
-                        // 实例化
-                        panel = handle.Result.GetComponent<LoadingScenePanel>();
-
-                        panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
-
-                        panel.OnEnter();
-
-
-                    };
-
-                };
-
-                System.Action<string, string> postCallback = async (string s1, string s2) =>
-                {
-                    await System.Threading.Tasks.Task.Run(() =>
-                    {
-                        while (panel == null) ;
-                    });
-                    panel.OnExit();
-                };
-
-                GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("GameScene", preCallback, postCallback));
-
-
-                this.OnExit();
-            };
-
-            this.ContinueGameBtn = new UISelectedButtonComponent(btnList, "ContinueGameBtn");
-            this.ContinueGameBtn.selectedButton.OnInteract += () =>
-            {
-
-            };
-
-            this.OptionBtn = new UISelectedButtonComponent(btnList, "OptionBtn");
-            this.OptionBtn.selectedButton.OnInteract += () =>
-            {
-
-                GameManager.Instance.EnterPoint.GetOptionPanelInstance().Completed += (handle) =>
-                {
-                    // 实例化
-                    var panel = handle.Result.GetComponent<OptionPanel>();
-
-                    panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
-
-                    // Push
-                    GameManager.Instance.UIManager.PushPanel(panel);
-                };
-            };
-
-            this.QuitGameBtn = new UISelectedButtonComponent(btnList, "QuitGameBtn");
-            this.QuitGameBtn.selectedButton.OnInteract += () =>
-            {
-
-            };
-
-            var btns = btnList.GetComponentsInChildren<SelectedButton>();
-
-            for (int i = 0; i < btns.Length; ++i)
-            {
-                int last = (i - 1 + btns.Length) % btns.Length;
-                int next = (i + 1 + btns.Length) % btns.Length;
-
-                btns[i].UpUI = btns[last];
-                btns[i].DownUI = btns[next];
-
-
-
-            }
-
-            foreach (var btn in btns)
-            {
-                btn.OnSelectedEnter += () => { btn.image.color = Color.red; };
-                btn.OnSelectedExit += () => { btn.image.color = Color.white; };
-            }
-
-
-            this.CurSelected = NewGameBtn.selectedButton;
-            this.CurSelected.SelectedEnter();
+            btnList = this.transform.Find("ButtonList");
+            
         }
         protected override void Start()
         {
-
+            InitUITextContents();
 
             IsInit = true;
-
-
-
             Refresh();
-
             base.Start();
         }
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
@@ -258,42 +168,15 @@ namespace ML.Engine.UI
 
         #region UI
         #region Temp
-        private List<Sprite> tempSprite = new List<Sprite>();
-        private Dictionary<ML.Engine.InventorySystem.ItemType, GameObject> tempItemType = new Dictionary<ML.Engine.InventorySystem.ItemType, GameObject>();
-        private List<GameObject> tempUIItems = new List<GameObject>();
-
 
         private void ClearTemp()
         {
-            foreach (var s in tempSprite)
-            {
-                Destroy(s);
-            }
-            foreach (var s in tempItemType.Values)
-            {
-                Destroy(s);
-            }
-            foreach (var s in tempUIItems)
-            {
-                Destroy(s);
-            }
+            
         }
 
         #endregion
 
         #region UI对象引用
-
-        private IUISelected CurSelected;
-
-        private UISelectedButtonComponent NewGameBtn;
-        private UISelectedButtonComponent ContinueGameBtn;
-        private UISelectedButtonComponent OptionBtn;
-        private UISelectedButtonComponent QuitGameBtn;
-
-        private TMPro.TextMeshProUGUI NewGameBtnText;
-        private TMPro.TextMeshProUGUI ContinueGameBtnText;
-        private TMPro.TextMeshProUGUI OptionBtnText;
-        private TMPro.TextMeshProUGUI QuitGameBtnText;
 
         #endregion
 
@@ -304,11 +187,6 @@ namespace ML.Engine.UI
                 return;
             }
 
-            NewGameBtnText.text = PanelTextContent_StartMenuPanel.NewGameBtn;
-            ContinueGameBtnText.text = PanelTextContent_StartMenuPanel.ContinueGameBtn;
-            OptionBtnText.text = PanelTextContent_StartMenuPanel.OptionBtn;
-            QuitGameBtnText.text = PanelTextContent_StartMenuPanel.QuitGameBtn;
-
         }
         #endregion
 
@@ -318,10 +196,7 @@ namespace ML.Engine.UI
         [System.Serializable]
         public struct StartMenuPanelStruct
         {
-            public ML.Engine.TextContent.TextContent NewGameBtn;
-            public ML.Engine.TextContent.TextContent ContinueGameBtn;
-            public ML.Engine.TextContent.TextContent OptionBtn;
-            public ML.Engine.TextContent.TextContent QuitGameBtn;
+            public TextTip[] Btns;
         }
 
         public StartMenuPanelStruct PanelTextContent_StartMenuPanel => ABJAProcessorJson_StartMenuPanel.Datas;
@@ -330,25 +205,118 @@ namespace ML.Engine.UI
         {
             ABJAProcessorJson_StartMenuPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<StartMenuPanelStruct>("ML/Json/TextContent", "StartMenuPanel", (datas) =>
             {
+                InitBtnData(datas);
                 Refresh();
                 this.enabled = false;
             }, "StartMenuPanel数据");
             ABJAProcessorJson_StartMenuPanel.StartLoadJsonAssetData();
 
         }
+
+        private Transform btnList;
+        private List<UISelectedButtonComponent> BtnComponents = new List<UISelectedButtonComponent>();
+        private IUISelected CurSelected;
+        private void InitBtnData(StartMenuPanelStruct datas)
+        {
+            foreach (var tt in datas.Btns)
+            {
+                var btn = new UISelectedButtonComponent(btnList, tt.name);
+                btn.textMeshProUGUI.text = tt.description.GetText();
+                this.BtnComponents.Add(btn);
+            }
+
+            //NewGameBtn
+            this.BtnComponents[0].selectedButton.OnInteract += () =>
+            {                               
+                UIBasePanel panel = null;
+                System.Action<string, string> preCallback = (string s1, string s2) =>
+                {
+                    GameManager.Instance.EnterPoint.GetLoadingScenePanelInstance().Completed += (handle) =>
+                    {
+                        // 实例化
+                        panel = handle.Result.GetComponent<LoadingScenePanel>();
+
+                        panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+
+                        panel.OnEnter();
+
+
+                    };
+
+                };
+                System.Action<string, string> postCallback = async (string s1, string s2) =>
+                {
+                    await System.Threading.Tasks.Task.Run(() =>
+                    {
+                        while (panel == null) ;
+                    });
+                    panel.OnExit();
+                };
+                GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("GameScene", preCallback, postCallback, true));
+                this.OnExit();
+            };
+            //ContinueGameBtn
+            this.BtnComponents[1].selectedButton.OnInteract += () =>
+            {
+
+            };
+            //OptionBtn
+            this.BtnComponents[2].selectedButton.OnInteract += () =>
+            {
+
+                GameManager.Instance.EnterPoint.GetOptionPanelInstance().Completed += (handle) =>
+                {
+                    // 实例化
+                    var panel = handle.Result.GetComponent<OptionPanel>();
+
+                    panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+
+                    GameManager.Instance.UIManager.PushPanel(panel);
+                };
+            };
+            //QuitGameBtn
+            this.BtnComponents[3].selectedButton.OnInteract += () =>
+            {
+
+            };
+
+
+            //SelectedButton初始化在Awake
+            var btns = btnList.GetComponentsInChildren<SelectedButton>();
+
+            for (int i = 0; i < btns.Length; ++i)
+            {
+                int last = (i - 1 + btns.Length) % btns.Length;
+                int next = (i + 1 + btns.Length) % btns.Length;
+
+                btns[i].UpUI = btns[last];
+                btns[i].DownUI = btns[next];
+            }
+
+            foreach (var btn in btns)
+            {
+                btn.OnSelectedEnter += () => { btn.image.color = Color.red; };
+                btn.OnSelectedExit += () => { btn.image.color = Color.white; };
+            }
+
+
+            this.CurSelected = this.BtnComponents[0].selectedButton;
+            this.CurSelected.SelectedEnter();
+        }
+
         #endregion
 
         #region Prefab
-/*        private GameObject LoadingScenePanelPrefab;
-        private void InitPrefabs()
-        {
-            GM.EnterPoint.GetLoadingScenePanelInstance().Completed += (handle) =>
-            {
-                this.goHandle.Add(handle);
-                this.LoadingScenePanelPrefab = handle.Result;
+        /*        private GameObject LoadingScenePanelPrefab;
+                private void InitPrefabs()
+                {
+                    GM.EnterPoint.GetLoadingScenePanelInstance().Completed += (handle) =>
+                    {
+                        this.goHandle.Add(handle);
+                        this.LoadingScenePanelPrefab = handle.Result;
 
-            };
-        }*/
+                    };
+                }*/
 
         #endregion
 

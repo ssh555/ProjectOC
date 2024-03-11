@@ -96,7 +96,7 @@ namespace ML.Engine.Level
         /// <summary>
         /// 异步加载场景
         /// </summary>
-        public IEnumerator LoadSceneAsync(string sceneName, System.Action<string, string> preCallback = null, System.Action<string, string> postCallback = null)
+        public IEnumerator LoadSceneAsync(string sceneName, System.Action<string, string> preCallback = null, System.Action<string, string> postCallback = null, bool isDelay = false)
         {
             string preSceneName = this.CurSceneName;
             this.CurSceneName = sceneName;
@@ -116,6 +116,12 @@ namespace ML.Engine.Level
             
             SceneHandle = Manager.GameManager.Instance.ABResourceManager.LoadSceneAsync(CurSceneName, LoadSceneMode.Single, false);
             yield return SceneHandle;
+
+            //场景切换延时
+            if(isDelay)
+            {
+                yield return new WaitForSeconds(1f);
+            }
 
             //// 等待资源加载完成
             //yield return loadResource;

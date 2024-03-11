@@ -11,6 +11,7 @@ using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using static ML.Engine.UI.StartMenuPanel;
 
 
 
@@ -23,82 +24,16 @@ namespace ML.Engine.UI
 
         private void Awake()
         {
-            InitUITextContents();
+            
 
             ToptitleText = this.transform.Find("TopTitle").Find("Text").GetComponent<TextMeshProUGUI>();
-            var btnList = this.transform.Find("ButtonList");
+            btnList = this.transform.Find("ButtonList");
             gridLayout = btnList.GetComponent<GridLayoutGroup>();
-
-            this.GraphicBtn = new UISelectedButtonComponent(btnList, "GraphicBtn");
-            this.GraphicBtn.selectedButton.OnInteract += () =>
-            {
-
-            };
-
-            this.AudioBtn = new UISelectedButtonComponent(btnList, "AudioBtn");
-            this.AudioBtn.selectedButton.OnInteract += () =>
-            {
-
-            };
-
-            this.ControllerBtn = new UISelectedButtonComponent(btnList, "ControllerBtn");
-            this.ControllerBtn.selectedButton.OnInteract += () =>
-            {
-
-            };
-
-            this.TutorialBtn = new UISelectedButtonComponent(btnList, "TutorialBtn");
-            this.TutorialBtn.selectedButton.OnInteract += () =>
-            {
-
-            };
-
-            this.BackBtn = new UISelectedButtonComponent(btnList, "BackBtn");
-            this.BackBtn.selectedButton.OnInteract += () =>
-            {
-
-            };
-
-            this.QuitGameBtn = new UISelectedButtonComponent(btnList, "QuitGameBtn");
-            this.QuitGameBtn.selectedButton.OnInteract += () =>
-            {
-
-            };
-
-            var btns = btnList.GetComponentsInChildren<SelectedButton>();
-            int ConstraintCount = gridLayout.constraintCount;
-            for (int i = 0; i < btns.Length; ++i)
-            {
-                int last = (i - 1 + btns.Length) % btns.Length;
-                int next = (i + 1 + btns.Length) % btns.Length;
-
-                btns[i].UpUI = i - ConstraintCount >= 0 ? btns[i - ConstraintCount] : btns[i - ConstraintCount + btns.Length];
-                btns[i].DownUI = i + ConstraintCount < btns.Length ? btns[i + ConstraintCount] : btns[i + ConstraintCount - btns.Length];
-                btns[i].RightUI = i % ConstraintCount + 1 < ConstraintCount ? btns[i + 1] : btns[i / ConstraintCount * ConstraintCount];
-                btns[i].LeftUI = i % ConstraintCount - 1 >= 0 ? btns[i - 1] : btns[i / ConstraintCount * ConstraintCount + ConstraintCount - 1];
-            }
-
-
-
-            foreach (var btn in btns)
-            {
-                btn.OnSelectedEnter += () =>
-                {
-                    btn.transform.Find("Selected").gameObject.SetActive(true);
-                };
-                btn.OnSelectedExit += () =>
-                {
-                    btn.transform.Find("Selected").gameObject.SetActive(false);
-                };
-            }
-
-            this.CurSelected = GraphicBtn.selectedButton;
-            this.CurSelected.SelectedEnter();
         }
 
         protected override void Start()
         {
-
+            InitUITextContents();
 
 
             IsInit = true;
@@ -116,22 +51,14 @@ namespace ML.Engine.UI
         public override void OnEnter()
         {
             base.OnEnter();
-
             this.Enter();
-
-            
-
         }
 
         public override void OnExit()
         {
             base.OnExit();
-
             this.Exit();
-
             ClearTemp();
-
-
         }
 
         public override void OnPause()
@@ -147,12 +74,6 @@ namespace ML.Engine.UI
         }
 
         #endregion
-
-       
-
-
-
-
 
         #region Internal
 
@@ -283,26 +204,10 @@ namespace ML.Engine.UI
 
         #region UI对象引用
 
-        private IUISelected CurSelected;
-
         private GridLayoutGroup gridLayout;
-
-        private UISelectedButtonComponent GraphicBtn;
-        private UISelectedButtonComponent AudioBtn;
-        private UISelectedButtonComponent ControllerBtn;
-        private UISelectedButtonComponent TutorialBtn;
-        private UISelectedButtonComponent BackBtn;
-        private UISelectedButtonComponent QuitGameBtn;
-
 
         private TMPro.TextMeshProUGUI ToptitleText;
 
-        private TMPro.TextMeshProUGUI GraphicBtnText;
-        private TMPro.TextMeshProUGUI AudioBtnText;
-        private TMPro.TextMeshProUGUI ControllerBtnText;
-        private TMPro.TextMeshProUGUI TutorialBtnText;
-        private TMPro.TextMeshProUGUI BackBtnText;
-        private TMPro.TextMeshProUGUI QuitGameBtnText;
 
 
         #endregion
@@ -313,15 +218,6 @@ namespace ML.Engine.UI
             {
                 return;
             }
-
-            ToptitleText.text = PanelTextContent_OptionPanel.TopTitle;
-            GraphicBtnText.text = PanelTextContent_OptionPanel.GraphicBtn;
-            AudioBtnText.text = PanelTextContent_OptionPanel.AudioBtn;
-            ControllerBtnText.text = PanelTextContent_OptionPanel.ControllerBtn;
-            TutorialBtnText.text = PanelTextContent_OptionPanel.TutorialBtn;
-            BackBtnText.text = PanelTextContent_OptionPanel.BackBtn;
-            QuitGameBtnText.text = PanelTextContent_OptionPanel.QuitGameBtn;
-
         }
         #endregion
 
@@ -333,16 +229,11 @@ namespace ML.Engine.UI
         {
             public ML.Engine.TextContent.TextContent TopTitle;
 
-            public ML.Engine.TextContent.TextContent GraphicBtn;
-            public ML.Engine.TextContent.TextContent AudioBtn;
-            public ML.Engine.TextContent.TextContent ControllerBtn;
-            public ML.Engine.TextContent.TextContent TutorialBtn;
-            public ML.Engine.TextContent.TextContent BackBtn;
-            public ML.Engine.TextContent.TextContent QuitGameBtn;
+            public TextTip[] Btns;
 
             //BotKeyTips
-            public KeyTip confirm;
-            public KeyTip back;
+            public KeyTip Confirm;
+            public KeyTip Back;
         }
 
         public OptionPanelStruct PanelTextContent_OptionPanel => ABJAProcessorJson_OptionPanel.Datas;
@@ -352,6 +243,7 @@ namespace ML.Engine.UI
 
             ABJAProcessorJson_OptionPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<OptionPanelStruct>("ML/Json/TextContent", "OptionPanel", (datas) =>
             {
+                InitBtnData(datas);
                 Refresh();
                 this.enabled = false;
             }, "OptionPanel数据");
@@ -359,6 +251,82 @@ namespace ML.Engine.UI
             
 
         }
+
+
+        private Transform btnList;
+        private List<UISelectedButtonComponent> BtnComponents = new List<UISelectedButtonComponent>();
+        private IUISelected CurSelected;
+        private void InitBtnData(OptionPanelStruct datas)
+        {
+            foreach (var tt in datas.Btns)
+            {
+                var btn = new UISelectedButtonComponent(btnList, tt.name);
+                btn.textMeshProUGUI.text = tt.description.GetText();
+                this.BtnComponents.Add(btn);
+            }
+
+            //GraphicBtn
+            this.BtnComponents[0].selectedButton.OnInteract += () =>
+            {
+                
+            };
+            //AudioBtn
+            this.BtnComponents[1].selectedButton.OnInteract += () =>
+            {
+
+            };
+            //ControllerBtn
+            this.BtnComponents[2].selectedButton.OnInteract += () =>
+            {
+
+            };
+            //TutorialBtn
+            this.BtnComponents[3].selectedButton.OnInteract += () =>
+            {
+
+            };
+            //BackBtn
+            this.BtnComponents[3].selectedButton.OnInteract += () =>
+            {
+
+            };
+            //QuitGameBtn
+            this.BtnComponents[3].selectedButton.OnInteract += () =>
+            {
+
+            };
+
+            var btns = btnList.GetComponentsInChildren<SelectedButton>();
+            int ConstraintCount = gridLayout.constraintCount;
+            for (int i = 0; i < btns.Length; ++i)
+            {
+                int last = (i - 1 + btns.Length) % btns.Length;
+                int next = (i + 1 + btns.Length) % btns.Length;
+
+                btns[i].UpUI = i - ConstraintCount >= 0 ? btns[i - ConstraintCount] : btns[i - ConstraintCount + btns.Length];
+                btns[i].DownUI = i + ConstraintCount < btns.Length ? btns[i + ConstraintCount] : btns[i + ConstraintCount - btns.Length];
+                btns[i].RightUI = i % ConstraintCount + 1 < ConstraintCount ? btns[i + 1] : btns[i / ConstraintCount * ConstraintCount];
+                btns[i].LeftUI = i % ConstraintCount - 1 >= 0 ? btns[i - 1] : btns[i / ConstraintCount * ConstraintCount + ConstraintCount - 1];
+            }
+
+            foreach (var btn in btns)
+            {
+                btn.OnSelectedEnter += () =>
+                {
+                    btn.transform.Find("Selected").gameObject.SetActive(true);
+                };
+                btn.OnSelectedExit += () =>
+                {
+                    btn.transform.Find("Selected").gameObject.SetActive(false);
+                };
+            }
+
+            this.CurSelected = this.BtnComponents[0].selectedButton;
+            this.CurSelected.SelectedEnter();
+        }
+
+
+
         #endregion
 
 

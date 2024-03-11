@@ -90,7 +90,7 @@ namespace ML.Engine.UI
         {
             if (GameManager.Instance.LevelSwitchManager.SceneHandle.IsValid())
             {
-                float progress = Mathf.Clamp01(GameManager.Instance.LevelSwitchManager.SceneHandle.PercentComplete / 0.9f);
+                float progress = Mathf.Clamp01(GameManager.Instance.LevelSwitchManager.SceneHandle.PercentComplete);
                 ProgressText.text = ((int)progress * 100).ToString() + "%";
                 slider.value = progress;
             }
