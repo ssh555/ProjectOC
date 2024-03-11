@@ -19,7 +19,7 @@ namespace ProjectOC.Player.UI
         #region Unity
         public bool IsInit = false;
         public PlayerCharacter player;
-        private void Start()
+        private void Awake()
         {
 
 

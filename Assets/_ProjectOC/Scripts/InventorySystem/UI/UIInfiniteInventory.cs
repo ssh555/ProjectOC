@@ -32,7 +32,7 @@ namespace ProjectOC.InventorySystem.UI
         #region Unity
         public bool IsInit = false;
         public SpriteAtlas inventoryAtlas;
-        private void Start()
+        private void Awake()
         {
             InitUITextContents();
             LoadInventoryAtlas();

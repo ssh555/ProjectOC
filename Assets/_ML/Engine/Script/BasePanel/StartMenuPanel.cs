@@ -16,9 +16,9 @@ namespace ML.Engine.UI
     {
         #region Unity
         public bool IsInit = false;
-        private void Start()
-        {
 
+        private void Awake()
+        {
             InitUITextContents();
 
             var btnList = this.transform.Find("ButtonList");
@@ -27,7 +27,8 @@ namespace ML.Engine.UI
             this.NewGameBtn.OnInteract += () =>
             {
                 UIBasePanel panel = null;
-                System.Action<string, string> preCallback = (string s1, string s2) => {
+                System.Action<string, string> preCallback = (string s1, string s2) =>
+                {
                     GameManager.Instance.EnterPoint.GetLoadingScenePanelInstance().Completed += (handle) =>
                     {
                         // สตภýปฏ
@@ -42,7 +43,8 @@ namespace ML.Engine.UI
 
                 };
 
-                System.Action<string, string> postCallback = async (string s1, string s2) => {
+                System.Action<string, string> postCallback = async (string s1, string s2) =>
+                {
                     await System.Threading.Tasks.Task.Run(() =>
                     {
                         while (panel == null) ;
@@ -97,7 +99,7 @@ namespace ML.Engine.UI
                 btns[i].UpUI = btns[last];
                 btns[i].DownUI = btns[next];
 
-                
+
 
             }
 
@@ -110,11 +112,18 @@ namespace ML.Engine.UI
 
             this.CurSelected = NewGameBtn;
             this.CurSelected.SelectedEnter();
+        }
+        protected override void Start()
+        {
+
+
             IsInit = true;
 
 
 
             Refresh();
+
+            base.Start();
         }
 
         #endregion

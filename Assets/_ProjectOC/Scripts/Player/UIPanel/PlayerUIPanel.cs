@@ -33,7 +33,7 @@ namespace ProjectOC.Player.UI
         public int lateTickPriority { get; set; }
 
         public bool IsInit = false;
-        private void Start()
+        private void Awake()
         {
             InitUITextContents();
 

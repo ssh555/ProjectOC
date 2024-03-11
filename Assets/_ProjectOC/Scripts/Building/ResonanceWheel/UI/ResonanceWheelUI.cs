@@ -42,9 +42,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #region Unity
         public bool IsInit = false;
-        private void Start()
-        {
 
+        private void Awake()
+        {
             workerEcho = (GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
 
 
@@ -66,12 +66,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             exclusivePart = this.transform.Find("ExclusivePart");
             exclusivePart.gameObject.SetActive(true);
 
-            
+
 
             // TopPart
             TopTitleText = this.transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
 
-                //FuctionType
+            //FuctionType
 
             var content = this.transform.Find("FunctionType").Find("Content");
 
@@ -85,7 +85,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             var ring = exclusivePart.Find("Ring").Find("Ring");
             Grids = new RingGrid[ring.childCount];
 
-            for(int i = 0;i < ring.childCount; i++)
+            for (int i = 0; i < ring.childCount; i++)
             {
                 Grids[i] = new RingGrid();
                 Grids[i].transform = ring.GetChild(i).transform;
@@ -108,6 +108,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             RCInfo = ResonanceConsumpion.Find("Info");
             TimerUI = RCInfo.Find("Timer");
             ResonanceConsumpionTitle = RCInfo.Find("Name").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
+        }
+        protected override void Start()
+        {
+
+
 
             
             //sub1
@@ -115,6 +120,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             IsInit = true;
             Refresh();
+
+            base.Start();
         }
 
         private AsyncOperationHandle spriteatlasHandle;

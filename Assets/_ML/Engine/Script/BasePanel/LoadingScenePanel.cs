@@ -22,11 +22,6 @@ namespace ML.Engine.UI
         private void Awake()
         {
             //DontDestroyOnLoad(this.gameObject);
-        }
-
-        private void Start()
-        {
-            
             InitUITextContents();
 
 
@@ -34,9 +29,17 @@ namespace ML.Engine.UI
 
             LoadText = this.transform.Find("LoadText").GetComponent<TextMeshProUGUI>();
             ProgressText = this.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>();
+        }
+
+        protected override void Start()
+        {
+            
+
 
             IsInit = true;
             Refresh();
+
+            base.Start();
         }
 
         #endregion

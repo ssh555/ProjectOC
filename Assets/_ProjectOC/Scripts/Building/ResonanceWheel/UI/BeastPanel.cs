@@ -38,7 +38,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #region Unity
         public bool IsInit = false;
-        private void Start()
+
+        private void Awake()
         {
             InitUITextContents();
             InitUITexture2D();
@@ -69,12 +70,18 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //需要调接口显示的隐兽信息
 
             BeastName = Info1.Find("Icon").Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
+        }
+        protected override void Start()
+        {
 
-        IsInit = true;
+
+            IsInit = true;
 
           
 
             Refresh();
+
+            base.Start();
         }
 
         private List<AsyncOperationHandle<GameObject>> goHandle = new List<AsyncOperationHandle<GameObject>>();

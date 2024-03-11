@@ -23,7 +23,7 @@ namespace ProjectOC.InventorySystem.UI
     {
         #region Unity
         public bool IsInit = false;
-        private void Start()
+        private void Awake()
         {
             InitUITextContents();
 
