@@ -192,10 +192,10 @@ namespace ProjectOC.Player.UI
 
         private IUISelected CurSelected;
 
-        private SelectedButton NewGameBtn;
-        private SelectedButton ContinueGameBtn;
-        private SelectedButton OptionBtn;
-        private SelectedButton QuitGameBtn;
+        private UISelectedButtonComponent NewGameBtn;
+        private UISelectedButtonComponent ContinueGameBtn;
+        private UISelectedButtonComponent OptionBtn;
+        private UISelectedButtonComponent QuitGameBtn;
 
         private TMPro.TextMeshProUGUI NewGameBtnText;
         private TMPro.TextMeshProUGUI ContinueGameBtnText;

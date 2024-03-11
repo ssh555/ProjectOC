@@ -25,9 +25,8 @@ namespace ML.Engine.UI
             //InitPrefabs();
 
             var btnList = this.transform.Find("ButtonList");
-            this.NewGameBtn = btnList.Find("NewGameBtn").GetComponent<SelectedButton>();
-            this.NewGameBtnText = NewGameBtn.transform.Find("BtnText").GetComponent<TextMeshProUGUI>();
-            this.NewGameBtn.OnInteract += () =>
+            this.NewGameBtn = new UISelectedButtonComponent(btnList, "NewGameBtn");
+            this.NewGameBtn.selectedButton.OnInteract += () =>
             {
                 UIBasePanel panel = null;
                 System.Action<string, string> preCallback = (string s1, string s2) =>
@@ -61,16 +60,14 @@ namespace ML.Engine.UI
                 this.OnExit();
             };
 
-            this.ContinueGameBtn = btnList.Find("ContinueGameBtn").GetComponent<SelectedButton>();
-            this.ContinueGameBtnText = ContinueGameBtn.transform.Find("BtnText").GetComponent<TextMeshProUGUI>();
-            this.ContinueGameBtn.OnInteract += () =>
+            this.ContinueGameBtn = new UISelectedButtonComponent(btnList, "ContinueGameBtn");
+            this.ContinueGameBtn.selectedButton.OnInteract += () =>
             {
 
             };
 
-            this.OptionBtn = btnList.Find("OptionBtn").GetComponent<SelectedButton>();
-            this.OptionBtnText = OptionBtn.transform.Find("BtnText").GetComponent<TextMeshProUGUI>();
-            this.OptionBtn.OnInteract += () =>
+            this.OptionBtn = new UISelectedButtonComponent(btnList, "OptionBtn");
+            this.OptionBtn.selectedButton.OnInteract += () =>
             {
 
                 GameManager.Instance.EnterPoint.GetOptionPanelInstance().Completed += (handle) =>
@@ -85,9 +82,8 @@ namespace ML.Engine.UI
                 };
             };
 
-            this.QuitGameBtn = btnList.Find("QuitGameBtn").GetComponent<SelectedButton>();
-            this.QuitGameBtnText = QuitGameBtn.transform.Find("BtnText").GetComponent<TextMeshProUGUI>();
-            this.QuitGameBtn.OnInteract += () =>
+            this.QuitGameBtn = new UISelectedButtonComponent(btnList, "QuitGameBtn");
+            this.QuitGameBtn.selectedButton.OnInteract += () =>
             {
 
             };
@@ -113,7 +109,7 @@ namespace ML.Engine.UI
             }
 
 
-            this.CurSelected = NewGameBtn;
+            this.CurSelected = NewGameBtn.selectedButton;
             this.CurSelected.SelectedEnter();
         }
         protected override void Start()
@@ -289,10 +285,10 @@ namespace ML.Engine.UI
 
         private IUISelected CurSelected;
 
-        private SelectedButton NewGameBtn;
-        private SelectedButton ContinueGameBtn;
-        private SelectedButton OptionBtn;
-        private SelectedButton QuitGameBtn;
+        private UISelectedButtonComponent NewGameBtn;
+        private UISelectedButtonComponent ContinueGameBtn;
+        private UISelectedButtonComponent OptionBtn;
+        private UISelectedButtonComponent QuitGameBtn;
 
         private TMPro.TextMeshProUGUI NewGameBtnText;
         private TMPro.TextMeshProUGUI ContinueGameBtnText;
