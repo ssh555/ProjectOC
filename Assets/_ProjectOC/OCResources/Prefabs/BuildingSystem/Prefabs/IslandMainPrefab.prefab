@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6829106823878387148}
-  - component: {fileID: 843463394735382302}
   - component: {fileID: 9085461861964717170}
   m_Layer: 0
   m_Name: IslandMainPrefab
@@ -35,22 +34,6 @@ Transform:
   - {fileID: 2323546141288189331}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &843463394735382302
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 278483109480395734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d37d3d4c9a445db4dbea37f893d6ff3d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mapGridSize: 100
-  maxSize: {x: 15, y: 15}
-  islandMains:
-  - {fileID: 9085461861964717170}
 --- !u!114 &9085461861964717170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,6 +53,7 @@ MonoBehaviour:
   - {x: 3, y: -3}
   - {x: 4, y: -3}
   islandMesh: {fileID: 1365645020588911494}
+  islandFieldParts: []
   affiliatedIslands:
   - {fileID: 3463678050611118378}
 --- !u!1 &314741419423962551
@@ -695,6 +679,7 @@ MonoBehaviour:
   - {x: -1, y: 0}
   - {x: -2, y: 0}
   islandMesh: {fileID: 2099034106723370416}
+  islandFieldParts: []
   islandMain: {fileID: 0}
 --- !u!4 &2888845180813195178 stripped
 Transform:
