@@ -180,8 +180,8 @@ namespace ProjectOC.LandMassExpand
             {
                 Gizmos.color = Color.red;
             }
-            
-            IslandManager islandManager = GetComponentInParent<IslandManager>();
+
+            IslandManager islandManager = GameManager.Instance.GetLocalManager<IslandManager>();
             for (int i = 0; i < islandMapRanges.Length; i++)
             {
                 Gizmos.DrawWireCube(new Vector3(islandMapRanges[i].x, 0, islandMapRanges[i].y) * islandManager.mapGridSize + transform.position,
