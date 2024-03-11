@@ -84,6 +84,7 @@ namespace ProjectOC.WorkerNS
         }
         public AsyncOperationHandle<GameObject> SpawnWorker(Vector3 pos, Quaternion rot, string name = "Worker")
         {
+            name = "Worker";
             var handle = GetObject(name, pos, rot);
             handle.Completed += (asHandle) =>
             {
@@ -138,7 +139,8 @@ namespace ProjectOC.WorkerNS
         /// <returns></returns>
         public AsyncOperationHandle<GameObject> GetObject(string name, Vector3 pos, Quaternion rot)
         {
-            return GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjPath + name +".prefab", pos, rot);
+            Debug.Log(WorldObjPath + "/" + name + ".prefab");
+            return GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjPath +"/"+ name +".prefab", pos, rot);
         }
     }
 }

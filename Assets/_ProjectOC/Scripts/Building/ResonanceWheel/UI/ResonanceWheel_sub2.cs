@@ -287,7 +287,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             if (UikeyTipIsInit == false)
             {
-                KeyTip[] keyTips = inputManager.ExportKeyTipValues(this.parentUI.ABJAProcessorJson_sub2);
+                KeyTip[] keyTips = inputManager.ExportKeyTipValues(this.parentUI.PanelTextContent_sub2);
                 foreach (var keyTip in keyTips)
                 {
                     
