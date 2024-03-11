@@ -26,49 +26,41 @@ namespace ML.Engine.UI
             InitUITextContents();
 
             ToptitleText = this.transform.Find("TopTitle").Find("Text").GetComponent<TextMeshProUGUI>();
-
-
             var btnList = this.transform.Find("ButtonList");
             gridLayout = btnList.GetComponent<GridLayoutGroup>();
-            this.GraphicBtn = btnList.Find("GraphicBtn").GetComponent<SelectedButton>();
-            this.GraphicBtnText = GraphicBtn.transform.Find("BtnText").GetComponent<TextMeshProUGUI>();
-            this.GraphicBtn.OnInteract += () =>
+
+            this.GraphicBtn = new UISelectedButtonComponent(btnList, "GraphicBtn");
+            this.GraphicBtn.selectedButton.OnInteract += () =>
             {
 
             };
 
-            this.AudioBtn = btnList.Find("AudioBtn").GetComponent<SelectedButton>();
-            this.AudioBtnText = AudioBtn.transform.Find("BtnText").GetComponent<TextMeshProUGUI>();
-            this.AudioBtn.OnInteract += () =>
+            this.AudioBtn = new UISelectedButtonComponent(btnList, "AudioBtn");
+            this.AudioBtn.selectedButton.OnInteract += () =>
             {
 
             };
 
-            this.ControllerBtn = btnList.Find("ControllerBtn").GetComponent<SelectedButton>();
-            this.ControllerBtnText = ControllerBtn.transform.Find("BtnText").GetComponent<TextMeshProUGUI>();
-            this.ControllerBtn.OnInteract += () =>
+            this.ControllerBtn = new UISelectedButtonComponent(btnList, "ControllerBtn");
+            this.ControllerBtn.selectedButton.OnInteract += () =>
             {
 
             };
 
-            this.TutorialBtn = btnList.Find("TutorialBtn").GetComponent<SelectedButton>();
-            this.TutorialBtnText = TutorialBtn.transform.Find("BtnText").GetComponent<TextMeshProUGUI>();
-            this.TutorialBtn.OnInteract += () =>
+            this.TutorialBtn = new UISelectedButtonComponent(btnList, "TutorialBtn");
+            this.TutorialBtn.selectedButton.OnInteract += () =>
             {
 
             };
 
-            this.BackBtn = btnList.Find("BackBtn").GetComponent<SelectedButton>();
-            this.BackBtnText = BackBtn.transform.Find("BtnText").GetComponent<TextMeshProUGUI>();
-            this.BackBtn.OnInteract += () =>
+            this.BackBtn = new UISelectedButtonComponent(btnList, "BackBtn");
+            this.BackBtn.selectedButton.OnInteract += () =>
             {
 
             };
 
-
-            this.QuitGameBtn = btnList.Find("QuitGameBtn").GetComponent<SelectedButton>();
-            this.QuitGameBtnText = QuitGameBtn.transform.Find("BtnText").GetComponent<TextMeshProUGUI>();
-            this.QuitGameBtn.OnInteract += () =>
+            this.QuitGameBtn = new UISelectedButtonComponent(btnList, "QuitGameBtn");
+            this.QuitGameBtn.selectedButton.OnInteract += () =>
             {
 
             };
@@ -100,19 +92,8 @@ namespace ML.Engine.UI
                 };
             }
 
-            this.CurSelected = GraphicBtn;
+            this.CurSelected = GraphicBtn.selectedButton;
             this.CurSelected.SelectedEnter();
-
-            //BotKeyTips
-            var kt = this.transform.Find("BotKeyTips").Find("KeyTips");
-            KT_Back = new UIKeyTip();
-
-            KT_Back.keytip = kt.Find("KT_Back").Find("Image").Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_Back.description = kt.Find("KT_Back").Find("Image").Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
-
-            KT_Confirm = new UIKeyTip();
-            KT_Confirm.keytip = kt.Find("KT_Confirm").Find("Image").Find("KeyText").GetComponent<TMPro.TextMeshProUGUI>();
-            KT_Confirm.description = kt.Find("KT_Back").Find("Image").Find("KeyTipText").GetComponent<TMPro.TextMeshProUGUI>();
         }
 
         protected override void Start()
@@ -306,12 +287,12 @@ namespace ML.Engine.UI
 
         private GridLayoutGroup gridLayout;
 
-        private SelectedButton GraphicBtn;
-        private SelectedButton AudioBtn;
-        private SelectedButton ControllerBtn;
-        private SelectedButton TutorialBtn;
-        private SelectedButton BackBtn;
-        private SelectedButton QuitGameBtn;
+        private UISelectedButtonComponent GraphicBtn;
+        private UISelectedButtonComponent AudioBtn;
+        private UISelectedButtonComponent ControllerBtn;
+        private UISelectedButtonComponent TutorialBtn;
+        private UISelectedButtonComponent BackBtn;
+        private UISelectedButtonComponent QuitGameBtn;
 
 
         private TMPro.TextMeshProUGUI ToptitleText;
@@ -323,9 +304,6 @@ namespace ML.Engine.UI
         private TMPro.TextMeshProUGUI BackBtnText;
         private TMPro.TextMeshProUGUI QuitGameBtnText;
 
-        //BotKeyTips
-        private UIKeyTip KT_Back;
-        private UIKeyTip KT_Confirm;
 
         #endregion
 
@@ -344,10 +322,6 @@ namespace ML.Engine.UI
             BackBtnText.text = PanelTextContent_OptionPanel.BackBtn;
             QuitGameBtnText.text = PanelTextContent_OptionPanel.QuitGameBtn;
 
-
-            //BotKeyTips
-            KT_Confirm.ReWrite(PanelTextContent_OptionPanel.confirm);
-            KT_Back.ReWrite(PanelTextContent_OptionPanel.back);
         }
         #endregion
 

@@ -205,7 +205,6 @@ namespace ML.Engine.Timer
         {
             if (this.addTick.Contains(tickComponent))
             {
-                Debug.Log("QWQ");
                 this.addTick.Remove(tickComponent);
                 return true;
             }

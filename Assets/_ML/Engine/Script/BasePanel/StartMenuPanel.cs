@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 
 
@@ -20,6 +22,7 @@ namespace ML.Engine.UI
         private void Awake()
         {
             InitUITextContents();
+            //InitPrefabs();
 
             var btnList = this.transform.Find("ButtonList");
             this.NewGameBtn = btnList.Find("NewGameBtn").GetComponent<SelectedButton>();
@@ -125,7 +128,17 @@ namespace ML.Engine.UI
 
             base.Start();
         }
-
+        private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
+        private List<AsyncOperationHandle<GameObject>> goHandle = new List<AsyncOperationHandle<GameObject>>();
+        private AsyncOperationHandle spriteAtlasHandle;
+        private void OnDestroy()
+        {
+            GM.ABResourceManager.Release(spriteAtlasHandle);
+            foreach (var handle in goHandle)
+            {
+                GM.ABResourceManager.ReleaseInstance(handle);
+            }
+        }
         #endregion
 
         #region Override
@@ -329,7 +342,19 @@ namespace ML.Engine.UI
         }
         #endregion
 
+        #region Prefab
+/*        private GameObject LoadingScenePanelPrefab;
+        private void InitPrefabs()
+        {
+            GM.EnterPoint.GetLoadingScenePanelInstance().Completed += (handle) =>
+            {
+                this.goHandle.Add(handle);
+                this.LoadingScenePanelPrefab = handle.Result;
 
+            };
+        }*/
+
+        #endregion
 
     }
 

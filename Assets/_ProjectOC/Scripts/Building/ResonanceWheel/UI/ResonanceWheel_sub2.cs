@@ -34,7 +34,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
             foreach (var item in UIKeyTipComponents)
             {
-                item.InitData();
                 uiKeyTipDic.Add(item.InputActionName, item);
             }
 
@@ -302,13 +301,13 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     inputManager.GetInputActionBindText(inputAction);
 
                     UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
-                    if (uIKeyTipComponent.uiKeyTip.keytip != null)
+                    if (uIKeyTipComponent.keytip != null)
                     {
-                        uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
+                        uIKeyTipComponent.keytip.text = inputManager.GetInputActionBindText(inputAction);
                     }
-                    if (uIKeyTipComponent.uiKeyTip.description != null)
+                    if (uIKeyTipComponent.description != null)
                     {
-                        uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
+                        uIKeyTipComponent.description.text = keyTip.description.GetText();
                     }
 
                 }
