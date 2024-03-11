@@ -10,7 +10,7 @@ namespace ML.Engine.SaveSystem
     /// <summary>
     /// 资产配置文件
     /// </summary>
-    [CreateAssetMenu(fileName = "SaveConfig", menuName = "ML/SaveSystem/SaveConfig", order = 1)]
+    [CreateAssetMenu(fileName = "SaveSystemConfig", menuName = "ML/SaveSystem/SaveSystemConfig", order = 1)]
     public class SaveSystemConfigAsset : SerializedScriptableObject
     {
         /// <summary>
@@ -23,12 +23,13 @@ namespace ML.Engine.SaveSystem
         /// </summary>
         private bool IsEditing;
 
-
 #if UNITY_EDITOR
+
         #region 面板交互按钮
         /// <summary>
         /// 启用编辑时显示Temp，隐藏Config
         /// </summary>
+        [ShowIf("IsEditing")]
         public SaveConfig Temp;
 
         /// <summary>
@@ -75,7 +76,10 @@ namespace ML.Engine.SaveSystem
             foreach (var dir in Directory.GetDirectories(root))
             {
                 DirectoryInfo info = new DirectoryInfo(dir);
-                SaveDataFolder saveDataFolder = (SaveDataFolder)oldSystem.LoadData(Path.Combine("Save", info.Name, "SaveConfig"), Config.UseEncrption);
+                SaveDataFolder saveDataFolder = oldSystem.LoadData<SaveDataFolder>(Path.Combine(info.Name, "SaveConfig"), Config.UseEncrption);
+                saveDataFolder.SaveName = "SaveConfig";
+                saveDataFolder.Path = info.Name;
+
                 saveDataFolders.Add(saveDataFolder);
             }
 
@@ -84,15 +88,40 @@ namespace ML.Engine.SaveSystem
                 saveDataFolder.IsDirty = true;
                 foreach (var kv in saveDataFolder.FileMap)
                 {
-                    ISaveData data = oldSystem.LoadData(Path.Combine("Save", saveDataFolder.Name, kv.Key), Config.UseEncrption);
+                    ISaveData data = oldSystem.LoadData<ISaveData>(Path.Combine(saveDataFolder.Path, kv.Key), Config.UseEncrption);
                     data.IsDirty = true;
+                    data.SaveName = kv.Key;
+                    data.Path = saveDataFolder.Path;
                     newSystem.SaveData(data, Temp.UseEncrption);
                 }
-                newSystem.SaveData(saveDataFolder, Temp.UseEncrption);
+
+                newSystem.SaveData<SaveDataFolder>(saveDataFolder, Temp.UseEncrption);
+                if (Config.SaveType != Temp.SaveType)
+                {
+                    foreach (var kv in saveDataFolder.FileMap)
+                    {
+                        if (Config.SaveType == SaveType.Binary)
+                        {
+                            File.Delete(kv.Value + ".bytes");
+                        }
+                        else
+                        {
+                            File.Delete(kv.Value + ".json");
+                        }
+                    }
+                    string path = Path.Combine(root, saveDataFolder.Path, saveDataFolder.SaveName);
+                    if (Config.SaveType == SaveType.Binary)
+                    {
+                        File.Delete(path + ".bytes");
+                    }
+                    else
+                    {
+                        File.Delete(path + ".json");
+                    }
+                }
             }
             Config.SaveType = Temp.SaveType;
             Config.UseEncrption = Temp.UseEncrption;
-            Temp = null;
             IsEditing = false;
         }
         /// <summary>
@@ -101,7 +130,6 @@ namespace ML.Engine.SaveSystem
         [Button("Cancel"), ShowIf("IsEditing")]
         protected void CancelButton()
         {
-            Temp = null;
             IsEditing = false;
         }
         #endregion

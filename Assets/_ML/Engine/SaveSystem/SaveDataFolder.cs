@@ -32,7 +32,7 @@ namespace ML.Engine.SaveSystem
 
         /// <summary>
         /// 存档文件名称-对应的数据结构类型全名字符串的映射表
-        /// SaveName -> Path+Name+SaveName+(.bytes|.json)为实际的存储绝对路径
+        /// SaveName -> Path+Name+SaveName
         /// </summary>
         public Dictionary<string, string> FileMap = new Dictionary<string, string>();
     }

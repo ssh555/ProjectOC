@@ -25,7 +25,7 @@ namespace ML.Engine.SaveSystem
         /// </summary>
         /// <param name="data">数据</param>
         /// <param name="useEncryption">是否加密</param>
-        public abstract void SaveData(ISaveData data, bool useEncryption);
+        public abstract void SaveData<T>(T data, bool useEncryption) where T : ISaveData;
 
         /// <summary>
         /// 加载数据，路径为不带后缀的相对路径
@@ -33,14 +33,14 @@ namespace ML.Engine.SaveSystem
         /// <param name="relativePathWithoutSuffix">Application.persistent路径，后缀为.bytes或者.json，自动添加</param>
         /// <param name="useEncryption">是否加密</param>
         /// <returns></returns>
-        public abstract ISaveData LoadData(string relativePathWithoutSuffix, bool useEncryption);
+        public abstract T LoadData<T>(string relativePathWithoutSuffix, bool useEncryption) where T : ISaveData;
 
         /// <summary>
         /// 读取内存流数据
         /// </summary>
         /// <param name="memory">内存流</param>
         /// <param name="useEncryption">是否加密</param>
-        public abstract ISaveData LoadData(Stream memory, bool useEncryption);
+        public abstract T LoadData<T>(Stream memory, bool useEncryption) where T : ISaveData;
 
         /// <summary>
         /// 加密数据流

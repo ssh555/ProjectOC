@@ -13,11 +13,35 @@ MonoBehaviour:
   m_Name: SaveSystemConfig
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 0
-    SerializedBytes: 01010600000043006f006e006600690067002f0000000001300000004d004c002e0045006e00670069006e0065002e005300610076006500530079007300740065006d002e00530061007600650043006f006e006600690067002c00200041007300730065006d0062006c0079002d00430053006800610072007000000000001d01080000005300610076006500540079007000650000000000000000002b010c00000055007300650045006e00630072007000740069006f006e0000052d0104000000540065006d007000
+    SerializedFormat: 2
+    SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
+    SerializationNodes:
+    - Name: Config
+      Entry: 7
+      Data: ML.Engine.SaveSystem.SaveConfig, Assembly-CSharp
+    - Name: SaveType
+      Entry: 3
+      Data: 0
+    - Name: UseEncrption
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: Temp
+      Entry: 7
+      Data: ML.Engine.SaveSystem.SaveConfig, Assembly-CSharp
+    - Name: SaveType
+      Entry: 3
+      Data: 0
+    - Name: UseEncrption
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 8
+      Data: 

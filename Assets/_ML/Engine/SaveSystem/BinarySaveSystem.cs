@@ -8,7 +8,7 @@ namespace ML.Engine.SaveSystem
 {
     public class BinarySaveSystem : SaveSystem
     {
-        public override ISaveData LoadData(string relativePathWithoutSuffix, bool useEncryption)
+        public override T LoadData<T>(string relativePathWithoutSuffix, bool useEncryption)
         {
             if (!string.IsNullOrEmpty(relativePathWithoutSuffix))
             {
@@ -21,15 +21,15 @@ namespace ML.Engine.SaveSystem
                     {
                         stream = DecryptorStream(fs);
                     }
-                    DataContractSerializer serializer = new DataContractSerializer(typeof(ISaveData));
-                    ISaveData loadedData = (ISaveData)serializer.ReadObject(stream);
+                    DataContractSerializer serializer = new DataContractSerializer(typeof(T));
+                    T loadedData = (T)serializer.ReadObject(stream);
                     stream.Close();
                     return loadedData;
                 }
             }
             return null;
         }
-        public override ISaveData LoadData(Stream memory, bool useEncryption)
+        public override T LoadData<T>(Stream memory, bool useEncryption)
         {
             if (memory != null)
             {
@@ -39,17 +39,17 @@ namespace ML.Engine.SaveSystem
                     stream = DecryptorStream(memory);
                 }
                 DataContractSerializer serializer = new DataContractSerializer(typeof(ISaveData));
-                ISaveData loadedData = (ISaveData)serializer.ReadObject(stream);
+                T loadedData = (T)serializer.ReadObject(stream);
                 stream.Close();
                 return loadedData;
             }
             return null;
         }
-        public override void SaveData(ISaveData data, bool useEncryption)
+        public override void SaveData<T>(T data, bool useEncryption)
         {
             if (data!=null && !string.IsNullOrEmpty(data.Path) && data.IsDirty)
             {
-                string path = Path.Combine(SavePath, data.Path + ".bytes");
+                string path = Path.Combine(SavePath, data.Path, data.SaveName + ".bytes");
                 string directoryPath = Path.GetDirectoryName(path);
                 if (!Directory.Exists(directoryPath))
                 {

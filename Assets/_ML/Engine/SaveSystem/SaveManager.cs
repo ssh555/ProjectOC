@@ -24,31 +24,23 @@ namespace ML.Engine.SaveSystem
         /// </summary>
         public SaveController SaveController;
 
-
-        /// <summary>
-        /// 是否已加载完数据
-        /// </summary>
-        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
-        public static ML.Engine.ABResources.ABJsonAssetProcessor<SaveConfig> ABJAProcessor;
         public SaveManager()
         {
-            if (ABJAProcessor == null)
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SaveSystemConfigAsset>("ML/Config/SaveSystemConfig.asset").Completed += (handle) =>
             {
-                ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<SaveConfig>("Config", "SaveSystemConfig", (data) =>
+                SaveSystemConfigAsset data = handle.Result;
+                this.Config = new SaveConfig(data.Config);
+
+                if (this.Config.SaveType == SaveType.Json)
                 {
-                    this.Config = new SaveConfig(data);
-                    if (this.Config.SaveType == SaveType.Json)
-                    {
-                        this.SaveSystem = new JsonSaveSystem();
-                    }
-                    else if (this.Config.SaveType == SaveType.Binary)
-                    {
-                        this.SaveSystem = new BinarySaveSystem();
-                    }
-                    this.SaveController = new SaveController();
-                }, null, "存档系统设置数据");
-                ABJAProcessor.StartLoadJsonAssetData();
-            }
+                    this.SaveSystem = new JsonSaveSystem();
+                }
+                else if (this.Config.SaveType == SaveType.Binary)
+                {
+                    this.SaveSystem = new BinarySaveSystem();
+                }
+                this.SaveController = new SaveController();
+            };
         }
 
         /// <summary>
@@ -56,7 +48,7 @@ namespace ML.Engine.SaveSystem
         /// </summary>
         public void SaveData<T>(T data) where T : ISaveData
         {
-            this.SaveSystem.SaveData(data, this.Config.UseEncrption);
+            this.SaveSystem.SaveData<T>(data, this.Config.UseEncrption);
         }
         /// <summary>
         /// 加载存档数据
@@ -65,7 +57,7 @@ namespace ML.Engine.SaveSystem
         /// <returns></returns>
         public T LoadData<T>(string path) where T : ISaveData
         {
-            return (T)this.SaveSystem.LoadData(path, this.Config.UseEncrption);
+            return (T)this.SaveSystem.LoadData<T>(path, this.Config.UseEncrption);
         }
     }
 }

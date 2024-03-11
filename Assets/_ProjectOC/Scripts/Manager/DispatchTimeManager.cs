@@ -36,6 +36,8 @@ namespace ProjectOC.ManagerNS
         /// 当前所处时段 [0, 23]
         /// </summary>
         public int CurrentTimeFrame = 0;
+        public int CurrentDay = 0;
+
         /// <summary>
         /// 计时器 => 时段更新(TimeScale确定) 一天循环24次，一个时段计时一次，计时结束时调用时段更新事件，Loop
         /// </summary>
@@ -44,6 +46,9 @@ namespace ProjectOC.ManagerNS
         /// 时段更新事件
         /// </summary>
         public event Action<int> OnTimeFrameChanged;
+        public event Action<int> OnDayChanged;
+
+
         public void Init()
         {
             this.Timer = new CounterDownTimer(this.TimeScale, true, false);
@@ -52,6 +57,11 @@ namespace ProjectOC.ManagerNS
         }
         private void EndActionForTimer()
         {
+            if (this.CurrentTimeFrame + 1 == 24)
+            {
+                this.CurrentDay += 1;
+                this.OnDayChanged?.Invoke(this.CurrentDay);
+            }
             this.CurrentTimeFrame = (this.CurrentTimeFrame + 1) % 24;
             this.OnTimeFrameChanged?.Invoke(this.CurrentTimeFrame);
         }

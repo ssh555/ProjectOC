@@ -8,7 +8,7 @@ namespace ML.Engine.SaveSystem
 {
     public class JsonSaveSystem : SaveSystem
     {
-        public override ISaveData LoadData(string relativePathWithoutSuffix, bool useEncryption)
+        public override T LoadData<T>(string relativePathWithoutSuffix, bool useEncryption)
         {
             if (!string.IsNullOrEmpty(relativePathWithoutSuffix))
             {
@@ -24,7 +24,7 @@ namespace ML.Engine.SaveSystem
                     using StreamReader reader = new StreamReader(stream);
                     string jsonFromFile = reader.ReadToEnd();
 
-                    ISaveData objFromFile = JsonConvert.DeserializeObject<ISaveData>(jsonFromFile);
+                    T objFromFile = JsonConvert.DeserializeObject<T>(jsonFromFile);
                     reader.Close();
                     stream.Close();
                     return objFromFile;
@@ -32,7 +32,7 @@ namespace ML.Engine.SaveSystem
             }
             return null;
         }
-        public override ISaveData LoadData(Stream memory, bool useEncryption)
+        public override T LoadData<T>(Stream memory, bool useEncryption)
         {
             if (memory != null)
             {
@@ -44,18 +44,18 @@ namespace ML.Engine.SaveSystem
                 using StreamReader reader = new StreamReader(stream);
                 string jsonFromFile = reader.ReadToEnd();
 
-                ISaveData objFromFile = JsonConvert.DeserializeObject<ISaveData>(jsonFromFile);
+                T objFromFile = JsonConvert.DeserializeObject<T>(jsonFromFile);
                 reader.Close();
                 stream.Close();
                 return objFromFile;
             }
             return null;
         }
-        public override void SaveData(ISaveData data, bool useEncryption)
+        public override void SaveData<T>(T data, bool useEncryption)
         {
             if (data != null && !string.IsNullOrEmpty(data.Path) && data.IsDirty)
             {
-                string path = Path.Combine(SavePath, data.Path + ".json");
+                string path = Path.Combine(SavePath, data.Path, data.SaveName + ".json");
                 string directoryPath = Path.GetDirectoryName(path);
                 if (!Directory.Exists(directoryPath))
                 {

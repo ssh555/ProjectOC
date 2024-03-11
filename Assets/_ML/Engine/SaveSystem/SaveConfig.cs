@@ -8,7 +8,7 @@ namespace ML.Engine.SaveSystem
     /// <summary>
     /// 存档设置
     /// </summary>
-    public class SaveConfig
+    public struct SaveConfig
     {
         /// <summary>
         /// 存档文件类型
@@ -18,31 +18,15 @@ namespace ML.Engine.SaveSystem
         /// 是否加密
         /// </summary>
         public bool UseEncrption;
-        public SaveConfig()
-        {
-            this.SaveType = SaveType.Json;
-            this.UseEncrption = false;
-        }
-        public SaveConfig(SaveType SaveType, bool UseEncrption)
+        public SaveConfig(SaveType SaveType = SaveType.Json, bool UseEncrption = false)
         {
             this.SaveType = SaveType;
             this.UseEncrption = UseEncrption;
         }
         public SaveConfig(SaveConfig config)
         {
-            if (config != null)
-            {
-                this.SaveType = config.SaveType;
-                this.UseEncrption = config.UseEncrption;
-            }
-        }
-        public void Init(SaveConfig config)
-        {
-            if (config != null)
-            {
-                this.SaveType = config.SaveType;
-                this.UseEncrption = config.UseEncrption;
-            }
+            this.SaveType = config.SaveType;
+            this.UseEncrption = config.UseEncrption;
         }
     }
 }

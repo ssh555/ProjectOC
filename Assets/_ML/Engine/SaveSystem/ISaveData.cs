@@ -22,7 +22,7 @@ namespace ML.Engine.SaveSystem
         [NonSerialized, IgnoreDataMember]
         public bool IsDirty;
         /// <summary>
-        /// 存储的相对路径位置
+        /// 存储的相对路径位置，不包括文件名
         /// </summary>
         [NonSerialized, IgnoreDataMember]
         public string Path;
