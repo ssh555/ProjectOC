@@ -18,7 +18,7 @@ namespace ML.Engine.BuildingSystem.UI
         #region Property|Field
         private BuildingManager BM => BuildingManager.Instance;
         private BuildingPlacer.BuildingPlacer Placer => BM.Placer;
-
+        private MonoBuildingManager monoBM;
         #region UIGO引用
         private UnityEngine.UI.Image[] matInstance;
         private int activeIndex;
@@ -38,7 +38,7 @@ namespace ML.Engine.BuildingSystem.UI
         private void Awake()
         {
             LoadMatPackages();
-
+            monoBM = ML.Engine.Manager.GameManager.Instance.GetLocalManager<MonoBuildingManager>();
             matParent = this.transform.Find("KT_AlterMat").Find("KT_AlterStyle").Find("Content") as RectTransform;
             this.templateMat = matParent.Find("MatTemplate") as RectTransform;
             templateMat.gameObject.SetActive(false);
@@ -50,27 +50,27 @@ namespace ML.Engine.BuildingSystem.UI
             comfirm.img = comfirm.root.Find("Image").GetComponent<Image>();
             comfirm.keytip = comfirm.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             comfirm.description = comfirm.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            comfirm.ReWrite(MonoBuildingManager.Instance.KeyTipDict["comfirm"]);
+            comfirm.ReWrite(monoBM.KeyTipDict["comfirm"]);
 
             back = new UIKeyTip();
             back.root = keytips.Find("KT_Back") as RectTransform;
             back.img = back.root.Find("Image").GetComponent<Image>();
             back.keytip = back.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             back.description = back.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            back.ReWrite(MonoBuildingManager.Instance.KeyTipDict["back"]);
+            back.ReWrite(monoBM.KeyTipDict["back"]);
 
             keytips = this.transform.Find("KT_AlterMat").Find("KT_AlterStyle");
             matlast = new UIKeyTip();
             matlast.root = keytips.Find("KT_Left") as RectTransform;
             matlast.img = matlast.root.Find("Image").GetComponent<Image>();
             matlast.keytip = matlast.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            matlast.ReWrite(MonoBuildingManager.Instance.KeyTipDict["matlast"]);
+            matlast.ReWrite(monoBM.KeyTipDict["matlast"]);
 
             matnext = new UIKeyTip();
             matnext.root = keytips.Find("KT_Right") as RectTransform;
             matnext.img = matnext.root.Find("Image").GetComponent<Image>();
             matnext.keytip = matnext.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            matnext.ReWrite(MonoBuildingManager.Instance.KeyTipDict["matnext"]);
+            matnext.ReWrite(monoBM.KeyTipDict["matnext"]);
 
         }
 
@@ -267,7 +267,7 @@ namespace ML.Engine.BuildingSystem.UI
         protected void ExitAppearancePanel()
         {
             // 弹出外观UI
-            MonoBuildingManager.Instance.PopPanel();
+            monoBM.PopPanel();
             // 禁用 Input.Appearance
             this.Placer.BInput.BuildingAppearance.Disable();
             this.Placer.SelectedPartInstance.Mode = this._aMode;
