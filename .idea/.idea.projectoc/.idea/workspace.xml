@@ -8,12 +8,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fef3870f-3f3d-437b-b554-2a7fe5c6b01a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.projectoc/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.projectoc/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assembly-CSharp-Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp-Editor.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/Windows" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/Windows" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/Windows.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/Windows.manifest" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/materials/other.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/materials/other.manifest" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab.manifest" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/scene" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/scene" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/scene.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/scene.manifest" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingArea/BuildingArea.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingArea/BuildingArea.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/UI/BSPlaceModePanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/UI/BSPlaceModePanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/UI/BSSelectBPartPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/UI/BSSelectBPartPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/InventorySystem/CompositeSystem/CompositeManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/InventorySystem/CompositeSystem/CompositeManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/InventorySystem/Scripts/ItemManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/InventorySystem/Scripts/ItemManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/OCResources/Prefabs/BuildingSystem/Prefabs/IslandMainPrefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/OCResources/Prefabs/BuildingSystem/Prefabs/IslandMainPrefab.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/GameScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/GameScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/wp/Mainland.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/wp/Mainland.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sirenix.OdinInspector.Modules.UnityMathematics.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Sirenix.OdinInspector.Modules.UnityMathematics.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Unity.AssetBundleBrowser.Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Unity.AssetBundleBrowser.Editor.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/yl/yl.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/yl/yl.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/Building/ResonanceWheel/UI/BeastPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/Building/ResonanceWheel/UI/BeastPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/InventorySystem/UI/UIInfiniteInventory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/InventorySystem/UI/UIInfiniteInventory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/IslandBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/IslandBase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/IslandManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/IslandManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/Manager/LocalGameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/Manager/LocalGameManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/TechTree/TechTreeManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/TechTree/TechTreeManager.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +43,7 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0ac2e88b7fe94e2890c926b6a574e5886200/78/2d9f789f/AssetBundle.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9b9fa26e86114fcba20da47317e725fe172c00/d9/5928a646/Transform.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9b9fa26e86114fcba20da47317e725fe172c00/e0/2dfe42da/AsyncOperation.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9b9fa26e86114fcba20da47317e725fe172c00/f4/4d115c28/Vector3.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3ea01e77be99618395f448b16bd7cc2bd4248bd9e5d8474964b2d97f39c5d74/System.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d44b17e136d09081da1e8fd0e8c83fde60e11818b9f2442d7ed8cb733fae895e/System.Collections.Generic.cs" root0="SKIP_HIGHLIGHTING" />
@@ -52,7 +70,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "WeiPeng",
+    "git-widget-placeholder": "yangLeNew",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
@@ -184,6 +202,7 @@
       <workItem from="1707239389645" duration="3522000" />
       <workItem from="1707284796327" duration="2479000" />
       <workItem from="1708611170205" duration="617000" />
+      <workItem from="1709863371495" duration="17281000" />
     </task>
     <servers />
   </component>

@@ -1,37 +1,32 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
-using ML.Engine.Manager;
-using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 
 namespace ProjectOC.LandMassExpand
 {
-    public class IslandManager : MonoBehaviour, ML.Engine.Manager.LocalManager.ILocalManager
+    public class IslandManager :  ML.Engine.Manager.LocalManager.ILocalManager
     {
-        [SerializeField] 
         public IslandBase currentIsland;
-        private void Awake()
-        {
-            islandGrids = new IslandBase[maxSize.x,maxSize.y];
-        }
-
-        private void Start()
-        {
-            GameManager.Instance.RegisterLocalManager(this);
-            this.enabled = false;
-        }
         
-        [LabelText("单个网格大小")]
+
         public int mapGridSize;
-        [LabelText("大地图网格范围")]
         public Vector2Int maxSize;
-        [SerializeField,LabelText("主岛屿")]
         private List<IslandMain> islandMains;
         public IslandBase[,] islandGrids;
+        
+        public void Init()
+        {
+            mapGridSize = 100;
+            maxSize = new Vector2Int(15, 15);
+            islandGrids = new IslandBase[maxSize.x,maxSize.y];
+            IslandBase mainIsland = GameObject.Find("IslandMainPrefab").GetComponent<IslandBase>();
+            currentIsland = mainIsland;
+            islandMains = new List<IslandMain>();
+            islandMains.Add(mainIsland as IslandMain);
+        }
+        
         bool UnlockIsland(int island_Index)
         {
             return true;
@@ -43,8 +38,7 @@ namespace ProjectOC.LandMassExpand
         {
             //to-do
         }
-        
-        [Button(name: "移动岛屿"),PropertyOrder(-1)]
+
         public void AllIslandMove()
         {
             foreach (var islandMain in islandMains)
@@ -53,11 +47,10 @@ namespace ProjectOC.LandMassExpand
             }
         }
         
-        void OnDrawGizmosSelected()
+        public void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.white;
             Gizmos.DrawWireCube(Vector3.zero,new Vector3(maxSize.x,0,maxSize.y)*mapGridSize);
-            
         }
     }
 }

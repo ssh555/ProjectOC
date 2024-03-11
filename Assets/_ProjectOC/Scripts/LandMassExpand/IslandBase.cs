@@ -169,6 +169,9 @@ namespace ProjectOC.LandMassExpand
         
         void OnDrawGizmosSelected()
         {
+            if (!Application.isPlaying)
+                return;
+            
             if(this.GetType() == typeof(IslandMain))
             {
                 Gizmos.color = Color.green;
