@@ -5,8 +5,6 @@ using ProjectOC.ManagerNS;
 using ProjectOC.ProNodeNS;
 using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,15 +24,6 @@ namespace ProjectOC.InventorySystem.UI
         private void Awake()
         {
             InitUITextContents();
-
-            //KeyTips
-            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
-            foreach (var item in UIKeyTipComponents)
-            {
-                uiKeyTipDic.Add(item.InputActionName, item);
-            }
-
-
             // TopTitle
             Text_Title = transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
 
@@ -110,6 +99,18 @@ namespace ProjectOC.InventorySystem.UI
             IsInit = true;
             Refresh();
         }
+
+        protected override void Start()
+        {
+            //KeyTips
+            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
+            foreach (var item in UIKeyTipComponents)
+            {
+                uiKeyTipDic.Add(item.InputActionName, item);
+            }
+            base.Start();
+        }
+
         #endregion
 
         #region Override
@@ -1579,8 +1580,6 @@ namespace ProjectOC.InventorySystem.UI
         {
             ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ProNodePanel>("OC/Json/TextContent/ProNode", "ProNodePanel", (datas) =>
             {
-                Refresh();
-                this.enabled = false;
             }, "UI生产节点Panel数据");
             ABJAProcessor.StartLoadJsonAssetData();
         }

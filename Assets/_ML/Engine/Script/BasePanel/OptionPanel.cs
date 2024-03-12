@@ -142,27 +142,19 @@ namespace ML.Engine.UI
 
             if (angle < 45 || angle > 315)
             {
-                this.CurSelected.SelectedExit();
-                this.CurSelected = this.CurSelected.UpUI;
-                this.CurSelected.SelectedEnter();
+                this.UIBtnList.MoveUPIUISelected();
             }  
             else if (angle > 45 && angle < 135)
             {
-                this.CurSelected.SelectedExit();
-                this.CurSelected = this.CurSelected.RightUI;
-                this.CurSelected.SelectedEnter();
+                this.UIBtnList.MoveRightIUISelected();
             }
             else if (angle > 135 && angle < 225)
             {
-                this.CurSelected.SelectedExit();
-                this.CurSelected = this.CurSelected.DownUI;
-                this.CurSelected.SelectedEnter();
+                this.UIBtnList.MoveDownIUISelected();
             }
             else if (angle > 225 && angle < 315)
             {
-                this.CurSelected.SelectedExit();
-                this.CurSelected = this.CurSelected.LeftUI;
-                this.CurSelected.SelectedEnter();
+                this.UIBtnList.MoveLeftIUISelected();
             }
         }
 
@@ -173,7 +165,8 @@ namespace ML.Engine.UI
 
         private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            this.CurSelected.Interact();
+            //this.CurSelected.Interact();
+            this.UIBtnList.GetCurSelected().Interact();
         }
         #endregion
 
@@ -254,79 +247,59 @@ namespace ML.Engine.UI
 
 
         private Transform btnList;
-        private List<UISelectedButtonComponent> BtnComponents = new List<UISelectedButtonComponent>();
-        private IUISelected CurSelected;
+        private UIBtnList UIBtnList; 
         private void InitBtnData(OptionPanelStruct datas)
         {
+            UIBtnList = new UIBtnList(parent: btnList, limitNum: gridLayout.constraintCount, BtnType: 2);
             foreach (var tt in datas.Btns)
             {
-                var btn = new UISelectedButtonComponent(btnList, tt.name);
-                btn.textMeshProUGUI.text = tt.description.GetText();
-                this.BtnComponents.Add(btn);
+                this.UIBtnList.SetBtnText(tt.name, tt.description.GetText());
             }
 
             //GraphicBtn
-            this.BtnComponents[0].selectedButton.OnInteract += () =>
-            {
-                
-            };
+            this.UIBtnList.SetBtnAction("GraphicBtn",
+            () =>
+                {
+                    Debug.Log("GraphicBtn");
+                }
+            );
             //AudioBtn
-            this.BtnComponents[1].selectedButton.OnInteract += () =>
+            this.UIBtnList.SetBtnAction("AudioBtn",
+            () =>
             {
-
-            };
+                Debug.Log("AudioBtn");
+            }
+            );
             //ControllerBtn
-            this.BtnComponents[2].selectedButton.OnInteract += () =>
+            this.UIBtnList.SetBtnAction("ControllerBtn",
+            () =>
             {
-
-            };
+                Debug.Log("ControllerBtn");
+            }
+            );
             //TutorialBtn
-            this.BtnComponents[3].selectedButton.OnInteract += () =>
+            this.UIBtnList.SetBtnAction("TutorialBtn",
+            () =>
             {
-
-            };
+                Debug.Log("TutorialBtn");
+            }
+            );
             //BackBtn
-            this.BtnComponents[3].selectedButton.OnInteract += () =>
+            this.UIBtnList.SetBtnAction("BackBtn",
+            () =>
             {
-
-            };
+                Debug.Log("BackBtn");
+            }
+            );
             //QuitGameBtn
-            this.BtnComponents[3].selectedButton.OnInteract += () =>
+            this.UIBtnList.SetBtnAction("QuitGameBtn",
+            () =>
             {
-
-            };
-
-            var btns = btnList.GetComponentsInChildren<SelectedButton>();
-            int ConstraintCount = gridLayout.constraintCount;
-            for (int i = 0; i < btns.Length; ++i)
-            {
-                int last = (i - 1 + btns.Length) % btns.Length;
-                int next = (i + 1 + btns.Length) % btns.Length;
-
-                btns[i].UpUI = i - ConstraintCount >= 0 ? btns[i - ConstraintCount] : btns[i - ConstraintCount + btns.Length];
-                btns[i].DownUI = i + ConstraintCount < btns.Length ? btns[i + ConstraintCount] : btns[i + ConstraintCount - btns.Length];
-                btns[i].RightUI = i % ConstraintCount + 1 < ConstraintCount ? btns[i + 1] : btns[i / ConstraintCount * ConstraintCount];
-                btns[i].LeftUI = i % ConstraintCount - 1 >= 0 ? btns[i - 1] : btns[i / ConstraintCount * ConstraintCount + ConstraintCount - 1];
+                Debug.Log("QuitGameBtn");
             }
-
-            foreach (var btn in btns)
-            {
-                btn.OnSelectedEnter += () =>
-                {
-                    btn.transform.Find("Selected").gameObject.SetActive(true);
-                };
-                btn.OnSelectedExit += () =>
-                {
-                    btn.transform.Find("Selected").gameObject.SetActive(false);
-                };
-            }
-
-            this.CurSelected = this.BtnComponents[0].selectedButton;
-            this.CurSelected.SelectedEnter();
+            );
+ 
         }
-
-
-
         #endregion
 
 

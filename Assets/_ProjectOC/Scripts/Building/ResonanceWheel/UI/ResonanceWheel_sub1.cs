@@ -1,27 +1,13 @@
-using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.Input;
-using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
-using Newtonsoft.Json;
-using ProjectOC.Player;
-using ProjectOC.ProNodeNS;
 using ProjectOC.WorkerEchoNS;
 using ProjectOC.WorkerNS;
-using Sirenix.OdinInspector;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using Unity.Burst.CompilerServices;
-using Unity.VisualScripting;
-
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Purchasing;
-using UnityEngine.Rendering;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.U2D;
 using UnityEngine.UI;
@@ -36,13 +22,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private void Awake()
         {
             InitUITexture2D();
-
-            //KeyTips
-            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
-            foreach (var item in UIKeyTipComponents)
-            {
-                uiKeyTipDic.Add(item.InputActionName, item);
-            }
 
             //BeastInfo
             var Info1 = this.transform.Find("HiddenBeastInfo1").Find("Info");
@@ -70,11 +49,15 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
         protected override void Start()
         {
-
+            //KeyTips
+            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
+            foreach (var item in UIKeyTipComponents)
+            {
+                uiKeyTipDic.Add(item.InputActionName, item);
+            }
 
             IsInit = true;
             Refresh();
-
             base.Start();
         }
 

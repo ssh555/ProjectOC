@@ -1,31 +1,16 @@
-using ML.Engine.ABResources;
-using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.Input;
 using ML.Engine.InventorySystem;
-using ML.Engine.Level;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.Timer;
 using ML.Engine.UI;
-using Newtonsoft.Json;
 using ProjectOC.Player;
-using ProjectOC.TechTree.UI;
 using ProjectOC.WorkerEchoNS;
-using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using TMPro;
-using Unity.Burst.CompilerServices;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Purchasing;
-using UnityEngine.Rendering;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.U2D;
 using UnityEngine.UI;
@@ -47,25 +32,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             workerEcho = (GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
 
-
-            this.GetComponent<ResonanceWheelUI>().enabled = true;
             InitUITexture2D();
             InitUITextContents();
-
-
-            //KeyTips
-            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
-            foreach (var item in UIKeyTipComponents)
-            {
-                uiKeyTipDic.Add(item.InputActionName, item);
-            }
-
 
             //exclusivePart
             exclusivePart = this.transform.Find("ExclusivePart");
             exclusivePart.gameObject.SetActive(true);
-
-
 
             // TopPart
             TopTitleText = this.transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
@@ -110,16 +82,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
         protected override void Start()
         {
-
-
-
-            
-            //sub1
-
-
             IsInit = true;
             Refresh();
-
             base.Start();
         }
 
@@ -603,8 +567,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region UI对象引用
-        private UIKeyTipComponent[] UIKeyTipComponents;
-
         public WorkerEcho workerEcho;
         public ResonanceWheel_sub1 resonanceWheel_Sub1;//详细隐兽界面 prefab
         public ResonanceWheel_sub2 resonanceWheel_Sub2;//随机选择隐兽界面 prefab
@@ -671,30 +633,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             {
                 return;
             }
-
-
-            if (UikeyTipIsInit == false)
-            {
-                KeyTip[] keyTips = inputManager.ExportKeyTipValues(PanelTextContent_Main);
-                foreach (var keyTip in keyTips)
-                {
-                    InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
-                    inputManager.GetInputActionBindText(inputAction);
-
-                    UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
-                    if (uIKeyTipComponent.keytip != null)
-                    {
-                        uIKeyTipComponent.keytip.text = inputManager.GetInputActionBindText(inputAction);
-                    }
-                    if (uIKeyTipComponent.description != null)
-                    {
-                        uIKeyTipComponent.description.text = keyTip.description.GetText();
-                    }
-
-                }
-                UikeyTipIsInit = true;
-            }
-
 
             #region TopPart
             TopTitleText.text = PanelTextContent_Main.toptitle;
@@ -946,24 +884,36 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             ABJAProcessorJson_Main = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheelPanel>("OC/Json/TextContent/ResonanceWheel", "ResonanceWheelPanel", (datas) =>
             {
-                Refresh();
-                this.enabled = false;
+                InitKeyTip();
             }, "UI共鸣轮Panel_Main数据");
             ABJAProcessorJson_Main.StartLoadJsonAssetData();
 
             ABJAProcessorJson_sub1 = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub1Struct>("OC/Json/TextContent/ResonanceWheel", "ResonanceWheel_sub1", (datas) =>
             {
-                Refresh();
-                this.enabled = false;
             }, "UI共鸣轮Panel_sub1数据");
             ABJAProcessorJson_sub1.StartLoadJsonAssetData();
 
             ABJAProcessorJson_sub2 = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub2Struct>("OC/Json/TextContent/ResonanceWheel", "ResonanceWheel_sub2", (datas) =>
             {
-                Refresh();
-                this.enabled = false;
             }, "UI共鸣轮Panel_sub2数据");
             ABJAProcessorJson_sub2.StartLoadJsonAssetData();
+        }
+        private UIKeyTipList UIKeyTipList;
+        private void InitKeyTip()
+        {
+            UIKeyTipList = new UIKeyTipList(transform);
+
+
+            KeyTip[] keyTips = inputManager.ExportKeyTipValues(PanelTextContent_Main);
+            foreach (var keyTip in keyTips)
+            {
+                InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
+                inputManager.GetInputActionBindText(inputAction);
+
+                this.UIKeyTipList.SetKeyTiptext(keyTip.keyname, inputManager.GetInputActionBindText(inputAction));
+                this.UIKeyTipList.SetDescriptiontext(keyTip.keyname, keyTip.description.GetText());
+            }
+
         }
         #endregion
 

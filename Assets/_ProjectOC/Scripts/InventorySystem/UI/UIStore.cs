@@ -2,15 +2,11 @@ using ML.Engine.InventorySystem;
 using ML.Engine.TextContent;
 using ProjectOC.StoreNS;
 using Sirenix.OdinInspector;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using ML.Engine.Extension;
 using ML.Engine.InventorySystem.CompositeSystem;
-using UnityEngine.Purchasing;
-using ProjectOC.ProNodeNS;
 using ML.Engine.UI;
 using ML.Engine.Manager;
 using ML.Engine.Input;
@@ -26,12 +22,7 @@ namespace ProjectOC.InventorySystem.UI
         {
             InitUITextContents();
 
-            //KeyTips
-            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
-            foreach (var item in UIKeyTipComponents)
-            {
-                uiKeyTipDic.Add(item.InputActionName, item);
-            }
+
 
             #region TopTitle
             Text_Title = transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
@@ -87,6 +78,16 @@ namespace ProjectOC.InventorySystem.UI
             CurPriority = MissionNS.TransportPriority.Normal;
             IsInit = true;
             Refresh();
+        }
+        protected override void Start()
+        {
+            //KeyTips
+            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
+            foreach (var item in UIKeyTipComponents)
+            {
+                uiKeyTipDic.Add(item.InputActionName, item);
+            }
+            base.Start();
         }
         #endregion
 
@@ -1098,8 +1099,6 @@ namespace ProjectOC.InventorySystem.UI
         {
             ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StorePanel>("OC/Json/TextContent/Store", "StorePanel", (datas) =>
             {
-                Refresh();
-                this.enabled = false;
             }, "UI²Ö¿âPanelÊý¾Ý");
             ABJAProcessor.StartLoadJsonAssetData();
         }

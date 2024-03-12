@@ -1,23 +1,12 @@
-using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.Input;
-using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
-using Newtonsoft.Json;
-using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using Unity.Burst.CompilerServices;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Purchasing;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheelUI;
 
@@ -30,13 +19,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void Awake()
         {
-            //KeyTips
-            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
-            foreach (var item in UIKeyTipComponents)
-            {
-                uiKeyTipDic.Add(item.InputActionName, item);
-            }
-
             //Ring
             var ringcontent = this.transform.Find("Ring").Find("Viewport").Find("Content");
 
@@ -65,16 +47,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         protected override void Start()
         {
 
-
-
-
-
+            //KeyTips
+            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
+            foreach (var item in UIKeyTipComponents)
+            {
+                uiKeyTipDic.Add(item.InputActionName, item);
+            }
             IsInit = true;
-
-          
-
             Refresh();
-
             base.Start();
         }
 

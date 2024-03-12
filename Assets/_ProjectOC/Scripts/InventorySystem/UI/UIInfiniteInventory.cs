@@ -36,12 +36,6 @@ namespace ProjectOC.InventorySystem.UI
         {
             InitUITextContents();
             LoadInventoryAtlas();
-            //KeyTips
-            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
-            foreach (var item in UIKeyTipComponents)
-            {
-                uiKeyTipDic.Add(item.InputActionName, item);
-            }
 
             // TopTitle
             TopTitleText = this.transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
@@ -76,6 +70,17 @@ namespace ProjectOC.InventorySystem.UI
 
             IsInit = true;
             Refresh();
+        }
+
+        protected override void Start()
+        {
+            //KeyTips
+            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
+            foreach (var item in UIKeyTipComponents)
+            {
+                uiKeyTipDic.Add(item.InputActionName, item);
+            }
+            base.Start();
         }
 
         private void OnDestroy()
@@ -707,8 +712,6 @@ namespace ProjectOC.InventorySystem.UI
         {
             ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<InventoryPanel>("OC/Json/TextContent/Inventory", "InventoryPanel", (datas) =>
             {
-                Refresh();
-                this.enabled = false;
             }, "UI±³°üPanelÊý¾Ý");
             ABJAProcessor.StartLoadJsonAssetData();
         }

@@ -1,14 +1,9 @@
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
-using Sirenix.OdinInspector;
-using System;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.UI;
-using static UnityEngine.Rendering.DebugUI;
+using Cysharp.Threading.Tasks;
 
 
 
@@ -36,10 +31,10 @@ namespace ML.Engine.UI
         }
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
         private List<AsyncOperationHandle<GameObject>> goHandle = new List<AsyncOperationHandle<GameObject>>();
-        private AsyncOperationHandle spriteAtlasHandle;
+        //private AsyncOperationHandle spriteAtlasHandle;
         private void OnDestroy()
         {
-            GM.ABResourceManager.Release(spriteAtlasHandle);
+            //GM.ABResourceManager.Release(spriteAtlasHandle);
             foreach (var handle in goHandle)
             {
                 GM.ABResourceManager.ReleaseInstance(handle);
@@ -143,15 +138,11 @@ namespace ML.Engine.UI
             var vec2 = obj.ReadValue<Vector2>();
             if (vec2.y > 0.1f)
             {
-                this.CurSelected.SelectedExit();
-                this.CurSelected = this.CurSelected.UpUI;
-                this.CurSelected.SelectedEnter();
+                this.UIBtnList.MoveUPIUISelected();
             }
             else if (vec2.y < -0.1f)
             {
-                this.CurSelected.SelectedExit();
-                this.CurSelected = this.CurSelected.DownUI;
-                this.CurSelected.SelectedEnter();
+                this.UIBtnList.MoveDownIUISelected();
             }
         }
 
@@ -162,7 +153,7 @@ namespace ML.Engine.UI
 
         private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            this.CurSelected.Interact();
+            this.UIBtnList.GetCurSelected().Interact();
         }
         #endregion
 
@@ -214,20 +205,19 @@ namespace ML.Engine.UI
         }
 
         private Transform btnList;
-        private List<UISelectedButtonComponent> BtnComponents = new List<UISelectedButtonComponent>();
-        private IUISelected CurSelected;
+        private UIBtnList UIBtnList;
         private void InitBtnData(StartMenuPanelStruct datas)
         {
+            UIBtnList = new UIBtnList(parent: btnList, BtnType: 1);
             foreach (var tt in datas.Btns)
             {
-                var btn = new UISelectedButtonComponent(btnList, tt.name);
-                btn.textMeshProUGUI.text = tt.description.GetText();
-                this.BtnComponents.Add(btn);
+                this.UIBtnList.SetBtnText(tt.name, tt.description.GetText());
             }
 
             //NewGameBtn
-            this.BtnComponents[0].selectedButton.OnInteract += () =>
-            {                               
+            this.UIBtnList.SetBtnAction("NewGameBtn",
+            () =>
+            {
                 UIBasePanel panel = null;
                 System.Action<string, string> preCallback = (string s1, string s2) =>
                 {
@@ -246,7 +236,7 @@ namespace ML.Engine.UI
                 };
                 System.Action<string, string> postCallback = async (string s1, string s2) =>
                 {
-                    await System.Threading.Tasks.Task.Run(() =>
+                    await UniTask.RunOnThreadPool(() =>
                     {
                         while (panel == null) ;
                     });
@@ -254,16 +244,21 @@ namespace ML.Engine.UI
                 };
                 GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("GameScene", preCallback, postCallback, true));
                 this.OnExit();
-            };
+            }
+            );
+
             //ContinueGameBtn
-            this.BtnComponents[1].selectedButton.OnInteract += () =>
+            this.UIBtnList.SetBtnAction("ContinueGameBtn",
+            () =>
             {
+                Debug.Log("ContinueGameBtn");
+            }
+            );
 
-            };
             //OptionBtn
-            this.BtnComponents[2].selectedButton.OnInteract += () =>
+            this.UIBtnList.SetBtnAction("OptionBtn",
+            () =>
             {
-
                 GameManager.Instance.EnterPoint.GetOptionPanelInstance().Completed += (handle) =>
                 {
                     // 实例化
@@ -273,53 +268,19 @@ namespace ML.Engine.UI
 
                     GameManager.Instance.UIManager.PushPanel(panel);
                 };
-            };
+            }
+            );
             //QuitGameBtn
-            this.BtnComponents[3].selectedButton.OnInteract += () =>
+            this.UIBtnList.SetBtnAction("QuitGameBtn",
+            () =>
             {
-
-            };
-
-
-            //SelectedButton初始化在Awake
-            var btns = btnList.GetComponentsInChildren<SelectedButton>();
-
-            for (int i = 0; i < btns.Length; ++i)
-            {
-                int last = (i - 1 + btns.Length) % btns.Length;
-                int next = (i + 1 + btns.Length) % btns.Length;
-
-                btns[i].UpUI = btns[last];
-                btns[i].DownUI = btns[next];
+                Debug.Log("QuitGameBtn");
             }
+            );
 
-            foreach (var btn in btns)
-            {
-                btn.OnSelectedEnter += () => { btn.image.color = Color.red; };
-                btn.OnSelectedExit += () => { btn.image.color = Color.white; };
-            }
-
-
-            this.CurSelected = this.BtnComponents[0].selectedButton;
-            this.CurSelected.SelectedEnter();
         }
 
         #endregion
-
-        #region Prefab
-        /*        private GameObject LoadingScenePanelPrefab;
-                private void InitPrefabs()
-                {
-                    GM.EnterPoint.GetLoadingScenePanelInstance().Completed += (handle) =>
-                    {
-                        this.goHandle.Add(handle);
-                        this.LoadingScenePanelPrefab = handle.Result;
-
-                    };
-                }*/
-
-        #endregion
-
     }
 
 }

@@ -8,12 +8,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
-using UnityEngine.Purchasing;
 using ML.Engine.InventorySystem;
 using ML.Engine.Timer;
 using ML.Engine.InventorySystem.CompositeSystem;
-using BehaviorDesigner.Runtime.Tasks.Movement;
-using UnityEngine.Audio;
 using ML.Engine.Manager;
 using ML.Engine.Input;
 using UnityEngine.InputSystem;
@@ -192,13 +189,6 @@ namespace ProjectOC.TechTree.UI
         #region Unity
         private void Awake()
         {
-            //KeyTips
-            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
-            foreach (var item in UIKeyTipComponents)
-            {
-                uiKeyTipDic.Add(item.InputActionName, item);
-            }
-
             topTitle = this.transform.Find("TopPanel").GetComponentInChildren<TextMeshProUGUI>();
 
             Transform ContentPanel = this.transform.Find("ContentPanel");
@@ -243,6 +233,17 @@ namespace ProjectOC.TechTree.UI
             this.TPUnlockingProgressBar = this.TPUnlockingState.Find("ProgressBar").GetComponent<Slider>();
             this.TPUnlockingState.gameObject.SetActive(false);
             #endregion
+        }
+
+        protected override void Start()
+        {
+            //KeyTips
+            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
+            foreach (var item in UIKeyTipComponents)
+            {
+                uiKeyTipDic.Add(item.InputActionName, item);
+            }
+            base.Start();
         }
 
 

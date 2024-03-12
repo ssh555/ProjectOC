@@ -1,17 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.UI;
 using Sirenix.OdinInspector;
-using UnityEngine.UI;
-using TMPro;
 using ML.Engine.TextContent;
-using Unity.VisualScripting;
-using Newtonsoft.Json;
 using UnityEngine.ResourceManagement.AsyncOperations;
-
+using Cysharp.Threading.Tasks;
 namespace ML.Engine.BuildingSystem
 {
 
@@ -82,7 +76,7 @@ namespace ML.Engine.BuildingSystem
 
         [ShowInInspector]
         private RectTransform Canvas => Manager.GameManager.Instance.UIManager.GetCanvas.GetComponent<RectTransform>();
-        public async System.Threading.Tasks.Task<T> GetPanel<T>() where T : UIBasePanel
+        public async UniTask<T> GetPanel<T>() where T : UIBasePanel
         {
             var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(UIPanelABPath + "/" + typeof(T).Name + ".prefab");
             await handle.Task;

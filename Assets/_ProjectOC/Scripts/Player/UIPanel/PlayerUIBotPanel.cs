@@ -21,15 +21,7 @@ namespace ProjectOC.Player.UI
         public PlayerCharacter player;
         private void Awake()
         {
-
-
-            
-
-            
             IsInit = true;
-
-
-
             Refresh();
         }
 
@@ -70,12 +62,6 @@ namespace ProjectOC.Player.UI
         }
 
         #endregion
-
-
-
-
-
-
 
         #region Internal
 
@@ -191,11 +177,6 @@ namespace ProjectOC.Player.UI
         #region UI对象引用
 
         private IUISelected CurSelected;
-
-        private UISelectedButtonComponent NewGameBtn;
-        private UISelectedButtonComponent ContinueGameBtn;
-        private UISelectedButtonComponent OptionBtn;
-        private UISelectedButtonComponent QuitGameBtn;
 
         private TMPro.TextMeshProUGUI NewGameBtnText;
         private TMPro.TextMeshProUGUI ContinueGameBtnText;

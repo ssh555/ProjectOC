@@ -72,8 +72,6 @@ namespace ML.Engine.Timer
 
             lock (destroyCounterDownTimers as System.Object)
             {
-                /*if(destroyCounterDownTimers.Count>0)
-                    Debug.Log("destroyCounterDownTimersCount " + destroyCounterDownTimers.Count + " " + Time.frameCount);*/
                 foreach (var item in destroyCounterDownTimers)
                 {
                     if (fixedCounterDownTimers.Contains(item))
@@ -86,18 +84,9 @@ namespace ML.Engine.Timer
                     }
                     else if (this.realCounterDownTimers.Contains(item))
                     {
-                        //Debug.Log("destroyrealCounterDownTimers " + item.GetHashCode() + " " + Time.frameCount);
                         this.realCounterDownTimers.Remove(item);
                     }
-                    /*else if(!this.realCounterDownTimers.Contains(item))
-                    {
-                        Debug.Log("dontContainsitem " + item.GetHashCode() + " " + Time.frameCount);
-                    }*/
                 }
-                /*if (destroyCounterDownTimers.Count > 0)
-                    Debug.Log("realCounterDownTimers " + realCounterDownTimers.Count + " " + Time.frameCount);*/
-
-
                 destroyCounterDownTimers.Clear();
             }
             
@@ -113,12 +102,14 @@ namespace ML.Engine.Timer
         /// <param name="tType"></param>
         public void AddTimer(CounterDownTimer countDownTimer, int tType)
         {
-            /*if (tType == 2)
-                Debug.Log("AddTimer " + countDownTimer.GetHashCode() + " " + Time.frameCount);*/
-            if (this.destroyCounterDownTimers.Contains(countDownTimer))
+            lock(destroyCounterDownTimers)
             {
-                destroyCounterDownTimers.Remove(countDownTimer);
+                if (this.destroyCounterDownTimers.Contains(countDownTimer))
+                {
+                    destroyCounterDownTimers.Remove(countDownTimer);
+                }
             }
+
             if (tType == 0)
             {
                 if(!this.fixedCounterDownTimers.Contains(countDownTimer))
@@ -138,7 +129,6 @@ namespace ML.Engine.Timer
                 
                 if (!this.realCounterDownTimers.Contains(countDownTimer))
                 {
-                    //Debug.Log("AddrealCounterDownTimers " + countDownTimer.GetHashCode() + " " + Time.frameCount);
                     this.realCounterDownTimers.Add(countDownTimer);
                 }
             }
@@ -152,13 +142,11 @@ namespace ML.Engine.Timer
                 lock(destroyCounterDownTimers as System.Object)
                 {
                     this.destroyCounterDownTimers.Add(countDownTimer);
-                    //Debug.Log("RemoveTimer true " + countDownTimer.GetHashCode() + " " + Time.frameCount);
                     return true;
                 }
-                
             }
-            //Debug.Log("RemoveTimer false " + countDownTimer.GetHashCode() + " " + Time.frameCount);
             return false;
         }
+
     }
 }
