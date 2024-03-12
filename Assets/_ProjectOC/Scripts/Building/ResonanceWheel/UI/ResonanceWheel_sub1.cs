@@ -249,12 +249,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             if (UikeyTipIsInit == false)
             {
-                KeyTip[] keyTips = inputManager.ExportKeyTipValues(this.parentUI.ABJAProcessorJson_sub1);
+                
+                KeyTip[] keyTips = inputManager.ExportKeyTipValues(this.parentUI.PanelTextContent_sub1);
                 foreach (var keyTip in keyTips)
                 {
                     InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
-                    inputManager.GetInputActionBindText(inputAction);
-
                     UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
                     if (uIKeyTipComponent.keytip != null)
                     {
@@ -264,7 +263,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     {
                         uIKeyTipComponent.description.text = keyTip.description.GetText();
                     }
-
                 }
                 UikeyTipIsInit = true;
             }

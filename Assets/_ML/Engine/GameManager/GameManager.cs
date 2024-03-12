@@ -49,6 +49,7 @@ namespace ML.Engine.Manager
         /// </summary>
         public Input.InputManager InputManager { get; private set; }
 
+        public SaveSystem.SaveManager SaveManager { get; private set; }
 
         public EnterPoint EnterPoint { get; private set; }
         #endregion
@@ -86,6 +87,8 @@ namespace ML.Engine.Manager
 
             this.UIManager = this.RegisterGlobalManager<UI.UIManager>();
             this.InputManager = this.RegisterGlobalManager<Input.InputManager>();
+
+            this.SaveManager = this.RegisterGlobalManager<SaveSystem.SaveManager>();
         }
         
         private void OnDestroy()

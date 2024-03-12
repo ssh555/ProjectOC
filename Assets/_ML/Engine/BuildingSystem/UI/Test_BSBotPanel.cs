@@ -24,7 +24,7 @@ namespace ML.Engine.BuildingSystem.UI
             enterbuild.img = enterbuild.root.Find("Image").GetComponent<Image>();
             enterbuild.keytip = enterbuild.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             enterbuild.description = enterbuild.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            enterbuild.ReWrite(MonoBuildingManager.Instance.KeyTipDict["enterbuild"]);
+            enterbuild.ReWrite(Manager.GameManager.Instance.GetLocalManager<MonoBuildingManager>().KeyTipDict["enterbuild"]);
         }
 
         public override void OnExit()

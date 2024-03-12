@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using ML.Engine.BuildingSystem;
 using ProjectOC.MissionNS;
 using UnityEngine;
 using ProjectOC.WorkerNS;
@@ -10,6 +12,7 @@ using ML.Engine.InventorySystem;
 using ProjectOC.LandMassExpand;
 using Sirenix.OdinInspector;
 using ML.Engine.UI;
+using ProjectOC.TechTree;
 
 namespace ProjectOC.ManagerNS
 {
@@ -32,6 +35,9 @@ namespace ProjectOC.ManagerNS
         public NavMeshManager NavMeshManager { get; private set; }
         public BuildPowerIslandManager BuildPowerIslandManager { get; private set; }
         public IslandManager IslandManager { get; private set; }
+        public MonoBuildingManager MonoBuildingManager { get; private set; }
+        public TechTreeManager TechTreeManager { get; private set; }
+        
         /// <summary>
         /// 单例管理
         /// </summary>
@@ -43,12 +49,7 @@ namespace ProjectOC.ManagerNS
                 return;
             }
             Instance = this;
-        }
-        /// <summary>
-        /// 数据载入初始化
-        /// </summary>
-        private void Start()
-        {
+            
             GM.RegisterLocalManager(this);
             DispatchTimeManager = GM.RegisterLocalManager<DispatchTimeManager>();
             DispatchTimeManager.Init();
@@ -68,12 +69,14 @@ namespace ProjectOC.ManagerNS
             SkillManager.LoadTableData();
             WorkerEchoManager = GM.RegisterLocalManager<WorkerEchoManager>();
             WorkerEchoManager.LoadTableData();
+            MonoBuildingManager = GM.RegisterLocalManager<MonoBuildingManager>();
+            TechTreeManager = GM.RegisterLocalManager<TechTreeManager>();
             NavMeshManager = GM.RegisterLocalManager<NavMeshManager>();
             IslandManager = GM.RegisterLocalManager<IslandManager>();
             BuildPowerIslandManager = GM.RegisterLocalManager<BuildPowerIslandManager>();
-            StartCoroutine(DelayStart());
             this.enabled = false;
         }
+
         private void OnDestroy()
         {
             if (Instance == this)
@@ -95,11 +98,14 @@ namespace ProjectOC.ManagerNS
                 Instance = null;
             }
         }
+        
 
-        IEnumerator DelayStart()
+        private void OnDrawGizmosSelected()
         {
-            yield return null;
-            NavMeshManager.DelayInit();
+            if (Application.isPlaying)
+            {
+                IslandManager.OnDrawGizmosSelected();       
+            }
         }
     }
 }

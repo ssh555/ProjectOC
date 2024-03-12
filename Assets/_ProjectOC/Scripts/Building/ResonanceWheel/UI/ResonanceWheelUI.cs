@@ -810,20 +810,19 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                     foreach (var item in GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRaw(cb))
                     {
-                        GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/Slot.prefab", Consumables).Completed += (handle) =>
-                        {
-                            this.goHandle.Add(handle);
-                            var descriptionPrefab = handle.Result;
-                            int needNum = item.num;
-                            int haveNum = this.inventory.GetItemAllNum(item.id);
-                            descriptionPrefab.transform.Find("ItemNumber").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = needNum.ToString() + "/" + haveNum.ToString();
-                            if (needNum > haveNum)
-                            {
-                                descriptionPrefab.transform.Find("ItemNumber").Find("Background").GetComponent<Image>().color = UnityEngine.Color.red;
-                            }
 
-                            descriptionPrefab.transform.Find("ItemName").GetComponent<TMPro.TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(item.id);
-                        };
+                        var tPrefab = GameObject.Instantiate(this.SlotPrefab, Consumables);
+                        int needNum = item.num;
+                        // TODO
+                        int haveNum = this.inventory.GetItemAllNum(item.id);
+                        tPrefab.transform.Find("ItemNumber").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = needNum.ToString() + "/" + haveNum.ToString();
+                        if (needNum > haveNum)
+                        {
+                            tPrefab.transform.Find("ItemNumber").Find("Background").GetComponent<Image>().color = UnityEngine.Color.red;
+                        }
+
+                        tPrefab.transform.Find("ItemName").GetComponent<TMPro.TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(item.id);
+
 
                     }
                 }
@@ -938,6 +937,20 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 beastTypeDic.Add(BeastType.WorkerEcho_Rabbit, resonanceAtlas.GetSprite("Rabbit"));
                 beastTypeDic.Add(BeastType.WorkerEcho_Seal, resonanceAtlas.GetSprite("Seal"));
                 beastTypeDic.Add(BeastType.WorkerEcho_Random, resonanceAtlas.GetSprite("Random"));
+            };
+        }
+
+        #endregion
+
+        #region Prefabs
+        private GameObject SlotPrefab;
+
+        private void InitPrefabs()
+        {
+            GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/Slot.prefab").Completed += (handle) =>
+            {
+                this.goHandle.Add(handle);
+                this.SlotPrefab = handle.Result;
             };
         }
 

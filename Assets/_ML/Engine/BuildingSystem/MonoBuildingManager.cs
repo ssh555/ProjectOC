@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.Manager;
 using ML.Engine.UI;
 using Sirenix.OdinInspector;
 using ML.Engine.TextContent;
@@ -10,10 +11,9 @@ namespace ML.Engine.BuildingSystem
 {
 
 
-    public class MonoBuildingManager : MonoBehaviour
+    public class MonoBuildingManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         #region Property|Field
-        public static MonoBuildingManager Instance;
         public BuildingManager BM;
         private int IsInit = 5;
         /// <summary>
@@ -109,21 +109,10 @@ namespace ML.Engine.BuildingSystem
             return Manager.GameManager.Instance.UIManager.GetTopUIPanel();
         }
 
-        private void Awake()
+        public MonoBuildingManager()
         {
-            if(Instance != null)
-            {
-                Manager.GameManager.DestroyObj(this.gameObject);
-            }
-            Instance = this;
-        }
-
-        void Start()
-        {
-            ML.Engine.Manager.GameManager.Instance.RegisterLocalManager(BM);
-
+            BM = ML.Engine.Manager.GameManager.Instance.RegisterLocalManager<BuildingManager>();
             RegisterBPartPrefab();
-
             InitUITextContents();
         }
 
@@ -147,7 +136,6 @@ namespace ML.Engine.BuildingSystem
                         if (IsAddBPartOnRegister)
                         {
                             BM.RegisterBPartPrefab(bpart);
-
                         }
 #endif
                     }
@@ -160,14 +148,10 @@ namespace ML.Engine.BuildingSystem
             };
         }
 
-        private void OnDestroy()
+        ~MonoBuildingManager()
         {
-            if(Instance == this)
-            {
-                Instance = null;
-                if(Manager.GameManager.Instance != null)
-                    Manager.GameManager.Instance.ABResourceManager.Release(BPartHandle);
-            }
+            if(Manager.GameManager.Instance != null)
+                Manager.GameManager.Instance.ABResourceManager.Release(BPartHandle);
         }
 
         #endregion

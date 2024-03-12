@@ -108,13 +108,13 @@ namespace ProjectOC.Player.UI
         {
 
 
-            //ÇÐ»»°´Å¥
+            //ï¿½Ð»ï¿½ï¿½ï¿½Å¥
             ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn.started -= SwichBtn_started;
 
-            //È·ÈÏ
+            //È·ï¿½ï¿½
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
 
-            // ·µ»Ø
+            // ï¿½ï¿½ï¿½ï¿½
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
 
 
@@ -124,13 +124,13 @@ namespace ProjectOC.Player.UI
         private void RegisterInput()
         {
 
-            //ÇÐ»»°´Å¥
+            //ï¿½Ð»ï¿½ï¿½ï¿½Å¥
             ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn.started += SwichBtn_started;
 
-            //È·ÈÏ
+            //È·ï¿½ï¿½
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
 
-            // ·µ»Ø
+            // ï¿½ï¿½ï¿½ï¿½
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
 
         }
@@ -169,7 +169,7 @@ namespace ProjectOC.Player.UI
 
         #endregion
 
-        #region UI¶ÔÏóÒýÓÃ
+        #region UIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         public PlayerCharacter player;
         private BuildingManager BM => BuildingManager.Instance;
         #endregion
@@ -201,7 +201,7 @@ namespace ProjectOC.Player.UI
             {
                 InitBtnData(datas);
 
-            }, "PlayerUIPanelÊý¾Ý");
+            }, "PlayerUIPanelï¿½ï¿½ï¿½ï¿½");
             ABJAProcessorJson_PlayerUIPanelPanel.StartLoadJsonAssetData();
 
         }
@@ -228,7 +228,7 @@ namespace ProjectOC.Player.UI
                     }
                     else
                     {
-                        Debug.LogWarning("µ±Ç°½¨ÖþÎïÊýÁ¿Îª0£¬ÎÞ·¨½øÈë½¨ÔìÄ£Ê½!");
+                        Debug.LogWarning("ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª0ï¿½ï¿½ï¿½Þ·ï¿½ï¿½ï¿½ï¿½ë½¨ï¿½ï¿½Ä£Ê½!");
                     }
                 }
             }

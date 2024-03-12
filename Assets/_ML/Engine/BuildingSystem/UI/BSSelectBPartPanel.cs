@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ProjectOC.ManagerNS;
 using TMPro;
 using UnityEngine;
 using UnityEngine.U2D;
@@ -28,7 +29,7 @@ namespace ML.Engine.BuildingSystem.UI
         public int IsInit = -1;
 
         private SpriteAtlas typeAtlas = null,categoryAtlas = null;
-        
+        private MonoBuildingManager monoBM;
         public Sprite GetCategorySprite(BuildingCategory1 category)
         {
             Sprite sprite = categoryAtlas.GetSprite(category.ToString());;
@@ -105,7 +106,7 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 var go = Instantiate<GameObject>(this.templateCategory.gameObject, this.categoryParent, false);
                 go.GetComponentInChildren<Image>().sprite = GetCategorySprite(category);
-                go.GetComponentInChildren<TextMeshProUGUI>().text = MonoBuildingManager.Instance.Category1Dict[category.ToString()].GetDescription();
+                go.GetComponentInChildren<TextMeshProUGUI>().text = monoBM.Category1Dict[category.ToString()].GetDescription();
                 go.SetActive(true);
                 this.categoryInstance.Add(category, go.transform as RectTransform);
             }
@@ -143,7 +144,7 @@ namespace ML.Engine.BuildingSystem.UI
         {
             InitCategoryTexture2D();
             InitTypeTexture2D();
-
+            monoBM = GameManager.Instance.GetLocalManager<MonoBuildingManager>();
             this.categoryParent = this.transform.Find("SelectCategory").Find("Content") as RectTransform;
             this.templateCategory = this.categoryParent.Find("CategoryTemplate") as RectTransform;
             this.templateCategory.gameObject.SetActive(false);
@@ -159,14 +160,14 @@ namespace ML.Engine.BuildingSystem.UI
             comfirm.img = comfirm.root.Find("Image").GetComponent<Image>();
             comfirm.keytip = comfirm.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             comfirm.description = comfirm.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            comfirm.ReWrite(MonoBuildingManager.Instance.KeyTipDict["comfirm"]);
+            comfirm.ReWrite(monoBM.KeyTipDict["comfirm"]);
 
             back = new UIKeyTip();
             back.root = keytip.Find("KT_Back") as RectTransform;
             back.img = back.root.Find("Image").GetComponent<Image>();
             back.keytip = back.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             back.description = back.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            back.ReWrite(MonoBuildingManager.Instance.KeyTipDict["back"]);
+            back.ReWrite(monoBM.KeyTipDict["back"]);
 
             keytip = this.transform.Find("SelectCategory");
 
@@ -174,13 +175,13 @@ namespace ML.Engine.BuildingSystem.UI
             categorylast.root = keytip.Find("KT_Last") as RectTransform;
             categorylast.img = categorylast.root.Find("Image").GetComponent<Image>();
             categorylast.keytip = categorylast.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            categorylast.ReWrite(MonoBuildingManager.Instance.KeyTipDict["categorylast"]);
+            categorylast.ReWrite(monoBM.KeyTipDict["categorylast"]);
 
             categorynext = new UIKeyTip();
             categorynext.root = keytip.Find("KT_Next") as RectTransform;
             categorynext.img = categorynext.root.Find("Image").GetComponent<Image>();
             categorynext.keytip = categorynext.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            categorynext.ReWrite(MonoBuildingManager.Instance.KeyTipDict["categorynext"]);
+            categorynext.ReWrite(monoBM.KeyTipDict["categorynext"]);
 
             keytip = this.transform.Find("SelectType");
 
@@ -188,13 +189,13 @@ namespace ML.Engine.BuildingSystem.UI
             typelast.root = keytip.Find("KT_Last") as RectTransform;
             typelast.img = typelast.root.Find("Image").GetComponent<Image>();
             typelast.keytip = typelast.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            typelast.ReWrite(MonoBuildingManager.Instance.KeyTipDict["typelast"]);
+            typelast.ReWrite(monoBM.KeyTipDict["typelast"]);
 
             typenext = new UIKeyTip();
             typenext.root = keytip.Find("KT_Next") as RectTransform;
             typenext.img = typenext.root.Find("Image").GetComponent<Image>();
             typenext.keytip = typenext.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            typenext.ReWrite(MonoBuildingManager.Instance.KeyTipDict["typenext"]);
+            typenext.ReWrite(monoBM.KeyTipDict["typenext"]);
         }
 
         #endregion
@@ -223,7 +224,7 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 var go = Instantiate<GameObject>(this.templateType.gameObject, this.typeParent, false);
                 go.GetComponentInChildren<Image>().sprite = GetTypeSprite(category2);
-                go.GetComponentInChildren<TextMeshProUGUI>().text = MonoBuildingManager.Instance.Category2Dict[category2.ToString()].GetDescription();
+                go.GetComponentInChildren<TextMeshProUGUI>().text = monoBM.Category2Dict[category2.ToString()].GetDescription();
                 go.SetActive(true);
 
                 this.typeInstance.Add(category2, go.transform as RectTransform);
@@ -357,13 +358,13 @@ namespace ML.Engine.BuildingSystem.UI
         private void Placer_CancelSelection(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             this.Placer.Mode = BuildingMode.Interact;
-            MonoBuildingManager.Instance.PopPanel();
+            monoBM.PopPanel();
         }
 
         private void Placer_ComfirmSelection(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(this.CanSelectCategory1[this.SelectedCategory1Index], this.CanSelectCategory2[this.SelectedCategory2Index]);
-            MonoBuildingManager.Instance.PopAndPushPanel<BSPlaceModePanel>();
+            monoBM.PopAndPushPanel<BSPlaceModePanel>();
         }
         #endregion
 

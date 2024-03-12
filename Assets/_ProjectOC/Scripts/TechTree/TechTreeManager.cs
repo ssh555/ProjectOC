@@ -13,7 +13,7 @@ using UnityEngine.U2D;
 
 namespace ProjectOC.TechTree
 {
-    public sealed class TechTreeManager : MonoBehaviour, ML.Engine.Manager.LocalManager.ILocalManager
+    public sealed class TechTreeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         #region Base
         public static TechTreeManager Instance;
@@ -23,20 +23,10 @@ namespace ProjectOC.TechTree
         /// <summary>
         /// 单例管理
         /// </summary>
-        private void Awake()
+        public TechTreeManager()
         {
-            if (Instance != null)
-            {
-                ML.Engine.Manager.GameManager.DestroyObj(this.gameObject);
-            }
             Instance = this;
-        }
-
-        /// <summary>
-        /// 数据载入初始化
-        /// </summary>
-        private void Start()
-        {
+            
             // 注册 Manager
             GM.RegisterLocalManager(this);
 
@@ -49,6 +39,7 @@ namespace ProjectOC.TechTree
             // 载入UI数据
             InitUITextContents();
         }
+
 
         private void OnDestroy()
         {
@@ -456,8 +447,9 @@ namespace ProjectOC.TechTree
             {
                 var str = BuildingManager.Instance.BPartTableDictOnID[c].GetClassificationString();
                 this.UnlockedBuild.Add(str);
-
-                MonoBuildingManager.Instance.BM.RegisterBPartPrefab(MonoBuildingManager.Instance.LoadedBPart[new ML.Engine.BuildingSystem.BuildingPart.BuildingPartClassification(str)]);
+                
+                MonoBuildingManager monoBM = ML.Engine.Manager.GameManager.Instance.GetLocalManager<MonoBuildingManager>();
+                monoBM.BM.RegisterBPartPrefab(monoBM.LoadedBPart[new ML.Engine.BuildingSystem.BuildingPart.BuildingPartClassification(str)]);
             }    
 
         }

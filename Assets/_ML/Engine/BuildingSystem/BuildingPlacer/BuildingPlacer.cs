@@ -14,7 +14,21 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
     {
         #region 建造模式
         //[LabelText("建造模式"), ShowInInspector, PropertyOrder(-1)]
+        private MonoBuildingManager monoBM ;
 
+        //好像是BuildingPlacer是在MonoBuildingManager初始化里面被创建的，此时MonoBuildingManager还没注册拿不到
+        public MonoBuildingManager MONOBM
+        {
+            get
+            {
+                if (this.monoBM == null)
+                {
+                    monoBM = ProjectOC.ManagerNS.LocalGameManager.Instance.MonoBuildingManager;
+                }
+                return monoBM;
+            }
+        }
+        
         /// <summary>
         /// 当前交互模式
         /// </summary>
@@ -31,7 +45,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         {
             BInput.Build.Enable();
 
-            MonoBuildingManager.Instance.PushPanel<UI.BSInteractModePanel>();
+            MONOBM.PushPanel<UI.BSInteractModePanel>();
 
             this.OnBuildingModeEnter?.Invoke();
         }
@@ -42,7 +56,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
             this.SelectedPartInstance = null;
 
-            MonoBuildingManager.Instance.PopPanel();
+            MONOBM.PopPanel();
 
             BInput.Build.Disable();
             BInput.BuildKeyCom.Disable();

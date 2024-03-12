@@ -193,8 +193,13 @@ MonoBehaviour:
     m_SerializedLabels:
     - Json/TextContent
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 888b947bf9b89904b920daf00eacd9a9
-    m_Address: MLResources/BaseUIPrefab
+  - m_GUID: 458572a514d013d4db22d36640fbd0e3
+    m_Address: ML/Config
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b503664485014544c88bedc884c3eddf
+    m_Address: ML/Config
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
