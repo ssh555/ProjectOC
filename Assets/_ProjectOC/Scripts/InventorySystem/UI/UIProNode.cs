@@ -13,17 +13,29 @@ using ML.Engine.BuildingSystem;
 using ML.Engine.UI;
 using ML.Engine.Manager;
 using ML.Engine.Input;
-using UnityEngine.InputSystem;
+using static ProjectOC.InventorySystem.UI.UIProNode;
+
 
 namespace ProjectOC.InventorySystem.UI
 {
-    public class UIProNode : ML.Engine.UI.UIBasePanel
+    public class UIProNode : ML.Engine.UI.UIBasePanel<ProNodePanel>
     {
         #region Unity
         public bool IsInit = false;
-        private void Awake()
+        protected override void Awake()
         {
-            InitUITextContents();
+
+            base.Awake();
+            this.InitTextContentPathData();
+
+            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
+            {
+                this.Refresh();
+            });
+
+            StartCoroutine(functionExecutor.Execute());
+
+
             // TopTitle
             Text_Title = transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
 
@@ -102,12 +114,6 @@ namespace ProjectOC.InventorySystem.UI
 
         protected override void Start()
         {
-            //KeyTips
-            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
-            foreach (var item in UIKeyTipComponents)
-            {
-                uiKeyTipDic.Add(item.InputActionName, item);
-            }
             base.Start();
         }
 
@@ -137,6 +143,26 @@ namespace ProjectOC.InventorySystem.UI
         {
             base.OnRecovery();
             this.Enter();
+        }
+
+        protected override void Enter()
+        {
+            ProNode.OnActionChange += RefreshDynamic;
+            ProNode.OnProduceTimerUpdate += OnProduceTimerUpdateAction;
+            ProNode.OnProduceEnd += Refresh;
+            this.RegisterInput();
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Enable();
+            base.Enter();
+        }
+
+        protected override void Exit()
+        {
+            ProNode.OnActionChange -= RefreshDynamic;
+            ProNode.OnProduceTimerUpdate -= OnProduceTimerUpdateAction;
+            ProNode.OnProduceEnd -= Refresh;
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Disable();
+            this.UnregisterInput();
+            base.Exit();
         }
         #endregion
 
@@ -406,26 +432,6 @@ namespace ProjectOC.InventorySystem.UI
 
         public Player.PlayerCharacter Player;
 
-        private void Enter()
-        {
-            ProNode.OnActionChange += RefreshDynamic;
-            ProNode.OnProduceTimerUpdate += OnProduceTimerUpdateAction;
-            ProNode.OnProduceEnd += Refresh;
-            this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Enable();
-            UikeyTipIsInit = false;
-            this.Refresh();
-        }
-
-        private void Exit()
-        {
-            ProNode.OnActionChange -= RefreshDynamic;
-            ProNode.OnProduceTimerUpdate -= OnProduceTimerUpdateAction;
-            ProNode.OnProduceEnd -= Refresh;
-            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Disable();
-            this.UnregisterInput();
-        }
-
         private void UnregisterInput()
         {
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
@@ -600,10 +606,6 @@ namespace ProjectOC.InventorySystem.UI
         private List<GameObject> tempUIItemsRecipeRaw = new List<GameObject>();
         private List<GameObject> tempUIItemsWorker = new List<GameObject>();
         private List<GameObject> tempUIItemsLevel = new List<GameObject>();
-
-        private Dictionary<string, UIKeyTipComponent> uiKeyTipDic = new Dictionary<string, UIKeyTipComponent>();
-        private bool UikeyTipIsInit;
-        private InputManager inputManager => GameManager.Instance.InputManager;
         private void ClearTemp()
         {
             foreach(var s in tempSprite)
@@ -630,13 +632,10 @@ namespace ProjectOC.InventorySystem.UI
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s);
             }
-            uiKeyTipDic = null;
         }
         #endregion
 
         #region UI对象引用
-
-        private UIKeyTipComponent[] UIKeyTipComponents;
 
         private TMPro.TextMeshProUGUI Text_Title;
         private TMPro.TextMeshProUGUI Text_Priority;
@@ -682,38 +681,10 @@ namespace ProjectOC.InventorySystem.UI
         public override void Refresh()
         {
             // 加载完成JSON数据 & 查找完所有引用
-            if(ABJAProcessor == null || !ABJAProcessor.IsLoaded || !IsInit)
+            if(ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
             {
                 return;
             }
-
-            if (UikeyTipIsInit == false)
-            {
-                KeyTip[] keyTips = inputManager.ExportKeyTipValues(PanelTextContent);
-                foreach (var keyTip in keyTips)
-                {
-                    InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
-                    inputManager.GetInputActionBindText(inputAction);
-                    if (uiKeyTipDic.ContainsKey(keyTip.keyname))
-                    {
-                        UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
-                        if (uIKeyTipComponent.keytip != null)
-                        {
-                            uIKeyTipComponent.keytip.text = inputManager.GetInputActionBindText(inputAction);
-                        }
-                        if (uIKeyTipComponent.description != null)
-                        {
-                            uIKeyTipComponent.description.text = keyTip.description.GetText();
-                        }
-                    }
-                    else
-                    {
-                        //Debug.Log("keyTip.keyname " + keyTip.keyname);
-                    }
-                }
-                UikeyTipIsInit = true;
-            }
-
 
             if (CurMode == Mode.ProNode)
             {
@@ -1572,16 +1543,11 @@ namespace ProjectOC.InventorySystem.UI
             public KeyTip ConfirmLevel;
             public KeyTip BackLevel;
         }
-
-        public ProNodePanel PanelTextContent => ABJAProcessor.Datas;
-        public ML.Engine.ABResources.ABJsonAssetProcessor<ProNodePanel> ABJAProcessor;
-
-        private void InitUITextContents()
+        private void InitTextContentPathData()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ProNodePanel>("OC/Json/TextContent/ProNode", "ProNodePanel", (datas) =>
-            {
-            }, "UI生产节点Panel数据");
-            ABJAProcessor.StartLoadJsonAssetData();
+            this.abpath = "OC/Json/TextContent/ProNode";
+            this.abname = "ProNodePanel";
+            this.description = "ProNodePanel数据加载完成";
         }
         #endregion
 

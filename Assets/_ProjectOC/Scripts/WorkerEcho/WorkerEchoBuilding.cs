@@ -1,5 +1,6 @@
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InteractSystem;
+using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
 using ProjectOC.Player;
@@ -7,6 +8,7 @@ using ProjectOC.ResonanceWheelSystem.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
@@ -37,9 +39,15 @@ namespace ProjectOC.WorkerEchoNS
         {
             if (this.uIResonanceWheelInstance == null)
             {
-                uIResonanceWheelInstance = GameObject.Instantiate(uIResonanceWheel);
-                uIResonanceWheelInstance.GetComponentInParent<ResonanceWheelUI>().inventory = component.gameObject.GetComponentInParent<PlayerCharacter>().Inventory;
-                uIResonanceWheelInstance.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                GameManager.Instance.ABResourceManager.InstantiateAsync(uIResonanceWheelPrefab).Completed += (handle) =>
+                {
+                    uIResonanceWheelInstance = handle.Result.GetComponent<ResonanceWheelUI>();
+                    uIResonanceWheelInstance.GetComponentInParent<ResonanceWheelUI>().inventory = component.gameObject.GetComponentInParent<PlayerCharacter>().Inventory;
+                    uIResonanceWheelInstance.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+
+                };
+
+                
             }
             else
             {

@@ -39,22 +39,14 @@ namespace ProjectOC.Player.UI
         public override void OnEnter()
         {
             base.OnEnter();
-
             this.Enter();
-
-
-
         }
 
         public override void OnExit()
         {
             base.OnExit();
-
             this.Exit();
-
             ClearTemp();
-
-
         }
 
         public override void OnPause()
@@ -68,27 +60,26 @@ namespace ProjectOC.Player.UI
             base.OnRecovery();
             this.Enter();
         }
-
-        #endregion
-
-        #region Internal
-
-        private void Enter()
+        protected override void Enter()
         {
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.Enable();
             ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
             this.player.interactComponent.Enable();
-            this.Refresh();
+            base.Enter();   
         }
 
-        private void Exit()
+        protected override void Exit()
         {
             this.UnregisterInput();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.Disable();
             ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
             this.player.interactComponent.Disable();
+            base.Exit();
         }
+        #endregion
+
+        #region Internal
 
         private void UnregisterInput()
         {

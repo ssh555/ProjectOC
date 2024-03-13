@@ -11,18 +11,27 @@ using ML.Engine.UI;
 using ML.Engine.Manager;
 using ML.Engine.Input;
 using UnityEngine.InputSystem;
+using static ProjectOC.InventorySystem.UI.UIStore;
+using System;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace ProjectOC.InventorySystem.UI
 {
-    public class UIStore : ML.Engine.UI.UIBasePanel
+    public class UIStore : ML.Engine.UI.UIBasePanel<StorePanel>
     {
         #region Unity
         public bool IsInit = false;
-        private void Awake()
+        protected override void Awake()
         {
-            InitUITextContents();
+            base.Awake();
+            this.InitTextContentPathData();
 
+            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
+            {
+                this.Refresh();
+            });
 
+            StartCoroutine(functionExecutor.Execute());
 
             #region TopTitle
             Text_Title = transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
@@ -81,12 +90,6 @@ namespace ProjectOC.InventorySystem.UI
         }
         protected override void Start()
         {
-            //KeyTips
-            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
-            foreach (var item in UIKeyTipComponents)
-            {
-                uiKeyTipDic.Add(item.InputActionName, item);
-            }
             base.Start();
         }
         #endregion
@@ -115,6 +118,24 @@ namespace ProjectOC.InventorySystem.UI
         {
             base.OnRecovery();
             this.Enter();
+        }
+
+        protected override void Enter()
+        {
+            Store.OnStoreDataChange += Refresh;
+            this.RegisterInput();
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Enable();
+            Store.IsInteracting = true;
+            base.Enter();
+        }
+
+        protected override void Exit()
+        {
+            Store.OnStoreDataChange -= Refresh;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Disable();
+            Store.IsInteracting = false;
+            this.UnregisterInput();
+            base.Exit();
         }
         #endregion
 
@@ -315,24 +336,6 @@ namespace ProjectOC.InventorySystem.UI
         }
         public Player.PlayerCharacter Player;
 
-        private void Enter()
-        {
-            Store.OnStoreDataChange += Refresh;
-            this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Enable();
-            Store.IsInteracting = true;
-            UikeyTipIsInit = false;
-            this.Refresh();
-        }
-
-        private void Exit()
-        {
-            Store.OnStoreDataChange -= Refresh;
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Disable();
-            Store.IsInteracting = false;
-            this.UnregisterInput();
-        }
-
         private void UnregisterInput()
         {
             // 切换Priority
@@ -530,10 +533,6 @@ namespace ProjectOC.InventorySystem.UI
         private List<GameObject> tempUIItemDatas = new List<GameObject>();
         private List<GameObject> tempUIItemDatasUpgrade = new List<GameObject>();
 
-        private Dictionary<string, UIKeyTipComponent> uiKeyTipDic = new Dictionary<string, UIKeyTipComponent>();
-        private bool UikeyTipIsInit;
-        private InputManager inputManager => GameManager.Instance.InputManager;
-
         private void ClearTemp()
         {
             foreach(var s in tempSprite)
@@ -552,7 +551,6 @@ namespace ProjectOC.InventorySystem.UI
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s);
             }
-            uiKeyTipDic = null;
         }
         #endregion
 
@@ -591,38 +589,10 @@ namespace ProjectOC.InventorySystem.UI
         public override void Refresh()
         {
             // 加载完成JSON数据 & 查找完所有引用
-            if(ABJAProcessor == null || !ABJAProcessor.IsLoaded || !IsInit)
+            if(ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
             {
                 return;
             }
-
-            if (UikeyTipIsInit == false)
-            {
-                KeyTip[] keyTips = inputManager.ExportKeyTipValues(PanelTextContent);
-                foreach (var keyTip in keyTips)
-                {
-                    InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
-                    inputManager.GetInputActionBindText(inputAction);
-                    if (uiKeyTipDic.ContainsKey(keyTip.keyname))
-                    {
-                        UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
-                        if (uIKeyTipComponent.keytip != null)
-                        {
-                            uIKeyTipComponent.keytip.text = inputManager.GetInputActionBindText(inputAction);
-                        }
-                        if (uIKeyTipComponent.description != null)
-                        {
-                            uIKeyTipComponent.description.text = keyTip.description.GetText();
-                        }
-                    }
-                    else
-                    {
-                        //Debug.Log("keyTip.keyname " + keyTip.keyname);
-                    }
-                }
-                UikeyTipIsInit = true;
-            }
-
 
             if (this.CurMode == Mode.Store)
             {
@@ -1091,16 +1061,11 @@ namespace ProjectOC.InventorySystem.UI
             public KeyTip Confirm;
             public KeyTip Back;
         }
-
-        public StorePanel PanelTextContent => ABJAProcessor.Datas;
-        public ML.Engine.ABResources.ABJsonAssetProcessor<StorePanel> ABJAProcessor;
-
-        private void InitUITextContents()
+        private void InitTextContentPathData()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StorePanel>("OC/Json/TextContent/Store", "StorePanel", (datas) =>
-            {
-            }, "UI仓库Panel数据");
-            ABJAProcessor.StartLoadJsonAssetData();
+            this.abpath = "OC/Json/TextContent/Store";
+            this.abname = "StorePanel";
+            this.description = "StorePanel数据加载完成";
         }
         #endregion
     }

@@ -150,7 +150,8 @@ namespace ML.Engine.Manager
                 }
             }
             this.globalManagers.Remove(manager);
-            manager.OnUnregister();
+            if (manager != null)
+                manager.OnUnregister();
             return manager;
         }
 
@@ -272,7 +273,8 @@ namespace ML.Engine.Manager
                 }
             }
             this.localManagers.Remove(manager);
-            manager.OnUnregister();
+            if (manager != null)
+                manager.OnUnregister();
             return manager;
         }
 

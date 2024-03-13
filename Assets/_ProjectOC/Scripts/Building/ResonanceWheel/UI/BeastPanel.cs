@@ -13,9 +13,6 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 using System;
-using System.Collections;
-using UnityEditor;
-using ML.Engine.ABResources;
 using static ProjectOC.ResonanceWheelSystem.UI.BeastPanel;
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
@@ -61,13 +58,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
         protected override void Start()
         {
-
-            //KeyTips
-            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
-            foreach (var item in UIKeyTipComponents)
-            {
-                uiKeyTipDic.Add(item.InputActionName, item);
-            }
             IsInit = true;
             Refresh();
             base.Start();
@@ -187,6 +177,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void SwitchBeast_canceled(InputAction.CallbackContext obj)
         {
+            ML.Engine.Manager.GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
             timer = null;
         }
 
@@ -210,14 +201,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #region UI
         #region temp
-        private Dictionary<string, UIKeyTipComponent> uiKeyTipDic = new Dictionary<string, UIKeyTipComponent>();
-        private bool UikeyTipIsInit;
         private InputManager inputManager => GameManager.Instance.InputManager;
         private Sprite icon_genderfemaleSprite, icon_gendermaleSprite;
 
         private void ClearTemp()
         {
-            uiKeyTipDic = null;
+
         }
 
         #endregion
@@ -258,29 +247,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 return;
             }
 
-            if (UikeyTipIsInit == false)
-            {
-                KeyTip[] keyTips = inputManager.ExportKeyTipValues(this.PanelTextContent);
-                foreach (var keyTip in keyTips)
-                {
-                    InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
-                    inputManager.GetInputActionBindText(inputAction);
-
-                    UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
-                    if (uIKeyTipComponent.keytip != null)
-                    {
-                        uIKeyTipComponent.keytip.text = inputManager.GetInputActionBindText(inputAction);
-                    }
-                    if (uIKeyTipComponent.description != null)
-                    {
-                        uIKeyTipComponent.description.text = keyTip.description.GetText();
-                    }
-
-                }
-                UikeyTipIsInit = true;
-            }
-
-
             var Content = this.transform.Find("HiddenBeastInfo1").Find("Info").Find("Scroll View").Find("Viewport").Find("Content");
 
             Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
@@ -296,7 +262,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             for (int i = 0; i < Workers.Count; i++)
             {
-                Debug.Log(this.beastBioPrefab + " " + Time.frameCount);
                 var tPrefab = GameObject.Instantiate(this.beastBioPrefab, Content);
                 //worker.TimeArrangement[10] = TimeStatus.Relax;
                 if (i == CurrentBeastIndex)

@@ -46,7 +46,7 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region Unity
-        private void Awake()
+        protected override void Awake()
         {
             this.enabled = false;
             monoBM = ML.Engine.Manager.GameManager.Instance.GetLocalManager<MonoBuildingManager>();

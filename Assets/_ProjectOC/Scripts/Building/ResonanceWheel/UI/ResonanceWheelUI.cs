@@ -1,23 +1,17 @@
-using ML.Engine.Input;
 using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.Timer;
-using ML.Engine.UI;
 using ProjectOC.Player;
 using ProjectOC.WorkerEchoNS;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.U2D;
 using UnityEngine.UI;
-using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub1;
-using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub2;
 using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheelUI;
 
 namespace ProjectOC.ResonanceWheelSystem.UI

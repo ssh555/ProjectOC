@@ -18,7 +18,8 @@ namespace ML.Engine.UI
             {
                 var KeyText = Image.Find("KeyText");
                 var KeyTipText = Image.Find("KeyTipText");
-                
+                keytip = null;
+                description = null;
                 if (KeyText != null) { keytip = KeyText.GetComponent<TMPro.TextMeshProUGUI>(); }
                 if (KeyTipText != null) { description = KeyTipText.GetComponent<TMPro.TextMeshProUGUI>(); }
             }

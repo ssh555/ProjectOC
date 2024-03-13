@@ -4,27 +4,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Cysharp.Threading.Tasks;
+using static ML.Engine.UI.StartMenuPanel;
+using static ProjectOC.Player.UI.PlayerUIPanel;
 
 
 
 namespace ML.Engine.UI
 {
-    public class StartMenuPanel : ML.Engine.UI.UIBasePanel
+    public class StartMenuPanel : ML.Engine.UI.UIBasePanel<StartMenuPanelStruct>
     {
         #region Unity
         public bool IsInit = false;
 
-        private void Awake()
+        protected override void Awake()
         {
-            Debug.Log("12423423424");
-            //InitPrefabs();
+            base.Awake();
+            this.InitTextContentPathData();
+
+            /*            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
+                            this.InitDescriptionPrefab,
+                            this.InitBeastBioPrefab,
+                            this.InitUITexture2D});*/
+            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
+            {
+                this.Refresh();
+            });
+
+            StartCoroutine(functionExecutor.Execute());
+
+
             btnList = this.transform.Find("ButtonList");
             
         }
         protected override void Start()
         {
-            InitUITextContents();
-
             IsInit = true;
             Refresh();
             base.Start();
@@ -46,22 +59,14 @@ namespace ML.Engine.UI
         public override void OnEnter()
         {
             base.OnEnter();
-
             this.Enter();
-
-            
-
         }
 
         public override void OnExit()
         {
             base.OnExit();
-
             this.Exit();
-
             ClearTemp();
-
-
         }
 
         public override void OnPause()
@@ -76,9 +81,22 @@ namespace ML.Engine.UI
             this.Enter();
         }
 
+        protected override void Enter()
+        {
+            this.RegisterInput();
+            ML.Engine.Input.InputManager.Instance.Common.StartMenu.Enable();
+            base.Enter();   
+        }
+
+        protected override void Exit()
+        {
+            ML.Engine.Input.InputManager.Instance.Common.StartMenu.Disable();
+            this.UnregisterInput();
+            base.Exit();
+        }
         #endregion
 
-       
+
 
 
 
@@ -86,19 +104,7 @@ namespace ML.Engine.UI
 
         #region Internal
 
-        private void Enter()
-        {
-            this.RegisterInput();
-            ML.Engine.Input.InputManager.Instance.Common.StartMenu.Enable();
-            this.Refresh();
-        }
 
-        private void Exit()
-        {
-            ML.Engine.Input.InputManager.Instance.Common.StartMenu.Disable();
-            this.UnregisterInput();
-
-        }
 
         private void UnregisterInput()
         {
@@ -173,7 +179,7 @@ namespace ML.Engine.UI
 
         public override void Refresh()
         {
-            if (ABJAProcessorJson_StartMenuPanel == null || !ABJAProcessorJson_StartMenuPanel.IsLoaded || !IsInit)
+            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
             {
                 return;
             }
@@ -190,20 +196,17 @@ namespace ML.Engine.UI
             public TextTip[] Btns;
         }
 
-        public StartMenuPanelStruct PanelTextContent_StartMenuPanel => ABJAProcessorJson_StartMenuPanel.Datas;
-        public ML.Engine.ABResources.ABJsonAssetProcessor<StartMenuPanelStruct> ABJAProcessorJson_StartMenuPanel;
-        private void InitUITextContents()
+        protected override void OnLoadJsonAssetComplete(StartMenuPanelStruct datas)
         {
-            ABJAProcessorJson_StartMenuPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<StartMenuPanelStruct>("ML/Json/TextContent", "StartMenuPanel", (datas) =>
-            {
-                InitBtnData(datas);
-                Refresh();
-                this.enabled = false;
-            }, "StartMenuPanel数据");
-            ABJAProcessorJson_StartMenuPanel.StartLoadJsonAssetData();
-
+            InitBtnData(datas);
         }
 
+        private void InitTextContentPathData()
+        {
+            this.abpath = "ML/Json/TextContent";
+            this.abname = "StartMenuPanel";
+            this.description = "StartMenuPanel数据加载完成";
+        }
         private Transform btnList;
         private UIBtnList UIBtnList;
         private void InitBtnData(StartMenuPanelStruct datas)

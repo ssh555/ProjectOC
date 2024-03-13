@@ -1,41 +1,48 @@
 using ML.Engine.InventorySystem;
 using ML.Engine.TextContent;
-using Newtonsoft.Json;
 using Sirenix.OdinInspector;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using ML.Engine.Extension;
 using ML.Engine.Timer;
-using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.Manager;
-using ProjectOC.WorkerEchoNS;
-using ProjectOC.WorkerNS;
 using ML.Engine.UI;
 using UnityEngine.U2D;
-using ML.Engine.Input;
-using UnityEngine.InputSystem;
-using Unity.VisualScripting;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using static ProjectOC.InventorySystem.UI.UIInfiniteInventory;
 
 namespace ProjectOC.InventorySystem.UI
 {
-    public class UIInfiniteInventory : ML.Engine.UI.UIBasePanel
+    public class UIInfiniteInventory : ML.Engine.UI.UIBasePanel<InventoryPanel>
     {
-
         #region Input
-
+        /// 用于Drop和Destroy按键响应Cancel
+        /// 长按响应了Destroy就置为true
+        /// Cancel就不响应Drop 并 重置
+        /// </summary>
+        private bool ItemIsDestroyed = false;
         #endregion
 
         #region Unity
         public bool IsInit = false;
         public SpriteAtlas inventoryAtlas;
-        protected void Awake()
+        protected override void Awake()
         {
-            InitUITextContents();
-            LoadInventoryAtlas();
+            base.Awake();
+            this.InitTextContentPathData();
+            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
+                this.LoadInventoryAtlas});
+            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
+            {
+                this.Refresh();
+            });
+
+            StartCoroutine(functionExecutor.Execute());
+
+
 
             // TopTitle
             TopTitleText = this.transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
@@ -61,7 +68,7 @@ namespace ProjectOC.InventorySystem.UI
 
 
             ItemTypes = Enum.GetValues(typeof(ML.Engine.InventorySystem.ItemType)).Cast<ML.Engine.InventorySystem.ItemType>().Where(e => (int)e > 0).ToArray();
-            CurrentItemTypeIndex = 0;
+
 
             var kt = this.transform.Find("BotKeyTips").Find("KeyTips");
             KT_Use = kt.Find("KT_Use");
@@ -69,17 +76,13 @@ namespace ProjectOC.InventorySystem.UI
             KT_Destroy = kt.Find("KT_Destroy");
 
             IsInit = true;
-            Refresh();
+            //Refresh();
         }
 
         protected override void Start()
         {
-            //KeyTips
-            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
-            foreach (var item in UIKeyTipComponents)
-            {
-                uiKeyTipDic.Add(item.InputActionName, item);
-            }
+            CurrentItemTypeIndex = 0;
+
             base.Start();
         }
 
@@ -114,6 +117,22 @@ namespace ProjectOC.InventorySystem.UI
         {
             base.OnRecovery();
             this.Enter();
+        }
+
+        protected override void Enter()
+        {
+            this.RegisterInput();
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Enable();
+            ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
+            base.Enter();
+        }
+
+        protected override void Exit()
+        {
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Disable();
+            ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
+            this.UnregisterInput();
+            base.Exit();
         }
 
         #endregion
@@ -231,23 +250,6 @@ namespace ProjectOC.InventorySystem.UI
             }
         }
 
-
-        private void Enter()
-        {
-            this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Enable();
-            ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
-            UikeyTipIsInit = false;
-            this.Refresh();
-        }
-
-        private void Exit()
-        {
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Disable();
-            ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
-            this.UnregisterInput();
-        }
-
         private void UnregisterInput()
         {
             // 切换类目
@@ -263,9 +265,12 @@ namespace ProjectOC.InventorySystem.UI
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
 
             // 丢弃
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Drop.started -= Drop_started;
-            // 销毁
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.started -= Destroy_started;
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Drop.performed -= Drop_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Drop.canceled -= Drop_canceled;
+            /*            // 销毁
+                        ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.started -= Destroy_started;
+                        ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.performed -= Destroy_performed;
+                        ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.canceled -= Destroy_canceled;*/
         }
 
         private void RegisterInput()
@@ -283,9 +288,12 @@ namespace ProjectOC.InventorySystem.UI
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
 
             // 丢弃
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Drop.started += Drop_started;
-            // 销毁
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.started += Destroy_started;
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Drop.performed += Drop_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Drop.canceled += Drop_canceled;
+            /*            // 销毁
+                        ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.started += Destroy_started;
+                        ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.performed += Destroy_performed;
+                        ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.canceled += Destroy_canceled;*/
 
         }
 
@@ -366,19 +374,35 @@ namespace ProjectOC.InventorySystem.UI
         /// Drop
         /// </summary>
         /// <param name="obj"></param>
-        private void Drop_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void Drop_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            DropItem();
+            if (this.ItemIsDestroyed)
+            {
+                this.ItemIsDestroyed = false;
+            }
+            else
+            {
+                Debug.Log("DropItem");
+                DropItem();
+            }
         }
 
         /// <summary>
         /// Destroy
         /// </summary>
         /// <param name="obj"></param>
-        private void Destroy_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void Drop_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
+            this.ItemIsDestroyed = true;
+            Debug.Log("DestroyItem");
             DestroyItem();
         }
+
+
+        /// <summary>
+        /// Destroy
+        /// </summary>
+        /// <param name="obj"></param>
 
         #endregion
 
@@ -388,9 +412,6 @@ namespace ProjectOC.InventorySystem.UI
         private Dictionary<ML.Engine.InventorySystem.ItemType, GameObject> tempItemType = new Dictionary<ML.Engine.InventorySystem.ItemType, GameObject>();
         private List<GameObject> tempUIItems = new List<GameObject>();
 
-        private Dictionary<string, UIKeyTipComponent> uiKeyTipDic = new Dictionary<string, UIKeyTipComponent>();
-        private bool UikeyTipIsInit;
-        private InputManager inputManager => GameManager.Instance.InputManager;
         private void ClearTemp()
         {
             foreach(var s in tempSprite)
@@ -406,7 +427,6 @@ namespace ProjectOC.InventorySystem.UI
                 ML.Engine.Manager.GameManager.DestroyObj(s);
             }
 
-            uiKeyTipDic = null;
         }
 
         #endregion
@@ -438,42 +458,14 @@ namespace ProjectOC.InventorySystem.UI
         public override void Refresh()
         {
             // 加载完成JSON数据 & 查找完所有引用
-            if (ABJAProcessor == null || !ABJAProcessor.IsLoaded || !IsInit)
+            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
             {
                 return;
             }
 
-
-            if (UikeyTipIsInit == false)
-            {
-                KeyTip[] keyTips = inputManager.ExportKeyTipValues(PanelTextContent_Main);
-                foreach (var keyTip in keyTips)
-                {
-                    InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
-                    inputManager.GetInputActionBindText(inputAction);
-                    if (uiKeyTipDic.ContainsKey(keyTip.keyname))
-                    {
-                        UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
-                        if (uIKeyTipComponent.keytip != null)
-                        {
-                            uIKeyTipComponent.keytip.text = inputManager.GetInputActionBindText(inputAction);
-                        }
-                        if (uIKeyTipComponent.description != null)
-                        {
-                            uIKeyTipComponent.description.text = keyTip.description.GetText();
-                        }
-                    }
-                    else
-                    {
-                        //Debug.Log("keyTip.keyname " + keyTip.keyname);
-                    }
-                }
-                UikeyTipIsInit = true;
-            }
-
             #region TopTitle
             // 更新标题文本
-            this.TopTitleText.text = PanelTextContent_Main.toptitle.GetText();
+            this.TopTitleText.text = PanelTextContent.toptitle.GetText();
             #endregion
 
             #region ItemType
@@ -502,7 +494,7 @@ namespace ProjectOC.InventorySystem.UI
                 }
 
                 // 刷新显示文本
-                obj.transform.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent_Main.itemtype.FirstOrDefault(it => it.name == itemtype.ToString()).GetDescription();
+                obj.transform.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.itemtype.FirstOrDefault(it => it.name == itemtype.ToString()).GetDescription();
                 // 更新 Selected
                 var selected = obj.transform.Find("Selected").gameObject;
                 selected.SetActive(CurrentItemType == itemtype);
@@ -652,17 +644,17 @@ namespace ProjectOC.InventorySystem.UI
                 // 更新图标 => 必定是载入了的
                 Info_ItemIcon.sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(CurrentItem.ID));
                 // 更新单个重量: JsonText + Amount
-                Info_ItemWeight.text = PanelTextContent_Main.weightprefix + ItemManager.Instance.GetWeight(CurrentItem.ID);
+                Info_ItemWeight.text = PanelTextContent.weightprefix + ItemManager.Instance.GetWeight(CurrentItem.ID);
 
                 // 更新描述文本: JsonText + ItemDescription
-                Info_ItemDescription.text = PanelTextContent_Main.descriptionprefix + "\n" + ItemManager.Instance.GetItemDescription(CurrentItem.ID);
+                Info_ItemDescription.text = PanelTextContent.descriptionprefix + "\n" + ItemManager.Instance.GetItemDescription(CurrentItem.ID);
                 // 强制更新布局 => 更新文本高度 -> 用于更新父物体的高度，适配UI显示
                 LayoutRebuilder.ForceRebuildLayoutImmediate(Info_ItemDescription.GetComponent<RectTransform>());
                 // 更新父物体的高度
                 Info_ItemDescription.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(Info_ItemDescription.transform.parent.GetComponent<RectTransform>().sizeDelta.x, Info_ItemDescription.GetComponent<RectTransform>().sizeDelta.y);
 
 
-                Info_ItemEffectDescription.text = PanelTextContent_Main.effectdescriptionprefix + "\n" + ItemManager.Instance.GetEffectDescription(CurrentItem.ID);
+                Info_ItemEffectDescription.text = PanelTextContent.effectdescriptionprefix + "\n" + ItemManager.Instance.GetEffectDescription(CurrentItem.ID);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(Info_ItemEffectDescription.GetComponent<RectTransform>());
                 Info_ItemEffectDescription.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(Info_ItemEffectDescription.transform.parent.GetComponent<RectTransform>().sizeDelta.x, Info_ItemEffectDescription.GetComponent<RectTransform>().sizeDelta.y);
 
@@ -705,24 +697,23 @@ namespace ProjectOC.InventorySystem.UI
             public KeyTip Destroy;
         }
 
-        public InventoryPanel PanelTextContent_Main => ABJAProcessor.Datas;
-        public ML.Engine.ABResources.ABJsonAssetProcessor<InventoryPanel> ABJAProcessor;
-
-        private void InitUITextContents()
+        private void InitTextContentPathData()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<InventoryPanel>("OC/Json/TextContent/Inventory", "InventoryPanel", (datas) =>
-            {
-            }, "UI背包Panel数据");
-            ABJAProcessor.StartLoadJsonAssetData();
+            this.abpath = "OC/Json/TextContent/Inventory";
+            this.abname = "InventoryPanel";
+            this.description = "InventoryPanel数据加载完成";
         }
         #endregion
 
-        private void LoadInventoryAtlas()
+        private AsyncOperationHandle LoadInventoryAtlas()
         {
-            GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>("OC/UI/Inventory/Texture/SA_Inventory_UI.spriteatlasv2").Completed += (handle) =>
+            var handle = GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>("OC/UI/Inventory/Texture/SA_Inventory_UI.spriteatlasv2");
+
+            handle.Completed += (handle) =>
             {
                 inventoryAtlas = handle.Result as SpriteAtlas;
             };
+            return handle;
         }
 
     }

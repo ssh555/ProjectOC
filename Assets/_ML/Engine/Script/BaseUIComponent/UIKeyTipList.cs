@@ -28,7 +28,11 @@ namespace ML.Engine.UI
         {
             if (this.KeyTipDic.ContainsKey(keyTipName))
             {
-                KeyTipDic[keyTipName].keytip.text = keytipText;
+                if (KeyTipDic[keyTipName].keytip != null)
+                {
+                    KeyTipDic[keyTipName].keytip.text = keytipText;
+                }
+                
             }
         }
         /// <summary>
@@ -38,7 +42,10 @@ namespace ML.Engine.UI
         {
             if (this.KeyTipDic.ContainsKey(keyTipName))
             {
-                KeyTipDic[keyTipName].description.text = descriptionText;
+                if (KeyTipDic[keyTipName].description != null)
+                {
+                    KeyTipDic[keyTipName].description.text = descriptionText;
+                }
             }
         }
     }

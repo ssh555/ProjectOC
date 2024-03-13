@@ -136,7 +136,6 @@ namespace ML.Engine.Timer
 
         public bool RemoveTimer(CounterDownTimer countDownTimer)
         {
-            
             if (fixedCounterDownTimers.Contains(countDownTimer) || this.updateCounterDownTimers.Contains(countDownTimer) || this.realCounterDownTimers.Contains(countDownTimer))
             {
                 lock(destroyCounterDownTimers as System.Object)

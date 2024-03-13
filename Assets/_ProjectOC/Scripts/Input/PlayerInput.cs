@@ -1165,7 +1165,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": ""Drop"",
                     ""type"": ""Button"",
-                    ""id"": ""bd543c13-a674-4748-aa09-6d0702ba6f93"",
+                    ""id"": ""4014e338-cad2-4b21-9c9f-9a0fe97b8566"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Hold"",
@@ -1174,7 +1174,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": ""Destroy"",
                     ""type"": ""Button"",
-                    ""id"": ""4bc8699e-a9f0-4c4a-befd-86e7e5c79a09"",
+                    ""id"": ""b9b4cd53-3dac-468c-ae83-a5ce6333b3e0"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Hold"",
@@ -1218,28 +1218,6 @@ namespace ProjectOC.Input
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""1f941058-fb48-4029-a3d5-3970d7e088ab"",
-                    ""path"": ""<XInputController>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Drop"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d6c65be8-d71a-444f-b0c8-d51c7d86ccc9"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Drop"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""30f1b5fe-1721-41f6-92e7-b2426f09bb0e"",
@@ -1396,7 +1374,7 @@ namespace ProjectOC.Input
                 },
                 {
                     ""name"": """",
-                    ""id"": ""76a8f7bc-2bdf-4e22-9edc-339e128eff82"",
+                    ""id"": ""52440aff-e5a6-4c3b-9cc3-ee4ba619e61e"",
                     ""path"": ""<XInputController>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -1407,12 +1385,34 @@ namespace ProjectOC.Input
                 },
                 {
                     ""name"": """",
-                    ""id"": ""bb781c6a-9a4c-4543-96e9-fe34724a1ee4"",
+                    ""id"": ""06869f83-69a6-4663-b2cb-94769eccdc00"",
                     ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Destroy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7a2ac9e2-2be2-4b70-a2f2-dfd5651084e7"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""794b91b9-d9b4-4cd8-9079-d5c66b54d76b"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },

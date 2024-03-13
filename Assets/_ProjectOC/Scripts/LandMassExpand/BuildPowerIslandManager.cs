@@ -9,6 +9,7 @@ using UnityEngine;
 
 namespace ProjectOC.LandMassExpand
 {
+    [System.Serializable]
     public class BuildPowerIslandManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         public List<ISupportPowerBPart> powerCores = new List<ISupportPowerBPart>();

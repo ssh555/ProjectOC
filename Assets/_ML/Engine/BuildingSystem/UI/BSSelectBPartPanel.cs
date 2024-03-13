@@ -140,7 +140,7 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region Unity
-        private void Awake()
+        protected override void Awake()
         {
             InitCategoryTexture2D();
             InitTypeTexture2D();

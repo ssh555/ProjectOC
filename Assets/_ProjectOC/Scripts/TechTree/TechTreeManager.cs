@@ -13,6 +13,7 @@ using UnityEngine.U2D;
 
 namespace ProjectOC.TechTree
 {
+    [System.Serializable]
     public sealed class TechTreeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         #region Base
@@ -23,7 +24,7 @@ namespace ProjectOC.TechTree
         /// <summary>
         /// µ¥Àý¹ÜÀí
         /// </summary>
-        public TechTreeManager()
+        public void Init()
         {
             Instance = this;
             

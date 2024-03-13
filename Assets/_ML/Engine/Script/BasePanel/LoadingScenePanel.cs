@@ -15,7 +15,7 @@ using UnityEngine.UI;
 
 namespace ML.Engine.UI
 {
-    public class LoadingScenePanel<LoadingScenePanelStruct> : ML.Engine.UI.UIBasePanel, ITickComponent
+    public class LoadingScenePanel : ML.Engine.UI.UIBasePanel, ITickComponent
     {
         #region Unity
         public bool IsInit = false;
@@ -77,7 +77,18 @@ namespace ML.Engine.UI
             this.Enter();
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
         }
+        protected override void Enter()
+        {
+            this.RegisterInput();
+            base.Enter();
+        }
 
+        protected override void Exit()
+        {
+            this.UnregisterInput();
+            base.Exit();
+
+        }
         #endregion
 
 
@@ -103,18 +114,6 @@ namespace ML.Engine.UI
 
 
         #region Internal
-
-        private void Enter()
-        {
-            this.RegisterInput();
-            this.Refresh();
-        }
-
-        private void Exit()
-        {
-            this.UnregisterInput();
-
-        }
 
         private void UnregisterInput()
         {

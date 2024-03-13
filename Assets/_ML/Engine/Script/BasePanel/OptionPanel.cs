@@ -11,21 +11,35 @@ using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using static ML.Engine.UI.OptionPanel;
 using static ML.Engine.UI.StartMenuPanel;
+using static ProjectOC.Player.UI.PlayerUIPanel;
 
 
 
 namespace ML.Engine.UI
 {
-    public class OptionPanel : ML.Engine.UI.UIBasePanel
+    public class OptionPanel : ML.Engine.UI.UIBasePanel<OptionPanelStruct>
     {
         #region Unity
         public bool IsInit = false;
 
-        private void Awake()
+        protected override void Awake()
         {
-            
 
+            base.Awake();
+            this.InitTextContentPathData();
+
+            /*            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
+                            this.InitDescriptionPrefab,
+                            this.InitBeastBioPrefab,
+                            this.InitUITexture2D});*/
+            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
+            {
+                this.Refresh();
+            });
+
+            StartCoroutine(functionExecutor.Execute());
             ToptitleText = this.transform.Find("TopTitle").Find("Text").GetComponent<TextMeshProUGUI>();
             btnList = this.transform.Find("ButtonList");
             gridLayout = btnList.GetComponent<GridLayoutGroup>();
@@ -33,15 +47,8 @@ namespace ML.Engine.UI
 
         protected override void Start()
         {
-            InitUITextContents();
-
-
             IsInit = true;
-
-
-
             Refresh();
-
             base.Start();
         }
 
@@ -73,23 +80,23 @@ namespace ML.Engine.UI
             this.Enter();
         }
 
-        #endregion
-
-        #region Internal
-
-        private void Enter()
+        protected override void Enter()
         {
             this.RegisterInput();
             ML.Engine.Input.InputManager.Instance.Common.Option.Enable();
-            this.Refresh();
+            base.Enter();
         }
 
-        private void Exit()
+        protected override void Exit()
         {
             ML.Engine.Input.InputManager.Instance.Common.Option.Disable();
             this.UnregisterInput();
-
+            base.Exit();
         }
+
+        #endregion
+
+        #region Internal
 
         private void UnregisterInput()
         {
@@ -207,7 +214,7 @@ namespace ML.Engine.UI
 
         public override void Refresh()
         {
-            if (ABJAProcessorJson_OptionPanel == null || !ABJAProcessorJson_OptionPanel.IsLoaded || !IsInit)
+            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
             {
                 return;
             }
@@ -229,23 +236,17 @@ namespace ML.Engine.UI
             public KeyTip Back;
         }
 
-        public OptionPanelStruct PanelTextContent_OptionPanel => ABJAProcessorJson_OptionPanel.Datas;
-        public ML.Engine.ABResources.ABJsonAssetProcessor<OptionPanelStruct> ABJAProcessorJson_OptionPanel;
-        private void InitUITextContents()
+        protected override void OnLoadJsonAssetComplete(OptionPanelStruct datas)
         {
-
-            ABJAProcessorJson_OptionPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<OptionPanelStruct>("ML/Json/TextContent", "OptionPanel", (datas) =>
-            {
-                InitBtnData(datas);
-                Refresh();
-                this.enabled = false;
-            }, "OptionPanel数据");
-            ABJAProcessorJson_OptionPanel.StartLoadJsonAssetData();
-            
-
+            InitBtnData(datas);
         }
 
-
+        private void InitTextContentPathData()
+        {
+            this.abpath = "ML/Json/TextContent";
+            this.abname = "OptionPanel";
+            this.description = "OptionPanel数据加载完成";
+        }
         private Transform btnList;
         private UIBtnList UIBtnList; 
         private void InitBtnData(OptionPanelStruct datas)
