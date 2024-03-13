@@ -16,7 +16,7 @@ namespace ML.Engine.UI
 
         private void Awake()
         {
-            
+            Debug.Log("12423423424");
             //InitPrefabs();
             btnList = this.transform.Find("ButtonList");
             

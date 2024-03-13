@@ -15,24 +15,30 @@ using UnityEngine.UI;
 using System;
 using System.Collections;
 using UnityEditor;
+using ML.Engine.ABResources;
+using static ProjectOC.ResonanceWheelSystem.UI.BeastPanel;
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
-    public class BeastPanel : ML.Engine.UI.UIBasePanel
+    public class BeastPanel : ML.Engine.UI.UIBasePanel<BeastPanelStruct>
     {
 
         #region Unity
         public bool IsInit = false;
 
-        private void Awake()
+        protected override void Awake()
         {
-            functionExecutor = new FunctionExecutor<AsyncOperationHandle>(new List<Func<AsyncOperationHandle>> {this.InitDescriptionPrefab, this.InitBeastBioPrefab, this.InitUITextContents,this.InitUITexture2D},
-                () =>
-                {
-                    this.Refresh();
-                }
-                
-                );
-             StartCoroutine(functionExecutor.Execute());
+            base.Awake();
+            this.InitTextContentPathData();
+            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
+                this.InitDescriptionPrefab,
+                this.InitBeastBioPrefab,
+                this.InitUITexture2D});
+            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
+            {
+                this.Refresh();
+            });
+
+            StartCoroutine(functionExecutor.Execute());
 
 
             //BeastInfo
@@ -83,21 +89,13 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public override void OnEnter()
         {
             base.OnEnter();
-            
             this.Enter();
-
-
-            
         }
-
         public override void OnExit()
         {
             base.OnExit();
-            
             this.Exit();
-            
             ClearTemp();
-
         }
 
         public override void OnPause()
@@ -112,30 +110,25 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             this.Enter();
         }
 
-        #endregion
-
-        #region Internal
-
-        private void Enter()
+        protected override void Enter()
         {
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Enable();
-            UikeyTipIsInit = false;
-            this.Refresh();
+            base.Enter();
         }
 
-        private void Exit()
+        protected override void Exit()
         {
-
             this.UnregisterInput();
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Disable();
+            base.Exit();
         }
 
+        #endregion
+
+        #region Internal
         private void UnregisterInput()
         {
-
-
-
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.SwitchBeast.started -= SwitchBeast_started;
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.SwitchBeast.canceled -= SwitchBeast_canceled;
             //驱逐
@@ -143,16 +136,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
-
-            
-
         }
-
-
 
         private void RegisterInput()
         {
-
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.SwitchBeast.started += SwitchBeast_started;
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.SwitchBeast.canceled += SwitchBeast_canceled;
 
@@ -161,7 +148,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
-
         }
 
         #region SwitchBeast_performed
@@ -201,7 +187,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void SwitchBeast_canceled(InputAction.CallbackContext obj)
         {
-            Debug.Log(GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer));
             timer = null;
         }
 
@@ -266,19 +251,16 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #endregion
 
-
-
         public override void Refresh()
         {
-            if (ABJAProcessorJson_BeastPanel == null || !ABJAProcessorJson_BeastPanel.IsLoaded || !IsInit)
+            if (this.ABJAProcessorJson == null || !this.ABJAProcessorJson.IsLoaded || !IsInit)
             {
-                Debug.Log("124");
                 return;
             }
 
             if (UikeyTipIsInit == false)
             {
-                KeyTip[] keyTips = inputManager.ExportKeyTipValues(PanelTextContent_BeastPanel);
+                KeyTip[] keyTips = inputManager.ExportKeyTipValues(this.PanelTextContent);
                 foreach (var keyTip in keyTips)
                 {
                     InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
@@ -336,13 +318,13 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                 //BeastInfo
 
-                Speed.text = PanelTextContent_BeastPanel.Speed;
-                Cook.text = PanelTextContent_BeastPanel.Cook;
-                HandCraft.text = PanelTextContent_BeastPanel.HandCraft;
-                Industry.text = PanelTextContent_BeastPanel.Industry;
-                Magic.text = PanelTextContent_BeastPanel.Magic;
-                Transport.text = PanelTextContent_BeastPanel.Transport;
-                Collect.text = PanelTextContent_BeastPanel.Collect;
+                Speed.text = this.PanelTextContent.Speed;
+                Cook.text = this.PanelTextContent.Cook;
+                HandCraft.text = this.PanelTextContent.HandCraft;
+                Industry.text = this.PanelTextContent.Industry;
+                Magic.text = this.PanelTextContent.Magic;
+                Transport.text = this.PanelTextContent.Transport;
+                Collect.text = this.PanelTextContent.Collect;
 
                 Worker worker = Workers[CurrentBeastIndex];
                 List<float> datas = new List<float>();
@@ -483,13 +465,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                 
                 #endregion
-
-
-
-
-
-
-
             }
             else
             {
@@ -501,12 +476,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
         #endregion
 
-
         #region Resource
-        FunctionExecutor<AsyncOperationHandle> functionExecutor;
-
-        #endregion
-
 
         #region TextContent
         [System.Serializable]
@@ -523,22 +493,15 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             public TextContent Collect;
 
             public KeyTip Expel;
-
-
             //BotKeyTips
             public KeyTip Back;
         }
-        public BeastPanelStruct PanelTextContent_BeastPanel => ABJAProcessorJson_BeastPanel.Datas;
-        public ML.Engine.ABResources.ABJsonAssetProcessor<BeastPanelStruct> ABJAProcessorJson_BeastPanel;
-        private AsyncOperationHandle InitUITextContents()
+        private void InitTextContentPathData()
         {
-            ABJAProcessorJson_BeastPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<BeastPanelStruct>("OC/Json/TextContent/ResonanceWheel", "BeastPanel", (datas) =>
-            {
-            }, "UIBeastPanel数据");
-            return ABJAProcessorJson_BeastPanel.StartLoadJsonAssetData();
-            
+            this.abpath = "OC/Json/TextContent/ResonanceWheel";
+            this.abname = "BeastPanel";
+            this.description = "BeastPanel数据加载完成";
         }
-
         #endregion
 
         #region Texture2D
@@ -587,7 +550,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #endregion
 
-
+        #endregion
     }
 
 

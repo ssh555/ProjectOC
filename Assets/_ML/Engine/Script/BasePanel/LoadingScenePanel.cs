@@ -15,12 +15,12 @@ using UnityEngine.UI;
 
 namespace ML.Engine.UI
 {
-    public class LoadingScenePanel : ML.Engine.UI.UIBasePanel, ITickComponent
+    public class LoadingScenePanel<LoadingScenePanelStruct> : ML.Engine.UI.UIBasePanel, ITickComponent
     {
         #region Unity
         public bool IsInit = false;
 
-        private void Awake()
+        protected override void Awake()
         {
             //DontDestroyOnLoad(this.gameObject);
             InitUITextContents();

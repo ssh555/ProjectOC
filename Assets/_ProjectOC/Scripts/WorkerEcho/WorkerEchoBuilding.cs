@@ -18,6 +18,7 @@ namespace ProjectOC.WorkerEchoNS
         public Vector3 PosOffset { get; set; }
 
         public ResonanceWheelSystem.UI.ResonanceWheelUI uIResonanceWheel;
+        private string uIResonanceWheelPrefab = "ML/BaseUIPanel/ResonanceWheelUI.prefab";
 
         public ResonanceWheelSystem.UI.ResonanceWheelUI uIResonanceWheelInstance;
 

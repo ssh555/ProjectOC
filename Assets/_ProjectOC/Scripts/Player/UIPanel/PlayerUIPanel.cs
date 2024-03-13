@@ -13,27 +13,39 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
+using static ProjectOC.Player.UI.PlayerUIPanel;
 using static UnityEngine.Rendering.DebugUI;
 
 
 
 namespace ProjectOC.Player.UI
 {
-    public class PlayerUIPanel : ML.Engine.UI.UIBasePanel
+    public class PlayerUIPanel : ML.Engine.UI.UIBasePanel<PlayerUIPanelStruct>
     {
         #region Unity
         public bool IsInit = false;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+            this.InitTextContentPathData();
 
-            //InitPrefabs();
+/*            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
+                this.InitDescriptionPrefab,
+                this.InitBeastBioPrefab,
+                this.InitUITexture2D});*/
+            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
+            {
+                this.Refresh();
+            });
+
+            StartCoroutine(functionExecutor.Execute());
+
             btnList = this.transform.Find("ButtonList");
 
         }
         protected override void Start()
         {
-            InitUITextContents();
 
             IsInit = true;
             Refresh();
@@ -41,10 +53,9 @@ namespace ProjectOC.Player.UI
         }
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
         private List<AsyncOperationHandle<GameObject>> goHandle = new List<AsyncOperationHandle<GameObject>>();
-        private AsyncOperationHandle spriteAtlasHandle;
+
         private void OnDestroy()
         {
-            GM.ABResourceManager.Release(spriteAtlasHandle);
             foreach (var handle in goHandle)
             {
                 GM.ABResourceManager.ReleaseInstance(handle);
@@ -86,35 +97,38 @@ namespace ProjectOC.Player.UI
             this.Enter();
         }
 
+        protected override void Enter()
+        {
+            this.RegisterInput();
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Enable();
+            base.Enter();
+        }
+
+        protected override void Exit()
+        {
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Disable();
+            this.UnregisterInput();
+            base.Exit();
+
+        }
+
         #endregion
 
         #region Internal
 
-        private void Enter()
-        {
-            this.RegisterInput();
-            ML.Engine.Input.InputManager.Instance.Common.StartMenu.Enable();
-            this.Refresh();
-        }
 
-        private void Exit()
-        {
-            ML.Engine.Input.InputManager.Instance.Common.StartMenu.Disable();
-            this.UnregisterInput();
-
-        }
 
         private void UnregisterInput()
         {
 
 
-            //�л���ť
-            ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn.started -= SwichBtn_started;
+            //切换按钮
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUI.AlterSelected.started -= AlterSelected_started;
 
-            //ȷ��
+            //确认
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
 
-            // ����
+            // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
 
 
@@ -124,18 +138,18 @@ namespace ProjectOC.Player.UI
         private void RegisterInput()
         {
 
-            //�л���ť
-            ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn.started += SwichBtn_started;
+            //切换按钮
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUI.AlterSelected.started += AlterSelected_started;
 
-            //ȷ��
+            //确认
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
 
-            // ����
+            // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
 
         }
 
-        private void SwichBtn_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void AlterSelected_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             var vec2 = obj.ReadValue<Vector2>();
             if (vec2.y > 0.1f)
@@ -150,7 +164,7 @@ namespace ProjectOC.Player.UI
 
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-
+            GameManager.Instance.UIManager.PopPanel();
         }
 
         private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -169,14 +183,14 @@ namespace ProjectOC.Player.UI
 
         #endregion
 
-        #region UI��������
+        #region UI对象引用
         public PlayerCharacter player;
         private BuildingManager BM => BuildingManager.Instance;
         #endregion
 
         public override void Refresh()
         {
-            if (ABJAProcessorJson_PlayerUIPanelPanel == null || !ABJAProcessorJson_PlayerUIPanelPanel.IsLoaded || !IsInit)
+            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
             {
                 return;
             }
@@ -185,7 +199,7 @@ namespace ProjectOC.Player.UI
         #endregion
 
 
-
+        #region Resource
         #region TextContent
         [System.Serializable]
         public struct PlayerUIPanelStruct
@@ -193,17 +207,16 @@ namespace ProjectOC.Player.UI
             public TextTip[] Btns;
         }
 
-        public PlayerUIPanelStruct PanelTextContent_PlayerUIPanelPanel => ABJAProcessorJson_PlayerUIPanelPanel.Datas;
-        public ML.Engine.ABResources.ABJsonAssetProcessor<PlayerUIPanelStruct> ABJAProcessorJson_PlayerUIPanelPanel;
-        private void InitUITextContents()
+        protected override void OnLoadJsonAssetComplete(PlayerUIPanelStruct datas)
         {
-            ABJAProcessorJson_PlayerUIPanelPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<PlayerUIPanelStruct>("OC/Json/TextContent/PlayerUIPanel", "PlayerUIPanel", (datas) =>
-            {
-                InitBtnData(datas);
+            InitBtnData(datas);
+        }
 
-            }, "PlayerUIPanel����");
-            ABJAProcessorJson_PlayerUIPanelPanel.StartLoadJsonAssetData();
-
+        private void InitTextContentPathData()
+        {
+            this.abpath = "OC/Json/TextContent/PlayerUIPanel";
+            this.abname = "PlayerUIPanel";
+            this.description = "PlayerUIPanel数据加载完成";
         }
 
         private Transform btnList;
@@ -228,7 +241,7 @@ namespace ProjectOC.Player.UI
                     }
                     else
                     {
-                        Debug.LogWarning("��ǰ����������Ϊ0���޷����뽨��ģʽ!");
+                        Debug.LogWarning("当前建筑物数量为0，无法进入建造模式!");
                     }
                 }
             }
@@ -284,7 +297,7 @@ namespace ProjectOC.Player.UI
         }
 
         #endregion
-
+        #endregion
     }
 
 }

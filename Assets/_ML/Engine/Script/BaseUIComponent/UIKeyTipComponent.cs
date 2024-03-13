@@ -11,13 +11,14 @@ namespace ML.Engine.UI
         public TMPro.TextMeshProUGUI description;
         public string InputActionName;
 
-        private void Awake()
+        public void Init()
         {
             var Image = this.transform.Find("Image");
             if (Image != null)
             {
                 var KeyText = Image.Find("KeyText");
                 var KeyTipText = Image.Find("KeyTipText");
+                
                 if (KeyText != null) { keytip = KeyText.GetComponent<TMPro.TextMeshProUGUI>(); }
                 if (KeyTipText != null) { description = KeyTipText.GetComponent<TMPro.TextMeshProUGUI>(); }
             }

@@ -149,7 +149,6 @@ namespace ML.Engine.Input
             // 遍历所有字段
             foreach (FieldInfo field in fields)
             {
-                Debug.Log(field.FieldType);
                 // 如果字段类型是KeyTip类型，则将其值添加到列表中
                 if (field.FieldType == typeof(KeyTip))
                 {
@@ -162,12 +161,7 @@ namespace ML.Engine.Input
             // 将列表转换为数组并返回
             return KeyTipValues.ToArray();
         }
-
-
         #endregion
-
-
-
     }
 
 }

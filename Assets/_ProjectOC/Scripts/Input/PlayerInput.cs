@@ -1021,7 +1021,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""f688b7d8-4b09-4939-9006-b9ed57af7e64"",
-                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""path"": ""<XInputController>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

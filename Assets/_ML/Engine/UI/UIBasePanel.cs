@@ -1,6 +1,16 @@
+using ML.Engine.ABResources;
+using ML.Engine.Manager;
+using ML.Engine.TextContent;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using static ProjectOC.Player.UI.PlayerUIPanel;
+using static ProjectOC.ResonanceWheelSystem.UI.BeastPanel;
+using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub2;
+using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheelUI;
 
 namespace ML.Engine.UI
 {
@@ -10,6 +20,10 @@ namespace ML.Engine.UI
         /// 唯一标识符
         /// </summary>
         public string ID { get; protected set; }
+        /// <summary>
+        /// 资源加载执行器
+        /// </summary>
+        public FunctionExecutor<AsyncOperationHandle> functionExecutor = new FunctionExecutor<AsyncOperationHandle>();
 
         /// <summary>
         /// 所属UIManager
@@ -22,7 +36,7 @@ namespace ML.Engine.UI
         {
             get
             {
-                if(_uiMgr == null)
+                if (_uiMgr == null)
                 {
                     _uiMgr = ML.Engine.Manager.GameManager.Instance.UIManager;
                 }
@@ -66,7 +80,23 @@ namespace ML.Engine.UI
             Manager.GameManager.DestroyObj(this.gameObject);
         }
 
+
+        protected virtual void Enter()
+        {
+            this.Refresh();
+        }
+
+        protected virtual void Exit()
+        {
+
+        }
+
         public virtual void Refresh()
+        {
+
+        }
+
+        protected virtual void Awake()
         {
 
         }
@@ -75,6 +105,63 @@ namespace ML.Engine.UI
         {
             this.enabled = false;
         }
+
     }
 
+    /// <summary>
+    /// 若该UIBasePanel需要TextContent则可以加入泛型<TextContentStruct>
+    /// </summary>
+    public class UIBasePanel<T> : UIBasePanel
+    {
+        public T PanelTextContent => ABJAProcessorJson.Datas;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<T> ABJAProcessorJson;
+        public string abpath;
+        public string abname;
+        public string description;
+
+        private UIKeyTipList UIKeyTipList;
+
+        /// <summary>
+        /// 加载Json完成后执行的回调，默认自动初始化KeyTip
+        /// </summary>
+        protected virtual void OnLoadJsonAssetComplete(T datas)
+        {
+            this.InitKeyTip(datas);
+        }
+        /// <summary>
+        /// 加载Json
+        /// </summary>
+        private AsyncOperationHandle InitUITextContents()
+        {
+            this.ABJAProcessorJson = new ML.Engine.ABResources.ABJsonAssetProcessor<T>(this.abpath, this.abname, (datas) =>
+            {
+               this.OnLoadJsonAssetComplete(datas);
+            }, this.description);
+            return this.ABJAProcessorJson.StartLoadJsonAssetData();
+        }
+        /// <summary>
+        /// 初始化KeyTip
+        /// </summary>
+        private void InitKeyTip(T datas)
+        {
+            UIKeyTipList = new UIKeyTipList(transform);
+
+            KeyTip[] keyTips = GameManager.Instance.InputManager.ExportKeyTipValues(datas);
+            foreach (var keyTip in keyTips)
+            {
+                InputAction inputAction = GameManager.Instance.InputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
+                GameManager.Instance.InputManager.GetInputActionBindText(inputAction);
+
+                
+                this.UIKeyTipList.SetKeyTiptext(keyTip.keyname, GameManager.Instance.InputManager.GetInputActionBindText(inputAction));
+                this.UIKeyTipList.SetDescriptiontext(keyTip.keyname, keyTip.description.GetText());
+            }
+        }
+
+        protected override void Awake()
+        {
+            base.Awake();
+            this.functionExecutor.AddFunction(this.InitUITextContents);
+        }
+    }
 }

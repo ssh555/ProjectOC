@@ -38,7 +38,7 @@ namespace ML.Engine.UI
         public event System.Action OnSelectedEnter;
         public event System.Action OnSelectedExit;
 
-        private void Awake()
+        public void Init()
         {
             image = this.GetComponentInChildren<UnityEngine.UI.Image>();
             text = this.GetComponentInChildren<TMPro.TextMeshProUGUI>();

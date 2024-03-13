@@ -79,7 +79,7 @@ namespace ProjectOC.Player
             this.playerModel = this.transform.Find("PlayerModel");
             this.playerTerrainDetect = this.transform.Find("PlayerTerrainDetect");
 
-
+            this.InternalInit();
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace ProjectOC.Player
         private void Start()
         {
             this.moveStateParams.RuntimeInit(this.playerInputActions.Acc, this.playerInputActions.Crouch);
-            this.InternalInit();
+            
         }
 
         private void InternalInit()

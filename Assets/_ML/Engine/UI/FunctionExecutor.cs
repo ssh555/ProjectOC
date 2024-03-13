@@ -17,6 +17,11 @@ namespace ML.Engine.UI
             this.onAllFunctionsCompleted = onAllFunctionsCompleted;
         }
 
+        public FunctionExecutor()
+        {
+            this.FunctionList = new List<Func<T>>();
+        }
+
         //Ö´ÐÐ
         public IEnumerator Execute()
         {
@@ -32,6 +37,20 @@ namespace ML.Engine.UI
 
 
             this.onAllFunctionsCompleted.Invoke();
+        }
+
+        public void AddFunction(Func<T> func)
+        {
+            this.FunctionList.Add(func);
+        }
+
+        public void AddFunction(List<Func<T>> funclist)
+        {
+            foreach (Func<T> func in funclist) { this.FunctionList.Add(func);}
+        }
+        public void SetOnAllFunctionsCompleted(Action action)
+        {
+            this.onAllFunctionsCompleted = action;
         }
     }
 }

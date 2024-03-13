@@ -19,10 +19,18 @@ namespace ProjectOC.Player.UI
         #region Unity
         public bool IsInit = false;
         public PlayerCharacter player;
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+            
+        }
+
+        protected override void Start()
+        {
+            
             IsInit = true;
             Refresh();
+            base.Start();
         }
 
         #endregion
@@ -176,13 +184,6 @@ namespace ProjectOC.Player.UI
 
         #region UI对象引用
 
-        private IUISelected CurSelected;
-
-        private TMPro.TextMeshProUGUI NewGameBtnText;
-        private TMPro.TextMeshProUGUI ContinueGameBtnText;
-        private TMPro.TextMeshProUGUI OptionBtnText;
-        private TMPro.TextMeshProUGUI QuitGameBtnText;
-
         #endregion
 
         public override void Refresh()
@@ -191,11 +192,7 @@ namespace ProjectOC.Player.UI
             {
                 return;
             }
-
-            NewGameBtnText.text = PanelTextContent_StartMenuPanel.NewGameBtn;
-            ContinueGameBtnText.text = PanelTextContent_StartMenuPanel.ContinueGameBtn;
-            OptionBtnText.text = PanelTextContent_StartMenuPanel.OptionBtn;
-            QuitGameBtnText.text = PanelTextContent_StartMenuPanel.QuitGameBtn;*/
+            */
 
         }
         #endregion

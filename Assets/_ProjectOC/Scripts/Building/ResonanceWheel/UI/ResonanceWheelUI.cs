@@ -7,8 +7,10 @@ using ML.Engine.UI;
 using ProjectOC.Player;
 using ProjectOC.WorkerEchoNS;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -16,10 +18,11 @@ using UnityEngine.U2D;
 using UnityEngine.UI;
 using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub1;
 using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub2;
+using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheelUI;
 
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
-    public class ResonanceWheelUI : ML.Engine.UI.UIBasePanel,ITickComponent
+    public class ResonanceWheelUI : ML.Engine.UI.UIBasePanel<ResonanceWheelPanel>,ITickComponent
     {
 
         public IInventory inventory;
@@ -28,12 +31,21 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #region Unity
         public bool IsInit = false;
 
-        private void Awake()
+        protected override void Awake()
         {
-            workerEcho = (GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
+            base.Awake();
+            this.InitTextContentPathData();
+            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
+                this.InitUITexture2D,
+                this.InitSlotPrefab });
+            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
+            {
+                this.Refresh();
+            });
 
-            InitUITexture2D();
-            InitUITextContents();
+            StartCoroutine(functionExecutor.Execute());
+
+            workerEcho = (GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
 
             //exclusivePart
             exclusivePart = this.transform.Find("ExclusivePart");
@@ -162,6 +174,23 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //this.Enter();
         }
 
+        protected override void Enter()
+        {
+            this.RegisterInput();
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Enable();
+            isQuit = false;
+            hasSub1nstance = false;
+            Invoke("Refresh", 0.01f);
+            base.Enter();
+        }
+
+        protected override void Exit()
+        {
+            this.UnregisterInput();
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Disable();
+            base.Exit();
+        }
+
         #endregion
 
         #region Internal
@@ -185,23 +214,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 ringGrid.isTiming = false;
                 ringGrid.isResonating = false;
             }
-        }
-
-        private void Enter()
-        {
-            this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Enable();
-            isQuit = false;
-            hasSub1nstance = false;
-            UikeyTipIsInit = false;
-            Invoke("Refresh", 0.01f);
-            //this.Refresh();
-        }
-
-        private void Exit()
-        {
-            this.UnregisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Disable();
         }
 
         private void UnregisterInput()
@@ -542,10 +554,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private List<Sprite> tempSprite = new List<Sprite>();
         private Dictionary<ML.Engine.InventorySystem.ItemType, GameObject> tempItemType = new Dictionary<ML.Engine.InventorySystem.ItemType, GameObject>();
         private List<GameObject> tempUIItems = new List<GameObject>();
-
-        private Dictionary<string, UIKeyTipComponent> uiKeyTipDic = new Dictionary<string, UIKeyTipComponent>();
-        private bool UikeyTipIsInit;
-        private InputManager inputManager => GameManager.Instance.InputManager;
         private void ClearTemp()
         {
             foreach (var s in tempSprite)
@@ -561,7 +569,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 ML.Engine.Manager.GameManager.DestroyObj(s);
             }
 
-            uiKeyTipDic = null;
         }
 
         #endregion
@@ -629,13 +636,13 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             if (!this.gameObject.activeInHierarchy) return;
 
-            if (ABJAProcessorJson_Main == null || !ABJAProcessorJson_Main.IsLoaded || !IsInit)
+            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
             {
                 return;
             }
 
             #region TopPart
-            TopTitleText.text = PanelTextContent_Main.toptitle;
+            TopTitleText.text = PanelTextContent.toptitle;
 
 
 
@@ -655,8 +662,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
 
 
-            HiddenBeastResonanceText.text = PanelTextContent_Main.HiddenBeastResonanceText;
-            SongofSeaBeastsText.text= PanelTextContent_Main.SongofSeaBeastsText;
+            HiddenBeastResonanceText.text = PanelTextContent.HiddenBeastResonanceText;
+            SongofSeaBeastsText.text= PanelTextContent.SongofSeaBeastsText;
             #endregion
 
 
@@ -773,7 +780,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     Grids[i].transform.Find("Selected").gameObject.SetActive(false);
                 }
 
-                Grids[i].RingGridText.text = PanelTextContent_Main.GridText;
+                Grids[i].RingGridText.text = PanelTextContent.GridText;
             }
 
 
@@ -781,15 +788,15 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
             #region ResonanceTarget
-            ResonanceTargetTitle.text = PanelTextContent_Main.ResonanceTargetTitle;
-            RandomText.text=PanelTextContent_Main.RandomText;      
+            ResonanceTargetTitle.text = PanelTextContent.ResonanceTargetTitle;
+            RandomText.text=PanelTextContent.RandomText;      
 
             #endregion
 
             #region ResonanceConsumpion
             if (Grids[CurrentGridIndex].isNull)
             {
-                ResonanceConsumpionTitle.text = PanelTextContent_Main.ResonanceConsumpionTitle.description[0];//0 代表共鸣消耗
+                ResonanceConsumpionTitle.text = PanelTextContent.ResonanceConsumpionTitle.description[0];//0 代表共鸣消耗
                 //显示消耗物品详细
 
                 var Consumables = RCInfo.Find("Consumables");
@@ -833,13 +840,15 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
             else if (Grids[CurrentGridIndex].isTiming)
             {
-                ResonanceConsumpionTitle.text = PanelTextContent_Main.ResonanceConsumpionTitle.description[1];//1 代表共鸣中
+                ResonanceConsumpionTitle.text = PanelTextContent.ResonanceConsumpionTitle.description[1];//1 代表共鸣中
             }
 
             #endregion
 
         }
         #endregion
+
+        #region Resource
 
         #region TextContent
         [System.Serializable]
@@ -871,58 +880,23 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         }
 
-        public ResonanceWheelPanel PanelTextContent_Main => ABJAProcessorJson_Main.Datas;
-        public ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheelPanel> ABJAProcessorJson_Main;
-
-        public ResonanceWheel_sub1Struct PanelTextContent_sub1 => ABJAProcessorJson_sub1.Datas;
-        public ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub1Struct> ABJAProcessorJson_sub1;
-
-        public ResonanceWheel_sub2Struct PanelTextContent_sub2 => ABJAProcessorJson_sub2.Datas;
-        public ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub2Struct> ABJAProcessorJson_sub2;
-        private void InitUITextContents()
+        private void InitTextContentPathData()
         {
-            ABJAProcessorJson_Main = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheelPanel>("OC/Json/TextContent/ResonanceWheel", "ResonanceWheelPanel", (datas) =>
-            {
-                InitKeyTip();
-            }, "UI共鸣轮Panel_Main数据");
-            ABJAProcessorJson_Main.StartLoadJsonAssetData();
-
-            ABJAProcessorJson_sub1 = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub1Struct>("OC/Json/TextContent/ResonanceWheel", "ResonanceWheel_sub1", (datas) =>
-            {
-            }, "UI共鸣轮Panel_sub1数据");
-            ABJAProcessorJson_sub1.StartLoadJsonAssetData();
-
-            ABJAProcessorJson_sub2 = new ML.Engine.ABResources.ABJsonAssetProcessor<ResonanceWheel_sub2Struct>("OC/Json/TextContent/ResonanceWheel", "ResonanceWheel_sub2", (datas) =>
-            {
-            }, "UI共鸣轮Panel_sub2数据");
-            ABJAProcessorJson_sub2.StartLoadJsonAssetData();
+            this.abpath = "OC/Json/TextContent/ResonanceWheel";
+            this.abname = "ResonanceWheelPanel";
+            this.description = "ResonanceWheelPanel数据加载完成";
         }
-        private UIKeyTipList UIKeyTipList;
-        private void InitKeyTip()
-        {
-            UIKeyTipList = new UIKeyTipList(transform);
 
-
-            KeyTip[] keyTips = inputManager.ExportKeyTipValues(PanelTextContent_Main);
-            foreach (var keyTip in keyTips)
-            {
-                InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
-                inputManager.GetInputActionBindText(inputAction);
-
-                this.UIKeyTipList.SetKeyTiptext(keyTip.keyname, inputManager.GetInputActionBindText(inputAction));
-                this.UIKeyTipList.SetDescriptiontext(keyTip.keyname, keyTip.description.GetText());
-            }
-
-        }
         #endregion
 
         #region Texture2D
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
         private string ResonanceWheelSpriteAtlasPath = "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2";
 
-        private void InitUITexture2D()
+        private AsyncOperationHandle InitUITexture2D()
         {
-            GM.ABResourceManager.LoadAssetAsync<SpriteAtlas>(ResonanceWheelSpriteAtlasPath).Completed += (handle) =>
+            var handle = GM.ABResourceManager.LoadAssetAsync<SpriteAtlas>(ResonanceWheelSpriteAtlasPath);
+            handle.Completed += (handle) =>
             {
                 this.spriteatlasHandle = handle;
                 var resonanceAtlas = handle.Result as SpriteAtlas;
@@ -938,6 +912,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 beastTypeDic.Add(BeastType.WorkerEcho_Seal, resonanceAtlas.GetSprite("Seal"));
                 beastTypeDic.Add(BeastType.WorkerEcho_Random, resonanceAtlas.GetSprite("Random"));
             };
+            return handle;
         }
 
         #endregion
@@ -945,19 +920,19 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #region Prefabs
         private GameObject SlotPrefab;
 
-        private void InitPrefabs()
+        private AsyncOperationHandle InitSlotPrefab()
         {
-            GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/Slot.prefab").Completed += (handle) =>
+            var handle = GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/Slot.prefab");
+            handle.Completed += (handle) =>
             {
                 this.goHandle.Add(handle);
                 this.SlotPrefab = handle.Result;
             };
+            return handle;
         }
 
         #endregion
-
-
-
+        #endregion
     }
 
 }

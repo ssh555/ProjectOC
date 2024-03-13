@@ -36,8 +36,6 @@ namespace ProjectOC.TechTree
             // 载入科技树表格数据 以及 恢复存档
             LoadTableData();
 
-            // 载入UI数据
-            InitUITextContents();
         }
 
 
@@ -457,7 +455,7 @@ namespace ProjectOC.TechTree
 
         #region TextContent
         public Dictionary<string, TextTip> CategoryDict = new Dictionary<string, TextTip>();
-        public TPPanel TPPanelTextContent_Main => ABJAProcessor_TPPanel.Datas;
+
 
         [System.Serializable]
         public struct TPPanel
@@ -473,19 +471,7 @@ namespace ProjectOC.TechTree
             public KeyTip Decipher;
             public KeyTip Back;
         }
-        public ML.Engine.ABResources.ABJsonAssetProcessor<TPPanel> ABJAProcessor_TPPanel;
 
-        public void InitUITextContents()
-        {
-            ABJAProcessor_TPPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<TPPanel>("OC/Json/TextContent/TechTree", "TechPointPanel", (datas) =>
-            {
-                foreach (var tip in datas.category)
-                {
-                    this.CategoryDict.Add(tip.name, tip);
-                }
-            }, "科技树UIPanel");
-            ABJAProcessor_TPPanel.StartLoadJsonAssetData();
-        }
         #endregion
 
         #region to-delete

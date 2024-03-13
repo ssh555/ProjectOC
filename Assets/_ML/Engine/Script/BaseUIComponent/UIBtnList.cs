@@ -30,12 +30,13 @@ namespace ML.Engine.UI
         {
             if (parent != null)
             {
-                this.OneDimSelectedButtons = parent.GetComponentsInChildren<SelectedButton>();
+                this.OneDimSelectedButtons = parent.GetComponentsInChildren<SelectedButton>(true);
                 this.limitNum = limitNum;
                 this.OneDimCnt = this.OneDimSelectedButtons.Length;
 
                 foreach(var btn in OneDimSelectedButtons)
                 {
+                    btn.Init();
                     SBDic.Add(btn.gameObject.name, btn);
                 }
 
@@ -276,8 +277,6 @@ namespace ML.Engine.UI
         {
             SBDic[btnName].transform.Find("BtnText").GetComponent<TextMeshProUGUI>().text = showText;
         }
-
-
     }
 
 }
