@@ -197,6 +197,8 @@ namespace ML.Engine.BuildingSystem
 
         public void OnRegister()
         {
+            instance = this;
+            LoadTableData();
             Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<Material>(_ABMatName).Completed += (handle) =>
             {
                 _buildingMaterial = handle.Result;

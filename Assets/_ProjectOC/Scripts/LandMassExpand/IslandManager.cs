@@ -16,7 +16,7 @@ namespace ProjectOC.LandMassExpand
         private List<IslandMain> islandMains;
         public IslandBase[,] islandGrids;
         
-        public void Init()
+        public IslandManager()
         {
             mapGridSize = 100;
             maxSize = new Vector2Int(15, 15);

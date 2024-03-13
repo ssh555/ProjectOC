@@ -151,9 +151,11 @@ namespace ML.Engine.Input
             // 遍历所有字段
             foreach (FieldInfo field in fields)
             {
+                Debug.Log(field.FieldType);
                 // 如果字段类型是KeyTip类型，则将其值添加到列表中
                 if (field.FieldType == typeof(KeyTip))
                 {
+                    
                     KeyTip value = (KeyTip)field.GetValue(StructT);
                     KeyTipValues.Add(value);
                 }
