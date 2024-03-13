@@ -90,7 +90,6 @@ namespace ProjectOC.Player
             this.moveStateParams.RuntimeInit(this.playerInputActions.Acc, this.playerInputActions.Crouch);
             this.InternalInit();
         }
-
         private void InternalInit()
         {
             this.playerModelStateController = new PlayerModelStateController(0, this.playerModel.GetComponentInChildren<Animator>(), this.GetComponent<Animator>(), this);
@@ -125,18 +124,6 @@ namespace ProjectOC.Player
             this.Inventory = new ML.Engine.InventorySystem.InfiniteInventory(this.transform, 999);
 
 
-
-            StartCoroutine(__DelayInit__());
-
-            //this.enabled = false;
-        }
-
-        private IEnumerator __DelayInit__()
-        {
-            while(ML.Engine.BuildingSystem.BuildingManager.Instance == null || ML.Engine.BuildingSystem.BuildingManager.Instance.Placer == null)
-            {
-                yield return null;
-            }
             // 进入建造系统要可移动
             ML.Engine.BuildingSystem.BuildingManager.Instance.Placer.OnBuildingModeEnter += () =>
             {
@@ -148,11 +135,8 @@ namespace ProjectOC.Player
                 // to-do : 待优化
                 this.GetComponentInChildren<InteractComponent>().Enable();
             };
-            while(!ML.Engine.InventorySystem.ItemManager.Instance.IsLoadOvered)
-            {
-                yield return null;
-            }
 
+            //StartCoroutine(__DelayInit__());
 
             this.enabled = false;
         }

@@ -104,15 +104,6 @@ namespace ML.Engine.BuildingSystem.BuildingArea
 
         private void Start()
         {
-            StartCoroutine(__DelayInit__());
-        }
-
-        private IEnumerator __DelayInit__()
-        {
-            while(BuildingManager.Instance == null || BuildingManager.Instance.BuildingAreaList == null)
-            {
-                yield return null;
-            }
             BuildingManager.Instance.BuildingAreaList.Add(this);
         }
 
