@@ -379,8 +379,8 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetMass.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animation\GetAnimatePhysics.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasEnteredTrigger2D.cs" />
-    <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Renderer\IsVisible.cs" />
     <Compile Include="Assets\_ML\Script\BasePanel\StartMenuPanel.cs" />
+    <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Renderer\IsVisible.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\SetRotation.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetRightVector.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Example Scenes\Files\Scripts\ExportMeshAndBasemapByPositionIndex.cs" />
