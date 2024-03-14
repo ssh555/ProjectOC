@@ -2,46 +2,49 @@ using ML.Engine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace ML.Engine.UI
 {
-    public class SelectedButton : MonoBehaviour, IUISelected
+    public class SelectedButton : Button
     {
-        #region IUISelected
-        public IUISelected LeftUI { get; set; }
-        public IUISelected RightUI { get; set; }
-        public IUISelected UpUI { get; set; }
-        public IUISelected DownUI { get; set; }
-
-        public void Interact()
-        {
-            OnInteract?.Invoke();
-        }
-
-        public void SelectedEnter()
-        {
-            OnSelectedEnter?.Invoke();
-            //this.image.color = Color.red;
-        }
-
-        public void SelectedExit()
-        {
-            OnSelectedExit?.Invoke();
-            //this.image.color = Color.white;
-        }
-        #endregion
-
-        public UnityEngine.UI.Image image;
-        public TMPro.TextMeshProUGUI text;
-
-        public event System.Action OnInteract;
         public event System.Action OnSelectedEnter;
         public event System.Action OnSelectedExit;
 
-        public void Init()
+        private Transform Selected = null;
+        public override void OnSelect(BaseEventData eventData)
+        {
+            if(Selected != null) 
+            {
+                this.Selected.gameObject.SetActive(true);
+            }
+            else
+            {
+                base.OnSelect(eventData);
+            }
+            this.OnSelectedEnter?.Invoke();
+        }
+        public override void OnDeselect(BaseEventData eventData)
+        {
+            if (Selected != null)
+            {
+                this.Selected.gameObject.SetActive(false);
+            }
+            else
+            {
+                base.OnDeselect(eventData);
+            }
+            this.OnSelectedExit?.Invoke();
+        }
+
+        public void Init(System.Action OnSelectedEnter, System.Action OnSelectedExit)
         {
             image = this.GetComponentInChildren<UnityEngine.UI.Image>();
-            text = this.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+            Selected = this.transform.Find("Selected");
+            this.targetGraphic = image;
+            this.OnSelectedEnter = OnSelectedEnter;
+            this.OnSelectedExit = OnSelectedExit;   
         }
     }
 

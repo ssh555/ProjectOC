@@ -173,7 +173,7 @@ namespace ML.Engine.UI
         private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             //this.CurSelected.Interact();
-            this.UIBtnList.GetCurSelected().Interact();
+            this.UIBtnList.GetCurSelected().onClick.Invoke();
         }
         #endregion
 
@@ -251,7 +251,7 @@ namespace ML.Engine.UI
         private UIBtnList UIBtnList; 
         private void InitBtnData(OptionPanelStruct datas)
         {
-            UIBtnList = new UIBtnList(parent: btnList, limitNum: gridLayout.constraintCount, BtnType: 2);
+            UIBtnList = new UIBtnList(parent: btnList, limitNum: gridLayout.constraintCount);
             foreach (var tt in datas.Btns)
             {
                 this.UIBtnList.SetBtnText(tt.name, tt.description.GetText());
@@ -262,6 +262,7 @@ namespace ML.Engine.UI
             () =>
                 {
                     Debug.Log("GraphicBtn");
+                    GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, "前面的区域，以后再来探索吧！");
                 }
             );
             //AudioBtn
@@ -269,6 +270,7 @@ namespace ML.Engine.UI
             () =>
             {
                 Debug.Log("AudioBtn");
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, "前面的区域，以后再来探索吧！");
             }
             );
             //ControllerBtn
@@ -276,6 +278,7 @@ namespace ML.Engine.UI
             () =>
             {
                 Debug.Log("ControllerBtn");
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI,"前面的区域，以后再来探索吧！");
             }
             );
             //TutorialBtn
@@ -283,6 +286,7 @@ namespace ML.Engine.UI
             () =>
             {
                 Debug.Log("TutorialBtn");
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, "前面的区域，以后再来探索吧！");
             }
             );
             //BackBtn

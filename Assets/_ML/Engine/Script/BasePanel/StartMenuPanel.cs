@@ -6,6 +6,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using Cysharp.Threading.Tasks;
 using static ML.Engine.UI.StartMenuPanel;
 using static ProjectOC.Player.UI.PlayerUIPanel;
+using System;
 
 
 
@@ -159,7 +160,7 @@ namespace ML.Engine.UI
 
         private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            this.UIBtnList.GetCurSelected().Interact();
+            this.UIBtnList.GetCurSelected().onClick.Invoke();
         }
         #endregion
 
@@ -211,7 +212,11 @@ namespace ML.Engine.UI
         private UIBtnList UIBtnList;
         private void InitBtnData(StartMenuPanelStruct datas)
         {
-            UIBtnList = new UIBtnList(parent: btnList, BtnType: 1);
+
+            Action OnslectedEnter = () => { };
+            Action OnslectedExit = () => { };
+
+            UIBtnList = new UIBtnList(parent: btnList);
             foreach (var tt in datas.Btns)
             {
                 this.UIBtnList.SetBtnText(tt.name, tt.description.GetText());

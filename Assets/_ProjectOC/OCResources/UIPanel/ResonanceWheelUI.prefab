@@ -4760,6 +4760,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87badff79e1e54a4a9d68c74f002b591, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  abpath: 
+  abname: 
+  description: 
   IsInit: 0
   workerEcho:
     Level: 2

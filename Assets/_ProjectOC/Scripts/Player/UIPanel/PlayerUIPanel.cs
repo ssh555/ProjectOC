@@ -169,7 +169,7 @@ namespace ProjectOC.Player.UI
 
         private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            this.UIBtnList.GetCurSelected().Interact();
+            this.UIBtnList.GetCurSelected().onClick.Invoke();
         }
         #endregion
 
@@ -223,7 +223,7 @@ namespace ProjectOC.Player.UI
         private UIBtnList UIBtnList;
         private void InitBtnData(PlayerUIPanelStruct datas)
         {
-            UIBtnList = new UIBtnList(parent: btnList, BtnType: 1);
+            UIBtnList = new UIBtnList(parent: btnList);
             foreach (var tt in datas.Btns)
             {
                 this.UIBtnList.SetBtnText(tt.name, tt.description.GetText());

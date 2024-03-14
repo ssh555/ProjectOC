@@ -430,6 +430,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetPan.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\Simulate.cs" />
     <Compile Include="Assets\_ML\Engine\UI\IUISelected.cs" />
+    <Compile Include="Assets\_ML\Engine\Script\BasePanel\FloatTextUI.cs" />
     <Compile Include="Assets\_ML\Engine\CombatSystem\CombatObject\CombatObject\MonoCombatObject.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetAngularDrag.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Actions\SendEvent.cs" />

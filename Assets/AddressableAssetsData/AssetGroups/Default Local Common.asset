@@ -185,7 +185,8 @@ MonoBehaviour:
   - m_GUID: dd360a45dbd59144da89a30283c7064c
     m_Address: ML/BaseUIPanel
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - NoticeUI
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fb0ecd8ab3c48844d8e7c3cd060c65ed
     m_Address: ML/Json/TextContent
@@ -202,6 +203,12 @@ MonoBehaviour:
     m_Address: ML/Config
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 50dc540eb51005b4fbf910c347ed5ed2
+    m_Address: ML/BaseUIPanel/Assets/_ML/MLResources/BaseUIPanel
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - NoticeUI
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 72d1a89784032c94ea3b026b42e20dcf, type: 2}

@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace ML.Engine.UI
 {
@@ -15,7 +17,7 @@ namespace ML.Engine.UI
         private int TwoDimH = 0;
         private int TwoDimW = 0;
 
-        private IUISelected CurSelected;
+        private SelectedButton CurSelected;
 
         //Index
         private int OneDimI = 0;
@@ -24,9 +26,9 @@ namespace ML.Engine.UI
 
         private Dictionary<string, SelectedButton> SBDic = new Dictionary<string, SelectedButton>();
         /// <summary>
-        /// parent: 按钮父物体 limitNum：一行多少个按钮 BtnType：0为无 1为选中退出红白样式 2为选中退出selected活性改变 
+        /// parent: 按钮父物体 limitNum：一行多少个按钮 
         /// </summary>
-        public UIBtnList(Transform parent,int limitNum = 1,int BtnType = 0)
+        public UIBtnList(Transform parent, int limitNum = 1, bool hasInitSelect = true, Action OnSelectedEnter = null, Action OnSelectedExit = null)
         {
             if (parent != null)
             {
@@ -36,7 +38,9 @@ namespace ML.Engine.UI
 
                 foreach(var btn in OneDimSelectedButtons)
                 {
-                    btn.Init();
+                    btn.Init(OnSelectedEnter, OnSelectedExit);
+                    Navigation navigation = btn.navigation;
+                    navigation.mode = Navigation.Mode.Explicit;
                     SBDic.Add(btn.gameObject.name, btn);
                 }
 
@@ -66,11 +70,11 @@ namespace ML.Engine.UI
                     {
                         int last = (i - 1 + OneDimSelectedButtons.Length) % OneDimSelectedButtons.Length;
                         int next = (i + 1 + OneDimSelectedButtons.Length) % OneDimSelectedButtons.Length;
-
-                        OneDimSelectedButtons[i].UpUI = i - limitNum >= 0 ? OneDimSelectedButtons[i - limitNum] : OneDimSelectedButtons[i - limitNum + OneDimSelectedButtons.Length];
-                        OneDimSelectedButtons[i].DownUI = i + limitNum < OneDimSelectedButtons.Length ? OneDimSelectedButtons[i + limitNum] : OneDimSelectedButtons[i + limitNum - OneDimSelectedButtons.Length];
-                        OneDimSelectedButtons[i].RightUI = i % limitNum + 1 < limitNum ? OneDimSelectedButtons[i + 1] : OneDimSelectedButtons[i / limitNum * limitNum];
-                        OneDimSelectedButtons[i].LeftUI = i % limitNum - 1 >= 0 ? OneDimSelectedButtons[i - 1] : OneDimSelectedButtons[i / limitNum * limitNum + limitNum - 1];
+                        Navigation navigation = OneDimSelectedButtons[i].navigation;
+                        navigation.selectOnUp = i - limitNum >= 0 ? OneDimSelectedButtons[i - limitNum] : OneDimSelectedButtons[i - limitNum + OneDimSelectedButtons.Length];
+                        navigation.selectOnDown = i + limitNum < OneDimSelectedButtons.Length ? OneDimSelectedButtons[i + limitNum] : OneDimSelectedButtons[i + limitNum - OneDimSelectedButtons.Length];
+                        navigation.selectOnRight = i % limitNum + 1 < limitNum ? OneDimSelectedButtons[i + 1] : OneDimSelectedButtons[i / limitNum * limitNum];
+                        navigation.selectOnLeft = i % limitNum - 1 >= 0 ? OneDimSelectedButtons[i - 1] : OneDimSelectedButtons[i / limitNum * limitNum + limitNum - 1];
                     }
 
                     //初始化选择对象
@@ -85,91 +89,63 @@ namespace ML.Engine.UI
                     {
                         int last = (i - 1 + OneDimSelectedButtons.Length) % OneDimSelectedButtons.Length;
                         int next = (i + 1 + OneDimSelectedButtons.Length) % OneDimSelectedButtons.Length;
-
-                        OneDimSelectedButtons[i].UpUI = OneDimSelectedButtons[last];
-                        OneDimSelectedButtons[i].DownUI = OneDimSelectedButtons[next];
+                        Navigation navigation = OneDimSelectedButtons[i].navigation;
+                        navigation.selectOnUp = OneDimSelectedButtons[last];
+                        navigation.selectOnDown = OneDimSelectedButtons[next];
                     }
 
                     //初始化选择对象
                     this.OneDimI = 0;
                     this.CurSelected = OneDimSelectedButtons[OneDimI];
                 }
-
-                foreach (var btn in OneDimSelectedButtons)
-                {
-                    btn.OnSelectedEnter += () =>
-                    {
-                        if(BtnType == 0)
-                        {
-                            
-                        }
-                        else if(BtnType == 1)
-                        {
-                            btn.image.color = Color.red;
-                        }
-                        else if(BtnType == 2)
-                        {
-                            btn.transform.Find("Selected").gameObject.SetActive(true);
-                        }
-                        
-                    };
-                    btn.OnSelectedExit += () =>
-                    {
-                        if (BtnType == 0)
-                        {
-
-                        }
-                        else if (BtnType == 1)
-                        {
-                            btn.image.color = Color.white;
-                        }
-                        else if (BtnType == 2)
-                        {
-                            btn.transform.Find("Selected").gameObject.SetActive(false);
-                        }
-                    };
-                }
-                
-                
-                this.CurSelected.SelectedEnter();
+                if(hasInitSelect)
+                    this.CurSelected.OnSelect(null);
             }   
         }
 
         /// <summary>
         /// 传入下标设置一维按钮列表action
         /// </summary>
-        public void SetBtnAction(int i,Action action)
+        public void SetBtnAction(int i,UnityAction action)
         {
-            this.OneDimSelectedButtons[i].OnInteract += action;
+            this.OneDimSelectedButtons[i].onClick.AddListener(action);
         }
         /// <summary>
         /// 传入下标设置二维按钮列表action
         /// </summary>
-        public void SetBtnAction(int i,int j, Action action)
+        public void SetBtnAction(int i,int j, UnityAction action)
         {
-            this.TwoDimSelectedButtons[i,j].OnInteract += action;
+            this.TwoDimSelectedButtons[i,j].onClick.AddListener(action);
         }
         /// <summary>
         /// 传入字符串设置按钮列表action
         /// </summary>
-        public void SetBtnAction(string BtnName, Action action)
+        public void SetBtnAction(string BtnName, UnityAction action)
         {
             if (this.SBDic.ContainsKey(BtnName))
             {
-                SBDic[BtnName].OnInteract += action;
+                SBDic[BtnName].onClick.AddListener(action);
             }
         }
         /// <summary>
         /// 获取当前选中按钮
         /// </summary>
-        public IUISelected GetCurSelected()
+        public Button GetCurSelected()
         {
             return this.CurSelected;
         }
         /// <summary>
+        /// 置空当前选中按钮
+        /// </summary>
+        public void SetCurSelectedNull()
+        {
+            this.CurSelected.OnDeselect(null);
+            this.CurSelected = null;
+        }
+        /// <summary>
         /// 向上
         /// </summary>
-        public IUISelected MoveUPIUISelected()
+        public Button MoveUPIUISelected()
         {
             if(limitNum > 1)
             {
@@ -177,7 +153,7 @@ namespace ML.Engine.UI
 
                 if (TwoDimSelectedButtons[i, TwoDimJ] == null) return null;
                 TwoDimI = i;
-                this.CurSelected.SelectedExit();
+                this.CurSelected?.OnDeselect(null);
                 this.CurSelected = TwoDimSelectedButtons[TwoDimI, TwoDimJ];
             }
             else
@@ -186,16 +162,16 @@ namespace ML.Engine.UI
 
                 if (OneDimSelectedButtons[i] == null) return null;
                 OneDimI = i;
-                this.CurSelected.SelectedExit();
+                this.CurSelected?.OnDeselect(null);
                 this.CurSelected = OneDimSelectedButtons[OneDimI];
             }
-            this.CurSelected.SelectedEnter();
+            this.CurSelected.OnSelect(null);
             return CurSelected;
         }
         /// <summary>
         /// 向下
         /// </summary>
-        public IUISelected MoveDownIUISelected()
+        public Button MoveDownIUISelected()
         {
             if (limitNum > 1)
             {
@@ -203,7 +179,7 @@ namespace ML.Engine.UI
 
                 if (TwoDimSelectedButtons[i, TwoDimJ] == null) return null;
                 TwoDimI = i;
-                this.CurSelected.SelectedExit();
+                this.CurSelected?.OnDeselect(null);
                 this.CurSelected = TwoDimSelectedButtons[TwoDimI, TwoDimJ];
             }
             else
@@ -212,16 +188,16 @@ namespace ML.Engine.UI
 
                 if (OneDimSelectedButtons[i] == null) return null;
                 OneDimI = i;
-                this.CurSelected.SelectedExit();
+                this.CurSelected?.OnDeselect(null);
                 this.CurSelected = OneDimSelectedButtons[OneDimI];
             }
-            this.CurSelected.SelectedEnter();
+            this.CurSelected.OnSelect(null);
             return CurSelected;
         }
         /// <summary>
         /// 向左
         /// </summary>
-        public IUISelected MoveLeftIUISelected()
+        public Button MoveLeftIUISelected()
         {
             if (limitNum > 1)
             {
@@ -229,7 +205,7 @@ namespace ML.Engine.UI
 
                 if (TwoDimSelectedButtons[TwoDimI, j] == null) return null;
                 TwoDimJ = j;
-                this.CurSelected.SelectedExit();
+                this.CurSelected?.OnDeselect(null);
                 this.CurSelected = TwoDimSelectedButtons[TwoDimI, TwoDimJ];
             }
             else
@@ -238,16 +214,16 @@ namespace ML.Engine.UI
 
                 if (OneDimSelectedButtons[i] == null) return null;
                 OneDimI = i;
-                this.CurSelected.SelectedExit();
+                this.CurSelected?.OnDeselect(null);
                 this.CurSelected = OneDimSelectedButtons[OneDimI];
             }
-            this.CurSelected.SelectedEnter();
+            this.CurSelected.OnSelect(null);
             return CurSelected;
         }
         /// <summary>
         /// 向右
         /// </summary>
-        public IUISelected MoveRightIUISelected()
+        public Button MoveRightIUISelected()
         {
             
             if (limitNum > 1)
@@ -255,7 +231,7 @@ namespace ML.Engine.UI
                 int j = TwoDimJ + 1 < TwoDimW ? TwoDimJ + 1 : TwoDimJ + 1 - TwoDimW;
                 if (TwoDimSelectedButtons[TwoDimI, j] == null) return null;
                 TwoDimJ = j;
-                this.CurSelected.SelectedExit();
+                this.CurSelected?.OnDeselect(null);
                 this.CurSelected = TwoDimSelectedButtons[TwoDimI, TwoDimJ];
             }
             else
@@ -264,12 +240,26 @@ namespace ML.Engine.UI
 
                 if (OneDimSelectedButtons[i] == null) return null;
                 OneDimI = i;
-                this.CurSelected.SelectedExit();
+                this.CurSelected?.OnDeselect(null);
                 this.CurSelected = OneDimSelectedButtons[OneDimI];
             }
-            this.CurSelected.SelectedEnter();
+            this.CurSelected.OnSelect(null);
             return CurSelected;
         }
+        /// <summary>
+        /// 向指定坐标移动
+        /// </summary>
+        public Button MoveIndexIUISelected(int i)
+        {
+
+            
+            this.CurSelected?.OnDeselect(null);
+            this.CurSelected = OneDimSelectedButtons[i];
+
+            this.CurSelected.OnSelect(null);
+            return CurSelected;
+        }
+
         /// <summary>
         /// 设置按钮按键提示文本
         /// </summary>

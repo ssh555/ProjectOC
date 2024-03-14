@@ -1,8 +1,11 @@
+using ML.Engine.Manager;
+using ProjectOC.InventorySystem.UI;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 using static UnityEngine.Rendering.DebugUI;
 namespace ML.Engine.UI
@@ -12,6 +15,10 @@ namespace ML.Engine.UI
         public UIManager()
         {
             GetCanvas = CreateCanvas();
+            InitSideBarUIPrefabInstance();
+            InitPopUpUIPrefabInstance();
+            InitFloatTextUIPrefabInstance();
+            InitBtnUIPrefabInstance();
         }
 
         public Canvas GetCanvas
@@ -68,7 +75,6 @@ namespace ML.Engine.UI
         {
             if(this.panelStack.Count > 2)
             {
-                Debug.Log("2");
                 return false;
             }
             if (this.panelStack.Count == 1)
@@ -85,7 +91,6 @@ namespace ML.Engine.UI
 
             if(panel != null)
             {
-                Debug.Log("pushpanel " + panel.name);
                 this.PushPanel(panel);
             }
 
@@ -133,6 +138,97 @@ namespace ML.Engine.UI
 
             return canvas;
         }
+
+        #region 通知UI
+        private string SideBarUIPrefabPath = "NoticeUI/SideBarUI.prefab";
+        private string PopUpUIPrefabPath = "NoticeUI/PopUpUI.prefab";
+        private string FloatTextUIPrefabPath = "NoticeUI/FloatTextUI.prefab";
+        private string BtnUIPrefabPath = "NoticeUI/BtnUI.prefab";
+        [ShowInInspector]
+        private GameObject SideBarUIPrefab, PopUpUIPrefab, FloatTextUIPrefab, BtnUIPrefab;
+        public enum NoticeUIType
+        {
+            FloatTextUI = 0,
+            PopUpUI,
+            SideBarUI,
+            BtnUI
+        }
+        //TODO 之后还需实例化时先取消对应脚本的活性
+        private void InitSideBarUIPrefabInstance()
+        {
+            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.SideBarUIPrefabPath, isGlobal: true).Completed += (handle) =>
+            {
+                Debug.Log("SideBarUIPrefabPath");
+                this.SideBarUIPrefab = handle.Result;
+                this.SideBarUIPrefab.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                this.SideBarUIPrefab.SetActive(false);
+            };
+        }
+        private void InitPopUpUIPrefabInstance()
+        {
+            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.PopUpUIPrefabPath, isGlobal: true).Completed += (handle) =>
+            {
+                Debug.Log("PopUpUIPrefabPath");
+                this.PopUpUIPrefab = handle.Result;
+                this.PopUpUIPrefab.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                this.PopUpUIPrefab.SetActive(false);
+            };
+        }
+        private void InitFloatTextUIPrefabInstance()
+        {
+            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.FloatTextUIPrefabPath, isGlobal: true).Completed += (handle) =>
+            {
+
+                this.FloatTextUIPrefab = handle.Result;
+                this.FloatTextUIPrefab.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                this.FloatTextUIPrefab.GetComponent<Animator>().enabled = false;
+                this.FloatTextUIPrefab.SetActive(false);
+
+            };
+        }
+        private void InitBtnUIPrefabInstance()
+        {
+            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.BtnUIPrefabPath, isGlobal: true).Completed += (handle) =>
+            {
+                Debug.Log("BtnUIPrefabPath");
+                this.BtnUIPrefab = handle.Result;
+                this.BtnUIPrefab.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                this.BtnUIPrefab.SetActive(false);
+            };
+        }
+
+        public void PushNoticeUIInstance(NoticeUIType noticeUIType,string msg)
+        {
+            GameObject panel = null;
+            switch (noticeUIType)
+            {
+                
+                case NoticeUIType.FloatTextUI:
+                    Debug.Log(this.FloatTextUIPrefab);
+                    panel = GameObject.Instantiate(this.FloatTextUIPrefab);
+                    panel.GetComponent<FloatTextUI>().Text.text = msg;
+                    panel.GetComponent<Animator>().enabled = true;
+                    break;
+                case NoticeUIType.BtnUI:
+                    Debug.Log(this.BtnUIPrefab);
+                    panel = GameObject.Instantiate(this.BtnUIPrefab);
+                    break;
+                case NoticeUIType.PopUpUI:
+                    Debug.Log(this.PopUpUIPrefab);
+                    panel = GameObject.Instantiate(this.PopUpUIPrefab);
+                    break;
+                case NoticeUIType.SideBarUI:
+                    Debug.Log(this.SideBarUIPrefab);
+                    panel = GameObject.Instantiate(this.SideBarUIPrefab);
+                    break;
+            }
+            panel.transform.localScale = Vector3.one;
+            panel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+            panel.SetActive(true);
+        }
+
+        #endregion
     }
 
 }
