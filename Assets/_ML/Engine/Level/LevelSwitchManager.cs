@@ -272,7 +272,7 @@ namespace ML.Engine.Level
 
             //  Õ∑≈Local
             ABRManager.ReleaseAllLocal();
-            //GameManager.Instance.CounterDownTimerManager
+            //GameManager.Instance.CounterDownTimerManager.RemoveAllTimer();
         }
 
         #endregion

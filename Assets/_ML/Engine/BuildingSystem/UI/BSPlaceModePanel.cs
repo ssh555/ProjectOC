@@ -345,7 +345,6 @@ namespace ML.Engine.BuildingSystem.UI
             Manager.GameManager.Instance.TickManager.UnregisterFixedTick(this);
             this.Placer.BInput.BuildPlaceMode.KeyCom.performed -= Placer_EnterKeyCom;
             this.Placer.backInputAction.performed -= Placer_CancelPlace;
-            Debug.Log("Remove");
 
             this.Placer.BInput.BuildPlaceMode.Rotate.performed -= Placer_RotateBPart;
             this.Placer.BInput.BuildPlaceMode.ChangeActiveSocket.performed -= Placer_ChangeActiveSocket;

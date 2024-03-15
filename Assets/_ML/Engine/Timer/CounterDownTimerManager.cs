@@ -147,5 +147,22 @@ namespace ML.Engine.Timer
             return false;
         }
 
+
+        public void RemoveAllTimer()
+        {
+            foreach (var timer in updateCounterDownTimers)
+            {
+                this.destroyCounterDownTimers.Add(timer);
+            }
+            foreach (var timer in fixedCounterDownTimers)
+            {
+                this.destroyCounterDownTimers.Add(timer);
+            }
+            foreach (var timer in realCounterDownTimers)
+            {
+                this.destroyCounterDownTimers.Add(timer);
+            }
+        }
+
     }
 }
