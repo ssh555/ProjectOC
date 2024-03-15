@@ -1,8 +1,10 @@
 using ML.Engine.BuildingSystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
+using ML.Engine.Timer;
 using ML.Engine.UI;
 using ProjectOC.InventorySystem.UI;
+using ProjectOC.ManagerNS;
 using ProjectOC.Player;
 using ProjectOC.TechTree.UI;
 using Sirenix.OdinInspector;
@@ -18,7 +20,7 @@ using static ProjectOC.Player.UI.PlayerUIBotPanel;
 
 namespace ProjectOC.Player.UI
 {
-    public class PlayerUIBotPanel : ML.Engine.UI.UIBasePanel<PlayerUIBotPanelStruct>
+    public class PlayerUIBotPanel : ML.Engine.UI.UIBasePanel<PlayerUIBotPanelStruct>, ITickComponent
     {
         #region Unity
         public bool IsInit = false;
@@ -40,6 +42,7 @@ namespace ProjectOC.Player.UI
             StartCoroutine(functionExecutor.Execute());
             Ring = this.transform.Find("Ring");
             btnList = Ring.Find("ButtonList");
+            TimeText = this.transform.Find("Time").Find("Text").GetComponent<TextMeshProUGUI>();
 
         }
 
@@ -56,12 +59,14 @@ namespace ProjectOC.Player.UI
         #region Override
         public override void OnEnter()
         {
+            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
             base.OnEnter();
             this.Enter();
         }
 
         public override void OnExit()
         {
+            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
             base.OnExit();
             this.Exit();
             ClearTemp();
@@ -69,12 +74,14 @@ namespace ProjectOC.Player.UI
 
         public override void OnPause()
         {
+            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
             base.OnPause();
             this.Exit();
         }
 
         public override void OnRecovery()
         {
+            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
             base.OnRecovery();
             this.Enter();
         }
@@ -92,11 +99,23 @@ namespace ProjectOC.Player.UI
             this.UnregisterInput();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.Disable();
             ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
-            this.player.interactComponent.Disable();
+            //TODO player null
+            this.player?.interactComponent.Disable();
             base.Exit();
         }
         #endregion
+        #region Tick
+        private TextMeshProUGUI TimeText;
+        public int tickPriority { get; set; }
+        public int fixedTickPriority { get; set; }
+        public int lateTickPriority { get; set; }
 
+        public void Tick(float deltatime)
+        {
+            TimeText.text = LocalGameManager.Instance.DispatchTimeManager.CurrentTimeFrame.ToString()+" : "+"分";
+        }
+
+        #endregion
         #region Internal
 
         private void UnregisterInput()
@@ -151,7 +170,7 @@ namespace ProjectOC.Player.UI
         private void SelectGrid_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (Ring.gameObject.activeInHierarchy == false) return;
-            this.UIBtnList.GetCurSelected().onClick.Invoke();
+            this.UIBtnList.GetCurSelected().Interact();
             this.UIBtnList.SetCurSelectedNull();
             Ring.gameObject.SetActive(false);
         }
@@ -185,7 +204,6 @@ namespace ProjectOC.Player.UI
 
         #region UI对象引用
         private Transform Ring;
-
         #endregion
 
         public override void Refresh()

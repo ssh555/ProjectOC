@@ -202,6 +202,7 @@
     <Compile Include="Assets\_ML\Engine\SaveSystem\SaveManager.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetLoop.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Decorators\UntilFailure.cs" />
+    <Compile Include="Assets\_ML\Engine\Script\BasePanel\NoticeUI\PopUpUI.cs" />
     <Compile Include="Assets\_ML\Engine\CombatSystem\DataConfig\Asset\CombatDataConfigAsset.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasEnteredCollision2D.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Player\Mono\PlayerTerrainDetect.cs" />
@@ -214,6 +215,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\AddForceAtPosition.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedBehaviour.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetIgnoreListenerPause.cs" />
+    <Compile Include="Assets\_ML\Engine\Script\BasePanel\NoticeUI\SideBarUI.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Worker\EffectType.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\WaitForState.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\LandMassExpand\IslandSub.cs" />
@@ -417,6 +419,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\GetStringToHash.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Actions\Reflection\GetFieldValue.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Scripts\Tasks\Pursue.cs" />
+    <Compile Include="Assets\_ML\Engine\Script\BasePanel\NoticeUI\FloatTextUI.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\GetSpeed.cs" />
     <Compile Include="Assets\_ML\Engine\SaveSystem\SaveSystem.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\CrossFade.cs" />
@@ -430,7 +433,6 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetPan.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\Simulate.cs" />
     <Compile Include="Assets\_ML\Engine\UI\IUISelected.cs" />
-    <Compile Include="Assets\_ML\Engine\Script\BasePanel\FloatTextUI.cs" />
     <Compile Include="Assets\_ML\Engine\CombatSystem\CombatObject\CombatObject\MonoCombatObject.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetAngularDrag.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Actions\SendEvent.cs" />
@@ -576,6 +578,7 @@
     <Compile Include="Assets\_ProjectOC\Scripts\Character\IStartPoint.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Actions\Reflection\SetFieldValue.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Worker\Effect.cs" />
+    <Compile Include="Assets\_ML\Engine\Script\BasePanel\NoticeUI\BtnUI.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\PlayScheduled.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\SetLookAtWeight.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector3\Dot.cs" />

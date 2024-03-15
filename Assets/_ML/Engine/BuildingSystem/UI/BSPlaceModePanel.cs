@@ -27,7 +27,7 @@ namespace ML.Engine.BuildingSystem.UI
 
         private BuildingManager BM => BuildingManager.Instance;
         private BuildingPlacer.BuildingPlacer Placer => BM.Placer;
-        private ProjectOC.Player.PlayerCharacter Player => GameObject.Find("PlayerCharacter")?.GetComponent<ProjectOC.Player.PlayerCharacter>();
+        private ProjectOC.Player.PlayerCharacter Player => GameObject.Find("PlayerCharacter(Clone)")?.GetComponent<ProjectOC.Player.PlayerCharacter>();
         private MonoBuildingManager monoBM;
 
         #region UIGOÒýÓÃ
@@ -297,6 +297,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.RegisterInput();
             if (BM.Placer.SelectedPartInstance != null)
             {
+                Debug.Log("CheckCostResources");
                 BM.Placer.SelectedPartInstance.CheckCanInPlaceMode += CheckCostResources;
             }
             BM.Placer.OnPlaceModeSuccess += OnPlaceModeSuccess;
@@ -435,7 +436,6 @@ namespace ML.Engine.BuildingSystem.UI
         #region Event
         private bool CheckCostResources(IBuildingPart bpart)
         {
-            //Debug.Log(CompositeManager.Instance+" "+)
             if (CompositeManager.Instance.CanComposite(Player.Inventory, BuildingManager.Instance.GetID(bpart.Classification.ToString())))
             {
                 return true;

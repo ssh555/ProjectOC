@@ -382,7 +382,6 @@ namespace ProjectOC.InventorySystem.UI
             }
             else
             {
-                Debug.Log("DropItem");
                 DropItem();
             }
         }

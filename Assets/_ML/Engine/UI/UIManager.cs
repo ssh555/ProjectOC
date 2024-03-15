@@ -158,17 +158,15 @@ namespace ML.Engine.UI
         {
             Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.SideBarUIPrefabPath, isGlobal: true).Completed += (handle) =>
             {
-                Debug.Log("SideBarUIPrefabPath");
                 this.SideBarUIPrefab = handle.Result;
                 this.SideBarUIPrefab.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
-                this.SideBarUIPrefab.SetActive(false);
+                this.SideBarUIPrefab.GetComponent<SideBarUI>().SaveAsInstance();
             };
         }
         private void InitPopUpUIPrefabInstance()
         {
             Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.PopUpUIPrefabPath, isGlobal: true).Completed += (handle) =>
             {
-                Debug.Log("PopUpUIPrefabPath");
                 this.PopUpUIPrefab = handle.Result;
                 this.PopUpUIPrefab.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
                 this.PopUpUIPrefab.SetActive(false);
@@ -181,8 +179,7 @@ namespace ML.Engine.UI
 
                 this.FloatTextUIPrefab = handle.Result;
                 this.FloatTextUIPrefab.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
-                this.FloatTextUIPrefab.GetComponent<Animator>().enabled = false;
-                this.FloatTextUIPrefab.SetActive(false);
+                this.FloatTextUIPrefab.GetComponent<FloatTextUI>().SaveAsInstance();
 
             };
         }
@@ -190,7 +187,6 @@ namespace ML.Engine.UI
         {
             Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.BtnUIPrefabPath, isGlobal: true).Completed += (handle) =>
             {
-                Debug.Log("BtnUIPrefabPath");
                 this.BtnUIPrefab = handle.Result;
                 this.BtnUIPrefab.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
                 this.BtnUIPrefab.SetActive(false);
@@ -204,28 +200,33 @@ namespace ML.Engine.UI
             {
                 
                 case NoticeUIType.FloatTextUI:
-                    Debug.Log(this.FloatTextUIPrefab);
+
                     panel = GameObject.Instantiate(this.FloatTextUIPrefab);
                     panel.GetComponent<FloatTextUI>().Text.text = msg;
-                    panel.GetComponent<Animator>().enabled = true;
+                    panel.GetComponent<FloatTextUI>().CopyInstance();
                     break;
                 case NoticeUIType.BtnUI:
-                    Debug.Log(this.BtnUIPrefab);
+
                     panel = GameObject.Instantiate(this.BtnUIPrefab);
                     break;
                 case NoticeUIType.PopUpUI:
-                    Debug.Log(this.PopUpUIPrefab);
+
                     panel = GameObject.Instantiate(this.PopUpUIPrefab);
+                    panel.GetComponent<PopUpUI>().Text.text = msg;
+                    //手动模拟入栈
+                    panelStack.Peek().OnPause();
+                    panel.GetComponent<PopUpUI>().OnEnter();
                     break;
                 case NoticeUIType.SideBarUI:
-                    Debug.Log(this.SideBarUIPrefab);
+
                     panel = GameObject.Instantiate(this.SideBarUIPrefab);
+                    panel.GetComponent<SideBarUI>().Text.text = msg;
+                    panel.GetComponent<SideBarUI>().CopyInstance();
                     break;
             }
             panel.transform.localScale = Vector3.one;
             panel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
             panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
-            panel.SetActive(true);
         }
 
         #endregion

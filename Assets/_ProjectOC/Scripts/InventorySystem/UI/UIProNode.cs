@@ -14,6 +14,9 @@ using ML.Engine.UI;
 using ML.Engine.Manager;
 using ML.Engine.Input;
 using static ProjectOC.InventorySystem.UI.UIProNode;
+using System;
+using ProjectOC.MissionNS;
+using UnityEditor;
 
 
 namespace ProjectOC.InventorySystem.UI
@@ -30,7 +33,9 @@ namespace ProjectOC.InventorySystem.UI
 
             this.functionExecutor.SetOnAllFunctionsCompleted(() =>
             {
+                CurPriority = MissionNS.TransportPriority.Normal;
                 this.Refresh();
+                
             });
 
             StartCoroutine(functionExecutor.Execute());
@@ -107,9 +112,9 @@ namespace ProjectOC.InventorySystem.UI
 
             BotKeyTips_Level.gameObject.SetActive(false);
 
-            CurPriority = MissionNS.TransportPriority.Normal;
+            
             IsInit = true;
-            Refresh();
+
         }
 
         protected override void Start()
@@ -197,21 +202,9 @@ namespace ProjectOC.InventorySystem.UI
                     Priority.Find("Selected").gameObject.SetActive(false);
                 }
                 curPriority = value;
-                switch (curPriority)
-                {
-                    case MissionNS.TransportPriority.Urgency:
-                        Priority = PriorityUrgency;
-                        Text_Priority.text = PanelTextContent.textUrgency.GetText();
-                        break;
-                    case MissionNS.TransportPriority.Normal:
-                        Priority = PriorityNormal;
-                        Text_Priority.text = PanelTextContent.textNormal.GetText();
-                        break;
-                    case MissionNS.TransportPriority.Alternative:
-                        Priority = PriorityAlternative;
-                        Text_Priority.text = PanelTextContent.textAlternative.GetText();
-                        break;
-                }
+
+                Text_Priority.text = PanelTextContent.TransportPriority[(int)curPriority];
+                Priority = transform.Find("TopTitle").Find("Priority").GetChild((int)curPriority);
                 Priority.Find("Selected").gameObject.SetActive(true);
             }
         }
@@ -470,18 +463,8 @@ namespace ProjectOC.InventorySystem.UI
         private void NextPriority_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             MissionNS.TransportPriority temp = CurPriority;
-            switch (temp)
-            {
-                case MissionNS.TransportPriority.Urgency:
-                    CurPriority = MissionNS.TransportPriority.Normal;
-                    break;
-                case MissionNS.TransportPriority.Normal:
-                    CurPriority = MissionNS.TransportPriority.Alternative;
-                    break;
-                case MissionNS.TransportPriority.Alternative:
-                    CurPriority = MissionNS.TransportPriority.Urgency;
-                    break;
-            }
+
+            CurPriority = (TransportPriority)(((int)CurPriority + 1) % System.Enum.GetValues(typeof(TransportPriority)).Length);
         }
 
         private void Alter_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -916,22 +899,13 @@ namespace ProjectOC.InventorySystem.UI
                         //}
                         //img.sprite = sprite;
                         var onDuty = UIWorker.transform.Find("OnDuty").GetComponent<TMPro.TextMeshProUGUI>();
-                        switch (Worker.Status)
+
+                        onDuty.text = PanelTextContent.workerStatus[(int)Worker.Status];
+                        if (Worker.Status == Status.Fishing && Worker.IsOnDuty)
                         {
-                            case Status.Relaxing:
-                                onDuty.text = PanelTextContent.textWorkerStateRelax;
-                                break;
-                            case Status.Fishing:
-                                onDuty.text = PanelTextContent.textWorkerStateFish;
-                                if (Worker.IsOnDuty)
-                                {
-                                    onDuty.text = PanelTextContent.textWorkerOnDuty;
-                                }
-                                break;
-                            case Status.Working:
-                                onDuty.text = PanelTextContent.textWorkerStateWork;
-                                break;
+                            onDuty.text = PanelTextContent.textWorkerOnDuty;
                         }
+
                         var rect = UIWorker.transform.Find("PrograssBar").Find("Cur").GetComponent<RectTransform>();
                         rect.offsetMax = new Vector2(rect.offsetMax.x, -1 * (int)(100 - 100 * Worker.APCurrent / Worker.APMax));
                         UIWorker.transform.Find("AP").GetComponent<TMPro.TextMeshProUGUI>().text = $"{Worker.APCurrent}/{Worker.APMax}";
@@ -1278,21 +1252,11 @@ namespace ProjectOC.InventorySystem.UI
                         //img.sprite = sprite;
                         // State
                         var state = item.transform.Find("State").GetComponent<TMPro.TextMeshProUGUI>();
-                        switch (worker.Status)
+
+                        state.text = PanelTextContent.workerStatus[(int)Worker.Status];
+                        if (Worker.Status == Status.Fishing && Worker.IsOnDuty)
                         {
-                            case Status.Relaxing:
-                                state.text = PanelTextContent.textWorkerStateRelax;
-                                break;
-                            case Status.Fishing:
-                                state.text = PanelTextContent.textWorkerStateFish;
-                                if (worker.IsOnDuty)
-                                {
-                                    state.text = PanelTextContent.textWorkerOnDuty;
-                                }
-                                break;
-                            case Status.Working:
-                                state.text = PanelTextContent.textWorkerStateWork;
-                                break;
+                            state.text = PanelTextContent.textWorkerOnDuty;
                         }
                         // PrograssBar
                         var rect = item.transform.Find("PrograssBar").Find("Cur").GetComponent<RectTransform>();
@@ -1512,17 +1476,24 @@ namespace ProjectOC.InventorySystem.UI
         {
             public TextTip[] proNodeType;
             public TextContent textEmpty;
-            public TextContent textUrgency;
+
+            public TextContent[] TransportPriority;
+
+/*            public TextContent textUrgency;
             public TextContent textNormal;
-            public TextContent textAlternative;
+            public TextContent textAlternative;*/
+
             public TextContent textStateVacancy;
             public TextContent textStateStagnation;
             public TextContent textStateProduction;
-            public TextContent textWorkerStateWork;
-            public TextContent textWorkerStateTransport;
+
+            public TextContent[] workerStatus;
+/*            public TextContent textWorkerStateWork;
             public TextContent textWorkerStateFish;
-            public TextContent textWorkerStateRelax;
+            public TextContent textWorkerStateRelax;*/
             public TextContent textWorkerOnDuty;
+
+            public TextContent textWorkerStateTransport;
             public TextContent textPrefixTime;
             public TextContent textPrefixEff;
             public TextContent text_LvDesc;
@@ -1580,22 +1551,12 @@ namespace ProjectOC.InventorySystem.UI
                 if (Worker != null)
                 {
                     var onDuty = UIWorker.transform.Find("OnDuty").GetComponent<TMPro.TextMeshProUGUI>();
-                    switch (Worker.Status)
+                    onDuty.text = PanelTextContent.workerStatus[(int)Worker.Status];
+                    if (Worker.Status == Status.Fishing && Worker.IsOnDuty)
                     {
-                        case Status.Relaxing:
-                            onDuty.text = PanelTextContent.textWorkerStateRelax;
-                            break;
-                        case Status.Fishing:
-                            onDuty.text = PanelTextContent.textWorkerStateFish;
-                            if (Worker.IsOnDuty)
-                            {
-                                onDuty.text = PanelTextContent.textWorkerOnDuty;
-                            }
-                            break;
-                        case Status.Working:
-                            onDuty.text = PanelTextContent.textWorkerStateWork;
-                            break;
+                        onDuty.text = PanelTextContent.textWorkerOnDuty;
                     }
+
                     Text_Eff.text = PanelTextContent.textPrefixEff + ": +" + ProNode.Eff.ToString() + "%";
                     Text_EffProNode.text = ProNode.Name + ": +" + ProNode.EffBase.ToString() + "%";
                     Text_EffWorker.text = Worker.Name + ": +" + (ProNode.Eff - ProNode.EffBase).ToString() + "%";

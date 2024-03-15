@@ -36,15 +36,15 @@
     {
       "name" : "BackBtn",
         "description" : {
-          "Chinese": "退出游戏",
-          "English": "Quit Game"
+          "Chinese": "返回标题",
+          "English": "Back"
         }
   },
   {
     "name" : "QuitGameBtn",
       "description" : {
-        "Chinese": "教程",
-        "English": "Tutorial"
+        "Chinese": "退出游戏",
+        "English": "Quit Game"
       }
 }
     

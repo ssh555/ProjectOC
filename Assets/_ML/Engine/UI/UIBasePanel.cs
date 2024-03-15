@@ -150,9 +150,7 @@ namespace ML.Engine.UI
             foreach (var keyTip in keyTips)
             {
                 InputAction inputAction = GameManager.Instance.InputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
-                GameManager.Instance.InputManager.GetInputActionBindText(inputAction);
 
-                
                 this.UIKeyTipList.SetKeyTiptext(keyTip.keyname, GameManager.Instance.InputManager.GetInputActionBindText(inputAction));
                 this.UIKeyTipList.SetDescriptiontext(keyTip.keyname, keyTip.description.GetText());
             }

@@ -39,7 +39,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             StartCoroutine(functionExecutor.Execute());
 
-            workerEcho = (GameObject.Find("PlayerCharacter").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
+            workerEcho = (GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
 
             //exclusivePart
             exclusivePart = this.transform.Find("ExclusivePart");

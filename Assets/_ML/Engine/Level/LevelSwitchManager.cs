@@ -1,4 +1,5 @@
 using ML.Engine.ABResources;
+using ML.Engine.Manager;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
@@ -271,6 +272,7 @@ namespace ML.Engine.Level
 
             //  Õ∑≈Local
             ABRManager.ReleaseAllLocal();
+            //GameManager.Instance.CounterDownTimerManager
         }
 
         #endregion

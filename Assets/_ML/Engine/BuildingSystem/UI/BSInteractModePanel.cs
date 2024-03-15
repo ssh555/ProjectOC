@@ -18,7 +18,7 @@ namespace ML.Engine.BuildingSystem.UI
         #region Property|Field
         private BuildingManager BM => BuildingManager.Instance;
         private BuildingPlacer.BuildingPlacer Placer => BM.Placer;
-        private ProjectOC.Player.PlayerCharacter Player => GameObject.Find("PlayerCharacter")?.GetComponent<ProjectOC.Player.PlayerCharacter>();
+        private ProjectOC.Player.PlayerCharacter Player => GameObject.Find("PlayerCharacter(Clone)")?.GetComponent<ProjectOC.Player.PlayerCharacter>();
         private MonoBuildingManager monoBM;
         #region KeyTip
         private UIKeyTip keycom;

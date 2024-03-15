@@ -49,6 +49,7 @@ namespace ML.Engine.Manager
         /// </summary>
         public Input.InputManager InputManager { get; private set; }
 
+        [ShowInInspector]
         public SaveSystem.SaveManager SaveManager { get; private set; }
 
         public EnterPoint EnterPoint { get; private set; }

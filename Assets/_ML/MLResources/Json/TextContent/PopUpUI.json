@@ -1,0 +1,25 @@
+{
+  "Confirm": {
+    "keyname": "KT_Confirm",
+    "keymap": {
+      "ActionMapName": "Common",
+      "ActionName": "Confirm"
+    },
+    "description": {
+      "Chinese": "确认",
+      "English": "Confirm"
+    }
+  },
+  "Back": {
+    "keyname": "KT_Back",
+    "keymap": {
+      "ActionMapName": "Common",
+      "ActionName": "Back"
+    },
+    "description": {
+      "Chinese": "返回",
+      "English": "Back"
+    }
+  }
+  
+}

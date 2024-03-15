@@ -128,9 +128,20 @@ namespace ML.Engine.UI
             }
         }
         /// <summary>
+        /// 获取指定按钮
+        /// </summary>
+        public SelectedButton GetBtn(string BtnName)
+        {
+            if (this.SBDic.ContainsKey(BtnName))
+            {
+                return SBDic[BtnName];
+            }
+            return null;
+        }
+        /// <summary>
         /// 获取当前选中按钮
         /// </summary>
-        public Button GetCurSelected()
+        public SelectedButton GetCurSelected()
         {
             return this.CurSelected;
         }
@@ -145,7 +156,7 @@ namespace ML.Engine.UI
         /// <summary>
         /// 向上
         /// </summary>
-        public Button MoveUPIUISelected()
+        public SelectedButton MoveUPIUISelected()
         {
             if(limitNum > 1)
             {
@@ -171,7 +182,7 @@ namespace ML.Engine.UI
         /// <summary>
         /// 向下
         /// </summary>
-        public Button MoveDownIUISelected()
+        public SelectedButton MoveDownIUISelected()
         {
             if (limitNum > 1)
             {
@@ -197,7 +208,7 @@ namespace ML.Engine.UI
         /// <summary>
         /// 向左
         /// </summary>
-        public Button MoveLeftIUISelected()
+        public SelectedButton MoveLeftIUISelected()
         {
             if (limitNum > 1)
             {
@@ -223,7 +234,7 @@ namespace ML.Engine.UI
         /// <summary>
         /// 向右
         /// </summary>
-        public Button MoveRightIUISelected()
+        public SelectedButton MoveRightIUISelected()
         {
             
             if (limitNum > 1)
@@ -249,7 +260,7 @@ namespace ML.Engine.UI
         /// <summary>
         /// 向指定坐标移动
         /// </summary>
-        public Button MoveIndexIUISelected(int i)
+        public SelectedButton MoveIndexIUISelected(int i)
         {
 
             

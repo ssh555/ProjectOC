@@ -78,7 +78,6 @@ namespace ProjectOC.Player
             this.playerViewer = this.transform.Find("PlayerViewer");
             this.playerModel = this.transform.Find("PlayerModel");
             this.playerTerrainDetect = this.transform.Find("PlayerTerrainDetect");
-
             this.InternalInit();
         }
 
@@ -106,6 +105,7 @@ namespace ProjectOC.Player
             this.moveStateController = new StateController(0);
             this.moveStateMachine = new PlayerMoveStateMachine(this.moveAbility.moveSetting, this.moveStateParams);
             this.moveStateMachine.SetMoveAnimator(this.GetComponent<Animator>());
+
             this.moveStateController.SetStateMachine(moveStateMachine);
 
             this.interactComponent = this.GetComponentInChildren<ML.Engine.InteractSystem.InteractComponent>();
@@ -145,6 +145,7 @@ namespace ProjectOC.Player
         {
             (this.thirdPersonRotateComp as ML.Engine.Timer.ITickComponent).DisposeTick();
             (this as ML.Engine.Timer.ITickComponent).DisposeTick();
+            this.playerModelStateController.Stop();
         }
         #endregion
 

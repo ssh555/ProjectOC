@@ -1,4 +1,6 @@
+using Cysharp.Threading.Tasks;
 using ML.Engine.Manager;
+using ML.Engine.SaveSystem;
 using ML.Engine.TextContent;
 using ProjectOC.ResonanceWheelSystem.UI;
 using Sirenix.OdinInspector;
@@ -70,7 +72,6 @@ namespace ML.Engine.UI
 
         public override void OnPause()
         {
-            base.OnPause();
             this.Exit();
         }
 
@@ -173,7 +174,7 @@ namespace ML.Engine.UI
         private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             //this.CurSelected.Interact();
-            this.UIBtnList.GetCurSelected().onClick.Invoke();
+            this.UIBtnList.GetCurSelected().Interact();
         }
         #endregion
 
@@ -221,7 +222,11 @@ namespace ML.Engine.UI
         }
         #endregion
 
+        #region SaveSystem
+        SaveController SC => GameManager.Instance.SaveManager.SaveController;
+        //下标0 为newgame 1为savegame
 
+        #endregion
 
         #region TextContent
         [System.Serializable]
@@ -261,46 +266,95 @@ namespace ML.Engine.UI
             this.UIBtnList.SetBtnAction("GraphicBtn",
             () =>
                 {
-                    Debug.Log("GraphicBtn");
-                    GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, "前面的区域，以后再来探索吧！");
+                    GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, "GraphicBtn");
                 }
             );
             //AudioBtn
             this.UIBtnList.SetBtnAction("AudioBtn",
             () =>
             {
-                Debug.Log("AudioBtn");
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, "前面的区域，以后再来探索吧！");
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, "AudioBtn");
             }
             );
             //ControllerBtn
             this.UIBtnList.SetBtnAction("ControllerBtn",
             () =>
             {
-                Debug.Log("ControllerBtn");
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI,"前面的区域，以后再来探索吧！");
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, "ControllerBtn");
             }
             );
             //TutorialBtn
             this.UIBtnList.SetBtnAction("TutorialBtn",
             () =>
             {
-                Debug.Log("TutorialBtn");
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, "前面的区域，以后再来探索吧！");
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, "TutorialBtn");
             }
             );
             //BackBtn
             this.UIBtnList.SetBtnAction("BackBtn",
             () =>
             {
-                Debug.Log("BackBtn");
+                if(GameManager.Instance.LevelSwitchManager.CurSceneName == "EnterPointScene")
+                {
+                    GameManager.Instance.UIManager.PopPanel();
+                }
+                else
+                {
+                    UIBasePanel loadingpanel = null;
+                    System.Action<string, string> preCallback = async (string s1, string s2) =>
+                    {
+                        //新游戏的临时存档，保存当前新游戏存档时，覆盖之前的savegame，并开始使用savegame存档，即当前使用存档为savegame
+
+                        SC.CreateSaveDataFolder(1, "savegame", () => { Debug.Log("存入savegame！"); });
+
+                        GameManager.Instance.EnterPoint.GetLoadingScenePanelInstance().Completed += (handle) =>
+                        {
+                            // 实例化
+                            loadingpanel = handle.Result.GetComponent<LoadingScenePanel>();
+
+                            loadingpanel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+
+                            loadingpanel.OnEnter();
+
+
+                        };
+
+                    };
+                    System.Action<string, string> postCallback = async (string s1, string s2) =>
+                    {
+                        await UniTask.RunOnThreadPool(() =>
+                        {
+                            while (loadingpanel == null) ;
+                        });
+                        loadingpanel.OnExit();
+
+                        GameManager.Instance.EnterPoint.GetStartMenuPanelInstance().Completed += (handle) =>
+                        {
+                            // 实例化
+                            var panel = handle.Result.GetComponent<StartMenuPanel>();
+
+                            panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+
+                            GameManager.Instance.UIManager.ChangeBotUIPanel(panel);
+
+                            //panel.OnEnter();
+                        };
+                    };
+                    GameManager.Instance.UIManager.PopPanel();//Pop OptionPanel
+                    GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("EnterPointScene", preCallback, postCallback));
+
+                }
             }
             );
             //QuitGameBtn
             this.UIBtnList.SetBtnAction("QuitGameBtn",
             () =>
             {
-                Debug.Log("QuitGameBtn");
+                #if UNITY_EDITOR
+                                UnityEditor.EditorApplication.isPlaying = false;//如果是在unity编译器中
+                #else
+                        Application.Quit();//否则在打包文件中
+                #endif
             }
             );
  

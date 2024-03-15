@@ -169,7 +169,7 @@ namespace ProjectOC.Player.UI
 
         private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            this.UIBtnList.GetCurSelected().onClick.Invoke();
+            this.UIBtnList.GetCurSelected().Interact();
         }
         #endregion
 

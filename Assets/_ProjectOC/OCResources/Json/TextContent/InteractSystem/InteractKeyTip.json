@@ -2,9 +2,9 @@
     {
         "keyname": "Interaction",
         "keymap": {
-            "KeyBoard": "E",
-            "XBOX": "A"
-        },
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
         "description": {
             "Chinese": "可交互",
             "English": "Interact"
@@ -13,9 +13,9 @@
     {
         "keyname": "WorkerEcho",
         "keymap": {
-            "KeyBoard": "E",
-            "XBOX": "A"
-        },
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
         "description": {
             "Chinese": "交互",
             "English": "Interact"
