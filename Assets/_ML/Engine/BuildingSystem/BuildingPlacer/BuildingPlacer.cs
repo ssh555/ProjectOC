@@ -146,10 +146,10 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             get => this.selectedPartInstance;
             set
             {
-                //if (value == null)
-                //{
-                //    Debug.Log("QWQ" + Time.frameCount);
-                //}
+/*                if (value == null)
+                {
+                    Debug.Log("QWQ" + Time.frameCount);
+                }*/
                 if (this.selectedPartInstance != null)
                 {
                     this.selectedPartInstance.Mode = BuildingMode.None;

@@ -13,6 +13,7 @@ using ProjectOC.LandMassExpand;
 using Sirenix.OdinInspector;
 using ML.Engine.UI;
 using ProjectOC.TechTree;
+using ML.Engine.Manager;
 
 namespace ProjectOC.ManagerNS
 {
@@ -21,22 +22,22 @@ namespace ProjectOC.ManagerNS
     {
         public static LocalGameManager Instance;
         public ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
-        public DispatchTimeManager DispatchTimeManager { get; private set; }
-        [ShowInInspector]
+        public DispatchTimeManager DispatchTimeManager;
         public MissionManager MissionManager;
-        public ProNodeManager ProNodeManager { get; private set; }
-        public RecipeManager RecipeManager { get; private set; }
-        public StoreManager StoreManager { get; private set; }
-        public WorkerManager WorkerManager { get; private set; }
-        public EffectManager EffectManager { get; private set; }
-        public FeatureManager FeatureManager { get; private set; }
-        public SkillManager SkillManager { get; private set; }
-        public WorkerEchoManager WorkerEchoManager { get; private set; }
-        public NavMeshManager NavMeshManager { get; private set; }
-        public BuildPowerIslandManager BuildPowerIslandManager { get; private set; }
-        public IslandManager IslandManager { get; private set; }
-        public MonoBuildingManager MonoBuildingManager { get; private set; }
-        public TechTreeManager TechTreeManager { get; private set; }
+        public ProNodeManager ProNodeManager;
+        public RecipeManager RecipeManager;
+        public StoreManager StoreManager;
+        public WorkerManager WorkerManager;
+        public EffectManager EffectManager;
+        public FeatureManager FeatureManager;
+        public SkillManager SkillManager;
+        public WorkerEchoManager WorkerEchoManager;
+        [NonSerialized]
+        public NavMeshManager NavMeshManager;
+        public BuildPowerIslandManager BuildPowerIslandManager;
+        public IslandManager IslandManager;
+        public MonoBuildingManager MonoBuildingManager;
+        public TechTreeManager TechTreeManager;
         
         /// <summary>
         /// 单例管理
@@ -49,32 +50,50 @@ namespace ProjectOC.ManagerNS
                 return;
             }
             Instance = this;
-            
+            //// TODO : 退出LocalGameManager的使用场景之后，要手动销毁掉
+            //DontDestroyOnLoad(this);
             GM.RegisterLocalManager(this);
-            DispatchTimeManager = GM.RegisterLocalManager<DispatchTimeManager>();
+            GM.RegisterLocalManager(DispatchTimeManager);
             DispatchTimeManager.Init();
-            MissionManager = GM.RegisterLocalManager<MissionManager>();
+            GM.RegisterLocalManager(MissionManager);
             MissionManager.Init();
-            ProNodeManager = GM.RegisterLocalManager<ProNodeManager>();
+            GM.RegisterLocalManager(ProNodeManager);
             ProNodeManager.LoadTableData();
-            RecipeManager = GM.RegisterLocalManager<RecipeManager>();
+            GM.RegisterLocalManager(RecipeManager);
             RecipeManager.LoadTableData();
-            StoreManager = GM.RegisterLocalManager<StoreManager>();
-            WorkerManager = GM.RegisterLocalManager<WorkerManager>();
-            EffectManager = GM.RegisterLocalManager<EffectManager>();
+            GM.RegisterLocalManager(StoreManager);
+            GM.RegisterLocalManager(WorkerManager);
+            GM.RegisterLocalManager(EffectManager);
             EffectManager.LoadTableData();
-            FeatureManager = GM.RegisterLocalManager<FeatureManager>();
+            GM.RegisterLocalManager(FeatureManager);
             FeatureManager.LoadTableData();
-            SkillManager = GM.RegisterLocalManager<SkillManager>();
+            GM.RegisterLocalManager(SkillManager);
             SkillManager.LoadTableData();
-            WorkerEchoManager = GM.RegisterLocalManager<WorkerEchoManager>();
+            GM.RegisterLocalManager(WorkerEchoManager);
             WorkerEchoManager.LoadTableData();
-            MonoBuildingManager = GM.RegisterLocalManager<MonoBuildingManager>();
-            TechTreeManager = GM.RegisterLocalManager<TechTreeManager>();
-            NavMeshManager = GM.RegisterLocalManager<NavMeshManager>();
-            IslandManager = GM.RegisterLocalManager<IslandManager>();
-            BuildPowerIslandManager = GM.RegisterLocalManager<BuildPowerIslandManager>();
+            GM.RegisterLocalManager(MonoBuildingManager);
+            MonoBuildingManager.Init();
+            GM.RegisterLocalManager(TechTreeManager);
+            TechTreeManager.Init();
+            GM.RegisterLocalManager(IslandManager);
+            IslandManager.Init();
+            GM.RegisterLocalManager(BuildPowerIslandManager);
+        }
+
+        private void Start()
+        {
+            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/Character/Player/Prefabs/PlayerCharacter.prefab").Completed += (handle) =>
+            {
+                // 实例化
+                var player = handle.Result;
+
+                player.transform.position = GameObject.Find("PlayerSpawnPoint").transform.position;
+
+                NavMeshManager = GM.RegisterLocalManager<NavMeshManager>();
+
+            };
             this.enabled = false;
+
         }
 
         private void OnDestroy()

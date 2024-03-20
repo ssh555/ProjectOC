@@ -1,0 +1,60 @@
+{
+    "Btns" : [
+        {
+            "name" : "背包",
+            "description" : {
+                "Chinese" : "背包",
+                "English" : "Inventory"
+            }
+        },
+        {
+            "name" : "选项",
+            "description" : {
+                "Chinese" : "选项",
+                "English" : "Option"
+            }
+        },
+        {
+            "name" : "友人",
+            "description" : {
+                "Chinese" : "友人",
+                "English" : "Friends"
+            }
+        },
+        {
+            "name" : "我的氏族",
+            "description" : {
+                "Chinese" : "我的氏族",
+                "English" : "My shizu"
+            }
+        },
+        {
+            "name" : "订单管理",
+            "description" : {
+                "Chinese" : "订单管理",
+                "English" : "Order Manage"
+            }
+        },
+        {
+            "name" : "生产管理",
+            "description" : {
+                "Chinese" : "生产管理",
+                "English" : "Produce Manage"
+            }
+        },
+        {
+            "name" : "科技树",
+            "description" : {
+                "Chinese" : "科技树",
+                "English" : "TechnologyTree"
+            }
+        },
+        {
+            "name" : "建造",
+            "description" : {
+                "Chinese" : "建造",
+                "English" : "Build"
+            }
+        }
+    ]
+}

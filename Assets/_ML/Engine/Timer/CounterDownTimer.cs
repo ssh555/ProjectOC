@@ -21,6 +21,7 @@ namespace ML.Engine.Timer
         /// <param name="autocycle">是否自动循环</param>
         public CounterDownTimer(float duration, bool autocycle = false, bool autoStart = true, double speed = 1f, int tType = 0)
         {
+            this._isStoped = true;
             Duration = Mathf.Max(0f, duration);
             TimerType = tType;
             IsAutoCycle = autocycle;
@@ -47,6 +48,8 @@ namespace ML.Engine.Timer
         public bool IsStoped { get => this._isStoped; 
             private set
             {
+                if (this._isStoped == value)
+                    return;
                 this._isStoped = value;
                 // 启动
                 if (!this._isStoped)

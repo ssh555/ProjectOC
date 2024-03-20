@@ -8,6 +8,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 
 
@@ -19,14 +20,9 @@ namespace ML.Engine.UI
         #region Unity
         public bool IsInit = false;
 
-        private void Awake()
+        protected override void Awake()
         {
             //DontDestroyOnLoad(this.gameObject);
-        }
-
-        private void Start()
-        {
-            
             InitUITextContents();
 
 
@@ -34,10 +30,19 @@ namespace ML.Engine.UI
 
             LoadText = this.transform.Find("LoadText").GetComponent<TextMeshProUGUI>();
             ProgressText = this.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>();
+        }
+
+        protected override void Start()
+        {
+            
+
 
             IsInit = true;
             Refresh();
+
+            base.Start();
         }
+
 
         #endregion
 
@@ -72,7 +77,18 @@ namespace ML.Engine.UI
             this.Enter();
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
         }
+        protected override void Enter()
+        {
+            this.RegisterInput();
+            base.Enter();
+        }
 
+        protected override void Exit()
+        {
+            this.UnregisterInput();
+            base.Exit();
+
+        }
         #endregion
 
 
@@ -85,7 +101,7 @@ namespace ML.Engine.UI
         {
             if (GameManager.Instance.LevelSwitchManager.SceneHandle.IsValid())
             {
-                float progress = Mathf.Clamp01(GameManager.Instance.LevelSwitchManager.SceneHandle.PercentComplete / 0.9f);
+                float progress = Mathf.Clamp01(GameManager.Instance.LevelSwitchManager.SceneHandle.PercentComplete);
                 ProgressText.text = ((int)progress * 100).ToString() + "%";
                 slider.value = progress;
             }
@@ -98,18 +114,6 @@ namespace ML.Engine.UI
 
 
         #region Internal
-
-        private void Enter()
-        {
-            this.RegisterInput();
-            this.Refresh();
-        }
-
-        private void Exit()
-        {
-            this.UnregisterInput();
-
-        }
 
         private void UnregisterInput()
         {
@@ -139,7 +143,6 @@ namespace ML.Engine.UI
         {
             if (ABJAProcessorJson_StartMenuPanel == null || !ABJAProcessorJson_StartMenuPanel.IsLoaded || !IsInit)
             {
-                Debug.Log("ABJAProcessorJson is null");
                 return;
             }
 
@@ -171,8 +174,6 @@ namespace ML.Engine.UI
             ABJAProcessorJson_StartMenuPanel.StartLoadJsonAssetData();
         }
         #endregion
-
-
 
     }
 

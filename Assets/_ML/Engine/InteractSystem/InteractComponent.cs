@@ -1,10 +1,13 @@
+using ML.Engine.Manager;
 using ML.Engine.TextContent;
+using ML.Engine.UI;
 using Newtonsoft.Json;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace ML.Engine.InteractSystem
@@ -51,7 +54,12 @@ namespace ML.Engine.InteractSystem
                     return;
                 }
                 uiKeyTip.img.transform.parent.gameObject.SetActive(true);
-                uiKeyTip.ReWrite(GetKeyTip(CurrentInteraction.InteractType));
+
+                KeyTip keyTip = GetKeyTip(CurrentInteraction.InteractType);
+                InputAction inputAction = GameManager.Instance.InputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
+
+                uiKeyTip.keytip.text = GameManager.Instance.InputManager.GetInputActionBindText(inputAction);
+                uiKeyTip.description.text = keyTip.description.GetText();
 
                 // 将世界坐标转换为屏幕坐标
                 Vector3 screenPosition = Camera.main.WorldToScreenPoint(CurrentInteraction.gameObject.transform.position + CurrentInteraction.PosOffset);
@@ -171,9 +179,6 @@ namespace ML.Engine.InteractSystem
                  // 禁用 Mono
                  this.enabled = false;
              };
-
-
-
         }
 
         private AsyncOperationHandle ktHandle;

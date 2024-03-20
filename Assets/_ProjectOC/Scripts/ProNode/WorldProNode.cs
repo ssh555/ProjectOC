@@ -10,6 +10,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 
 namespace ProjectOC.ProNodeNS
@@ -48,7 +49,7 @@ namespace ProjectOC.ProNodeNS
         public void Interact(InteractComponent component)
         {
             // ÊµÀý»¯UIPanel
-            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIProNodePanel.prefab", GameManager.Instance.UIManager.GetCanvas.transform, true).Completed += (handle) =>
+            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIProNodePanel.prefab", GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
             {
                 InventorySystem.UI.UIProNode uiPanel = handle.Result.GetComponent<InventorySystem.UI.UIProNode>();
                 uiPanel.Player = component.GetComponentInParent<Player.PlayerCharacter>();
