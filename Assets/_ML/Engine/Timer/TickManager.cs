@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,8 @@ namespace ML.Engine.Timer
         // ´ýÒÆ³ý¶ÓÁÐ
         private List<ITickComponent> removeTick;
         private List<ITickComponent> removeFixedTick;
+
+        [ShowInInspector]
         private List<ITickComponent> removeLateTick;
 
         public float TimeScale = 1;
@@ -180,6 +183,7 @@ namespace ML.Engine.Timer
         /// <param name="tickComponent"></param>
         public bool RegisterTick(int priority, ITickComponent tickComponent)
         {
+            Debug.Log("RegisterTick");
             if(this.addTick.Contains(tickComponent))
             {
                 return false;
@@ -203,9 +207,9 @@ namespace ML.Engine.Timer
         }
         public bool UnregisterTick(ITickComponent tickComponent)
         {
+            Debug.Log("UnregisterTick");
             if (this.addTick.Contains(tickComponent))
             {
-                Debug.Log("QWQ");
                 this.addTick.Remove(tickComponent);
                 return true;
             }

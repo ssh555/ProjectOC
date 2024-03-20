@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -34,6 +35,7 @@ namespace ML.Engine.SaveSystem
         /// <summary>
         /// 当前选择游玩的存档index
         /// </summary>
+        [ShowInInspector]
         protected int CurIndex = -1;
         /// <summary>
         /// 获取当前选中的存档的SaveConfig

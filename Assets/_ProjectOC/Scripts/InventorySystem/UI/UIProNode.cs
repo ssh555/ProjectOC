@@ -5,8 +5,6 @@ using ProjectOC.ManagerNS;
 using ProjectOC.ProNodeNS;
 using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,25 +13,32 @@ using ML.Engine.BuildingSystem;
 using ML.Engine.UI;
 using ML.Engine.Manager;
 using ML.Engine.Input;
-using UnityEngine.InputSystem;
+using static ProjectOC.InventorySystem.UI.UIProNode;
+using System;
+using ProjectOC.MissionNS;
+using UnityEditor;
+
 
 namespace ProjectOC.InventorySystem.UI
 {
-    public class UIProNode : ML.Engine.UI.UIBasePanel
+    public class UIProNode : ML.Engine.UI.UIBasePanel<ProNodePanel>
     {
         #region Unity
         public bool IsInit = false;
-        private void Start()
+        protected override void Awake()
         {
-            InitUITextContents();
 
-            //KeyTips
-            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
-            foreach (var item in UIKeyTipComponents)
+            base.Awake();
+            this.InitTextContentPathData();
+
+            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
             {
-                item.InitData();
-                uiKeyTipDic.Add(item.InputActionName, item);
-            }
+                CurPriority = MissionNS.TransportPriority.Normal;
+                this.Refresh();
+                
+            });
+
+            StartCoroutine(functionExecutor.Execute());
 
 
             // TopTitle
@@ -107,10 +112,16 @@ namespace ProjectOC.InventorySystem.UI
 
             BotKeyTips_Level.gameObject.SetActive(false);
 
-            CurPriority = MissionNS.TransportPriority.Normal;
+            
             IsInit = true;
-            Refresh();
+
         }
+
+        protected override void Start()
+        {
+            base.Start();
+        }
+
         #endregion
 
         #region Override
@@ -137,6 +148,26 @@ namespace ProjectOC.InventorySystem.UI
         {
             base.OnRecovery();
             this.Enter();
+        }
+
+        protected override void Enter()
+        {
+            ProNode.OnActionChange += RefreshDynamic;
+            ProNode.OnProduceTimerUpdate += OnProduceTimerUpdateAction;
+            ProNode.OnProduceEnd += Refresh;
+            this.RegisterInput();
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Enable();
+            base.Enter();
+        }
+
+        protected override void Exit()
+        {
+            ProNode.OnActionChange -= RefreshDynamic;
+            ProNode.OnProduceTimerUpdate -= OnProduceTimerUpdateAction;
+            ProNode.OnProduceEnd -= Refresh;
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Disable();
+            this.UnregisterInput();
+            base.Exit();
         }
         #endregion
 
@@ -171,21 +202,9 @@ namespace ProjectOC.InventorySystem.UI
                     Priority.Find("Selected").gameObject.SetActive(false);
                 }
                 curPriority = value;
-                switch (curPriority)
-                {
-                    case MissionNS.TransportPriority.Urgency:
-                        Priority = PriorityUrgency;
-                        Text_Priority.text = PanelTextContent.textUrgency.GetText();
-                        break;
-                    case MissionNS.TransportPriority.Normal:
-                        Priority = PriorityNormal;
-                        Text_Priority.text = PanelTextContent.textNormal.GetText();
-                        break;
-                    case MissionNS.TransportPriority.Alternative:
-                        Priority = PriorityAlternative;
-                        Text_Priority.text = PanelTextContent.textAlternative.GetText();
-                        break;
-                }
+
+                Text_Priority.text = PanelTextContent.TransportPriority[(int)curPriority];
+                Priority = transform.Find("TopTitle").Find("Priority").GetChild((int)curPriority);
                 Priority.Find("Selected").gameObject.SetActive(true);
             }
         }
@@ -406,26 +425,6 @@ namespace ProjectOC.InventorySystem.UI
 
         public Player.PlayerCharacter Player;
 
-        private void Enter()
-        {
-            ProNode.OnActionChange += RefreshDynamic;
-            ProNode.OnProduceTimerUpdate += OnProduceTimerUpdateAction;
-            ProNode.OnProduceEnd += Refresh;
-            this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Enable();
-            UikeyTipIsInit = false;
-            this.Refresh();
-        }
-
-        private void Exit()
-        {
-            ProNode.OnActionChange -= RefreshDynamic;
-            ProNode.OnProduceTimerUpdate -= OnProduceTimerUpdateAction;
-            ProNode.OnProduceEnd -= Refresh;
-            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Disable();
-            this.UnregisterInput();
-        }
-
         private void UnregisterInput()
         {
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
@@ -464,18 +463,8 @@ namespace ProjectOC.InventorySystem.UI
         private void NextPriority_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             MissionNS.TransportPriority temp = CurPriority;
-            switch (temp)
-            {
-                case MissionNS.TransportPriority.Urgency:
-                    CurPriority = MissionNS.TransportPriority.Normal;
-                    break;
-                case MissionNS.TransportPriority.Normal:
-                    CurPriority = MissionNS.TransportPriority.Alternative;
-                    break;
-                case MissionNS.TransportPriority.Alternative:
-                    CurPriority = MissionNS.TransportPriority.Urgency;
-                    break;
-            }
+
+            CurPriority = (TransportPriority)(((int)CurPriority + 1) % System.Enum.GetValues(typeof(TransportPriority)).Length);
         }
 
         private void Alter_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -600,10 +589,6 @@ namespace ProjectOC.InventorySystem.UI
         private List<GameObject> tempUIItemsRecipeRaw = new List<GameObject>();
         private List<GameObject> tempUIItemsWorker = new List<GameObject>();
         private List<GameObject> tempUIItemsLevel = new List<GameObject>();
-
-        private Dictionary<string, UIKeyTipComponent> uiKeyTipDic = new Dictionary<string, UIKeyTipComponent>();
-        private bool UikeyTipIsInit;
-        private InputManager inputManager => GameManager.Instance.InputManager;
         private void ClearTemp()
         {
             foreach(var s in tempSprite)
@@ -630,13 +615,10 @@ namespace ProjectOC.InventorySystem.UI
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s);
             }
-            uiKeyTipDic = null;
         }
         #endregion
 
         #region UI对象引用
-
-        private UIKeyTipComponent[] UIKeyTipComponents;
 
         private TMPro.TextMeshProUGUI Text_Title;
         private TMPro.TextMeshProUGUI Text_Priority;
@@ -682,38 +664,10 @@ namespace ProjectOC.InventorySystem.UI
         public override void Refresh()
         {
             // 加载完成JSON数据 & 查找完所有引用
-            if(ABJAProcessor == null || !ABJAProcessor.IsLoaded || !IsInit)
+            if(ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
             {
                 return;
             }
-
-            if (UikeyTipIsInit == false)
-            {
-                KeyTip[] keyTips = inputManager.ExportKeyTipValues(PanelTextContent);
-                foreach (var keyTip in keyTips)
-                {
-                    InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
-                    inputManager.GetInputActionBindText(inputAction);
-                    if (uiKeyTipDic.ContainsKey(keyTip.keyname))
-                    {
-                        UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
-                        if (uIKeyTipComponent.uiKeyTip.keytip != null)
-                        {
-                            uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
-                        }
-                        if (uIKeyTipComponent.uiKeyTip.description != null)
-                        {
-                            uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
-                        }
-                    }
-                    else
-                    {
-                        //Debug.Log("keyTip.keyname " + keyTip.keyname);
-                    }
-                }
-                UikeyTipIsInit = true;
-            }
-
 
             if (CurMode == Mode.ProNode)
             {
@@ -945,22 +899,13 @@ namespace ProjectOC.InventorySystem.UI
                         //}
                         //img.sprite = sprite;
                         var onDuty = UIWorker.transform.Find("OnDuty").GetComponent<TMPro.TextMeshProUGUI>();
-                        switch (Worker.Status)
+
+                        onDuty.text = PanelTextContent.workerStatus[(int)Worker.Status];
+                        if (Worker.Status == Status.Fishing && Worker.IsOnDuty)
                         {
-                            case Status.Relaxing:
-                                onDuty.text = PanelTextContent.textWorkerStateRelax;
-                                break;
-                            case Status.Fishing:
-                                onDuty.text = PanelTextContent.textWorkerStateFish;
-                                if (Worker.IsOnDuty)
-                                {
-                                    onDuty.text = PanelTextContent.textWorkerOnDuty;
-                                }
-                                break;
-                            case Status.Working:
-                                onDuty.text = PanelTextContent.textWorkerStateWork;
-                                break;
+                            onDuty.text = PanelTextContent.textWorkerOnDuty;
                         }
+
                         var rect = UIWorker.transform.Find("PrograssBar").Find("Cur").GetComponent<RectTransform>();
                         rect.offsetMax = new Vector2(rect.offsetMax.x, -1 * (int)(100 - 100 * Worker.APCurrent / Worker.APMax));
                         UIWorker.transform.Find("AP").GetComponent<TMPro.TextMeshProUGUI>().text = $"{Worker.APCurrent}/{Worker.APMax}";
@@ -1307,21 +1252,11 @@ namespace ProjectOC.InventorySystem.UI
                         //img.sprite = sprite;
                         // State
                         var state = item.transform.Find("State").GetComponent<TMPro.TextMeshProUGUI>();
-                        switch (worker.Status)
+
+                        state.text = PanelTextContent.workerStatus[(int)Worker.Status];
+                        if (Worker.Status == Status.Fishing && Worker.IsOnDuty)
                         {
-                            case Status.Relaxing:
-                                state.text = PanelTextContent.textWorkerStateRelax;
-                                break;
-                            case Status.Fishing:
-                                state.text = PanelTextContent.textWorkerStateFish;
-                                if (worker.IsOnDuty)
-                                {
-                                    state.text = PanelTextContent.textWorkerOnDuty;
-                                }
-                                break;
-                            case Status.Working:
-                                state.text = PanelTextContent.textWorkerStateWork;
-                                break;
+                            state.text = PanelTextContent.textWorkerOnDuty;
                         }
                         // PrograssBar
                         var rect = item.transform.Find("PrograssBar").Find("Cur").GetComponent<RectTransform>();
@@ -1541,17 +1476,24 @@ namespace ProjectOC.InventorySystem.UI
         {
             public TextTip[] proNodeType;
             public TextContent textEmpty;
-            public TextContent textUrgency;
+
+            public TextContent[] TransportPriority;
+
+/*            public TextContent textUrgency;
             public TextContent textNormal;
-            public TextContent textAlternative;
+            public TextContent textAlternative;*/
+
             public TextContent textStateVacancy;
             public TextContent textStateStagnation;
             public TextContent textStateProduction;
-            public TextContent textWorkerStateWork;
-            public TextContent textWorkerStateTransport;
+
+            public TextContent[] workerStatus;
+/*            public TextContent textWorkerStateWork;
             public TextContent textWorkerStateFish;
-            public TextContent textWorkerStateRelax;
+            public TextContent textWorkerStateRelax;*/
             public TextContent textWorkerOnDuty;
+
+            public TextContent textWorkerStateTransport;
             public TextContent textPrefixTime;
             public TextContent textPrefixEff;
             public TextContent text_LvDesc;
@@ -1572,18 +1514,11 @@ namespace ProjectOC.InventorySystem.UI
             public KeyTip ConfirmLevel;
             public KeyTip BackLevel;
         }
-
-        public ProNodePanel PanelTextContent => ABJAProcessor.Datas;
-        public ML.Engine.ABResources.ABJsonAssetProcessor<ProNodePanel> ABJAProcessor;
-
-        private void InitUITextContents()
+        private void InitTextContentPathData()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ProNodePanel>("OC/Json/TextContent/ProNode", "ProNodePanel", (datas) =>
-            {
-                Refresh();
-                this.enabled = false;
-            }, "UI生产节点Panel数据");
-            ABJAProcessor.StartLoadJsonAssetData();
+            this.abpath = "OC/Json/TextContent/ProNode";
+            this.abname = "ProNodePanel";
+            this.description = "ProNodePanel数据加载完成";
         }
         #endregion
 
@@ -1616,22 +1551,12 @@ namespace ProjectOC.InventorySystem.UI
                 if (Worker != null)
                 {
                     var onDuty = UIWorker.transform.Find("OnDuty").GetComponent<TMPro.TextMeshProUGUI>();
-                    switch (Worker.Status)
+                    onDuty.text = PanelTextContent.workerStatus[(int)Worker.Status];
+                    if (Worker.Status == Status.Fishing && Worker.IsOnDuty)
                     {
-                        case Status.Relaxing:
-                            onDuty.text = PanelTextContent.textWorkerStateRelax;
-                            break;
-                        case Status.Fishing:
-                            onDuty.text = PanelTextContent.textWorkerStateFish;
-                            if (Worker.IsOnDuty)
-                            {
-                                onDuty.text = PanelTextContent.textWorkerOnDuty;
-                            }
-                            break;
-                        case Status.Working:
-                            onDuty.text = PanelTextContent.textWorkerStateWork;
-                            break;
+                        onDuty.text = PanelTextContent.textWorkerOnDuty;
                     }
+
                     Text_Eff.text = PanelTextContent.textPrefixEff + ": +" + ProNode.Eff.ToString() + "%";
                     Text_EffProNode.text = ProNode.Name + ": +" + ProNode.EffBase.ToString() + "%";
                     Text_EffWorker.text = Worker.Name + ": +" + (ProNode.Eff - ProNode.EffBase).ToString() + "%";

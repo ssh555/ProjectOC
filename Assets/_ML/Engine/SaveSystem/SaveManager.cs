@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,7 @@ namespace ML.Engine.SaveSystem
         /// <summary>
         /// ´æµµ¿ØÖÆÆ÷
         /// </summary>
+        [ShowInInspector]
         public SaveController SaveController;
 
         public SaveManager()

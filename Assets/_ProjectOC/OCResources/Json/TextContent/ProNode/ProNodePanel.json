@@ -152,18 +152,23 @@
         "Chinese" : "空",
         "English" : "Empty"
     },
-    "textUrgency" : {
-        "Chinese" : "紧急",
-        "English" : "Urgency"
-    },
-    "textNormal" : {
-        "Chinese" : "常规",
-        "English" : "Normal"
-    },
-    "textAlternative" : {
-        "Chinese" : "备选",
-        "English" : "Alternative"
-    },
+
+    "TransportPriority":[
+            {
+                "Chinese" : "紧急",
+                "English" : "Urgency"
+            },
+            {
+                "Chinese" : "常规",
+                "English" : "Normal"
+            },
+            {
+                "Chinese" : "备选",
+                "English" : "Alternative"
+            }
+    ],
+
+    
     "textStateVacancy" : {
         "Chinese" : "空置",
         "English" : "Vacancy"
@@ -176,25 +181,32 @@
         "Chinese" : "生产",
         "English" : "Production"
     },
-    "textWorkerStateWork" : {
-        "Chinese" : "工作",
-        "English" : "Work"
-    },
-    "textWorkerStateTransport" : {
-        "Chinese" : "搬运",
-        "English" : "Transport"
-    },
-    "textWorkerStateFish" : {
-        "Chinese" : "摸鱼",
-        "English" : "Fish"
-    },
-    "textWorkerStateRelax" : {
-        "Chinese" : "休息",
-        "English" : "Relax"
-    },
+
+    "workerStatus":[
+
+        {
+            "Chinese" : "摸鱼",
+            "English" : "Fish"
+        },
+        {
+            "Chinese" : "休息",
+            "English" : "Relax"
+        },
+        {
+            "Chinese" : "工作",
+            "English" : "Work"
+        }
+
+    ],
+
     "textWorkerOnDuty" : {
         "Chinese" : "在岗",
         "English" : "OnDuty"
+    },
+
+    "textWorkerStateTransport" : {
+        "Chinese" : "搬运",
+        "English" : "Transport"
     },
     "textPrefixTime" : {
         "Chinese" : "时间",

@@ -10,7 +10,6 @@ namespace ML.Engine.TextContent
     public struct KeyMap
     {
         public string ActionMapName;
-
         public string ActionName;
     }
 

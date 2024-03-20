@@ -9,6 +9,7 @@ using ML.Engine.Manager;
 using ProjectOC.LandMassExpand;
 using Sirenix.OdinInspector;
 
+[System.Serializable]
 public class NavMeshManager :ML.Engine.Manager.LocalManager.ILocalManager
 {
     private List<NavMeshSurface> surfacesToReBake = new List<NavMeshSurface>();
