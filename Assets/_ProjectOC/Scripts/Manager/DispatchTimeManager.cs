@@ -36,6 +36,7 @@ namespace ProjectOC.ManagerNS
         /// 当前所处时段 [0, 23]
         /// </summary>
         public int CurrentTimeFrame = 0;
+        public int CurrentMinute = 0;
         public int CurrentDay = 0;
 
         /// <summary>
@@ -51,19 +52,24 @@ namespace ProjectOC.ManagerNS
 
         public void Init()
         {
-            this.Timer = new CounterDownTimer(this.TimeScale, true, false);
+            this.Timer = new CounterDownTimer(1f, true, false);
             this.Timer.OnEndEvent += EndActionForTimer;
             this.Timer.Start();
         }
         private void EndActionForTimer()
         {
+            if (this.CurrentMinute + 1 == 60)
+            {
+                this.CurrentTimeFrame += 1;
+                this.OnTimeFrameChanged?.Invoke(this.CurrentTimeFrame);
+            }
             if (this.CurrentTimeFrame + 1 == 24)
             {
                 this.CurrentDay += 1;
                 this.OnDayChanged?.Invoke(this.CurrentDay);
             }
+            this.CurrentMinute = (this.CurrentMinute + 1) % 60;
             this.CurrentTimeFrame = (this.CurrentTimeFrame + 1) % 24;
-            this.OnTimeFrameChanged?.Invoke(this.CurrentTimeFrame);
         }
     }
 }

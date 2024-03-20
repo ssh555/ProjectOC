@@ -1,14 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using ML.Engine.BuildingSystem;
 using ML.Engine.InventorySystem;
 using ML.Engine.InventorySystem.CompositeSystem;
-using ML.Engine.UI;
 using ProjectOC.MissionNS;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using static ML.Engine.InventorySystem.CompositeSystem.CompositeManager;
 
 namespace ProjectOC.StoreNS
 {
@@ -334,7 +331,7 @@ namespace ProjectOC.StoreNS
         /// <returns></returns>
         public bool IsStoreHaveStorage(string itemID, int amount)
         {
-            return GetStoreStorage(itemID) > amount;
+            return GetStoreStorage(itemID) >= amount;
         }
 
         /// <summary>
@@ -345,7 +342,7 @@ namespace ProjectOC.StoreNS
         /// <returns></returns>
         public bool IsStoreHaveEmpty(string itemID, int amount)
         {
-            return GetStoreEmpty(itemID) > amount;
+            return GetStoreEmpty(itemID) >= amount;
         }
 
         public int GetStoreStorageAll(string itemID)

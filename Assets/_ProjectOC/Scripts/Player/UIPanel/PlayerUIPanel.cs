@@ -1,17 +1,15 @@
 using ML.Engine.BuildingSystem;
-using ML.Engine.InventorySystem;
+using ML.Engine.Manager;
 using ML.Engine.SaveSystem;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
 using Newtonsoft.Json;
 using ProjectOC.InventorySystem.UI;
 using ProjectOC.ResonanceWheelSystem.UI;
-using ProjectOC.StoreNS;
 using ProjectOC.TechTree.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 namespace ProjectOC.Player.UI
 {
@@ -35,6 +33,7 @@ namespace ProjectOC.Player.UI
         public int lateTickPriority { get; set; }
 
         public bool IsInit = false;
+
         private void Start()
         {
             InitUITextContents();
@@ -106,20 +105,12 @@ namespace ProjectOC.Player.UI
             this.SaveSystemBtn = btnList.Find("SaveSystem").GetComponent<SelectedButton>();
             this.SaveSystemBtn.OnInteract += () =>
             {
-                bool flag = true;
-                foreach (ISaveData data in ML.Engine.Manager.GameManager.Instance.SaveManager.SaveController.datas)
+                if (GameManager.Instance.SaveManager.SaveController.GetSaveData<TestSaveData>() == null)
                 {
-                    if (data is TestSaveData)
-                    {
-                        flag = false;
-                    }
-                }
-                if (flag)
-                {
+                    GameManager.Instance.SaveManager.SaveController.SelectSaveDataFolder(0, null);
                     TestSaveData data = new TestSaveData();
                     data.AddToSaveSystem();
                 }
-                ML.Engine.Manager.GameManager.Instance.SaveManager.SaveController.SaveSaveDataFolder(null);
             };
 
 
