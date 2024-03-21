@@ -35,7 +35,7 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region Unity
-        private void Awake()
+        protected override void Awake()
         {
             LoadMatPackages();
             monoBM = ML.Engine.Manager.GameManager.Instance.GetLocalManager<MonoBuildingManager>();
@@ -112,7 +112,7 @@ namespace ML.Engine.BuildingSystem.UI
         {
             this.Placer.BInput.BuildingAppearance.Disable();
 
-            this.Placer.comfirmInputAction.performed += Placer_ComfirmAppearance;
+            this.Placer.comfirmInputAction.performed -= Placer_ComfirmAppearance;
             this.Placer.backInputAction.performed -= Placer_CancelAppearance;
             this.Placer.BInput.BuildingAppearance.AlterMaterial.performed -= Placer_OnChangeAppearance;
 
@@ -266,11 +266,12 @@ namespace ML.Engine.BuildingSystem.UI
 
         protected void ExitAppearancePanel()
         {
+            this.Placer.SelectedPartInstance.Mode = this._aMode;
+
             // 弹出外观UI
             monoBM.PopPanel();
             // 禁用 Input.Appearance
             this.Placer.BInput.BuildingAppearance.Disable();
-            this.Placer.SelectedPartInstance.Mode = this._aMode;
         }
 
         private const string MatPABPath = "BPartMatPackage";

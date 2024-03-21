@@ -1,25 +1,20 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.Manager;
 using ML.Engine.UI;
 using Sirenix.OdinInspector;
-using UnityEngine.UI;
-using TMPro;
 using ML.Engine.TextContent;
-using Unity.VisualScripting;
-using Newtonsoft.Json;
 using UnityEngine.ResourceManagement.AsyncOperations;
-
+using Cysharp.Threading.Tasks;
 namespace ML.Engine.BuildingSystem
 {
 
-
+    [System.Serializable]
     public class MonoBuildingManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         #region Property|Field
+        [SerializeField]
         public BuildingManager BM;
         private int IsInit = 5;
         /// <summary>
@@ -80,9 +75,8 @@ namespace ML.Engine.BuildingSystem
 
         public const string BPartABPath = "BuildingPart";
 
-        [ShowInInspector]
-        private RectTransform Canvas => Manager.GameManager.Instance.UIManager.GetCanvas.GetComponent<RectTransform>();
-        public async System.Threading.Tasks.Task<T> GetPanel<T>() where T : UIBasePanel
+        private RectTransform Canvas { get => Manager.GameManager.Instance.UIManager.GetCanvas.GetComponent<RectTransform>(); }
+        public async UniTask<T> GetPanel<T>() where T : UIBasePanel
         {
             var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(UIPanelABPath + "/" + typeof(T).Name + ".prefab");
             await handle.Task;
@@ -115,9 +109,9 @@ namespace ML.Engine.BuildingSystem
             return Manager.GameManager.Instance.UIManager.GetTopUIPanel();
         }
 
-        public MonoBuildingManager()
+        public void Init()
         {
-            BM = ML.Engine.Manager.GameManager.Instance.RegisterLocalManager<BuildingManager>();
+            ML.Engine.Manager.GameManager.Instance.RegisterLocalManager(BM);
             RegisterBPartPrefab();
             InitUITextContents();
         }

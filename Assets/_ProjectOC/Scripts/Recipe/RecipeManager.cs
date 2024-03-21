@@ -20,6 +20,7 @@ namespace ML.Engine.InventorySystem
         public int ExpRecipe;
     }
 
+    [System.Serializable]
     public sealed class RecipeManager : Manager.LocalManager.ILocalManager
     {
         #region Load And Data

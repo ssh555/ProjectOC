@@ -1,30 +1,19 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using ML.Engine.Timer;
-using UnityEngine.Networking;
-using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.InventorySystem;
 using ML.Engine.BuildingSystem;
 using Sirenix.OdinInspector;
 using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
 using ML.Engine.TextContent;
 using Newtonsoft.Json;
-using static ProjectOC.WorkerNS.EffectManager;
-using System.Runtime.Serialization;
-using Sirenix.Serialization;
 using UnityEngine.U2D;
-using Random = UnityEngine.Random;
-using ML.Engine.UI;
-using UnityEditor.PackageManager.Requests;
+
 
 namespace ProjectOC.TechTree
 {
+    [System.Serializable]
     public sealed class TechTreeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         #region Base
@@ -35,7 +24,7 @@ namespace ProjectOC.TechTree
         /// <summary>
         /// 单例管理
         /// </summary>
-        public TechTreeManager()
+        public void Init()
         {
             Instance = this;
             
@@ -48,8 +37,6 @@ namespace ProjectOC.TechTree
             // 载入科技树表格数据 以及 恢复存档
             LoadTableData();
 
-            // 载入UI数据
-            InitUITextContents();
         }
 
 
@@ -469,7 +456,7 @@ namespace ProjectOC.TechTree
 
         #region TextContent
         public Dictionary<string, TextTip> CategoryDict = new Dictionary<string, TextTip>();
-        public TPPanel TPPanelTextContent_Main => ABJAProcessor_TPPanel.Datas;
+
 
         [System.Serializable]
         public struct TPPanel
@@ -485,19 +472,7 @@ namespace ProjectOC.TechTree
             public KeyTip Decipher;
             public KeyTip Back;
         }
-        public ML.Engine.ABResources.ABJsonAssetProcessor<TPPanel> ABJAProcessor_TPPanel;
 
-        public void InitUITextContents()
-        {
-            ABJAProcessor_TPPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<TPPanel>("OC/Json/TextContent/TechTree", "TechPointPanel", (datas) =>
-            {
-                foreach (var tip in datas.category)
-                {
-                    this.CategoryDict.Add(tip.name, tip);
-                }
-            }, "科技树UIPanel");
-            ABJAProcessor_TPPanel.StartLoadJsonAssetData();
-        }
         #endregion
 
         #region to-delete

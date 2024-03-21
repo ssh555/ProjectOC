@@ -30,11 +30,13 @@ namespace ML.Engine.Manager
         /// <summary>
         /// 内置的计时器Manager
         /// </summary>
+        [ShowInInspector]
         public Timer.CounterDownTimerManager CounterDownTimerManager { get; private set; }
 
         /// <summary>
         /// 内置的 TickManager(对应于unity中的Update
         /// </summary>
+        [ShowInInspector]
         public Timer.TickManager TickManager { get; private set; }
 
         /// <summary>
@@ -48,6 +50,7 @@ namespace ML.Engine.Manager
         /// </summary>
         public Input.InputManager InputManager { get; private set; }
 
+        [ShowInInspector]
         public SaveSystem.SaveManager SaveManager { get; private set; }
 
         public EnterPoint EnterPoint { get; private set; }
@@ -149,7 +152,8 @@ namespace ML.Engine.Manager
                 }
             }
             this.globalManagers.Remove(manager);
-            manager.OnUnregister();
+            if (manager != null)
+                manager.OnUnregister();
             return manager;
         }
 
@@ -271,7 +275,8 @@ namespace ML.Engine.Manager
                 }
             }
             this.localManagers.Remove(manager);
-            manager.OnUnregister();
+            if (manager != null)
+                manager.OnUnregister();
             return manager;
         }
 
@@ -355,9 +360,10 @@ namespace ML.Engine.Manager
         #region Update
         private void Update()
         {
+            this.TickManager.UpdateTickComponentList();
+
             if (IsPause)
             {
-                this.TickManager.UpdateTickComponentList();
             }
             else
             {
@@ -366,15 +372,15 @@ namespace ML.Engine.Manager
 
                 this.TickManager.Tick(Time.deltaTime);
 
-                this.TickManager.UpdateTickComponentList();
             }
         }
 
         private void FixedUpdate()
         {
+            this.TickManager.UpdateFixedTickComponentList();
+
             if (IsPause)
             {
-                this.TickManager.UpdateFixedTickComponentList();
             }
             else
             {
@@ -383,23 +389,20 @@ namespace ML.Engine.Manager
 
                 this.TickManager.FixedTick(Time.fixedDeltaTime);
 
-                this.TickManager.UpdateFixedTickComponentList();
             }
         }
 
         private void LateUpdate()
         {
             this.CounterDownTimerManager.LateUpdate(Time.deltaTime);
+            this.TickManager.UpdateLateTickComponentList();
 
             if (IsPause)
             {
-                this.TickManager.UpdateLateTickComponentList();
             }
             else
             {
                 this.TickManager.LateTick(Time.deltaTime);
-
-                this.TickManager.UpdateLateTickComponentList();
             }
         }
         #endregion

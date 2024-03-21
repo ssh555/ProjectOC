@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace ProjectOC.LandMassExpand
 {
+    [System.Serializable]
     public class IslandManager :  ML.Engine.Manager.LocalManager.ILocalManager
     {
         public IslandBase currentIsland;
@@ -16,7 +17,7 @@ namespace ProjectOC.LandMassExpand
         private List<IslandMain> islandMains;
         public IslandBase[,] islandGrids;
         
-        public IslandManager()
+        public void Init()
         {
             mapGridSize = 100;
             maxSize = new Vector2Int(15, 15);
