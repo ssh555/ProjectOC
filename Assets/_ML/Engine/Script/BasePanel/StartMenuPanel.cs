@@ -197,7 +197,7 @@ namespace ML.Engine.UI
         private void InitSaveSystemData()
         {
             
-            if (SC.SaveDataFolders[1] == null)
+            if (SC.GetSaveDataFolder(1) == null)
             {
                 this.UIBtnList.GetBtn("ContinueGameBtn").Interactable = false;
             }
@@ -251,9 +251,9 @@ namespace ML.Engine.UI
                 System.Action<string, string> preCallback = async (string s1, string s2) =>
                 {
                     //开始新游戏时，删除之前的newgame存档，从0开始新的newgame存档
-                    if (SC.SaveDataFolders[0] != null)
+                    if (SC.GetSaveDataFolder(0) != null)
                     {
-                        await SC.DeleteSaveDataFolderAsync(0);
+                        await SC.DeleteSaveDataFolderAsync(0, null);
                     }
                     SC.CreateSaveDataFolder(0, "newgame", async () => { 
                         Debug.Log("存入newgame！");
