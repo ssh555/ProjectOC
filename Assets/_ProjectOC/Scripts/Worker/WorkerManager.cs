@@ -52,6 +52,16 @@ namespace ProjectOC.WorkerNS
             return this.Workers.ToList();
         }
 
+        public void DeleteAllWorker()
+        {
+            foreach (Worker worker in Workers)
+            {
+                ML.Engine.Manager.GameManager.DestroyObj(worker.gameObject);
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.ReleaseInstance(worker.gameObject);
+            }
+            this.Workers.Clear();
+        }
+
         public bool DeleteWorker(Worker worker)
         {
             ML.Engine.Manager.GameManager.DestroyObj(worker.gameObject);
