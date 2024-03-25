@@ -91,9 +91,14 @@ namespace ProjectOC.Player
             #region 处于空中
             [LabelText("浮空最大行走速度"), ShowInInspector, FoldoutGroup("浮空")]
             public float inAirLimitSpeed;
-
-            [LabelText("浮空加速度"), ShowInInspector, FoldoutGroup("浮空")]
-            public float inAirAccSpeed;
+            [LabelText("浮空加速度"), ShowInInspector, Range(0,1),FoldoutGroup("浮空")]
+            public float airControl;
+            public float inAirAccSpeed => airControl * walkAccSpeed;
+            //横向速度大于AirControlBoostVelocityThreshold乘空气控制
+            [LabelText("空气控制提升乘数"), ShowInInspector, FoldoutGroup("浮空"),Range(0,1)]
+            public float airControlBoostMultiplier;
+            [LabelText("空气控制提升速度阈值"), ShowInInspector, FoldoutGroup("浮空"),Range(0,1),PropertyTooltip("高于空中最大速度百分比阈值后乘以该系数")]
+            public float airControlBoostVelocityThreshold;
             #endregion
             //[LabelText("滑铲初速度"), ShowInInspector, FoldoutGroup("滑铲")]
             //public float slideInitSpeed;
@@ -234,6 +239,17 @@ namespace ProjectOC.Player
             this.inAirState.BindExitAction((stateMachine, preState, curState) =>
             {
                 this.ChangeVelocityParams();
+            });
+            this.inAirState.BindUpdateAction((stateMachine, curState) =>
+            {
+                if (moveData.Speed >= stateParams.airControlBoostVelocityThreshold * stateParams.inAirLimitSpeed)
+                {
+                    this.moveData.AddAcceleration = stateParams.inAirAccSpeed * stateParams.airControlBoostMultiplier;
+                }
+                else
+                {
+                    this.moveData.AddAcceleration = stateParams.inAirAccSpeed;
+                }
             });
             #endregion
 

@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ProjectOC.Player
 {
@@ -18,26 +19,30 @@ namespace ProjectOC.Player
             [LabelText("能否基本移动"), FoldoutGroup("启用|禁用移动")]
             public bool bCanMove;
 
-            [LabelText("在空中是否能移动"), FoldoutGroup("启用|禁用移动")]
-            public bool bCanMoveInAir;
+            [LabelText("启用重力"), FoldoutGroup("启用|禁用移动")]
+            public bool UseGravity = true;
+
+            [LabelText("启用重力分量"), FoldoutGroup("启用|禁用移动")]
+            public bool UseGravityWeight;
+
+            [LabelText("启用阻尼"), FoldoutGroup("启用|禁用移动")]
+            public bool UseDrag = true;
+            
+            [LabelText("启用跳跃"), FoldoutGroup("启用|禁用移动")]
+            public bool bEnableJump;
+            
             #endregion
 
-            #region 移动参数
-            [LabelText("水平输入最大速度"), Range(0, float.PositiveInfinity), FoldoutGroup("移动参数")]
-            public float MaxSpeed;
+            #region 通用
 
-            [LabelText("最小移动速度"), Range(0, float.PositiveInfinity), FoldoutGroup("移动参数")]
-            public float MinSpeed;
+            [LabelText("质量"), FoldoutGroup("通用")] 
+            public float Mass;
 
-            [LabelText("移动加速度"), FoldoutGroup("移动参数"), Space(10)]
-            public float AddAcceleration;
+            [LabelText("重力加速度"), FoldoutGroup("通用")]
+            public float Gravity;
 
-            [LabelText("启用阻尼"), FoldoutGroup("移动参数")]
-            public bool UseDrag;
-            [LabelText("固定空气阻尼"), Range(0, float.MaxValue), FoldoutGroup("移动参数"), PropertyTooltip("V -= kV")]
-            public float airDrag;
-            [LabelText("可变地面阻尼"), ShowInInspector, ReadOnly, FoldoutGroup("移动参数"), PropertyTooltip("V -= kV")]
-            protected float terrainDrag
+            [LabelText("地面摩擦系数"), ShowInInspector, ReadOnly, FoldoutGroup("通用"), PropertyTooltip("V -= kV")]
+            public float terrainDrag
             {
                 get
                 {
@@ -47,32 +52,47 @@ namespace ProjectOC.Player
 
             [HideInInspector]
             public MonoTerrainMoveDrag TerrainDrag;
+            
+            [LabelText("底面摩擦系数"), Range(0, float.MaxValue), FoldoutGroup("通用"), PropertyTooltip("鞋/脚提供的摩擦力系数")] 
+            public float BottomFrictionScale;
+            [LabelText("坠落水平减速度"), Range(0, float.MaxValue), FoldoutGroup("通用"), PropertyTooltip("水平摩擦系数")]
+            public float FallDeceleration;
+            [LabelText("空气阻力系数"), Range(0, float.MaxValue), FoldoutGroup("通用"), PropertyTooltip("大气摩擦")]
+            public float airDrag;
 
-            [LabelText("最终阻尼"), ShowInInspector, ReadOnly, FoldoutGroup("移动参数"), PropertyTooltip("V -= kV * Max(-ln(V * 2), 1)")]
+            [LabelText("最终阻尼"), ShowInInspector, ReadOnly, FoldoutGroup("通用"), PropertyTooltip("普普通通的加速度")]
             public float FinalDrag
             {
                 get
                 {
-                    return this.UseDrag ? this.airDrag + this.terrainDrag : 0;
+                    float horizontalDrag = IsGrounded ? this.terrainDrag + this.BottomFrictionScale : FallDeceleration;
+                    return this.UseDrag ? this.airDrag + horizontalDrag: 0;
                 }
             }
 
-            [LabelText("启用重力"), FoldoutGroup("移动参数")]
-            public bool UseGravity;
 
-            [LabelText("启用重力分量"), FoldoutGroup("移动参数")]
-            public bool UseGravityWeight;
+            [LabelText("蹲伏半高"), FoldoutGroup("通用")] 
+            public int CrouchedHalfHeight;
+            #endregion
 
-            [LabelText("重力加速度"), FoldoutGroup("移动参数")]
-            public float GravityAcceleration;
+            
+            #region 移动参数
 
-            [LabelText("向前移动速度系数"), Range(0, 1), Space(10), FoldoutGroup("移动参数")]
-            public float ForwardSpeedRate;
-            [LabelText("向后移动速度系数"), Range(0, 1), FoldoutGroup("移动参数")]
-            public float BackwardSpeedRate;
-            [LabelText("左右移动速度系数"), Range(0, 1), FoldoutGroup("移动参数")]
-            public float StrafeSpeedRate;
+            [LabelText("最大步高"), ShowInInspector,Range(0, float.PositiveInfinity), FoldoutGroup("移动参数")]
+            private float MaxStepHeight;
 
+            [LabelText("可行走地面角度"), ShowInInspector,Range(0, 360), FoldoutGroup("移动参数")]
+            private float WalkerbleFloorAngle;
+            
+            [LabelText("水平输入最大速度"), Range(0, float.PositiveInfinity), FoldoutGroup("移动参数")]
+            public float MaxSpeed;
+
+            [LabelText("最小移动速度"), Range(0, float.PositiveInfinity), FoldoutGroup("移动参数"), PropertyTooltip("小于该值则直接停止")]
+            public float MinSpeed;
+
+            [LabelText("移动加速度"), FoldoutGroup("移动参数"), Space(10)]
+            public float AddAcceleration;
+            
             [LabelText("当前输入速度大小"), ReadOnly, FoldoutGroup("移动参数")]
             private float speed;
             [LabelText("当前输入速度大小"), ShowInInspector, ReadOnly, FoldoutGroup("移动参数")]
@@ -137,12 +157,14 @@ namespace ProjectOC.Player
                 }
             }
 
-            [LabelText("模型是否旋转"), ShowInInspector, ReadOnly, FoldoutGroup("移动参数")]
+            [LabelText("角色模型是否旋转"), ShowInInspector, ReadOnly, FoldoutGroup("移动参数")]
             public bool CanModelRotate;
+            [LabelText("能否空中转向"), FoldoutGroup("移动参数")]
+            public bool AirRotationControl = true;
             #endregion
 
             #region 按键
-            [LabelText("按下|抬起跳跃"), FoldoutGroup("按键"), PropertyTooltip("true : 按下跳跃, false : 抬起跳跃")]
+            [LabelText("按下|抬起跳跃"), FoldoutGroup("按键"), PropertyTooltip("true : 按下跳跃, false : 抬起跳跃"),HideInInspector]
             public bool JumpDownOrUp;
             #endregion
 
@@ -152,11 +174,9 @@ namespace ProjectOC.Player
             #endregion
 
             #region 跳跃参数
-            [LabelText("启用跳跃"), FoldoutGroup("跳跃参数")]
-            public bool bEnableJump;
             [LabelText("最大跳跃次数"), FoldoutGroup("跳跃参数")]
             public int MaxJumpCount;
-            [LabelText("当前剩余跳跃次数"), FoldoutGroup("跳跃参数")]
+            [LabelText("当前剩余跳跃次数"), ReadOnly, FoldoutGroup("跳跃参数")]
             public int RemainJumpCount;
             [LabelText("能否跳跃"), FoldoutGroup("跳跃参数")]
             public bool bCanJump;
@@ -164,6 +184,12 @@ namespace ProjectOC.Player
             public bool bIsWorldUpAxis;
             [LabelText("跳跃叠加速度"), FoldoutGroup("跳跃参数"), PropertyTooltip("true : 当前速度叠加，false : 直接更改垂直速度")]
             public bool IsJumpVelocityStack;
+            [LabelText("跳跃继承基础速度X"), FoldoutGroup("跳跃参数")]
+            public bool ImpactBaseVelocityX;
+            [LabelText("跳跃继承基础速度Y"), FoldoutGroup("跳跃参数")]
+            public bool ImpactBaseVelocityY;
+            [LabelText("跳跃继承基础速度Z"), FoldoutGroup("跳跃参数")]
+            public bool ImpactBaseVelocityZ;
             [LabelText("跳跃初速度"), Range(0, float.PositiveInfinity), FoldoutGroup("跳跃参数"), ShowIf("@IsJumpVelocityStack == true")]
             public float JumpInitialVelocity;
             [LabelText("跳跃时间"), FoldoutGroup("跳跃参数"), PropertyTooltip("跳跃持续时间"), ShowIf("@IsJumpVelocityStack == false"), ShowInInspector]
@@ -177,6 +203,17 @@ namespace ProjectOC.Player
 
             [HideInInspector, NonSerialized]
             public PlayerNormalMove OwnMove;
+            
+            public PlayerMoveSetting(PlayerNormalMove _playerNormalMove)
+            {
+                OwnMove = _playerNormalMove;
+                CanModelRotate = true;
+
+                //感觉让策划在CharacterController里配更直观一点
+                // OwnMove.controller.GetComponent<Rigidbody>().mass = Mass;
+                // OwnMove.controller.stepOffset = MaxStepHeight;
+                // OwnMove.controller.slopeLimit = WalkerbleFloorAngle;
+            }
         }
         #endregion
 
@@ -197,7 +234,7 @@ namespace ProjectOC.Player
 
         [LabelText("移动模型"), FoldoutGroup("移动组件引用")]
         public Transform Model;
-        [LabelText("移动旋转率"), Range(0,1), FoldoutGroup("移动组件引用"), ShowIf("@Model!=null")]
+        [LabelText("移动旋转率"), Range(0,1), FoldoutGroup("移动组件引用"), ShowIf("@Model!=null"), PropertyTooltip("移动时旋转速度")]
         public float rotRate = 0.5f;
         [LabelText("最小旋转角"), Range(0, 10), FoldoutGroup("移动组件引用"), ShowIf("@Model!=null")]
         public float minRotAngle = 1;
@@ -206,16 +243,6 @@ namespace ProjectOC.Player
         #region 地面检测
         [LabelText("自检测处于地面"), ShowInInspector, ReadOnly, FoldoutGroup("地面检测")]
         private bool checkGround = false;
-
-        [LabelText("角色控制器处于地面"), ShowInInspector, ReadOnly, FoldoutGroup("地面检测")]
-        private bool characterGround
-        {
-            get
-            {
-                return this.controller == null ? false : this.controller.isGrounded;
-            }
-        }
-
         /// <summary>
         /// 是否处于地面
         /// </summary>
@@ -264,14 +291,13 @@ namespace ProjectOC.Player
             }
         }
 
+
+        
         #endregion
 
         public PlayerNormalMove()
         {
-            this.moveSetting = new PlayerMoveSetting();
-            this.moveSetting.OwnMove = this;
-            this.moveSetting.CanModelRotate = true;
-
+            this.moveSetting = new PlayerMoveSetting(this);
         }
 
         #region 移动Move
@@ -320,12 +346,8 @@ namespace ProjectOC.Player
             // 移动输入
             if (this.moveSetting.bCanMove)
             {
-                // 处于地面 || 允许空中移动
-                if (IsGrounded || this.moveSetting.bCanMoveInAir)
-                {
-                    moveDir = this.GetInputMoveDir(inputV);
-                    _speedRate = 1;
-                }
+                moveDir = this.GetInputMoveDir(inputV);
+                _speedRate = 1;
             }
             // 移动
             this.UpdatePosition(deltaTime, moveDir, _speedRate);
@@ -342,7 +364,7 @@ namespace ProjectOC.Player
         {
             moveDir.Normalize();
 
-            // 输入速度更新
+            // 输入速度更新，各种加速和各种阻力都是普通的 加减速度
             // 能移动 && 移动速度率为正 && 有移动方向 && 没有达到最大速度则增加速度
             if (this.moveSetting.bCanMove && _speedRate > float.Epsilon && moveDir.magnitude > float.Epsilon && this.moveSetting.Speed <= this.moveSetting.MaxSpeed * _speedRate)
             {
@@ -351,11 +373,11 @@ namespace ProjectOC.Player
                 // 更新输入方向
                 this.moveSetting.Velocity = moveDir * this.moveSetting.Speed;
             }
-            // 输入速度衰减
+            // 无输入速度，开始减速 输入速度衰减
             else if(this.moveSetting.Speed > this.moveSetting.MinSpeed)
             {
                 // V -= KV * Max(ln(V*2), 1) => V < 0.74 开始加速衰减
-                this.moveSetting.Speed -= this.moveSetting.Speed * DragEquation(this.moveSetting.FinalDrag) * deltaTime * Mathf.Max(-Mathf.Log(this.moveSetting.Speed / this.moveSetting.MaxSpeed), 1);
+                this.moveSetting.Speed -= this.moveSetting.FinalDrag * deltaTime;
                 if (this.moveSetting.Speed < this.moveSetting.MinSpeed)
                 {
                     this.moveSetting.Speed = 0;
@@ -430,7 +452,7 @@ namespace ProjectOC.Player
             // 额外速度衰减
             if (this.moveSetting.ExtraSpeed > this.moveSetting.MinSpeed)
             {
-                this.moveSetting.ExtraSpeed -= this.moveSetting.ExtraSpeed * DragEquation(this.moveSetting.FinalDrag) * deltaTime;
+                this.moveSetting.ExtraSpeed -= this.moveSetting.FinalDrag * deltaTime;
                 if (this.moveSetting.ExtraSpeed < this.moveSetting.MinSpeed)
                 {
                     this.moveSetting.ExtraSpeed = 0;
@@ -443,7 +465,7 @@ namespace ProjectOC.Player
 
 
             // 根据实际运动方向更新 模型旋转
-            if (this.moveSetting.CanModelRotate == true && this.Model && this.controller.velocity.magnitude > this.moveSetting.MinSpeed)
+            if (this.moveSetting.CanModelRotate && (moveSetting.AirRotationControl || IsGrounded) && this.Model && this.controller.velocity.magnitude > this.moveSetting.MinSpeed)
             {
                 moveDir = this.controller.velocity;
                 moveDir.y = 0;
@@ -489,7 +511,7 @@ namespace ProjectOC.Player
                         // distance
                         (this.controller.radius + this.controller.skinWidth) * 0.5f + this.controller.skinWidth,
                         this.moveSetting.DetectLayer);
-                    Vector3 gravity = this.moveSetting.GravityAcceleration * Vector3.down;
+                    Vector3 gravity = this.moveSetting.Gravity * Vector3.down;
                     Vector3 sum = Vector3.zero;
                     foreach (var hit in hitResults)
                     {
@@ -511,7 +533,7 @@ namespace ProjectOC.Player
                 }
                 else if (!this.controller.isGrounded && !Physics.CheckSphere(p, radius * 0.11f, this.moveSetting.DetectLayer))
                 {
-                    this.moveSetting.ExtraVelocity += this.moveSetting.GravityAcceleration * Vector3.down * deltaTime;
+                    this.moveSetting.ExtraVelocity += this.moveSetting.Gravity * Vector3.down * deltaTime;
                 }
             }
 
@@ -522,6 +544,10 @@ namespace ProjectOC.Player
                 {
                     this.moveSetting.RemainJumpCount = this.moveSetting.MaxJumpCount;
                 }
+            }
+            else
+            {
+                this.moveSetting.RemainJumpCount = Mathf.Min(this.moveSetting.RemainJumpCount,this.moveSetting.MaxJumpCount-1) ;
             }
             // 落地 -> 垂直速度清0
             if (this.controller.isGrounded)
@@ -669,7 +695,7 @@ namespace ProjectOC.Player
                 Vector3 jVel = this.moveSetting.bIsWorldUpAxis ? Vector3.up : this.controller.transform.TransformDirection(Vector3.up);
                 this.moveSetting.ExtraVelocity += jVel * this.moveSetting.JumpInitialVelocity;
             }
-            // 直接应用速度
+            // 直接应用速度，修改跳跃时间
             else
             {
                 this.jumpTimer.Reset(this.moveSetting.jumpTime);
@@ -681,13 +707,17 @@ namespace ProjectOC.Player
             // WorldUpAxis
             if (this.moveSetting.bIsWorldUpAxis)
             {
-                this.moveSetting.ExtraVelocity = new Vector3(this.moveSetting.ExtraVelocity.x, this.moveSetting.jumpSpeedCurve.Evaluate((float)this.jumpTimer.Time), this.moveSetting.ExtraVelocity.z);
+                Vector3 jVel = ImpactJumpSpeed(this.moveSetting.ExtraVelocity);
+                jVel += Vector3.up * this.moveSetting.jumpSpeedCurve.Evaluate((float)this.jumpTimer.Time);
+                this.moveSetting.ExtraVelocity = jVel;
             }
-            // SelfUpAxis
+            // SelfUpAxis,蹬墙跳用
             else
             {
+                //变为局部速度，继承局部坐标
                 Vector3 jVel = this.controller.transform.InverseTransformVector(this.moveSetting.ExtraVelocity);
-                jVel.y = this.moveSetting.jumpSpeedCurve.Evaluate((float)this.jumpTimer.Time);
+                jVel = ImpactJumpSpeed(jVel); 
+                jVel.y += this.moveSetting.jumpSpeedCurve.Evaluate((float)this.jumpTimer.Time);
                 this.moveSetting.ExtraVelocity = this.controller.transform.TransformVector(jVel);
             }
             // 落地
@@ -695,19 +725,20 @@ namespace ProjectOC.Player
             {
                 this.jumpTimer.End();
             }
+        }
 
+        private Vector3 ImpactJumpSpeed(Vector3 _inSpeed)
+        {
+            Vector3 outSpeed = _inSpeed;
+            if (!moveSetting.ImpactBaseVelocityX)
+                outSpeed.x = 0;
+            if (!moveSetting.ImpactBaseVelocityY)
+                outSpeed.y = 0;
+            if (!moveSetting.ImpactBaseVelocityZ)
+                outSpeed.z = 0;
+            return outSpeed;
         }
 #endregion
-
-        /// <summary>
-        /// 阻尼乘数因子计算公式
-        /// </summary>
-        /// <param name="x"></param>
-        /// <returns></returns>
-        protected float DragEquation(float x)
-        {
-            return 100 * x / (x + 500);
-        }
     }
 
 }

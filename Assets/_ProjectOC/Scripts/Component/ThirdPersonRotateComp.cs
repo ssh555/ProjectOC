@@ -60,6 +60,17 @@ namespace ProjectOC.Player
         [LabelText("启用deltaTime")]
         public bool bEnableDeltaTime = false;
 
+        #region 相机跟随
+        [LabelText("相机是否硬跟随"),PropertyTooltip("True 硬跟随|Flase P5型跟随")]
+        public bool HardLockCameraFollow = false;
+        [LabelText("弹簧臂长"),Range(0.1f,10)] 
+        public float SpringCurLength = 0.1f;
+        [LabelText("弹簧臂长最大"),Range(0,10)] 
+        public float SpringMaxLength = 10f;
+        [LabelText("弹簧臂长最小"),Range(0,10)] 
+        public float SpringMinLength = 1f;
+        #endregion
+        
         private UnityEngine.InputSystem.InputAction MouseXInput;
         private UnityEngine.InputSystem.InputAction MouseYInput;
         public void RuntimeSetMouseInput(UnityEngine.InputSystem.InputAction X, UnityEngine.InputSystem.InputAction Y)
@@ -84,6 +95,7 @@ namespace ProjectOC.Player
                 return;
             }
 
+            #region 跟随鼠标旋转
             // 锁定鼠标
             //Cursor.lockState = CursorLockMode.Locked;
 
@@ -99,6 +111,15 @@ namespace ProjectOC.Player
             this.VCamRotX.localRotation *= Quaternion.Euler(mouseY * (bInVerseRotX ? -1 : 1), 0f, 0f);
             this.VCamRotX.localRotation = this.ClampRotationAroundXAxis(this.VCamRotX.localRotation);
             //this.ConstrainCamera();
+            #endregion
+            
+            #region 相机跟随
+            if (!HardLockCameraFollow)
+            {
+                Vector3 camPos =  VCamera.transform.localPosition.normalized* SpringCurLength;
+                VCamera.transform.localPosition = camPos;
+            }
+            #endregion
         }
         #endregion
 
