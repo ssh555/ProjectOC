@@ -297,7 +297,6 @@ namespace ML.Engine.BuildingSystem.UI
             this.RegisterInput();
             if (BM.Placer.SelectedPartInstance != null)
             {
-                Debug.Log("CheckCostResources");
                 BM.Placer.SelectedPartInstance.CheckCanInPlaceMode += CheckCostResources;
             }
             BM.Placer.OnPlaceModeSuccess += OnPlaceModeSuccess;
@@ -367,7 +366,7 @@ namespace ML.Engine.BuildingSystem.UI
             Manager.GameManager.Instance.TickManager.RegisterFixedTick(0, this);
             this.Placer.BInput.BuildPlaceMode.KeyCom.performed += Placer_EnterKeyCom;
             this.Placer.backInputAction.performed += Placer_CancelPlace;
-            Debug.Log("Add");
+
             this.Placer.BInput.BuildPlaceMode.Rotate.performed += Placer_RotateBPart;
             this.Placer.BInput.BuildPlaceMode.ChangeActiveSocket.performed += Placer_ChangeActiveSocket;
             this.Placer.BInput.BuildPlaceMode.ChangeStyle.performed += Placer_ChangeBPartStyle;

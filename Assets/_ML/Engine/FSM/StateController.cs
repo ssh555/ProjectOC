@@ -28,7 +28,6 @@ namespace ML.Engine.FSM
         public virtual void SetStateMachine(StateMachine stateMachine)
         {
             this.Machine = stateMachine;
-            Debug.Log("SetStateMachine " + this.Machine);
         }
 
         public virtual void Tick(float deltatime)

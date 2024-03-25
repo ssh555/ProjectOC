@@ -65,7 +65,6 @@ namespace ML.Engine.UI
         }
         private void OnInteractableEnabled()
         {
-            Debug.Log("OnInteractableEnabled");
             var Texts = this.GetComponentsInChildren<TextMeshProUGUI>();
             foreach (TextMeshProUGUI text in Texts)
             {
@@ -75,7 +74,6 @@ namespace ML.Engine.UI
 
         private void OnInteractableDisabled()
         {
-            Debug.Log("OnInteractableDisabled");
             var Texts = this.GetComponentsInChildren<TextMeshProUGUI>();
             foreach (TextMeshProUGUI text in Texts)
             {
@@ -94,7 +92,6 @@ namespace ML.Engine.UI
 
         public void Interact()
         {
-            Debug.Log(this.name + " " + this.Interactable);
             if(this.Interactable)
             {
                 this.onClick.Invoke();

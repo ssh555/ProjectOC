@@ -66,7 +66,6 @@ namespace ProjectOC.WorkerEchoNS
                 {
                     if (item.num > inventory.GetItemAllNum(item.id))
                     {
-                        Debug.Log("材料不足！无法召唤！");
                         return null;
                     }
                 }

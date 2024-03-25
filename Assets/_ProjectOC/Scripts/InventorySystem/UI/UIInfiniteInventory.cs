@@ -393,7 +393,6 @@ namespace ProjectOC.InventorySystem.UI
         private void Drop_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             this.ItemIsDestroyed = true;
-            Debug.Log("DestroyItem");
             DestroyItem();
         }
 
