@@ -22,8 +22,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             base.Awake();
             this.InitTextContentPathData();
-            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
-                this.InitUITexture2D});
+            this.functionExecutor.AddFunction(
+                this.InitUITexture2D);
             this.functionExecutor.SetOnAllFunctionsCompleted(() =>
             {
                 this.Refresh();
@@ -314,8 +314,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #region Texture2D
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
         private string ResonanceWheelSpriteAtlasPath = "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2";
-        private AsyncOperationHandle InitUITexture2D()
+        private List<AsyncOperationHandle> InitUITexture2D()
         {
+            var handles = new List<AsyncOperationHandle>();
             var handle = GM.ABResourceManager.LoadAssetAsync<SpriteAtlas>(ResonanceWheelSpriteAtlasPath);
             handle.Completed += (handle) =>
             {
@@ -324,7 +325,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 icon_genderfemaleSprite = atlas.GetSprite("icon_genderfemale");
                 icon_gendermaleSprite = atlas.GetSprite("icon_gendermale");
             };
-            return handle;
+            handles.Add(handle);
+            return handles;
         }
         #endregion
         #endregion

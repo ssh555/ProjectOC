@@ -29,7 +29,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             base.Awake();
             this.InitTextContentPathData();
-            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
+            this.functionExecutor.AddFunction(new List<Func<List<AsyncOperationHandle>>> {
                 this.InitUITexture2D,
                 this.InitSlotPrefab });
             this.functionExecutor.SetOnAllFunctionsCompleted(() =>
@@ -95,7 +95,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private AsyncOperationHandle spriteatlasHandle;
         private List<AsyncOperationHandle<GameObject>> goHandle = new List<AsyncOperationHandle<GameObject>>();
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             ClearTemp();
             (this as ITickComponent).DisposeTick();
@@ -887,8 +887,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
         private string ResonanceWheelSpriteAtlasPath = "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2";
 
-        private AsyncOperationHandle InitUITexture2D()
+        private List<AsyncOperationHandle> InitUITexture2D()
         {
+            var handles = new List<AsyncOperationHandle>();
             var handle = GM.ABResourceManager.LoadAssetAsync<SpriteAtlas>(ResonanceWheelSpriteAtlasPath);
             handle.Completed += (handle) =>
             {
@@ -906,7 +907,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 beastTypeDic.Add(BeastType.WorkerEcho_Seal, resonanceAtlas.GetSprite("Seal"));
                 beastTypeDic.Add(BeastType.WorkerEcho_Random, resonanceAtlas.GetSprite("Random"));
             };
-            return handle;
+            handles.Add(handle);
+            return handles;
         }
 
         #endregion
@@ -914,15 +916,17 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #region Prefabs
         private GameObject SlotPrefab;
 
-        private AsyncOperationHandle InitSlotPrefab()
+        private List<AsyncOperationHandle> InitSlotPrefab()
         {
+            var handles = new List<AsyncOperationHandle>();
             var handle = GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/Slot.prefab");
             handle.Completed += (handle) =>
             {
                 this.goHandle.Add(handle);
                 this.SlotPrefab = handle.Result;
             };
-            return handle;
+            handles.Add(handle);
+            return handles;
         }
 
         #endregion

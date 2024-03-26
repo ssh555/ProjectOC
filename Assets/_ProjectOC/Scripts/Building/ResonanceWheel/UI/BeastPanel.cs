@@ -14,6 +14,7 @@ using UnityEngine.U2D;
 using UnityEngine.UI;
 using System;
 using static ProjectOC.ResonanceWheelSystem.UI.BeastPanel;
+using ML.Engine.Utility;
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
     public class BeastPanel : ML.Engine.UI.UIBasePanel<BeastPanelStruct>
@@ -25,17 +26,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         protected override void Awake()
         {
             base.Awake();
-            this.InitTextContentPathData();
-            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
-                this.InitDescriptionPrefab,
-                this.InitBeastBioPrefab,
-                this.InitUITexture2D});
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
 
-            StartCoroutine(functionExecutor.Execute());
+            
 
 
             //BeastInfo
@@ -63,15 +55,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             base.Start();
         }
 
-        private List<AsyncOperationHandle<GameObject>> goHandle = new List<AsyncOperationHandle<GameObject>>();
-        private AsyncOperationHandle spriteAtlasHandle;
+
         private void OnDestroy()
         {
-            GM.ABResourceManager.Release(spriteAtlasHandle);
+            /*GM.ABResourceManager.Release(spriteAtlasHandle);
             foreach(var handle in goHandle)
             {
                 GM.ABResourceManager.ReleaseInstance(handle);
-            }
+            }*/
         }
         #endregion
 
@@ -102,6 +93,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         protected override void Enter()
         {
+            
             this.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Enable();
             base.Enter();
@@ -202,7 +194,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #region UI
         #region temp
         private InputManager inputManager => GameManager.Instance.InputManager;
-        private Sprite icon_genderfemaleSprite, icon_gendermaleSprite;
+        private static Sprite icon_genderfemaleSprite, icon_gendermaleSprite;
 
         private void ClearTemp()
         {
@@ -242,6 +234,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         public override void Refresh()
         {
+
             if (this.ABJAProcessorJson == null || !this.ABJAProcessorJson.IsLoaded || !IsInit)
             {
                 return;
@@ -253,16 +246,16 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             
             if (Workers.Count == 0) CurrentBeastIndex = -1;
 
-            for (int i = 0; i < Content.childCount; i++)
-            {
-                ML.Engine.Manager.GameManager.DestroyObj(Content.GetChild(i).gameObject);
-            }
+
+            this.objectPool.ResetAllObject();
+            
 
             //Debug.Log("Workers " + Workers.Count);
 
             for (int i = 0; i < Workers.Count; i++)
             {
-                var tPrefab = GameObject.Instantiate(this.beastBioPrefab, Content);
+ 
+                var tPrefab = this.objectPool.GetNextObject("BeastBioPool", Content);
                 //worker.TimeArrangement[10] = TimeStatus.Relax;
                 if (i == CurrentBeastIndex)
                 {
@@ -326,16 +319,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 SpeedNumText.text = worker.WalkSpeed.ToString();
 
                 var Info = this.transform.Find("HiddenBeastInfo3").Find("Info").Find("Scroll View").Find("Viewport").Find("Content");
-                for (int i = 0; i < Info.childCount; i++)
-                {
-                    ML.Engine.Manager.GameManager.DestroyObj(Info.GetChild(i).gameObject);
-                }
 
                 foreach (var feature in worker.Features)
                 {
 
-
-                    var tPrefab = GameObject.Instantiate(this.descriptionPrefab, Info);
+                    var tPrefab = this.objectPool.GetNextObject("DescriptionPool", Info);
                     tPrefab.transform.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;
                     tPrefab.transform.Find("Text2").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Description;
                     tPrefab.transform.Find("Text3").GetComponent<TMPro.TextMeshProUGUI>().text =
@@ -469,51 +457,33 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
         #endregion
 
-        #region Texture2D
-        private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
-        private string ResonanceWheelSpriteAtlasPath = "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2";
-        private AsyncOperationHandle InitUITexture2D()
+        
+        protected override void InitObjectPool()
         {
-            var handle = GM.ABResourceManager.LoadAssetAsync<SpriteAtlas>(ResonanceWheelSpriteAtlasPath);
-            handle.Completed += (handle) =>
+            base.InitObjectPool();
+
+            this.InitTextContentPathData();
+
+            this.objectPool.RegisterPool(ObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
+            "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2", (handle) =>
             {
-                this.spriteAtlasHandle = handle;
                 SpriteAtlas resonanceWheelAtlas = handle.Result as SpriteAtlas;
                 icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite("icon_genderfemale");
                 icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite("icon_gendermale");
-            };
-            return handle;
-        }
+            }
+            );
+            this.objectPool.RegisterPool(ObjectPool.HandleType.Prefab, "BeastBioPool", LocalGameManager.Instance.WorkerManager.GetWorkers().Count, "OC/UI/ResonanceWheel/Prefabs/BeastBio.prefab");
+            this.objectPool.RegisterPool(ObjectPool.HandleType.Prefab, "DescriptionPool", 5, "OC/UI/ResonanceWheel/Prefabs/Description.prefab");
 
-        #endregion
+            
 
-        #region Prefab
-        private GameObject descriptionPrefab;
-        private GameObject beastBioPrefab;
-        private AsyncOperationHandle InitBeastBioPrefab()
-        {
-            var handle = GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/BeastBio.prefab");
-            handle.Completed += (handle) =>
+            this.objectPool.GetFunctionExecutor().SetOnAllFunctionsCompleted(() =>
             {
-                this.goHandle.Add(handle);
-                this.beastBioPrefab = handle.Result;
-            };
-            return handle;
+                this.Refresh();
+            });
+
+            StartCoroutine(this.objectPool.GetFunctionExecutor().Execute());
         }
-
-        private AsyncOperationHandle InitDescriptionPrefab()
-        {
-
-            var handle = GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/Description.prefab");
-            handle.Completed += (handle) =>
-            {
-                this.goHandle.Add(handle);
-                this.descriptionPrefab = handle.Result;
-            };
-            return handle;
-        }
-
-        #endregion
 
         #endregion
     }

@@ -33,7 +33,7 @@ namespace ProjectOC.InventorySystem.UI
         {
             base.Awake();
             this.InitTextContentPathData();
-            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
+            this.functionExecutor.AddFunction(new List<Func<List<AsyncOperationHandle>>> {
                 this.LoadInventoryAtlas});
             this.functionExecutor.SetOnAllFunctionsCompleted(() =>
             {
@@ -703,15 +703,17 @@ namespace ProjectOC.InventorySystem.UI
         }
         #endregion
 
-        private AsyncOperationHandle LoadInventoryAtlas()
+        private List<AsyncOperationHandle> LoadInventoryAtlas()
         {
+            var handles = new List<AsyncOperationHandle>();
             var handle = GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>("OC/UI/Inventory/Texture/SA_Inventory_UI.spriteatlasv2");
 
             handle.Completed += (handle) =>
             {
                 inventoryAtlas = handle.Result as SpriteAtlas;
             };
-            return handle;
+            handles.Add(handle);
+            return handles;
         }
 
     }

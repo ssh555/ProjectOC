@@ -1,30 +1,31 @@
 using ML.Engine.ABResources;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
+using ML.Engine.Utility;
+using ProjectOC.ManagerNS;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using static ProjectOC.Player.UI.PlayerUIPanel;
-using static ProjectOC.ResonanceWheelSystem.UI.BeastPanel;
-using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub2;
-using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheelUI;
+using UnityEngine.U2D;
+
 
 namespace ML.Engine.UI
 {
-    public class UIBasePanel : MonoBehaviour
+    public class UIBasePanel : UIBehaviour
     {
         /// <summary>
         /// 唯一标识符
         /// </summary>
         public string ID { get; protected set; }
         /// <summary>
-        /// 资源加载执行器
+        /// 对象池
         /// </summary>
-        public FunctionExecutor<AsyncOperationHandle> functionExecutor = new FunctionExecutor<AsyncOperationHandle>();
-
+        public ObjectPool objectPool;
+        public FunctionExecutor<List<AsyncOperationHandle>> functionExecutor = new FunctionExecutor<List<AsyncOperationHandle>>();
         /// <summary>
         /// 所属UIManager
         /// </summary>
@@ -54,6 +55,7 @@ namespace ML.Engine.UI
         public virtual void OnEnter()
         {
             this.gameObject.SetActive(true);
+            this.objectPool = new ObjectPool();
         }
 
         /// <summary>
@@ -83,12 +85,13 @@ namespace ML.Engine.UI
 
         protected virtual void Enter()
         {
+            this.InitObjectPool();
             this.Refresh();
         }
 
         protected virtual void Exit()
         {
-
+            this.objectPool.OnDestroy();
         }
 
         public virtual void Refresh()
@@ -98,13 +101,19 @@ namespace ML.Engine.UI
 
         protected virtual void Awake()
         {
-
+            
         }
 
         protected virtual void Start()
         {
             this.enabled = false;
         }
+
+        protected virtual void InitObjectPool()
+        {
+            
+        }
+
 
     }
 
@@ -131,13 +140,17 @@ namespace ML.Engine.UI
         /// <summary>
         /// 加载Json
         /// </summary>
-        private AsyncOperationHandle InitUITextContents()
+        private List<AsyncOperationHandle> InitUITextContents()
         {
-            this.ABJAProcessorJson = new ML.Engine.ABResources.ABJsonAssetProcessor<T>(this.abpath, this.abname, (datas) =>
+            var handles = new List<AsyncOperationHandle>();
+            var handle = this.ABJAProcessorJson = new ML.Engine.ABResources.ABJsonAssetProcessor<T>(this.abpath, this.abname, (datas) =>
             {
+                Debug.Log("InitUITextContentscompelete");
                this.OnLoadJsonAssetComplete(datas);
             }, this.description);
-            return this.ABJAProcessorJson.StartLoadJsonAssetData();
+            handles.Add(this.ABJAProcessorJson.StartLoadJsonAssetData());
+
+            return handles;
         }
         /// <summary>
         /// 初始化KeyTip
@@ -160,6 +173,19 @@ namespace ML.Engine.UI
         {
             base.Awake();
             this.functionExecutor.AddFunction(this.InitUITextContents);
+        }
+
+        protected override void Enter()
+        {
+            base.Enter();
+            
+            
+        }
+
+        protected override void InitObjectPool()
+        {
+            base.InitObjectPool();
+            this.objectPool.GetFunctionExecutor().AddFunction(this.InitUITextContents);
         }
     }
 }

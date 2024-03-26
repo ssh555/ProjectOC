@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Collections;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using Unity.VisualScripting;
 namespace ML.Engine.UI
 {
-    public class FunctionExecutor<T> where T : IEnumerator
+    public class FunctionExecutor<T> where T : List<AsyncOperationHandle>
     {
-        private List<Func<T>> FunctionList = new List<Func<T>>();
+        public List<Func<T>> FunctionList = new List<Func<T>>();
         private Action onAllFunctionsCompleted; // 所有函数执行完毕后的回调函数
 
         // 构造函数
@@ -25,16 +27,21 @@ namespace ML.Engine.UI
         //执行
         public IEnumerator Execute()
         {
-            IEnumerator[] enumerators = new IEnumerator[FunctionList.Count];
-            for (int i = 0; i < FunctionList.Count; i++)
+            List<IEnumerator> enumerators = new List<IEnumerator>();
+
+            foreach (Func<T> func in this.FunctionList)
             {
-                enumerators[i] = FunctionList[i].Invoke();
+                
+                foreach (IEnumerator enumerator in func.Invoke())
+                {
+                    enumerators.Add(enumerator);
+                }
             }
-            for (int i = 0; i < FunctionList.Count; i++)
+
+            for (int i = 0; i < enumerators.Count; i++)
             {
                 yield return enumerators[i];
             }
-
 
             this.onAllFunctionsCompleted.Invoke();
         }
