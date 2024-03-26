@@ -272,6 +272,17 @@
             "English" : "Fast Add"
         }
     },
+    "Return" : {
+        "keyname" : "KT_Return",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
+        "description" : {
+            "Chinese" : "退出",
+            "English" : "Return"
+        }
+    },
     "Confirm" : {
         "keyname" : "KT_Confirm",
         "keymap": {
@@ -292,17 +303,6 @@
         "description" : {
             "Chinese" : "返回",
             "English" : "Back"
-        }
-    },
-    "Return" : {
-        "keyname" : "KT_Return",
-        "keymap": {
-            "ActionMapName": "Common",
-            "ActionName": "Back"
-          },
-        "description" : {
-            "Chinese" : "退出",
-            "English" : "Return"
         }
     }
 }

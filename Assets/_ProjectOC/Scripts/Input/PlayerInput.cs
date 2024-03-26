@@ -1330,15 +1330,6 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""ChangeStoreData"",
-                    ""type"": ""Button"",
-                    ""id"": ""85cd286b-a4d6-4443-be17-a0dbcece27f9"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1581,28 +1572,6 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""FastAdd"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d672555a-41d0-4912-84c2-fd0d4beca6e0"",
-                    ""path"": ""<XInputController>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeStoreData"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1eaed07e-af47-4ff0-8edf-16e8dde649d1"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeStoreData"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -2587,7 +2556,6 @@ namespace ProjectOC.Input
             m_UIStore_Remove10 = m_UIStore.FindAction("Remove10", throwIfNotFound: true);
             m_UIStore_FastAdd = m_UIStore.FindAction("FastAdd", throwIfNotFound: true);
             m_UIStore_Upgrade = m_UIStore.FindAction("Upgrade", throwIfNotFound: true);
-            m_UIStore_ChangeStoreData = m_UIStore.FindAction("ChangeStoreData", throwIfNotFound: true);
             // UIProNode
             m_UIProNode = asset.FindActionMap("UIProNode", throwIfNotFound: true);
             m_UIProNode_Upgrade = m_UIProNode.FindAction("Upgrade", throwIfNotFound: true);
@@ -3052,7 +3020,6 @@ namespace ProjectOC.Input
         private readonly InputAction m_UIStore_Remove10;
         private readonly InputAction m_UIStore_FastAdd;
         private readonly InputAction m_UIStore_Upgrade;
-        private readonly InputAction m_UIStore_ChangeStoreData;
         public struct UIStoreActions
         {
             private @PlayerInput m_Wrapper;
@@ -3064,7 +3031,6 @@ namespace ProjectOC.Input
             public InputAction @Remove10 => m_Wrapper.m_UIStore_Remove10;
             public InputAction @FastAdd => m_Wrapper.m_UIStore_FastAdd;
             public InputAction @Upgrade => m_Wrapper.m_UIStore_Upgrade;
-            public InputAction @ChangeStoreData => m_Wrapper.m_UIStore_ChangeStoreData;
             public InputActionMap Get() { return m_Wrapper.m_UIStore; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -3095,9 +3061,6 @@ namespace ProjectOC.Input
                 @Upgrade.started += instance.OnUpgrade;
                 @Upgrade.performed += instance.OnUpgrade;
                 @Upgrade.canceled += instance.OnUpgrade;
-                @ChangeStoreData.started += instance.OnChangeStoreData;
-                @ChangeStoreData.performed += instance.OnChangeStoreData;
-                @ChangeStoreData.canceled += instance.OnChangeStoreData;
             }
 
             private void UnregisterCallbacks(IUIStoreActions instance)
@@ -3123,9 +3086,6 @@ namespace ProjectOC.Input
                 @Upgrade.started -= instance.OnUpgrade;
                 @Upgrade.performed -= instance.OnUpgrade;
                 @Upgrade.canceled -= instance.OnUpgrade;
-                @ChangeStoreData.started -= instance.OnChangeStoreData;
-                @ChangeStoreData.performed -= instance.OnChangeStoreData;
-                @ChangeStoreData.canceled -= instance.OnChangeStoreData;
             }
 
             public void RemoveCallbacks(IUIStoreActions instance)
@@ -3539,7 +3499,6 @@ namespace ProjectOC.Input
             void OnRemove10(InputAction.CallbackContext context);
             void OnFastAdd(InputAction.CallbackContext context);
             void OnUpgrade(InputAction.CallbackContext context);
-            void OnChangeStoreData(InputAction.CallbackContext context);
         }
         public interface IUIProNodeActions
         {

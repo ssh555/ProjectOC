@@ -1306,15 +1306,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "ChangeStoreData",
-                    "type": "Button",
-                    "id": "85cd286b-a4d6-4443-be17-a0dbcece27f9",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1557,28 +1548,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "FastAdd",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d672555a-41d0-4912-84c2-fd0d4beca6e0",
-                    "path": "<XInputController>/buttonSouth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeStoreData",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "1eaed07e-af47-4ff0-8edf-16e8dde649d1",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChangeStoreData",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -43,9 +43,6 @@ namespace ProjectOC.InventorySystem.UI
             Transform priority = transform.Find("TopTitle").Find("Priority");
             Text_Priority = priority.Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
 
-            PriorityUrgency = priority.Find("Urgency");
-            PriorityNormal = priority.Find("Normal");
-            PriorityAlternative = priority.Find("Alternative");
             // ProNode
             ProNodeUI = transform.Find("ProNode");
             // ProNode Recipe
@@ -100,7 +97,7 @@ namespace ProjectOC.InventorySystem.UI
             // BotKeyTips1
             BotKeyTips1 = this.transform.Find("BotKeyTips").Find("KeyTips1");
             BotKeyTips1.gameObject.SetActive(false);
-            CurPriority = MissionNS.TransportPriority.Normal;
+            //CurPriority = MissionNS.TransportPriority.Normal;
             IsInit = true;
         }
 
@@ -661,9 +658,6 @@ namespace ProjectOC.InventorySystem.UI
         private TMPro.TextMeshProUGUI DescNew;
 
         private Transform Priority;
-        private Transform PriorityUrgency;
-        private Transform PriorityNormal;
-        private Transform PriorityAlternative;
         private Transform Product;
         private Transform UIWorker;
         private Transform UIWorkerEff;
@@ -1455,8 +1449,6 @@ namespace ProjectOC.InventorySystem.UI
             public KeyTip Remove10;
             public KeyTip FastAdd;
             public KeyTip Return;
-            public KeyTip ChangeWorker;
-            public KeyTip RemoveWorker;
             public KeyTip Confirm;
             public KeyTip Back;
         }

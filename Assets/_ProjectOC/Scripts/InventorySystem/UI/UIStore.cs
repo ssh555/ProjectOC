@@ -344,8 +344,6 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Upgrade.performed -= Upgrade_performed;
             // 上下切换StoreData
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeItem.performed -= ChangeItem_performed;
-            // 改变StoreData存储的Item
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeStoreData.performed -= ChangeStoreData_performed;
             // 快捷放入
             ProjectOC.Input.InputManager.PlayerInput.UIStore.FastAdd.performed -= FastAdd_performed;
             // 取出1个
@@ -365,8 +363,6 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Upgrade.performed += Upgrade_performed;
             // 上下切换StoreData
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeItem.performed += ChangeItem_performed;
-            // 改变StoreData存储的Item
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeStoreData.performed += ChangeStoreData_performed;
             // 快捷放入
             ProjectOC.Input.InputManager.PlayerInput.UIStore.FastAdd.performed += FastAdd_performed;
             // 取出1个
@@ -428,14 +424,6 @@ namespace ProjectOC.InventorySystem.UI
                 this.CurrentItemIndex += -offset.y * grid.y + offset.x;
             }
         }
-        private void ChangeStoreData_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            if (CurMode == Mode.Store)
-            {
-                CurMode = Mode.ChangeItem;
-                Refresh();
-            }
-        }
         private void FastAdd_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (CurMode == Mode.Store)
@@ -477,7 +465,11 @@ namespace ProjectOC.InventorySystem.UI
         }
         private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurMode == Mode.ChangeItem)
+            if (CurMode == Mode.Store)
+            {
+                CurMode = Mode.ChangeItem;
+            }
+            else if (CurMode == Mode.ChangeItem)
             {
                 Store.ChangeStoreData(CurrentDataIndex, CurrentItemData);
                 this.CurMode = Mode.Store;
@@ -779,10 +771,6 @@ namespace ProjectOC.InventorySystem.UI
                 // 强制立即更新 VerticalLayoutGroup 的布局
                 LayoutRebuilder.ForceRebuildLayoutImmediate(GridLayout.GetComponent<RectTransform>());
                 #endregion
-
-                #region BotKeyTips
-
-                #endregion
             }
             else if(this.CurMode == Mode.ChangeItem || this.CurMode == Mode.ChangeIcon)
             {
@@ -932,10 +920,6 @@ namespace ProjectOC.InventorySystem.UI
                 // 强制立即更新 VerticalLayoutGroup 的布局
                 LayoutRebuilder.ForceRebuildLayoutImmediate(ChangeItem_GridLayout.GetComponent<RectTransform>());
                 #endregion
-
-                #region BotKeyTips
-
-                #endregion
             }
             else if (this.CurMode == Mode.Upgrade)
             {
@@ -1029,10 +1013,6 @@ namespace ProjectOC.InventorySystem.UI
                     LvNew.text = "";
                     DescNew.text = "";
                 }
-                #endregion
-
-                #region BotKeyTips
-
                 #endregion
             }
         }
