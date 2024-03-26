@@ -4,6 +4,7 @@ using ML.Engine.BuildingSystem;
 using ML.Engine.InventorySystem;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ProjectOC.MissionNS;
+using ProjectOC.ProNodeNS;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -177,16 +178,19 @@ namespace ProjectOC.StoreNS
                 {
                     foreach (StoreData storeData in StoreDatas)
                     {
-                        int removeAmount = storeData.MaxCapacity - newStoreDataCapacity;
-                        if (storeData.Storage > removeAmount)
+                        int removeAmount = storeData.StorageAll - newStoreDataCapacity;
+                        if (removeAmount > 0)
                         {
-                            storeData.Storage -= removeAmount;
-                            temp.Add(storeData.ItemID, removeAmount);
-                        }
-                        else
-                        {
-                            temp.Add(storeData.ItemID, storeData.Storage);
-                            storeData.Storage = 0;
+                            if (storeData.Storage > removeAmount)
+                            {
+                                storeData.Storage -= removeAmount;
+                                temp.Add(storeData.ItemID, removeAmount);
+                            }
+                            else
+                            {
+                                temp.Add(storeData.ItemID, storeData.Storage);
+                                storeData.Storage = 0;
+                            }
                         }
                         storeData.MaxCapacity = newStoreDataCapacity;
                     }
@@ -527,7 +531,8 @@ namespace ProjectOC.StoreNS
             List<Formula> result = new List<Formula>();
             if (this.WorldStore != null)
             {
-                List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(this.WorldStore.Classification.ToString());
+                string upgradeCID = BuildingManager.Instance.GetUpgradeCID(this.WorldStore.Classification.ToString());
+                List<Formula> formulas = BuildingManager.Instance.GetRaw(upgradeCID);
                 if (formulas != null)
                 {
                     result.AddRange(formulas);
@@ -541,35 +546,33 @@ namespace ProjectOC.StoreNS
             List<Formula> result = new List<Formula>();
             if (this.WorldStore != null)
             {
-                List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(this.WorldStore.Classification.ToString());
-                if (formulas != null)
+                List<Formula> formulas = GetUpgradeRaw();
+                foreach (Formula formula in formulas)
                 {
-                    foreach (Formula formula in formulas)
-                    {
-                        int num = player.Inventory.GetItemAllNum(formula.id);
-                        Formula newFormula = new Formula();
-                        newFormula.id = formula.id;
-                        newFormula.num = num;
-                        result.Add(newFormula);
-                    }
+                    int num = player.Inventory.GetItemAllNum(formula.id);
+                    Formula newFormula = new Formula();
+                    newFormula.id = formula.id;
+                    newFormula.num = num;
+                    result.Add(newFormula);
                 }
             }
             return result;
         }
-
         public void Upgrade(Player.PlayerCharacter player)
         {
             if (this.WorldStore != null)
             {
                 string ID = BuildingManager.Instance.GetID(this.WorldStore.Classification.ToString());
                 string upgradeID = BuildingManager.Instance.GetUpgradeID(this.WorldStore.Classification.ToString());
-                string upgradeCID = BuildingManager.Instance.GetUpgradeCID(this.WorldStore.Classification.ToString());
+                string upgradeCID = BuildingManager.Instance.GetClassification(upgradeID);
 
-                if (!string.IsNullOrEmpty(upgradeID) 
+                if (!string.IsNullOrEmpty(upgradeID)
                     && !string.IsNullOrEmpty(upgradeCID)
-                    && BuildingManager.Instance.IsValidBPartID(upgradeCID) 
-                    && CompositeManager.Instance.OnlyCostResource(player.Inventory, $"{ID}_{upgradeID}"))
+                    && BuildingManager.Instance.IsValidBPartID(upgradeCID)
+                    && CompositeManager.Instance.OnlyCostResource(player.Inventory, upgradeID))
                 {
+                    // ·µ»Ø²ÄÁÏ
+                    CompositeManager.Instance.OnlyReturnResource(player.Inventory, ID);
                     if (BuildingManager.Instance.GetOneBPartInstance(upgradeCID) is WorldStore upgrade)
                     {
                         upgrade.InstanceID = this.WorldStore.InstanceID;

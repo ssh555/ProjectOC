@@ -76,5 +76,6 @@ namespace ML.Engine.InventorySystem
         DiversionNode,
         LifeDiversion,
         Projector,
+        DiveStation
     }
 }

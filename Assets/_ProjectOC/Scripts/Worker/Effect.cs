@@ -44,7 +44,6 @@ namespace ProjectOC.WorkerNS
             this.ID = config.ID;
             if (string.IsNullOrEmpty(value))
             {
-                //Debug.LogError($"Effect Value {value} is empty or null");
                 return;
             }
             switch (EffectType)
@@ -83,17 +82,12 @@ namespace ProjectOC.WorkerNS
                 this.ParamInt = effect.ParamInt;
                 this.ParamFloat = effect.ParamFloat;
             }
-            else
-            {
-                //Debug.LogError("Effect is null");
-            }
         }
 
         public void ApplyEffect(Worker worker)
         {
             if (worker == null)
             {
-                //Debug.LogError($"Effect {this.ID} Worker is Null");
                 return;
             }
             string workTypeStr;
@@ -116,10 +110,6 @@ namespace ProjectOC.WorkerNS
                         {
                             worker.ExpRate[workType] = ParamInt;
                         }
-                        else
-                        {
-                            //Debug.LogError($"Worker {worker} ExpRate not contains WorkType {workType}");
-                        }
                     }
                     break;
                 case EffectType.AlterWalkSpeed:
@@ -137,13 +127,9 @@ namespace ProjectOC.WorkerNS
                     workTypeStr = this.EffectType.ToString().Split('_')[1];
                     if (Enum.TryParse(workTypeStr, out workType))
                     {
-                        if (worker.ExpRate.ContainsKey(workType))
+                        if (worker.Eff.ContainsKey(workType))
                         {
-                            worker.ExpRate[workType] = ParamInt;
-                        }
-                        else
-                        {
-                            //Debug.LogError($"Worker {worker} ExpRate not contains WorkType {workType}");
+                            worker.Eff[workType] = ParamInt;
                         }
                     }
                     break;

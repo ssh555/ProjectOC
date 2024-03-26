@@ -55,7 +55,10 @@ namespace ProjectOC.ProNodeNS
             // 7 -> StackThreshold
             this.StackThreshold = int.Parse(row[7]);
             // 8 -> RawThreshold
-            this.RawThreshold = int.Parse(row[8]);
+            if (!string.IsNullOrEmpty(row[8]))
+            {
+                this.RawThreshold = int.Parse(row[8]);
+            }
             return true;
         }
     }

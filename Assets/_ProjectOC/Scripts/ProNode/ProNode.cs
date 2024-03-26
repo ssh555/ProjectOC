@@ -7,8 +7,6 @@ using System;
 using UnityEngine;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.BuildingSystem;
-using ProjectOC.LandMassExpand;
-using ML.Engine.UI;
 
 namespace ProjectOC.ProNodeNS
 {
@@ -718,14 +716,13 @@ namespace ProjectOC.ProNodeNS
                 StartProduce();
             }
         }
-
-
         public List<Formula> GetUpgradeRaw()
         {
             List<Formula> result = new List<Formula>();
             if (this.WorldProNode != null)
             {
-                List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(this.WorldProNode.Classification.ToString());
+                string upgradeCID = BuildingManager.Instance.GetUpgradeCID(this.WorldProNode.Classification.ToString());
+                List<Formula> formulas = BuildingManager.Instance.GetRaw(upgradeCID);
                 if (formulas != null)
                 {
                     result.AddRange(formulas);
@@ -739,17 +736,14 @@ namespace ProjectOC.ProNodeNS
             List<Formula> result = new List<Formula>();
             if (this.WorldProNode != null)
             {
-                List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(this.WorldProNode.Classification.ToString());
-                if (formulas != null)
+                List<Formula> formulas = GetUpgradeRaw();
+                foreach (Formula formula in formulas)
                 {
-                    foreach (Formula formula in formulas)
-                    {
-                        int num = player.Inventory.GetItemAllNum(formula.id);
-                        Formula newFormula = new Formula();
-                        newFormula.id = formula.id;
-                        newFormula.num = num;
-                        result.Add(newFormula);
-                    }
+                    int num = player.Inventory.GetItemAllNum(formula.id);
+                    Formula newFormula = new Formula();
+                    newFormula.id = formula.id;
+                    newFormula.num = num;
+                    result.Add(newFormula);
                 }
             }
             return result;
@@ -761,13 +755,15 @@ namespace ProjectOC.ProNodeNS
             {
                 string ID = BuildingManager.Instance.GetID(this.WorldProNode.Classification.ToString());
                 string upgradeID = BuildingManager.Instance.GetUpgradeID(this.WorldProNode.Classification.ToString());
-                string upgradeCID = BuildingManager.Instance.GetUpgradeCID(this.WorldProNode.Classification.ToString());
+                string upgradeCID = BuildingManager.Instance.GetClassification(upgradeID);
 
                 if (!string.IsNullOrEmpty(upgradeID)
                     && !string.IsNullOrEmpty(upgradeCID)
                     && BuildingManager.Instance.IsValidBPartID(upgradeCID)
-                    && CompositeManager.Instance.OnlyCostResource(player.Inventory, $"{ID}_{upgradeID}"))
+                    && CompositeManager.Instance.OnlyCostResource(player.Inventory, upgradeID))
                 {
+                    // ·µ»Ø²ÄÁÏ
+                    CompositeManager.Instance.OnlyReturnResource(player.Inventory, ID);
                     if (BuildingManager.Instance.GetOneBPartInstance(upgradeCID) is WorldProNode upgrade)
                     {
                         upgrade.InstanceID = this.WorldProNode.InstanceID;
@@ -833,6 +829,7 @@ namespace ProjectOC.ProNodeNS
                     amount = StackReserve;
                     StackReserve = 0;
                 }
+                StartProduce();
                 OnActionChange?.Invoke();
                 return amount;
             }
@@ -881,6 +878,7 @@ namespace ProjectOC.ProNodeNS
                 else if (ProductItem == item.ID && Stack >= item.Amount)
                 {
                     Stack -= item.Amount;
+                    this.StartProduce();
                     OnActionChange?.Invoke();
                     return true;
                 }
@@ -914,6 +912,7 @@ namespace ProjectOC.ProNodeNS
                         amount = Stack;
                         Stack = 0;
                     }
+                    this.StartProduce();
                 }
             }
             Item result = ItemManager.Instance.SpawnItem(item.ID);
@@ -942,6 +941,7 @@ namespace ProjectOC.ProNodeNS
                     if (Stack >= amount)
                     {
                         Stack -= amount;
+                        this.StartProduce();
                         OnActionChange?.Invoke();
                         return true;
                     }
