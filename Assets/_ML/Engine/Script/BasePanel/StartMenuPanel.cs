@@ -35,7 +35,7 @@ namespace ML.Engine.UI
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
         private List<AsyncOperationHandle<GameObject>> goHandle = new List<AsyncOperationHandle<GameObject>>();
         //private AsyncOperationHandle spriteAtlasHandle;
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             //GM.ABResourceManager.Release(spriteAtlasHandle);
             foreach (var handle in goHandle)

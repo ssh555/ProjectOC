@@ -82,7 +82,8 @@ namespace ProjectOC.ManagerNS
 
         private void Start()
         {
-            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/Character/Player/Prefabs/PlayerCharacter.prefab", GameObject.Find("PlayerSpawnPoint").transform).Completed += (handle) =>
+            var transf = GameObject.Find("PlayerSpawnPoint").transform;
+            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/Character/Player/Prefabs/PlayerCharacter.prefab", transf).Completed += (handle) =>
             {
                 // สตภýปฏ
                 var player = handle.Result;

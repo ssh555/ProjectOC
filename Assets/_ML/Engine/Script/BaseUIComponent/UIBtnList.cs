@@ -262,8 +262,6 @@ namespace ML.Engine.UI
         /// </summary>
         public SelectedButton MoveIndexIUISelected(int i)
         {
-
-            
             this.CurSelected?.OnDeselect(null);
             this.CurSelected = OneDimSelectedButtons[i];
 
@@ -278,6 +276,49 @@ namespace ML.Engine.UI
         {
             SBDic[btnName].transform.Find("BtnText").GetComponent<TextMeshProUGUI>().text = showText;
         }
+
+        /// <summary>
+        /// 按钮导航回调
+        /// </summary>
+        public void SwichBtn_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            string actionName = obj.action.name;
+
+            // 使用 ReadValue<T>() 方法获取附加数据
+            string actionMapName = obj.action.actionMap.name;
+
+            var vector2 = obj.ReadValue<UnityEngine.Vector2>();
+            float angle = Mathf.Atan2(vector2.x, vector2.y);
+
+            angle = angle * 180 / Mathf.PI;
+            if (angle < 0)
+            {
+                angle = angle + 360;
+            }
+
+            if (angle < 45 || angle > 315)
+            {
+                this.MoveUPIUISelected();
+            }
+            else if (angle > 45 && angle < 135)
+            {
+                this.MoveRightIUISelected();
+            }
+            else if (angle > 135 && angle < 225)
+            {
+                this.MoveDownIUISelected();
+            }
+            else if (angle > 225 && angle < 315)
+            {
+                this.MoveLeftIUISelected();
+            }
+        }
+
+        public void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            this.CurSelected.Interact();
+        }
+        
     }
 
 }
