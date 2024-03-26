@@ -3,6 +3,7 @@ using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
 using ProjectOC.InventorySystem.UI;
+using ProjectOC.ManagerNS;
 using ProjectOC.ResonanceWheelSystem.UI;
 using ProjectOC.TechTree.UI;
 using Sirenix.OdinInspector;
@@ -12,6 +13,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 using static ProjectOC.Player.UI.PlayerUIPanel;
 using static UnityEngine.Rendering.DebugUI;
@@ -28,19 +30,6 @@ namespace ProjectOC.Player.UI
         protected override void Awake()
         {
             base.Awake();
-            this.InitTextContentPathData();
-
-/*            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
-                this.InitDescriptionPrefab,
-                this.InitBeastBioPrefab,
-                this.InitUITexture2D});*/
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
-
             btnList = this.transform.Find("ButtonList");
 
         }
@@ -217,6 +206,12 @@ namespace ProjectOC.Player.UI
             this.abpath = "OC/Json/TextContent/PlayerUIPanel";
             this.abname = "PlayerUIPanel";
             this.description = "PlayerUIPanel数据加载完成";
+        }
+
+        protected override void InitObjectPool()
+        {
+            this.InitTextContentPathData();
+            base.InitObjectPool();
         }
 
         private Transform btnList;

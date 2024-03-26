@@ -27,19 +27,7 @@ namespace ProjectOC.InventorySystem.UI
         public bool IsInit = false;
         protected override void Awake()
         {
-
             base.Awake();
-            this.InitTextContentPathData();
-
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                CurPriority = MissionNS.TransportPriority.Normal;
-                this.Refresh();
-                
-            });
-
-            StartCoroutine(functionExecutor.Execute());
-
 
             // TopTitle
             Text_Title = transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
@@ -98,7 +86,7 @@ namespace ProjectOC.InventorySystem.UI
             // BotKeyTips
             BotKeyTips_ProNode = this.transform.Find("BotKeyTips").Find("KeyTips");
 
-            
+
             // BotKeyTips ChangeRecipe
             BotKeyTips_Recipe = this.transform.Find("BotKeyTips").Find("ChangeRecipe");
 
@@ -112,7 +100,7 @@ namespace ProjectOC.InventorySystem.UI
 
             BotKeyTips_Level.gameObject.SetActive(false);
 
-            
+
             IsInit = true;
 
         }
@@ -227,14 +215,14 @@ namespace ProjectOC.InventorySystem.UI
             set
             {
                 int last = currentRawIndex;
-                if(Raws != null && Raws.Count > 0)
+                if (Raws != null && Raws.Count > 0)
                 {
                     currentRawIndex = value;
-                    if(currentRawIndex == -1)
+                    if (currentRawIndex == -1)
                     {
                         currentRawIndex = Raws.Count - 1;
                     }
-                    else if(currentRawIndex == Raws.Count)
+                    else if (currentRawIndex == Raws.Count)
                     {
                         currentRawIndex = 0;
                     }
@@ -264,7 +252,7 @@ namespace ProjectOC.InventorySystem.UI
                 {
                     currentRawIndex = 0;
                 }
-                if(last != currentRawIndex)
+                if (last != currentRawIndex)
                 {
                     lastRawIndex = last;
                 }
@@ -278,7 +266,7 @@ namespace ProjectOC.InventorySystem.UI
         {
             get
             {
-                if(Raws != null && CurrentRawIndex < Raws.Count)
+                if (Raws != null && CurrentRawIndex < Raws.Count)
                 {
                     return Raws[CurrentRawIndex].id;
                 }
@@ -505,10 +493,10 @@ namespace ProjectOC.InventorySystem.UI
                     var texture = ItemManager.Instance.GetItemTexture2D(ProNode.Recipe.Product.id);
                     if (texture != null)
                     {
-                        ItemManager.Instance.AddItemIconObject(ProNode.Recipe.Product.id, 
-                                                               this.ProNode.WorldProNode.transform, 
-                                                               new Vector3(0, this.ProNode.WorldProNode.transform.GetComponent<Collider>().bounds.size.y / 2, 0), 
-                                                               Quaternion.Euler(new Vector3(90, 0, 0)), 
+                        ItemManager.Instance.AddItemIconObject(ProNode.Recipe.Product.id,
+                                                               this.ProNode.WorldProNode.transform,
+                                                               new Vector3(0, this.ProNode.WorldProNode.transform.GetComponent<Collider>().bounds.size.y / 2, 0),
+                                                               Quaternion.Euler(new Vector3(90, 0, 0)),
                                                                Vector3.one);
                     }
                 }
@@ -591,7 +579,7 @@ namespace ProjectOC.InventorySystem.UI
         private List<GameObject> tempUIItemsLevel = new List<GameObject>();
         private void ClearTemp()
         {
-            foreach(var s in tempSprite)
+            foreach (var s in tempSprite)
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s);
             }
@@ -664,7 +652,7 @@ namespace ProjectOC.InventorySystem.UI
         public override void Refresh()
         {
             // 加载完成JSON数据 & 查找完所有引用
-            if(ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
+            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
             {
                 return;
             }
@@ -1126,7 +1114,7 @@ namespace ProjectOC.InventorySystem.UI
                 {
                     imgProduct.sprite = null;
                 }
-               
+
                 var amountProduct = Recipe_Product.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
                 amountProduct.text = product.num.ToString();
                 var tiemProduct = Recipe_Product.transform.Find("Time").GetComponent<TMPro.TextMeshProUGUI>();
@@ -1282,7 +1270,7 @@ namespace ProjectOC.InventorySystem.UI
                     }
                     else
                     {
-                        item.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text  = "";
+                        item.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = "";
                         item.transform.Find("State").GetComponent<TMPro.TextMeshProUGUI>().text = "";
                         var rect = item.transform.Find("PrograssBar").Find("Cur").GetComponent<RectTransform>();
                         rect.offsetMax = new Vector2(rect.offsetMax.x, -100);
@@ -1479,18 +1467,18 @@ namespace ProjectOC.InventorySystem.UI
 
             public TextContent[] TransportPriority;
 
-/*            public TextContent textUrgency;
-            public TextContent textNormal;
-            public TextContent textAlternative;*/
+            /*            public TextContent textUrgency;
+                        public TextContent textNormal;
+                        public TextContent textAlternative;*/
 
             public TextContent textStateVacancy;
             public TextContent textStateStagnation;
             public TextContent textStateProduction;
 
             public TextContent[] workerStatus;
-/*            public TextContent textWorkerStateWork;
-            public TextContent textWorkerStateFish;
-            public TextContent textWorkerStateRelax;*/
+            /*            public TextContent textWorkerStateWork;
+                        public TextContent textWorkerStateFish;
+                        public TextContent textWorkerStateRelax;*/
             public TextContent textWorkerOnDuty;
 
             public TextContent textWorkerStateTransport;
@@ -1514,7 +1502,7 @@ namespace ProjectOC.InventorySystem.UI
             public KeyTip ConfirmLevel;
             public KeyTip BackLevel;
         }
-        private void InitTextContentPathData()
+        protected override void InitTextContentPathData()
         {
             this.abpath = "OC/Json/TextContent/ProNode";
             this.abname = "ProNodePanel";

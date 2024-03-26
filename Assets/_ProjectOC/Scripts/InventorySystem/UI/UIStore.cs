@@ -24,14 +24,6 @@ namespace ProjectOC.InventorySystem.UI
         protected override void Awake()
         {
             base.Awake();
-            this.InitTextContentPathData();
-
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
 
             #region TopTitle
             Text_Title = transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
@@ -1061,7 +1053,7 @@ namespace ProjectOC.InventorySystem.UI
             public KeyTip Confirm;
             public KeyTip Back;
         }
-        private void InitTextContentPathData()
+        protected override void InitTextContentPathData()
         {
             this.abpath = "OC/Json/TextContent/Store";
             this.abname = "StorePanel";

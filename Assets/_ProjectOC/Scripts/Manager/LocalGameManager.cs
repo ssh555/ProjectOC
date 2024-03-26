@@ -82,12 +82,12 @@ namespace ProjectOC.ManagerNS
 
         private void Start()
         {
-            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/Character/Player/Prefabs/PlayerCharacter.prefab").Completed += (handle) =>
+            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/Character/Player/Prefabs/PlayerCharacter.prefab", GameObject.Find("PlayerSpawnPoint").transform).Completed += (handle) =>
             {
                 // สตภýปฏ
                 var player = handle.Result;
 
-                player.transform.position = GameObject.Find("PlayerSpawnPoint").transform.position;
+                Debug.Log("player "+player.transform.position);
 
                 NavMeshManager = GM.RegisterLocalManager<NavMeshManager>();
 

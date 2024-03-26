@@ -25,7 +25,6 @@ namespace ML.Engine.UI
         /// 对象池
         /// </summary>
         public ObjectPool objectPool;
-        public FunctionExecutor<List<AsyncOperationHandle>> functionExecutor = new FunctionExecutor<List<AsyncOperationHandle>>();
         /// <summary>
         /// 所属UIManager
         /// </summary>
@@ -99,19 +98,24 @@ namespace ML.Engine.UI
 
         }
 
-        protected virtual void Awake()
+        protected override void Awake()
         {
             
         }
 
-        protected virtual void Start()
+        protected override void Start()
         {
             this.enabled = false;
         }
 
         protected virtual void InitObjectPool()
         {
-            
+            this.objectPool.GetFunctionExecutor().SetOnAllFunctionsCompleted(() =>
+            {
+                this.Refresh();
+            });
+
+            StartCoroutine(this.objectPool.GetFunctionExecutor().Execute());
         }
 
 
@@ -128,7 +132,7 @@ namespace ML.Engine.UI
         public string abname;
         public string description;
 
-        private UIKeyTipList UIKeyTipList;
+        private UIKeyTipList<T> UIKeyTipList;
 
         /// <summary>
         /// 加载Json完成后执行的回调，默认自动初始化KeyTip
@@ -157,35 +161,31 @@ namespace ML.Engine.UI
         /// </summary>
         private void InitKeyTip(T datas)
         {
-            UIKeyTipList = new UIKeyTipList(transform);
+            UIKeyTipList = new UIKeyTipList<T>(transform,datas);
 
-            KeyTip[] keyTips = GameManager.Instance.InputManager.ExportKeyTipValues(datas);
-            foreach (var keyTip in keyTips)
-            {
-                InputAction inputAction = GameManager.Instance.InputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
-
-                this.UIKeyTipList.SetKeyTiptext(keyTip.keyname, GameManager.Instance.InputManager.GetInputActionBindText(inputAction));
-                this.UIKeyTipList.SetDescriptiontext(keyTip.keyname, keyTip.description.GetText());
-            }
+            
         }
 
         protected override void Awake()
         {
             base.Awake();
-            this.functionExecutor.AddFunction(this.InitUITextContents);
         }
 
         protected override void Enter()
         {
             base.Enter();
-            
-            
+        }
+
+        protected virtual void InitTextContentPathData()
+        {
+
         }
 
         protected override void InitObjectPool()
         {
-            base.InitObjectPool();
+            this.InitTextContentPathData();
             this.objectPool.GetFunctionExecutor().AddFunction(this.InitUITextContents);
+            base.InitObjectPool();
         }
     }
 }

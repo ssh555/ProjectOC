@@ -13,6 +13,8 @@ using ML.Engine.UI;
 using UnityEngine.U2D;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using static ProjectOC.InventorySystem.UI.UIInfiniteInventory;
+using ProjectOC.ManagerNS;
+using ML.Engine.Utility;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -32,17 +34,6 @@ namespace ProjectOC.InventorySystem.UI
         protected override void Awake()
         {
             base.Awake();
-            this.InitTextContentPathData();
-            this.functionExecutor.AddFunction(new List<Func<List<AsyncOperationHandle>>> {
-                this.LoadInventoryAtlas});
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
-
-
 
             // TopTitle
             TopTitleText = this.transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
@@ -86,10 +77,9 @@ namespace ProjectOC.InventorySystem.UI
             base.Start();
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.Release(this.gameObject);
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.Release(this.inventoryAtlas);
         }
         #endregion
 
@@ -695,26 +685,24 @@ namespace ProjectOC.InventorySystem.UI
             public KeyTip Destroy;
         }
 
-        private void InitTextContentPathData()
+        protected override void InitTextContentPathData()
         {
             this.abpath = "OC/Json/TextContent/Inventory";
             this.abname = "InventoryPanel";
             this.description = "InventoryPanel数据加载完成";
         }
-        #endregion
 
-        private List<AsyncOperationHandle> LoadInventoryAtlas()
+        protected override void InitObjectPool()
         {
-            var handles = new List<AsyncOperationHandle>();
-            var handle = GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>("OC/UI/Inventory/Texture/SA_Inventory_UI.spriteatlasv2");
-
-            handle.Completed += (handle) =>
+            this.objectPool.RegisterPool(ObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
+            "OC/UI/Inventory/Texture/SA_Inventory_UI.spriteatlasv2", (handle) =>
             {
                 inventoryAtlas = handle.Result as SpriteAtlas;
-            };
-            handles.Add(handle);
-            return handles;
+            }
+            );
+            base.InitObjectPool();
         }
+        #endregion
 
     }
 

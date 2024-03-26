@@ -193,19 +193,6 @@ namespace ProjectOC.TechTree.UI
         {
             base.Awake();
 
-            this.InitTextContentPathData();
-            /*            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
-                            this.InitUITexture2D,
-                            this.InitSlotPrefab });*/
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
-
-
-
             topTitle = this.transform.Find("TopPanel").GetComponentInChildren<TextMeshProUGUI>();
 
             Transform ContentPanel = this.transform.Find("ContentPanel");
@@ -870,8 +857,6 @@ namespace ProjectOC.TechTree.UI
             obj.GetComponentInChildren<Image>().color = Color.white;
         }
         #endregion
-
-
         protected override void OnLoadJsonAssetComplete(TPPanel datas)
         {
             foreach (var tip in datas.category)
@@ -880,7 +865,7 @@ namespace ProjectOC.TechTree.UI
             }
 
         }
-        private void InitTextContentPathData()
+        protected override void InitTextContentPathData()
         {
             this.abpath = "OC/Json/TextContent/TechTree";
             this.abname = "TechPointPanel";

@@ -27,9 +27,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             base.Awake();
 
-            
-
-
             //BeastInfo
             var Info1 = this.transform.Find("HiddenBeastInfo2").Find("Info");
             Speed = Info1.Find("MovingSpeed").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
@@ -56,13 +53,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
 
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
-            /*GM.ABResourceManager.Release(spriteAtlasHandle);
-            foreach(var handle in goHandle)
-            {
-                GM.ABResourceManager.ReleaseInstance(handle);
-            }*/
+
         }
         #endregion
 
@@ -449,7 +442,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //BotKeyTips
             public KeyTip Back;
         }
-        private void InitTextContentPathData()
+        protected override void InitTextContentPathData()
         {
             this.abpath = "OC/Json/TextContent/ResonanceWheel";
             this.abname = "BeastPanel";
@@ -457,13 +450,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
         #endregion
 
-        
         protected override void InitObjectPool()
         {
-            base.InitObjectPool();
-
-            this.InitTextContentPathData();
-
             this.objectPool.RegisterPool(ObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
             "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2", (handle) =>
             {
@@ -474,15 +462,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             );
             this.objectPool.RegisterPool(ObjectPool.HandleType.Prefab, "BeastBioPool", LocalGameManager.Instance.WorkerManager.GetWorkers().Count, "OC/UI/ResonanceWheel/Prefabs/BeastBio.prefab");
             this.objectPool.RegisterPool(ObjectPool.HandleType.Prefab, "DescriptionPool", 5, "OC/UI/ResonanceWheel/Prefabs/Description.prefab");
-
-            
-
-            this.objectPool.GetFunctionExecutor().SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(this.objectPool.GetFunctionExecutor().Execute());
+            base.InitObjectPool();
         }
 
         #endregion

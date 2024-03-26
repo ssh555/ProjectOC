@@ -2,11 +2,13 @@ using ML.Engine.Input;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
+using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub2;
 using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheelUI;
@@ -21,17 +23,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         protected override void Awake()
         {
             base.Awake();
-            this.InitTextContentPathData();
-            /*            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
-                            this.InitDescriptionPrefab,
-                            this.InitBeastBioPrefab,
-                            this.InitUITexture2D});*/
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
 
             //Ring
             var ringcontent = this.transform.Find("Ring").Find("Viewport").Find("Content");
@@ -283,7 +274,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             public KeyTip Back;
         }
 
-        private void InitTextContentPathData()
+        protected override void InitTextContentPathData()
         {
             this.abpath = "OC/Json/TextContent/ResonanceWheel";
             this.abname = "ResonanceWheel_sub2";

@@ -1,6 +1,8 @@
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
+using ML.Engine.Utility;
+using ProjectOC.ManagerNS;
 using ProjectOC.WorkerEchoNS;
 using ProjectOC.WorkerNS;
 using System;
@@ -21,15 +23,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         protected override void Awake()
         {
             base.Awake();
-            this.InitTextContentPathData();
-            this.functionExecutor.AddFunction(
-                this.InitUITexture2D);
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
 
             //BeastInfo
             var Info1 = this.transform.Find("HiddenBeastInfo1").Find("Info");
@@ -302,7 +295,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             public KeyTip Receive;
 
         }
-        private void InitTextContentPathData()
+        protected override void InitTextContentPathData()
         {
             this.abpath = "OC/Json/TextContent/ResonanceWheel";
             this.abname = "ResonanceWheel_sub1";
@@ -310,25 +303,18 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
 
         #endregion
-
-        #region Texture2D
-        private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
-        private string ResonanceWheelSpriteAtlasPath = "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2";
-        private List<AsyncOperationHandle> InitUITexture2D()
+        protected override void InitObjectPool()
         {
-            var handles = new List<AsyncOperationHandle>();
-            var handle = GM.ABResourceManager.LoadAssetAsync<SpriteAtlas>(ResonanceWheelSpriteAtlasPath);
-            handle.Completed += (handle) =>
+            this.objectPool.RegisterPool(ObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
+            "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2", (handle) =>
             {
-                spriteatlasHandle = handle;
-                var atlas = handle.Result as SpriteAtlas;
-                icon_genderfemaleSprite = atlas.GetSprite("icon_genderfemale");
-                icon_gendermaleSprite = atlas.GetSprite("icon_gendermale");
-            };
-            handles.Add(handle);
-            return handles;
+                SpriteAtlas resonanceWheelAtlas = handle.Result as SpriteAtlas;
+                icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite("icon_genderfemale");
+                icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite("icon_gendermale");
+            }
+            );
+            base.InitObjectPool();
         }
-        #endregion
         #endregion
     }
 

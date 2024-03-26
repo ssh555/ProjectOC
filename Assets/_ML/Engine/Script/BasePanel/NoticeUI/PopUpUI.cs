@@ -18,13 +18,6 @@ namespace ML.Engine.UI
         {
 
             base.Awake();
-            this.InitTextContentPathData();
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
             this.Text = this.transform.Find("Image").Find("Text").GetComponent<TextMeshProUGUI>(); ;
         }
 
@@ -140,7 +133,7 @@ namespace ML.Engine.UI
             public KeyTip Confirm;
             public KeyTip Back;
         }
-        private void InitTextContentPathData()
+        protected override void InitTextContentPathData()
         {
             this.abpath = "ML/Json/TextContent";
             this.abname = "PopUpUI";

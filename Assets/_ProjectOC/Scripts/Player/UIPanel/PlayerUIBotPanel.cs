@@ -28,27 +28,13 @@ namespace ProjectOC.Player.UI
         protected override void Awake()
         {
             base.Awake();
-            this.InitTextContentPathData();
-
-            /*            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
-                            this.InitDescriptionPrefab,
-                            this.InitBeastBioPrefab,
-                            this.InitUITexture2D});*/
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
             Ring = this.transform.Find("Ring");
             btnList = Ring.Find("ButtonList");
             TimeText = this.transform.Find("Time").Find("Text").GetComponent<TextMeshProUGUI>();
-
         }
 
         protected override void Start()
         {
-            
             IsInit = true;
             Refresh();
             base.Start();
@@ -224,7 +210,6 @@ namespace ProjectOC.Player.UI
         public struct PlayerUIBotPanelStruct
         {
             public TextTip[] Btns;
-
         }
 
         protected override void OnLoadJsonAssetComplete(PlayerUIBotPanelStruct datas)
@@ -232,7 +217,7 @@ namespace ProjectOC.Player.UI
             InitBtnData(datas);
         }
 
-        private void InitTextContentPathData()
+        protected override void InitTextContentPathData()
         {
             this.abpath = "OC/Json/TextContent/PlayerUIBotPanel";
             this.abname = "PlayerUIBotPanel";

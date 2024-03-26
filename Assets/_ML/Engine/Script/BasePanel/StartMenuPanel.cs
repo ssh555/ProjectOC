@@ -23,20 +23,6 @@ namespace ML.Engine.UI
         protected override void Awake()
         {
             base.Awake();
-            this.InitTextContentPathData();
-
-            /*            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
-                            this.InitDescriptionPrefab,
-                            this.InitBeastBioPrefab,
-                            this.InitUITexture2D});*/
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
-
-
             btnList = this.transform.Find("ButtonList");
             
         }
@@ -221,8 +207,7 @@ namespace ML.Engine.UI
         {
             InitBtnData(datas);
         }
-
-        private void InitTextContentPathData()
+        protected override void InitTextContentPathData()
         {
             this.abpath = "ML/Json/TextContent";
             this.abname = "StartMenuPanel";

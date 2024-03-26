@@ -2,6 +2,8 @@ using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.Timer;
+using ML.Engine.Utility;
+using ProjectOC.ManagerNS;
 using ProjectOC.Player;
 using ProjectOC.WorkerEchoNS;
 using Sirenix.OdinInspector;
@@ -28,16 +30,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         protected override void Awake()
         {
             base.Awake();
-            this.InitTextContentPathData();
-            this.functionExecutor.AddFunction(new List<Func<List<AsyncOperationHandle>>> {
-                this.InitUITexture2D,
-                this.InitSlotPrefab });
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
 
             workerEcho = (GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
 
@@ -93,17 +85,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             base.Start();
         }
 
-        private AsyncOperationHandle spriteatlasHandle;
-        private List<AsyncOperationHandle<GameObject>> goHandle = new List<AsyncOperationHandle<GameObject>>();
+
         protected override void OnDestroy()
         {
             ClearTemp();
             (this as ITickComponent).DisposeTick();
-            GM.ABResourceManager.Release(spriteatlasHandle);
-            foreach(var handle in goHandle)
-            {
-                GM.ABResourceManager.ReleaseInstance(handle);
-            }
         }
         #endregion
 
@@ -843,7 +829,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region Resource
-
+        private GameObject SlotPrefab;
         #region TextContent
         [System.Serializable]
         public struct ResonanceWheelPanel
@@ -874,26 +860,19 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         }
 
-        private void InitTextContentPathData()
+        protected override void InitTextContentPathData()
         {
             this.abpath = "OC/Json/TextContent/ResonanceWheel";
             this.abname = "ResonanceWheelPanel";
             this.description = "ResonanceWheelPanel数据加载完成";
         }
-
         #endregion
 
-        #region Texture2D
-        private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
-        private string ResonanceWheelSpriteAtlasPath = "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2";
-
-        private List<AsyncOperationHandle> InitUITexture2D()
+        protected override void InitObjectPool()
         {
-            var handles = new List<AsyncOperationHandle>();
-            var handle = GM.ABResourceManager.LoadAssetAsync<SpriteAtlas>(ResonanceWheelSpriteAtlasPath);
-            handle.Completed += (handle) =>
+            this.objectPool.RegisterPool(ObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
+            "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2", (handle) =>
             {
-                this.spriteatlasHandle = handle;
                 var resonanceAtlas = handle.Result as SpriteAtlas;
                 sprite1 = resonanceAtlas.GetSprite("icon_beast");
                 sprite2 = resonanceAtlas.GetSprite("icon_timing");
@@ -906,30 +885,15 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 beastTypeDic.Add(BeastType.WorkerEcho_Rabbit, resonanceAtlas.GetSprite("Rabbit"));
                 beastTypeDic.Add(BeastType.WorkerEcho_Seal, resonanceAtlas.GetSprite("Seal"));
                 beastTypeDic.Add(BeastType.WorkerEcho_Random, resonanceAtlas.GetSprite("Random"));
-            };
-            handles.Add(handle);
-            return handles;
-        }
-
-        #endregion
-
-        #region Prefabs
-        private GameObject SlotPrefab;
-
-        private List<AsyncOperationHandle> InitSlotPrefab()
-        {
-            var handles = new List<AsyncOperationHandle>();
-            var handle = GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/Slot.prefab");
-            handle.Completed += (handle) =>
+            }
+            );
+            this.objectPool.RegisterPool(ObjectPool.HandleType.Prefab, "SlotPrefabPool", 1, "OC/UI/ResonanceWheel/Prefabs/Slot.prefab", (handle) =>
             {
-                this.goHandle.Add(handle);
-                this.SlotPrefab = handle.Result;
-            };
-            handles.Add(handle);
-            return handles;
-        }
+                SlotPrefab = handle.Result as GameObject;
+            });
 
-        #endregion
+            base.InitObjectPool();
+        }
         #endregion
     }
 
