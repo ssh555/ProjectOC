@@ -134,7 +134,7 @@ namespace ML.Engine.UI
         {
             this.objectPool.GetFunctionExecutor().SetOnAllFunctionsCompleted(() =>
             {
-                //this.Refresh();
+                this.Refresh();
             });
 
             StartCoroutine(this.objectPool.GetFunctionExecutor().Execute());

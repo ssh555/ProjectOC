@@ -341,9 +341,13 @@ namespace ML.Engine.BuildingSystem.UI
 
         private void Placer_AlterCategory1(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            int offset = obj.ReadValue<float>() > 0 ? 1 : -1;
-            this.SelectedCategory1Index = (this.SelectedCategory1Index + this.CanSelectCategory1.Length + offset) % this.CanSelectCategory1.Length;
-            this.UpdatePlaceBuildingType(this.CanSelectCategory1[this.SelectedCategory1Index]);
+            if(CanSelectCategory1 != null)
+            {
+                int offset = obj.ReadValue<float>() > 0 ? 1 : -1;
+                this.SelectedCategory1Index = (this.SelectedCategory1Index + this.CanSelectCategory1.Length + offset) % this.CanSelectCategory1.Length;
+                this.UpdatePlaceBuildingType(this.CanSelectCategory1[this.SelectedCategory1Index]);
+            }
+
         }
 
         private void Placer_CancelSelection(UnityEngine.InputSystem.InputAction.CallbackContext obj)
