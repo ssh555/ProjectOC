@@ -28,7 +28,6 @@ namespace ML.Engine.FSM
         public virtual void SetStateMachine(StateMachine stateMachine)
         {
             this.Machine = stateMachine;
-            Debug.Log("SetStateMachine " + this.Machine);
         }
 
         public virtual void Tick(float deltatime)
@@ -61,10 +60,8 @@ namespace ML.Engine.FSM
             this.isRunning = false;
             //TODO Machine is null
             this.Machine?.ResetState();
-            Debug.Log(Manager.GameManager.Instance.TickManager.UnregisterTick(this));
-            Debug.Log(Manager.GameManager.Instance.TickManager.UnregisterLateTick(this));
-/*            Manager.GameManager.Instance.TickManager.UnregisterTick(this);
-            Manager.GameManager.Instance.TickManager.UnregisterLateTick(this);*/
+            Manager.GameManager.Instance.TickManager.UnregisterTick(this);
+            Manager.GameManager.Instance.TickManager.UnregisterLateTick(this);
         }
 
         /// <summary>
@@ -74,6 +71,8 @@ namespace ML.Engine.FSM
         {
             this.isRunning = true;
             Machine.CurrentState.InvokeEnterAction(Machine, null);
+            Manager.GameManager.Instance.TickManager.RegisterTick(tickPriority, this);
+            Manager.GameManager.Instance.TickManager.RegisterLateTick(lateTickPriority, this);
         }
     }
 }

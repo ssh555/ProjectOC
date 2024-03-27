@@ -100,32 +100,14 @@ namespace ML.Engine.BuildingSystem.UI
         public override void OnEnter()
         {
             base.OnEnter();
-            this.RegisterInput();
 
             // ¼ÇÂ¼Ô­ Transform
             this._editOldPos = this.Placer.SelectedPartInstance.transform.position;
             this._editOldRotation = this.Placer.SelectedPartInstance.transform.rotation;
         }
-
-
-        public override void OnPause()
-        {
-            base.OnPause();
-            this.UnregisterInput();
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            this.RegisterInput();
-        }
-
-
-
         public override void OnExit()
         {
             base.OnExit();
-            this.UnregisterInput();
             this.Placer.SelectedPartInstance = null;
         }
         #endregion
@@ -143,7 +125,7 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region KeyFunction
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
             Manager.GameManager.Instance.TickManager.UnregisterFixedTick(this);
 
@@ -160,7 +142,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.comfirmInputAction.performed -= Placer_ComfirmEdit;
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
             Manager.GameManager.Instance.TickManager.RegisterFixedTick(0, this);
 

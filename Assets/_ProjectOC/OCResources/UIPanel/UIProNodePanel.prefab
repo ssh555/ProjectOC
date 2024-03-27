@@ -5641,6 +5641,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5a75fe406490b1448c391e02cf791da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  abpath: 
+  abname: 
+  description: 
   IsInit: 0
   CurMode: 0
   CurProNodeMode: 0

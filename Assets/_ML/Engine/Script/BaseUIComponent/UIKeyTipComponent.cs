@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ML.Engine.TextContent;
+using UnityEngine.EventSystems;
 namespace ML.Engine.UI
 {
-
-    public class UIKeyTipComponent : MonoBehaviour
+    public class UIKeyTipComponent : UIBehaviour
     {
         public TMPro.TextMeshProUGUI keytip;
         public TMPro.TextMeshProUGUI description;

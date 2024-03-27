@@ -24,14 +24,6 @@ namespace ProjectOC.InventorySystem.UI
         protected override void Awake()
         {
             base.Awake();
-            this.InitTextContentPathData();
-
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
 
             #region TopTitle
             Text_Title = transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
@@ -95,36 +87,9 @@ namespace ProjectOC.InventorySystem.UI
         #endregion
 
         #region Override
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            this.Enter();
-        }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-            this.Exit();
-            ClearTemp();
-        }
-
-        public override void OnPause()
-        {
-            base.OnPause();
-            this.Exit();
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            this.Enter();
-        }
-
         protected override void Enter()
         {
             Store.OnStoreDataChange += Refresh;
-            this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Enable();
             Store.IsInteracting = true;
             base.Enter();
         }
@@ -132,9 +97,8 @@ namespace ProjectOC.InventorySystem.UI
         protected override void Exit()
         {
             Store.OnStoreDataChange -= Refresh;
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Disable();
             Store.IsInteracting = false;
-            this.UnregisterInput();
+            ClearTemp();
             base.Exit();
         }
         #endregion
@@ -336,8 +300,9 @@ namespace ProjectOC.InventorySystem.UI
         }
         public Player.PlayerCharacter Player;
 
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Disable();
             // ÇÐ»»Priority
             ProjectOC.Input.InputManager.PlayerInput.UIStore.NextPriority.performed -= NextPriority_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeIcon.performed -= ChangeIcon_performed;
@@ -355,8 +320,9 @@ namespace ProjectOC.InventorySystem.UI
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Enable();
             // ÇÐ»»Priority
             ProjectOC.Input.InputManager.PlayerInput.UIStore.NextPriority.performed += NextPriority_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeIcon.performed += ChangeIcon_performed;
@@ -1049,7 +1015,7 @@ namespace ProjectOC.InventorySystem.UI
             public KeyTip Confirm;
             public KeyTip Back;
         }
-        private void InitTextContentPathData()
+        protected override void InitTextContentPathData()
         {
             this.abpath = "OC/Json/TextContent/Store";
             this.abname = "StorePanel";

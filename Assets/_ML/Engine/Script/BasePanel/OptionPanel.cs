@@ -2,22 +2,10 @@ using Cysharp.Threading.Tasks;
 using ML.Engine.Manager;
 using ML.Engine.SaveSystem;
 using ML.Engine.TextContent;
-using ProjectOC.ResonanceWheelSystem.UI;
-using Sirenix.OdinInspector;
-using System;
-using System.Collections.Generic;
-using System.Numerics;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using static ML.Engine.UI.OptionPanel;
-using static ML.Engine.UI.StartMenuPanel;
-using static ProjectOC.Player.UI.PlayerUIPanel;
-
-
 
 namespace ML.Engine.UI
 {
@@ -28,20 +16,7 @@ namespace ML.Engine.UI
 
         protected override void Awake()
         {
-
             base.Awake();
-            this.InitTextContentPathData();
-
-            /*            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
-                            this.InitDescriptionPrefab,
-                            this.InitBeastBioPrefab,
-                            this.InitUITexture2D});*/
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
             ToptitleText = this.transform.Find("TopTitle").Find("Text").GetComponent<TextMeshProUGUI>();
             btnList = this.transform.Find("ButtonList");
             gridLayout = btnList.GetComponent<GridLayoutGroup>();
@@ -57,50 +32,13 @@ namespace ML.Engine.UI
         #endregion
 
         #region Override
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            this.Enter();
-        }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-            this.Exit();
-            ClearTemp();
-        }
-
-        public override void OnPause()
-        {
-            this.Exit();
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            this.Enter();
-        }
-
-        protected override void Enter()
-        {
-            this.RegisterInput();
-            ML.Engine.Input.InputManager.Instance.Common.Option.Enable();
-            base.Enter();
-        }
-
-        protected override void Exit()
-        {
-            ML.Engine.Input.InputManager.Instance.Common.Option.Disable();
-            this.UnregisterInput();
-            base.Exit();
-        }
 
         #endregion
 
         #region Internal
-
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
+            ML.Engine.Input.InputManager.Instance.Common.Option.Disable();
 
 
             //切换按钮
@@ -111,14 +49,11 @@ namespace ML.Engine.UI
 
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
-
-
-
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
-
+            ML.Engine.Input.InputManager.Instance.Common.Option.Enable();
             //切换按钮
             ML.Engine.Input.InputManager.Instance.Common.Option.SwichBtn.started += SwichBtn_started;
 
@@ -129,10 +64,7 @@ namespace ML.Engine.UI
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
 
         }
-
-
-
-        private void SwichBtn_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        public void SwichBtn_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             string actionName = obj.action.name;
 
@@ -151,7 +83,7 @@ namespace ML.Engine.UI
             if (angle < 45 || angle > 315)
             {
                 this.UIBtnList.MoveUPIUISelected();
-            }  
+            }
             else if (angle > 45 && angle < 135)
             {
                 this.UIBtnList.MoveRightIUISelected();
@@ -166,42 +98,18 @@ namespace ML.Engine.UI
             }
         }
 
+        public void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            this.UIBtnList.GetCurSelected().Interact();
+        }
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             GameManager.Instance.UIManager.PopPanel();
         }
 
-        private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            //this.CurSelected.Interact();
-            this.UIBtnList.GetCurSelected().Interact();
-        }
         #endregion
 
         #region UI
-        #region Temp
-        private List<Sprite> tempSprite = new List<Sprite>();
-        private Dictionary<ML.Engine.InventorySystem.ItemType, GameObject> tempItemType = new Dictionary<ML.Engine.InventorySystem.ItemType, GameObject>();
-        private List<GameObject> tempUIItems = new List<GameObject>();
-
-
-        private void ClearTemp()
-        {
-            foreach (var s in tempSprite)
-            {
-                Destroy(s);
-            }
-            foreach (var s in tempItemType.Values)
-            {
-                Destroy(s);
-            }
-            foreach (var s in tempUIItems)
-            {
-                Destroy(s);
-            }
-        }
-
-        #endregion
 
         #region UI对象引用
 
@@ -244,9 +152,10 @@ namespace ML.Engine.UI
         protected override void OnLoadJsonAssetComplete(OptionPanelStruct datas)
         {
             InitBtnData(datas);
-        }
 
-        private void InitTextContentPathData()
+            
+        }
+        protected override void InitTextContentPathData()
         {
             this.abpath = "ML/Json/TextContent";
             this.abname = "OptionPanel";

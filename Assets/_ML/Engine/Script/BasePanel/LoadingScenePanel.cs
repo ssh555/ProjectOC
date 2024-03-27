@@ -10,22 +10,19 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
+using static ML.Engine.UI.LoadingScenePanel;
 
 
 
 namespace ML.Engine.UI
 {
-    public class LoadingScenePanel : ML.Engine.UI.UIBasePanel, ITickComponent
+    public class LoadingScenePanel : ML.Engine.UI.UIBasePanel<LoadingScenePanelStruct>, ITickComponent
     {
         #region Unity
         public bool IsInit = false;
 
         protected override void Awake()
         {
-            //DontDestroyOnLoad(this.gameObject);
-            InitUITextContents();
-
-
             slider = this.transform.Find("Slider").GetComponent<Slider>();
 
             LoadText = this.transform.Find("LoadText").GetComponent<TextMeshProUGUI>();
@@ -34,63 +31,26 @@ namespace ML.Engine.UI
 
         protected override void Start()
         {
-            
-
-
             IsInit = true;
             Refresh();
-
             base.Start();
         }
-
 
         #endregion
 
         #region Override
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            
-            this.Enter();
-
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
-        }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-
-            this.Exit();
-            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
-        }
-
-        public override void OnPause()
-        {
-            base.OnPause();
-            this.Exit();
-            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            this.Enter();
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
-        }
         protected override void Enter()
         {
-            this.RegisterInput();
             base.Enter();
+            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
         }
 
         protected override void Exit()
         {
-            this.UnregisterInput();
             base.Exit();
-
+            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
         }
         #endregion
-
 
         #region Tick
         public int tickPriority { get; set; }
@@ -107,51 +67,25 @@ namespace ML.Engine.UI
             }
 
         }
-
-        #endregion
-
-
-
-
-        #region Internal
-
-        private void UnregisterInput()
-        {
-        }
-
-        private void RegisterInput()
-        {
-
-        }
-
         #endregion
 
         #region UI
 
-
         #region UI对象引用
         private Slider slider;
-
-
         private TMPro.TextMeshProUGUI LoadText;
         private TMPro.TextMeshProUGUI ProgressText;
-
-
         #endregion
 
         public override void Refresh()
         {
-            if (ABJAProcessorJson_StartMenuPanel == null || !ABJAProcessorJson_StartMenuPanel.IsLoaded || !IsInit)
+            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
             {
                 return;
             }
-
-            LoadText.text = PanelTextContent_StartMenuPanel.LoadText;
-
+            LoadText.text = PanelTextContent.LoadText;
         }
         #endregion
-
-
 
         #region TextContent
         [System.Serializable]
@@ -160,18 +94,11 @@ namespace ML.Engine.UI
             public ML.Engine.TextContent.TextContent LoadText;
         }
 
-        public LoadingScenePanelStruct PanelTextContent_StartMenuPanel => ABJAProcessorJson_StartMenuPanel.Datas;
-        public ML.Engine.ABResources.ABJsonAssetProcessor<LoadingScenePanelStruct> ABJAProcessorJson_StartMenuPanel;
-        private void InitUITextContents()
+        protected override void InitTextContentPathData()
         {
-            ABJAProcessorJson_StartMenuPanel = new ML.Engine.ABResources.ABJsonAssetProcessor<LoadingScenePanelStruct>("ML/Json/TextContent", "LoadingScenePanel", (datas) =>
-            {
-                if (this.IsDestroyed())
-                    return;
-                Refresh();
-                this.enabled = false;
-            }, "LoadingScenePanel数据");
-            ABJAProcessorJson_StartMenuPanel.StartLoadJsonAssetData();
+            this.abpath = "ML/Json/TextContent";
+            this.abname = "LoadingScenePanel";
+            this.description = "LoadingScenePanel数据加载完成";
         }
         #endregion
 

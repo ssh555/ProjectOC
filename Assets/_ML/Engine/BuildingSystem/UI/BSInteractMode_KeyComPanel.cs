@@ -59,30 +59,6 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region Override
-        public override void OnExit()
-        {
-            base.OnExit();
-            this.UnregisterInput();
-        }
-
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            this.RegisterInput();
-        }
-
-        public override void OnPause()
-        {
-            base.OnPause();
-            this.UnregisterInput();
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            this.RegisterInput();
-        }
-
         public override void Refresh()
         {
             keycom.ReWrite(monoBM.KeyTipDict["keycom"]);
@@ -94,7 +70,7 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region KeyFunction
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
             this.Placer.BInput.BuildKeyCom.Disable();
 
@@ -104,7 +80,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.BInput.BuildKeyCom.KeyCom.canceled -= KeyCom_canceled;
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
             this.Placer.BInput.BuildKeyCom.Enable();
 

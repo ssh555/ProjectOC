@@ -28,27 +28,13 @@ namespace ProjectOC.Player.UI
         protected override void Awake()
         {
             base.Awake();
-            this.InitTextContentPathData();
-
-            /*            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
-                            this.InitDescriptionPrefab,
-                            this.InitBeastBioPrefab,
-                            this.InitUITexture2D});*/
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
             Ring = this.transform.Find("Ring");
             btnList = Ring.Find("ButtonList");
             TimeText = this.transform.Find("Time").Find("Text").GetComponent<TextMeshProUGUI>();
-
         }
 
         protected override void Start()
         {
-            
             IsInit = true;
             Refresh();
             base.Start();
@@ -57,48 +43,16 @@ namespace ProjectOC.Player.UI
         #endregion
 
         #region Override
-        public override void OnEnter()
-        {
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
-            base.OnEnter();
-            this.Enter();
-        }
-
-        public override void OnExit()
-        {
-            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
-            base.OnExit();
-            this.Exit();
-            ClearTemp();
-        }
-
-        public override void OnPause()
-        {
-            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
-            base.OnPause();
-            this.Exit();
-        }
-
-        public override void OnRecovery()
-        {
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
-            base.OnRecovery();
-            this.Enter();
-        }
         protected override void Enter()
         {
-            this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.Enable();
-            ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
+            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
             this.player.interactComponent.Enable();
             base.Enter();   
         }
 
         protected override void Exit()
         {
-            this.UnregisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.Disable();
-            ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
+            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
             //TODO player null
             this.player?.interactComponent.Disable();
             base.Exit();
@@ -118,16 +72,20 @@ namespace ProjectOC.Player.UI
         #endregion
         #region Internal
 
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.Disable();
+            ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMenu.started -= OpenMenu_started;
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMap.started -= OpenMap_started;
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.performed -= SelectGrid_performed;
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.canceled -= SelectGrid_canceled;
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.Enable();
+            ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMenu.started += OpenMenu_started;
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMap.started += OpenMap_started;
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.performed += SelectGrid_performed;
@@ -177,54 +135,15 @@ namespace ProjectOC.Player.UI
         
         #endregion
 
-        #region UI
-        #region Temp
-        private List<Sprite> tempSprite = new List<Sprite>();
-        private Dictionary<ML.Engine.InventorySystem.ItemType, GameObject> tempItemType = new Dictionary<ML.Engine.InventorySystem.ItemType, GameObject>();
-        private List<GameObject> tempUIItems = new List<GameObject>();
-
-
-        private void ClearTemp()
-        {
-            foreach (var s in tempSprite)
-            {
-                Destroy(s);
-            }
-            foreach (var s in tempItemType.Values)
-            {
-                Destroy(s);
-            }
-            foreach (var s in tempUIItems)
-            {
-                Destroy(s);
-            }
-        }
-
-        #endregion
-
         #region UI对象引用
         private Transform Ring;
         #endregion
-
-        public override void Refresh()
-        {
-            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
-            {
-                return;
-            }
-
-
-        }
-        #endregion
-
-
 
         #region TextContent
         [System.Serializable]
         public struct PlayerUIBotPanelStruct
         {
             public TextTip[] Btns;
-
         }
 
         protected override void OnLoadJsonAssetComplete(PlayerUIBotPanelStruct datas)
@@ -232,7 +151,7 @@ namespace ProjectOC.Player.UI
             InitBtnData(datas);
         }
 
-        private void InitTextContentPathData()
+        protected override void InitTextContentPathData()
         {
             this.abpath = "OC/Json/TextContent/PlayerUIBotPanel";
             this.abname = "PlayerUIBotPanel";

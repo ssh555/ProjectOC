@@ -29,7 +29,6 @@ namespace ML.Engine.Timer
         /// </summary>
         [ShowInInspector]
         private List<CounterDownTimer> destroyCounterDownTimers = new List<CounterDownTimer>();
-        private readonly object lockObject = new object();
 
         public float TimeScale = 1;
 
