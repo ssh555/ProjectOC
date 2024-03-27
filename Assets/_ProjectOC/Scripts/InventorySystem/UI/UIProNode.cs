@@ -27,16 +27,6 @@ namespace ProjectOC.InventorySystem.UI
             base.Awake();
             this.InitTextContentPathData();
 
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                CurPriority = MissionNS.TransportPriority.Normal;
-                this.Refresh();
-
-            });
-
-            StartCoroutine(functionExecutor.Execute());
-
-
             // TopTitle
             Text_Title = transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
 
@@ -415,7 +405,7 @@ namespace ProjectOC.InventorySystem.UI
 
         public Player.PlayerCharacter Player;
 
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
@@ -427,7 +417,7 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Alter.performed -= Alter_performed;
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
@@ -1451,7 +1441,7 @@ namespace ProjectOC.InventorySystem.UI
             public KeyTip Confirm;
             public KeyTip Back;
         }
-        private void InitTextContentPathData()
+        protected override void InitTextContentPathData()
         {
             this.abpath = "OC/Json/TextContent/ProNode";
             this.abname = "ProNodePanel";

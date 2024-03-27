@@ -12,6 +12,4 @@ public class PlayerControllerState : IControllerState
         normal,
         death
     }
-
-    private PlayerState playerState = PlayerState.normal;
 }

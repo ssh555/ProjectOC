@@ -210,7 +210,7 @@ namespace ML.Engine.UI
                 else
                 {
                     UIBasePanel loadingpanel = null;
-                    System.Action<string, string> preCallback = async (string s1, string s2) =>
+                    System.Action<string, string> preCallback = (string s1, string s2) =>
                     {
                         //新游戏的临时存档，保存当前新游戏存档时，覆盖之前的savegame，并开始使用savegame存档，即当前使用存档为savegame
 

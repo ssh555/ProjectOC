@@ -202,7 +202,7 @@ namespace ML.Engine.UI
 
                 await SC.SelectSaveDataFolderAsync(1, null);
                 UIBasePanel panel = null;
-                System.Action<string, string> preCallback = async (string s1, string s2) =>
+                System.Action<string, string> preCallback = (string s1, string s2) =>
                 {
                     
                     GameManager.Instance.EnterPoint.GetLoadingScenePanelInstance().Completed += (handle) =>
