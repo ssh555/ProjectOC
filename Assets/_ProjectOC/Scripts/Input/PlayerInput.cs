@@ -91,13 +91,22 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MouseScroll"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""4e5062f4-d1da-49c2-af5a-d4a4e3e89564"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
                     ""id"": ""b6b2759c-aff9-47c3-9922-7d68738b472d"",
-                    ""path"": ""<Keyboard>/shift"",
+                    ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -152,7 +161,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""0eae1f6a-e0ff-463a-b088-33a24d852ad5"",
-                    ""path"": ""<XInputController>/rightTrigger"",
+                    ""path"": ""<XInputController>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -275,7 +284,7 @@ namespace ProjectOC.Input
                     ""id"": ""0300f32d-0324-4740-86ff-3065e60b42e9"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""Scale(factor=0.3)"",
                     ""groups"": """",
                     ""action"": ""MouseX"",
                     ""isComposite"": true,
@@ -341,7 +350,7 @@ namespace ProjectOC.Input
                     ""id"": ""f2e79e28-1ad6-4942-ab34-e84ed109e82d"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""Scale(factor=0.3)"",
                     ""groups"": """",
                     ""action"": ""MouseY"",
                     ""isComposite"": true,
@@ -416,13 +425,79 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""daebb05f-51df-457d-b0ac-6ef65a0a1c11"",
-                    ""path"": ""<XInputController>/leftTrigger"",
+                    ""path"": ""<XInputController>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""OpenBotUI"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""MouseScroll"",
+                    ""id"": ""d3a6341a-4205-4735-835f-5220078d01e4"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=0.05)"",
+                    ""groups"": """",
+                    ""action"": ""MouseScroll"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""008e84c6-850c-47e9-98f5-a10723e0b9d3"",
+                    ""path"": ""<Mouse>/scroll/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseScroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""a1b4ff69-d15c-47d1-b7c1-c2b24f154d9b"",
+                    ""path"": ""<Mouse>/scroll/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseScroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""ButtonScroll"",
+                    ""id"": ""2d555810-adc6-4fd3-b192-0478b01efd26"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseScroll"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""544c8b65-2aef-4eb6-9f72-c5d63a7a51f8"",
+                    ""path"": ""<XInputController>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseScroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""f623b096-cb5b-46d3-9a66-c977b7bb32dc"",
+                    ""path"": ""<XInputController>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseScroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -2524,6 +2599,7 @@ namespace ProjectOC.Input
             m_Player_MouseX = m_Player.FindAction("MouseX", throwIfNotFound: true);
             m_Player_MouseY = m_Player.FindAction("MouseY", throwIfNotFound: true);
             m_Player_OpenBotUI = m_Player.FindAction("OpenBotUI", throwIfNotFound: true);
+            m_Player_MouseScroll = m_Player.FindAction("MouseScroll", throwIfNotFound: true);
             // PlayerUIBot
             m_PlayerUIBot = asset.FindActionMap("PlayerUIBot", throwIfNotFound: true);
             m_PlayerUIBot_OpenMenu = m_PlayerUIBot.FindAction("OpenMenu", throwIfNotFound: true);
@@ -2654,6 +2730,7 @@ namespace ProjectOC.Input
         private readonly InputAction m_Player_MouseX;
         private readonly InputAction m_Player_MouseY;
         private readonly InputAction m_Player_OpenBotUI;
+        private readonly InputAction m_Player_MouseScroll;
         public struct PlayerActions
         {
             private @PlayerInput m_Wrapper;
@@ -2665,6 +2742,7 @@ namespace ProjectOC.Input
             public InputAction @MouseX => m_Wrapper.m_Player_MouseX;
             public InputAction @MouseY => m_Wrapper.m_Player_MouseY;
             public InputAction @OpenBotUI => m_Wrapper.m_Player_OpenBotUI;
+            public InputAction @MouseScroll => m_Wrapper.m_Player_MouseScroll;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -2695,6 +2773,9 @@ namespace ProjectOC.Input
                 @OpenBotUI.started += instance.OnOpenBotUI;
                 @OpenBotUI.performed += instance.OnOpenBotUI;
                 @OpenBotUI.canceled += instance.OnOpenBotUI;
+                @MouseScroll.started += instance.OnMouseScroll;
+                @MouseScroll.performed += instance.OnMouseScroll;
+                @MouseScroll.canceled += instance.OnMouseScroll;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -2720,6 +2801,9 @@ namespace ProjectOC.Input
                 @OpenBotUI.started -= instance.OnOpenBotUI;
                 @OpenBotUI.performed -= instance.OnOpenBotUI;
                 @OpenBotUI.canceled -= instance.OnOpenBotUI;
+                @MouseScroll.started -= instance.OnMouseScroll;
+                @MouseScroll.performed -= instance.OnMouseScroll;
+                @MouseScroll.canceled -= instance.OnMouseScroll;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -3462,6 +3546,7 @@ namespace ProjectOC.Input
             void OnMouseX(InputAction.CallbackContext context);
             void OnMouseY(InputAction.CallbackContext context);
             void OnOpenBotUI(InputAction.CallbackContext context);
+            void OnMouseScroll(InputAction.CallbackContext context);
         }
         public interface IPlayerUIBotActions
         {
