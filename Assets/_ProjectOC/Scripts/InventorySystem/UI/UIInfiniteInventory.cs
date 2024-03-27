@@ -554,6 +554,10 @@ namespace ProjectOC.InventorySystem.UI
                 {
                     sprite = ItemManager.Instance.GetItemSprite(SelectedItems[i].ID);
                     AddSprite(sprite);
+                    {
+                        Debug.Log(SelectedItems[i].ID);
+                    }
+                    
                 }
                 img.sprite = sprite;
                 // Amount
@@ -729,6 +733,12 @@ namespace ProjectOC.InventorySystem.UI
 
         private void AddSprite(Sprite _sprite)
         {
+            if (_sprite == null)
+            {
+                Debug.Log("sprite null");
+                return;
+            }
+            
             _sprite.name = _sprite.name.Replace("(Clone)", "");
             tempSprite.Add(_sprite);
         }
