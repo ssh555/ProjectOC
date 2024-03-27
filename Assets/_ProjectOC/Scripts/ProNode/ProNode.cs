@@ -516,7 +516,7 @@ namespace ProjectOC.ProNodeNS
         {
             if (this.timerForProduce != null)
             {
-                this.TimerForProduce.End();
+                this.TimerForProduce?.End();
             }
         }
 

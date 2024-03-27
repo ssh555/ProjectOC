@@ -1223,9 +1223,8 @@ namespace ProjectOC.InventorySystem.UI
                         //img.sprite = sprite;
                         // State
                         var state = item.transform.Find("State").GetComponent<TMPro.TextMeshProUGUI>();
-
-                        state.text = PanelTextContent.workerStatus[(int)Worker.Status];
-                        if (Worker.Status == Status.Fishing && Worker.IsOnDuty)
+                        state.text = PanelTextContent.workerStatus[(int)worker.Status];
+                        if (worker.Status == Status.Fishing && worker.IsOnDuty)
                         {
                             state.text = PanelTextContent.textOnDuty;
                         }
