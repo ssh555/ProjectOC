@@ -67,7 +67,7 @@ namespace ML.Engine.SaveSystem
                 {
                     DirectoryInfo info = new DirectoryInfo(dirs[i]);
                     SaveDataFolder saveDataFolder = ML.Engine.Manager.GameManager.Instance.SaveManager.LoadData<SaveDataFolder>(Path.Combine(info.Name, "SaveConfig"));
-                    Debug.Log(saveDataFolder);
+                    Debug.Log(SavePath);
                     saveDataFolder.SaveName = "SaveConfig";
                     saveDataFolder.IsDirty = false;
                     saveDataFolder.Path = info.Name;

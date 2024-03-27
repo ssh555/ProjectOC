@@ -222,7 +222,7 @@ namespace ML.Engine.UI
             }
             );
 
-            InitSaveSystemData();
+            //InitSaveSystemData();
 
         }
 
