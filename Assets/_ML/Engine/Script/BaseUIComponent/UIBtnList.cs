@@ -328,6 +328,10 @@ namespace ML.Engine.UI
 
         public void RemoveAllListener()
         {
+            foreach (var item in SBDic)
+            {
+                item.Value.onClick.RemoveAllListeners();
+            }
 
         }
         

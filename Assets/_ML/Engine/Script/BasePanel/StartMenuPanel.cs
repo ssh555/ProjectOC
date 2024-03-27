@@ -35,24 +35,149 @@ namespace ML.Engine.UI
         }
         #endregion
 
+        #region override
+        public override void OnEnter()
+        {
+            UIBtnList = new UIBtnList(parent: btnList);
+            base.OnEnter();
+        }
+
+        #endregion
 
         #region Internal
         protected override void UnregisterInput()
         {
+            this.UIBtnList.RemoveAllListener();
             ML.Engine.Input.InputManager.Instance.Common.StartMenu.Disable();
 
             //切换按钮
-            ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn.started -= this.UIBtnList.SwichBtn_started;
+            ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn.started -= SwichBtn_started;
 
             //确认
-            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= this.UIBtnList.Confirm_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
 
         }
         protected override void RegisterInput()
         {
+
+            //NewGameBtn
+            this.UIBtnList.SetBtnAction("NewGameBtn",
+            () =>
+            {
+                UIBasePanel panel = null;
+                System.Action<string, string> preCallback = async (string s1, string s2) =>
+                {
+                    //开始新游戏时，删除之前的newgame存档，从0开始新的newgame存档
+                    if (SC.GetSaveDataFolder(0) != null)
+                    {
+                        await SC.DeleteSaveDataFolderAsync(0, null);
+                    }
+                    SC.CreateSaveDataFolder(0, "newgame", async () => {
+                        Debug.Log("存入newgame！");
+
+                        await SC.SelectSaveDataFolderAsync(0, null);
+
+                    });
+
+                    GameManager.Instance.EnterPoint.GetLoadingScenePanelInstance().Completed += (handle) =>
+                    {
+                        // 实例化
+                        panel = handle.Result.GetComponent<LoadingScenePanel>();
+
+                        panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+
+                        panel.OnEnter();
+
+
+                    };
+
+                };
+                System.Action<string, string> postCallback = async (string s1, string s2) =>
+                {
+                    await UniTask.RunOnThreadPool(() =>
+                    {
+                        while (panel == null) ;
+                    });
+                    panel.OnExit();
+                };
+                GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("GameScene", preCallback, postCallback, true));
+                this.OnExit();
+            }
+            );
+
+            //ContinueGameBtn
+            this.UIBtnList.SetBtnAction("ContinueGameBtn",
+            async () =>
+            {
+
+                await SC.SelectSaveDataFolderAsync(1, null);
+                UIBasePanel panel = null;
+                System.Action<string, string> preCallback = (string s1, string s2) =>
+                {
+
+                    GameManager.Instance.EnterPoint.GetLoadingScenePanelInstance().Completed += (handle) =>
+                    {
+                        // 实例化
+                        panel = handle.Result.GetComponent<LoadingScenePanel>();
+
+                        panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+
+                        panel.OnEnter();
+
+
+                    };
+
+                };
+                System.Action<string, string> postCallback = async (string s1, string s2) =>
+                {
+                    await UniTask.RunOnThreadPool(() =>
+                    {
+                        while (panel == null) ;
+                    });
+                    panel.OnExit();
+                };
+                GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("GameScene", preCallback, postCallback, true));
+                this.OnExit();
+
+
+
+            }
+            );
+
+            //OptionBtn
+            this.UIBtnList.SetBtnAction("OptionBtn",
+            () =>
+            {
+                GameManager.Instance.EnterPoint.GetOptionPanelInstance().Completed += (handle) =>
+                {
+                    // 实例化
+                    var panel = handle.Result.GetComponent<OptionPanel>();
+
+                    panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+
+                    GameManager.Instance.UIManager.PushPanel(panel);
+                };
+            }
+            );
+            //QuitGameBtn
+            this.UIBtnList.SetBtnAction("QuitGameBtn",
+            () =>
+            {
+            #if UNITY_EDITOR
+                            UnityEditor.EditorApplication.isPlaying = false;//如果是在unity编译器中
+            #else
+                                                    Application.Quit();//否则在打包文件中
+            #endif
+            }
+            );
             ML.Engine.Input.InputManager.Instance.Common.StartMenu.Enable();
 
-            
+            //切换按钮
+            ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn.started += SwichBtn_started;
+
+            //确认
+            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
+
         }
 
         public void SwichBtn_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -123,11 +248,7 @@ namespace ML.Engine.UI
         protected override void OnLoadJsonAssetComplete(StartMenuPanelStruct datas)
         {
             InitBtnData(datas);
-            //切换按钮
-            ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn.started += this.UIBtnList.SwichBtn_started;
 
-            //确认
-            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += this.UIBtnList.Confirm_performed;
         }
         protected override void InitTextContentPathData()
         {
@@ -139,130 +260,11 @@ namespace ML.Engine.UI
         [ShowInInspector]
         private UIBtnList UIBtnList;
         private void InitBtnData(StartMenuPanelStruct datas)
-        {
-
-            Action OnslectedEnter = () => { };
-            Action OnslectedExit = () => { };
-
-            UIBtnList = new UIBtnList(parent: btnList);
+        {    
             foreach (var tt in datas.Btns)
             {
                 this.UIBtnList.SetBtnText(tt.name, tt.description.GetText());
             }
-
-            //NewGameBtn
-            this.UIBtnList.SetBtnAction("NewGameBtn",
-            () =>
-            {
-                UIBasePanel panel = null;
-                System.Action<string, string> preCallback = async (string s1, string s2) =>
-                {
-                    //开始新游戏时，删除之前的newgame存档，从0开始新的newgame存档
-                    if (SC.GetSaveDataFolder(0) != null)
-                    {
-                        await SC.DeleteSaveDataFolderAsync(0, null);
-                    }
-                    SC.CreateSaveDataFolder(0, "newgame", async () => { 
-                        Debug.Log("存入newgame！");
-
-                        await SC.SelectSaveDataFolderAsync(0, null);
-
-                    });
-
-                    GameManager.Instance.EnterPoint.GetLoadingScenePanelInstance().Completed += (handle) =>
-                    {
-                        // 实例化
-                        panel = handle.Result.GetComponent<LoadingScenePanel>();
-
-                        panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
-
-                        panel.OnEnter();
-
-
-                    };
-
-                };
-                System.Action<string, string> postCallback = async (string s1, string s2) =>
-                {
-                    await UniTask.RunOnThreadPool(() =>
-                    {
-                        while (panel == null) ;
-                    });
-                    panel.OnExit();
-                };
-                GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("GameScene", preCallback, postCallback, true));
-                this.OnExit();
-            }
-            );
-
-            //ContinueGameBtn
-            this.UIBtnList.SetBtnAction("ContinueGameBtn",
-            async () =>
-            {
-
-                await SC.SelectSaveDataFolderAsync(1, null);
-                UIBasePanel panel = null;
-                System.Action<string, string> preCallback = (string s1, string s2) =>
-                {
-                    
-                    GameManager.Instance.EnterPoint.GetLoadingScenePanelInstance().Completed += (handle) =>
-                    {
-                        // 实例化
-                        panel = handle.Result.GetComponent<LoadingScenePanel>();
-
-                        panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
-
-                        panel.OnEnter();
-
-
-                    };
-
-                };
-                System.Action<string, string> postCallback = async (string s1, string s2) =>
-                {
-                    await UniTask.RunOnThreadPool(() =>
-                    {
-                        while (panel == null) ;
-                    });
-                    panel.OnExit();
-                };
-                GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("GameScene", preCallback, postCallback, true));
-                this.OnExit();
-
-
-
-            }
-            );
-            
-            //OptionBtn
-            this.UIBtnList.SetBtnAction("OptionBtn",
-            () =>
-            {
-                GameManager.Instance.EnterPoint.GetOptionPanelInstance().Completed += (handle) =>
-                {
-                    // 实例化
-                    var panel = handle.Result.GetComponent<OptionPanel>();
-
-                    panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
-
-                    GameManager.Instance.UIManager.PushPanel(panel);
-                };
-            }
-            );
-            //QuitGameBtn
-            this.UIBtnList.SetBtnAction("QuitGameBtn",
-            () =>
-            {
-                #if UNITY_EDITOR
-                                UnityEditor.EditorApplication.isPlaying = false;//如果是在unity编译器中
-                #else
-                                        Application.Quit();//否则在打包文件中
-                #endif
-            }
-            );
-
-            //InitSaveSystemData();
-
         }
 
         #endregion

@@ -55,6 +55,7 @@ namespace ML.Engine.UI
         {
             this.gameObject.SetActive(true);
             this.objectPool = new ObjectPool();
+            this.InitObjectPool();
             this.Enter();
             
      
@@ -67,6 +68,7 @@ namespace ML.Engine.UI
         {
             this.Exit();
             Manager.GameManager.DestroyObj(this.gameObject);
+            this.objectPool.OnDestroy();
         }
 
         /// <summary>
@@ -93,7 +95,6 @@ namespace ML.Engine.UI
         protected virtual void Enter()
         {
             this.RegisterInput();
-            this.InitObjectPool();
             this.Refresh();
         }
 
@@ -101,7 +102,7 @@ namespace ML.Engine.UI
         {
             Debug.Log("Exit "+this.gameObject.name);
             this.UnregisterInput();
-            this.objectPool.OnDestroy();
+            
         }
 
 
@@ -133,7 +134,7 @@ namespace ML.Engine.UI
         {
             this.objectPool.GetFunctionExecutor().SetOnAllFunctionsCompleted(() =>
             {
-                this.Refresh();
+                //this.Refresh();
             });
 
             StartCoroutine(this.objectPool.GetFunctionExecutor().Execute());

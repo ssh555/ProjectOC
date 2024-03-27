@@ -203,6 +203,11 @@ namespace ML.Engine.BuildingSystem.UI
         #region Refresh
         public override void Refresh()
         {
+            if (IsInit < 1)
+            {
+                return;
+            }
+
             this.ClearCategory2Instance();
 
             // ¸ü»» Category1
@@ -218,6 +223,7 @@ namespace ML.Engine.BuildingSystem.UI
                     Active(img);
                 }
             }
+
 
             // ¸ü»» Category2
             foreach (var category2 in this.CanSelectCategory2)
