@@ -287,38 +287,23 @@ namespace ML.Engine.BuildingSystem.UI
         public override void OnEnter()
         {
             base.OnEnter();
-            this.RegisterInput();
             this.Placer.Mode = BuildingMode.Place;
             this.Placer.InteractBPartList.Clear();
             this.Placer.SelectedPartInstance = null;
 
         }
-
-        public override void OnPause()
-        {
-            base.OnPause();
-            this.UnregisterInput();
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            this.RegisterInput();
-        }
-
         public override void OnExit()
         {
             S_LastSelectedCategory1Index = this.SelectedCategory1Index;
             S_LastSelectedCategory2Index = this.SelectedCategory2Index;
             base.OnExit();
             this.ClearInstance();
-            this.UnregisterInput();
             this.UnloadAsset();
         }
         #endregion
 
         #region KeyFunction
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
             this.Placer.BInput.BuildSelection.Disable();
 
@@ -329,7 +314,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.BInput.BuildSelection.AlternativeType.started -= Placer_AlterCategory2;
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
             this.Placer.BInput.BuildSelection.Enable();
 

@@ -117,17 +117,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region Override
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            this.Enter();
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
-        }
-
         public override void OnExit()
         {
-            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
-
             //TODO: 共鸣轮建筑存在时只隐藏不销毁
             this.gameObject.SetActive(false);
             this.Exit();
@@ -136,28 +127,22 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         public override void OnPause()
         {
-            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
-            
-
+            //不走base.OnPause();
             //base.OnPause();
             //this.Exit();
         }
 
         public override void OnRecovery()
         {
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
-
-
             this.Refresh();
-
+            //不走base.OnRecovery();
             //base.OnRecovery();
             //this.Enter();
         }
 
         protected override void Enter()
         {
-            this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Enable();
+            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
             isQuit = false;
             hasSub1nstance = false;
             Invoke("Refresh", 0.01f);
@@ -166,8 +151,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         protected override void Exit()
         {
-            this.UnregisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Disable();
+            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
             base.Exit();
         }
 
@@ -196,8 +180,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
         }
 
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Disable();
             // 切换类目
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.LastTerm.performed -= LastTerm_performed;
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.NextTerm.performed -= NextTerm_performed;
@@ -221,8 +206,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Enable();
             // 切换类目
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.LastTerm.performed += LastTerm_performed;
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.NextTerm.performed += NextTerm_performed;
@@ -448,11 +434,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             var ReasonanceTarget = exclusivePart.Find("ResonanceTarget");
             var ResonanceConsumption = exclusivePart.Find("ResonanceConsumption");
             
-
             ReasonanceTarget.gameObject.SetActive(true);
             ResonanceConsumption.gameObject.SetActive(true);
             
-
             // 切换类目
             
             //切换隐兽

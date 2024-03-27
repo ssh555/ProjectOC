@@ -113,38 +113,11 @@ namespace ProjectOC.InventorySystem.UI
         #endregion
 
         #region Override
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            this.Enter();
-        }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-            this.Exit();
-            ClearTemp();
-        }
-
-        public override void OnPause()
-        {
-            base.OnPause();
-            this.Exit();
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            this.Enter();
-        }
-
         protected override void Enter()
         {
             ProNode.OnActionChange += RefreshDynamic;
             ProNode.OnProduceTimerUpdate += OnProduceTimerUpdateAction;
             ProNode.OnProduceEnd += Refresh;
-            this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Enable();
             base.Enter();
         }
 
@@ -153,8 +126,7 @@ namespace ProjectOC.InventorySystem.UI
             ProNode.OnActionChange -= RefreshDynamic;
             ProNode.OnProduceTimerUpdate -= OnProduceTimerUpdateAction;
             ProNode.OnProduceEnd -= Refresh;
-            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Disable();
-            this.UnregisterInput();
+            ClearTemp();
             base.Exit();
         }
         #endregion
@@ -413,8 +385,9 @@ namespace ProjectOC.InventorySystem.UI
 
         public Player.PlayerCharacter Player;
 
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Disable();
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Upgrade.performed -= Upgrade_performed;
@@ -427,8 +400,9 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.AlterRawItem.performed -= Alter_performed;
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Enable();
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Upgrade.performed += Upgrade_performed;

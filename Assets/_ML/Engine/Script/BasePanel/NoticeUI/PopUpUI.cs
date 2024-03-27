@@ -16,7 +16,6 @@ namespace ML.Engine.UI
 
         protected override void Awake()
         {
-
             base.Awake();
             this.Text = this.transform.Find("Image").Find("Text").GetComponent<TextMeshProUGUI>(); ;
         }
@@ -31,48 +30,10 @@ namespace ML.Engine.UI
         #endregion
 
         #region Override
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            this.Enter();
-        }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-            this.Exit();
-            ClearTemp();
-        }
-
-        public override void OnPause()
-        {
-            base.OnPause();
-            this.Exit();
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            this.Enter();
-        }
-
-        protected override void Enter()
-        {
-            this.RegisterInput();
-            base.Enter();
-        }
-
-        protected override void Exit()
-        {
-            this.UnregisterInput();
-            base.Exit();
-        }
-
         #endregion
 
         #region Internal
-
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
 
             //确认
@@ -83,7 +44,7 @@ namespace ML.Engine.UI
 
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
             //确认
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
@@ -107,22 +68,8 @@ namespace ML.Engine.UI
         }
         #endregion
 
-        #region UI
-        #region Temp
-        private void ClearTemp()
-        {
-            
-        }
-
-        #endregion
-
         #region UI对象引用
-
         public TMPro.TextMeshProUGUI Text;
-
-        #endregion
-
-
         #endregion
 
         #region TextContent

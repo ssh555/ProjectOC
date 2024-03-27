@@ -276,8 +276,6 @@ namespace ML.Engine.BuildingSystem.UI
             BM.Placer.OnPlaceModeChangeBPart += Placer_OnPlaceModeChangeBPart;
         }
 
-
-
         public override void OnPause()
         {
             base.OnPause();
@@ -294,7 +292,6 @@ namespace ML.Engine.BuildingSystem.UI
         public override void OnRecovery()
         {
             base.OnRecovery();
-            this.RegisterInput();
             if (BM.Placer.SelectedPartInstance != null)
             {
                 BM.Placer.SelectedPartInstance.CheckCanInPlaceMode += CheckCostResources;
@@ -307,7 +304,6 @@ namespace ML.Engine.BuildingSystem.UI
         {
             base.OnExit();
             this.ClearInstance();
-            this.UnregisterInput();
             this.UnloadAsset();
 
             if (BM.Placer.SelectedPartInstance != null)
@@ -335,7 +331,7 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region KeyFunction
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
             this.Placer.DisablePlayerInput();
 
@@ -353,7 +349,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.comfirmInputAction.performed -= Placer_ComfirmPlaceBPart;
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
             this.Placer.EnablePlayerInput();
 

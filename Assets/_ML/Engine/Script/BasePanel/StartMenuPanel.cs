@@ -18,26 +18,16 @@ namespace ML.Engine.UI
     public class StartMenuPanel : ML.Engine.UI.UIBasePanel<StartMenuPanelStruct>
     {
         #region Unity
-        public bool IsInit = false;
-
         protected override void Awake()
         {
             base.Awake();
             btnList = this.transform.Find("ButtonList");
-            
-        }
-        protected override void Start()
-        {
-            IsInit = true;
-            Refresh();
-            base.Start();
         }
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
         private List<AsyncOperationHandle<GameObject>> goHandle = new List<AsyncOperationHandle<GameObject>>();
-        //private AsyncOperationHandle spriteAtlasHandle;
+
         protected override void OnDestroy()
         {
-            //GM.ABResourceManager.Release(spriteAtlasHandle);
             foreach (var handle in goHandle)
             {
                 GM.ABResourceManager.ReleaseInstance(handle);
@@ -45,137 +35,27 @@ namespace ML.Engine.UI
         }
         #endregion
 
-        #region Override
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            this.Enter();
-        }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-            this.Exit();
-            ClearTemp();
-        }
-
-        public override void OnPause()
-        {
-            base.OnPause();
-            this.Exit();
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            this.Enter();
-        }
-
-        protected override void Enter()
-        {
-            this.RegisterInput();
-            ML.Engine.Input.InputManager.Instance.Common.StartMenu.Enable();
-            base.Enter();   
-        }
-
-        protected override void Exit()
-        {
-            ML.Engine.Input.InputManager.Instance.Common.StartMenu.Disable();
-            this.UnregisterInput();
-            base.Exit();
-        }
-        #endregion
-
-
-
-
-
-
 
         #region Internal
-
-
-
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
-
+            ML.Engine.Input.InputManager.Instance.Common.StartMenu.Disable();
 
             //切换按钮
-            ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn.started -= SwichBtn_started;
+            ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn.started -= this.UIBtnList.SwichBtn_started;
 
             //确认
-            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
-
-            // 返回
-            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
-
-
+            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= this.UIBtnList.Confirm_performed;
 
         }
-
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
+            ML.Engine.Input.InputManager.Instance.Common.StartMenu.Enable();
 
-            //切换按钮
-            ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn.started += SwichBtn_started;
-
-            //确认
-            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
-
-            // 返回
-            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
-
-        }
-
-
-
-        private void SwichBtn_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            var vec2 = obj.ReadValue<Vector2>();
-            if (vec2.y > 0.1f)
-            {
-                this.UIBtnList.MoveUPIUISelected();
-            }
-            else if (vec2.y < -0.1f)
-            {
-                this.UIBtnList.MoveDownIUISelected();
-            }
-        }
-
-        private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
             
         }
-
-        private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            this.UIBtnList.GetCurSelected().Interact();
-        }
         #endregion
 
-        #region UI
-        #region Temp
-
-        private void ClearTemp()
-        {
-            
-        }
-
-        #endregion
-
-        #region UI对象引用
-
-        #endregion
-
-        public override void Refresh()
-        {
-            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
-            {
-                return;
-            }
-
-        }
-        #endregion
 
         #region SaveSystem
         SaveController SC => GameManager.Instance.SaveManager.SaveController;
@@ -193,7 +73,6 @@ namespace ML.Engine.UI
             }
             
         }
-
         #endregion
         
         #region TextContent
@@ -202,10 +81,14 @@ namespace ML.Engine.UI
         {
             public TextTip[] Btns;
         }
-
         protected override void OnLoadJsonAssetComplete(StartMenuPanelStruct datas)
         {
             InitBtnData(datas);
+            //切换按钮
+            ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn.started += this.UIBtnList.SwichBtn_started;
+
+            //确认
+            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += this.UIBtnList.Confirm_performed;
         }
         protected override void InitTextContentPathData()
         {

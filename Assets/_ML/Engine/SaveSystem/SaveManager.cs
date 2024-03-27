@@ -59,6 +59,7 @@ namespace ML.Engine.SaveSystem
         /// <returns></returns>
         public T LoadData<T>(string path) where T : ISaveData
         {
+            Debug.Log(path);
             return (T)this.SaveSystem.LoadData<T>(path, this.Config.UseEncrption);
         }
     }

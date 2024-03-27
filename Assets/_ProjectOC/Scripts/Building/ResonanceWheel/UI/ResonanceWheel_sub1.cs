@@ -57,7 +57,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private List<AsyncOperationHandle> descriptionHandle = new List<AsyncOperationHandle>();
         private AsyncOperationHandle spriteatlasHandle;
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             var abmgr = GameManager.Instance.ABResourceManager;
             foreach(var handle in descriptionHandle)
@@ -74,42 +74,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public override void OnEnter()
         {
             base.OnEnter();
-            this.Enter();
             parentUI.MainToSub1();
         }
 
         public override void OnExit()
         {
             base.OnExit();
-            this.Exit();
             ClearTemp();
             parentUI.Sub1ToMain();
-        }
-
-        public override void OnPause()
-        {
-            base.OnPause();
-            this.Exit();
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            this.Enter();
-        }
-
-        protected override void Enter()
-        {
-            this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Enable();
-            base.Enter();
-        }
-
-        protected override void Exit()
-        {
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Disable();
-            this.UnregisterInput();
-            base.Exit();
         }
         #endregion
 
@@ -118,11 +90,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             public WorkType workType;
             public TMPro.TextMeshProUGUI skillText;
-        
         }
 
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Disable();
             //ÇýÖð
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Expel.performed -= Expel_performed;
 
@@ -131,8 +103,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Enable();
             //ÇýÖð
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Expel.performed += Expel_performed;
 
@@ -163,23 +136,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #region Temp
         private Sprite icon_genderfemaleSprite, icon_gendermaleSprite;
 
-        private List<Sprite> tempSprite = new List<Sprite>();
-        private Dictionary<ML.Engine.InventorySystem.ItemType, GameObject> tempItemType = new Dictionary<ML.Engine.InventorySystem.ItemType, GameObject>();
-        private List<GameObject> tempUIItems = new List<GameObject>();
         private void ClearTemp()
         {
-            foreach (var s in tempSprite)
-            {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
-            }
-            foreach (var s in tempItemType.Values)
-            {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
-            }
-            foreach (var s in tempUIItems)
-            {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
-            }
+            GameManager.DestroyObj(icon_genderfemaleSprite);
+            GameManager.DestroyObj(icon_gendermaleSprite);
         }
 
         #endregion

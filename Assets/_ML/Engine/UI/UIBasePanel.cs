@@ -53,8 +53,20 @@ namespace ML.Engine.UI
         /// </summary>
         public virtual void OnEnter()
         {
-            this.gameObject.SetActive(true);
             this.objectPool = new ObjectPool();
+            this.Enter();
+            this.gameObject.SetActive(true);
+            
+            
+        }
+
+        /// <summary>
+        /// 出栈时调用
+        /// </summary>
+        public virtual void OnExit()
+        {
+            this.Exit();
+            Manager.GameManager.DestroyObj(this.gameObject);
         }
 
         /// <summary>
@@ -62,6 +74,7 @@ namespace ML.Engine.UI
         /// </summary>
         public virtual void OnPause()
         {
+            this.Exit();
             this.gameObject.SetActive(false);
         }
 
@@ -70,29 +83,36 @@ namespace ML.Engine.UI
         /// </summary>
         public virtual void OnRecovery()
         {
+            this.Enter();
             this.gameObject.SetActive(true);
         }
 
-        /// <summary>
-        /// 出栈时调用
-        /// </summary>
-        public virtual void OnExit()
-        {
-            Manager.GameManager.DestroyObj(this.gameObject);
-        }
+
 
 
         protected virtual void Enter()
         {
+            this.RegisterInput();
             this.InitObjectPool();
             this.Refresh();
         }
 
         protected virtual void Exit()
         {
+            this.UnregisterInput();
             this.objectPool.OnDestroy();
         }
 
+
+        protected virtual void UnregisterInput()
+        {
+
+        }
+
+        protected virtual void RegisterInput()
+        {
+
+        }
         public virtual void Refresh()
         {
 

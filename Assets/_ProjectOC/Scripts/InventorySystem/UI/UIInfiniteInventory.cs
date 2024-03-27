@@ -73,7 +73,6 @@ namespace ProjectOC.InventorySystem.UI
         protected override void Start()
         {
             CurrentItemTypeIndex = 0;
-
             base.Start();
         }
 
@@ -84,44 +83,16 @@ namespace ProjectOC.InventorySystem.UI
         #endregion
 
         #region Override
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            this.Enter();
-        }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-            this.Exit();
-            ClearTemp();
-        }
-
-        public override void OnPause()
-        {
-            base.OnPause();
-            this.Exit();
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            this.Enter();
-        }
-
         protected override void Enter()
         {
-            this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Enable();
             ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
             base.Enter();
         }
 
         protected override void Exit()
         {
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Disable();
             ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
-            this.UnregisterInput();
+            ClearTemp();
             base.Exit();
         }
 
@@ -240,8 +211,9 @@ namespace ProjectOC.InventorySystem.UI
             }
         }
 
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Disable();
             // 切换类目
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.LastTerm.performed -= LastTerm_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.NextTerm.performed -= NextTerm_performed;
@@ -263,8 +235,9 @@ namespace ProjectOC.InventorySystem.UI
                         ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.canceled -= Destroy_canceled;*/
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Enable();
             // 切换类目
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.LastTerm.performed += LastTerm_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.NextTerm.performed += NextTerm_performed;

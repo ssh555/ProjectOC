@@ -19,7 +19,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 {
     public class BeastPanel : ML.Engine.UI.UIBasePanel<BeastPanelStruct>
     {
-
         #region Unity
         public bool IsInit = false;
 
@@ -52,58 +51,23 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             base.Start();
         }
 
-
-        protected override void OnDestroy()
-        {
-
-        }
         #endregion
 
         #region Override
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            this.Enter();
-        }
-        public override void OnExit()
-        {
-            base.OnExit();
-            this.Exit();
-            ClearTemp();
-        }
-
-        public override void OnPause()
-        {
-            base.OnPause();
-            this.Exit();
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            this.Enter();
-        }
-
-        protected override void Enter()
-        {
-            
-            this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Enable();
-            base.Enter();
-        }
 
         protected override void Exit()
         {
-            this.UnregisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Disable();
             base.Exit();
+            ClearTemp();
         }
 
         #endregion
 
         #region Internal
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Disable();
+
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.SwitchBeast.started -= SwitchBeast_started;
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.SwitchBeast.canceled -= SwitchBeast_canceled;
             //ÇýÖð
@@ -113,8 +77,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Enable();
+
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.SwitchBeast.started += SwitchBeast_started;
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.SwitchBeast.canceled += SwitchBeast_canceled;
 
@@ -187,11 +153,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #region UI
         #region temp
         private InputManager inputManager => GameManager.Instance.InputManager;
-        private static Sprite icon_genderfemaleSprite, icon_gendermaleSprite;
+        private Sprite icon_genderfemaleSprite, icon_gendermaleSprite;
 
         private void ClearTemp()
         {
-
+            GameManager.DestroyObj(icon_genderfemaleSprite);
+            GameManager.DestroyObj(icon_gendermaleSprite);
         }
 
         #endregion
@@ -416,8 +383,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             {
                 this.transform.Find("HiddenBeastInfo2").Find("Info").gameObject.SetActive(false);
                 this.transform.Find("HiddenBeastInfo3").Find("Info").gameObject.SetActive(false);
-
-                //Debug.Log("ÎÞÒþÊÞ");
             }  
         }
         #endregion
