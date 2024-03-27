@@ -254,6 +254,7 @@ namespace ML.Engine.InventorySystem
              {
                  return null;
              }
+             
             foreach (var sa in this.itemAtlasList)
             {
                 var s = sa.GetSprite(this.ItemTypeStrDict[id].icon);

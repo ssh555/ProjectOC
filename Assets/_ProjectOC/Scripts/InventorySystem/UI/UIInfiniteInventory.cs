@@ -481,14 +481,18 @@ namespace ProjectOC.InventorySystem.UI
                     // 加入临时内存管理
                     tempItemType.Add(itemtype, obj);
                     // 载入ItemType对应的Texture2D
-                    var sprite = inventoryAtlas.GetSprite(itemtype.ToString());
+
+                    Sprite sprite = GetSprite(itemtype.ToString());
+                    if(sprite == null)
+                        sprite = inventoryAtlas.GetSprite(itemtype.ToString());
                     //var tex = ab.LoadAsset<Texture2D>(itemtype.ToString());
                     // 创建Sprite并加入临时内存管理
-
+                    
                     if (sprite != null)
                     {
+                        AddSprite(sprite);
                         obj.transform.Find("Image").GetComponent<Image>().sprite = sprite;
-                        tempSprite.Add(sprite);
+
                     }
                 }
 
@@ -544,12 +548,12 @@ namespace ProjectOC.InventorySystem.UI
                 // 更新Icon
                 var img = item.transform.Find("Icon").GetComponent<Image>();
                 // 查找临时存储的Sprite
-                var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(SelectedItems[i].ID));
+                var sprite = GetSprite(SelectedItems[i].ID);
                 // 不存在则生成
                 if (sprite == null)
                 {
                     sprite = ItemManager.Instance.GetItemSprite(SelectedItems[i].ID);
-                    tempSprite.Add(sprite);
+                    AddSprite(sprite);
                 }
                 img.sprite = sprite;
                 // Amount
@@ -640,8 +644,10 @@ namespace ProjectOC.InventorySystem.UI
                 this.transform.Find("ItemInfo").gameObject.SetActive(true);
                 // 更新Item名称
                 Info_ItemName.text = ItemManager.Instance.GetItemName(CurrentItem.ID);
+                Sprite _sprite = GetSprite(CurrentItem.ID);
+                Debug.Log($"{CurrentItem.ID}  sprite:{_sprite}");
                 // 更新图标 => 必定是载入了的
-                Info_ItemIcon.sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(CurrentItem.ID));
+                Info_ItemIcon.sprite = _sprite;
                 // 更新单个重量: JsonText + Amount
                 Info_ItemWeight.text = PanelTextContent.weightprefix + ItemManager.Instance.GetWeight(CurrentItem.ID);
 
@@ -713,6 +719,18 @@ namespace ProjectOC.InventorySystem.UI
                 inventoryAtlas = handle.Result as SpriteAtlas;
             };
             return handle;
+        }
+
+        private Sprite GetSprite(string id)
+        {
+            Sprite res = tempSprite.Find(s => s.name == id);
+            return res;
+        }
+
+        private void AddSprite(Sprite _sprite)
+        {
+            _sprite.name = _sprite.name.Replace("(Clone)", "");
+            tempSprite.Add(_sprite);
         }
 
     }

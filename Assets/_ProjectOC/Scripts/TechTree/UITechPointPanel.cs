@@ -499,6 +499,7 @@ namespace ProjectOC.TechTree.UI
 
                     var sprite = TechTreeManager.Instance.GetTPCategorySprite(c);
                     obj.GetComponentInChildren<Image>().sprite = sprite;
+                    
                     tempSprite.Add(sprite);
                 }
 
@@ -716,6 +717,7 @@ namespace ProjectOC.TechTree.UI
 
                         // Image
                         var s = ItemManager.Instance.GetItemSprite(f.id);
+                        s.name = s.name.Replace("(Clone)", "");
                         tempSprite.Add(s);
                         item.transform.Find("Image").GetComponent<Image>().sprite = s;
                     }
