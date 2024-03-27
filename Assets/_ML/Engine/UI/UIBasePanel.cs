@@ -53,11 +53,11 @@ namespace ML.Engine.UI
         /// </summary>
         public virtual void OnEnter()
         {
+            this.gameObject.SetActive(true);
             this.objectPool = new ObjectPool();
             this.Enter();
-            this.gameObject.SetActive(true);
             
-            
+     
         }
 
         /// <summary>
@@ -83,8 +83,8 @@ namespace ML.Engine.UI
         /// </summary>
         public virtual void OnRecovery()
         {
-            this.Enter();
             this.gameObject.SetActive(true);
+            this.Enter();
         }
 
 
@@ -99,6 +99,7 @@ namespace ML.Engine.UI
 
         protected virtual void Exit()
         {
+            Debug.Log("Exit "+this.gameObject.name);
             this.UnregisterInput();
             this.objectPool.OnDestroy();
         }

@@ -146,7 +146,8 @@ namespace ML.Engine.Utility
                 GameManager.Instance.ABResourceManager.Release(handle);
             }
 
-            GameManager.DestroyObj(RootGameObject, false);
+            if(RootGameObject != null)
+                GameManager.DestroyObj(RootGameObject, false);
         }
 
         /// <summary>

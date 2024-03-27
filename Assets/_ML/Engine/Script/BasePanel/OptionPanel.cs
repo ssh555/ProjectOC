@@ -40,11 +40,12 @@ namespace ML.Engine.UI
         {
             ML.Engine.Input.InputManager.Instance.Common.Option.Disable();
 
+
             //切换按钮
-            ML.Engine.Input.InputManager.Instance.Common.Option.SwichBtn.started -= this.UIBtnList.SwichBtn_started;
+            ML.Engine.Input.InputManager.Instance.Common.Option.SwichBtn.started -= SwichBtn_started;
 
             //确认
-            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= this.UIBtnList.Confirm_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
 
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
@@ -54,15 +55,53 @@ namespace ML.Engine.UI
         {
             ML.Engine.Input.InputManager.Instance.Common.Option.Enable();
             //切换按钮
-            ML.Engine.Input.InputManager.Instance.Common.Option.SwichBtn.started += this.UIBtnList.SwichBtn_started;
+            ML.Engine.Input.InputManager.Instance.Common.Option.SwichBtn.started += SwichBtn_started;
 
             //确认
-            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += this.UIBtnList.Confirm_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
 
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
+
+        }
+        public void SwichBtn_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            string actionName = obj.action.name;
+
+            // 使用 ReadValue<T>() 方法获取附加数据
+            string actionMapName = obj.action.actionMap.name;
+
+            var vector2 = obj.ReadValue<UnityEngine.Vector2>();
+            float angle = Mathf.Atan2(vector2.x, vector2.y);
+
+            angle = angle * 180 / Mathf.PI;
+            if (angle < 0)
+            {
+                angle = angle + 360;
+            }
+
+            if (angle < 45 || angle > 315)
+            {
+                this.UIBtnList.MoveUPIUISelected();
+            }
+            else if (angle > 45 && angle < 135)
+            {
+                this.UIBtnList.MoveRightIUISelected();
+            }
+            else if (angle > 135 && angle < 225)
+            {
+                this.UIBtnList.MoveDownIUISelected();
+            }
+            else if (angle > 225 && angle < 315)
+            {
+                this.UIBtnList.MoveLeftIUISelected();
+            }
         }
 
+        public void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            this.UIBtnList.GetCurSelected().Interact();
+        }
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             GameManager.Instance.UIManager.PopPanel();
@@ -113,6 +152,8 @@ namespace ML.Engine.UI
         protected override void OnLoadJsonAssetComplete(OptionPanelStruct datas)
         {
             InitBtnData(datas);
+
+            
         }
         protected override void InitTextContentPathData()
         {

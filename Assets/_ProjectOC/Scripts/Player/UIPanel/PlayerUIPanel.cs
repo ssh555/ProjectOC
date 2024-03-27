@@ -75,6 +75,8 @@ namespace ProjectOC.Player.UI
         protected override void RegisterInput()
         {
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Enable();
+
+
             //切换按钮
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.AlterSelected.started += this.UIBtnList.SwichBtn_started;
 
@@ -107,6 +109,7 @@ namespace ProjectOC.Player.UI
         protected override void OnLoadJsonAssetComplete(PlayerUIPanelStruct datas)
         {
             InitBtnData(datas);
+            
         }
 
         protected override void InitTextContentPathData()

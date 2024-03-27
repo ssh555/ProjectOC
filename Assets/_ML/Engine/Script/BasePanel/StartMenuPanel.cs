@@ -54,6 +54,45 @@ namespace ML.Engine.UI
 
             
         }
+
+        public void SwichBtn_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            string actionName = obj.action.name;
+
+            // 使用 ReadValue<T>() 方法获取附加数据
+            string actionMapName = obj.action.actionMap.name;
+
+            var vector2 = obj.ReadValue<UnityEngine.Vector2>();
+            float angle = Mathf.Atan2(vector2.x, vector2.y);
+
+            angle = angle * 180 / Mathf.PI;
+            if (angle < 0)
+            {
+                angle = angle + 360;
+            }
+
+            if (angle < 45 || angle > 315)
+            {
+                this.UIBtnList.MoveUPIUISelected();
+            }
+            else if (angle > 45 && angle < 135)
+            {
+                this.UIBtnList.MoveRightIUISelected();
+            }
+            else if (angle > 135 && angle < 225)
+            {
+                this.UIBtnList.MoveDownIUISelected();
+            }
+            else if (angle > 225 && angle < 315)
+            {
+                this.UIBtnList.MoveLeftIUISelected();
+            }
+        }
+
+        public void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            this.UIBtnList.GetCurSelected().Interact();
+        }
         #endregion
 
 

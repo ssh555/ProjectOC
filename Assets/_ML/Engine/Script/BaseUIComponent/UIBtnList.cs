@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace ML.Engine.UI
@@ -317,6 +318,17 @@ namespace ML.Engine.UI
         public void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             this.CurSelected.Interact();
+        }
+
+        public void BindBtnActionPerformed(InputAction inputAction,Action<InputAction.CallbackContext> bindAction)
+        {
+            inputAction.performed += bindAction;
+        }
+
+
+        public void RemoveAllListener()
+        {
+
         }
         
     }
