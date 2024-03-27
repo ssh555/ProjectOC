@@ -53,20 +53,21 @@ namespace ProjectOC.Player
             [HideInInspector]
             public MonoTerrainMoveDrag TerrainDrag;
             
-            [LabelText("底面摩擦系数"), Range(0, float.MaxValue), FoldoutGroup("通用"), PropertyTooltip("鞋/脚提供的摩擦力系数")] 
-            public float BottomFrictionScale;
-            [LabelText("坠落水平减速度"), Range(0, float.MaxValue), FoldoutGroup("通用"), PropertyTooltip("水平摩擦系数")]
+            [LabelText("底面摩擦系数"), Range(0, 20), FoldoutGroup("通用"), PropertyTooltip("鞋/脚提供的摩擦力系数")] 
+            public float BottomDrag;
+            [LabelText("坠落水平减速度"), Range(0, 20), FoldoutGroup("通用"), PropertyTooltip("水平摩擦系数")]
             public float FallDeceleration;
-            [LabelText("空气阻力系数"), Range(0, float.MaxValue), FoldoutGroup("通用"), PropertyTooltip("大气摩擦")]
+            [LabelText("空气阻力系数"), Range(0, 20), FoldoutGroup("通用"), PropertyTooltip("大气摩擦")]
             public float airDrag;
-
+            private float airDragAcc => airDrag * Speed;
+            
             [LabelText("最终阻尼"), ShowInInspector, ReadOnly, FoldoutGroup("通用"), PropertyTooltip("普普通通的加速度")]
             public float FinalDrag
             {
                 get
                 {
-                    float horizontalDrag = IsGrounded ? this.terrainDrag + this.BottomFrictionScale : FallDeceleration;
-                    return this.UseDrag ? this.airDrag + horizontalDrag: 0;
+                    float horizontalDragAcc = IsGrounded ? this.terrainDrag + this.BottomDrag : FallDeceleration;
+                    return this.UseDrag ? airDragAcc + horizontalDragAcc: 0;
                 }
             }
 
@@ -78,24 +79,24 @@ namespace ProjectOC.Player
             
             #region 移动参数
 
-            [LabelText("最大步高"), ShowInInspector,Range(0, float.PositiveInfinity), FoldoutGroup("移动参数")]
-            private float MaxStepHeight;
+            [LabelText("最大步高"), ShowInInspector,Range(0, 1.5f), FoldoutGroup("移动参数")]
+            public float MaxStepHeight;
 
             [LabelText("可行走地面角度"), ShowInInspector,Range(0, 360), FoldoutGroup("移动参数")]
-            private float WalkerbleFloorAngle;
-            
-            [LabelText("水平输入最大速度"), Range(0, float.PositiveInfinity), FoldoutGroup("移动参数")]
-            public float MaxSpeed;
+            public float WalkerbleFloorAngle;
 
-            [LabelText("最小移动速度"), Range(0, float.PositiveInfinity), FoldoutGroup("移动参数"), PropertyTooltip("小于该值则直接停止")]
+            [LabelText("最小移动速度"), Range(0, 10), FoldoutGroup("移动参数"), PropertyTooltip("小于该值则直接停止")]
             public float MinSpeed;
 
-            [LabelText("移动加速度"), FoldoutGroup("移动参数"), Space(10)]
+            [LabelText("当前水平输入最大速度"), ReadOnly, Range(0, 50), FoldoutGroup("移动参数")]
+            public float MaxSpeed;
+
+            [LabelText("当前移动加速度"), ReadOnly, FoldoutGroup("移动参数"), Space(10)]
             public float AddAcceleration;
             
-            [LabelText("当前输入速度大小"), ReadOnly, FoldoutGroup("移动参数")]
+            [LabelText("当前速度大小"), ReadOnly, FoldoutGroup("移动参数")]
             private float speed;
-            [LabelText("当前输入速度大小"), ShowInInspector, ReadOnly, FoldoutGroup("移动参数")]
+            [LabelText("当前速度大小"), ShowInInspector, ReadOnly, FoldoutGroup("移动参数")]
             public float Speed
             {
                 get
@@ -109,9 +110,9 @@ namespace ProjectOC.Player
                 }
             }
 
-            [LabelText("当前输入速度"), ReadOnly, FoldoutGroup("移动参数")]
+            [LabelText("当前速度"), ReadOnly, FoldoutGroup("移动参数")]
             private Vector3 velocity;
-            [LabelText("当前输入速度"), ShowInInspector, ReadOnly, FoldoutGroup("移动参数")]
+            [LabelText("当前速度"), ShowInInspector, ReadOnly, FoldoutGroup("移动参数")]
             public Vector3 Velocity
             {
                 get
@@ -177,7 +178,7 @@ namespace ProjectOC.Player
             [LabelText("最大跳跃次数"), FoldoutGroup("跳跃参数")]
             public int MaxJumpCount;
             [LabelText("当前剩余跳跃次数"), ReadOnly, FoldoutGroup("跳跃参数")]
-            public int RemainJumpCount;
+            public int RemainJumpCount = 0;
             [LabelText("能否跳跃"), FoldoutGroup("跳跃参数")]
             public bool bCanJump;
             [LabelText("是否使用世界Up轴"), FoldoutGroup("跳跃参数"), PropertyTooltip("true : 使用WorldUp跳跃，false : 使用SelfUp跳跃")]
@@ -186,12 +187,12 @@ namespace ProjectOC.Player
             public bool IsJumpVelocityStack;
             [LabelText("跳跃继承基础速度X"), FoldoutGroup("跳跃参数")]
             public bool ImpactBaseVelocityX;
-            [LabelText("跳跃继承基础速度Y"), FoldoutGroup("跳跃参数")]
-            public bool ImpactBaseVelocityY;
             [LabelText("跳跃继承基础速度Z"), FoldoutGroup("跳跃参数")]
             public bool ImpactBaseVelocityZ;
-            [LabelText("跳跃初速度"), Range(0, float.PositiveInfinity), FoldoutGroup("跳跃参数"), ShowIf("@IsJumpVelocityStack == true")]
-            public float JumpInitialVelocity;
+            [LabelText("跳跃继承基础速度Y"), FoldoutGroup("跳跃参数")]
+            public bool ImpactBaseVelocityY;
+ 
+
             [LabelText("跳跃时间"), FoldoutGroup("跳跃参数"), PropertyTooltip("跳跃持续时间"), ShowIf("@IsJumpVelocityStack == false"), ShowInInspector]
             public double jumpTime => this.jumpSpeedCurve == null ? -1 : (this.jumpSpeedCurve.keys.Length > 0 ? this.jumpSpeedCurve.keys[this.jumpSpeedCurve.length - 1].time : -1);
             [LabelText("跳跃实际速度参数"), FoldoutGroup("跳跃参数"), PropertyTooltip("横轴:百分比(0-1)，纵轴:速度"), ShowIf("@IsJumpVelocityStack == false")]
@@ -369,7 +370,7 @@ namespace ProjectOC.Player
             if (this.moveSetting.bCanMove && _speedRate > float.Epsilon && moveDir.magnitude > float.Epsilon && this.moveSetting.Speed <= this.moveSetting.MaxSpeed * _speedRate)
             {
                 // 增加速度
-                this.moveSetting.Speed = Math.Clamp(this.moveSetting.Speed + this.moveSetting.AddAcceleration * deltaTime, 0, this.moveSetting.MaxSpeed * _speedRate);
+                this.moveSetting.Speed = Math.Clamp(this.moveSetting.Speed + Mathf.Max(0,this.moveSetting.AddAcceleration - this.moveSetting.FinalDrag) * deltaTime, 0, this.moveSetting.MaxSpeed * _speedRate);
                 // 更新输入方向
                 this.moveSetting.Velocity = moveDir * this.moveSetting.Speed;
             }
@@ -615,6 +616,7 @@ namespace ProjectOC.Player
             {
                 this._lastIsInPreJump = this._isInPreJump;
                 this._isInPreJump = value;
+                
                 if (this._isInPreJump == false && this._lastIsInPreJump == true)
                 {
                     --this.moveSetting.RemainJumpCount;
@@ -689,17 +691,21 @@ namespace ProjectOC.Player
         /// </summary>
         public void ForceJump()
         {
-            // 叠加速度
-            if (this.moveSetting.IsJumpVelocityStack)
+            if (this.moveSetting.bIsWorldUpAxis)
             {
-                Vector3 jVel = this.moveSetting.bIsWorldUpAxis ? Vector3.up : this.controller.transform.TransformDirection(Vector3.up);
-                this.moveSetting.ExtraVelocity += jVel * this.moveSetting.JumpInitialVelocity;
+                (moveSetting.Velocity,moveSetting.ExtraVelocity) = ImpactJumpSpeed(moveSetting.Velocity,moveSetting.ExtraVelocity);
             }
-            // 直接应用速度，修改跳跃时间
             else
             {
-                this.jumpTimer.Reset(this.moveSetting.jumpTime);
+                Vector3 tmpVelocity = this.controller.transform.InverseTransformVector(this.moveSetting.Velocity);
+                Vector3 tmpExtraVelocity = this.controller.transform.InverseTransformVector(this.moveSetting.ExtraVelocity);
+                
+                (tmpVelocity,tmpExtraVelocity)  = ImpactJumpSpeed(tmpVelocity,tmpExtraVelocity);
+                this.moveSetting.Velocity = this.controller.transform.TransformVector(tmpVelocity);
+                this.moveSetting.ExtraVelocity = this.controller.transform.TransformVector(tmpExtraVelocity);
             }
+
+            this.jumpTimer.Reset(this.moveSetting.jumpTime);
         }
 
         protected void JumpTimer(double timer)
@@ -707,7 +713,7 @@ namespace ProjectOC.Player
             // WorldUpAxis
             if (this.moveSetting.bIsWorldUpAxis)
             {
-                Vector3 jVel = ImpactJumpSpeed(this.moveSetting.ExtraVelocity);
+                Vector3 jVel = this.moveSetting.ExtraVelocity;
                 jVel += Vector3.up * this.moveSetting.jumpSpeedCurve.Evaluate((float)this.jumpTimer.Time);
                 this.moveSetting.ExtraVelocity = jVel;
             }
@@ -716,7 +722,6 @@ namespace ProjectOC.Player
             {
                 //变为局部速度，继承局部坐标
                 Vector3 jVel = this.controller.transform.InverseTransformVector(this.moveSetting.ExtraVelocity);
-                jVel = ImpactJumpSpeed(jVel); 
                 jVel.y += this.moveSetting.jumpSpeedCurve.Evaluate((float)this.jumpTimer.Time);
                 this.moveSetting.ExtraVelocity = this.controller.transform.TransformVector(jVel);
             }
@@ -727,17 +732,18 @@ namespace ProjectOC.Player
             }
         }
 
-        private Vector3 ImpactJumpSpeed(Vector3 _inSpeed)
+        private (Vector3,Vector3) ImpactJumpSpeed(Vector3 _inSpeedXZ,Vector3 _inSpeedY)
         {
-            Vector3 outSpeed = _inSpeed;
             if (!moveSetting.ImpactBaseVelocityX)
-                outSpeed.x = 0;
-            if (!moveSetting.ImpactBaseVelocityY)
-                outSpeed.y = 0;
+                _inSpeedXZ.x = 0;
             if (!moveSetting.ImpactBaseVelocityZ)
-                outSpeed.z = 0;
-            return outSpeed;
+                _inSpeedXZ.z = 0;
+            if (!moveSetting.ImpactBaseVelocityY)
+                _inSpeedY.y = 0;
+
+            return (_inSpeedXZ,_inSpeedY);
         }
+        
 #endregion
     }
 

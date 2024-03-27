@@ -1,8 +1,9 @@
 using System;
+using ProjectOC.PlayerCharacterNS;
 
 namespace ML.Engine.FSM
 {
-    public class State
+    public class State : IState
     {
         #region Property
         public string Name = "";

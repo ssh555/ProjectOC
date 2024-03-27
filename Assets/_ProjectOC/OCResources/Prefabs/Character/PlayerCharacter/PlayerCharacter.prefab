@@ -224,6 +224,7 @@ GameObject:
   - component: {fileID: 8934122120414618599}
   - component: {fileID: 8934122120414618594}
   - component: {fileID: 8934122120414618593}
+  - component: {fileID: 8147751788525175907}
   m_Layer: 6
   m_Name: cm
   m_TagString: Untagged
@@ -439,8 +440,8 @@ CharacterController:
   serializedVersion: 3
   m_Height: 2
   m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_SlopeLimit: 30
+  m_StepOffset: 0.4
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
@@ -493,19 +494,15 @@ MonoBehaviour:
     VCamRotY: {fileID: 8934122119905390431}
     VCamRotZ: {fileID: 8934122121196313096}
     VCamViewer: {fileID: 8934122119657867356}
-    rotSpeedX: 0.3
-    rotSpeedY: 0.3
+    rotSpeedX: 0.9
+    rotSpeedY: 0.9
     rotXMin: -45
     rotXMax: 60
     bInVerseRotX: 1
     bEnableDeltaTime: 0
-    HardLockCameraFollow: 0
-    SpringCurLength: 3
-    SpringMaxLength: 10
-    SpringMinLength: 1.7
-    curLocation: {x: 0, y: 0}
-    initLocation: {x: 0, y: 0}
-    initRotation: {x: 0, y: 0}
+    scrollSpeed: 0.02
+    SpringMaxLength: 4
+    SpringMinLength: 2
   interactComponent: {fileID: 0}
   moveAbility:
     moveSetting:
@@ -515,14 +512,16 @@ MonoBehaviour:
       UseDrag: 1
       bEnableJump: 1
       Mass: 1
-      Gravity: 30
+      Gravity: 40
       TerrainDrag: {fileID: 0}
-      BottomFrictionScale: 5
-      FallDeceleration: 0
-      airDrag: 10
+      BottomDrag: 20
+      FallDeceleration: 20
+      airDrag: 0.2
       CrouchedHalfHeight: 0
-      MaxSpeed: 5
+      MaxStepHeight: 0.4
+      WalkerbleFloorAngle: 30
       MinSpeed: 0.01
+      MaxSpeed: 5
       AddAcceleration: 20
       CanModelRotate: 1
       AirRotationControl: 1
@@ -535,16 +534,14 @@ MonoBehaviour:
       bCanJump: 1
       bIsWorldUpAxis: 1
       IsJumpVelocityStack: 0
-      ImpactBaseVelocityX: 0
+      ImpactBaseVelocityXZ: 0
       ImpactBaseVelocityY: 0
-      ImpactBaseVelocityZ: 0
-      JumpInitialVelocity: 0
       jumpSpeedCurve:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 12.40952
+          value: 1.6126963
           inSlope: 0
           outSlope: 0
           tangentMode: 136
@@ -552,8 +549,8 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.6569394
-          value: 12.409523
+          time: 0.23922795
+          value: 1.6126992
           inSlope: 0
           outSlope: 0
           tangentMode: 136
@@ -592,14 +589,14 @@ MonoBehaviour:
     lowestWalkSpeed: 0.8
     lowestRunSpeed: 5
     maxRunSpeed: 10
-    walkAccSpeed: 20
+    walkAccSpeed: 40
     runAccSpeed: 100
     IsAcc: 0
-    crouchLimitSpeed: 5
+    crouchLimitSpeed: 30
     crouchAccSpeed: 5
     IsCrouch: 0
     inAirLimitSpeed: 8
-    airControl: 0.5
+    airControl: 0.8
     airControlBoostMultiplier: 0.5
     airControlBoostVelocityThreshold: 0.8
   playerUIBotPanel: {fileID: 5715426156639872100, guid: 0f4895c0ccc062942944ba4cb41ec456, type: 3}

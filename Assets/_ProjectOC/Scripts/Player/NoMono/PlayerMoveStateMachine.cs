@@ -100,8 +100,6 @@ namespace ProjectOC.Player
             [LabelText("空气控制提升速度阈值"), ShowInInspector, FoldoutGroup("浮空"),Range(0,1),PropertyTooltip("高于空中最大速度百分比阈值后乘以该系数")]
             public float airControlBoostVelocityThreshold;
             #endregion
-            //[LabelText("滑铲初速度"), ShowInInspector, FoldoutGroup("滑铲")]
-            //public float slideInitSpeed;
         }
         protected MoveStateParams stateParams;
         #endregion
@@ -179,50 +177,6 @@ namespace ProjectOC.Player
 
                 this.ChangeVelocityParams();
             });
-
-            #region 滑铲注释
-            // Slide 滑铲
-            //this.slideState = new State("Slide");
-            //// Slide 进入时
-            //this.slideState.BindEnterAction((stateMachine, preState, curState) =>
-            //{
-            //    // 播放滑铲动画
-            //    if (this.moveAnimator != null)
-            //    {
-            //        this.moveAnimator.SetInteger("MoveState", 4);
-            //    }
-
-            //    // 禁用移动
-            //    this.moveData.bCanMove = false;
-
-            //    // 禁用视口旋转
-            //    if (this.mouseLook != null)
-            //    {
-            //        this.mouseLook.bCanRotate = false;
-            //    }
-
-            //    // 设置滑铲参数
-            //    this.moveData.MaxSpeed = this.stateParams.slideInitSpeed;
-            //    this.moveData.Speed = this.stateParams.slideInitSpeed;
-            //});
-            //// Slide 离开时
-            //this.slideState.BindExitAction((stateMachine, exitState, nextState) =>
-            //{
-            //    this.stateParams.IsCrouch = true;
-            //    // 设置蹲伏参数
-            //    this.moveData.AddAcceleration = this.stateParams.crouchAccSpeed;
-            //    this.moveData.MaxSpeed = this.stateParams.crouchLimitSpeed;
-
-            //    // 启用移动
-            //    this.moveData.bCanMove = true;
-            //    // 启用视口旋转
-            //    if (this.mouseLook != null)
-            //    {
-            //        this.mouseLook.bCanRotate = true;
-            //    }
-
-            //});
-            #endregion
 
             // InAir 处于空中
             this.inAirState = new State("InAir");

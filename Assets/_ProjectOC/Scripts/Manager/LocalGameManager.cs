@@ -38,7 +38,7 @@ namespace ProjectOC.ManagerNS
         public IslandManager IslandManager;
         public MonoBuildingManager MonoBuildingManager;
         public TechTreeManager TechTreeManager;
-        
+       
         /// <summary>
         /// 单例管理
         /// </summary>
@@ -86,14 +86,16 @@ namespace ProjectOC.ManagerNS
             {
                 // 实例化
                 var player = handle.Result;
-
+                
                 player.transform.position = GameObject.Find("PlayerSpawnPoint").transform.position;
 
                 NavMeshManager = GM.RegisterLocalManager<NavMeshManager>();
 
             };
+            
+#if !UNITY_EDITOR
             this.enabled = false;
-
+#endif
         }
 
         private void OnDestroy()
@@ -117,15 +119,38 @@ namespace ProjectOC.ManagerNS
                 Instance = null;
             }
         }
-        
 
+
+        #region Gizmos管理
+#if UNITY_EDITOR
+        [System.Flags]
+        public enum GizmosEnableControl
+        {
+            [LabelText("All")]
+            All = int.MaxValue,
+            [LabelText("None")]
+            None = 0,
+            [LabelText("岛屿范围")]
+            IslandManager = 1 << 0,
+            [LabelText("Test2")]
+            Test2 = 1 << 1
+        }
+
+        public GizmosEnableControl gizmosEnableControl; 
         private void OnDrawGizmosSelected()
         {
-            if (Application.isPlaying)
+            if (Application.isPlaying && (GizmosEnableControl.IslandManager & gizmosEnableControl) != 0)
             {
                 IslandManager.OnDrawGizmosSelected();       
             }
+            if((GizmosEnableControl.Test2 & gizmosEnableControl) != 0)
+            {
+                Debug.Log("gizmosEnableControl 2");
+            }
         }
+#endif
+        #endregion
+
     }
 }
 
