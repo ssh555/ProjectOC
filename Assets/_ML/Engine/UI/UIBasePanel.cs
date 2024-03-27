@@ -1,30 +1,30 @@
 using ML.Engine.ABResources;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
+using ML.Engine.Utility;
+using ProjectOC.ManagerNS;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using static ProjectOC.Player.UI.PlayerUIPanel;
-using static ProjectOC.ResonanceWheelSystem.UI.BeastPanel;
-using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub2;
-using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheelUI;
+using UnityEngine.U2D;
+
 
 namespace ML.Engine.UI
 {
-    public class UIBasePanel : MonoBehaviour
+    public class UIBasePanel : UIBehaviour
     {
         /// <summary>
         /// 唯一标识符
         /// </summary>
         public string ID { get; protected set; }
         /// <summary>
-        /// 资源加载执行器
+        /// 对象池
         /// </summary>
-        public FunctionExecutor<AsyncOperationHandle> functionExecutor = new FunctionExecutor<AsyncOperationHandle>();
-
+        public ObjectPool objectPool;
         /// <summary>
         /// 所属UIManager
         /// </summary>
@@ -54,6 +54,19 @@ namespace ML.Engine.UI
         public virtual void OnEnter()
         {
             this.gameObject.SetActive(true);
+            this.objectPool = new ObjectPool();
+            this.Enter();
+            
+     
+        }
+
+        /// <summary>
+        /// 出栈时调用
+        /// </summary>
+        public virtual void OnExit()
+        {
+            this.Exit();
+            Manager.GameManager.DestroyObj(this.gameObject);
         }
 
         /// <summary>
@@ -61,6 +74,7 @@ namespace ML.Engine.UI
         /// </summary>
         public virtual void OnPause()
         {
+            this.Exit();
             this.gameObject.SetActive(false);
         }
 
@@ -70,41 +84,61 @@ namespace ML.Engine.UI
         public virtual void OnRecovery()
         {
             this.gameObject.SetActive(true);
+            this.Enter();
         }
 
-        /// <summary>
-        /// 出栈时调用
-        /// </summary>
-        public virtual void OnExit()
-        {
-            Manager.GameManager.DestroyObj(this.gameObject);
-        }
+
 
 
         protected virtual void Enter()
         {
+            this.RegisterInput();
+            this.InitObjectPool();
             this.Refresh();
         }
 
         protected virtual void Exit()
         {
+            Debug.Log("Exit "+this.gameObject.name);
+            this.UnregisterInput();
+            this.objectPool.OnDestroy();
+        }
+
+
+        protected virtual void UnregisterInput()
+        {
 
         }
 
+        protected virtual void RegisterInput()
+        {
+
+        }
         public virtual void Refresh()
         {
 
         }
 
-        protected virtual void Awake()
+        protected override void Awake()
         {
-
+            
         }
 
-        protected virtual void Start()
+        protected override void Start()
         {
             this.enabled = false;
         }
+
+        protected virtual void InitObjectPool()
+        {
+            this.objectPool.GetFunctionExecutor().SetOnAllFunctionsCompleted(() =>
+            {
+                this.Refresh();
+            });
+
+            StartCoroutine(this.objectPool.GetFunctionExecutor().Execute());
+        }
+
 
     }
 
@@ -119,7 +153,7 @@ namespace ML.Engine.UI
         public string abname;
         public string description;
 
-        private UIKeyTipList UIKeyTipList;
+        private UIKeyTipList<T> UIKeyTipList;
 
         /// <summary>
         /// 加载Json完成后执行的回调，默认自动初始化KeyTip
@@ -131,35 +165,48 @@ namespace ML.Engine.UI
         /// <summary>
         /// 加载Json
         /// </summary>
-        private AsyncOperationHandle InitUITextContents()
+        private List<AsyncOperationHandle> InitUITextContents()
         {
-            this.ABJAProcessorJson = new ML.Engine.ABResources.ABJsonAssetProcessor<T>(this.abpath, this.abname, (datas) =>
+            var handles = new List<AsyncOperationHandle>();
+            var handle = this.ABJAProcessorJson = new ML.Engine.ABResources.ABJsonAssetProcessor<T>(this.abpath, this.abname, (datas) =>
             {
+                Debug.Log("InitUITextContentscompelete");
                this.OnLoadJsonAssetComplete(datas);
             }, this.description);
-            return this.ABJAProcessorJson.StartLoadJsonAssetData();
+            handles.Add(this.ABJAProcessorJson.StartLoadJsonAssetData());
+
+            return handles;
         }
         /// <summary>
         /// 初始化KeyTip
         /// </summary>
         private void InitKeyTip(T datas)
         {
-            UIKeyTipList = new UIKeyTipList(transform);
+            UIKeyTipList = new UIKeyTipList<T>(transform,datas);
 
-            KeyTip[] keyTips = GameManager.Instance.InputManager.ExportKeyTipValues(datas);
-            foreach (var keyTip in keyTips)
-            {
-                InputAction inputAction = GameManager.Instance.InputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
-
-                this.UIKeyTipList.SetKeyTiptext(keyTip.keyname, GameManager.Instance.InputManager.GetInputActionBindText(inputAction));
-                this.UIKeyTipList.SetDescriptiontext(keyTip.keyname, keyTip.description.GetText());
-            }
+            
         }
 
         protected override void Awake()
         {
             base.Awake();
-            this.functionExecutor.AddFunction(this.InitUITextContents);
+        }
+
+        protected override void Enter()
+        {
+            base.Enter();
+        }
+
+        protected virtual void InitTextContentPathData()
+        {
+
+        }
+
+        protected override void InitObjectPool()
+        {
+            this.InitTextContentPathData();
+            this.objectPool.GetFunctionExecutor().AddFunction(this.InitUITextContents);
+            base.InitObjectPool();
         }
     }
 }

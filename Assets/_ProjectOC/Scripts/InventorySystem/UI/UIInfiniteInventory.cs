@@ -13,6 +13,8 @@ using ML.Engine.UI;
 using UnityEngine.U2D;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using static ProjectOC.InventorySystem.UI.UIInfiniteInventory;
+using ProjectOC.ManagerNS;
+using ML.Engine.Utility;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -32,17 +34,6 @@ namespace ProjectOC.InventorySystem.UI
         protected override void Awake()
         {
             base.Awake();
-            this.InitTextContentPathData();
-            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
-                this.LoadInventoryAtlas});
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
-
-
 
             // TopTitle
             TopTitleText = this.transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
@@ -82,56 +73,26 @@ namespace ProjectOC.InventorySystem.UI
         protected override void Start()
         {
             CurrentItemTypeIndex = 0;
-
             base.Start();
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.Release(this.gameObject);
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.Release(this.inventoryAtlas);
         }
         #endregion
 
         #region Override
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            this.Enter();
-        }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-            this.Exit();
-            ClearTemp();
-        }
-
-        public override void OnPause()
-        {
-            base.OnPause();
-            this.Exit();
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            this.Enter();
-        }
-
         protected override void Enter()
         {
-            this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Enable();
             ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
             base.Enter();
         }
 
         protected override void Exit()
         {
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Disable();
             ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(1);
-            this.UnregisterInput();
+            ClearTemp();
             base.Exit();
         }
 
@@ -250,8 +211,9 @@ namespace ProjectOC.InventorySystem.UI
             }
         }
 
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Disable();
             // 切换类目
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.LastTerm.performed -= LastTerm_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.NextTerm.performed -= NextTerm_performed;
@@ -273,8 +235,9 @@ namespace ProjectOC.InventorySystem.UI
                         ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.canceled -= Destroy_canceled;*/
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Enable();
             // 切换类目
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.LastTerm.performed += LastTerm_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.NextTerm.performed += NextTerm_performed;
@@ -393,7 +356,6 @@ namespace ProjectOC.InventorySystem.UI
         private void Drop_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             this.ItemIsDestroyed = true;
-            Debug.Log("DestroyItem");
             DestroyItem();
         }
 
@@ -707,24 +669,24 @@ namespace ProjectOC.InventorySystem.UI
             public KeyTip Destroy;
         }
 
-        private void InitTextContentPathData()
+        protected override void InitTextContentPathData()
         {
             this.abpath = "OC/Json/TextContent/Inventory";
             this.abname = "InventoryPanel";
             this.description = "InventoryPanel数据加载完成";
         }
-        #endregion
 
-        private AsyncOperationHandle LoadInventoryAtlas()
+        protected override void InitObjectPool()
         {
-            var handle = GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>("OC/UI/Inventory/Texture/SA_Inventory_UI.spriteatlasv2");
-
-            handle.Completed += (handle) =>
+            this.objectPool.RegisterPool(ObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
+            "OC/UI/Inventory/Texture/SA_Inventory_UI.spriteatlasv2", (handle) =>
             {
                 inventoryAtlas = handle.Result as SpriteAtlas;
-            };
-            return handle;
+            }
+            );
+            base.InitObjectPool();
         }
+        #endregion
 
         private Sprite GetSprite(string id)
         {

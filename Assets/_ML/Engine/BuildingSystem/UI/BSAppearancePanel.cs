@@ -74,19 +74,13 @@ namespace ML.Engine.BuildingSystem.UI
 
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             Manager.GameManager.Instance.ABResourceManager.Release(matHandle);
         }
         #endregion
 
         #region Override
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            this.RegisterInput();
-        }
-
         public override void OnPause()
         {
             throw new Exception("建造系统外观UI面板不允许存在叠加其他UI面板的情况");
@@ -99,16 +93,14 @@ namespace ML.Engine.BuildingSystem.UI
 
         public override void OnExit()
         {
-            this.UnregisterInput();
+            base.OnExit();
             ClearInstance();
-
-            Manager.GameManager.DestroyObj(this.gameObject);
         }
         #endregion
 
         #region Internal
         #region KeyFunction
-        public void UnregisterInput()
+        protected override void UnregisterInput()
         {
             this.Placer.BInput.BuildingAppearance.Disable();
 
@@ -122,7 +114,7 @@ namespace ML.Engine.BuildingSystem.UI
             //ProjectOC.Input.InputManager.PlayerInput.Player.Jump.Disable();
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
             this.Placer.BInput.BuildingAppearance.Enable();
 

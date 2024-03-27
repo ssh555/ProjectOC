@@ -220,6 +220,7 @@ namespace ML.Engine.InventorySystem
         
 
         #endregion
+        
         #region Getter
         public string[] GetAllItemID()
         {
@@ -252,6 +253,7 @@ namespace ML.Engine.InventorySystem
         {
             if (!this.ItemTypeStrDict.ContainsKey(id))
             {
+
                 foreach (var sa in this.itemAtlasList)
                 {
                     var s = sa.GetSprite(id);
@@ -262,7 +264,8 @@ namespace ML.Engine.InventorySystem
                 }
                 return null;
             }
-             
+
+        
             foreach (var sa in this.itemAtlasList)
             {
                 var s = sa.GetSprite(this.ItemTypeStrDict[id].icon);

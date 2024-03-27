@@ -1,6 +1,8 @@
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
+using ML.Engine.Utility;
+using ProjectOC.ManagerNS;
 using ProjectOC.WorkerEchoNS;
 using ProjectOC.WorkerNS;
 using System;
@@ -21,15 +23,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         protected override void Awake()
         {
             base.Awake();
-            this.InitTextContentPathData();
-            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
-                this.InitUITexture2D});
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
 
             //BeastInfo
             var Info1 = this.transform.Find("HiddenBeastInfo1").Find("Info");
@@ -64,7 +57,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private List<AsyncOperationHandle> descriptionHandle = new List<AsyncOperationHandle>();
         private AsyncOperationHandle spriteatlasHandle;
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             var abmgr = GameManager.Instance.ABResourceManager;
             foreach(var handle in descriptionHandle)
@@ -81,42 +74,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public override void OnEnter()
         {
             base.OnEnter();
-            this.Enter();
             parentUI.MainToSub1();
         }
 
         public override void OnExit()
         {
             base.OnExit();
-            this.Exit();
             ClearTemp();
             parentUI.Sub1ToMain();
-        }
-
-        public override void OnPause()
-        {
-            base.OnPause();
-            this.Exit();
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            this.Enter();
-        }
-
-        protected override void Enter()
-        {
-            this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Enable();
-            base.Enter();
-        }
-
-        protected override void Exit()
-        {
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Disable();
-            this.UnregisterInput();
-            base.Exit();
         }
         #endregion
 
@@ -125,11 +90,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             public WorkType workType;
             public TMPro.TextMeshProUGUI skillText;
-        
         }
 
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Disable();
             //ÇýÖð
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Expel.performed -= Expel_performed;
 
@@ -138,8 +103,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Enable();
             //ÇýÖð
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Expel.performed += Expel_performed;
 
@@ -170,23 +136,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #region Temp
         private Sprite icon_genderfemaleSprite, icon_gendermaleSprite;
 
-        private List<Sprite> tempSprite = new List<Sprite>();
-        private Dictionary<ML.Engine.InventorySystem.ItemType, GameObject> tempItemType = new Dictionary<ML.Engine.InventorySystem.ItemType, GameObject>();
-        private List<GameObject> tempUIItems = new List<GameObject>();
         private void ClearTemp()
         {
-            foreach (var s in tempSprite)
-            {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
-            }
-            foreach (var s in tempItemType.Values)
-            {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
-            }
-            foreach (var s in tempUIItems)
-            {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
-            }
+            GameManager.DestroyObj(icon_genderfemaleSprite);
+            GameManager.DestroyObj(icon_gendermaleSprite);
         }
 
         #endregion
@@ -302,7 +255,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             public KeyTip Receive;
 
         }
-        private void InitTextContentPathData()
+        protected override void InitTextContentPathData()
         {
             this.abpath = "OC/Json/TextContent/ResonanceWheel";
             this.abname = "ResonanceWheel_sub1";
@@ -310,23 +263,18 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
 
         #endregion
-
-        #region Texture2D
-        private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
-        private string ResonanceWheelSpriteAtlasPath = "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2";
-        private AsyncOperationHandle InitUITexture2D()
+        protected override void InitObjectPool()
         {
-            var handle = GM.ABResourceManager.LoadAssetAsync<SpriteAtlas>(ResonanceWheelSpriteAtlasPath);
-            handle.Completed += (handle) =>
+            this.objectPool.RegisterPool(ObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
+            "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2", (handle) =>
             {
-                spriteatlasHandle = handle;
-                var atlas = handle.Result as SpriteAtlas;
-                icon_genderfemaleSprite = atlas.GetSprite("icon_genderfemale");
-                icon_gendermaleSprite = atlas.GetSprite("icon_gendermale");
-            };
-            return handle;
+                SpriteAtlas resonanceWheelAtlas = handle.Result as SpriteAtlas;
+                icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite("icon_genderfemale");
+                icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite("icon_gendermale");
+            }
+            );
+            base.InitObjectPool();
         }
-        #endregion
         #endregion
     }
 
