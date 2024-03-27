@@ -220,6 +220,7 @@ namespace ML.Engine.InventorySystem
         
 
         #endregion
+        
         #region Getter
         public string[] GetAllItemID()
         {
