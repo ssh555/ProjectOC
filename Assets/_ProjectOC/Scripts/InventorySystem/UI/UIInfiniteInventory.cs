@@ -554,6 +554,7 @@ namespace ProjectOC.InventorySystem.UI
                 {
                     sprite = ItemManager.Instance.GetItemSprite(SelectedItems[i].ID);
                     AddSprite(sprite);
+                    if (sprite == null)
                     {
                         Debug.Log(SelectedItems[i].ID);
                     }
