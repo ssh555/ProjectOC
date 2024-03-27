@@ -253,7 +253,15 @@ namespace ML.Engine.InventorySystem
         {
              if (!this.ItemTypeStrDict.ContainsKey(id))
              {
-                 return null;
+                foreach (var sa in this.itemAtlasList)
+                {
+                    var s = sa.GetSprite(id);
+                    if (s != null)
+                    {
+                        return s;
+                    }
+                }
+                return null;
              }
              
             foreach (var sa in this.itemAtlasList)
