@@ -245,7 +245,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             {
                 return null;
             }
-            return InventorySystem.ItemManager.Instance.GetItemSprite(id);
+            return InventorySystem.ItemManager.Instance.GetItemSprite(this.CompositeData[id].texture2d);
         }
 
         public string GetCompositonName(string id)
