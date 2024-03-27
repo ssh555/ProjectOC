@@ -239,6 +239,39 @@
             "English" : ""
         }
     },
+    "ChangeRecipe" : {
+        "keyname" : "KT_ChangeRecipe",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "更改配方",
+            "English" : "Change Recipe"
+        }
+    },
+    "ChangeWorker" : {
+        "keyname" : "KT_ChangeWorker",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "变更派遣",
+            "English" : "Change Worker"
+        }
+    },
+    "RemoveWorker" : {
+        "keyname" : "KT_RemoveWorker",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "FastAdd"
+          },
+        "description" : {
+            "Chinese" : "移除派遣",
+            "English" : "Remove Worker"
+        }
+    },
     "Remove1" : {
         "keyname" : "KT_Remove1",
         "keymap": {
