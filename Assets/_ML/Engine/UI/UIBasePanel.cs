@@ -77,7 +77,7 @@ namespace ML.Engine.UI
         public virtual void OnPause()
         {
             this.Exit();
-            this.gameObject.SetActive(false);
+            //this.gameObject.SetActive(false);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace ML.Engine.UI
         /// </summary>
         public virtual void OnRecovery()
         {
-            this.gameObject.SetActive(true);
+            //this.gameObject.SetActive(true);
             this.Enter();
         }
 
@@ -100,9 +100,7 @@ namespace ML.Engine.UI
 
         protected virtual void Exit()
         {
-            Debug.Log("Exit "+this.gameObject.name);
             this.UnregisterInput();
-            
         }
 
 
@@ -134,7 +132,8 @@ namespace ML.Engine.UI
         {
             this.objectPool.GetFunctionExecutor().SetOnAllFunctionsCompleted(() =>
             {
-                //this.Refresh();
+                Debug.Log("InitObjectPoolRefresh");
+                this.Refresh();
             });
 
             StartCoroutine(this.objectPool.GetFunctionExecutor().Execute());
