@@ -2,6 +2,8 @@ using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.Timer;
+using ML.Engine.Utility;
+using ProjectOC.ManagerNS;
 using ProjectOC.Player;
 using ProjectOC.WorkerEchoNS;
 using Sirenix.OdinInspector;
@@ -28,16 +30,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         protected override void Awake()
         {
             base.Awake();
-            this.InitTextContentPathData();
-            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
-                this.InitUITexture2D,
-                this.InitSlotPrefab });
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
 
             workerEcho = (GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
 
@@ -93,17 +85,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             base.Start();
         }
 
-        private AsyncOperationHandle spriteatlasHandle;
-        private List<AsyncOperationHandle<GameObject>> goHandle = new List<AsyncOperationHandle<GameObject>>();
-        private void OnDestroy()
+
+        protected override void OnDestroy()
         {
             ClearTemp();
             (this as ITickComponent).DisposeTick();
-            GM.ABResourceManager.Release(spriteatlasHandle);
-            foreach(var handle in goHandle)
-            {
-                GM.ABResourceManager.ReleaseInstance(handle);
-            }
         }
         #endregion
 
@@ -131,17 +117,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region Override
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            this.Enter();
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
-        }
-
         public override void OnExit()
         {
-            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
-
             //TODO: 共鸣轮建筑存在时只隐藏不销毁
             this.gameObject.SetActive(false);
             this.Exit();
@@ -150,28 +127,22 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         public override void OnPause()
         {
-            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
-            
-
+            //不走base.OnPause();
             //base.OnPause();
             //this.Exit();
         }
 
         public override void OnRecovery()
         {
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
-
-
             this.Refresh();
-
+            //不走base.OnRecovery();
             //base.OnRecovery();
             //this.Enter();
         }
 
         protected override void Enter()
         {
-            this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Enable();
+            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
             isQuit = false;
             hasSub1nstance = false;
             Invoke("Refresh", 0.01f);
@@ -180,8 +151,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         protected override void Exit()
         {
-            this.UnregisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Disable();
+            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
             base.Exit();
         }
 
@@ -210,8 +180,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
         }
 
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Disable();
             // 切换类目
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.LastTerm.performed -= LastTerm_performed;
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.NextTerm.performed -= NextTerm_performed;
@@ -235,8 +206,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.Enable();
             // 切换类目
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.LastTerm.performed += LastTerm_performed;
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.NextTerm.performed += NextTerm_performed;
@@ -462,11 +434,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             var ReasonanceTarget = exclusivePart.Find("ResonanceTarget");
             var ResonanceConsumption = exclusivePart.Find("ResonanceConsumption");
             
-
             ReasonanceTarget.gameObject.SetActive(true);
             ResonanceConsumption.gameObject.SetActive(true);
             
-
             // 切换类目
             
             //切换隐兽
@@ -843,7 +813,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region Resource
-
+        private GameObject SlotPrefab;
         #region TextContent
         [System.Serializable]
         public struct ResonanceWheelPanel
@@ -874,25 +844,19 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         }
 
-        private void InitTextContentPathData()
+        protected override void InitTextContentPathData()
         {
             this.abpath = "OC/Json/TextContent/ResonanceWheel";
             this.abname = "ResonanceWheelPanel";
             this.description = "ResonanceWheelPanel数据加载完成";
         }
-
         #endregion
 
-        #region Texture2D
-        private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
-        private string ResonanceWheelSpriteAtlasPath = "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2";
-
-        private AsyncOperationHandle InitUITexture2D()
+        protected override void InitObjectPool()
         {
-            var handle = GM.ABResourceManager.LoadAssetAsync<SpriteAtlas>(ResonanceWheelSpriteAtlasPath);
-            handle.Completed += (handle) =>
+            this.objectPool.RegisterPool(ObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
+            "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2", (handle) =>
             {
-                this.spriteatlasHandle = handle;
                 var resonanceAtlas = handle.Result as SpriteAtlas;
                 sprite1 = resonanceAtlas.GetSprite("icon_beast");
                 sprite2 = resonanceAtlas.GetSprite("icon_timing");
@@ -905,27 +869,15 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 beastTypeDic.Add(BeastType.WorkerEcho_Rabbit, resonanceAtlas.GetSprite("Rabbit"));
                 beastTypeDic.Add(BeastType.WorkerEcho_Seal, resonanceAtlas.GetSprite("Seal"));
                 beastTypeDic.Add(BeastType.WorkerEcho_Random, resonanceAtlas.GetSprite("Random"));
-            };
-            return handle;
-        }
-
-        #endregion
-
-        #region Prefabs
-        private GameObject SlotPrefab;
-
-        private AsyncOperationHandle InitSlotPrefab()
-        {
-            var handle = GM.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/Slot.prefab");
-            handle.Completed += (handle) =>
+            }
+            );
+            this.objectPool.RegisterPool(ObjectPool.HandleType.Prefab, "SlotPrefabPool", 1, "OC/UI/ResonanceWheel/Prefabs/Slot.prefab", (handle) =>
             {
-                this.goHandle.Add(handle);
-                this.SlotPrefab = handle.Result;
-            };
-            return handle;
-        }
+                SlotPrefab = handle.Result as GameObject;
+            });
 
-        #endregion
+            base.InitObjectPool();
+        }
         #endregion
     }
 

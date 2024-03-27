@@ -110,7 +110,6 @@ namespace ML.Engine.BuildingSystem.UI
         public override void OnEnter()
         {
             base.OnEnter();
-            this.RegisterInput();
             BM.Placer.OnDestroySelectedBPart += OnDestroySelectedBPart;
         }
 
@@ -118,23 +117,14 @@ namespace ML.Engine.BuildingSystem.UI
         public override void OnPause()
         {
             base.OnPause();
-            this.UnregisterInput();
             BM.Placer.OnDestroySelectedBPart -= OnDestroySelectedBPart;
         }
 
         public override void OnRecovery()
         {
             base.OnRecovery();
-            this.RegisterInput();
             BM.Placer.OnDestroySelectedBPart += OnDestroySelectedBPart;
         }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-            this.UnregisterInput();
-        }
-
         public override void Refresh()
         {
             keycom.ReWrite(monoBM.KeyTipDict["keycom"]);
@@ -147,7 +137,7 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region KeyFunction
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
             this.Placer.BInput.Build.Disable();
 
@@ -164,7 +154,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.backInputAction.performed -= Placer_ExitBuild;
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
             this.Placer.BInput.Build.Enable();
 

@@ -58,9 +58,11 @@ namespace ML.Engine.UI
         /// <param name="panelType"></param>
         public void PushPanel(UIBasePanel panel)
         {
+            Debug.Log("PushPanel "+ panel.gameObject.name);
             // ‘›Õ£’ª∂•
             if (panelStack.Count > 0)
             {
+                
                 panelStack.Peek().OnPause();
             }
             // —π»Î’ª
