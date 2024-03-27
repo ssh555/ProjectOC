@@ -51,7 +51,6 @@ namespace ProjectOC.WorkerNS
             {
                 return new Effect(EffectTableDict[id], value);
             }
-            //Debug.LogError($"ID:{id} Value:{value} 无法创建Effect");
             return null;
         }
         #endregion

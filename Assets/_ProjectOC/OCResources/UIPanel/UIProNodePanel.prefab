@@ -5646,6 +5646,7 @@ MonoBehaviour:
   description: 
   IsInit: 0
   CurMode: 0
+  CurProNodeMode: 0
   ProNode:
     WorldProNode: {fileID: 0}
     ID: 

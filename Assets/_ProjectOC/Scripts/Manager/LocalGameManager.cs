@@ -106,6 +106,7 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<ProNodeManager>();
                 GM?.UnregisterLocalManager<RecipeManager>();
                 GM?.UnregisterLocalManager<StoreManager>();
+                WorkerManager?.DeleteAllWorker();
                 GM?.UnregisterLocalManager<WorkerManager>();
                 GM?.UnregisterLocalManager<EffectManager>();
                 GM?.UnregisterLocalManager<FeatureManager>();

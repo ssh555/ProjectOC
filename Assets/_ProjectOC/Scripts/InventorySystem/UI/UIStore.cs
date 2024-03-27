@@ -309,8 +309,6 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Upgrade.performed -= Upgrade_performed;
             // 上下切换StoreData
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeItem.performed -= ChangeItem_performed;
-            // 改变StoreData存储的Item
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeStoreData.performed -= ChangeStoreData_performed;
             // 快捷放入
             ProjectOC.Input.InputManager.PlayerInput.UIStore.FastAdd.performed -= FastAdd_performed;
             // 取出1个
@@ -331,8 +329,6 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Upgrade.performed += Upgrade_performed;
             // 上下切换StoreData
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeItem.performed += ChangeItem_performed;
-            // 改变StoreData存储的Item
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeStoreData.performed += ChangeStoreData_performed;
             // 快捷放入
             ProjectOC.Input.InputManager.PlayerInput.UIStore.FastAdd.performed += FastAdd_performed;
             // 取出1个
@@ -394,14 +390,6 @@ namespace ProjectOC.InventorySystem.UI
                 this.CurrentItemIndex += -offset.y * grid.y + offset.x;
             }
         }
-        private void ChangeStoreData_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            if (CurMode == Mode.Store)
-            {
-                CurMode = Mode.ChangeItem;
-                Refresh();
-            }
-        }
         private void FastAdd_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (CurMode == Mode.Store)
@@ -443,7 +431,11 @@ namespace ProjectOC.InventorySystem.UI
         }
         private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurMode == Mode.ChangeItem)
+            if (CurMode == Mode.Store)
+            {
+                CurMode = Mode.ChangeItem;
+            }
+            else if (CurMode == Mode.ChangeItem)
             {
                 Store.ChangeStoreData(CurrentDataIndex, CurrentItemData);
                 this.CurMode = Mode.Store;
@@ -471,11 +463,11 @@ namespace ProjectOC.InventorySystem.UI
                         }
                         img.sprite = sprite;
 
-                        ItemManager.Instance.AddItemIconObject(itemID,
-                                                               this.Store.WorldStore.transform,
-                                                               new Vector3(0, this.Store.WorldStore.transform.GetComponent<Collider>().bounds.size.y / 2, 0),
-                                                               Quaternion.Euler(90, 0, 0),
-                                                               Vector3.one);
+                        //ItemManager.Instance.AddItemIconObject(itemID,
+                        //                                       this.Store.WorldStore.transform,
+                        //                                       new Vector3(0, this.Store.WorldStore.transform.GetComponent<Collider>().bounds.size.y / 2, 0),
+                        //                                       Quaternion.Euler(90, 0, 0),
+                        //                                       Vector3.one);
                     }
                 }
                 else
@@ -599,15 +591,19 @@ namespace ProjectOC.InventorySystem.UI
                     var img = uiStoreData.transform.Find("Icon").GetComponent<Image>();
                     if (ItemManager.Instance.IsValidItemID(storeData.ItemID))
                     {
-                        // 查找临时存储的Sprite
-                        var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(storeData.ItemID));
-                        // 不存在则生成
-                        if (sprite == null)
+                        var texture = ItemManager.Instance.GetItemTexture2D(storeData.ItemID);
+                        if (texture != null)
                         {
-                            sprite = ItemManager.Instance.GetItemSprite(storeData.ItemID);
-                            tempSprite.Add(sprite);
+                            // 查找临时存储的Sprite
+                            var sprite = tempSprite.Find(s => s.texture == texture);
+                            // 不存在则生成
+                            if (sprite == null)
+                            {
+                                sprite = ItemManager.Instance.GetItemSprite(storeData.ItemID);
+                                tempSprite.Add(sprite);
+                            }
+                            img.sprite = sprite;
                         }
-                        img.sprite = sprite;
                     }
                     else
                     {
@@ -745,10 +741,6 @@ namespace ProjectOC.InventorySystem.UI
                 // 强制立即更新 VerticalLayoutGroup 的布局
                 LayoutRebuilder.ForceRebuildLayoutImmediate(GridLayout.GetComponent<RectTransform>());
                 #endregion
-
-                #region BotKeyTips
-
-                #endregion
             }
             else if(this.CurMode == Mode.ChangeItem || this.CurMode == Mode.ChangeIcon)
             {
@@ -801,15 +793,19 @@ namespace ProjectOC.InventorySystem.UI
                     var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
                     if (ItemManager.Instance.IsValidItemID(itemID))
                     {
-                        // 查找临时存储的Sprite
-                        var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(itemID));
-                        // 不存在则生成
-                        if (sprite == null)
+                        var texture = ItemManager.Instance.GetItemTexture2D(itemID);
+                        if (texture != null)
                         {
-                            sprite = ItemManager.Instance.GetItemSprite(itemID);
-                            tempSprite.Add(sprite);
+                            // 查找临时存储的Sprite
+                            var sprite = tempSprite.Find(s => s.texture == texture);
+                            // 不存在则生成
+                            if (sprite == null)
+                            {
+                                sprite = ItemManager.Instance.GetItemSprite(itemID);
+                                tempSprite.Add(sprite);
+                            }
+                            img.sprite = sprite;
                         }
-                        img.sprite = sprite;
                     }
                     else
                     {
@@ -898,10 +894,6 @@ namespace ProjectOC.InventorySystem.UI
                 // 强制立即更新 VerticalLayoutGroup 的布局
                 LayoutRebuilder.ForceRebuildLayoutImmediate(ChangeItem_GridLayout.GetComponent<RectTransform>());
                 #endregion
-
-                #region BotKeyTips
-
-                #endregion
             }
             else if (this.CurMode == Mode.Upgrade)
             {
@@ -949,7 +941,7 @@ namespace ProjectOC.InventorySystem.UI
                         if (texture != null)
                         {
                             // 查找临时存储的Sprite
-                            var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(itemID));
+                            var sprite = tempSprite.Find(s => s.texture == texture);
                             // 不存在则生成
                             if (sprite == null)
                             {
@@ -995,10 +987,6 @@ namespace ProjectOC.InventorySystem.UI
                     LvNew.text = "";
                     DescNew.text = "";
                 }
-                #endregion
-
-                #region BotKeyTips
-
                 #endregion
             }
         }
