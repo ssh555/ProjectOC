@@ -12,22 +12,28 @@ namespace ML.Engine.SaveSystem
         {
             if (!string.IsNullOrEmpty(relativePathWithoutSuffix))
             {
-                string path = Path.Combine(SavePath, relativePathWithoutSuffix + ".json");
+                string relativePath = relativePathWithoutSuffix + ".json";
+                string path = Path.Combine(SavePath, relativePath);
                 if (File.Exists(path))
                 {
-                    using FileStream fs = new FileStream(path, FileMode.Open);
-                    Stream stream = fs;
-                    if (useEncryption)
+                    using(FileStream fs = new FileStream(path, FileMode.Open))
                     {
-                        stream = DecryptorStream(fs);
+                        Stream stream = fs;
+                        if (useEncryption)
+                        {
+                            stream = DecryptorStream(fs);
+                        }
+                        using(StreamReader reader = new StreamReader(stream))
+                        {
+                            string jsonFromFile = reader.ReadToEnd();
+                            T objFromFile = JsonConvert.DeserializeObject<T>(jsonFromFile);
+                            objFromFile.Path = Path.GetDirectoryName(relativePath);
+                            objFromFile.SaveName = Path.GetFileNameWithoutExtension(relativePath);
+                            reader.Close();
+                            stream.Close();
+                            return objFromFile;
+                        }
                     }
-                    using StreamReader reader = new StreamReader(stream);
-                    string jsonFromFile = reader.ReadToEnd();
-
-                    T objFromFile = JsonConvert.DeserializeObject<T>(jsonFromFile);
-                    reader.Close();
-                    stream.Close();
-                    return objFromFile;
                 }
             }
             return null;
@@ -41,19 +47,20 @@ namespace ML.Engine.SaveSystem
                 {
                     stream = DecryptorStream(memory);
                 }
-                using StreamReader reader = new StreamReader(stream);
-                string jsonFromFile = reader.ReadToEnd();
-
-                T objFromFile = JsonConvert.DeserializeObject<T>(jsonFromFile);
-                reader.Close();
-                stream.Close();
-                return objFromFile;
+                using(StreamReader reader = new StreamReader(stream))
+                {
+                    string jsonFromFile = reader.ReadToEnd();
+                    T objFromFile = JsonConvert.DeserializeObject<T>(jsonFromFile);
+                    reader.Close();
+                    stream.Close();
+                    return objFromFile;
+                }
             }
             return null;
         }
         public override void SaveData<T>(T data, bool useEncryption)
         {
-            if (data != null && !string.IsNullOrEmpty(data.Path) && data.IsDirty)
+            if (data != null && !string.IsNullOrEmpty(data.SaveName) && data.IsDirty)
             {
                 string path = Path.Combine(SavePath, data.Path, data.SaveName + ".json");
                 string directoryPath = Path.GetDirectoryName(path);
@@ -61,19 +68,22 @@ namespace ML.Engine.SaveSystem
                 {
                     Directory.CreateDirectory(directoryPath);
                 }
-                using FileStream fs = new FileStream(path, FileMode.Create);
-                Stream stream = fs;
-                if (useEncryption)
+                using (FileStream fs = new FileStream(path, FileMode.Create))
                 {
-                    stream = EncryptorStream(fs);
+                    Stream stream = fs;
+                    if (useEncryption)
+                    {
+                        stream = EncryptorStream(fs);
+                    }
+                    using (StreamWriter writer = new StreamWriter(stream))
+                    {
+                        string json = JsonConvert.SerializeObject(data);
+                        writer.Write(json);
+                        data.IsDirty = false;
+                        writer.Close();
+                        stream.Close();
+                    }
                 }
-                using StreamWriter writer = new StreamWriter(stream);
-                string json = JsonConvert.SerializeObject(data);
-                writer.Write(json);
-
-                writer.Close();
-                stream.Close();
-                data.IsDirty = false;
             }
         }
     }

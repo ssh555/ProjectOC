@@ -60,10 +60,6 @@ namespace ProjectOC.WorkerNS
                 {
                     this.Effects.Add(effect);
                 }
-                else
-                {
-                    //Debug.LogError($"Skill {this.ID} Effect {tuple.Item1} is Null");
-                }
             }
         }
         /// <summary>
@@ -156,10 +152,6 @@ namespace ProjectOC.WorkerNS
                 {
                     effect.ApplyEffect(worker);
                 }
-            }
-            else
-            {
-                //Debug.LogError($"Skill {this.ID} Worker is Null");
             }
         }
     }
