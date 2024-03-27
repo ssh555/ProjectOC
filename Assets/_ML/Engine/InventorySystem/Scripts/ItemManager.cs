@@ -251,8 +251,9 @@ namespace ML.Engine.InventorySystem
 
         public Sprite GetItemSprite(string id)
         {
-             if (!this.ItemTypeStrDict.ContainsKey(id))
-             {
+            if (!this.ItemTypeStrDict.ContainsKey(id))
+            {
+
                 foreach (var sa in this.itemAtlasList)
                 {
                     var s = sa.GetSprite(id);
@@ -262,8 +263,9 @@ namespace ML.Engine.InventorySystem
                     }
                 }
                 return null;
-             }
-             
+            }
+
+        
             foreach (var sa in this.itemAtlasList)
             {
                 var s = sa.GetSprite(this.ItemTypeStrDict[id].icon);
