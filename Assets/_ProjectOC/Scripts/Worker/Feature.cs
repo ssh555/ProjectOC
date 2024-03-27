@@ -53,10 +53,6 @@ namespace ProjectOC.WorkerNS
                 {
                     this.Effects.Add(effect);
                 }
-                else
-                {
-                    //Debug.LogError($"Feature {this.ID} Effect {tuple.Item1} is Null");
-                }
             }
         }
 
@@ -68,10 +64,6 @@ namespace ProjectOC.WorkerNS
                 {
                     effect.ApplyEffect(worker);
                 }
-            }
-            else
-            {
-                //Debug.LogError($"Feature {this.ID} Worker is Null");
             }
         }
 

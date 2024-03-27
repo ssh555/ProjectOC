@@ -14,11 +14,16 @@ namespace ML.Engine.SaveSystem
         /// 保存文件的路径
         /// </summary>
         protected string SavePath = Path.Combine(Application.persistentDataPath, "Save");
-        // 加密密钥和初始化向量（IV）
-        protected byte[] Key = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };
-        protected byte[] IV = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };
+        /// <summary>
+        /// 加密密钥 256位
+        /// </summary>
+        private byte[] Key = new byte[] {0x2B, 0x7E, 0x15, 0x16, 0x28, 0xAE, 0xD2, 0xA6};
+        /// <summary>
+        /// 随机生成的初始化向量
+        /// </summary>
+        private byte[] IV = new byte[] {0x6A, 0x8F, 0xE2, 0x4B, 0x7D, 0x1A, 0x5C, 0x3E};
 
-        protected DESCryptoServiceProvider CryptoProvider = new DESCryptoServiceProvider();
+        private DESCryptoServiceProvider CryptoProvider = new DESCryptoServiceProvider();
 
         /// <summary>
         /// 存数据
@@ -45,7 +50,7 @@ namespace ML.Engine.SaveSystem
         /// <summary>
         /// 加密数据流
         /// </summary>
-        public Stream EncryptorStream(Stream stream)
+        protected Stream EncryptorStream(Stream stream)
         {
             // 使用提供的加密密钥和初始化向量
             CryptoProvider.Key = Key;
@@ -59,7 +64,7 @@ namespace ML.Engine.SaveSystem
         /// <summary>
         /// 解密数据流
         /// </summary>
-        public Stream DecryptorStream(Stream stream)
+        protected Stream DecryptorStream(Stream stream)
         {
             // 使用提供的加密密钥和初始化向量
             CryptoProvider.Key = Key;

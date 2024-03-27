@@ -58,7 +58,6 @@ namespace ProjectOC.MissionNS
             }
             else
             {
-                //Debug.LogError($"{itemID} {missionNum} {initiator}");
                 return null;
             }
         }
