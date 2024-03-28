@@ -1,47 +1,101 @@
 using ML.Engine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace ML.Engine.UI
 {
-    public class SelectedButton : MonoBehaviour, IUISelected
+    public class SelectedButton : Button
     {
-        #region IUISelected
-        public IUISelected LeftUI { get; set; }
-        public IUISelected RightUI { get; set; }
-        public IUISelected UpUI { get; set; }
-        public IUISelected DownUI { get; set; }
-
-        public void Interact()
-        {
-            OnInteract?.Invoke();
-        }
-
-        public void SelectedEnter()
-        {
-            OnSelectedEnter?.Invoke();
-            //this.image.color = Color.red;
-        }
-
-        public void SelectedExit()
-        {
-            OnSelectedExit?.Invoke();
-            //this.image.color = Color.white;
-        }
-        #endregion
-
-        public UnityEngine.UI.Image image;
-        public TMPro.TextMeshProUGUI text;
-
-        public event System.Action OnInteract;
         public event System.Action OnSelectedEnter;
         public event System.Action OnSelectedExit;
 
-        private void Awake()
+        private Transform Selected = null;
+
+        // 定义按钮是否可交互的属性
+        public bool Interactable
+        {
+            get { return interactable; }
+            set
+            {
+                // 如果新值与旧值相同，则不执行任何操作
+                if (interactable == value)
+                    return;
+
+                // 更新按钮是否可交互的状态
+                interactable = value;
+
+                // 根据按钮是否可交互执行不同的逻辑
+                if (interactable)
+                {
+                    OnInteractableEnabled();
+                }
+                else
+                {
+                    OnInteractableDisabled();
+                }
+            }
+        }
+        public override void OnSelect(BaseEventData eventData)
+        {
+            if(Selected != null) 
+            {
+                this.Selected.gameObject.SetActive(true);
+            }
+            else
+            {
+                base.OnSelect(eventData);
+            }
+            this.OnSelectedEnter?.Invoke();
+        }
+        public override void OnDeselect(BaseEventData eventData)
+        {
+            if (Selected != null)
+            {
+                this.Selected.gameObject.SetActive(false);
+            }
+            else
+            {
+                base.OnDeselect(eventData);
+            }
+            this.OnSelectedExit?.Invoke();
+        }
+        private void OnInteractableEnabled()
+        {
+            var Texts = this.GetComponentsInChildren<TextMeshProUGUI>();
+            foreach (TextMeshProUGUI text in Texts)
+            {
+                text.color = Color.white;
+            }
+        }
+
+        private void OnInteractableDisabled()
+        {
+            var Texts = this.GetComponentsInChildren<TextMeshProUGUI>();
+            foreach (TextMeshProUGUI text in Texts)
+            {
+                text.color = Color.grey;
+            }
+        }
+
+        public void Init(System.Action OnSelectedEnter, System.Action OnSelectedExit)
         {
             image = this.GetComponentInChildren<UnityEngine.UI.Image>();
-            text = this.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+            Selected = this.transform.Find("Selected");
+            this.targetGraphic = image;
+            this.OnSelectedEnter = OnSelectedEnter;
+            this.OnSelectedExit = OnSelectedExit;   
+        }
+
+        public void Interact()
+        {
+            if(this.Interactable)
+            {
+                this.onClick.Invoke();
+            }
         }
     }
 

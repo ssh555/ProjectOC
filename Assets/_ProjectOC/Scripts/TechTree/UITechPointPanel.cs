@@ -8,19 +8,18 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
-using UnityEngine.Purchasing;
 using ML.Engine.InventorySystem;
 using ML.Engine.Timer;
 using ML.Engine.InventorySystem.CompositeSystem;
-using BehaviorDesigner.Runtime.Tasks.Movement;
-using UnityEngine.Audio;
 using ML.Engine.Manager;
 using ML.Engine.Input;
 using UnityEngine.InputSystem;
+using static ProjectOC.TechTree.TechTreeManager;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace ProjectOC.TechTree.UI
 {
-    public sealed class UITechPointPanel : UIBasePanel, ITickComponent
+    public sealed class UITechPointPanel : UIBasePanel<TPPanel>, ITickComponent
     {
         #region 静态数据初始化
         private static bool IsInit = false;
@@ -33,7 +32,7 @@ namespace ProjectOC.TechTree.UI
 
             category = ((TechPointCategory[])Enum.GetValues(typeof(TechPointCategory))).Where(c => (int)c > 0).ToArray();
             RefreshCategory(0);
-
+            IsInit = true;
         }
 
         private static TechPointCategory[] category;
@@ -190,15 +189,9 @@ namespace ProjectOC.TechTree.UI
         #endregion
 
         #region Unity
-        private void Awake()
+        protected override void Awake()
         {
-            //KeyTips
-            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
-            foreach (var item in UIKeyTipComponents)
-            {
-                item.InitData();
-                uiKeyTipDic.Add(item.InputActionName, item);
-            }
+            base.Awake();
 
             topTitle = this.transform.Find("TopPanel").GetComponentInChildren<TextMeshProUGUI>();
 
@@ -246,12 +239,13 @@ namespace ProjectOC.TechTree.UI
             #endregion
         }
 
-        private void Start()
+        protected override void Start()
         {
-            this.enabled = false;
+            base.Start();
         }
 
-        private void OnDestroy()
+
+        protected override void OnDestroy()
         {
             ClearTemp();
             (this as ITickComponent).DisposeTick();
@@ -301,11 +295,9 @@ namespace ProjectOC.TechTree.UI
         public override void OnEnter()
         {
             InitStaticData();
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
             base.OnEnter();
-            UikeyTipIsInit = false;
             ProjectOC.Input.InputManager.PlayerInput.TechTree.Enable();
-            Refresh();
+            //Refresh();
 
             //// to-delete
             //for (int i = 0; i < 99; ++i)
@@ -320,15 +312,12 @@ namespace ProjectOC.TechTree.UI
         public override void OnPause()
         {
             base.OnPause();
-            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
             ProjectOC.Input.InputManager.PlayerInput.TechTree.Disable();
         }
 
         public override void OnRecovery()
         {
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
             base.OnRecovery();
-            UikeyTipIsInit = false;
             ProjectOC.Input.InputManager.PlayerInput.TechTree.Enable();
             Refresh();
         }
@@ -336,9 +325,21 @@ namespace ProjectOC.TechTree.UI
         public override void OnExit()
         {
             base.OnExit();
-            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
             ProjectOC.Input.InputManager.PlayerInput.TechTree.Disable();
         }
+
+        protected override void Enter()
+        {
+            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
+            base.Enter();
+        }
+
+        protected override void Exit()
+        {
+            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
+            base.Exit();
+        }
+
         #endregion
 
         #region Internal
@@ -392,8 +393,6 @@ namespace ProjectOC.TechTree.UI
 
         private int lastCIndex;
 
-        private Dictionary<string, UIKeyTipComponent> uiKeyTipDic = new Dictionary<string, UIKeyTipComponent>();
-        private bool UikeyTipIsInit;
         private InputManager inputManager => GameManager.Instance.InputManager;
 
         private void ClearTempOnAlterTP()
@@ -409,7 +408,6 @@ namespace ProjectOC.TechTree.UI
             }
             TPUnlockGO.Clear();
 
-            uiKeyTipDic = null;
         }
 
         private void ClearTemp()
@@ -465,34 +463,9 @@ namespace ProjectOC.TechTree.UI
 
         public override void Refresh()
         {
-
-
-            if (UikeyTipIsInit == false)
+            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
             {
-                KeyTip[] keyTips = inputManager.ExportKeyTipValues(TechTreeManager.Instance.TPPanelTextContent_Main);
-                foreach (var keyTip in keyTips)
-                {
-                    InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
-                    inputManager.GetInputActionBindText(inputAction);
-                    if (uiKeyTipDic.ContainsKey(keyTip.keyname))
-                    {
-                        UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
-                        if (uIKeyTipComponent.uiKeyTip.keytip != null) 
-                        {
-                            uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
-                        }
-                        if (uIKeyTipComponent.uiKeyTip.description != null) 
-                        {
-                            uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
-                        }
-                        
-                    }
-                    else
-                    {
-                        //Debug.Log("keyTip.keyname " + keyTip.keyname);
-                    }
-                }
-                UikeyTipIsInit = true;
+                return;
             }
 
             if (lastCIndex != cIndex)
@@ -513,7 +486,7 @@ namespace ProjectOC.TechTree.UI
                 ClearTemp();
             }
 
-            topTitle.text = TechTreeManager.Instance.TPPanelTextContent_Main.toptitle.GetText();
+            topTitle.text = PanelTextContent.toptitle.GetText();
 
             #region CategoryPanel
 
@@ -527,6 +500,7 @@ namespace ProjectOC.TechTree.UI
 
                     var sprite = TechTreeManager.Instance.GetTPCategorySprite(c);
                     obj.GetComponentInChildren<Image>().sprite = sprite;
+                    
                     tempSprite.Add(sprite);
                 }
 
@@ -695,7 +669,7 @@ namespace ProjectOC.TechTree.UI
             // Description
             this.TPDescription.text = TM.GetTPDescription(CurrentID);
             // DecipherTip
-            this.TPDecipherTip.text = tpStatus == 1 ? TM.TPPanelTextContent_Main.unlockedtitletip.GetText() : TM.TPPanelTextContent_Main.lockedtitletip.GetText();
+            this.TPDecipherTip.text = tpStatus == 1 ? PanelTextContent.unlockedtitletip.GetText() : PanelTextContent.lockedtitletip.GetText();
 
             // 可解锁项
             foreach(var id in TM.GetTPCanUnlockedID(CurrentID))
@@ -731,7 +705,7 @@ namespace ProjectOC.TechTree.UI
                 this.TPKT_Decipher.Find("Mask").GetComponent<Image>().gameObject.SetActive(!canDecipher);
 
                 // 时间消耗
-                this.TPTimeCost.text = TM.TPPanelTextContent_Main.timecosttip + TM.GetTPTimeCost(CurrentID).ToString() + "s";
+                this.TPTimeCost.text = PanelTextContent.timecosttip + TM.GetTPTimeCost(CurrentID).ToString() + "s";
 
                 // Item 消耗
                 foreach(var f in TM.GetTPItemCost(CurrentID))
@@ -744,6 +718,7 @@ namespace ProjectOC.TechTree.UI
 
                         // Image
                         var s = ItemManager.Instance.GetItemSprite(f.id);
+                        s.name = s.name.Replace("(Clone)", "");
                         tempSprite.Add(s);
                         item.transform.Find("Image").GetComponent<Image>().sprite = s;
                     }
@@ -898,6 +873,20 @@ namespace ProjectOC.TechTree.UI
             obj.GetComponentInChildren<Image>().color = Color.white;
         }
         #endregion
+        protected override void OnLoadJsonAssetComplete(TPPanel datas)
+        {
+            foreach (var tip in datas.category)
+            {
+                TechTreeManager.Instance.CategoryDict.Add(tip.name, tip);
+            }
+
+        }
+        protected override void InitTextContentPathData()
+        {
+            this.abpath = "OC/Json/TextContent/TechTree";
+            this.abname = "TechPointPanel";
+            this.description = "TechPointPanel数据加载完成";
+        }
 
         #endregion
     }

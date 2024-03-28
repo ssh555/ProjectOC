@@ -24,6 +24,7 @@ namespace ProjectOC.ProNodeNS
     /// <summary>
     /// 生产节点管理器
     /// </summary>
+    [System.Serializable]
     public sealed class ProNodeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         #region Load And Data

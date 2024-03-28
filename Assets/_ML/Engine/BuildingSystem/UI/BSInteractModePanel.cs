@@ -18,8 +18,8 @@ namespace ML.Engine.BuildingSystem.UI
         #region Property|Field
         private BuildingManager BM => BuildingManager.Instance;
         private BuildingPlacer.BuildingPlacer Placer => BM.Placer;
-        private ProjectOC.Player.PlayerCharacter Player => GameObject.Find("PlayerCharacter")?.GetComponent<ProjectOC.Player.PlayerCharacter>();
-
+        private ProjectOC.Player.PlayerCharacter Player => GameObject.Find("PlayerCharacter(Clone)")?.GetComponent<ProjectOC.Player.PlayerCharacter>();
+        private MonoBuildingManager monoBM;
         #region KeyTip
         private UIKeyTip keycom;
         private UIKeyTip movebuild;
@@ -46,10 +46,10 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region Unity
-        private void Awake()
+        protected override void Awake()
         {
             this.enabled = false;
-
+            monoBM = ML.Engine.Manager.GameManager.Instance.GetLocalManager<MonoBuildingManager>();
             Transform keytip = this.transform.Find("BPartInteractTip");
 
             keycom = new UIKeyTip();
@@ -57,28 +57,28 @@ namespace ML.Engine.BuildingSystem.UI
             keycom.img = keycom.root.Find("Image").GetComponent<Image>();
             keycom.keytip = keycom.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             keycom.description = keycom.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            keycom.ReWrite(MonoBuildingManager.Instance.KeyTipDict["keycom"]);
+            keycom.ReWrite(monoBM.KeyTipDict["keycom"]);
 
             movebuild = new UIKeyTip();
             movebuild.root = keytip.Find("KT_MoveBuild") as RectTransform;
             movebuild.img = movebuild.root.Find("Image").GetComponent<Image>();
             movebuild.keytip = movebuild.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             movebuild.description = movebuild.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            movebuild.ReWrite(MonoBuildingManager.Instance.KeyTipDict["movebuild"]);
+            movebuild.ReWrite(monoBM.KeyTipDict["movebuild"]);
 
             destroybuild = new UIKeyTip();
             destroybuild.root = keytip.Find("KT_DestroyBuild") as RectTransform;
             destroybuild.img = destroybuild.root.Find("Image").GetComponent<Image>();
             destroybuild.keytip = destroybuild.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             destroybuild.description = destroybuild.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            destroybuild.ReWrite(MonoBuildingManager.Instance.KeyTipDict["destroybuild"]);
+            destroybuild.ReWrite(monoBM.KeyTipDict["destroybuild"]);
 
             altermat = new UIKeyTip();
             altermat.root = keytip.Find("KT_AlterMat") as RectTransform;
             altermat.img = altermat.root.Find("Image").GetComponent<Image>();
             altermat.keytip = altermat.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             altermat.description = altermat.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            altermat.ReWrite(MonoBuildingManager.Instance.KeyTipDict["altermat"]);
+            altermat.ReWrite(monoBM.KeyTipDict["altermat"]);
 
             keytip = this.transform.Find("InteractTip");
             alterbpart = new UIKeyTip();
@@ -86,21 +86,21 @@ namespace ML.Engine.BuildingSystem.UI
             alterbpart.img = alterbpart.root.Find("Image").GetComponent<Image>();
             alterbpart.keytip = alterbpart.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             alterbpart.description = alterbpart.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            alterbpart.ReWrite(MonoBuildingManager.Instance.KeyTipDict["alterbpart"]);
+            alterbpart.ReWrite(monoBM.KeyTipDict["alterbpart"]);
 
             selectbpart = new UIKeyTip();
             selectbpart.root = keytip.Find("KT_SelectBPart") as RectTransform;
             selectbpart.img = selectbpart.root.Find("Image").GetComponent<Image>();
             selectbpart.keytip = selectbpart.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             selectbpart.description = selectbpart.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            selectbpart.ReWrite(MonoBuildingManager.Instance.KeyTipDict["selectbpart"]);
+            selectbpart.ReWrite(monoBM.KeyTipDict["selectbpart"]);
 
             back = new UIKeyTip();
             back.root = keytip.Find("KT_Back") as RectTransform;
             back.img = back.root.Find("Image").GetComponent<Image>();
             back.keytip = back.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             back.description = back.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            back.ReWrite(MonoBuildingManager.Instance.KeyTipDict["back"]);
+            back.ReWrite(monoBM.KeyTipDict["back"]);
 
         }
 
@@ -110,7 +110,6 @@ namespace ML.Engine.BuildingSystem.UI
         public override void OnEnter()
         {
             base.OnEnter();
-            this.RegisterInput();
             BM.Placer.OnDestroySelectedBPart += OnDestroySelectedBPart;
         }
 
@@ -118,36 +117,27 @@ namespace ML.Engine.BuildingSystem.UI
         public override void OnPause()
         {
             base.OnPause();
-            this.UnregisterInput();
             BM.Placer.OnDestroySelectedBPart -= OnDestroySelectedBPart;
         }
 
         public override void OnRecovery()
         {
             base.OnRecovery();
-            this.RegisterInput();
             BM.Placer.OnDestroySelectedBPart += OnDestroySelectedBPart;
         }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-            this.UnregisterInput();
-        }
-
         public override void Refresh()
         {
-            keycom.ReWrite(MonoBuildingManager.Instance.KeyTipDict["keycom"]);
-            movebuild.ReWrite(MonoBuildingManager.Instance.KeyTipDict["movebuild"]);
-            destroybuild.ReWrite(MonoBuildingManager.Instance.KeyTipDict["destroybuild"]);
-            altermat.ReWrite(MonoBuildingManager.Instance.KeyTipDict["altermat"]);
-            selectbpart.ReWrite(MonoBuildingManager.Instance.KeyTipDict["selectbpart"]);
-            back.ReWrite(MonoBuildingManager.Instance.KeyTipDict["back"]);
+            keycom.ReWrite(monoBM.KeyTipDict["keycom"]);
+            movebuild.ReWrite(monoBM.KeyTipDict["movebuild"]);
+            destroybuild.ReWrite(monoBM.KeyTipDict["destroybuild"]);
+            altermat.ReWrite(monoBM.KeyTipDict["altermat"]);
+            selectbpart.ReWrite(monoBM.KeyTipDict["selectbpart"]);
+            back.ReWrite(monoBM.KeyTipDict["back"]);
         }
         #endregion
 
         #region KeyFunction
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
             this.Placer.BInput.Build.Disable();
 
@@ -164,7 +154,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.backInputAction.performed -= Placer_ExitBuild;
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
             this.Placer.BInput.Build.Enable();
 
@@ -185,7 +175,7 @@ namespace ML.Engine.BuildingSystem.UI
         {
             if (this.Placer.SelectedPartInstance != null)
             {
-                MonoBuildingManager.Instance.PushPanel<BSInteractMode_KeyComPanel>();
+                monoBM.PushPanel<BSInteractMode_KeyComPanel>();
             }
         }
 
@@ -193,7 +183,7 @@ namespace ML.Engine.BuildingSystem.UI
         {
             if (this.Placer.SelectedPartInstance != null)
             {
-                MonoBuildingManager.Instance.PushPanel<BSAppearancePanel>();
+                monoBM.PushPanel<BSAppearancePanel>();
             }
         }
 
@@ -201,7 +191,7 @@ namespace ML.Engine.BuildingSystem.UI
         {
             if (this.Placer.SelectedPartInstance != null && this.Placer.SelectedPartInstance.CanEnterEditMode())
             {
-                MonoBuildingManager.Instance.PushPanel<BSEditModePanel>();
+                monoBM.PushPanel<BSEditModePanel>();
             }
         }
 
@@ -224,12 +214,12 @@ namespace ML.Engine.BuildingSystem.UI
 
         private void Placer_EnterPlace(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            MonoBuildingManager.Instance.PushPanel<BSSelectBPartPanel>();
+            monoBM.PushPanel<BSSelectBPartPanel>();
         }
 
         private void Placer_ExitBuild(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            //MonoBuildingManager.Instance.PopPanel();
+            //monoBM.PopPanel();
             this.Placer.Mode = BuildingMode.None;
         }
 

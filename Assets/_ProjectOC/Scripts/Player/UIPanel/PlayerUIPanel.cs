@@ -1,45 +1,88 @@
 using ML.Engine.BuildingSystem;
-using ML.Engine.InventorySystem;
+using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
-using Newtonsoft.Json;
 using ProjectOC.InventorySystem.UI;
+using ProjectOC.ManagerNS;
 using ProjectOC.ResonanceWheelSystem.UI;
-using ProjectOC.StoreNS;
 using ProjectOC.TechTree.UI;
-using System.Collections;
+using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.U2D;
+using UnityEngine.UI;
+using static ProjectOC.Player.UI.PlayerUIPanel;
 using static UnityEngine.Rendering.DebugUI;
+
+
 
 namespace ProjectOC.Player.UI
 {
-    public class PlayerUIPanel : UIBasePanel, ML.Engine.Timer.ITickComponent
+    public class PlayerUIPanel : ML.Engine.UI.UIBasePanel<PlayerUIPanelStruct>
     {
-        public PlayerCharacter player;
-
-        private IUISelected CurSelected;
-
-        private SelectedButton EnterBuildBtn;
-        private SelectedButton EnterTechTreeBtn;
-        private SelectedButton EnterInventoryBtn;
-        private SelectedButton EnterBeastPanelBtn;
-        private SelectedButton CreateWorkerBtn;
-
-        private BuildingManager BM => BuildingManager.Instance;
-
-        public int tickPriority { get; set; }
-        public int fixedTickPriority { get; set; }
-        public int lateTickPriority { get; set; }
-
+        #region Unity
         public bool IsInit = false;
-        private void Start()
-        {
-            InitUITextContents();
 
-            var btnList = this.transform.Find("ButtonList");
-            this.EnterBuildBtn = btnList.Find("EnterBuild").GetComponent<SelectedButton>();
-            this.EnterBuildBtn.OnInteract += () =>
+        protected override void Awake()
+        {
+            base.Awake();
+            btnList = this.transform.Find("ButtonList");
+        }
+        protected override void Start()
+        {
+            IsInit = true;
+            Refresh();
+            base.Start();
+        }
+        private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
+        private List<AsyncOperationHandle<GameObject>> goHandle = new List<AsyncOperationHandle<GameObject>>();
+
+        protected override void OnDestroy()
+        {
+            foreach (var handle in goHandle)
+            {
+                GM.ABResourceManager.ReleaseInstance(handle);
+            }
+        }
+        #endregion
+
+        #region Override
+
+        public override void OnEnter()
+        {
+            UIBtnList = new UIBtnList(parent: btnList);
+            base.OnEnter();
+        }
+
+        #endregion
+
+        #region Internal
+        protected override void UnregisterInput()
+        {
+            this.UIBtnList.RemoveAllListener();
+
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Disable();
+
+            //切换按钮
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUI.AlterSelected.started -= this.UIBtnList.SwichBtn_started;
+
+            //确认
+            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= this.UIBtnList.Confirm_performed;
+
+            // 返回
+            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
+        }
+
+        protected override void RegisterInput()
+        {
+
+            //EnterBuild
+            this.UIBtnList.SetBtnAction("EnterBuild",
+            () =>
             {
                 if (ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.WasPressedThisFrame() && BM.Mode == BuildingMode.None)
                 {
@@ -49,28 +92,28 @@ namespace ProjectOC.Player.UI
                     }
                     else
                     {
-                        Debug.LogWarning("��ǰ����������Ϊ0���޷����뽨��ģʽ!");
+                        Debug.LogWarning("当前建筑物数量为0，无法进入建造模式!");
                     }
                 }
-            };
-
-
-
-            this.EnterTechTreeBtn = btnList.Find("EnterTechTree").GetComponent<SelectedButton>();
-            this.EnterTechTreeBtn.OnInteract += () =>
+            }
+            );
+            //EnterTechTree
+            this.UIBtnList.SetBtnAction("EnterTechTree",
+            () =>
             {
                 ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/TechPointPanel.prefab", this.transform.parent, true).Completed += (handle) =>
-                 {
-                     var panel = handle.Result.GetComponent<UITechPointPanel>();
-                     panel.transform.localScale = Vector3.one;
-                     panel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
-                     panel.inventory = this.player.Inventory;
-                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
-                 };
-            };
-
-            this.EnterInventoryBtn = btnList.Find("EnterInventory").GetComponent<SelectedButton>();
-            this.EnterInventoryBtn.OnInteract += () =>
+                {
+                    var panel = handle.Result.GetComponent<UITechPointPanel>();
+                    panel.transform.localScale = Vector3.one;
+                    panel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+                    panel.inventory = this.player.Inventory;
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
+                };
+            }
+            );
+            //EnterInventory
+            this.UIBtnList.SetBtnAction("EnterInventory",
+            () =>
             {
                 ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIInfiniteInventoryPanel.prefab", this.transform.parent, true).Completed += (handle) =>
                 {
@@ -80,10 +123,11 @@ namespace ProjectOC.Player.UI
                     panel.inventory = this.player.Inventory as ML.Engine.InventorySystem.InfiniteInventory;
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
                 };
-            };
-
-            this.EnterBeastPanelBtn = btnList.Find("EnterBeastPanel").GetComponent<SelectedButton>();
-            this.EnterBeastPanelBtn.OnInteract += () =>
+            }
+            );
+            //EnterBeastPanel
+            this.UIBtnList.SetBtnAction("EnterBeastPanel",
+            () =>
             {
                 ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/BeastPanel.prefab", this.transform.parent, true).Completed += (handle) =>
                 {
@@ -92,136 +136,73 @@ namespace ProjectOC.Player.UI
                     panel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
                 };
-            };
-
-
-            this.CreateWorkerBtn = btnList.Find("CreateWorker").GetComponent<SelectedButton>();
-            this.CreateWorkerBtn.OnInteract += () =>
+            }
+            );
+            //CreateWorker
+            this.UIBtnList.SetBtnAction("CreateWorker",
+            () =>
             {
                 ProjectOC.ManagerNS.LocalGameManager.Instance.WorkerManager.SpawnWorker(player.transform.position, player.transform.rotation);
-            };
-
-
-            var btns = btnList.GetComponentsInChildren<SelectedButton>();
-
-            for (int i = 0; i < btns.Length; ++i)
-            {
-                int last = (i - 1 + btns.Length) % btns.Length;
-                int next = (i + 1 + btns.Length) % btns.Length;
-
-                btns[i].UpUI = btns[last];
-                btns[i].DownUI = btns[next];
-
-
-
             }
+            );
 
-            foreach (var btn in btns)
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Enable();
+
+
+            //切换按钮
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUI.AlterSelected.started += this.UIBtnList.SwichBtn_started;
+
+            //确认
+            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += this.UIBtnList.Confirm_performed;
+
+            // 返回
+            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
+
+        }
+
+        private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            GameManager.Instance.UIManager.PopPanel();
+        }
+        #endregion
+
+        #region UI对象引用
+        public PlayerCharacter player;
+        private BuildingManager BM => BuildingManager.Instance;
+        #endregion
+
+        #region Resource
+        #region TextContent
+        [System.Serializable]
+        public struct PlayerUIPanelStruct
+        {
+            public TextTip[] Btns;
+        }
+        protected override void OnLoadJsonAssetComplete(PlayerUIPanelStruct datas)
+        {
+            InitBtnData(datas);
+            
+        }
+
+        protected override void InitTextContentPathData()
+        {
+            this.abpath = "OC/Json/TextContent/PlayerUIPanel";
+            this.abname = "PlayerUIPanel";
+            this.description = "PlayerUIPanel数据加载完成";
+        }
+
+        private Transform btnList;
+        private UIBtnList UIBtnList;
+        private void InitBtnData(PlayerUIPanelStruct datas)
+        {
+            foreach (var tt in datas.Btns)
             {
-                btn.OnSelectedEnter += () => { btn.image.color = Color.red; };
-                btn.OnSelectedExit += () => { btn.image.color = Color.white; };
-            }
-
-            this.CurSelected = EnterBuildBtn;
-            this.CurSelected.SelectedEnter();
-
-            IsInit = true;
-
-            Refresh();
-        }
-
-        public void Tick(float deltatime)
-        {
-            if(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.WasPressedThisFrame())
-            {
-                this.CurSelected.Interact();
-            }
-            if(Input.InputManager.PlayerInput.PlayerUI.AlterSelected.WasPressedThisFrame())
-            {
-                var vec2 = Input.InputManager.PlayerInput.PlayerUI.AlterSelected.ReadValue<Vector2>();
-                if(vec2.y > 0.1f)
-                {
-                    this.CurSelected.SelectedExit();
-                    this.CurSelected = this.CurSelected.UpUI;
-                    this.CurSelected.SelectedEnter();
-                }
-                else if(vec2.y < -0.1f)
-                {
-                    this.CurSelected.SelectedExit();
-                    this.CurSelected = this.CurSelected.DownUI;
-                    this.CurSelected.SelectedEnter();
-                }
-            }
-            if (ML.Engine.Input.InputManager.Instance.Common.Common.Back.WasPressedThisFrame())
-            {
-                ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
-            }
-        }
-
-        private void OnDestroy()
-        {
-            (this as ML.Engine.Timer.ITickComponent).DisposeTick();
-        }
-
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            Input.InputManager.PlayerInput.PlayerUI.Enable();
-            Refresh();
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
-        }
-
-        public override void OnPause()
-        {
-            base.OnPause();
-            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
-            Input.InputManager.PlayerInput.PlayerUI.Disable();
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
-            Input.InputManager.PlayerInput.PlayerUI.Enable();
-            Refresh();
-        }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
-            Input.InputManager.PlayerInput.PlayerUI.Disable();
-        }
-
-        public Dictionary<string, TextTip> TipDict = new Dictionary<string, TextTip>();
-
-        public ML.Engine.ABResources.ABJsonAssetProcessor<ML.Engine.TextContent.TextTip[]> ABJAProcessor;
-
-        public void InitUITextContents()
-        {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ML.Engine.TextContent.TextTip[]>("OC/Json/TextContent/PlayerUIPanel", "PlayerUIPanel", (datas) =>
-            {
-                foreach (var tip in datas)
-                {
-                    TipDict.Add(tip.name, tip);
-                }
-                this.Refresh();
-                this.enabled = false;
-            }, "PlayerUIPanel");
-            ABJAProcessor.StartLoadJsonAssetData();
-        }
-
-        public override void Refresh()
-        {
-            if(ABJAProcessor != null && ABJAProcessor.IsLoaded && IsInit)
-            {
-                this.EnterBuildBtn.text.text = TipDict["enterbuild"].GetDescription();
-                this.EnterTechTreeBtn.text.text = TipDict["techtree"].GetDescription();
-                this.EnterInventoryBtn.text.text = TipDict["inventory"].GetDescription();
-                this.EnterBeastPanelBtn.text.text = TipDict["beastpanel"].GetDescription();
-                this.CreateWorkerBtn.text.text = TipDict["worker"].GetDescription();
+                this.UIBtnList.SetBtnText(tt.name, tt.description.GetText());
             }
         }
+
+        #endregion
+        #endregion
     }
-}
 
+}

@@ -1,37 +1,39 @@
-[
-    {
-        "name" : "enterbuild",
-        "description" : {
-            "Chinese" : "建造模式",
-            "English" : "EntetBuild"
+{
+    "Btns" : [
+        {
+            "name" : "EnterBuild",
+            "description" : {
+                "Chinese" : "建造模式",
+                "English" : "EntetBuild"
+            }
+        },
+        {
+            "name" : "EnterTechTree",
+            "description" : {
+                "Chinese" : "科技树",
+                "English" : "TechTree"
+            }
+        },
+        {
+            "name" : "EnterInventory",
+            "description" : {
+                "Chinese" : "背包",
+                "English" : "Inventory"
+            }
+        },
+        {
+            "name" : "EnterBeastPanel",
+            "description" : {
+                "Chinese" : "查看隐兽",
+                "English" : "View Hidden Beasts"
+            }
+        },
+        {
+            "name" : "CreateWorker",
+            "description" : {
+                "Chinese" : "刁民",
+                "English" : "Worker"
+            }
         }
-    },
-    {
-        "name" : "techtree",
-        "description" : {
-            "Chinese" : "科技树",
-            "English" : "TechTree"
-        }
-    },
-    {
-        "name" : "inventory",
-        "description" : {
-            "Chinese" : "背包",
-            "English" : "Inventory"
-        }
-    },
-    {
-        "name" : "beastpanel",
-        "description" : {
-            "Chinese" : "查看隐兽",
-            "English" : "View Hidden Beasts"
-        }
-    },
-    {
-        "name" : "worker",
-        "description" : {
-            "Chinese" : "刁民",
-            "English" : "Worker"
-        }
-    }
-]
+    ]
+}

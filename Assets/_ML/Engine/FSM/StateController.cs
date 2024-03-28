@@ -58,7 +58,10 @@ namespace ML.Engine.FSM
         public void Stop()
         {
             this.isRunning = false;
-            this.Machine.ResetState();
+            //TODO Machine is null
+            this.Machine?.ResetState();
+            Manager.GameManager.Instance.TickManager.UnregisterTick(this);
+            Manager.GameManager.Instance.TickManager.UnregisterLateTick(this);
         }
 
         /// <summary>
@@ -68,6 +71,8 @@ namespace ML.Engine.FSM
         {
             this.isRunning = true;
             Machine.CurrentState.InvokeEnterAction(Machine, null);
+            Manager.GameManager.Instance.TickManager.RegisterTick(tickPriority, this);
+            Manager.GameManager.Instance.TickManager.RegisterLateTick(lateTickPriority, this);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,9 @@ using ProjectOC.Player.Terrain;
 using UnityEngine.InputSystem;
 using ML.Engine.InteractSystem;
 using ML.Engine.UI;
+using UnityEngine.InputSystem.Controls;
+using UnityEngine.InputSystem.Layouts;
+using UnityEngine.InputSystem.Utilities;
 
 namespace ProjectOC.Player
 {
@@ -78,8 +82,7 @@ namespace ProjectOC.Player
             this.playerViewer = this.transform.Find("PlayerViewer");
             this.playerModel = this.transform.Find("PlayerModel");
             this.playerTerrainDetect = this.transform.Find("PlayerTerrainDetect");
-
-
+            this.InternalInit();
         }
 
         /// <summary>
@@ -88,25 +91,26 @@ namespace ProjectOC.Player
         private void Start()
         {
             this.moveStateParams.RuntimeInit(this.playerInputActions.Acc, this.playerInputActions.Crouch);
-            this.InternalInit();
+            
         }
-
         private void InternalInit()
         {
             this.playerModelStateController = new PlayerModelStateController(0, this.playerModel.GetComponentInChildren<Animator>(), this.GetComponent<Animator>(), this);
             
+            this.playerTerrainDetect.gameObject.AddComponent<PlayerTerrainDetect>().SetMoveSetting(this.moveAbility.moveSetting);
+
             if(this.thirdPersonRotateComp == null)
             {
                 this.thirdPersonRotateComp = new ThirdPersonRotateComp();
             }
             this.thirdPersonRotateComp.RegisterTick(0);
-            this.thirdPersonRotateComp.RuntimeSetMouseInput(this.playerInputActions.MouseX, this.playerInputActions.MouseY);
+            this.thirdPersonRotateComp.RuntimeSetMouseInput(this.playerInputActions.MouseX, this.playerInputActions.MouseY,this.playerInputActions.MouseScroll);
 
-            this.playerTerrainDetect.gameObject.AddComponent<PlayerTerrainDetect>().SetMoveSetting(this.moveAbility.moveSetting);
 
             this.moveStateController = new StateController(0);
             this.moveStateMachine = new PlayerMoveStateMachine(this.moveAbility.moveSetting, this.moveStateParams);
             this.moveStateMachine.SetMoveAnimator(this.GetComponent<Animator>());
+
             this.moveStateController.SetStateMachine(moveStateMachine);
 
             this.interactComponent = this.GetComponentInChildren<ML.Engine.InteractSystem.InteractComponent>();
@@ -125,18 +129,6 @@ namespace ProjectOC.Player
             this.Inventory = new ML.Engine.InventorySystem.InfiniteInventory(this.transform, 999);
 
 
-
-            StartCoroutine(__DelayInit__());
-
-            //this.enabled = false;
-        }
-
-        private IEnumerator __DelayInit__()
-        {
-            while(ML.Engine.BuildingSystem.BuildingManager.Instance == null || ML.Engine.BuildingSystem.BuildingManager.Instance.Placer == null)
-            {
-                yield return null;
-            }
             // 进入建造系统要可移动
             ML.Engine.BuildingSystem.BuildingManager.Instance.Placer.OnBuildingModeEnter += () =>
             {
@@ -148,11 +140,8 @@ namespace ProjectOC.Player
                 // to-do : 待优化
                 this.GetComponentInChildren<InteractComponent>().Enable();
             };
-            while(!ML.Engine.InventorySystem.ItemManager.Instance.IsLoadOvered)
-            {
-                yield return null;
-            }
 
+            //StartCoroutine(__DelayInit__());
 
             this.enabled = false;
         }
@@ -161,6 +150,7 @@ namespace ProjectOC.Player
         {
             (this.thirdPersonRotateComp as ML.Engine.Timer.ITickComponent).DisposeTick();
             (this as ML.Engine.Timer.ITickComponent).DisposeTick();
+            this.playerModelStateController.Stop();
         }
         #endregion
 
@@ -215,7 +205,7 @@ namespace ProjectOC.Player
             // 仅测试用
             foreach (var id in ML.Engine.InventorySystem.ItemManager.Instance.GetAllItemID())//ML.Engine.InventorySystem.ItemManager.Instance.GetCanStack(id) ? UnityEngine.Random.Range(1, 999) : 1
             {
-                ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(id, 999).ForEach(item => Inventory.AddItem(item));
+                ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(id, 500).ForEach(item => Inventory.AddItem(item));
             }
         }
 
@@ -226,5 +216,14 @@ namespace ProjectOC.Player
             ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(id, amount).ForEach(item => Inventory.AddItem(item));
         }
         #endregion
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            GetComponent<Rigidbody>().mass = moveAbility.moveSetting.Mass;
+            CharacterController cc = GetComponent<CharacterController>();
+            cc.stepOffset = moveAbility.moveSetting.MaxStepHeight;
+            cc.slopeLimit = moveAbility.moveSetting.WalkerbleFloorAngle;
+        }
+#endif
     }
 }

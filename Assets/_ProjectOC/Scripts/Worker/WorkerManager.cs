@@ -52,6 +52,19 @@ namespace ProjectOC.WorkerNS
             return this.Workers.ToList();
         }
 
+        public void DeleteAllWorker()
+        {
+            foreach (Worker worker in Workers)
+            {
+                if (worker != null)
+                {
+                    ML.Engine.Manager.GameManager.DestroyObj(worker.gameObject);
+                    ML.Engine.Manager.GameManager.Instance.ABResourceManager.ReleaseInstance(worker.gameObject);
+                }
+            }
+            this.Workers.Clear();
+        }
+
         public bool DeleteWorker(Worker worker)
         {
             ML.Engine.Manager.GameManager.DestroyObj(worker.gameObject);
@@ -84,6 +97,8 @@ namespace ProjectOC.WorkerNS
         }
         public AsyncOperationHandle<GameObject> SpawnWorker(Vector3 pos, Quaternion rot, string name = "Worker")
         {
+            //TODO 
+            name = "Worker";
             var handle = GetObject(name, pos, rot);
             handle.Completed += (asHandle) =>
             {
@@ -138,7 +153,7 @@ namespace ProjectOC.WorkerNS
         /// <returns></returns>
         public AsyncOperationHandle<GameObject> GetObject(string name, Vector3 pos, Quaternion rot)
         {
-            return GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjPath + name +".prefab", pos, rot);
+            return GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjPath +"/"+ name +".prefab", pos, rot);
         }
     }
 }

@@ -3,8 +3,8 @@
         {
             "name" : "None",
             "description" : {
-                "Chinese" : "空",
-                "English" : "None"
+                "Chinese" : "生产节点",
+                "English" : "ProNode"
             }
         },
         {
@@ -152,18 +152,27 @@
         "Chinese" : "空",
         "English" : "Empty"
     },
-    "textUrgency" : {
-        "Chinese" : "紧急",
-        "English" : "Urgency"
+    "textLack" : {
+        "Chinese" : "空缺",
+        "English" : "Lack"
     },
-    "textNormal" : {
-        "Chinese" : "常规",
-        "English" : "Normal"
-    },
-    "textAlternative" : {
-        "Chinese" : "备选",
-        "English" : "Alternative"
-    },
+
+    "TransportPriority":[
+            {
+                "Chinese" : "紧急",
+                "English" : "Urgency"
+            },
+            {
+                "Chinese" : "常规",
+                "English" : "Normal"
+            },
+            {
+                "Chinese" : "备选",
+                "English" : "Alternative"
+            }
+    ],
+
+    
     "textStateVacancy" : {
         "Chinese" : "空置",
         "English" : "Vacancy"
@@ -176,35 +185,35 @@
         "Chinese" : "生产",
         "English" : "Production"
     },
-    "textWorkerStateWork" : {
-        "Chinese" : "工作",
-        "English" : "Work"
-    },
-    "textWorkerStateTransport" : {
-        "Chinese" : "搬运",
-        "English" : "Transport"
-    },
-    "textWorkerStateFish" : {
-        "Chinese" : "摸鱼",
-        "English" : "Fish"
-    },
-    "textWorkerStateRelax" : {
-        "Chinese" : "休息",
-        "English" : "Relax"
-    },
-    "textWorkerOnDuty" : {
+    "workerStatus":[
+
+        {
+            "Chinese" : "摸鱼",
+            "English" : "Fish"
+        },
+        {
+            "Chinese" : "休息",
+            "English" : "Relax"
+        },
+        {
+            "Chinese" : "工作",
+            "English" : "Work"
+        }
+    ],
+
+    "textOnDuty" : {
         "Chinese" : "在岗",
         "English" : "OnDuty"
     },
-    "textPrefixTime" : {
+    "textTime" : {
         "Chinese" : "时间",
         "English" : "Time"
     },
-    "textPrefixEff" : {
+    "textEff" : {
         "Chinese" : "效率",
         "English" : "Eff"
     },
-    "text_LvDesc" : {
+    "textLvDesc" : {
         "Chinese" : "生产效率: ",
         "English" : "Eff: "
     },
@@ -233,12 +242,34 @@
     "ChangeRecipe" : {
         "keyname" : "KT_ChangeRecipe",
         "keymap": {
-            "ActionMapName": "UIProNode",
-            "ActionName": "ChangeRecipe"
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
           },
         "description" : {
-            "Chinese" : "变更生产项",
+            "Chinese" : "更改配方",
             "English" : "Change Recipe"
+        }
+    },
+    "ChangeWorker" : {
+        "keyname" : "KT_ChangeWorker",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "变更派遣",
+            "English" : "Change Worker"
+        }
+    },
+    "RemoveWorker" : {
+        "keyname" : "KT_RemoveWorker",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "FastAdd"
+          },
+        "description" : {
+            "Chinese" : "移除派遣",
+            "English" : "Remove Worker"
         }
     },
     "Remove1" : {
@@ -274,99 +305,33 @@
             "English" : "Fast Add"
         }
     },
-    "Back" : {
-        "keyname" : "KT_Back",
+    "Return" : {
+        "keyname" : "KT_Return",
         "keymap": {
             "ActionMapName": "Common",
             "ActionName": "Back"
           },
         "description" : {
-            "Chinese" : "返回",
-            "English" : "Back"
+            "Chinese" : "退出",
+            "English" : "Return"
         }
     },
-    "ChangeWorker" : {
-        "keyname" : "KT_ChangeWorker",
+    "Confirm" : {
+        "keyname" : "KT_Confirm",
         "keymap": {
-            "ActionMapName": "UIProNode",
-            "ActionName": "ChangeWorker"
-          },
-        "description" : {
-            "Chinese" : "变更刁民",
-            "English" : "Change Worker"
-        }
-    },
-    "RemoveWorker" : {
-        "keyname" : "KT_RemoveWorker",
-        "keymap": {
-            "ActionMapName": "UIProNode",
-            "ActionName": "RemoveWorker"
-          },
-        "description" : {
-            "Chinese" : "移除刁民",
-            "English" : "Remove Worker"
-        }
-    },
-    "ConfirmRecipe" : {
-        "keyname" : "KT_ConfirmRecipe",
-        "keymap": {
-            "ActionMapName": "UIProNode",
-            "ActionName": "ConfirmRecipe"
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
           },
         "description" : {
             "Chinese" : "确认",
             "English" : "Confirm"
         }
     },
-    "BackRecipe" : {
-        "keyname" : "KT_BackRecipe",
+    "Back" : {
+        "keyname" : "KT_Back",
         "keymap": {
-            "ActionMapName": "UIProNode",
-            "ActionName": "BackRecipe"
-          },
-        "description" : {
-            "Chinese" : "返回",
-            "English" : "Back"
-        }
-    },
-    "ConfirmWorker" : {
-        "keyname" : "KT_ConfirmWorker",
-        "keymap": {
-            "ActionMapName": "UIProNode",
-            "ActionName": "ConfirmWorker"
-          },
-        "description" : {
-            "Chinese" : "确认",
-            "English" : "Confirm"
-        }
-    },
-    "BackWorker" : {
-        "keyname" : "KT_BackWorker",
-        "keymap": {
-            "ActionMapName": "UIProNode",
-            "ActionName": "BackWorker"
-          },
-        "description" : {
-            "Chinese" : "返回",
-            "English" : "Back"
-        }
-    },
-    "ConfirmLevel" : {
-        "keyname" : "KT_ConfirmLevel",
-        "keymap": {
-            "ActionMapName": "UIProNode",
-            "ActionName": "ConfirmLevel"
-          },
-        "description" : {
-            "Chinese" : "确认",
-            "English" : "Confirm"
-        }
-    },
-    "BackLevel" : {
-        "keyname" : "KT_BackLevel",
-        "keymap": {
-            "ActionMapName": "UIProNode",
-            "ActionName": "BackLevel"
+            "ActionMapName": "Common",
+            "ActionName": "Back"
           },
         "description" : {
             "Chinese" : "返回",

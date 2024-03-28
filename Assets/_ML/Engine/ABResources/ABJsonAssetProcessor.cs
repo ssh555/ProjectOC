@@ -74,6 +74,7 @@ namespace ML.Engine.ABResources
             IsLoading = true;
 
             var abmgr = ML.Engine.Manager.GameManager.Instance.ABResourceManager;
+            //Debug.Log(this.ABPath + "/" + this.ABName + ".json");
             handle = abmgr.LoadAssetAsync<TextAsset>(this.ABPath + "/" + this.ABName + ".json");
             handle.Completed += (asHandle) =>
             {
@@ -90,6 +91,7 @@ namespace ML.Engine.ABResources
 
             return handle;
         }
+
     }
 
 }

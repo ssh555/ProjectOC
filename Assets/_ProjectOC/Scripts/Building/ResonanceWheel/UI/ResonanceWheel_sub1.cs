@@ -1,48 +1,28 @@
-using ML.Engine.BuildingSystem.BuildingPart;
-using ML.Engine.Input;
-using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
-using Newtonsoft.Json;
-using ProjectOC.Player;
-using ProjectOC.ProNodeNS;
+using ML.Engine.Utility;
+using ProjectOC.ManagerNS;
 using ProjectOC.WorkerEchoNS;
 using ProjectOC.WorkerNS;
-using Sirenix.OdinInspector;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using Unity.Burst.CompilerServices;
-using Unity.VisualScripting;
-
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.Purchasing;
-using UnityEngine.Rendering;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.U2D;
 using UnityEngine.UI;
+using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub1;
 
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
-    public class ResonanceWheel_sub1 : ML.Engine.UI.UIBasePanel
+    public class ResonanceWheel_sub1 : ML.Engine.UI.UIBasePanel<ResonanceWheel_sub1Struct>
     {
         #region Unity
         public bool IsInit = false;
-        private void Start()
-        {
-            InitUITexture2D();
 
-            //KeyTips
-            UIKeyTipComponents = this.transform.GetComponentsInChildren<UIKeyTipComponent>(true);
-            foreach (var item in UIKeyTipComponents)
-            {
-                item.InitData();
-                uiKeyTipDic.Add(item.InputActionName, item);
-            }
+        protected override void Awake()
+        {
+            base.Awake();
 
             //BeastInfo
             var Info1 = this.transform.Find("HiddenBeastInfo1").Find("Info");
@@ -66,15 +46,18 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             //需要调接口显示的隐兽信息
 
-            BeastName= Info1.Find("Icon").Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
-
+            BeastName = Info1.Find("Icon").Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
+        }
+        protected override void Start()
+        {
             IsInit = true;
             Refresh();
+            base.Start();
         }
 
         private List<AsyncOperationHandle> descriptionHandle = new List<AsyncOperationHandle>();
         private AsyncOperationHandle spriteatlasHandle;
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             var abmgr = GameManager.Instance.ABResourceManager;
             foreach(var handle in descriptionHandle)
@@ -91,30 +74,15 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public override void OnEnter()
         {
             base.OnEnter();
-            this.Enter();
             parentUI.MainToSub1();
         }
 
         public override void OnExit()
         {
             base.OnExit();
-            this.Exit();
             ClearTemp();
             parentUI.Sub1ToMain();
         }
-
-        public override void OnPause()
-        {
-            base.OnPause();
-            this.Exit();
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            this.Enter();
-        }
-
         #endregion
 
         #region Internal
@@ -122,67 +90,31 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             public WorkType workType;
             public TMPro.TextMeshProUGUI skillText;
-        
         }
 
-        private void Enter()
-        {
-            this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Enable();
-            UikeyTipIsInit = false;
-            this.Refresh();
-        }
-
-        private void Exit()
+        protected override void UnregisterInput()
         {
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Disable();
-            this.UnregisterInput();
-        }
-
-        private void UnregisterInput()
-        {
-
-
-
-
             //驱逐
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Expel.performed -= Expel_performed;
 
             //收留
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Receive.performed -= Receive_performed;
 
-            // 返回
-            //ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
-
-            
-
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
-            
-
-
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Enable();
             //驱逐
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Expel.performed += Expel_performed;
 
             //收留
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Receive.performed += Receive_performed;
-
-            // 返回
-            //ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
-
-        }
-
-        private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            
-            UIMgr.PopPanel();
         }
 
         private void Expel_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            //parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
             parentUI.workerEcho.ExpelWorker(parentUI.CurrentGridIndex);
 
             //ui
@@ -193,7 +125,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void Receive_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            //parentUI = GameObject.Find("Canvas").GetComponentInChildren<ResonanceWheelUI>();
             parentUI.workerEcho.SpawnWorker(parentUI.CurrentGridIndex, Vector3.zero);
             
             ResonanceWheelUI.RingGrid.Reset(parentUI.Grids[parentUI.CurrentGridIndex]);
@@ -205,28 +136,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #region Temp
         private Sprite icon_genderfemaleSprite, icon_gendermaleSprite;
 
-        private List<Sprite> tempSprite = new List<Sprite>();
-        private Dictionary<ML.Engine.InventorySystem.ItemType, GameObject> tempItemType = new Dictionary<ML.Engine.InventorySystem.ItemType, GameObject>();
-        private List<GameObject> tempUIItems = new List<GameObject>();
-        private Dictionary<string, UIKeyTipComponent> uiKeyTipDic = new Dictionary<string, UIKeyTipComponent>();
-        private bool UikeyTipIsInit;
-        private InputManager inputManager => GameManager.Instance.InputManager;
-
         private void ClearTemp()
         {
-            foreach (var s in tempSprite)
-            {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
-            }
-            foreach (var s in tempItemType.Values)
-            {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
-            }
-            foreach (var s in tempUIItems)
-            {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
-            }
-            uiKeyTipDic = null;
+            GameManager.DestroyObj(icon_genderfemaleSprite);
+            GameManager.DestroyObj(icon_gendermaleSprite);
         }
 
         #endregion
@@ -253,35 +166,13 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         public override void Refresh()
         {
-            if (this.parentUI.ABJAProcessorJson_sub1 == null || !this.parentUI.ABJAProcessorJson_sub1.IsLoaded || !IsInit)
+            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
             {
                 return;
             }
 
-            if (UikeyTipIsInit == false)
-            {
-                KeyTip[] keyTips = inputManager.ExportKeyTipValues(this.parentUI.ABJAProcessorJson_sub1);
-                foreach (var keyTip in keyTips)
-                {
-                    InputAction inputAction = inputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
-                    inputManager.GetInputActionBindText(inputAction);
-
-                    UIKeyTipComponent uIKeyTipComponent = uiKeyTipDic[keyTip.keyname];
-                    if (uIKeyTipComponent.uiKeyTip.keytip != null)
-                    {
-                        uIKeyTipComponent.uiKeyTip.keytip.text = inputManager.GetInputActionBindText(inputAction);
-                    }
-                    if (uIKeyTipComponent.uiKeyTip.description != null)
-                    {
-                        uIKeyTipComponent.uiKeyTip.description.text = keyTip.description.GetText();
-                    }
-
-                }
-                UikeyTipIsInit = true;
-            }
-
             //BeastInfo
-            foreach (TextTip tp in this.parentUI.PanelTextContent_sub1.SkillType)
+            foreach (TextTip tp in PanelTextContent.SkillType)
             {
                 for (int i = 0; i < beastSkills.Length; i++) 
                 {
@@ -352,6 +243,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
         #endregion
 
+        #region Resource
         #region TextContent
         [System.Serializable]
         public struct ResonanceWheel_sub1Struct
@@ -359,26 +251,29 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //BeastInfo
             public TextTip[] SkillType;
 
-
             public KeyTip Expel;
             public KeyTip Receive;
 
         }
+        protected override void InitTextContentPathData()
+        {
+            this.abpath = "OC/Json/TextContent/ResonanceWheel";
+            this.abname = "ResonanceWheel_sub1";
+            this.description = "ResonanceWheel_sub1数据加载完成";
+        }
 
         #endregion
-
-        #region Texture2D
-        private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
-        private string ResonanceWheelSpriteAtlasPath = "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2";
-        private void InitUITexture2D()
+        protected override void InitObjectPool()
         {
-            GM.ABResourceManager.LoadAssetAsync<SpriteAtlas>(ResonanceWheelSpriteAtlasPath).Completed += (handle) =>
+            this.objectPool.RegisterPool(ObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
+            "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2", (handle) =>
             {
-                spriteatlasHandle = handle;
-                var atlas = handle.Result as SpriteAtlas;
-                icon_genderfemaleSprite = atlas.GetSprite("icon_genderfemale");
-                icon_gendermaleSprite = atlas.GetSprite("icon_gendermale");
-            };
+                SpriteAtlas resonanceWheelAtlas = handle.Result as SpriteAtlas;
+                icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite("icon_genderfemale");
+                icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite("icon_gendermale");
+            }
+            );
+            base.InitObjectPool();
         }
         #endregion
     }

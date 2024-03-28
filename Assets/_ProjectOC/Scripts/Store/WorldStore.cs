@@ -2,12 +2,9 @@ using ML.Engine.BuildingSystem;
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InteractSystem;
 using ML.Engine.Manager;
-using ML.Engine.UI;
 using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ProjectOC.StoreNS
@@ -44,12 +41,13 @@ namespace ProjectOC.StoreNS
         public void Interact(InteractComponent component)
         {
             // TODO
-            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIStorePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, true).Completed += (handle) =>
+            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIStorePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
             {
                 InventorySystem.UI.UIStore uiPanel = (handle.Result).GetComponent<InventorySystem.UI.UIStore>();
                 uiPanel.Player = component.GetComponentInParent<Player.PlayerCharacter>();
                 // 初始化相关数据
                 uiPanel.Store = this.Store;
+                uiPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
                 // Push
                 GameManager.Instance.UIManager.PushPanel(uiPanel);
             };

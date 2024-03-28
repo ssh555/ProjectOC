@@ -21,8 +21,7 @@ namespace ML.Engine.BuildingSystem
         public string category4;
         public string actorID;
         public List<InventorySystem.CompositeSystem.Formula> raw;
-        public string upgradeCID;
-        public List<InventorySystem.CompositeSystem.Formula> upgradeRaw;
+        public string upgradeID;
 
         public string GetClassificationString()
         {
@@ -197,6 +196,8 @@ namespace ML.Engine.BuildingSystem
 
         public void OnRegister()
         {
+            instance = this;
+            LoadTableData();
             Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<Material>(_ABMatName).Completed += (handle) =>
             {
                 _buildingMaterial = handle.Result;
@@ -925,33 +926,21 @@ namespace ML.Engine.BuildingSystem
             return null;
         }
 
-        public List<InventorySystem.CompositeSystem.Formula> GetUpgradeRaw(string CID)
+        public string GetUpgradeID(string CID)
         {
             if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
             {
-                return BPartTableDictOnClass[CID].upgradeRaw;
+                return BPartTableDictOnClass[CID].upgradeID;
             }
             return null;
         }
 
         public string GetUpgradeCID(string CID)
         {
-            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
+            string upgradeID = GetUpgradeID(CID);
+            if (upgradeID != null)
             {
-                return BPartTableDictOnClass[CID].upgradeCID;
-            }
-            return null;
-        }
-
-        public string GetUpgradeID(string CID)
-        {
-            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
-            {
-                string upgradeCID = BPartTableDictOnClass[CID].upgradeCID;
-                if (!string.IsNullOrEmpty(upgradeCID) && BPartTableDictOnClass.ContainsKey(upgradeCID))
-                {
-                    return BPartTableDictOnClass[upgradeCID].id;
-                }
+                return GetClassification(upgradeID);
             }
             return null;
         }

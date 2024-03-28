@@ -91,13 +91,22 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MouseScroll"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""4e5062f4-d1da-49c2-af5a-d4a4e3e89564"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
                     ""id"": ""b6b2759c-aff9-47c3-9922-7d68738b472d"",
-                    ""path"": ""<Keyboard>/shift"",
+                    ""path"": ""<Keyboard>/leftShift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -152,7 +161,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""0eae1f6a-e0ff-463a-b088-33a24d852ad5"",
-                    ""path"": ""<XInputController>/rightTrigger"",
+                    ""path"": ""<XInputController>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -275,7 +284,7 @@ namespace ProjectOC.Input
                     ""id"": ""0300f32d-0324-4740-86ff-3065e60b42e9"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""Scale(factor=0.3)"",
                     ""groups"": """",
                     ""action"": ""MouseX"",
                     ""isComposite"": true,
@@ -341,7 +350,7 @@ namespace ProjectOC.Input
                     ""id"": ""f2e79e28-1ad6-4942-ab34-e84ed109e82d"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
-                    ""processors"": """",
+                    ""processors"": ""Scale(factor=0.3)"",
                     ""groups"": """",
                     ""action"": ""MouseY"",
                     ""isComposite"": true,
@@ -416,13 +425,79 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""daebb05f-51df-457d-b0ac-6ef65a0a1c11"",
-                    ""path"": ""<XInputController>/leftTrigger"",
+                    ""path"": ""<XInputController>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""OpenBotUI"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""MouseScroll"",
+                    ""id"": ""d3a6341a-4205-4735-835f-5220078d01e4"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": ""Scale(factor=0.05)"",
+                    ""groups"": """",
+                    ""action"": ""MouseScroll"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""008e84c6-850c-47e9-98f5-a10723e0b9d3"",
+                    ""path"": ""<Mouse>/scroll/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseScroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""a1b4ff69-d15c-47d1-b7c1-c2b24f154d9b"",
+                    ""path"": ""<Mouse>/scroll/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseScroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""ButtonScroll"",
+                    ""id"": ""2d555810-adc6-4fd3-b192-0478b01efd26"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseScroll"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""544c8b65-2aef-4eb6-9f72-c5d63a7a51f8"",
+                    ""path"": ""<XInputController>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseScroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""f623b096-cb5b-46d3-9a66-c977b7bb32dc"",
+                    ""path"": ""<XInputController>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseScroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -432,18 +507,18 @@ namespace ProjectOC.Input
             ""actions"": [
                 {
                     ""name"": ""OpenMenu"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""27f7a73d-11b8-4591-bf27-2e94d794c16a"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""OpenMap"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""a35a7b80-5fec-414f-9f2f-9a910333ff29"",
-                    ""expectedControlType"": ""Vector2"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -459,226 +534,6 @@ namespace ProjectOC.Input
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": ""KeyBoard"",
-                    ""id"": ""1adacd95-25e0-4edd-a425-6db4e7f7bd17"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenMenu"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""5836ff54-6452-41b9-a363-4f69a4610dbb"",
-                    ""path"": ""<Keyboard>/upArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenMenu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""d4450875-9d93-4c9d-b97c-d8c338f08699"",
-                    ""path"": ""<Keyboard>/downArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenMenu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""027cdfe5-8078-408d-b155-db9c2476ba24"",
-                    ""path"": ""<Keyboard>/leftArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenMenu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""c66336e6-b160-4e7c-957d-fde0cf35b8b4"",
-                    ""path"": ""<Keyboard>/rightArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenMenu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""XBOX"",
-                    ""id"": ""79b67ef4-ee4a-478e-9381-dd6f10b5ddce"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenMenu"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""63a11067-52aa-4eb0-81cf-f9a2470a922d"",
-                    ""path"": ""<XInputController>/leftStick/up"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenMenu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""c78126b0-3016-4e11-8e03-33df6df4e11a"",
-                    ""path"": ""<XInputController>/leftStick/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenMenu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""2f6f7e49-3f27-4f48-83cf-0732f7131584"",
-                    ""path"": ""<XInputController>/leftStick/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenMenu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""b36b6f32-933b-4dc9-9108-c3bc4523e3a5"",
-                    ""path"": ""<XInputController>/leftStick/right"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenMenu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""KeyBoard"",
-                    ""id"": ""e76a8523-725b-4a44-9f79-434fb82dbdab"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenMap"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""d0b59f2c-2140-45b5-9aa5-95f007378fbc"",
-                    ""path"": ""<Keyboard>/upArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenMap"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""7725d727-cad0-4ce0-ab0f-345a948468a4"",
-                    ""path"": ""<Keyboard>/downArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenMap"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""be35a41b-6519-4864-b9bf-6dc782b0a718"",
-                    ""path"": ""<Keyboard>/leftArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenMap"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""4842660e-704d-4afd-a8b2-aaee8dd0731e"",
-                    ""path"": ""<Keyboard>/rightArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenMap"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""XBOX"",
-                    ""id"": ""f5a5c866-c8dd-42c1-acdc-20103acde4fe"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenMap"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""32228e47-968e-4fe7-ba11-e6c0e7c0280e"",
-                    ""path"": ""<XInputController>/leftStick/up"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenMap"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""3a0ddb83-90dc-4edc-ae77-44657859c41e"",
-                    ""path"": ""<XInputController>/leftStick/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenMap"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""0b1e457b-9485-46bc-b585-1c22786c8798"",
-                    ""path"": ""<XInputController>/leftStick/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenMap"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""b33b087d-289d-4893-9bbe-32c59fa7b583"",
-                    ""path"": ""<XInputController>/leftStick/right"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""OpenMap"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
                 {
                     ""name"": ""2D Vector"",
                     ""id"": ""2475cd1a-209b-47f2-915f-f284bac44061"",
@@ -777,6 +632,50 @@ namespace ProjectOC.Input
                     ""action"": ""SelectGrid"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2cd182ea-62c8-4023-9ac9-6ef845de0dc7"",
+                    ""path"": ""<XInputController>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""607a20dd-ca00-4c35-ad14-8b5882358ba0"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""239e1db5-a8ed-4123-b594-ae88a93a3f94"",
+                    ""path"": ""<XInputController>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""93b8d105-e30c-405f-85eb-ec4d74bb2726"",
+                    ""path"": ""<Keyboard>/m"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenMap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1021,7 +920,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""f688b7d8-4b09-4939-9006-b9ed57af7e64"",
-                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""path"": ""<XInputController>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1165,7 +1064,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": ""Drop"",
                     ""type"": ""Button"",
-                    ""id"": ""bd543c13-a674-4748-aa09-6d0702ba6f93"",
+                    ""id"": ""4014e338-cad2-4b21-9c9f-9a0fe97b8566"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Hold"",
@@ -1174,7 +1073,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": ""Destroy"",
                     ""type"": ""Button"",
-                    ""id"": ""4bc8699e-a9f0-4c4a-befd-86e7e5c79a09"",
+                    ""id"": ""b9b4cd53-3dac-468c-ae83-a5ce6333b3e0"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Hold"",
@@ -1218,28 +1117,6 @@ namespace ProjectOC.Input
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""1f941058-fb48-4029-a3d5-3970d7e088ab"",
-                    ""path"": ""<XInputController>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Drop"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d6c65be8-d71a-444f-b0c8-d51c7d86ccc9"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Drop"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""30f1b5fe-1721-41f6-92e7-b2426f09bb0e"",
@@ -1396,7 +1273,7 @@ namespace ProjectOC.Input
                 },
                 {
                     ""name"": """",
-                    ""id"": ""76a8f7bc-2bdf-4e22-9edc-339e128eff82"",
+                    ""id"": ""52440aff-e5a6-4c3b-9cc3-ee4ba619e61e"",
                     ""path"": ""<XInputController>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -1407,12 +1284,34 @@ namespace ProjectOC.Input
                 },
                 {
                     ""name"": """",
-                    ""id"": ""bb781c6a-9a4c-4543-96e9-fe34724a1ee4"",
+                    ""id"": ""06869f83-69a6-4663-b2cb-94769eccdc00"",
                     ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Destroy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7a2ac9e2-2be2-4b70-a2f2-dfd5651084e7"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""794b91b9-d9b4-4cd8-9079-d5c66b54d76b"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Drop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1506,15 +1405,6 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""ChangeStoreData"",
-                    ""type"": ""Button"",
-                    ""id"": ""87b70b70-485e-43c4-8fe3-dee297ad547d"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1537,28 +1427,6 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""NextPriority"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3ea772ae-eb77-4e95-a915-090a81beae3d"",
-                    ""path"": ""<XInputController>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeStoreData"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""69f3b08a-3774-47b3-8fa2-9f4b983b0397"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeStoreData"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1730,7 +1598,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""fff4c8a5-5012-4e6c-a787-8fa445766c9e"",
-                    ""path"": ""<Keyboard>/t"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1752,7 +1620,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""98ac3791-c45b-4c66-9fe1-a4aac0b72d8c"",
-                    ""path"": ""<Keyboard>/t"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1807,15 +1675,6 @@ namespace ProjectOC.Input
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ChangeRecipe"",
-                    ""type"": ""Button"",
-                    ""id"": ""0817c063-c7ed-4b4b-82a0-e4d37ce286d9"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Remove1"",
                     ""type"": ""Button"",
                     ""id"": ""8973dd42-db36-411c-92bd-4827c8b757f7"",
@@ -1843,79 +1702,7 @@ namespace ProjectOC.Input
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ChangeWorker"",
-                    ""type"": ""Button"",
-                    ""id"": ""339699fa-04cc-4c40-be7d-e826a3bebd10"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""RemoveWorker"",
-                    ""type"": ""Button"",
-                    ""id"": ""9426e949-b89a-46f1-97ba-88da48a782d9"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""ConfirmRecipe"",
-                    ""type"": ""Button"",
-                    ""id"": ""fd5d01eb-32dc-42c3-a74e-2d3fc4fc426f"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""BackRecipe"",
-                    ""type"": ""Button"",
-                    ""id"": ""3b3e28f6-fc56-4a07-a4c2-0ebcef9e458c"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""ConfirmWorker"",
-                    ""type"": ""Button"",
-                    ""id"": ""9eb65a06-9fdb-4a75-8aad-e659ba859fc1"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""BackWorker"",
-                    ""type"": ""Button"",
-                    ""id"": ""d63f1d02-aa3b-47bc-8a02-8f72cb0d393c"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""ConfirmLevel"",
-                    ""type"": ""Button"",
-                    ""id"": ""95b157b0-36c0-4b96-9f42-27c8dd5713b3"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""BackLevel"",
-                    ""type"": ""Button"",
-                    ""id"": ""d1cac56f-bbc4-4d16-ac00-56575b3e126b"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""AlterRawItem"",
+                    ""name"": ""Alter"",
                     ""type"": ""Value"",
                     ""id"": ""1a286c3e-5479-48e0-b312-c005d1204369"",
                     ""expectedControlType"": ""Vector2"",
@@ -1954,7 +1741,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AlterRawItem"",
+                    ""action"": ""Alter"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -1965,7 +1752,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AlterRawItem"",
+                    ""action"": ""Alter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -1976,7 +1763,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AlterRawItem"",
+                    ""action"": ""Alter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -1987,7 +1774,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AlterRawItem"",
+                    ""action"": ""Alter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -1998,7 +1785,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AlterRawItem"",
+                    ""action"": ""Alter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -2009,7 +1796,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AlterRawItem"",
+                    ""action"": ""Alter"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -2020,7 +1807,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AlterRawItem"",
+                    ""action"": ""Alter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -2031,7 +1818,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AlterRawItem"",
+                    ""action"": ""Alter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -2042,7 +1829,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AlterRawItem"",
+                    ""action"": ""Alter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -2053,7 +1840,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AlterRawItem"",
+                    ""action"": ""Alter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -2071,7 +1858,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""6d63c30d-26b5-41c0-9c64-5a2db20ecda6"",
-                    ""path"": ""<Keyboard>/u"",
+                    ""path"": ""<Keyboard>/g"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -2142,204 +1929,6 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""FastAdd"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""73d82c5b-7d0b-42bc-a88b-3abdee935233"",
-                    ""path"": ""<XInputController>/leftShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeWorker"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a3fd9745-4663-47e8-a447-f54511980706"",
-                    ""path"": ""<Keyboard>/n"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeWorker"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""9a4a7946-7f31-4be2-9a55-e7c15f46fcf9"",
-                    ""path"": ""<XInputController>/rightShoulder"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""RemoveWorker"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ff1a270f-4e4b-46ba-9e16-c4276cdb319e"",
-                    ""path"": ""<Keyboard>/m"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""RemoveWorker"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ab8c2549-8f91-4fbd-814d-b8e13a71ef2b"",
-                    ""path"": ""<XInputController>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeRecipe"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""b5240a5e-bc65-4453-a8e6-cab9c610b992"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeRecipe"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""b1d4327d-0947-4821-8306-11bbd3ad5ec4"",
-                    ""path"": ""<XInputController>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ConfirmRecipe"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d0e9b740-5876-45c0-9469-ece72c872769"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ConfirmRecipe"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""abeb6d6a-a0fa-4f97-ba24-c407f6899864"",
-                    ""path"": ""<XInputController>/buttonEast"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""BackRecipe"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""94b48943-e528-4fcd-9687-3e283fe24ea2"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""BackRecipe"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""5931685b-b23f-4a2f-8c47-8cc5a6d58516"",
-                    ""path"": ""<XInputController>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ConfirmWorker"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""52d13c55-58dc-472c-a253-7efc5722d719"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ConfirmWorker"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""579fb096-2c7f-4fd7-83d9-fff713515c07"",
-                    ""path"": ""<XInputController>/buttonEast"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""BackWorker"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""9bb071e3-30ed-4d21-99a7-80bff389a1c1"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""BackWorker"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""2b62aa97-e370-4cc7-b5c4-fa13d11b08fd"",
-                    ""path"": ""<XInputController>/buttonEast"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ConfirmLevel"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""9aed1072-d7f1-4097-b077-8426a8206fd5"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ConfirmLevel"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""5edafa2e-4170-4ec5-99be-345f3b4201fc"",
-                    ""path"": ""<XInputController>/buttonEast"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""BackLevel"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""9efe0372-7775-49e9-a98a-d58562b89d92"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""BackLevel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -3010,6 +2599,7 @@ namespace ProjectOC.Input
             m_Player_MouseX = m_Player.FindAction("MouseX", throwIfNotFound: true);
             m_Player_MouseY = m_Player.FindAction("MouseY", throwIfNotFound: true);
             m_Player_OpenBotUI = m_Player.FindAction("OpenBotUI", throwIfNotFound: true);
+            m_Player_MouseScroll = m_Player.FindAction("MouseScroll", throwIfNotFound: true);
             // PlayerUIBot
             m_PlayerUIBot = asset.FindActionMap("PlayerUIBot", throwIfNotFound: true);
             m_PlayerUIBot_OpenMenu = m_PlayerUIBot.FindAction("OpenMenu", throwIfNotFound: true);
@@ -3042,24 +2632,14 @@ namespace ProjectOC.Input
             m_UIStore_Remove10 = m_UIStore.FindAction("Remove10", throwIfNotFound: true);
             m_UIStore_FastAdd = m_UIStore.FindAction("FastAdd", throwIfNotFound: true);
             m_UIStore_Upgrade = m_UIStore.FindAction("Upgrade", throwIfNotFound: true);
-            m_UIStore_ChangeStoreData = m_UIStore.FindAction("ChangeStoreData", throwIfNotFound: true);
             // UIProNode
             m_UIProNode = asset.FindActionMap("UIProNode", throwIfNotFound: true);
             m_UIProNode_Upgrade = m_UIProNode.FindAction("Upgrade", throwIfNotFound: true);
             m_UIProNode_NextPriority = m_UIProNode.FindAction("NextPriority", throwIfNotFound: true);
-            m_UIProNode_ChangeRecipe = m_UIProNode.FindAction("ChangeRecipe", throwIfNotFound: true);
             m_UIProNode_Remove1 = m_UIProNode.FindAction("Remove1", throwIfNotFound: true);
             m_UIProNode_Remove10 = m_UIProNode.FindAction("Remove10", throwIfNotFound: true);
             m_UIProNode_FastAdd = m_UIProNode.FindAction("FastAdd", throwIfNotFound: true);
-            m_UIProNode_ChangeWorker = m_UIProNode.FindAction("ChangeWorker", throwIfNotFound: true);
-            m_UIProNode_RemoveWorker = m_UIProNode.FindAction("RemoveWorker", throwIfNotFound: true);
-            m_UIProNode_ConfirmRecipe = m_UIProNode.FindAction("ConfirmRecipe", throwIfNotFound: true);
-            m_UIProNode_BackRecipe = m_UIProNode.FindAction("BackRecipe", throwIfNotFound: true);
-            m_UIProNode_ConfirmWorker = m_UIProNode.FindAction("ConfirmWorker", throwIfNotFound: true);
-            m_UIProNode_BackWorker = m_UIProNode.FindAction("BackWorker", throwIfNotFound: true);
-            m_UIProNode_ConfirmLevel = m_UIProNode.FindAction("ConfirmLevel", throwIfNotFound: true);
-            m_UIProNode_BackLevel = m_UIProNode.FindAction("BackLevel", throwIfNotFound: true);
-            m_UIProNode_AlterRawItem = m_UIProNode.FindAction("AlterRawItem", throwIfNotFound: true);
+            m_UIProNode_Alter = m_UIProNode.FindAction("Alter", throwIfNotFound: true);
             // ResonanceWheelUI
             m_ResonanceWheelUI = asset.FindActionMap("ResonanceWheelUI", throwIfNotFound: true);
             m_ResonanceWheelUI_NextTerm = m_ResonanceWheelUI.FindAction("NextTerm", throwIfNotFound: true);
@@ -3150,6 +2730,7 @@ namespace ProjectOC.Input
         private readonly InputAction m_Player_MouseX;
         private readonly InputAction m_Player_MouseY;
         private readonly InputAction m_Player_OpenBotUI;
+        private readonly InputAction m_Player_MouseScroll;
         public struct PlayerActions
         {
             private @PlayerInput m_Wrapper;
@@ -3161,6 +2742,7 @@ namespace ProjectOC.Input
             public InputAction @MouseX => m_Wrapper.m_Player_MouseX;
             public InputAction @MouseY => m_Wrapper.m_Player_MouseY;
             public InputAction @OpenBotUI => m_Wrapper.m_Player_OpenBotUI;
+            public InputAction @MouseScroll => m_Wrapper.m_Player_MouseScroll;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -3191,6 +2773,9 @@ namespace ProjectOC.Input
                 @OpenBotUI.started += instance.OnOpenBotUI;
                 @OpenBotUI.performed += instance.OnOpenBotUI;
                 @OpenBotUI.canceled += instance.OnOpenBotUI;
+                @MouseScroll.started += instance.OnMouseScroll;
+                @MouseScroll.performed += instance.OnMouseScroll;
+                @MouseScroll.canceled += instance.OnMouseScroll;
             }
 
             private void UnregisterCallbacks(IPlayerActions instance)
@@ -3216,6 +2801,9 @@ namespace ProjectOC.Input
                 @OpenBotUI.started -= instance.OnOpenBotUI;
                 @OpenBotUI.performed -= instance.OnOpenBotUI;
                 @OpenBotUI.canceled -= instance.OnOpenBotUI;
+                @MouseScroll.started -= instance.OnMouseScroll;
+                @MouseScroll.performed -= instance.OnMouseScroll;
+                @MouseScroll.canceled -= instance.OnMouseScroll;
             }
 
             public void RemoveCallbacks(IPlayerActions instance)
@@ -3516,7 +3104,6 @@ namespace ProjectOC.Input
         private readonly InputAction m_UIStore_Remove10;
         private readonly InputAction m_UIStore_FastAdd;
         private readonly InputAction m_UIStore_Upgrade;
-        private readonly InputAction m_UIStore_ChangeStoreData;
         public struct UIStoreActions
         {
             private @PlayerInput m_Wrapper;
@@ -3528,7 +3115,6 @@ namespace ProjectOC.Input
             public InputAction @Remove10 => m_Wrapper.m_UIStore_Remove10;
             public InputAction @FastAdd => m_Wrapper.m_UIStore_FastAdd;
             public InputAction @Upgrade => m_Wrapper.m_UIStore_Upgrade;
-            public InputAction @ChangeStoreData => m_Wrapper.m_UIStore_ChangeStoreData;
             public InputActionMap Get() { return m_Wrapper.m_UIStore; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -3559,9 +3145,6 @@ namespace ProjectOC.Input
                 @Upgrade.started += instance.OnUpgrade;
                 @Upgrade.performed += instance.OnUpgrade;
                 @Upgrade.canceled += instance.OnUpgrade;
-                @ChangeStoreData.started += instance.OnChangeStoreData;
-                @ChangeStoreData.performed += instance.OnChangeStoreData;
-                @ChangeStoreData.canceled += instance.OnChangeStoreData;
             }
 
             private void UnregisterCallbacks(IUIStoreActions instance)
@@ -3587,9 +3170,6 @@ namespace ProjectOC.Input
                 @Upgrade.started -= instance.OnUpgrade;
                 @Upgrade.performed -= instance.OnUpgrade;
                 @Upgrade.canceled -= instance.OnUpgrade;
-                @ChangeStoreData.started -= instance.OnChangeStoreData;
-                @ChangeStoreData.performed -= instance.OnChangeStoreData;
-                @ChangeStoreData.canceled -= instance.OnChangeStoreData;
             }
 
             public void RemoveCallbacks(IUIStoreActions instance)
@@ -3613,38 +3193,20 @@ namespace ProjectOC.Input
         private List<IUIProNodeActions> m_UIProNodeActionsCallbackInterfaces = new List<IUIProNodeActions>();
         private readonly InputAction m_UIProNode_Upgrade;
         private readonly InputAction m_UIProNode_NextPriority;
-        private readonly InputAction m_UIProNode_ChangeRecipe;
         private readonly InputAction m_UIProNode_Remove1;
         private readonly InputAction m_UIProNode_Remove10;
         private readonly InputAction m_UIProNode_FastAdd;
-        private readonly InputAction m_UIProNode_ChangeWorker;
-        private readonly InputAction m_UIProNode_RemoveWorker;
-        private readonly InputAction m_UIProNode_ConfirmRecipe;
-        private readonly InputAction m_UIProNode_BackRecipe;
-        private readonly InputAction m_UIProNode_ConfirmWorker;
-        private readonly InputAction m_UIProNode_BackWorker;
-        private readonly InputAction m_UIProNode_ConfirmLevel;
-        private readonly InputAction m_UIProNode_BackLevel;
-        private readonly InputAction m_UIProNode_AlterRawItem;
+        private readonly InputAction m_UIProNode_Alter;
         public struct UIProNodeActions
         {
             private @PlayerInput m_Wrapper;
             public UIProNodeActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
             public InputAction @Upgrade => m_Wrapper.m_UIProNode_Upgrade;
             public InputAction @NextPriority => m_Wrapper.m_UIProNode_NextPriority;
-            public InputAction @ChangeRecipe => m_Wrapper.m_UIProNode_ChangeRecipe;
             public InputAction @Remove1 => m_Wrapper.m_UIProNode_Remove1;
             public InputAction @Remove10 => m_Wrapper.m_UIProNode_Remove10;
             public InputAction @FastAdd => m_Wrapper.m_UIProNode_FastAdd;
-            public InputAction @ChangeWorker => m_Wrapper.m_UIProNode_ChangeWorker;
-            public InputAction @RemoveWorker => m_Wrapper.m_UIProNode_RemoveWorker;
-            public InputAction @ConfirmRecipe => m_Wrapper.m_UIProNode_ConfirmRecipe;
-            public InputAction @BackRecipe => m_Wrapper.m_UIProNode_BackRecipe;
-            public InputAction @ConfirmWorker => m_Wrapper.m_UIProNode_ConfirmWorker;
-            public InputAction @BackWorker => m_Wrapper.m_UIProNode_BackWorker;
-            public InputAction @ConfirmLevel => m_Wrapper.m_UIProNode_ConfirmLevel;
-            public InputAction @BackLevel => m_Wrapper.m_UIProNode_BackLevel;
-            public InputAction @AlterRawItem => m_Wrapper.m_UIProNode_AlterRawItem;
+            public InputAction @Alter => m_Wrapper.m_UIProNode_Alter;
             public InputActionMap Get() { return m_Wrapper.m_UIProNode; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -3660,9 +3222,6 @@ namespace ProjectOC.Input
                 @NextPriority.started += instance.OnNextPriority;
                 @NextPriority.performed += instance.OnNextPriority;
                 @NextPriority.canceled += instance.OnNextPriority;
-                @ChangeRecipe.started += instance.OnChangeRecipe;
-                @ChangeRecipe.performed += instance.OnChangeRecipe;
-                @ChangeRecipe.canceled += instance.OnChangeRecipe;
                 @Remove1.started += instance.OnRemove1;
                 @Remove1.performed += instance.OnRemove1;
                 @Remove1.canceled += instance.OnRemove1;
@@ -3672,33 +3231,9 @@ namespace ProjectOC.Input
                 @FastAdd.started += instance.OnFastAdd;
                 @FastAdd.performed += instance.OnFastAdd;
                 @FastAdd.canceled += instance.OnFastAdd;
-                @ChangeWorker.started += instance.OnChangeWorker;
-                @ChangeWorker.performed += instance.OnChangeWorker;
-                @ChangeWorker.canceled += instance.OnChangeWorker;
-                @RemoveWorker.started += instance.OnRemoveWorker;
-                @RemoveWorker.performed += instance.OnRemoveWorker;
-                @RemoveWorker.canceled += instance.OnRemoveWorker;
-                @ConfirmRecipe.started += instance.OnConfirmRecipe;
-                @ConfirmRecipe.performed += instance.OnConfirmRecipe;
-                @ConfirmRecipe.canceled += instance.OnConfirmRecipe;
-                @BackRecipe.started += instance.OnBackRecipe;
-                @BackRecipe.performed += instance.OnBackRecipe;
-                @BackRecipe.canceled += instance.OnBackRecipe;
-                @ConfirmWorker.started += instance.OnConfirmWorker;
-                @ConfirmWorker.performed += instance.OnConfirmWorker;
-                @ConfirmWorker.canceled += instance.OnConfirmWorker;
-                @BackWorker.started += instance.OnBackWorker;
-                @BackWorker.performed += instance.OnBackWorker;
-                @BackWorker.canceled += instance.OnBackWorker;
-                @ConfirmLevel.started += instance.OnConfirmLevel;
-                @ConfirmLevel.performed += instance.OnConfirmLevel;
-                @ConfirmLevel.canceled += instance.OnConfirmLevel;
-                @BackLevel.started += instance.OnBackLevel;
-                @BackLevel.performed += instance.OnBackLevel;
-                @BackLevel.canceled += instance.OnBackLevel;
-                @AlterRawItem.started += instance.OnAlterRawItem;
-                @AlterRawItem.performed += instance.OnAlterRawItem;
-                @AlterRawItem.canceled += instance.OnAlterRawItem;
+                @Alter.started += instance.OnAlter;
+                @Alter.performed += instance.OnAlter;
+                @Alter.canceled += instance.OnAlter;
             }
 
             private void UnregisterCallbacks(IUIProNodeActions instance)
@@ -3709,9 +3244,6 @@ namespace ProjectOC.Input
                 @NextPriority.started -= instance.OnNextPriority;
                 @NextPriority.performed -= instance.OnNextPriority;
                 @NextPriority.canceled -= instance.OnNextPriority;
-                @ChangeRecipe.started -= instance.OnChangeRecipe;
-                @ChangeRecipe.performed -= instance.OnChangeRecipe;
-                @ChangeRecipe.canceled -= instance.OnChangeRecipe;
                 @Remove1.started -= instance.OnRemove1;
                 @Remove1.performed -= instance.OnRemove1;
                 @Remove1.canceled -= instance.OnRemove1;
@@ -3721,33 +3253,9 @@ namespace ProjectOC.Input
                 @FastAdd.started -= instance.OnFastAdd;
                 @FastAdd.performed -= instance.OnFastAdd;
                 @FastAdd.canceled -= instance.OnFastAdd;
-                @ChangeWorker.started -= instance.OnChangeWorker;
-                @ChangeWorker.performed -= instance.OnChangeWorker;
-                @ChangeWorker.canceled -= instance.OnChangeWorker;
-                @RemoveWorker.started -= instance.OnRemoveWorker;
-                @RemoveWorker.performed -= instance.OnRemoveWorker;
-                @RemoveWorker.canceled -= instance.OnRemoveWorker;
-                @ConfirmRecipe.started -= instance.OnConfirmRecipe;
-                @ConfirmRecipe.performed -= instance.OnConfirmRecipe;
-                @ConfirmRecipe.canceled -= instance.OnConfirmRecipe;
-                @BackRecipe.started -= instance.OnBackRecipe;
-                @BackRecipe.performed -= instance.OnBackRecipe;
-                @BackRecipe.canceled -= instance.OnBackRecipe;
-                @ConfirmWorker.started -= instance.OnConfirmWorker;
-                @ConfirmWorker.performed -= instance.OnConfirmWorker;
-                @ConfirmWorker.canceled -= instance.OnConfirmWorker;
-                @BackWorker.started -= instance.OnBackWorker;
-                @BackWorker.performed -= instance.OnBackWorker;
-                @BackWorker.canceled -= instance.OnBackWorker;
-                @ConfirmLevel.started -= instance.OnConfirmLevel;
-                @ConfirmLevel.performed -= instance.OnConfirmLevel;
-                @ConfirmLevel.canceled -= instance.OnConfirmLevel;
-                @BackLevel.started -= instance.OnBackLevel;
-                @BackLevel.performed -= instance.OnBackLevel;
-                @BackLevel.canceled -= instance.OnBackLevel;
-                @AlterRawItem.started -= instance.OnAlterRawItem;
-                @AlterRawItem.performed -= instance.OnAlterRawItem;
-                @AlterRawItem.canceled -= instance.OnAlterRawItem;
+                @Alter.started -= instance.OnAlter;
+                @Alter.performed -= instance.OnAlter;
+                @Alter.canceled -= instance.OnAlter;
             }
 
             public void RemoveCallbacks(IUIProNodeActions instance)
@@ -4038,6 +3546,7 @@ namespace ProjectOC.Input
             void OnMouseX(InputAction.CallbackContext context);
             void OnMouseY(InputAction.CallbackContext context);
             void OnOpenBotUI(InputAction.CallbackContext context);
+            void OnMouseScroll(InputAction.CallbackContext context);
         }
         public interface IPlayerUIBotActions
         {
@@ -4075,25 +3584,15 @@ namespace ProjectOC.Input
             void OnRemove10(InputAction.CallbackContext context);
             void OnFastAdd(InputAction.CallbackContext context);
             void OnUpgrade(InputAction.CallbackContext context);
-            void OnChangeStoreData(InputAction.CallbackContext context);
         }
         public interface IUIProNodeActions
         {
             void OnUpgrade(InputAction.CallbackContext context);
             void OnNextPriority(InputAction.CallbackContext context);
-            void OnChangeRecipe(InputAction.CallbackContext context);
             void OnRemove1(InputAction.CallbackContext context);
             void OnRemove10(InputAction.CallbackContext context);
             void OnFastAdd(InputAction.CallbackContext context);
-            void OnChangeWorker(InputAction.CallbackContext context);
-            void OnRemoveWorker(InputAction.CallbackContext context);
-            void OnConfirmRecipe(InputAction.CallbackContext context);
-            void OnBackRecipe(InputAction.CallbackContext context);
-            void OnConfirmWorker(InputAction.CallbackContext context);
-            void OnBackWorker(InputAction.CallbackContext context);
-            void OnConfirmLevel(InputAction.CallbackContext context);
-            void OnBackLevel(InputAction.CallbackContext context);
-            void OnAlterRawItem(InputAction.CallbackContext context);
+            void OnAlter(InputAction.CallbackContext context);
         }
         public interface IResonanceWheelUIActions
         {

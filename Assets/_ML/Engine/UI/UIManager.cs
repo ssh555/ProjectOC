@@ -1,8 +1,11 @@
+using ML.Engine.Manager;
+using ProjectOC.InventorySystem.UI;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 using static UnityEngine.Rendering.DebugUI;
 namespace ML.Engine.UI
@@ -12,6 +15,10 @@ namespace ML.Engine.UI
         public UIManager()
         {
             GetCanvas = CreateCanvas();
+            InitSideBarUIPrefabInstance();
+            InitPopUpUIPrefabInstance();
+            InitFloatTextUIPrefabInstance();
+            InitBtnUIPrefabInstance();
         }
 
         public Canvas GetCanvas
@@ -51,9 +58,11 @@ namespace ML.Engine.UI
         /// <param name="panelType"></param>
         public void PushPanel(UIBasePanel panel)
         {
+            Debug.Log("PushPanel "+ panel.gameObject.name);
             // 暂停栈顶
             if (panelStack.Count > 0)
             {
+                
                 panelStack.Peek().OnPause();
             }
             // 压入栈
@@ -72,7 +81,14 @@ namespace ML.Engine.UI
             }
             if (this.panelStack.Count == 1)
             {
-                this.panelStack.Pop().OnExit();
+                if(GetTopUIPanel() != null)
+                {
+                    this.panelStack.Pop().OnExit();
+                }
+                else//场景切换导致UIPanel为空却占用一个栈位，强行pop
+                {
+                    panelStack.Pop();
+                }
             }
 
             if(panel != null)
@@ -124,6 +140,98 @@ namespace ML.Engine.UI
 
             return canvas;
         }
+
+        #region 通知UI
+        private string SideBarUIPrefabPath = "NoticeUI/SideBarUI.prefab";
+        private string PopUpUIPrefabPath = "NoticeUI/PopUpUI.prefab";
+        private string FloatTextUIPrefabPath = "NoticeUI/FloatTextUI.prefab";
+        private string BtnUIPrefabPath = "NoticeUI/BtnUI.prefab";
+        [ShowInInspector]
+        private GameObject SideBarUIPrefab, PopUpUIPrefab, FloatTextUIPrefab, BtnUIPrefab;
+        public enum NoticeUIType
+        {
+            FloatTextUI = 0,
+            PopUpUI,
+            SideBarUI,
+            BtnUI
+        }
+        //TODO 之后还需实例化时先取消对应脚本的活性
+        private void InitSideBarUIPrefabInstance()
+        {
+            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.SideBarUIPrefabPath, isGlobal: true).Completed += (handle) =>
+            {
+                this.SideBarUIPrefab = handle.Result;
+                this.SideBarUIPrefab.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                this.SideBarUIPrefab.GetComponent<SideBarUI>().SaveAsInstance();
+            };
+        }
+        private void InitPopUpUIPrefabInstance()
+        {
+            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.PopUpUIPrefabPath, isGlobal: true).Completed += (handle) =>
+            {
+                this.PopUpUIPrefab = handle.Result;
+                this.PopUpUIPrefab.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                this.PopUpUIPrefab.SetActive(false);
+            };
+        }
+        private void InitFloatTextUIPrefabInstance()
+        {
+            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.FloatTextUIPrefabPath, isGlobal: true).Completed += (handle) =>
+            {
+
+                this.FloatTextUIPrefab = handle.Result;
+                this.FloatTextUIPrefab.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                this.FloatTextUIPrefab.GetComponent<FloatTextUI>().SaveAsInstance();
+
+            };
+        }
+        private void InitBtnUIPrefabInstance()
+        {
+            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.BtnUIPrefabPath, isGlobal: true).Completed += (handle) =>
+            {
+                this.BtnUIPrefab = handle.Result;
+                this.BtnUIPrefab.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                this.BtnUIPrefab.SetActive(false);
+            };
+        }
+
+        public void PushNoticeUIInstance(NoticeUIType noticeUIType,string msg)
+        {
+            GameObject panel = null;
+            switch (noticeUIType)
+            {
+                
+                case NoticeUIType.FloatTextUI:
+
+                    panel = GameObject.Instantiate(this.FloatTextUIPrefab);
+                    panel.GetComponent<FloatTextUI>().Text.text = msg;
+                    panel.GetComponent<FloatTextUI>().CopyInstance();
+                    break;
+                case NoticeUIType.BtnUI:
+
+                    panel = GameObject.Instantiate(this.BtnUIPrefab);
+                    break;
+                case NoticeUIType.PopUpUI:
+
+                    panel = GameObject.Instantiate(this.PopUpUIPrefab);
+                    panel.GetComponent<PopUpUI>().Text.text = msg;
+                    //手动模拟入栈
+                    panelStack.Peek().OnPause();
+                    panel.GetComponent<PopUpUI>().OnEnter();
+                    break;
+                case NoticeUIType.SideBarUI:
+
+                    panel = GameObject.Instantiate(this.SideBarUIPrefab);
+                    panel.GetComponent<SideBarUI>().Text.text = msg;
+                    panel.GetComponent<SideBarUI>().CopyInstance();
+                    break;
+            }
+            panel.transform.localScale = Vector3.one;
+            panel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+            panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+        }
+
+        #endregion
     }
 
 }

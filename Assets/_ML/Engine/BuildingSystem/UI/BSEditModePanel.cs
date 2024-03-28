@@ -14,7 +14,7 @@ namespace ML.Engine.BuildingSystem.UI
         private BuildingManager BM => BuildingManager.Instance;
         private BuildingPlacer.BuildingPlacer Placer => BM.Placer;
 
-
+        private MonoBuildingManager monoBM;
 
         #region UIGO引用
         #region KeyTip
@@ -45,10 +45,10 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region Unity
-        private void Awake()
+        protected override void Awake()
         {
             this.enabled = false;
-
+            monoBM = ML.Engine.Manager.GameManager.Instance.GetLocalManager<MonoBuildingManager>();
             Transform keytips = this.transform.Find("KeyTip");
 
             place = new UIKeyTip();
@@ -56,42 +56,42 @@ namespace ML.Engine.BuildingSystem.UI
             place.img = place.root.Find("Image").GetComponent<Image>();
             place.keytip = place.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             place.description = place.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            place.ReWrite(MonoBuildingManager.Instance.KeyTipDict["place"]);
+            place.ReWrite(monoBM.KeyTipDict["place"]);
 
             altersocket = new UIKeyTip();
             altersocket.root = keytips.Find("KT_AlterSocket") as RectTransform;
             altersocket.img = altersocket.root.Find("Image").GetComponent<Image>();
             altersocket.keytip = altersocket.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             altersocket.description = altersocket.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            altersocket.ReWrite(MonoBuildingManager.Instance.KeyTipDict["altersocket"]);
+            altersocket.ReWrite(monoBM.KeyTipDict["altersocket"]);
 
             rotateright = new UIKeyTip();
             rotateright.root = keytips.Find("KT_Rotate") as RectTransform;
             rotateright.img = rotateright.root.Find("Right").GetComponent<Image>();
             rotateright.keytip = rotateright.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             rotateright.description = rotateright.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            rotateright.ReWrite(MonoBuildingManager.Instance.KeyTipDict["rotateright"]);
+            rotateright.ReWrite(monoBM.KeyTipDict["rotateright"]);
 
             rotateleft = new UIKeyTip();
             rotateleft.root = keytips.Find("KT_Rotate") as RectTransform;
             rotateleft.img = rotateleft.root.Find("Left").GetComponent<Image>();
             rotateleft.keytip = rotateleft.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             rotateleft.description = rotateright.description;
-            rotateleft.ReWrite(MonoBuildingManager.Instance.KeyTipDict["rotateleft"]);
+            rotateleft.ReWrite(monoBM.KeyTipDict["rotateleft"]);
 
             back = new UIKeyTip();
             back.root = keytips.Find("KT_Back") as RectTransform;
             back.img = back.root.Find("Image").GetComponent<Image>();
             back.keytip = back.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             back.description = back.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            back.ReWrite(MonoBuildingManager.Instance.KeyTipDict["back"]);
+            back.ReWrite(monoBM.KeyTipDict["back"]);
 
             keycom = new UIKeyTip();
             keycom.root = this.transform.Find("KT_KeyCom") as RectTransform;
             keycom.img = keycom.root.Find("Image").GetComponent<Image>();
             keycom.keytip = keycom.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             keycom.description = keycom.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            keycom.ReWrite(MonoBuildingManager.Instance.KeyTipDict["keycom"]);
+            keycom.ReWrite(monoBM.KeyTipDict["keycom"]);
         }
 
         #endregion
@@ -100,32 +100,14 @@ namespace ML.Engine.BuildingSystem.UI
         public override void OnEnter()
         {
             base.OnEnter();
-            this.RegisterInput();
 
             // 记录原 Transform
             this._editOldPos = this.Placer.SelectedPartInstance.transform.position;
             this._editOldRotation = this.Placer.SelectedPartInstance.transform.rotation;
         }
-
-
-        public override void OnPause()
-        {
-            base.OnPause();
-            this.UnregisterInput();
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            this.RegisterInput();
-        }
-
-
-
         public override void OnExit()
         {
             base.OnExit();
-            this.UnregisterInput();
             this.Placer.SelectedPartInstance = null;
         }
         #endregion
@@ -133,17 +115,17 @@ namespace ML.Engine.BuildingSystem.UI
         #region Refresh
         public override void Refresh()
         {
-            place.ReWrite(MonoBuildingManager.Instance.KeyTipDict["place"]);
-            altersocket.ReWrite(MonoBuildingManager.Instance.KeyTipDict["altersocket"]);
-            rotateright.ReWrite(MonoBuildingManager.Instance.KeyTipDict["rotateright"]);
-            rotateleft.ReWrite(MonoBuildingManager.Instance.KeyTipDict["rotateleft"]);
-            back.ReWrite(MonoBuildingManager.Instance.KeyTipDict["back"]);
-            keycom.ReWrite(MonoBuildingManager.Instance.KeyTipDict["keycom"]);
+            place.ReWrite(monoBM.KeyTipDict["place"]);
+            altersocket.ReWrite(monoBM.KeyTipDict["altersocket"]);
+            rotateright.ReWrite(monoBM.KeyTipDict["rotateright"]);
+            rotateleft.ReWrite(monoBM.KeyTipDict["rotateleft"]);
+            back.ReWrite(monoBM.KeyTipDict["back"]);
+            keycom.ReWrite(monoBM.KeyTipDict["keycom"]);
         }
         #endregion
 
         #region KeyFunction
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
             Manager.GameManager.Instance.TickManager.UnregisterFixedTick(this);
 
@@ -160,7 +142,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.comfirmInputAction.performed -= Placer_ComfirmEdit;
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
             Manager.GameManager.Instance.TickManager.RegisterFixedTick(0, this);
 
@@ -184,7 +166,7 @@ namespace ML.Engine.BuildingSystem.UI
         {
             if(this.Placer.ComfirmEditBPart(this._editOldPos))
             {
-                MonoBuildingManager.Instance.PopPanel();
+                monoBM.PopPanel();
             }
         }
 
@@ -212,12 +194,12 @@ namespace ML.Engine.BuildingSystem.UI
         {
             this.Placer.SelectedPartInstance.transform.position = this._editOldPos;
             this.Placer.SelectedPartInstance.transform.rotation = this._editOldRotation;
-            MonoBuildingManager.Instance.PopPanel();
+            monoBM.PopPanel();
         }
 
         private void Placer_EnterKeyCom(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            MonoBuildingManager.Instance.PushPanel<BSEditMode_KeyComPanel>();
+            monoBM.PushPanel<BSEditMode_KeyComPanel>();
         }
 
         #endregion

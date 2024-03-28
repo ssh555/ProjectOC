@@ -1,8 +1,6 @@
 using ML.Engine.BuildingSystem;
-using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InteractSystem;
 using ML.Engine.Manager;
-using ML.Engine.UI;
 using ProjectOC.LandMassExpand;
 using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
@@ -48,7 +46,7 @@ namespace ProjectOC.ProNodeNS
         public void Interact(InteractComponent component)
         {
             // ÊµÀý»¯UIPanel
-            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIProNodePanel.prefab", GameManager.Instance.UIManager.GetCanvas.transform, true).Completed += (handle) =>
+            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIProNodePanel.prefab", GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
             {
                 InventorySystem.UI.UIProNode uiPanel = handle.Result.GetComponent<InventorySystem.UI.UIProNode>();
                 uiPanel.Player = component.GetComponentInParent<Player.PlayerCharacter>();

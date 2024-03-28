@@ -18,7 +18,7 @@ namespace ML.Engine.BuildingSystem.UI
         #region Property|Field
         private BuildingManager BM => BuildingManager.Instance;
         private BuildingPlacer.BuildingPlacer Placer => BM.Placer;
-
+        private MonoBuildingManager monoBM;
         #region UIGO引用
         private UnityEngine.UI.Image[] matInstance;
         private int activeIndex;
@@ -35,10 +35,10 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region Unity
-        private void Awake()
+        protected override void Awake()
         {
             LoadMatPackages();
-
+            monoBM = ML.Engine.Manager.GameManager.Instance.GetLocalManager<MonoBuildingManager>();
             matParent = this.transform.Find("KT_AlterMat").Find("KT_AlterStyle").Find("Content") as RectTransform;
             this.templateMat = matParent.Find("MatTemplate") as RectTransform;
             templateMat.gameObject.SetActive(false);
@@ -50,43 +50,37 @@ namespace ML.Engine.BuildingSystem.UI
             comfirm.img = comfirm.root.Find("Image").GetComponent<Image>();
             comfirm.keytip = comfirm.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             comfirm.description = comfirm.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            comfirm.ReWrite(MonoBuildingManager.Instance.KeyTipDict["comfirm"]);
+            comfirm.ReWrite(monoBM.KeyTipDict["comfirm"]);
 
             back = new UIKeyTip();
             back.root = keytips.Find("KT_Back") as RectTransform;
             back.img = back.root.Find("Image").GetComponent<Image>();
             back.keytip = back.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
             back.description = back.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            back.ReWrite(MonoBuildingManager.Instance.KeyTipDict["back"]);
+            back.ReWrite(monoBM.KeyTipDict["back"]);
 
             keytips = this.transform.Find("KT_AlterMat").Find("KT_AlterStyle");
             matlast = new UIKeyTip();
             matlast.root = keytips.Find("KT_Left") as RectTransform;
             matlast.img = matlast.root.Find("Image").GetComponent<Image>();
             matlast.keytip = matlast.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            matlast.ReWrite(MonoBuildingManager.Instance.KeyTipDict["matlast"]);
+            matlast.ReWrite(monoBM.KeyTipDict["matlast"]);
 
             matnext = new UIKeyTip();
             matnext.root = keytips.Find("KT_Right") as RectTransform;
             matnext.img = matnext.root.Find("Image").GetComponent<Image>();
             matnext.keytip = matnext.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            matnext.ReWrite(MonoBuildingManager.Instance.KeyTipDict["matnext"]);
+            matnext.ReWrite(monoBM.KeyTipDict["matnext"]);
 
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             Manager.GameManager.Instance.ABResourceManager.Release(matHandle);
         }
         #endregion
 
         #region Override
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            this.RegisterInput();
-        }
-
         public override void OnPause()
         {
             throw new Exception("建造系统外观UI面板不允许存在叠加其他UI面板的情况");
@@ -99,20 +93,18 @@ namespace ML.Engine.BuildingSystem.UI
 
         public override void OnExit()
         {
-            this.UnregisterInput();
+            base.OnExit();
             ClearInstance();
-
-            Manager.GameManager.DestroyObj(this.gameObject);
         }
         #endregion
 
         #region Internal
         #region KeyFunction
-        public void UnregisterInput()
+        protected override void UnregisterInput()
         {
             this.Placer.BInput.BuildingAppearance.Disable();
 
-            this.Placer.comfirmInputAction.performed += Placer_ComfirmAppearance;
+            this.Placer.comfirmInputAction.performed -= Placer_ComfirmAppearance;
             this.Placer.backInputAction.performed -= Placer_CancelAppearance;
             this.Placer.BInput.BuildingAppearance.AlterMaterial.performed -= Placer_OnChangeAppearance;
 
@@ -122,7 +114,7 @@ namespace ML.Engine.BuildingSystem.UI
             //ProjectOC.Input.InputManager.PlayerInput.Player.Jump.Disable();
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
             this.Placer.BInput.BuildingAppearance.Enable();
 
@@ -266,11 +258,12 @@ namespace ML.Engine.BuildingSystem.UI
 
         protected void ExitAppearancePanel()
         {
+            this.Placer.SelectedPartInstance.Mode = this._aMode;
+
             // 弹出外观UI
-            MonoBuildingManager.Instance.PopPanel();
+            monoBM.PopPanel();
             // 禁用 Input.Appearance
             this.Placer.BInput.BuildingAppearance.Disable();
-            this.Placer.SelectedPartInstance.Mode = this._aMode;
         }
 
         private const string MatPABPath = "BPartMatPackage";

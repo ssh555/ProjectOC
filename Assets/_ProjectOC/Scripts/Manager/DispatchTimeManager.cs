@@ -8,19 +8,16 @@ using UnityEngine;
 namespace ProjectOC.ManagerNS
 {
     /// <summary>
-    /// 调度的时间管理器
+    /// 时间管理器
     /// </summary>
     [System.Serializable]
     public sealed class DispatchTimeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
+        private int timeScale = 1;
         /// <summary>
-        /// 时间流速比例，现实 timeScale秒 等于游戏内 1h
+        /// 时间流速比例，现实TimeScale秒等于游戏内1分钟。
         /// </summary>
-        private float timeScale = 60;
-        /// <summary>
-        /// 时间流速比例，现实timeScale s等于游戏1h
-        /// </summary>
-        public float TimeScale 
+        public int TimeScale 
         { 
             get { return timeScale; }
             set
@@ -37,23 +34,46 @@ namespace ProjectOC.ManagerNS
         /// </summary>
         public int CurrentTimeFrame = 0;
         /// <summary>
-        /// 计时器 => 时段更新(TimeScale确定) 一天循环24次，一个时段计时一次，计时结束时调用时段更新事件，Loop
+        /// 当前所处分钟 [0, 59]
+        /// </summary>
+        public int CurrentMinute = 0;
+        /// <summary>
+        /// 当前日期，从0开始
+        /// </summary>
+        public int CurrentDay = 0;
+        /// <summary>
+        /// 计时器，时间为TimeScale秒，循环计时。每次计时结束后更新时段，并调用时段更新事件
         /// </summary>
         private CounterDownTimer Timer;
         /// <summary>
-        /// 时段更新事件
+        /// 时段更新事件，时段切换时调用，参数为当前新的时段
         /// </summary>
         public event Action<int> OnTimeFrameChanged;
+        /// <summary>
+        /// 日期更新事件，日期切换时调用，参数为当前新的日期
+        /// </summary>
+        public event Action<int> OnDayChanged;
+
+
         public void Init()
         {
-            this.Timer = new CounterDownTimer(this.TimeScale, true, false);
+            this.Timer = new CounterDownTimer(TimeScale, true, false);
             this.Timer.OnEndEvent += EndActionForTimer;
             this.Timer.Start();
         }
         private void EndActionForTimer()
         {
-            this.CurrentTimeFrame = (this.CurrentTimeFrame + 1) % 24;
-            this.OnTimeFrameChanged?.Invoke(this.CurrentTimeFrame);
+            this.CurrentMinute = (this.CurrentMinute + 1) % 60;
+            if (this.CurrentMinute == 0)
+            {
+                this.CurrentTimeFrame = (this.CurrentTimeFrame + 1) % 24;
+                this.OnTimeFrameChanged?.Invoke(this.CurrentTimeFrame);
+                if (this.CurrentTimeFrame == 0)
+                {
+                    this.CurrentDay += 1;
+                    this.OnDayChanged?.Invoke(this.CurrentDay);
+                }
+            }
         }
     }
 }

@@ -26,7 +26,9 @@ namespace ML.Engine.Manager
 
                     panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
 
-                    panel.OnEnter();
+                    GameManager.Instance.UIManager.PushPanel(panel);
+
+                    //panel.OnEnter();
                 };
 
             };
@@ -52,20 +54,21 @@ namespace ML.Engine.Manager
         //    this.isInit = true;
            
         //}
-        #endregion
+        
 
         public AsyncOperationHandle<GameObject> GetStartMenuPanelInstance()
         {
-            return Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.StartMenuPanelPrefab);
+            return Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.StartMenuPanelPrefab, isGlobal: true);
         }
         public AsyncOperationHandle<GameObject> GetLoadingScenePanelInstance()
         {
-            return Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.LoadingScenePanelPrefab);
+            return Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.LoadingScenePanelPrefab, isGlobal: true);
         }
         public AsyncOperationHandle<GameObject> GetOptionPanelInstance()
         {
-            return Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.OptionPanelPrefab);
+            return Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.OptionPanelPrefab, isGlobal: true);
         }
+        #endregion
     }
 
 }

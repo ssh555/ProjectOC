@@ -58,14 +58,27 @@ namespace ProjectOC.Player
         public bool bInVerseRotX;
 
         [LabelText("启用deltaTime")]
-        public bool bEnableDeltaTime = false;
+        public bool bEnableDeltaTime = true;
 
+        #region 相机跟随
+        
+        private float SpringCurLength = 0.1f;
+        [LabelText("弹簧臂伸缩速度")]
+        public float scrollSpeed = 0.001f;
+        [LabelText("弹簧臂长最大"),Range(0,10)] 
+        public float SpringMaxLength = 4f;
+        [LabelText("弹簧臂长最小"),Range(0,10)] 
+        public float SpringMinLength = 2f;
+        #endregion
+        
         private UnityEngine.InputSystem.InputAction MouseXInput;
         private UnityEngine.InputSystem.InputAction MouseYInput;
-        public void RuntimeSetMouseInput(UnityEngine.InputSystem.InputAction X, UnityEngine.InputSystem.InputAction Y)
+        private UnityEngine.InputSystem.InputAction MouseScroll;
+        public void RuntimeSetMouseInput(UnityEngine.InputSystem.InputAction X, UnityEngine.InputSystem.InputAction Y,UnityEngine.InputSystem.InputAction Scroll)
         {
             this.MouseXInput = X;
             this.MouseYInput = Y;
+            this.MouseScroll = Scroll;
         }
         #endregion
 
@@ -83,7 +96,16 @@ namespace ProjectOC.Player
             {
                 return;
             }
+            #region 相机跟随
 
+            float mouseScroll = this.MouseScroll.ReadValue<float>() * scrollSpeed;
+            SpringCurLength =  Mathf.Clamp(SpringCurLength + mouseScroll,SpringMinLength,SpringMaxLength);
+            Vector3 camPos =  VCamera.transform.localPosition.normalized* SpringCurLength;
+            VCamera.transform.localPosition = camPos;
+
+            #endregion
+            
+            #region 跟随鼠标旋转
             // 锁定鼠标
             //Cursor.lockState = CursorLockMode.Locked;
 
@@ -99,6 +121,9 @@ namespace ProjectOC.Player
             this.VCamRotX.localRotation *= Quaternion.Euler(mouseY * (bInVerseRotX ? -1 : 1), 0f, 0f);
             this.VCamRotX.localRotation = this.ClampRotationAroundXAxis(this.VCamRotX.localRotation);
             //this.ConstrainCamera();
+            #endregion
+            
+
         }
         #endregion
 
