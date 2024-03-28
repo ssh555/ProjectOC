@@ -203,7 +203,7 @@ namespace ProjectOC.Player
             // ½ö²âÊÔÓÃ
             foreach (var id in ML.Engine.InventorySystem.ItemManager.Instance.GetAllItemID())//ML.Engine.InventorySystem.ItemManager.Instance.GetCanStack(id) ? UnityEngine.Random.Range(1, 999) : 1
             {
-                ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(id, 999).ForEach(item => Inventory.AddItem(item));
+                ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(id, 500).ForEach(item => Inventory.AddItem(item));
             }
         }
 

@@ -32,7 +32,7 @@ namespace ProjectOC.TechTree.UI
 
             category = ((TechPointCategory[])Enum.GetValues(typeof(TechPointCategory))).Where(c => (int)c > 0).ToArray();
             RefreshCategory(0);
-
+            IsInit = true;
         }
 
         private static TechPointCategory[] category;
@@ -463,6 +463,11 @@ namespace ProjectOC.TechTree.UI
 
         public override void Refresh()
         {
+            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
+            {
+                return;
+            }
+
             if (lastCIndex != cIndex)
             {
                 lastCIndex = cIndex;

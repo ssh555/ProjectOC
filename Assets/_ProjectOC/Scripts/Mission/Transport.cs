@@ -193,7 +193,7 @@ namespace ProjectOC.MissionNS
                 ItemManager.Instance.SpawnWorldItem(item, Worker.transform.position, Worker.transform.rotation);
 #pragma warning restore CS4014
             }
-            Worker.SetTimeStatusAll(TimeStatus.Relax);
+            //Worker.SetTimeStatusAll(TimeStatus.Relax);
             Worker.TransportItems.Clear();
             Worker.Transport = null;
             Worker.ClearDestination();

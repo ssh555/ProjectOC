@@ -139,8 +139,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             if (Workers.Count == 0) return;
             LocalGameManager.Instance.WorkerManager.DeleteWorker(Workers[CurrentBeastIndex]);
-
-            CurrentBeastIndex = (CurrentBeastIndex + Workers.Count - 1) % Workers.Count;
+            Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
+            if (Workers.Count != 0) 
+                CurrentBeastIndex = (CurrentBeastIndex + Workers.Count - 1) % Workers.Count;
             this.Refresh();
         }
 
@@ -323,8 +324,15 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                 if (lastIndex != -1 && curIndex != -1)
                 {
-                    var cur = Content.GetChild(curIndex);
-                    var last = Content.GetChild(lastIndex);
+                    Transform cur = null;
+                    Transform last = null;
+                    try
+                    {
+                        cur = Content.GetChild(curIndex);
+                        last = Content.GetChild(lastIndex);
+                    }
+                    catch { }
+                    
 
                     if (cur != null && last != null)
                     {
@@ -417,6 +425,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         protected override void InitObjectPool()
         {
+            Debug.Log("InitObjectPool " + this.objectPool.GetHashCode());
             this.objectPool.RegisterPool(ObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
             "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2", (handle) =>
             {

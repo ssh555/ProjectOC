@@ -77,7 +77,7 @@ namespace ML.Engine.InventorySystem
         #region to-do : 需读表导入所有所需的 Item 数据
         public const string TypePath = "ML.Engine.InventorySystem.";
         public const string ItemIconLabel = "ItemTexture2D";
-        public const string WorldObjLabel = "ItemWorldPrefabs";
+        public const string WorldObjLabel = "ML/InventorySystem/WorldItemPrefabs";
 
 
 
@@ -282,7 +282,7 @@ namespace ML.Engine.InventorySystem
             if (parent.GetComponentInChildren<SpriteRenderer>() == null)
             {
                 // 异步加载资源
-                var handle = Addressables.InstantiateAsync(WorldObjLabel + "/ItemIcon", parent);
+                var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjLabel + "/ItemIcon.prefab", parent);
 
                 // 等待加载完成
                 await handle.Task;

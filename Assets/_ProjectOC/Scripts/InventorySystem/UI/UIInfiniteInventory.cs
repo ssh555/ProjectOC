@@ -369,13 +369,13 @@ namespace ProjectOC.InventorySystem.UI
 
         #region UI
         #region Temp
-        private List<Sprite> tempSprite = new List<Sprite>();
+        private Dictionary<string,Sprite> spriteDictionart = new Dictionary<string, Sprite>();
         private Dictionary<ML.Engine.InventorySystem.ItemType, GameObject> tempItemType = new Dictionary<ML.Engine.InventorySystem.ItemType, GameObject>();
         private List<GameObject> tempUIItems = new List<GameObject>();
 
         private void ClearTemp()
         {
-            foreach(var s in tempSprite)
+            foreach(var s in spriteDictionart.Values)
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s);
             }
@@ -444,15 +444,15 @@ namespace ProjectOC.InventorySystem.UI
                     tempItemType.Add(itemtype, obj);
                     // 载入ItemType对应的Texture2D
 
-                    Sprite sprite = GetSprite(itemtype.ToString());
-                    if(sprite == null)
+                    Sprite sprite = null;
+                    if(!spriteDictionart.TryGetValue(itemtype.ToString(),out sprite))
                         sprite = inventoryAtlas.GetSprite(itemtype.ToString());
                     //var tex = ab.LoadAsset<Texture2D>(itemtype.ToString());
                     // 创建Sprite并加入临时内存管理
                     
                     if (sprite != null)
                     {
-                        AddSprite(sprite);
+                        spriteDictionart.Add(itemtype.ToString(),sprite);
                         obj.transform.Find("Image").GetComponent<Image>().sprite = sprite;
 
                     }
@@ -510,17 +510,12 @@ namespace ProjectOC.InventorySystem.UI
                 // 更新Icon
                 var img = item.transform.Find("Icon").GetComponent<Image>();
                 // 查找临时存储的Sprite
-                var sprite = GetSprite(SelectedItems[i].ID);
+                Sprite sprite = null;
                 // 不存在则生成
-                if (sprite == null)
+                if (!spriteDictionart.TryGetValue(SelectedItems[i].ID,out sprite))
                 {
                     sprite = ItemManager.Instance.GetItemSprite(SelectedItems[i].ID);
-                    AddSprite(sprite);
-                    if (sprite == null)
-                    {
-                        Debug.Log(SelectedItems[i].ID);
-                    }
-                    
+                    spriteDictionart.Add(SelectedItems[i].ID,sprite);
                 }
                 img.sprite = sprite;
                 // Amount
@@ -611,8 +606,7 @@ namespace ProjectOC.InventorySystem.UI
                 this.transform.Find("ItemInfo").gameObject.SetActive(true);
                 // 更新Item名称
                 Info_ItemName.text = ItemManager.Instance.GetItemName(CurrentItem.ID);
-                Sprite _sprite = GetSprite(CurrentItem.ID);
-                Debug.Log($"{CurrentItem.ID}  sprite:{_sprite}");
+                Sprite _sprite = spriteDictionart[CurrentItem.ID];
                 // 更新图标 => 必定是载入了的
                 Info_ItemIcon.sprite = _sprite;
                 // 更新单个重量: JsonText + Amount
@@ -688,23 +682,7 @@ namespace ProjectOC.InventorySystem.UI
         }
         #endregion
 
-        private Sprite GetSprite(string id)
-        {
-            Sprite res = tempSprite.Find(s => s.name == id);
-            return res;
-        }
 
-        private void AddSprite(Sprite _sprite)
-        {
-            if (_sprite == null)
-            {
-                Debug.Log("sprite null");
-                return;
-            }
-            
-            _sprite.name = _sprite.name.Replace("(Clone)", "");
-            tempSprite.Add(_sprite);
-        }
 
     }
 
