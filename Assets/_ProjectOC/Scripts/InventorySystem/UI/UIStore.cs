@@ -14,6 +14,7 @@ using UnityEngine.InputSystem;
 using static ProjectOC.InventorySystem.UI.UIStore;
 using System;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.Purchasing;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -21,17 +22,9 @@ namespace ProjectOC.InventorySystem.UI
     {
         #region Unity
         public bool IsInit = false;
-        protected override void Awake()
+        protected override void Start()
         {
-            base.Awake();
-            this.InitTextContentPathData();
-
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
+            base.Start();
 
             #region TopTitle
             Text_Title = transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
@@ -84,47 +77,16 @@ namespace ProjectOC.InventorySystem.UI
             BotKeyTips_ChangeItem.gameObject.SetActive(false);
             #endregion
 
-            CurPriority = MissionNS.TransportPriority.Normal;
+            // CurPriority = MissionNS.TransportPriority.Normal;
             IsInit = true;
             Refresh();
-        }
-        protected override void Start()
-        {
-            base.Start();
         }
         #endregion
 
         #region Override
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            this.Enter();
-        }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-            this.Exit();
-            ClearTemp();
-        }
-
-        public override void OnPause()
-        {
-            base.OnPause();
-            this.Exit();
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            this.Enter();
-        }
-
         protected override void Enter()
         {
             Store.OnStoreDataChange += Refresh;
-            this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Enable();
             Store.IsInteracting = true;
             base.Enter();
         }
@@ -132,9 +94,8 @@ namespace ProjectOC.InventorySystem.UI
         protected override void Exit()
         {
             Store.OnStoreDataChange -= Refresh;
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Disable();
             Store.IsInteracting = false;
-            this.UnregisterInput();
+            ClearTemp();
             base.Exit();
         }
         #endregion
@@ -336,16 +297,15 @@ namespace ProjectOC.InventorySystem.UI
         }
         public Player.PlayerCharacter Player;
 
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Disable();
             // 切换Priority
             ProjectOC.Input.InputManager.PlayerInput.UIStore.NextPriority.performed -= NextPriority_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeIcon.performed -= ChangeIcon_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Upgrade.performed -= Upgrade_performed;
             // 上下切换StoreData
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeItem.performed -= ChangeItem_performed;
-            // 改变StoreData存储的Item
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeStoreData.performed -= ChangeStoreData_performed;
             // 快捷放入
             ProjectOC.Input.InputManager.PlayerInput.UIStore.FastAdd.performed -= FastAdd_performed;
             // 取出1个
@@ -357,16 +317,15 @@ namespace ProjectOC.InventorySystem.UI
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Enable();
             // 切换Priority
             ProjectOC.Input.InputManager.PlayerInput.UIStore.NextPriority.performed += NextPriority_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeIcon.performed += ChangeIcon_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Upgrade.performed += Upgrade_performed;
             // 上下切换StoreData
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeItem.performed += ChangeItem_performed;
-            // 改变StoreData存储的Item
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeStoreData.performed += ChangeStoreData_performed;
             // 快捷放入
             ProjectOC.Input.InputManager.PlayerInput.UIStore.FastAdd.performed += FastAdd_performed;
             // 取出1个
@@ -428,14 +387,6 @@ namespace ProjectOC.InventorySystem.UI
                 this.CurrentItemIndex += -offset.y * grid.y + offset.x;
             }
         }
-        private void ChangeStoreData_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            if (CurMode == Mode.Store)
-            {
-                CurMode = Mode.ChangeItem;
-                Refresh();
-            }
-        }
         private void FastAdd_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (CurMode == Mode.Store)
@@ -477,7 +428,11 @@ namespace ProjectOC.InventorySystem.UI
         }
         private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurMode == Mode.ChangeItem)
+            if (CurMode == Mode.Store)
+            {
+                CurMode = Mode.ChangeItem;
+            }
+            else if (CurMode == Mode.ChangeItem)
             {
                 Store.ChangeStoreData(CurrentDataIndex, CurrentItemData);
                 this.CurMode = Mode.Store;
@@ -492,25 +447,21 @@ namespace ProjectOC.InventorySystem.UI
                 var img = StoreIcon.GetComponent<Image>();
                 if (ItemManager.Instance.IsValidItemID(itemID))
                 {
-                    var texture = ItemManager.Instance.GetItemTexture2D(itemID);
-                    if (texture != null)
+                    if (!tempSprite.ContainsKey(itemID))
                     {
-                        // 查找临时存储的Sprite
-                        var sprite = tempSprite.Find(s => s.texture == texture);
-                        // 不存在则生成
-                        if (sprite == null)
-                        {
-                            sprite = ItemManager.Instance.GetItemSprite(itemID);
-                            tempSprite.Add(sprite);
-                        }
+                        var sprite = ItemManager.Instance.GetItemSprite(itemID);
+                        tempSprite[itemID] = sprite;
                         img.sprite = sprite;
-
-                        ItemManager.Instance.AddItemIconObject(itemID,
-                                                               this.Store.WorldStore.transform,
-                                                               new Vector3(0, this.Store.WorldStore.transform.GetComponent<Collider>().bounds.size.y / 2, 0),
-                                                               Quaternion.Euler(90, 0, 0),
-                                                               Vector3.one);
                     }
+                    else
+                    {
+                        img.sprite = tempSprite[itemID];
+                    }
+                    ItemManager.Instance.AddItemIconObject(itemID,
+                                                           this.Store.WorldStore.transform,
+                                                           new Vector3(0, this.Store.WorldStore.transform.GetComponent<Collider>().bounds.size.y / 2, 0),
+                                                           Quaternion.Euler(90, 0, 0),
+                                                           Vector3.one);
                 }
                 else
                 {
@@ -528,7 +479,7 @@ namespace ProjectOC.InventorySystem.UI
 
         #region UI
         #region Temp
-        private List<Sprite> tempSprite = new List<Sprite>();
+        private Dictionary<string, Sprite> tempSprite = new Dictionary<string, Sprite>();
         private List<GameObject> uiStoreDatas = new List<GameObject>();
         private List<GameObject> tempUIItemDatas = new List<GameObject>();
         private List<GameObject> tempUIItemDatasUpgrade = new List<GameObject>();
@@ -537,7 +488,7 @@ namespace ProjectOC.InventorySystem.UI
         {
             foreach(var s in tempSprite)
             {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s.Value);
             }
             foreach (var s in uiStoreDatas)
             {
@@ -633,15 +584,16 @@ namespace ProjectOC.InventorySystem.UI
                     var img = uiStoreData.transform.Find("Icon").GetComponent<Image>();
                     if (ItemManager.Instance.IsValidItemID(storeData.ItemID))
                     {
-                        // 查找临时存储的Sprite
-                        var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(storeData.ItemID));
-                        // 不存在则生成
-                        if (sprite == null)
+                        if (!tempSprite.ContainsKey(storeData.ItemID))
                         {
-                            sprite = ItemManager.Instance.GetItemSprite(storeData.ItemID);
-                            tempSprite.Add(sprite);
+                            var sprite = ItemManager.Instance.GetItemSprite(storeData.ItemID);
+                            tempSprite[storeData.ItemID] = sprite;
+                            img.sprite = sprite;
                         }
-                        img.sprite = sprite;
+                        else
+                        {
+                            img.sprite = tempSprite[storeData.ItemID];
+                        }
                     }
                     else
                     {
@@ -779,10 +731,6 @@ namespace ProjectOC.InventorySystem.UI
                 // 强制立即更新 VerticalLayoutGroup 的布局
                 LayoutRebuilder.ForceRebuildLayoutImmediate(GridLayout.GetComponent<RectTransform>());
                 #endregion
-
-                #region BotKeyTips
-
-                #endregion
             }
             else if(this.CurMode == Mode.ChangeItem || this.CurMode == Mode.ChangeIcon)
             {
@@ -835,15 +783,16 @@ namespace ProjectOC.InventorySystem.UI
                     var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
                     if (ItemManager.Instance.IsValidItemID(itemID))
                     {
-                        // 查找临时存储的Sprite
-                        var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(itemID));
-                        // 不存在则生成
-                        if (sprite == null)
+                        if (!tempSprite.ContainsKey(itemID))
                         {
-                            sprite = ItemManager.Instance.GetItemSprite(itemID);
-                            tempSprite.Add(sprite);
+                            var sprite = ItemManager.Instance.GetItemSprite(itemID);
+                            tempSprite[itemID] = sprite;
+                            img.sprite = sprite;
                         }
-                        img.sprite = sprite;
+                        else
+                        {
+                            img.sprite = tempSprite[itemID];
+                        }
                     }
                     else
                     {
@@ -932,10 +881,6 @@ namespace ProjectOC.InventorySystem.UI
                 // 强制立即更新 VerticalLayoutGroup 的布局
                 LayoutRebuilder.ForceRebuildLayoutImmediate(ChangeItem_GridLayout.GetComponent<RectTransform>());
                 #endregion
-
-                #region BotKeyTips
-
-                #endregion
             }
             else if (this.CurMode == Mode.Upgrade)
             {
@@ -979,18 +924,15 @@ namespace ProjectOC.InventorySystem.UI
                     var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
                     if (ItemManager.Instance.IsValidItemID(itemID))
                     {
-                        var texture = ItemManager.Instance.GetItemTexture2D(itemID);
-                        if (texture != null)
+                        if (!tempSprite.ContainsKey(itemID))
                         {
-                            // 查找临时存储的Sprite
-                            var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(itemID));
-                            // 不存在则生成
-                            if (sprite == null)
-                            {
-                                sprite = ItemManager.Instance.GetItemSprite(itemID);
-                                tempSprite.Add(sprite);
-                            }
+                            var sprite = ItemManager.Instance.GetItemSprite(itemID);
+                            tempSprite[itemID] = sprite;
                             img.sprite = sprite;
+                        }
+                        else
+                        {
+                            img.sprite = tempSprite[itemID];
                         }
                     }
                     else
@@ -1030,10 +972,6 @@ namespace ProjectOC.InventorySystem.UI
                     DescNew.text = "";
                 }
                 #endregion
-
-                #region BotKeyTips
-
-                #endregion
             }
         }
         #endregion
@@ -1061,7 +999,7 @@ namespace ProjectOC.InventorySystem.UI
             public KeyTip Confirm;
             public KeyTip Back;
         }
-        private void InitTextContentPathData()
+        protected override void InitTextContentPathData()
         {
             this.abpath = "OC/Json/TextContent/Store";
             this.abname = "StorePanel";

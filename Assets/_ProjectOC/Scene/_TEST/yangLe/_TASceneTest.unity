@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 257821958}
   - component: {fileID: 257821957}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: AlphaBlend
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -222,7 +222,7 @@ Transform:
   m_GameObject: {fileID: 257821956}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.038, y: 1.38, z: 3.246}
+  m_LocalPosition: {x: -1.038, y: 1.561, z: 3.246}
   m_LocalScale: {x: 2.0341, y: 2.0341, z: 2.0341}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -874,6 +874,26 @@ PrefabInstance:
     - target: {fileID: 8934122120899684264, guid: e86c5df5f2cad3b4f906fc81b800943e, type: 3}
       propertyPath: multiEnumAsset
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8934122120899684264, guid: e86c5df5f2cad3b4f906fc81b800943e, type: 3}
+      propertyPath: moveStateParams.airControl
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8934122120899684264, guid: e86c5df5f2cad3b4f906fc81b800943e, type: 3}
+      propertyPath: moveAbility.moveSetting.Mass
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8934122120899684264, guid: e86c5df5f2cad3b4f906fc81b800943e, type: 3}
+      propertyPath: moveAbility.moveSetting.airDrag
+      value: 6.374998e+36
+      objectReference: {fileID: 0}
+    - target: {fileID: 8934122120899684264, guid: e86c5df5f2cad3b4f906fc81b800943e, type: 3}
+      propertyPath: moveStateParams.airControlBoostMultiplier
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8934122120899684264, guid: e86c5df5f2cad3b4f906fc81b800943e, type: 3}
+      propertyPath: moveStateParams.airControlBoostVelocityThreshold
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 8934122120899684269, guid: e86c5df5f2cad3b4f906fc81b800943e, type: 3}
       propertyPath: m_LocalPosition.x

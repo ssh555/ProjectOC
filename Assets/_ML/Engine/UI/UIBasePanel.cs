@@ -1,36 +1,36 @@
 using ML.Engine.ABResources;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
+using ML.Engine.Utility;
+using ProjectOC.ManagerNS;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using static ProjectOC.Player.UI.PlayerUIPanel;
-using static ProjectOC.ResonanceWheelSystem.UI.BeastPanel;
-using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub2;
-using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheelUI;
+using UnityEngine.U2D;
+
 
 namespace ML.Engine.UI
 {
-    public class UIBasePanel : MonoBehaviour
+    public class UIBasePanel : UIBehaviour
     {
         /// <summary>
-        /// Î¨Ò»±êÊ¶·û
+        /// å”¯ä¸€æ ‡è¯†ç¬¦
         /// </summary>
         public string ID { get; protected set; }
         /// <summary>
-        /// ×ÊÔ´¼ÓÔØÖ´ĞĞÆ÷
+        /// å¯¹è±¡æ± 
         /// </summary>
-        public FunctionExecutor<AsyncOperationHandle> functionExecutor = new FunctionExecutor<AsyncOperationHandle>();
-
+        public ObjectPool objectPool;
         /// <summary>
-        /// ËùÊôUIManager
+        /// æ‰€å±UIManager
         /// </summary>
         private UIManager _uiMgr;
         /// <summary>
-        /// ËùÊôUIManager
+        /// æ‰€å±UIManager
         /// </summary>
         public UIManager UIMgr
         {
@@ -49,67 +49,100 @@ namespace ML.Engine.UI
         }
 
         /// <summary>
-        /// Ñ¹ÈëUIÕ»Ê±µ÷ÓÃ
+        /// å‹å…¥UIæ ˆæ—¶è°ƒç”¨
         /// </summary>
         public virtual void OnEnter()
         {
             this.gameObject.SetActive(true);
+            this.objectPool = new ObjectPool();
+            this.InitObjectPool();
+            this.Enter();
+            
+     
         }
 
         /// <summary>
-        /// ÔİÍ£Ê±µ÷ÓÃ£¬¼´²»´¦ÓÚÕ»¶¥Ê±
-        /// </summary>
-        public virtual void OnPause()
-        {
-            this.gameObject.SetActive(false);
-        }
-
-        /// <summary>
-        /// ÔÙ´Î³ÉÎªÕ»¶¥Ê±µ÷ÓÃ
-        /// </summary>
-        public virtual void OnRecovery()
-        {
-            this.gameObject.SetActive(true);
-        }
-
-        /// <summary>
-        /// ³öÕ»Ê±µ÷ÓÃ
+        /// å‡ºæ ˆæ—¶è°ƒç”¨
         /// </summary>
         public virtual void OnExit()
         {
+            this.Exit();
             Manager.GameManager.DestroyObj(this.gameObject);
+            this.objectPool.OnDestroy();
         }
+
+        /// <summary>
+        /// æš‚åœæ—¶è°ƒç”¨ï¼Œå³ä¸å¤„äºæ ˆé¡¶æ—¶
+        /// </summary>
+        public virtual void OnPause()
+        {
+            this.Exit();
+            //this.gameObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// å†æ¬¡æˆä¸ºæ ˆé¡¶æ—¶è°ƒç”¨
+        /// </summary>
+        public virtual void OnRecovery()
+        {
+            //this.gameObject.SetActive(true);
+            this.Enter();
+        }
+
+
 
 
         protected virtual void Enter()
         {
+            this.RegisterInput();
             this.Refresh();
         }
 
         protected virtual void Exit()
         {
+            this.UnregisterInput();
+        }
+
+
+        protected virtual void UnregisterInput()
+        {
 
         }
 
+        protected virtual void RegisterInput()
+        {
+
+        }
         public virtual void Refresh()
         {
 
         }
 
-        protected virtual void Awake()
+        protected override void Awake()
         {
-
+            
         }
 
-        protected virtual void Start()
+        protected override void Start()
         {
             this.enabled = false;
         }
 
+        protected virtual void InitObjectPool()
+        {
+            this.objectPool.GetFunctionExecutor().SetOnAllFunctionsCompleted(() =>
+            {
+                this.Refresh();
+            });
+
+            StartCoroutine(this.objectPool.GetFunctionExecutor().Execute());
+        }
+
+
     }
 
     /// <summary>
-    /// Èô¸ÃUIBasePanelĞèÒªTextContentÔò¿ÉÒÔ¼ÓÈë·ºĞÍ<TextContentStruct>
+    /// è‹¥è¯¥UIBasePaneléœ€è¦TextContentåˆ™å¯ä»¥åŠ å…¥æ³›å‹<TextContentStruct>
     /// </summary>
     public class UIBasePanel<T> : UIBasePanel
     {
@@ -119,47 +152,60 @@ namespace ML.Engine.UI
         public string abname;
         public string description;
 
-        private UIKeyTipList UIKeyTipList;
+        private UIKeyTipList<T> UIKeyTipList;
 
         /// <summary>
-        /// ¼ÓÔØJsonÍê³ÉºóÖ´ĞĞµÄ»Øµ÷£¬Ä¬ÈÏ×Ô¶¯³õÊ¼»¯KeyTip
+        /// åŠ è½½Jsonå®Œæˆåæ‰§è¡Œçš„å›è°ƒï¼Œé»˜è®¤è‡ªåŠ¨åˆå§‹åŒ–KeyTip
         /// </summary>
         protected virtual void OnLoadJsonAssetComplete(T datas)
         {
             this.InitKeyTip(datas);
         }
         /// <summary>
-        /// ¼ÓÔØJson
+        /// åŠ è½½Json
         /// </summary>
-        private AsyncOperationHandle InitUITextContents()
+        private List<AsyncOperationHandle> InitUITextContents()
         {
-            this.ABJAProcessorJson = new ML.Engine.ABResources.ABJsonAssetProcessor<T>(this.abpath, this.abname, (datas) =>
+            var handles = new List<AsyncOperationHandle>();
+            var handle = this.ABJAProcessorJson = new ML.Engine.ABResources.ABJsonAssetProcessor<T>(this.abpath, this.abname, (datas) =>
             {
+                Debug.Log("InitUITextContentscompelete");
                this.OnLoadJsonAssetComplete(datas);
             }, this.description);
-            return this.ABJAProcessorJson.StartLoadJsonAssetData();
+            handles.Add(this.ABJAProcessorJson.StartLoadJsonAssetData());
+
+            return handles;
         }
         /// <summary>
-        /// ³õÊ¼»¯KeyTip
+        /// åˆå§‹åŒ–KeyTip
         /// </summary>
         private void InitKeyTip(T datas)
         {
-            UIKeyTipList = new UIKeyTipList(transform);
+            UIKeyTipList = new UIKeyTipList<T>(transform,datas);
 
-            KeyTip[] keyTips = GameManager.Instance.InputManager.ExportKeyTipValues(datas);
-            foreach (var keyTip in keyTips)
-            {
-                InputAction inputAction = GameManager.Instance.InputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
-
-                this.UIKeyTipList.SetKeyTiptext(keyTip.keyname, GameManager.Instance.InputManager.GetInputActionBindText(inputAction));
-                this.UIKeyTipList.SetDescriptiontext(keyTip.keyname, keyTip.description.GetText());
-            }
+            
         }
 
         protected override void Awake()
         {
             base.Awake();
-            this.functionExecutor.AddFunction(this.InitUITextContents);
+        }
+
+        protected override void Enter()
+        {
+            base.Enter();
+        }
+
+        protected virtual void InitTextContentPathData()
+        {
+
+        }
+
+        protected override void InitObjectPool()
+        {
+            this.InitTextContentPathData();
+            this.objectPool.GetFunctionExecutor().AddFunction(this.InitUITextContents);
+            base.InitObjectPool();
         }
     }
 }

@@ -2,11 +2,13 @@ using ML.Engine.Input;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
+using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheel_sub2;
 using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheelUI;
@@ -21,37 +23,15 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         protected override void Awake()
         {
             base.Awake();
-            this.InitTextContentPathData();
-            /*            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
-                            this.InitDescriptionPrefab,
-                            this.InitBeastBioPrefab,
-                            this.InitUITexture2D});*/
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
 
             //Ring
             var ringcontent = this.transform.Find("Ring").Find("Viewport").Find("Content");
 
             ring = ringcontent.Find("Ring").Find("ring");
 
-
             Grids = new GridBeastType[ring.childCount];
-
-
-
             IsInit = true;
             Refresh();
-            base.Start();
-
-
-        }
-        protected override void Start()
-        {
-            base.Start();
         }
 
         #endregion
@@ -60,48 +40,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public override void OnEnter()
         {
             base.OnEnter();
-            
-            this.Enter();
-
             parentUI.MainToSub2();
-            
         }
 
         public override void OnExit()
         {
             base.OnExit();
-            
-            this.Exit();
-            
             ClearTemp();
             parentUI.Sub2ToMain();
-
-        }
-
-        public override void OnPause()
-        {
-            base.OnPause();
-            this.Exit();
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            this.Enter();
-        }
-
-        protected override void Enter()
-        {
-            this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.Enable();
-            base.Enter();
-        }
-
-        protected override void Exit()
-        {
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.Disable();
-            this.UnregisterInput();
-            base.Exit();
         }
         #endregion
 
@@ -120,9 +66,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         }
         #region Internal
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
-           
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.Disable();
 
             //ÇÐ»»ÒþÊÞ
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.NextGrid.performed -= NextGrid_performed;
@@ -130,29 +76,21 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //È·ÈÏ
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.Confirm.performed -= Confirm_performed;
 
-
-
-
             // ·µ»Ø
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
-
-            
-
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
-            
+            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.Enable();
             //ÇÐ»»ÒþÊÞ
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.NextGrid.performed += NextGrid_performed;
-
 
             //È·ÈÏ
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub2.Confirm.performed += Confirm_performed;
 
             // ·µ»Ø
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
-
         }
 
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -283,7 +221,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             public KeyTip Back;
         }
 
-        private void InitTextContentPathData()
+        protected override void InitTextContentPathData()
         {
             this.abpath = "OC/Json/TextContent/ResonanceWheel";
             this.abname = "ResonanceWheel_sub2";

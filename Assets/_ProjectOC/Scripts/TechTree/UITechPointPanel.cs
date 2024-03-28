@@ -32,7 +32,7 @@ namespace ProjectOC.TechTree.UI
 
             category = ((TechPointCategory[])Enum.GetValues(typeof(TechPointCategory))).Where(c => (int)c > 0).ToArray();
             RefreshCategory(0);
-
+            IsInit = true;
         }
 
         private static TechPointCategory[] category;
@@ -193,19 +193,6 @@ namespace ProjectOC.TechTree.UI
         {
             base.Awake();
 
-            this.InitTextContentPathData();
-            /*            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
-                            this.InitUITexture2D,
-                            this.InitSlotPrefab });*/
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
-
-
-
             topTitle = this.transform.Find("TopPanel").GetComponentInChildren<TextMeshProUGUI>();
 
             Transform ContentPanel = this.transform.Find("ContentPanel");
@@ -258,7 +245,7 @@ namespace ProjectOC.TechTree.UI
         }
 
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             ClearTemp();
             (this as ITickComponent).DisposeTick();
@@ -308,7 +295,6 @@ namespace ProjectOC.TechTree.UI
         public override void OnEnter()
         {
             InitStaticData();
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
             base.OnEnter();
             ProjectOC.Input.InputManager.PlayerInput.TechTree.Enable();
             //Refresh();
@@ -326,13 +312,11 @@ namespace ProjectOC.TechTree.UI
         public override void OnPause()
         {
             base.OnPause();
-            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
             ProjectOC.Input.InputManager.PlayerInput.TechTree.Disable();
         }
 
         public override void OnRecovery()
         {
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
             base.OnRecovery();
             ProjectOC.Input.InputManager.PlayerInput.TechTree.Enable();
             Refresh();
@@ -341,9 +325,21 @@ namespace ProjectOC.TechTree.UI
         public override void OnExit()
         {
             base.OnExit();
-            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
             ProjectOC.Input.InputManager.PlayerInput.TechTree.Disable();
         }
+
+        protected override void Enter()
+        {
+            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
+            base.Enter();
+        }
+
+        protected override void Exit()
+        {
+            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
+            base.Exit();
+        }
+
         #endregion
 
         #region Internal
@@ -467,6 +463,11 @@ namespace ProjectOC.TechTree.UI
 
         public override void Refresh()
         {
+            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
+            {
+                return;
+            }
+
             if (lastCIndex != cIndex)
             {
                 lastCIndex = cIndex;
@@ -499,6 +500,7 @@ namespace ProjectOC.TechTree.UI
 
                     var sprite = TechTreeManager.Instance.GetTPCategorySprite(c);
                     obj.GetComponentInChildren<Image>().sprite = sprite;
+                    
                     tempSprite.Add(sprite);
                 }
 
@@ -716,6 +718,7 @@ namespace ProjectOC.TechTree.UI
 
                         // Image
                         var s = ItemManager.Instance.GetItemSprite(f.id);
+                        s.name = s.name.Replace("(Clone)", "");
                         tempSprite.Add(s);
                         item.transform.Find("Image").GetComponent<Image>().sprite = s;
                     }
@@ -870,8 +873,6 @@ namespace ProjectOC.TechTree.UI
             obj.GetComponentInChildren<Image>().color = Color.white;
         }
         #endregion
-
-
         protected override void OnLoadJsonAssetComplete(TPPanel datas)
         {
             foreach (var tip in datas.category)
@@ -880,7 +881,7 @@ namespace ProjectOC.TechTree.UI
             }
 
         }
-        private void InitTextContentPathData()
+        protected override void InitTextContentPathData()
         {
             this.abpath = "OC/Json/TextContent/TechTree";
             this.abname = "TechPointPanel";

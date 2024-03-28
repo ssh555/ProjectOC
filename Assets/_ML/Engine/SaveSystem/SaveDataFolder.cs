@@ -1,17 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using UnityEngine;
+using System.Linq;
 
 namespace ML.Engine.SaveSystem
 {
     /// <summary>
     /// 对应一个存档文件夹下的SaveConfig文件
-    /// 存此存档的相关数据(不是实际数据)
-    /// 存档路径Path + 存档名称name == 存档所在文件夹
-    /// 在此文件夹下有一个SaveConfig文件，就是存储的SaveDataFolder数据
-    /// 其余文件为存档数据文件
     /// </summary>
     public class SaveDataFolder : ISaveData
     {
@@ -32,8 +26,28 @@ namespace ML.Engine.SaveSystem
 
         /// <summary>
         /// 存档文件名称-对应的数据结构类型全名字符串的映射表
-        /// SaveName -> Path+Name+SaveName
+        /// SaveName -> Path+Name+SaveName+文件后缀
         /// </summary>
         public Dictionary<string, string> FileMap = new Dictionary<string, string>();
+
+        public SaveDataFolder() : base("", "SaveConfig") { }
+
+        public SaveDataFolder(string name) : base(name, "SaveConfig")
+        {
+            this.Name = name;
+            this.CreateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            this.LastSaveTime = this.CreateTime;
+        }
+        public void ChangeName(string name)
+        {
+            this.LastSaveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            this.IsDirty = true;
+            this.Path = name;
+            foreach (var kv in FileMap.ToList())
+            {
+                FileMap[kv.Key] = kv.Value.Replace(this.Name, name);
+            }
+            this.Name = name;
+        }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,9 @@ using ProjectOC.Player.Terrain;
 using UnityEngine.InputSystem;
 using ML.Engine.InteractSystem;
 using ML.Engine.UI;
+using UnityEngine.InputSystem.Controls;
+using UnityEngine.InputSystem.Layouts;
+using UnityEngine.InputSystem.Utilities;
 
 namespace ProjectOC.Player
 {
@@ -93,14 +97,15 @@ namespace ProjectOC.Player
         {
             this.playerModelStateController = new PlayerModelStateController(0, this.playerModel.GetComponentInChildren<Animator>(), this.GetComponent<Animator>(), this);
             
+            this.playerTerrainDetect.gameObject.AddComponent<PlayerTerrainDetect>().SetMoveSetting(this.moveAbility.moveSetting);
+
             if(this.thirdPersonRotateComp == null)
             {
                 this.thirdPersonRotateComp = new ThirdPersonRotateComp();
             }
             this.thirdPersonRotateComp.RegisterTick(0);
-            this.thirdPersonRotateComp.RuntimeSetMouseInput(this.playerInputActions.MouseX, this.playerInputActions.MouseY);
+            this.thirdPersonRotateComp.RuntimeSetMouseInput(this.playerInputActions.MouseX, this.playerInputActions.MouseY,this.playerInputActions.MouseScroll);
 
-            this.playerTerrainDetect.gameObject.AddComponent<PlayerTerrainDetect>().SetMoveSetting(this.moveAbility.moveSetting);
 
             this.moveStateController = new StateController(0);
             this.moveStateMachine = new PlayerMoveStateMachine(this.moveAbility.moveSetting, this.moveStateParams);
@@ -200,7 +205,7 @@ namespace ProjectOC.Player
             // ½ö²âÊÔÓÃ
             foreach (var id in ML.Engine.InventorySystem.ItemManager.Instance.GetAllItemID())//ML.Engine.InventorySystem.ItemManager.Instance.GetCanStack(id) ? UnityEngine.Random.Range(1, 999) : 1
             {
-                ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(id, 999).ForEach(item => Inventory.AddItem(item));
+                ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(id, 500).ForEach(item => Inventory.AddItem(item));
             }
         }
 
@@ -211,5 +216,14 @@ namespace ProjectOC.Player
             ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(id, amount).ForEach(item => Inventory.AddItem(item));
         }
         #endregion
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            GetComponent<Rigidbody>().mass = moveAbility.moveSetting.Mass;
+            CharacterController cc = GetComponent<CharacterController>();
+            cc.stepOffset = moveAbility.moveSetting.MaxStepHeight;
+            cc.slopeLimit = moveAbility.moveSetting.WalkerbleFloorAngle;
+        }
+#endif
     }
 }

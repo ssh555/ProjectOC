@@ -13,13 +13,15 @@ namespace ML.Engine.SaveSystem
         public TestSaveData() 
         {
             this.SaveName = "TestSaveData";
-            this.IsDirty = false;
         }
 
         public void AddToSaveSystem()
         {
+#if UNITY_EDITOR
+            this.dataInt = 1;
             this.IsDirty = true;
-            Manager.GameManager.Instance.SaveManager.SaveController.datas.Add(this);
+            Manager.GameManager.Instance.SaveManager.SaveController.SaveData(this, true);
+#endif
         }
     }
 }

@@ -3,6 +3,7 @@ using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
 using ProjectOC.InventorySystem.UI;
+using ProjectOC.ManagerNS;
 using ProjectOC.ResonanceWheelSystem.UI;
 using ProjectOC.TechTree.UI;
 using Sirenix.OdinInspector;
@@ -12,6 +13,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 using static ProjectOC.Player.UI.PlayerUIPanel;
 using static UnityEngine.Rendering.DebugUI;
@@ -28,25 +30,10 @@ namespace ProjectOC.Player.UI
         protected override void Awake()
         {
             base.Awake();
-            this.InitTextContentPathData();
-
-/*            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
-                this.InitDescriptionPrefab,
-                this.InitBeastBioPrefab,
-                this.InitUITexture2D});*/
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
-
             btnList = this.transform.Find("ButtonList");
-
         }
         protected override void Start()
         {
-
             IsInit = true;
             Refresh();
             base.Start();
@@ -54,7 +41,7 @@ namespace ProjectOC.Player.UI
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
         private List<AsyncOperationHandle<GameObject>> goHandle = new List<AsyncOperationHandle<GameObject>>();
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             foreach (var handle in goHandle)
             {
@@ -64,170 +51,34 @@ namespace ProjectOC.Player.UI
         #endregion
 
         #region Override
+
         public override void OnEnter()
         {
+            UIBtnList = new UIBtnList(parent: btnList);
             base.OnEnter();
-
-            this.Enter();
-
-
-
-        }
-
-        public override void OnExit()
-        {
-            base.OnExit();
-
-            this.Exit();
-
-            ClearTemp();
-
-
-        }
-
-        public override void OnPause()
-        {
-            base.OnPause();
-            this.Exit();
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            this.Enter();
-        }
-
-        protected override void Enter()
-        {
-            this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Enable();
-            base.Enter();
-        }
-
-        protected override void Exit()
-        {
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Disable();
-            this.UnregisterInput();
-            base.Exit();
-
         }
 
         #endregion
 
         #region Internal
-
-
-
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
+            this.UIBtnList.RemoveAllListener();
 
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Disable();
 
             //切换按钮
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUI.AlterSelected.started -= AlterSelected_started;
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUI.AlterSelected.started -= this.UIBtnList.SwichBtn_started;
 
             //确认
-            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
+            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= this.UIBtnList.Confirm_performed;
 
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
-
-
-
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
-
-            //切换按钮
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUI.AlterSelected.started += AlterSelected_started;
-
-            //确认
-            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
-
-            // 返回
-            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
-
-        }
-
-        private void AlterSelected_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            var vec2 = obj.ReadValue<Vector2>();
-            if (vec2.y > 0.1f)
-            {
-                this.UIBtnList.MoveUPIUISelected();
-            }
-            else if (vec2.y < -0.1f)
-            {
-                this.UIBtnList.MoveDownIUISelected();
-            }
-        }
-
-        private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            GameManager.Instance.UIManager.PopPanel();
-        }
-
-        private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            this.UIBtnList.GetCurSelected().Interact();
-        }
-        #endregion
-
-        #region UI
-        #region Temp
-
-        private void ClearTemp()
-        {
-
-        }
-
-        #endregion
-
-        #region UI对象引用
-        public PlayerCharacter player;
-        private BuildingManager BM => BuildingManager.Instance;
-        #endregion
-
-        public override void Refresh()
-        {
-            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
-            {
-                return;
-            }
-
-        }
-        #endregion
-
-
-        #region Resource
-        #region TextContent
-        [System.Serializable]
-        public struct PlayerUIPanelStruct
-        {
-            public TextTip[] Btns;
-        }
-
-        protected override void OnLoadJsonAssetComplete(PlayerUIPanelStruct datas)
-        {
-            InitBtnData(datas);
-        }
-
-        private void InitTextContentPathData()
-        {
-            this.abpath = "OC/Json/TextContent/PlayerUIPanel";
-            this.abname = "PlayerUIPanel";
-            this.description = "PlayerUIPanel数据加载完成";
-        }
-
-        private Transform btnList;
-        private UIBtnList UIBtnList;
-        private void InitBtnData(PlayerUIPanelStruct datas)
-        {
-            UIBtnList = new UIBtnList(parent: btnList);
-            foreach (var tt in datas.Btns)
-            {
-                this.UIBtnList.SetBtnText(tt.name, tt.description.GetText());
-            }
 
             //EnterBuild
             this.UIBtnList.SetBtnAction("EnterBuild",
@@ -294,6 +145,60 @@ namespace ProjectOC.Player.UI
                 ProjectOC.ManagerNS.LocalGameManager.Instance.WorkerManager.SpawnWorker(player.transform.position, player.transform.rotation);
             }
             );
+
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Enable();
+
+
+            //切换按钮
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUI.AlterSelected.started += this.UIBtnList.SwichBtn_started;
+
+            //确认
+            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += this.UIBtnList.Confirm_performed;
+
+            // 返回
+            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
+
+        }
+
+        private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            GameManager.Instance.UIManager.PopPanel();
+        }
+        #endregion
+
+        #region UI对象引用
+        public PlayerCharacter player;
+        private BuildingManager BM => BuildingManager.Instance;
+        #endregion
+
+        #region Resource
+        #region TextContent
+        [System.Serializable]
+        public struct PlayerUIPanelStruct
+        {
+            public TextTip[] Btns;
+        }
+        protected override void OnLoadJsonAssetComplete(PlayerUIPanelStruct datas)
+        {
+            InitBtnData(datas);
+            
+        }
+
+        protected override void InitTextContentPathData()
+        {
+            this.abpath = "OC/Json/TextContent/PlayerUIPanel";
+            this.abname = "PlayerUIPanel";
+            this.description = "PlayerUIPanel数据加载完成";
+        }
+
+        private Transform btnList;
+        private UIBtnList UIBtnList;
+        private void InitBtnData(PlayerUIPanelStruct datas)
+        {
+            foreach (var tt in datas.Btns)
+            {
+                this.UIBtnList.SetBtnText(tt.name, tt.description.GetText());
+            }
         }
 
         #endregion

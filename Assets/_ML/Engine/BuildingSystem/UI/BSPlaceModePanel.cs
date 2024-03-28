@@ -276,8 +276,6 @@ namespace ML.Engine.BuildingSystem.UI
             BM.Placer.OnPlaceModeChangeBPart += Placer_OnPlaceModeChangeBPart;
         }
 
-
-
         public override void OnPause()
         {
             base.OnPause();
@@ -294,10 +292,8 @@ namespace ML.Engine.BuildingSystem.UI
         public override void OnRecovery()
         {
             base.OnRecovery();
-            this.RegisterInput();
             if (BM.Placer.SelectedPartInstance != null)
             {
-                Debug.Log("CheckCostResources");
                 BM.Placer.SelectedPartInstance.CheckCanInPlaceMode += CheckCostResources;
             }
             BM.Placer.OnPlaceModeSuccess += OnPlaceModeSuccess;
@@ -308,7 +304,6 @@ namespace ML.Engine.BuildingSystem.UI
         {
             base.OnExit();
             this.ClearInstance();
-            this.UnregisterInput();
             this.UnloadAsset();
 
             if (BM.Placer.SelectedPartInstance != null)
@@ -336,7 +331,7 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region KeyFunction
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
             this.Placer.DisablePlayerInput();
 
@@ -354,7 +349,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.comfirmInputAction.performed -= Placer_ComfirmPlaceBPart;
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
             this.Placer.EnablePlayerInput();
 
@@ -367,7 +362,7 @@ namespace ML.Engine.BuildingSystem.UI
             Manager.GameManager.Instance.TickManager.RegisterFixedTick(0, this);
             this.Placer.BInput.BuildPlaceMode.KeyCom.performed += Placer_EnterKeyCom;
             this.Placer.backInputAction.performed += Placer_CancelPlace;
-            Debug.Log("Add");
+
             this.Placer.BInput.BuildPlaceMode.Rotate.performed += Placer_RotateBPart;
             this.Placer.BInput.BuildPlaceMode.ChangeActiveSocket.performed += Placer_ChangeActiveSocket;
             this.Placer.BInput.BuildPlaceMode.ChangeStyle.performed += Placer_ChangeBPartStyle;

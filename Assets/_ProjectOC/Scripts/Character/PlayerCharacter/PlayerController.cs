@@ -1,8 +1,9 @@
 using ML.Engine.Timer;
 using System.Collections;
 using System.Collections.Generic;
+using ProjectOC.Player;
 using UnityEngine;
-
+using Sirenix.OdinInspector;
 
 namespace ProjectOC.PlayerCharacterNS
 {
@@ -11,14 +12,23 @@ namespace ProjectOC.PlayerCharacterNS
         public List<ICharacter> SpawnedCharacters { get; set; }
         public IControllerState State { get; set; }
         public IStartPoint startPoint { get; set; }
+        
         public ICharacter SpawnCharacter()
         {
-            ICharacter character = null;
-            return character;
+            PlayerCharacter playerCharacter = null;
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/Character/Player/Prefabs/PlayerCharacter.prefab").Completed += (handle) =>
+            {
+                // สตภýปฏ
+                playerCharacter = handle.Result.GetComponent<PlayerCharacter>();
+                playerCharacter.transform.position = GameObject.Find("PlayerSpawnPoint").transform.position;
+                
+            };
+            
+            return playerCharacter as ICharacter;
         }
         public void ReSpawn()
         {
-
+            
         }
         public void Dispose(ICharacter character)
         {

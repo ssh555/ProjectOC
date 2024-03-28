@@ -18,40 +18,16 @@ namespace ML.Engine.UI
     public class StartMenuPanel : ML.Engine.UI.UIBasePanel<StartMenuPanelStruct>
     {
         #region Unity
-        public bool IsInit = false;
-
         protected override void Awake()
         {
             base.Awake();
-            this.InitTextContentPathData();
-
-            /*            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
-                            this.InitDescriptionPrefab,
-                            this.InitBeastBioPrefab,
-                            this.InitUITexture2D});*/
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
-
-
             btnList = this.transform.Find("ButtonList");
-            
-        }
-        protected override void Start()
-        {
-            IsInit = true;
-            Refresh();
-            base.Start();
         }
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
         private List<AsyncOperationHandle<GameObject>> goHandle = new List<AsyncOperationHandle<GameObject>>();
-        //private AsyncOperationHandle spriteAtlasHandle;
-        private void OnDestroy()
+
+        protected override void OnDestroy()
         {
-            //GM.ABResourceManager.Release(spriteAtlasHandle);
             foreach (var handle in goHandle)
             {
                 GM.ABResourceManager.ReleaseInstance(handle);
@@ -59,60 +35,20 @@ namespace ML.Engine.UI
         }
         #endregion
 
-        #region Override
+        #region override
         public override void OnEnter()
         {
+            UIBtnList = new UIBtnList(parent: btnList);
             base.OnEnter();
-            this.Enter();
         }
 
-        public override void OnExit()
-        {
-            base.OnExit();
-            this.Exit();
-            ClearTemp();
-        }
-
-        public override void OnPause()
-        {
-            base.OnPause();
-            this.Exit();
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            this.Enter();
-        }
-
-        protected override void Enter()
-        {
-            this.RegisterInput();
-            ML.Engine.Input.InputManager.Instance.Common.StartMenu.Enable();
-            base.Enter();   
-        }
-
-        protected override void Exit()
-        {
-            ML.Engine.Input.InputManager.Instance.Common.StartMenu.Disable();
-            this.UnregisterInput();
-            base.Exit();
-        }
         #endregion
 
-
-
-
-
-
-
         #region Internal
-
-
-
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
-
+            this.UIBtnList.RemoveAllListener();
+            ML.Engine.Input.InputManager.Instance.Common.StartMenu.Disable();
 
             //切换按钮
             ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn.started -= SwichBtn_started;
@@ -120,128 +56,9 @@ namespace ML.Engine.UI
             //确认
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
 
-            // 返回
-            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
-
-
-
         }
-
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
-
-            //切换按钮
-            ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn.started += SwichBtn_started;
-
-            //确认
-            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
-
-            // 返回
-            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
-
-        }
-
-
-
-        private void SwichBtn_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            var vec2 = obj.ReadValue<Vector2>();
-            if (vec2.y > 0.1f)
-            {
-                this.UIBtnList.MoveUPIUISelected();
-            }
-            else if (vec2.y < -0.1f)
-            {
-                this.UIBtnList.MoveDownIUISelected();
-            }
-        }
-
-        private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            
-        }
-
-        private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            this.UIBtnList.GetCurSelected().Interact();
-        }
-        #endregion
-
-        #region UI
-        #region Temp
-
-        private void ClearTemp()
-        {
-            
-        }
-
-        #endregion
-
-        #region UI对象引用
-
-        #endregion
-
-        public override void Refresh()
-        {
-            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
-            {
-                return;
-            }
-
-        }
-        #endregion
-
-        #region SaveSystem
-        SaveController SC => GameManager.Instance.SaveManager.SaveController;
-        //下标0 为newgame 1为savegame
-        private void InitSaveSystemData()
-        {
-            
-            if (SC.SaveDataFolders[1] == null)
-            {
-                this.UIBtnList.GetBtn("ContinueGameBtn").Interactable = false;
-            }
-            else
-            {
-                this.UIBtnList.GetBtn("ContinueGameBtn").Interactable = true;
-            }
-            
-        }
-
-        #endregion
-        
-        #region TextContent
-        [System.Serializable]
-        public struct StartMenuPanelStruct
-        {
-            public TextTip[] Btns;
-        }
-
-        protected override void OnLoadJsonAssetComplete(StartMenuPanelStruct datas)
-        {
-            InitBtnData(datas);
-        }
-
-        private void InitTextContentPathData()
-        {
-            this.abpath = "ML/Json/TextContent";
-            this.abname = "StartMenuPanel";
-            this.description = "StartMenuPanel数据加载完成";
-        }
-        private Transform btnList;
-        [ShowInInspector]
-        private UIBtnList UIBtnList;
-        private void InitBtnData(StartMenuPanelStruct datas)
-        {
-
-            Action OnslectedEnter = () => { };
-            Action OnslectedExit = () => { };
-
-            UIBtnList = new UIBtnList(parent: btnList);
-            foreach (var tt in datas.Btns)
-            {
-                this.UIBtnList.SetBtnText(tt.name, tt.description.GetText());
-            }
 
             //NewGameBtn
             this.UIBtnList.SetBtnAction("NewGameBtn",
@@ -251,11 +68,11 @@ namespace ML.Engine.UI
                 System.Action<string, string> preCallback = async (string s1, string s2) =>
                 {
                     //开始新游戏时，删除之前的newgame存档，从0开始新的newgame存档
-                    if (SC.SaveDataFolders[0] != null)
+                    if (SC.GetSaveDataFolder(0) != null)
                     {
-                        await SC.DeleteSaveDataFolderAsync(0);
+                        await SC.DeleteSaveDataFolderAsync(0, null);
                     }
-                    SC.CreateSaveDataFolder(0, "newgame", async () => { 
+                    SC.CreateSaveDataFolder(0, "newgame", async () => {
                         Debug.Log("存入newgame！");
 
                         await SC.SelectSaveDataFolderAsync(0, null);
@@ -295,9 +112,9 @@ namespace ML.Engine.UI
 
                 await SC.SelectSaveDataFolderAsync(1, null);
                 UIBasePanel panel = null;
-                System.Action<string, string> preCallback = async (string s1, string s2) =>
+                System.Action<string, string> preCallback = (string s1, string s2) =>
                 {
-                    
+
                     GameManager.Instance.EnterPoint.GetLoadingScenePanelInstance().Completed += (handle) =>
                     {
                         // 实例化
@@ -326,7 +143,7 @@ namespace ML.Engine.UI
 
             }
             );
-            
+
             //OptionBtn
             this.UIBtnList.SetBtnAction("OptionBtn",
             () =>
@@ -346,16 +163,108 @@ namespace ML.Engine.UI
             this.UIBtnList.SetBtnAction("QuitGameBtn",
             () =>
             {
-                #if UNITY_EDITOR
-                                UnityEditor.EditorApplication.isPlaying = false;//如果是在unity编译器中
-                #else
-                                        Application.Quit();//否则在打包文件中
-                #endif
+            #if UNITY_EDITOR
+                            UnityEditor.EditorApplication.isPlaying = false;//如果是在unity编译器中
+            #else
+                                                    Application.Quit();//否则在打包文件中
+            #endif
             }
             );
+            ML.Engine.Input.InputManager.Instance.Common.StartMenu.Enable();
 
-            InitSaveSystemData();
+            //切换按钮
+            ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn.started += SwichBtn_started;
 
+            //确认
+            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
+
+        }
+
+        public void SwichBtn_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            string actionName = obj.action.name;
+
+            // 使用 ReadValue<T>() 方法获取附加数据
+            string actionMapName = obj.action.actionMap.name;
+
+            var vector2 = obj.ReadValue<UnityEngine.Vector2>();
+            float angle = Mathf.Atan2(vector2.x, vector2.y);
+
+            angle = angle * 180 / Mathf.PI;
+            if (angle < 0)
+            {
+                angle = angle + 360;
+            }
+
+            if (angle < 45 || angle > 315)
+            {
+                this.UIBtnList.MoveUPIUISelected();
+            }
+            else if (angle > 45 && angle < 135)
+            {
+                this.UIBtnList.MoveRightIUISelected();
+            }
+            else if (angle > 135 && angle < 225)
+            {
+                this.UIBtnList.MoveDownIUISelected();
+            }
+            else if (angle > 225 && angle < 315)
+            {
+                this.UIBtnList.MoveLeftIUISelected();
+            }
+        }
+
+        public void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            this.UIBtnList.GetCurSelected().Interact();
+        }
+        #endregion
+
+
+        #region SaveSystem
+        SaveController SC => GameManager.Instance.SaveManager.SaveController;
+        //下标0 为newgame 1为savegame
+        private void InitSaveSystemData()
+        {
+            
+            if (SC.GetSaveDataFolder(1) == null)
+            {
+                this.UIBtnList.GetBtn("ContinueGameBtn").Interactable = false;
+            }
+            else
+            {
+                this.UIBtnList.GetBtn("ContinueGameBtn").Interactable = true;
+            }
+            
+        }
+        #endregion
+        
+        #region TextContent
+        [System.Serializable]
+        public struct StartMenuPanelStruct
+        {
+            public TextTip[] Btns;
+        }
+        protected override void OnLoadJsonAssetComplete(StartMenuPanelStruct datas)
+        {
+            InitBtnData(datas);
+
+        }
+        protected override void InitTextContentPathData()
+        {
+            this.abpath = "ML/Json/TextContent";
+            this.abname = "StartMenuPanel";
+            this.description = "StartMenuPanel数据加载完成";
+        }
+        private Transform btnList;
+        [ShowInInspector]
+        private UIBtnList UIBtnList;
+        private void InitBtnData(StartMenuPanelStruct datas)
+        {    
+            foreach (var tt in datas.Btns)
+            {
+                this.UIBtnList.SetBtnText(tt.name, tt.description.GetText());
+            }
         }
 
         #endregion

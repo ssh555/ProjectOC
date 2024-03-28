@@ -203,6 +203,11 @@ namespace ML.Engine.BuildingSystem.UI
         #region Refresh
         public override void Refresh()
         {
+            if (IsInit < 1)
+            {
+                return;
+            }
+
             this.ClearCategory2Instance();
 
             // ¸ü»» Category1
@@ -218,6 +223,7 @@ namespace ML.Engine.BuildingSystem.UI
                     Active(img);
                 }
             }
+
 
             // ¸ü»» Category2
             foreach (var category2 in this.CanSelectCategory2)
@@ -287,38 +293,23 @@ namespace ML.Engine.BuildingSystem.UI
         public override void OnEnter()
         {
             base.OnEnter();
-            this.RegisterInput();
             this.Placer.Mode = BuildingMode.Place;
             this.Placer.InteractBPartList.Clear();
             this.Placer.SelectedPartInstance = null;
 
         }
-
-        public override void OnPause()
-        {
-            base.OnPause();
-            this.UnregisterInput();
-        }
-
-        public override void OnRecovery()
-        {
-            base.OnRecovery();
-            this.RegisterInput();
-        }
-
         public override void OnExit()
         {
             S_LastSelectedCategory1Index = this.SelectedCategory1Index;
             S_LastSelectedCategory2Index = this.SelectedCategory2Index;
             base.OnExit();
             this.ClearInstance();
-            this.UnregisterInput();
             this.UnloadAsset();
         }
         #endregion
 
         #region KeyFunction
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
             this.Placer.BInput.BuildSelection.Disable();
 
@@ -329,7 +320,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.BInput.BuildSelection.AlternativeType.started -= Placer_AlterCategory2;
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
             this.Placer.BInput.BuildSelection.Enable();
 
@@ -350,9 +341,13 @@ namespace ML.Engine.BuildingSystem.UI
 
         private void Placer_AlterCategory1(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            int offset = obj.ReadValue<float>() > 0 ? 1 : -1;
-            this.SelectedCategory1Index = (this.SelectedCategory1Index + this.CanSelectCategory1.Length + offset) % this.CanSelectCategory1.Length;
-            this.UpdatePlaceBuildingType(this.CanSelectCategory1[this.SelectedCategory1Index]);
+            if(CanSelectCategory1 != null)
+            {
+                int offset = obj.ReadValue<float>() > 0 ? 1 : -1;
+                this.SelectedCategory1Index = (this.SelectedCategory1Index + this.CanSelectCategory1.Length + offset) % this.CanSelectCategory1.Length;
+                this.UpdatePlaceBuildingType(this.CanSelectCategory1[this.SelectedCategory1Index]);
+            }
+
         }
 
         private void Placer_CancelSelection(UnityEngine.InputSystem.InputAction.CallbackContext obj)

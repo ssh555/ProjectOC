@@ -28,27 +28,13 @@ namespace ProjectOC.Player.UI
         protected override void Awake()
         {
             base.Awake();
-            this.InitTextContentPathData();
-
-            /*            this.functionExecutor.AddFunction(new List<Func<AsyncOperationHandle>> {
-                            this.InitDescriptionPrefab,
-                            this.InitBeastBioPrefab,
-                            this.InitUITexture2D});*/
-            this.functionExecutor.SetOnAllFunctionsCompleted(() =>
-            {
-                this.Refresh();
-            });
-
-            StartCoroutine(functionExecutor.Execute());
             Ring = this.transform.Find("Ring");
             btnList = Ring.Find("ButtonList");
             TimeText = this.transform.Find("Time").Find("Text").GetComponent<TextMeshProUGUI>();
-
         }
 
         protected override void Start()
         {
-            
             IsInit = true;
             Refresh();
             base.Start();
@@ -57,48 +43,22 @@ namespace ProjectOC.Player.UI
         #endregion
 
         #region Override
+
         public override void OnEnter()
         {
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
+            UIBtnList = new UIBtnList(parent: btnList, hasInitSelect: false);
             base.OnEnter();
-            this.Enter();
-        }
-
-        public override void OnExit()
-        {
-            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
-            base.OnExit();
-            this.Exit();
-            ClearTemp();
-        }
-
-        public override void OnPause()
-        {
-            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
-            base.OnPause();
-            this.Exit();
-        }
-
-        public override void OnRecovery()
-        {
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
-            base.OnRecovery();
-            this.Enter();
         }
         protected override void Enter()
         {
-            this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.Enable();
-            ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
+            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
             this.player.interactComponent.Enable();
             base.Enter();   
         }
 
         protected override void Exit()
         {
-            this.UnregisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.Disable();
-            ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
+            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
             //TODO player null
             this.player?.interactComponent.Disable();
             base.Exit();
@@ -118,136 +78,19 @@ namespace ProjectOC.Player.UI
         #endregion
         #region Internal
 
-        private void UnregisterInput()
+        protected override void UnregisterInput()
         {
+            this.UIBtnList.RemoveAllListener();
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.Disable();
+            ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMenu.started -= OpenMenu_started;
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMap.started -= OpenMap_started;
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.performed -= SelectGrid_performed;
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.canceled -= SelectGrid_canceled;
         }
 
-        private void RegisterInput()
+        protected override void RegisterInput()
         {
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMenu.started += OpenMenu_started;
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMap.started += OpenMap_started;
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.performed += SelectGrid_performed;
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.canceled += SelectGrid_canceled;
-        }
-
-        private void OpenMenu_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            this.Ring.gameObject.SetActive(true);
-        }
-
-        private void OpenMap_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, "打开地图！");
-        }
-
-
-        private void SelectGrid_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            if (Ring.gameObject.activeInHierarchy == false) return;
-            Vector2 vector2 = obj.ReadValue<Vector2>();
-
-            float angle = Mathf.Atan2(vector2.x, vector2.y);
-
-            angle = angle * 180 / Mathf.PI;
-            if (angle < 0)
-            {
-                angle = angle + 360;
-            }
-
-            if (angle < 22.5 || angle > 337.5) this.UIBtnList.MoveIndexIUISelected(0);
-            else if (angle > 22.5 && angle < 67.5) this.UIBtnList.MoveIndexIUISelected(7);
-            else if (angle > 67.5 && angle < 112.5) this.UIBtnList.MoveIndexIUISelected(6);
-            else if (angle > 112.5 && angle < 157.5) this.UIBtnList.MoveIndexIUISelected(5);
-            else if (angle > 157.5 && angle < 202.5) this.UIBtnList.MoveIndexIUISelected(4);
-            else if (angle > 202.5 && angle < 247.5) this.UIBtnList.MoveIndexIUISelected(3);
-            else if (angle > 247.5 && angle < 292.5) this.UIBtnList.MoveIndexIUISelected(2);
-            else if (angle > 292.5 && angle < 337.5) this.UIBtnList.MoveIndexIUISelected(1);
-        }
-        private void SelectGrid_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            if (Ring.gameObject.activeInHierarchy == false) return;
-            this.UIBtnList.GetCurSelected().Interact();
-            this.UIBtnList.SetCurSelectedNull();
-            Ring.gameObject.SetActive(false);
-        }
-        
-        #endregion
-
-        #region UI
-        #region Temp
-        private List<Sprite> tempSprite = new List<Sprite>();
-        private Dictionary<ML.Engine.InventorySystem.ItemType, GameObject> tempItemType = new Dictionary<ML.Engine.InventorySystem.ItemType, GameObject>();
-        private List<GameObject> tempUIItems = new List<GameObject>();
-
-
-        private void ClearTemp()
-        {
-            foreach (var s in tempSprite)
-            {
-                Destroy(s);
-            }
-            foreach (var s in tempItemType.Values)
-            {
-                Destroy(s);
-            }
-            foreach (var s in tempUIItems)
-            {
-                Destroy(s);
-            }
-        }
-
-        #endregion
-
-        #region UI对象引用
-        private Transform Ring;
-        #endregion
-
-        public override void Refresh()
-        {
-            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
-            {
-                return;
-            }
-
-
-        }
-        #endregion
-
-
-
-        #region TextContent
-        [System.Serializable]
-        public struct PlayerUIBotPanelStruct
-        {
-            public TextTip[] Btns;
-
-        }
-
-        protected override void OnLoadJsonAssetComplete(PlayerUIBotPanelStruct datas)
-        {
-            InitBtnData(datas);
-        }
-
-        private void InitTextContentPathData()
-        {
-            this.abpath = "OC/Json/TextContent/PlayerUIBotPanel";
-            this.abname = "PlayerUIBotPanel";
-            this.description = "PlayerUIBotPanel数据加载完成";
-        }
-        private Transform btnList;
-        private UIBtnList UIBtnList;
-        private void InitBtnData(PlayerUIBotPanelStruct datas)
-        {
-            UIBtnList = new UIBtnList(parent: btnList,hasInitSelect: false);
-            foreach (var tt in datas.Btns)
-            {
-                this.UIBtnList.SetBtnText(tt.name, tt.description.GetText());
-            }
-
             this.UIBtnList.SetBtnAction("背包",
             () =>
             {
@@ -328,12 +171,89 @@ namespace ProjectOC.Player.UI
                 }
             }
             );
-
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.Enable();
+            ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMenu.started += OpenMenu_started;
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMap.started += OpenMap_started;
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.performed += SelectGrid_performed;
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.canceled += SelectGrid_canceled;
         }
+
+        private void OpenMenu_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            this.Ring.gameObject.SetActive(true);
+        }
+
+        private void OpenMap_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, "打开地图！");
+        }
+
+
+        private void SelectGrid_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            if (Ring.gameObject.activeInHierarchy == false) return;
+            Vector2 vector2 = obj.ReadValue<Vector2>();
+
+            float angle = Mathf.Atan2(vector2.x, vector2.y);
+
+            angle = angle * 180 / Mathf.PI;
+            if (angle < 0)
+            {
+                angle = angle + 360;
+            }
+
+            if (angle < 22.5 || angle > 337.5) this.UIBtnList.MoveIndexIUISelected(0);
+            else if (angle > 22.5 && angle < 67.5) this.UIBtnList.MoveIndexIUISelected(7);
+            else if (angle > 67.5 && angle < 112.5) this.UIBtnList.MoveIndexIUISelected(6);
+            else if (angle > 112.5 && angle < 157.5) this.UIBtnList.MoveIndexIUISelected(5);
+            else if (angle > 157.5 && angle < 202.5) this.UIBtnList.MoveIndexIUISelected(4);
+            else if (angle > 202.5 && angle < 247.5) this.UIBtnList.MoveIndexIUISelected(3);
+            else if (angle > 247.5 && angle < 292.5) this.UIBtnList.MoveIndexIUISelected(2);
+            else if (angle > 292.5 && angle < 337.5) this.UIBtnList.MoveIndexIUISelected(1);
+        }
+        private void SelectGrid_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            if (Ring.gameObject.activeInHierarchy == false) return;
+            this.UIBtnList.GetCurSelected().Interact();
+            this.UIBtnList.SetCurSelectedNull();
+            Ring.gameObject.SetActive(false);
+        }
+        
         #endregion
 
+        #region UI对象引用
+        private Transform Ring;
+        #endregion
 
+        #region TextContent
+        [System.Serializable]
+        public struct PlayerUIBotPanelStruct
+        {
+            public TextTip[] Btns;
+        }
 
+        protected override void OnLoadJsonAssetComplete(PlayerUIBotPanelStruct datas)
+        {
+            InitBtnData(datas);
+        }
+
+        protected override void InitTextContentPathData()
+        {
+            this.abpath = "OC/Json/TextContent/PlayerUIBotPanel";
+            this.abname = "PlayerUIBotPanel";
+            this.description = "PlayerUIBotPanel数据加载完成";
+        }
+        private Transform btnList;
+        private UIBtnList UIBtnList;
+        private void InitBtnData(PlayerUIBotPanelStruct datas)
+        {
+            foreach (var tt in datas.Btns)
+            {
+                this.UIBtnList.SetBtnText(tt.name, tt.description.GetText());
+            }
+        }
+        #endregion
     }
 
 }

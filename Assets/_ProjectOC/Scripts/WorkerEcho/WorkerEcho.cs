@@ -6,6 +6,7 @@ using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.Manager;
 using ML.Engine.Timer;
 using ML.Engine.UI;
+using ProjectOC.ManagerNS;
 using ProjectOC.Player;
 using ProjectOC.ResonanceWheelSystem.UI;
 using ProjectOC.WorkerNS;
@@ -66,7 +67,6 @@ namespace ProjectOC.WorkerEchoNS
                 {
                     if (item.num > inventory.GetItemAllNum(item.id))
                     {
-                        Debug.Log("材料不足！无法召唤！");
                         return null;
                     }
                 }
@@ -89,8 +89,7 @@ namespace ProjectOC.WorkerEchoNS
 
         public void ExpelWorker(int index)
         {
-            ML.Engine.Manager.GameManager.DestroyObj(Workers[index].worker.gameObject);
-           
+            LocalGameManager.Instance.WorkerManager.DeleteWorker(Workers[index].worker);
             Workers[index] = null;
         }
 

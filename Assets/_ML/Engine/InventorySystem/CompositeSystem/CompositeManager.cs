@@ -188,6 +188,28 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             }
             return true;
         }
+        /// <summary>
+        /// 返回需要消耗的资源
+        /// </summary>
+        public bool OnlyReturnResource(IInventory resource, string compositonID)
+        {
+            // 返回需要消耗的资源
+            lock (resource)
+            {
+                if (!string.IsNullOrEmpty(compositonID) && this.CompositeData.ContainsKey(compositonID) && this.CompositeData[compositonID].formula != null)
+                {
+                    foreach (var formula in this.CompositeData[compositonID].formula)
+                    {
+                        List<Item> items = ItemManager.Instance.SpawnItems(formula.id, formula.num);
+                        foreach (var item in items)
+                        {
+                            resource.AddItem(item);
+                        }
+                    }
+                }
+            }
+            return true;
+        }
 
         /// <summary>
         /// 获取指定 id 可合成物品的 IDList
@@ -223,7 +245,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             {
                 return null;
             }
-            return InventorySystem.ItemManager.Instance.GetItemSprite(id);
+            return InventorySystem.ItemManager.Instance.GetItemSprite(this.CompositeData[id].texture2d);
         }
 
         public string GetCompositonName(string id)

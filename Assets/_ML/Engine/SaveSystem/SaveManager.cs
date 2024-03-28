@@ -15,11 +15,11 @@ namespace ML.Engine.SaveSystem
         /// 读取ConfigAsset.Config数据初始化
         /// 根据Config设置SaveSystem
         /// </summary>
-        public SaveConfig Config;
+        private SaveConfig Config;
         /// <summary>
         /// 使用的用于存取文件的对象
         /// </summary>
-        public SaveSystem SaveSystem;
+        private SaveSystem SaveSystem;
         /// <summary>
         /// 存档控制器
         /// </summary>
@@ -37,29 +37,32 @@ namespace ML.Engine.SaveSystem
                 {
                     this.SaveSystem = new JsonSaveSystem();
                 }
-                else if (this.Config.SaveType == SaveType.Binary)
+                else if (this.Config.SaveType == SaveType.XML)
                 {
-                    this.SaveSystem = new BinarySaveSystem();
+                    this.SaveSystem = new XMLSaveSystem();
                 }
-                this.SaveController = new SaveController();
+                this.SaveController = new SaveController(Config, SaveSystem);
             };
         }
 
+        
+
         /// <summary>
-        /// 保存存档数据
+        /// 加载存档数据
+        /// </summary>
+        /// <param name="relativePathWithoutSuffix">相对路径，没有后缀</param>
+        public T LoadData<T>(string relativePathWithoutSuffix) where T : ISaveData
+        {
+            T data = (T)this.SaveSystem.LoadData<T>(relativePathWithoutSuffix, this.Config.UseEncrption);
+            return data;
+        }
+
+        /// <summary>
+        /// 保存数据
         /// </summary>
         public void SaveData<T>(T data) where T : ISaveData
         {
             this.SaveSystem.SaveData<T>(data, this.Config.UseEncrption);
-        }
-        /// <summary>
-        /// 加载存档数据
-        /// </summary>
-        /// <param name="path">相对路径，没有后缀</param>
-        /// <returns></returns>
-        public T LoadData<T>(string path) where T : ISaveData
-        {
-            return (T)this.SaveSystem.LoadData<T>(path, this.Config.UseEncrption);
         }
     }
 }

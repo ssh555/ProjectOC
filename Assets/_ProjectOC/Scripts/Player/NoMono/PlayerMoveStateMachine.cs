@@ -91,12 +91,15 @@ namespace ProjectOC.Player
             #region 处于空中
             [LabelText("浮空最大行走速度"), ShowInInspector, FoldoutGroup("浮空")]
             public float inAirLimitSpeed;
-
-            [LabelText("浮空加速度"), ShowInInspector, FoldoutGroup("浮空")]
-            public float inAirAccSpeed;
+            [LabelText("浮空加速度"), ShowInInspector, Range(0,1),FoldoutGroup("浮空")]
+            public float airControl;
+            public float inAirAccSpeed => airControl * walkAccSpeed;
+            //横向速度大于AirControlBoostVelocityThreshold乘空气控制
+            [LabelText("空气控制提升乘数"), ShowInInspector, FoldoutGroup("浮空"),Range(0,1)]
+            public float airControlBoostMultiplier;
+            [LabelText("空气控制提升速度阈值"), ShowInInspector, FoldoutGroup("浮空"),Range(0,1),PropertyTooltip("高于空中最大速度百分比阈值后乘以该系数")]
+            public float airControlBoostVelocityThreshold;
             #endregion
-            //[LabelText("滑铲初速度"), ShowInInspector, FoldoutGroup("滑铲")]
-            //public float slideInitSpeed;
         }
         protected MoveStateParams stateParams;
         #endregion
@@ -175,50 +178,6 @@ namespace ProjectOC.Player
                 this.ChangeVelocityParams();
             });
 
-            #region 滑铲注释
-            // Slide 滑铲
-            //this.slideState = new State("Slide");
-            //// Slide 进入时
-            //this.slideState.BindEnterAction((stateMachine, preState, curState) =>
-            //{
-            //    // 播放滑铲动画
-            //    if (this.moveAnimator != null)
-            //    {
-            //        this.moveAnimator.SetInteger("MoveState", 4);
-            //    }
-
-            //    // 禁用移动
-            //    this.moveData.bCanMove = false;
-
-            //    // 禁用视口旋转
-            //    if (this.mouseLook != null)
-            //    {
-            //        this.mouseLook.bCanRotate = false;
-            //    }
-
-            //    // 设置滑铲参数
-            //    this.moveData.MaxSpeed = this.stateParams.slideInitSpeed;
-            //    this.moveData.Speed = this.stateParams.slideInitSpeed;
-            //});
-            //// Slide 离开时
-            //this.slideState.BindExitAction((stateMachine, exitState, nextState) =>
-            //{
-            //    this.stateParams.IsCrouch = true;
-            //    // 设置蹲伏参数
-            //    this.moveData.AddAcceleration = this.stateParams.crouchAccSpeed;
-            //    this.moveData.MaxSpeed = this.stateParams.crouchLimitSpeed;
-
-            //    // 启用移动
-            //    this.moveData.bCanMove = true;
-            //    // 启用视口旋转
-            //    if (this.mouseLook != null)
-            //    {
-            //        this.mouseLook.bCanRotate = true;
-            //    }
-
-            //});
-            #endregion
-
             // InAir 处于空中
             this.inAirState = new State("InAir");
             // InAir 进入时
@@ -234,6 +193,17 @@ namespace ProjectOC.Player
             this.inAirState.BindExitAction((stateMachine, preState, curState) =>
             {
                 this.ChangeVelocityParams();
+            });
+            this.inAirState.BindUpdateAction((stateMachine, curState) =>
+            {
+                if (moveData.Speed >= stateParams.airControlBoostVelocityThreshold * stateParams.inAirLimitSpeed)
+                {
+                    this.moveData.AddAcceleration = stateParams.inAirAccSpeed * stateParams.airControlBoostMultiplier;
+                }
+                else
+                {
+                    this.moveData.AddAcceleration = stateParams.inAirAccSpeed;
+                }
             });
             #endregion
 
