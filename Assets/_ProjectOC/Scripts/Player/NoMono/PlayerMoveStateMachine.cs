@@ -49,11 +49,9 @@ namespace ProjectOC.Player
                 this.CrouchInputAction = crouch;
             }
 
-            #region 键位
-            [LabelText("加速键"), ShowInInspector, ReadOnly, FoldoutGroup("键位")]
-            public UnityEngine.InputSystem.InputAction AccelerationInputAction;
+            #region InputAction
 
-            [LabelText("蹲伏键"), ShowInInspector, ReadOnly, FoldoutGroup("键位")]
+            public UnityEngine.InputSystem.InputAction AccelerationInputAction;
             public UnityEngine.InputSystem.InputAction CrouchInputAction;
             #endregion
 
@@ -325,7 +323,7 @@ namespace ProjectOC.Player
             this.stateParams.IsAcc = false;
 
             this.ChangeVelocityParams();
-        }
+        }//构造函数
 
         public override void Update(float deltaTime)
         {
@@ -342,7 +340,7 @@ namespace ProjectOC.Player
             {
                 this.ExitAcc();
             }
-
+            
 
             if (this.stateParams.CrouchInputAction.WasPressedThisFrame())
             {

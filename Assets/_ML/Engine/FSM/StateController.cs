@@ -60,8 +60,11 @@ namespace ML.Engine.FSM
             this.isRunning = false;
             //TODO Machine is null
             this.Machine?.ResetState();
-            Manager.GameManager.Instance.TickManager.UnregisterTick(this);
-            Manager.GameManager.Instance.TickManager.UnregisterLateTick(this);
+            if (Manager.GameManager.Instance != null && Manager.GameManager.Instance.TickManager != null)
+            {
+                Manager.GameManager.Instance.TickManager.UnregisterTick(this);
+                Manager.GameManager.Instance.TickManager.UnregisterLateTick(this);
+            }
         }
 
         /// <summary>

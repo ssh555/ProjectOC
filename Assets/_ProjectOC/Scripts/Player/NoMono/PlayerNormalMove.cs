@@ -185,11 +185,11 @@ namespace ProjectOC.Player
             public bool bIsWorldUpAxis;
             [LabelText("跳跃叠加速度"), FoldoutGroup("跳跃参数"), PropertyTooltip("true : 当前速度叠加，false : 直接更改垂直速度")]
             public bool IsJumpVelocityStack;
-            [LabelText("跳跃继承基础速度X"), FoldoutGroup("跳跃参数")]
+            [LabelText("跳跃继承基础水平速度X"), FoldoutGroup("跳跃参数")]
             public bool ImpactBaseVelocityX;
-            [LabelText("跳跃继承基础速度Z"), FoldoutGroup("跳跃参数")]
+            [LabelText("跳跃继承基础水平速度Z"), FoldoutGroup("跳跃参数")]
             public bool ImpactBaseVelocityZ;
-            [LabelText("跳跃继承基础速度Y"), FoldoutGroup("跳跃参数")]
+            [LabelText("跳跃继承基础垂直速度Y"), FoldoutGroup("跳跃参数")]
             public bool ImpactBaseVelocityY;
  
 
@@ -601,7 +601,7 @@ namespace ProjectOC.Player
         /// <summary>
         /// 启用起跳前摇
         /// </summary>
-        [LabelText("启用跳跃前摇")]
+        [LabelText("启用跳跃前摇"), FoldoutGroup("跳跃参数")]
         public bool EnablePreJump = false;
         private bool _lastIsInPreJump = false;
         private bool _isInPreJump = false;
@@ -616,13 +616,6 @@ namespace ProjectOC.Player
             {
                 this._lastIsInPreJump = this._isInPreJump;
                 this._isInPreJump = value;
-                
-                if (this._isInPreJump == false && this._lastIsInPreJump == true)
-                {
-                    --this.moveSetting.RemainJumpCount;
-                    this.ForceJump();
-                    this._lastIsInPreJump = false;
-                }
             }
         }
 
@@ -635,17 +628,8 @@ namespace ProjectOC.Player
         {
             if (CanJump() && ((this.moveSetting.JumpDownOrUp && jumpAction.WasPressedThisFrame() || (!this.moveSetting.JumpDownOrUp && jumpAction.WasReleasedThisFrame()))))
             {
-                if (this.EnablePreJump)
-                {
-                    if (!this._isInPreJump)
-                    {
-                        this.IsInPreJump = true;
-                    }
-                }
-                else
-                {
+                    this.IsInPreJump = true;
                     Jump();
-                }
             }
         }
 
@@ -705,6 +689,7 @@ namespace ProjectOC.Player
                 this.moveSetting.ExtraVelocity = this.controller.transform.TransformVector(tmpExtraVelocity);
             }
 
+            
             this.jumpTimer.Reset(this.moveSetting.jumpTime);
         }
 
@@ -725,7 +710,7 @@ namespace ProjectOC.Player
                 jVel.y += this.moveSetting.jumpSpeedCurve.Evaluate((float)this.jumpTimer.Time);
                 this.moveSetting.ExtraVelocity = this.controller.transform.TransformVector(jVel);
             }
-            // 落地
+            // 除了第一帧,落地
             if (this.controller.isGrounded && this.moveSetting.ExtraVelocity.y < 0)
             {
                 this.jumpTimer.End();
@@ -738,6 +723,7 @@ namespace ProjectOC.Player
                 _inSpeedXZ.x = 0;
             if (!moveSetting.ImpactBaseVelocityZ)
                 _inSpeedXZ.z = 0;
+            
             if (!moveSetting.ImpactBaseVelocityY)
                 _inSpeedY.y = 0;
 
