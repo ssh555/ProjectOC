@@ -9,7 +9,6 @@ namespace ML.Engine.UI
 {
     public class UIKeyTipList<T>
     {
-        private UIKeyTipComponent[] KeyTips;
         private T datas;
         private Dictionary<string, UIKeyTipComponent> KeyTipDic = new Dictionary<string, UIKeyTipComponent>();
 
@@ -17,7 +16,7 @@ namespace ML.Engine.UI
         {
             if (parent != null)
             {
-                this.KeyTips = parent.GetComponentsInChildren<UIKeyTipComponent>(true);
+                UIKeyTipComponent[] KeyTips = parent.GetComponentsInChildren<UIKeyTipComponent>(true);
                 foreach (var keytip in KeyTips)
                 {
                     keytip.Init();
@@ -28,30 +27,13 @@ namespace ML.Engine.UI
             RefreshKetTip(datas);
         }
         /// <summary>
-        /// 设置按键提示文本
+        /// 设置按键提示文本与设置按键描述文本
         /// </summary>
-        private void SetKeyTiptext(string keyTipName,string keytipText)
+        private void RefreshKeyTiptext(string keyName, string keyTipName,string keytipText)
         {
-            if (this.KeyTipDic.ContainsKey(keyTipName))
+            if (this.KeyTipDic.ContainsKey(keyName))
             {
-                if (KeyTipDic[keyTipName].keytip != null)
-                {
-                    KeyTipDic[keyTipName].keytip.text = keytipText;
-                }
-                
-            }
-        }
-        /// <summary>
-        /// 设置按键描述文本
-        /// </summary>
-        private void SetDescriptiontext(string keyTipName, string descriptionText)
-        {
-            if (this.KeyTipDic.ContainsKey(keyTipName))
-            {
-                if (KeyTipDic[keyTipName].description != null)
-                {
-                    KeyTipDic[keyTipName].description.text = descriptionText;
-                }
+                KeyTipDic[keyName].Refresh(keyTipName, keytipText);
             }
         }
         /// <summary>
@@ -63,9 +45,7 @@ namespace ML.Engine.UI
             foreach (var keyTip in keyTips)
             {
                 InputAction inputAction = GameManager.Instance.InputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
-
-                this.SetKeyTiptext(keyTip.keyname, GameManager.Instance.InputManager.GetInputActionBindText(inputAction));
-                this.SetDescriptiontext(keyTip.keyname, keyTip.description.GetText());
+                RefreshKeyTiptext(keyTip.keyname, GameManager.Instance.InputManager.GetInputActionBindText(inputAction), keyTip.description.GetText());
             }
         }
     }

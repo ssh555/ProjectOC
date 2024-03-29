@@ -42,19 +42,27 @@ namespace ML.Engine.UI
             base.OnEnter();
         }
 
+        protected override void Enter()
+        {
+            this.UIBtnList.EnableBtnList();
+            base.Enter();
+        }
+
+        protected override void Exit()
+        {
+            this.UIBtnList.DisableBtnList();
+            base.Exit();
+        }
+
         #endregion
 
         #region Internal
         protected override void UnregisterInput()
         {
             this.UIBtnList.RemoveAllListener();
+            this.UIBtnList.DeBindInputAction();
             ML.Engine.Input.InputManager.Instance.Common.StartMenu.Disable();
 
-            //切换按钮
-            ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn.started -= SwichBtn_started;
-
-            //确认
-            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
 
         }
         protected override void RegisterInput()
@@ -172,11 +180,9 @@ namespace ML.Engine.UI
             );
             ML.Engine.Input.InputManager.Instance.Common.StartMenu.Enable();
 
-            //切换按钮
-            ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn.started += SwichBtn_started;
+            this.UIBtnList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn, UIBtnList.BindType.started);
+            this.UIBtnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm, UIBtnList.BindType.started);
 
-            //确认
-            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
 
         }
 

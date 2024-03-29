@@ -970,7 +970,6 @@ namespace ML.Engine.ABResources
         // Release(handle.asset) -> 释放asset对应的所有handle
         public void Release<TObject>(TObject obj)
         {
-            Addressables.Release<TObject>(obj);
             if (this.localHandles.ContainsValue(obj))
             {
                 this.RemoveFromDictionary(this.localHandles, obj);

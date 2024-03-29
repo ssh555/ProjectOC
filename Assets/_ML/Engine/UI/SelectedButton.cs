@@ -2,8 +2,10 @@ using ML.Engine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace ML.Engine.UI
@@ -13,7 +15,16 @@ namespace ML.Engine.UI
         public event System.Action OnSelectedEnter;
         public event System.Action OnSelectedExit;
 
+        public System.Action PreInteract;
+        public System.Action PostInteract;
+
         private Transform Selected = null;
+
+        private UIBtnList UIBtnList = null;
+        protected override void Start()
+        {
+            
+        }
 
         // 定义按钮是否可交互的属性
         public bool Interactable
@@ -92,11 +103,36 @@ namespace ML.Engine.UI
 
         public void Interact()
         {
+            
             if(this.Interactable)
             {
+                this.PreInteract?.Invoke();
                 this.onClick.Invoke();
+                this.PostInteract?.Invoke();
             }
         }
+
+        public void SetUIBtnList(UIBtnList uIBtnList)
+        {
+            this.UIBtnList = uIBtnList;
+        }
+
+        public void SetPreAndPostInteract(System.Action preAction, System.Action postAction)
+        {
+            this.PreInteract = preAction; 
+            this.PostInteract = postAction;
+        }
+
+        // 统一鼠标与按键
+        public override void OnPointerEnter(UnityEngine.EventSystems.PointerEventData eventData)
+        {
+            this.UIBtnList.RefreshSelected(this);
+        }
+        public override void OnPointerClick(PointerEventData eventData)
+        {
+            this.UIBtnList.ButtonInteract(new InputAction.CallbackContext());
+        }
+
     }
 
 }

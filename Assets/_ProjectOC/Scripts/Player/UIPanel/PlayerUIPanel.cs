@@ -67,11 +67,7 @@ namespace ProjectOC.Player.UI
 
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Disable();
 
-            //切换按钮
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUI.AlterSelected.started -= this.UIBtnList.SwichBtn_started;
-
-            //确认
-            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= this.UIBtnList.Confirm_performed;
+            this.UIBtnList.DeBindInputAction();
 
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
@@ -149,11 +145,8 @@ namespace ProjectOC.Player.UI
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Enable();
 
 
-            //切换按钮
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUI.AlterSelected.started += this.UIBtnList.SwichBtn_started;
-
-            //确认
-            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += this.UIBtnList.Confirm_performed;
+            this.UIBtnList.BindNavigationInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUI.AlterSelected, UIBtnList.BindType.started);
+            this.UIBtnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm, UIBtnList.BindType.started);
 
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;

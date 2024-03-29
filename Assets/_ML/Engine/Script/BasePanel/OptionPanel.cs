@@ -37,6 +37,19 @@ namespace ML.Engine.UI
             UIBtnList = new UIBtnList(parent: btnList, limitNum: gridLayout.constraintCount);
             base.OnEnter();
         }
+
+        protected override void Enter()
+        {
+            this.UIBtnList.EnableBtnList();
+            base.Enter();
+        }
+
+        protected override void Exit()
+        {
+            this.UIBtnList.DisableBtnList();
+            base.Exit();
+        }
+
         #endregion
 
         #region Internal
@@ -46,12 +59,8 @@ namespace ML.Engine.UI
 
             ML.Engine.Input.InputManager.Instance.Common.Option.Disable();
 
-
-            //切换按钮
-            ML.Engine.Input.InputManager.Instance.Common.Option.SwichBtn.started -= SwichBtn_started;
-
-            //确认
-            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
+            //解绑按钮导航和按钮确认InputAction的回调函数
+            this.UIBtnList.DeBindInputAction();
 
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
@@ -63,28 +72,28 @@ namespace ML.Engine.UI
             this.UIBtnList.SetBtnAction("GraphicBtn",
             () =>
             {
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, "GraphicBtn");
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("<color=yellow>氏族名称</color>  发布了紧急征求", "订单名称"));
             }
             );
             //AudioBtn
             this.UIBtnList.SetBtnAction("AudioBtn",
             () =>
             {
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, "AudioBtn");
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData("确定取消该订单吗？", "您将面临违约惩罚", null, () => { Debug.Log("确定响应！"); }));
             }
             );
             //ControllerBtn
             this.UIBtnList.SetBtnAction("ControllerBtn",
             () =>
             {
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, "ControllerBtn");
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.BtnUI, new UIManager.BtnUIData("message1", () => { Debug.Log("按钮响应！"); }));
             }
             );
             //TutorialBtn
             this.UIBtnList.SetBtnAction("TutorialBtn",
             () =>
             {
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, "TutorialBtn");
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("message1"));
             }
             );
             //BackBtn
@@ -138,7 +147,7 @@ namespace ML.Engine.UI
                         };
                     };
                     GameManager.Instance.UIManager.PopPanel();//Pop OptionPanel
-                    GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("EnterPointScene", preCallback, postCallback));
+                    GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("EnterPointScene", preCallback, postCallback,isDelay: true));
 
                 }
             }
@@ -156,54 +165,17 @@ namespace ML.Engine.UI
                         );
 
             ML.Engine.Input.InputManager.Instance.Common.Option.Enable();
-            //切换按钮
-            ML.Engine.Input.InputManager.Instance.Common.Option.SwichBtn.started += SwichBtn_started;
 
-            //确认
-            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
+            //绑定按钮导航和按钮确认InputAction的回调函数
 
+            this.UIBtnList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Option.SwichBtn, UIBtnList.BindType.started);
+            this.UIBtnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm, UIBtnList.BindType.started);
+            
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
 
         }
-        public void SwichBtn_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            string actionName = obj.action.name;
 
-            // 使用 ReadValue<T>() 方法获取附加数据
-            string actionMapName = obj.action.actionMap.name;
-
-            var vector2 = obj.ReadValue<UnityEngine.Vector2>();
-            float angle = Mathf.Atan2(vector2.x, vector2.y);
-
-            angle = angle * 180 / Mathf.PI;
-            if (angle < 0)
-            {
-                angle = angle + 360;
-            }
-
-            if (angle < 45 || angle > 315)
-            {
-                this.UIBtnList.MoveUPIUISelected();
-            }
-            else if (angle > 45 && angle < 135)
-            {
-                this.UIBtnList.MoveRightIUISelected();
-            }
-            else if (angle > 135 && angle < 225)
-            {
-                this.UIBtnList.MoveDownIUISelected();
-            }
-            else if (angle > 225 && angle < 315)
-            {
-                this.UIBtnList.MoveLeftIUISelected();
-            }
-        }
-
-        public void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            this.UIBtnList.GetCurSelected().Interact();
-        }
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             GameManager.Instance.UIManager.PopPanel();
@@ -253,9 +225,8 @@ namespace ML.Engine.UI
 
         protected override void OnLoadJsonAssetComplete(OptionPanelStruct datas)
         {
+            base.OnLoadJsonAssetComplete(datas);
             InitBtnData(datas);
-
-            
         }
         protected override void InitTextContentPathData()
         {
