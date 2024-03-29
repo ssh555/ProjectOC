@@ -72,12 +72,15 @@ namespace ML.Engine.UI
                     {
                         await SC.DeleteSaveDataFolderAsync(0, null);
                     }
-                    SC.CreateSaveDataFolder(0, "newgame", async () => {
+#pragma warning disable CS4014
+                    SC.CreateSaveDataFolderAsync(0, "newgame", async () =>
+                    {
                         Debug.Log("´æÈënewgame£¡");
 
                         await SC.SelectSaveDataFolderAsync(0, null);
 
                     });
+#pragma warning restore CS4014
 
                     GameManager.Instance.EnterPoint.GetLoadingScenePanelInstance().Completed += (handle) =>
                     {
@@ -110,7 +113,7 @@ namespace ML.Engine.UI
             async () =>
             {
 
-                await SC.SelectSaveDataFolderAsync(1, null);
+                await SC.SelectSaveDataFolderAsync(0, null);
                 UIBasePanel panel = null;
                 System.Action<string, string> preCallback = (string s1, string s2) =>
                 {

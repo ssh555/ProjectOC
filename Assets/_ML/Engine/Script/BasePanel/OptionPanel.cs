@@ -101,8 +101,9 @@ namespace ML.Engine.UI
                     System.Action<string, string> preCallback = (string s1, string s2) =>
                     {
                         //新游戏的临时存档，保存当前新游戏存档时，覆盖之前的savegame，并开始使用savegame存档，即当前使用存档为savegame
-
-                        SC.CreateSaveDataFolder(1, "savegame", () => { Debug.Log("存入savegame！"); });
+#pragma warning disable CS4014
+                        SC.CreateSaveDataFolderAsync(1, "savegame", () => { Debug.Log("存入savegame！"); });
+#pragma warning restore CS4014
 
                         GameManager.Instance.EnterPoint.GetLoadingScenePanelInstance().Completed += (handle) =>
                         {
