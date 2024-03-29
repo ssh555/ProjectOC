@@ -155,6 +155,7 @@ namespace ML.Engine.Utility
         /// </summary>
         public GameObject GetNextObject(string poolName, Transform parent = null)
         {
+            Debug.Log("GetNextObject "+goPoolDic.Count);
             if (this.goPoolDic.ContainsKey(poolName))
             {
                 PoolStruct<GameObject> poolStruct = this.goPoolDic[poolName];

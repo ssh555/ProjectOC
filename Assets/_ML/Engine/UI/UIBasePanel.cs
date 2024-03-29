@@ -18,19 +18,19 @@ namespace ML.Engine.UI
     public class UIBasePanel : UIBehaviour
     {
         /// <summary>
-        /// Î¨Ò»±êÊ¶·û
+        /// å”¯ä¸€æ ‡è¯†ç¬¦
         /// </summary>
         public string ID { get; protected set; }
         /// <summary>
-        /// ¶ÔÏó³Ø
+        /// å¯¹è±¡æ± 
         /// </summary>
         public ObjectPool objectPool;
         /// <summary>
-        /// ËùÊôUIManager
+        /// æ‰€å±UIManager
         /// </summary>
         private UIManager _uiMgr;
         /// <summary>
-        /// ËùÊôUIManager
+        /// æ‰€å±UIManager
         /// </summary>
         public UIManager UIMgr
         {
@@ -49,7 +49,7 @@ namespace ML.Engine.UI
         }
 
         /// <summary>
-        /// Ñ¹ÈëUIÕ»Ê±µ÷ÓÃ
+        /// å‹å…¥UIæ ˆæ—¶è°ƒç”¨
         /// </summary>
         public virtual void OnEnter()
         {
@@ -62,7 +62,7 @@ namespace ML.Engine.UI
         }
 
         /// <summary>
-        /// ³öÕ»Ê±µ÷ÓÃ
+        /// å‡ºæ ˆæ—¶è°ƒç”¨
         /// </summary>
         public virtual void OnExit()
         {
@@ -72,20 +72,20 @@ namespace ML.Engine.UI
         }
 
         /// <summary>
-        /// ÔİÍ£Ê±µ÷ÓÃ£¬¼´²»´¦ÓÚÕ»¶¥Ê±
+        /// æš‚åœæ—¶è°ƒç”¨ï¼Œå³ä¸å¤„äºæ ˆé¡¶æ—¶
         /// </summary>
         public virtual void OnPause()
         {
             this.Exit();
-            this.gameObject.SetActive(false);
+            //this.gameObject.SetActive(false);
         }
 
         /// <summary>
-        /// ÔÙ´Î³ÉÎªÕ»¶¥Ê±µ÷ÓÃ
+        /// å†æ¬¡æˆä¸ºæ ˆé¡¶æ—¶è°ƒç”¨
         /// </summary>
         public virtual void OnRecovery()
         {
-            this.gameObject.SetActive(true);
+            //this.gameObject.SetActive(true);
             this.Enter();
         }
 
@@ -100,9 +100,7 @@ namespace ML.Engine.UI
 
         protected virtual void Exit()
         {
-            Debug.Log("Exit "+this.gameObject.name);
             this.UnregisterInput();
-            
         }
 
 
@@ -134,7 +132,7 @@ namespace ML.Engine.UI
         {
             this.objectPool.GetFunctionExecutor().SetOnAllFunctionsCompleted(() =>
             {
-                //this.Refresh();
+                this.Refresh();
             });
 
             StartCoroutine(this.objectPool.GetFunctionExecutor().Execute());
@@ -144,7 +142,7 @@ namespace ML.Engine.UI
     }
 
     /// <summary>
-    /// Èô¸ÃUIBasePanelĞèÒªTextContentÔò¿ÉÒÔ¼ÓÈë·ºĞÍ<TextContentStruct>
+    /// è‹¥è¯¥UIBasePaneléœ€è¦TextContentåˆ™å¯ä»¥åŠ å…¥æ³›å‹<TextContentStruct>
     /// </summary>
     public class UIBasePanel<T> : UIBasePanel
     {
@@ -157,14 +155,14 @@ namespace ML.Engine.UI
         private UIKeyTipList<T> UIKeyTipList;
 
         /// <summary>
-        /// ¼ÓÔØJsonÍê³ÉºóÖ´ĞĞµÄ»Øµ÷£¬Ä¬ÈÏ×Ô¶¯³õÊ¼»¯KeyTip
+        /// åŠ è½½Jsonå®Œæˆåæ‰§è¡Œçš„å›è°ƒï¼Œé»˜è®¤è‡ªåŠ¨åˆå§‹åŒ–KeyTip
         /// </summary>
         protected virtual void OnLoadJsonAssetComplete(T datas)
         {
             this.InitKeyTip(datas);
         }
         /// <summary>
-        /// ¼ÓÔØJson
+        /// åŠ è½½Json
         /// </summary>
         private List<AsyncOperationHandle> InitUITextContents()
         {
@@ -179,7 +177,7 @@ namespace ML.Engine.UI
             return handles;
         }
         /// <summary>
-        /// ³õÊ¼»¯KeyTip
+        /// åˆå§‹åŒ–KeyTip
         /// </summary>
         private void InitKeyTip(T datas)
         {

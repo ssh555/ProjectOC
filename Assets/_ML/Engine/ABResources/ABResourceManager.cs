@@ -803,6 +803,10 @@ namespace ML.Engine.ABResources
         }
         public bool ReleaseInstance(AsyncOperationHandle handle)
         {
+            if(!handle.IsValid())
+            {
+                return false;
+            }
             var b = Addressables.ReleaseInstance(handle);
             if (b)
             {
@@ -814,6 +818,10 @@ namespace ML.Engine.ABResources
         }
         public bool ReleaseInstance(AsyncOperationHandle<GameObject> handle)
         {
+            if (!handle.IsValid())
+            {
+                return false;
+            }
             var b = Addressables.ReleaseInstance(handle);
             if (b)
             {
@@ -974,12 +982,14 @@ namespace ML.Engine.ABResources
         }
         public void Release<TObject>(AsyncOperationHandle<TObject> handle)
         {
+            if (handle.IsValid() == false) return;
             Addressables.Release<TObject>(handle);
             this.localHandles.Remove(handle);
             this.globalHandles.Remove(handle);
         }
         public void Release(AsyncOperationHandle handle)
         {
+            if (handle.IsValid() == false) return;
             Addressables.Release(handle);
             this.localHandles.Remove(handle);
             this.globalHandles.Remove(handle);
@@ -1030,11 +1040,17 @@ namespace ML.Engine.ABResources
         {
             foreach (var instance in this.localInstances)
             {
-                Addressables.ReleaseInstance(instance.Key);
+                if (instance.Key.IsValid())
+                {
+                    Addressables.ReleaseInstance(instance.Key);
+                }
             }
             foreach (var instance in this.localHandles)
             {
-                Addressables.ReleaseInstance(instance.Key);
+                if(instance.Key.IsValid())
+                {
+                    Addressables.Release(instance.Key);
+                }
             }
             this.localInstances.Clear();
             this.localHandles.Clear();

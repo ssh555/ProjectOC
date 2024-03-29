@@ -37,7 +37,6 @@ namespace ML.Engine.UI
             UIBtnList = new UIBtnList(parent: btnList, limitNum: gridLayout.constraintCount);
             base.OnEnter();
         }
-
         #endregion
 
         #region Internal

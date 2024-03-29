@@ -21,10 +21,10 @@ namespace ProjectOC.InventorySystem.UI
     {
         #region Unity
         public bool IsInit = false;
-        protected override void Awake()
+        protected override void Start()
         {
+            base.Start();
 
-            base.Awake();
             this.InitTextContentPathData();
 
             // TopTitle
@@ -89,11 +89,7 @@ namespace ProjectOC.InventorySystem.UI
             BotKeyTips1.gameObject.SetActive(false);
             //CurPriority = MissionNS.TransportPriority.Normal;
             IsInit = true;
-        }
 
-        protected override void Start()
-        {
-            base.Start();
         }
         #endregion
 
@@ -590,7 +586,7 @@ namespace ProjectOC.InventorySystem.UI
 
         #region UI
         #region Temp
-        private List<Sprite> tempSprite = new List<Sprite>();
+        private Dictionary<string, Sprite> tempSprite = new Dictionary<string, Sprite>();
         private List<GameObject> tempUIItems = new List<GameObject>();
         private List<GameObject> tempUIItemsRecipe = new List<GameObject>();
         private List<GameObject> tempUIItemsRecipeRaw = new List<GameObject>();
@@ -601,7 +597,7 @@ namespace ProjectOC.InventorySystem.UI
         {
             foreach (var s in tempSprite)
             {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
+                ML.Engine.Manager.GameManager.DestroyObj(s.Value);
             }
             foreach (var s in tempUIItems)
             {
@@ -722,20 +718,15 @@ namespace ProjectOC.InventorySystem.UI
                     var imgProduct = Product.transform.Find("Icon").GetComponent<Image>();
                     if (ItemManager.Instance.IsValidItemID(productID))
                     {
-                        var texture = ItemManager.Instance.GetItemTexture2D(productID);
-                        if (texture != null)
+                        if (!tempSprite.ContainsKey(productID))
                         {
-                            var spriteProduct = tempSprite.Find(s => s.texture == texture);
-                            if (spriteProduct == null)
-                            {
-                                spriteProduct = ItemManager.Instance.GetItemSprite(productID);
-                                tempSprite.Add(spriteProduct);
-                            }
-                            imgProduct.sprite = spriteProduct;
+                            var sprite = ItemManager.Instance.GetItemSprite(productID);
+                            tempSprite[productID] = sprite;
+                            imgProduct.sprite = sprite;
                         }
                         else
                         {
-                            imgProduct.sprite = null;
+                            imgProduct.sprite = tempSprite[productID];
                         }
                     }
                     else
@@ -780,16 +771,15 @@ namespace ProjectOC.InventorySystem.UI
                         var img = item.transform.Find("Icon").GetComponent<Image>();
                         if (ItemManager.Instance.IsValidItemID(itemID))
                         {
-                            var texture = ItemManager.Instance.GetItemTexture2D(itemID);
-                            if (texture != null)
+                            if (!tempSprite.ContainsKey(itemID))
                             {
-                                var sprite = tempSprite.Find(s => s.texture == texture);
-                                if (sprite == null)
-                                {
-                                    sprite = ItemManager.Instance.GetItemSprite(itemID);
-                                    tempSprite.Add(sprite);
-                                }
+                                var sprite = ItemManager.Instance.GetItemSprite(itemID);
+                                tempSprite[itemID] = sprite;
                                 img.sprite = sprite;
+                            }
+                            else
+                            {
+                                img.sprite = tempSprite[itemID];
                             }
                         }
                         else
@@ -996,16 +986,15 @@ namespace ProjectOC.InventorySystem.UI
                     var img = item.transform.Find("Icon").GetComponent<Image>();
                     if (ItemManager.Instance.IsValidItemID(product.id))
                     {
-                        var texture = ItemManager.Instance.GetItemTexture2D(product.id);
-                        if (texture != null)
+                        if (!tempSprite.ContainsKey(product.id))
                         {
-                            var sprite = tempSprite.Find(s => s.texture == texture);
-                            if (sprite == null)
-                            {
-                                sprite = ItemManager.Instance.GetItemSprite(product.id);
-                                tempSprite.Add(sprite);
-                            }
+                            var sprite = ItemManager.Instance.GetItemSprite(product.id);
+                            tempSprite[product.id] = sprite;
                             img.sprite = sprite;
+                        }
+                        else
+                        {
+                            img.sprite = tempSprite[product.id];
                         }
                     }
                     else
@@ -1075,13 +1064,16 @@ namespace ProjectOC.InventorySystem.UI
                     var texture = ItemManager.Instance.GetItemTexture2D(product.id);
                     if (texture != null)
                     {
-                        var spriteProduct = tempSprite.Find(s => s.texture == texture);
-                        if (spriteProduct == null)
+                        if (!tempSprite.ContainsKey(product.id))
                         {
-                            spriteProduct = ItemManager.Instance.GetItemSprite(product.id);
-                            tempSprite.Add(spriteProduct);
+                            var sprite = ItemManager.Instance.GetItemSprite(product.id);
+                            tempSprite[product.id] = sprite;
+                            Recipe_Product.GetComponent<Image>().sprite = sprite;
                         }
-                        Recipe_Product.GetComponent<Image>().sprite = spriteProduct;
+                        else
+                        {
+                            Recipe_Product.GetComponent<Image>().sprite = tempSprite[product.id];
+                        }
                     }
 
                     Text_Recipe_Time.text = PanelTextContent.textTime + ":" + LocalGameManager.Instance.RecipeManager.GetTimeCost(CurrentRecipe).ToString() + "s";
@@ -1136,16 +1128,15 @@ namespace ProjectOC.InventorySystem.UI
                     if (ItemManager.Instance.IsValidItemID(itemID))
                     {
                         var img = item.transform.Find("Icon").GetComponent<Image>();
-                        var texture = ItemManager.Instance.GetItemTexture2D(itemID);
-                        if (texture != null)
+                        if (!tempSprite.ContainsKey(itemID))
                         {
-                            var sprite = tempSprite.Find(s => s.texture == texture);
-                            if (sprite == null)
-                            {
-                                sprite = ItemManager.Instance.GetItemSprite(itemID);
-                                tempSprite.Add(sprite);
-                            }
+                            var sprite = ItemManager.Instance.GetItemSprite(itemID);
+                            tempSprite[itemID] = sprite;
                             img.sprite = sprite;
+                        }
+                        else
+                        {
+                            img.sprite = tempSprite[itemID];
                         }
                     }
                 }
@@ -1346,13 +1337,16 @@ namespace ProjectOC.InventorySystem.UI
                         var texture = ItemManager.Instance.GetItemTexture2D(itemID);
                         if (texture != null)
                         {
-                            var sprite = tempSprite.Find(s => s.texture == ItemManager.Instance.GetItemTexture2D(itemID));
-                            if (sprite == null)
+                            if (!tempSprite.ContainsKey(itemID))
                             {
-                                sprite = ItemManager.Instance.GetItemSprite(itemID);
-                                tempSprite.Add(sprite);
+                                var sprite = ItemManager.Instance.GetItemSprite(itemID);
+                                tempSprite[itemID] = sprite;
+                                img.sprite = sprite;
                             }
-                            img.sprite = sprite;
+                            else
+                            {
+                                img.sprite = tempSprite[itemID];
+                            }
                         }
                     }
                     else
