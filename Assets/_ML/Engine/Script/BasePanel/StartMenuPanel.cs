@@ -78,7 +78,7 @@ namespace ML.Engine.UI
                         Debug.Log("¥Ê»Înewgame£°");
 
                         await SC.SelectSaveDataFolderAsync(0, null);
-
+                        await SC.LoadSaveDataAsync(null);
                     });
 #pragma warning restore CS4014
 
@@ -114,6 +114,7 @@ namespace ML.Engine.UI
             {
 
                 await SC.SelectSaveDataFolderAsync(0, null);
+                await SC.LoadSaveDataAsync(null);
                 UIBasePanel panel = null;
                 System.Action<string, string> preCallback = (string s1, string s2) =>
                 {
