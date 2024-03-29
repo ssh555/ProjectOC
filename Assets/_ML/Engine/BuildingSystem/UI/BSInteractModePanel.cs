@@ -125,6 +125,11 @@ namespace ML.Engine.BuildingSystem.UI
             base.OnRecovery();
             BM.Placer.OnDestroySelectedBPart += OnDestroySelectedBPart;
         }
+        public override void OnExit()
+        {
+            base.OnExit();
+            BM.Placer.OnDestroySelectedBPart -= OnDestroySelectedBPart;
+        }
         public override void Refresh()
         {
             keycom.ReWrite(monoBM.KeyTipDict["keycom"]);

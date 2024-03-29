@@ -302,7 +302,14 @@ namespace ML.Engine.InventorySystem
                 obj.transform.localScale = scale;
             }
             SpriteRenderer spriteRenderer = parent.GetComponentInChildren<SpriteRenderer>();
-            spriteRenderer.sprite = GetItemSprite(itemID);
+            if (IsValidItemID(itemID))
+            {
+                spriteRenderer.sprite = GetItemSprite(itemID);
+            }
+            else
+            {
+                spriteRenderer.sprite = null;
+            }
         }
 
         public string GetItemName(string id)

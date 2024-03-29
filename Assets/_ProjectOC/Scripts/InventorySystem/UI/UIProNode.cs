@@ -521,18 +521,12 @@ namespace ProjectOC.InventorySystem.UI
             else if (CurMode == Mode.ChangeRecipe)
             {
                 ProNode.ChangeRecipe(Player, CurrentRecipe);
-                if (ItemManager.Instance.IsValidItemID(ProNode.Recipe?.Product.id ?? ""))
-                {
-                    var texture = ItemManager.Instance.GetItemTexture2D(ProNode.Recipe.Product.id);
-                    if (texture != null)
-                    {
-                        //ItemManager.Instance.AddItemIconObject(ProNode.Recipe.Product.id,
-                        //                                       this.ProNode.WorldProNode.transform,
-                        //                                       new Vector3(0, this.ProNode.WorldProNode.transform.GetComponent<Collider>().bounds.size.y / 2, 0),
-                        //                                       Quaternion.Euler(new Vector3(90, 0, 0)),
-                        //                                       Vector3.one);
-                    }
-                }
+                BoxCollider collider = ProNode.WorldProNode.transform.GetComponent<BoxCollider>();
+                ItemManager.Instance.AddItemIconObject(ProNode.Recipe.Product.id,
+                                                               this.ProNode.WorldProNode.transform,
+                                                               new Vector3(0, this.ProNode.WorldProNode.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),
+                                                               Quaternion.Euler(new Vector3(0, 0, 0)),
+                                                               Vector3.one);
                 CurMode = Mode.ProNode;
             }
             else if (CurMode == Mode.ChangeWorker)
@@ -1167,7 +1161,7 @@ namespace ProjectOC.InventorySystem.UI
                 this.BotKeyTips1.gameObject.SetActive(true);
                 this.Worker_UIItemTemplate.gameObject.SetActive(false);
                 Workers = new List<Worker>() { null };
-                Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
+                Workers.AddRange(LocalGameManager.Instance.WorkerManager.GetWorkers());
                 #region Select
                 int delta = tempUIItemsWorker.Count - Workers.Count;
                 if (delta > 0)
@@ -1220,7 +1214,7 @@ namespace ProjectOC.InventorySystem.UI
                         }
                         // PrograssBar
                         var rect = item.transform.Find("PrograssBar").Find("Cur").GetComponent<RectTransform>();
-                        rect.offsetMax = new Vector2(rect.offsetMax.x, -1 * (int)(100 - 100 * worker.APCurrent / worker.APMax));
+                        rect.offsetMax = new Vector2(rect.offsetMax.x, (int)(((float)worker.APCurrent/worker.APMax - 1) * 60));
                         // Eff
                         var eff = item.transform.Find("Eff").GetComponent<TMPro.TextMeshProUGUI>();
                         eff.text = worker.Eff[ProNode.ExpType].ToString();

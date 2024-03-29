@@ -1,5 +1,6 @@
 using ML.Engine.FSM;
 using ML.Engine.InventorySystem;
+using ML.Engine.Timer;
 using ProjectOC.MissionNS;
 using ProjectOC.ProNodeNS;
 using Sirenix.OdinInspector;
@@ -15,7 +16,7 @@ namespace ProjectOC.WorkerNS
     /// 刁民
     /// </summary>
     [System.Serializable]
-    public class Worker : MonoBehaviour
+    public class Worker : MonoBehaviour, ITickComponent
     {
         #region 策划配置项
         [LabelText("名字")]
@@ -121,6 +122,12 @@ namespace ProjectOC.WorkerNS
         [LabelText("搬运物品")]
         public List<Item> TransportItems = new List<Item>();
 
+        #region ITickComponent
+        public int tickPriority { get; set; }
+        public int fixedTickPriority { get; set; }
+        public int lateTickPriority { get; set; }
+        #endregion
+
         private NavMeshAgent Agent = null;
         public float Threshold = 2f;
         public Transform Target = null;
@@ -177,15 +184,18 @@ namespace ProjectOC.WorkerNS
             StateMachine = new WorkerStateMachine(this);
             StateController.SetStateMachine(StateMachine);
         }
-
-        public void Start()
+        private void Awake()
+        {
+            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
+        }
+        private void Start()
         {
             Agent = GetComponent<NavMeshAgent>();
             this.Init();
-            //this.enabled = false;
+            this.enabled = false;
         }
 
-        public void Update()
+        public void Tick(float deltatime)
         {
             if (Target != null && !HasArrived && Vector3.Distance(transform.position, Target.position) < Threshold)
             {
@@ -290,6 +300,7 @@ namespace ProjectOC.WorkerNS
 
         public void OnDestroy()
         {
+            (this as ML.Engine.Timer.ITickComponent).DisposeTick();
             this.ClearDestination();
             if (this.Transport != null)
             {

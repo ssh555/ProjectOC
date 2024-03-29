@@ -20,8 +20,7 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// 搬运任务列表
         /// </summary>
-        public List<MissionTransport> MissionTransports = new List<MissionTransport>();
-        //public SortedSet<MissionTransport> MissionTransports = new SortedSet<MissionTransport>(new MissionTransport.Sort());
+        public SortedSet<MissionTransport> MissionTransports = new SortedSet<MissionTransport>(new MissionTransport.Sort());
 
         private CounterDownTimer timer;
         /// <summary>
