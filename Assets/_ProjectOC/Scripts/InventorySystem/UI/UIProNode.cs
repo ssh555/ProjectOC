@@ -1299,11 +1299,7 @@ namespace ProjectOC.InventorySystem.UI
 
                 string cid = this.ProNode.WorldProNode.Classification.ToString();
                 string cidUpgrade = BuildingManager.Instance.GetUpgradeCID(cid);
-                if (string.IsNullOrEmpty(cidUpgrade))
-                {
-                    cidUpgrade = cid;
-                }
-                this.Level_Build.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = BuildingManager.Instance.GetName(cidUpgrade);
+                this.Level_Build.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = BuildingManager.Instance.GetName((!string.IsNullOrEmpty(cidUpgrade) ? cidUpgrade : cid));
 
                 List<Formula> raw = this.ProNode.GetUpgradeRaw();
                 List<Formula> rawCur = this.ProNode.GetUpgradeRawCurrent(Player);
@@ -1387,7 +1383,7 @@ namespace ProjectOC.InventorySystem.UI
                 #region Level
                 LvOld.text = "Lv: " + this.ProNode.Level.ToString();
                 DescOld.text = PanelTextContent.textLvDesc + this.ProNode.EffBase + "%";
-                if (this.ProNode.Level + 1 <= this.ProNode.LevelMax)
+                if (this.ProNode.Level + 1 <= this.ProNode.LevelMax && !string.IsNullOrEmpty(cidUpgrade))
                 {
                     ChangeLevel.Find("Level").Find("Back1").gameObject.SetActive(true);
                     LvNew.text = "Lv: " + (ProNode.Level + 1).ToString();

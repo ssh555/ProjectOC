@@ -138,6 +138,27 @@ namespace ProjectOC.StoreNS
                 }
             }
         }
+
+        public void WorldStoreSetData(WorldStore worldStore, Store store)
+        {
+            if (worldStore != null && store != null)
+            {
+                if (!WorldStoreDict.ContainsKey(worldStore.InstanceID))
+                {
+                    WorldStoreDict.Add(worldStore.InstanceID, worldStore);
+                }
+                else
+                {
+                    WorldStoreDict[worldStore.InstanceID] = worldStore;
+                }
+                if (worldStore.Store != null)
+                {
+                    worldStore.Store.WorldStore = null;
+                }
+                worldStore.Store = store;
+                store.WorldStore = worldStore;
+            }
+        }
     }
 }
 

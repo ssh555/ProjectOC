@@ -7,6 +7,7 @@ using System;
 using UnityEngine;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.BuildingSystem;
+using ProjectOC.ManagerNS;
 
 namespace ProjectOC.ProNodeNS
 {
@@ -90,11 +91,11 @@ namespace ProjectOC.ProNodeNS
         /// <summary>
         /// 总堆积份数
         /// </summary>
-        public int StackAllNum { get => StackAll / ProductNum; }
+        public int StackAllNum { get => (ProductNum != 0) ? (StackAll / ProductNum) : StackAll; }
         /// <summary>
         /// 没有分配任务的堆积份数
         /// </summary>
-        public int StackNum { get => Stack / ProductNum; }
+        public int StackNum { get => (ProductNum != 0) ? (Stack / ProductNum): Stack; }
         /// <summary>
         /// 生产物ID
         /// </summary>
@@ -756,6 +757,7 @@ namespace ProjectOC.ProNodeNS
                 string ID = BuildingManager.Instance.GetID(this.WorldProNode.Classification.ToString());
                 string upgradeID = BuildingManager.Instance.GetUpgradeID(this.WorldProNode.Classification.ToString());
                 string upgradeCID = BuildingManager.Instance.GetClassification(upgradeID);
+                Transform parent = this.WorldProNode.transform.parent;
 
                 if (!string.IsNullOrEmpty(upgradeID)
                     && !string.IsNullOrEmpty(upgradeCID)
@@ -766,12 +768,12 @@ namespace ProjectOC.ProNodeNS
                     CompositeManager.Instance.OnlyReturnResource(player.Inventory, ID);
                     if (BuildingManager.Instance.GetOneBPartInstance(upgradeCID) is WorldProNode upgrade)
                     {
+                        upgrade.transform.SetParent(parent);
                         upgrade.InstanceID = this.WorldProNode.InstanceID;
                         upgrade.transform.position = this.WorldProNode.transform.position;
                         upgrade.transform.rotation = this.WorldProNode.transform.rotation;
                         ML.Engine.Manager.GameManager.DestroyObj(this.WorldProNode.gameObject);
-                        this.WorldProNode = upgrade;
-                        upgrade.ProNode = this;
+                        LocalGameManager.Instance.ProNodeManager.WorldNodeSetData(upgrade, this);
                         this.SetLevel(upgrade.Classification.Category4 - 1);
                     }
                 }
