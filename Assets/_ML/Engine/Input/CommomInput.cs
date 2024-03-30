@@ -39,6 +39,15 @@ namespace ML.Engine.Input
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""Confirm1"",
+                    ""type"": ""Button"",
+                    ""id"": ""a6e6617f-4fdd-4178-be77-0094a5495b8e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Back"",
                     ""type"": ""Button"",
                     ""id"": ""09cef832-34f8-464e-8f2b-224e1c2034db"",
@@ -101,6 +110,28 @@ namespace ML.Engine.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""750e2c37-6a4b-4806-9ad0-1daeebeaa1f9"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Confirm1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c649bcd5-e3f5-41cf-81c6-0e0c988799a6"",
+                    ""path"": ""<XInputController>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Confirm1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -366,6 +397,7 @@ namespace ML.Engine.Input
             // Common
             m_Common = asset.FindActionMap("Common", throwIfNotFound: true);
             m_Common_Confirm = m_Common.FindAction("Confirm", throwIfNotFound: true);
+            m_Common_Confirm1 = m_Common.FindAction("Confirm1", throwIfNotFound: true);
             m_Common_Back = m_Common.FindAction("Back", throwIfNotFound: true);
             // StartMenu
             m_StartMenu = asset.FindActionMap("StartMenu", throwIfNotFound: true);
@@ -435,12 +467,14 @@ namespace ML.Engine.Input
         private readonly InputActionMap m_Common;
         private List<ICommonActions> m_CommonActionsCallbackInterfaces = new List<ICommonActions>();
         private readonly InputAction m_Common_Confirm;
+        private readonly InputAction m_Common_Confirm1;
         private readonly InputAction m_Common_Back;
         public struct CommonActions
         {
             private @CommomInput m_Wrapper;
             public CommonActions(@CommomInput wrapper) { m_Wrapper = wrapper; }
             public InputAction @Confirm => m_Wrapper.m_Common_Confirm;
+            public InputAction @Confirm1 => m_Wrapper.m_Common_Confirm1;
             public InputAction @Back => m_Wrapper.m_Common_Back;
             public InputActionMap Get() { return m_Wrapper.m_Common; }
             public void Enable() { Get().Enable(); }
@@ -454,6 +488,9 @@ namespace ML.Engine.Input
                 @Confirm.started += instance.OnConfirm;
                 @Confirm.performed += instance.OnConfirm;
                 @Confirm.canceled += instance.OnConfirm;
+                @Confirm1.started += instance.OnConfirm1;
+                @Confirm1.performed += instance.OnConfirm1;
+                @Confirm1.canceled += instance.OnConfirm1;
                 @Back.started += instance.OnBack;
                 @Back.performed += instance.OnBack;
                 @Back.canceled += instance.OnBack;
@@ -464,6 +501,9 @@ namespace ML.Engine.Input
                 @Confirm.started -= instance.OnConfirm;
                 @Confirm.performed -= instance.OnConfirm;
                 @Confirm.canceled -= instance.OnConfirm;
+                @Confirm1.started -= instance.OnConfirm1;
+                @Confirm1.performed -= instance.OnConfirm1;
+                @Confirm1.canceled -= instance.OnConfirm1;
                 @Back.started -= instance.OnBack;
                 @Back.performed -= instance.OnBack;
                 @Back.canceled -= instance.OnBack;
@@ -579,6 +619,7 @@ namespace ML.Engine.Input
         public interface ICommonActions
         {
             void OnConfirm(InputAction.CallbackContext context);
+            void OnConfirm1(InputAction.CallbackContext context);
             void OnBack(InputAction.CallbackContext context);
         }
         public interface IStartMenuActions

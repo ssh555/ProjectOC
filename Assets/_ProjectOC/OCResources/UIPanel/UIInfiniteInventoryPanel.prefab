@@ -1831,6 +1831,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 902042dd59e50754a80bcc00d8654070, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  abpath: 
+  abname: 
+  description: 
   IsInit: 0
   inventoryAtlas: {fileID: 0}
 --- !u!222 &257790905731768433

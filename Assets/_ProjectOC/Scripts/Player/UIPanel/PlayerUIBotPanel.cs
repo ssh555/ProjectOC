@@ -46,11 +46,12 @@ namespace ProjectOC.Player.UI
 
         public override void OnEnter()
         {
-            UIBtnList = new UIBtnList(parent: btnList, hasInitSelect: false);
+            UIBtnList = new UIBtnList(parent: btnList, hasInitSelect: false, isWheel: true);
             base.OnEnter();
         }
         protected override void Enter()
         {
+            this.UIBtnList.EnableBtnList();
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
             this.player.interactComponent.Enable();
             base.Enter();   
@@ -58,6 +59,7 @@ namespace ProjectOC.Player.UI
 
         protected override void Exit()
         {
+            this.UIBtnList.DisableBtnList();
             ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
             //TODO player null
             this.player?.interactComponent.Disable();
@@ -72,7 +74,8 @@ namespace ProjectOC.Player.UI
 
         public void Tick(float deltatime)
         {
-            TimeText.text = LocalGameManager.Instance.DispatchTimeManager.CurrentTimeFrame.ToString()+" : "+"分";
+            if(LocalGameManager.Instance!=null)
+                TimeText.text = LocalGameManager.Instance.DispatchTimeManager.CurrentTimeFrame.ToString()+" : "+"分";
         }
 
         #endregion
@@ -85,8 +88,6 @@ namespace ProjectOC.Player.UI
             ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMenu.started -= OpenMenu_started;
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMap.started -= OpenMap_started;
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.performed -= SelectGrid_performed;
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.canceled -= SelectGrid_canceled;
         }
 
         protected override void RegisterInput()
@@ -121,25 +122,25 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("友人",
             () =>
             {
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, "友人！");
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("友人"));
             }
             );
             this.UIBtnList.SetBtnAction("我的氏族",
             () =>
             {
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, "我的氏族！");
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("我的氏族"));
             }
             );
             this.UIBtnList.SetBtnAction("订单管理",
             () =>
             {
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, "订单管理！");
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("<color=yellow>订单管理</color>  订单管理", "订单管理"));
             }
             );
             this.UIBtnList.SetBtnAction("生产管理",
             () =>
             {
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, "生产管理！");
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("<color=yellow>生产管理</color>  生产管理", "生产管理"));
             }
             );
             this.UIBtnList.SetBtnAction("科技树",
@@ -175,49 +176,26 @@ namespace ProjectOC.Player.UI
             ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMenu.started += OpenMenu_started;
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMap.started += OpenMap_started;
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.performed += SelectGrid_performed;
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.canceled += SelectGrid_canceled;
+            
+
         }
 
         private void OpenMenu_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
+            this.UIBtnList.BindNavigationInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid, UIBtnList.BindType.performed);
+            this.UIBtnList.BindButtonInteractInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid, UIBtnList.BindType.canceled,
+                null, () => { 
+                    Ring.gameObject.SetActive(false);
+                    this.UIBtnList.SetCurSelectedNull();
+                    this.UIBtnList.DeBindInputAction();
+
+                });
             this.Ring.gameObject.SetActive(true);
         }
 
         private void OpenMap_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, "打开地图！");
-        }
-
-
-        private void SelectGrid_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            if (Ring.gameObject.activeInHierarchy == false) return;
-            Vector2 vector2 = obj.ReadValue<Vector2>();
-
-            float angle = Mathf.Atan2(vector2.x, vector2.y);
-
-            angle = angle * 180 / Mathf.PI;
-            if (angle < 0)
-            {
-                angle = angle + 360;
-            }
-
-            if (angle < 22.5 || angle > 337.5) this.UIBtnList.MoveIndexIUISelected(0);
-            else if (angle > 22.5 && angle < 67.5) this.UIBtnList.MoveIndexIUISelected(7);
-            else if (angle > 67.5 && angle < 112.5) this.UIBtnList.MoveIndexIUISelected(6);
-            else if (angle > 112.5 && angle < 157.5) this.UIBtnList.MoveIndexIUISelected(5);
-            else if (angle > 157.5 && angle < 202.5) this.UIBtnList.MoveIndexIUISelected(4);
-            else if (angle > 202.5 && angle < 247.5) this.UIBtnList.MoveIndexIUISelected(3);
-            else if (angle > 247.5 && angle < 292.5) this.UIBtnList.MoveIndexIUISelected(2);
-            else if (angle > 292.5 && angle < 337.5) this.UIBtnList.MoveIndexIUISelected(1);
-        }
-        private void SelectGrid_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            if (Ring.gameObject.activeInHierarchy == false) return;
-            this.UIBtnList.GetCurSelected().Interact();
-            this.UIBtnList.SetCurSelectedNull();
-            Ring.gameObject.SetActive(false);
+            GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("打开地图"));
         }
         
         #endregion

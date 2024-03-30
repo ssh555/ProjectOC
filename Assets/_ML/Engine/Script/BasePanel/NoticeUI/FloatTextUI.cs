@@ -6,32 +6,41 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class FloatTextUI : UIBasePanel
+namespace ML.Engine.UI
 {
-    public TextMeshProUGUI Text;
-    private Animator animator;
-    protected override void Awake()
+    public class FloatTextUI : UIBasePanel,INoticeUI
     {
-        base.Awake();
-        Text = transform.Find("Image").Find("Text").GetComponent<TextMeshProUGUI>();
-        animator = GetComponent<Animator>();
-    }
+        public TextMeshProUGUI Text;
+        private Animator animator;
+        protected override void Awake()
+        {
+            base.Awake();
+            Text = transform.Find("Image").Find("Text").GetComponent<TextMeshProUGUI>();
+            animator = GetComponent<Animator>();
+        }
 
-    public void DestroySelf()
-    {
-        GameManager.DestroyObj(gameObject);
-    }
+        #region INoticeUI
+        public void DestroySelf()
+        {
+            GameManager.DestroyObj(gameObject);
+        }
+        public void SaveAsInstance()
+        {
+            this.gameObject.SetActive(false);
+            this.animator.enabled = false;
+        }
+        #endregion
 
-    public void SaveAsInstance()
-    {
-        this.gameObject.SetActive(false);
-        this.animator.enabled = false;
-    }
 
-    public void CopyInstance()
-    {
-        this.gameObject.SetActive(true);
-        this.animator.enabled = true;
-
+        public void CopyInstance<D>(D data)
+        {
+            this.gameObject.SetActive(true);
+            this.animator.enabled = true;
+            if(data is UIManager.FloatTextUIData floatTextUIData)
+            {
+                Text.text = floatTextUIData.msg;
+            }
+        }
     }
 }
+

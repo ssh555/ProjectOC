@@ -31,18 +31,17 @@ namespace ML.Engine.Utility
 
             foreach (Func<T> func in this.FunctionList)
             {
-                
                 foreach (IEnumerator enumerator in func.Invoke())
                 {
                     enumerators.Add(enumerator);
                 }
             }
-
+            
             for (int i = 0; i < enumerators.Count; i++)
             {
                 yield return enumerators[i];
             }
-
+            yield return null;
             this.onAllFunctionsCompleted.Invoke();
         }
 
@@ -57,7 +56,12 @@ namespace ML.Engine.Utility
         }
         public void SetOnAllFunctionsCompleted(Action action)
         {
-            this.onAllFunctionsCompleted = action;
+            if(this.onAllFunctionsCompleted != null)
+            {
+                this.onAllFunctionsCompleted += action;
+            }
+            else { this.onAllFunctionsCompleted = action; }
+
         }
     }
 }

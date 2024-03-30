@@ -67,7 +67,7 @@ namespace ProjectOC.InventorySystem.UI
             KT_Destroy = kt.Find("KT_Destroy");
 
             IsInit = true;
-            //Refresh();
+            Refresh();
         }
 
         protected override void Start()
@@ -75,10 +75,9 @@ namespace ProjectOC.InventorySystem.UI
             CurrentItemTypeIndex = 0;
             base.Start();
         }
-
         protected override void OnDestroy()
         {
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.Release(this.gameObject);
+            GameManager.Instance.ABResourceManager.Release(inventoryAtlas);
         }
         #endregion
 
@@ -443,7 +442,6 @@ namespace ProjectOC.InventorySystem.UI
                     // 加入临时内存管理
                     tempItemType.Add(itemtype, obj);
                     // 载入ItemType对应的Texture2D
-
                     Sprite sprite = null;
                     if(!spriteDictionart.TryGetValue(itemtype.ToString(),out sprite))
                         sprite = inventoryAtlas.GetSprite(itemtype.ToString());
