@@ -42,7 +42,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8934122119495876466}
   - component: {fileID: 8934122119495876467}
-  - component: {fileID: 8397872725126908898}
   m_Layer: 6
   m_Name: PlayerTerrainDetect
   m_TagString: Untagged
@@ -88,18 +87,6 @@ CapsuleCollider:
   m_Height: 2.2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8397872725126908898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8934122119495876465}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6feb82b60c7707348a49cccd1c157035, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8934122119657867331
 GameObject:
   m_ObjectHideFlags: 0
@@ -333,7 +320,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8934122120462560558}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.11118153, y: -0.0000000074043873, z: 8.283668e-10, w: 0.99380016}
+  m_LocalRotation: {x: 0.11118145, y: -1e-45, z: -0, w: 0.99380016}
   m_LocalPosition: {x: 0, y: 0.75, z: -3.31}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -514,7 +501,7 @@ MonoBehaviour:
       Mass: 1
       Gravity: 40
       TerrainDrag: {fileID: 0}
-      BottomDrag: 20
+      BottomDrag: 10
       FallDeceleration: 20
       airDrag: 0.2
       CrouchedHalfHeight: 0
@@ -534,14 +521,15 @@ MonoBehaviour:
       bCanJump: 1
       bIsWorldUpAxis: 1
       IsJumpVelocityStack: 0
-      ImpactBaseVelocityXZ: 0
+      ImpactBaseVelocityX: 0
+      ImpactBaseVelocityZ: 0
       ImpactBaseVelocityY: 0
       jumpSpeedCurve:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 1.6126963
+          value: 2.5328267
           inSlope: 0
           outSlope: 0
           tangentMode: 136
@@ -549,8 +537,8 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 0.23922795
-          value: 1.6126992
+          time: 0.1066224
+          value: 2.5213099
           inSlope: 0
           outSlope: 0
           tangentMode: 136
@@ -592,8 +580,8 @@ MonoBehaviour:
     walkAccSpeed: 40
     runAccSpeed: 100
     IsAcc: 0
-    crouchLimitSpeed: 30
-    crouchAccSpeed: 5
+    crouchLimitSpeed: 2
+    crouchAccSpeed: 30
     IsCrouch: 0
     inAirLimitSpeed: 8
     airControl: 0.8

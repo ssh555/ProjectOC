@@ -16,15 +16,11 @@ namespace ProjectOC.StoreNS
 
         public string InteractType { get; set; } = "WorldStore";
         public Vector3 PosOffset { get; set; } = Vector3.zero;
-
-        private void Start()
-        {
-            this.enabled = false;
-        }
+        
         public override void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
             // 第一次新建
-            if(oldPos == newPos)
+            if(isFirstBuild)
             {
                 // 生成逻辑对象
                 string actorID = BuildingManager.Instance.GetActorID(this.Classification.ToString());
@@ -36,6 +32,8 @@ namespace ProjectOC.StoreNS
                     LocalGameManager.Instance.StoreManager.WorldStoreSetData(this, storeType, level-1);
                 }
             }
+            //isFirstBuild的更新放在基类里，要要到引用后面
+            base.OnChangePlaceEvent(oldPos,newPos);
         }
 
         public void Interact(InteractComponent component)

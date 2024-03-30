@@ -61,7 +61,7 @@ namespace ProjectOC.LandMassExpand
         public override void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
             //如果List没有，说明刚建造则加入
-            if (!bPIslandManager.powerCores.Contains(this))
+            if (isFirstBuild)
             {
                 bPIslandManager.powerCores.Add(this);
             }
@@ -93,6 +93,7 @@ namespace ProjectOC.LandMassExpand
                     powerSub.PowerCount++;
                 }
             }
+            base.OnChangePlaceEvent(oldPos,newPos);
         }
     }
 }
