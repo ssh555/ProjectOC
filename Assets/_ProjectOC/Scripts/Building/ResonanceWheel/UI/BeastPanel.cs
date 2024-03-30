@@ -425,7 +425,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         protected override void InitObjectPool()
         {
-            Debug.Log("InitObjectPool " + this.objectPool.GetHashCode());
             this.objectPool.RegisterPool(ObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
             "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2", (handle) =>
             {

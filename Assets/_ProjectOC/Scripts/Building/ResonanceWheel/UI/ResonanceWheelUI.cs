@@ -397,6 +397,17 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
         #endregion
 
+        #region external
+        public bool ResonanceWheelIsBusy()
+        {
+            for (int i = 0; i < Grids.Length; i++)
+            {
+                if (!Grids[i].isNull) return true;
+            }
+            return false;
+        }
+
+        #endregion
         #region ChangeToSubUI
 
         public void MainToSub1()

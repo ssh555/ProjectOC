@@ -4,12 +4,17 @@ using ML.Engine.SaveSystem;
 using ML.Engine.TextContent;
 using ProjectOC.ResonanceWheelSystem.UI;
 using Sirenix.OdinInspector;
+using System;
 using TMPro;
+using UnityEngine;
+using UnityEngine.Events;
+using static ML.Engine.UI.OptionPanel;
 using static ML.Engine.UI.PopUpUI;
+using static ML.Engine.UI.UIManager;
 
 namespace ML.Engine.UI
 {
-    public class PopUpUI : ML.Engine.UI.UIBasePanel<PopUpUIStruct>
+    public class PopUpUI : ML.Engine.UI.UIBasePanel<PopUpUIStruct> ,INoticeUI
     {
         #region Unity
         public bool IsInit = false;
@@ -17,7 +22,9 @@ namespace ML.Engine.UI
         protected override void Awake()
         {
             base.Awake();
-            this.Text = this.transform.Find("Image").Find("Text").GetComponent<TextMeshProUGUI>(); ;
+            this.Msg1 = this.transform.Find("TextGroup").Find("Text1").GetComponent<TextMeshProUGUI>();
+            this.Msg2 = this.transform.Find("TextGroup").Find("Text2").GetComponent<TextMeshProUGUI>();
+            this.ImageGroup = this.transform.Find("ImageGroup");
         }
 
         protected override void Start()
@@ -30,49 +37,73 @@ namespace ML.Engine.UI
         #endregion
 
         #region Override
+        public override void OnEnter()
+        {
+            base.OnEnter();
+        }
+
+        protected override void Enter()
+        {
+            this.UIBtnList.EnableBtnList();
+            Invoke("RegisterInput", 0.1f);
+        }
+
+        protected override void Exit()
+        {
+            this.UIBtnList.DisableBtnList();
+            base.Exit();
+        }
+
+
         #endregion
 
         #region Internal
         protected override void UnregisterInput()
         {
+            this.UIBtnList.RemoveAllListener();
+            this.UIBtnList.DeBindInputAction();
 
-            //确认
-            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
-
-            // 返回
-            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
 
         }
 
         protected override void RegisterInput()
         {
-            //确认
-            ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
+            this.UIBtnList.BindInputAction("ConfirmBtn", ML.Engine.Input.InputManager.Instance.Common.Common.Confirm, UIBtnList.BindType.performed, null, () => { GameManager.Instance.UIManager.PopPanel(); });
 
-            // 返回
-            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
+            this.UIBtnList.BindInputAction("CancleBtn", ML.Engine.Input.InputManager.Instance.Common.Common.Back, UIBtnList.BindType.performed, null, () => { GameManager.Instance.UIManager.PopPanel(); });
         }
 
-        private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        #endregion
+
+        #region INoticeUI
+        public void SaveAsInstance()
         {
-            //手动模拟出栈
-            GameManager.Instance.UIManager.GetTopUIPanel().OnRecovery();
-            this.OnExit();
+            this.gameObject.SetActive(false);
         }
 
-        private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        public void CopyInstance<D>(D data)
         {
-            //手动模拟出栈
-            GameManager.Instance.UIManager.GetTopUIPanel().OnRecovery();
-            this.OnExit();
+            //PopUPUI UIBtnList初始化放在这，因为下面需要使用它初始化数据
+            UIBtnList = new UIBtnList(parent: this.transform, hasInitSelect: false);
+            this.gameObject.SetActive(true);
+            if (data is UIManager.PopUpUIData popUpUIData)
+            {
+                this.Msg1.text = popUpUIData.msg1;
+                this.Msg2.text = popUpUIData.msg2;
+                Debug.Log("SetBtnAction " + Time.frameCount);
+                this.UIBtnList.SetBtnAction("ConfirmBtn", popUpUIData.action);
+            }
+
         }
         #endregion
 
         #region UI对象引用
-        public TMPro.TextMeshProUGUI Text;
+        private TMPro.TextMeshProUGUI Msg1,Msg2;
+        private Transform ImageGroup;
         #endregion
 
         #region TextContent
+        private UIBtnList UIBtnList;
         [System.Serializable]
         public struct PopUpUIStruct
         {
@@ -86,6 +117,7 @@ namespace ML.Engine.UI
             this.abname = "PopUpUI";
             this.description = "PopUpUI数据加载完成";
         }
+
         #endregion
     }
 

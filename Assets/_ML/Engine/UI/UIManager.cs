@@ -3,7 +3,9 @@ using ProjectOC.InventorySystem.UI;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
@@ -15,10 +17,11 @@ namespace ML.Engine.UI
         public UIManager()
         {
             GetCanvas = CreateCanvas();
-            InitSideBarUIPrefabInstance();
-            InitPopUpUIPrefabInstance();
-            InitFloatTextUIPrefabInstance();
-            InitBtnUIPrefabInstance();
+
+            InitUIPrefabInstance<SideBarUI>(this.SideBarUIPrefabPath);
+            InitUIPrefabInstance<PopUpUI>(this.PopUpUIPrefabPath);
+            InitUIPrefabInstance<FloatTextUI>(this.FloatTextUIPrefabPath);
+            InitUIPrefabInstance<BtnUI>(this.BtnUIPrefabPath);
         }
 
         public Canvas GetCanvas
@@ -39,6 +42,8 @@ namespace ML.Engine.UI
         /// </summary>
         public UIBasePanel PopPanel()
         {
+            Debug.Log("PopPanel "+Time.frameCount);
+            ClearNull();
             // 最底层UI->start无法移除
             if (panelStack.Count < 2)
             {
@@ -58,7 +63,8 @@ namespace ML.Engine.UI
         /// <param name="panelType"></param>
         public void PushPanel(UIBasePanel panel)
         {
-            Debug.Log("PushPanel "+ panel.gameObject.name);
+            Debug.Log("PushPanel " + Time.frameCount);
+            ClearNull();
             // 暂停栈顶
             if (panelStack.Count > 0)
             {
@@ -75,20 +81,14 @@ namespace ML.Engine.UI
         /// </summary>
         public bool ChangeBotUIPanel(UIBasePanel panel)
         {
-            if(this.panelStack.Count > 2)
+            ClearNull();
+            if (this.panelStack.Count > 2)
             {
                 return false;
             }
             if (this.panelStack.Count == 1)
             {
-                if(GetTopUIPanel() != null)
-                {
-                    this.panelStack.Pop().OnExit();
-                }
-                else//场景切换导致UIPanel为空却占用一个栈位，强行pop
-                {
-                    panelStack.Pop();
-                }
+                this.panelStack.Pop().OnExit();
             }
 
             if(panel != null)
@@ -99,12 +99,21 @@ namespace ML.Engine.UI
             return true;
         }
 
+        public void ClearNull()
+        {
+            while (panelStack.Count!=0 && panelStack.Peek() == null)
+            {
+                panelStack.Pop();
+            }
+        }
+
         /// <summary>
         /// 获得栈顶的UIPanel
         /// </summary>
         /// <returns></returns>
         public UIBasePanel GetTopUIPanel()
         {
+            ClearNull();
             return this.panelStack.Peek();
         }
 
@@ -148,6 +157,12 @@ namespace ML.Engine.UI
         private string BtnUIPrefabPath = "NoticeUI/BtnUI.prefab";
         [ShowInInspector]
         private GameObject SideBarUIPrefab, PopUpUIPrefab, FloatTextUIPrefab, BtnUIPrefab;
+        private BtnUIContainer BtnUIContainer = null;
+
+        public BtnUIContainer GetBtnUIContainer()
+        {
+            return this.BtnUIContainer;
+        }
         public enum NoticeUIType
         {
             FloatTextUI = 0,
@@ -155,81 +170,150 @@ namespace ML.Engine.UI
             SideBarUI,
             BtnUI
         }
-        //TODO 之后还需实例化时先取消对应脚本的活性
-        private void InitSideBarUIPrefabInstance()
-        {
-            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.SideBarUIPrefabPath, isGlobal: true).Completed += (handle) =>
-            {
-                this.SideBarUIPrefab = handle.Result;
-                this.SideBarUIPrefab.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
-                this.SideBarUIPrefab.GetComponent<SideBarUI>().SaveAsInstance();
-            };
-        }
-        private void InitPopUpUIPrefabInstance()
-        {
-            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.PopUpUIPrefabPath, isGlobal: true).Completed += (handle) =>
-            {
-                this.PopUpUIPrefab = handle.Result;
-                this.PopUpUIPrefab.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
-                this.PopUpUIPrefab.SetActive(false);
-            };
-        }
-        private void InitFloatTextUIPrefabInstance()
-        {
-            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.FloatTextUIPrefabPath, isGlobal: true).Completed += (handle) =>
-            {
 
-                this.FloatTextUIPrefab = handle.Result;
-                this.FloatTextUIPrefab.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
-                this.FloatTextUIPrefab.GetComponent<FloatTextUI>().SaveAsInstance();
+        private void InitUIPrefabInstance<T>(string prefabPath) where T : INoticeUI
+        {
+            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(prefabPath, isGlobal: true).Completed += (handle) =>
+            {
+                GameObject prefab = handle.Result;
 
+                if (typeof(T) == typeof(PopUpUI))
+                {
+                    this.PopUpUIPrefab = prefab;
+                }
+                else if(typeof(T) == typeof(FloatTextUI))
+                {
+                    this.FloatTextUIPrefab = prefab;
+                }
+                else if(typeof(T) == typeof(SideBarUI))
+                {
+                    this.SideBarUIPrefab = prefab;
+                }
+                else if (typeof(T) == typeof(BtnUI))
+                {
+                    this.BtnUIPrefab = prefab;
+                }
+                prefab.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                prefab.GetComponent<T>().SaveAsInstance();
             };
         }
-        private void InitBtnUIPrefabInstance()
+        public struct FloatTextUIData
         {
-            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(this.BtnUIPrefabPath, isGlobal: true).Completed += (handle) =>
+            public string msg;
+
+            // 构造函数
+            public FloatTextUIData(string message)
             {
-                this.BtnUIPrefab = handle.Result;
-                this.BtnUIPrefab.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
-                this.BtnUIPrefab.SetActive(false);
-            };
+                msg = message;
+            }
         }
 
-        public void PushNoticeUIInstance(NoticeUIType noticeUIType,string msg)
+        public struct BtnUIData
         {
-            GameObject panel = null;
+            public string msg;
+            public UnityAction action;
+
+            // 构造函数
+            public BtnUIData(string message, UnityAction act)
+            {
+                msg = message;
+                action = act;
+            }
+        }
+
+        public struct PopUpUIData
+        {
+            public string msg1;
+            public string msg2;
+            public List<Sprite> spriteList;
+            public UnityAction action;
+
+            // 构造函数
+            public PopUpUIData(string message1, string message2, List<Sprite> sprites, UnityAction act)
+            {
+                msg1 = message1;
+                msg2 = message2;
+                spriteList = sprites;
+                action = act;
+            }
+        }
+
+        public struct SideBarUIData
+        {
+            public string msg1;
+            public string msg2;
+
+            // 构造函数
+            public SideBarUIData(string message1, string message2)
+            {
+                msg1 = message1;
+                msg2 = message2;
+            }
+        }
+
+
+        public void PushNoticeUIInstance<T>(NoticeUIType noticeUIType, T data)
+        {
+            GameObject panelGo = null;
             switch (noticeUIType)
             {
-                
-                case NoticeUIType.FloatTextUI:
 
-                    panel = GameObject.Instantiate(this.FloatTextUIPrefab);
-                    panel.GetComponent<FloatTextUI>().Text.text = msg;
-                    panel.GetComponent<FloatTextUI>().CopyInstance();
+                case NoticeUIType.FloatTextUI:
+                    panelGo = GameObject.Instantiate(this.FloatTextUIPrefab);
+                    FloatTextUIData floatTextData = (FloatTextUIData)(object)data;
+                    panelGo.GetComponent<FloatTextUI>().CopyInstance(floatTextData);
+                    panelGo.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
                     break;
                 case NoticeUIType.BtnUI:
 
-                    panel = GameObject.Instantiate(this.BtnUIPrefab);
+                    if(GetCanvas.transform.Find("PlayerUIBotPanel(Clone)") == null)
+                    {
+                        return;
+                    }
+                    Transform BtnNoticeUI = GetCanvas.transform.Find("PlayerUIBotPanel(Clone)").Find("BtnNoticeUI");
+                    if (BtnNoticeUI != null)
+                    {
+                        var Content = BtnNoticeUI.Find("Scroll View").Find("Viewport").Find("Content");
+                        panelGo = GameObject.Instantiate(this.BtnUIPrefab);
+                        panelGo.transform.SetParent(Content, false);
+                        panelGo.name = panelGo.GetHashCode().ToString();
+                        BtnUIData btnData = (BtnUIData)(object)data;
+                        
+
+                        if (this.BtnUIContainer != null)
+                        {
+                            this.BtnUIContainer.AddBtn();
+                        }
+                        else
+                        {
+                            this.BtnUIContainer = new BtnUIContainer(Content);
+                        }
+                        panelGo.GetComponent<BtnUI>().CopyInstance(btnData);
+
+                    }
+
+                    
+
                     break;
                 case NoticeUIType.PopUpUI:
-
-                    panel = GameObject.Instantiate(this.PopUpUIPrefab);
-                    panel.GetComponent<PopUpUI>().Text.text = msg;
-                    //手动模拟入栈
-                    panelStack.Peek().OnPause();
-                    panel.GetComponent<PopUpUI>().OnEnter();
+                    panelGo = GameObject.Instantiate(this.PopUpUIPrefab);
+                    PopUpUIData popUpData = (PopUpUIData)(object)data;
+                    panelGo.GetComponent<PopUpUI>().CopyInstance(popUpData);
+                    GameManager.Instance.UIManager.PushPanel(panelGo.GetComponent<PopUpUI>());
+                    panelGo.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
                     break;
                 case NoticeUIType.SideBarUI:
-
-                    panel = GameObject.Instantiate(this.SideBarUIPrefab);
-                    panel.GetComponent<SideBarUI>().Text.text = msg;
-                    panel.GetComponent<SideBarUI>().CopyInstance();
+                    panelGo = GameObject.Instantiate(this.SideBarUIPrefab);
+                    SideBarUIData sideBarData = (SideBarUIData)(object)data;
+                    panelGo.GetComponent<SideBarUI>().CopyInstance(sideBarData);
+                    panelGo.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
                     break;
             }
-            panel.transform.localScale = Vector3.one;
-            panel.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
-            panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+            
+
         }
+
+
 
         #endregion
     }

@@ -7,8 +7,8 @@ namespace ML.Engine.UI
 {
     public class UIKeyTipComponent : UIBehaviour
     {
-        public TMPro.TextMeshProUGUI keytip;
-        public TMPro.TextMeshProUGUI description;
+        private TMPro.TextMeshProUGUI keytip;
+        private TMPro.TextMeshProUGUI description;
         public string InputActionName;
 
         public void Init()
@@ -25,6 +25,14 @@ namespace ML.Engine.UI
             }
             InputActionName = this.gameObject.name;
             this.enabled = false;
+        }
+
+        public void Refresh(string keyTipName, string keytipText)
+        {
+            if (this.keytip != null) 
+                this.keytip.text = keyTipName;
+            if (this.description != null)
+                this.description.text = keytipText;
         }
 
 

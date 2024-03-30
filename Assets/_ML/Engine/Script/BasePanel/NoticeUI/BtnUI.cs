@@ -4,12 +4,14 @@ using ML.Engine.SaveSystem;
 using ML.Engine.TextContent;
 using ProjectOC.ResonanceWheelSystem.UI;
 using Sirenix.OdinInspector;
+using System;
+using System.Diagnostics;
 using TMPro;
 using static ML.Engine.UI.BtnUI;
-
+using UnityEngine;
 namespace ML.Engine.UI
 {
-    public class BtnUI : ML.Engine.UI.UIBasePanel
+    public class BtnUI : ML.Engine.UI.UIBasePanel,INoticeUI
     {
         #region Unity
         public bool IsInit = false;
@@ -19,7 +21,7 @@ namespace ML.Engine.UI
 
             base.Awake();
 
-            this.Text = this.transform.Find("Image1").Find("Text").GetComponent<TextMeshProUGUI>(); ;
+            this.Msg = this.transform.Find("BtnText").GetComponent<TextMeshProUGUI>();
         }
 
         protected override void Start()
@@ -70,6 +72,27 @@ namespace ML.Engine.UI
             GameManager.Instance.UIManager.GetTopUIPanel().OnRecovery();
             this.OnExit();
         }
+
+
+        #endregion
+
+        #region INoticeUI
+        public void SaveAsInstance()
+        {
+            this.gameObject.SetActive(false);
+        }
+
+        public void CopyInstance<D>(D data)
+        {
+            this.gameObject.SetActive(true);
+            if(data is UIManager.BtnUIData btnData)
+            {
+                this.Msg.text = btnData.msg;
+                UnityEngine.Debug.Log(GameManager.Instance.UIManager.GetBtnUIContainer());
+                UnityEngine.Debug.Log(gameObject);
+                GameManager.Instance.UIManager.GetBtnUIContainer().SetBtnAction(gameObject.GetHashCode().ToString(), btnData.action);
+            }
+        }
         #endregion
 
         #region UI
@@ -80,7 +103,7 @@ namespace ML.Engine.UI
 
         #region UI对象引用
 
-        public TMPro.TextMeshProUGUI Text;
+        public TMPro.TextMeshProUGUI Msg;
 
         #endregion
 

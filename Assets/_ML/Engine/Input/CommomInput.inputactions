@@ -15,6 +15,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Confirm1",
+                    "type": "Button",
+                    "id": "a6e6617f-4fdd-4178-be77-0094a5495b8e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Back",
                     "type": "Button",
                     "id": "09cef832-34f8-464e-8f2b-224e1c2034db",
@@ -77,6 +86,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Back",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "750e2c37-6a4b-4806-9ad0-1daeebeaa1f9",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Confirm1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c649bcd5-e3f5-41cf-81c6-0e0c988799a6",
+                    "path": "<XInputController>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Confirm1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
