@@ -38,6 +38,18 @@ namespace ProjectOC.Player.UI
             Refresh();
             base.Start();
         }
+
+        protected override void Enter()
+        {
+            this.UIBtnList.EnableBtnList();
+            base.Enter();
+        }
+
+        protected override void Exit()
+        {
+            this.UIBtnList.DisableBtnList();
+            base.Exit();
+        }
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
         private List<AsyncOperationHandle<GameObject>> goHandle = new List<AsyncOperationHandle<GameObject>>();
 

@@ -88,8 +88,6 @@ namespace ML.Engine.UI
             if(data is UIManager.BtnUIData btnData)
             {
                 this.Msg.text = btnData.msg;
-                UnityEngine.Debug.Log(GameManager.Instance.UIManager.GetBtnUIContainer());
-                UnityEngine.Debug.Log(gameObject);
                 GameManager.Instance.UIManager.GetBtnUIContainer().SetBtnAction(gameObject.GetHashCode().ToString(), btnData.action);
             }
         }
