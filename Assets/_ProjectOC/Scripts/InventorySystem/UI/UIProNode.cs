@@ -434,9 +434,8 @@ namespace ProjectOC.InventorySystem.UI
         }
         private void NextPriority_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            MissionNS.TransportPriority temp = CurPriority;
-
-            CurPriority = (TransportPriority)(((int)CurPriority + 1) % System.Enum.GetValues(typeof(TransportPriority)).Length);
+            ProNode.TransportPriority = (TransportPriority)(((int)ProNode.TransportPriority + 1) % System.Enum.GetValues(typeof(TransportPriority)).Length);
+            CurPriority = ProNode.TransportPriority;
         }
 
         private void Alter_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -673,7 +672,7 @@ namespace ProjectOC.InventorySystem.UI
             {
                 return;
             }
-
+            CurPriority = ProNode.TransportPriority;
             if (CurMode == Mode.ProNode)
             {
                 this.ProNodeUI.gameObject.SetActive(true);

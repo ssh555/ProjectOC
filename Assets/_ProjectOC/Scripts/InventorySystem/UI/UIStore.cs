@@ -15,6 +15,7 @@ using static ProjectOC.InventorySystem.UI.UIStore;
 using System;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.Purchasing;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -77,7 +78,6 @@ namespace ProjectOC.InventorySystem.UI
             BotKeyTips_ChangeItem.gameObject.SetActive(false);
             #endregion
 
-            // CurPriority = MissionNS.TransportPriority.Normal;
             IsInit = true;
             Refresh();
         }
@@ -354,19 +354,20 @@ namespace ProjectOC.InventorySystem.UI
         }
         private void NextPriority_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            MissionNS.TransportPriority temp = CurPriority;
-            switch (temp)
+            MissionNS.TransportPriority priority = Store.TransportPriority;
+            switch (priority)
             {
                 case MissionNS.TransportPriority.Urgency:
-                    CurPriority = MissionNS.TransportPriority.Normal;
+                    Store.TransportPriority = MissionNS.TransportPriority.Normal;
                     break;
                 case MissionNS.TransportPriority.Normal:
-                    CurPriority = MissionNS.TransportPriority.Alternative;
+                    Store.TransportPriority = MissionNS.TransportPriority.Alternative;
                     break;
                 case MissionNS.TransportPriority.Alternative:
-                    CurPriority = MissionNS.TransportPriority.Urgency;
+                    Store.TransportPriority = MissionNS.TransportPriority.Urgency;
                     break;
             }
+            CurPriority = Store.TransportPriority;
         }
 
         // Store
@@ -547,7 +548,7 @@ namespace ProjectOC.InventorySystem.UI
             {
                 return;
             }
-
+            CurPriority = Store.TransportPriority;
             if (this.CurMode == Mode.Store)
             {
                 this.ChangeItem.gameObject.SetActive(false);
