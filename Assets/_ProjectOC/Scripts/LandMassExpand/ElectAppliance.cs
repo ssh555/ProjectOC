@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using ML.Engine.Extension;
 using ML.Engine.Manager;
+using ProjectOC.ManagerNS;
 
 namespace ProjectOC.LandMassExpand
 {
@@ -40,10 +41,12 @@ namespace ProjectOC.LandMassExpand
 
         private BuildPowerIslandManager bpIslandManager;
 
-        protected virtual void Start()
+        protected override void Awake()
         {
-            bpIslandManager = GameManager.Instance.GetLocalManager<BuildPowerIslandManager>();
+            base.Awake();
+            bpIslandManager = LocalGameManager.Instance.BuildPowerIslandManager;
         }
+        
 
         void OnDestroy()
         {
@@ -53,11 +56,12 @@ namespace ProjectOC.LandMassExpand
                 RemoveFromAllPowerCores();
             }
         }
-
+        
+        //第一次新建为true，否则为false
         public override void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
             //如果没有，说明刚建造则加入
-            if (!bpIslandManager.electAppliances.Contains(this))
+            if (isFirstBuild)
             {
                 bpIslandManager.electAppliances.Add(this);
             }
@@ -66,6 +70,7 @@ namespace ProjectOC.LandMassExpand
             RemoveFromAllPowerCores();
             //重新计算
             RecalculatePowerCount();
+            base.OnChangePlaceEvent(oldPos,newPos);
         }
 
         private void RecalculatePowerCount()
