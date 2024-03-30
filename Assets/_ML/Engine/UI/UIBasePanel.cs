@@ -134,8 +134,8 @@ namespace ML.Engine.UI
             {
                 this.Refresh();
             });
-
             StartCoroutine(this.objectPool.GetFunctionExecutor().Execute());
+            
         }
 
 
@@ -169,7 +169,6 @@ namespace ML.Engine.UI
             var handles = new List<AsyncOperationHandle>();
             var handle = this.ABJAProcessorJson = new ML.Engine.ABResources.ABJsonAssetProcessor<T>(this.abpath, this.abname, (datas) =>
             {
-                Debug.Log("InitUITextContentscompelete");
                this.OnLoadJsonAssetComplete(datas);
             }, this.description);
             handles.Add(this.ABJAProcessorJson.StartLoadJsonAssetData());
@@ -182,8 +181,6 @@ namespace ML.Engine.UI
         private void InitKeyTip(T datas)
         {
             UIKeyTipList = new UIKeyTipList<T>(transform,datas);
-
-            
         }
 
         protected override void Awake()

@@ -41,14 +41,16 @@ namespace ML.Engine.UI
         #region Override
         protected override void Enter()
         {
-            base.Enter();
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
+            base.Enter();
+            
         }
 
         protected override void Exit()
         {
-            base.Exit();
             ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
+            base.Exit();
+            
         }
         #endregion
 

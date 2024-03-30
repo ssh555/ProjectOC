@@ -91,8 +91,8 @@ namespace ML.Engine.Utility
 
                             this.saPoolDic[poolName].Pool.Add(handle1.Result);
                             OnCompleted?.Invoke(handle1);
-                            handles.Add(handle1);
                         };
+                        handles.Add(handle1);
                         break;
                     case HandleType.Prefab:
                         var handle2 = GameManager.Instance.ABResourceManager.InstantiateAsync(path);
@@ -109,17 +109,10 @@ namespace ML.Engine.Utility
 
                             this.goPoolDic[poolName].Pool.Add(handle2.Result);
                             OnCompleted?.Invoke(handle2);
-                            handles.Add(handle2);
                         };
-
+                        handles.Add(handle2);
                         break;
-                }
-
-
-                
-               
-                
-                
+                }  
             }
             return handles;
         }
@@ -130,6 +123,7 @@ namespace ML.Engine.Utility
         public void RegisterPool(HandleType handleType, string poolName, int n, string path, Action<AsyncOperationHandle> OnCompleted = null)
         {
             this.functionExecutor.AddFunction(() => { return GetHandles(handleType, poolName, n, path, OnCompleted); });
+
         }
         /// <summary>
         /// 该函数用于释放对象池中所有资源
@@ -155,7 +149,7 @@ namespace ML.Engine.Utility
         /// </summary>
         public GameObject GetNextObject(string poolName, Transform parent = null)
         {
-            Debug.Log("GetNextObject "+goPoolDic.Count);
+            //Debug.Log("GetNextObject "+goPoolDic.Count);
             if (this.goPoolDic.ContainsKey(poolName))
             {
                 PoolStruct<GameObject> poolStruct = this.goPoolDic[poolName];

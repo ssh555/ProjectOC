@@ -94,7 +94,7 @@ namespace ML.Engine.Input
             string humanReadableString;
             foreach (InputBinding binding in inputAction.bindings)
             {
-
+                
                 humanReadableString = InputControlPath.ToHumanReadableString(binding.path, options);
                 if (Config.inputDevice == Config.InputDevice.Keyboard && binding.path.StartsWith("<Keyboard>"))
                 {
