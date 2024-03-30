@@ -19,20 +19,12 @@ namespace ProjectOC.ProNodeNS
 
         public string InteractType { get; set; } = "WorldProNode";
         public Vector3 PosOffset { get; set; } = Vector3.zero;
-
-
-        protected override void Start()
-        {
-            base.Start();
-            // 不需要 Update
-            this.enabled = false;
-        }
+        
 
         public override void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
-            base.OnChangePlaceEvent(oldPos, newPos);
             // 第一次新建
-            if (oldPos == newPos)
+            if (isFirstBuild)
             {
                 // 生成逻辑对象
                 string actorID = BuildingManager.Instance.GetActorID(this.Classification.ToString());
@@ -41,6 +33,7 @@ namespace ProjectOC.ProNodeNS
                     LocalGameManager.Instance.ProNodeManager.WorldNodeSetData(this, actorID);
                 }
             }
+            base.OnChangePlaceEvent(oldPos, newPos);
         }
 
         public void Interact(InteractComponent component)
