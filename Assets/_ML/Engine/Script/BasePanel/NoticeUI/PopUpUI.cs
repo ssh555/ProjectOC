@@ -90,7 +90,6 @@ namespace ML.Engine.UI
             {
                 this.Msg1.text = popUpUIData.msg1;
                 this.Msg2.text = popUpUIData.msg2;
-                Debug.Log("SetBtnAction " + Time.frameCount);
                 this.UIBtnList.SetBtnAction("ConfirmBtn", popUpUIData.action);
             }
 
