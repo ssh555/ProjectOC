@@ -16,7 +16,7 @@ namespace ProjectOC.WorkerNS
     /// 刁民
     /// </summary>
     [System.Serializable]
-    public class Worker : MonoBehaviour, ITickComponent
+    public class Worker : SerializedMonoBehaviour, ITickComponent
     {
         #region 策划配置项
         [LabelText("名字")]
@@ -82,7 +82,6 @@ namespace ProjectOC.WorkerNS
                 {
                     return TimeArrangement[timeManager.CurrentTimeFrame];
                 }
-                //Debug.LogError("DispatchTimeManager is Null");
                 return TimeStatus.Relax;
             } 
         }
@@ -112,12 +111,15 @@ namespace ProjectOC.WorkerNS
         
         [LabelText("生产节点")]
         public ProNode ProNode = null;
-        
+        public bool HasProNode { get => this.ProNode != null && !string.IsNullOrEmpty(this.ProNode.UID); }
+
         [LabelText("是否到达生产节点")]
         public bool ArriveProNode = false;
         
         [LabelText("搬运")]
         public Transport Transport = null;
+        [ShowInInspector]
+        public bool HasTransport { get => this.Transport != null && !string.IsNullOrEmpty(this.Transport.ItemID); }
         
         [LabelText("搬运物品")]
         public List<Item> TransportItems = new List<Item>();
@@ -172,10 +174,6 @@ namespace ProjectOC.WorkerNS
                 {
                     skill.ApplySkill(this);
                     this.Skill[kv.Key] = skill;
-                }
-                else
-                {
-                    //Debug.LogError($"Worker {Name} Skill {kv.Value} is Null");
                 }
             }
 
@@ -235,11 +233,11 @@ namespace ProjectOC.WorkerNS
 
         public void ChangeProNode(ProNode proNode)
         {
-            if (this.Transport != null)
+            if (HasTransport)
             {
                 this.Transport.End();
             }
-            if (this.ProNode != null)
+            if (HasProNode)
             {
                 this.ProNode.RemoveWorker();
             }
@@ -302,11 +300,11 @@ namespace ProjectOC.WorkerNS
         {
             (this as ML.Engine.Timer.ITickComponent).DisposeTick();
             this.ClearDestination();
-            if (this.Transport != null)
+            if (HasTransport)
             {
                 this.Transport.End();
             }
-            if (this.ProNode != null)
+            if (HasProNode)
             {
                 this.ProNode.RemoveWorker();
             }

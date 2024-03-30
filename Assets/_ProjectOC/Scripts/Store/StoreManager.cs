@@ -80,16 +80,19 @@ namespace ProjectOC.StoreNS
                         if (!store.IsInteracting && store.IsStoreHaveItem(itemID))
                         {
                             int storeAmount = store.GetStoreStorage(itemID);
-                            if (resultAmount + storeAmount >= amount)
+                            if (storeAmount > 0)
                             {
-                                result.Add(store, amount - resultAmount);
-                                resultAmount = amount;
-                                break;
-                            }
-                            else
-                            {
-                                result.Add(store, storeAmount);
-                                resultAmount += storeAmount;
+                                if (resultAmount + storeAmount >= amount)
+                                {
+                                    result.Add(store, amount - resultAmount);
+                                    resultAmount = amount;
+                                    break;
+                                }
+                                else
+                                {
+                                    result.Add(store, storeAmount);
+                                    resultAmount += storeAmount;
+                                }
                             }
                         }
                     }

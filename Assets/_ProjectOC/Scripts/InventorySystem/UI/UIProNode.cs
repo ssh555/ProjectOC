@@ -1460,8 +1460,22 @@ namespace ProjectOC.InventorySystem.UI
                     amountProduct.text = ProNode.GetItemAllNum(ProNode.Recipe.ProductID).ToString();
                     for (int i = 0; i < Raws.Count; ++i)
                     {
-                        var amount = tempUIItems[i].transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
+                        GameObject item = tempUIItems[i];
+                        var amount = item.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
                         amount.text = ProNode.GetItemAllNum(Raws[i].id).ToString();
+
+                        // NeedAmount
+                        var needAmount = item.transform.Find("NeedAmount").GetComponent<TMPro.TextMeshProUGUI>();
+                        needAmount.text = ProNode.Recipe.GetRawNum(Raws[i].id).ToString();
+
+                        if (int.Parse(amount.text) < int.Parse(needAmount.text))
+                        {
+                            item.transform.Find("Back").GetComponent<Image>().color = Color.red;
+                        }
+                        else
+                        {
+                            item.transform.Find("Back").GetComponent<Image>().color = Color.black;
+                        }
                     }
                 }
                 if (Worker != null)
