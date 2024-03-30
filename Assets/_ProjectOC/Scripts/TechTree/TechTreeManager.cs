@@ -9,7 +9,8 @@ using System.IO;
 using ML.Engine.TextContent;
 using Newtonsoft.Json;
 using UnityEngine.U2D;
-
+using ML.Engine.Manager;
+using ML.Engine.SaveSystem;
 
 namespace ProjectOC.TechTree
 {
@@ -206,7 +207,7 @@ namespace ProjectOC.TechTree
             }
             if (isSave)
             {
-                this.SaveUnlockingTPData();
+                this.SaveData(false, true);
             }
 
         }
@@ -240,11 +241,10 @@ namespace ProjectOC.TechTree
                 }
                 // 读取AB包表格数据，若有存档，将读取的数据的是否解锁更新为存档数据，更新存档
                 // 存在则更新
-                if (System.IO.File.Exists(System.IO.Path.Combine(Application.persistentDataPath, SaveTPJsonDataPath)))
+                TechTreeSaveData saveData = GameManager.Instance.SaveManager.SaveController.GetSaveData<TechTreeSaveData>();
+                if (saveData != null)
                 {
-                    var str = File.ReadAllText(System.IO.Path.Combine(Application.persistentDataPath, SaveTPJsonDataPath));
-                    datas = JsonConvert.DeserializeObject<TechPoint[]>(str);
-                    foreach (var data in datas)
+                    foreach (TechPoint data in saveData.Datas)
                     {
                         // 只需要更新 是否解锁
                         if (this.registerTechPoints.ContainsKey(data.ID))
@@ -254,19 +254,15 @@ namespace ProjectOC.TechTree
                         }
                     }
                 }
-
                 #region Load UnlockingTPData
-                if (System.IO.File.Exists(System.IO.Path.Combine(Application.persistentDataPath, SaveUnlockingTPJsonDataPath)))
+                if (saveData != null)
                 {
-                    var str = File.ReadAllText(System.IO.Path.Combine(Application.persistentDataPath, SaveUnlockingTPJsonDataPath));
-                    UnlockingTechPoint[] datas1 = JsonConvert.DeserializeObject<UnlockingTechPoint[]>(str);
-
-                    foreach (var data in datas1)
+                    foreach (UnlockingTechPoint unlock in saveData.Unlocks)
                     {
                         // 剔除更新数据后不存在的节点
-                        if (this.registerTechPoints.ContainsKey(data.id))
+                        if (this.registerTechPoints.ContainsKey(unlock.id))
                         {
-                            this.UnlockingTechPointDict.Add(data.id, data);
+                            this.UnlockingTechPointDict.Add(unlock.id, unlock);
                         }
                     }
                 }
@@ -304,36 +300,27 @@ namespace ProjectOC.TechTree
         #endregion
 
         #region Save
-        public void SaveData()
+        public void SaveData(bool saveTechPoint=true, bool saveUnlock=true)
         {
-            this.SaveTPJsonData();
-            this.SaveUnlockingTPData();
-        }
-
-        private void SaveTPJsonData()
-        {
-            string path = System.IO.Path.Combine(Application.persistentDataPath, SaveTPJsonDataPath);
-
-            TechPoint[] array = registerTechPoints.Values.ToArray();
-            File.WriteAllText(path, JsonConvert.SerializeObject(array));
-        }
-
-        private void SaveUnlockingTPData()
-        {
-            string path = System.IO.Path.Combine(Application.persistentDataPath, SaveUnlockingTPJsonDataPath);
-
-            UnlockingTechPoint[] array = UnlockingTechPointDict.Values.ToArray();
-            File.WriteAllText(path, JsonConvert.SerializeObject(array));
+            TechTreeSaveData saveData = GameManager.Instance.SaveManager.SaveController.GetSaveData<TechTreeSaveData>();
+            if (saveData == null)
+            {
+                saveData = new TechTreeSaveData();
+                GameManager.Instance.SaveManager.SaveController.AddSaveData<TechTreeSaveData>(saveData);
+            }
+            if (saveTechPoint)
+            {
+                saveData.Reset(registerTechPoints.Values.ToList());
+            }
+            if (saveUnlock)
+            {
+                saveData.Reset(UnlockingTechPointDict.Values.ToList());
+            }
+#pragma warning disable CS4014
+            GameManager.Instance.SaveManager.SaveController.SaveSaveDataFolderAsync(null);
+#pragma warning restore CS4014
         }
         #endregion
-
-        [Button("删除存档")]
-        public void DeleteData()
-        {
-            System.IO.File.Delete(System.IO.Path.Combine(Application.persistentDataPath, SaveTPJsonDataPath));
-            System.IO.File.Delete(System.IO.Path.Combine(Application.persistentDataPath, SaveUnlockingTPJsonDataPath));
-        }
-
         #endregion
 
         #region UnLock

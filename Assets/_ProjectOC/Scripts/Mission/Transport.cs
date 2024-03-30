@@ -103,7 +103,6 @@ namespace ProjectOC.MissionNS
             this.Source.AddTransport(this);
             this.Target.AddTransport(this);
             this.Worker.Transport = this;
-            this.Worker.SetTimeStatusAll(TimeStatus.Work_Transport);
             this.Worker.SetDestination(this.Worker.Transport.Source.GetTransform(), Transport_Source_Action);
         }
         private void Transport_Source_Action(Worker worker)
@@ -193,7 +192,6 @@ namespace ProjectOC.MissionNS
                 ItemManager.Instance.SpawnWorldItem(item, Worker.transform.position, Worker.transform.rotation);
 #pragma warning restore CS4014
             }
-            //Worker.SetTimeStatusAll(TimeStatus.Relax);
             Worker.TransportItems.Clear();
             Worker.Transport = null;
             Worker.ClearDestination();

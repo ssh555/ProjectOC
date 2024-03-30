@@ -467,6 +467,11 @@ namespace ProjectOC.InventorySystem.UI
                 {
                     img.sprite = null;
                 }
+                ItemManager.Instance.AddItemIconObject(itemID,
+                                                        this.Store.WorldStore.transform,
+                                                        new Vector3(0, this.Store.WorldStore.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),
+                                                        Quaternion.Euler(0, 0, 0),
+                                                        Vector3.one);
             }
             else if (CurMode == Mode.Upgrade)
             {
