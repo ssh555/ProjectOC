@@ -76,7 +76,6 @@ namespace ProjectOC.WorkerNS
             {
                 return false;
             }
-            //Debug.Log($"{Time.frameCount} {!IsAPAboveWorkThreshold} {!Worker.IsOnDuty} {Worker.ProNode.State != ProNodeState.Production}");
             // 体力低于工作阈值 || 没在生产节点 || 生产节点未在生产
             return !IsAPAboveWorkThreshold || !Worker.IsOnDuty || Worker.ProNode == null || Worker.ProNode.State != ProNodeState.Production;
         }

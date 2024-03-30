@@ -518,11 +518,14 @@ namespace ProjectOC.InventorySystem.UI
             {
                 ProNode.ChangeRecipe(Player, CurrentRecipe);
                 BoxCollider collider = ProNode.WorldProNode.transform.GetComponent<BoxCollider>();
-                ItemManager.Instance.AddItemIconObject(ProNode.Recipe.Product.id,
+                if (ProNode.Recipe != null && !string.IsNullOrEmpty(ProNode.Recipe.Product.id))
+                {
+                    ItemManager.Instance.AddItemIconObject(ProNode.Recipe.Product.id,
                                                                this.ProNode.WorldProNode.transform,
                                                                new Vector3(0, this.ProNode.WorldProNode.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),
                                                                Quaternion.Euler(new Vector3(0, 0, 0)),
                                                                Vector3.one);
+                }
                 CurMode = Mode.ProNode;
             }
             else if (CurMode == Mode.ChangeWorker)

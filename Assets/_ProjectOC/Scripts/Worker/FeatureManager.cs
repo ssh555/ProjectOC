@@ -83,7 +83,7 @@ namespace ProjectOC.WorkerNS
 
                     //抽取规则为“拿出不放回”
                     int curSampleNum = 1;
-                    while (curSampleNum <= maxFeatureNum && featureIDSets.Count > 0)
+                    while (curSampleNum < maxFeatureNum && featureIDSets.Count > 0)
                     {
                         randomIndex = Random.Next(0, featureIDSets.Count);
                         result.Add(this.SpawnFeature(featureIDSets.ElementAt(randomIndex)));

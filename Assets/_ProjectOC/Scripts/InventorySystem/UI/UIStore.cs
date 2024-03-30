@@ -457,21 +457,19 @@ namespace ProjectOC.InventorySystem.UI
                     {
                         img.sprite = tempSprite[itemID];
                     }
-                    ItemManager.Instance.AddItemIconObject(itemID,
-                                                           this.Store.WorldStore.transform,
-                                                           new Vector3(0, this.Store.WorldStore.transform.GetComponent<Collider>().bounds.size.y / 2, 0),
-                                                           Quaternion.Euler(90, 0, 0),
-                                                           Vector3.one);
                 }
                 else
                 {
                     img.sprite = null;
                 }
-                ItemManager.Instance.AddItemIconObject(itemID,
+                if (!string.IsNullOrEmpty(itemID))
+                {
+                    ItemManager.Instance.AddItemIconObject(itemID,
                                                         this.Store.WorldStore.transform,
                                                         new Vector3(0, this.Store.WorldStore.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),
                                                         Quaternion.Euler(0, 0, 0),
                                                         Vector3.one);
+                }
             }
             else if (CurMode == Mode.Upgrade)
             {

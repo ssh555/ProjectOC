@@ -157,28 +157,13 @@ namespace ProjectOC.MissionNS
         public void PutInTarget()
         {
             int num = this.CurNum;
-            bool flagTarget = this.Target.PutIn(this.ItemID, num);
-            if (flagTarget)
-            {
-                this.Worker.TransportItems.Clear();
-                this.FinishNum += num;
-                // ÈÎÎñ½áÊø
-                if (this.FinishNum == this.MissionNum)
-                {
-                    this.Worker.SettleTransport();
-                    this.End();
-                }
-                else if (this.FinishNum > this.MissionNum)
-                {
-                    //Debug.LogError($"FinishNum > MissionNum");
-                }
-                this.Mission.FinishNum += num;
-            }
-            else
-            {
-                //Debug.LogError($"Target Cannot Put In {ItemID} {num}");
-                this.End();
-            }
+            this.Target.PutIn(this.ItemID, num);
+            MissionTransport mission = this.Mission;
+            this.Worker.TransportItems.Clear();
+            this.FinishNum += num;
+            this.Worker.SettleTransport();
+            this.End();
+            mission.FinishNum += num;
         }
 
         /// <summary>
