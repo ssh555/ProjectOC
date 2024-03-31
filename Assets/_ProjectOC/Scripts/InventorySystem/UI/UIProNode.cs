@@ -434,9 +434,8 @@ namespace ProjectOC.InventorySystem.UI
         }
         private void NextPriority_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            MissionNS.TransportPriority temp = CurPriority;
-
-            CurPriority = (TransportPriority)(((int)CurPriority + 1) % System.Enum.GetValues(typeof(TransportPriority)).Length);
+            ProNode.TransportPriority = (TransportPriority)(((int)ProNode.TransportPriority + 1) % System.Enum.GetValues(typeof(TransportPriority)).Length);
+            CurPriority = ProNode.TransportPriority;
         }
 
         private void Alter_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -518,11 +517,14 @@ namespace ProjectOC.InventorySystem.UI
             {
                 ProNode.ChangeRecipe(Player, CurrentRecipe);
                 BoxCollider collider = ProNode.WorldProNode.transform.GetComponent<BoxCollider>();
-                ItemManager.Instance.AddItemIconObject(ProNode.Recipe.Product.id,
+                if (ProNode.Recipe != null && !string.IsNullOrEmpty(ProNode.Recipe.Product.id))
+                {
+                    ItemManager.Instance.AddItemIconObject(ProNode.Recipe.Product.id,
                                                                this.ProNode.WorldProNode.transform,
                                                                new Vector3(0, this.ProNode.WorldProNode.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),
                                                                Quaternion.Euler(new Vector3(0, 0, 0)),
                                                                Vector3.one);
+                }
                 CurMode = Mode.ProNode;
             }
             else if (CurMode == Mode.ChangeWorker)
@@ -670,7 +672,7 @@ namespace ProjectOC.InventorySystem.UI
             {
                 return;
             }
-
+            CurPriority = ProNode.TransportPriority;
             if (CurMode == Mode.ProNode)
             {
                 this.ProNodeUI.gameObject.SetActive(true);
@@ -1297,11 +1299,7 @@ namespace ProjectOC.InventorySystem.UI
 
                 string cid = this.ProNode.WorldProNode.Classification.ToString();
                 string cidUpgrade = BuildingManager.Instance.GetUpgradeCID(cid);
-                if (string.IsNullOrEmpty(cidUpgrade))
-                {
-                    cidUpgrade = cid;
-                }
-                this.Level_Build.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = BuildingManager.Instance.GetName(cidUpgrade);
+                this.Level_Build.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = BuildingManager.Instance.GetName((!string.IsNullOrEmpty(cidUpgrade) ? cidUpgrade : cid));
 
                 List<Formula> raw = this.ProNode.GetUpgradeRaw();
                 List<Formula> rawCur = this.ProNode.GetUpgradeRawCurrent(Player);
@@ -1385,7 +1383,7 @@ namespace ProjectOC.InventorySystem.UI
                 #region Level
                 LvOld.text = "Lv: " + this.ProNode.Level.ToString();
                 DescOld.text = PanelTextContent.textLvDesc + this.ProNode.EffBase + "%";
-                if (this.ProNode.Level + 1 <= this.ProNode.LevelMax)
+                if (this.ProNode.Level + 1 <= this.ProNode.LevelMax && !string.IsNullOrEmpty(cidUpgrade))
                 {
                     ChangeLevel.Find("Level").Find("Back1").gameObject.SetActive(true);
                     LvNew.text = "Lv: " + (ProNode.Level + 1).ToString();
@@ -1458,8 +1456,22 @@ namespace ProjectOC.InventorySystem.UI
                     amountProduct.text = ProNode.GetItemAllNum(ProNode.Recipe.ProductID).ToString();
                     for (int i = 0; i < Raws.Count; ++i)
                     {
-                        var amount = tempUIItems[i].transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
+                        GameObject item = tempUIItems[i];
+                        var amount = item.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
                         amount.text = ProNode.GetItemAllNum(Raws[i].id).ToString();
+
+                        // NeedAmount
+                        var needAmount = item.transform.Find("NeedAmount").GetComponent<TMPro.TextMeshProUGUI>();
+                        needAmount.text = ProNode.Recipe.GetRawNum(Raws[i].id).ToString();
+
+                        if (int.Parse(amount.text) < int.Parse(needAmount.text))
+                        {
+                            item.transform.Find("Back").GetComponent<Image>().color = Color.red;
+                        }
+                        else
+                        {
+                            item.transform.Find("Back").GetComponent<Image>().color = Color.black;
+                        }
                     }
                 }
                 if (Worker != null)

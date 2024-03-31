@@ -80,16 +80,19 @@ namespace ProjectOC.StoreNS
                         if (!store.IsInteracting && store.IsStoreHaveItem(itemID))
                         {
                             int storeAmount = store.GetStoreStorage(itemID);
-                            if (resultAmount + storeAmount >= amount)
+                            if (storeAmount > 0)
                             {
-                                result.Add(store, amount - resultAmount);
-                                resultAmount = amount;
-                                break;
-                            }
-                            else
-                            {
-                                result.Add(store, storeAmount);
-                                resultAmount += storeAmount;
+                                if (resultAmount + storeAmount >= amount)
+                                {
+                                    result.Add(store, amount - resultAmount);
+                                    resultAmount = amount;
+                                    break;
+                                }
+                                else
+                                {
+                                    result.Add(store, storeAmount);
+                                    resultAmount += storeAmount;
+                                }
                             }
                         }
                     }
@@ -133,6 +136,27 @@ namespace ProjectOC.StoreNS
                 {
                     //Debug.LogError($"StoreType {storeType} cannot create store");
                 }
+            }
+        }
+
+        public void WorldStoreSetData(WorldStore worldStore, Store store)
+        {
+            if (worldStore != null && store != null)
+            {
+                if (!WorldStoreDict.ContainsKey(worldStore.InstanceID))
+                {
+                    WorldStoreDict.Add(worldStore.InstanceID, worldStore);
+                }
+                else
+                {
+                    WorldStoreDict[worldStore.InstanceID] = worldStore;
+                }
+                if (worldStore.Store != null)
+                {
+                    worldStore.Store.WorldStore = null;
+                }
+                worldStore.Store = store;
+                store.WorldStore = worldStore;
             }
         }
     }

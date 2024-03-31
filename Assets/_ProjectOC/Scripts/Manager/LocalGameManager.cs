@@ -18,7 +18,7 @@ using ML.Engine.Manager;
 namespace ProjectOC.ManagerNS
 {
     [System.Serializable]
-    public sealed class LocalGameManager : MonoBehaviour, ML.Engine.Manager.LocalManager.ILocalManager
+    public sealed class LocalGameManager : SerializedMonoBehaviour, ML.Engine.Manager.LocalManager.ILocalManager
     {
         public static LocalGameManager Instance;
         public ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;

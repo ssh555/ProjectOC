@@ -23,7 +23,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
         GameObject IBuildingPart.gameObject { get => this.gameObject;  }
         Transform IBuildingPart.transform { get => this.transform;  }
-
+        protected bool isFirstBuild = true;
         [SerializeField, LabelText("ƒ‹∑Ò∑≈÷√"), ReadOnly]
         private bool canPlaceInPlaceMode = true;
         public bool CanPlaceInPlaceMode 
@@ -39,7 +39,8 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         public event IBuildingPart.CheckMode CheckCanDestory;
         public virtual void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
-
+            if(isFirstBuild)
+                isFirstBuild = false;
         }
 
         public bool CanEnterEditMode()
@@ -230,8 +231,14 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             this.OwnedSocketList.AddRange(this.GetComponentsInChildren<BuildingSocket.BuildingSocket>());
 
             //this.ActiveSocket = this.OwnedSocketList[0];
+            this.enabled = true;
         }
-    
+
+        protected void Start()
+        {
+            this.enabled = false;
+        }
+
         private void SetColliderTrigger(bool isTrigger)
         {
             foreach(var col in this.GetComponentsInChildren<Collider>())

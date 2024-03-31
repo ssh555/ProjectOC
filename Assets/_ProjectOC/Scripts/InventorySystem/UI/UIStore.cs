@@ -15,6 +15,7 @@ using static ProjectOC.InventorySystem.UI.UIStore;
 using System;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.Purchasing;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -77,7 +78,6 @@ namespace ProjectOC.InventorySystem.UI
             BotKeyTips_ChangeItem.gameObject.SetActive(false);
             #endregion
 
-            // CurPriority = MissionNS.TransportPriority.Normal;
             IsInit = true;
             Refresh();
         }
@@ -354,19 +354,20 @@ namespace ProjectOC.InventorySystem.UI
         }
         private void NextPriority_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            MissionNS.TransportPriority temp = CurPriority;
-            switch (temp)
+            MissionNS.TransportPriority priority = Store.TransportPriority;
+            switch (priority)
             {
                 case MissionNS.TransportPriority.Urgency:
-                    CurPriority = MissionNS.TransportPriority.Normal;
+                    Store.TransportPriority = MissionNS.TransportPriority.Normal;
                     break;
                 case MissionNS.TransportPriority.Normal:
-                    CurPriority = MissionNS.TransportPriority.Alternative;
+                    Store.TransportPriority = MissionNS.TransportPriority.Alternative;
                     break;
                 case MissionNS.TransportPriority.Alternative:
-                    CurPriority = MissionNS.TransportPriority.Urgency;
+                    Store.TransportPriority = MissionNS.TransportPriority.Urgency;
                     break;
             }
+            CurPriority = Store.TransportPriority;
         }
 
         // Store
@@ -457,21 +458,19 @@ namespace ProjectOC.InventorySystem.UI
                     {
                         img.sprite = tempSprite[itemID];
                     }
-                    ItemManager.Instance.AddItemIconObject(itemID,
-                                                           this.Store.WorldStore.transform,
-                                                           new Vector3(0, this.Store.WorldStore.transform.GetComponent<Collider>().bounds.size.y / 2, 0),
-                                                           Quaternion.Euler(90, 0, 0),
-                                                           Vector3.one);
                 }
                 else
                 {
                     img.sprite = null;
                 }
-                ItemManager.Instance.AddItemIconObject(itemID,
+                if (!string.IsNullOrEmpty(itemID))
+                {
+                    ItemManager.Instance.AddItemIconObject(itemID,
                                                         this.Store.WorldStore.transform,
                                                         new Vector3(0, this.Store.WorldStore.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),
                                                         Quaternion.Euler(0, 0, 0),
                                                         Vector3.one);
+                }
             }
             else if (CurMode == Mode.Upgrade)
             {
@@ -549,7 +548,7 @@ namespace ProjectOC.InventorySystem.UI
             {
                 return;
             }
-
+            CurPriority = Store.TransportPriority;
             if (this.CurMode == Mode.Store)
             {
                 this.ChangeItem.gameObject.SetActive(false);

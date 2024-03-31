@@ -16,7 +16,7 @@ namespace ProjectOC.WorkerNS
     /// 刁民
     /// </summary>
     [System.Serializable]
-    public class Worker : MonoBehaviour, ITickComponent
+    public class Worker : SerializedMonoBehaviour, ITickComponent
     {
         #region 策划配置项
         [LabelText("名字")]
@@ -82,7 +82,6 @@ namespace ProjectOC.WorkerNS
                 {
                     return TimeArrangement[timeManager.CurrentTimeFrame];
                 }
-                //Debug.LogError("DispatchTimeManager is Null");
                 return TimeStatus.Relax;
             } 
         }
@@ -112,12 +111,15 @@ namespace ProjectOC.WorkerNS
         
         [LabelText("生产节点")]
         public ProNode ProNode = null;
-        
+        public bool HasProNode { get => this.ProNode != null && !string.IsNullOrEmpty(this.ProNode.UID); }
+
         [LabelText("是否到达生产节点")]
         public bool ArriveProNode = false;
         
         [LabelText("搬运")]
         public Transport Transport = null;
+        [ShowInInspector]
+        public bool HasTransport { get => this.Transport != null && !string.IsNullOrEmpty(this.Transport.ItemID); }
         
         [LabelText("搬运物品")]
         public List<Item> TransportItems = new List<Item>();
@@ -129,7 +131,7 @@ namespace ProjectOC.WorkerNS
         #endregion
 
         private NavMeshAgent Agent = null;
-        public float Threshold = 2f;
+        public float Threshold = 3f;
         public Transform Target = null;
         private event Action<Worker> OnArrival;
         public bool HasArrived = false;
@@ -173,10 +175,6 @@ namespace ProjectOC.WorkerNS
                     skill.ApplySkill(this);
                     this.Skill[kv.Key] = skill;
                 }
-                else
-                {
-                    //Debug.LogError($"Worker {Name} Skill {kv.Value} is Null");
-                }
             }
 
             // 初始化状态机
@@ -209,6 +207,7 @@ namespace ProjectOC.WorkerNS
             this.Target = target;
             if (Target != null)
             {
+                Agent.isStopped = false;
                 if (Agent.SetDestination(Target.position))
                 {
                     HasArrived = false;
@@ -231,15 +230,16 @@ namespace ProjectOC.WorkerNS
             Target = null;
             OnArrival = null;
             HasArrived = false;
+            Agent.isStopped = true;
         }
 
         public void ChangeProNode(ProNode proNode)
         {
-            if (this.Transport != null)
+            if (HasTransport)
             {
                 this.Transport.End();
             }
-            if (this.ProNode != null)
+            if (HasProNode)
             {
                 this.ProNode.RemoveWorker();
             }
@@ -302,11 +302,11 @@ namespace ProjectOC.WorkerNS
         {
             (this as ML.Engine.Timer.ITickComponent).DisposeTick();
             this.ClearDestination();
-            if (this.Transport != null)
+            if (HasTransport)
             {
                 this.Transport.End();
             }
-            if (this.ProNode != null)
+            if (HasProNode)
             {
                 this.ProNode.RemoveWorker();
             }

@@ -93,6 +93,27 @@ namespace ProjectOC.ProNodeNS
                 node.WorldProNode = worldNode;
             }
         }
+
+        public void WorldNodeSetData(WorldProNode worldNode, ProNode proNode)
+        {
+            if (worldNode != null && proNode != null)
+            {
+                if (WorldProNodeDict.ContainsKey(worldNode.InstanceID))
+                {
+                    WorldProNodeDict[worldNode.InstanceID] = worldNode;
+                }
+                else
+                {
+                    WorldProNodeDict.Add(worldNode.InstanceID, worldNode);
+                }
+                if (worldNode.ProNode != null)
+                {
+                    worldNode.ProNode.WorldProNode = null;
+                }
+                worldNode.ProNode = proNode;
+                proNode.WorldProNode = worldNode;
+            }
+        }
         #endregion
 
         #region Getter

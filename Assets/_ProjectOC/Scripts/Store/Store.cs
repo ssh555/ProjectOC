@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ML.Engine.BuildingSystem;
 using ML.Engine.InventorySystem;
 using ML.Engine.InventorySystem.CompositeSystem;
+using ProjectOC.ManagerNS;
 using ProjectOC.MissionNS;
 using ProjectOC.ProNodeNS;
 using Sirenix.OdinInspector;
@@ -565,6 +566,7 @@ namespace ProjectOC.StoreNS
                 string ID = BuildingManager.Instance.GetID(this.WorldStore.Classification.ToString());
                 string upgradeID = BuildingManager.Instance.GetUpgradeID(this.WorldStore.Classification.ToString());
                 string upgradeCID = BuildingManager.Instance.GetClassification(upgradeID);
+                Transform parent = this.WorldStore.transform.parent;
 
                 if (!string.IsNullOrEmpty(upgradeID)
                     && !string.IsNullOrEmpty(upgradeCID)
@@ -575,12 +577,12 @@ namespace ProjectOC.StoreNS
                     CompositeManager.Instance.OnlyReturnResource(player.Inventory, ID);
                     if (BuildingManager.Instance.GetOneBPartInstance(upgradeCID) is WorldStore upgrade)
                     {
+                        upgrade.transform.SetParent(parent);
                         upgrade.InstanceID = this.WorldStore.InstanceID;
                         upgrade.transform.position = this.WorldStore.transform.position;
                         upgrade.transform.rotation = this.WorldStore.transform.rotation;
                         ML.Engine.Manager.GameManager.DestroyObj(this.WorldStore.gameObject);
-                        this.WorldStore = upgrade;
-                        upgrade.Store = this;
+                        LocalGameManager.Instance.StoreManager.WorldStoreSetData(upgrade, this);
                         this.SetLevel(upgrade.Classification.Category4 - 1);
                     }
                 }

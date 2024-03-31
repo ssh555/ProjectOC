@@ -91,7 +91,7 @@ namespace ProjectOC.Player
         private void Start()
         {
             this.moveStateParams.RuntimeInit(this.playerInputActions.Acc, this.playerInputActions.Crouch);
-            
+            this.enabled = false;
         }
         private void InternalInit()
         {
@@ -142,8 +142,6 @@ namespace ProjectOC.Player
             };
 
             //StartCoroutine(__DelayInit__());
-
-            this.enabled = false;
         }
 
         private void OnDestroy()

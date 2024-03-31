@@ -134,13 +134,13 @@ namespace ProjectOC.MissionNS
                 }
                 if (x.Type != y.Type)
                 {
-                    x.Type.CompareTo(y.Type);
+                    return x.Type.CompareTo(y.Type);
                 }
                 int priorityX = (int)x.Initiator.GetTransportPriority();
                 int priorityY = (int)y.Initiator.GetTransportPriority();
                 if (priorityX != priorityY)
                 {
-                    priorityX.CompareTo(priorityY);
+                    return priorityX.CompareTo(priorityY);
                 }
                 return x.GetUID().CompareTo(y.GetUID());
             }
