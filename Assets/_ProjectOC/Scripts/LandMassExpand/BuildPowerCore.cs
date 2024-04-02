@@ -35,15 +35,11 @@ namespace ProjectOC.LandMassExpand
         private BuildPowerIslandManager bPIslandManager;
         protected override void Awake()
         {
+            bPIslandManager = GameManager.Instance.GetLocalManager<BuildPowerIslandManager>();
             needPowerBparts = new List<INeedPowerBpart>();
             base.Awake();
         }
-
-        protected void Start()
-        {
-            bPIslandManager = GameManager.Instance.GetLocalManager<BuildPowerIslandManager>();
-        }
-
+        
         void OnDestroy()
         {
             if (bPIslandManager != null && bPIslandManager.powerCores.Contains(this))

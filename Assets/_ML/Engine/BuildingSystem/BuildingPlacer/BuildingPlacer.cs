@@ -3,6 +3,7 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using ProjectOC.ManagerNS;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static ML.Engine.BuildingSystem.MonoBuildingManager;
@@ -463,7 +464,9 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             return false;
         }
 
-        /// <summary>
+        // private Vector3 _pos;
+        [SerializeField]Vector3 posOffset;
+        /// <summary>p
         /// 应用位置和旋转于SelectedPartInstance
         /// </summary>
         public void TransformSelectedPartInstance()
@@ -479,6 +482,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 this.SelectedPartInstance.transform.rotation = Quaternion.identity;
                 this.SelectedPartInstance.transform.position = pos;
 
+
                 Vector3 rotAroundPoint = this.SelectedPartInstance.ActiveSocket.transform.position;
 
                 // Up-Y
@@ -487,6 +491,19 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, Vector3.right, euler.x);
                 // Forward-Z
                 this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, Vector3.forward, euler.z);
+                
+                if (this.SelectedPartInstance.AttachedArea == null && this.SelectedPartInstance.AttachedSocket == null)
+                {
+                    this.SelectedPartInstance.transform.position = pos + this.Camera.transform.rotation * posOffset;
+                    
+                }
+            }
+            // else if((_pos - pos).sqrMagnitude >0.001f)
+            else
+            {
+                // _pos = pos;
+                
+                this.SelectedPartInstance.transform.position = pos + posOffset;
             }
         }
 
@@ -576,6 +593,21 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         #region Unity
         private void Awake()
         {
+            IslandAreaManager islandAreaManager = LocalGameManager.Instance.IslandAreaManager;
+            OnPlaceModeSuccess += (bpart) =>
+            {
+                islandAreaManager.JudgeUpdateField(bpart.transform);
+            };
+            OnEditModeSuccess += (bpart, pos1, pos2) =>
+            {
+                islandAreaManager.JudgeUpdateField(bpart.transform);
+            };
+            OnBuildingModeExit += () =>
+            {
+                islandAreaManager.UpdateNaveMeshSurfaces();
+                islandAreaManager.ClearUpdateTransform();
+            };
+            
             this.enabled = false;
         }
         #endregion

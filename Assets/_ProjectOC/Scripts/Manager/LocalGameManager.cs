@@ -32,10 +32,9 @@ namespace ProjectOC.ManagerNS
         public FeatureManager FeatureManager;
         public SkillManager SkillManager;
         public WorkerEchoManager WorkerEchoManager;
-        [NonSerialized]
-        public NavMeshManager NavMeshManager;
+        public IslandAreaManager IslandAreaManager;
         public BuildPowerIslandManager BuildPowerIslandManager;
-        public IslandManager IslandManager;
+        public IslandModelManager IslandManager;
         public MonoBuildingManager MonoBuildingManager;
         public TechTreeManager TechTreeManager;
        
@@ -78,6 +77,7 @@ namespace ProjectOC.ManagerNS
             GM.RegisterLocalManager(IslandManager);
             IslandManager.Init();
             GM.RegisterLocalManager(BuildPowerIslandManager);
+            GM.RegisterLocalManager(IslandAreaManager);
         }
 
         private void Start()
@@ -88,9 +88,6 @@ namespace ProjectOC.ManagerNS
                 var player = handle.Result;
                 
                 player.transform.position = GameObject.Find("PlayerSpawnPoint").transform.position;
-
-                NavMeshManager = GM.RegisterLocalManager<NavMeshManager>();
-
             };
             
 #if !UNITY_EDITOR
@@ -114,8 +111,8 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<SkillManager>();
                 GM?.UnregisterLocalManager<WorkerEchoManager>();
                 GM?.UnregisterLocalManager<LocalGameManager>();
-                GM?.UnregisterLocalManager<NavMeshManager>();
-                GM?.UnregisterLocalManager<IslandManager>();
+                GM?.UnregisterLocalManager<IslandAreaManager>();
+                GM?.UnregisterLocalManager<IslandModelManager>();
                 GM?.UnregisterLocalManager<BuildPowerIslandManager>();
                 Instance = null;
             }
