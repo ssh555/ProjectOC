@@ -6,6 +6,7 @@ namespace ProjectOC.PlayerCharacterNS
 {
     public interface ICharacter
     {
+        int prefabIndex { get; set; }
         ICharacterState State { get; set; }
         IController Controller { get; set; }
         void onSpawn(IController controller);
