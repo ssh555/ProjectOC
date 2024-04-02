@@ -1364,7 +1364,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": ""ChangeItem"",
                     ""type"": ""Value"",
-                    ""id"": ""a88c7458-1957-4bf2-8552-c159134b876a"",
+                    ""id"": ""6e81e7cf-8e76-49fc-ad8a-6c71efc0deee"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -1475,116 +1475,6 @@ namespace ProjectOC.Input
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""KeyBoard"",
-                    ""id"": ""02d150a4-d82f-4b8a-ba2b-1ace06b1f76b"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeItem"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""45bd83b0-e9f7-4ce6-aa86-5115aca8fb3c"",
-                    ""path"": ""<Keyboard>/upArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeItem"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""0678282e-ec10-46fb-83d6-5e2e38497284"",
-                    ""path"": ""<Keyboard>/downArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeItem"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""3e10dbc0-1b67-476d-bf4b-068321a341ea"",
-                    ""path"": ""<Keyboard>/leftArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeItem"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""791b05b0-01d0-4317-a42b-8b65177398fd"",
-                    ""path"": ""<Keyboard>/rightArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeItem"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""XBOX"",
-                    ""id"": ""471c472e-00cd-403d-a291-7c8711707230"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeItem"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""8f23e198-6925-49f6-89a8-fff03911ba1d"",
-                    ""path"": ""<XInputController>/dpad/up"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeItem"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""5dadc7c7-33a6-4af0-a55e-514b8b0738ce"",
-                    ""path"": ""<XInputController>/dpad/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeItem"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""b8c497cd-c6a5-4a14-9141-a130a1334f67"",
-                    ""path"": ""<XInputController>/dpad/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeItem"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""102ae375-002d-4127-b73b-a8f8a027ea3a"",
-                    ""path"": ""<XInputController>/dpad/right"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ChangeItem"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": """",
                     ""id"": ""8e7db927-4ca8-4a74-b4a4-eea8f7f71bbe"",
                     ""path"": ""<XInputController>/buttonWest"",
@@ -1649,6 +1539,116 @@ namespace ProjectOC.Input
                     ""action"": ""FastAdd"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""KeyBoard"",
+                    ""id"": ""297ff535-d7bd-46fa-98db-267bb4e13202"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeItem"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""ef091520-7c52-4c87-b6d6-3f57c039751c"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""85c3c95f-5a69-41a3-b15a-f2562301cc95"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""5fce3903-a615-4e8d-acc0-b6fb7fb3bdcc"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""1f91c5ef-5fd3-4dc5-8de9-a87ac480392c"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""9a91cc31-9418-4b95-b477-3f569471354d"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeItem"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""56dd0431-0a00-4263-b5bc-be90b8b458da"",
+                    ""path"": ""<XInputController>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""9f98b186-f89c-448f-8566-312367e49260"",
+                    ""path"": ""<XInputController>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""c28b91aa-4370-4ba2-9dfe-1cb222642a29"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""267a4835-5f27-491d-90c3-f7b91b15a354"",
+                    ""path"": ""<XInputController>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -1704,7 +1704,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": ""Alter"",
                     ""type"": ""Value"",
-                    ""id"": ""1a286c3e-5479-48e0-b312-c005d1204369"",
+                    ""id"": ""16e5acf8-5707-4a30-b9af-a96fd8a4d4a7"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -1733,116 +1733,6 @@ namespace ProjectOC.Input
                     ""action"": ""NextPriority"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""KeyBoard"",
-                    ""id"": ""6d7178fd-01ba-48e6-b80f-828911d1e752"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Alter"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""dd1e748f-0c49-4842-b66e-4efb47d2755c"",
-                    ""path"": ""<Keyboard>/upArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Alter"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""3441ff6c-86a2-4efd-b7c7-b325ae670dbe"",
-                    ""path"": ""<Keyboard>/downArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Alter"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""86cb4fc7-0b07-4576-894f-918f41218696"",
-                    ""path"": ""<Keyboard>/leftArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Alter"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""cd4eee97-33df-4edf-805b-51ff54aec145"",
-                    ""path"": ""<Keyboard>/rightArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Alter"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""XBOX"",
-                    ""id"": ""bf3209ce-bec4-4238-b6da-e5185ba20c63"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Alter"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""9ef64ad6-1469-4941-bac3-1ad6d272b6ba"",
-                    ""path"": ""<XInputController>/dpad/up"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Alter"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""10b6474b-d4a0-4f91-a7e7-9f7cf463d7ef"",
-                    ""path"": ""<XInputController>/dpad/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Alter"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""9b2fafe2-13fa-42ec-9767-cb4124271758"",
-                    ""path"": ""<XInputController>/dpad/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Alter"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""cdc2d751-844a-4136-9e66-745dd178a9c4"",
-                    ""path"": ""<XInputController>/dpad/right"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Alter"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -1929,6 +1819,217 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""FastAdd"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""KeyBoard"",
+                    ""id"": ""a49550c0-0bc0-4c40-83b7-193e67c2f3ec"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""5a1ab771-ecf9-44bd-90ff-05d5bd23fede"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""ec6f6b96-7dec-4260-bebc-a082911383b3"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""71169a9b-0255-49a7-bddc-b56a7d964cfd"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""428a1f65-6315-4bc5-ac1d-f337c6e621be"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""4fe83df4-ea62-4bc7-b605-b9c4a62e6f3b"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""e21b91ae-994a-40e2-84dd-ff65f42660e0"",
+                    ""path"": ""<XInputController>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""2184d062-f161-4343-8566-d2bccae81535"",
+                    ""path"": ""<XInputController>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""68b52ce9-7cf1-458e-ab49-25b3df306dc0"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""34cbf2a9-ceca-4851-9f19-73c081dbb1c1"",
+                    ""path"": ""<XInputController>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
+        },
+        {
+            ""name"": ""UIBed"",
+            ""id"": ""ea10d783-1f35-436b-b922-41245bb5792b"",
+            ""actions"": [
+                {
+                    ""name"": ""SetEmpty"",
+                    ""type"": ""Button"",
+                    ""id"": ""ed20eed7-2110-4f7d-a73f-99f59fb48c6d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pre"",
+                    ""type"": ""Button"",
+                    ""id"": ""ba9e3cac-47eb-42dc-980c-d83d49260e0c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Post"",
+                    ""type"": ""Button"",
+                    ""id"": ""b1c670e3-782f-4a11-8665-d878fc699a46"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""b2d976c7-b5fe-4b0b-a1a9-256d0ebf2180"",
+                    ""path"": ""<XInputController>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SetEmpty"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0dc0c06d-6e01-42a6-95c5-fe62abaae88d"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SetEmpty"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2792c060-3060-4a5c-9c76-5278b9ef5712"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pre"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d3d7670e-4cff-42dd-b313-bb4ea5eb3d52"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pre"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5037a0db-ad7c-4fc4-9860-025311571281"",
+                    ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Post"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""454d4e0f-ddd9-4549-ad10-878120f359e1"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Post"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -2640,6 +2741,11 @@ namespace ProjectOC.Input
             m_UIProNode_Remove10 = m_UIProNode.FindAction("Remove10", throwIfNotFound: true);
             m_UIProNode_FastAdd = m_UIProNode.FindAction("FastAdd", throwIfNotFound: true);
             m_UIProNode_Alter = m_UIProNode.FindAction("Alter", throwIfNotFound: true);
+            // UIBed
+            m_UIBed = asset.FindActionMap("UIBed", throwIfNotFound: true);
+            m_UIBed_SetEmpty = m_UIBed.FindAction("SetEmpty", throwIfNotFound: true);
+            m_UIBed_Pre = m_UIBed.FindAction("Pre", throwIfNotFound: true);
+            m_UIBed_Post = m_UIBed.FindAction("Post", throwIfNotFound: true);
             // ResonanceWheelUI
             m_ResonanceWheelUI = asset.FindActionMap("ResonanceWheelUI", throwIfNotFound: true);
             m_ResonanceWheelUI_NextTerm = m_ResonanceWheelUI.FindAction("NextTerm", throwIfNotFound: true);
@@ -3274,6 +3380,68 @@ namespace ProjectOC.Input
         }
         public UIProNodeActions @UIProNode => new UIProNodeActions(this);
 
+        // UIBed
+        private readonly InputActionMap m_UIBed;
+        private List<IUIBedActions> m_UIBedActionsCallbackInterfaces = new List<IUIBedActions>();
+        private readonly InputAction m_UIBed_SetEmpty;
+        private readonly InputAction m_UIBed_Pre;
+        private readonly InputAction m_UIBed_Post;
+        public struct UIBedActions
+        {
+            private @PlayerInput m_Wrapper;
+            public UIBedActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @SetEmpty => m_Wrapper.m_UIBed_SetEmpty;
+            public InputAction @Pre => m_Wrapper.m_UIBed_Pre;
+            public InputAction @Post => m_Wrapper.m_UIBed_Post;
+            public InputActionMap Get() { return m_Wrapper.m_UIBed; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(UIBedActions set) { return set.Get(); }
+            public void AddCallbacks(IUIBedActions instance)
+            {
+                if (instance == null || m_Wrapper.m_UIBedActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_UIBedActionsCallbackInterfaces.Add(instance);
+                @SetEmpty.started += instance.OnSetEmpty;
+                @SetEmpty.performed += instance.OnSetEmpty;
+                @SetEmpty.canceled += instance.OnSetEmpty;
+                @Pre.started += instance.OnPre;
+                @Pre.performed += instance.OnPre;
+                @Pre.canceled += instance.OnPre;
+                @Post.started += instance.OnPost;
+                @Post.performed += instance.OnPost;
+                @Post.canceled += instance.OnPost;
+            }
+
+            private void UnregisterCallbacks(IUIBedActions instance)
+            {
+                @SetEmpty.started -= instance.OnSetEmpty;
+                @SetEmpty.performed -= instance.OnSetEmpty;
+                @SetEmpty.canceled -= instance.OnSetEmpty;
+                @Pre.started -= instance.OnPre;
+                @Pre.performed -= instance.OnPre;
+                @Pre.canceled -= instance.OnPre;
+                @Post.started -= instance.OnPost;
+                @Post.performed -= instance.OnPost;
+                @Post.canceled -= instance.OnPost;
+            }
+
+            public void RemoveCallbacks(IUIBedActions instance)
+            {
+                if (m_Wrapper.m_UIBedActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IUIBedActions instance)
+            {
+                foreach (var item in m_Wrapper.m_UIBedActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_UIBedActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public UIBedActions @UIBed => new UIBedActions(this);
+
         // ResonanceWheelUI
         private readonly InputActionMap m_ResonanceWheelUI;
         private List<IResonanceWheelUIActions> m_ResonanceWheelUIActionsCallbackInterfaces = new List<IResonanceWheelUIActions>();
@@ -3593,6 +3761,12 @@ namespace ProjectOC.Input
             void OnRemove10(InputAction.CallbackContext context);
             void OnFastAdd(InputAction.CallbackContext context);
             void OnAlter(InputAction.CallbackContext context);
+        }
+        public interface IUIBedActions
+        {
+            void OnSetEmpty(InputAction.CallbackContext context);
+            void OnPre(InputAction.CallbackContext context);
+            void OnPost(InputAction.CallbackContext context);
         }
         public interface IResonanceWheelUIActions
         {

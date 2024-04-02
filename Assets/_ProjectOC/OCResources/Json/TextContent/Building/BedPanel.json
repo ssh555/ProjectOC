@@ -1,0 +1,95 @@
+{
+    "textBed" : {
+        "Chinese" : "床",
+        "English" : "Bed"
+    },
+    "SetEmpty" : {
+        "keyname" : "KT_SetEmpty",
+        "keymap": {
+            "ActionMapName": "UIBed",
+            "ActionName": "SetEmpty"
+          },
+        "description" : {
+            "Chinese" : "置空",
+            "English" : "Set Empty"
+        }
+    },
+    "ConfirmClan" : {
+        "keyname" : "KT_ConfirmClan",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "变更拥有者",
+            "English" : "Change Clan"
+        }
+    },
+    "Pre" : {
+        "keyname" : "KT_Pre",
+        "keymap": {
+            "ActionMapName": "UIBed",
+            "ActionName": "Pre"
+          },
+        "description" : {
+            "Chinese" : "上一位",
+            "English" : "Previous"
+        }
+    },
+    "Post" : {
+        "keyname" : "KT_Post",
+        "keymap": {
+            "ActionMapName": "UIBed",
+            "ActionName": "Post"
+          },
+        "description" : {
+            "Chinese" : "下一位",
+            "English" : "Next"
+        }
+    },
+    "Confirm": {
+        "keyname": "KT_Confirm",
+        "keymap": {
+          "ActionMapName": "Common",
+          "ActionName": "Confirm"
+        },
+        "description": {
+          "Chinese": "指定",
+          "English": "Confirm"
+        }
+      },
+    "Back" : {
+        "keyname" : "KT_Back",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
+        "description" : {
+            "Chinese" : "返回",
+            "English" : "Back"
+        }
+    },
+    "Confirm1": {
+        "keyname": "KT_Confirm1",
+        "keymap": {
+          "ActionMapName": "Common",
+          "ActionName": "Confirm"
+        },
+        "description": {
+          "Chinese": "确认",
+          "English": "Confirm"
+        }
+      },
+    "Back1" : {
+        "keyname" : "KT_Back1",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
+        "description" : {
+            "Chinese" : "返回",
+            "English" : "Back"
+        }
+    }
+}
+
