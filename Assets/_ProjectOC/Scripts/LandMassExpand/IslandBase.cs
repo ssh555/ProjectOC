@@ -12,6 +12,8 @@ namespace ProjectOC.LandMassExpand
 {
     public class IslandBase : MonoBehaviour
     {
+        #region 岛屿大地图
+
         private int island_Index;
         [SerializeField,LabelText("岛屿大地图位置")] 
         public Vector2Int islandMapPos;
@@ -20,13 +22,13 @@ namespace ProjectOC.LandMassExpand
         [SerializeField,LabelText("岛屿模型")]
         private Transform islandMesh;
 
-        private IslandManager islandManager;        
+        private IslandModelManager islandManager;        
         Vector2Int bigMapSize => islandManager.maxSize;
         [SerializeField,LabelText("岛屿区域")] 
         public List<IslandFieldPart> islandFieldParts;
         private void Start()
         {
-            islandManager = GameManager.Instance.GetLocalManager<IslandManager>();
+            islandManager = GameManager.Instance.GetLocalManager<IslandModelManager>();
             //ChangeIslandGrids(islandMapRanges, true);
             this.enabled = false;
         }
@@ -168,6 +170,27 @@ namespace ProjectOC.LandMassExpand
             return realBigMapPos;
         }
         
+        
+        
+        #endregion
+        
+        
+
+        #region 区域划分
+        [Serializable]
+        public struct IslandFieldPart
+        {
+            public List<Bounds> fieldBounds;
+            public Transform buildingPartsTransf;
+        }
+
+        
+
+
+
+        #endregion
+
+        
         void OnDrawGizmosSelected()
         {
             if (!Application.isPlaying)
@@ -182,7 +205,7 @@ namespace ProjectOC.LandMassExpand
                 Gizmos.color = Color.red;
             }
 
-            IslandManager islandManager = GameManager.Instance.GetLocalManager<IslandManager>();
+            IslandModelManager islandManager = GameManager.Instance.GetLocalManager<IslandModelManager>();
             for (int i = 0; i < islandMapRanges.Length; i++)
             {
                 Gizmos.DrawWireCube(new Vector3(islandMapRanges[i].x, 0, islandMapRanges[i].y) * islandManager.mapGridSize + transform.position,
@@ -199,30 +222,5 @@ namespace ProjectOC.LandMassExpand
                 }   
             }
         }
-
-        #region 区域划分
-        [Serializable]
-        public struct IslandFieldPart
-        {
-            public List<Bounds> fieldBounds;
-            public NavMeshSurface navMeshSurface;
-            public Transform buildingPartsTransf;
-        }
-
-        
-        public void SetSurfacesTrigger(List<NavMeshSurface> _NMSes,bool _isTrue = true)
-        {
-            foreach (var _nms in _NMSes)
-            {
-                MeshCollider[] meshColliders = _nms.transform.Find("TerrainPartCollider").GetComponentsInChildren<MeshCollider>();
-                foreach (var meshCollider in meshColliders)
-                {
-                    meshCollider.isTrigger = _isTrue;
-                }
-            }
-        }
-        #endregion
-
-
     }
 }

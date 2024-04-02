@@ -76,13 +76,8 @@ namespace ProjectOC.LandMassExpand
             powerSupportVFX.GetComponent<Renderer>().sharedMaterial = powerVFXMat;
             powerVFXMat.SetColor("_VFXColor",new Color32(139, 167,236,255));
             needPowerBparts = new List<INeedPowerBpart>();
-            
-            base.Awake();
-        }
-
-        protected virtual void Start()
-        {
             bpIslandManager = GameManager.Instance.GetLocalManager<BuildPowerIslandManager>();
+            base.Awake();
         }
 
         void OnDestroy()
