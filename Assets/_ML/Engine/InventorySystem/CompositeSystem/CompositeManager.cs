@@ -1,11 +1,6 @@
-using Newtonsoft.Json;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.U2D;
 
 namespace ML.Engine.InventorySystem.CompositeSystem
 {
@@ -109,7 +104,6 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <returns></returns>
         public bool CanComposite(IInventory resource, string compositonID)
         {
-            
             if (string.IsNullOrEmpty(compositonID) || !this.CompositeData.ContainsKey(compositonID) || this.CompositeData[compositonID].formula == null)
             {
                 return false;
@@ -122,7 +116,6 @@ namespace ML.Engine.InventorySystem.CompositeSystem
                     return false;
                 }
             }
-
             return true;
         }
 

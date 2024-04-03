@@ -298,6 +298,13 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             return false;
         }
 #endif
+
+        public virtual void OnBPartDestroy()
+        {
+
+        }
     }
+
+
 
 }

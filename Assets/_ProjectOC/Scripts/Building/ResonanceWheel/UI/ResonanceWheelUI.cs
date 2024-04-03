@@ -30,7 +30,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         protected override void Awake()
         {
             base.Awake();
-
+            Debug.Log(GameObject.Find("PlayerCharacter(Clone)"));
+            Debug.Log(GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>());
+            Debug.Log(GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent);
+            Debug.Log(GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction);
+            Debug.Log(GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding);
+            Debug.Log((GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho);
             workerEcho = (GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
 
             //exclusivePart
@@ -526,23 +531,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #region UI
         #region Temp
-        private List<Sprite> tempSprite = new List<Sprite>();
-        private Dictionary<ML.Engine.InventorySystem.ItemType, GameObject> tempItemType = new Dictionary<ML.Engine.InventorySystem.ItemType, GameObject>();
-        private List<GameObject> tempUIItems = new List<GameObject>();
+
         private void ClearTemp()
         {
-            foreach (var s in tempSprite)
-            {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
-            }
-            foreach (var s in tempItemType.Values)
-            {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
-            }
-            foreach (var s in tempUIItems)
-            {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
-            }
+            beastTypeDic.Clear();
+
 
         }
 

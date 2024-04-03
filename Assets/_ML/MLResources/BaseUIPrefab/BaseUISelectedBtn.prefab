@@ -221,7 +221,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2774935812138795924, guid: 842bef1dc7171594db07017ca93393ca, type: 3}
       propertyPath: m_Name
-      value: GraphicBtn Variant
+      value: BaseUISelectedBtn
       objectReference: {fileID: 0}
     - target: {fileID: 2791765416471780196, guid: 842bef1dc7171594db07017ca93393ca, type: 3}
       propertyPath: m_SizeDelta.y

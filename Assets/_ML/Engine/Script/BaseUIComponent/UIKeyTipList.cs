@@ -24,7 +24,7 @@ namespace ML.Engine.UI
                 }
             }
             this.datas = datas;
-            RefreshKetTip(datas);
+            RefreshKetTip();
         }
         /// <summary>
         /// 设置按键提示文本与设置按键描述文本
@@ -39,9 +39,9 @@ namespace ML.Engine.UI
         /// <summary>
         /// 外部调用刷新KeyTip接口
         /// </summary>
-        public void RefreshKetTip(T datas)
+        public void RefreshKetTip()
         {
-            KeyTip[] keyTips = GameManager.Instance.InputManager.ExportKeyTipValues(datas);
+            KeyTip[] keyTips = GameManager.Instance.InputManager.ExportKeyTipValues(this.datas);
             foreach (var keyTip in keyTips)
             {
                 InputAction inputAction = GameManager.Instance.InputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));

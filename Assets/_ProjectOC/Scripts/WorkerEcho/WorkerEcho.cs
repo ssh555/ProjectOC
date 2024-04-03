@@ -34,7 +34,7 @@ namespace ProjectOC.WorkerEchoNS
                   {
                       this.worker = handle.Result.GetComponent<Worker>();
                       this.worker.gameObject.transform.position = this.worker.gameObject.transform.position += new Vector3((float)(3 * Math.Cos(2 * 3.1415926 * index / 5)), 0, (float)(3 * Math.Sin(2 * 3.1415926 * index / 5)));
-                      (buildingPart as WorkerEchoBuilding).workerEcho.AddWorker(worker, index);
+                      //(buildingPart as WorkerEchoBuilding).workerEcho.AddWorker(worker, index);
                   };
         
             };
@@ -53,27 +53,13 @@ namespace ProjectOC.WorkerEchoNS
         }
 
         public ExternWorker SummonWorker(string id,int index,IInventory inventory)
-        {   
-            if (this.Level==1)
-            {
-                
-                GameManager.Instance.GetLocalManager<WorkerManager>().OnlyCostResource(inventory, id);
-                id = GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRandomID();
-                
-            }
-            else
-            {
-                foreach (var item in GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRaw(id))
-                {
-                    if (item.num > inventory.GetItemAllNum(item.id))
-                    {
-                        return null;
-                    }
-                }
-                GameManager.Instance.GetLocalManager<WorkerManager>().OnlyCostResource(inventory, id);
-            }
+        {
+            if (!GameManager.Instance.GetLocalManager<WorkerManager>().OnlyCostResource(inventory, id)) return null;
 
-            
+            if (this.Level == 1)
+            {
+                id = GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRandomID();
+            }
             
             ExternWorker externWorker = new ExternWorker(id, GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetTimeCost(id), BuildingPart,index);
             Workers[index] = externWorker;
@@ -84,12 +70,16 @@ namespace ProjectOC.WorkerEchoNS
         public void SpawnWorker(int index,Vector3 pos)
         {
             Workers[index].worker.transform.position = pos;
+            (BuildingPart as WorkerEchoBuilding).workerEcho.AddWorker(Workers[index].worker, index);
+
+            ML.Engine.Manager.GameManager.Instance.CounterDownTimerManager.RemoveTimer(Workers[index].timer);
             Workers[index] = null;
         }
 
         public void ExpelWorker(int index)
         {
             LocalGameManager.Instance.WorkerManager.DeleteWorker(Workers[index].worker);
+            ML.Engine.Manager.GameManager.Instance.CounterDownTimerManager.RemoveTimer(Workers[index].timer);
             Workers[index] = null;
         }
 
@@ -107,12 +97,15 @@ namespace ProjectOC.WorkerEchoNS
                 if (Workers[i] != null)
                 {
                     isNone = false;
+                    break;
                 }
             }
+
             if (isNone) return EchoStatusType.None;
             foreach (ExternWorker worker in Workers)
             {
-                if (!worker.timer.IsTimeUp)
+
+                if (worker!=null && !worker.timer.IsTimeUp)
                 {
                     return EchoStatusType.Echoing;
                 }

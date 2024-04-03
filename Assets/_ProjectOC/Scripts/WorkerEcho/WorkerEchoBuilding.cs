@@ -32,6 +32,7 @@ namespace ProjectOC.WorkerEchoNS
             this.InteractType = "WorkerEcho";
             this.PosOffset = Vector3.zero;
             this.CheckCanDestory += CheckCanDestroyOrEdit();
+            this.CheckCanEdit += CheckCanDestroyOrEdit();
             this.uIResonanceWheelInstance = null;
         }
 
@@ -69,5 +70,11 @@ namespace ProjectOC.WorkerEchoNS
             return new IBuildingPart.CheckMode(CanEditOrDestroy);
         }
 
+
+        public override void OnBPartDestroy()
+        {
+            this.CheckCanDestory -= CheckCanDestroyOrEdit();
+            this.CheckCanEdit -= CheckCanDestroyOrEdit();
+        }
     }
 }

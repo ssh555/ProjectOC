@@ -14,6 +14,7 @@ using Sirenix.OdinInspector;
 using ML.Engine.UI;
 using ProjectOC.TechTree;
 using ML.Engine.Manager;
+using ProjectOC.Order;
 
 namespace ProjectOC.ManagerNS
 {
@@ -38,7 +39,8 @@ namespace ProjectOC.ManagerNS
         public IslandManager IslandManager;
         public MonoBuildingManager MonoBuildingManager;
         public TechTreeManager TechTreeManager;
-       
+        public OrderManager OrderManager;
+
         /// <summary>
         /// µ¥Àý¹ÜÀí
         /// </summary>
@@ -75,6 +77,8 @@ namespace ProjectOC.ManagerNS
             MonoBuildingManager.Init();
             GM.RegisterLocalManager(TechTreeManager);
             TechTreeManager.Init();
+/*            GM.RegisterLocalManager(OrderManager);
+            OrderManager.Init();*/
             GM.RegisterLocalManager(IslandManager);
             IslandManager.Init();
             GM.RegisterLocalManager(BuildPowerIslandManager);
