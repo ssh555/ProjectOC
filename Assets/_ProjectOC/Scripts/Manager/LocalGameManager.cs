@@ -11,9 +11,9 @@ using ProjectOC.ProNodeNS;
 using ML.Engine.InventorySystem;
 using ProjectOC.LandMassExpand;
 using Sirenix.OdinInspector;
+using ML.Engine.UI;
 using ProjectOC.TechTree;
 using ML.Engine.Manager;
-using ProjectOC.ClanNS;
 
 namespace ProjectOC.ManagerNS
 {
@@ -32,11 +32,9 @@ namespace ProjectOC.ManagerNS
         public FeatureManager FeatureManager;
         public SkillManager SkillManager;
         public WorkerEchoManager WorkerEchoManager;
-        public ClanManager ClanManager;
-        [NonSerialized]
-        public NavMeshManager NavMeshManager;
+        public IslandAreaManager IslandAreaManager;
         public BuildPowerIslandManager BuildPowerIslandManager;
-        public IslandManager IslandManager;
+        public IslandModelManager IslandManager;
         public MonoBuildingManager MonoBuildingManager;
         public TechTreeManager TechTreeManager;
        
@@ -72,7 +70,6 @@ namespace ProjectOC.ManagerNS
             SkillManager.LoadTableData();
             GM.RegisterLocalManager(WorkerEchoManager);
             WorkerEchoManager.LoadTableData();
-            GM.RegisterLocalManager(ClanManager);
             GM.RegisterLocalManager(MonoBuildingManager);
             MonoBuildingManager.Init();
             GM.RegisterLocalManager(TechTreeManager);
@@ -80,6 +77,7 @@ namespace ProjectOC.ManagerNS
             GM.RegisterLocalManager(IslandManager);
             IslandManager.Init();
             GM.RegisterLocalManager(BuildPowerIslandManager);
+            GM.RegisterLocalManager(IslandAreaManager);
         }
 
         private void Start()
@@ -90,9 +88,6 @@ namespace ProjectOC.ManagerNS
                 var player = handle.Result;
                 
                 player.transform.position = GameObject.Find("PlayerSpawnPoint").transform.position;
-
-                NavMeshManager = GM.RegisterLocalManager<NavMeshManager>();
-
             };
             
 #if !UNITY_EDITOR
@@ -115,10 +110,9 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<FeatureManager>();
                 GM?.UnregisterLocalManager<SkillManager>();
                 GM?.UnregisterLocalManager<WorkerEchoManager>();
-                GM?.UnregisterLocalManager<ClanManager>();
                 GM?.UnregisterLocalManager<LocalGameManager>();
-                GM?.UnregisterLocalManager<NavMeshManager>();
-                GM?.UnregisterLocalManager<IslandManager>();
+                GM?.UnregisterLocalManager<IslandAreaManager>();
+                GM?.UnregisterLocalManager<IslandModelManager>();
                 GM?.UnregisterLocalManager<BuildPowerIslandManager>();
                 Instance = null;
             }

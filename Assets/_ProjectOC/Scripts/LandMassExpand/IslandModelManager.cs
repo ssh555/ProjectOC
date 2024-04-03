@@ -7,7 +7,7 @@ using UnityEngine;
 namespace ProjectOC.LandMassExpand
 {
     [System.Serializable]
-    public class IslandManager :  ML.Engine.Manager.LocalManager.ILocalManager
+    public class IslandModelManager :  ML.Engine.Manager.LocalManager.ILocalManager
     {
         public IslandBase currentIsland;
         
