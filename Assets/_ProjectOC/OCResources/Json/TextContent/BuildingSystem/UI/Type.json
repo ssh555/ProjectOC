@@ -201,5 +201,12 @@
             "Chinese": "生态投影装置",
             "English": "Projector"
         }
+    },
+    {
+        "name": "Bed",
+        "description": {
+            "Chinese": "床",
+            "English": "Bed"
+        }
     }
 ]
