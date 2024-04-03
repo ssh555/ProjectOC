@@ -210,16 +210,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - NoticeUI
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 49d67b4d5f2a64849bd03cb6ce5860d0
-    m_Address: OC/UI/Building/Bed
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 37ae1fb3b2b863648826e3ba6706a3b7
-    m_Address: OC/UI/Building
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 72d1a89784032c94ea3b026b42e20dcf, type: 2}
   m_SchemaSet:
