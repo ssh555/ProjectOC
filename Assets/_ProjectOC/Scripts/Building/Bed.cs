@@ -79,7 +79,6 @@ namespace ProjectOC.Building
                     break;
                 }
             }
-            Debug.Log($"333 {flagUp} {flagDown} {flagUp && flagDown}");
             this.CanSetClan = flagUp && flagDown;
             return this.CanSetClan;
         }
