@@ -17,7 +17,10 @@ public class IslandAreaManager :ML.Engine.Manager.LocalManager.ILocalManager
 #region 岛屿区域管理
 
         public List<Transform> updatedFieldTransforms = new List<Transform>();
-        
+        /// <summary>
+        /// 区域建筑发生变化事件，退出建造模式的时候调用一次
+        /// </summary>
+        public Action UpdatedFieldTransformsAction;
         //UpdateFieldTransform List控制
         public void JudgeUpdateField(Transform _transf)
         {

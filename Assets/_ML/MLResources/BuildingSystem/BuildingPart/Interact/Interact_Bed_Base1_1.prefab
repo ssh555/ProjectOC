@@ -67,11 +67,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 8192
-  InTakeType: 0
+  InTakeType: 114
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  CanPlaceAreaType: 8
+  CanPlaceAreaType: 11
 --- !u!1 &3374980008265688684
 GameObject:
   m_ObjectHideFlags: 0
@@ -197,20 +197,19 @@ MonoBehaviour:
     Category3: 100
     Category4: 1
   instanceID: 
+  isFirstBuild: 1
   canPlaceInPlaceMode: 1
   mode: 0
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 0, z: 0, w: 0}
   activeSocketIndex: 0
-  OffsetPositionUp: {x: 0, y: 0, z: 0}
-  LengthUp: 1
-  HeightUp: 1
-  WidthUp: 1
-  RotationUp: {x: 0, y: 0, z: 0}
-  ScaleUp: {x: 1, y: 1, z: 1}
-  OffsetPositionDown: {x: 0, y: 0, z: 0}
-  LengthDown: 1
-  WidthDown: 1
-  HeightDown: 1
-  RotationDown: {x: 0, y: 0, z: 0}
-  ScaleDown: {x: 1, y: 1, z: 1}
+  ConfigUp:
+    Offset: {x: 0, y: 0.5, z: 0}
+    Size: {x: 1, y: 1, z: 1}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: {x: 1, y: 1, z: 1}
+  ConfigDown:
+    Offset: {x: 0, y: -0.5, z: 0}
+    Size: {x: 1, y: 1, z: 1}
+    Rotation: {x: 0, y: 0, z: 0}
+    Scale: {x: 1, y: 1, z: 1}

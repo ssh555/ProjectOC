@@ -1,88 +1,57 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using ProjectOC.ClanNS;
 using Sirenix.OdinInspector;
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InteractSystem;
 using ML.Engine.Manager;
-using System;
+using ProjectOC.ManagerNS;
 
 namespace ProjectOC.Building
 {
     public class Bed : BuildingPart, IInteraction
     {
+        #region 参数
         [LabelText("关联氏族"), ShowInInspector, ReadOnly]
         public Clan Clan;
-        [ShowInInspector, ReadOnly]
+        [LabelText("是否有关联氏族"), ShowInInspector, ReadOnly]
         public bool HasClan { get { return Clan != null && !string.IsNullOrEmpty(Clan.ID); } }
-        #region 向上检测
-        [LabelText("Offset"), FoldoutGroup("向上检测"), ShowInInspector]
-        public Vector3 OffsetPositionUp;
-        [LabelText("Length"), FoldoutGroup("向上检测"), ShowInInspector]
-        public float LengthUp = 1f;
-        [LabelText("Height"), FoldoutGroup("向上检测"), ShowInInspector]
-        public float HeightUp = 1f;
-        [LabelText("Width"), FoldoutGroup("向上检测"), ShowInInspector]
-        public float WidthUp = 1f;
-        [LabelText("Rotation"), FoldoutGroup("向上检测"), ShowInInspector]
-        public Vector3 RotationUp;
-        [LabelText("Scale"), FoldoutGroup("向上检测"), ShowInInspector]
-        public Vector3 ScaleUp = Vector3.one;
-        #endregion
-        #region 向下检测
-        [LabelText("Offset"), FoldoutGroup("向下检测"), ShowInInspector]
-        public Vector3 OffsetPositionDown;
-        [LabelText("Length"), FoldoutGroup("向下检测"), ShowInInspector]
-        public float LengthDown = 1f;
-        [LabelText("Width"), FoldoutGroup("向下检测"), ShowInInspector]
-        public float WidthDown = 1f;
-        [LabelText("Height"), FoldoutGroup("向下检测"), ShowInInspector]
-        public float HeightDown = 1f;
-        [LabelText("Rotation"), FoldoutGroup("向下检测"), ShowInInspector]
-        public Vector3 RotationDown;
-        [LabelText("Scale"), FoldoutGroup("向下检测"), ShowInInspector]
-        public Vector3 ScaleDown = Vector3.one;
-        #endregion
+        [LabelText("是否能放置"), ShowInInspector, ReadOnly]
+        public bool CanSetClan { get; private set; }
+
+        [LabelText("向上检测参数"), ShowInInspector]
+        public RaycastConfig ConfigUp;
+        [LabelText("向下检测参数"), ShowInInspector]
+        public RaycastConfig ConfigDown;
         public string InteractType { get; set; } = "Bed";
         public Vector3 PosOffset { get; set; } = Vector3.zero;
+        #endregion
 
         private new void Start()
         {
-            //ML.Engine.BuildingSystem.BuildingManager.Instance.Placer.OnBuildingModeExit += () =>
-            //{
-            //    // 床不在屋子里时，清空氏族数据
-            //    if (!HouseDetection())
-            //    {
-            //        SetClan(null);
-            //    }
-            //};
             this.enabled = false;
         }
 
         public override void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
-            // 不是第一次新建
-            if (!isFirstBuild)
+            // 第一次新建
+            if (isFirstBuild)
             {
-                // 床不在屋子里时，清空氏族数据
-                if (!HouseDetection() && HasClan)
-                {
-                    SetEmpty();
-                }
+                LocalGameManager.Instance.IslandAreaManager.UpdatedFieldTransformsAction += HouseDetectionAction;
             }
             //isFirstBuild的更新放在基类里，要要到引用后面
             base.OnChangePlaceEvent(oldPos, newPos);
         }
 
-
         public bool HouseDetection()
         {
             // 向上检测
-            Vector3 posUp = transform.TransformPoint(OffsetPositionUp);
-            Quaternion rotUp = transform.rotation * Quaternion.Euler(RotationUp);
-            Vector3 sizeUp = new Vector3(LengthUp, HeightUp, WidthUp) / 2;
-            sizeUp = Vector3.Scale(sizeUp, ScaleUp);
+            Vector3 posUp = transform.TransformPoint(ConfigUp.Offset);
+            Quaternion rotUp = transform.rotation * Quaternion.Euler(ConfigUp.Rotation);
+            Vector3 sizeUp = ConfigUp.Size / 2;
+            sizeUp = Vector3.Scale(sizeUp, ConfigUp.Scale);
             sizeUp = Vector3.Scale(sizeUp, transform.localScale);
             bool flagUp = false;
             foreach (RaycastHit hit in Physics.BoxCastAll(posUp, sizeUp, transform.up, rotUp))
@@ -95,10 +64,10 @@ namespace ProjectOC.Building
                 }
             }
             // 向下检测
-            Vector3 posDown = transform.TransformPoint(OffsetPositionDown);
-            Quaternion rotDown = transform.rotation * Quaternion.Euler(RotationDown);
-            Vector3 sizeDown = new Vector3(LengthDown, HeightDown, WidthDown) / 2;
-            sizeDown = Vector3.Scale(sizeDown, ScaleDown);
+            Vector3 posDown = transform.TransformPoint(ConfigDown.Offset);
+            Quaternion rotDown = transform.rotation * Quaternion.Euler(ConfigDown.Rotation);
+            Vector3 sizeDown = ConfigDown.Size / 2;
+            sizeDown = Vector3.Scale(sizeDown, ConfigDown.Scale);
             sizeDown = Vector3.Scale(sizeDown, transform.localScale);
             bool flagDown = false;
             foreach (RaycastHit hit in Physics.BoxCastAll(posDown, sizeDown, -transform.up, rotDown))
@@ -110,12 +79,23 @@ namespace ProjectOC.Building
                     break;
                 }
             }
-            if (flagUp && flagDown)
-            {
-                return true;
-            }
-            return false;
+            Debug.Log($"333 {flagUp} {flagDown} {flagUp && flagDown}");
+            this.CanSetClan = flagUp && flagDown;
+            return this.CanSetClan;
         }
+
+        private void HouseDetectionAction()
+        {
+            if (LocalGameManager.Instance.IslandAreaManager.updatedFieldTransforms.Contains(this.transform.parent))
+            {
+                // 床不在屋子里时，清空氏族数据
+                if (!HouseDetection())
+                {
+                    SetEmpty();
+                }
+            }
+        }
+
         /// <summary>
         /// 设置关联氏族
         /// </summary>
@@ -135,6 +115,7 @@ namespace ProjectOC.Building
                 clan.Bed = this;
             }
         }
+
         public void SetEmpty()
         {
             if (this.HasClan)
@@ -144,23 +125,22 @@ namespace ProjectOC.Building
             this.Clan = null;
         }
 
-
         private void OnDrawGizmosSelected()
         {
             // 向上检测
-            Vector3 posUp = transform.TransformPoint(OffsetPositionUp);
-            Quaternion rotUp = transform.rotation * Quaternion.Euler(RotationUp);
-            Vector3 scaleUp = Vector3.Scale(ScaleUp, transform.localScale);
+            Vector3 posUp = transform.TransformPoint(ConfigUp.Offset);
+            Quaternion rotUp = transform.rotation * Quaternion.Euler(ConfigUp.Rotation);
+            Vector3 scaleUp = Vector3.Scale(ConfigUp.Scale, transform.localScale);
             Gizmos.color = UnityEngine.Color.green;
             Gizmos.matrix = Matrix4x4.TRS(posUp, rotUp, scaleUp);
-            Gizmos.DrawWireCube(Vector3.zero, new Vector3(LengthUp, HeightUp, WidthUp));
+            Gizmos.DrawWireCube(Vector3.zero, ConfigUp.Size);
             // 向下检测
-            Vector3 posDown = transform.TransformPoint(OffsetPositionDown);
-            Quaternion rotDown = transform.rotation * Quaternion.Euler(RotationDown);
-            Vector3 scaleDown = Vector3.Scale(ScaleDown, transform.localScale);
+            Vector3 posDown = transform.TransformPoint(ConfigDown.Offset);
+            Quaternion rotDown = transform.rotation * Quaternion.Euler(ConfigDown.Rotation);
+            Vector3 scaleDown = Vector3.Scale(ConfigDown.Scale, transform.localScale);
             Gizmos.color = UnityEngine.Color.green;
             Gizmos.matrix = Matrix4x4.TRS(posDown, rotDown, scaleDown);
-            Gizmos.DrawWireCube(Vector3.zero, new Vector3(LengthDown, HeightDown, WidthDown));
+            Gizmos.DrawWireCube(Vector3.zero, ConfigDown.Size);
         }
 
         public void Interact(InteractComponent component)
@@ -174,6 +154,11 @@ namespace ProjectOC.Building
                 // Push
                 GameManager.Instance.UIManager.PushPanel(uiPanel);
             };
+        }
+
+        public void OnDestroy()
+        {
+            LocalGameManager.Instance.IslandAreaManager.UpdatedFieldTransformsAction -= HouseDetectionAction;
         }
     }
 }

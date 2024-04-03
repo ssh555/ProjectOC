@@ -605,6 +605,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             OnBuildingModeExit += () =>
             {
                 islandAreaManager.UpdateNaveMeshSurfaces();
+                islandAreaManager.UpdatedFieldTransformsAction?.Invoke();
                 islandAreaManager.ClearUpdateTransform();
             };
             
