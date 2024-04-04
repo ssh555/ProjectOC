@@ -130,8 +130,8 @@ namespace ProjectOC.WorkerNS
         public int lateTickPriority { get; set; }
         #endregion
 
-        private NavMeshAgent Agent = null;
-        public float Threshold = 3f;
+        public NavMeshAgent Agent = null;
+        public float Threshold = 2f;
         public Transform Target = null;
         private event Action<Worker> OnArrival;
         public bool HasArrived = false;
@@ -230,7 +230,10 @@ namespace ProjectOC.WorkerNS
             Target = null;
             OnArrival = null;
             HasArrived = false;
-            Agent.isStopped = true;
+            if (Agent.enabled)
+            {
+                Agent.isStopped = true;
+            }
         }
 
         public void ChangeProNode(ProNode proNode)

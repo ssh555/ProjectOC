@@ -444,7 +444,8 @@ namespace ProjectOC.ProNodeNS
         public void ProNode_Action(Worker worker)
         {
             worker.ArriveProNode = true;
-            worker.gameObject.SetActive(false);
+            worker.Agent.enabled = false;
+            worker.transform.position = WorldProNode.transform.position + new Vector3(0, 2f, 0);
             worker.ClearDestination();
             this.StartProduce();
         }
@@ -464,7 +465,11 @@ namespace ProjectOC.ProNodeNS
                     this.Worker.SetTimeStatusAll(TimeStatus.Relax);
                     this.Worker.ClearDestination();
                     this.Worker.ProNode = null;
-                    this.Worker.gameObject.SetActive(true);
+                    if (!this.Worker.Agent.enabled)
+                    {
+                        this.Worker.transform.position = WorldProNode.transform.position;
+                        this.Worker.Agent.enabled = true;
+                    }
                     this.Worker = null;
                 }
                 return true;
