@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ProjectOC.PlayerCharacterNS
+namespace ML.PlayerCharacterNS
 {
     public interface IStartPoint
     {
@@ -18,6 +18,6 @@ namespace ProjectOC.PlayerCharacterNS
         [ShowInInspector]
         Vector3 RotRange { get; set; }
         [ShowInInspector]
-        bool[] EnableRotRange { get; set; }
+        bool EnableRotRange { get; set; }
     }
 }

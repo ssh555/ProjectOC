@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ProjectOC.PlayerCharacterNS
+namespace ML.PlayerCharacterNS
 {
     public interface ICharacter
     {
-        int prefabIndex { get; set; }
+        Transform transform { get; }
+        int prefabIndex { get;}
         ICharacterState State { get; set; }
         IController Controller { get; set; }
         void onSpawn(IController controller);

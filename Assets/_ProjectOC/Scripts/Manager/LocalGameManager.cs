@@ -82,14 +82,8 @@ namespace ProjectOC.ManagerNS
 
         private void Start()
         {
-            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/Character/Player/Prefabs/PlayerCharacter.prefab").Completed += (handle) =>
-            {
-                // สตภýปฏ
-                var player = handle.Result;
-                
-                player.transform.position = GameObject.Find("PlayerSpawnPoint").transform.position;
-            };
-            
+            GameManager.Instance.CharacterManager.Scene1Init();
+
 #if !UNITY_EDITOR
             this.enabled = false;
 #endif

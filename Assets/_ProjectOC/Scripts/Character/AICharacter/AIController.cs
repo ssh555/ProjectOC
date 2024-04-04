@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ProjectOC.PlayerCharacterNS
+namespace ML.PlayerCharacterNS
 {
     public class AIController : IController
     {
@@ -14,6 +14,12 @@ namespace ProjectOC.PlayerCharacterNS
             ICharacter character = null;
             return character;
         }
+
+        public ICharacter SpawnCharacter(int _index = 0,Transform _transf = null)
+        {
+            return null;
+        }
+
         public void ReSpawn()
         {
             //to-do

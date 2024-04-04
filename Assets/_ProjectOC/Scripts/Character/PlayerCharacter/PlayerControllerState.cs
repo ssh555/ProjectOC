@@ -1,15 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
-using ProjectOC.PlayerCharacterNS;
+using ML.PlayerCharacterNS;
 using UnityEngine;
 
-public class PlayerControllerState : IControllerState
+namespace ML.PlayerCharacterNS
 {
-    public IController controller { get; set; }
-
-    public enum PlayerState
+    public class PlayerControllerState : IControllerState
     {
-        normal,
-        death
+        public IController controller { get; set; }
+
+        public enum PlayerState
+        {
+            normal,
+            death
+        }
     }
 }
