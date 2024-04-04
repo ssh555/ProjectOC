@@ -21,6 +21,31 @@ public class IslandAreaManager :ML.Engine.Manager.LocalManager.ILocalManager
         /// 区域建筑发生变化事件，退出建造模式的时候调用一次
         /// </summary>
         public Action UpdatedFieldTransformsAction;
+
+        public void Init()
+        {
+            BuildingPlacer buildingPlacer = BuildingManager.Instance.Placer;
+            buildingPlacer.OnPlaceModeSuccess += (bpart) =>
+            {
+                JudgeUpdateField(bpart.transform);
+            };
+            buildingPlacer.OnEditModeSuccess += (bpart, pos1, pos2) =>
+            {
+                JudgeUpdateField(bpart.transform);
+                UpdatedFieldTransformsAction?.Invoke();
+            };
+            buildingPlacer.OnBuildingModeExit += () =>
+            {
+                UpdateNaveMeshSurfaces();
+                UpdatedFieldTransformsAction?.Invoke();
+                ClearUpdateTransform();
+            };
+            buildingPlacer.OnDestroySelectedBPart += (bpart) =>
+            {
+                JudgeUpdateField(bpart.transform);
+                UpdatedFieldTransformsAction?.Invoke();
+            };
+        }
         //UpdateFieldTransform List控制
         public void JudgeUpdateField(Transform _transf)
         {

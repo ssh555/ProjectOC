@@ -20,17 +20,28 @@ namespace ML.PlayerCharacterNS
             return null;
         }
 
-        public void ReSpawn()
+        public void ReSpawn(ICharacter _character,Transform _transf = null)
         {
-            //to-do
+            int _index = _character.prefabIndex;
+            Dispose(_character);
+            SpawnCharacter(_index,_transf);
         }
-        public void Dispose(ICharacter character)
+        
+        public void Dispose(ICharacter character,bool _destoryModel = true)
         {
+            if (_destoryModel)
+            {
+                //Ïú»ÙÎïÌå
+                ML.Engine.Manager.GameManager.DestroyObj(character.transform.gameObject);
+            }
             this.SpawnedCharacters.Remove(character);
         }
         public void DisposeAll()
         {
-            this.SpawnedCharacters.Clear();
+            foreach (var _character in SpawnedCharacters)
+            {
+                Dispose(_character);
+            }
         }
         #region ITickComponent
         public int tickPriority { get; set; }

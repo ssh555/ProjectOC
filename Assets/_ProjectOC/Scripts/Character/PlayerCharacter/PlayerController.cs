@@ -1,15 +1,17 @@
 using ML.Engine.Timer;
 using System.Collections;
 using System.Collections.Generic;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
 using ProjectOC.Player;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using Unity.VisualScripting;
 
 namespace ML.PlayerCharacterNS
 {
     public class PlayerController : IController,ML.Engine.Manager.GlobalManager.IGlobalManager
     {
-        public ICharacter currentCharacter;
+        public ICharacter currentCharacter = null;
         public List<ICharacter> SpawnedCharacters { get; set; }
         public IControllerState State { get; set; }
         public IStartPoint startPoint { get; set; }
@@ -36,26 +38,36 @@ namespace ML.PlayerCharacterNS
                 // 实例化
                 var playerCharacter = handle.Result.GetComponent<PlayerCharacter>();
                 playerCharacter.transform.position = _transf.position;
-                
+                Debug.Log($"Instantiate over: {playerCharacter}");
+                currentCharacter = playerCharacter;
+                SpawnedCharacters.Add(playerCharacter); 
             };
-
-            currentCharacter = playerCharacter;
-            SpawnedCharacters.Add(playerCharacter); 
+            Debug.Log($"Instantiate outerrr: {playerCharacter}");
             return playerCharacter as ICharacter;
         }
 
 
-        public void ReSpawn()
+        public void ReSpawn(ICharacter _character,Transform _transf = null)
         {
-            
+            int _index = _character.prefabIndex;
+            Dispose(_character);
+            SpawnCharacter(_index,_transf);
         }
-        public void Dispose(ICharacter character)
+        public void Dispose(ICharacter character,bool _destoryModel = true)
         {
+            if (_destoryModel)
+            {
+                //销毁物体
+                ML.Engine.Manager.GameManager.DestroyObj(character.transform.gameObject);
+            }
             this.SpawnedCharacters.Remove(character);
         }
         public void DisposeAll()
         {
-            this.SpawnedCharacters.Clear();
+            foreach (var _character in SpawnedCharacters)
+            {
+                Dispose(_character);
+            }
         }
 
         #region ITickComponent

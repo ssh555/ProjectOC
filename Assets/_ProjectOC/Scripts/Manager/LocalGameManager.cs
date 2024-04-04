@@ -14,6 +14,7 @@ using Sirenix.OdinInspector;
 using ML.Engine.UI;
 using ProjectOC.TechTree;
 using ML.Engine.Manager;
+using ML.PlayerCharacterNS;
 using ProjectOC.ClanNS;
 
 namespace ProjectOC.ManagerNS
@@ -80,13 +81,17 @@ namespace ProjectOC.ManagerNS
             GM.RegisterLocalManager(IslandManager);
             IslandManager.Init();
             GM.RegisterLocalManager(BuildPowerIslandManager);
+            GameManager.Instance.CharacterManager.Scene1Init();
+            //要获取Placer
             GM.RegisterLocalManager(IslandAreaManager);
+            
+            StartCoroutine(AfterPlayerCharacter());
         }
 
         private void Start()
         {
-            GameManager.Instance.CharacterManager.Scene1Init();
 
+            //为了Editor渲染Gizoms
 #if !UNITY_EDITOR
             this.enabled = false;
 #endif
@@ -112,10 +117,23 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<IslandAreaManager>();
                 GM?.UnregisterLocalManager<IslandModelManager>();
                 GM?.UnregisterLocalManager<BuildPowerIslandManager>();
+                GM?.UnregisterLocalManager<IslandAreaManager>();
+
                 Instance = null;
             }
         }
-
+        
+        //在PlayerCharacter生成之后调用
+        IEnumerator AfterPlayerCharacter()
+        {
+            PlayerController playerController = GameManager.Instance.CharacterManager.GetController();
+            while (playerController.currentCharacter == null)
+            {
+                yield return null;
+            }
+            
+            IslandAreaManager.Init();
+        }
 
         #region Gizmos管理
 #if UNITY_EDITOR

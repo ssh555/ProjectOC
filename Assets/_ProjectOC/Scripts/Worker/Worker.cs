@@ -7,6 +7,7 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using ML.PlayerCharacterNS;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -16,7 +17,7 @@ namespace ProjectOC.WorkerNS
     /// 刁民
     /// </summary>
     [System.Serializable]
-    public class Worker : SerializedMonoBehaviour, ITickComponent
+    public class Worker : SerializedMonoBehaviour, ITickComponent,IAICharacter
     {
         #region 策划配置项
         [LabelText("名字")]
@@ -313,6 +314,24 @@ namespace ProjectOC.WorkerNS
             {
                 this.ProNode.RemoveWorker();
             }
+        }
+
+        public int prefabIndex { get; } = 0;
+        public ICharacterState State { get; set; }
+        public IController Controller { get; set; }
+        public void onSpawn(IController controller)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onDestroy(IController controller)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onUpdate(IController controller)
+        {
+            throw new NotImplementedException();
         }
     }
 }

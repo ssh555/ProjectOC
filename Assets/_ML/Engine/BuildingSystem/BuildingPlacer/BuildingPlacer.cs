@@ -593,33 +593,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         #region Unity
         private void Awake()
         {
-            IslandAreaManager islandAreaManager = LocalGameManager.Instance.IslandAreaManager;
-            OnPlaceModeSuccess += (bpart) =>
-            {
-                islandAreaManager.JudgeUpdateField(bpart.transform);
-            };
-            OnEditModeSuccess += (bpart, pos1, pos2) =>
-            {
-                islandAreaManager.JudgeUpdateField(bpart.transform);
-                islandAreaManager.UpdatedFieldTransformsAction?.Invoke();
-            };
-            OnBuildingModeExit += () =>
-            {
-                islandAreaManager.UpdateNaveMeshSurfaces();
-                islandAreaManager.UpdatedFieldTransformsAction?.Invoke();
-                islandAreaManager.ClearUpdateTransform();
-            };
-            OnDestroySelectedBPart += (bpart) =>
-            {
-                islandAreaManager.JudgeUpdateField(bpart.transform);
-                islandAreaManager.UpdatedFieldTransformsAction?.Invoke();
-            };
             this.enabled = false;
-            
-            
-
-
-
         }
         #endregion
 
