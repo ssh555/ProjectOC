@@ -559,11 +559,17 @@ namespace ML.Engine.UI
             return null;
         }
 
+        /// <summary>
+        /// 该函数功能为启用BtnList
+        /// </summary>
         public void EnableBtnList()
         {
             this.isEnable = true;
         }
 
+        /// <summary>
+        /// 该函数功能为禁用BtnList
+        /// </summary>
         public void DisableBtnList()
         {
             this.isEnable = false;
