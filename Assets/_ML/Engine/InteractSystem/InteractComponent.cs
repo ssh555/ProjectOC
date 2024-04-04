@@ -6,6 +6,7 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -42,10 +43,20 @@ namespace ML.Engine.InteractSystem
                 }
             }
 
-
+           
             // ºÏ≤‚µΩ ±œ‘ æUITip
             if (CurrentInteraction != null)
             {
+                try
+                {
+                    GameObject gameObject = CurrentInteraction.gameObject;
+                }
+                catch (UnityEngine.MissingReferenceException)
+                {
+                    CurrentInteraction = null;
+                    return;
+                }
+
                 if (hits == null || hits.Length == 0)
                 {
                     CurrentInteraction.OnSelectedExit(this);

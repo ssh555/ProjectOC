@@ -18,9 +18,9 @@ namespace ML.Engine.UI
             this.UIBtnList.EnableBtnList();
         }
 
-        public void AddBtn()
+        public void AddBtn(SelectedButton selectedButton)
         {
-            UIBtnList.InitBtnInfo(parent);
+            UIBtnList.AddBtn(selectedButton);
         }
 
         public void SetBtnAction(string btnName,UnityAction action)

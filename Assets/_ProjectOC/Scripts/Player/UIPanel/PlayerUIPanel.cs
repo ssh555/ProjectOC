@@ -66,7 +66,7 @@ namespace ProjectOC.Player.UI
 
         public override void OnEnter()
         {
-            UIBtnList = new UIBtnList(parent: btnList);
+            UIBtnList = new UIBtnList(parent: btnList, isLoop: true);
             base.OnEnter();
         }
 

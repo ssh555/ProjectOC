@@ -56,7 +56,6 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 categoryAtlas = handle.Result as SpriteAtlas;
                 CanSelectCategory1 = BuildingManager.Instance.GetRegisteredCategory();
-
                 ++IsInit;
                 if (IsInit >= 1)
                 {
