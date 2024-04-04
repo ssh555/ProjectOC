@@ -29,7 +29,7 @@ namespace ProjectOC.Building
         public Vector3 PosOffset { get; set; } = Vector3.zero;
         #endregion
 
-        private new void Start()
+        protected override void Start()
         {
             this.enabled = false;
         }

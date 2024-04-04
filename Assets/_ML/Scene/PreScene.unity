@@ -154,7 +154,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   language: 0
   platform: 0
-  inputDevice: 0
+  inputDevice: 1
+  Version:
+    Major: 1
+    Minor: 0
+    Patch: 0
 --- !u!4 &1908448144
 Transform:
   m_ObjectHideFlags: 0

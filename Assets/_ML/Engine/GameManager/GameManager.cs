@@ -491,6 +491,8 @@ namespace ML.Engine.Manager
         public Config.Platform platform = Config.Platform.Windows;
         [LabelText("输入设备"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
         public Config.InputDevice inputDevice = Config.InputDevice.Keyboard;
+        [LabelText("版本号"), ShowInInspector, FoldoutGroup("Config"), PropertyOrder(-1)]
+        public Version Version;
         #endregion
     }
 }

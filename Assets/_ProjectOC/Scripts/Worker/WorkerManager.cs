@@ -33,6 +33,7 @@ namespace ProjectOC.WorkerNS
 
         ~WorkerManager()
         {
+            this?.DeleteAllWorker();
             GameManager.Instance.ABResourceManager.Release(spriteAtalsHandle);
         }
 
