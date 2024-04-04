@@ -601,13 +601,19 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             OnEditModeSuccess += (bpart, pos1, pos2) =>
             {
                 islandAreaManager.JudgeUpdateField(bpart.transform);
+                islandAreaManager.UpdatedFieldTransformsAction?.Invoke();
             };
             OnBuildingModeExit += () =>
             {
                 islandAreaManager.UpdateNaveMeshSurfaces();
+                islandAreaManager.UpdatedFieldTransformsAction?.Invoke();
                 islandAreaManager.ClearUpdateTransform();
             };
-            
+            OnDestroySelectedBPart += (bpart) =>
+            {
+                islandAreaManager.JudgeUpdateField(bpart.transform);
+                islandAreaManager.UpdatedFieldTransformsAction?.Invoke();
+            };
             this.enabled = false;
             
             

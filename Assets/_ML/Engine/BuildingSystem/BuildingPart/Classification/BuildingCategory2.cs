@@ -47,7 +47,9 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		LifeDiversion = 105,
 		[LabelText("生态投影装置")]
 		Projector = 106,
-		[LabelText("地基")]
+        [LabelText("床")]
+        Bed = 107,
+        [LabelText("地基")]
 		Foundation = 200,
 		[LabelText("地基外沿")]
 		FoundationEdge = 201,
@@ -65,5 +67,5 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		Door = 207,
 		[LabelText("窗")]
 		Window = 208,
-	}
+    }
 }
