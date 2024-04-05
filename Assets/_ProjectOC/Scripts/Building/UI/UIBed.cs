@@ -60,13 +60,11 @@ namespace ProjectOC.Building.UI
         protected override void Enter()
         {
             this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.UIBed.Enable();
             base.Enter();
         }
 
         protected override void Exit()
         {
-            ProjectOC.Input.InputManager.PlayerInput.UIBed.Disable();
             this.UnregisterInput();
             base.Exit();
         }
@@ -132,6 +130,7 @@ namespace ProjectOC.Building.UI
 
         protected override void UnregisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.UIBed.Disable();
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIBed.SetEmpty.performed -= SetEmpty_performed;
@@ -141,6 +140,7 @@ namespace ProjectOC.Building.UI
 
         protected override void RegisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.UIBed.Enable();
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIBed.SetEmpty.performed += SetEmpty_performed;
