@@ -1,60 +1,57 @@
 using ML.Engine.Timer;
 using System.Collections;
 using System.Collections.Generic;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
 using ProjectOC.Player;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using Unity.VisualScripting;
 
-namespace ProjectOC.PlayerCharacterNS
+namespace ML.PlayerCharacterNS
 {
-    public class PlayerController : IController,ITickComponent
+    public class PlayerController : RoleController,IController
     {
+        public ICharacter currentCharacter = null;
         public List<ICharacter> SpawnedCharacters { get; set; }
         public IControllerState State { get; set; }
-        public IStartPoint startPoint { get; set; }
-        
-        public ICharacter SpawnCharacter()
+
+        private List<string> ICharacterABResourcePath = new List<string>();
+
+        public PlayerController()
         {
-            PlayerCharacter playerCharacter = null;
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/Character/Player/Prefabs/PlayerCharacter.prefab").Completed += (handle) =>
+            SpawnedCharacters = new List<ICharacter>();
+            //ABResource Path 加入
+            ICharacterABResourcePath.Add("OC/Character/Player/Prefabs/PlayerCharacter.prefab");
+        }
+        
+        public override ICharacter SpawnCharacter(int _index = 0, IStartPoint _startPoint = null)
+        {
+            IPlayerCharacter playerCharacter = null;
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.
+                InstantiateAsync(ICharacterABResourcePath[_index],isGlobal:true).Completed += (handle) =>
             {
                 // 实例化
-                playerCharacter = handle.Result.GetComponent<PlayerCharacter>();
-                playerCharacter.transform.position = GameObject.Find("PlayerSpawnPoint").transform.position;
-                
+                var playerCharacter = handle.Result.GetComponent<PlayerCharacter>();
+                SetCharacterTransform(playerCharacter.transform, _startPoint);
+                currentCharacter = playerCharacter;
+                SpawnedCharacters.Add(playerCharacter); 
+                playerCharacter.OnSpawn(this);
             };
-            
             return playerCharacter as ICharacter;
         }
-        public void ReSpawn()
-        {
-            
-        }
-        public void Dispose(ICharacter character)
-        {
-            this.SpawnedCharacters.Remove(character);
-        }
-        public void DisposeAll()
-        {
-            this.SpawnedCharacters.Clear();
-        }
 
-        #region ITickComponent
-        public int tickPriority { get; set; }
-        public int fixedTickPriority { get; set; }
-        public int lateTickPriority { get; set; }
-        public virtual void Tick(float deltatime)
-        {
 
-        }
-        public virtual void FixedTick(float deltatime)
+        public override void ReSpawn(ICharacter _character, IStartPoint _startPoint = null)
         {
-
+            base.ReSpawn(_character,_startPoint);
         }
-        public virtual void LateTick(float deltatime)
+        public override void Dispose(ICharacter _character)
         {
-
+            base.Dispose(_character);
         }
-        #endregion
+        public override void DisposeAll()
+        {
+            base.DisposeAll();
+        }
     }
 }
