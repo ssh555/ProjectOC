@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using ProjectOC.ManagerNS;
 using ProjectOC.Player;
 using UnityEngine;
@@ -11,18 +12,20 @@ namespace ML.PlayerCharacterNS
         List<PlayerController> playerControllers;
         List<IPlayerCharacter> playerCharacters;
         List<IAICharacter> AICharacters;
-        private List<IStartPoint> playerStartPoint;
+        private List<IStartPoint> playerStartPoints;
         int CurrentControllerIndex;
 
         //暂定Scene1 的触发时间
         public void Scene1Init()
         {
             playerControllers = new List<PlayerController>();
-            playerStartPoint = new List<IStartPoint>();
-            //    
+            playerStartPoints = new List<IStartPoint>();
             AddPlayerController(new PlayerController());
             CurrentControllerIndex = 0;
-            GetController().SpawnCharacter(0);
+            
+            //Player生成
+            playerStartPoints = GameObject.Find("SpawnPoints").GetComponentsInChildren<IStartPoint>().ToList();
+            GetController().SpawnCharacter(0,playerStartPoints[Random.Range(0,playerStartPoints.Count)]);
         }
         
         

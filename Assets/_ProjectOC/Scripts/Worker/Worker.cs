@@ -319,19 +319,13 @@ namespace ProjectOC.WorkerNS
         public int prefabIndex { get; } = 0;
         public ICharacterState State { get; set; }
         public IController Controller { get; set; }
-        public void onSpawn(IController controller)
+        public void OnSpawn(IController controller)
         {
-            throw new NotImplementedException();
         }
 
-        public void onDestroy(IController controller)
+        public void OnDespose(IController controller)
         {
-            throw new NotImplementedException();
-        }
 
-        public void onUpdate(IController controller)
-        {
-            throw new NotImplementedException();
         }
     }
 }

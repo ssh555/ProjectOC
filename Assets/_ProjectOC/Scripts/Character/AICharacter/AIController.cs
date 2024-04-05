@@ -4,11 +4,10 @@ using UnityEngine;
 
 namespace ML.PlayerCharacterNS
 {
-    public class AIController : IController
+    public class AIController : RoleController,IController
     {
         public List<ICharacter> SpawnedCharacters { get; set; }
         public IControllerState State { get; set; }
-        public IStartPoint startPoint { get; set; }
         public ICharacter SpawnCharacter()
         {
             ICharacter character = null;
@@ -20,45 +19,17 @@ namespace ML.PlayerCharacterNS
             return null;
         }
 
-        public void ReSpawn(ICharacter _character,Transform _transf = null)
+        public override void ReSpawn(ICharacter _character, IStartPoint _startPoint = null)
         {
-            int _index = _character.prefabIndex;
-            Dispose(_character);
-            SpawnCharacter(_index,_transf);
+            base.ReSpawn(_character,_startPoint);
         }
-        
-        public void Dispose(ICharacter character,bool _destoryModel = true)
+        public override void Dispose(ICharacter _character)
         {
-            if (_destoryModel)
-            {
-                //Ïú»ÙÎïÌå
-                ML.Engine.Manager.GameManager.DestroyObj(character.transform.gameObject);
-            }
-            this.SpawnedCharacters.Remove(character);
+            base.Dispose(_character);
         }
-        public void DisposeAll()
+        public override void DisposeAll()
         {
-            foreach (var _character in SpawnedCharacters)
-            {
-                Dispose(_character);
-            }
+            base.DisposeAll();
         }
-        #region ITickComponent
-        public int tickPriority { get; set; }
-        public int fixedTickPriority { get; set; }
-        public int lateTickPriority { get; set; }
-        public virtual void Tick(float deltatime)
-        {
-
-        }
-        public virtual void FixedTick(float deltatime)
-        {
-
-        }
-        public virtual void LateTick(float deltatime)
-        {
-
-        }
-        #endregion
     }
 }

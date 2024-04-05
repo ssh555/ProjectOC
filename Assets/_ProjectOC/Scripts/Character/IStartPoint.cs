@@ -5,19 +5,16 @@ using UnityEngine;
 
 namespace ML.PlayerCharacterNS
 {
-    public interface IStartPoint
+    public abstract class IStartPoint:MonoBehaviour
     {
         [ShowInInspector]
-        Vector3 CenterPosition { get; set; }
+        public bool EnablePosRange;
+        [ShowInInspector,ShowIf("@EnablePosRange == true")] 
+        public float PosRange;
+        
         [ShowInInspector]
-        float PosRange { get; set; }
-        [ShowInInspector]
-        bool EnablePosRange { get; set; }
-        [ShowInInspector]
-        Quaternion Rotation { get; set; }
-        [ShowInInspector]
-        Vector3 RotRange { get; set; }
-        [ShowInInspector]
-        bool EnableRotRange { get; set; }
+        public bool EnableRotRange;
+        [ShowInInspector,ShowIf("@EnableRotRange == true"),Range(0,180f)] 
+        public float RotRange;   //应该只需要旋转Y轴吧
     }
 }

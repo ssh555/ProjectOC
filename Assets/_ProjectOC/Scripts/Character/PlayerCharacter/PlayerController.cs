@@ -9,12 +9,12 @@ using Unity.VisualScripting;
 
 namespace ML.PlayerCharacterNS
 {
-    public class PlayerController : IController,ML.Engine.Manager.GlobalManager.IGlobalManager
+    public class PlayerController : RoleController,IController
     {
         public ICharacter currentCharacter = null;
         public List<ICharacter> SpawnedCharacters { get; set; }
         public IControllerState State { get; set; }
-        public IStartPoint startPoint { get; set; }
+
         private List<string> ICharacterABResourcePath = new List<string>();
 
         public PlayerController()
@@ -24,68 +24,34 @@ namespace ML.PlayerCharacterNS
             ICharacterABResourcePath.Add("OC/Character/Player/Prefabs/PlayerCharacter.prefab");
         }
         
-        public ICharacter SpawnCharacter(int _index = 0,Transform _transf = null)
+        public override ICharacter SpawnCharacter(int _index = 0, IStartPoint _startPoint = null)
         {
             IPlayerCharacter playerCharacter = null;
-            if (_transf == null)
-            {
-                _transf = GameObject.Find("PlayerSpawnPoint").transform;
-            }
-            
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.
                 InstantiateAsync(ICharacterABResourcePath[_index],isGlobal:true).Completed += (handle) =>
             {
                 // 实例化
                 var playerCharacter = handle.Result.GetComponent<PlayerCharacter>();
-                playerCharacter.transform.position = _transf.position;
-                Debug.Log($"Instantiate over: {playerCharacter}");
+                SetCharacterTransform(playerCharacter.transform, _startPoint);
                 currentCharacter = playerCharacter;
                 SpawnedCharacters.Add(playerCharacter); 
+                playerCharacter.OnSpawn(this);
             };
-            Debug.Log($"Instantiate outerrr: {playerCharacter}");
             return playerCharacter as ICharacter;
         }
 
 
-        public void ReSpawn(ICharacter _character,Transform _transf = null)
+        public override void ReSpawn(ICharacter _character, IStartPoint _startPoint = null)
         {
-            int _index = _character.prefabIndex;
-            Dispose(_character);
-            SpawnCharacter(_index,_transf);
+            base.ReSpawn(_character,_startPoint);
         }
-        public void Dispose(ICharacter character,bool _destoryModel = true)
+        public override void Dispose(ICharacter _character)
         {
-            if (_destoryModel)
-            {
-                //销毁物体
-                ML.Engine.Manager.GameManager.DestroyObj(character.transform.gameObject);
-            }
-            this.SpawnedCharacters.Remove(character);
+            base.Dispose(_character);
         }
-        public void DisposeAll()
+        public override void DisposeAll()
         {
-            foreach (var _character in SpawnedCharacters)
-            {
-                Dispose(_character);
-            }
+            base.DisposeAll();
         }
-
-        #region ITickComponent
-        public int tickPriority { get; set; }
-        public int fixedTickPriority { get; set; }
-        public int lateTickPriority { get; set; }
-        public virtual void Tick(float deltatime)
-        {
-
-        }
-        public virtual void FixedTick(float deltatime)
-        {
-
-        }
-        public virtual void LateTick(float deltatime)
-        {
-
-        }
-        #endregion
     }
 }

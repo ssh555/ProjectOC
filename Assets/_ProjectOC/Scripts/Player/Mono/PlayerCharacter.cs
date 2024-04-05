@@ -233,16 +233,12 @@ namespace ProjectOC.Player
         }
         public ICharacterState State { get; set; }
         public IController Controller { get; set; }
-        public void onSpawn(IController controller)
+        public void OnSpawn(IController controller)
         {
+            
         }
 
-        public void onDestroy(IController controller)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void onUpdate(IController controller)
+        public void OnDespose(IController controller)
         {
             throw new NotImplementedException();
         }

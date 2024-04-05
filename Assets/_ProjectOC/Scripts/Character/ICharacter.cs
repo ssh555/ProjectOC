@@ -10,8 +10,7 @@ namespace ML.PlayerCharacterNS
         int prefabIndex { get;}
         ICharacterState State { get; set; }
         IController Controller { get; set; }
-        void onSpawn(IController controller);
-        void onDestroy(IController controller);
-        void onUpdate(IController controller);
+        public void OnSpawn(IController controller);
+        public void OnDespose(IController controller);
     }
 }
