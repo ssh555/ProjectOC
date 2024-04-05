@@ -30,6 +30,10 @@ namespace ProjectOC.StoreNS
         public int EmptyReserve;
         [LabelText("最大容量")]
         public int MaxCapacity;
+        [LabelText("刁民能否存入")]
+        public bool CanIn = true;
+        [LabelText("刁民能否取出")]
+        public bool CanOut = true;
         public StoreData()
         {
         }

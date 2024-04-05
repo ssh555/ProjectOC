@@ -1,5 +1,6 @@
 using ProjectOC.TechTree;
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,19 +8,18 @@ namespace ML.Engine.SaveSystem
 {
     public class TechTreeSaveData : ISaveData
     {
-        public List<TechPoint> Datas;
-        public List<TechTreeManager.UnlockingTechPoint> Unlocks;
+        #region ISaveData
+        public string SavePath { get; set; } = "";
+        public string SaveName { get; set; } = "";
+        public bool IsDirty { get; set; }
+        public ML.Engine.Utility.Version Version { get; set; }
+        #endregion
 
-        public TechTreeSaveData() : base("TechTreeSaveData", "TechTreeSaveData")
-        {
-            this.Datas = new List<TechPoint>();
-            this.Unlocks = new List<TechTreeManager.UnlockingTechPoint>();
-        }
-        public TechTreeSaveData(List<TechPoint> datas, List<TechTreeManager.UnlockingTechPoint> unlocks) : base("TechTreeSaveData", "TechTreeSaveData")
-        {
-            Reset(datas);
-            Reset(unlocks);
-        }
+        public List<TechPoint> Datas = new List<TechPoint>();
+        public List<TechTreeManager.UnlockingTechPoint> Unlocks = new List<TechTreeManager.UnlockingTechPoint>();
+
+        public TechTreeSaveData(){ }
+
         public void Reset(List<TechPoint> datas)
         {
             if (datas != null)
@@ -31,12 +31,16 @@ namespace ML.Engine.SaveSystem
         }
         public void Reset(List<TechTreeManager.UnlockingTechPoint> unlocks)
         {
-            if(unlocks != null)
+            if (unlocks != null)
             {
                 this.Unlocks = new List<TechTreeManager.UnlockingTechPoint>();
                 this.Unlocks.AddRange(unlocks);
                 this.IsDirty = true;
             }
+        }
+        public object Clone()
+        {
+            return MemberwiseClone();
         }
     }
 }

@@ -33,6 +33,7 @@ namespace ProjectOC.WorkerNS
 
         ~WorkerManager()
         {
+            this?.DeleteAllWorker();
             GameManager.Instance.ABResourceManager.Release(spriteAtalsHandle);
         }
 
@@ -95,7 +96,7 @@ namespace ProjectOC.WorkerNS
         {
             return CompositeManager.Instance.OnlyCostResource(inventory, workerID);
         }
-        public AsyncOperationHandle<GameObject> SpawnWorker(Vector3 pos, Quaternion rot, string name = "Worker")
+        public AsyncOperationHandle<GameObject> SpawnWorker(Vector3 pos, Quaternion rot, string name = "Worker", bool isAdd=true)
         {
             //TODO 
             name = "Worker";
@@ -110,7 +111,10 @@ namespace ProjectOC.WorkerNS
                     {
                         worker = obj.AddComponent<Worker>();
                     }
-                    Workers.Add(worker);
+                    if (isAdd)
+                    {
+                        Workers.Add(worker);
+                    }
                 }
                 else
                 {
@@ -118,6 +122,15 @@ namespace ProjectOC.WorkerNS
                 }
             };
             return handle;
+        }
+        public bool AddToWorkers(Worker worker)
+        {
+            if (worker != null && !this.Workers.Contains(worker))
+            {
+                this.Workers.Add(worker);
+                return true;
+            }
+            return false;
         }
 
         public AsyncOperationHandle<GameObject> SpawnWorker(Vector3 pos, Quaternion rot, IInventory inventory, string workerID, string name = "Worker")

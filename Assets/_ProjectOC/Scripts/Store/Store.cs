@@ -5,7 +5,6 @@ using ML.Engine.InventorySystem;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ProjectOC.ManagerNS;
 using ProjectOC.MissionNS;
-using ProjectOC.ProNodeNS;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -101,7 +100,9 @@ namespace ProjectOC.StoreNS
         /// </summary>
         public void Destroy(Player.PlayerCharacter player = null)
         {
-            foreach (Transport transport in Transports)
+            List<Transport> transports = new List<Transport>();
+            transports.AddRange(Transports);
+            foreach (Transport transport in transports)
             {
                 transport?.End();
             }
@@ -111,9 +112,9 @@ namespace ProjectOC.StoreNS
             List<Item> resItems = new List<Item>();
             foreach (StoreData data in StoreDatas)
             {
-                if (ItemManager.Instance.IsValidItemID(data.ItemID) && data.StorageAll > 0)
+                if (ItemManager.Instance.IsValidItemID(data.ItemID) && data.Storage > 0)
                 {
-                    List<Item> items = ItemManager.Instance.SpawnItems(data.ItemID, data.StorageAll);
+                    List<Item> items = ItemManager.Instance.SpawnItems(data.ItemID, data.Storage);
                     foreach (var item in items)
                     {
                         if (flag)
@@ -144,68 +145,17 @@ namespace ProjectOC.StoreNS
         /// </summary>
         public bool SetLevel(int newLevel)
         {
-            if (WorldStore.transform != null && newLevel >= 0 && newLevel <= LevelMax)
+            if (WorldStore.transform != null && newLevel > this.Level && newLevel <= LevelMax)
             {
                 int newStoreCapacity = LevelStoreCapacity[newLevel];
                 int newStoreDataCapacity = LevelStoreDataCapacity[newLevel];
-                Dictionary<string, int> temp = new Dictionary<string, int>();
-                if (newStoreCapacity >= StoreCapacity)
+                for (int i = 0; i < newStoreCapacity - StoreCapacity; i++)
                 {
-                    for (int i = 0; i < newStoreCapacity - StoreCapacity; i++)
-                    {
-                        this.StoreDatas.Add(new StoreData("", newStoreDataCapacity));
-                    }
+                    this.StoreDatas.Add(new StoreData("", newStoreDataCapacity));
                 }
-                else
+                foreach (StoreData storeData in StoreDatas)
                 {
-                    for (int i = 0; i < StoreCapacity - newStoreCapacity; i++)
-                    {
-                        StoreData storeData = StoreDatas[StoreDatas.Count - 1];
-                        if (ItemManager.Instance.IsValidItemID(storeData.ItemID) && storeData.StorageAll > 0)
-                        {
-                            temp.Add(storeData.ItemID, storeData.StorageAll);
-                        }
-                        StoreDatas.RemoveAt(StoreDatas.Count - 1);
-                    }
-                }
-                if (newStoreDataCapacity >= StoreDataCapacity)
-                {
-                    foreach (StoreData storeData in StoreDatas)
-                    {
-                        storeData.MaxCapacity = newStoreDataCapacity;
-                    }
-                }
-                else
-                {
-                    foreach (StoreData storeData in StoreDatas)
-                    {
-                        int removeAmount = storeData.StorageAll - newStoreDataCapacity;
-                        if (removeAmount > 0)
-                        {
-                            if (storeData.Storage > removeAmount)
-                            {
-                                storeData.Storage -= removeAmount;
-                                temp.Add(storeData.ItemID, removeAmount);
-                            }
-                            else
-                            {
-                                temp.Add(storeData.ItemID, storeData.Storage);
-                                storeData.Storage = 0;
-                            }
-                        }
-                        storeData.MaxCapacity = newStoreDataCapacity;
-                    }
-                }
-                // 根据temp生成场景物体
-                foreach (var kv in temp)
-                {
-                    List<Item> items = ItemManager.Instance.SpawnItems(kv.Key, kv.Value);
-                    foreach (Item item in items)
-                    {
-#pragma warning disable CS4014
-                        ItemManager.Instance.SpawnWorldItem(item, WorldStore.transform.position, WorldStore.transform.rotation);
-#pragma warning restore CS4014
-                    }
+                    storeData.MaxCapacity = newStoreDataCapacity;
                 }
                 Level = newLevel;
                 return true;
@@ -219,7 +169,7 @@ namespace ProjectOC.StoreNS
         /// <param name="index">第几个存储格子</param>
         /// <param name="itemID">新的物品ID</param>
         /// <returns></returns>
-        public bool ChangeStoreData(int index, string itemID)
+        public bool ChangeStoreData(int index, string itemID, IInventory inventory)
         {
             if (itemID == null)
             {
@@ -228,16 +178,52 @@ namespace ProjectOC.StoreNS
             if (0 <= index && index < this.StoreCapacity)
             {
                 StoreData data = this.StoreDatas[index];
-                if (data.Storage == 0 && data.StorageReserve == 0 && data.EmptyReserve == 0)
+                if (data.StorageReserve != 0 || data.EmptyReserve != 0)
                 {
-                    this.StoreDatas[index] = new StoreData(itemID, this.StoreDataCapacity);
-                    OnStoreDataChange?.Invoke();
-                    return true;
+                    foreach (Transport transport in Transports)
+                    {
+                        if (transport.ItemID == data.ItemID)
+                        {
+                            transport?.End();
+                        }
+                    }
                 }
+                // 将堆放的物品，全部返还至玩家背包
+                bool flag = false;
+                List<Item> resItems = new List<Item>();
+                if (ItemManager.Instance.IsValidItemID(data.ItemID) && data.Storage > 0)
+                {
+                    List<Item> items = ItemManager.Instance.SpawnItems(data.ItemID, data.Storage);
+                    foreach (var item in items)
+                    {
+                        if (flag)
+                        {
+                            resItems.Add(item);
+                        }
+                        else
+                        {
+                            if (inventory != null || !inventory.AddItem(item))
+                            {
+                                flag = true;
+                            }
+                        }
+                    }
+                }
+                // 没有加到玩家背包的都变成WorldItem
+                foreach (Item item in resItems)
+                {
+#pragma warning disable CS4014
+                    ItemManager.Instance.SpawnWorldItem(item, WorldStore.transform.position, WorldStore.transform.rotation);
+#pragma warning restore CS4014
+                }
+                this.StoreDatas[index] = new StoreData(itemID, this.StoreDataCapacity);
+                OnStoreDataChange?.Invoke();
+                return true;
             }
             return false;
         }
 
+        #region 给刁民的接口
         /// <summary>
         /// 给刁民预留存入的量
         /// </summary>
@@ -247,7 +233,7 @@ namespace ProjectOC.StoreNS
             {
                 foreach (StoreData data in this.StoreDatas)
                 {
-                    if (data.ItemID != "" && data.ItemID == itemID)
+                    if (data.ItemID != "" && data.CanIn && data.ItemID == itemID)
                     {
                         if (data.Empty >= amount)
                         {
@@ -266,7 +252,7 @@ namespace ProjectOC.StoreNS
                 {
                     foreach (StoreData data in this.StoreDatas)
                     {
-                        if (data.ItemID != "" && data.ItemID == itemID)
+                        if (data.ItemID != "" && data.CanIn && data.ItemID == itemID)
                         {
                             data.EmptyReserve += amount;
                             amount = 0;
@@ -277,7 +263,6 @@ namespace ProjectOC.StoreNS
             }
             return amount;
         }
-
         /// <summary>
         /// 给刁民预留取出的量
         /// </summary>
@@ -287,7 +272,7 @@ namespace ProjectOC.StoreNS
             {
                 foreach (StoreData data in this.StoreDatas)
                 {
-                    if (data.ItemID != "" && data.ItemID == itemID)
+                    if (data.ItemID != "" && data.CanOut && data.ItemID == itemID)
                     {
                         if (data.Storage >= amount)
                         {
@@ -307,7 +292,46 @@ namespace ProjectOC.StoreNS
             }
             return amount;
         }
-
+        /// <summary>
+        /// 仓库中有多少数量的刁民能够取出的该物品
+        /// </summary>
+        /// <param name="itemID">物品ID</param>
+        /// <returns></returns>
+        public int GetCanOutStoreStorage(string itemID)
+        {
+            int result = 0;
+            if (!string.IsNullOrEmpty(itemID))
+            {
+                foreach (StoreData data in this.StoreDatas)
+                {
+                    if (data.ItemID == itemID && data.CanOut)
+                    {
+                        result += data.Storage;
+                    }
+                }
+            }
+            return result;
+        }
+        /// <summary>
+        /// 仓库中有多少数量的刁民能够存入的该物品
+        /// </summary>
+        /// <param name="itemID">物品ID</param>
+        /// <returns></returns>
+        public int GetCanInStoreEmpty(string itemID)
+        {
+            int result = 0;
+            if (!string.IsNullOrEmpty(itemID))
+            {
+                foreach (StoreData data in this.StoreDatas)
+                {
+                    if (data.ItemID == itemID && data.CanIn)
+                    {
+                        result += data.Empty;
+                    }
+                }
+            }
+            return result;
+        }
         /// <summary>
         /// 仓库是否有该物品
         /// </summary>
@@ -327,29 +351,37 @@ namespace ProjectOC.StoreNS
             }
             return false;
         }
-
-        /// <summary>
-        /// 仓库是否有指定数量的该物品
-        /// </summary>
-        /// <param name="itemID">物品ID</param>
-        /// <param name="amount">数量</param>
-        /// <returns></returns>
-        public bool IsStoreHaveStorage(string itemID, int amount)
+        public bool IsStoreCanInItem(string itemID)
         {
-            return GetStoreStorage(itemID) >= amount;
+            if (!string.IsNullOrEmpty(itemID))
+            {
+                foreach (StoreData data in this.StoreDatas)
+                {
+                    if (data.ItemID == itemID && data.CanIn)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
-
-        /// <summary>
-        /// 仓库是否能存入指定数量的该物品
-        /// </summary>
-        /// <param name="itemID">物品ID</param>
-        /// <param name="amount">数量</param>
-        /// <returns></returns>
-        public bool IsStoreHaveEmpty(string itemID, int amount)
+        public bool IsStoreCanOutItem(string itemID)
         {
-            return GetStoreEmpty(itemID) >= amount;
+            if (!string.IsNullOrEmpty(itemID))
+            {
+                foreach (StoreData data in this.StoreDatas)
+                {
+                    if (data.ItemID == itemID && data.CanOut)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
+        #endregion
 
+        #region Getter
         public int GetStoreStorageAll(string itemID)
         {
             int result = 0;
@@ -439,6 +471,39 @@ namespace ProjectOC.StoreNS
             }
             return result;
         }
+        #endregion
+
+        /// <summary>
+        /// 排序
+        /// </summary>
+        public class Sort : IComparer<Store>
+        {
+            public int Compare(Store x, Store y)
+            {
+                if (x == null)
+                {
+                    if (y == null)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        return 1;
+                    }
+                }
+                if (y == null)
+                {
+                    return -1;
+                }
+                int priorityX = (int)x.TransportPriority;
+                int priorityY = (int)y.TransportPriority;
+                if (priorityX != priorityY)
+                {
+                    return priorityX.CompareTo(priorityY);
+                }
+                return x.UID.CompareTo(y.UID);
+            }
+        }
 
         #region UI接口
         public void UIAdd(Player.PlayerCharacter player, StoreData storeData, int amount)
@@ -527,6 +592,15 @@ namespace ProjectOC.StoreNS
                 }
             }
         }
+        public bool UIChangeStoreData(Player.PlayerCharacter player, int index, string itemID)
+        {
+            if (player != null)
+            {
+                return ChangeStoreData(index, itemID, player.Inventory);
+            }
+            return false;
+        }
+
         public List<Formula> GetUpgradeRaw()
         {
             List<Formula> result = new List<Formula>();
@@ -807,7 +881,7 @@ namespace ProjectOC.StoreNS
 
         public int GetItemAllNum(string id)
         {
-            return GetStoreStorageAll(id);
+            return GetStoreStorage(id);
         }
 
         public Item[] GetItemList()
