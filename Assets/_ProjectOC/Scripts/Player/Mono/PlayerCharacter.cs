@@ -155,9 +155,12 @@ namespace ProjectOC.Player
         #region Tick
         public void Tick(float deltatime)
         {
-            this.moveAbility.UpdateJump(deltatime, this.playerInputActions.Jump);
+            if(this.interactComponent.CurrentInteraction == null)
+            {
+                this.moveAbility.UpdateJump(deltatime, this.playerInputActions.Jump);
+            }
 
-            if(Input.InputManager.PlayerInput.Player.OpenBotUI.WasPressedThisFrame())
+            if (Input.InputManager.PlayerInput.Player.OpenBotUI.WasPressedThisFrame())
             {
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(GameObject.Instantiate(this.playerUIPanel.gameObject, ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).GetComponent<ML.Engine.UI.UIBasePanel>());
                 (ML.Engine.Manager.GameManager.Instance.UIManager.GetTopUIPanel() as UI.PlayerUIPanel).player = this;
