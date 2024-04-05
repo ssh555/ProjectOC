@@ -78,7 +78,6 @@ namespace ProjectOC.Player
 
             
             #region 移动参数
-
             [LabelText("最大步高"), ShowInInspector,Range(0, 1.5f), FoldoutGroup("移动参数")]
             public float MaxStepHeight;
 
@@ -209,11 +208,6 @@ namespace ProjectOC.Player
             {
                 OwnMove = _playerNormalMove;
                 CanModelRotate = true;
-
-                //感觉让策划在CharacterController里配更直观一点
-                // OwnMove.controller.GetComponent<Rigidbody>().mass = Mass;
-                // OwnMove.controller.stepOffset = MaxStepHeight;
-                // OwnMove.controller.slopeLimit = WalkerbleFloorAngle;
             }
         }
         #endregion
@@ -308,9 +302,17 @@ namespace ProjectOC.Player
         /// <returns></returns>
         public Vector3 GetInputMoveDir(Vector2 inputV)
         {
+            //Dir input
+            float dirStepValue = 0.2f;
+            float InputStep(float _input)
+            {
+                return (_input > dirStepValue) ? 1f : ((_input < -dirStepValue) ? -1f : 0f);
+            }
+
             Vector3 moveDir;
             moveDir = inputV;
-            moveDir.z = moveDir.y;
+            moveDir.x = InputStep(moveDir.x);
+            moveDir.z = InputStep(moveDir.y);;
             moveDir.y = 0;
 
             //if (MathF.Abs(moveDir.x) > float.Epsilon)
@@ -364,31 +366,36 @@ namespace ProjectOC.Player
         public void UpdatePosition(float deltaTime, Vector3 moveDir, float _speedRate = 1)
         {
             moveDir.Normalize();
-
+            float slopAddition = 1f;
+            
+            
             // 输入速度更新，各种加速和各种阻力都是普通的 加减速度
-            // 能移动 && 移动速度率为正 && 有移动方向 && 没有达到最大速度则增加速度
-            if (this.moveSetting.bCanMove && _speedRate > float.Epsilon && moveDir.magnitude > float.Epsilon && this.moveSetting.Speed <= this.moveSetting.MaxSpeed * _speedRate)
+            Vector3 FinalAcceleration = Vector3.zero;
+            if (this.moveSetting.Speed > 0)
             {
-                // 增加速度
-                this.moveSetting.Speed = Math.Clamp(this.moveSetting.Speed + Mathf.Max(0,this.moveSetting.AddAcceleration - this.moveSetting.FinalDrag) * deltaTime, 0, this.moveSetting.MaxSpeed * _speedRate);
-                // 更新输入方向
-                this.moveSetting.Velocity = moveDir * this.moveSetting.Speed;
-            }
-            // 无输入速度，开始减速 输入速度衰减
-            else if(this.moveSetting.Speed > this.moveSetting.MinSpeed)
-            {
-                // V -= KV * Max(ln(V*2), 1) => V < 0.74 开始加速衰减
-                this.moveSetting.Speed -= this.moveSetting.FinalDrag * deltaTime;
-                if (this.moveSetting.Speed < this.moveSetting.MinSpeed)
+                if (moveSetting.Speed < moveSetting.FinalDrag * deltaTime)
                 {
-                    this.moveSetting.Speed = 0;
+                    moveSetting.Speed = 0;
                 }
+                else
+                {
+                    FinalAcceleration -= (moveSetting.Velocity.normalized * moveSetting.FinalDrag);    
+                }
+                //FinalAcceleration -= (moveSetting.Velocity.normalized * moveSetting.FinalDrag);    
             }
-            if (this.moveSetting.Speed * deltaTime <= this.controller.minMoveDistance)
+            // 能移动 && 移动速度率为正 && 有移动方向
+            if (this.moveSetting.bCanMove && _speedRate > float.Epsilon && moveDir.magnitude > float.Epsilon)
             {
-                this.moveSetting.Velocity = Vector3.zero;
+                FinalAcceleration += moveDir* this.moveSetting.AddAcceleration;
             }
-
+            
+            moveSetting.Velocity += (FinalAcceleration * deltaTime);
+            if (this.moveSetting.Speed < this.moveSetting.MinSpeed)
+            {
+                this.moveSetting.Speed = 0;
+            }
+            this.moveSetting.Speed = Math.Clamp(this.moveSetting.Speed , 0, this.moveSetting.MaxSpeed * _speedRate);
+ 
             // 输入速度方向变换 => 应用于上下坡
             if (this.moveSetting.Velocity.sqrMagnitude > float.Epsilon)
             {
@@ -423,6 +430,7 @@ namespace ProjectOC.Player
                         float angle = Vector3.Angle(Vector3.ProjectOnPlane(direction, Vector3.up), direction);
                         if (angle > 1 && angle <= this.controller.slopeLimit)
                         {
+                            slopAddition = 1f / Mathf.Cos(angle * Mathf.Deg2Rad);
                             // 更新速度方向
                             this.moveSetting.Velocity = this.moveSetting.Speed * direction;
                         }
@@ -435,7 +443,9 @@ namespace ProjectOC.Player
                 }
             }
             
-            Vector3 motion = (this.moveSetting.Velocity + this.moveSetting.ExtraVelocity) * deltaTime;
+            //乘上坡度补偿
+            Vector3 finalVelocity = this.moveSetting.Velocity * slopAddition;
+            Vector3 motion = (finalVelocity + this.moveSetting.ExtraVelocity) * deltaTime;
             this.controller.Move(motion);
 
             // 向上碰撞到掩体

@@ -1,35 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using ProjectOC.ManagerNS;
 using ProjectOC.Player;
 using UnityEngine;
 
-namespace ProjectOC.PlayerCharacterNS
+namespace ML.PlayerCharacterNS
 {
     public class CharacterManager : ML.Engine.Manager.GlobalManager.IGlobalManager
     {
         List<PlayerController> playerControllers;
         List<IPlayerCharacter> playerCharacters;
         List<IAICharacter> AICharacters;
+        private List<IStartPoint> playerStartPoints;
         int CurrentControllerIndex;
 
-        private string CharacterPrefabABRPath = "OC/Character/Player/Prefabs/PlayerCharacter.prefab";
-
-        public PlayerCharacter SpawnPlayerCharacter()
+        //暂定Scene1 的触发时间
+        public void Scene1Init()
         {
-            PlayerCharacter player = null;
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(CharacterPrefabABRPath).Completed += (handle) =>
-            {
-                // 实例化
-                player = handle.Result.GetComponent<PlayerCharacter>();
-                player.transform.position = GameObject.Find("PlayerSpawnPoint").transform.position;
-            };
-            return player;
+            playerControllers = new List<PlayerController>();
+            playerStartPoints = new List<IStartPoint>();
+            AddPlayerController(new PlayerController());
+            CurrentControllerIndex = 0;
+            
+            //Player生成
+            playerStartPoints = GameObject.Find("SpawnPoints").GetComponentsInChildren<IStartPoint>().ToList();
+            GetController().SpawnCharacter(0,playerStartPoints[Random.Range(0,playerStartPoints.Count)]);
         }
         
         
-        public PlayerController GetCurrentController(int index)
+        public PlayerController GetController(int index = -1)
         {
+            if (index == -1)
+                index = CurrentControllerIndex;
             return playerControllers[index];
         }
 

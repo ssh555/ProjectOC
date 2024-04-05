@@ -23,7 +23,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
         GameObject IBuildingPart.gameObject { get => this.gameObject;  }
         Transform IBuildingPart.transform { get => this.transform;  }
-        public bool isFirstBuild = true;
+        public bool isFirstBuild { get; private set; }= true;
         [SerializeField, LabelText("ƒ‹∑Ò∑≈÷√"), ReadOnly]
         private bool canPlaceInPlaceMode = true;
         public bool CanPlaceInPlaceMode 
@@ -37,6 +37,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         public event IBuildingPart.CheckMode CheckCanInPlaceMode;
         public event IBuildingPart.CheckMode CheckCanEdit;
         public event IBuildingPart.CheckMode CheckCanDestory;
+
         public virtual void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
             if(isFirstBuild)

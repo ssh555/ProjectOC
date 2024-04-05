@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e04c33259d65b934fa9ee5353f84593e, type: 3}
+  m_Name: PinchPartType2
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  enumNamespace: ProjectOC.PinchFace
+  NoneName:
+    name: HeadTop
+    displayName: "\u5934\u9876"
+    value: 0
+  EnumList:
+  - name: Ear
+    displayName: "\u8033"
+    value: 1
+  - name: EarTop
+    displayName: "\u9876\u8033"
+    value: 2
+  - name: Brow
+    displayName: "\u989D"
+    value: 3
+  - name: TopHorn
+    displayName: "\u9876\u89D2"
+    value: 4
+  - name: Face
+    displayName: "\u8138"
+    value: 5
+  - name: Tooth
+    displayName: "\u7259"
+    value: 6
+  - name: Body
+    displayName: "\u4F53\u8868"
+    value: 7
+  - name: Back
+    displayName: "\u80CC\u5FC3"
+    value: 8
+  - name: Lumbar
+    displayName: "\u8170\u4FA7"
+    value: 9
+  - name: Tail
+    displayName: "\u5C3E"
+    value: 10
+  - name: Arm
+    displayName: "\u624B\u81C2"
+    value: 11
+  - name: Hand
+    displayName: "\u624B"
+    value: 12
+  - name: Leg
+    displayName: "\u817F"
+    value: 13
