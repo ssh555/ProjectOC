@@ -84,7 +84,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.SwitchBeast.started += SwitchBeast_started;
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.SwitchBeast.canceled += SwitchBeast_canceled;
 
-            //ÇýÖð
+            // ÇýÖð
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Expel.performed += Expel_performed;
 
             // ·µ»Ø

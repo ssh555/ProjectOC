@@ -136,6 +136,7 @@ namespace ProjectOC.Building.UI
             ProjectOC.Input.InputManager.PlayerInput.UIBed.SetEmpty.performed -= SetEmpty_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIBed.Pre.performed -= Pre_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIBed.Post.performed -= Post_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIBed.Disable();
         }
 
         protected override void RegisterInput()
@@ -146,6 +147,7 @@ namespace ProjectOC.Building.UI
             ProjectOC.Input.InputManager.PlayerInput.UIBed.SetEmpty.performed += SetEmpty_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIBed.Pre.performed += Pre_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIBed.Post.performed += Post_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIBed.Enable();
         }
 
         private void SetEmpty_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
