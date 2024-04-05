@@ -3,6 +3,7 @@ using ML.Engine.Utility;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
+using ML.PlayerCharacterNS;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 namespace ML.Engine.Manager
@@ -54,6 +55,7 @@ namespace ML.Engine.Manager
         public SaveSystem.SaveManager SaveManager { get; private set; }
 
         public EnterPoint EnterPoint { get; private set; }
+        public CharacterManager CharacterManager { get; private set; }
         #endregion
 
         #region µ¥Àý¹ÜÀí
@@ -91,6 +93,7 @@ namespace ML.Engine.Manager
             this.InputManager = this.RegisterGlobalManager<Input.InputManager>();
 
             this.SaveManager = this.RegisterGlobalManager<SaveSystem.SaveManager>();
+            this.CharacterManager = this.RegisterGlobalManager<CharacterManager>();
         }
         
         private void OnDestroy()

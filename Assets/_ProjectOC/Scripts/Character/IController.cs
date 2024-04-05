@@ -3,15 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ProjectOC.PlayerCharacterNS
+namespace ML.PlayerCharacterNS
 {
     public interface IController:ITickComponent
     {
-        List<ICharacter> SpawnedCharacters { get; set; }
+        List<ICharacter> SpawnedCharacters{ get; set; }
         IControllerState State { get;set;  }
-        IStartPoint startPoint { get; set; }
-        ICharacter SpawnCharacter();
-        void ReSpawn();
+        ICharacter SpawnCharacter(int _index = 0,IStartPoint _startPoint = null);
+        void ReSpawn(ICharacter _character,IStartPoint _startPoint = null);
         void Dispose(ICharacter character);
         void DisposeAll();
     }
