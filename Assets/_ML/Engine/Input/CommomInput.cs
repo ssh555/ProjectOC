@@ -39,6 +39,15 @@ namespace ML.Engine.Input
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""SwichBtn"",
+                    ""type"": ""Value"",
+                    ""id"": ""a86454bc-c2e4-484f-8224-919690d1e274"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Confirm1"",
                     ""type"": ""Button"",
                     ""id"": ""a6e6617f-4fdd-4178-be77-0094a5495b8e"",
@@ -134,6 +143,116 @@ namespace ML.Engine.Input
                     ""action"": ""Confirm1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""KeyBoard"",
+                    ""id"": ""82d4d19e-5b30-4f0d-8028-9f745500ec3e"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""c9bbb5a0-94e3-409c-96ee-dbc53b519683"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""ec454c15-3627-4d8b-bb9c-9b33d123931b"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""6522029b-21c8-4cea-977a-a88cd81affba"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""34c7dc56-dd10-4fa6-afe4-9a44e386614d"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""b6f4ad35-aa09-4186-a0e6-c66060ea1f2c"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""018b9edb-1e37-4011-859b-20b139c25f5e"",
+                    ""path"": ""<XInputController>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""9c0e7962-370e-4e47-9cab-ae06fd050801"",
+                    ""path"": ""<XInputController>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""28ba3262-97c5-4967-90de-fe81e1c22de5"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""8d897183-7f8e-4124-a122-55796b99b7ad"",
+                    ""path"": ""<XInputController>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -397,6 +516,7 @@ namespace ML.Engine.Input
             // Common
             m_Common = asset.FindActionMap("Common", throwIfNotFound: true);
             m_Common_Confirm = m_Common.FindAction("Confirm", throwIfNotFound: true);
+            m_Common_SwichBtn = m_Common.FindAction("SwichBtn", throwIfNotFound: true);
             m_Common_Confirm1 = m_Common.FindAction("Confirm1", throwIfNotFound: true);
             m_Common_Back = m_Common.FindAction("Back", throwIfNotFound: true);
             // StartMenu
@@ -467,6 +587,7 @@ namespace ML.Engine.Input
         private readonly InputActionMap m_Common;
         private List<ICommonActions> m_CommonActionsCallbackInterfaces = new List<ICommonActions>();
         private readonly InputAction m_Common_Confirm;
+        private readonly InputAction m_Common_SwichBtn;
         private readonly InputAction m_Common_Confirm1;
         private readonly InputAction m_Common_Back;
         public struct CommonActions
@@ -474,6 +595,7 @@ namespace ML.Engine.Input
             private @CommomInput m_Wrapper;
             public CommonActions(@CommomInput wrapper) { m_Wrapper = wrapper; }
             public InputAction @Confirm => m_Wrapper.m_Common_Confirm;
+            public InputAction @SwichBtn => m_Wrapper.m_Common_SwichBtn;
             public InputAction @Confirm1 => m_Wrapper.m_Common_Confirm1;
             public InputAction @Back => m_Wrapper.m_Common_Back;
             public InputActionMap Get() { return m_Wrapper.m_Common; }
@@ -488,6 +610,9 @@ namespace ML.Engine.Input
                 @Confirm.started += instance.OnConfirm;
                 @Confirm.performed += instance.OnConfirm;
                 @Confirm.canceled += instance.OnConfirm;
+                @SwichBtn.started += instance.OnSwichBtn;
+                @SwichBtn.performed += instance.OnSwichBtn;
+                @SwichBtn.canceled += instance.OnSwichBtn;
                 @Confirm1.started += instance.OnConfirm1;
                 @Confirm1.performed += instance.OnConfirm1;
                 @Confirm1.canceled += instance.OnConfirm1;
@@ -501,6 +626,9 @@ namespace ML.Engine.Input
                 @Confirm.started -= instance.OnConfirm;
                 @Confirm.performed -= instance.OnConfirm;
                 @Confirm.canceled -= instance.OnConfirm;
+                @SwichBtn.started -= instance.OnSwichBtn;
+                @SwichBtn.performed -= instance.OnSwichBtn;
+                @SwichBtn.canceled -= instance.OnSwichBtn;
                 @Confirm1.started -= instance.OnConfirm1;
                 @Confirm1.performed -= instance.OnConfirm1;
                 @Confirm1.canceled -= instance.OnConfirm1;
@@ -619,6 +747,7 @@ namespace ML.Engine.Input
         public interface ICommonActions
         {
             void OnConfirm(InputAction.CallbackContext context);
+            void OnSwichBtn(InputAction.CallbackContext context);
             void OnConfirm1(InputAction.CallbackContext context);
             void OnBack(InputAction.CallbackContext context);
         }

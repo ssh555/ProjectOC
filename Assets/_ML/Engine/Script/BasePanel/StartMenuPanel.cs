@@ -184,8 +184,8 @@ namespace ML.Engine.UI
             );
             ML.Engine.Input.InputManager.Instance.Common.StartMenu.Enable();
 
-            this.UIBtnList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn, UIBtnList.BindType.started);
-            this.UIBtnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm, UIBtnList.BindType.started);
+            this.UIBtnList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn, UIBtnListContainer.BindType.started);
+            this.UIBtnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm, UIBtnListContainer.BindType.started);
 
 
         }

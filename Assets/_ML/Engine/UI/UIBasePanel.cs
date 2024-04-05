@@ -77,7 +77,7 @@ namespace ML.Engine.UI
         public virtual void OnPause()
         {
             this.Exit();
-            //this.gameObject.SetActive(false);
+            this.gameObject.SetActive(false);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace ML.Engine.UI
         /// </summary>
         public virtual void OnRecovery()
         {
-            //this.gameObject.SetActive(true);
+            this.gameObject.SetActive(true);
             this.Enter();
         }
 

@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static ML.Engine.UI.OptionPanel;
+using static ML.Engine.UI.UIBtnListContainer;
 
 namespace ML.Engine.UI
 {
@@ -79,14 +80,32 @@ namespace ML.Engine.UI
             this.UIBtnList.SetBtnAction("AudioBtn",
             () =>
             {
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData("确定取消该订单吗？", "您将面临违约惩罚", null, () => { Debug.Log("确定响应！"); }));
+                //GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData("确定取消该订单吗？", "您将面临违约惩罚", null, () => { Debug.Log("确定响应！"); }));
+                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/BaseUIPanel/GridTestPanel1.prefab").Completed += (handle) =>
+                {
+                    // 实例化
+                    var panel = handle.Result.GetComponent<TestPanel1>();
+
+                    panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+
+                    GameManager.Instance.UIManager.PushPanel(panel);
+                };
             }
             );
             //ControllerBtn
             this.UIBtnList.SetBtnAction("ControllerBtn",
             () =>
             {
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.BtnUI, new UIManager.BtnUIData("message1", () => { Debug.Log("按钮响应！"); }));
+                //GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.BtnUI, new UIManager.BtnUIData("message1", () => { Debug.Log("按钮响应！"); }));
+                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/BaseUIPanel/GridTestPanel.prefab").Completed += (handle) =>
+                {
+                    // 实例化
+                    var panel = handle.Result.GetComponent<TestPanel>();
+
+                    panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+
+                    GameManager.Instance.UIManager.PushPanel(panel);
+                };
             }
             );
             //TutorialBtn
@@ -169,8 +188,8 @@ namespace ML.Engine.UI
 
             //绑定按钮导航和按钮确认InputAction的回调函数
 
-            this.UIBtnList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Option.SwichBtn, UIBtnList.BindType.started);
-            this.UIBtnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm, UIBtnList.BindType.started);
+            this.UIBtnList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Option.SwichBtn, BindType.started);
+            this.UIBtnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm, BindType.started);
             
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;

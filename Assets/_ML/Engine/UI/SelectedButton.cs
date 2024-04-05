@@ -117,6 +117,11 @@ namespace ML.Engine.UI
             this.UIBtnList = uIBtnList;
         }
 
+        public UIBtnList GetUIBtnList()
+        {
+            return this.UIBtnList;
+        }
+
         public void SetPreAndPostInteract(System.Action preAction, System.Action postAction)
         {
             this.PreInteract = preAction; 
@@ -126,6 +131,7 @@ namespace ML.Engine.UI
         // 统一鼠标与按键
         public override void OnPointerEnter(UnityEngine.EventSystems.PointerEventData eventData)
         {
+            Debug.Log("OnPointerEnter");
             this.UIBtnList.RefreshSelected(this);
         }
         public override void OnPointerClick(PointerEventData eventData)
