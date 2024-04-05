@@ -8,6 +8,7 @@ using ProjectOC.Player.Terrain;
 using UnityEngine.InputSystem;
 using ML.Engine.InteractSystem;
 using ML.Engine.UI;
+using ML.PlayerCharacterNS;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.Layouts;
 using UnityEngine.InputSystem.Utilities;
@@ -15,7 +16,7 @@ using UnityEngine.InputSystem.Utilities;
 namespace ProjectOC.Player
 {
     [RequireComponent(typeof(CharacterController))]
-    public class PlayerCharacter : MonoBehaviour, ML.Engine.Timer.ITickComponent
+    public class PlayerCharacter : MonoBehaviour, ML.Engine.Timer.ITickComponent,IPlayerCharacter
     {
         #region ITickComponent
         public int tickPriority { get; set; }
@@ -155,9 +156,12 @@ namespace ProjectOC.Player
         #region Tick
         public void Tick(float deltatime)
         {
-            this.moveAbility.UpdateJump(deltatime, this.playerInputActions.Jump);
+            if(this.interactComponent.CurrentInteraction == null)
+            {
+                this.moveAbility.UpdateJump(deltatime, this.playerInputActions.Jump);
+            }
 
-            if(Input.InputManager.PlayerInput.Player.OpenBotUI.WasPressedThisFrame())
+            if (Input.InputManager.PlayerInput.Player.OpenBotUI.WasPressedThisFrame())
             {
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(GameObject.Instantiate(this.playerUIPanel.gameObject, ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).GetComponent<ML.Engine.UI.UIBasePanel>());
                 (ML.Engine.Manager.GameManager.Instance.UIManager.GetTopUIPanel() as UI.PlayerUIPanel).player = this;
@@ -223,5 +227,26 @@ namespace ProjectOC.Player
             cc.slopeLimit = moveAbility.moveSetting.WalkerbleFloorAngle;
         }
 #endif
+
+        #region IPlayerCharacter
+
+        public int prefabIndex
+        {
+            get => 0;
+        }
+        public ICharacterState State { get; set; }
+        public IController Controller { get; set; }
+        public void OnSpawn(IController controller)
+        {
+            
+        }
+
+        public void OnDespose(IController controller)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
     }
 }
