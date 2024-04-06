@@ -303,7 +303,7 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove1.performed -= Remove1_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove10.performed -= Remove10_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.FastAdd.performed -= FastAdd_RemoveWorker_performed;
-            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Alter.performed -= Alter_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Alter.started -= Alter_started;
         }
 
         protected override void RegisterInput()
@@ -316,7 +316,7 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove1.performed += Remove1_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove10.performed += Remove10_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.FastAdd.performed += FastAdd_RemoveWorker_performed;
-            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Alter.performed += Alter_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Alter.started += Alter_started;
         }
         private void Upgrade_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
@@ -329,7 +329,7 @@ namespace ProjectOC.InventorySystem.UI
             CurPriority = ProNode.TransportPriority;
         }
 
-        private void Alter_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void Alter_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (CurMode == Mode.ProNode)
             {
@@ -919,16 +919,6 @@ namespace ProjectOC.InventorySystem.UI
                     var item = tempUIItemsWorker[i];
                     // Active
                     item.SetActive(true);
-
-                    //bool isWorkerNotNull = worker != null;
-                    //item.transform.Find("Bar").gameObject.SetActive(isWorkerNotNull);
-                    //item.transform.Find("Bar1").gameObject.SetActive(isWorkerNotNull);
-                    //item.transform.Find("Image").gameObject.SetActive(isWorkerNotNull);
-                    //item.transform.Find("Gender").gameObject.SetActive(isWorkerNotNull);
-                    //item.transform.Find("Eff").gameObject.SetActive(isWorkerNotNull);
-                    //item.transform.Find("StateCur").gameObject.SetActive(isWorkerNotNull);
-                    //item.transform.Find("StateWork").gameObject.SetActive(isWorkerNotNull);
-                    //item.transform.Find("StateRelax").gameObject.SetActive(isWorkerNotNull);
                     // Icon
                     item.transform.Find("Icon").GetComponent<Image>().sprite = WorkerIcon;
                     // Bar1
@@ -961,60 +951,6 @@ namespace ProjectOC.InventorySystem.UI
                     {
                         last = item;
                     }
-                    //if (isWorkerNotNull)
-                    //{
-                    //    // Icon
-                    //    item.transform.Find("Icon").GetComponent<Image>().sprite = WorkerIcon;
-                    //    // Bar1
-                    //    var bar1 = item.transform.Find("Bar1").GetComponent<Image>();
-                    //    bar1.fillAmount = (float)worker.APCurrent / worker.APMax;
-                    //    bar1.color = worker.APCurrent < worker.APWorkThreshold ? Color.red : Color.green;
-                    //    // Name
-                    //    item.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = worker.Name;
-                    //    // Gender
-                    //    item.transform.Find("Gender").GetComponent<Image>().sprite = worker.Gender == Gender.Male ? WorkerMaleIcon : WorkerFemalIcon;
-                    //    // Eff
-                    //    item.transform.Find("Eff").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + worker.Eff[ProNode.ExpType].ToString();
-                    //    // Selected
-                    //    var selected = item.transform.Find("Selected");
-                    //    bool isCurrentWorker = Worker == worker;
-                    //    item.transform.Find("StateCur").gameObject.SetActive(isCurrentWorker);
-                    //    item.transform.Find("StateWork").gameObject.SetActive(!isCurrentWorker && worker.Status == Status.Working);
-                    //    item.transform.Find("StateRelax").gameObject.SetActive(!isCurrentWorker && worker.Status != Status.Working);
-
-                    //    if (CurrentWorker == worker)
-                    //    {
-                    //        selected.gameObject.SetActive(true);
-                    //        cur = item;
-                    //    }
-                    //    else
-                    //    {
-                    //        selected.gameObject.SetActive(false);
-                    //    }
-                    //    if (i == lastWorkerIndex)
-                    //    {
-                    //        last = item;
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    item.transform.Find("Icon").GetComponent<Image>().sprite = EmptySprite;
-                    //    item.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textEmpty;
-                    //    var selected = item.transform.Find("Selected");
-                    //    if (CurrentWorker == null)
-                    //    {
-                    //        selected.gameObject.SetActive(true);
-                    //        cur = item;
-                    //    }
-                    //    else
-                    //    {
-                    //        selected.gameObject.SetActive(false);
-                    //    }
-                    //    if (i == lastWorkerIndex)
-                    //    {
-                    //        last = item;
-                    //    }
-                    //}
                 }
                 #region 更新滑动窗口
                 if (cur != null && last != null)
@@ -1240,6 +1176,10 @@ namespace ProjectOC.InventorySystem.UI
         {
             if (CurMode == Mode.ProNode)
             {
+                if (!ProNode.HasRecipe || ProNode.State != ProNodeState.Production)
+                {
+                    ProNode_Product.Find("Mask").GetComponent<Image>().fillAmount = 0;
+                }
                 if (ProNode.HasRecipe)
                 {
                     ProNode_Product.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.GetItemAllNum(ProNode.Recipe.ProductID).ToString();

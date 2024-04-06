@@ -106,6 +106,7 @@ namespace ProjectOC.WorkerNS
         }
 
         public Action<Status> StatusChangeAction;
+        public Action<int> APChangeAction;
         
         [LabelText("ÊÇ·ñÔÚÖµ°à")]
         public bool IsOnDuty { get { return HasProNode && this.Status != Status.Relaxing && ArriveProNode; } }
@@ -267,6 +268,7 @@ namespace ProjectOC.WorkerNS
             if (ap >= 0 && ap <= this.APMax)
             {
                 this.APCurrent = ap;
+                this.APChangeAction?.Invoke(this.APCurrent);
                 return true;
             }
             return false;
