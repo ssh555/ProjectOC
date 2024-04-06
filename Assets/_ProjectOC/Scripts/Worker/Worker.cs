@@ -23,7 +23,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("名字")]
         public string Name = "Worker";
         [LabelText("性别")]
-        public Gender Gender = Gender.None;
+        public Gender Gender = Gender.Male;
         [LabelText("当前体力值")]
         public int APCurrent = 10;
         [LabelText("体力上限")]
