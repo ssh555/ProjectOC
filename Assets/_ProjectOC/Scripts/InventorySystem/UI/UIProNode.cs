@@ -1191,6 +1191,19 @@ namespace ProjectOC.InventorySystem.UI
             public TextContent textTime;
             public TextContent textEff;
             public TextContent textLvDesc;
+
+            public KeyTip Upgrade;
+            public KeyTip NextPriority;
+            public KeyTip UpgradeConfirm;
+            public KeyTip ChangeRecipe;
+            public KeyTip Remove1;
+            public KeyTip Remove10;
+            public KeyTip FastAdd;
+            public KeyTip ChangeWorker;
+            public KeyTip RemoveWorker;
+            public KeyTip Return;
+            public KeyTip Confirm;
+            public KeyTip Back;
         }
         protected override void InitTextContentPathData()
         {
