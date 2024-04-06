@@ -35,10 +35,10 @@ namespace ML.Engine.SaveSystem
         /// <summary>
         /// 加载数据，路径为不带后缀的相对路径
         /// </summary>
-        /// <param name="relativePathWithoutSuffix">Application.persistent路径，后缀为.bytes或者.json，自动添加</param>
+        /// <param name="relativePath">Application.persistent路径，后缀为.bytes或者.json，自动添加</param>
         /// <param name="useEncryption">是否加密</param>
         /// <returns></returns>
-        public abstract T LoadData<T>(string relativePathWithoutSuffix, bool useEncryption) where T : ISaveData;
+        public abstract T LoadData<T>(string relativePath, bool useEncryption) where T : ISaveData;
 
         /// <summary>
         /// 读取内存流数据

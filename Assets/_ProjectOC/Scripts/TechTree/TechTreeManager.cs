@@ -316,9 +316,7 @@ namespace ProjectOC.TechTree
             {
                 saveData.Reset(UnlockingTechPointDict.Values.ToList());
             }
-#pragma warning disable CS4014
-            GameManager.Instance.SaveManager.SaveController.SaveSaveDataFolderAsync(null);
-#pragma warning restore CS4014
+            GameManager.Instance.SaveManager.SaveController.SaveSaveDataFolder();
         }
         #endregion
         #endregion

@@ -169,7 +169,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   language: 1
   platform: 0
-  inputDevice: 0
+  inputDevice: 1
+  Version:
+    Major: 1
+    Minor: 0
+    Patch: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

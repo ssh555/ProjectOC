@@ -7,10 +7,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using ML.Engine.Extension;
 using ML.Engine.InventorySystem.CompositeSystem;
-using ML.Engine.UI;
 using static ProjectOC.InventorySystem.UI.UIStore;
+using System;
+using ML.Engine.BuildingSystem;
 
-
+//aaa
 namespace ProjectOC.InventorySystem.UI
 {
     public class UIStore : ML.Engine.UI.UIBasePanel<StorePanel>
@@ -23,19 +24,19 @@ namespace ProjectOC.InventorySystem.UI
 
             #region TopTitle
             Text_Title = transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
-            StoreIcon = transform.Find("TopTitle").Find("Icon");
+            StoreIcon = transform.Find("TopTitle").Find("Icon").GetComponent<Image>();
+            EmptySprite = StoreIcon.sprite;
 
-            #region Priority
             Transform priority = transform.Find("TopTitle").Find("Priority");
             Text_Priority = priority.Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             PriorityUrgency = priority.Find("Urgency");
             PriorityNormal = priority.Find("Normal");
             PriorityAlternative = priority.Find("Alternative");
             #endregion
-            #endregion
 
             #region Store
-            Transform content = transform.Find("Store").Find("Viewport").Find("Content");
+            StoreTransform = transform.Find("Store");
+            Transform content = StoreTransform.Find("Viewport").Find("Content");
             GridLayout = content.GetComponent<GridLayoutGroup>();
             UIItemTemplate = content.Find("UIItemTemplate");
             UIItemTemplate.gameObject.SetActive(false);
@@ -52,23 +53,20 @@ namespace ProjectOC.InventorySystem.UI
 
             #region Upgrade
             Upgrade = transform.Find("Upgrade");
+            Upgrade_Build = Upgrade.Find("Build");
             Transform contentUpgrade = transform.Find("Upgrade").Find("Raw").Find("Viewport").Find("Content");
             Upgrade_GridLayout = contentUpgrade.GetComponent<GridLayoutGroup>();
             Upgrade_UIItemTemplate = contentUpgrade.Find("UIItemTemplate");
             Upgrade_UIItemTemplate.gameObject.SetActive(false);
-            Transform level = transform.Find("Upgrade").Find("Level");
-            LvOld = level.Find("LvOld").GetComponent<TMPro.TextMeshProUGUI>();
-            LvNew = level.Find("LvNew").GetComponent<TMPro.TextMeshProUGUI>();
-            DescOld = level.Find("DescOld").GetComponent<TMPro.TextMeshProUGUI>();
-            DescNew = level.Find("DescNew").GetComponent<TMPro.TextMeshProUGUI>();
+            Upgrade_LvOld = Upgrade.Find("Level").Find("LvOld");
+            Upgrade_LvNew = Upgrade.Find("Level").Find("LvNew");
             Upgrade.gameObject.SetActive(false);
             #endregion
 
             #region BotKeyTips
             BotKeyTips_KeyTips = this.transform.Find("BotKeyTips").Find("KeyTips");
-            
             BotKeyTips_ChangeItem = this.transform.Find("BotKeyTips").Find("ChangeItem");
-            
+            BotKeyTips_Upgrade = this.transform.Find("BotKeyTips").Find("Upgrade");
             BotKeyTips_ChangeItem.gameObject.SetActive(false);
             #endregion
 
@@ -103,6 +101,13 @@ namespace ProjectOC.InventorySystem.UI
             Upgrade = 3
         }
         public Mode CurMode = Mode.Store;
+        public enum StoreMode
+        {
+            ChangeItem = 0,
+            ChangeIn = 1,
+            ChangeOut = 2
+        }
+        public StoreMode CurStoreMode = StoreMode.ChangeItem;
         /// <summary>
         /// 对应的逻辑仓库
         /// </summary>
@@ -363,7 +368,6 @@ namespace ProjectOC.InventorySystem.UI
             }
             CurPriority = Store.TransportPriority;
         }
-
         // Store
         private void ChangeItem_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
@@ -371,8 +375,28 @@ namespace ProjectOC.InventorySystem.UI
             {
                 var f_offset = obj.ReadValue<Vector2>();
                 var offset = new Vector2Int(Mathf.RoundToInt(f_offset.x), Mathf.RoundToInt(f_offset.y));
-                var grid = GridLayout.GetGridSize();
-                this.CurrentDataIndex += -offset.y * grid.y + offset.x;
+                if (offset.x > 0)
+                {
+                    if ((int)CurStoreMode < Enum.GetValues(typeof(StoreMode)).Length - 1)
+                    {
+                        this.CurStoreMode++;
+                        Refresh();
+                    }
+                }
+                else if (offset.x < 0)
+                {
+                    if ((int)CurStoreMode > 0)
+                    {
+                        this.CurStoreMode--;
+                        Refresh();
+                    }
+                }
+
+                if (offset.y != 0)
+                {
+                    var grid = GridLayout.GetGridSize();
+                    this.CurrentDataIndex += -offset.y * grid.y + offset.x;
+                }
             }
             else if (CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon)
             {
@@ -384,7 +408,7 @@ namespace ProjectOC.InventorySystem.UI
         }
         private void FastAdd_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurMode == Mode.Store)
+            if (CurMode == Mode.Store && CurStoreMode == StoreMode.ChangeItem)
             {
                 Store.UIFastAdd(Player, CurrentStoreData);
                 Refresh();
@@ -392,7 +416,7 @@ namespace ProjectOC.InventorySystem.UI
         }
         private void Remove1_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurMode == Mode.Store)
+            if (CurMode == Mode.Store && CurStoreMode == StoreMode.ChangeItem)
             {
                 Store.UIRemove(Player, CurrentStoreData, 1);
                 Refresh();
@@ -400,7 +424,7 @@ namespace ProjectOC.InventorySystem.UI
         }
         private void Remove10_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurMode == Mode.Store)
+            if (CurMode == Mode.Store && CurStoreMode == StoreMode.ChangeItem)
             {
                 Store.UIRemove(Player, CurrentStoreData, 10);
                 Refresh();
@@ -425,11 +449,28 @@ namespace ProjectOC.InventorySystem.UI
         {
             if (CurMode == Mode.Store)
             {
-                CurMode = Mode.ChangeItem;
+                if (CurStoreMode == StoreMode.ChangeItem)
+                {
+                    CurMode = Mode.ChangeItem;
+                }
+                else if (CurStoreMode == StoreMode.ChangeIn)
+                {
+                    if (this.CurrentStoreData != null)
+                    {
+                        this.CurrentStoreData.CanIn = !this.CurrentStoreData.CanIn;
+                    }
+                }
+                else if (CurStoreMode == StoreMode.ChangeOut)
+                {
+                    if (this.CurrentStoreData != null)
+                    {
+                        this.CurrentStoreData.CanOut = !this.CurrentStoreData.CanOut;
+                    }
+                }
             }
             else if (CurMode == Mode.ChangeItem)
             {
-                Store.ChangeStoreData(CurrentDataIndex, CurrentItemData);
+                Store.UIChangeStoreData(Player, CurrentDataIndex, CurrentItemData);
                 this.CurMode = Mode.Store;
                 this.ItemDatas.Clear();
                 this.lastItemIndex = 0;
@@ -455,7 +496,7 @@ namespace ProjectOC.InventorySystem.UI
                 }
                 else
                 {
-                    img.sprite = null;
+                    img.sprite = EmptySprite;
                 }
                 if (!string.IsNullOrEmpty(itemID))
                 {
@@ -471,7 +512,6 @@ namespace ProjectOC.InventorySystem.UI
                 this.Store.Upgrade(Player);
             }
             Refresh();
-
         }
         #endregion
 
@@ -504,35 +544,33 @@ namespace ProjectOC.InventorySystem.UI
         #endregion
 
         #region UI对象引用
-        private UIKeyTipComponent[] UIKeyTipComponents;
-
-
         private TMPro.TextMeshProUGUI Text_Title;
         private TMPro.TextMeshProUGUI Text_Priority;
-
-        private Transform UIItemTemplate;
-        private GridLayoutGroup GridLayout;
+        private Image StoreIcon;
+        private Sprite EmptySprite;
         private Transform Priority;
         private Transform PriorityUrgency;
         private Transform PriorityNormal;
         private Transform PriorityAlternative;
 
-        private Transform StoreIcon;
+        private Transform StoreTransform;
+        private Transform UIItemTemplate;
+        private GridLayoutGroup GridLayout;
 
         private Transform ChangeItem;
         private Transform ChangeItem_UIItemTemplate;
         private GridLayoutGroup ChangeItem_GridLayout;
 
         private Transform Upgrade;
+        private Transform Upgrade_Build;
         private Transform Upgrade_UIItemTemplate;
         private GridLayoutGroup Upgrade_GridLayout;
-        private TMPro.TextMeshProUGUI LvOld;
-        private TMPro.TextMeshProUGUI LvNew;
-        private TMPro.TextMeshProUGUI DescOld;
-        private TMPro.TextMeshProUGUI DescNew;
+        private Transform Upgrade_LvOld;
+        private Transform Upgrade_LvNew;
 
         private Transform BotKeyTips_KeyTips;
         private Transform BotKeyTips_ChangeItem;
+        private Transform BotKeyTips_Upgrade;
         #endregion
 
         public override void Refresh()
@@ -543,15 +581,18 @@ namespace ProjectOC.InventorySystem.UI
                 return;
             }
             CurPriority = Store.TransportPriority;
+            // StoreIcon
+            Sprite itemicon = Store.WorldStore.transform.GetComponentInChildren<SpriteRenderer>()?.sprite;
+            StoreIcon.sprite = itemicon == null ? EmptySprite : itemicon;
+
             if (this.CurMode == Mode.Store)
             {
+                this.StoreTransform.gameObject.SetActive(true);
                 this.ChangeItem.gameObject.SetActive(false);
-                this.BotKeyTips_ChangeItem.gameObject.SetActive(false);
-                this.BotKeyTips_KeyTips.gameObject.SetActive(true);
-                this.UIItemTemplate.gameObject.SetActive(false);
-                this.ChangeItem_UIItemTemplate.gameObject.SetActive(false);
                 this.Upgrade.gameObject.SetActive(false);
-                this.Upgrade_UIItemTemplate.gameObject.SetActive(false);
+                this.BotKeyTips_KeyTips.gameObject.SetActive(true);
+                this.BotKeyTips_ChangeItem.gameObject.SetActive(false);
+                this.BotKeyTips_Upgrade.gameObject.SetActive(false);
 
                 StoreDatas = Store.StoreDatas;
                 #region TopTitle
@@ -595,8 +636,10 @@ namespace ProjectOC.InventorySystem.UI
                     }
                     else
                     {
-                        img.sprite = null;
+                        img.sprite = EmptySprite;
                     }
+                    // Select Icon
+                    uiStoreData.transform.Find("Select").gameObject.SetActive(CurStoreMode == StoreMode.ChangeItem);
                     // Name
                     var nametext = uiStoreData.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
                     if (storeData.ItemID != "")
@@ -608,64 +651,117 @@ namespace ProjectOC.InventorySystem.UI
                         nametext.text = PanelTextContent.text_Empty;
                     }
                     // Amount
-                    int amount = storeData.StorageAll;
+                    int amount = storeData.Storage;
                     int amountMax = storeData.MaxCapacity;
                     var AmountCur = uiStoreData.transform.Find("Amount").Find("Cur").GetComponent<TMPro.TextMeshProUGUI>();
                     var AmountMax = uiStoreData.transform.Find("Amount").Find("Max").GetComponent<TMPro.TextMeshProUGUI>();
                     AmountCur.text = amount.ToString();
                     AmountMax.text = amountMax.ToString();
-                    // ProgressBar
-                    int level = Store.Level;
-                    int amountEachLevel = amountMax / (level + 1);
+
+                    #region ProgressBar
                     Transform progressBar1 = uiStoreData.transform.Find("ProgressBar1");
-                    RectTransform progressBarRectCur1 = progressBar1.Find("Cur").GetComponent<RectTransform>();
-                    RectTransform progressBarRectMax1 = progressBar1.Find("Max").GetComponent<RectTransform>();
+                    RectTransform bar1Cur1 = progressBar1.Find("Cur").GetComponent<RectTransform>();
+                    RectTransform bar1Cur2 = progressBar1.Find("Cur1").GetComponent<RectTransform>();
+                    RectTransform bar1Cur3 = progressBar1.Find("Cur2").GetComponent<RectTransform>();
                     Transform progressBar2 = uiStoreData.transform.Find("ProgressBar2");
-                    RectTransform progressBarRectCur2 = progressBar2.Find("Cur").GetComponent<RectTransform>();
-                    RectTransform progressBarRectMax2 = progressBar2.Find("Max").GetComponent<RectTransform>();
+                    RectTransform bar2Cur1 = progressBar2.Find("Cur").GetComponent<RectTransform>();
+                    RectTransform bar2Cur2 = progressBar2.Find("Cur1").GetComponent<RectTransform>();
+                    RectTransform bar2Cur3 = progressBar2.Find("Cur2").GetComponent<RectTransform>();
                     Transform progressBar3 = uiStoreData.transform.Find("ProgressBar3");
-                    RectTransform progressBarRectCur3 = progressBar3.Find("Cur").GetComponent<RectTransform>();
-                    RectTransform progressBarRectMax3 = progressBar3.Find("Max").GetComponent<RectTransform>();
-                    if (level == 0)
+                    RectTransform bar3Cur1 = progressBar3.Find("Cur").GetComponent<RectTransform>();
+                    RectTransform bar3Cur2 = progressBar3.Find("Cur1").GetComponent<RectTransform>();
+                    RectTransform bar3Cur3 = progressBar3.Find("Cur2").GetComponent<RectTransform>();
+                    List<RectTransform> cur1 = new List<RectTransform>() { bar1Cur1, bar2Cur1, bar3Cur1 };
+                    List<RectTransform> cur2 = new List<RectTransform>() { bar1Cur2, bar2Cur2, bar3Cur2 };
+                    List<RectTransform> cur3 = new List<RectTransform>() { bar1Cur3, bar2Cur3, bar3Cur3 };
+                    foreach (RectTransform rect in cur1)
                     {
-                        progressBar1.Find("None").gameObject.SetActive(false);
-                        progressBar2.Find("None").gameObject.SetActive(true);
-                        progressBar3.Find("None").gameObject.SetActive(true);
+                        rect.sizeDelta = new Vector2(0, rect.sizeDelta.y);
                     }
-                    else if (level == 1)
+                    foreach (RectTransform rect in cur2)
                     {
-                        progressBar1.Find("None").gameObject.SetActive(false);
-                        progressBar2.Find("None").gameObject.SetActive(false);
-                        progressBar3.Find("None").gameObject.SetActive(true);
+                        rect.sizeDelta = new Vector2(0, rect.sizeDelta.y);
                     }
-                    else if (level == 2)
+                    foreach (RectTransform rect in cur3)
                     {
-                        progressBar1.Find("None").gameObject.SetActive(false);
-                        progressBar2.Find("None").gameObject.SetActive(false);
-                        progressBar3.Find("None").gameObject.SetActive(false);
+                        rect.sizeDelta = new Vector2(0, rect.sizeDelta.y);
                     }
-                    float width1 = amount >= amountEachLevel ? 1 : (float)amount / amountEachLevel;
-                    float width2 = amount >= 2 * amountEachLevel ? 1 : (float)amount / amountEachLevel - 1;
-                    width2 = width2 >= 0 ? width2 : 0;
-                    float width3 = amount >= 3 * amountEachLevel ? 1 : (float)amount / amountMax - 2;
-                    width3 = width3 >= 0 ? width3 : 0;
-                    progressBarRectCur1.sizeDelta = new Vector2(400 * width1, progressBarRectCur1.sizeDelta.y);
-                    progressBarRectCur2.sizeDelta = new Vector2(400 * width2, progressBarRectCur2.sizeDelta.y);
-                    progressBarRectCur3.sizeDelta = new Vector2(400 * width3, progressBarRectCur3.sizeDelta.y);
+
+                    int level = Store.Level + 1;
+                    progressBar1.Find("None").gameObject.SetActive(level < 1);
+                    progressBar2.Find("None").gameObject.SetActive(level < 2);
+                    progressBar3.Find("None").gameObject.SetActive(level < 3);
+                    float storage = level * (float)storeData.Storage / amountMax;
+                    int storageStage = (int)storage;
+                    for (int stage = 0; stage < storageStage; stage++)
+                    {
+                        cur1[stage].sizeDelta = new Vector2(400, cur1[stage].sizeDelta.y);
+                    }
+                    float curPos = storage - storageStage;
+                    int curStage = storageStage;
+                    if (curPos > 0 && curStage <= 2)
+                    {
+                        cur1[curStage].sizeDelta = new Vector2(400 * curPos, cur1[curStage].sizeDelta.y);
+                    }
+                    float storageReserve = level * (float)storeData.StorageReserve / amountMax;
+                    int storageReserveStage = (int)(storage + storageReserve);
+                    for (int stage = curStage; stage < storageReserveStage; stage++)
+                    {
+                        cur2[stage].sizeDelta = new Vector2(400, cur2[stage].sizeDelta.y);
+                    }
+                    curPos = (storage + storageReserve) - storageReserveStage;
+                    curStage = storageReserveStage;
+                    if (curPos > 0 && curStage <= 2)
+                    {
+                        cur2[curStage].sizeDelta = new Vector2(400 * curPos, cur2[curStage].sizeDelta.y);
+                    }
+                    float emptyReserve = level * (float)storeData.EmptyReserve / amountMax;
+                    int emptyReserveStage = (int)(storage + storageReserve + emptyReserve);
+                    for (int stage = curStage; stage < emptyReserveStage; stage++)
+                    {
+                        cur3[stage].sizeDelta = new Vector2(400, cur3[stage].sizeDelta.y);
+                    }
+                    curPos = (storage + storageReserve + emptyReserve) - emptyReserveStage;
+                    curStage = emptyReserveStage;
+                    if (curPos > 0 && curStage <= 2)
+                    {
+                        cur3[curStage].sizeDelta = new Vector2(400 * curPos, cur3[curStage].sizeDelta.y);
+                    }
+                    #endregion
 
                     // Add and Remove
                     uiStoreData.transform.Find("Add").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_Add.GetText();
                     uiStoreData.transform.Find("Remove").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_Remove.GetText();
+                    if (!string.IsNullOrEmpty(storeData.ItemID))
+                    {
+                        uiStoreData.transform.Find("Add").Find("Tick").gameObject.SetActive(storeData.CanIn);
+                        uiStoreData.transform.Find("Remove").Find("Tick").gameObject.SetActive(storeData.CanOut);
+                    }
+                    else
+                    {
+                        uiStoreData.transform.Find("Add").Find("Tick").gameObject.SetActive(false);
+                        uiStoreData.transform.Find("Remove").Find("Tick").gameObject.SetActive(false);
+                    }
                     // Selected
                     var selected = uiStoreData.transform.Find("Selected");
+                    var selectIcon = uiStoreData.transform.Find("Select");
+                    var selectAdd = uiStoreData.transform.Find("Add").Find("Select");
+                    var selectARemove = uiStoreData.transform.Find("Remove").Find("Select");
+
                     if (CurrentStoreData == StoreDatas[i])
                     {
                         selected.gameObject.SetActive(true);
+                        selectIcon.gameObject.SetActive(CurStoreMode == StoreMode.ChangeItem);
+                        selectAdd.gameObject.SetActive(CurStoreMode == StoreMode.ChangeIn);
+                        selectARemove.gameObject.SetActive(CurStoreMode == StoreMode.ChangeOut);
                         cur = uiStoreData;
                     }
                     else
                     {
                         selected.gameObject.SetActive(false);
+                        selectIcon.gameObject.SetActive(false);
+                        selectAdd.gameObject.SetActive(false);
+                        selectARemove.gameObject.SetActive(false);
                     }
                     if (i == lastDataIndex)
                     {
@@ -729,16 +825,34 @@ namespace ProjectOC.InventorySystem.UI
                 // 强制立即更新 VerticalLayoutGroup 的布局
                 LayoutRebuilder.ForceRebuildLayoutImmediate(GridLayout.GetComponent<RectTransform>());
                 #endregion
+
+                #region BotKeyTips
+                if (CurStoreMode == StoreMode.ChangeItem)
+                {
+                    this.BotKeyTips_KeyTips.Find("KT_ChangeItem").gameObject.SetActive(true);
+                    this.BotKeyTips_KeyTips.Find("KT_Remove1").gameObject.SetActive(true);
+                    this.BotKeyTips_KeyTips.Find("KT_Remove10").gameObject.SetActive(true);
+                    this.BotKeyTips_KeyTips.Find("KT_Switch").gameObject.SetActive(false);
+                    this.BotKeyTips_KeyTips.Find("KT_FastAdd").gameObject.SetActive(true);
+                }
+                else
+                {
+                    this.BotKeyTips_KeyTips.Find("KT_ChangeItem").gameObject.SetActive(false);
+                    this.BotKeyTips_KeyTips.Find("KT_Remove1").gameObject.SetActive(false);
+                    this.BotKeyTips_KeyTips.Find("KT_Remove10").gameObject.SetActive(false);
+                    this.BotKeyTips_KeyTips.Find("KT_Switch").gameObject.SetActive(true);
+                    this.BotKeyTips_KeyTips.Find("KT_FastAdd").gameObject.SetActive(false);
+                }
+                #endregion
             }
             else if(this.CurMode == Mode.ChangeItem || this.CurMode == Mode.ChangeIcon)
             {
+                this.StoreTransform.gameObject.SetActive(false);
                 this.ChangeItem.gameObject.SetActive(true);
-                this.BotKeyTips_ChangeItem.gameObject.SetActive(true);
-                this.BotKeyTips_KeyTips.gameObject.SetActive(false);
-                this.UIItemTemplate.gameObject.SetActive(false);
-                this.ChangeItem_UIItemTemplate.gameObject.SetActive(false);
                 this.Upgrade.gameObject.SetActive(false);
-                this.Upgrade_UIItemTemplate.gameObject.SetActive(false);
+                this.BotKeyTips_KeyTips.gameObject.SetActive(false);
+                this.BotKeyTips_ChangeItem.gameObject.SetActive(true);
+                this.BotKeyTips_Upgrade.gameObject.SetActive(false);
 
                 ItemDatas = new List<string>() { "" };
                 ItemDatas.AddRange(ItemManager.Instance.GetAllItemID());
@@ -794,17 +908,7 @@ namespace ProjectOC.InventorySystem.UI
                     }
                     else
                     {
-                        img.sprite = null;
-                    }
-                    // Name
-                    var nametext = uiItemData.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
-                    if (itemID != "")
-                    {
-                        nametext.text = ItemManager.Instance.GetItemName(itemID);
-                    }
-                    else
-                    {
-                        nametext.text = PanelTextContent.text_Empty;
+                        img.sprite = EmptySprite;
                     }
                     // Selected
                     var selected = uiItemData.transform.Find("Selected");
@@ -882,17 +986,30 @@ namespace ProjectOC.InventorySystem.UI
             }
             else if (this.CurMode == Mode.Upgrade)
             {
+                this.StoreTransform.gameObject.SetActive(false);
                 this.ChangeItem.gameObject.SetActive(false);
-                this.BotKeyTips_ChangeItem.gameObject.SetActive(true);
-                this.BotKeyTips_KeyTips.gameObject.SetActive(false);
-                this.UIItemTemplate.gameObject.SetActive(false);
-                this.ChangeItem_UIItemTemplate.gameObject.SetActive(false);
                 this.Upgrade.gameObject.SetActive(true);
-                this.Upgrade_UIItemTemplate.gameObject.SetActive(false);
+                this.BotKeyTips_KeyTips.gameObject.SetActive(false);
+                this.BotKeyTips_ChangeItem.gameObject.SetActive(false);
+                this.BotKeyTips_Upgrade.gameObject.SetActive(true);
 
+                #region Build
+                // Icon
+                string buildCID = Store.WorldStore.Classification.ToString();
+                string buildID = BuildingManager.Instance.GetID(buildCID);
+                if (!tempSprite.ContainsKey(buildID))
+                {
+                    tempSprite[buildID] = CompositeManager.Instance.GetCompositonSprite(buildID);
+                }
+                Upgrade_Build.Find("Icon").GetComponent<Image>().sprite = tempSprite[buildID];
+                // Name
+                Upgrade_Build.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = BuildingManager.Instance.GetName(buildCID) ?? "";
+                #endregion
+
+                #region Raw
+                bool flagUpgradeBtn = true;
                 List<Formula> raw = this.Store.GetUpgradeRaw();
                 List<Formula> rawCur = this.Store.GetUpgradeRawCurrent(Player);
-                #region Item
                 int delta = tempUIItemDatasUpgrade.Count - raw.Count;
                 if (delta > 0)
                 {
@@ -935,11 +1052,19 @@ namespace ProjectOC.InventorySystem.UI
                     }
                     else
                     {
-                        img.sprite = null;
+                        img.sprite = EmptySprite;
                     }
+
+                    uiItemData.transform.Find("Background3").gameObject.SetActive(current < need);
+
                     var nametext = uiItemData.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
                     var amounttext = uiItemData.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
                     var needtext = uiItemData.transform.Find("NeedAmount").GetComponent<TMPro.TextMeshProUGUI>();
+                    uiItemData.transform.Find("Background3").gameObject.SetActive(current < need);
+                    if (current < need)
+                    {
+                        flagUpgradeBtn = false;
+                    }
                     if (itemID != "")
                     {
                         nametext.text = ItemManager.Instance.GetItemName(itemID);
@@ -954,20 +1079,34 @@ namespace ProjectOC.InventorySystem.UI
                     }
                 }
                 LayoutRebuilder.ForceRebuildLayoutImmediate(ChangeItem_GridLayout.GetComponent<RectTransform>());
+
+                Upgrade.Find("BtnBackground1").gameObject.SetActive(flagUpgradeBtn);
                 #endregion
 
                 #region Level
-                LvOld.text = "Lv: " + this.Store.Level.ToString();
-                DescOld.text = PanelTextContent.text_LvDesc1 + this.Store.StoreCapacity + "    " + PanelTextContent.text_LvDesc2 + this.Store.StoreDataCapacity;
+                Upgrade_LvOld.Find("Lv").GetComponent<TMPro.TextMeshProUGUI>().text = "Lv: " + Store.Level.ToString();
+                Upgrade_LvOld.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc1 + Store.StoreCapacity;
+                Upgrade_LvOld.Find("Desc1").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc2 + Store.StoreDataCapacity;
+
                 if (this.Store.Level + 1 <= this.Store.LevelMax)
                 {
-                    LvNew.text = "Lv: " + (Store.Level + 1).ToString();
-                    DescNew.text = PanelTextContent.text_LvDesc1 + Store.LevelStoreCapacity[Store.Level + 1] + "    " + PanelTextContent.text_LvDesc2 + Store.LevelStoreDataCapacity[Store.Level + 1];
+                    Upgrade.Find("BtnBackground").gameObject.SetActive(true);
+                    Upgrade.Find("KT_UpgradeConfirm").gameObject.SetActive(true);
+
+                    Upgrade_Build.Find("Image").gameObject.SetActive(true);
+                    Upgrade_LvNew.Find("Lv").GetComponent<TMPro.TextMeshProUGUI>().text = "Lv: " + (Store.Level + 1).ToString();
+                    Upgrade_LvNew.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc1 + Store.LevelStoreCapacity[Store.Level + 1];
+                    Upgrade_LvNew.Find("Desc1").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc2 + Store.LevelStoreDataCapacity[Store.Level + 1];
                 }
                 else
                 {
-                    LvNew.text = "";
-                    DescNew.text = "";
+                    Upgrade.Find("BtnBackground").gameObject.SetActive(false);
+                    Upgrade.Find("BtnBackground1").gameObject.SetActive(false);
+                    Upgrade.Find("KT_UpgradeConfirm").gameObject.SetActive(false);
+
+                    Upgrade_Build.Find("Image").gameObject.SetActive(false);
+                    Upgrade_LvOld.Find("Lv").GetComponent<TMPro.TextMeshProUGUI>().text = "Lv: MAX";
+                    Upgrade_LvNew.gameObject.SetActive(false);
                 }
                 #endregion
             }
