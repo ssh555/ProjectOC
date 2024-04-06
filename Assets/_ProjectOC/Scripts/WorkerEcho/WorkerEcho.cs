@@ -30,7 +30,7 @@ namespace ProjectOC.WorkerEchoNS
 
             timer.OnEndEvent += () =>
             {
-                GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker(buildingPart.transform.position, Quaternion.identity, WorkerID).Completed += (handle) =>
+                GameManager.Instance.GetLocalManager<WorkerManager>().SpawnWorker(buildingPart.transform.position, Quaternion.identity, WorkerID, isAdd: false).Completed += (handle) =>
                   {
                       this.worker = handle.Result.GetComponent<Worker>();
                       this.worker.gameObject.transform.position = this.worker.gameObject.transform.position += new Vector3((float)(3 * Math.Cos(2 * 3.1415926 * index / 5)), 0, (float)(3 * Math.Sin(2 * 3.1415926 * index / 5)));
@@ -69,6 +69,8 @@ namespace ProjectOC.WorkerEchoNS
 
         public void SpawnWorker(int index,Vector3 pos)
         {
+            GameManager.Instance.GetLocalManager<WorkerManager>().AddToWorkers(Workers[index].worker);
+
             Workers[index].worker.transform.position = pos;
             (BuildingPart as WorkerEchoBuilding).workerEcho.AddWorker(Workers[index].worker, index);
 

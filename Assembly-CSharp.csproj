@@ -191,8 +191,8 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Actions\Reflection\InvokeMethod.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\HasKey.cs" />
     <Compile Include="Assets\_ML\Engine\InventorySystem\CompositeSystem\ICompositeAbility.cs" />
-    <Compile Include="Assets\_ML\Engine\BuildingSystem\UI\BSEditMode_KeyComPanel.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Order\OrderNormal.cs" />
+    <Compile Include="Assets\_ML\Engine\BuildingSystem\UI\BSEditMode_KeyComPanel.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Worker\WorkerStateWorkingDuty.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetSlopeLimit.cs" />
     <Compile Include="Assets\_ML\Engine\InventorySystem\Scripts\Items\ResourceItem.cs" />
