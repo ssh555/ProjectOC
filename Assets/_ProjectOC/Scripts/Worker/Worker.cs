@@ -137,7 +137,7 @@ namespace ProjectOC.WorkerNS
         public float Threshold = 2f;
         public Vector3 Target;
         public event Action<Worker> OnArrival;
-        public event Action<Worker> OnArrivalDisposable;
+        private event Action<Worker> OnArrivalDisposable;
         public bool HasDestination = false;
         public void Init()
         {
@@ -201,26 +201,25 @@ namespace ProjectOC.WorkerNS
         {
             if (HasDestination && Vector3.Distance(transform.position, Target) < Threshold)
             {
-                HasDestination = false;
-                OnArrival?.Invoke(this);
+                ClearDestination();
                 OnArrivalDisposable?.Invoke(this);
-                OnArrivalDisposable = null;
+                OnArrival?.Invoke(this);
             }
         }
 
         public bool SetDestination(Vector3 target, Action<Worker> action = null)
         {
+            ClearDestination();
             Agent.isStopped = false;
             if (Agent.SetDestination(target))
             {
                 Target = target;
                 HasDestination = true;
-                OnArrivalDisposable += action;
+                OnArrivalDisposable = action;
                 return true;
             }
             else
             {
-                Agent.isStopped = true;
                 return false;
             }
         }
@@ -228,8 +227,7 @@ namespace ProjectOC.WorkerNS
         public void ClearDestination()
         {
             HasDestination = false;
-            OnArrivalDisposable = null;
-            if (Agent.enabled)
+            if (Agent != null && Agent.enabled)
             {
                 Agent.isStopped = true;
             }
@@ -303,7 +301,6 @@ namespace ProjectOC.WorkerNS
         public void OnDestroy()
         {
             (this as ML.Engine.Timer.ITickComponent).DisposeTick();
-            this.ClearDestination();
             if (HasTransport)
             {
                 this.Transport.End();

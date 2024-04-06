@@ -111,11 +111,7 @@ namespace ProjectOC.ProNodeNS
         {
             get
             {
-                if (this.Recipe == null)
-                {
-                    return ProNodeState.Vacancy;
-                }
-                else
+                if (HasRecipe)
                 {
                     if (this.timerForProduce != null && !this.timerForProduce.IsStoped)
                     {
@@ -126,6 +122,10 @@ namespace ProjectOC.ProNodeNS
                         return ProNodeState.Stagnation;
                     }
                 }
+                else
+                {
+                    return ProNodeState.Vacancy;
+                }
             }
         }
         /// <summary>
@@ -135,7 +135,7 @@ namespace ProjectOC.ProNodeNS
         {
             get
             {
-                if ((this.ProNodeType == ProNodeType.Mannul) && this.Worker != null)
+                if (HasWorker)
                 {
                     return this.EffBase + this.Worker.Eff[this.ExpType];
                 }
@@ -152,7 +152,7 @@ namespace ProjectOC.ProNodeNS
         {
             get
             {
-                if (this.Recipe != null && this.Eff > 0)
+                if (this.HasRecipe && this.Eff > 0)
                 {
                     if ((100 * Recipe.TimeCost) % Eff == 0)
                     {
@@ -180,10 +180,12 @@ namespace ProjectOC.ProNodeNS
         /// 正在生产的配方
         /// </summary>
         public Recipe Recipe;
+        public bool HasRecipe { get => Recipe != null && !string.IsNullOrEmpty(Recipe.ID); }
         /// <summary>
         /// 人工生产节点常驻刁民
         /// </summary>
         public Worker Worker;
+        public bool HasWorker { get => this.ProNodeType == ProNodeType.Mannul && Worker != null && !string.IsNullOrEmpty(Worker.Name); }
         /// <summary>
         /// 已经分配的搬运任务
         /// </summary>
@@ -282,6 +284,25 @@ namespace ProjectOC.ProNodeNS
             this.RemoveWorker();
         }
 
+        public void OnPositionChange()
+        {
+            if (HasWorker)
+            {
+                if (this.Worker.ArriveProNode)
+                {
+                    Worker.transform.position = WorldProNode.transform.position + new Vector3(0, 2f, 0);
+                }
+                else
+                {
+                    Worker.SetDestination(WorldProNode.transform.position, ProNode_Action);
+                }
+            }
+            foreach (var mission in MissionTransports)
+            {
+                mission?.UpdateTransportDestionation();
+            }
+        }
+
         public bool SetLevel(int level)
         {
             if (0 <= level && level <= LevelMax)
@@ -363,7 +384,7 @@ namespace ProjectOC.ProNodeNS
             bool flag = false;
             List<Item> resItems = new List<Item>();
             // 堆放的成品
-            if (this.Recipe != null && !string.IsNullOrEmpty(ProductItem) && StackAll > 0)
+            if (HasRecipe && StackAll > 0)
             {
                 List<Item> items = ItemManager.Instance.SpawnItems(ProductItem, StackAll);
                 foreach (var item in items)
@@ -432,9 +453,8 @@ namespace ProjectOC.ProNodeNS
                 this.RemoveWorker();
                 worker.ChangeProNode(this);
                 worker.SetTimeStatusAll(TimeStatus.Work_OnDuty);
-                worker.ClearDestination();
-                this.Worker = worker;
                 worker.SetDestination(WorldProNode.transform.position, ProNode_Action);
+                this.Worker = worker;
                 worker.StatusChangeAction += OnWorkerStatusChangeAction;
                 return true;
             }
@@ -446,8 +466,7 @@ namespace ProjectOC.ProNodeNS
             worker.ArriveProNode = true;
             worker.Agent.enabled = false;
             worker.transform.position = WorldProNode.transform.position + new Vector3(0, 2f, 0);
-            worker.ClearDestination();
-            this.StartProduce();
+            worker.ProNode.StartProduce();
         }
 
         /// <summary>
@@ -459,7 +478,7 @@ namespace ProjectOC.ProNodeNS
             if (this.ProNodeType == ProNodeType.Mannul)
             {
                 this.StopProduce();
-                if (this.Worker != null)
+                if (HasWorker)
                 {
                     this.Worker.StatusChangeAction -= OnWorkerStatusChangeAction;
                     this.Worker.SetTimeStatusAll(TimeStatus.Relax);
@@ -531,7 +550,7 @@ namespace ProjectOC.ProNodeNS
         /// </summary>
         public bool CanWorking()
         {
-            if (this.Recipe != null)
+            if (HasRecipe)
             {
                 foreach (var kv in this.Recipe.Raw)
                 {
@@ -540,7 +559,7 @@ namespace ProjectOC.ProNodeNS
                         return false;
                     }
                 }
-                if (this.ProNodeType == ProNodeType.Mannul && (this.Worker == null || !this.Worker.IsOnDuty))
+                if (this.ProNodeType == ProNodeType.Mannul && !(HasWorker && Worker.IsOnDuty))
                 {
                     return false;
                 }
@@ -607,13 +626,12 @@ namespace ProjectOC.ProNodeNS
             if (status != Status.Relaxing)
             {
                 StartProduce();
-                OnActionChange?.Invoke();
             }
             else
             {
                 StopProduce();
-                OnActionChange?.Invoke();
             }
+            OnActionChange?.Invoke();
         }
 
         /// <summary>
@@ -642,38 +660,6 @@ namespace ProjectOC.ProNodeNS
             return result;
         }
 
-        /// <summary>
-        /// 排序
-        /// </summary>
-        public class Sort : IComparer<ProNode>
-        {
-            public int Compare(ProNode x, ProNode y)
-            {
-                if (x == null)
-                {
-                    if (y == null)
-                    {
-                        return 0;
-                    }
-                    else
-                    {
-                        return 1;
-                    }
-                }
-                if (y == null)
-                {
-                    return -1;
-                }
-                int priorityX = (int)x.TransportPriority;
-                int priorityY = (int)y.TransportPriority;
-                if (priorityX != priorityY)
-                {
-                    return priorityX.CompareTo(priorityY);
-                }
-                return x.UID.CompareTo(y.UID);
-            }
-        }
-
         #region UI接口
         public void UIAdd(Player.PlayerCharacter player, string itemID, int amount)
         {
@@ -686,10 +672,6 @@ namespace ProjectOC.ProNodeNS
                     {
                         RawItems[itemID] += amount;
                         StartProduce();
-                    }
-                    else
-                    {
-                        //Debug.LogError("ProNode UIAdd Error");
                     }
                 }
             }
@@ -708,11 +690,28 @@ namespace ProjectOC.ProNodeNS
                     }
                     else
                     {
-                        //Debug.LogError("ProNode UIRemove Error");
                         break;
                     }
                 }
                 StartProduce();
+            }
+        }
+        public void UIFastAdd(Player.PlayerCharacter player)
+        {
+            if (player != null)
+            {
+                foreach (var kv in RawItems)
+                {
+                    string itemID = kv.Key;
+                    int amount = player.Inventory.GetItemAllNum(itemID);
+                    int maxAmount = StackMaxNum * Recipe.GetRawNum(itemID) - kv.Value;
+                    amount = amount >= maxAmount ? maxAmount : amount;
+                    if (player.Inventory.RemoveItem(itemID, amount))
+                    {
+                        RawItems[itemID] += amount;
+                        StartProduce();
+                    }
+                }
             }
         }
         public void UIFastAdd(Player.PlayerCharacter player, string itemID)
@@ -726,10 +725,6 @@ namespace ProjectOC.ProNodeNS
                 {
                     RawItems[itemID] += amount;
                     StartProduce();
-                }
-                else
-                {
-                    //Debug.LogError("ProNode UIFastAdd Error");
                 }
             }
         }
@@ -747,7 +742,6 @@ namespace ProjectOC.ProNodeNS
                     }
                     else
                     {
-                        //Debug.LogError("ProNode UIFastRemove Error");
                         break;
                     }
                 }

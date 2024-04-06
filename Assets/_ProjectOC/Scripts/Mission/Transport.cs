@@ -30,6 +30,10 @@ namespace ProjectOC.MissionNS
         public int CurNum;
         [LabelText("完成的数量")]
         public int FinishNum;
+        [LabelText("取货地预留的数量")]
+        public int SoureceReserveNum;
+        [LabelText("送货地预留的数量")]
+        public int TargetReserveNum;
 
         [LabelText("是否到达取货地")]
         public bool ArriveSource;
@@ -57,7 +61,6 @@ namespace ProjectOC.MissionNS
             {
                 if (this.Source.GetTransform().position != this.Worker.Target)
                 {
-                    this.Worker.ClearDestination();
                     this.Worker.SetDestination(this.Source.GetTransform().position, Transport_Source_Action);
                 }
             }
@@ -65,7 +68,6 @@ namespace ProjectOC.MissionNS
             {
                 if (this.Target.GetTransform().position != this.Worker.Target)
                 {
-                    this.Worker.ClearDestination();
                     this.Worker.SetDestination(this.Target.GetTransform().position, Transport_Target_Action);
                 }
             }
@@ -73,7 +75,7 @@ namespace ProjectOC.MissionNS
 
         private void Transport_Source_Action(Worker worker)
         {
-            ArriveSource = true;
+            worker.Transport.ArriveSource = true;
             worker.Transport.PutOutSource();
             worker.SetDestination(worker.Transport.Target.GetTransform().position, Transport_Target_Action);
         }
@@ -81,7 +83,6 @@ namespace ProjectOC.MissionNS
         private void Transport_Target_Action(Worker worker)
         {
             worker.Transport.PutInTarget();
-            worker.ClearDestination();
         }
 
         /// <summary>
@@ -165,21 +166,28 @@ namespace ProjectOC.MissionNS
                     if (item.Amount >= CurNum)
                     {
                         item.Amount -= CurNum;
-                        FinishNum += CurNum;
                         CurNum = 0;
                         break;
                     }
                     else
                     {
                         CurNum -= item.Amount;
-                        FinishNum += item.Amount;
                         item.Amount = 0;
                     }
                 }
             }
-            Worker.TransportItems.Clear();
+            Worker.TransportItems.RemoveAll(item => item.Amount == 0);
             Worker.Transport = null;
             Worker.ClearDestination();
+            if (Source != null && Source is StoreNS.Store source)
+            {
+                source.RemoveReserveStorage(ItemID, SoureceReserveNum);
+            }
+            if (Target != null && Target is StoreNS.Store target)
+            {
+                target.RemoveReserveEmpty(ItemID, TargetReserveNum);
+            }
+
             if (remove)
             {
                 Mission.Transports.Remove(this);

@@ -20,7 +20,7 @@ namespace ProjectOC.StoreNS
         public override void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
             // 第一次新建
-            if(isFirstBuild)
+            if (isFirstBuild)
             {
                 // 生成逻辑对象
                 string actorID = BuildingManager.Instance.GetActorID(this.Classification.ToString());
@@ -29,8 +29,12 @@ namespace ProjectOC.StoreNS
                     string[] split = actorID.Split("_");
                     StoreType storeType = (StoreType)Enum.Parse(typeof(StoreType), split[1]);
                     int level = int.Parse(split[2]);
-                    LocalGameManager.Instance.StoreManager.WorldStoreSetData(this, storeType, level-1);
+                    LocalGameManager.Instance.StoreManager.WorldStoreSetData(this, storeType, level - 1);
                 }
+            }
+            if (oldPos != newPos)
+            {
+                Store.OnPositionChange();
             }
             //isFirstBuild的更新放在基类里，要要到引用后面
             base.OnChangePlaceEvent(oldPos,newPos);

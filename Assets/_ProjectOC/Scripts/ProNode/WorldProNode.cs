@@ -33,6 +33,10 @@ namespace ProjectOC.ProNodeNS
                     LocalGameManager.Instance.ProNodeManager.WorldNodeSetData(this, actorID);
                 }
             }
+            if (oldPos != newPos)
+            {
+                ProNode.OnPositionChange();
+            }
             base.OnChangePlaceEvent(oldPos, newPos);
         }
 
