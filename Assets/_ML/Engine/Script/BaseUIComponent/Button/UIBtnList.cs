@@ -354,12 +354,10 @@ namespace ML.Engine.UI
         public SelectedButton MoveLeftIUISelected()
         {
             SelectedButton selectedButton = CurSelected.navigation.selectOnLeft as SelectedButton;
-            Debug.Log(selectedButton);
             if (selectedButton == CurSelected)
             {
                 if (this.uiBtnListContainer?.Grid_NavagationType == ContainerType.A)
                 {
-                    Debug.Log("asd");
                     this.uiBtnListContainer.CurnavagationMode = NavagationMode.BtnList;
                     this.OnExitInner();
                 }
@@ -374,12 +372,10 @@ namespace ML.Engine.UI
         public SelectedButton MoveRightIUISelected()
         {
             SelectedButton selectedButton = CurSelected.navigation.selectOnRight as SelectedButton;
-            Debug.Log(selectedButton);
             if (selectedButton == CurSelected)
             {
                 if (this.uiBtnListContainer?.Grid_NavagationType == ContainerType.A)
                 {
-                    Debug.Log("asd");
                     this.uiBtnListContainer.CurnavagationMode = NavagationMode.BtnList;
                     this.OnExitInner();
                 }

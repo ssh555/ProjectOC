@@ -18,7 +18,7 @@ namespace ML.Engine.UI
     {
         #region Unity
         public bool IsInit = false;
-
+        
         protected override void Awake()
         {
             base.Awake();

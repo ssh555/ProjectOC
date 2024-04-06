@@ -84,7 +84,7 @@ namespace ML.Engine.UI
 
         private ContainerType gridNavagationType;
 
-        public ContainerType Grid_NavagationType { set { Debug.Log("set "+value); }  get { return gridNavagationType; } }
+        public ContainerType Grid_NavagationType { set {  }  get { return gridNavagationType; } }
 
         private InputAction gridNavagationInputAction;
         public InputAction curGridNavagationInputAction { get { return gridNavagationInputAction; } }
@@ -109,7 +109,6 @@ namespace ML.Engine.UI
                 };
                 uIBtnLists.Add(uIBtnList);
                 tmpDic.Add(uIBtnListInitors[i], uIBtnList);
-                Debug.Log("grer "+uIBtnList);
             }
 
             //加入UIBtnList之间的导航关系
@@ -360,10 +359,6 @@ namespace ML.Engine.UI
                     }
                     break;
             }
-            foreach (var item in selectedButtons)
-            {
-                Debug.Log("AddEdge " + item.GetHashCode());
-            }
             return selectedButtons;
         }
 
@@ -372,9 +367,6 @@ namespace ML.Engine.UI
         {
             int l1 = edge1.Count;
             int l2 = edge2.Count;
-            foreach (SelectedButton button in edge1) { Debug.Log("1 "+button.gameObject.name); }
-            foreach (SelectedButton button in edge2) { Debug.Log("2 "+button.gameObject.name); }
-            Debug.Log(l1+ " " + l2);
             if (l1 >= l2)
             {
                 for(int i = 0; i < l2; i++) 
