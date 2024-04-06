@@ -99,9 +99,9 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Animancer\Internal\Editor\GUI\DummySerializableCallback.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Animancer\Internal\Mixer States\DirectionalMixerState.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Animancer\Internal\Editor\GUI\SerializableEventSequenceDrawer.cs" />
-    <Compile Include="Assets\_ML\Engine\_Addons\Animancer\Utilities\Transitions\ControllerTransitionAsset.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Animancer\Utilities\Directional Animations\DirectionalAnimationSet.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Animancer\Internal\Editor\Transition Preview Window\TransitionPreviewWindow.Scene.cs" />
+    <Compile Include="Assets\_ML\Engine\_Addons\Animancer\Utilities\Transitions\ControllerTransitionAsset.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Animancer\Utilities\Animation Jobs\AnimatedInt.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Animancer\Internal\Editor\AnimationGatherer.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Animancer\Internal\Editor\Serialization\Polymorphic.cs" />
@@ -185,8 +185,8 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Animancer\Internal\Editor\Attributes\EventNamesAttribute.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Animancer\Internal\Controller States\Float1ControllerState.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Animancer\Utilities\Animation Jobs\AnimatedBool.cs" />
-    <Compile Include="Assets\_ML\Engine\_Addons\Animancer\Internal\Core\AnimancerEvent.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Animancer\Internal\Controller States\ControllerState.DampedFloatParameter.cs" />
+    <Compile Include="Assets\_ML\Engine\_Addons\Animancer\Internal\Core\AnimancerEvent.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Animancer\Internal\Editor\AnimationBindings.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Animancer\Internal\Editor\AnimancerSettings.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Animancer\Internal\Editor\AnimancerReadMe.cs" />

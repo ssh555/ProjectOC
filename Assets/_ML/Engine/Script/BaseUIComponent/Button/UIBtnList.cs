@@ -514,6 +514,7 @@ namespace ML.Engine.UI
         /// </summary>
         public void BindNavigationInputAction(InputAction NavigationInputAction, BindType bindType, Action preAction = null, Action postAction = null)
         {
+            Debug.Log("BindInputAction " + this.GetHashCode());
             this.NavigationPreAction = preAction;
             this.NavigationPostAction = postAction;
             this.NavigationInputAction = NavigationInputAction;
@@ -563,7 +564,6 @@ namespace ML.Engine.UI
         /// </summary>
         public void BindInputAction(string btnName, InputAction InputAction, BindType bindType, Action preAction = null, Action postAction = null)
         {
-
             //统一点击与按键 并且加入preAction 与 postAction
             SelectedButton btn = GetBtn(btnName);
             btn.SetPreAndPostInteract(preAction, postAction);
@@ -594,6 +594,7 @@ namespace ML.Engine.UI
         {
             if (this.NavigationInputAction != null)
             {
+                Debug.Log("DeBindInputAction "+this.GetHashCode());
                 switch (this.NavigationBindType)
                 {
                     case BindType.started:

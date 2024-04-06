@@ -80,6 +80,7 @@
     <Compile Include="Assets\_ProjectOC\Scripts\Character\PlayerCharacter\IPlayerCharacter.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Building\ResonanceWheel\UI\UIPolygon.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\Stop.cs" />
+    <Compile Include="Assets\_ML\Engine\Utility\Version.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetMute.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetMaxParticles.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetVolume.cs" />
@@ -191,6 +192,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\HasKey.cs" />
     <Compile Include="Assets\_ML\Engine\InventorySystem\CompositeSystem\ICompositeAbility.cs" />
     <Compile Include="Assets\_ML\Engine\BuildingSystem\UI\BSEditMode_KeyComPanel.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\Order\OrderNormal.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Worker\WorkerStateWorkingDuty.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetSlopeLimit.cs" />
     <Compile Include="Assets\_ML\Engine\InventorySystem\Scripts\Items\ResourceItem.cs" />
@@ -291,6 +293,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Angle.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedQuaternion.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Math\SetInt.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\Order\OrderManager.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetMaxDistance.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Timeline\Stop.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\SetLocalScale.cs" />
@@ -335,6 +338,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\LayerMask\GetLayer.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Mission\TransportPriority.cs" />
     <Compile Include="Assets\_ML\Engine\InventorySystem\Scripts\WorldItem.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\Order\UI\UIOrderPanel.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Manager\LocalGameManager.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\CircleCollider2D\GetOffset.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Light\GetSpotAngle.cs" />
@@ -479,6 +483,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\RotateAround.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetVector2.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\String\BuildString.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\Order\OrderSpecial.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedGameObject.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Collider\GetEnabled.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Physics\Raycast.cs" />
@@ -679,6 +684,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\Pause.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\IsParameterControlledByCurve.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Character\AICharacter\AIController.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\Order\Order.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Worker\WorkerStateWorkingTransport.cs" />
     <Compile Include="Assets\_ML\Engine\Input\InputManager.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\GetChildCount.cs" />
@@ -691,6 +697,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Scripts\Tasks\MoveTowards.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Worker\FeatureType.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SharedTransformsToTransformList.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\Order\OrderUrgent.cs" />
     <Compile Include="Assets\_ML\Example\InventorySystem\CompositeSystem\UI\Formula\FormulaItemBtn.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedRect.cs" />
     <Compile Include="Assets\_ML\Engine\SaveSystem\XMLSaveSystem.cs" />
