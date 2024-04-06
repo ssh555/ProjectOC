@@ -8,6 +8,8 @@ using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InteractSystem;
 using ML.Engine.Manager;
 using ProjectOC.ManagerNS;
+using ML.Engine.InventorySystem;
+using ProjectOC.ProNodeNS;
 
 namespace ProjectOC.Building
 {
@@ -31,6 +33,9 @@ namespace ProjectOC.Building
 
         protected override void Start()
         {
+            ItemManager.Instance.AddItemIconObject("", transform,
+                                                        new Vector3(0, transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),
+                                                        Quaternion.Euler(Vector3.zero), Vector3.one);
             this.enabled = false;
         }
 
@@ -80,6 +85,8 @@ namespace ProjectOC.Building
                 }
             }
             this.CanSetClan = flagUp && flagDown;
+            string icon = this.CanSetClan ? "UI_Bed_Icon_Enable" : "UI_Bed_Icon_Disable";
+            this.transform.GetComponentInChildren<SpriteRenderer>().sprite = ItemManager.Instance.GetItemSprite(icon);
             return this.CanSetClan;
         }
 
@@ -157,7 +164,10 @@ namespace ProjectOC.Building
 
         public void OnDestroy()
         {
-            LocalGameManager.Instance.IslandAreaManager.UpdatedFieldTransformsAction -= HouseDetectionAction;
+            if (LocalGameManager.Instance.IslandAreaManager != null)
+            {
+                LocalGameManager.Instance.IslandAreaManager.UpdatedFieldTransformsAction -= HouseDetectionAction;
+            }
         }
     }
 }

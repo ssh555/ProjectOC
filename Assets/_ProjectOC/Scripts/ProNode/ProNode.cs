@@ -434,7 +434,7 @@ namespace ProjectOC.ProNodeNS
                 worker.SetTimeStatusAll(TimeStatus.Work_OnDuty);
                 worker.ClearDestination();
                 this.Worker = worker;
-                worker.SetDestination(WorldProNode.transform, ProNode_Action);
+                worker.SetDestination(WorldProNode.transform.position, ProNode_Action);
                 worker.StatusChangeAction += OnWorkerStatusChangeAction;
                 return true;
             }

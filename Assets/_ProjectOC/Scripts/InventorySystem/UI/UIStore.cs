@@ -337,19 +337,13 @@ namespace ProjectOC.InventorySystem.UI
         }
         private void ChangeIcon_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurMode == Mode.Store)
-            {
-                CurMode = Mode.ChangeIcon;
-                Refresh();
-            }
+            CurMode = Mode.ChangeIcon;
+            Refresh();
         }
         private void Upgrade_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurMode == Mode.Store)
-            {
-                CurMode = Mode.Upgrade;
-                Refresh();
-            }
+            CurMode = Mode.Upgrade;
+            Refresh();
         }
         private void NextPriority_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
@@ -485,14 +479,9 @@ namespace ProjectOC.InventorySystem.UI
                 {
                     if (!tempSprite.ContainsKey(itemID))
                     {
-                        var sprite = ItemManager.Instance.GetItemSprite(itemID);
-                        tempSprite[itemID] = sprite;
-                        img.sprite = sprite;
+                        tempSprite[itemID] = ItemManager.Instance.GetItemSprite(itemID);
                     }
-                    else
-                    {
-                        img.sprite = tempSprite[itemID];
-                    }
+                    img.sprite = tempSprite[itemID];
                 }
                 else
                 {
@@ -511,7 +500,11 @@ namespace ProjectOC.InventorySystem.UI
             {
                 this.Store.Upgrade(Player);
             }
-            Refresh();
+
+            if (CurMode != Mode.ChangeIcon)
+            {
+                Refresh();
+            }
         }
         #endregion
 

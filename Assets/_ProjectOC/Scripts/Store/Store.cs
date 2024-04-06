@@ -104,7 +104,10 @@ namespace ProjectOC.StoreNS
             transports.AddRange(Transports);
             foreach (Transport transport in transports)
             {
-                transport?.End();
+                if (transport.Target == this || !transport.ArriveSource)
+                {
+                    transport?.End();
+                }
             }
             this.Transports.Clear();
             // 将堆放的成品，素材，全部返还至玩家背包
@@ -178,16 +181,7 @@ namespace ProjectOC.StoreNS
             if (0 <= index && index < this.StoreCapacity)
             {
                 StoreData data = this.StoreDatas[index];
-                if (data.StorageReserve != 0 || data.EmptyReserve != 0)
-                {
-                    foreach (Transport transport in Transports)
-                    {
-                        if (transport.ItemID == data.ItemID)
-                        {
-                            transport?.End();
-                        }
-                    }
-                }
+                string oldItemID = data.ItemID;
                 // 将堆放的物品，全部返还至玩家背包
                 bool flag = false;
                 List<Item> resItems = new List<Item>();
@@ -217,6 +211,30 @@ namespace ProjectOC.StoreNS
 #pragma warning restore CS4014
                 }
                 this.StoreDatas[index] = new StoreData(itemID, this.StoreDataCapacity);
+
+                int storageReserve = GetStoreStorageReserve(oldItemID);
+                int emptyReserve = GetStoreEmptyReserve(oldItemID);
+                foreach (Transport transport in Transports)
+                {
+                    if (transport!=null && transport.ItemID == oldItemID)
+                    {
+                        if (transport.Source == this && !transport.ArriveSource)
+                        {
+                            if (storageReserve <= 0)
+                            {
+                                transport.End();
+                            }
+                            else
+                            {
+                                storageReserve -= transport.MissionNum;
+                            }
+                        }
+                        else if(transport.Target == this && emptyReserve == 0)
+                        {
+                            transport.End();
+                        }
+                    }
+                }
                 OnStoreDataChange?.Invoke();
                 return true;
             }
