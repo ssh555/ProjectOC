@@ -12,9 +12,6 @@ namespace ML.PlayerCharacterNS
     public class PlayerController : RoleController,IController
     {
         public ICharacter currentCharacter = null;
-        public List<ICharacter> SpawnedCharacters { get; set; }
-        public IControllerState State { get; set; }
-
         private List<string> ICharacterABResourcePath = new List<string>();
 
         public PlayerController()

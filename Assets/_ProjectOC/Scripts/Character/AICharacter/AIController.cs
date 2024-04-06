@@ -6,14 +6,6 @@ namespace ML.PlayerCharacterNS
 {
     public class AIController : RoleController,IController
     {
-        public List<ICharacter> SpawnedCharacters { get; set; }
-        public IControllerState State { get; set; }
-        public ICharacter SpawnCharacter()
-        {
-            ICharacter character = null;
-            return character;
-        }
-
         public ICharacter SpawnCharacter(int _index = 0,Transform _transf = null)
         {
             return null;
