@@ -117,6 +117,11 @@ namespace ML.Engine.UI
             this.UIBtnList = uIBtnList;
         }
 
+        public UIBtnList GetUIBtnList()
+        {
+            return this.UIBtnList;
+        }
+
         public void SetPreAndPostInteract(System.Action preAction, System.Action postAction)
         {
             this.PreInteract = preAction; 

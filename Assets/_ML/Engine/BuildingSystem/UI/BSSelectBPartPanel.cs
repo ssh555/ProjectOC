@@ -14,13 +14,15 @@ using UnityEngine;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 using UnityEngine.Windows;
+using Unity.VisualScripting;
+using static ML.Engine.BuildingSystem.UI.BSSelectBPartPanel;
 
 namespace ML.Engine.BuildingSystem.UI
 {
     /// <summary>
     /// 放置的一级
     /// </summary>
-    public class BSSelectBPartPanel : Engine.UI.UIBasePanel
+    public class BSSelectBPartPanel : Engine.UI.UIBasePanel<BSSelectBPartPanelStruct>
     {
         #region 载入资源
         public const string TCategorySpriteAtlasPath = "ML/BuildingSystem/Category/SA_Build_Category.spriteatlasv2";
@@ -127,14 +129,6 @@ namespace ML.Engine.BuildingSystem.UI
         private RectTransform templateCategory;
         private RectTransform typeParent;
         private RectTransform templateType;
-
-        private UIKeyTip categorylast;
-        private UIKeyTip categorynext;
-        private UIKeyTip typelast;
-        private UIKeyTip typenext;
-        private UIKeyTip comfirm;
-        private UIKeyTip back;
-
         #endregion
 
         #endregion
@@ -152,50 +146,6 @@ namespace ML.Engine.BuildingSystem.UI
             this.typeParent = this.transform.Find("SelectType").Find("Content") as RectTransform;
             this.templateType = this.typeParent.Find("TypeTemplate") as RectTransform;
             this.templateType.gameObject.SetActive(false);
-
-            Transform keytip = this.transform.Find("KeyTip");
-
-            comfirm = new UIKeyTip();
-            comfirm.root = keytip.Find("KT_Comfirm") as RectTransform;
-            comfirm.img = comfirm.root.Find("Image").GetComponent<Image>();
-            comfirm.keytip = comfirm.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            comfirm.description = comfirm.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            comfirm.ReWrite(monoBM.KeyTipDict["comfirm"]);
-
-            back = new UIKeyTip();
-            back.root = keytip.Find("KT_Back") as RectTransform;
-            back.img = back.root.Find("Image").GetComponent<Image>();
-            back.keytip = back.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            back.description = back.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            back.ReWrite(monoBM.KeyTipDict["back"]);
-
-            keytip = this.transform.Find("SelectCategory");
-
-            categorylast = new UIKeyTip();
-            categorylast.root = keytip.Find("KT_Last") as RectTransform;
-            categorylast.img = categorylast.root.Find("Image").GetComponent<Image>();
-            categorylast.keytip = categorylast.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            categorylast.ReWrite(monoBM.KeyTipDict["categorylast"]);
-
-            categorynext = new UIKeyTip();
-            categorynext.root = keytip.Find("KT_Next") as RectTransform;
-            categorynext.img = categorynext.root.Find("Image").GetComponent<Image>();
-            categorynext.keytip = categorynext.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            categorynext.ReWrite(monoBM.KeyTipDict["categorynext"]);
-
-            keytip = this.transform.Find("SelectType");
-
-            typelast = new UIKeyTip();
-            typelast.root = keytip.Find("KT_Last") as RectTransform;
-            typelast.img = typelast.root.Find("Image").GetComponent<Image>();
-            typelast.keytip = typelast.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            typelast.ReWrite(monoBM.KeyTipDict["typelast"]);
-
-            typenext = new UIKeyTip();
-            typenext.root = keytip.Find("KT_Next") as RectTransform;
-            typenext.img = typenext.root.Find("Image").GetComponent<Image>();
-            typenext.keytip = typenext.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            typenext.ReWrite(monoBM.KeyTipDict["typenext"]);
         }
 
         #endregion
@@ -403,6 +353,21 @@ namespace ML.Engine.BuildingSystem.UI
             this.SelectedCategory2Index = 0;
 
             this.Refresh();
+        }
+        #endregion
+
+        #region TextContent
+        [System.Serializable]
+        public struct BSSelectBPartPanelStruct
+        {
+            public KeyTip[] KeyTips;
+        }
+
+        protected override void InitTextContentPathData()
+        {
+            this.abpath = "OC/Json/TextContent/BuildingSystem/UI";
+            this.abname = "BSSelectBPartPanel";
+            this.description = "BSSelectBPartPanel数据加载完成";
         }
         #endregion
     }

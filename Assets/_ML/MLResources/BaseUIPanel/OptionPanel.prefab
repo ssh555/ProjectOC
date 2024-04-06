@@ -555,6 +555,7 @@ GameObject:
   - component: {fileID: 7869780169875665340}
   - component: {fileID: 7199694727152791077}
   - component: {fileID: 7626284151922367933}
+  - component: {fileID: 161251149844034361}
   m_Layer: 5
   m_Name: ButtonList
   m_TagString: Untagged
@@ -625,6 +626,24 @@ MonoBehaviour:
   m_Spacing: {x: 50.07, y: 43.14}
   m_Constraint: 1
   m_ConstraintCount: 3
+--- !u!114 &161251149844034361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1957370328634654117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3988da8222f461e4e9032c2c636facbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  btnListInitData:
+    limitNum: 3
+    hasInitSelect: 1
+    isLoop: 0
+    isWheel: 0
+    hasBtnListContainer: 0
 --- !u!1 &2379418739328238892
 GameObject:
   m_ObjectHideFlags: 0
@@ -1705,6 +1724,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7869780169875665340}
     m_Modifications:
+    - target: {fileID: 7309323843883390160, guid: b8074846cd694eb4a9791b340e8fb00c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7783856600298987799, guid: b8074846cd694eb4a9791b340e8fb00c, type: 3}
       propertyPath: m_Name
       value: AudioBtn
@@ -1810,6 +1833,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7869780169875665340}
     m_Modifications:
+    - target: {fileID: 5730878060068974648, guid: b8074846cd694eb4a9791b340e8fb00c, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5730878060068974648, guid: b8074846cd694eb4a9791b340e8fb00c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5730878060068974648, guid: b8074846cd694eb4a9791b340e8fb00c, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5730878060068974648, guid: b8074846cd694eb4a9791b340e8fb00c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5730878060068974648, guid: b8074846cd694eb4a9791b340e8fb00c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5730878060068974648, guid: b8074846cd694eb4a9791b340e8fb00c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7309323843883390160, guid: b8074846cd694eb4a9791b340e8fb00c, type: 3}
       propertyPath: m_IsActive
       value: 1

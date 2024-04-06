@@ -2068,6 +2068,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2778978528566360266}
+  - component: {fileID: 9091602855121147622}
   m_Layer: 0
   m_Name: ButtonList
   m_TagString: Untagged
@@ -2103,6 +2104,24 @@ RectTransform:
   m_AnchoredPosition: {x: 2.4927, y: 3.7391}
   m_SizeDelta: {x: 555.2734, y: 563.7662}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &9091602855121147622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5890216114809454951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3988da8222f461e4e9032c2c636facbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  btnListInitData:
+    limitNum: 1
+    hasInitSelect: 0
+    isLoop: 0
+    isWheel: 1
+    hasBtnListContainer: 0
 --- !u!1 &6081137565749083049
 GameObject:
   m_ObjectHideFlags: 0

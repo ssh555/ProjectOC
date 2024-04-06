@@ -15,13 +15,15 @@ using UnityEngine.U2D;
 using UnityEngine.UI;
 using UnityEngine.Windows;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using Unity.VisualScripting;
+using static ML.Engine.BuildingSystem.UI.BSPlaceModePanel;
 
 namespace ML.Engine.BuildingSystem.UI
 {
     /// <summary>
     /// 放置的三级
     /// </summary>
-    public class BSPlaceModePanel : Engine.UI.UIBasePanel, Timer.ITickComponent
+    public class BSPlaceModePanel : Engine.UI.UIBasePanel<BSPlaceModePanelStruct>, Timer.ITickComponent
     {
         #region Property|Field
 
@@ -34,22 +36,6 @@ namespace ML.Engine.BuildingSystem.UI
         private Dictionary<BuildingCategory3, RectTransform> styleInstance = new Dictionary<BuildingCategory3, RectTransform>();
         private RectTransform styleParent;
         private RectTransform templateStyle;
-
-        #region KeyTip
-        private UIKeyTip place;
-        private UIKeyTip altersocket;
-        private UIKeyTip altermat;
-        private UIKeyTip rotateleft;
-        private UIKeyTip rotateright;
-        private UIKeyTip back;
-        private UIKeyTip keycom;
-        private UIKeyTip stylelast;
-        private UIKeyTip stylenext;
-        private UIKeyTip heightlast;
-        private UIKeyTip heightnext;
-
-        #endregion
-
         #endregion
 
         #endregion
@@ -63,85 +49,6 @@ namespace ML.Engine.BuildingSystem.UI
             this.styleParent = this.transform.Find("KT_AlterHeight").Find("KT_AlterStyle").Find("Content") as RectTransform;
             this.templateStyle = this.styleParent.Find("StyleTemplate") as RectTransform;
             this.templateStyle.gameObject.SetActive(false);
-
-            Transform keytips = this.transform.Find("KeyTip");
-
-            place = new UIKeyTip();
-            place.root = keytips.Find("KT_Place") as RectTransform;
-            place.img = place.root.Find("Image").GetComponent<Image>();
-            place.keytip = place.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            place.description = place.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            place.ReWrite(monoBM.KeyTipDict["place"]);
-
-            altersocket = new UIKeyTip();
-            altersocket.root = keytips.Find("KT_AlterSocket") as RectTransform;
-            altersocket.img = altersocket.root.Find("Image").GetComponent<Image>();
-            altersocket.keytip = altersocket.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            altersocket.description = altersocket.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            altersocket.ReWrite(monoBM.KeyTipDict["altersocket"]);
-
-            altermat = new UIKeyTip();
-            altermat.root = keytips.Find("KT_AlterMat") as RectTransform;
-            altermat.img = altermat.root.Find("Image").GetComponent<Image>();
-            altermat.keytip = altermat.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            altermat.description = altermat.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            altermat.ReWrite(monoBM.KeyTipDict["altermat"]);
-
-            rotateright = new UIKeyTip();
-            rotateright.root = keytips.Find("KT_Rotate") as RectTransform;
-            rotateright.img = rotateright.root.Find("Right").GetComponent<Image>();
-            rotateright.keytip = rotateright.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            rotateright.description = rotateright.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            rotateright.ReWrite(monoBM.KeyTipDict["rotateright"]);
-
-            rotateleft = new UIKeyTip();
-            rotateleft.root = keytips.Find("KT_Rotate") as RectTransform;
-            rotateleft.img = rotateleft.root.Find("Left").GetComponent<Image>();
-            rotateleft.keytip = rotateleft.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            rotateleft.description = rotateright.description;
-            rotateleft.ReWrite(monoBM.KeyTipDict["rotateleft"]);
-
-            back = new UIKeyTip();
-            back.root = keytips.Find("KT_Back") as RectTransform;
-            back.img = back.root.Find("Image").GetComponent<Image>();
-            back.keytip = back.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            back.description = back.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            back.ReWrite(monoBM.KeyTipDict["back"]);
-
-            keycom = new UIKeyTip();
-            keycom.root = this.transform.Find("KT_KeyCom") as RectTransform;
-            keycom.img = keycom.root.Find("Image").GetComponent<Image>();
-            keycom.keytip = keycom.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            keycom.description = keycom.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            keycom.ReWrite(monoBM.KeyTipDict["keycom"]);
-
-
-
-            keytips = this.transform.Find("KT_AlterHeight");
-            heightlast = new UIKeyTip();
-            heightlast.root = keytips.Find("KT_Down") as RectTransform;
-            heightlast.img = heightlast.root.Find("Image").GetComponent<Image>();
-            heightlast.keytip = heightlast.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            heightlast.ReWrite(monoBM.KeyTipDict["heightlast"]);
-
-            heightnext = new UIKeyTip();
-            heightnext.root = keytips.Find("KT_Up") as RectTransform;
-            heightnext.img = heightnext.root.Find("Image").GetComponent<Image>();
-            heightnext.keytip = heightnext.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            heightnext.ReWrite(monoBM.KeyTipDict["heightnext"]);
-
-            keytips = keytips.Find("KT_AlterStyle");
-            stylelast = new UIKeyTip();
-            stylelast.root = keytips.Find("KT_Left") as RectTransform;
-            stylelast.img = stylelast.root.Find("Image").GetComponent<Image>();
-            stylelast.keytip = stylelast.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            stylelast.ReWrite(monoBM.KeyTipDict["stylelast"]);
-
-            stylenext = new UIKeyTip();
-            stylenext.root = keytips.Find("KT_Right") as RectTransform;
-            stylenext.img = stylenext.root.Find("Image").GetComponent<Image>();
-            stylenext.keytip = stylenext.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            stylenext.ReWrite(monoBM.KeyTipDict["stylenext"]);
         }
 
         #endregion
@@ -450,6 +357,21 @@ namespace ML.Engine.BuildingSystem.UI
         private void Placer_OnPlaceModeChangeBPart(IBuildingPart obj)
         {
             obj.CheckCanInPlaceMode += CheckCostResources;
+        }
+        #endregion
+
+        #region TextContent
+        [System.Serializable]
+        public struct BSPlaceModePanelStruct
+        {
+            public KeyTip[] KeyTips;
+        }
+
+        protected override void InitTextContentPathData()
+        {
+            this.abpath = "OC/Json/TextContent/BuildingSystem/UI";
+            this.abname = "BSPlaceModePanel";
+            this.description = "BSPlaceModePanel数据加载完成";
         }
         #endregion
     }
