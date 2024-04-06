@@ -5,6 +5,7 @@ using ML.Engine.SaveSystem;
 using ML.Engine.Timer;
 using ML.Engine.UI;
 using ML.Example.InventorySystem;
+using ProjectOC.ManagerNS;
 using ProjectOC.Player;
 using ProjectOC.TechTree;
 using ProjectOC.WorkerNS;
@@ -277,9 +278,9 @@ namespace ProjectOC.Order
                 }
 
                 //TODO°´Ë³Ðò¿Û²Ö¿â
-                if (AcceptedList[i].canBeCommit)
+                if (!AcceptedList[i].canBeCommit) 
                 {
-
+                    //LocalGameManager.Instance.StoreManager.GetStores
                 }
             }
 
