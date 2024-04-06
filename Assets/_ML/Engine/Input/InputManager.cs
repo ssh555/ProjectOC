@@ -85,26 +85,45 @@ namespace ML.Engine.Input
             return null;
         }
 
-        public string GetInputActionBindText(InputAction inputAction)
+        /// <summary>
+        /// 获取对应InputAction的BindText index为选择InputAction下的哪一项Binding 默认为0即为全选 下标从1开始
+        /// </summary>
+        public string GetInputActionBindText(InputAction inputAction,int index = 0)
         {
             HashSet<string> keys = new HashSet<string>();
             string t = "";
             // 遍历当前 InputAction 的所有绑定
             var options = InputControlPath.HumanReadableStringOptions.OmitDevice | InputControlPath.HumanReadableStringOptions.UseShortNames;
             string humanReadableString;
-            foreach (InputBinding binding in inputAction.bindings)
+            for (int i = 0; i < inputAction.bindings.Count; i++)
             {
+                if(index == 0)
+                {
+                    humanReadableString = InputControlPath.ToHumanReadableString(inputAction.bindings[i].path, options);
+                    if (Config.inputDevice == Config.InputDevice.Keyboard && inputAction.bindings[i].path.StartsWith("<Keyboard>"))
+                    {
+                        keys.Add(ExtractString(humanReadableString));
+                    }
+                    else if (Config.inputDevice == Config.InputDevice.XBOX && inputAction.bindings[i].path.StartsWith("<XInputController>"))
+                    {
+                        keys.Add(ExtractString(humanReadableString));
+                    }
+                }
+                else if(index - 1 == i)
+                {
+                    humanReadableString = InputControlPath.ToHumanReadableString(inputAction.bindings[i].path, options);
+                    if (Config.inputDevice == Config.InputDevice.Keyboard && inputAction.bindings[i].path.StartsWith("<Keyboard>"))
+                    {
+                        return humanReadableString;
+                    }
+                    else if (Config.inputDevice == Config.InputDevice.XBOX && inputAction.bindings[i].path.StartsWith("<XInputController>"))
+                    {
+                        return humanReadableString;
+                    }
+                }
                 
-                humanReadableString = InputControlPath.ToHumanReadableString(binding.path, options);
-                if (Config.inputDevice == Config.InputDevice.Keyboard && binding.path.StartsWith("<Keyboard>"))
-                {
-                    keys.Add(ExtractString(humanReadableString));
-                }
-                else if (Config.inputDevice == Config.InputDevice.XBOX && binding.path.StartsWith("<XInputController>"))
-                {
-                    keys.Add(ExtractString(humanReadableString));
-                }
             }
+            
 
             foreach (var item in keys)
             {
@@ -143,23 +162,28 @@ namespace ML.Engine.Input
             // 获取结构体中的所有字段
             FieldInfo[] fields = structType.GetFields();
 
-            // 创建一个用于存储KeyTip的列表
-            List<KeyTip> KeyTipValues = new List<KeyTip>();
+            // 创建一个用于存储 KeyTip 的列表
+            List<KeyTip> keyTipValues = new List<KeyTip>();
 
             // 遍历所有字段
             foreach (FieldInfo field in fields)
             {
-                // 如果字段类型是KeyTip类型，则将其值添加到列表中
+                // 如果字段类型是 KeyTip 类型，则将其值添加到列表中
                 if (field.FieldType == typeof(KeyTip))
                 {
-                    
                     KeyTip value = (KeyTip)field.GetValue(StructT);
-                    KeyTipValues.Add(value);
+                    keyTipValues.Add(value);
+                }
+                // 如果字段类型是 KeyTip[] 类型，则逐个添加数组中的元素到列表中
+                else if (field.FieldType == typeof(KeyTip[]))
+                {
+                    KeyTip[] arrayValue = (KeyTip[])field.GetValue(StructT);
+                    keyTipValues.AddRange(arrayValue);
                 }
             }
 
             // 将列表转换为数组并返回
-            return KeyTipValues.ToArray();
+            return keyTipValues.ToArray();
         }
         #endregion
     }

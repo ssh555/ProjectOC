@@ -19,8 +19,6 @@ namespace ML.Engine.UI
         {
             base.Awake();
             ToptitleText = this.transform.Find("TopTitle").Find("Text").GetComponent<TextMeshProUGUI>();
-            btnList = this.transform.Find("ButtonList");
-            gridLayout = btnList.GetComponent<GridLayoutGroup>();
         }
 
         protected override void Start()
@@ -33,12 +31,6 @@ namespace ML.Engine.UI
         #endregion
 
         #region Override
-        public override void OnEnter()
-        {
-            UIBtnList = new UIBtnList(parent: btnList, limitNum: gridLayout.constraintCount);
-            base.OnEnter();
-        }
-
         protected override void Enter()
         {
             this.UIBtnList.EnableBtnList();
@@ -207,8 +199,6 @@ namespace ML.Engine.UI
 
         #region UI对象引用
 
-        private GridLayoutGroup gridLayout;
-
         private TMPro.TextMeshProUGUI ToptitleText;
 
 
@@ -254,8 +244,13 @@ namespace ML.Engine.UI
             this.abname = "OptionPanel";
             this.description = "OptionPanel数据加载完成";
         }
-        private Transform btnList;
-        private UIBtnList UIBtnList; 
+        private UIBtnList UIBtnList;
+
+        protected override void InitBtnInfo()
+        {
+            UIBtnListInitor uIBtnListInitor = this.transform.GetComponentInChildren<UIBtnListInitor>(true);
+            this.UIBtnList = new UIBtnList(uIBtnListInitor.transform, uIBtnListInitor.btnListInitData);
+        }
         private void InitBtnData(OptionPanelStruct datas)
         {
             foreach (var tt in datas.Btns)

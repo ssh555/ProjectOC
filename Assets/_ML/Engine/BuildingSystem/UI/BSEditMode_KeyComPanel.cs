@@ -2,24 +2,20 @@ using ML.Engine.TextContent;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static ML.Engine.BuildingSystem.MonoBuildingManager;
+using static ML.Engine.BuildingSystem.UI.BSEditMode_KeyComPanel;
 
 namespace ML.Engine.BuildingSystem.UI
 {
-    public class BSEditMode_KeyComPanel : Engine.UI.UIBasePanel
+    public class BSEditMode_KeyComPanel : Engine.UI.UIBasePanel<BSEditMode_KeyComPanelStruct>
     {
         #region Property|Field
         private BuildingManager BM => BuildingManager.Instance;
         private BuildingPlacer.BuildingPlacer Placer => BM.Placer;
         private MonoBuildingManager monoBM;
-        #region UIGO引用
-        private UIKeyTip keycom;
-        private UIKeyTip copymat;
-        private UIKeyTip pastemat;
-        private UIKeyTip switchframe;
-        #endregion
 
         #endregion
 
@@ -28,34 +24,7 @@ namespace ML.Engine.BuildingSystem.UI
         protected override void Awake()
         {
             this.enabled = false;
-            Transform keycoms = this.transform.Find("KeyCom");
             monoBM = ML.Engine.Manager.GameManager.Instance.GetLocalManager<MonoBuildingManager>();
-            keycom = new UIKeyTip();
-            keycom.root = keycoms.Find("KT_KeyCom") as RectTransform;
-            keycom.img = keycom.root.Find("Image").GetComponent<Image>();
-            keycom.keytip = keycom.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            keycom.ReWrite(monoBM.KeyTipDict["keycom"]);
-
-            copymat = new UIKeyTip();
-            copymat.root = keycoms.Find("KT_CopyMat") as RectTransform;
-            copymat.img = copymat.root.Find("Image").GetComponent<Image>();
-            copymat.keytip = copymat.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            copymat.description = copymat.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            copymat.ReWrite(monoBM.KeyTipDict["copymat"]);
-
-            pastemat = new UIKeyTip();
-            pastemat.root = keycoms.Find("KT_PasteMat") as RectTransform;
-            pastemat.img = pastemat.root.Find("Image").GetComponent<Image>();
-            pastemat.keytip = pastemat.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            pastemat.description = pastemat.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            pastemat.ReWrite(monoBM.KeyTipDict["pastemat"]);
-
-            switchframe = new UIKeyTip();
-            switchframe.root = keycoms.Find("KT_SwitchFrame") as RectTransform;
-            switchframe.img = switchframe.root.Find("Image").GetComponent<Image>();
-            switchframe.keytip = switchframe.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            switchframe.description = switchframe.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            switchframe.ReWrite(monoBM.KeyTipDict["switchframe"]);
         }
 
         #endregion
@@ -63,10 +32,7 @@ namespace ML.Engine.BuildingSystem.UI
         #region Override
         public override void Refresh()
         {
-            keycom.ReWrite(monoBM.KeyTipDict["keycom"]);
-            copymat.ReWrite(monoBM.KeyTipDict["copymat"]);
-            pastemat.ReWrite(monoBM.KeyTipDict["pastemat"]);
-            switchframe.ReWrite(monoBM.KeyTipDict["switchframe"]);
+            
         }
         #endregion
 
@@ -112,6 +78,21 @@ namespace ML.Engine.BuildingSystem.UI
         {
             // 辅助网格
             this.Placer.IsEnableGridSupport = !this.Placer.IsEnableGridSupport;
+        }
+        #endregion
+
+        #region TextContent
+        [System.Serializable]
+        public struct BSEditMode_KeyComPanelStruct
+        {
+            public KeyTip[] KeyTips;
+        }
+
+        protected override void InitTextContentPathData()
+        {
+            this.abpath = "OC/Json/TextContent/BuildingSystem/UI";
+            this.abname = "BSEditMode_KeyComPanel";
+            this.description = "BSEditMode_KeyComPanel数据加载完成";
         }
         #endregion
     }

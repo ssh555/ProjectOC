@@ -12,17 +12,27 @@ using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 using static ML.Engine.UI.UIBtnListContainer;
 using Sirenix.OdinInspector;
+using static ML.Engine.UI.UIBtnListContainerInitor;
+using static ML.Engine.UI.UIBtnListInitor;
 
 namespace ML.Engine.UI
 {
-    public class UIBtnList
+    public class UIBtnList : ISelected
     {
+        #region ISelected
+        public ISelected LeftUI { get ; set ; }
+        public ISelected RightUI { get; set; }
+        public ISelected UpUI { get; set; }
+        public ISelected DownUI { get; set; }
+        #endregion
+
         [ShowInInspector]
         private List<List<SelectedButton>> TwoDimSelectedButtons = new List<List<SelectedButton>>();//二维列表
 
 
         public List<List<SelectedButton>> GetTwoDimSelectedButtons { get { return TwoDimSelectedButtons; } }
         private int OneDimCnt = 0;
+        public int BtnCnt {  get { return OneDimCnt; } }
         private int TwoDimH = 0;
         private int TwoDimW = 0;
 
@@ -79,6 +89,24 @@ namespace ML.Engine.UI
             if (parent != null)
             {
                 InitBtnInfo(parent, limitNum, hasInitSelect, isLoop, isWheel, OnSelectedEnter, OnSelectedExit);
+                try
+                {
+                    this.Selected = parent.Find("Selected");
+                }
+                catch { }
+            }
+        }
+
+        public UIBtnList(Transform parent, BtnListInitData btnListInitData)
+        {
+            this.parent = parent;
+            this.limitNum = btnListInitData.limitNum;
+            this.hasInitSelect = btnListInitData.hasInitSelect;
+            this.isLoop = btnListInitData.isLoop;
+            this.isWheel = btnListInitData.isWheel;
+            if (parent != null)
+            {
+                InitBtnInfo(parent, limitNum, hasInitSelect, isLoop, isWheel, null, null);
                 try
                 {
                     this.Selected = parent.Find("Selected");
@@ -214,6 +242,7 @@ namespace ML.Engine.UI
                 navigation.selectOnLeft = j - 1 >= 0 ? TwoDimSelectedButtons[i][j - 1] : TwoDimSelectedButtons[i][j];
             }
             TwoDimSelectedButtons[i][j].navigation = navigation;
+            ++OneDimCnt;
         }
 
         public void DeleteButton(int index)
@@ -288,32 +317,76 @@ namespace ML.Engine.UI
         /// </summary>
         public SelectedButton MoveUPIUISelected()
         {
-            if(this.CurSelected == null)return null;
-            return RefreshSelected(CurSelected.navigation.selectOnUp as SelectedButton);
+            SelectedButton selectedButton = CurSelected.navigation.selectOnUp as SelectedButton;
+            if (selectedButton == CurSelected)
+            {
+                if(this.uiBtnListContainer?.Grid_NavagationType == ContainerType.A)
+                {
+                    this.uiBtnListContainer.CurnavagationMode = NavagationMode.BtnList;
+                    this.OnExitInner();
+                }
+                return null;
+            }
+                
+            return RefreshSelected(selectedButton);
         }
         /// <summary>
         /// 向下
         /// </summary>
         public SelectedButton MoveDownIUISelected()
         {
-            if (this.CurSelected == null) return null;
-            return RefreshSelected(CurSelected.navigation.selectOnDown as SelectedButton);
+            SelectedButton selectedButton = CurSelected.navigation.selectOnDown as SelectedButton;
+            if (selectedButton == CurSelected)
+            {
+                if (this.uiBtnListContainer?.Grid_NavagationType == ContainerType.A)
+                {
+                    this.uiBtnListContainer.CurnavagationMode = NavagationMode.BtnList;
+                    this.OnExitInner();
+                }
+                return null;
+            }
+
+            return RefreshSelected(selectedButton);
         }
         /// <summary>
         /// 向左
         /// </summary>
         public SelectedButton MoveLeftIUISelected()
         {
-            if (this.CurSelected == null) return null;
-            return RefreshSelected(CurSelected.navigation.selectOnLeft as SelectedButton);
+            SelectedButton selectedButton = CurSelected.navigation.selectOnLeft as SelectedButton;
+            Debug.Log(selectedButton);
+            if (selectedButton == CurSelected)
+            {
+                if (this.uiBtnListContainer?.Grid_NavagationType == ContainerType.A)
+                {
+                    Debug.Log("asd");
+                    this.uiBtnListContainer.CurnavagationMode = NavagationMode.BtnList;
+                    this.OnExitInner();
+                }
+                return null;
+            }
+
+            return RefreshSelected(selectedButton);
         }
         /// <summary>
         /// 向右
         /// </summary>
         public SelectedButton MoveRightIUISelected()
         {
-            if (this.CurSelected == null) return null;
-            return RefreshSelected(CurSelected.navigation.selectOnRight as SelectedButton);
+            SelectedButton selectedButton = CurSelected.navigation.selectOnRight as SelectedButton;
+            Debug.Log(selectedButton);
+            if (selectedButton == CurSelected)
+            {
+                if (this.uiBtnListContainer?.Grid_NavagationType == ContainerType.A)
+                {
+                    Debug.Log("asd");
+                    this.uiBtnListContainer.CurnavagationMode = NavagationMode.BtnList;
+                    this.OnExitInner();
+                }
+                return null;
+            }
+
+            return RefreshSelected(selectedButton);
         }
         /// <summary>
         /// 向指定坐标移动
@@ -609,6 +682,7 @@ namespace ML.Engine.UI
                 //this.CurSelected?.OnDeselect(null);
                 //转移btnlist进入选中
                 sb.GetUIBtnList().CurSelected = sb;
+                this.UIBtnListContainer.CurnavagationMode = NavagationMode.SelectedButton;
                 this.UIBtnListContainer?.MoveToBtnList(sb.GetUIBtnList());
             }
             
@@ -637,10 +711,18 @@ namespace ML.Engine.UI
             this.Selected.gameObject.SetActive(true);
 
 
-            /*if(this.uiBtnListContainer.Grid_NavagationType == GridNavagationType.B)
+            if (this.uiBtnListContainer.Grid_NavagationType == ContainerType.B)
             {
                 this.OnEnterInner();
-            }*/
+            }
+            else if(this.uiBtnListContainer.Grid_NavagationType == ContainerType.A)
+            {
+                if(this.UIBtnListContainer.CurnavagationMode == NavagationMode.SelectedButton)
+                {
+                    this.OnEnterInner();
+                }
+            }
+
         }
 
         public void OnSelectExit()
@@ -660,6 +742,7 @@ namespace ML.Engine.UI
         //从选中Inner退出然后进入Btnlist
         public void OnEnterToBtnlist()
         {
+            this.SetCurSelectedNull();
             this.EnableBtnList();
             this.Selected.gameObject.SetActive(true);
         }
@@ -678,24 +761,43 @@ namespace ML.Engine.UI
             this.CurSelected?.OnSelect(null);
 
 
-            /*if (this.uiBtnListContainer.Grid_NavagationType == GridNavagationType.B)
+            if (this.uiBtnListContainer.Grid_NavagationType == ContainerType.B)
             {
                 //加绑
                 this.BindNavigationInputAction(uiBtnListContainer.curGridNavagationInputAction, uiBtnListContainer.curBindType);
-            }*/
-            
+            }
+            else if(this.uiBtnListContainer.Grid_NavagationType == ContainerType.A)
+            {
+                //加绑
+                this.BindNavigationInputAction(uiBtnListContainer.curGridNavagationInputAction, uiBtnListContainer.curBindType);
+                //解绑父项导航
+                this.uiBtnListContainer.DeBindNavigationInputAction();
+            }
+
         }
 
         public void OnExitInner()
         {
             this.OnEnterToBtnlist();
 
-            /*if (this.uiBtnListContainer.Grid_NavagationType == GridNavagationType.B)
+            if (this.uiBtnListContainer.Grid_NavagationType == ContainerType.B)
             {
                 //解绑
                 DeBindInputAction();
                 this.OnSelectExit();
-            }*/
+            }
+            else if(this.uiBtnListContainer.Grid_NavagationType == ContainerType.A)
+            {
+
+                //解绑
+                DeBindInputAction();
+                //加绑父项导航
+                this.uiBtnListContainer.BindNavigationInputAction();
+                if(this.uiBtnListContainer.CurnavagationMode == NavagationMode.SelectedButton)
+                {
+                    this.OnSelectExit();
+                }
+            }
         }
     }
 

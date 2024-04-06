@@ -28,9 +28,8 @@ namespace ProjectOC.Player.UI
         protected override void Awake()
         {
             base.Awake();
-            Ring = this.transform.Find("Ring");
-            btnList = Ring.Find("ButtonList");
             TimeText = this.transform.Find("Time").Find("Text").GetComponent<TextMeshProUGUI>();
+            this.Ring = this.transform.Find("Ring");
         }
 
         protected override void Start()
@@ -44,11 +43,6 @@ namespace ProjectOC.Player.UI
 
         #region Override
 
-        public override void OnEnter()
-        {
-            UIBtnList = new UIBtnList(parent: btnList, hasInitSelect: false, isWheel: true);
-            base.OnEnter();
-        }
         protected override void Enter()
         {
             this.UIBtnList.EnableBtnList();
@@ -241,8 +235,12 @@ namespace ProjectOC.Player.UI
             this.abname = "PlayerUIBotPanel";
             this.description = "PlayerUIBotPanel数据加载完成";
         }
-        private Transform btnList;
         private UIBtnList UIBtnList;
+        protected override void InitBtnInfo()
+        {
+            UIBtnListInitor uIBtnListInitor = this.transform.GetComponentInChildren<UIBtnListInitor>(true);
+            this.UIBtnList = new UIBtnList(uIBtnListInitor.transform, uIBtnListInitor.btnListInitData);
+        }
         private void InitBtnData(PlayerUIBotPanelStruct datas)
         {
             foreach (var tt in datas.Btns)

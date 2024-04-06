@@ -56,6 +56,7 @@ namespace ML.Engine.UI
             this.gameObject.SetActive(true);
             this.objectPool = new ObjectPool();
             this.InitObjectPool();
+            this.InitBtnInfo();
             this.Enter();
             
      
@@ -137,6 +138,13 @@ namespace ML.Engine.UI
             StartCoroutine(this.objectPool.GetFunctionExecutor().Execute());
             
         }
+
+        //检测panel中的所有BtnListInitor和BtnListContainerInitor组件并初始化
+        protected virtual void InitBtnInfo()
+        {
+
+        }
+
 
 
     }

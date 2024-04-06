@@ -6,14 +6,16 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 using UnityEngine.Windows;
+using static ML.Engine.BuildingSystem.UI.BSAppearancePanel;
 
 namespace ML.Engine.BuildingSystem.UI
 {
-    public class BSAppearancePanel : Engine.UI.UIBasePanel
+    public class BSAppearancePanel : Engine.UI.UIBasePanel<BSAppearancePanelStruct>
     {
         #region Property|Field
         private BuildingManager BM => BuildingManager.Instance;
@@ -24,11 +26,6 @@ namespace ML.Engine.BuildingSystem.UI
         private int activeIndex;
         private RectTransform matParent;
         private RectTransform templateMat;
-
-        private UIKeyTip comfirm;
-        private UIKeyTip back;
-        private UIKeyTip matlast;
-        private UIKeyTip matnext;
 
         #endregion
 
@@ -42,36 +39,6 @@ namespace ML.Engine.BuildingSystem.UI
             matParent = this.transform.Find("KT_AlterMat").Find("KT_AlterStyle").Find("Content") as RectTransform;
             this.templateMat = matParent.Find("MatTemplate") as RectTransform;
             templateMat.gameObject.SetActive(false);
-
-            Transform keytips = this.transform.Find("KeyTip");
-
-            comfirm = new UIKeyTip();
-            comfirm.root = keytips.Find("KT_Comfirm") as RectTransform;
-            comfirm.img = comfirm.root.Find("Image").GetComponent<Image>();
-            comfirm.keytip = comfirm.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            comfirm.description = comfirm.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            comfirm.ReWrite(monoBM.KeyTipDict["comfirm"]);
-
-            back = new UIKeyTip();
-            back.root = keytips.Find("KT_Back") as RectTransform;
-            back.img = back.root.Find("Image").GetComponent<Image>();
-            back.keytip = back.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            back.description = back.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            back.ReWrite(monoBM.KeyTipDict["back"]);
-
-            keytips = this.transform.Find("KT_AlterMat").Find("KT_AlterStyle");
-            matlast = new UIKeyTip();
-            matlast.root = keytips.Find("KT_Left") as RectTransform;
-            matlast.img = matlast.root.Find("Image").GetComponent<Image>();
-            matlast.keytip = matlast.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            matlast.ReWrite(monoBM.KeyTipDict["matlast"]);
-
-            matnext = new UIKeyTip();
-            matnext.root = keytips.Find("KT_Right") as RectTransform;
-            matnext.img = matnext.root.Find("Image").GetComponent<Image>();
-            matnext.keytip = matnext.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            matnext.ReWrite(monoBM.KeyTipDict["matnext"]);
-
         }
 
         protected override void OnDestroy()
@@ -288,6 +255,21 @@ namespace ML.Engine.BuildingSystem.UI
 
         #endregion
 
+        #endregion
+
+        #region TextContent
+        [System.Serializable]
+        public struct BSAppearancePanelStruct
+        {
+            public KeyTip[] KeyTips;
+        }
+
+        protected override void InitTextContentPathData()
+        {
+            this.abpath = "OC/Json/TextContent/BuildingSystem/UI";
+            this.abname = "BSAppearancePanel";
+            this.description = "BSAppearancePanel数据加载完成";
+        }
         #endregion
     }
 

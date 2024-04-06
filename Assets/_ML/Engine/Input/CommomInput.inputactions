@@ -67,17 +67,6 @@
                 },
                 {
                     "name": "",
-                    "id": "8b757e4d-fc5b-4ec6-bc48-24c3ad5b4802",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Back",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "dde9783f-58d9-4638-b426-18c22a02e9e1",
                     "path": "<Keyboard>/escape",
                     "interactions": "",

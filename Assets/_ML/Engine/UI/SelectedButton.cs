@@ -131,7 +131,6 @@ namespace ML.Engine.UI
         // 统一鼠标与按键
         public override void OnPointerEnter(UnityEngine.EventSystems.PointerEventData eventData)
         {
-            Debug.Log("OnPointerEnter");
             this.UIBtnList.RefreshSelected(this);
         }
         public override void OnPointerClick(PointerEventData eventData)

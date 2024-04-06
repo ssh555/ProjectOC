@@ -21,7 +21,6 @@ namespace ML.Engine.UI
         protected override void Awake()
         {
             base.Awake();
-            btnList = this.transform.Find("ButtonList");
         }
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
         private List<AsyncOperationHandle<GameObject>> goHandle = new List<AsyncOperationHandle<GameObject>>();
@@ -36,11 +35,6 @@ namespace ML.Engine.UI
         #endregion
 
         #region override
-        public override void OnEnter()
-        {
-            UIBtnList = new UIBtnList(parent: btnList);
-            base.OnEnter();
-        }
 
         protected override void Enter()
         {
@@ -62,8 +56,6 @@ namespace ML.Engine.UI
             this.UIBtnList.RemoveAllListener();
             this.UIBtnList.DeBindInputAction();
             ML.Engine.Input.InputManager.Instance.Common.StartMenu.Disable();
-
-
         }
         protected override void RegisterInput()
         {
@@ -266,9 +258,12 @@ namespace ML.Engine.UI
             this.abname = "StartMenuPanel";
             this.description = "StartMenuPanel数据加载完成";
         }
-        private Transform btnList;
-        [ShowInInspector]
         private UIBtnList UIBtnList;
+        protected override void InitBtnInfo()
+        {
+            UIBtnListInitor uIBtnListInitor = this.transform.GetComponentInChildren<UIBtnListInitor>();
+            this.UIBtnList = new UIBtnList(uIBtnListInitor.transform, uIBtnListInitor.btnListInitData);
+        }
         private void InitBtnData(StartMenuPanelStruct datas)
         {    
             foreach (var tt in datas.Btns)

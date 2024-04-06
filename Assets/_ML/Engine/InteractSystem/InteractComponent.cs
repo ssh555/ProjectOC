@@ -6,6 +6,7 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -104,7 +105,11 @@ namespace ML.Engine.InteractSystem
         public void Disable()
         {
             Manager.GameManager.Instance.TickManager.UnregisterTick(this);
-            uiKeyTip.img.transform.parent.gameObject.SetActive(false);
+
+            if(!this.IsDestroyed())
+            {
+                uiKeyTip.img.transform.parent.gameObject.SetActive(false);
+            }
         }
         public void Enable()
         {

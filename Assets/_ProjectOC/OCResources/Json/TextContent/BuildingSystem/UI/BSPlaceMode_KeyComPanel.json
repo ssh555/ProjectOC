@@ -1,0 +1,48 @@
+{"KeyTips":
+[
+    {
+        "keyname": "KT_KeyCom",
+        "keymap": {
+            "KeyBoard": "Ctrl",
+            "XBOX": "LB"
+        },
+        "description": {
+            "Chinese": "...",
+            "English": "..."
+        }
+    },
+    {
+        "keyname": "KT_CopyMat",
+        "keymap": {
+            "KeyBoard": "C",
+            "XBOX": "X"
+        },
+        "description": {
+            "Chinese": "复制外观",
+            "English": "Copy Mat"
+        }
+    },
+    {
+        "keyname": "KT_PasteMat",
+        "keymap": {
+            "KeyBoard": "V",
+            "XBOX": "Y"
+        },
+        "description": {
+            "Chinese": "粘贴外观",
+            "English": "Paste Mat"
+        }
+    },
+    {
+        "keyname": "KT_SwitchFrame",
+        "keymap": {
+            "KeyBoard": "X",
+            "XBOX": "A"
+        },
+        "description": {
+            "Chinese": "网格辅助",
+            "English": "Switch Frame"
+        }
+    }
+]
+}
