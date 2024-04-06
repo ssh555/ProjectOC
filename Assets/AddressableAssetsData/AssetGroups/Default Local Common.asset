@@ -176,12 +176,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - InputActionAssets
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4d8e67c31d8280c418fea4346d451dc4
-    m_Address: PreScene
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Scene
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: dd360a45dbd59144da89a30283c7064c
     m_Address: ML/BaseUIPanel
     m_ReadOnly: 0
@@ -209,6 +203,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - NoticeUI
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 010fbc4a16cc1f144a3fee08825a2229
+    m_Address: OC/UI/Store/Texture
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 72d1a89784032c94ea3b026b42e20dcf, type: 2}

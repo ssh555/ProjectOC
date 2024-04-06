@@ -2,58 +2,26 @@ using ML.Engine.TextContent;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using static ML.Engine.BuildingSystem.UI.BSInteractMode_KeyComPanel;
 
 namespace ML.Engine.BuildingSystem.UI
 {
-    public class BSInteractMode_KeyComPanel : Engine.UI.UIBasePanel
+    public class BSInteractMode_KeyComPanel : Engine.UI.UIBasePanel<BSInteractMode_KeyComPanelStruct>
     {
         #region Property|Field
         private BuildingManager BM => BuildingManager.Instance;
         private BuildingPlacer.BuildingPlacer Placer => BM.Placer;
         private MonoBuildingManager monoBM;
-        #region UIGO引用
-        private UIKeyTip keycom;
-        private UIKeyTip copymat;
-        private UIKeyTip pastemat;
-        private UIKeyTip copybuild;
-        #endregion
-
         #endregion
 
         #region Unity
         protected override void Awake()
         {
             this.enabled = false;
-            Transform keycoms = this.transform.Find("KeyCom");
             monoBM = ML.Engine.Manager.GameManager.Instance.GetLocalManager<MonoBuildingManager>();
-            keycom = new UIKeyTip();
-            keycom.root = keycoms.Find("KT_KeyCom") as RectTransform;
-            keycom.img = keycom.root.Find("Image").GetComponent<Image>();
-            keycom.keytip = keycom.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            keycom.ReWrite(monoBM.KeyTipDict["keycom"]);
-
-            copymat = new UIKeyTip();
-            copymat.root = keycoms.Find("KT_CopyMat") as RectTransform;
-            copymat.img = copymat.root.Find("Image").GetComponent<Image>();
-            copymat.keytip = copymat.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            copymat.description = copymat.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            copymat.ReWrite(monoBM.KeyTipDict["copymat"]);
-
-            pastemat = new UIKeyTip();
-            pastemat.root = keycoms.Find("KT_PasteMat") as RectTransform;
-            pastemat.img = pastemat.root.Find("Image").GetComponent<Image>();
-            pastemat.keytip = pastemat.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            pastemat.description = pastemat.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            pastemat.ReWrite(monoBM.KeyTipDict["pastemat"]);
-
-            copybuild = new UIKeyTip();
-            copybuild.root = keycoms.Find("KT_CopyBuild") as RectTransform;
-            copybuild.img = copybuild.root.Find("Image").GetComponent<Image>();
-            copybuild.keytip = copybuild.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            copybuild.description = copybuild.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            copybuild.ReWrite(monoBM.KeyTipDict["copybuild"]);
         }
 
         #endregion
@@ -61,10 +29,6 @@ namespace ML.Engine.BuildingSystem.UI
         #region Override
         public override void Refresh()
         {
-            keycom.ReWrite(monoBM.KeyTipDict["keycom"]);
-            copymat.ReWrite(monoBM.KeyTipDict["copymat"]);
-            pastemat.ReWrite(monoBM.KeyTipDict["pastemat"]);
-            copybuild.ReWrite(monoBM.KeyTipDict["copybuild"]);
         }
 
         #endregion
@@ -114,6 +78,21 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 monoBM.PopAndPushPanel<BSPlaceModePanel>();
             }
+        }
+        #endregion
+
+        #region TextContent
+        [System.Serializable]
+        public struct BSInteractMode_KeyComPanelStruct
+        {
+            public KeyTip[] KeyTips;
+        }
+
+        protected override void InitTextContentPathData()
+        {
+            this.abpath = "OC/Json/TextContent/BuildingSystem/UI";
+            this.abname = "BSInteractMode_KeyComPanel";
+            this.description = "BSInteractMode_KeyComPanel数据加载完成";
         }
         #endregion
     }

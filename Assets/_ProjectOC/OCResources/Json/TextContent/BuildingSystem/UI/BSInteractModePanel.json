@@ -1,0 +1,81 @@
+{"KeyTips":
+[
+    {
+        "keyname": "KT_KeyCom",
+        "keymap": {
+            "KeyBoard": "Ctrl",
+            "XBOX": "LB"
+        },
+        "description": {
+            "Chinese": "...",
+            "English": "..."
+        }
+    },
+    {
+        "keyname": "KT_MoveBuild",
+        "keymap": {
+            "KeyBoard": "E",
+            "XBOX": "X"
+        },
+        "description": {
+            "Chinese": "移动",
+            "English": "Move Build"
+        }
+    },
+    {
+        "keyname": "KT_DestroyBuild",
+        "keymap": {
+            "KeyBoard": "R",
+            "XBOX": "Y"
+        },
+        "description": {
+            "Chinese": "销毁",
+            "English": "Destroy Build"
+        }
+    },
+    {
+        "keyname": "KT_AlterMat",
+        "keymap": {
+            "KeyBoard": "Z",
+            "XBOX": "RB"
+        },
+        "description": {
+            "Chinese": "更改外观",
+            "English": "Alter Mat"
+        }
+    },
+    {
+        "keyname": "KT_AlterBPart",
+        "keymap": {
+            "KeyBoard": "Scroll",
+            "XBOX": "+"
+        },
+        "description": {
+            "Chinese": "切换建筑物",
+            "English": "Alter BPart"
+        }
+    },
+    {
+        "keyname": "KT_SelectBPart",
+        "keymap": {
+            "KeyBoard": "F",
+            "XBOX": "A"
+        },
+        "description": {
+            "Chinese": "新建建筑物",
+            "English": "Create BPart"
+        }
+    },
+    {
+        "keyname": "KT_Back",
+        "keymap": {
+            "KeyBoard": "ESC",
+            "XBOX": "B"
+        },
+        "description": {
+            "Chinese": "回退",
+            "English": "Back"
+        }
+    }
+]
+}

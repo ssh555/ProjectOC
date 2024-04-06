@@ -35,6 +35,17 @@
         "Chinese" : "存储容量: ",
         "English" : "StorageCapacity: "
     },
+    "Upgrade" : {
+        "keyname" : "KT_Upgrade",
+        "keymap": {
+            "ActionMapName": "UIStore",
+            "ActionName": "Upgrade"
+          },
+        "description" : {
+            "Chinese" : "建筑升级",
+            "English" : "Upgrade"
+        }
+    },
     "NextPriority" : {
         "keyname" : "KT_NextPriority",
         "keymap": {
@@ -53,15 +64,26 @@
             "ActionName": "ChangeIcon"
           },
         "description" : {
-            "Chinese" : "",
-            "English" : ""
+            "Chinese" : "更换标识",
+            "English" : "Change Icon"
+        }
+    },
+    "UpgradeConfirm" : {
+        "keyname" : "KT_UpgradeConfirm",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "升级",
+            "English" : "Upgrade"
         }
     },
     "ChangeItem" : {
         "keyname" : "KT_ChangeItem",
         "keymap": {
-            "ActionMapName": "UIStore",
-            "ActionName": "ChangeItem"
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
           },
         "description" : {
             "Chinese" : "改变物品",
@@ -90,6 +112,17 @@
             "English" : "Remove 10"
         }
     },
+    "Switch" : {
+        "keyname" : "KT_Switch",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "切换",
+            "English" : "Switch"
+        }
+    },
     "FastAdd" : {
         "keyname" : "KT_FastAdd",
         "keymap": {
@@ -114,6 +147,17 @@
       },
     "Back" : {
         "keyname" : "KT_Back",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
+        "description" : {
+            "Chinese" : "返回",
+            "English" : "Back"
+        }
+    },
+    "UpgradeBack" : {
+        "keyname" : "KT_UpgradeBack",
         "keymap": {
             "ActionMapName": "Common",
             "ActionName": "Back"

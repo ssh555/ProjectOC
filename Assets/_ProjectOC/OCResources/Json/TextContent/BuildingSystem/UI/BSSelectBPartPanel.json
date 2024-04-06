@@ -1,0 +1,70 @@
+{"KeyTips":
+[
+    {
+        "keyname": "KT_Comfirm",
+        "keymap": {
+            "KeyBoard": "E",
+            "XBOX": "A"
+        },
+        "description": {
+            "Chinese": "确认",
+            "English": "Comfirm"
+        }
+    },
+    {
+        "keyname": "KT_Back",
+        "keymap": {
+            "KeyBoard": "ESC",
+            "XBOX": "B"
+        },
+        "description": {
+            "Chinese": "回退",
+            "English": "Back"
+        }
+    },
+    {
+        "keyname": "KT_SelectCategoryLast",
+        "keymap": {
+            "KeyBoard": "Z",
+            "XBOX": "LB"
+        },
+        "description": {
+            "Chinese": "",
+            "English": ""
+        }
+    },
+    {
+        "keyname": "KT_SelectCategoryNext",
+        "keymap": {
+            "KeyBoard": "X",
+            "XBOX": "RB"
+        },
+        "description": {
+            "Chinese": "",
+            "English": ""
+        }
+    },
+    {
+        "keyname": "KT_SelectTypeLast",
+        "keymap": {
+            "KeyBoard": "C",
+            "XBOX": "LS"
+        },
+        "description": {
+            "Chinese": "",
+            "English": ""
+        }
+    },
+    {
+        "keyname": "KT_SelectTypeNext",
+        "keymap": {
+            "KeyBoard": "V",
+            "XBOX": "RS"
+        },
+        "description": {
+            "Chinese": "",
+            "English": ""
+        }
+    }
+]
+}

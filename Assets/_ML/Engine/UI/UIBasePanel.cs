@@ -56,6 +56,7 @@ namespace ML.Engine.UI
             this.gameObject.SetActive(true);
             this.objectPool = new ObjectPool();
             this.InitObjectPool();
+            this.InitBtnInfo();
             this.Enter();
             
      
@@ -77,7 +78,7 @@ namespace ML.Engine.UI
         public virtual void OnPause()
         {
             this.Exit();
-            //this.gameObject.SetActive(false);
+            this.gameObject.SetActive(false);
         }
 
         /// <summary>
@@ -85,7 +86,7 @@ namespace ML.Engine.UI
         /// </summary>
         public virtual void OnRecovery()
         {
-            //this.gameObject.SetActive(true);
+            this.gameObject.SetActive(true);
             this.Enter();
         }
 
@@ -137,6 +138,13 @@ namespace ML.Engine.UI
             StartCoroutine(this.objectPool.GetFunctionExecutor().Execute());
             
         }
+
+        //检测panel中的所有BtnListInitor和BtnListContainerInitor组件并初始化
+        protected virtual void InitBtnInfo()
+        {
+
+        }
+
 
 
     }
