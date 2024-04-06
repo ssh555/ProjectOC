@@ -8,11 +8,10 @@ namespace ML.Engine.SaveSystem
 {
     public class XMLSaveSystem : SaveSystem
     {
-        public override T LoadData<T>(string relativePathWithoutSuffix, bool useEncryption)
+        public override T LoadData<T>(string relativePath, bool useEncryption)
         {
-            if (!string.IsNullOrEmpty(relativePathWithoutSuffix))
+            if (!string.IsNullOrEmpty(relativePath))
             {
-                string relativePath = relativePathWithoutSuffix + ".xml";
                 string path = Path.Combine(SavePath, relativePath);
                 if (File.Exists(path))
                 {
@@ -25,14 +24,14 @@ namespace ML.Engine.SaveSystem
                         }
                         DataContractSerializer serializer = new DataContractSerializer(typeof(T));
                         T loadedData = (T)serializer.ReadObject(stream);
-                        loadedData.Path = Path.GetDirectoryName(relativePath);
-                        loadedData.SaveName = Path.GetFileNameWithoutExtension(relativePath);
+                        loadedData.SavePath = Path.GetDirectoryName(relativePath);
+                        loadedData.SaveName = Path.GetFileName(relativePath);
                         stream.Close();
                         return loadedData;
                     }
                 }
             }
-            return null;
+            return default(T);
         }
         public override T LoadData<T>(Stream memory, bool useEncryption)
         {
@@ -48,13 +47,13 @@ namespace ML.Engine.SaveSystem
                 stream.Close();
                 return loadedData;
             }
-            return null;
+            return default(T);
         }
         public override void SaveData<T>(T data, bool useEncryption)
         {
             if (data!=null && !string.IsNullOrEmpty(data.SaveName) && data.IsDirty)
             {
-                string path = Path.Combine(SavePath, data.Path, data.SaveName + ".xml");
+                string path = Path.Combine(SavePath, data.SavePath, data.SaveName);
                 string directoryPath = Path.GetDirectoryName(path);
                 if (!Directory.Exists(directoryPath))
                 {

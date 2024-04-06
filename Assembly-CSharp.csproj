@@ -76,6 +76,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetMaxDistance.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Scripts\Tasks\LeaderFollow.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\BoxCollider\SetCenter.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\Store\StoreData.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Character\PlayerCharacter\IPlayerCharacter.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Building\ResonanceWheel\UI\UIPolygon.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\Stop.cs" />
@@ -190,7 +191,6 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\HasKey.cs" />
     <Compile Include="Assets\_ML\Engine\InventorySystem\CompositeSystem\ICompositeAbility.cs" />
     <Compile Include="Assets\_ML\Engine\BuildingSystem\UI\BSEditMode_KeyComPanel.cs" />
-    <Compile Include="Assets\_ProjectOC\Scripts\Order\OrderNormal.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Worker\WorkerStateWorkingDuty.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetSlopeLimit.cs" />
     <Compile Include="Assets\_ML\Engine\InventorySystem\Scripts\Items\ResourceItem.cs" />
@@ -287,10 +287,10 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Input\IsButtonDown.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetVolume.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetAngularVelocity.cs" />
+    <Compile Include="Assets\_ML\Engine\UI\ISelected.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Angle.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedQuaternion.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Math\SetInt.cs" />
-    <Compile Include="Assets\_ProjectOC\Scripts\Order\OrderManager.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetMaxDistance.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Timeline\Stop.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\SetLocalScale.cs" />
@@ -309,6 +309,7 @@
     <Compile Include="Assets\_ProjectOC\Scripts\Character\CharacterManager.cs" />
     <Compile Include="Assets\_ML\Example\InventorySystem\CompositeSystem\UI\Usage\UsageItemBtn.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Identity.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\PinchFace\TypeChangePinchSetting.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\MovePosition.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetStartColor.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetStartSize.cs" />
@@ -334,7 +335,6 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\LayerMask\GetLayer.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Mission\TransportPriority.cs" />
     <Compile Include="Assets\_ML\Engine\InventorySystem\Scripts\WorldItem.cs" />
-    <Compile Include="Assets\_ProjectOC\Scripts\Order\UI\UIOrderPanel.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Manager\LocalGameManager.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\CircleCollider2D\GetOffset.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Light\GetSpotAngle.cs" />
@@ -414,6 +414,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Decorators\ReturnSuccess.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Debug\LogFormat.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\GameObject\SetTag.cs" />
+    <Compile Include="Assets\_ML\Engine\Script\BaseUIComponent\Button\UIBtnListContainerInitor.cs" />
     <Compile Include="Assets\_ML\Engine\TextContent\TextTip.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedVector4.cs" />
     <Compile Include="Assets\_ML\Engine\InteractSystem\IInteraction.cs" />
@@ -426,6 +427,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\GetSpeed.cs" />
     <Compile Include="Assets\_ML\Engine\SaveSystem\SaveSystem.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\CrossFade.cs" />
+    <Compile Include="Assets\_ML\Engine\Script\BaseUIComponent\Button\UIBtnListContainer.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetCenterOfMass.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Light\GetShadowStrength.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\GetDeltaPosition.cs" />
@@ -437,12 +439,12 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetPan.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\Simulate.cs" />
     <Compile Include="Assets\_ML\Engine\InventorySystem\Scripts\ItemIcon.cs" />
-    <Compile Include="Assets\_ML\Engine\UI\IUISelected.cs" />
     <Compile Include="Assets\_ML\Engine\CombatSystem\CombatObject\CombatObject\MonoCombatObject.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetAngularDrag.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Actions\SendEvent.cs" />
     <Compile Include="Assets\_ML\Engine\CombatSystem\Action\UpdateStatusAction.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\GetDuration.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\PinchFace\Classification\PinchPartType3.cs" />
     <Compile Include="Assets\_ML\Engine\FSM\State.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Slerp.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Decorators\Inverter.cs" />
@@ -477,7 +479,6 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\RotateAround.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetVector2.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\String\BuildString.cs" />
-    <Compile Include="Assets\_ProjectOC\Scripts\Order\OrderSpecial.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedGameObject.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Collider\GetEnabled.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Physics\Raycast.cs" />
@@ -518,6 +519,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetVelocity.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetIgnoreListenerVolume.cs" />
     <Compile Include="Assets\_ML\Engine\BuildingSystem\UI\BSSelectBPartPanel.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\Character\StartPoint.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedFloat.cs" />
     <Compile Include="Assets\_ML\Engine\CombatSystem\CombatObject\Ability\FreezeFrameAbility.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\StartRecording.cs" />
@@ -550,6 +552,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\Resume.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedMaterial.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Decorators\Cooldown.cs" />
+    <Compile Include="Assets\_ML\Engine\Script\BaseUIComponent\Button\UIBtnListInitor.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\SetFloat.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\TechTree\TechPoint.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\SetLocalEulerAngles.cs" />
@@ -561,6 +564,7 @@
     <Compile Include="Assets\_ProjectOC\Scripts\ProNode\ProNodeManager.cs" />
     <Compile Include="Assets\_ML\Engine\BuildingSystem\BuildingPart\Classification\BuildingCategory1.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Input\IsMouseUp.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\PinchFace\PinchFacePanel.cs" />
     <Compile Include="Assets\_ML\Engine\BuildingSystem\BuildingPart\Classification\BuildingCategory3.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\SetFloatParameter.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\StopRecording.cs" />
@@ -580,6 +584,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animation\Play.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\GetAngleToTarget.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\IsName.cs" />
+    <Compile Include="Assets\_ML\MLResources\BaseUIPanel\TestPanel1.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\GetDestination.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Character\IStartPoint.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Actions\Reflection\SetFieldValue.cs" />
@@ -611,6 +616,7 @@
     <Compile Include="Assets\_ML\Engine\FSM\StateMachine.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Light\SetIntensity.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetGravityScale.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\PinchFace\IPinchSettingComp.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Math\RandomInt.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetVelocityUpdateMode.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetIgnoreListenerPause.cs" />
@@ -621,12 +627,14 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\String\CompareTo.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\GameObject\CompareTag.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetMinDistance.cs" />
+    <Compile Include="Assets\_ML\MLResources\BaseUIPanel\TestPanel.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Actions\StopBehaviorTree.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedRect.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Worker\Gender.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Lerp.cs" />
     <Compile Include="Assets\_ML\Engine\BuildingSystem\UI\BSAppearancePanel.cs" />
     <Compile Include="Assets\_ML\Engine\SaveSystem\SaveDataFolder.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\PinchFace\PinchRacePanel.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\SetLookAtPosition.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Scripts\Tasks\CanSeeObject.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedString.cs" />
@@ -664,13 +672,13 @@
     <Compile Include="Assets\_ML\Engine\Utility\AssetDatabaseExtension.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Building\ResonanceWheel\UI\ResonanceWheel_sub2.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Actions\Reflection\SetPropertyValue.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\PinchFace\PinchPartManager.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\IsPaused.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedTransformList.cs" />
     <Compile Include="Assets\_ML\Engine\GameManager\LocalManager\ILocalManager.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\Pause.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\IsParameterControlledByCurve.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Character\AICharacter\AIController.cs" />
-    <Compile Include="Assets\_ProjectOC\Scripts\Order\Order.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Worker\WorkerStateWorkingTransport.cs" />
     <Compile Include="Assets\_ML\Engine\Input\InputManager.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\GetChildCount.cs" />
@@ -683,7 +691,6 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Scripts\Tasks\MoveTowards.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Worker\FeatureType.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SharedTransformsToTransformList.cs" />
-    <Compile Include="Assets\_ProjectOC\Scripts\Order\OrderUrgent.cs" />
     <Compile Include="Assets\_ML\Example\InventorySystem\CompositeSystem\UI\Formula\FormulaItemBtn.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedRect.cs" />
     <Compile Include="Assets\_ML\Engine\SaveSystem\XMLSaveSystem.cs" />
@@ -710,7 +717,6 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\GetLayerWeight.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Light\SetCullingMask.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\SetInt.cs" />
-    <Compile Include="Assets\_ML\Engine\Script\BaseUIComponent\UIBtnList.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedGameObjectList.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\SetRightVector.cs" />
     <Compile Include="Assets\_ML\Engine\SaveSystem\SaveType.cs" />
@@ -723,6 +729,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\GameObject\FindWithTag.cs" />
     <Compile Include="Assets\_ML\Engine\InventorySystem\Scripts\Inventory.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector2\SetXY.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\PinchFace\Classification\PinchPartType.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Worker\WorkerStateFishing.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\MovePosition.cs" />
     <Compile Include="Assets\_ML\Engine\GameManager\GlobalManager\IGlobalManager.cs" />
@@ -761,6 +768,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Debug\DrawLine.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\WorkerEcho\WorkerEcho.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector3\Operator.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\PinchFace\Classification\TimeScaleTest.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\SetEulerAngles.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\LandMassExpand\BuildPowerIslandManager.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\InventorySystem\UI\UIStore.cs" />
@@ -790,6 +798,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SphereCollider\SetCenter.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\LandMassExpand\IslandModelManager.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Character\ICharacterState.cs" />
+    <Compile Include="Assets\_ML\Engine\Script\BaseUIComponent\Button\UIBtnList.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\Move.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\GetGravityWeight.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector2\ClampMagnitude.cs" />
@@ -812,6 +821,7 @@
     <Compile Include="Assets\_ProjectOC\Scripts\Player\UIPanel\PlayerUIPanel.cs" />
     <Compile Include="Assets\_ML\Engine\SaveSystem\SaveConfig.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedBool.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\Character\RoleController.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\MoveRotation.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\GetPosition.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\LandMassExpand\IslandBase.cs" />
@@ -831,6 +841,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Scripts\Tasks\Follow.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\String\IsNullOrEmpty.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetIsKinematic.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\PinchFace\Classification\PinchPartType1.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetIsStopped.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedLayerMask.cs" />
     <Compile Include="Assets\_ML\Engine\Script\BaseUIComponent\UIKeyTipComponent.cs" />
@@ -857,6 +868,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\PlayDelayed.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Physics\Linecast.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetGravtyScale.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\PinchFace\Classification\PinchPartType2.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animation\Rewind.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Worker\Feature.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Character\IControllerState.cs" />
@@ -1826,6 +1838,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Animancer.FSM.csproj">
+      <Project>{9FE9C3DD-0123-2C11-43B3-8B9CAC8724D3}</Project>
+      <Name>Animancer.FSM</Name>
+    </ProjectReference>
     <ProjectReference Include="Sirenix.OdinInspector.Modules.UnityMathematics.csproj">
       <Project>{95D32012-70E8-D86F-0614-4190F88F9787}</Project>
       <Name>Sirenix.OdinInspector.Modules.UnityMathematics</Name>
@@ -1833,6 +1849,14 @@
     <ProjectReference Include="Sirenix.OdinInspector.Modules.Unity.Addressables.csproj">
       <Project>{D5A725F1-8175-CC09-BA14-3DE91B73FDC3}</Project>
       <Name>Sirenix.OdinInspector.Modules.Unity.Addressables</Name>
+    </ProjectReference>
+    <ProjectReference Include="Animancer.Examples.csproj">
+      <Project>{EAA4AB15-DDB5-9C3C-E4E8-A713B137F896}</Project>
+      <Name>Animancer.Examples</Name>
+    </ProjectReference>
+    <ProjectReference Include="Animancer.csproj">
+      <Project>{1E2AFD03-D260-61F5-1B7B-46C707B19967}</Project>
+      <Name>Animancer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

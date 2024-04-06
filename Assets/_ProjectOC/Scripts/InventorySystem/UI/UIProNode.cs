@@ -125,7 +125,6 @@ namespace ProjectOC.InventorySystem.UI
             ProNode.OnProduceTimerUpdate += OnProduceTimerUpdateAction;
             ProNode.OnProduceEnd += Refresh;
             this.RegisterInput();
-            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Enable();
             base.Enter();
         }
 
@@ -134,7 +133,6 @@ namespace ProjectOC.InventorySystem.UI
             ProNode.OnActionChange -= RefreshDynamic;
             ProNode.OnProduceTimerUpdate -= OnProduceTimerUpdateAction;
             ProNode.OnProduceEnd -= Refresh;
-            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Disable();
             this.UnregisterInput();
             base.Exit();
         }
@@ -403,6 +401,7 @@ namespace ProjectOC.InventorySystem.UI
 
         protected override void UnregisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Disable();
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Upgrade.performed -= Upgrade_performed;
@@ -411,10 +410,12 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove10.performed -= Remove10_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.FastAdd.performed -= FastAdd_RemoveWorker_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Alter.performed -= Alter_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Disable();
         }
 
         protected override void RegisterInput()
         {
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Enable();
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Upgrade.performed += Upgrade_performed;
@@ -423,6 +424,7 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove10.performed += Remove10_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.FastAdd.performed += FastAdd_RemoveWorker_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Alter.performed += Alter_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Enable();
         }
         private void Upgrade_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {

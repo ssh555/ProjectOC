@@ -27,11 +27,6 @@ namespace ProjectOC.Player.UI
         #region Unity
         public bool IsInit = false;
 
-        protected override void Awake()
-        {
-            base.Awake();
-            btnList = this.transform.Find("ButtonList");
-        }
         protected override void Start()
         {
             IsInit = true;
@@ -62,16 +57,6 @@ namespace ProjectOC.Player.UI
         }
         #endregion
 
-        #region Override
-
-        public override void OnEnter()
-        {
-            UIBtnList = new UIBtnList(parent: btnList, isLoop: true);
-            base.OnEnter();
-        }
-
-        #endregion
-
         #region Internal
         protected override void UnregisterInput()
         {
@@ -100,7 +85,7 @@ namespace ProjectOC.Player.UI
                     }
                     else
                     {
-                        Debug.LogWarning("当前建筑物数量为0，无法进入建造模式!");
+                        Debug.LogWarning("当前建筑物数量为0，无法进入建造模�?!");
                     }
                 }
             }
@@ -157,8 +142,8 @@ namespace ProjectOC.Player.UI
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Enable();
 
 
-            this.UIBtnList.BindNavigationInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUI.AlterSelected, UIBtnList.BindType.started);
-            this.UIBtnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm, UIBtnList.BindType.started);
+            this.UIBtnList.BindNavigationInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUI.AlterSelected, UIBtnListContainer.BindType.started);
+            this.UIBtnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm, UIBtnListContainer.BindType.started);
 
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
@@ -196,8 +181,12 @@ namespace ProjectOC.Player.UI
             this.description = "PlayerUIPanel数据加载完成";
         }
 
-        private Transform btnList;
         private UIBtnList UIBtnList;
+        protected override void InitBtnInfo()
+        {
+            UIBtnListInitor uIBtnListInitor = this.transform.GetComponentInChildren<UIBtnListInitor>(true);
+            this.UIBtnList = new UIBtnList(uIBtnListInitor.transform, uIBtnListInitor.btnListInitData);
+        }
         private void InitBtnData(PlayerUIPanelStruct datas)
         {
             foreach (var tt in datas.Btns)

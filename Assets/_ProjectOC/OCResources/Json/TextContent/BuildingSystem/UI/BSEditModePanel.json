@@ -1,0 +1,70 @@
+{"KeyTips":
+[
+    {
+        "keyname": "KT_Place",
+        "keymap": {
+            "KeyBoard": "E",
+            "XBOX": "A"
+        },
+        "description": {
+            "Chinese": "放置",
+            "English": "Place"
+        }
+    },
+    {
+        "keyname": "KT_AlterSocket",
+        "keymap": {
+            "KeyBoard": "R",
+            "XBOX": "Y"
+        },
+        "description": {
+            "Chinese": "切换附着点",
+            "English": "Alter Socket"
+        }
+    },
+    {
+        "keyname": "KT_RotateLeft",
+        "keymap": {
+            "KeyBoard": "1",
+            "XBOX": "LT"
+        },
+        "description": {
+            "Chinese": "旋转",
+            "English": "Rotate"
+        }
+    },
+    {
+        "keyname": "KT_RotateRight",
+        "keymap": {
+            "KeyBoard": "3",
+            "XBOX": "RT"
+        },
+        "description": {
+            "Chinese": "旋转",
+            "English": "Rotate"
+        }
+    },
+    {
+        "keyname": "KT_Back",
+        "keymap": {
+            "KeyBoard": "ESC",
+            "XBOX": "B"
+        },
+        "description": {
+            "Chinese": "回退",
+            "English": "Back"
+        }
+    },
+    {
+        "keyname": "KT_KeyCom",
+        "keymap": {
+            "KeyBoard": "Ctrl",
+            "XBOX": "LB"
+        },
+        "description": {
+            "Chinese": "...",
+            "English": "..."
+        }
+    }
+]
+}

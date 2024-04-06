@@ -54,6 +54,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             return true;
         }
 
+        public bool isFirstBuild { get; }
         /// <summary>
         /// 在PlaceMode或者EditMode更改之后调用
         /// </summary>

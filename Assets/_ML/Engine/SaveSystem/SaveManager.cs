@@ -1,6 +1,7 @@
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 namespace ML.Engine.SaveSystem
@@ -45,15 +46,15 @@ namespace ML.Engine.SaveSystem
             };
         }
 
-        
-
         /// <summary>
         /// 加载存档数据
         /// </summary>
-        /// <param name="relativePathWithoutSuffix">相对路径，没有后缀</param>
-        public T LoadData<T>(string relativePathWithoutSuffix) where T : ISaveData
+        /// <param name="relativePath">相对路径，没有后缀</param>
+        public T LoadData<T>(string relativePath) where T : ISaveData
         {
-            T data = (T)this.SaveSystem.LoadData<T>(relativePathWithoutSuffix, this.Config.UseEncrption);
+            T data = (T)this.SaveSystem.LoadData<T>(relativePath, this.Config.UseEncrption);
+            data.SavePath = Path.GetDirectoryName(relativePath);
+            data.SaveName = Path.GetFileName(relativePath);
             return data;
         }
 

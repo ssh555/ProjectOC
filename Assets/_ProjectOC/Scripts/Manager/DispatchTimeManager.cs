@@ -13,11 +13,11 @@ namespace ProjectOC.ManagerNS
     [System.Serializable]
     public sealed class DispatchTimeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
-        private int timeScale = 1;
+        private float timeScale = 1;
         /// <summary>
         /// 时间流速比例，现实TimeScale秒等于游戏内1分钟。
         /// </summary>
-        public int TimeScale 
+        public float TimeScale 
         { 
             get { return timeScale; }
             set

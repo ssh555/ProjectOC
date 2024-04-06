@@ -1,0 +1,48 @@
+{"KeyTips":
+[
+    {
+        "keyname": "KT_Comfirm",
+        "keymap": {
+            "KeyBoard": "E",
+            "XBOX": "A"
+        },
+        "description": {
+            "Chinese": "确认",
+            "English": "Comfirm"
+        }
+    },
+    {
+        "keyname": "KT_Back",
+        "keymap": {
+            "KeyBoard": "ESC",
+            "XBOX": "B"
+        },
+        "description": {
+            "Chinese": "回退",
+            "English": "Back"
+        }
+    },
+    {
+        "keyname": "KT_Left",
+        "keymap": {
+            "KeyBoard": "A",
+            "XBOX": "left"
+        },
+        "description": {
+            "Chinese": "",
+            "English": ""
+        }
+    },
+    {
+        "keyname": "KT_Right",
+        "keymap": {
+            "KeyBoard": "D",
+            "XBOX": "right"
+        },
+        "description": {
+            "Chinese": "",
+            "English": ""
+        }
+    }
+]
+}

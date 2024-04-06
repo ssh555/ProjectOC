@@ -21,13 +21,9 @@ namespace ML.Engine.BuildingSystem
         /// 是否初始化完成所有数据的载入
         /// </summary>
         public bool IsLoadOvered => IsInit == 0;
-
         #endregion
 
         #region TextContent
-        #region KeyTip
-        public Dictionary<string, KeyTip> KeyTipDict = new Dictionary<string, KeyTip>();
-        #endregion
 
         #region Category|Type
         public Dictionary<string, TextContent.TextTip> Category1Dict = new Dictionary<string, TextContent.TextTip>();
@@ -37,16 +33,6 @@ namespace ML.Engine.BuildingSystem
        
         public void InitUITextContents()
         {
-            var KeyTip_ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<KeyTip[]>("OC/Json/TextContent/BuildingSystem/UI", "KeyTip", (datas) =>
-            {
-                foreach (var keytip in datas)
-                {
-                    this.KeyTipDict.Add(keytip.keyname, keytip);
-                }
-                IsInit--;
-            }, "建造系统按键提示");
-            KeyTip_ABJAProcessor.StartLoadJsonAssetData();
-
             var Category_ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextTip[]>("OC/Json/TextContent/BuildingSystem/UI", "Category", (datas) =>
             {
                 foreach (var category in datas)

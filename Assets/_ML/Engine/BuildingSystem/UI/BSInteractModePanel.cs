@@ -10,10 +10,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Windows;
+using ML.Engine.UI;
+using Unity.VisualScripting;
+using static ML.Engine.BuildingSystem.UI.BSInteractModePanel;
 
 namespace ML.Engine.BuildingSystem.UI
 {
-    public class BSInteractModePanel : Engine.UI.UIBasePanel, Timer.ITickComponent
+    public class BSInteractModePanel : Engine.UI.UIBasePanel<BSInteractModePanelStruct>, Timer.ITickComponent
     {
         #region Property|Field
         private BuildingManager BM => BuildingManager.Instance;
@@ -50,57 +53,6 @@ namespace ML.Engine.BuildingSystem.UI
         {
             this.enabled = false;
             monoBM = ML.Engine.Manager.GameManager.Instance.GetLocalManager<MonoBuildingManager>();
-            Transform keytip = this.transform.Find("BPartInteractTip");
-
-            keycom = new UIKeyTip();
-            keycom.root = keytip.Find("KT_KeyCom") as RectTransform;
-            keycom.img = keycom.root.Find("Image").GetComponent<Image>();
-            keycom.keytip = keycom.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            keycom.description = keycom.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            keycom.ReWrite(monoBM.KeyTipDict["keycom"]);
-
-            movebuild = new UIKeyTip();
-            movebuild.root = keytip.Find("KT_MoveBuild") as RectTransform;
-            movebuild.img = movebuild.root.Find("Image").GetComponent<Image>();
-            movebuild.keytip = movebuild.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            movebuild.description = movebuild.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            movebuild.ReWrite(monoBM.KeyTipDict["movebuild"]);
-
-            destroybuild = new UIKeyTip();
-            destroybuild.root = keytip.Find("KT_DestroyBuild") as RectTransform;
-            destroybuild.img = destroybuild.root.Find("Image").GetComponent<Image>();
-            destroybuild.keytip = destroybuild.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            destroybuild.description = destroybuild.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            destroybuild.ReWrite(monoBM.KeyTipDict["destroybuild"]);
-
-            altermat = new UIKeyTip();
-            altermat.root = keytip.Find("KT_AlterMat") as RectTransform;
-            altermat.img = altermat.root.Find("Image").GetComponent<Image>();
-            altermat.keytip = altermat.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            altermat.description = altermat.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            altermat.ReWrite(monoBM.KeyTipDict["altermat"]);
-
-            keytip = this.transform.Find("InteractTip");
-            alterbpart = new UIKeyTip();
-            alterbpart.root = keytip.Find("KT_AlterBPart") as RectTransform;
-            alterbpart.img = alterbpart.root.Find("Image").GetComponent<Image>();
-            alterbpart.keytip = alterbpart.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            alterbpart.description = alterbpart.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            alterbpart.ReWrite(monoBM.KeyTipDict["alterbpart"]);
-
-            selectbpart = new UIKeyTip();
-            selectbpart.root = keytip.Find("KT_SelectBPart") as RectTransform;
-            selectbpart.img = selectbpart.root.Find("Image").GetComponent<Image>();
-            selectbpart.keytip = selectbpart.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            selectbpart.description = selectbpart.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            selectbpart.ReWrite(monoBM.KeyTipDict["selectbpart"]);
-
-            back = new UIKeyTip();
-            back.root = keytip.Find("KT_Back") as RectTransform;
-            back.img = back.root.Find("Image").GetComponent<Image>();
-            back.keytip = back.img.transform.Find("KeyText").GetComponent<TextMeshProUGUI>();
-            back.description = back.img.transform.Find("KeyTipText").GetComponent<TextMeshProUGUI>();
-            back.ReWrite(monoBM.KeyTipDict["back"]);
 
         }
 
@@ -132,12 +84,7 @@ namespace ML.Engine.BuildingSystem.UI
         }
         public override void Refresh()
         {
-            keycom.ReWrite(monoBM.KeyTipDict["keycom"]);
-            movebuild.ReWrite(monoBM.KeyTipDict["movebuild"]);
-            destroybuild.ReWrite(monoBM.KeyTipDict["destroybuild"]);
-            altermat.ReWrite(monoBM.KeyTipDict["altermat"]);
-            selectbpart.ReWrite(monoBM.KeyTipDict["selectbpart"]);
-            back.ReWrite(monoBM.KeyTipDict["back"]);
+
         }
         #endregion
 
@@ -243,7 +190,7 @@ namespace ML.Engine.BuildingSystem.UI
 
             bool flag = false;
             List<Item> resItems = new List<Item>();
-            foreach (Formula formula in CompositeManager.Instance.GetCompositonFomula(BuildingManager.Instance.GetID(bpart.Classification.ToString())))
+            foreach (InventorySystem.CompositeSystem.Formula formula in CompositeManager.Instance.GetCompositonFomula(BuildingManager.Instance.GetID(bpart.Classification.ToString())))
             {
                 if (ItemManager.Instance.IsValidItemID(formula.id) && formula.num > 0)
                 {
@@ -273,6 +220,24 @@ namespace ML.Engine.BuildingSystem.UI
 #pragma warning restore CS4014
             }
         }
+
+        #region TextContent
+        [System.Serializable]
+        public struct BSInteractModePanelStruct
+        {
+            public KeyTip[] KeyTips;
+        }
+
+        protected override void InitTextContentPathData()
+        {
+            this.abpath = "OC/Json/TextContent/BuildingSystem/UI";
+            this.abname = "BSInteractModePanel";
+            this.description = "BSInteractModePanel数据加载完成";
+        }
+        #endregion
     }
+
+
+
 }
 

@@ -28,9 +28,8 @@ namespace ProjectOC.Player.UI
         protected override void Awake()
         {
             base.Awake();
-            Ring = this.transform.Find("Ring");
-            btnList = Ring.Find("ButtonList");
             TimeText = this.transform.Find("Time").Find("Text").GetComponent<TextMeshProUGUI>();
+            this.Ring = this.transform.Find("Ring");
         }
 
         protected override void Start()
@@ -44,11 +43,6 @@ namespace ProjectOC.Player.UI
 
         #region Override
 
-        public override void OnEnter()
-        {
-            UIBtnList = new UIBtnList(parent: btnList, hasInitSelect: false, isWheel: true);
-            base.OnEnter();
-        }
         protected override void Enter()
         {
             this.UIBtnList.EnableBtnList();
@@ -88,6 +82,9 @@ namespace ProjectOC.Player.UI
             ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMenu.started -= OpenMenu_started;
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMap.started -= OpenMap_started;
+
+            // 返回
+            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
         }
 
         protected override void RegisterInput()
@@ -176,28 +173,44 @@ namespace ProjectOC.Player.UI
             ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMenu.started += OpenMenu_started;
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMap.started += OpenMap_started;
-            
+
+
+            // 返回
+            ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
 
         }
 
         private void OpenMenu_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            this.UIBtnList.BindNavigationInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid, UIBtnList.BindType.performed);
-            this.UIBtnList.BindButtonInteractInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid, UIBtnList.BindType.canceled,
+            this.UIBtnList.BindNavigationInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid, UIBtnListContainer.BindType.performed);
+            this.UIBtnList.BindButtonInteractInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid, UIBtnListContainer.BindType.canceled,
                 null, () => { 
                     Ring.gameObject.SetActive(false);
+                    ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
                     this.UIBtnList.SetCurSelectedNull();
                     this.UIBtnList.DeBindInputAction();
-
                 });
             this.Ring.gameObject.SetActive(true);
+            ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
+
         }
 
         private void OpenMap_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("打开地图"));
         }
-        
+
+        private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            if(this.Ring.gameObject.activeInHierarchy == true)
+            {
+                Ring.gameObject.SetActive(false);
+                ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
+                this.UIBtnList.SetCurSelectedNull();
+                this.UIBtnList.DeBindInputAction();
+            }
+        }
+
         #endregion
 
         #region UI对象引用
@@ -222,8 +235,12 @@ namespace ProjectOC.Player.UI
             this.abname = "PlayerUIBotPanel";
             this.description = "PlayerUIBotPanel数据加载完成";
         }
-        private Transform btnList;
         private UIBtnList UIBtnList;
+        protected override void InitBtnInfo()
+        {
+            UIBtnListInitor uIBtnListInitor = this.transform.GetComponentInChildren<UIBtnListInitor>(true);
+            this.UIBtnList = new UIBtnList(uIBtnListInitor.transform, uIBtnListInitor.btnListInitData);
+        }
         private void InitBtnData(PlayerUIBotPanelStruct datas)
         {
             foreach (var tt in datas.Btns)

@@ -642,6 +642,38 @@ namespace ProjectOC.ProNodeNS
             return result;
         }
 
+        /// <summary>
+        /// ÅÅÐò
+        /// </summary>
+        public class Sort : IComparer<ProNode>
+        {
+            public int Compare(ProNode x, ProNode y)
+            {
+                if (x == null)
+                {
+                    if (y == null)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        return 1;
+                    }
+                }
+                if (y == null)
+                {
+                    return -1;
+                }
+                int priorityX = (int)x.TransportPriority;
+                int priorityY = (int)y.TransportPriority;
+                if (priorityX != priorityY)
+                {
+                    return priorityX.CompareTo(priorityY);
+                }
+                return x.UID.CompareTo(y.UID);
+            }
+        }
+
         #region UI½Ó¿Ú
         public void UIAdd(Player.PlayerCharacter player, string itemID, int amount)
         {
