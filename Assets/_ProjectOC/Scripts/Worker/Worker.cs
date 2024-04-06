@@ -303,11 +303,11 @@ namespace ProjectOC.WorkerNS
             (this as ML.Engine.Timer.ITickComponent).DisposeTick();
             if (HasTransport)
             {
-                this.Transport.End();
+                this.Transport?.End();
             }
             if (HasProNode)
             {
-                this.ProNode.RemoveWorker();
+                this.ProNode?.RemoveWorker();
             }
         }
 

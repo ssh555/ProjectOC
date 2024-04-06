@@ -700,7 +700,8 @@ namespace ProjectOC.ProNodeNS
         {
             if (player != null)
             {
-                foreach (var kv in RawItems)
+                Dictionary<string, int> tempRawItems = new Dictionary<string, int>(RawItems);
+                foreach (var kv in tempRawItems)
                 {
                     string itemID = kv.Key;
                     int amount = player.Inventory.GetItemAllNum(itemID);

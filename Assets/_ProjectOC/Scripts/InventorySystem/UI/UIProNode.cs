@@ -150,8 +150,7 @@ namespace ProjectOC.InventorySystem.UI
         public enum ProNodeSelectMode
         {
             Product = 0,
-            Raw = 1,
-            Worker = 2
+            Worker = 1
         }
         public ProNodeSelectMode CurProNodeMode = ProNodeSelectMode.Product;
 
@@ -186,81 +185,6 @@ namespace ProjectOC.InventorySystem.UI
         }
         #region ProNode Raw
         private List<Formula> Raws => ProNode.Recipe?.Raw;
-        /// <summary>
-        /// 上一次选中的ItemIndex，用于移动滑动窗口
-        /// </summary>
-        private int lastRawIndex = 0;
-        /// <summary>
-        /// 当前选中的ItemIndex
-        /// </summary>
-        private int currentRawIndex = 0;
-        /// <summary>
-        /// 封装，方便更新数据和Refresh
-        /// </summary>
-        private int CurrentRawIndex
-        {
-            get => currentRawIndex;
-            set
-            {
-                int last = currentRawIndex;
-                if (Raws != null && Raws.Count > 0)
-                {
-                    currentRawIndex = value;
-                    if (currentRawIndex == -1)
-                    {
-                        currentRawIndex = Raws.Count - 1;
-                    }
-                    else if (currentRawIndex == Raws.Count)
-                    {
-                        currentRawIndex = 0;
-                    }
-                    else
-                    {
-                        var grid = Raw_GridLayout.GetGridSize();
-                        if (currentRawIndex < 0)
-                        {
-                            currentRawIndex += (grid.x * grid.y);
-                        }
-                        else if (currentRawIndex >= Raws.Count)
-                        {
-                            currentRawIndex -= (grid.x * grid.y);
-                            if (currentRawIndex < 0)
-                            {
-                                currentRawIndex += grid.y;
-                            }
-                        }
-                        // 不计算隐藏的模板
-                        while (this.currentRawIndex >= Raws.Count)
-                        {
-                            this.currentRawIndex -= grid.y;
-                        }
-                    }
-                }
-                else
-                {
-                    currentRawIndex = 0;
-                }
-                if (last != currentRawIndex)
-                {
-                    lastRawIndex = last;
-                }
-                this.Refresh();
-            }
-        }
-        /// <summary>
-        /// 当前选中的Item
-        /// </summary>
-        private string CurrentRaw
-        {
-            get
-            {
-                if (Raws != null && CurrentRawIndex < Raws.Count)
-                {
-                    return Raws[CurrentRawIndex].id;
-                }
-                return null;
-            }
-        }
         #endregion
 
         #region ChangeRecipe
@@ -448,39 +372,14 @@ namespace ProjectOC.InventorySystem.UI
                 var offset = new Vector2Int(Mathf.RoundToInt(f_offset.x), Mathf.RoundToInt(f_offset.y));
                 if (CurProNodeMode == ProNodeSelectMode.Product)
                 {
-                    if (offset.y < 0 && this.ProNode.Recipe != null)
-                    {
-                        CurProNodeMode = ProNodeSelectMode.Raw;
-                    }
-                    else if (offset.x > 0 && ProNode.ProNodeType == ProNodeType.Mannul)
+                    if (offset.x > 0 && ProNode.ProNodeType == ProNodeType.Mannul)
                     {
                         CurProNodeMode = ProNodeSelectMode.Worker;
                     }
                 }
-                else if (CurProNodeMode == ProNodeSelectMode.Raw)
-                {
-                    var grid = Raw_GridLayout.GetGridSize();
-                    int rawIndex = this.CurrentRawIndex - offset.y * grid.y + offset.x;
-                    this.CurrentRawIndex = rawIndex;
-                    if (rawIndex >= Raws.Count || rawIndex < 0)
-                    {
-                        if (offset.y > 0)
-                        {
-                            CurProNodeMode = ProNodeSelectMode.Product;
-                        }
-                        else if (offset.x > 0 && ProNode.ProNodeType == ProNodeType.Mannul)
-                        {
-                            CurProNodeMode = ProNodeSelectMode.Worker;
-                        }
-                    }
-                }
                 else if (CurProNodeMode == ProNodeSelectMode.Worker)
                 {
-                    if (offset.y < 0 && this.ProNode.Recipe != null)
-                    {
-                        CurProNodeMode = ProNodeSelectMode.Raw;
-                    }
-                    else if (offset.x < 0)
+                    if (offset.x < 0)
                     {
                         CurProNodeMode = ProNodeSelectMode.Product;
                     }
@@ -519,7 +418,7 @@ namespace ProjectOC.InventorySystem.UI
             {
                 ProNode.ChangeRecipe(Player, CurrentRecipe);
                 BoxCollider collider = ProNode.WorldProNode.transform.GetComponent<BoxCollider>();
-                if (ProNode.Recipe != null && !string.IsNullOrEmpty(ProNode.Recipe.Product.id))
+                if (ProNode.HasRecipe)
                 {
                     ItemManager.Instance.AddItemIconObject(ProNode.Recipe.Product.id,
                                                                this.ProNode.WorldProNode.transform,
@@ -577,11 +476,10 @@ namespace ProjectOC.InventorySystem.UI
                 if (CurProNodeMode == ProNodeSelectMode.Worker)
                 {
                     ProNode.RemoveWorker();
-
                 }
                 else
                 {
-                    ProNode.UIFastAdd(Player, CurrentRaw);
+                    ProNode.UIFastAdd(Player);
                 }
             }
             Refresh();
@@ -713,7 +611,7 @@ namespace ProjectOC.InventorySystem.UI
                     ProNodeUI.Find("Worker").Find("Selected").gameObject.SetActive(true);
                 }
 
-                if (ProNode.Recipe != null)
+                if (ProNode.HasRecipe)
                 {
                     #region Product
                     string productID = ProNode.Recipe.ProductID;
@@ -761,8 +659,6 @@ namespace ProjectOC.InventorySystem.UI
                             tempUIItems.Add(uiitem.gameObject);
                         }
                     }
-                    GameObject cur = null;
-                    GameObject last = null;
                     for (int i = 0; i < Raws.Count; ++i)
                     {
                         var itemID = Raws[i].id;
@@ -805,56 +701,7 @@ namespace ProjectOC.InventorySystem.UI
                         {
                             item.transform.Find("Back").GetComponent<Image>().color = Color.black;
                         }
-
-                        if (CurrentRaw == itemID)
-                        {
-                            if (CurProNodeMode == ProNodeSelectMode.Raw)
-                            {
-                                item.transform.Find("Selected").gameObject.SetActive(true);
-                            }
-                            cur = item;
-                        }
-                        if (i == lastRawIndex)
-                        {
-                            last = item;
-                        }
                     }
-                    #region 更新滑动窗口
-                    if (cur != null && last != null)
-                    {
-                        RectTransform uiRectTransform = cur.GetComponent<RectTransform>();
-                        RectTransform scrollRectTransform = cur.transform.parent.parent.parent.GetComponent<RectTransform>();
-                        ScrollRect scrollRect = scrollRectTransform.GetComponent<ScrollRect>();
-                        RectTransform contentRect = scrollRect.content;
-
-                        Vector3[] corners = new Vector3[4];
-                        uiRectTransform.GetWorldCorners(corners);
-                        bool allCornersVisible = true;
-                        for (int i = 0; i < 4; ++i)
-                        {
-                            Vector3 screenPoint = RectTransformUtility.WorldToScreenPoint(null, corners[i]);
-                            if (!RectTransformUtility.RectangleContainsScreenPoint(scrollRectTransform, screenPoint, null))
-                            {
-                                allCornersVisible = false;
-                                break;
-                            }
-                        }
-
-                        if (!allCornersVisible)
-                        {
-                            Vector2 positionA = (last.transform as RectTransform).anchoredPosition;
-                            Vector2 positionB = (cur.transform as RectTransform).anchoredPosition;
-                            Vector2 offset = positionB - positionA;
-                            Vector2 normalizedPosition = scrollRect.normalizedPosition;
-                            normalizedPosition += new Vector2(offset.x / (contentRect.rect.width - (contentRect.parent as RectTransform).rect.width), offset.y / (contentRect.rect.height - (contentRect.parent as RectTransform).rect.height));
-                            scrollRect.normalizedPosition = normalizedPosition;
-                        }
-                    }
-                    else
-                    {
-                        Raw_GridLayout.transform.parent.parent.GetComponent<ScrollRect>().normalizedPosition = new Vector2(0, 1);
-                    }
-                    #endregion
                     LayoutRebuilder.ForceRebuildLayoutImmediate(Raw_GridLayout.GetComponent<RectTransform>());
                     #endregion
                 }
@@ -1065,20 +912,12 @@ namespace ProjectOC.InventorySystem.UI
                 product = LocalGameManager.Instance.RecipeManager.GetProduct(CurrentRecipe);
                 if (ItemManager.Instance.IsValidItemID(product.id))
                 {
-                    var texture = ItemManager.Instance.GetItemTexture2D(product.id);
-                    if (texture != null)
+                    if (!tempSprite.ContainsKey(product.id))
                     {
-                        if (!tempSprite.ContainsKey(product.id))
-                        {
-                            var sprite = ItemManager.Instance.GetItemSprite(product.id);
-                            tempSprite[product.id] = sprite;
-                            Recipe_Product.GetComponent<Image>().sprite = sprite;
-                        }
-                        else
-                        {
-                            Recipe_Product.GetComponent<Image>().sprite = tempSprite[product.id];
-                        }
+                        var sprite = ItemManager.Instance.GetItemSprite(product.id);
+                        tempSprite[product.id] = sprite;
                     }
+                    Recipe_Product.GetComponent<Image>().sprite = tempSprite[product.id];
 
                     Text_Recipe_Time.text = PanelTextContent.textTime + ":" + LocalGameManager.Instance.RecipeManager.GetTimeCost(CurrentRecipe).ToString() + "s";
                     Text_Recipe_Name.text = ItemManager.Instance.GetItemName(product.id);
@@ -1334,20 +1173,12 @@ namespace ProjectOC.InventorySystem.UI
                     var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
                     if (ItemManager.Instance.IsValidItemID(itemID))
                     {
-                        var texture = ItemManager.Instance.GetItemTexture2D(itemID);
-                        if (texture != null)
+                        if (!tempSprite.ContainsKey(itemID))
                         {
-                            if (!tempSprite.ContainsKey(itemID))
-                            {
-                                var sprite = ItemManager.Instance.GetItemSprite(itemID);
-                                tempSprite[itemID] = sprite;
-                                img.sprite = sprite;
-                            }
-                            else
-                            {
-                                img.sprite = tempSprite[itemID];
-                            }
+                            var sprite = ItemManager.Instance.GetItemSprite(itemID);
+                            tempSprite[itemID] = sprite;
                         }
+                        img.sprite = tempSprite[itemID];
                     }
                     else
                     {
@@ -1452,7 +1283,7 @@ namespace ProjectOC.InventorySystem.UI
         {
             if (CurMode == Mode.ProNode)
             {
-                if (ProNode.Recipe != null)
+                if (ProNode.HasRecipe)
                 {
                     var amountProduct = Product.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
                     amountProduct.text = ProNode.GetItemAllNum(ProNode.Recipe.ProductID).ToString();
@@ -1493,6 +1324,5 @@ namespace ProjectOC.InventorySystem.UI
             }
         }
         #endregion
-
     }
 }
