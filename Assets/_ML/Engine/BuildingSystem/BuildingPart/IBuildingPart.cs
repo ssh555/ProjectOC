@@ -194,7 +194,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                     lastTriggerFrameCount = Time.frameCount;
                 }
                 // 同一帧检测到不能放置，则此帧就不能更改能否放置值，仅为不能放置
-                else if(lastTriggerFrameCount != Time.frameCount)
+                else if (lastTriggerFrameCount != Time.frameCount)
                 {
                     this.CanPlaceInPlaceMode = true;
                     this.Mode = this.tmpTriggerMode;

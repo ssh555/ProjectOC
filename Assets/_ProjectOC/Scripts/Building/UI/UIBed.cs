@@ -278,6 +278,7 @@ namespace ProjectOC.Building.UI
             else if (CurMode == Mode.ConfirmClan)
             {
                 ChangeClan.gameObject.SetActive(true);
+                ConfirmClan.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textConfirmPrefix + CurClan.Name + PanelTextContent.textConfirmSuffix;
                 ConfirmClan.gameObject.SetActive(true);
             }
 
@@ -301,6 +302,8 @@ namespace ProjectOC.Building.UI
         public struct BedPanel
         {
             public TextContent textBed;
+            public TextContent textConfirmPrefix;
+            public TextContent textConfirmSuffix;
             public KeyTip SetEmpty;
             public KeyTip ConfirmClan;
             public KeyTip Pre;

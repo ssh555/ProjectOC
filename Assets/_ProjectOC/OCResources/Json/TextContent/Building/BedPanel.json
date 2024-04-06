@@ -3,6 +3,14 @@
         "Chinese" : "床",
         "English" : "Bed"
     },
+    "textConfirmPrefix" : {
+        "Chinese" : "确认要将",
+        "English" : "Are you sure you want to move the homes of "
+    },
+    "textConfirmSuffix" : {
+        "Chinese" : "的家搬至此处吗？ ",
+        "English" : " here?"
+    },
     "SetEmpty" : {
         "keyname" : "KT_SetEmpty",
         "keymap": {

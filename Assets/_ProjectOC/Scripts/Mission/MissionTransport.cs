@@ -93,6 +93,14 @@ namespace ProjectOC.MissionNS
             return this.Initiator?.GetUID() ?? "";
         }
 
+        public void UpdateTransportDestionation()
+        {
+            foreach (Transport transport in this.Transports)
+            {
+                transport?.UpdateDestination();
+            }
+        }
+
         /// <summary>
         /// жуж╧хннЯ
         /// </summary>

@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 4371231804377761434}
   - component: {fileID: -603927515045954914}
   m_Layer: 7
-  m_Name: Interact_Bed_Base1_1
+  m_Name: Furniture_Bed_Base1_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -192,12 +192,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
-    Category1: 1
-    Category2: 107
+    Category1: 3
+    Category2: 300
     Category3: 100
     Category4: 1
   instanceID: 
-  isFirstBuild: 1
   canPlaceInPlaceMode: 1
   mode: 0
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
