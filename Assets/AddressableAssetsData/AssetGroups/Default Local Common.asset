@@ -204,10 +204,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - NoticeUI
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 010fbc4a16cc1f144a3fee08825a2229
-    m_Address: OC/UI/Store/Texture
+  - m_GUID: 20d8b97e998812b41a900f8b1694575c
+    m_Address: OC/Building/BedIcon
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - ItemTexture2D
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 72d1a89784032c94ea3b026b42e20dcf, type: 2}

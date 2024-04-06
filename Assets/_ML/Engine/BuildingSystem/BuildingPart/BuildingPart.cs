@@ -64,7 +64,6 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
                 mode = value;
                 this.SetColliderTrigger((mode == BuildingMode.Place || mode == BuildingMode.Destroy || mode == BuildingMode.Edit));
-
                 if (mode == BuildingMode.Edit || mode == BuildingMode.Place)
                 {
                     this.canPlaceInPlaceMode = true;

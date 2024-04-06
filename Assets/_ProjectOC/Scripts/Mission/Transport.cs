@@ -1,5 +1,7 @@
 using ML.Engine.InventorySystem;
 using ProjectOC.WorkerNS;
+using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,110 +13,76 @@ namespace ProjectOC.MissionNS
     [System.Serializable]
     public class Transport
     {
-        /// <summary>
-        /// 搬运所属的任务
-        /// </summary>
-        [System.NonSerialized]
-        public MissionTransport Mission;
-
-        /// <summary>
-        /// 搬运物品ID
-        /// </summary>
+        [LabelText("搬运物品ID")]
         public string ItemID = "";
-
-        /// <summary>
-        /// 需要搬运的数量
-        /// </summary>
-        public int MissionNum;
-
-        /// <summary>
-        /// 取货地
-        /// </summary>
+        [LabelText("搬运所属的任务"), NonSerialized]
+        public MissionTransport Mission;
+        [LabelText("取货地")]
         public IMissionObj Source;
-
-        /// <summary>
-        /// 送货地
-        /// </summary>
+        [LabelText("送货地")]
         public IMissionObj Target;
-
-        /// <summary>
-        /// 该任务的刁民
-        /// </summary>
+        [LabelText("负责该搬运的刁民")]
         public Worker Worker;
 
-        /// <summary>
-        /// 当前拿到的数量
-        /// </summary>
-        public int CurNum
-        {
-            get
-            {
-                int result = 0;
-                if (this.Worker != null)
-                {
-                    foreach (Item item in Worker.TransportItems)
-                    {
-                        if (item.ID == ItemID)
-                        {
-                            result += item.Amount;
-                        }
-                    }
-                }
-                return result;
-            }
-        }
-
-        /// <summary>
-        /// 还需要搬运的数量
-        /// </summary>
-        public int NeedTransportNum
-        {
-            get
-            {
-                return MissionNum - FinishNum - CurNum;
-            }
-        }
-
-        /// <summary>
-        /// 完成的数量
-        /// </summary>
+        [LabelText("需要搬运的数量")]
+        public int MissionNum;
+        [LabelText("当前拿到的数量")]
+        public int CurNum;
+        [LabelText("完成的数量")]
         public int FinishNum;
+        [LabelText("取货地预留的数量")]
+        public int SoureceReserveNum;
+        [LabelText("送货地预留的数量")]
+        public int TargetReserveNum;
 
-        /// <summary>
-        /// 刁民搬运状态
-        /// </summary>
-        public TransportState TransportState
-        {
-            get
-            {
-                return CurNum > 0 ? TransportState.HoldingObjects : TransportState.EmptyHanded;
-            }
-        }
+        [LabelText("是否到达取货地")]
+        public bool ArriveSource;
+
 
         public Transport(MissionTransport mission, string itemID, int missionNum, IMissionObj source, IMissionObj destination, Worker worker)
         {
-            this.Mission = mission;
             this.ItemID = itemID;
-            this.MissionNum = missionNum;
+            this.Mission = mission;
             this.Source = source;
             this.Target = destination;
             this.Worker = worker;
+            this.MissionNum = missionNum;
+
             this.Mission.Transports.Add(this);
             this.Source.AddTransport(this);
             this.Target.AddTransport(this);
             this.Worker.Transport = this;
-            this.Worker.SetDestination(this.Worker.Transport.Source.GetTransform(), Transport_Source_Action);
+            this.Worker.SetDestination(this.Source.GetTransform().position, Transport_Source_Action);
         }
+
+        public void UpdateDestination()
+        {
+            if (!ArriveSource)
+            {
+                if (this.Source.GetTransform().position != this.Worker.Target)
+                {
+                    this.Worker.SetDestination(this.Source.GetTransform().position, Transport_Source_Action);
+                }
+            }
+            else
+            {
+                if (this.Target.GetTransform().position != this.Worker.Target)
+                {
+                    this.Worker.SetDestination(this.Target.GetTransform().position, Transport_Target_Action);
+                }
+            }
+        }
+
         private void Transport_Source_Action(Worker worker)
         {
+            worker.Transport.ArriveSource = true;
             worker.Transport.PutOutSource();
-            worker.SetDestination(worker.Transport.Target.GetTransform(), Transport_Target_Action);
+            worker.SetDestination(worker.Transport.Target.GetTransform().position, Transport_Target_Action);
         }
 
         private void Transport_Target_Action(Worker worker)
         {
             worker.Transport.PutInTarget();
-            worker.ClearDestination();
         }
 
         /// <summary>
@@ -124,7 +92,7 @@ namespace ProjectOC.MissionNS
         {
             bool flagBurden = false;
             bool flagSource = false;
-            List<Item> items = ItemManager.Instance.SpawnItems(ItemID, this.NeedTransportNum);
+            List<Item> items = ItemManager.Instance.SpawnItems(ItemID, this.MissionNum);
             foreach (Item item in items)
             {
                 if (item.Weight + Worker.BURCurrent >= Worker.BURMax)
@@ -140,14 +108,11 @@ namespace ProjectOC.MissionNS
                     flagSource = true;
                 }
                 Worker.TransportItems.Add(item);
+                CurNum += item.Amount;
                 if (flagBurden || flagSource)
                 {
                     break;
                 }
-            }
-            if (flagSource)
-            {
-                //Debug.LogError("Source is not Enough");
             }
         }
 
@@ -156,14 +121,30 @@ namespace ProjectOC.MissionNS
         /// </summary>
         public void PutInTarget()
         {
-            int num = this.CurNum;
-            this.Target.PutIn(this.ItemID, num);
-            MissionTransport mission = this.Mission;
-            this.Worker.TransportItems.Clear();
-            this.FinishNum += num;
+            foreach (Item item in Worker.TransportItems)
+            {
+                if (item.ID == ItemID)
+                {
+                    if (item.Amount >= CurNum)
+                    {
+                        item.Amount -= CurNum;
+                        FinishNum += CurNum;
+                        CurNum = 0;
+                        break;
+                    }
+                    else
+                    {
+                        CurNum -= item.Amount;
+                        FinishNum += item.Amount;
+                        item.Amount = 0;
+                    }
+                }
+            }
+            this.Worker.TransportItems.RemoveAll(item => item.Amount == 0);
+            this.Target.PutIn(this.ItemID, this.FinishNum);
             this.Worker.SettleTransport();
             this.End();
-            mission.FinishNum += num;
+            this.Mission.FinishNum += this.FinishNum;
         }
 
         /// <summary>
@@ -171,21 +152,48 @@ namespace ProjectOC.MissionNS
         /// </summary>
         public void End(bool remove=true)
         {
-            foreach (Item item in Worker.TransportItems)
+            List<Item> items = ItemManager.Instance.SpawnItems(ItemID, CurNum);
+            foreach (Item item in items)
             {
 #pragma warning disable CS4014
                 ItemManager.Instance.SpawnWorldItem(item, Worker.transform.position, Worker.transform.rotation);
 #pragma warning restore CS4014
             }
-            Worker.TransportItems.Clear();
+            foreach (Item item in Worker.TransportItems)
+            {
+                if (item.ID == ItemID)
+                {
+                    if (item.Amount >= CurNum)
+                    {
+                        item.Amount -= CurNum;
+                        CurNum = 0;
+                        break;
+                    }
+                    else
+                    {
+                        CurNum -= item.Amount;
+                        item.Amount = 0;
+                    }
+                }
+            }
+            Worker.TransportItems.RemoveAll(item => item.Amount == 0);
             Worker.Transport = null;
             Worker.ClearDestination();
+            if (Source != null && Source is StoreNS.Store source)
+            {
+                source.RemoveReserveStorage(ItemID, SoureceReserveNum);
+            }
+            if (Target != null && Target is StoreNS.Store target)
+            {
+                target.RemoveReserveEmpty(ItemID, TargetReserveNum);
+            }
+
             if (remove)
             {
                 Mission.Transports.Remove(this);
             }
-            Source.RemoveTranport(this);
-            Target.RemoveTranport(this);
+            Source?.RemoveTranport(this);
+            Target?.RemoveTranport(this);
         }
     }
 }

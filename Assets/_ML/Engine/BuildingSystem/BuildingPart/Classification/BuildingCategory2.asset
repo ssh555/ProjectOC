@@ -114,3 +114,6 @@ MonoBehaviour:
   - name: Window
     displayName: "\u7A97"
     value: 208
+  - name: Bed
+    displayName: "\u5E8A"
+    value: 300
