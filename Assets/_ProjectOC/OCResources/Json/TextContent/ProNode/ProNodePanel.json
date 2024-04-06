@@ -206,11 +206,11 @@
         "English" : "OnDuty"
     },
     "textTime" : {
-        "Chinese" : "时间",
+        "Chinese" : "制作时间",
         "English" : "Time"
     },
     "textEff" : {
-        "Chinese" : "效率",
+        "Chinese" : "生产效率",
         "English" : "Eff"
     },
     "textLvDesc" : {
@@ -239,6 +239,17 @@
             "English" : ""
         }
     },
+    "UpgradeConfirm" : {
+        "keyname" : "KT_UpgradeConfirm",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "升级",
+            "English" : "Upgrade"
+        }
+    },
     "ChangeRecipe" : {
         "keyname" : "KT_ChangeRecipe",
         "keymap": {
@@ -248,28 +259,6 @@
         "description" : {
             "Chinese" : "更改配方",
             "English" : "Change Recipe"
-        }
-    },
-    "ChangeWorker" : {
-        "keyname" : "KT_ChangeWorker",
-        "keymap": {
-            "ActionMapName": "Common",
-            "ActionName": "Confirm"
-          },
-        "description" : {
-            "Chinese" : "变更派遣",
-            "English" : "Change Worker"
-        }
-    },
-    "RemoveWorker" : {
-        "keyname" : "KT_RemoveWorker",
-        "keymap": {
-            "ActionMapName": "UIProNode",
-            "ActionName": "FastAdd"
-          },
-        "description" : {
-            "Chinese" : "移除派遣",
-            "English" : "Remove Worker"
         }
     },
     "Remove1" : {
@@ -303,6 +292,28 @@
         "description" : {
             "Chinese" : "快捷投入",
             "English" : "Fast Add"
+        }
+    },
+    "ChangeWorker" : {
+        "keyname" : "KT_ChangeWorker",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "变更派遣",
+            "English" : "Change Worker"
+        }
+    },
+    "RemoveWorker" : {
+        "keyname" : "KT_RemoveWorker",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "FastAdd"
+          },
+        "description" : {
+            "Chinese" : "移除派遣",
+            "English" : "Remove Worker"
         }
     },
     "Return" : {

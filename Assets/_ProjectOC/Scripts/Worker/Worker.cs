@@ -23,7 +23,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("名字")]
         public string Name = "Worker";
         [LabelText("性别")]
-        public Gender Gender = Gender.None;
+        public Gender Gender = Gender.Male;
         [LabelText("当前体力值")]
         public int APCurrent = 10;
         [LabelText("体力上限")]
@@ -108,7 +108,7 @@ namespace ProjectOC.WorkerNS
         public Action<Status> StatusChangeAction;
         
         [LabelText("是否在值班")]
-        public bool IsOnDuty { get { return this.ProNode != null && this.Status != Status.Relaxing && ArriveProNode; } }
+        public bool IsOnDuty { get { return HasProNode && this.Status != Status.Relaxing && ArriveProNode; } }
         
         [LabelText("生产节点")]
         public ProNode ProNode = null;
@@ -121,7 +121,9 @@ namespace ProjectOC.WorkerNS
         public Transport Transport = null;
         [ShowInInspector]
         public bool HasTransport { get => this.Transport != null && !string.IsNullOrEmpty(this.Transport.ItemID); }
-        
+        [ShowInInspector]
+        public TransportState TransportState { get => (HasTransport && this.Transport.CurNum > 0) ? TransportState.HoldingObjects : TransportState.EmptyHanded; }
+
         [LabelText("搬运物品")]
         public List<Item> TransportItems = new List<Item>();
 
@@ -133,9 +135,10 @@ namespace ProjectOC.WorkerNS
 
         public NavMeshAgent Agent = null;
         public float Threshold = 2f;
-        public Transform Target = null;
-        private event Action<Worker> OnArrival;
-        public bool HasArrived = false;
+        public Vector3 Target;
+        public event Action<Worker> OnArrival;
+        private event Action<Worker> OnArrivalDisposable;
+        public bool HasDestination = false;
         public void Init()
         {
             this.ExpRate.Add(WorkType.None, 0);
@@ -196,42 +199,35 @@ namespace ProjectOC.WorkerNS
 
         public void Tick(float deltatime)
         {
-            if (Target != null && !HasArrived && Vector3.Distance(transform.position, Target.position) < Threshold)
+            if (HasDestination && Vector3.Distance(transform.position, Target) < Threshold)
             {
-                HasArrived = true;
+                ClearDestination();
+                OnArrivalDisposable?.Invoke(this);
                 OnArrival?.Invoke(this);
             }
         }
 
-        public bool SetDestination(Transform target, Action<Worker> action = null, bool isClearAction=true)
+        public bool SetDestination(Vector3 target, Action<Worker> action = null)
         {
-            this.Target = target;
-            if (Target != null)
+            ClearDestination();
+            Agent.isStopped = false;
+            if (Agent.SetDestination(target))
             {
-                Agent.isStopped = false;
-                if (Agent.SetDestination(Target.position))
-                {
-                    HasArrived = false;
-                    if (isClearAction)
-                    {
-                        OnArrival = action;
-                    }
-                    else
-                    {
-                        OnArrival += action;
-                    }
-                    return true;
-                }
+                Target = target;
+                HasDestination = true;
+                OnArrivalDisposable = action;
+                return true;
             }
-            return false;
+            else
+            {
+                return false;
+            }
         }
 
         public void ClearDestination()
         {
-            Target = null;
-            OnArrival = null;
-            HasArrived = false;
-            if (Agent.enabled)
+            HasDestination = false;
+            if (Agent != null && Agent.enabled)
             {
                 Agent.isStopped = true;
             }
@@ -305,14 +301,13 @@ namespace ProjectOC.WorkerNS
         public void OnDestroy()
         {
             (this as ML.Engine.Timer.ITickComponent).DisposeTick();
-            this.ClearDestination();
             if (HasTransport)
             {
-                this.Transport.End();
+                this.Transport?.End();
             }
             if (HasProNode)
             {
-                this.ProNode.RemoveWorker();
+                this.ProNode?.RemoveWorker();
             }
         }
 

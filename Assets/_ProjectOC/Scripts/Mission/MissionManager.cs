@@ -82,7 +82,7 @@ namespace ProjectOC.MissionNS
                 if (worker != null && store != null && missionNum > 0)
                 {
                     Transport transport = new Transport(mission, mission.ItemID, missionNum, mission.Initiator, store, worker);
-                    store.ReserveEmptyToWorker(mission.ItemID, missionNum);
+                    store.ReserveEmptyToWorker(mission.ItemID, missionNum, transport);
                 }
                 else
                 {
@@ -113,7 +113,7 @@ namespace ProjectOC.MissionNS
                     if (worker != null && store != null && missionNum > 0)
                     {
                         Transport transport = new Transport(mission, mission.ItemID, missionNum, store, mission.Initiator, worker);
-                        store.ReserveStorageToWorker(mission.ItemID, missionNum);
+                        store.ReserveStorageToWorker(mission.ItemID, missionNum, transport);
                     }
                     else
                     {

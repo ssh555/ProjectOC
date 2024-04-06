@@ -79,23 +79,26 @@ namespace ML.Engine.SaveSystem
             if (Directory.Exists(SavePath))
             {
                 GlobalSaveDataFolder globalSaveDataFolder = LoadData<GlobalSaveDataFolder>("GlobalSaveConfig");
-                List<string> configs = globalSaveDataFolder?.SaveDataFolders;
-                Utility.Version version = globalSaveDataFolder.Version;
-                if (configs != null)
+                if (globalSaveDataFolder != null)
                 {
-                    for (int i=0; i< MAXSAVEDATACOUNT; i++)
+                    List<string> configs = globalSaveDataFolder.SaveDataFolders;
+                    Utility.Version version = globalSaveDataFolder.Version;
+                    if (configs != null)
                     {
-                        ConfigPaths[i] = configs[i];
-                        if (ConfigPaths[i] != null)
+                        for (int i = 0; i < MAXSAVEDATACOUNT; i++)
                         {
-                            SaveDataFolders[i] = LoadData<SaveDataFolder>(Path.Combine(ConfigPaths[i], "SaveConfig"));
-                            SaveDataFolders[i].SavePath = ConfigPaths[i];
+                            ConfigPaths[i] = configs[i];
+                            if (ConfigPaths[i] != null)
+                            {
+                                SaveDataFolders[i] = LoadData<SaveDataFolder>(Path.Combine(ConfigPaths[i], "SaveConfig"));
+                                SaveDataFolders[i].SavePath = ConfigPaths[i];
+                            }
                         }
                     }
-                }
-                if (version < GameManager.Instance.Version)
-                {
-                    UpdateVersion();
+                    if (version < GameManager.Instance.Version)
+                    {
+                        UpdateVersion();
+                    }
                 }
             }
         }
