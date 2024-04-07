@@ -278,11 +278,11 @@ namespace ML.Engine.UI
                         panelGo.transform.SetParent(Content, false);
                         panelGo.name = panelGo.GetHashCode().ToString();
                         BtnUIData btnData = (BtnUIData)(object)data;
-                        
+                        SelectedButton selectedButton = panelGo.GetComponent<SelectedButton>();
 
                         if (this.BtnUIContainer != null)
                         {
-                            this.BtnUIContainer.AddBtn();
+                            this.BtnUIContainer.AddBtn(selectedButton);
                         }
                         else
                         {

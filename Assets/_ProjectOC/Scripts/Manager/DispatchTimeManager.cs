@@ -72,6 +72,7 @@ namespace ProjectOC.ManagerNS
                 {
                     this.CurrentDay += 1;
                     this.OnDayChanged?.Invoke(this.CurrentDay);
+                    
                 }
             }
         }

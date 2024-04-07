@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.U2D;
 using System.Threading.Tasks;
 using UnityEngine.AddressableAssets;
+using ML.Engine.Manager.LocalManager;
+using ML.Engine.Manager;
 
 namespace ML.Engine.InventorySystem
 {
@@ -28,10 +30,13 @@ namespace ML.Engine.InventorySystem
     /// <summary>
     /// 没有以 Manager 为后缀，是懒得改其他地方了，太多了
     /// </summary>
-    public sealed class ItemManager : Manager.GlobalManager.IGlobalManager
+    [System.Serializable]
+    public sealed class ItemManager : ILocalManager
     {
         #region Instance
-        private ItemManager() { }
+        public ItemManager() 
+        {
+        }
 
         ~ItemManager()
         {
@@ -41,22 +46,37 @@ namespace ML.Engine.InventorySystem
             }
         }
 
+        public static ItemManager Instance { get { return instance; } }
+
         private static ItemManager instance;
 
-        public static ItemManager Instance
+        /// <summary>
+        /// 单例管理
+        /// </summary>
+        public void Init()
         {
-            get
+            LoadTableData();
+            LoadItemAtlas();
+        }
+
+        public void OnRegister()
+        {
+            if (instance == null)
             {
-                if (instance == null)
-                {
-                    instance = new ItemManager();
-                    Manager.GameManager.Instance.RegisterGlobalManager(instance);
-                }
-                return instance;
+                instance = this;
             }
         }
+
+        public void OnUnregister()
+        {
+            if (instance == this)
+            {
+                instance = null;
+            }
+        }
+
         #endregion
-        
+
         #region Load And Data
         /// <summary>
         /// 是否已加载完数据

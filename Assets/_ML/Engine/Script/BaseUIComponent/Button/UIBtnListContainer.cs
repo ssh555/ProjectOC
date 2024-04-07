@@ -65,8 +65,8 @@ namespace ML.Engine.UI
             get { return curSelectUIBtnList; }
         }
 
-        private SelectedButton curSelectSelectedButton = null;
-        private SelectedButton lastSelectSelectedButton = null;
+        //private SelectedButton curSelectSelectedButton = null;
+        //private SelectedButton lastSelectSelectedButton = null;
         public enum NavagationMode
         {
             BtnList = 0,
@@ -91,9 +91,12 @@ namespace ML.Engine.UI
         private BindType bindType;
         public BindType curBindType { get { return bindType; } }
 
+        private BtnListContainerInitData btnListContainerInitData;
+
         public UIBtnListContainer(Transform transform, BtnListContainerInitData btnListContainerInitData)
         {
             this.gridNavagationType = btnListContainerInitData.containerType;
+            this.btnListContainerInitData = btnListContainerInitData;
             UIBtnListInitor[] uIBtnListInitors = transform.GetComponentsInChildren<UIBtnListInitor>();
 
             Dictionary<UIBtnListInitor, UIBtnList> tmpDic = new Dictionary<UIBtnListInitor, UIBtnList>();
@@ -131,13 +134,6 @@ namespace ML.Engine.UI
                     uIBtnLists[i].RightUI = tmpDic[btnListContainerInitData.navagations[i].Right];
                 }
             }
-
-            //连边
-            foreach (var linkData in btnListContainerInitData.LinkDatas)
-            {
-                this.LinkTwoEdge(GetEdge(UIBtnLists[linkData.btnlist1], linkData.btnlist1type), GetEdge(UIBtnLists[linkData.btnlist2], linkData.btnlist2type), linkData.linktype);
-            }
-
         }
 
         public void BindNavigationInputAction(InputAction NavigationInputAction, BindType bindType)
@@ -367,6 +363,8 @@ namespace ML.Engine.UI
         {
             int l1 = edge1.Count;
             int l2 = edge2.Count;
+            if (l1 == 0 || l2 == 0) return;
+
             if (l1 >= l2)
             {
                 for(int i = 0; i < l2; i++) 
@@ -463,16 +461,33 @@ namespace ML.Engine.UI
                 btnlist.DeBindInputAction();
                 btnlist.DisableBtnList();
             }
+            this.DeBindNavigationInputAction();
         }
 
 
         public void MoveToBtnList(UIBtnList uIBtnList)
         {
             if (this.CurSelectUIBtnList == uIBtnList || uIBtnList == null) return;
-            //绑定输入
-            uIBtnList.BindNavigationInputAction(this.gridNavagationInputAction, this.bindType);
-            //当前退出
-            this.CurSelectUIBtnList?.OnExitInner();
+/*            //绑定输入
+            uIBtnList.BindNavigationInputAction(this.gridNavagationInputAction, this.bindType);*/
+
+            if(gridNavagationType == ContainerType.A)
+            {
+                if(navagationMode == NavagationMode.BtnList)
+                {
+                    this.CurSelectUIBtnList?.OnSelectExit();
+                }
+                else if(navagationMode == NavagationMode.SelectedButton)
+                {
+                    this.CurSelectUIBtnList?.OnExitInner();
+                }
+            }
+            else if(gridNavagationType == ContainerType.B)
+            {
+                //当前退出
+                this.CurSelectUIBtnList?.OnExitInner();
+            }
+            
             //更改CurSelectUIBtnList
             this.CurSelectUIBtnList = uIBtnList;
             //当前进入
@@ -538,6 +553,8 @@ namespace ML.Engine.UI
 
         public void FindEnterableUIBtnList()
         {
+            RefreshEdge();
+
             for (int i = 0; i < this.UIBtnLists.Count; i++)
             {
                 if (this.UIBtnLists[i].BtnCnt>0)
@@ -545,6 +562,15 @@ namespace ML.Engine.UI
                     MoveToBtnList(this.UIBtnLists[i]);
                     return;
                 }
+            }
+        }
+
+        private void RefreshEdge()
+        {
+            //连边
+            foreach (var linkData in btnListContainerInitData.LinkDatas)
+            {
+                this.LinkTwoEdge(GetEdge(uIBtnLists[linkData.btnlist1], linkData.btnlist1type), GetEdge(uIBtnLists[linkData.btnlist2], linkData.btnlist2type), linkData.linktype);
             }
         }
 

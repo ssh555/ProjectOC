@@ -337,9 +337,18 @@ namespace ProjectOC.TechTree.UI
         protected override void Exit()
         {
             ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
+            ClearTempOnExit();
             base.Exit();
         }
 
+        #endregion
+
+        #region Temp
+        private void ClearTempOnExit()
+        {
+            TechTreeManager.Instance.CategoryDict.Clear();
+
+        }
         #endregion
 
         #region Internal
@@ -413,7 +422,7 @@ namespace ProjectOC.TechTree.UI
         private void ClearTemp()
         {
             // sprite
-            foreach(var s in tempSprite)
+            foreach (var s in tempSprite)
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s);
             }

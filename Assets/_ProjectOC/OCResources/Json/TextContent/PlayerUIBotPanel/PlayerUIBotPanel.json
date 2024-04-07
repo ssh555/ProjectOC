@@ -56,5 +56,16 @@
                 "English" : "Build"
             }
         }
-    ]
+    ],
+    "SelectGrid" : {
+        "keyname" : "KT_SelectGrid",
+        "keymap": {
+            "ActionMapName": "PlayerUIBot",
+            "ActionName": "SelectGrid"
+          },
+        "description" : {
+            "Chinese" : "",
+            "English" : ""
+        }
+    }
 }

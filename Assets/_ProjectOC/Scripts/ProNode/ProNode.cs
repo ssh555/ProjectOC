@@ -483,7 +483,7 @@ namespace ProjectOC.ProNodeNS
                 {
                     this.Worker.StatusChangeAction -= OnWorkerStatusChangeAction;
                     this.Worker.APChangeAction -= OnWorkerAPChangeAction;
-                    this.Worker.SetTimeStatusAll(TimeStatus.Relax);
+                    //this.Worker.SetTimeStatusAll(TimeStatus.Relax);
                     this.Worker.ClearDestination();
                     this.Worker.ProNode = null;
                     if (!this.Worker.Agent.enabled)
