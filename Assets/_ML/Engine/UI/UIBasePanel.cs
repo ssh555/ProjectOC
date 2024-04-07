@@ -160,7 +160,7 @@ namespace ML.Engine.UI
         public string abname;
         public string description;
 
-        private UIKeyTipList<T> UIKeyTipList;
+        public UIKeyTipList<T> UIKeyTipList;
 
         /// <summary>
         /// 加载Json完成后执行的回调，默认自动初始化KeyTip
@@ -188,7 +188,7 @@ namespace ML.Engine.UI
         /// </summary>
         private void InitKeyTip(T datas)
         {
-            UIKeyTipList = new UIKeyTipList<T>(transform,datas);
+            this.UIKeyTipList = new UIKeyTipList<T>(transform,datas);
         }
 
         protected override void Awake()

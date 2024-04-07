@@ -288,6 +288,8 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
             ProjectOC.Input.InputManager.PlayerInput.Player.Crouch.Disable();
             ProjectOC.Input.InputManager.PlayerInput.Player.Jump.Disable();
+            ProjectOC.Input.InputManager.PlayerInput.Player.MouseScroll.Disable();
+            ProjectOC.Input.InputManager.PlayerInput.Player.OpenBotUI.Disable();
         }
 
         public void DisablePlayerInput()

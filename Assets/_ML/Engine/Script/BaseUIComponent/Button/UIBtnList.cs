@@ -563,7 +563,6 @@ namespace ML.Engine.UI
         /// </summary>
         public void BindInputAction(string btnName, InputAction InputAction, BindType bindType, Action preAction = null, Action postAction = null)
         {
-
             //统一点击与按键 并且加入preAction 与 postAction
             SelectedButton btn = GetBtn(btnName);
             btn.SetPreAndPostInteract(preAction, postAction);

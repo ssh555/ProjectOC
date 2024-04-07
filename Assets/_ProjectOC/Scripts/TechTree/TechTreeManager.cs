@@ -32,7 +32,7 @@ namespace ProjectOC.TechTree
             // 注册 Manager
             GM.RegisterLocalManager(this);
 
-            // 载入 Item 和 合成表格
+            
             LoadResource();
 
             // 载入科技树表格数据 以及 恢复存档
@@ -467,10 +467,7 @@ namespace ProjectOC.TechTree
         /// <returns></returns>
         void LoadResource()
         {
-            ML.Engine.InventorySystem.ItemManager.Instance.LoadTableData();
-            ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.LoadTableData();
             LoadTechAtlas();
-            ItemManager.Instance.LoadItemAtlas();
         }
 
         
