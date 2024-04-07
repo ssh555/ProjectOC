@@ -9,15 +9,16 @@ using Unity.VisualScripting;
 
 namespace ML.PlayerCharacterNS
 {
-    public class PlayerController : RoleController,IController
+    public class PlayerController : RoleController
     {
         public ICharacter currentCharacter = null;
+
         private List<string> ICharacterABResourcePath = new List<string>();
 
         public PlayerController()
         {
             SpawnedCharacters = new List<ICharacter>();
-            //ABResource Path ¼ÓÈë
+            //ABResource Path ï¿½ï¿½ï¿½ï¿½
             ICharacterABResourcePath.Add("OC/Character/Player/Prefabs/PlayerCharacter.prefab");
         }
         
@@ -27,7 +28,7 @@ namespace ML.PlayerCharacterNS
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.
                 InstantiateAsync(ICharacterABResourcePath[_index],isGlobal:true).Completed += (handle) =>
             {
-                // ÊµÀý»¯
+                // Êµï¿½ï¿½ï¿½ï¿½
                 var playerCharacter = handle.Result.GetComponent<PlayerCharacter>();
                 SetCharacterTransform(playerCharacter.transform, _startPoint);
                 currentCharacter = playerCharacter;
