@@ -119,6 +119,10 @@ namespace ML.Engine.BuildingSystem.UI
         #region Refresh
         public override void Refresh()
         {
+            if(matInstance == null)
+            {
+                return;
+            }
             Disactive(this.matInstance[activeIndex]);
             activeIndex = _aCurrentIndex;
             Active(this.matInstance[activeIndex]);
