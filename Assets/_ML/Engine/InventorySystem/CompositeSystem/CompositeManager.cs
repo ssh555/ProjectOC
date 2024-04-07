@@ -1,11 +1,8 @@
-using Newtonsoft.Json;
-using System;
-using System.Collections;
+using ML.Engine.Manager;
+using ML.Engine.Manager.LocalManager;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.U2D;
 
 namespace ML.Engine.InventorySystem.CompositeSystem
 {
@@ -20,25 +17,37 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         public string texture2d;
         public List<string> usage;
     }
-    public sealed class CompositeManager : Manager.GlobalManager.IGlobalManager
+
+    [System.Serializable]
+    public sealed class CompositeManager : ILocalManager
     {
-        private CompositeManager() { }
+        public CompositeManager() { }
+
+        public static CompositeManager Instance { get { return instance; } }
 
         private static CompositeManager instance;
-
-        public static CompositeManager Instance
+        /// <summary>
+        /// 单例管理
+        /// </summary>
+        public void Init()
         {
-            get
+            LoadTableData();
+        }
+        public void OnRegister()
+        {
+            if (instance == null)
             {
-                if (instance == null)
-                {
-                    instance = new CompositeManager();
-                    Manager.GameManager.Instance.RegisterGlobalManager(instance);
-                }
-                return instance;
+                instance = this;
             }
         }
 
+        public void OnUnregister()
+        {
+            if(instance == this)
+            {
+                instance = null;
+            }
+        }
 
         /// <summary>
         /// 是否已加载完数据
@@ -109,7 +118,6 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <returns></returns>
         public bool CanComposite(IInventory resource, string compositonID)
         {
-            
             if (string.IsNullOrEmpty(compositonID) || !this.CompositeData.ContainsKey(compositonID) || this.CompositeData[compositonID].formula == null)
             {
                 return false;
@@ -122,7 +130,6 @@ namespace ML.Engine.InventorySystem.CompositeSystem
                     return false;
                 }
             }
-
             return true;
         }
 

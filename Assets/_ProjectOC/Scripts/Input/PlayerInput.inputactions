@@ -1320,7 +1320,7 @@
             "id": "6c9463f6-81a1-4ff6-ad81-9b25e52ed957",
             "actions": [
                 {
-                    "name": "Upgrade",
+                    "name": "ChangeIcon",
                     "type": "Button",
                     "id": "e187d8c7-7825-440a-b954-9c52e6b1f573",
                     "expectedControlType": "Button",
@@ -1374,7 +1374,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ChangeIcon",
+                    "name": "Upgrade",
                     "type": "Button",
                     "id": "d60d6ab9-0a0f-44d7-bf1e-e1b964f968b6",
                     "expectedControlType": "Button",
@@ -1413,18 +1413,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ChangeIcon",
+                    "action": "Upgrade",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "34ccf2f4-fe5f-4b34-b387-4d304ee8d446",
-                    "path": "<Keyboard>/g",
+                    "path": "<Keyboard>/u",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ChangeIcon",
+                    "action": "Upgrade",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1435,18 +1435,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Upgrade",
+                    "action": "ChangeIcon",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "db8ad17a-856a-46cf-a9be-8d29947512c3",
-                    "path": "<Keyboard>/u",
+                    "path": "<Keyboard>/g",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Upgrade",
+                    "action": "ChangeIcon",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -2182,7 +2182,7 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "aqeqfefwefwef",
+                    "name": "2D Vector",
                     "id": "86416eaa-55a1-40b9-be24-a46eede2daec",
                     "path": "2DVector",
                     "interactions": "",

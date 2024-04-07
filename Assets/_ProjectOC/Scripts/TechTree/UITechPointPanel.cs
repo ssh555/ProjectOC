@@ -337,9 +337,18 @@ namespace ProjectOC.TechTree.UI
         protected override void Exit()
         {
             ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
+            ClearTempOnExit();
             base.Exit();
         }
 
+        #endregion
+
+        #region Temp
+        private void ClearTempOnExit()
+        {
+            TechTreeManager.Instance.CategoryDict.Clear();
+
+        }
         #endregion
 
         #region Internal
@@ -412,53 +421,7 @@ namespace ProjectOC.TechTree.UI
 
         private void ClearTemp()
         {
-            // sprite
-            foreach(var s in tempSprite)
-            {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
-            }
-            tempSprite.Clear();
-            // TPCategory
-            foreach (var s in TPCGO.Values)
-            {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
-            }
-            TPCGO.Clear();
-            // TechTree
-            foreach (var s in TTTPGO.Values)
-            {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
-            }
-            TTTPGO.Clear();
-            foreach (var s in TTTPEGO.Values)
-            {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
-            }
-            TTTPEGO.Clear();
-            // TechPoint
-            foreach (var s in TPCItemGO.Values)
-            {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
-            }
-            TPCItemGO.Clear();
-            foreach (var s in TPUnlockGO.Values)
-            {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
-            }
-            TPUnlockGO.Clear();
-
-            // Temp
-            foreach (var s in tempGO)
-            {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
-            }
-            tempGO.Clear();
-            foreach (var s in tempTimer)
-            {
-                s.OnUpdateEvent = null;
-                s.OnEndEvent -= Refresh;
-            }
-            tempTimer.Clear();
+            
         }
 
         public override void Refresh()
