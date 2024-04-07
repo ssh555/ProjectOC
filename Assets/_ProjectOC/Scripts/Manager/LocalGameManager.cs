@@ -127,7 +127,8 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<IslandModelManager>();
                 GM?.UnregisterLocalManager<BuildPowerIslandManager>();
                 GM?.UnregisterLocalManager<IslandAreaManager>();
-
+                GM?.UnregisterLocalManager<ItemManager>();
+                GM?.UnregisterLocalManager<CompositeManager>();
                 Instance = null;
             }
         }

@@ -21,23 +21,33 @@ namespace ML.Engine.InventorySystem.CompositeSystem
     [System.Serializable]
     public sealed class CompositeManager : ILocalManager
     {
-        private CompositeManager() { }
+        public CompositeManager() { }
 
-        public static CompositeManager Instance;
+        public static CompositeManager Instance { get { return instance; } }
 
-
+        private static CompositeManager instance;
         /// <summary>
         /// 单例管理
         /// </summary>
         public void Init()
         {
-            Instance = this;
-
-            // 注册 Manager
-            GameManager.Instance.RegisterLocalManager(this);
             LoadTableData();
         }
+        public void OnRegister()
+        {
+            if (instance == null)
+            {
+                instance = this;
+            }
+        }
 
+        public void OnUnregister()
+        {
+            if(instance == this)
+            {
+                instance = null;
+            }
+        }
 
         /// <summary>
         /// 是否已加载完数据

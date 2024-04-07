@@ -34,7 +34,9 @@ namespace ML.Engine.InventorySystem
     public sealed class ItemManager : ILocalManager
     {
         #region Instance
-        private ItemManager() { }
+        public ItemManager() 
+        {
+        }
 
         ~ItemManager()
         {
@@ -44,23 +46,37 @@ namespace ML.Engine.InventorySystem
             }
         }
 
-        public static ItemManager Instance;
+        public static ItemManager Instance { get { return instance; } }
+
+        private static ItemManager instance;
 
         /// <summary>
         /// 单例管理
         /// </summary>
         public void Init()
         {
-            Instance = this;
-
-            // 注册 Manager
-            GameManager.Instance.RegisterLocalManager(this);
             LoadTableData();
             LoadItemAtlas();
         }
-       
+
+        public void OnRegister()
+        {
+            if (instance == null)
+            {
+                instance = this;
+            }
+        }
+
+        public void OnUnregister()
+        {
+            if (instance == this)
+            {
+                instance = null;
+            }
+        }
+
         #endregion
-        
+
         #region Load And Data
         /// <summary>
         /// 是否已加载完数据
