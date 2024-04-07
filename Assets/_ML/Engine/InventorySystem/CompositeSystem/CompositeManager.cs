@@ -1,3 +1,5 @@
+using ML.Engine.Manager;
+using ML.Engine.Manager.LocalManager;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -15,23 +17,25 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         public string texture2d;
         public List<string> usage;
     }
-    public sealed class CompositeManager : Manager.GlobalManager.IGlobalManager
+
+    [System.Serializable]
+    public sealed class CompositeManager : ILocalManager
     {
         private CompositeManager() { }
 
-        private static CompositeManager instance;
+        public static CompositeManager Instance;
 
-        public static CompositeManager Instance
+
+        /// <summary>
+        /// µ¥Àý¹ÜÀí
+        /// </summary>
+        public void Init()
         {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new CompositeManager();
-                    Manager.GameManager.Instance.RegisterGlobalManager(instance);
-                }
-                return instance;
-            }
+            Instance = this;
+
+            // ×¢²á Manager
+            GameManager.Instance.RegisterLocalManager(this);
+            LoadTableData();
         }
 
 

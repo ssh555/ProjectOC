@@ -17,6 +17,7 @@ using ML.Engine.Manager;
 using ProjectOC.Order;
 using ML.PlayerCharacterNS;
 using ProjectOC.ClanNS;
+using ML.Engine.InventorySystem.CompositeSystem;
 
 namespace ProjectOC.ManagerNS
 {
@@ -42,7 +43,8 @@ namespace ProjectOC.ManagerNS
         public MonoBuildingManager MonoBuildingManager;
         public TechTreeManager TechTreeManager;
         public OrderManager OrderManager;
-
+        public ItemManager ItemManager;
+        public CompositeManager CompositeManager;
         /// <summary>
         /// µ¥Àý¹ÜÀí
         /// </summary>
@@ -80,8 +82,12 @@ namespace ProjectOC.ManagerNS
             MonoBuildingManager.Init();
             GM.RegisterLocalManager(TechTreeManager);
             TechTreeManager.Init();
-/*            GM.RegisterLocalManager(OrderManager);
-            OrderManager.Init();*/
+            /*            GM.RegisterLocalManager(OrderManager);
+                        OrderManager.Init();*/
+            GM.RegisterLocalManager(ItemManager);
+            ItemManager.Init();
+            GM.RegisterLocalManager(CompositeManager);
+            CompositeManager.Init();
             GM.RegisterLocalManager(IslandManager);
             IslandManager.Init();
             GM.RegisterLocalManager(BuildPowerIslandManager);

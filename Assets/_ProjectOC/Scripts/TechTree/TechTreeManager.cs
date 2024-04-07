@@ -467,10 +467,7 @@ namespace ProjectOC.TechTree
         /// <returns></returns>
         void LoadResource()
         {
-            ML.Engine.InventorySystem.ItemManager.Instance.LoadTableData();
-            ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.LoadTableData();
             LoadTechAtlas();
-            ItemManager.Instance.LoadItemAtlas();
         }
 
         

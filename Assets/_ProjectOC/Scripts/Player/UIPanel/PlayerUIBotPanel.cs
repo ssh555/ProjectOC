@@ -191,6 +191,8 @@ namespace ProjectOC.Player.UI
                     this.UIBtnList.DeBindInputAction();
                 });
             this.Ring.gameObject.SetActive(true);
+            Debug.Log("OpenMenu_started " + UIKeyTipList);
+            this.UIKeyTipList.RefreshKetTip();
             ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
 
         }
@@ -222,10 +224,12 @@ namespace ProjectOC.Player.UI
         public struct PlayerUIBotPanelStruct
         {
             public TextTip[] Btns;
+            public KeyTip SelectGrid;
         }
 
         protected override void OnLoadJsonAssetComplete(PlayerUIBotPanelStruct datas)
         {
+            base.OnLoadJsonAssetComplete(datas);
             InitBtnData(datas);
         }
 
