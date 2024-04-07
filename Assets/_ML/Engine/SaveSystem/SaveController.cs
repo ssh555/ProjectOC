@@ -1,3 +1,5 @@
+using ML.Engine.Manager;
+using ML.Engine.Timer;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -15,52 +17,54 @@ namespace ML.Engine.SaveSystem
     /// </summary>
     public class SaveController
     {
-        /// <summary>
-        /// 本地保存存档的路径
-        /// </summary>
-        private string SavePath = Path.Combine(Application.persistentDataPath, "Save");
-        /// <summary>
-        /// 存档位最大数量
-        /// </summary>
-        private const int MAXSAVEDATACOUNT = 3;
-        /// <summary>
-        /// 存档数据的SaveConfig的名称
-        /// string对应SaveDataFolder.name
-        /// </summary>
-        private string[] ConfigPaths = new string[MAXSAVEDATACOUNT];
-        /// <summary>
-        /// 存档数据SaveConfig，为null表示没有对应的存档
-        /// 加载完configpaths数据后就加载此项数据
-        /// </summary>
-        private SaveDataFolder[] SaveDataFolders = new SaveDataFolder[MAXSAVEDATACOUNT];
-        /// <summary>
-        /// 当前选择游玩的存档index
-        /// </summary>
-        [ShowInInspector]
+        [LabelText("当前选择游玩的存档Index"), ShowInInspector, ReadOnly]
         public int CurIndex { get; private set; }
-        /// <summary>
-        /// 获取当前选中的存档的SaveConfig
-        /// </summary>
-        public SaveDataFolder CurrentSaveDataFolder 
-        { 
-            get 
+        [LabelText("获取当前选中存档的SaveConfig"), ShowInInspector, ReadOnly]
+        public SaveDataFolder CurrentSaveDataFolder
+        {
+            get
             {
                 if (CurIndex >= 0 && CurIndex < MAXSAVEDATACOUNT)
                 {
                     return SaveDataFolders[CurIndex];
                 }
                 return null;
-            } 
+            }
         }
+        [LabelText("是否加载完存档数据"), ShowInInspector, ReadOnly]
+        public bool IsLoadedSaveData { get; private set; }
         /// <summary>
-        /// 实际存档数据，默认为null
-        /// 只有选择了对应存档之后，才会载入实际数据
+        /// 存档时调用
         /// </summary>
+        [HideInInspector]
+        public Action<List<ISaveData>> OnSaveAction;
+
+
+        [LabelText("本地保存存档的路径"), ShowInInspector, ReadOnly]
+        private string SavePath = Path.Combine(Application.persistentDataPath, "Save");
+        [LabelText("存档位最大数量"), ShowInInspector, ReadOnly]
+        private const int MAXSAVEDATACOUNT = 3;
+        [LabelText("实际存档数据"), ShowInInspector, ReadOnly]
         private List<ISaveData> Datas = new List<ISaveData>();
+        [LabelText("存档数据的SaveConfig"), ShowInInspector, ReadOnly]
+        private SaveDataFolder[] SaveDataFolders = new SaveDataFolder[MAXSAVEDATACOUNT];
+        [LabelText("SaveConfig名称"), ShowInInspector, ReadOnly]
+        private string[] ConfigPaths = new string[MAXSAVEDATACOUNT];
+        [LabelText("存档Config"), ShowInInspector, ReadOnly]
         private SaveConfig SaveConfig;
         private SaveSystem SaveSystem;
-
-        public bool IsLoadedSaveData { get; private set; } = false;
+        /// <summary>
+        /// 存档计时器，存档时需要过1s再存档
+        /// </summary>
+        private CounterDownTimer SaveTimer;
+        /// <summary>
+        /// 等待存档的数据，计时器结束后将该数据存档
+        /// </summary>
+        private List<ISaveData> TempDatas = new List<ISaveData>();
+        /// <summary>
+        /// 等待存档时的SaveDataFolder
+        /// </summary>
+        private SaveDataFolder TempSaveDataFolder;
         /// <summary>
         /// 用来反射
         /// </summary>
@@ -70,35 +74,67 @@ namespace ML.Engine.SaveSystem
         {
             SaveConfig = saveConfig;
             SaveSystem = saveSystem;
+            SaveTimer = new CounterDownTimer(1f, false, false);
+            SaveTimer.OnEndEvent += SaveTimerEndAction;
             if (Directory.Exists(SavePath))
             {
                 GlobalSaveDataFolder globalSaveDataFolder = LoadData<GlobalSaveDataFolder>("GlobalSaveConfig");
-                List<string> configs = globalSaveDataFolder?.SaveDataFolders;
-                if (configs != null)
+                if (globalSaveDataFolder != null)
                 {
-                    for (int i=0; i< MAXSAVEDATACOUNT; i++)
+                    List<string> configs = globalSaveDataFolder.SaveDataFolders;
+                    Utility.Version version = globalSaveDataFolder.Version;
+                    if (configs != null)
                     {
-                        ConfigPaths[i] = configs[i];
-                        if (ConfigPaths[i] != null)
+                        for (int i = 0; i < MAXSAVEDATACOUNT; i++)
                         {
-                            SaveDataFolders[i] = LoadData<SaveDataFolder>(Path.Combine(ConfigPaths[i], "SaveConfig"));
+                            ConfigPaths[i] = configs[i];
+                            if (ConfigPaths[i] != null)
+                            {
+                                SaveDataFolders[i] = LoadData<SaveDataFolder>(Path.Combine(ConfigPaths[i], "SaveConfig"));
+                                SaveDataFolders[i].SavePath = ConfigPaths[i];
+                            }
                         }
+                    }
+                    if (version < GameManager.Instance.Version)
+                    {
+                        UpdateVersion();
                     }
                 }
             }
         }
 
-        public string GetFileExtension()
+        /// <summary>
+        /// 更新版本
+        /// </summary>
+        private void UpdateVersion()
         {
-            if (this.SaveConfig.SaveType == SaveType.Json)
+            ML.Engine.Utility.Version version = GameManager.Instance.Version;
+            foreach (SaveDataFolder saveDataFolder in this.SaveDataFolders)
             {
-                return ".json";
+                if (saveDataFolder != null)
+                {
+                    foreach (var kv in saveDataFolder.FileMap)
+                    {
+                        if (!MethodDict.ContainsKey(kv.Key))
+                        {
+                            Type type = Type.GetType(kv.Key);
+                            MethodInfo method = typeof(SaveController).GetMethod("LoadData").MakeGenericMethod(type);
+                            MethodDict.Add(kv.Key, method);
+                        }
+                        object loadData = MethodDict[kv.Key].Invoke(this, new object[] { Path.Combine(saveDataFolder.Name, kv.Key) });
+                        ISaveData data = (ISaveData)loadData;
+                        data.SaveName = kv.Key;
+                        data.SavePath = saveDataFolder.SavePath;
+                        data.Version = version;
+                        data.IsDirty = true;
+                        SaveData(data);
+                    }
+                    saveDataFolder.Version = version;
+                    saveDataFolder.IsDirty = true;
+                    SaveData(saveDataFolder);
+                }
             }
-            else if (this.SaveConfig.SaveType == SaveType.XML)
-            {
-                return ".xml";
-            }
-            return "";
+            SaveGlobalSaveDataFolder();
         }
 
         public SaveDataFolder GetSaveDataFolder(int index)
@@ -124,41 +160,49 @@ namespace ML.Engine.SaveSystem
                     }
                 }
             }
-            return null;
+            return default(T);
         }
-        public void AddSaveData<T>(T data) where T : ISaveData
+        /// <summary>
+        /// 将数据加入存档数据中
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data">数据</param>
+        /// <param name="isSave">是否存档</param>
+        public void AddSaveData<T>(T data, bool isSave=true) where T : ISaveData
         {
             if (this.GetSaveData<T>() == null)
             {
                 SaveDataFolder saveDataFolder = CurrentSaveDataFolder;
-                this.Datas.Add(data);
-                data.Path = saveDataFolder.Name;
-                data.SaveName = data.GetType().ToString();
-                string extension = GetFileExtension();
-                saveDataFolder.FileMap[data.SaveName] = Path.Combine(SavePath, saveDataFolder.Name, data.SaveName + extension);
-                saveDataFolder.IsDirty = true;
-                SaveData(saveDataFolder);
+                if (saveDataFolder != null)
+                {
+                    this.Datas.Add(data);
+                    data.SavePath = saveDataFolder.Name;
+                    data.SaveName = data.GetType().ToString();
+                    data.Version = GameManager.Instance.Version;
+                    data.IsDirty = true;
+                    saveDataFolder.FileMap[data.SaveName] = Path.Combine(SavePath, data.SavePath, data.SaveName);
+                    saveDataFolder.IsDirty = true;
+                    if (isSave)
+                    {
+                        SaveData(saveDataFolder);
+                    }
+                }
             }
         }
         /// <summary>
         /// 加载存档数据
         /// </summary>
-        /// <param name="relativePathWithoutSuffix">相对路径，没有后缀</param>
-        public T LoadData<T>(string relativePathWithoutSuffix) where T : ISaveData
+        /// <param name="relativePath">相对路径，没有后缀</param>
+        public T LoadData<T>(string relativePath) where T : ISaveData
         {
-            T data = (T)this.SaveSystem.LoadData<T>(relativePathWithoutSuffix, this.SaveConfig.UseEncrption);
+            T data = (T)this.SaveSystem.LoadData<T>(relativePath, this.SaveConfig.UseEncrption);
             return data;
         }
-
         /// <summary>
         /// 保存数据
         /// </summary>
-        public void SaveData<T>(T data, bool isAdd = false) where T : ISaveData
+        public void SaveData<T>(T data) where T : ISaveData
         {
-            if (isAdd)
-            {
-                AddSaveData<T>(data);
-            }
             this.SaveSystem.SaveData<T>(data, this.SaveConfig.UseEncrption);
         }
 
@@ -184,6 +228,7 @@ namespace ML.Engine.SaveSystem
                     string oldPath = Path.Combine(SavePath, ConfigPaths[index]);
                     string path = Path.Combine(SavePath, name);
                     Task task1 = Task.Run(() => Directory.CreateDirectory(path));
+                    await task1;
                     Task task2 = Task.Run(() =>
                     {
                         foreach (string file in Directory.GetFiles(oldPath))
@@ -191,9 +236,8 @@ namespace ML.Engine.SaveSystem
                             File.Move(file, Path.Combine(path, Path.GetFileName(file)));
                         }
                     });
-                    Task task3 = Task.Run(() => Directory.Delete(oldPath, true));
-                    await task1;
                     await task2;
+                    Task task3 = Task.Run(() => Directory.Delete(oldPath, true));
                     await task3;
 
                     SaveDataFolders[index].ChangeName(name);
@@ -201,12 +245,15 @@ namespace ML.Engine.SaveSystem
                     {
                         foreach (ISaveData data in Datas)
                         {
-                            data.Path = name;
+                            data.SavePath = name;
                         }
                     }
                     ConfigPaths[index] = name;
-                    await Task.Run(() => SaveData(SaveDataFolders[index]));
-                    await SaveGlobalSaveDataFolderAsync();
+                    await Task.Run(() =>
+                    {
+                        SaveData(SaveDataFolders[index]);
+                        SaveGlobalSaveDataFolder();
+                    });
                 }
                 callback?.Invoke();
             }
@@ -219,11 +266,15 @@ namespace ML.Engine.SaveSystem
             if (!string.IsNullOrEmpty(name) && index >= 0 && index < MAXSAVEDATACOUNT && string.IsNullOrEmpty(ConfigPaths[index]) && !ConfigPaths.Contains(name))
             {
                 await Task.Run(() => Directory.CreateDirectory(Path.Combine(SavePath, name)));
-                SaveDataFolder saveDataFolder = new SaveDataFolder(name);
+                SaveDataFolder saveDataFolder = new SaveDataFolder(name, GameManager.Instance.Version);
+                saveDataFolder.IsDirty = true;
                 ConfigPaths[index] = name;
                 SaveDataFolders[index] = saveDataFolder;
-                await Task.Run(() => SaveData(saveDataFolder));
-                await SaveGlobalSaveDataFolderAsync();
+                await Task.Run(() =>
+                {
+                    SaveData(saveDataFolder);
+                    SaveGlobalSaveDataFolder();
+                });
                 callback?.Invoke();
                 return saveDataFolder;
             }
@@ -243,6 +294,7 @@ namespace ML.Engine.SaveSystem
                     SaveDataFolders[index] = await CreateSaveDataFolderAsync(index, index.ToString(), null);
                 }
                 this.Datas.Clear();
+                this.IsLoadedSaveData = false;
                 callback?.Invoke();
             }
         }
@@ -256,11 +308,10 @@ namespace ML.Engine.SaveSystem
         /// <summary>
         /// 加载数据
         /// </summary>
-        public async Task LoadSaveDataAsync(int index, Action<List<ISaveData>> callback)
+        private async Task LoadSaveDataAsync(int index, Action<List<ISaveData>> callback)
         {
-            if (index >= 0 && index < MAXSAVEDATACOUNT)
+            if (index >= 0 && index < MAXSAVEDATACOUNT && !this.IsLoadedSaveData)
             {
-                this.IsLoadedSaveData = false;
                 SaveDataFolder saveDataFolder = SaveDataFolders[index];
                 await Task.Run(() =>
                 {
@@ -274,7 +325,7 @@ namespace ML.Engine.SaveSystem
                         }
                         object loadData = MethodDict[kv.Key].Invoke(this, new object[] { Path.Combine(saveDataFolder.Name, kv.Key) });
                         ISaveData data = (ISaveData) loadData;
-                        data.Path = saveDataFolder.Name;
+                        data.SavePath = saveDataFolder.Name;
                         data.SaveName = kv.Key;
                         data.IsDirty = false;
                         this.Datas.Add(data);
@@ -310,8 +361,9 @@ namespace ML.Engine.SaveSystem
                     if (index == CurIndex)
                     {
                         this.Datas.Clear();
+                        this.IsLoadedSaveData = false;
                     }
-                    await SaveGlobalSaveDataFolderAsync();
+                    SaveGlobalSaveDataFolder();
                 }
                 callback?.Invoke();
             }
@@ -319,57 +371,52 @@ namespace ML.Engine.SaveSystem
         /// <summary>
         /// 将当前的数据保存在当前的CurIndex对应的存档位置上
         /// </summary>
-        public async Task SaveSaveDataFolderAsync(Action callback)
+        public void SaveSaveDataFolder()
         {
-            await SaveSaveDataFolderAsync(CurIndex, callback);
-        }
-        /// <summary>
-        /// 将当前的数据保存在当前的index对应的存档位置上
-        /// </summary>
-        public async Task SaveSaveDataFolderAsync(int index, Action callback)
-        {
-            if (index >= 0 && index < MAXSAVEDATACOUNT)
+            if (CurrentSaveDataFolder != null)
             {
-                // 创建临时数据
-                List<ISaveData> tempDatas = new List<ISaveData>();
-                if (Datas != null)
+                this.TempSaveDataFolder = (SaveDataFolder)CurrentSaveDataFolder.Clone();
+                CurrentSaveDataFolder.IsDirty = false;
+                this.TempDatas.Clear();
+                foreach (ISaveData data in Datas)
                 {
-                    foreach (ISaveData data in Datas)
-                    {
-                        tempDatas.Add((ISaveData)data.Clone());
-                        data.IsDirty = false;
-                    }
+                    this.TempDatas.Add((ISaveData)data.Clone());
+                    data.IsDirty = false;
                 }
-                if (SaveDataFolders[index] == null || string.IsNullOrEmpty(ConfigPaths[index]))
-                {
-                    SaveDataFolders[index] = await CreateSaveDataFolderAsync(index, index.ToString(), null);
-                }
-                SaveDataFolder tempSaveDataFolder = (SaveDataFolder)SaveDataFolders[index].Clone();
-                SaveDataFolders[index].IsDirty = false;
-
-                await Task.Run(() =>
-                {
-                    foreach (ISaveData data in tempDatas)
-                    {
-                        data.Path = ConfigPaths[index];
-                        SaveData(data);
-                        string extension = GetFileExtension();
-                        tempSaveDataFolder.FileMap[data.SaveName] = Path.Combine(SavePath, data.Path, data.SaveName + extension);
-                    }
-                });
-                await Task.Run(() =>
-                {
-                    tempSaveDataFolder.IsDirty = true;
-                    SaveData(tempSaveDataFolder);
-                });
-                callback?.Invoke();
+                SaveTimer.Reset(1f);
             }
         }
-        public async Task SaveGlobalSaveDataFolderAsync()
+        private void SaveTimerEndAction()
         {
-            GlobalSaveDataFolder global = new GlobalSaveDataFolder(ConfigPaths.ToList());
+#pragma warning disable CS4014
+            SaveSaveDataFolderAsync();
+#pragma warning restore CS4014
+        }
+        /// <summary>
+        /// 将当前的数据保存在TempCurIndex对应的存档位置上
+        /// </summary>
+        private async Task SaveSaveDataFolderAsync()
+        {
+            await Task.Run(() =>
+            {
+                foreach (ISaveData data in TempDatas)
+                {
+                    SaveData(data);
+                }
+                TempSaveDataFolder.LastSaveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                TempSaveDataFolder.IsDirty = true;
+                SaveData(TempSaveDataFolder);
+            });
+            OnSaveAction?.Invoke(TempDatas);
+        }
+        /// <summary>
+        /// 更新SaveDataFolder后才能调用
+        /// </summary>
+        public void SaveGlobalSaveDataFolder()
+        {
+            GlobalSaveDataFolder global = new GlobalSaveDataFolder(ConfigPaths.ToList(), GameManager.Instance.Version);
             global.IsDirty = true;
-            await Task.Run(() => SaveData(global));
+            SaveData(global);
         }
     }
 }

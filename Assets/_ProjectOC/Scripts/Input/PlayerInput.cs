@@ -1344,7 +1344,7 @@ namespace ProjectOC.Input
             ""id"": ""6c9463f6-81a1-4ff6-ad81-9b25e52ed957"",
             ""actions"": [
                 {
-                    ""name"": ""ChangeIcon"",
+                    ""name"": ""Upgrade"",
                     ""type"": ""Button"",
                     ""id"": ""e187d8c7-7825-440a-b954-9c52e6b1f573"",
                     ""expectedControlType"": ""Button"",
@@ -1373,10 +1373,10 @@ namespace ProjectOC.Input
                 {
                     ""name"": ""Remove1"",
                     ""type"": ""Button"",
-                    ""id"": ""7de4161b-eba3-4eda-a0b5-8e5010edde9f"",
+                    ""id"": ""7ed51ab5-5c3a-4252-b1bc-dab3cdfa1df5"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -1398,7 +1398,7 @@ namespace ProjectOC.Input
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Upgrade"",
+                    ""name"": ""ChangeIcon"",
                     ""type"": ""Button"",
                     ""id"": ""d60d6ab9-0a0f-44d7-bf1e-e1b964f968b6"",
                     ""expectedControlType"": ""Button"",
@@ -1437,35 +1437,13 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Upgrade"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""34ccf2f4-fe5f-4b34-b387-4d304ee8d446"",
-                    ""path"": ""<Keyboard>/u"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Upgrade"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e7840604-f4f3-4dd9-b617-28cf525b3c7f"",
-                    ""path"": ""<XInputController>/leftTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
                     ""action"": ""ChangeIcon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""db8ad17a-856a-46cf-a9be-8d29947512c3"",
+                    ""id"": ""34ccf2f4-fe5f-4b34-b387-4d304ee8d446"",
                     ""path"": ""<Keyboard>/g"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -1476,23 +1454,23 @@ namespace ProjectOC.Input
                 },
                 {
                     ""name"": """",
-                    ""id"": ""8e7db927-4ca8-4a74-b4a4-eea8f7f71bbe"",
-                    ""path"": ""<XInputController>/buttonWest"",
+                    ""id"": ""e7840604-f4f3-4dd9-b617-28cf525b3c7f"",
+                    ""path"": ""<XInputController>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Remove1"",
+                    ""action"": ""Upgrade"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""fff4c8a5-5012-4e6c-a787-8fa445766c9e"",
-                    ""path"": ""<Keyboard>/f"",
+                    ""id"": ""db8ad17a-856a-46cf-a9be-8d29947512c3"",
+                    ""path"": ""<Keyboard>/u"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Remove1"",
+                    ""action"": ""Upgrade"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1649,6 +1627,28 @@ namespace ProjectOC.Input
                     ""action"": ""ChangeItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8ca4eeed-f748-4cf4-812f-da108307f1a1"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f4d49e6c-7a66-43ce-a9aa-b95d4326b994"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -2206,7 +2206,7 @@ namespace ProjectOC.Input
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""2D Vector"",
+                    ""name"": ""aqeqfefwefwef"",
                     ""id"": ""86416eaa-55a1-40b9-be24-a46eede2daec"",
                     ""path"": ""2DVector"",
                     ""interactions"": """",
@@ -2726,13 +2726,13 @@ namespace ProjectOC.Input
             m_UIInventory_LastTerm = m_UIInventory.FindAction("LastTerm", throwIfNotFound: true);
             // UIStore
             m_UIStore = asset.FindActionMap("UIStore", throwIfNotFound: true);
-            m_UIStore_ChangeIcon = m_UIStore.FindAction("ChangeIcon", throwIfNotFound: true);
+            m_UIStore_Upgrade = m_UIStore.FindAction("Upgrade", throwIfNotFound: true);
             m_UIStore_NextPriority = m_UIStore.FindAction("NextPriority", throwIfNotFound: true);
             m_UIStore_ChangeItem = m_UIStore.FindAction("ChangeItem", throwIfNotFound: true);
             m_UIStore_Remove1 = m_UIStore.FindAction("Remove1", throwIfNotFound: true);
             m_UIStore_Remove10 = m_UIStore.FindAction("Remove10", throwIfNotFound: true);
             m_UIStore_FastAdd = m_UIStore.FindAction("FastAdd", throwIfNotFound: true);
-            m_UIStore_Upgrade = m_UIStore.FindAction("Upgrade", throwIfNotFound: true);
+            m_UIStore_ChangeIcon = m_UIStore.FindAction("ChangeIcon", throwIfNotFound: true);
             // UIProNode
             m_UIProNode = asset.FindActionMap("UIProNode", throwIfNotFound: true);
             m_UIProNode_Upgrade = m_UIProNode.FindAction("Upgrade", throwIfNotFound: true);
@@ -3203,24 +3203,24 @@ namespace ProjectOC.Input
         // UIStore
         private readonly InputActionMap m_UIStore;
         private List<IUIStoreActions> m_UIStoreActionsCallbackInterfaces = new List<IUIStoreActions>();
-        private readonly InputAction m_UIStore_ChangeIcon;
+        private readonly InputAction m_UIStore_Upgrade;
         private readonly InputAction m_UIStore_NextPriority;
         private readonly InputAction m_UIStore_ChangeItem;
         private readonly InputAction m_UIStore_Remove1;
         private readonly InputAction m_UIStore_Remove10;
         private readonly InputAction m_UIStore_FastAdd;
-        private readonly InputAction m_UIStore_Upgrade;
+        private readonly InputAction m_UIStore_ChangeIcon;
         public struct UIStoreActions
         {
             private @PlayerInput m_Wrapper;
             public UIStoreActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
-            public InputAction @ChangeIcon => m_Wrapper.m_UIStore_ChangeIcon;
+            public InputAction @Upgrade => m_Wrapper.m_UIStore_Upgrade;
             public InputAction @NextPriority => m_Wrapper.m_UIStore_NextPriority;
             public InputAction @ChangeItem => m_Wrapper.m_UIStore_ChangeItem;
             public InputAction @Remove1 => m_Wrapper.m_UIStore_Remove1;
             public InputAction @Remove10 => m_Wrapper.m_UIStore_Remove10;
             public InputAction @FastAdd => m_Wrapper.m_UIStore_FastAdd;
-            public InputAction @Upgrade => m_Wrapper.m_UIStore_Upgrade;
+            public InputAction @ChangeIcon => m_Wrapper.m_UIStore_ChangeIcon;
             public InputActionMap Get() { return m_Wrapper.m_UIStore; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -3230,9 +3230,9 @@ namespace ProjectOC.Input
             {
                 if (instance == null || m_Wrapper.m_UIStoreActionsCallbackInterfaces.Contains(instance)) return;
                 m_Wrapper.m_UIStoreActionsCallbackInterfaces.Add(instance);
-                @ChangeIcon.started += instance.OnChangeIcon;
-                @ChangeIcon.performed += instance.OnChangeIcon;
-                @ChangeIcon.canceled += instance.OnChangeIcon;
+                @Upgrade.started += instance.OnUpgrade;
+                @Upgrade.performed += instance.OnUpgrade;
+                @Upgrade.canceled += instance.OnUpgrade;
                 @NextPriority.started += instance.OnNextPriority;
                 @NextPriority.performed += instance.OnNextPriority;
                 @NextPriority.canceled += instance.OnNextPriority;
@@ -3248,16 +3248,16 @@ namespace ProjectOC.Input
                 @FastAdd.started += instance.OnFastAdd;
                 @FastAdd.performed += instance.OnFastAdd;
                 @FastAdd.canceled += instance.OnFastAdd;
-                @Upgrade.started += instance.OnUpgrade;
-                @Upgrade.performed += instance.OnUpgrade;
-                @Upgrade.canceled += instance.OnUpgrade;
+                @ChangeIcon.started += instance.OnChangeIcon;
+                @ChangeIcon.performed += instance.OnChangeIcon;
+                @ChangeIcon.canceled += instance.OnChangeIcon;
             }
 
             private void UnregisterCallbacks(IUIStoreActions instance)
             {
-                @ChangeIcon.started -= instance.OnChangeIcon;
-                @ChangeIcon.performed -= instance.OnChangeIcon;
-                @ChangeIcon.canceled -= instance.OnChangeIcon;
+                @Upgrade.started -= instance.OnUpgrade;
+                @Upgrade.performed -= instance.OnUpgrade;
+                @Upgrade.canceled -= instance.OnUpgrade;
                 @NextPriority.started -= instance.OnNextPriority;
                 @NextPriority.performed -= instance.OnNextPriority;
                 @NextPriority.canceled -= instance.OnNextPriority;
@@ -3273,9 +3273,9 @@ namespace ProjectOC.Input
                 @FastAdd.started -= instance.OnFastAdd;
                 @FastAdd.performed -= instance.OnFastAdd;
                 @FastAdd.canceled -= instance.OnFastAdd;
-                @Upgrade.started -= instance.OnUpgrade;
-                @Upgrade.performed -= instance.OnUpgrade;
-                @Upgrade.canceled -= instance.OnUpgrade;
+                @ChangeIcon.started -= instance.OnChangeIcon;
+                @ChangeIcon.performed -= instance.OnChangeIcon;
+                @ChangeIcon.canceled -= instance.OnChangeIcon;
             }
 
             public void RemoveCallbacks(IUIStoreActions instance)
@@ -3745,13 +3745,13 @@ namespace ProjectOC.Input
         }
         public interface IUIStoreActions
         {
-            void OnChangeIcon(InputAction.CallbackContext context);
+            void OnUpgrade(InputAction.CallbackContext context);
             void OnNextPriority(InputAction.CallbackContext context);
             void OnChangeItem(InputAction.CallbackContext context);
             void OnRemove1(InputAction.CallbackContext context);
             void OnRemove10(InputAction.CallbackContext context);
             void OnFastAdd(InputAction.CallbackContext context);
-            void OnUpgrade(InputAction.CallbackContext context);
+            void OnChangeIcon(InputAction.CallbackContext context);
         }
         public interface IUIProNodeActions
         {

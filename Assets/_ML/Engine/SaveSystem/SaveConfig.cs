@@ -13,11 +13,6 @@ namespace ML.Engine.SaveSystem
         ///  «∑Òº”√‹
         /// </summary>
         public bool UseEncrption;
-        public SaveConfig(SaveType SaveType = SaveType.Json, bool UseEncrption = false)
-        {
-            this.SaveType = SaveType;
-            this.UseEncrption = UseEncrption;
-        }
         public SaveConfig(SaveConfig config)
         {
             this.SaveType = config.SaveType;

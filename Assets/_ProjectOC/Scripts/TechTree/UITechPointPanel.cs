@@ -875,6 +875,7 @@ namespace ProjectOC.TechTree.UI
         #endregion
         protected override void OnLoadJsonAssetComplete(TPPanel datas)
         {
+            base.OnLoadJsonAssetComplete(datas);
             foreach (var tip in datas.category)
             {
                 TechTreeManager.Instance.CategoryDict.Add(tip.name, tip);

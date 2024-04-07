@@ -1320,7 +1320,7 @@
             "id": "6c9463f6-81a1-4ff6-ad81-9b25e52ed957",
             "actions": [
                 {
-                    "name": "ChangeIcon",
+                    "name": "Upgrade",
                     "type": "Button",
                     "id": "e187d8c7-7825-440a-b954-9c52e6b1f573",
                     "expectedControlType": "Button",
@@ -1349,10 +1349,10 @@
                 {
                     "name": "Remove1",
                     "type": "Button",
-                    "id": "7de4161b-eba3-4eda-a0b5-8e5010edde9f",
+                    "id": "7ed51ab5-5c3a-4252-b1bc-dab3cdfa1df5",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Hold",
                     "initialStateCheck": false
                 },
                 {
@@ -1374,7 +1374,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Upgrade",
+                    "name": "ChangeIcon",
                     "type": "Button",
                     "id": "d60d6ab9-0a0f-44d7-bf1e-e1b964f968b6",
                     "expectedControlType": "Button",
@@ -1413,35 +1413,13 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Upgrade",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "34ccf2f4-fe5f-4b34-b387-4d304ee8d446",
-                    "path": "<Keyboard>/u",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Upgrade",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e7840604-f4f3-4dd9-b617-28cf525b3c7f",
-                    "path": "<XInputController>/leftTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
                     "action": "ChangeIcon",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "db8ad17a-856a-46cf-a9be-8d29947512c3",
+                    "id": "34ccf2f4-fe5f-4b34-b387-4d304ee8d446",
                     "path": "<Keyboard>/g",
                     "interactions": "",
                     "processors": "",
@@ -1452,23 +1430,23 @@
                 },
                 {
                     "name": "",
-                    "id": "8e7db927-4ca8-4a74-b4a4-eea8f7f71bbe",
-                    "path": "<XInputController>/buttonWest",
+                    "id": "e7840604-f4f3-4dd9-b617-28cf525b3c7f",
+                    "path": "<XInputController>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Remove1",
+                    "action": "Upgrade",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "fff4c8a5-5012-4e6c-a787-8fa445766c9e",
-                    "path": "<Keyboard>/f",
+                    "id": "db8ad17a-856a-46cf-a9be-8d29947512c3",
+                    "path": "<Keyboard>/u",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Remove1",
+                    "action": "Upgrade",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1625,6 +1603,28 @@
                     "action": "ChangeItem",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "8ca4eeed-f748-4cf4-812f-da108307f1a1",
+                    "path": "<XInputController>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Remove1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f4d49e6c-7a66-43ce-a9aa-b95d4326b994",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Remove1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -2182,7 +2182,7 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "2D Vector",
+                    "name": "aqeqfefwefwef",
                     "id": "86416eaa-55a1-40b9-be24-a46eede2daec",
                     "path": "2DVector",
                     "interactions": "",

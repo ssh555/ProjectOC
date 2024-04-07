@@ -78,11 +78,11 @@ namespace ProjectOC.MissionNS
                     int maxBurNum = (int)(worker.BURMax / ItemManager.Instance.GetWeight(mission.ItemID));
                     missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
                 }
-                Store store = ManagerNS.LocalGameManager.Instance.StoreManager.GetCanPutInStore(mission.ItemID, missionNum);
+                Store store = ManagerNS.LocalGameManager.Instance.StoreManager.GetCanPutInStore(mission.ItemID, missionNum, 1);
                 if (worker != null && store != null && missionNum > 0)
                 {
                     Transport transport = new Transport(mission, mission.ItemID, missionNum, mission.Initiator, store, worker);
-                    store.ReserveEmptyToWorker(mission.ItemID, missionNum);
+                    store.ReserveEmptyToWorker(mission.ItemID, missionNum, transport);
                 }
                 else
                 {
@@ -99,7 +99,7 @@ namespace ProjectOC.MissionNS
         {
             if (mission.NeedAssignNum > 0)
             {
-                Dictionary<Store, int> result = ManagerNS.LocalGameManager.Instance.StoreManager.GetCanPutOutStore(mission.ItemID, mission.NeedAssignNum);
+                Dictionary<Store, int> result = ManagerNS.LocalGameManager.Instance.StoreManager.GetCanPutOutStore(mission.ItemID, mission.NeedAssignNum, 1);
                 foreach (var kv in result)
                 {
                     Store store = kv.Key;
@@ -113,7 +113,7 @@ namespace ProjectOC.MissionNS
                     if (worker != null && store != null && missionNum > 0)
                     {
                         Transport transport = new Transport(mission, mission.ItemID, missionNum, store, mission.Initiator, worker);
-                        store.ReserveStorageToWorker(mission.ItemID, missionNum);
+                        store.ReserveStorageToWorker(mission.ItemID, missionNum, transport);
                     }
                     else
                     {

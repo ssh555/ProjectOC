@@ -44,8 +44,21 @@ namespace ML.Engine.UI
             KeyTip[] keyTips = GameManager.Instance.InputManager.ExportKeyTipValues(datas);
             foreach (var keyTip in keyTips)
             {
-                InputAction inputAction = GameManager.Instance.InputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
-                RefreshKeyTiptext(keyTip.keyname, GameManager.Instance.InputManager.GetInputActionBindText(inputAction), keyTip.description.GetText());
+                //动态按键提示
+                if(keyTip.keymap.ActionMapName!=null&& keyTip.keymap.ActionName!=null)
+                {
+                    Debug.Log("动态按键提示 "+keyTip.keyname + " | " + keyTip.keymap.ActionMapName + " | " + keyTip.keymap.ActionName + " | " + keyTip.keymap.XBOX + " | " + keyTip.keymap.KeyBoard);
+                    InputAction inputAction = GameManager.Instance.InputManager.GetInputAction((keyTip.keymap.ActionMapName, keyTip.keymap.ActionName));
+                    RefreshKeyTiptext(keyTip.keyname, GameManager.Instance.InputManager.GetInputActionBindText(inputAction), keyTip.description.GetText());
+                }
+                else if(keyTip.keymap.XBOX != null && keyTip.keymap.KeyBoard != null)//静态按键提示
+                {
+                    Debug.Log("静态按键提示 "+keyTip.keyname + " | " + keyTip.keymap.ActionMapName + " | " + keyTip.keymap.ActionName + " | " + keyTip.keymap.XBOX + " | " + keyTip.keymap.KeyBoard);
+                    Debug.Log(keyTip.GetKeyMapText() + " " + keyTip.GetDescription());
+                    RefreshKeyTiptext(keyTip.keyname, keyTip.GetKeyMapText(), keyTip.GetDescription());
+                }
+
+                
             }
         }
     }
