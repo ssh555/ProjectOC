@@ -4,10 +4,8 @@ using UnityEngine;
 
 namespace ML.PlayerCharacterNS
 {
-    public class AIController : RoleController,IController
+    public class AIController : RoleController
     {
-        public List<ICharacter> SpawnedCharacters { get; set; }
-        public IControllerState State { get; set; }
         public ICharacter SpawnCharacter()
         {
             ICharacter character = null;

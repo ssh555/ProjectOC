@@ -21,10 +21,12 @@ namespace ML.Engine.SaveSystem
         [ReadOnly, HideIf("IsEditing")]
         public SaveConfig Config = new SaveConfig();
 #if UNITY_EDITOR
+#pragma warning disable 0414
         /// <summary>
         /// 是否正在编辑
         /// </summary>
         private bool IsEditing;
+#pragma warning restore 0414
         #region 面板交互按钮
         /// <summary>
         /// 启用编辑时显示Temp，隐藏Config

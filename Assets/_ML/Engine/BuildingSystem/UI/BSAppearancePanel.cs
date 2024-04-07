@@ -119,7 +119,7 @@ namespace ML.Engine.BuildingSystem.UI
         #region Refresh
         public override void Refresh()
         {
-            if(matInstance == null)
+            if(matInstance == null || (activeIndex < 0 || activeIndex >= this.matInstance.Length))
             {
                 return;
             }
