@@ -31,19 +31,19 @@ namespace ML.Engine.Manager
         /// <summary>
         /// 内置的计时器Manager
         /// </summary>
-        [ShowInInspector]
+        [ShowInInspector, ReadOnly]
         public Timer.CounterDownTimerManager CounterDownTimerManager { get; private set; }
 
         /// <summary>
         /// 内置的 TickManager(对应于unity中的Update
         /// </summary>
-        [ShowInInspector]
+        [ShowInInspector, ReadOnly]
         public Timer.TickManager TickManager { get; private set; }
 
         /// <summary>
         /// 内置的全局UIManager
         /// </summary>
-        [ShowInInspector]
+        [ShowInInspector, ReadOnly]
         public UI.UIManager UIManager { get; private set; }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace ML.Engine.Manager
         /// </summary>
         public Input.InputManager InputManager { get; private set; }
 
-        [ShowInInspector]
+        [ShowInInspector, ReadOnly]
         public SaveSystem.SaveManager SaveManager { get; private set; }
 
         public EnterPoint EnterPoint { get; private set; }

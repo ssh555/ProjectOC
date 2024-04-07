@@ -65,8 +65,8 @@ namespace ML.Engine.UI
             get { return curSelectUIBtnList; }
         }
 
-        private SelectedButton curSelectSelectedButton = null;
-        private SelectedButton lastSelectSelectedButton = null;
+        //private SelectedButton curSelectSelectedButton = null;
+        //private SelectedButton lastSelectSelectedButton = null;
         public enum NavagationMode
         {
             BtnList = 0,

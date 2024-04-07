@@ -119,6 +119,10 @@ namespace ML.Engine.BuildingSystem.UI
         #region Refresh
         public override void Refresh()
         {
+            if(matInstance == null || (activeIndex < 0 || activeIndex >= this.matInstance.Length))
+            {
+                return;
+            }
             Disactive(this.matInstance[activeIndex]);
             activeIndex = _aCurrentIndex;
             Active(this.matInstance[activeIndex]);
@@ -193,30 +197,47 @@ namespace ML.Engine.BuildingSystem.UI
             this._aMat = this.Placer.SelectedPartInstance.GetCopiedMaterial();
             this.Placer.SelectedPartInstance.Mode = BuildingMode.None;
 
-            var kv = _allMatPackages[this.Placer.SelectedPartInstance.Classification].ToMatPackage();
-
-            this._aCurrentTexs = kv.Keys.ToArray();
-            this._aCurrentMatPackages = kv.Values.ToArray();
-            var mat = this.Placer.SelectedPartInstance.GetCopiedMaterial();
-            this._aCurrentIndex = System.Array.IndexOf(this._aCurrentMatPackages, mat);
-
-            // Init & Refresh
-            ClearInstance();
-
-            matInstance = new UnityEngine.UI.Image[this._aCurrentTexs.Length];
-            for (int i = 0; i < this._aCurrentTexs.Length; ++i)
+            if(_allMatPackages.ContainsKey(this.Placer.SelectedPartInstance.Classification))
             {
-                Sprite sprite = Sprite.Create(this._aCurrentTexs[i], new Rect(0, 0, this._aCurrentTexs[i].width, this._aCurrentTexs[i].height), new Vector2(0.5f, 0.5f));
-                var img = Instantiate<GameObject>(templateMat.gameObject, matParent, false).GetComponent<UnityEngine.UI.Image>();
-                img.sprite = sprite;
+                var kv = _allMatPackages[this.Placer.SelectedPartInstance.Classification].ToMatPackage();
 
-                Disactive(img);
+                this._aCurrentTexs = kv.Keys.ToArray();
+                this._aCurrentMatPackages = kv.Values.ToArray();
+                var mat = this.Placer.SelectedPartInstance.GetCopiedMaterial();
+                this._aCurrentIndex = System.Array.IndexOf(this._aCurrentMatPackages, mat);
+                if(this._aCurrentIndex == -1)
+                {
+                    this._aCurrentIndex = 0;
+#if UNITY_EDITOR
+                    Debug.LogWarning($"{this.Placer.SelectedPartInstance.gameObject.name} - {this.Placer.SelectedPartInstance.Classification.ToString()} 的材质包不存在默认预制体配置的材质包");
+#endif
+                }
+                // Init & Refresh
+                ClearInstance();
 
-                img.gameObject.SetActive(true);
-                matInstance[i] = img;
+                matInstance = new UnityEngine.UI.Image[this._aCurrentTexs.Length];
+                for (int i = 0; i < this._aCurrentTexs.Length; ++i)
+                {
+                    Sprite sprite = Sprite.Create(this._aCurrentTexs[i], new Rect(0, 0, this._aCurrentTexs[i].width, this._aCurrentTexs[i].height), new Vector2(0.5f, 0.5f));
+                    var img = Instantiate<GameObject>(templateMat.gameObject, matParent, false).GetComponent<UnityEngine.UI.Image>();
+                    img.sprite = sprite;
+
+                    Disactive(img);
+
+                    img.gameObject.SetActive(true);
+                    matInstance[i] = img;
+                }
+
+                activeIndex = _aCurrentIndex;
+            }
+            else
+            {
+#if UNITY_EDITOR
+                Debug.LogError($"{this.Placer.SelectedPartInstance.gameObject.name} - {this.Placer.SelectedPartInstance.Classification.ToString()} 不存在对应的材质包");
+#endif
             }
 
-            activeIndex = _aCurrentIndex;
+
 
             Refresh();
 
