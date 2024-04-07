@@ -30,12 +30,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         protected override void Awake()
         {
             base.Awake();
-            Debug.Log(GameObject.Find("PlayerCharacter(Clone)"));
+            /*Debug.Log(GameObject.Find("PlayerCharacter(Clone)"));
             Debug.Log(GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>());
             Debug.Log(GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent);
             Debug.Log(GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction);
             Debug.Log(GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding);
-            Debug.Log((GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho);
+            Debug.Log((GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho);*/
             workerEcho = (GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
 
             //exclusivePart

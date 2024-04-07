@@ -1,4 +1,5 @@
 using ML.Engine.BuildingSystem;
+using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
@@ -136,6 +137,17 @@ namespace ProjectOC.Player.UI
             () =>
             {
                 ProjectOC.ManagerNS.LocalGameManager.Instance.WorkerManager.SpawnWorker(player.transform.position, player.transform.rotation);
+            }
+            );
+
+            //AddItem
+            this.UIBtnList.SetBtnAction("AddItem",
+            () =>
+            {
+                foreach (var id in ML.Engine.InventorySystem.ItemManager.Instance.GetAllItemID())//ML.Engine.InventorySystem.ItemManager.Instance.GetCanStack(id) ? UnityEngine.Random.Range(1, 999) : 1
+                {
+                    ItemManager.Instance.SpawnItems(id, 500).ForEach(item => GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().Inventory.AddItem(item));
+                }
             }
             );
 

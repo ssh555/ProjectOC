@@ -514,7 +514,6 @@ namespace ML.Engine.UI
         /// </summary>
         public void BindNavigationInputAction(InputAction NavigationInputAction, BindType bindType, Action preAction = null, Action postAction = null)
         {
-            Debug.Log("BindInputAction " + this.GetHashCode());
             this.NavigationPreAction = preAction;
             this.NavigationPostAction = postAction;
             this.NavigationInputAction = NavigationInputAction;
@@ -594,7 +593,6 @@ namespace ML.Engine.UI
         {
             if (this.NavigationInputAction != null)
             {
-                Debug.Log("DeBindInputAction "+this.GetHashCode());
                 switch (this.NavigationBindType)
                 {
                     case BindType.started:
