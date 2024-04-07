@@ -205,7 +205,10 @@ namespace ML.Engine.BuildingSystem.UI
                 this._aCurrentMatPackages = kv.Values.ToArray();
                 var mat = this.Placer.SelectedPartInstance.GetCopiedMaterial();
                 this._aCurrentIndex = System.Array.IndexOf(this._aCurrentMatPackages, mat);
-
+                if(this._aCurrentIndex == -1)
+                {
+                    this._aCurrentIndex = 0;
+                }
                 // Init & Refresh
                 ClearInstance();
 
