@@ -1373,10 +1373,10 @@ namespace ProjectOC.Input
                 {
                     ""name"": ""Remove1"",
                     ""type"": ""Button"",
-                    ""id"": ""7de4161b-eba3-4eda-a0b5-8e5010edde9f"",
+                    ""id"": ""7ed51ab5-5c3a-4252-b1bc-dab3cdfa1df5"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -1471,28 +1471,6 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ChangeIcon"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8e7db927-4ca8-4a74-b4a4-eea8f7f71bbe"",
-                    ""path"": ""<XInputController>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Remove1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""fff4c8a5-5012-4e6c-a787-8fa445766c9e"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Remove1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1649,6 +1627,28 @@ namespace ProjectOC.Input
                     ""action"": ""ChangeItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8ca4eeed-f748-4cf4-812f-da108307f1a1"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f4d49e6c-7a66-43ce-a9aa-b95d4326b994"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },

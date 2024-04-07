@@ -456,6 +456,7 @@ namespace ProjectOC.ProNodeNS
                 worker.SetDestination(WorldProNode.transform.position, ProNode_Action);
                 this.Worker = worker;
                 worker.StatusChangeAction += OnWorkerStatusChangeAction;
+                worker.APChangeAction += OnWorkerAPChangeAction;
                 return true;
             }
             return false;
@@ -481,7 +482,8 @@ namespace ProjectOC.ProNodeNS
                 if (HasWorker)
                 {
                     this.Worker.StatusChangeAction -= OnWorkerStatusChangeAction;
-                    this.Worker.SetTimeStatusAll(TimeStatus.Relax);
+                    this.Worker.APChangeAction -= OnWorkerAPChangeAction;
+                    //this.Worker.SetTimeStatusAll(TimeStatus.Relax);
                     this.Worker.ClearDestination();
                     this.Worker.ProNode = null;
                     if (!this.Worker.Agent.enabled)
@@ -631,6 +633,10 @@ namespace ProjectOC.ProNodeNS
             {
                 StopProduce();
             }
+            OnActionChange?.Invoke();
+        }
+        private void OnWorkerAPChangeAction(int ap)
+        {
             OnActionChange?.Invoke();
         }
 
