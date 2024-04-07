@@ -338,7 +338,6 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\LayerMask\GetLayer.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Mission\TransportPriority.cs" />
     <Compile Include="Assets\_ML\Engine\InventorySystem\Scripts\WorldItem.cs" />
-    <Compile Include="Assets\_ProjectOC\Scripts\Order\UI\UIOrderPanel.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Manager\LocalGameManager.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\CircleCollider2D\GetOffset.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Light\GetSpotAngle.cs" />
@@ -511,6 +510,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Math\FloatAbs.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\CharacterController\SimpleMove.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Store\Store.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\Order\UI\OrderBoardPanel.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Time\GetDeltaTime.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Actions\StackedAction.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\GetFloatParameter.cs" />

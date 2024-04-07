@@ -180,6 +180,11 @@ namespace ML.Engine.Utility
             }
         }
 
+        public bool IsLoadFinish()
+        {
+            return this.functionExecutor.IsFinished;
+        }
+
     }
 
 }
