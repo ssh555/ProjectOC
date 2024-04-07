@@ -11,11 +11,19 @@ using static ProjectOC.InventorySystem.UI.UIStore;
 using System;
 using ML.Engine.BuildingSystem;
 
-//aaa
+
 namespace ProjectOC.InventorySystem.UI
 {
     public class UIStore : ML.Engine.UI.UIBasePanel<StorePanel>
     {
+        #region Input
+        /// 用于Drop和Destroy按键响应Cancel
+        /// 长按响应了Destroy就置为true
+        /// Cancel就不响应Drop 并 重置
+        /// </summary>
+        private bool ItemIsDestroyed = false;
+        #endregion
+
         #region Unity
         public bool IsInit = false;
         protected override void Start()
@@ -304,13 +312,13 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeIcon.performed -= ChangeIcon_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Upgrade.performed -= Upgrade_performed;
             // 上下切换StoreData
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeItem.performed -= ChangeItem_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeItem.started -= ChangeItem_started;
             // 快捷放入
             ProjectOC.Input.InputManager.PlayerInput.UIStore.FastAdd.performed -= FastAdd_performed;
             // 取出1个
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove1.performed -= Remove1_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove1.canceled -= Remove_cancled;
             // 取出10个
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove10.performed -= Remove10_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove1.performed -= Remove_performed;
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
@@ -324,13 +332,13 @@ namespace ProjectOC.InventorySystem.UI
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeIcon.performed += ChangeIcon_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Upgrade.performed += Upgrade_performed;
             // 上下切换StoreData
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeItem.performed += ChangeItem_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeItem.started += ChangeItem_started;
             // 快捷放入
             ProjectOC.Input.InputManager.PlayerInput.UIStore.FastAdd.performed += FastAdd_performed;
             // 取出1个
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove1.performed += Remove1_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove1.canceled += Remove_cancled;
             // 取出10个
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove10.performed += Remove10_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove1.performed += Remove_performed;
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
@@ -363,7 +371,7 @@ namespace ProjectOC.InventorySystem.UI
             CurPriority = Store.TransportPriority;
         }
         // Store
-        private void ChangeItem_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void ChangeItem_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (CurMode == Mode.Store)
             {
@@ -408,18 +416,26 @@ namespace ProjectOC.InventorySystem.UI
                 Refresh();
             }
         }
-        private void Remove1_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void Remove_cancled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (CurMode == Mode.Store && CurStoreMode == StoreMode.ChangeItem)
             {
-                Store.UIRemove(Player, CurrentStoreData, 1);
-                Refresh();
+                if (this.ItemIsDestroyed)
+                {
+                    this.ItemIsDestroyed = false;
+                }
+                else
+                {
+                    Store.UIRemove(Player, CurrentStoreData, 1);
+                    Refresh();
+                }
             }
         }
-        private void Remove10_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void Remove_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (CurMode == Mode.Store && CurStoreMode == StoreMode.ChangeItem)
             {
+                this.ItemIsDestroyed = true;
                 Store.UIRemove(Player, CurrentStoreData, 10);
                 Refresh();
             }
@@ -1120,14 +1136,18 @@ namespace ProjectOC.InventorySystem.UI
             public TextContent text_LvDesc1;
             public TextContent text_LvDesc2;
 
+            public KeyTip Upgrade;
             public KeyTip NextPriority;
             public KeyTip ChangeIcon;
+            public KeyTip UpgradeConfirm;
             public KeyTip ChangeItem;
             public KeyTip Remove1;
             public KeyTip Remove10;
+            public KeyTip Switch;
             public KeyTip FastAdd;
             public KeyTip Confirm;
             public KeyTip Back;
+            public KeyTip UpgradeBack;
         }
         protected override void InitTextContentPathData()
         {

@@ -21,10 +21,6 @@ namespace ProjectOC.InventorySystem.UI
     public class UIInfiniteInventory : ML.Engine.UI.UIBasePanel<InventoryPanel>
     {
         #region Input
-        /// 用于Drop和Destroy按键响应Cancel
-        /// 长按响应了Destroy就置为true
-        /// Cancel就不响应Drop 并 重置
-        /// </summary>
         private bool ItemIsDestroyed = false;
         #endregion
 
