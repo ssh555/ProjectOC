@@ -164,7 +164,7 @@ namespace ProjectOC.Building
 
         public void OnDestroy()
         {
-            if (LocalGameManager.Instance.IslandAreaManager != null)
+            if (LocalGameManager.Instance?.IslandAreaManager != null)
             {
                 LocalGameManager.Instance.IslandAreaManager.UpdatedFieldTransformsAction -= HouseDetectionAction;
             }
