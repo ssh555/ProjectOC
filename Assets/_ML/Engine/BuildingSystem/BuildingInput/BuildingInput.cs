@@ -1003,7 +1003,7 @@ namespace ML.Engine.BuildingSystem.Input
                 {
                     ""name"": ""positive"",
                     ""id"": ""db5cc0f1-b403-4cde-aaf6-571f37e31d9a"",
-                    ""path"": ""<XInputController>/leftTrigger"",
+                    ""path"": ""<XInputController>/rightTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
