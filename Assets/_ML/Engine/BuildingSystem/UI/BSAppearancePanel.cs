@@ -208,6 +208,9 @@ namespace ML.Engine.BuildingSystem.UI
                 if(this._aCurrentIndex == -1)
                 {
                     this._aCurrentIndex = 0;
+#if UNITY_EDITOR
+                    Debug.LogWarning($"{this.Placer.SelectedPartInstance.gameObject.name} - {this.Placer.SelectedPartInstance.Classification.ToString()} 的材质包不存在默认预制体配置的材质包");
+#endif
                 }
                 // Init & Refresh
                 ClearInstance();
@@ -227,7 +230,12 @@ namespace ML.Engine.BuildingSystem.UI
 
                 activeIndex = _aCurrentIndex;
             }
-
+            else
+            {
+#if UNITY_EDITOR
+                Debug.LogError($"{this.Placer.SelectedPartInstance.gameObject.name} - {this.Placer.SelectedPartInstance.Classification.ToString()} 不存在对应的材质包");
+#endif
+            }
 
 
 
