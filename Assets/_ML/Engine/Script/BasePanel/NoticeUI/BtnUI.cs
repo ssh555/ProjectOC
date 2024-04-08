@@ -88,7 +88,7 @@ namespace ML.Engine.UI
             if(data is UIManager.BtnUIData btnData)
             {
                 this.Msg.text = btnData.msg;
-                GameManager.Instance.UIManager.GetBtnUIContainer().SetBtnAction(gameObject.GetHashCode().ToString(), btnData.action);
+                //TODO
             }
         }
         #endregion
