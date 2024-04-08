@@ -58,6 +58,7 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 categoryAtlas = handle.Result as SpriteAtlas;
                 CanSelectCategory1 = BuildingManager.Instance.GetRegisteredCategory();
+                Array.Sort(CanSelectCategory1);
                 ++IsInit;
                 if (IsInit >= 1)
                 {
@@ -72,6 +73,7 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 typeAtlas = handle.Result as SpriteAtlas;
                 CanSelectCategory2 = BuildingManager.Instance.GetRegisteredType();
+                Array.Sort(CanSelectCategory2);
 
                 ++IsInit;
                 if (IsInit >= 1)
@@ -245,7 +247,6 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.Mode = BuildingMode.Place;
             this.Placer.InteractBPartList.Clear();
             this.Placer.SelectedPartInstance = null;
-
         }
         public override void OnExit()
         {
@@ -313,8 +314,16 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region Select
-        public static int S_LastSelectedCategory1Index = -1;
-        public static int S_LastSelectedCategory2Index = -1;
+        public int S_LastSelectedCategory1Index
+        {
+            get => BSInteractModePanel.S_LastSelectedCategory1Index;
+            set => BSInteractModePanel.S_LastSelectedCategory1Index = value;
+        }
+        public int S_LastSelectedCategory2Index
+        {
+            get => BSInteractModePanel.S_LastSelectedCategory2Index;
+            set => BSInteractModePanel.S_LastSelectedCategory2Index = value;
+        }
 
         /// <summary>
         /// 当前选中的Category1Index
@@ -348,6 +357,7 @@ namespace ML.Engine.BuildingSystem.UI
         protected void UpdatePlaceBuildingType(BuildingCategory1 category)
         {
             this.CanSelectCategory2 = BuildingManager.Instance.GetRegisteredType().Where(type => (int)type >= ((int)category * 100) && (int)type < ((int)category * 100 + 100)).ToArray();
+            Array.Sort(CanSelectCategory2);
 
             this.SelectedCategory2Index = 0;
 

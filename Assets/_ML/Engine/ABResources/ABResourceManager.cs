@@ -1068,13 +1068,15 @@ namespace ML.Engine.ABResources
             {
                 Addressables.ReleaseInstance(handle);
             }
-            foreach (var handle in this.localHandles.Values)
+            foreach (AsyncOperationHandle handle in this.localHandles.Values)
             {
-                Addressables.Release(handle);
+                if(handle.IsValid())
+                    Addressables.Release(handle);
             }
-            foreach (var handle in this.globalHandles.Values)
+            foreach (AsyncOperationHandle handle in this.globalHandles.Values)
             {
-                Addressables.Release(handle);
+                if (handle.IsValid())
+                    Addressables.Release(handle);
             }
         }
 
