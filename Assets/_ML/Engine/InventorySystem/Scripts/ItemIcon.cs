@@ -10,6 +10,7 @@ namespace ML.Engine.InventorySystem
     {
         private UnityEngine.UI.Image Image;
         public PlayerCharacter Player;
+        public bool CanShow = false;
 
         #region ITickComponent
         public int tickPriority { get; set; }
@@ -17,35 +18,28 @@ namespace ML.Engine.InventorySystem
         public int lateTickPriority { get; set; }
         #endregion
 
-        private void Awake()
-        {
-            Image = GetComponentInChildren<UnityEngine.UI.Image>();
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterLateTick(0, this);
-        }
-
         private void Start()
         {
+            Image = GetComponentInChildren<UnityEngine.UI.Image>();
             Image.transform.SetParent(Manager.GameManager.Instance.UIManager.GetCanvas.transform);
             Image.enabled = false;
+            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterLateTick(0, this);
             this.enabled = false;
         }
 
         public void LateTick(float deltatime)
         {
-            if (Image != null)
+            if (CanShow && Image.sprite != null && Vector3.Distance(transform.position, Player.transform.position) <= 5f)
             {
-                if (Player != null && Vector3.Distance(transform.position, Player.transform.position) <= 3f)
-                {
-                    Image.enabled = true;
-                    Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
-                    screenPosition.x = Mathf.Clamp(screenPosition.x, 0, Screen.width);
-                    screenPosition.y = Mathf.Clamp(screenPosition.y, 0, Screen.height);
-                    Image.transform.position = screenPosition;
-                }
-                else
-                {
-                    Image.enabled = false;
-                }
+                Image.enabled = true;
+                Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
+                screenPosition.x = Mathf.Clamp(screenPosition.x, 0, Screen.width);
+                screenPosition.y = Mathf.Clamp(screenPosition.y, 0, Screen.height);
+                Image.transform.position = screenPosition;
+            }
+            else
+            {
+                Image.enabled = false;
             }
         }
 
@@ -55,10 +49,7 @@ namespace ML.Engine.InventorySystem
         }
         public void SetSprite(Sprite sprite)
         {
-            if (Image != null)
-            {
-                Image.sprite = sprite;
-            }
+            Image.sprite = sprite;
         }
 
         private void OnDestroy()

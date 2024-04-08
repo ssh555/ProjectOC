@@ -82,6 +82,10 @@ namespace ProjectOC.InventorySystem.UI
         #region Override
         protected override void Enter()
         {
+            if (Store.WorldStore.ItemIcon != null)
+            {
+                Store.WorldStore.ItemIcon.CanShow = false;
+            }
             Store.OnStoreDataChange += Refresh;
             Store.IsInteracting = true;
             base.Enter();
@@ -89,6 +93,10 @@ namespace ProjectOC.InventorySystem.UI
 
         protected override void Exit()
         {
+            if (Store.WorldStore.ItemIcon != null)
+            {
+                Store.WorldStore.ItemIcon.CanShow = true;
+            }
             Store.OnStoreDataChange -= Refresh;
             Store.IsInteracting = false;
             ClearTemp();

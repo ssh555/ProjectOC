@@ -97,6 +97,10 @@ namespace ProjectOC.InventorySystem.UI
         #region Override
         protected override void Enter()
         {
+            if (ProNode.WorldProNode.ItemIcon != null)
+            {
+                ProNode.WorldProNode.ItemIcon.CanShow = true;
+            }
             ProNode.OnActionChange += RefreshDynamic;
             ProNode.OnProduceTimerUpdate += OnProduceTimerUpdateAction;
             ProNode.OnProduceEnd += Refresh;
@@ -105,6 +109,10 @@ namespace ProjectOC.InventorySystem.UI
 
         protected override void Exit()
         {
+            if (ProNode.WorldProNode.ItemIcon != null)
+            {
+                ProNode.WorldProNode.ItemIcon.CanShow = true;
+            }
             ProNode.OnActionChange -= RefreshDynamic;
             ProNode.OnProduceTimerUpdate -= OnProduceTimerUpdateAction;
             ProNode.OnProduceEnd -= Refresh;

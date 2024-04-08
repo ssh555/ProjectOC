@@ -17,7 +17,7 @@ namespace ProjectOC.ProNodeNS
     {
         [ShowInInspector, ReadOnly, SerializeField]
         public ProNode ProNode;
-
+        public ItemIcon ItemIcon { get => GetComponentInChildren<ItemIcon>(); }
         public string InteractType { get; set; } = "WorldProNode";
         public Vector3 PosOffset { get; set; } = Vector3.zero;
         

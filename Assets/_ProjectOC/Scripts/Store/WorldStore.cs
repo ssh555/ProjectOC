@@ -14,7 +14,7 @@ namespace ProjectOC.StoreNS
     {
         [ShowInInspector, ReadOnly, SerializeField]
         public Store Store;
-
+        public ItemIcon ItemIcon { get => GetComponentInChildren<ItemIcon>(); }
         public string InteractType { get; set; } = "WorldStore";
         public Vector3 PosOffset { get; set; } = Vector3.zero;
         

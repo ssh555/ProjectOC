@@ -29,6 +29,8 @@ namespace ProjectOC.Building
         public RaycastConfig ConfigDown;
         public string InteractType { get; set; } = "Bed";
         public Vector3 PosOffset { get; set; } = Vector3.zero;
+
+        public ItemIcon ItemIcon { get => GetComponentInChildren<ItemIcon>(); }
         #endregion
 
         protected override void Start()
@@ -84,7 +86,7 @@ namespace ProjectOC.Building
             }
             this.CanSetClan = flagUp && flagDown;
             string icon = this.CanSetClan ? "UI_Bed_Icon_Enable" : "UI_Bed_Icon_Disable";
-            transform.GetComponentInChildren<ItemIcon>()?.SetSprite(ItemManager.Instance.GetItemSprite(icon));
+            ItemIcon?.SetSprite(ItemManager.Instance.GetItemSprite(icon));
             return this.CanSetClan;
         }
 
