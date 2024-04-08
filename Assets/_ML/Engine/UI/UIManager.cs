@@ -157,12 +157,7 @@ namespace ML.Engine.UI
         private string BtnUIPrefabPath = "NoticeUI/BtnUI.prefab";
         [ShowInInspector]
         private GameObject SideBarUIPrefab, PopUpUIPrefab, FloatTextUIPrefab, BtnUIPrefab;
-        private BtnUIContainer BtnUIContainer = null;
 
-        public BtnUIContainer GetBtnUIContainer()
-        {
-            return this.BtnUIContainer;
-        }
         public enum NoticeUIType
         {
             FloatTextUI = 0,
@@ -280,14 +275,8 @@ namespace ML.Engine.UI
                         BtnUIData btnData = (BtnUIData)(object)data;
                         SelectedButton selectedButton = panelGo.GetComponent<SelectedButton>();
 
-                        if (this.BtnUIContainer != null)
-                        {
-                            this.BtnUIContainer.AddBtn(selectedButton);
-                        }
-                        else
-                        {
-                            this.BtnUIContainer = new BtnUIContainer(Content);
-                        }
+                        //TODO
+
                         panelGo.GetComponent<BtnUI>().CopyInstance(btnData);
 
                     }

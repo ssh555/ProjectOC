@@ -82,8 +82,8 @@ namespace ProjectOC.ManagerNS
             MonoBuildingManager.Init();
             GM.RegisterLocalManager(TechTreeManager);
             TechTreeManager.Init();
-            /*            GM.RegisterLocalManager(OrderManager);
-                        OrderManager.Init();*/
+            GM.RegisterLocalManager(OrderManager);
+            OrderManager.Init();
             GM.RegisterLocalManager(ItemManager);
             ItemManager.Init();
             GM.RegisterLocalManager(CompositeManager);
@@ -127,6 +127,7 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<IslandModelManager>();
                 GM?.UnregisterLocalManager<BuildPowerIslandManager>();
                 GM?.UnregisterLocalManager<IslandAreaManager>();
+                GM?.UnregisterLocalManager<OrderManager>();
                 GM?.UnregisterLocalManager<ItemManager>();
                 GM?.UnregisterLocalManager<CompositeManager>();
                 Instance = null;

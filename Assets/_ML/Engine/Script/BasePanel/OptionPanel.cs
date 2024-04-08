@@ -49,11 +49,10 @@ namespace ML.Engine.UI
         protected override void UnregisterInput()
         {
             this.UIBtnList.RemoveAllListener();
-
-            ML.Engine.Input.InputManager.Instance.Common.Option.Disable();
-
             //解绑按钮导航和按钮确认InputAction的回调函数
             this.UIBtnList.DeBindInputAction();
+
+            ML.Engine.Input.InputManager.Instance.Common.Option.Disable();
 
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
@@ -73,10 +72,10 @@ namespace ML.Engine.UI
             () =>
             {
                 //GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData("确定取消该订单吗？", "您将面临违约惩罚", null, () => { Debug.Log("确定响应！"); }));
-                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/BaseUIPanel/GridTestPanel1.prefab").Completed += (handle) =>
+                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/BaseUIPanel/GridTestPanelA.prefab").Completed += (handle) =>
                 {
                     // 实例化
-                    var panel = handle.Result.GetComponent<TestPanel1>();
+                    var panel = handle.Result.GetComponent<TestPanelA>();
 
                     panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
 
@@ -89,10 +88,10 @@ namespace ML.Engine.UI
             () =>
             {
                 //GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.BtnUI, new UIManager.BtnUIData("message1", () => { Debug.Log("按钮响应！"); }));
-                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/BaseUIPanel/GridTestPanel.prefab").Completed += (handle) =>
+                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/BaseUIPanel/GridTestPanelB.prefab").Completed += (handle) =>
                 {
                     // 实例化
-                    var panel = handle.Result.GetComponent<TestPanel>();
+                    var panel = handle.Result.GetComponent<TestPanelB>();
 
                     panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
 
@@ -249,7 +248,7 @@ namespace ML.Engine.UI
         protected override void InitBtnInfo()
         {
             UIBtnListInitor uIBtnListInitor = this.transform.GetComponentInChildren<UIBtnListInitor>(true);
-            this.UIBtnList = new UIBtnList(uIBtnListInitor.transform, uIBtnListInitor.btnListInitData);
+            this.UIBtnList = new UIBtnList(uIBtnListInitor);
         }
         private void InitBtnData(OptionPanelStruct datas)
         {

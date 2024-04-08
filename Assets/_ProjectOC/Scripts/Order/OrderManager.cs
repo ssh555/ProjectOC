@@ -123,20 +123,17 @@ namespace ProjectOC.Order
         #endregion
 
         #region Base
-        public static OrderManager Instance;
 
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
 
         /// <summary>
         /// 单例管理
         /// </summary>
+        public static OrderManager Instance { get { return instance; } }
+
+        private static OrderManager instance;
         public void Init()
         {
-            Instance = this;
-
-            // 注册 Manager
-            GM.RegisterLocalManager(this);
-
             //TODO 之后由氏族模块处理
             OrderDelegationMap.Add(("ID1",OrderType.Urgent), new List<Order>(2));
             OrderDelegationMap.Add(("ID1", OrderType.Special), new List<Order>());
@@ -173,25 +170,28 @@ namespace ProjectOC.Order
                 this.RefreshAcceptedList();
             };
 
-            PlayerInventory = GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().Inventory;
+            //PlayerInventory = GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().Inventory;
             // 载入表格数据 
             LoadTableData();
 
         }
-
-
-        private void OnDestroy()
+        public void OnRegister()
         {
-            if (Instance == this)
+            if (instance == null)
             {
-                Instance = null;
-                if (GM != null)
-                {
-
-                }
-                    
+                instance = this;
             }
         }
+
+        public void OnUnregister()
+        {
+            if (instance == this)
+            {
+                instance = null;
+            }
+        }
+
+
         #endregion
 
         #region Internal
