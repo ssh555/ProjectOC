@@ -52,7 +52,7 @@ namespace ProjectOC.TechTree
             var sgrid = row[5].Split(',');
             this.Grid = new int[2] { int.Parse(sgrid[0]), int.Parse(sgrid[1]) };
             // 6 -> IsUnlocked
-            this.IsUnlocked = row[6] == "True";
+            this.IsUnlocked = int.Parse(row[6]) != 0;
             // 7 -> ≈‰∑Ω
             if (!string.IsNullOrEmpty(row[7]))
             {
