@@ -624,7 +624,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsEnableGridSupport: 1
-  DisableGridRotRate: 10
+  DisableGridRotRate: 90
   EnableGridRotRate: 15
   camera: {fileID: 0}
   checkRadius: 20

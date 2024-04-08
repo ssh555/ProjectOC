@@ -33,6 +33,7 @@ namespace ML.Engine.BuildingSystem.UI
         private UIKeyTip back;
 
         #endregion
+        private GameObject interactPanel;
 
         #endregion
 
@@ -53,7 +54,7 @@ namespace ML.Engine.BuildingSystem.UI
         {
             this.enabled = false;
             monoBM = ML.Engine.Manager.GameManager.Instance.GetLocalManager<MonoBuildingManager>();
-
+            interactPanel = this.transform.Find("BPartInteractTip").gameObject;
         }
 
         #endregion
@@ -63,6 +64,8 @@ namespace ML.Engine.BuildingSystem.UI
         {
             base.OnEnter();
             BM.Placer.OnDestroySelectedBPart += OnDestroySelectedBPart;
+            S_LastSelectedCategory1Index = -1;
+            S_LastSelectedCategory2Index = -1;
         }
 
 
@@ -92,6 +95,7 @@ namespace ML.Engine.BuildingSystem.UI
         protected override void UnregisterInput()
         {
             this.Placer.BInput.Build.Disable();
+            this.Placer.OnSelectBPart -= this.OnSelectBPart;
 
             Manager.GameManager.Instance.TickManager.UnregisterFixedTick(this);
 
@@ -109,6 +113,7 @@ namespace ML.Engine.BuildingSystem.UI
         protected override void RegisterInput()
         {
             this.Placer.BInput.Build.Enable();
+            this.Placer.OnSelectBPart += this.OnSelectBPart;
 
             Manager.GameManager.Instance.TickManager.RegisterFixedTick(0, this);
 
@@ -177,6 +182,7 @@ namespace ML.Engine.BuildingSystem.UI
 
         #endregion
 
+        #region OnEvent
         private void OnDestroySelectedBPart(IBuildingPart bpart)
         {
             if (bpart is WorldStore worldStore)
@@ -221,6 +227,14 @@ namespace ML.Engine.BuildingSystem.UI
             }
         }
 
+        private void OnSelectBPart(IBuildingPart BPart)
+        {
+
+            interactPanel.SetActive(BPart != null);
+        }
+
+        #endregion
+
         #region TextContent
         [System.Serializable]
         public struct BSInteractModePanelStruct
@@ -234,6 +248,11 @@ namespace ML.Engine.BuildingSystem.UI
             this.abname = "BSInteractModePanel";
             this.description = "BSInteractModePanel数据加载完成";
         }
+        #endregion
+
+        #region 临时存储
+        public static int S_LastSelectedCategory1Index = -1;
+        public static int S_LastSelectedCategory2Index = -1;
         #endregion
     }
 

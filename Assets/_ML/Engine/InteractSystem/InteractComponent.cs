@@ -116,7 +116,7 @@ namespace ML.Engine.InteractSystem
         {
             Manager.GameManager.Instance.TickManager.UnregisterTick(this);
 
-            if(!this.IsDestroyed())
+            if(!this.IsDestroyed() && uiKeyTip.img)
             {
                 uiKeyTip.img.transform.parent.gameObject.SetActive(false);
             }

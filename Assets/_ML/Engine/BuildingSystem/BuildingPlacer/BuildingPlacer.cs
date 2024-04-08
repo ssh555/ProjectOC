@@ -208,6 +208,8 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         public void AlternateBPartOnStyle(bool isForward)
         {
             var tmp = BuildingManager.Instance.PollingBPartPeekInstanceOnStyle(this.SelectedPartInstance, isForward);
+            //tmp.BaseRotation = SelectedPartInstance.BaseRotation;
+            tmp.RotOffset = SelectedPartInstance.RotOffset;
             this.ResetBPart();
             this.SelectedPartInstance = tmp;
             // to-do : 只有PlaceMode会调用
@@ -220,6 +222,8 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         public void AlternateBPartOnHeight(bool isForward)
         {
             var tmp = BuildingManager.Instance.PollingBPartPeekInstanceOnHeight(this.SelectedPartInstance, isForward);
+            //tmp.BaseRotation = SelectedPartInstance.BaseRotation;
+            tmp.RotOffset = SelectedPartInstance.RotOffset;
             this.ResetBPart();
             this.SelectedPartInstance = tmp;
             // to-do : 只有PlaceMode会调用
@@ -523,7 +527,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         protected float sphereRadius = 0.5f;
 
         [LabelText("检测时间间隔"), SerializeField, FoldoutGroup("交互检测"), PropertyTooltip("单位 s")]
-        protected float interactCheckInterval = 1f;
+        protected float interactCheckInterval = 0.1f;
         private float _curTimer = 0f;
 
         [HideInInspector]
@@ -554,6 +558,8 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// </summary>
         protected bool GetCanPlaceBPart => this.SelectedPartInstance == null ? false : this.SelectedPartInstance.CanPlaceInPlaceMode;
 
+        public event System.Action<IBuildingPart> OnSelectBPart;
+
         public void CheckInteractBPart(float deltatime)
         {
             // 使用BInput.Build
@@ -568,11 +574,13 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     if (this.SelectedPartInstance == null || !this.InteractBPartList.Contains(this.SelectedPartInstance))
                     {
                         this.SelectedPartInstance = this.InteractBPartList[0];
+                        OnSelectBPart?.Invoke(this.SelectedPartInstance);
                     }
                 }
                 else
                 {
                     this.SelectedPartInstance = null;
+                    OnSelectBPart?.Invoke(this.SelectedPartInstance);
                 }
 
             }

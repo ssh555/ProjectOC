@@ -72,7 +72,7 @@ namespace ML.Engine.BuildingSystem.Input
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": true
+                    ""initialStateCheck"": false
                 },
                 {
                     ""name"": ""KeyCom"",
@@ -957,7 +957,7 @@ namespace ML.Engine.BuildingSystem.Input
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""negative"",
+                    ""name"": ""Negative"",
                     ""id"": ""5768cd4a-1a14-42f6-8929-4d508cc659f1"",
                     ""path"": ""<Keyboard>/1"",
                     ""interactions"": """",
@@ -968,7 +968,7 @@ namespace ML.Engine.BuildingSystem.Input
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""positive"",
+                    ""name"": ""Positive"",
                     ""id"": ""81057847-24f7-4a92-8b22-289517189228"",
                     ""path"": ""<Keyboard>/3"",
                     ""interactions"": """",
@@ -990,7 +990,7 @@ namespace ML.Engine.BuildingSystem.Input
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""negative"",
+                    ""name"": ""Negative"",
                     ""id"": ""c5be6e3b-7a62-4671-8e22-d8e55ff37bb0"",
                     ""path"": ""<XInputController>/leftTrigger"",
                     ""interactions"": """",
@@ -1001,7 +1001,7 @@ namespace ML.Engine.BuildingSystem.Input
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""positive"",
+                    ""name"": ""Positive"",
                     ""id"": ""db5cc0f1-b403-4cde-aaf6-571f37e31d9a"",
                     ""path"": ""<XInputController>/rightTrigger"",
                     ""interactions"": """",
