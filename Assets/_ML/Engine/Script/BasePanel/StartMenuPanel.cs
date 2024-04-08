@@ -262,7 +262,7 @@ namespace ML.Engine.UI
         protected override void InitBtnInfo()
         {
             UIBtnListInitor uIBtnListInitor = this.transform.GetComponentInChildren<UIBtnListInitor>();
-            this.UIBtnList = new UIBtnList(uIBtnListInitor.transform, uIBtnListInitor.btnListInitData);
+            this.UIBtnList = new UIBtnList(uIBtnListInitor);
         }
         private void InitBtnData(StartMenuPanelStruct datas)
         {    

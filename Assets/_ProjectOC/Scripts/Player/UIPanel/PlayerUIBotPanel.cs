@@ -251,7 +251,7 @@ namespace ProjectOC.Player.UI
         protected override void InitBtnInfo()
         {
             UIBtnListInitor uIBtnListInitor = this.transform.GetComponentInChildren<UIBtnListInitor>(true);
-            this.UIBtnList = new UIBtnList(uIBtnListInitor.transform, uIBtnListInitor.btnListInitData);
+            this.UIBtnList = new UIBtnList(uIBtnListInitor);
         }
         private void InitBtnData(PlayerUIBotPanelStruct datas)
         {

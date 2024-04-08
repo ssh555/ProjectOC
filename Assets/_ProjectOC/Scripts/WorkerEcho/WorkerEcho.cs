@@ -67,11 +67,10 @@ namespace ProjectOC.WorkerEchoNS
             return externWorker;
         }
 
-        public void SpawnWorker(int index,Vector3 pos)
+        public void SpawnWorker(int index)
         {
             GameManager.Instance.GetLocalManager<WorkerManager>().AddToWorkers(Workers[index].worker);
 
-            Workers[index].worker.transform.position = pos;
             (BuildingPart as WorkerEchoBuilding).workerEcho.AddWorker(Workers[index].worker, index);
 
             ML.Engine.Manager.GameManager.Instance.CounterDownTimerManager.RemoveTimer(Workers[index].timer);

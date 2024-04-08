@@ -63,7 +63,6 @@ namespace ProjectOC.InventorySystem.UI
             KT_Destroy = kt.Find("KT_Destroy");
 
             IsInit = true;
-            Refresh();
         }
 
         protected override void Start()
@@ -395,7 +394,7 @@ namespace ProjectOC.InventorySystem.UI
         public override void Refresh()
         {
             // 加载完成JSON数据 & 查找完所有引用
-            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
+            if (!this.objectPool.IsLoadFinish())
             {
                 return;
             }
@@ -434,7 +433,25 @@ namespace ProjectOC.InventorySystem.UI
                 }
 
                 // 刷新显示文本
-                obj.transform.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.itemtype.FirstOrDefault(it => it.name == itemtype.ToString()).GetDescription();
+
+                Debug.Log(obj.transform.Find("Text"));
+                Debug.Log(obj.transform.Find("Text").GetComponent<TMPro.TextMeshProUGUI>());
+                Debug.Log(PanelTextContent);
+                Debug.Log(PanelTextContent.itemtype);
+                Debug.Log(PanelTextContent.itemtype.FirstOrDefault(it => it.name == itemtype.ToString()));
+                Debug.Log(PanelTextContent.itemtype.FirstOrDefault(it => it.name == itemtype.ToString()).GetDescription());
+
+                TextTip textTip = PanelTextContent.itemtype.FirstOrDefault(it => it.name == itemtype.ToString());
+
+                if (textTip != null)
+                {
+                    obj.transform.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = textTip.GetDescription();
+                }
+                else
+                {
+                    Debug.LogWarning("找不到匹配的ItemType");
+                }
+                
                 // 更新 Selected
                 var selected = obj.transform.Find("Selected").gameObject;
                 selected.SetActive(CurrentItemType == itemtype);

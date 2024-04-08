@@ -121,7 +121,6 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Input\IsKeyUp.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedObject.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Actions\Wait.cs" />
-    <Compile Include="Assets\_ML\Engine\Script\BasePanel\NoticeUI\BtnUIContainer.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Math\IntComparison.cs" />
     <Compile Include="Assets\_ML\Engine\Utility\OSTime.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector2\Dot.cs" />
@@ -589,7 +588,6 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animation\Play.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\GetAngleToTarget.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\IsName.cs" />
-    <Compile Include="Assets\_ML\MLResources\BaseUIPanel\TestPanel1.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\GetDestination.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Character\IStartPoint.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Actions\Reflection\SetFieldValue.cs" />
@@ -632,7 +630,6 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\String\CompareTo.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\GameObject\CompareTag.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetMinDistance.cs" />
-    <Compile Include="Assets\_ML\MLResources\BaseUIPanel\TestPanel.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Actions\StopBehaviorTree.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedRect.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Worker\Gender.cs" />
@@ -708,10 +705,12 @@
     <Compile Include="Assets\_ML\Example\InventorySystem\UIItem.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedCollider.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\GameObject\SendMessage.cs" />
+    <Compile Include="Assets\_ML\MLResources\BaseUIPanel\TestPanelB.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\UseGravity.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Quaternion\AngleAxis.cs" />
     <Compile Include="Assets\_ML\Engine\TextContent\UIKeyTip.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetMute.cs" />
+    <Compile Include="Assets\_ML\MLResources\BaseUIPanel\TestPanelA.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\CapsuleCollider\GetHeight.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Quaternion\FromToRotation.cs" />
     <Compile Include="Assets\_ML\Engine\BuildingSystem\UI\BSEditModePanel.cs" />
