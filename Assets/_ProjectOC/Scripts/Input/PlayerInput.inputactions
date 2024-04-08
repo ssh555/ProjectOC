@@ -2283,6 +2283,76 @@
             ]
         },
         {
+            "name": "OrderBoardPanel",
+            "id": "06e0510c-459a-43f9-be7c-a9d6ab7b4800",
+            "actions": [
+                {
+                    "name": "NextTerm",
+                    "type": "Button",
+                    "id": "b30a407d-5a60-436e-8653-04db31f1709e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "LastTerm",
+                    "type": "Button",
+                    "id": "5831ea61-4e1f-4117-82cf-7d480bfa2348",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "76c01ed6-0063-45bc-ba83-ab0a13d47fa1",
+                    "path": "<XInputController>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "NextTerm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "33ea2913-8a4f-4cbd-a87d-5f88a4bc4564",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "NextTerm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bac765c7-6409-4168-807e-38578e87629f",
+                    "path": "<XInputController>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LastTerm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "647f1e61-a292-47f9-be57-a3e14a304e4e",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LastTerm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
             "name": "ResonanceWheelUI_sub1",
             "id": "fbf093c0-22ab-44b5-a7d6-9c52881e65c6",
             "actions": [

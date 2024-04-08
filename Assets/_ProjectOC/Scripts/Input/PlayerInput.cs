@@ -2307,6 +2307,76 @@ namespace ProjectOC.Input
             ]
         },
         {
+            ""name"": ""OrderBoardPanel"",
+            ""id"": ""06e0510c-459a-43f9-be7c-a9d6ab7b4800"",
+            ""actions"": [
+                {
+                    ""name"": ""NextTerm"",
+                    ""type"": ""Button"",
+                    ""id"": ""b30a407d-5a60-436e-8653-04db31f1709e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LastTerm"",
+                    ""type"": ""Button"",
+                    ""id"": ""5831ea61-4e1f-4117-82cf-7d480bfa2348"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""76c01ed6-0063-45bc-ba83-ab0a13d47fa1"",
+                    ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""33ea2913-8a4f-4cbd-a87d-5f88a4bc4564"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bac765c7-6409-4168-807e-38578e87629f"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LastTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""647f1e61-a292-47f9-be57-a3e14a304e4e"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LastTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""ResonanceWheelUI_sub1"",
             ""id"": ""fbf093c0-22ab-44b5-a7d6-9c52881e65c6"",
             ""actions"": [
@@ -2754,6 +2824,10 @@ namespace ProjectOC.Input
             m_ResonanceWheelUI_SwitchTarget = m_ResonanceWheelUI.FindAction("SwitchTarget", throwIfNotFound: true);
             m_ResonanceWheelUI_StartResonance = m_ResonanceWheelUI.FindAction("StartResonance", throwIfNotFound: true);
             m_ResonanceWheelUI_StopResonance = m_ResonanceWheelUI.FindAction("StopResonance", throwIfNotFound: true);
+            // OrderBoardPanel
+            m_OrderBoardPanel = asset.FindActionMap("OrderBoardPanel", throwIfNotFound: true);
+            m_OrderBoardPanel_NextTerm = m_OrderBoardPanel.FindAction("NextTerm", throwIfNotFound: true);
+            m_OrderBoardPanel_LastTerm = m_OrderBoardPanel.FindAction("LastTerm", throwIfNotFound: true);
             // ResonanceWheelUI_sub1
             m_ResonanceWheelUI_sub1 = asset.FindActionMap("ResonanceWheelUI_sub1", throwIfNotFound: true);
             m_ResonanceWheelUI_sub1_Expel = m_ResonanceWheelUI_sub1.FindAction("Expel", throwIfNotFound: true);
@@ -3528,6 +3602,60 @@ namespace ProjectOC.Input
         }
         public ResonanceWheelUIActions @ResonanceWheelUI => new ResonanceWheelUIActions(this);
 
+        // OrderBoardPanel
+        private readonly InputActionMap m_OrderBoardPanel;
+        private List<IOrderBoardPanelActions> m_OrderBoardPanelActionsCallbackInterfaces = new List<IOrderBoardPanelActions>();
+        private readonly InputAction m_OrderBoardPanel_NextTerm;
+        private readonly InputAction m_OrderBoardPanel_LastTerm;
+        public struct OrderBoardPanelActions
+        {
+            private @PlayerInput m_Wrapper;
+            public OrderBoardPanelActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @NextTerm => m_Wrapper.m_OrderBoardPanel_NextTerm;
+            public InputAction @LastTerm => m_Wrapper.m_OrderBoardPanel_LastTerm;
+            public InputActionMap Get() { return m_Wrapper.m_OrderBoardPanel; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(OrderBoardPanelActions set) { return set.Get(); }
+            public void AddCallbacks(IOrderBoardPanelActions instance)
+            {
+                if (instance == null || m_Wrapper.m_OrderBoardPanelActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_OrderBoardPanelActionsCallbackInterfaces.Add(instance);
+                @NextTerm.started += instance.OnNextTerm;
+                @NextTerm.performed += instance.OnNextTerm;
+                @NextTerm.canceled += instance.OnNextTerm;
+                @LastTerm.started += instance.OnLastTerm;
+                @LastTerm.performed += instance.OnLastTerm;
+                @LastTerm.canceled += instance.OnLastTerm;
+            }
+
+            private void UnregisterCallbacks(IOrderBoardPanelActions instance)
+            {
+                @NextTerm.started -= instance.OnNextTerm;
+                @NextTerm.performed -= instance.OnNextTerm;
+                @NextTerm.canceled -= instance.OnNextTerm;
+                @LastTerm.started -= instance.OnLastTerm;
+                @LastTerm.performed -= instance.OnLastTerm;
+                @LastTerm.canceled -= instance.OnLastTerm;
+            }
+
+            public void RemoveCallbacks(IOrderBoardPanelActions instance)
+            {
+                if (m_Wrapper.m_OrderBoardPanelActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IOrderBoardPanelActions instance)
+            {
+                foreach (var item in m_Wrapper.m_OrderBoardPanelActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_OrderBoardPanelActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public OrderBoardPanelActions @OrderBoardPanel => new OrderBoardPanelActions(this);
+
         // ResonanceWheelUI_sub1
         private readonly InputActionMap m_ResonanceWheelUI_sub1;
         private List<IResonanceWheelUI_sub1Actions> m_ResonanceWheelUI_sub1ActionsCallbackInterfaces = new List<IResonanceWheelUI_sub1Actions>();
@@ -3776,6 +3904,11 @@ namespace ProjectOC.Input
             void OnSwitchTarget(InputAction.CallbackContext context);
             void OnStartResonance(InputAction.CallbackContext context);
             void OnStopResonance(InputAction.CallbackContext context);
+        }
+        public interface IOrderBoardPanelActions
+        {
+            void OnNextTerm(InputAction.CallbackContext context);
+            void OnLastTerm(InputAction.CallbackContext context);
         }
         public interface IResonanceWheelUI_sub1Actions
         {

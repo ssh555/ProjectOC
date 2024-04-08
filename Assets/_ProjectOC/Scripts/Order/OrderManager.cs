@@ -170,7 +170,7 @@ namespace ProjectOC.Order
                 this.RefreshAcceptedList();
             };
 
-            PlayerInventory = GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().Inventory;
+            //PlayerInventory = GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().Inventory;
             // 载入表格数据 
             LoadTableData();
 

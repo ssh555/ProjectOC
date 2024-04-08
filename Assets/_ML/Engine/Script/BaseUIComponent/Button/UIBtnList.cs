@@ -92,6 +92,7 @@ namespace ML.Engine.UI
                 try
                 {
                     this.Selected = parent.Find("Selected");
+                    this.Selected.gameObject.SetActive(false);
                 }
                 catch { }
             }
@@ -110,6 +111,27 @@ namespace ML.Engine.UI
                 try
                 {
                     this.Selected = parent.Find("Selected");
+                    this.Selected.gameObject.SetActive(false);
+                }
+                catch { }
+            }
+        }
+
+        public UIBtnList(UIBtnListInitor uIBtnListInitor)
+        {
+            BtnListInitData btnListInitData = uIBtnListInitor.btnListInitData;
+            this.parent = uIBtnListInitor.transform;
+            this.limitNum = btnListInitData.limitNum;
+            this.hasInitSelect = btnListInitData.hasInitSelect;
+            this.isLoop = btnListInitData.isLoop;
+            this.isWheel = btnListInitData.isWheel;
+            if (parent != null)
+            {
+                InitBtnInfo(parent, limitNum, hasInitSelect, isLoop, isWheel, null, null);
+                try
+                {
+                    this.Selected = parent.Find("Selected");
+                    this.Selected.gameObject.SetActive(false);
                 }
                 catch { }
             }

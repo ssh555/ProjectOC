@@ -44,8 +44,9 @@ namespace ML.Engine.Utility
                 yield return enumerators[i];
             }
             yield return null;
-            this.onAllFunctionsCompleted.Invoke();
             this.isFinished = true;
+            this.onAllFunctionsCompleted.Invoke();
+            
         }
 
         public void AddFunction(Func<T> func)
