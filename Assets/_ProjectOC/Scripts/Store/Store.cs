@@ -86,6 +86,10 @@ namespace ProjectOC.StoreNS
         /// </summary>
         public bool IsInteracting;
         public event Action OnStoreDataChange;
+        /// <summary>
+        /// 场景Icon对应的Item
+        /// </summary>
+        public string WorldIconItemID;
 
         public Store(StoreType storeType)
         {
@@ -220,7 +224,10 @@ namespace ProjectOC.StoreNS
                     ItemManager.Instance.SpawnWorldItem(item, WorldStore.transform.position, WorldStore.transform.rotation);
 #pragma warning restore CS4014
                 }
-                this.StoreDatas[index] = new StoreData(itemID, this.StoreDataCapacity);
+                data.Storage = 0;
+                data.StorageReserve = 0;
+                data.EmptyReserve = 0;
+                data.ItemID = itemID;
 
                 int storageReserve = GetStoreStorageReserve(oldItemID);
                 int emptyReserve = GetStoreEmptyReserve(oldItemID);

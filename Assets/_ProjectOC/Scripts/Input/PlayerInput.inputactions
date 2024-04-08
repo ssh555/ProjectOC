@@ -1347,18 +1347,9 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Remove1",
+                    "name": "Remove",
                     "type": "Button",
                     "id": "7ed51ab5-5c3a-4252-b1bc-dab3cdfa1df5",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Hold",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Remove10",
-                    "type": "Button",
-                    "id": "cdc16934-a633-4bc5-8f80-d0c33d8eb723",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Hold",
@@ -1409,7 +1400,7 @@
                 {
                     "name": "",
                     "id": "9146e27f-fc3f-4379-97fd-3535fc23c096",
-                    "path": "<XInputController>/leftShoulder",
+                    "path": "<XInputController>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -1431,7 +1422,7 @@
                 {
                     "name": "",
                     "id": "e7840604-f4f3-4dd9-b617-28cf525b3c7f",
-                    "path": "<XInputController>/leftTrigger",
+                    "path": "<XInputController>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -1447,28 +1438,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "ChangeIcon",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a09f564f-a92d-479a-92ab-3b5abc3d9a8e",
-                    "path": "<XInputController>/buttonWest",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Remove10",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "98ac3791-c45b-4c66-9fe1-a4aac0b72d8c",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Remove10",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1611,7 +1580,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Remove1",
+                    "action": "Remove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1622,7 +1591,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Remove1",
+                    "action": "Remove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -1651,16 +1620,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Remove1",
-                    "type": "Button",
-                    "id": "8973dd42-db36-411c-92bd-4827c8b757f7",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Remove10",
+                    "name": "Remove",
                     "type": "Button",
                     "id": "a43d0ad0-d595-433d-8740-83ccafaa5e74",
                     "expectedControlType": "Button",
@@ -1734,34 +1694,12 @@
                 },
                 {
                     "name": "",
-                    "id": "bffdff7c-5dda-47e9-ac11-d20cc139ffab",
-                    "path": "<XInputController>/buttonWest",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Remove1",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a4b2f75f-7100-4ac2-bb32-f6566a8040b5",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Remove1",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "8cdc6c39-36f7-4977-ac32-d5b22450f706",
                     "path": "<XInputController>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Remove10",
+                    "action": "Remove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1772,7 +1710,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Remove10",
+                    "action": "Remove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

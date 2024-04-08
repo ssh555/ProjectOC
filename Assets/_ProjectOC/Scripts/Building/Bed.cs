@@ -29,13 +29,12 @@ namespace ProjectOC.Building
         public RaycastConfig ConfigDown;
         public string InteractType { get; set; } = "Bed";
         public Vector3 PosOffset { get; set; } = Vector3.zero;
+
+        public ItemIcon ItemIcon { get => GetComponentInChildren<ItemIcon>(); }
         #endregion
 
         protected override void Start()
         {
-            ItemManager.Instance.AddItemIconObject("", transform,
-                                                        new Vector3(0, transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),
-                                                        Quaternion.Euler(Vector3.zero), Vector3.one);
             this.enabled = false;
         }
 
@@ -45,6 +44,7 @@ namespace ProjectOC.Building
             if (isFirstBuild)
             {
                 LocalGameManager.Instance.IslandAreaManager.UpdatedFieldTransformsAction += HouseDetectionAction;
+                ItemManager.Instance.AddItemIconObject("", transform, new Vector3(0, transform.GetComponent<BoxCollider>().size.y * 1.5f, 0), Quaternion.Euler(Vector3.zero), Vector3.one);
             }
             //isFirstBuild的更新放在基类里，要要到引用后面
             base.OnChangePlaceEvent(oldPos, newPos);
@@ -86,7 +86,7 @@ namespace ProjectOC.Building
             }
             this.CanSetClan = flagUp && flagDown;
             string icon = this.CanSetClan ? "UI_Bed_Icon_Enable" : "UI_Bed_Icon_Disable";
-            this.transform.GetComponentInChildren<SpriteRenderer>().sprite = ItemManager.Instance.GetItemSprite(icon);
+            ItemIcon?.SetSprite(ItemManager.Instance.GetItemSprite(icon));
             return this.CanSetClan;
         }
 
@@ -161,7 +161,6 @@ namespace ProjectOC.Building
                 GameManager.Instance.UIManager.PushPanel(uiPanel);
             };
         }
-
         public void OnDestroy()
         {
             if (LocalGameManager.Instance?.IslandAreaManager != null)

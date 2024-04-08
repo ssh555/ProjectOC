@@ -1,5 +1,6 @@
 using ML.Engine.BuildingSystem;
 using ML.Engine.InteractSystem;
+using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ProjectOC.LandMassExpand;
 using ProjectOC.ManagerNS;
@@ -16,7 +17,7 @@ namespace ProjectOC.ProNodeNS
     {
         [ShowInInspector, ReadOnly, SerializeField]
         public ProNode ProNode;
-
+        public ItemIcon ItemIcon { get => GetComponentInChildren<ItemIcon>(); }
         public string InteractType { get; set; } = "WorldProNode";
         public Vector3 PosOffset { get; set; } = Vector3.zero;
         
@@ -52,7 +53,6 @@ namespace ProjectOC.ProNodeNS
                 // Push
                 GameManager.Instance.UIManager.PushPanel(uiPanel);
             };
-
         }
     }
 }
