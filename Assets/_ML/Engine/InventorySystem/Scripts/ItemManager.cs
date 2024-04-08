@@ -28,9 +28,6 @@ namespace ML.Engine.InventorySystem
         public string worldobject;
     }
 
-    /// <summary>
-    /// 没有以 Manager 为后缀，是懒得改其他地方了，太多了
-    /// </summary>
     [System.Serializable]
     public sealed class ItemManager : ILocalManager
     {
@@ -323,12 +320,12 @@ namespace ML.Engine.InventorySystem
                 }
                 obj.transform.localScale = scale;
                 itemIcon = obj.GetComponentInChildren<ItemIcon>();
-                itemIcon.SetSprite(GetItemSprite(itemID));
+                itemIcon.SetSprite(GetItemSprite(itemID ?? ""));
                 itemIcon.Player = GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>();
             }
             else
             {
-                itemIcon.SetSprite(GetItemSprite(itemID));
+                itemIcon.SetSprite(GetItemSprite(itemID ?? ""));
                 itemIcon.Player = GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>();
             }
         }
