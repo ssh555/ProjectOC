@@ -109,13 +109,16 @@ namespace ProjectOC.Player
 
         private bool _isGrounded => this.moveData.IsGrounded;
 
+        private PlayerCharacter Player;
+
         /// <summary>
         /// 初始化角色的移动状态机
         /// </summary>
-        public PlayerMoveStateMachine(PlayerNormalMove.PlayerMoveSetting MoveSetting, MoveStateParams stateParams)
+        public PlayerMoveStateMachine(PlayerCharacter player, PlayerNormalMove.PlayerMoveSetting MoveSetting, MoveStateParams stateParams)
         {
             this.moveData = MoveSetting;
             this.stateParams = stateParams;
+            this.Player = player;
             // 设置默认移动加速度为行走加速度
             this.moveData.AddAcceleration = this.stateParams.walkAccSpeed;
             // 设置默认移动最大速度为最大行走速度
@@ -187,10 +190,12 @@ namespace ProjectOC.Player
                     this.moveAnimator.SetInteger("MoveState", 5);
                 }
                 this.ChangeVelocityParams();
+                this.Player.interactComponent.Disable();
             });
             this.inAirState.BindExitAction((stateMachine, preState, curState) =>
             {
                 this.ChangeVelocityParams();
+                this.Player.interactComponent.Enable();
             });
             this.inAirState.BindUpdateAction((stateMachine, curState) =>
             {

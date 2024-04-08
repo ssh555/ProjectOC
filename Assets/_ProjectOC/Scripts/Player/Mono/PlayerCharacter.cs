@@ -109,7 +109,7 @@ namespace ProjectOC.Player
 
 
             this.moveStateController = new StateController(0);
-            this.moveStateMachine = new PlayerMoveStateMachine(this.moveAbility.moveSetting, this.moveStateParams);
+            this.moveStateMachine = new PlayerMoveStateMachine(this, this.moveAbility.moveSetting, this.moveStateParams);
             this.moveStateMachine.SetMoveAnimator(this.GetComponent<Animator>());
 
             this.moveStateController.SetStateMachine(moveStateMachine);

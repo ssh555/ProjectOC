@@ -24,11 +24,13 @@ namespace ML.Engine.InteractSystem
             // 射线检测可交互物
             Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
             RaycastHit[] hits = Physics.RaycastAll(ray, range, layerMask);
+            int cnt = 0;
             foreach (RaycastHit hit in hits)
             {
                 var interact = hit.collider.gameObject.GetComponentInParent<IInteraction>();
                 if(interact != null)
                 {
+                    ++cnt;
                     if(CurrentInteraction == interact)
                     {
                         break;
@@ -42,7 +44,14 @@ namespace ML.Engine.InteractSystem
                     break;
                 }
             }
-
+            if(cnt == 0)
+            {
+                if (CurrentInteraction != null)
+                {
+                    CurrentInteraction.OnSelectedExit(this);
+                }
+                CurrentInteraction = null;
+            }
            
             // 检测到时显示UITip
             if (CurrentInteraction != null)
@@ -116,7 +125,7 @@ namespace ML.Engine.InteractSystem
         {
             Manager.GameManager.Instance.TickManager.UnregisterTick(this);
 
-            if(!this.IsDestroyed())
+            if(!this.IsDestroyed() && uiKeyTip.img)
             {
                 uiKeyTip.img.transform.parent.gameObject.SetActive(false);
             }
