@@ -199,7 +199,6 @@ namespace ProjectOC.Player.UI
                     this.UIBtnList.DeBindInputAction();
                 });
             this.Ring.gameObject.SetActive(true);
-            Debug.Log("OpenMenu_started " + UIKeyTipList);
             this.UIKeyTipList.RefreshKetTip();
             ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
 

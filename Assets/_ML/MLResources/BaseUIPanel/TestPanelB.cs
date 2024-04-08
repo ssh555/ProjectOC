@@ -77,7 +77,6 @@ namespace ML.Engine.UI
             this.TestBtnList.SetBtnAction("DeleteBtn",
             () =>
             {
-                Debug.Log("DeleteBtn "+DeleteBtnInputField.text);
                 string[] numbers = DeleteBtnInputField.text.Split(',');
                 int number1, number2;
                 if (numbers.Length == 2)

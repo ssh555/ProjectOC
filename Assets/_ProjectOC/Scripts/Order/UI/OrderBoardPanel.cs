@@ -67,14 +67,12 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     private void LastTerm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         FunctionIndex = (FunctionIndex + FunctionType - 1) % FunctionType;
-        Debug.Log("LastTerm_performed " + FunctionType+" "+ FunctionIndex);
         this.Refresh();
     }
 
     private void NextTerm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         FunctionIndex = (FunctionIndex + 1) % FunctionType;
-        Debug.Log("NextTerm_performed " + FunctionType + " " + FunctionIndex);
         this.Refresh();
     }
     private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -111,7 +109,6 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         {
             return;
         }
-        Debug.Log("sdfs");
         #region FunctionType
 
         for (int i = 0; i < FunctionType; i++)

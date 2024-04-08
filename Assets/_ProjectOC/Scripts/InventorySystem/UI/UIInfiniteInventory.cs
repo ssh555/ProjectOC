@@ -433,14 +433,6 @@ namespace ProjectOC.InventorySystem.UI
                 }
 
                 // 刷新显示文本
-
-                Debug.Log(obj.transform.Find("Text"));
-                Debug.Log(obj.transform.Find("Text").GetComponent<TMPro.TextMeshProUGUI>());
-                Debug.Log(PanelTextContent);
-                Debug.Log(PanelTextContent.itemtype);
-                Debug.Log(PanelTextContent.itemtype.FirstOrDefault(it => it.name == itemtype.ToString()));
-                Debug.Log(PanelTextContent.itemtype.FirstOrDefault(it => it.name == itemtype.ToString()).GetDescription());
-
                 TextTip textTip = PanelTextContent.itemtype.FirstOrDefault(it => it.name == itemtype.ToString());
 
                 if (textTip != null)
