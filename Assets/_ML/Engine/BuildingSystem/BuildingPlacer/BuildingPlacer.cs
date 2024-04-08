@@ -207,6 +207,10 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// </summary>
         public void AlternateBPartOnStyle(bool isForward)
         {
+            if (BuildingManager.Instance.GetBPartPrefabCountOnStyle(this.SelectedPartInstance) < 1)
+            {
+                return;
+            }
             var tmp = BuildingManager.Instance.PollingBPartPeekInstanceOnStyle(this.SelectedPartInstance, isForward);
             //tmp.BaseRotation = SelectedPartInstance.BaseRotation;
             tmp.RotOffset = SelectedPartInstance.RotOffset;
@@ -221,6 +225,10 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// </summary>
         public void AlternateBPartOnHeight(bool isForward)
         {
+            if(BuildingManager.Instance.GetBPartPrefabCountOnHeight(this.SelectedPartInstance) < 1)
+            {
+                return;
+            }
             var tmp = BuildingManager.Instance.PollingBPartPeekInstanceOnHeight(this.SelectedPartInstance, isForward);
             //tmp.BaseRotation = SelectedPartInstance.BaseRotation;
             tmp.RotOffset = SelectedPartInstance.RotOffset;

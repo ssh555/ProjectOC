@@ -577,7 +577,21 @@ namespace ML.Engine.BuildingSystem
         {
             return PollingBPartPeekInstanceOnStyle(BPart.Classification.Category1, BPart.Classification.Category2, BPart.Classification.Category3, isForward);
         }
+        
+        public int GetBPartPrefabCountOnStyle(BuildingCategory1 category, BuildingCategory2 type, BuildingCategory3 style)
+        {
+            if (this.BPartClassificationOnStyle.ContainsKey(category) && this.BPartClassificationOnStyle[category].ContainsKey(type) && this.BPartClassificationOnStyle[category][type].ContainsKey(style))
+            {
+                var BPartQueue = this.BPartClassificationOnStyle[category][type][style];
 
+                return BPartQueue.Count;
+            }
+            return 0;
+        }
+        public int GetBPartPrefabCountOnStyle(IBuildingPart BPart)
+        {
+            return GetBPartPrefabCountOnStyle(BPart.Classification.Category1, BPart.Classification.Category2, BPart.Classification.Category3);
+        }
         public short[] GetAllHeightByBPartStyle(IBuildingPart BPart)
         {
             var bparts = BPartClassificationOnStyle[BPart.Classification.Category1][BPart.Classification.Category2][BPart.Classification.Category3].ToArray();
@@ -722,6 +736,20 @@ namespace ML.Engine.BuildingSystem
             return PollingBPartPeekInstanceOnHeight(BPart.Classification.Category1, BPart.Classification.Category2, BPart.Classification.Category4, isForward);
         }
 
+        public int GetBPartPrefabCountOnHeight(BuildingCategory1 category, BuildingCategory2 type, short height)
+        {
+            if (this.BPartClassificationOnHeight.ContainsKey(category) && this.BPartClassificationOnHeight[category].ContainsKey(type) && this.BPartClassificationOnHeight[category][type].ContainsKey(height))
+            {
+                var BPartQueue = this.BPartClassificationOnHeight[category][type][height];
+
+                return BPartQueue.Count;
+            }
+            return 0;
+        }
+        public int GetBPartPrefabCountOnHeight(IBuildingPart BPart)
+        {
+            return GetBPartPrefabCountOnHeight(BPart.Classification.Category1, BPart.Classification.Category2, BPart.Classification.Category4);
+        }
         public BuildingCategory3[] GetAllStyleByBPartHeight(IBuildingPart BPart)
         {
             var bparts = BPartClassificationOnHeight[BPart.Classification.Category1][BPart.Classification.Category2][BPart.Classification.Category4].ToArray();
