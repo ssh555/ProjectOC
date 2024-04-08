@@ -136,6 +136,10 @@ namespace ML.Engine.BuildingSystem.UI
             }
 
             // 更换 Height
+
+            // 下侧显示
+            bool active = (BuildingManager.Instance.GetBPartPrefabCountOnHeight(this.Placer.SelectedPartInstance) < 1 && BuildingManager.Instance.GetBPartPrefabCountOnStyle(this.Placer.SelectedPartInstance) < 1);
+            this.transform.Find("KT_AlterHeight").gameObject.SetActive(active);
         }
 
         /// <summary>
@@ -233,6 +237,10 @@ namespace ML.Engine.BuildingSystem.UI
         {
             // 实时更新落点的位置和旋转以及是否可放置
             this.Placer.TransformSelectedPartInstance();
+            if(this.IsRotate)
+            {
+                this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.DisableGridRotRate * Time.deltaTime * rotOffset, this.Placer.SelectedPartInstance.transform.up);
+            }
         }
 
         #endregion
@@ -248,7 +256,8 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.BInput.BuildPlaceMode.KeyCom.performed -= Placer_EnterKeyCom;
             this.Placer.backInputAction.performed -= Placer_CancelPlace;
 
-            this.Placer.BInput.BuildPlaceMode.Rotate.performed -= Placer_RotateBPart;
+            this.Placer.BInput.BuildPlaceMode.Rotate.started -= Placer_RotateBPart;
+            this.Placer.BInput.BuildPlaceMode.Rotate.canceled -= Placer_RotateBPart;
             this.Placer.BInput.BuildPlaceMode.ChangeActiveSocket.performed -= Placer_ChangeActiveSocket;
             this.Placer.BInput.BuildPlaceMode.ChangeStyle.performed -= Placer_ChangeBPartStyle;
             this.Placer.BInput.BuildPlaceMode.ChangeHeight.performed -= Placer_ChangeBPartHeight;
@@ -270,7 +279,8 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.BInput.BuildPlaceMode.KeyCom.performed += Placer_EnterKeyCom;
             this.Placer.backInputAction.performed += Placer_CancelPlace;
 
-            this.Placer.BInput.BuildPlaceMode.Rotate.performed += Placer_RotateBPart;
+            this.Placer.BInput.BuildPlaceMode.Rotate.started += Placer_RotateBPart;
+            this.Placer.BInput.BuildPlaceMode.Rotate.canceled += Placer_RotateBPart;
             this.Placer.BInput.BuildPlaceMode.ChangeActiveSocket.performed += Placer_ChangeActiveSocket;
             this.Placer.BInput.BuildPlaceMode.ChangeStyle.performed += Placer_ChangeBPartStyle;
             this.Placer.BInput.BuildPlaceMode.ChangeHeight.performed += Placer_ChangeBPartHeight;
@@ -290,13 +300,13 @@ namespace ML.Engine.BuildingSystem.UI
 
         private void Placer_ChangeBPartStyle(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            this.Placer.AlternateBPartOnHeight(obj.ReadValue<float>() > 0);
+            this.Placer.AlternateBPartOnHeight(obj.ReadValue<float>() < 0);
            this.Refresh();
         }
 
         private void Placer_ChangeBPartHeight(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            this.Placer.AlternateBPartOnStyle(obj.ReadValue<float>() > 0);
+            this.Placer.AlternateBPartOnStyle(obj.ReadValue<float>() < 0);
             this.Refresh();
         }
 
@@ -305,17 +315,24 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.SelectedPartInstance.AlternativeActiveSocket();
         }
 
+        private bool IsRotate = false;
+        private float rotOffset = 0;
         private void Placer_RotateBPart(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             int offset = obj.ReadValue<float>() > 0 ? 1 : -1;
-
-            if(this.Placer.IsEnableGridSupport)
+            if (this.Placer.IsEnableGridSupport)
             {
-                this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, this.Placer.SelectedPartInstance.transform.up);
+                if(obj.started)
+                {
+                    this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, this.Placer.SelectedPartInstance.transform.up);
+                }
+
             }
             else
             {
-                this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.DisableGridRotRate * Time.deltaTime * offset, this.Placer.SelectedPartInstance.transform.up);
+                IsRotate = !IsRotate;
+                rotOffset = offset;
+                //this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.DisableGridRotRate * Time.deltaTime * offset, this.Placer.SelectedPartInstance.transform.up);
             }
         }
 

@@ -69,5 +69,6 @@ namespace ML.Engine.InventorySystem
         Food,
         Material,
         Mission,
+        Creature,
     }
 }
