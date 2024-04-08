@@ -17,10 +17,6 @@ namespace ProjectOC.InventorySystem.UI
     public class UIStore : ML.Engine.UI.UIBasePanel<StorePanel>
     {
         #region Input
-        /// 用于Drop和Destroy按键响应Cancel
-        /// 长按响应了Destroy就置为true
-        /// Cancel就不响应Drop 并 重置
-        /// </summary>
         private bool ItemIsDestroyed = false;
         #endregion
 
@@ -316,9 +312,9 @@ namespace ProjectOC.InventorySystem.UI
             // 快捷放入
             ProjectOC.Input.InputManager.PlayerInput.UIStore.FastAdd.performed -= FastAdd_performed;
             // 取出1个
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove1.canceled -= Remove_cancled;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove.canceled -= Remove_cancled;
             // 取出10个
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove1.performed -= Remove_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove.performed -= Remove_performed;
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
@@ -336,21 +332,38 @@ namespace ProjectOC.InventorySystem.UI
             // 快捷放入
             ProjectOC.Input.InputManager.PlayerInput.UIStore.FastAdd.performed += FastAdd_performed;
             // 取出1个
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove1.canceled += Remove_cancled;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove.canceled += Remove_cancled;
             // 取出10个
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove1.performed += Remove_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove.performed += Remove_performed;
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
         }
         private void ChangeIcon_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            CurMode = Mode.ChangeIcon;
+            if (CurMode != Mode.ChangeIcon)
+            {
+                CurMode = Mode.ChangeIcon;
+                this.ItemDatas.Clear();
+                this.lastItemIndex = 0;
+                this.currentItemIndex = 0;
+            }
+            else
+            {
+                CurMode = Mode.Store;
+            }
             Refresh();
         }
         private void Upgrade_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            CurMode = Mode.Upgrade;
+            if (CurMode != Mode.Upgrade)
+            {
+                CurMode = Mode.Upgrade;
+            }
+            else
+            {
+                CurMode = Mode.Store;
+            }
             Refresh();
         }
         private void NextPriority_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -436,7 +449,14 @@ namespace ProjectOC.InventorySystem.UI
             if (CurMode == Mode.Store && CurStoreMode == StoreMode.ChangeItem)
             {
                 this.ItemIsDestroyed = true;
-                Store.UIRemove(Player, CurrentStoreData, 10);
+                if (CurrentStoreData.Storage < 10)
+                {
+                    Store.UIRemove(Player, CurrentStoreData, CurrentStoreData.Storage);
+                }
+                else
+                {
+                    Store.UIRemove(Player, CurrentStoreData, 10);
+                }
                 Refresh();
             }
         }
@@ -489,6 +509,7 @@ namespace ProjectOC.InventorySystem.UI
             else if (CurMode == Mode.ChangeIcon)
             {
                 string itemID = CurrentItemData;
+                this.Store.WorldIconItemID = itemID;
                 // 更新Icon
                 var img = StoreIcon.GetComponent<Image>();
                 if (ItemManager.Instance.IsValidItemID(itemID))
@@ -508,7 +529,7 @@ namespace ProjectOC.InventorySystem.UI
                     ItemManager.Instance.AddItemIconObject(itemID,
                                                         this.Store.WorldStore.transform,
                                                         new Vector3(0, this.Store.WorldStore.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),
-                                                        Quaternion.Euler(0, 0, 0),
+                                                        Quaternion.Euler(Vector3.zero),
                                                         Vector3.one);
                 }
             }
@@ -591,7 +612,7 @@ namespace ProjectOC.InventorySystem.UI
             }
             CurPriority = Store.TransportPriority;
             // StoreIcon
-            Sprite itemicon = Store.WorldStore.transform.GetComponentInChildren<SpriteRenderer>()?.sprite;
+            Sprite itemicon = Store.WorldStore.transform.GetComponentInChildren<ItemIcon>()?.GetSprite();
             StoreIcon.sprite = itemicon == null ? EmptySprite : itemicon;
 
             if (this.CurMode == Mode.Store)
@@ -741,16 +762,8 @@ namespace ProjectOC.InventorySystem.UI
                     // Add and Remove
                     uiStoreData.transform.Find("Add").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_Add.GetText();
                     uiStoreData.transform.Find("Remove").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_Remove.GetText();
-                    if (!string.IsNullOrEmpty(storeData.ItemID))
-                    {
-                        uiStoreData.transform.Find("Add").Find("Tick").gameObject.SetActive(storeData.CanIn);
-                        uiStoreData.transform.Find("Remove").Find("Tick").gameObject.SetActive(storeData.CanOut);
-                    }
-                    else
-                    {
-                        uiStoreData.transform.Find("Add").Find("Tick").gameObject.SetActive(false);
-                        uiStoreData.transform.Find("Remove").Find("Tick").gameObject.SetActive(false);
-                    }
+                    uiStoreData.transform.Find("Add").Find("Tick").gameObject.SetActive(storeData.CanIn);
+                    uiStoreData.transform.Find("Remove").Find("Tick").gameObject.SetActive(storeData.CanOut);
                     // Selected
                     var selected = uiStoreData.transform.Find("Selected");
                     var selectIcon = uiStoreData.transform.Find("Select");
@@ -920,15 +933,33 @@ namespace ProjectOC.InventorySystem.UI
                         img.sprite = EmptySprite;
                     }
                     // Selected
-                    var selected = uiItemData.transform.Find("Selected");
-                    if (CurrentItemData == ItemDatas[i])
+                    var isSelected = false;
+                    if (CurMode == Mode.ChangeIcon && currentItemIndex == 0 && !string.IsNullOrEmpty(Store.WorldIconItemID))
                     {
-                        selected.gameObject.SetActive(true);
-                        cur = uiItemData;
+                        if (Store.WorldIconItemID == itemID)
+                        {
+                            lastItemIndex = currentItemIndex;
+                            currentItemIndex = i;
+                            isSelected = true;
+                        }
                     }
-                    else
+                    else if (CurMode == Mode.ChangeItem && currentItemIndex == 0 && !string.IsNullOrEmpty(CurrentStoreData.ItemID))
                     {
-                        selected.gameObject.SetActive(false);
+                        if (CurrentStoreData.ItemID == itemID)
+                        {
+                            lastItemIndex = currentItemIndex;
+                            currentItemIndex = i;
+                            isSelected = true;
+                        }
+                    }
+                    else if (CurrentItemData == itemID)
+                    {
+                        isSelected = true;
+                    }
+                    uiItemData.transform.Find("Selected").gameObject.SetActive(isSelected);
+                    if (isSelected)
+                    {
+                        cur = uiItemData;
                     }
                     if (i == lastItemIndex)
                     {

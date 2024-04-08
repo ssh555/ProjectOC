@@ -94,7 +94,7 @@
         "keyname" : "KT_Remove1",
         "keymap": {
             "ActionMapName": "UIStore",
-            "ActionName": "Remove1"
+            "ActionName": "Remove"
           },
         "description" : {
             "Chinese" : "取出1个",
@@ -105,7 +105,7 @@
         "keyname" : "KT_Remove10",
         "keymap": {
             "ActionMapName": "UIStore",
-            "ActionName": "Remove10"
+            "ActionName": "Remove"
           },
         "description" : {
             "Chinese" : "取出10个",

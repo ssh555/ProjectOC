@@ -1,6 +1,7 @@
 using ML.Engine.BuildingSystem;
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InteractSystem;
+using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
@@ -53,7 +54,6 @@ namespace ProjectOC.StoreNS
                 // Push
                 GameManager.Instance.UIManager.PushPanel(uiPanel);
             };
-
         }
     }
 }

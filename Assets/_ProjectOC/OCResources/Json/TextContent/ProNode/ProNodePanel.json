@@ -265,7 +265,7 @@
         "keyname" : "KT_Remove1",
         "keymap": {
             "ActionMapName": "UIProNode",
-            "ActionName": "Remove1"
+            "ActionName": "Remove"
           },
         "description" : {
             "Chinese" : "取出1",
@@ -276,7 +276,7 @@
         "keyname" : "KT_Remove10",
         "keymap": {
             "ActionMapName": "UIProNode",
-            "ActionName": "Remove10"
+            "ActionName": "Remove"
           },
         "description" : {
             "Chinese" : "取出10",

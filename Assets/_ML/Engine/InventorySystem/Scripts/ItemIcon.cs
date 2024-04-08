@@ -1,4 +1,5 @@
 using ML.Engine.Timer;
+using ProjectOC.Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,8 @@ namespace ML.Engine.InventorySystem
 {
     public class ItemIcon : MonoBehaviour, ITickComponent
     {
-        private Transform m_Camera;
+        private UnityEngine.UI.Image Image;
+        public PlayerCharacter Player;
 
         #region ITickComponent
         public int tickPriority { get; set; }
@@ -17,27 +19,53 @@ namespace ML.Engine.InventorySystem
 
         private void Awake()
         {
+            Image = GetComponentInChildren<UnityEngine.UI.Image>();
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterLateTick(0, this);
         }
+
         private void Start()
         {
-            m_Camera = Camera.main.transform;
+            Image.transform.SetParent(Manager.GameManager.Instance.UIManager.GetCanvas.transform);
+            Image.enabled = false;
             this.enabled = false;
         }
 
         public void LateTick(float deltatime)
         {
-            if (m_Camera == null)
+            if (Image != null)
             {
-                return;
+                if (Player != null && Vector3.Distance(transform.position, Player.transform.position) <= 3f)
+                {
+                    Image.enabled = true;
+                    Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
+                    screenPosition.x = Mathf.Clamp(screenPosition.x, 0, Screen.width);
+                    screenPosition.y = Mathf.Clamp(screenPosition.y, 0, Screen.height);
+                    Image.transform.position = screenPosition;
+                }
+                else
+                {
+                    Image.enabled = false;
+                }
             }
-            transform.rotation = Quaternion.LookRotation(transform.position - m_Camera.position);
+        }
+
+        public Sprite GetSprite()
+        {
+            return Image?.sprite;
+        }
+        public void SetSprite(Sprite sprite)
+        {
+            if (Image != null)
+            {
+                Image.sprite = sprite;
+            }
         }
 
         private void OnDestroy()
         {
             (this as ML.Engine.Timer.ITickComponent).DisposeTick();
+            if (Manager.GameManager.Instance != null && Image != null)
+                Manager.GameManager.Instance.ABResourceManager.ReleaseInstance(Image.transform.gameObject);
         }
     }
-
 }

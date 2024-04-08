@@ -16,12 +16,17 @@ using ProjectOC.MissionNS;
 using static ProjectOC.InventorySystem.UI.UIProNode;
 using ML.Engine.Utility;
 using UnityEngine.U2D;
+using ML.Engine.UI;
 
 
 namespace ProjectOC.InventorySystem.UI
 {
     public class UIProNode : ML.Engine.UI.UIBasePanel<ProNodePanel>
     {
+        #region Input
+        private bool ItemIsDestroyed = false;
+        #endregion
+
         #region Unity
         public bool IsInit = false;
         protected override void Start()
@@ -300,8 +305,8 @@ namespace ProjectOC.InventorySystem.UI
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Upgrade.performed -= Upgrade_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.NextPriority.performed -= NextPriority_performed;
-            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove1.performed -= Remove1_performed;
-            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove10.performed -= Remove10_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove.canceled -= Remove_canceled;
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove.performed -= Remove_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.FastAdd.performed -= FastAdd_RemoveWorker_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Alter.started -= Alter_started;
         }
@@ -313,14 +318,21 @@ namespace ProjectOC.InventorySystem.UI
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Upgrade.performed += Upgrade_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.NextPriority.performed += NextPriority_performed;
-            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove1.performed += Remove1_performed;
-            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove10.performed += Remove10_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove.canceled += Remove_canceled;
+            ProjectOC.Input.InputManager.PlayerInput.UIProNode.Remove.performed += Remove_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.FastAdd.performed += FastAdd_RemoveWorker_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Alter.started += Alter_started;
         }
         private void Upgrade_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            CurMode = Mode.Upgrade;
+            if (CurMode != Mode.Upgrade)
+            {
+                CurMode = Mode.Upgrade;
+            }
+            else
+            {
+                CurMode = Mode.ProNode;
+            }
             Refresh();
         }
         private void NextPriority_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -379,10 +391,10 @@ namespace ProjectOC.InventorySystem.UI
                 if (ProNode.HasRecipe)
                 {
                     ItemManager.Instance.AddItemIconObject(ProNode.Recipe.Product.id,
-                                                               this.ProNode.WorldProNode.transform,
-                                                               new Vector3(0, this.ProNode.WorldProNode.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),
-                                                               Quaternion.Euler(new Vector3(0, 0, 0)),
-                                                               Vector3.one);
+                                                           ProNode.WorldProNode.transform,
+                                                           new Vector3(0, ProNode.WorldProNode.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),
+                                                           Quaternion.Euler(Vector3.zero),
+                                                           Vector3.one);
                 }
                 CurMode = Mode.ProNode;
             }
@@ -411,19 +423,34 @@ namespace ProjectOC.InventorySystem.UI
             }
         }
 
-        private void Remove1_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void Remove_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (CurMode == Mode.ProNode && CurProNodeMode == ProNodeSelectMode.Recipe)
             {
-                ProNode.UIRemove(Player, 1);
-                Refresh();
+                if (this.ItemIsDestroyed)
+                {
+                    this.ItemIsDestroyed = false;
+                }
+                else
+                {
+                    ProNode.UIRemove(Player, 1);
+                    Refresh();
+                }
             }
         }
-        private void Remove10_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void Remove_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (CurMode == Mode.ProNode && CurProNodeMode == ProNodeSelectMode.Recipe)
             {
-                ProNode.UIRemove(Player, 10);
+                this.ItemIsDestroyed = true;
+                if (ProNode.Stack < 10)
+                {
+                    ProNode.UIRemove(Player, ProNode.Stack);
+                }
+                else
+                {
+                    ProNode.UIRemove(Player, 10);
+                }
                 Refresh();
             }
         }
@@ -757,15 +784,24 @@ namespace ProjectOC.InventorySystem.UI
                         img.sprite = EmptySprite;
                     }
                     // Selected
-                    var selected = item.transform.Find("Selected");
-                    if (CurrentRecipe == recipeID)
+                    bool isSelected = false;
+                    if (currentRecipeIndex == 0 && ProNode.HasRecipe)
                     {
-                        selected.gameObject.SetActive(true);
-                        cur = item;
+                        if (ProNode.Recipe.ID == recipeID)
+                        {
+                            lastRecipeIndex = currentRecipeIndex;
+                            currentRecipeIndex = i;
+                            isSelected = true;
+                        }
                     }
-                    else
+                    else if (CurrentRecipe == recipeID)
                     {
-                        selected.gameObject.SetActive(false);
+                        isSelected = true;
+                    }
+                    item.transform.Find("Selected").gameObject.SetActive(isSelected);
+                    if (isSelected)
+                    {
+                        cur = item;
                     }
                     if (i == lastRecipeIndex)
                     {
@@ -932,20 +968,30 @@ namespace ProjectOC.InventorySystem.UI
                     // Eff
                     item.transform.Find("Eff").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + worker.Eff[ProNode.ExpType].ToString();
                     // Selected
-                    var selected = item.transform.Find("Selected");
                     bool isCurrentWorker = Worker == worker;
                     item.transform.Find("StateCur").gameObject.SetActive(isCurrentWorker);
                     item.transform.Find("StateWork").gameObject.SetActive(!isCurrentWorker && worker.Status == Status.Working);
                     item.transform.Find("StateRelax").gameObject.SetActive(!isCurrentWorker && worker.Status != Status.Working);
 
-                    if (CurrentWorker == worker)
+                    bool isSelected = false;
+                    if (currentWorkerIndex == 0 && ProNode.HasWorker)
                     {
-                        selected.gameObject.SetActive(true);
-                        cur = item;
+                        if (isCurrentWorker)
+                        {
+                            lastWorkerIndex = currentWorkerIndex;
+                            currentWorkerIndex = i;
+                            isSelected = true;
+                        }
                     }
-                    else
+                    else if (CurrentWorker == worker)
                     {
-                        selected.gameObject.SetActive(false);
+                        isSelected = true;
+                    }
+
+                    item.transform.Find("Selected").gameObject.SetActive(isSelected);
+                    if (isSelected)
+                    {
+                        cur = item;
                     }
                     if (i == lastWorkerIndex)
                     {

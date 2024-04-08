@@ -1,5 +1,6 @@
 using ML.Engine.BuildingSystem;
 using ML.Engine.InteractSystem;
+using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ProjectOC.LandMassExpand;
 using ProjectOC.ManagerNS;
@@ -52,7 +53,6 @@ namespace ProjectOC.ProNodeNS
                 // Push
                 GameManager.Instance.UIManager.PushPanel(uiPanel);
             };
-
         }
     }
 }

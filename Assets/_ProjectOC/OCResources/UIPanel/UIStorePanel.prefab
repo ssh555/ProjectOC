@@ -162,7 +162,7 @@ GameObject:
   - component: {fileID: 2565260041455613258}
   - component: {fileID: 8432536484133526742}
   m_Layer: 0
-  m_Name: Amount
+  m_Name: NeedAmount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2954,7 +2954,7 @@ GameObject:
   - component: {fileID: 3207577891072632027}
   - component: {fileID: 694915202176139593}
   m_Layer: 0
-  m_Name: NeedAmount
+  m_Name: Amount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5117,6 +5117,7 @@ MonoBehaviour:
     LevelStoreDataCapacity: 
     TransportPriority: 0
     IsInteracting: 0
+    WorldIconItemID: 
   Player: {fileID: 0}
 --- !u!222 &257790905731768433
 CanvasRenderer:
