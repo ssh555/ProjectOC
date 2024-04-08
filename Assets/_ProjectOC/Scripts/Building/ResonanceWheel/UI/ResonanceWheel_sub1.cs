@@ -125,7 +125,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void Receive_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            parentUI.workerEcho.SpawnWorker(parentUI.CurrentGridIndex, Vector3.zero);
+            parentUI.workerEcho.SpawnWorker(parentUI.CurrentGridIndex);
             
             ResonanceWheelUI.RingGrid.Reset(parentUI.Grids[parentUI.CurrentGridIndex]);
             UIMgr.PopPanel();

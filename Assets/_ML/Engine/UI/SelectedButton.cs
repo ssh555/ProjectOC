@@ -131,11 +131,11 @@ namespace ML.Engine.UI
         // 统一鼠标与按键
         public override void OnPointerEnter(UnityEngine.EventSystems.PointerEventData eventData)
         {
-            this.UIBtnList.RefreshSelected(this);
+            this.UIBtnList?.RefreshSelected(this);
         }
         public override void OnPointerClick(PointerEventData eventData)
         {
-            this.UIBtnList.ButtonInteract(new InputAction.CallbackContext());
+            this.UIBtnList?.ButtonInteract(new InputAction.CallbackContext());
         }
 
     }

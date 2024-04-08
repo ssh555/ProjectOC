@@ -11,7 +11,8 @@ namespace ML.Engine.Utility
     {
         public List<Func<T>> FunctionList = new List<Func<T>>();
         private Action onAllFunctionsCompleted; // 所有函数执行完毕后的回调函数
-
+        public bool IsFinished { get { return isFinished; } }
+        private bool isFinished;
         // 构造函数
         public FunctionExecutor(List<Func<T>> FunctionList, Action onAllFunctionsCompleted)
         {
@@ -22,6 +23,7 @@ namespace ML.Engine.Utility
         public FunctionExecutor()
         {
             this.FunctionList = new List<Func<T>>();
+            this.isFinished = false;
         }
 
         //执行
@@ -42,7 +44,9 @@ namespace ML.Engine.Utility
                 yield return enumerators[i];
             }
             yield return null;
+            this.isFinished = true;
             this.onAllFunctionsCompleted.Invoke();
+            
         }
 
         public void AddFunction(Func<T> func)
