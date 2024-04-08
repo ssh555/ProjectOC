@@ -58,11 +58,11 @@ namespace ProjectOC.PinchFace
 		[LabelText("鲨鱼牙")]
 		T_Shark = 25,
 		[LabelText("身体纹理")]
-		B_Tattoo = 26,
+		TR_Tattoo = 26,
 		[LabelText("鳞")]
-		B_Scale = 27,
+		TR_Scale = 27,
 		[LabelText("痂")]
-		B_Scab = 28,
+		TR_Scab = 28,
 		[LabelText("背翅")]
 		BA_Wing = 29,
 		[LabelText("腰翅")]
@@ -83,5 +83,17 @@ namespace ProjectOC.PinchFace
 		AR_Hand = 37,
 		[LabelText("腿部纹理")]
 		L_Tattoo = 38,
+		[LabelText("体型")]
+		B_Body = 39,
+		[LabelText("前发")]
+		HF_HairFront = 40,
+		[LabelText("后发")]
+		HB_HairBack = 41,
+		[LabelText("呆毛")]
+		HD_Dai = 42,
+		[LabelText("辫子")]
+		HB_HairBraid = 43,
+		[LabelText("眼眶")]
+		O_Orbit = 44,
 	}
 }

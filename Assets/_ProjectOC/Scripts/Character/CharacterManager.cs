@@ -22,11 +22,11 @@ namespace ML.PlayerCharacterNS
             CurrentControllerIndex = 0;
             
             //PlayerÉú³É
-            GetController().SpawnCharacter(0,playerStartPoints[Random.Range(0,playerStartPoints.Count)]);
+            GetPlayerController().SpawnCharacter(0,playerStartPoints[Random.Range(0,playerStartPoints.Count)]);
         }
         
         
-        public PlayerController GetController(int index = -1)
+        public PlayerController GetPlayerController(int index = -1)
         {
             if (index == -1)
                 index = CurrentControllerIndex;

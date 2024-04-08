@@ -136,7 +136,7 @@ namespace ProjectOC.ManagerNS
         //在PlayerCharacter生成之后调用
         IEnumerator AfterPlayerCharacter()
         {
-            PlayerController playerController = GameManager.Instance.CharacterManager.GetController();
+            PlayerController playerController = GameManager.Instance.CharacterManager.GetPlayerController();
             while (playerController.currentCharacter == null)
             {
                 yield return null;
