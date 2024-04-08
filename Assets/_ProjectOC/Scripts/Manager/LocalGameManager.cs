@@ -68,6 +68,7 @@ namespace ProjectOC.ManagerNS
             GM.RegisterLocalManager(RecipeManager);
             RecipeManager.LoadTableData();
             GM.RegisterLocalManager(StoreManager);
+            StoreManager.LoadTableData();
             GM.RegisterLocalManager(WorkerManager);
             GM.RegisterLocalManager(EffectManager);
             EffectManager.LoadTableData();

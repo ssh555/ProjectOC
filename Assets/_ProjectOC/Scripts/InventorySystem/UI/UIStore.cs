@@ -10,7 +10,7 @@ using ML.Engine.InventorySystem.CompositeSystem;
 using static ProjectOC.InventorySystem.UI.UIStore;
 using System;
 using ML.Engine.BuildingSystem;
-
+using ProjectOC.ManagerNS;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -862,7 +862,7 @@ namespace ProjectOC.InventorySystem.UI
             else if(this.CurMode == Mode.ChangeItem || this.CurMode == Mode.ChangeIcon)
             {
                 ItemDatas = new List<string>() { "" };
-                ItemDatas.AddRange(ItemManager.Instance.GetAllItemID());
+                ItemDatas.AddRange(LocalGameManager.Instance.StoreManager.GetStoreIconItems());
                 #region Item
                 // 临时内存生成的UIItemData数量(只增不减，多的隐藏掉即可) - 当前筛选出来的UIItemData数量
                 int delta = tempUIItemDatas.Count - ItemDatas.Count;
