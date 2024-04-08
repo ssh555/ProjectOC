@@ -88,6 +88,8 @@
     <Compile Include="BuildingTableData.cs" />
     <Compile Include="EffectTableData.cs" />
     <Compile Include="FeatureTableData.cs" />
+    <Compile Include="OrderTableData.cs" />
+    <Compile Include="OrderUnlock.cs" />
     <Compile Include="ProNodeTableData.cs" />
     <Compile Include="CompositionTableData.cs" />
     <Compile Include="DataToBinaryManager.cs" />

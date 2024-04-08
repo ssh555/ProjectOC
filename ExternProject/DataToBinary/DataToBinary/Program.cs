@@ -70,7 +70,7 @@ namespace ExcelToJson
             List<CompositionTableData> compositionTableDatas = new List<CompositionTableData>();
             // 1. 读入需要的EXCEL表
             List<BuildingTableData> buildingTableDatas = DBMgr.ReadExcel<BuildingTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 4);
-            List<RecipeTableData> recipeTableDatas = DBMgr.ReadExcel<RecipeTableData>(path:excelFilePath, iBeginRow:5, iWorksheet:5);
+            List<RecipeTableData> recipeTableDatas = DBMgr.ReadExcel<RecipeTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 5);
             List<ItemTableData> itemTableDatas = DBMgr.ReadExcel<ItemTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 6);
             List<WorkerEchoTableData> workerEchoTableDatas = DBMgr.ReadExcel<WorkerEchoTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 12);
             Dictionary<string, BuildingTableData> buildDict = new Dictionary<string, BuildingTableData>();
@@ -98,12 +98,13 @@ namespace ExcelToJson
             // 合成表二进制文件
             // 必须是.json后缀
             List<EBConfig> configs = new List<EBConfig>();
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 1,  BinaryFilePath = rootPath + "ProNode.json", type = typeof(ProjectOC.ProNodeNS.ProNodeTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 1, BinaryFilePath = rootPath + "ProNode.json", type = typeof(ProjectOC.ProNodeNS.ProNodeTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 3, BinaryFilePath = rootPath + "TechPoint.json", type = typeof(TechPoint) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 6,  BinaryFilePath = rootPath + "Item.json", type = typeof(ItemTableData) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 9,  BinaryFilePath = rootPath + "Feature.json", type = typeof(ProjectOC.WorkerNS.FeatureTableData) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 10,  BinaryFilePath = rootPath + "Effect.json", type = typeof(ProjectOC.WorkerNS.EffectTableData) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 11, BinaryFilePath = rootPath + "Skill.json", type = typeof(ProjectOC.WorkerNS.SkillTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 6, BinaryFilePath = rootPath + "Item.json", type = typeof(ItemTableData) });
+            //configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 9, BinaryFilePath = rootPath + "Feature.json", type = typeof(ProjectOC.WorkerNS.FeatureTableData) });
+            //configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 10, BinaryFilePath = rootPath + "Effect.json", type = typeof(ProjectOC.WorkerNS.EffectTableData) });
+            //configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 11, BinaryFilePath = rootPath + "Skill.json", type = typeof(ProjectOC.WorkerNS.SkillTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 14, BinaryFilePath = rootPath + "Order.json", type = typeof(ProjectOC.Order.OrderTableData) });
 
             System.Threading.Tasks.Parallel.ForEach(configs, (config) =>
             {
@@ -122,7 +123,7 @@ namespace ExcelToJson
 
                     Console.WriteLine($"转换完成: {System.IO.Path.GetFullPath(config.ExcelFilePath)} -> {System.IO.Path.GetFullPath(config.BinaryFilePath)}");
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine($"Error: 处理异常 {System.IO.Path.GetFullPath(config.ExcelFilePath)} -> {System.IO.Path.GetFullPath(config.BinaryFilePath)} => {e.Message}");
@@ -172,7 +173,7 @@ namespace ExcelToJson
             //});
             //Console.WriteLine("\n----------------------------------------");
             //Console.WriteLine("JSON转换完成!!!");
-            
+
             #endregion
 
             Console.WriteLine("\n----------------------------------------");
@@ -188,7 +189,7 @@ namespace ExcelToJson
                 string[] sfs = data.Split(';').Where(x => !string.IsNullOrEmpty(x)).ToArray();
                 foreach (var sf in sfs)
                 {
-                    var t = sf.Split( ',', '，' );
+                    var t = sf.Split(',', '，');
                     if (t.Length == 2)
                     {
                         var f = new ML.Engine.InventorySystem.CompositeSystem.Formula();
@@ -203,6 +204,31 @@ namespace ExcelToJson
                 }
             }
             return formulas;
+        }
+
+        public static List<ProjectOC.Order.OrderMap> ParseOrderMap(string data)
+        {
+            List<ProjectOC.Order.OrderMap> ordermaps = new List<ProjectOC.Order.OrderMap>();
+            if (!string.IsNullOrEmpty(data))
+            {
+                string[] sfs = data.Split(';').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                foreach (var sf in sfs)
+                {
+                    var t = sf.Split(',', '，');
+                    if (t.Length == 2)
+                    {
+                        var f = new ProjectOC.Order.OrderMap();
+                        f.id = t[0];
+                        f.num = int.Parse(t[1]);
+                        ordermaps.Add(f);
+                    }
+                    else
+                    {
+                        Debug.Print($"Error {t}");
+                    }
+                }
+            }
+            return ordermaps;
         }
     }
 }

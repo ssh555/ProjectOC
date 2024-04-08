@@ -49,6 +49,10 @@ namespace ML.Engine.InventorySystem
         LifeDiversion,
         [LabelText("生态投影装置")]
         Projector,
+        [LabelText("繁殖中心")]
+        BreedingCenter,
+        [LabelText("农场")]
+        Farm
     }
 }
 

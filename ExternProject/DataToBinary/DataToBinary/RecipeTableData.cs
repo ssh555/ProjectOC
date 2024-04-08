@@ -48,7 +48,10 @@ namespace ML.Engine.InventorySystem
             // 6 -> TimeCost
             this.TimeCost = int.Parse(row[6]);
             // 7 -> ExpRecipe
-            this.ExpRecipe = int.Parse(row[7]);
+            if (!string.IsNullOrEmpty(row[7]))
+            {
+                this.ExpRecipe = int.Parse(row[7]);
+            }
             return true;
         }
     }
@@ -76,6 +79,8 @@ namespace ML.Engine.InventorySystem
         DiversionNode,
         LifeDiversion,
         Projector,
-        DiveStation
+        DiveStation,
+        BreedingCenter,
+        Farm
     }
 }

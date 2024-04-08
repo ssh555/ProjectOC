@@ -15,5 +15,7 @@ namespace ML.Engine.InventorySystem
 		Material,
 		[LabelText("任务")]
 		Mission,
+		[LabelText("生物")]
+		Creature
 	}
 }
