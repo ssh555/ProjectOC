@@ -20,7 +20,7 @@ namespace ProjectOC.PinchFace
 		[LabelText("牙")]
 		Tooth = 6,
 		[LabelText("体表")]
-		Body = 7,
+		Trunk = 7,
 		[LabelText("背心")]
 		Back = 8,
 		[LabelText("腰侧")]
@@ -33,5 +33,13 @@ namespace ProjectOC.PinchFace
 		Hand = 12,
 		[LabelText("腿")]
 		Leg = 13,
+		[LabelText("体型")]
+		Body = 14,
+		[LabelText("头发")]
+		Hair = 15,
+		[LabelText("眼睛")]
+		Eye = 16,
+		[LabelText("面妆")]
+		FaceDress = 17,
 	}
 }
