@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using ProjectOC.PinchFace;
@@ -7,36 +8,56 @@ namespace ProjectOC.PinchFace
 {
     public class CharacterModelPinch : MonoBehaviour
     {
-        [SerializeField]
-        List<Transform> boneTransf;
         [SerializeField] 
-        List<GameObject> replaceGo;
+        List<GameObject> replaceGo = new List<GameObject>();
 
+        [SerializeField] 
+        List<Transform> boneWeight = new List<Transform>();
 
-        #region 更换样式
+        [SerializeField]
+        List<Transform> boneTransf = new List<Transform>();
+
+        public 
+        List<GameObject> tempTail = new List<GameObject>();
+
+        private Dictionary<string, Transform> boneCatalog = new Dictionary<string, Transform>();
+        #region 捏脸函数
         public void ChangeType(PinchPartType2 boneType2, int typeIndex)
         {
-            
+            if (replaceGo[(int)boneType2] != null)
+            {
+                UnEquipItem(boneType2,replaceGo[(int)boneType2]);
+            }
+            EquipItem(boneType2,tempTail[typeIndex]);
         }
         
-        public void ChangeType(PinchPartType2 boneType2, GameObject _PinchGo)
+        public void TempChangeType(int index)
         {
-            
+            ChangeType(PinchPartType2.HeadTop, index);
         }
-
-        void EquipItem(PinchPartType2 boneType2, GameObject _PinchGo)
+        public void EquipItem(PinchPartType2 boneType2, GameObject _PinchGo)
         {
             //生成 gameObejct Asset
             //装备
+            //删除gameObject Instance
+            _PinchGo = GameObject.Instantiate(_PinchGo);
+            // sourceClothing衣服 targetAvatar 角色
+            
+            
+            Destroy(_PinchGo);
         }
 
-        void UnEquipItem(PinchPartType2 boneType2, GameObject _PinchGo)
+        public void UnEquipItem(PinchPartType2 boneType2, GameObject _PinchGo)
         {
             //先移出Parent.Transform，然后 删除 gameObject 
         }
-        #endregion
 
+        void EquipBone(PinchPartType2 boneType2)
+        {
+            
+        }
 
+        
         public void ChangeTexture(PinchPartType2 boneType2, int textureIndex)
         {
             //更换Mat 的 _MainTex 参数
@@ -66,6 +87,35 @@ namespace ProjectOC.PinchFace
             //从boneType找到对应的两个 Mat，更改Mat的_Color 属性
         }
         
+                
+
+        #endregion
+        
+        #region TransformCatalog
+        
+            void Awake()
+            {
+                // Avatar targetAvatar = GetComponent<Animator>().avatar;
+                // Catalog(boneCatalog,targetAvatar.);
+            }
+            private void Catalog (Dictionary<string,Transform>dic, Transform transform)
+            {
+                if(dic.ContainsKey(transform.name))
+                {
+                    dic.Remove(transform.name); 
+                    dic.Add(transform.name, transform);
+                }
+                else
+                {
+                    dic.Add(transform.name, transform);
+                }
+                
+                foreach (Transform child in transform)
+                    Catalog (dic,child);
+            }
+            
+            #endregion
+    
         
     }
 }
