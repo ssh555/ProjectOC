@@ -6,10 +6,12 @@ using ML.Engine.UI;
 using ProjectOC.InventorySystem.UI;
 using ProjectOC.ManagerNS;
 using ProjectOC.Player;
+using ProjectOC.ResonanceWheelSystem.UI;
 using ProjectOC.TechTree.UI;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -131,7 +133,13 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("订单管理",
             () =>
             {
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("<color=yellow>订单管理</color>  订单管理", "订单管理"));
+                GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/OrderBoardPanel.prefab").Completed += (handle) =>
+                {
+                    OrderBoardPanel orderBoardPanel = handle.Result.GetComponent<OrderBoardPanel>();
+
+                    orderBoardPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(orderBoardPanel);
+                };
             }
             );
             this.UIBtnList.SetBtnAction("生产管理",
@@ -191,7 +199,6 @@ namespace ProjectOC.Player.UI
                     this.UIBtnList.DeBindInputAction();
                 });
             this.Ring.gameObject.SetActive(true);
-            Debug.Log("OpenMenu_started " + UIKeyTipList);
             this.UIKeyTipList.RefreshKetTip();
             ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
 
@@ -243,7 +250,7 @@ namespace ProjectOC.Player.UI
         protected override void InitBtnInfo()
         {
             UIBtnListInitor uIBtnListInitor = this.transform.GetComponentInChildren<UIBtnListInitor>(true);
-            this.UIBtnList = new UIBtnList(uIBtnListInitor.transform, uIBtnListInitor.btnListInitData);
+            this.UIBtnList = new UIBtnList(uIBtnListInitor);
         }
         private void InitBtnData(PlayerUIBotPanelStruct datas)
         {

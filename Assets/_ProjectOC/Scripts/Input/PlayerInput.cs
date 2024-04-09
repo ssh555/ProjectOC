@@ -1371,18 +1371,9 @@ namespace ProjectOC.Input
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Remove1"",
+                    ""name"": ""Remove"",
                     ""type"": ""Button"",
                     ""id"": ""7ed51ab5-5c3a-4252-b1bc-dab3cdfa1df5"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Hold"",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Remove10"",
-                    ""type"": ""Button"",
-                    ""id"": ""cdc16934-a633-4bc5-8f80-d0c33d8eb723"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Hold"",
@@ -1433,7 +1424,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""9146e27f-fc3f-4379-97fd-3535fc23c096"",
-                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""path"": ""<XInputController>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1455,7 +1446,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""e7840604-f4f3-4dd9-b617-28cf525b3c7f"",
-                    ""path"": ""<XInputController>/leftTrigger"",
+                    ""path"": ""<XInputController>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1471,28 +1462,6 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ChangeIcon"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a09f564f-a92d-479a-92ab-3b5abc3d9a8e"",
-                    ""path"": ""<XInputController>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Remove10"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""98ac3791-c45b-4c66-9fe1-a4aac0b72d8c"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Remove10"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1635,7 +1604,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Remove1"",
+                    ""action"": ""Remove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1646,7 +1615,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Remove1"",
+                    ""action"": ""Remove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1675,16 +1644,7 @@ namespace ProjectOC.Input
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Remove1"",
-                    ""type"": ""Button"",
-                    ""id"": ""8973dd42-db36-411c-92bd-4827c8b757f7"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Remove10"",
+                    ""name"": ""Remove"",
                     ""type"": ""Button"",
                     ""id"": ""a43d0ad0-d595-433d-8740-83ccafaa5e74"",
                     ""expectedControlType"": ""Button"",
@@ -1758,34 +1718,12 @@ namespace ProjectOC.Input
                 },
                 {
                     ""name"": """",
-                    ""id"": ""bffdff7c-5dda-47e9-ac11-d20cc139ffab"",
-                    ""path"": ""<XInputController>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Remove1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a4b2f75f-7100-4ac2-bb32-f6566a8040b5"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Remove1"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""8cdc6c39-36f7-4977-ac32-d5b22450f706"",
                     ""path"": ""<XInputController>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Remove10"",
+                    ""action"": ""Remove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1796,7 +1734,7 @@ namespace ProjectOC.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Remove10"",
+                    ""action"": ""Remove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -2307,6 +2245,76 @@ namespace ProjectOC.Input
             ]
         },
         {
+            ""name"": ""OrderBoardPanel"",
+            ""id"": ""06e0510c-459a-43f9-be7c-a9d6ab7b4800"",
+            ""actions"": [
+                {
+                    ""name"": ""NextTerm"",
+                    ""type"": ""Button"",
+                    ""id"": ""b30a407d-5a60-436e-8653-04db31f1709e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LastTerm"",
+                    ""type"": ""Button"",
+                    ""id"": ""5831ea61-4e1f-4117-82cf-7d480bfa2348"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""76c01ed6-0063-45bc-ba83-ab0a13d47fa1"",
+                    ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""33ea2913-8a4f-4cbd-a87d-5f88a4bc4564"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bac765c7-6409-4168-807e-38578e87629f"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LastTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""647f1e61-a292-47f9-be57-a3e14a304e4e"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LastTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""ResonanceWheelUI_sub1"",
             ""id"": ""fbf093c0-22ab-44b5-a7d6-9c52881e65c6"",
             ""actions"": [
@@ -2729,16 +2737,14 @@ namespace ProjectOC.Input
             m_UIStore_ChangeIcon = m_UIStore.FindAction("ChangeIcon", throwIfNotFound: true);
             m_UIStore_NextPriority = m_UIStore.FindAction("NextPriority", throwIfNotFound: true);
             m_UIStore_ChangeItem = m_UIStore.FindAction("ChangeItem", throwIfNotFound: true);
-            m_UIStore_Remove1 = m_UIStore.FindAction("Remove1", throwIfNotFound: true);
-            m_UIStore_Remove10 = m_UIStore.FindAction("Remove10", throwIfNotFound: true);
+            m_UIStore_Remove = m_UIStore.FindAction("Remove", throwIfNotFound: true);
             m_UIStore_FastAdd = m_UIStore.FindAction("FastAdd", throwIfNotFound: true);
             m_UIStore_Upgrade = m_UIStore.FindAction("Upgrade", throwIfNotFound: true);
             // UIProNode
             m_UIProNode = asset.FindActionMap("UIProNode", throwIfNotFound: true);
             m_UIProNode_Upgrade = m_UIProNode.FindAction("Upgrade", throwIfNotFound: true);
             m_UIProNode_NextPriority = m_UIProNode.FindAction("NextPriority", throwIfNotFound: true);
-            m_UIProNode_Remove1 = m_UIProNode.FindAction("Remove1", throwIfNotFound: true);
-            m_UIProNode_Remove10 = m_UIProNode.FindAction("Remove10", throwIfNotFound: true);
+            m_UIProNode_Remove = m_UIProNode.FindAction("Remove", throwIfNotFound: true);
             m_UIProNode_FastAdd = m_UIProNode.FindAction("FastAdd", throwIfNotFound: true);
             m_UIProNode_Alter = m_UIProNode.FindAction("Alter", throwIfNotFound: true);
             // UIBed
@@ -2754,6 +2760,10 @@ namespace ProjectOC.Input
             m_ResonanceWheelUI_SwitchTarget = m_ResonanceWheelUI.FindAction("SwitchTarget", throwIfNotFound: true);
             m_ResonanceWheelUI_StartResonance = m_ResonanceWheelUI.FindAction("StartResonance", throwIfNotFound: true);
             m_ResonanceWheelUI_StopResonance = m_ResonanceWheelUI.FindAction("StopResonance", throwIfNotFound: true);
+            // OrderBoardPanel
+            m_OrderBoardPanel = asset.FindActionMap("OrderBoardPanel", throwIfNotFound: true);
+            m_OrderBoardPanel_NextTerm = m_OrderBoardPanel.FindAction("NextTerm", throwIfNotFound: true);
+            m_OrderBoardPanel_LastTerm = m_OrderBoardPanel.FindAction("LastTerm", throwIfNotFound: true);
             // ResonanceWheelUI_sub1
             m_ResonanceWheelUI_sub1 = asset.FindActionMap("ResonanceWheelUI_sub1", throwIfNotFound: true);
             m_ResonanceWheelUI_sub1_Expel = m_ResonanceWheelUI_sub1.FindAction("Expel", throwIfNotFound: true);
@@ -3206,8 +3216,7 @@ namespace ProjectOC.Input
         private readonly InputAction m_UIStore_ChangeIcon;
         private readonly InputAction m_UIStore_NextPriority;
         private readonly InputAction m_UIStore_ChangeItem;
-        private readonly InputAction m_UIStore_Remove1;
-        private readonly InputAction m_UIStore_Remove10;
+        private readonly InputAction m_UIStore_Remove;
         private readonly InputAction m_UIStore_FastAdd;
         private readonly InputAction m_UIStore_Upgrade;
         public struct UIStoreActions
@@ -3217,8 +3226,7 @@ namespace ProjectOC.Input
             public InputAction @ChangeIcon => m_Wrapper.m_UIStore_ChangeIcon;
             public InputAction @NextPriority => m_Wrapper.m_UIStore_NextPriority;
             public InputAction @ChangeItem => m_Wrapper.m_UIStore_ChangeItem;
-            public InputAction @Remove1 => m_Wrapper.m_UIStore_Remove1;
-            public InputAction @Remove10 => m_Wrapper.m_UIStore_Remove10;
+            public InputAction @Remove => m_Wrapper.m_UIStore_Remove;
             public InputAction @FastAdd => m_Wrapper.m_UIStore_FastAdd;
             public InputAction @Upgrade => m_Wrapper.m_UIStore_Upgrade;
             public InputActionMap Get() { return m_Wrapper.m_UIStore; }
@@ -3239,12 +3247,9 @@ namespace ProjectOC.Input
                 @ChangeItem.started += instance.OnChangeItem;
                 @ChangeItem.performed += instance.OnChangeItem;
                 @ChangeItem.canceled += instance.OnChangeItem;
-                @Remove1.started += instance.OnRemove1;
-                @Remove1.performed += instance.OnRemove1;
-                @Remove1.canceled += instance.OnRemove1;
-                @Remove10.started += instance.OnRemove10;
-                @Remove10.performed += instance.OnRemove10;
-                @Remove10.canceled += instance.OnRemove10;
+                @Remove.started += instance.OnRemove;
+                @Remove.performed += instance.OnRemove;
+                @Remove.canceled += instance.OnRemove;
                 @FastAdd.started += instance.OnFastAdd;
                 @FastAdd.performed += instance.OnFastAdd;
                 @FastAdd.canceled += instance.OnFastAdd;
@@ -3264,12 +3269,9 @@ namespace ProjectOC.Input
                 @ChangeItem.started -= instance.OnChangeItem;
                 @ChangeItem.performed -= instance.OnChangeItem;
                 @ChangeItem.canceled -= instance.OnChangeItem;
-                @Remove1.started -= instance.OnRemove1;
-                @Remove1.performed -= instance.OnRemove1;
-                @Remove1.canceled -= instance.OnRemove1;
-                @Remove10.started -= instance.OnRemove10;
-                @Remove10.performed -= instance.OnRemove10;
-                @Remove10.canceled -= instance.OnRemove10;
+                @Remove.started -= instance.OnRemove;
+                @Remove.performed -= instance.OnRemove;
+                @Remove.canceled -= instance.OnRemove;
                 @FastAdd.started -= instance.OnFastAdd;
                 @FastAdd.performed -= instance.OnFastAdd;
                 @FastAdd.canceled -= instance.OnFastAdd;
@@ -3299,8 +3301,7 @@ namespace ProjectOC.Input
         private List<IUIProNodeActions> m_UIProNodeActionsCallbackInterfaces = new List<IUIProNodeActions>();
         private readonly InputAction m_UIProNode_Upgrade;
         private readonly InputAction m_UIProNode_NextPriority;
-        private readonly InputAction m_UIProNode_Remove1;
-        private readonly InputAction m_UIProNode_Remove10;
+        private readonly InputAction m_UIProNode_Remove;
         private readonly InputAction m_UIProNode_FastAdd;
         private readonly InputAction m_UIProNode_Alter;
         public struct UIProNodeActions
@@ -3309,8 +3310,7 @@ namespace ProjectOC.Input
             public UIProNodeActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
             public InputAction @Upgrade => m_Wrapper.m_UIProNode_Upgrade;
             public InputAction @NextPriority => m_Wrapper.m_UIProNode_NextPriority;
-            public InputAction @Remove1 => m_Wrapper.m_UIProNode_Remove1;
-            public InputAction @Remove10 => m_Wrapper.m_UIProNode_Remove10;
+            public InputAction @Remove => m_Wrapper.m_UIProNode_Remove;
             public InputAction @FastAdd => m_Wrapper.m_UIProNode_FastAdd;
             public InputAction @Alter => m_Wrapper.m_UIProNode_Alter;
             public InputActionMap Get() { return m_Wrapper.m_UIProNode; }
@@ -3328,12 +3328,9 @@ namespace ProjectOC.Input
                 @NextPriority.started += instance.OnNextPriority;
                 @NextPriority.performed += instance.OnNextPriority;
                 @NextPriority.canceled += instance.OnNextPriority;
-                @Remove1.started += instance.OnRemove1;
-                @Remove1.performed += instance.OnRemove1;
-                @Remove1.canceled += instance.OnRemove1;
-                @Remove10.started += instance.OnRemove10;
-                @Remove10.performed += instance.OnRemove10;
-                @Remove10.canceled += instance.OnRemove10;
+                @Remove.started += instance.OnRemove;
+                @Remove.performed += instance.OnRemove;
+                @Remove.canceled += instance.OnRemove;
                 @FastAdd.started += instance.OnFastAdd;
                 @FastAdd.performed += instance.OnFastAdd;
                 @FastAdd.canceled += instance.OnFastAdd;
@@ -3350,12 +3347,9 @@ namespace ProjectOC.Input
                 @NextPriority.started -= instance.OnNextPriority;
                 @NextPriority.performed -= instance.OnNextPriority;
                 @NextPriority.canceled -= instance.OnNextPriority;
-                @Remove1.started -= instance.OnRemove1;
-                @Remove1.performed -= instance.OnRemove1;
-                @Remove1.canceled -= instance.OnRemove1;
-                @Remove10.started -= instance.OnRemove10;
-                @Remove10.performed -= instance.OnRemove10;
-                @Remove10.canceled -= instance.OnRemove10;
+                @Remove.started -= instance.OnRemove;
+                @Remove.performed -= instance.OnRemove;
+                @Remove.canceled -= instance.OnRemove;
                 @FastAdd.started -= instance.OnFastAdd;
                 @FastAdd.performed -= instance.OnFastAdd;
                 @FastAdd.canceled -= instance.OnFastAdd;
@@ -3527,6 +3521,60 @@ namespace ProjectOC.Input
             }
         }
         public ResonanceWheelUIActions @ResonanceWheelUI => new ResonanceWheelUIActions(this);
+
+        // OrderBoardPanel
+        private readonly InputActionMap m_OrderBoardPanel;
+        private List<IOrderBoardPanelActions> m_OrderBoardPanelActionsCallbackInterfaces = new List<IOrderBoardPanelActions>();
+        private readonly InputAction m_OrderBoardPanel_NextTerm;
+        private readonly InputAction m_OrderBoardPanel_LastTerm;
+        public struct OrderBoardPanelActions
+        {
+            private @PlayerInput m_Wrapper;
+            public OrderBoardPanelActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @NextTerm => m_Wrapper.m_OrderBoardPanel_NextTerm;
+            public InputAction @LastTerm => m_Wrapper.m_OrderBoardPanel_LastTerm;
+            public InputActionMap Get() { return m_Wrapper.m_OrderBoardPanel; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(OrderBoardPanelActions set) { return set.Get(); }
+            public void AddCallbacks(IOrderBoardPanelActions instance)
+            {
+                if (instance == null || m_Wrapper.m_OrderBoardPanelActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_OrderBoardPanelActionsCallbackInterfaces.Add(instance);
+                @NextTerm.started += instance.OnNextTerm;
+                @NextTerm.performed += instance.OnNextTerm;
+                @NextTerm.canceled += instance.OnNextTerm;
+                @LastTerm.started += instance.OnLastTerm;
+                @LastTerm.performed += instance.OnLastTerm;
+                @LastTerm.canceled += instance.OnLastTerm;
+            }
+
+            private void UnregisterCallbacks(IOrderBoardPanelActions instance)
+            {
+                @NextTerm.started -= instance.OnNextTerm;
+                @NextTerm.performed -= instance.OnNextTerm;
+                @NextTerm.canceled -= instance.OnNextTerm;
+                @LastTerm.started -= instance.OnLastTerm;
+                @LastTerm.performed -= instance.OnLastTerm;
+                @LastTerm.canceled -= instance.OnLastTerm;
+            }
+
+            public void RemoveCallbacks(IOrderBoardPanelActions instance)
+            {
+                if (m_Wrapper.m_OrderBoardPanelActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IOrderBoardPanelActions instance)
+            {
+                foreach (var item in m_Wrapper.m_OrderBoardPanelActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_OrderBoardPanelActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public OrderBoardPanelActions @OrderBoardPanel => new OrderBoardPanelActions(this);
 
         // ResonanceWheelUI_sub1
         private readonly InputActionMap m_ResonanceWheelUI_sub1;
@@ -3748,8 +3796,7 @@ namespace ProjectOC.Input
             void OnChangeIcon(InputAction.CallbackContext context);
             void OnNextPriority(InputAction.CallbackContext context);
             void OnChangeItem(InputAction.CallbackContext context);
-            void OnRemove1(InputAction.CallbackContext context);
-            void OnRemove10(InputAction.CallbackContext context);
+            void OnRemove(InputAction.CallbackContext context);
             void OnFastAdd(InputAction.CallbackContext context);
             void OnUpgrade(InputAction.CallbackContext context);
         }
@@ -3757,8 +3804,7 @@ namespace ProjectOC.Input
         {
             void OnUpgrade(InputAction.CallbackContext context);
             void OnNextPriority(InputAction.CallbackContext context);
-            void OnRemove1(InputAction.CallbackContext context);
-            void OnRemove10(InputAction.CallbackContext context);
+            void OnRemove(InputAction.CallbackContext context);
             void OnFastAdd(InputAction.CallbackContext context);
             void OnAlter(InputAction.CallbackContext context);
         }
@@ -3776,6 +3822,11 @@ namespace ProjectOC.Input
             void OnSwitchTarget(InputAction.CallbackContext context);
             void OnStartResonance(InputAction.CallbackContext context);
             void OnStopResonance(InputAction.CallbackContext context);
+        }
+        public interface IOrderBoardPanelActions
+        {
+            void OnNextTerm(InputAction.CallbackContext context);
+            void OnLastTerm(InputAction.CallbackContext context);
         }
         public interface IResonanceWheelUI_sub1Actions
         {

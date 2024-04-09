@@ -153,7 +153,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #region UI
         #region temp
-        private InputManager inputManager => GameManager.Instance.InputManager;
         private Sprite icon_genderfemaleSprite, icon_gendermaleSprite;
 
         private void ClearTemp()
@@ -165,8 +164,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region UI对象引用
-        private UIKeyTipComponent[] UIKeyTipComponents;
-
         private int CurrentBeastIndex = 0;
 
         [ShowInInspector]

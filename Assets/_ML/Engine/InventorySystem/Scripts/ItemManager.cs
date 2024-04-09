@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 using ML.Engine.Manager.LocalManager;
 using ML.Engine.Manager;
+using ProjectOC.Player;
 
 namespace ML.Engine.InventorySystem
 {
@@ -27,9 +28,6 @@ namespace ML.Engine.InventorySystem
         public string worldobject;
     }
 
-    /// <summary>
-    /// 没有以 Manager 为后缀，是懒得改其他地方了，太多了
-    /// </summary>
     [System.Serializable]
     public sealed class ItemManager : ILocalManager
     {
@@ -299,7 +297,8 @@ namespace ML.Engine.InventorySystem
 
         public async void AddItemIconObject(string itemID, Transform parent, Vector3 pos, Quaternion rot, Vector3 scale, bool isLocal = true)
         {
-            if (parent.GetComponentInChildren<SpriteRenderer>() == null)
+            ItemIcon itemIcon = parent.GetComponentInChildren<ItemIcon>();
+            if (itemIcon == null)
             {
                 // 异步加载资源
                 var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjLabel + "/ItemIcon.prefab", parent);
@@ -320,15 +319,14 @@ namespace ML.Engine.InventorySystem
                     obj.transform.rotation = rot;
                 }
                 obj.transform.localScale = scale;
-            }
-            SpriteRenderer spriteRenderer = parent.GetComponentInChildren<SpriteRenderer>();
-            if (IsValidItemID(itemID))
-            {
-                spriteRenderer.sprite = GetItemSprite(itemID);
+                itemIcon = obj.GetComponentInChildren<ItemIcon>();
+                itemIcon.SetSprite(GetItemSprite(itemID ?? ""));
+                itemIcon.Player = GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>();
             }
             else
             {
-                spriteRenderer.sprite = null;
+                itemIcon.SetSprite(GetItemSprite(itemID ?? ""));
+                itemIcon.Player = GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>();
             }
         }
 

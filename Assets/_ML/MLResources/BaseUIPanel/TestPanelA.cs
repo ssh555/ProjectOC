@@ -11,29 +11,12 @@ using static ML.Engine.UI.UIBtnListContainer;
 
 namespace ML.Engine.UI
 {
-    public class TestPanel : ML.Engine.UI.UIBasePanel
+    public class TestPanelA : ML.Engine.UI.UIBasePanel
     {
-        private Transform BtnList1, BtnList2, BtnList3;
-        private List<Transform> transforms = new List<Transform>();
-        
-        protected override void Awake()
-        {
-            base.Awake();
-            
-
-            
-        }
-
-
-        protected override void Exit()
-        {
-            this.UIBtnListContainer.DisableUIBtnListContainer();
-            base.Exit();
-        }
-
         #region Internal
         protected override void UnregisterInput()
         {
+            this.UIBtnListContainer.DisableUIBtnListContainer();
             // ·µ»Ø
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
         }
@@ -58,10 +41,6 @@ namespace ML.Engine.UI
             UIBtnListContainerInitor uIBtnListContainerInitor = this.transform.GetComponentInChildren<UIBtnListContainerInitor>();
             this.UIBtnListContainer = new UIBtnListContainer(uIBtnListContainerInitor.transform, uIBtnListContainerInitor.btnListContainerInitData);
         }
-
-
-
-
     }
 
 }

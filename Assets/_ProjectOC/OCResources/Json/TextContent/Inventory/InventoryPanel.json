@@ -31,6 +31,13 @@
                 "Chinese" : "任务",
                 "English" : "Mission"
             }
+        },
+        {
+            "name" : "Creature",
+            "description" : {
+                "Chinese" : "生物",
+                "English" : "Creature"
+            }
         }
     ],
     "LastTerm" : {

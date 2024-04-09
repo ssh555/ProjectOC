@@ -1,3 +1,4 @@
+using ML.Engine.Manager;
 using OpenCover.Framework.Model;
 using Sirenix.OdinInspector;
 using System;
@@ -16,7 +17,7 @@ using static ML.Engine.UI.UIBtnListInitor;
 
 namespace ML.Engine.UI
 {
-    [ShowInInspector]
+    [Serializable]
     public class UIBtnListContainer
     {
 
@@ -54,7 +55,7 @@ namespace ML.Engine.UI
         [ShowInInspector]
         private List<UIBtnList> uIBtnLists = new List<UIBtnList>();
         public List<UIBtnList> UIBtnLists { get { return uIBtnLists; } }
-
+        [ShowInInspector]
         private UIBtnList curSelectUIBtnList;
         public UIBtnList CurSelectUIBtnList { 
             set 
@@ -72,7 +73,7 @@ namespace ML.Engine.UI
             BtnList = 0,
             SelectedButton
         }
-
+        [ShowInInspector]
         private NavagationMode navagationMode = NavagationMode.BtnList;
         public NavagationMode CurnavagationMode { set { navagationMode = value; } get { return navagationMode; } }
         public enum BindType
@@ -81,7 +82,7 @@ namespace ML.Engine.UI
             performed,
             canceled
         }
-
+        [ShowInInspector]
         private ContainerType gridNavagationType;
 
         public ContainerType Grid_NavagationType { set {  }  get { return gridNavagationType; } }
@@ -92,6 +93,24 @@ namespace ML.Engine.UI
         public BindType curBindType { get { return bindType; } }
 
         private BtnListContainerInitData btnListContainerInitData;
+
+        private bool isEmpty;
+
+        public bool IsEmpty { get { return isEmpty; } }
+
+        public void RefreshIsEmpty()
+        {
+
+            foreach (var btnlist in this.uIBtnLists)
+            {
+                if(btnlist.IsEmpty == false)
+                {
+                    this.isEmpty = false;
+                    return;
+                }
+            }
+            this.isEmpty = true;
+        }
 
         public UIBtnListContainer(Transform transform, BtnListContainerInitData btnListContainerInitData)
         {
@@ -104,9 +123,7 @@ namespace ML.Engine.UI
 
             for (int i = 0; i < uIBtnListInitors.Length; i++) 
             {
-                Transform parent = uIBtnListInitors[i].transform;
-                BtnListInitData btnListInitData = uIBtnListInitors[i].btnListInitData;
-                UIBtnList uIBtnList = new UIBtnList(parent, btnListInitData)
+                UIBtnList uIBtnList = new UIBtnList(uIBtnListInitors[i])
                 {
                     UIBtnListContainer = this
                 };
@@ -323,7 +340,7 @@ namespace ML.Engine.UI
                         }
                         else
                         {
-                            for(int j = colCount - 1;j >= 0; j--)
+                            for(int j = rowCount - 1;j >= 0; j--)
                             {
                                 if(btnlist[j][colCount - i - 1] != null)
                                 {
@@ -363,6 +380,7 @@ namespace ML.Engine.UI
         {
             int l1 = edge1.Count;
             int l2 = edge2.Count;
+
             if (l1 == 0 || l2 == 0) return;
 
             if (l1 >= l2)
@@ -470,7 +488,7 @@ namespace ML.Engine.UI
             if (this.CurSelectUIBtnList == uIBtnList || uIBtnList == null) return;
 /*            //绑定输入
             uIBtnList.BindNavigationInputAction(this.gridNavagationInputAction, this.bindType);*/
-
+            //this.CurSelectUIBtnList = uIBtnList;
             if(gridNavagationType == ContainerType.A)
             {
                 if(navagationMode == NavagationMode.BtnList)
@@ -565,7 +583,7 @@ namespace ML.Engine.UI
             }
         }
 
-        private void RefreshEdge()
+        public void RefreshEdge()
         {
             //连边
             foreach (var linkData in btnListContainerInitData.LinkDatas)
@@ -574,6 +592,30 @@ namespace ML.Engine.UI
             }
         }
 
+        public void AddBtn(int index,string prefabpath)
+        {
+            if (index >= 0 || index < this.uIBtnLists.Count)
+            {
+                this.uIBtnLists[index].AddBtn(prefabpath); 
+            }
+            else
+            {
+                Debug.LogError("不存在该BtnList!");
+            }
+        }
+
+        public void DeleteBtn(int BtnListIndex,int SelectedButtonIndex)
+        {
+            if ((BtnListIndex >= 0 || BtnListIndex < this.uIBtnLists.Count) && (SelectedButtonIndex >= 0 && SelectedButtonIndex < this.uIBtnLists[BtnListIndex].BtnCnt))
+            {
+                this.uIBtnLists[BtnListIndex].DeleteButton(SelectedButtonIndex);
+               
+            }
+            else
+            {
+                Debug.LogError("不存在该BtnList或SelectedButton!");
+            }
+        }
     }
 }
 

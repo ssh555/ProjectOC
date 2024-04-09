@@ -10,17 +10,13 @@ using ML.Engine.InventorySystem.CompositeSystem;
 using static ProjectOC.InventorySystem.UI.UIStore;
 using System;
 using ML.Engine.BuildingSystem;
-
+using ProjectOC.ManagerNS;
 
 namespace ProjectOC.InventorySystem.UI
 {
     public class UIStore : ML.Engine.UI.UIBasePanel<StorePanel>
     {
         #region Input
-        /// 用于Drop和Destroy按键响应Cancel
-        /// 长按响应了Destroy就置为true
-        /// Cancel就不响应Drop 并 重置
-        /// </summary>
         private bool ItemIsDestroyed = false;
         #endregion
 
@@ -239,6 +235,7 @@ namespace ProjectOC.InventorySystem.UI
 
         [ShowInInspector]
         private List<string> ItemDatas = new List<string>();
+        private bool IsInitCurItemIndex;
         private int lastItemIndex = 0;
         private int currentItemIndex = 0;
         private int CurrentItemIndex
@@ -302,6 +299,7 @@ namespace ProjectOC.InventorySystem.UI
                 return null;
             }
         }
+
         public Player.PlayerCharacter Player;
 
         protected override void UnregisterInput()
@@ -316,9 +314,9 @@ namespace ProjectOC.InventorySystem.UI
             // 快捷放入
             ProjectOC.Input.InputManager.PlayerInput.UIStore.FastAdd.performed -= FastAdd_performed;
             // 取出1个
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove1.canceled -= Remove_cancled;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove.canceled -= Remove_cancled;
             // 取出10个
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove1.performed -= Remove_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove.performed -= Remove_performed;
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
@@ -336,21 +334,39 @@ namespace ProjectOC.InventorySystem.UI
             // 快捷放入
             ProjectOC.Input.InputManager.PlayerInput.UIStore.FastAdd.performed += FastAdd_performed;
             // 取出1个
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove1.canceled += Remove_cancled;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove.canceled += Remove_cancled;
             // 取出10个
-            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove1.performed += Remove_performed;
+            ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove.performed += Remove_performed;
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
         }
         private void ChangeIcon_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            CurMode = Mode.ChangeIcon;
+            if (CurMode != Mode.ChangeIcon)
+            {
+                CurMode = Mode.ChangeIcon;
+                this.IsInitCurItemIndex = false;
+                this.ItemDatas.Clear();
+                this.lastItemIndex = 0;
+                this.currentItemIndex = 0;
+            }
+            else
+            {
+                CurMode = Mode.Store;
+            }
             Refresh();
         }
         private void Upgrade_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            CurMode = Mode.Upgrade;
+            if (CurMode != Mode.Upgrade)
+            {
+                CurMode = Mode.Upgrade;
+            }
+            else
+            {
+                CurMode = Mode.Store;
+            }
             Refresh();
         }
         private void NextPriority_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -436,7 +452,14 @@ namespace ProjectOC.InventorySystem.UI
             if (CurMode == Mode.Store && CurStoreMode == StoreMode.ChangeItem)
             {
                 this.ItemIsDestroyed = true;
-                Store.UIRemove(Player, CurrentStoreData, 10);
+                if (CurrentStoreData.Storage < 10)
+                {
+                    Store.UIRemove(Player, CurrentStoreData, CurrentStoreData.Storage);
+                }
+                else
+                {
+                    Store.UIRemove(Player, CurrentStoreData, 10);
+                }
                 Refresh();
             }
         }
@@ -444,6 +467,9 @@ namespace ProjectOC.InventorySystem.UI
         {
             if (CurMode == Mode.Store)
             {
+                ItemManager.Instance.AddItemIconObject(Store.WorldIconItemID, Store.WorldStore.transform,
+                                                        new Vector3(0, this.Store.WorldStore.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),
+                                                        Quaternion.Euler(Vector3.zero), Vector3.one);
                 UIMgr.PopPanel();
             }
             else if (CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon || CurMode == Mode.Upgrade)
@@ -462,6 +488,7 @@ namespace ProjectOC.InventorySystem.UI
                 if (CurStoreMode == StoreMode.ChangeItem)
                 {
                     CurMode = Mode.ChangeItem;
+                    this.IsInitCurItemIndex = false;
                 }
                 else if (CurStoreMode == StoreMode.ChangeIn)
                 {
@@ -489,38 +516,13 @@ namespace ProjectOC.InventorySystem.UI
             else if (CurMode == Mode.ChangeIcon)
             {
                 string itemID = CurrentItemData;
-                // 更新Icon
-                var img = StoreIcon.GetComponent<Image>();
-                if (ItemManager.Instance.IsValidItemID(itemID))
-                {
-                    if (!tempSprite.ContainsKey(itemID))
-                    {
-                        tempSprite[itemID] = ItemManager.Instance.GetItemSprite(itemID);
-                    }
-                    img.sprite = tempSprite[itemID];
-                }
-                else
-                {
-                    img.sprite = EmptySprite;
-                }
-                if (!string.IsNullOrEmpty(itemID))
-                {
-                    ItemManager.Instance.AddItemIconObject(itemID,
-                                                        this.Store.WorldStore.transform,
-                                                        new Vector3(0, this.Store.WorldStore.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),
-                                                        Quaternion.Euler(0, 0, 0),
-                                                        Vector3.one);
-                }
+                this.Store.WorldIconItemID = itemID;
             }
             else if (CurMode == Mode.Upgrade)
             {
                 this.Store.Upgrade(Player);
             }
-
-            if (CurMode != Mode.ChangeIcon)
-            {
-                Refresh();
-            }
+            Refresh();
         }
         #endregion
 
@@ -590,19 +592,30 @@ namespace ProjectOC.InventorySystem.UI
                 return;
             }
             CurPriority = Store.TransportPriority;
+
             // StoreIcon
-            Sprite itemicon = Store.WorldStore.transform.GetComponentInChildren<SpriteRenderer>()?.sprite;
-            StoreIcon.sprite = itemicon == null ? EmptySprite : itemicon;
+            if (!string.IsNullOrEmpty(Store.WorldIconItemID))
+            {
+                if (!tempSprite.ContainsKey(Store.WorldIconItemID))
+                {
+                    tempSprite[Store.WorldIconItemID] = ItemManager.Instance.GetItemSprite(Store.WorldIconItemID);
+                }
+                StoreIcon.GetComponent<Image>().sprite = tempSprite[Store.WorldIconItemID];
+            }
+            else
+            {
+                StoreIcon.GetComponent<Image>().sprite = EmptySprite;
+            }
+
+            this.StoreTransform.gameObject.SetActive(CurMode == Mode.Store);
+            this.ChangeItem.gameObject.SetActive(CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon);
+            this.Upgrade.gameObject.SetActive(CurMode == Mode.Upgrade);
+            this.BotKeyTips_KeyTips.gameObject.SetActive(CurMode == Mode.Store);
+            this.BotKeyTips_ChangeItem.gameObject.SetActive(CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon);
+            this.BotKeyTips_Upgrade.gameObject.SetActive(CurMode == Mode.Upgrade);
 
             if (this.CurMode == Mode.Store)
             {
-                this.StoreTransform.gameObject.SetActive(true);
-                this.ChangeItem.gameObject.SetActive(false);
-                this.Upgrade.gameObject.SetActive(false);
-                this.BotKeyTips_KeyTips.gameObject.SetActive(true);
-                this.BotKeyTips_ChangeItem.gameObject.SetActive(false);
-                this.BotKeyTips_Upgrade.gameObject.SetActive(false);
-
                 StoreDatas = Store.StoreDatas;
                 #region TopTitle
                 Text_Title.text = PanelTextContent.text_Title.GetText();
@@ -741,16 +754,8 @@ namespace ProjectOC.InventorySystem.UI
                     // Add and Remove
                     uiStoreData.transform.Find("Add").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_Add.GetText();
                     uiStoreData.transform.Find("Remove").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_Remove.GetText();
-                    if (!string.IsNullOrEmpty(storeData.ItemID))
-                    {
-                        uiStoreData.transform.Find("Add").Find("Tick").gameObject.SetActive(storeData.CanIn);
-                        uiStoreData.transform.Find("Remove").Find("Tick").gameObject.SetActive(storeData.CanOut);
-                    }
-                    else
-                    {
-                        uiStoreData.transform.Find("Add").Find("Tick").gameObject.SetActive(false);
-                        uiStoreData.transform.Find("Remove").Find("Tick").gameObject.SetActive(false);
-                    }
+                    uiStoreData.transform.Find("Add").Find("Tick").gameObject.SetActive(storeData.CanIn);
+                    uiStoreData.transform.Find("Remove").Find("Tick").gameObject.SetActive(storeData.CanOut);
                     // Selected
                     var selected = uiStoreData.transform.Find("Selected");
                     var selectIcon = uiStoreData.transform.Find("Select");
@@ -856,15 +861,8 @@ namespace ProjectOC.InventorySystem.UI
             }
             else if(this.CurMode == Mode.ChangeItem || this.CurMode == Mode.ChangeIcon)
             {
-                this.StoreTransform.gameObject.SetActive(false);
-                this.ChangeItem.gameObject.SetActive(true);
-                this.Upgrade.gameObject.SetActive(false);
-                this.BotKeyTips_KeyTips.gameObject.SetActive(false);
-                this.BotKeyTips_ChangeItem.gameObject.SetActive(true);
-                this.BotKeyTips_Upgrade.gameObject.SetActive(false);
-
                 ItemDatas = new List<string>() { "" };
-                ItemDatas.AddRange(ItemManager.Instance.GetAllItemID());
+                ItemDatas.AddRange(LocalGameManager.Instance.StoreManager.GetStoreIconItems());
                 #region Item
                 // 临时内存生成的UIItemData数量(只增不减，多的隐藏掉即可) - 当前筛选出来的UIItemData数量
                 int delta = tempUIItemDatas.Count - ItemDatas.Count;
@@ -893,14 +891,29 @@ namespace ProjectOC.InventorySystem.UI
                 // 上一个UIItemData
                 GameObject last = null;
 
+                if (!IsInitCurItemIndex)
+                {
+                    for (int i = 0; i < ItemDatas.Count; ++i)
+                    {
+                        string itemID = ItemDatas[i];
+                        string curItemID = CurMode == Mode.ChangeIcon ? Store.WorldIconItemID : CurrentStoreData.ItemID;
+                        curItemID = curItemID != null ? curItemID : "";
+                        if (curItemID == itemID)
+                        {
+                            lastItemIndex = currentItemIndex;
+                            currentItemIndex = i;
+                            IsInitCurItemIndex = true;
+                            break;
+                        }
+                    }
+                }
+                
                 // 遍历筛选的ItemDataList
                 for (int i = 0; i < ItemDatas.Count; ++i)
                 {
                     var uiItemData = tempUIItemDatas[i];
                     string itemID = ItemDatas[i];
-                    // Active
                     uiItemData.SetActive(true);
-                    // 更新Icon
                     var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
                     if (ItemManager.Instance.IsValidItemID(itemID))
                     {
@@ -908,27 +921,19 @@ namespace ProjectOC.InventorySystem.UI
                         {
                             var sprite = ItemManager.Instance.GetItemSprite(itemID);
                             tempSprite[itemID] = sprite;
-                            img.sprite = sprite;
                         }
-                        else
-                        {
-                            img.sprite = tempSprite[itemID];
-                        }
+                        img.sprite = tempSprite[itemID];
                     }
                     else
                     {
                         img.sprite = EmptySprite;
                     }
                     // Selected
-                    var selected = uiItemData.transform.Find("Selected");
-                    if (CurrentItemData == ItemDatas[i])
+                    var isSelected = CurrentItemData == itemID;
+                    uiItemData.transform.Find("Selected").gameObject.SetActive(isSelected);
+                    if (isSelected)
                     {
-                        selected.gameObject.SetActive(true);
                         cur = uiItemData;
-                    }
-                    else
-                    {
-                        selected.gameObject.SetActive(false);
                     }
                     if (i == lastItemIndex)
                     {
@@ -995,13 +1000,6 @@ namespace ProjectOC.InventorySystem.UI
             }
             else if (this.CurMode == Mode.Upgrade)
             {
-                this.StoreTransform.gameObject.SetActive(false);
-                this.ChangeItem.gameObject.SetActive(false);
-                this.Upgrade.gameObject.SetActive(true);
-                this.BotKeyTips_KeyTips.gameObject.SetActive(false);
-                this.BotKeyTips_ChangeItem.gameObject.SetActive(false);
-                this.BotKeyTips_Upgrade.gameObject.SetActive(true);
-
                 #region Build
                 // Icon
                 string buildCID = Store.WorldStore.Classification.ToString();
