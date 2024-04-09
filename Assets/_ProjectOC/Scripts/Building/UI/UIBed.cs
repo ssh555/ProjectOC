@@ -252,7 +252,10 @@ namespace ProjectOC.Building.UI
             }
             else if (CurMode == Mode.ChangeClan)
             {
-                this.Clans = LocalGameManager.Instance.ClanManager.Clans;
+                this.Clans = new List<Clan>();
+                this.Clans.AddRange(LocalGameManager.Instance.ClanManager.Clans);
+                this.Clans.Sort(new Clan.Sort());
+
                 ChangeClan.gameObject.SetActive(true);
                 ConfirmClan.gameObject.SetActive(false);
 
