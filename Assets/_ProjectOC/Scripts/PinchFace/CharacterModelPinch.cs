@@ -95,19 +95,24 @@ namespace ProjectOC.PinchFace
         
             void Awake()
             {
-                // Avatar targetAvatar = GetComponent<Animator>().avatar;
-                // Catalog(boneCatalog,targetAvatar.);
+                Transform _avatar = transform.Find("AnMiXiuBone");
+                Catalog(boneCatalog,_avatar);
             }
-            private void Catalog (Dictionary<string,Transform>dic, Transform transform)
+            
+            //将子物体加入字典
+            private void Catalog (Dictionary<string,Transform>dic, Transform transform,bool containThis = true)
             {
-                if(dic.ContainsKey(transform.name))
+                if (containThis)
                 {
-                    dic.Remove(transform.name); 
-                    dic.Add(transform.name, transform);
-                }
-                else
-                {
-                    dic.Add(transform.name, transform);
+                    if(dic.ContainsKey(transform.name))
+                    {
+                        dic.Remove(transform.name); 
+                        dic.Add(transform.name, transform);
+                    }
+                    else
+                    {
+                        dic.Add(transform.name, transform);
+                    }
                 }
                 
                 foreach (Transform child in transform)

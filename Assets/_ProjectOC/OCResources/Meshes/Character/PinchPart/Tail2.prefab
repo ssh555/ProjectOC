@@ -48,6 +48,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -6291290946267445969, guid: 024df7fd7b0a1b047a0cd617c6c9faeb, type: 3}
+      propertyPath: m_Name
+      value: Bone_Root
+      objectReference: {fileID: 0}
     - target: {fileID: -2355435514559539567, guid: 024df7fd7b0a1b047a0cd617c6c9faeb, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
