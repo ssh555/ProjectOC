@@ -16,7 +16,6 @@ using ProjectOC.MissionNS;
 using static ProjectOC.InventorySystem.UI.UIProNode;
 using ML.Engine.Utility;
 using UnityEngine.U2D;
-using ML.Engine.UI;
 
 
 namespace ProjectOC.InventorySystem.UI
@@ -97,10 +96,6 @@ namespace ProjectOC.InventorySystem.UI
         #region Override
         protected override void Enter()
         {
-            if (ProNode.WorldProNode.ItemIcon != null)
-            {
-                ProNode.WorldProNode.ItemIcon.CanShow = true;
-            }
             ProNode.OnActionChange += RefreshDynamic;
             ProNode.OnProduceTimerUpdate += OnProduceTimerUpdateAction;
             ProNode.OnProduceEnd += Refresh;
@@ -109,10 +104,6 @@ namespace ProjectOC.InventorySystem.UI
 
         protected override void Exit()
         {
-            if (ProNode.WorldProNode.ItemIcon != null)
-            {
-                ProNode.WorldProNode.ItemIcon.CanShow = true;
-            }
             ProNode.OnActionChange -= RefreshDynamic;
             ProNode.OnProduceTimerUpdate -= OnProduceTimerUpdateAction;
             ProNode.OnProduceEnd -= Refresh;
@@ -166,10 +157,10 @@ namespace ProjectOC.InventorySystem.UI
                 ProNode_Priority.Find("Selected").gameObject.SetActive(true);
             }
         }
-        #region ProNode Raw
-        private List<Formula> Raws => ProNode.Recipe?.Raw;
-        #endregion
 
+       // ProNode Raw
+        private List<Formula> Raws => ProNode.Recipe?.Raw;
+        public bool IsInitCurRecipeOrWorker;
         #region ChangeRecipe
         [ShowInInspector]
         private List<string> Recipes = new List<string>();
@@ -396,19 +387,13 @@ namespace ProjectOC.InventorySystem.UI
             else if (CurMode == Mode.ChangeRecipe)
             {
                 ProNode.ChangeRecipe(Player, CurrentRecipe);
-                if (ProNode.HasRecipe)
-                {
-                    ItemManager.Instance.AddItemIconObject(ProNode.Recipe.Product.id,
-                                                           ProNode.WorldProNode.transform,
-                                                           new Vector3(0, ProNode.WorldProNode.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),
-                                                           Quaternion.Euler(Vector3.zero),
-                                                           Vector3.one);
-                }
+                IsInitCurRecipeOrWorker = false;
                 CurMode = Mode.ProNode;
             }
             else if (CurMode == Mode.ChangeWorker)
             {
                 ProNode.ChangeWorker(CurrentWorker);
+                IsInitCurRecipeOrWorker = false;
                 CurMode = Mode.ProNode;
             }
             else if (CurMode == Mode.Upgrade)
@@ -422,6 +407,14 @@ namespace ProjectOC.InventorySystem.UI
         {
             if (CurMode == Mode.ProNode)
             {
+                if (ProNode.HasRecipe)
+                {
+                    ItemManager.Instance.AddItemIconObject(ProNode.Recipe.Product.id,
+                                                           ProNode.WorldProNode.transform,
+                                                           new Vector3(0, ProNode.WorldProNode.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),
+                                                           Quaternion.Euler(Vector3.zero),
+                                                           Vector3.one);
+                }
                 UIMgr.PopPanel();
             }
             else
@@ -770,6 +763,21 @@ namespace ProjectOC.InventorySystem.UI
                 }
                 GameObject cur = null;
                 GameObject last = null;
+
+                if (!IsInitCurRecipeOrWorker)
+                {
+                    for (int i = 0; i < Recipes.Count; ++i)
+                    {
+                        if (ProNode.HasRecipe && ProNode.Recipe.ID == Recipes[i])
+                        {
+                            lastRecipeIndex = currentRecipeIndex;
+                            currentRecipeIndex = i;
+                            IsInitCurRecipeOrWorker = true;
+                            break;
+                        }
+                    }
+                }
+
                 for (int i = 0; i < Recipes.Count; ++i)
                 {
                     var recipeID = Recipes[i];
@@ -792,20 +800,7 @@ namespace ProjectOC.InventorySystem.UI
                         img.sprite = EmptySprite;
                     }
                     // Selected
-                    bool isSelected = false;
-                    if (currentRecipeIndex == 0 && ProNode.HasRecipe)
-                    {
-                        if (ProNode.Recipe.ID == recipeID)
-                        {
-                            lastRecipeIndex = currentRecipeIndex;
-                            currentRecipeIndex = i;
-                            isSelected = true;
-                        }
-                    }
-                    else if (CurrentRecipe == recipeID)
-                    {
-                        isSelected = true;
-                    }
+                    bool isSelected = CurrentRecipe == recipeID;
                     item.transform.Find("Selected").gameObject.SetActive(isSelected);
                     if (isSelected)
                     {
@@ -957,6 +952,21 @@ namespace ProjectOC.InventorySystem.UI
                 }
                 GameObject cur = null;
                 GameObject last = null;
+
+                if (!IsInitCurRecipeOrWorker)
+                {
+                    for (int i = 0; i < Workers.Count; ++i)
+                    {
+                        if (ProNode.HasWorker && Worker == Workers[i])
+                        {
+                            lastWorkerIndex = currentWorkerIndex;
+                            currentWorkerIndex = i;
+                            IsInitCurRecipeOrWorker = true;
+                            break;
+                        }
+                    }
+                }
+
                 for (int i = 0; i < Workers.Count; ++i)
                 {
                     var worker = Workers[i];
@@ -981,21 +991,7 @@ namespace ProjectOC.InventorySystem.UI
                     item.transform.Find("StateWork").gameObject.SetActive(!isCurrentWorker && worker.Status == Status.Working);
                     item.transform.Find("StateRelax").gameObject.SetActive(!isCurrentWorker && worker.Status != Status.Working);
 
-                    bool isSelected = false;
-                    if (currentWorkerIndex == 0 && ProNode.HasWorker)
-                    {
-                        if (isCurrentWorker)
-                        {
-                            lastWorkerIndex = currentWorkerIndex;
-                            currentWorkerIndex = i;
-                            isSelected = true;
-                        }
-                    }
-                    else if (CurrentWorker == worker)
-                    {
-                        isSelected = true;
-                    }
-
+                    bool isSelected = CurrentWorker == worker;
                     item.transform.Find("Selected").gameObject.SetActive(isSelected);
                     if (isSelected)
                     {

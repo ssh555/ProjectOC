@@ -59,20 +59,12 @@ namespace ProjectOC.Building.UI
 
         protected override void Enter()
         {
-            if (Bed.ItemIcon != null)
-            {
-                Bed.ItemIcon.CanShow = false;
-            }
             this.RegisterInput();
             base.Enter();
         }
 
         protected override void Exit()
         {
-            if (Bed.ItemIcon != null)
-            {
-                Bed.ItemIcon.CanShow = true;
-            }
             this.UnregisterInput();
             base.Exit();
         }

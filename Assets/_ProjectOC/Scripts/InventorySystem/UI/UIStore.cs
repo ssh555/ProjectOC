@@ -10,7 +10,7 @@ using ML.Engine.InventorySystem.CompositeSystem;
 using static ProjectOC.InventorySystem.UI.UIStore;
 using System;
 using ML.Engine.BuildingSystem;
-
+using ProjectOC.ManagerNS;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -82,10 +82,6 @@ namespace ProjectOC.InventorySystem.UI
         #region Override
         protected override void Enter()
         {
-            if (Store.WorldStore.ItemIcon != null)
-            {
-                Store.WorldStore.ItemIcon.CanShow = false;
-            }
             Store.OnStoreDataChange += Refresh;
             Store.IsInteracting = true;
             base.Enter();
@@ -93,10 +89,6 @@ namespace ProjectOC.InventorySystem.UI
 
         protected override void Exit()
         {
-            if (Store.WorldStore.ItemIcon != null)
-            {
-                Store.WorldStore.ItemIcon.CanShow = true;
-            }
             Store.OnStoreDataChange -= Refresh;
             Store.IsInteracting = false;
             ClearTemp();
@@ -243,6 +235,7 @@ namespace ProjectOC.InventorySystem.UI
 
         [ShowInInspector]
         private List<string> ItemDatas = new List<string>();
+        private bool IsInitCurItemIndex;
         private int lastItemIndex = 0;
         private int currentItemIndex = 0;
         private int CurrentItemIndex
@@ -306,6 +299,7 @@ namespace ProjectOC.InventorySystem.UI
                 return null;
             }
         }
+
         public Player.PlayerCharacter Player;
 
         protected override void UnregisterInput()
@@ -352,6 +346,7 @@ namespace ProjectOC.InventorySystem.UI
             if (CurMode != Mode.ChangeIcon)
             {
                 CurMode = Mode.ChangeIcon;
+                this.IsInitCurItemIndex = false;
                 this.ItemDatas.Clear();
                 this.lastItemIndex = 0;
                 this.currentItemIndex = 0;
@@ -472,6 +467,9 @@ namespace ProjectOC.InventorySystem.UI
         {
             if (CurMode == Mode.Store)
             {
+                ItemManager.Instance.AddItemIconObject(Store.WorldIconItemID, Store.WorldStore.transform,
+                                                        new Vector3(0, this.Store.WorldStore.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),
+                                                        Quaternion.Euler(Vector3.zero), Vector3.one);
                 UIMgr.PopPanel();
             }
             else if (CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon || CurMode == Mode.Upgrade)
@@ -490,6 +488,7 @@ namespace ProjectOC.InventorySystem.UI
                 if (CurStoreMode == StoreMode.ChangeItem)
                 {
                     CurMode = Mode.ChangeItem;
+                    this.IsInitCurItemIndex = false;
                 }
                 else if (CurStoreMode == StoreMode.ChangeIn)
                 {
@@ -518,38 +517,12 @@ namespace ProjectOC.InventorySystem.UI
             {
                 string itemID = CurrentItemData;
                 this.Store.WorldIconItemID = itemID;
-                // 更新Icon
-                var img = StoreIcon.GetComponent<Image>();
-                if (ItemManager.Instance.IsValidItemID(itemID))
-                {
-                    if (!tempSprite.ContainsKey(itemID))
-                    {
-                        tempSprite[itemID] = ItemManager.Instance.GetItemSprite(itemID);
-                    }
-                    img.sprite = tempSprite[itemID];
-                }
-                else
-                {
-                    img.sprite = EmptySprite;
-                }
-                if (!string.IsNullOrEmpty(itemID))
-                {
-                    ItemManager.Instance.AddItemIconObject(itemID,
-                                                        this.Store.WorldStore.transform,
-                                                        new Vector3(0, this.Store.WorldStore.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),
-                                                        Quaternion.Euler(Vector3.zero),
-                                                        Vector3.one);
-                }
             }
             else if (CurMode == Mode.Upgrade)
             {
                 this.Store.Upgrade(Player);
             }
-
-            if (CurMode != Mode.ChangeIcon)
-            {
-                Refresh();
-            }
+            Refresh();
         }
         #endregion
 
@@ -619,19 +592,30 @@ namespace ProjectOC.InventorySystem.UI
                 return;
             }
             CurPriority = Store.TransportPriority;
+
             // StoreIcon
-            Sprite itemicon = Store.WorldStore.transform.GetComponentInChildren<ItemIcon>()?.GetSprite();
-            StoreIcon.sprite = itemicon == null ? EmptySprite : itemicon;
+            if (!string.IsNullOrEmpty(Store.WorldIconItemID))
+            {
+                if (!tempSprite.ContainsKey(Store.WorldIconItemID))
+                {
+                    tempSprite[Store.WorldIconItemID] = ItemManager.Instance.GetItemSprite(Store.WorldIconItemID);
+                }
+                StoreIcon.GetComponent<Image>().sprite = tempSprite[Store.WorldIconItemID];
+            }
+            else
+            {
+                StoreIcon.GetComponent<Image>().sprite = EmptySprite;
+            }
+
+            this.StoreTransform.gameObject.SetActive(CurMode == Mode.Store);
+            this.ChangeItem.gameObject.SetActive(CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon);
+            this.Upgrade.gameObject.SetActive(CurMode == Mode.Upgrade);
+            this.BotKeyTips_KeyTips.gameObject.SetActive(CurMode == Mode.Store);
+            this.BotKeyTips_ChangeItem.gameObject.SetActive(CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon);
+            this.BotKeyTips_Upgrade.gameObject.SetActive(CurMode == Mode.Upgrade);
 
             if (this.CurMode == Mode.Store)
             {
-                this.StoreTransform.gameObject.SetActive(true);
-                this.ChangeItem.gameObject.SetActive(false);
-                this.Upgrade.gameObject.SetActive(false);
-                this.BotKeyTips_KeyTips.gameObject.SetActive(true);
-                this.BotKeyTips_ChangeItem.gameObject.SetActive(false);
-                this.BotKeyTips_Upgrade.gameObject.SetActive(false);
-
                 StoreDatas = Store.StoreDatas;
                 #region TopTitle
                 Text_Title.text = PanelTextContent.text_Title.GetText();
@@ -877,15 +861,8 @@ namespace ProjectOC.InventorySystem.UI
             }
             else if(this.CurMode == Mode.ChangeItem || this.CurMode == Mode.ChangeIcon)
             {
-                this.StoreTransform.gameObject.SetActive(false);
-                this.ChangeItem.gameObject.SetActive(true);
-                this.Upgrade.gameObject.SetActive(false);
-                this.BotKeyTips_KeyTips.gameObject.SetActive(false);
-                this.BotKeyTips_ChangeItem.gameObject.SetActive(true);
-                this.BotKeyTips_Upgrade.gameObject.SetActive(false);
-
                 ItemDatas = new List<string>() { "" };
-                ItemDatas.AddRange(ItemManager.Instance.GetAllItemID());
+                ItemDatas.AddRange(LocalGameManager.Instance.StoreManager.GetStoreIconItems());
                 #region Item
                 // 临时内存生成的UIItemData数量(只增不减，多的隐藏掉即可) - 当前筛选出来的UIItemData数量
                 int delta = tempUIItemDatas.Count - ItemDatas.Count;
@@ -914,14 +891,29 @@ namespace ProjectOC.InventorySystem.UI
                 // 上一个UIItemData
                 GameObject last = null;
 
+                if (!IsInitCurItemIndex)
+                {
+                    for (int i = 0; i < ItemDatas.Count; ++i)
+                    {
+                        string itemID = ItemDatas[i];
+                        string curItemID = CurMode == Mode.ChangeIcon ? Store.WorldIconItemID : CurrentStoreData.ItemID;
+                        curItemID = curItemID != null ? curItemID : "";
+                        if (curItemID == itemID)
+                        {
+                            lastItemIndex = currentItemIndex;
+                            currentItemIndex = i;
+                            IsInitCurItemIndex = true;
+                            break;
+                        }
+                    }
+                }
+                
                 // 遍历筛选的ItemDataList
                 for (int i = 0; i < ItemDatas.Count; ++i)
                 {
                     var uiItemData = tempUIItemDatas[i];
                     string itemID = ItemDatas[i];
-                    // Active
                     uiItemData.SetActive(true);
-                    // 更新Icon
                     var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
                     if (ItemManager.Instance.IsValidItemID(itemID))
                     {
@@ -929,41 +921,15 @@ namespace ProjectOC.InventorySystem.UI
                         {
                             var sprite = ItemManager.Instance.GetItemSprite(itemID);
                             tempSprite[itemID] = sprite;
-                            img.sprite = sprite;
                         }
-                        else
-                        {
-                            img.sprite = tempSprite[itemID];
-                        }
+                        img.sprite = tempSprite[itemID];
                     }
                     else
                     {
                         img.sprite = EmptySprite;
                     }
                     // Selected
-                    var isSelected = false;
-                    if (CurMode == Mode.ChangeIcon && currentItemIndex == 0 && !string.IsNullOrEmpty(Store.WorldIconItemID))
-                    {
-                        if (Store.WorldIconItemID == itemID)
-                        {
-                            lastItemIndex = currentItemIndex;
-                            currentItemIndex = i;
-                            isSelected = true;
-                        }
-                    }
-                    else if (CurMode == Mode.ChangeItem && currentItemIndex == 0 && !string.IsNullOrEmpty(CurrentStoreData.ItemID))
-                    {
-                        if (CurrentStoreData.ItemID == itemID)
-                        {
-                            lastItemIndex = currentItemIndex;
-                            currentItemIndex = i;
-                            isSelected = true;
-                        }
-                    }
-                    else if (CurrentItemData == itemID)
-                    {
-                        isSelected = true;
-                    }
+                    var isSelected = CurrentItemData == itemID;
                     uiItemData.transform.Find("Selected").gameObject.SetActive(isSelected);
                     if (isSelected)
                     {
@@ -1034,13 +1000,6 @@ namespace ProjectOC.InventorySystem.UI
             }
             else if (this.CurMode == Mode.Upgrade)
             {
-                this.StoreTransform.gameObject.SetActive(false);
-                this.ChangeItem.gameObject.SetActive(false);
-                this.Upgrade.gameObject.SetActive(true);
-                this.BotKeyTips_KeyTips.gameObject.SetActive(false);
-                this.BotKeyTips_ChangeItem.gameObject.SetActive(false);
-                this.BotKeyTips_Upgrade.gameObject.SetActive(true);
-
                 #region Build
                 // Icon
                 string buildCID = Store.WorldStore.Classification.ToString();
