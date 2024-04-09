@@ -18,6 +18,7 @@ namespace ProjectOC.Player
         [LabelText("是否启用旋转"), ShowInInspector]
         public bool bRotEnable;
 
+        private bool bSpringScaleEnable = true;
         /// <summary>
         /// 摄像机transform
         /// </summary>
@@ -98,11 +99,13 @@ namespace ProjectOC.Player
             }
             #region 相机跟随
 
-            float mouseScroll = this.MouseScroll.ReadValue<float>() * scrollSpeed;
-            SpringCurLength =  Mathf.Clamp(SpringCurLength + mouseScroll,SpringMinLength,SpringMaxLength);
-            Vector3 camPos =  VCamera.transform.localPosition.normalized* SpringCurLength;
-            VCamera.transform.localPosition = camPos;
-
+            if (bSpringScaleEnable)
+            {
+                float mouseScroll = this.MouseScroll.ReadValue<float>() * scrollSpeed;
+                SpringCurLength =  Mathf.Clamp(SpringCurLength + mouseScroll,SpringMinLength,SpringMaxLength);
+                Vector3 camPos =  VCamera.transform.localPosition.normalized* SpringCurLength;
+                VCamera.transform.localPosition = camPos;
+            }
             #endregion
             
             #region 跟随鼠标旋转

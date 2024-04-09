@@ -2,11 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TypeChangePinchSetting : IPinchSettingComp
+namespace ProjectOC.PinchFace
 {
-    public int Index { get; }
-    public void LoadData()
+    public class TypeChangePinchSetting : IPinchSettingComp
     {
-        throw new System.NotImplementedException();
+        public int Index { get; }
+        public void LoadData()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void GenerateUI()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

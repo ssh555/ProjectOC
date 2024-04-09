@@ -1,3 +1,4 @@
+using System;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,6 +8,13 @@ namespace ML.PlayerCharacterNS
 {
     public abstract class IStartPoint:MonoBehaviour
     {
+        public enum StartPointType
+        {
+            Player,
+            AI
+        }
+
+        protected StartPointType startPointType = StartPointType.Player;
         [ShowInInspector]
         public bool EnablePosRange;
         [ShowInInspector,ShowIf("@EnablePosRange == true")] 
@@ -16,5 +24,6 @@ namespace ML.PlayerCharacterNS
         public bool EnableRotRange;
         [ShowInInspector,ShowIf("@EnableRotRange == true"),Range(0,180f)] 
         public float RotRange;   //应该只需要旋转Y轴吧
+        
     }
 }
