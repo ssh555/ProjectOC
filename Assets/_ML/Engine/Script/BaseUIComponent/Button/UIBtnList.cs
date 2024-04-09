@@ -20,9 +20,13 @@ namespace ML.Engine.UI
     public class UIBtnList : ISelected
     {
         #region ISelected
+        [ShowInInspector]
         public ISelected LeftUI { get ; set ; }
+        [ShowInInspector]
         public ISelected RightUI { get; set; }
+        [ShowInInspector]
         public ISelected UpUI { get; set; }
+        [ShowInInspector]
         public ISelected DownUI { get; set; }
         #endregion
 
@@ -66,7 +70,8 @@ namespace ML.Engine.UI
         private bool isWheel;
 
         private bool NeedToResetCurSelected = false;
-        private bool isEmpty { set { this.uiBtnListContainer?.RefreshIsEmpty(); } get { return isEmpty; } }
+        [ShowInInspector]
+        private bool isEmpty;
         public bool IsEmpty { get { return isEmpty; } }
 
         /// <summary>
@@ -144,6 +149,7 @@ namespace ML.Engine.UI
             {
                 this.isEmpty = false;
             }
+            this.uiBtnListContainer?.RefreshIsEmpty();
 
             foreach (var btn in OneDimSelectedButtons)
             {
@@ -203,7 +209,7 @@ namespace ML.Engine.UI
                 }
             }
 
-            if (OneDimCnt > 0 && (hasInitSelect||NeedToResetCurSelected)) 
+            if (OneDimCnt > 0 && (hasInitSelect || (NeedToResetCurSelected && this.uiBtnListContainer?.CurSelectUIBtnList == this))) 
             {
                 //初始化选择对象
                 this.TwoDimI = 0;
@@ -271,16 +277,19 @@ namespace ML.Engine.UI
                 var btn = handle.Result.GetComponent<SelectedButton>();
                 btn.gameObject.name = btn.GetHashCode().ToString();
                 btn.transform.SetParent(this.parent.Find("Container"), false);
+
+                bool needMoveToBtnList = this.uiBtnListContainer.IsEmpty;
+
                 InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
-
-                this.UIBtnListContainer?.RefreshEdge();
-/*                if (this.uiBtnListContainer.IsEmpty)
+                
+                if(needMoveToBtnList)
                 {
-                    this.uiBtnListContainer.MoveToBtnList(this);
-                }*/
-
-
-
+                    this.UIBtnListContainer?.FindEnterableUIBtnList();
+                }
+                else
+                {
+                    this.UIBtnListContainer?.RefreshEdge();
+                }
             };
             
         }
@@ -302,7 +311,7 @@ namespace ML.Engine.UI
             this.UIBtnListContainer?.RefreshEdge();*/
             int i = SelectedButtonIndex / TwoDimW;
             int j = SelectedButtonIndex % TwoDimW;
-            if (this.TwoDimSelectedButtons[i][j] == this.CurSelected)
+            if (this.TwoDimSelectedButtons[i][j] == this.CurSelected) 
             {
                 this.NeedToResetCurSelected = true;
             }

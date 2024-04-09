@@ -53,7 +53,9 @@ namespace ML.Engine.UI
         #region Internal
         protected override void UnregisterInput()
         {
+            //去除按钮加入的所有回调
             this.UIBtnList.RemoveAllListener();
+            //解绑输入
             this.UIBtnList.DeBindInputAction();
             ML.Engine.Input.InputManager.Instance.Common.StartMenu.Disable();
         }
@@ -249,8 +251,15 @@ namespace ML.Engine.UI
         }
         protected override void OnLoadJsonAssetComplete(StartMenuPanelStruct datas)
         {
+            base.OnLoadJsonAssetComplete(datas);
             InitBtnData(datas);
-
+        }
+        private void InitBtnData(StartMenuPanelStruct datas)
+        {
+            foreach (var tt in datas.Btns)
+            {
+                this.UIBtnList.SetBtnText(tt.name, tt.description.GetText());
+            }
         }
         protected override void InitTextContentPathData()
         {
@@ -264,13 +273,7 @@ namespace ML.Engine.UI
             UIBtnListInitor uIBtnListInitor = this.transform.GetComponentInChildren<UIBtnListInitor>();
             this.UIBtnList = new UIBtnList(uIBtnListInitor);
         }
-        private void InitBtnData(StartMenuPanelStruct datas)
-        {    
-            foreach (var tt in datas.Btns)
-            {
-                this.UIBtnList.SetBtnText(tt.name, tt.description.GetText());
-            }
-        }
+        
 
         #endregion
     }

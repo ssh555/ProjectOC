@@ -3,8 +3,6 @@ using ML.Engine.Manager;
 using ML.Engine.SaveSystem;
 using ML.Engine.TextContent;
 using Sirenix.OdinInspector;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -14,15 +12,13 @@ using static ML.Engine.UI.UIBtnListContainer;
 
 namespace ML.Engine.UI
 {
-    public class TestPanelB : ML.Engine.UI.UIBasePanel
+    public class TestPanelA : ML.Engine.UI.UIBasePanel
     {
-
         #region Override
         protected override void Awake()
         {
             base.Awake();
             this.ButtonList = transform.Find("ButtonList");
-            this.AddBtnInputField = this.ButtonList.Find("AddBtn").Find("InputField").GetComponent<TMP_InputField>();
             this.DeleteBtnInputField = this.ButtonList.Find("DeleteBtn").Find("InputField").GetComponent<TMP_InputField>();
         }
 
@@ -63,45 +59,20 @@ namespace ML.Engine.UI
             this.TestBtnList.SetBtnAction("AddBtn",
             () =>
             {
-                int number1;
-                if (!int.TryParse(AddBtnInputField.text, out number1))
-                {
-                    Debug.Log("请重新输入");
-                    return;
-                }
-
-                this.UIBtnListContainer.AddBtn(number1, "Assets/_ML/MLResources/BaseUIPrefab/BaseUISelectedBtn.prefab");
-                
+                this.UIBtnListContainer.AddBtnList("ML/BaseUIPanel/GridNavagation/TestButtonList.prefab");
             });
 
             this.TestBtnList.SetBtnAction("DeleteBtn",
             () =>
             {
-                string[] numbers = DeleteBtnInputField.text.Split(',');
-                int number1, number2;
-                if (numbers.Length == 2)
-                {
-                    if (!int.TryParse(numbers[0], out number1))
-                    {
-                        Debug.Log("请重新输入");
-                        return;
-                    }
-
-                    if (!int.TryParse(numbers[1], out number2))
-                    {
-                        Debug.Log("请重新输入");
-                        return;
-                    }
-                }
-                else
+                int number1;
+                if (!int.TryParse(DeleteBtnInputField.text, out number1))
                 {
                     Debug.Log("请重新输入");
                     return;
                 }
 
-                
-                this.UIBtnListContainer.DeleteBtn(number1, number2);
-
+                this.UIBtnListContainer.DeleteBtnList(number1);
             });
         }
 
@@ -112,22 +83,17 @@ namespace ML.Engine.UI
 
         #endregion
         [ShowInInspector]
-        private UIBtnListContainer UIBtnListContainer;
+        
         private Transform ButtonList;
         private UIBtnList TestBtnList;
-        private TMP_InputField AddBtnInputField, DeleteBtnInputField;
+        private TMP_InputField DeleteBtnInputField;
+
+        private UIBtnListContainer UIBtnListContainer;
         protected override void InitBtnInfo()
         {
-            UIBtnListContainerInitor uIBtnListContainerInitor = this.transform.GetComponentInChildren<UIBtnListContainerInitor>();
-            this.UIBtnListContainer = new UIBtnListContainer(uIBtnListContainerInitor.transform, uIBtnListContainerInitor.btnListContainerInitData);
+            this.UIBtnListContainer = new UIBtnListContainer(this.transform.GetComponentInChildren<UIBtnListContainerInitor>());
             this.TestBtnList = new UIBtnList(ButtonList.GetComponentInChildren<UIBtnListInitor>());
         }
 
-
-        
-
-        
-
     }
-
 }
