@@ -8,29 +8,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fef3870f-3f3d-437b-b554-2a7fe5c6b01a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/Windows" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/Windows" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/Windows.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/Windows.manifest" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/materials/other.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/materials/other.manifest" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/prefabs/buildingsystem/prefab.manifest" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/scene" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/scene" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/scene.manifest" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/StreamingAssets/Windows/scene.manifest" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingArea/BuildingArea.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/BuildingArea/BuildingArea.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/UI/BSPlaceModePanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/UI/BSPlaceModePanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/UI/BSSelectBPartPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/BuildingSystem/UI/BSSelectBPartPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/InventorySystem/CompositeSystem/CompositeManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/InventorySystem/CompositeSystem/CompositeManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/InventorySystem/Scripts/ItemManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/InventorySystem/Scripts/ItemManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/OCResources/Prefabs/BuildingSystem/Prefabs/IslandMainPrefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/OCResources/Prefabs/BuildingSystem/Prefabs/IslandMainPrefab.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/GameScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/GameScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/ssh/_TotalTest.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/wp/Mainland.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/wp/Mainland.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/yl/yl.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/yl/yl.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/Building/ResonanceWheel/UI/BeastPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/Building/ResonanceWheel/UI/BeastPanel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/InventorySystem/UI/UIInfiniteInventory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/InventorySystem/UI/UIInfiniteInventory.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/IslandBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/IslandBase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/IslandManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/IslandManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/Manager/LocalGameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/Manager/LocalGameManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/TechTree/TechTreeManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/TechTree/TechTreeManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.projectoc/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.projectoc/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Animancer.Examples.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Animancer.Examples.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Animancer.FSM.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Animancer.FSM.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Animancer.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Animancer.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assembly-CSharp-Editor.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp-Editor.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assembly-CSharp-firstpass.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp-firstpass.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/Engine/Utility/Enum/SingleEnumAssetWithDisplayName.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Engine/Utility/Enum/SingleEnumAssetWithDisplayName.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ML/Scene/PreScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ML/Scene/PreScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/OCResources/Materials/Character/PlayerCharacter/AnMiXiu_PinchFace/Pants.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/OCResources/Materials/Character/PlayerCharacter/AnMiXiu_PinchFace/Pants.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/OCResources/Materials/Character/PlayerCharacter/AnMiXiu_PinchFace/Tie.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/OCResources/Materials/Character/PlayerCharacter/AnMiXiu_PinchFace/Tie.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/OCResources/Materials/Character/PlayerCharacter/AnMiXiu_PinchFace/瞳孔.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/OCResources/Materials/Character/PlayerCharacter/AnMiXiu_PinchFace/瞳孔.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/OCResources/Meshes/Character/AnMiXiu.fbx.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/OCResources/Meshes/Character/AnMiXiu.fbx.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/OCResources/Meshes/Character/PinchPart/HairBack.fbx.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/OCResources/Meshes/Character/PinchPart/HairBack.fbx.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/OCResources/Meshes/Character/PinchPart/HairFront1.fbx.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/OCResources/Meshes/Character/PinchPart/HairFront1.fbx.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/yangLe/PinchPartScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scene/_TEST/yangLe/PinchPartScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/Building/ResonanceWheel/UI/ResonanceWheelUI.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/Building/ResonanceWheel/UI/ResonanceWheelUI.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/PinchFace/CharacterModelPinch.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_ProjectOC/Scripts/PinchFace/CharacterModelPinch.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectOC.sln" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectOC.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sirenix.OdinInspector.Modules.Unity.Addressables.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Sirenix.OdinInspector.Modules.Unity.Addressables.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sirenix.OdinInspector.Modules.UnityMathematics.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Sirenix.OdinInspector.Modules.UnityMathematics.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,16 +41,21 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/0ac2e88b7fe94e2890c926b6a574e5886200/78/2d9f789f/AssetBundle.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9b9fa26e86114fcba20da47317e725fe172c00/68/f2efe1be/Component.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9b9fa26e86114fcba20da47317e725fe172c00/d9/5928a646/Transform.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9b9fa26e86114fcba20da47317e725fe172c00/e0/2dfe42da/AsyncOperation.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/9b9fa26e86114fcba20da47317e725fe172c00/f4/4d115c28/Vector3.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/be8e834a1bd2405aa702c518821eafa21fe00/b7/c785434c/CharacterController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3ea01e77be99618395f448b16bd7cc2bd4248bd9e5d8474964b2d97f39c5d74/System.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d44b17e136d09081da1e8fd0e8c83fde60e11818b9f2442d7ed8cb733fae895e/System.Collections.Generic.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/INeedPowerBpart.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/IPowerBPart.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_ProjectOC/Scripts/LandMassExpand/ISupportPowerBPart.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_ProjectOC/Scripts/PinchFace/CharacterModelPinch.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_ProjectOC/Scripts/PinchFace/PinchPart.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.universal@14.0.8/Shaders/Lit.shader" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.timeline@1.7.5/Editor/Animation/TimelineAnimationUtilities.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Runtime/UI/Core/Layout/CanvasScaler.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
@@ -65,25 +69,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "yangLeNew",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;yangLe&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "rider.external.source.directories": [
-      "C:\\Users\\34933\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\DecompilerCache",
-      "C:\\Users\\34933\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\SourcesCache",
-      "C:\\Users\\34933\\AppData\\Local\\Symbols\\src"
+  &quot;keyToStringList&quot;: {
+    &quot;rider.external.source.directories&quot;: [
+      &quot;C:\\Users\\34933\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\DecompilerCache&quot;,
+      &quot;C:\\Users\\34933\\AppData\\Roaming\\JetBrains\\Rider2023.2\\resharper-host\\SourcesCache&quot;,
+      &quot;C:\\Users\\34933\\AppData\\Local\\Symbols\\src&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Standalone Player.Start Unity">
     <configuration name="DataToBinary" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
@@ -203,6 +208,18 @@
       <workItem from="1707284796327" duration="2479000" />
       <workItem from="1708611170205" duration="617000" />
       <workItem from="1709863371495" duration="17281000" />
+      <workItem from="1712043537008" duration="13511000" />
+      <workItem from="1712071471163" duration="2956000" />
+      <workItem from="1712110032195" duration="3701000" />
+      <workItem from="1712114053924" duration="15285000" />
+      <workItem from="1712199242683" duration="23404000" />
+      <workItem from="1712227240941" duration="9826000" />
+      <workItem from="1712238836766" duration="4954000" />
+      <workItem from="1712283624556" duration="8112000" />
+      <workItem from="1712303572714" duration="6275000" />
+      <workItem from="1712462152096" duration="628000" />
+      <workItem from="1712545170397" duration="13793000" />
+      <workItem from="1712630224899" duration="4252000" />
     </task>
     <servers />
   </component>
@@ -214,5 +231,9 @@
   <component name="UnityUnitTestConfiguration" currentTestLauncher="Both" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

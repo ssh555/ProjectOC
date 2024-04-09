@@ -45,7 +45,7 @@ MonoBehaviour:
   - name: Tooth
     displayName: "\u7259"
     value: 6
-  - name: Body
+  - name: Trunk
     displayName: "\u4F53\u8868"
     value: 7
   - name: Back
@@ -66,3 +66,15 @@ MonoBehaviour:
   - name: Leg
     displayName: "\u817F"
     value: 13
+  - name: Body
+    displayName: "\u4F53\u578B"
+    value: 14
+  - name: Hair
+    displayName: "\u5934\u53D1"
+    value: 15
+  - name: Eye
+    displayName: "\u773C\u775B"
+    value: 16
+  - name: FaceDress
+    displayName: "\u9762\u5986"
+    value: 17

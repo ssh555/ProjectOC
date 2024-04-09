@@ -2,9 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IPinchSettingComp
+namespace ProjectOC.PinchFace
 {
-    int Index { get; }
-    public void LoadData();
+    public interface IPinchSettingComp
+    {
+        int Index { get; }
+        public void LoadData();
 
+        //生成UI时顺便加入ButtonAction，读取相关Data
+        public void GenerateUI();
+    }
 }
