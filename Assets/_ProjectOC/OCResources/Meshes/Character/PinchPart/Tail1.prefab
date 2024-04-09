@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -3306380293972821347, guid: bf89a3c8f08d9104daf43d685769dc67, type: 3}
       propertyPath: m_Name
-      value: KeyTail
+      value: Key_Tail
       objectReference: {fileID: 0}
     - target: {fileID: -1993966415131351515, guid: bf89a3c8f08d9104daf43d685769dc67, type: 3}
       propertyPath: m_Name
