@@ -10,7 +10,6 @@ namespace ML.Engine.InventorySystem
     {
         private UnityEngine.UI.Image Image;
         public PlayerCharacter Player;
-        public bool CanShow = false;
 
         #region ITickComponent
         public int tickPriority { get; set; }
@@ -29,7 +28,7 @@ namespace ML.Engine.InventorySystem
 
         public void LateTick(float deltatime)
         {
-            if (CanShow && Image.sprite != null && Vector3.Distance(transform.position, Player.transform.position) <= 5f)
+            if (Image.sprite != null && Vector3.Distance(transform.position, Player.transform.position) <= 5f)
             {
                 Image.enabled = true;
                 Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
