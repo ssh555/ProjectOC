@@ -9,27 +9,24 @@ namespace ML.PlayerCharacterNS
 {
     public class CharacterManager : ML.Engine.Manager.GlobalManager.IGlobalManager
     {
-        List<PlayerController> playerControllers;
-        List<IPlayerCharacter> playerCharacters;
-        List<IAICharacter> AICharacters;
-        private List<IStartPoint> playerStartPoints;
+        List<PlayerController> playerControllers = new List<PlayerController>();
+        List<IPlayerCharacter> playerCharacters = new List<IPlayerCharacter>();
+        List<IAICharacter> AICharacters = new List<IAICharacter>();
+        public List<IStartPoint> playerStartPoints = new List<IStartPoint>();
         int CurrentControllerIndex;
 
         //暂定Scene1 的触发时间
         public void Scene1Init()
         {
-            playerControllers = new List<PlayerController>();
-            playerStartPoints = new List<IStartPoint>();
             AddPlayerController(new PlayerController());
             CurrentControllerIndex = 0;
             
             //Player生成
-            playerStartPoints = GameObject.Find("SpawnPoints").GetComponentsInChildren<IStartPoint>().ToList();
-            GetController().SpawnCharacter(0,playerStartPoints[Random.Range(0,playerStartPoints.Count)]);
+            GetPlayerController().SpawnCharacter(0,playerStartPoints[Random.Range(0,playerStartPoints.Count)]);
         }
         
         
-        public PlayerController GetController(int index = -1)
+        public PlayerController GetPlayerController(int index = -1)
         {
             if (index == -1)
                 index = CurrentControllerIndex;

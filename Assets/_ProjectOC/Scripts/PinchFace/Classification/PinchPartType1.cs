@@ -15,11 +15,7 @@ namespace ProjectOC.PinchFace
 		ArmPart = 3,
 		[LabelText("腿部")]
 		LegPart = 4,
-		[LabelText("身体")]
-		BodyPart = 5,
-		[LabelText("头发")]
-		HairPart = 6,
-		[LabelText("眼睛")]
-		EyePart = 7,
+		[LabelText("通用")]
+		Common = 5,
 	}
 }
