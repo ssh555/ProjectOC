@@ -99,3 +99,93 @@ MonoBehaviour:
   - name: Extra6
     displayName: "\u9644\u52A06"
     value: 603
+  - name: SingleBed
+    displayName: "\u5355\u4EBA\u5E8A"
+    value: 700
+  - name: DoubleBed
+    displayName: "\u53CC\u4EBA\u5E8A"
+    value: 701
+  - name: Bunk
+    displayName: "\u53CC\u5C42\u5E8A"
+    value: 702
+  - name: Leisure
+    displayName: "\u4F11\u95F2\u5E8A"
+    value: 703
+  - name: Sofa
+    displayName: "\u6C99\u53D1"
+    value: 710
+  - name: Chair
+    displayName: "\u6905"
+    value: 711
+  - name: Stool
+    displayName: "\u51F3"
+    value: 712
+  - name: Tea
+    displayName: "\u8336\u51E0"
+    value: 720
+  - name: Board
+    displayName: "\u9910\u684C"
+    value: 721
+  - name: Desk
+    displayName: "\u4E66\u684C"
+    value: 722
+  - name: StorageDesk
+    displayName: "\u7F6E\u7269\u53F0"
+    value: 723
+  - name: Functional
+    displayName: "\u529F\u80FD\u684C"
+    value: 724
+  - name: Bookcase
+    displayName: "\u4E66\u67DC"
+    value: 730
+  - name: Cabinet
+    displayName: "\u6A71\u67DC"
+    value: 731
+  - name: Wardrobe
+    displayName: "\u8863\u67DC"
+    value: 732
+  - name: Credenza
+    displayName: "\u77EE\u67DC"
+    value: 733
+  - name: Closet
+    displayName: "\u58C1\u67DC"
+    value: 734
+  - name: Box
+    displayName: "\u7BB1"
+    value: 735
+  - name: Vertical
+    displayName: "\u7ACB\u5F0F\u7F6E\u7269\u67B6"
+    value: 740
+  - name: Ledge
+    displayName: "\u58C1\u6302\u7F6E\u7269\u67B6"
+    value: 741
+  - name: Bath
+    displayName: "\u6D74\u6C60"
+    value: 750
+  - name: Pond
+    displayName: "\u6C34\u6C60"
+    value: 751
+  - name: Container
+    displayName: "\u6C34\u4F53\u7BB1"
+    value: 752
+  - name: Ceiling
+    displayName: "\u540A\u706F"
+    value: 760
+  - name: FloorLamp
+    displayName: "\u843D\u5730\u706F"
+    value: 761
+  - name: WallLamp
+    displayName: "\u58C1\u706F"
+    value: 762
+  - name: TableLamp
+    displayName: "\u53F0\u706F"
+    value: 763
+  - name: Carpet
+    displayName: "\u5730\u6BEF"
+    value: 770
+  - name: Curtain
+    displayName: "\u5E18"
+    value: 771
+  - name: Nature
+    displayName: "\u81EA\u7136"
+    value: 772

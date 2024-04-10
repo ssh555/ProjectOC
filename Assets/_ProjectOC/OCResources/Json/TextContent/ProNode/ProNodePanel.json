@@ -186,25 +186,19 @@
         "English" : "Production"
     },
     "workerStatus":[
-
         {
-            "Chinese" : "摸鱼",
-            "English" : "Fish"
+            "Chinese" : "摸鱼中",
+            "English" : "On Fish"
         },
         {
-            "Chinese" : "休息",
-            "English" : "Relax"
+            "Chinese" : "离岗",
+            "English" : "Leave"
         },
         {
-            "Chinese" : "工作",
-            "English" : "Work"
+            "Chinese" : "值班中",
+            "English" : "On Duty"
         }
     ],
-
-    "textOnDuty" : {
-        "Chinese" : "在岗",
-        "English" : "OnDuty"
-    },
     "textTime" : {
         "Chinese" : "制作时间",
         "English" : "Time"

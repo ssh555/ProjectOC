@@ -65,7 +65,21 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		Door = 207,
 		[LabelText("窗")]
 		Window = 208,
-		[LabelText("床")]
+		[LabelText("卧具")]
 		Bed = 300,
+		[LabelText("坐具")]
+		Seat = 301,
+		[LabelText("桌台")]
+		Table = 302,
+		[LabelText("箱柜")]
+		Cupboard = 303,
+		[LabelText("架")]
+		Rack = 304,
+		[LabelText("池")]
+		Pool = 305,
+		[LabelText("灯")]
+		Lamp = 306,
+		[LabelText("装饰")]
+		Decoration = 307,
 	}
 }

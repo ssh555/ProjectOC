@@ -466,6 +466,7 @@ namespace ProjectOC.ProNodeNS
         {
             worker.ArriveProNode = true;
             worker.Agent.enabled = false;
+            worker.LastPosition = worker.transform.position;
             worker.transform.position = WorldProNode.transform.position + new Vector3(0, 2f, 0);
             worker.ProNode.StartProduce();
         }
@@ -483,12 +484,11 @@ namespace ProjectOC.ProNodeNS
                 {
                     this.Worker.StatusChangeAction -= OnWorkerStatusChangeAction;
                     this.Worker.APChangeAction -= OnWorkerAPChangeAction;
-                    //this.Worker.SetTimeStatusAll(TimeStatus.Relax);
                     this.Worker.ClearDestination();
                     this.Worker.ProNode = null;
                     if (!this.Worker.Agent.enabled)
                     {
-                        this.Worker.transform.position = WorldProNode.transform.position;
+                        this.Worker.transform.position = this.Worker.LastPosition;
                         this.Worker.Agent.enabled = true;
                     }
                     this.Worker = null;

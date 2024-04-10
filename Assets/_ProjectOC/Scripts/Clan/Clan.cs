@@ -34,5 +34,34 @@ namespace ProjectOC.ClanNS
             this.ID = id;
             this.Name = name;
         }
+
+        public class Sort : IComparer<Clan>
+        {
+            public int Compare(Clan x, Clan y)
+            {
+                if (x == null)
+                {
+                    if (y == null)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        return 1;
+                    }
+                }
+                if (y == null)
+                {
+                    return -1;
+                }
+                bool hasBedX = x.HasBed;
+                bool hasBedY = y.HasBed;
+                if (hasBedX != hasBedY)
+                {
+                    return hasBedX.CompareTo(hasBedY);
+                }
+                return x.ID.CompareTo(y.ID);
+            }
+        }
     }
 }
