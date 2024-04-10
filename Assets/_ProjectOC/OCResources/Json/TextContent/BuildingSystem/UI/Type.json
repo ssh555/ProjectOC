@@ -205,8 +205,57 @@
     {
         "name": "Bed",
         "description": {
-            "Chinese": "床",
+            "Chinese": "卧具",
             "English": "Bed"
+        }
+    },
+    {
+        "name": "Seat",
+        "description": {
+            "Chinese": "坐具",
+            "English": "Seat"
+        }
+    },
+    {
+        "name": "Table",
+        "description": {
+            "Chinese": "桌台",
+            "English": "Table"
+        }
+    },
+    {
+        "name": "Rack",
+        "description": {
+            "Chinese": "架",
+            "English": "Rack"
+        }
+    },
+    {
+        "name": "Cupboard",
+        "description": {
+            "Chinese": "箱柜",
+            "English": "Cupboard"
+        }
+    },
+    {
+        "name": "Pool",
+        "description": {
+            "Chinese": "池",
+            "English": "Pool"
+        }
+    },
+    {
+        "name": "Lamp",
+        "description": {
+            "Chinese": "灯",
+            "English": "Lamp"
+        }
+    },
+    {
+        "name": "Decoration",
+        "description": {
+            "Chinese": "装饰",
+            "English": "Decoration"
         }
     }
 ]
