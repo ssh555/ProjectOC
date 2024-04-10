@@ -9,10 +9,11 @@ namespace ML.Engine.InventorySystem.CompositeSystem
     [System.Serializable]
     public class CompositionTableData : IGenData
     {
+        public string id;
         /// <summary>
         /// 合成对象 -> Item | 建筑物 ID 引用
         /// </summary>
-        public string id;
+        public string compositionid;
         /// <summary>
         /// 一次可合成数量
         /// </summary>
@@ -40,7 +41,8 @@ namespace ML.Engine.InventorySystem.CompositeSystem
 
         public CompositionTableData(RecipeTableData data, ItemTableData itemData)
         {
-            this.id = data.Product.id;
+            this.id = data.ID;
+            this.compositionid = data.Product.id;
             this.compositionnum = data.Product.num;
             this.formula = data.Raw.ToArray();
             this.name = data.Name;
@@ -51,6 +53,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         public CompositionTableData(BuildingTableData data)
         {
             this.id = data.id;
+            this.compositionid = data.id;
             this.compositionnum = 1;
             this.formula = data.raw.ToArray();
             this.name = data.name;
@@ -61,6 +64,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         public CompositionTableData(ProjectOC.WorkerEchoNS.WorkerEchoTableData data)
         {
             this.id = data.ID;
+            this.compositionid = data.ID;
             this.compositionnum = 1;
             this.formula = data.Raw.ToArray();
             this.name = new TextContent.TextContent();
@@ -79,6 +83,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             }
             // 0 -> id
             this.id = row[0];
+            this.compositionid = row[0];
             // 1 -> name
             this.name = new TextContent.TextContent();
             this.name.Chinese = row[1];
