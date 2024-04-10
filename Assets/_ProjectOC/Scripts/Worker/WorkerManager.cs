@@ -47,6 +47,11 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         private HashSet<Worker> Workers = new HashSet<Worker>();
 
+        public string GetOneNewWorkerInstanceID()
+        {
+            return ML.Engine.Utility.OSTime.OSCurMilliSeconedTime.ToString();
+        }
+
         public List<Worker> GetWorkers()
         {
             this.Workers.RemoveWhere(item => item == null);
@@ -111,6 +116,7 @@ namespace ProjectOC.WorkerNS
                     {
                         worker = obj.AddComponent<Worker>();
                     }
+                    worker.InstanceID = this.GetOneNewWorkerInstanceID();
                     if (isAdd)
                     {
                         Workers.Add(worker);
@@ -150,15 +156,10 @@ namespace ProjectOC.WorkerNS
         private SpriteAtlas workerAtlas = null;
         private AsyncOperationHandle spriteAtalsHandle;
 
-        public Texture2D GetTexture2D(string name)
-        {
-            return this.workerAtlas.GetSprite(name).texture;
-        }
         public Sprite GetSprite(string name)
         {
             return workerAtlas.GetSprite(name);
         }
-
         /// <summary>
         /// 所有调用的地方，都必须维护好GameObject或者Handle，在不使用GameObejct的时候，除了destroy之外还需要Release(handle)
         /// </summary>
@@ -170,4 +171,3 @@ namespace ProjectOC.WorkerNS
         }
     }
 }
-

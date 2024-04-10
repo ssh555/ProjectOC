@@ -178,6 +178,13 @@ namespace ProjectOC.Building.UI
             if (CurMode == Mode.Bed)
             {
                 this.CurMode = Mode.ChangeClan;
+                this.Clans.AddRange(LocalGameManager.Instance.ClanManager.Clans);
+                this.Clans.Sort(new Clan.Sort());
+                if (this.Clan != null)
+                {
+                    this.Clans.Remove(this.Clan);
+                    this.Clans.Insert(0, this.Clan);
+                }
             }
             else if (CurMode == Mode.ChangeClan)
             {
@@ -202,6 +209,8 @@ namespace ProjectOC.Building.UI
             else if (CurMode == Mode.ChangeClan)
             {
                 CurMode = Mode.Bed;
+                this.Clans.Clear();
+                index = 0;
                 Refresh();
             }
             else if(CurMode == Mode.ConfirmClan)
@@ -252,7 +261,6 @@ namespace ProjectOC.Building.UI
             }
             else if (CurMode == Mode.ChangeClan)
             {
-                this.Clans = LocalGameManager.Instance.ClanManager.Clans;
                 ChangeClan.gameObject.SetActive(true);
                 ConfirmClan.gameObject.SetActive(false);
 
