@@ -112,6 +112,56 @@ namespace ProjectOC.InventorySystem.UI
         }
         #endregion
 
+        #region Config
+        [System.Serializable]
+        public struct APBarColorConfig
+        {
+            [LabelText("初始体力值")]
+            public int Start;
+            [LabelText("结束体力值")]
+            public int End;
+            [LabelText("对应颜色")]
+            public Color Color;
+        }
+        [System.Serializable]
+        public struct IconNumConfig
+        {
+            [LabelText("初始体力值")]
+            public int Start;
+            [LabelText("结束体力值")]
+            public int End;
+            [LabelText("对应数量")]
+            public int Num;
+        }
+
+        [LabelText("体力对应的体力条颜色"), FoldoutGroup("配置项"), ShowInInspector]
+        public List<APBarColorConfig> APBarColorConfigs = new List<APBarColorConfig>();
+        [LabelText("学习速度对应的图标数量"), FoldoutGroup("配置项"), ShowInInspector]
+        public List<IconNumConfig> ExpRateIconNumConfigs = new List<IconNumConfig>();
+        private Color GetAPBarColor(int ap)
+        {
+            foreach (var config in APBarColorConfigs)
+            {
+                if (config.Start <= ap && (config.End == 0 || ap <= config.End))
+                {
+                    return config.Color;
+                }
+            }
+            return default(Color);
+        }
+        private int GetExpRateIconNum(int eff)
+        {
+            foreach (var config in ExpRateIconNumConfigs)
+            {
+                if (config.Start <= eff && (config.End == 0 || eff <= config.End))
+                {
+                    return config.Num;
+                }
+            }
+            return 0;
+        }
+        #endregion
+
         #region Internal
         public enum Mode
         {
@@ -127,7 +177,6 @@ namespace ProjectOC.InventorySystem.UI
             Worker = 1
         }
         public ProNodeSelectMode CurProNodeMode = ProNodeSelectMode.Recipe;
-
 
         public Worker Worker => ProNode.Worker;
         /// <summary>
@@ -701,7 +750,7 @@ namespace ProjectOC.InventorySystem.UI
                     {
                         ProNode_Worker.Find("Icon").GetComponent<Image>().sprite = WorkerIcon;
                         ProNode_Worker.Find("Bar1").GetComponent<Image>().fillAmount = (float)Worker.APCurrent / Worker.APMax;
-                        ProNode_Worker.Find("Bar1").GetComponent<Image>().color = Worker.Status != Status.Relaxing ? Color.green : Color.red;
+                        ProNode_Worker.Find("Bar1").GetComponent<Image>().color = GetAPBarColor(Worker.APCurrent);
                         ProNode_Worker.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = Worker.Name;
                         ProNode_Worker.Find("Gender").GetComponent<Image>().sprite = Worker.Gender == Gender.Male ? WorkerMaleIcon : WorkerFemalIcon ;
                         onDuty.text = PanelTextContent.workerStatus[(int)Worker.Status];
@@ -875,6 +924,8 @@ namespace ProjectOC.InventorySystem.UI
                     Recipe_Desc.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(product.id);
                     Recipe_Desc.Find("ItemDesc").GetComponent<TMPro.TextMeshProUGUI>().text = ItemManager.Instance.GetItemDescription(product.id);
                     Recipe_Desc.Find("EffectDesc").GetComponent<TMPro.TextMeshProUGUI>().text = ItemManager.Instance.GetEffectDescription(product.id);
+                    Recipe_Desc.Find("WeightIcon").gameObject.SetActive(true);
+                    Recipe_Desc.Find("Weight").GetComponent<TMPro.TextMeshProUGUI>().text = ItemManager.Instance.GetWeight(product.id).ToString();
                 }
                 else
                 {
@@ -884,6 +935,8 @@ namespace ProjectOC.InventorySystem.UI
                     Recipe_Desc.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textEmpty;
                     Recipe_Desc.Find("ItemDesc").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textEmpty;
                     Recipe_Desc.Find("EffectDesc").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textEmpty;
+                    Recipe_Desc.Find("WeightIcon").gameObject.SetActive(false);
+                    Recipe_Desc.Find("Weight").GetComponent<TMPro.TextMeshProUGUI>().text = "";
                 }
                 #endregion
 
@@ -980,7 +1033,7 @@ namespace ProjectOC.InventorySystem.UI
                     // Bar1
                     var bar1 = item.transform.Find("Bar1").GetComponent<Image>();
                     bar1.fillAmount = (float)worker.APCurrent / worker.APMax;
-                    bar1.color = worker.APCurrent < worker.APWorkThreshold ? Color.red : Color.green;
+                    bar1.color = GetAPBarColor(worker.APCurrent);
                     // Name
                     item.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = worker.Name;
                     // Gender
@@ -1004,18 +1057,18 @@ namespace ProjectOC.InventorySystem.UI
                     {
                         GridLayoutGroup gridLayout = item.transform.Find("Level").GetComponent<GridLayoutGroup>();
                         Transform template = item.transform.Find("Level").Find("Icon");
-                        int level = worker.Skill[ProNode.ExpType].Level;
+                        int num = GetExpRateIconNum(worker.ExpRate[ProNode.ExpType]);
                         Image[] images = item.transform.Find("Level").GetComponentsInChildren<Image>();
                         int cnt = 0;
                         foreach (var image in images)
                         {
-                            image.transform.gameObject.SetActive(cnt < level);
-                            if (cnt < level)
+                            image.transform.gameObject.SetActive(cnt < num);
+                            if (cnt < num)
                             {
                                 cnt++;
                             }
                         }
-                        while (cnt < level)
+                        while (cnt < num)
                         {
                             var uiitem = Instantiate(template, gridLayout.transform, false);
                             uiitem.gameObject.SetActive(true);
@@ -1309,7 +1362,7 @@ namespace ProjectOC.InventorySystem.UI
 
                     var bar1 = ProNode_Worker.Find("Bar1").GetComponent<Image>();
                     bar1.fillAmount = (float)Worker.APCurrent / Worker.APMax;
-                    bar1.color = Worker.APCurrent < Worker.APWorkThreshold ? Color.red : Color.green;
+                    bar1.color = GetAPBarColor(Worker.APCurrent);
                 }
             }
         }
