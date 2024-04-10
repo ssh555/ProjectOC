@@ -138,7 +138,7 @@ namespace ML.Engine.BuildingSystem.UI
             // ¸ü»» Height
 
             // ÏÂ²àÏÔÊ¾
-            bool active = (BuildingManager.Instance.GetBPartPrefabCountOnHeight(this.Placer.SelectedPartInstance) < 1 && BuildingManager.Instance.GetBPartPrefabCountOnStyle(this.Placer.SelectedPartInstance) < 1);
+            bool active = (BuildingManager.Instance.GetBPartPrefabCountOnHeight(this.Placer.SelectedPartInstance) > 1 || BuildingManager.Instance.GetBPartPrefabCountOnStyle(this.Placer.SelectedPartInstance) > 1);
             this.transform.Find("KT_AlterHeight").gameObject.SetActive(active);
         }
 
