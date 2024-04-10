@@ -23,58 +23,70 @@ MonoBehaviour:
     SerializationNodes: []
   enumNamespace: ProjectOC.PinchFace
   NoneName:
-    name: HeadTop
-    displayName: "\u5934\u9876"
+    name: None
+    displayName: None
     value: 0
   EnumList:
+  - name: HeadTop
+    displayName: "\u5934\u9876"
+    value: 1
   - name: Ear
     displayName: "\u8033"
-    value: 1
+    value: 2
   - name: EarTop
     displayName: "\u9876\u8033"
-    value: 2
+    value: 3
   - name: Brow
     displayName: "\u989D"
-    value: 3
+    value: 4
   - name: TopHorn
     displayName: "\u9876\u89D2"
-    value: 4
+    value: 5
   - name: Face
     displayName: "\u8138"
-    value: 5
+    value: 6
   - name: Tooth
     displayName: "\u7259"
-    value: 6
+    value: 7
   - name: Trunk
     displayName: "\u4F53\u8868"
-    value: 7
+    value: 8
   - name: Back
     displayName: "\u80CC\u5FC3"
-    value: 8
+    value: 9
   - name: Lumbar
     displayName: "\u8170\u4FA7"
-    value: 9
+    value: 10
   - name: Tail
     displayName: "\u5C3E"
-    value: 10
+    value: 11
   - name: Arm
     displayName: "\u624B\u81C2"
-    value: 11
+    value: 12
   - name: Hand
     displayName: "\u624B"
-    value: 12
+    value: 13
   - name: Leg
     displayName: "\u817F"
-    value: 13
+    value: 14
   - name: Body
     displayName: "\u4F53\u578B"
-    value: 14
-  - name: Hair
-    displayName: "\u5934\u53D1"
     value: 15
+  - name: HairFront
+    displayName: "\u524D\u53D1"
+    value: 16
+  - name: HairBack
+    displayName: "\u540E\u53D1"
+    value: 17
+  - name: HairDai
+    displayName: "\u5446\u6BDB"
+    value: 18
+  - name: HairBraid
+    displayName: "\u8FAB\u5B50"
+    value: 19
   - name: Eye
     displayName: "\u773C\u775B"
-    value: 16
+    value: 20
   - name: FaceDress
     displayName: "\u9762\u5986"
-    value: 17
+    value: 21

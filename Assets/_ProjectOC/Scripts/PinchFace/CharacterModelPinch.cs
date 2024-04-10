@@ -15,12 +15,7 @@ namespace ProjectOC.PinchFace
         [SerializeField] 
         List<GameObject> replaceGo = new List<GameObject>();
 
-        [SerializeField] 
-        List<Transform> boneWeight = new List<Transform>();
-
-        [SerializeField]
-        List<Transform> boneTransf = new List<Transform>();
-
+        
         public 
         List<GameObject> tempTail = new List<GameObject>();
         [ShowInInspector]
@@ -37,7 +32,7 @@ namespace ProjectOC.PinchFace
         
         public void TempChangeType(int index)
         {
-            ChangeType(PinchPartType2.HeadTop, index);
+            ChangeType(PinchPartType2.Tail, index);
         }
         public void EquipItem(PinchPartType2 boneType2, GameObject _PinchGo)
         {
@@ -54,57 +49,61 @@ namespace ProjectOC.PinchFace
 
         public void UnEquipItem(PinchPartType2 boneType2, GameObject _PinchGo)
         {
-            Transform keyBone = boneTransf[(int)boneType2];
-            //去除骨骼 ，移出Parent.Transform，然后 删除 gameObject 
-            DisCatalog( boneCatalog,keyBone);
-            keyBone.SetParent(this.transform.parent);
-            Destroy(keyBone.gameObject);
-            _PinchGo.transform.SetParent(this.transform.parent);
-            Destroy(_PinchGo);
+            if (boneTransfsDictionary.TryGetValue(boneType2, out var keyBone))
+            {
+                foreach (Transform bone in keyBone)
+                {
+                    //去除骨骼 ，移出Parent.Transform，然后 删除 gameObject 
+                    DisCatalog(boneCatalog,bone);
+                    bone.SetParent(this.transform.parent);
+                    Destroy(bone.gameObject);
+                }
+
+            }
+            
+            if (_PinchGo != null)
+            {
+                _PinchGo.transform.SetParent(this.transform.parent);
+                Destroy(_PinchGo);   
+            }
         }
 
         public GameObject Stitch(GameObject sourceClothing, GameObject targetCharacter)
         {
             GameObject targetClothingBone = null;
+            targetClothingBone = new GameObject(sourceClothing.name);
+            targetClothingBone.transform.SetParent(targetCharacter.transform);
             //if() 需要添加骨骼
             //追加骨骼，存入字典  ,S、T 来区分source、target
             //映射骨骼
-            string keyStr = "Key_";
-            Transform SkeyBone = BreadthFirstSearchForKey(sourceClothing.transform,keyStr);
-            if (SkeyBone != null)
+            
+            Transform SkeyBone = BreadthFirstSearchForKey(sourceClothing.transform,AddStr);
+            //如果部件中显示有Key骨骼，说明需要添加追加新骨骼
+            if (SkeyBone != null && SkeyBone.childCount > 0)
             {
-                SkeyBone.name = SkeyBone.name.Replace(keyStr, "");
+                //SkeyBone.name = SkeyBone.name.Replace(keyStr, "");
                 Transform TKeyBone = boneCatalog[SkeyBone.name];
             
                 // set parents,localPosition
-                foreach (var _trans in SkeyBone)
+                foreach (Transform _transBone in SkeyBone)
                 {
-                    
+                    GameObject SNewBone = GameObject.Instantiate(_transBone.gameObject);
+                    SNewBone.name = _transBone.name;
+            
+            
+                    SNewBone.transform.SetParent(TKeyBone);
+                    SNewBone.transform.localPosition = _transBone.localPosition;
+                    SNewBone.transform.localRotation = _transBone.localRotation;
+                    SNewBone.transform.localScale = _transBone.localScale;
+                    Catalog(boneCatalog,SNewBone.transform);
                 }
-
                 
-                Transform SNewBone = SkeyBone.GetChild(0);
-                targetClothingBone =GameObject.Instantiate(SNewBone.gameObject);
-                targetClothingBone.name = SNewBone.name;
-            
-            
-                targetClothingBone.transform.SetParent(TKeyBone);
-                targetClothingBone.transform.localPosition = SNewBone.transform.localPosition;
-                targetClothingBone.transform.localRotation = SNewBone.transform.localRotation;
-                targetClothingBone.transform.localScale = SNewBone.transform.localScale;
-                Catalog(boneCatalog,targetClothingBone.transform);
             }
-
+ 
             //添加smr组件并赋值、映射骨骼
             SkinnedMeshRenderer[] smrs = sourceClothing.GetComponentsInChildren<SkinnedMeshRenderer>();
             foreach (var smr in smrs)
             {
-                if (targetClothingBone == null)
-                {
-                    targetClothingBone = new GameObject(smr.gameObject.name);
-                    targetClothingBone.transform.SetParent(targetCharacter.transform);
-                }
-                
                 SkinnedMeshRenderer targetRenderer = AddSkinnedMeshRenderer(smr,targetClothingBone);
                 targetRenderer.bones = TranslateTransforms (smr.bones, boneCatalog);
             }
@@ -122,6 +121,7 @@ namespace ProjectOC.PinchFace
             Transform[] targets = new Transform[sources.Length];
             for (int index = 0; index < sources.Length; index++)
             {
+                //有可能还存有之前的骨骼数据，有脏东西删不掉
                 if(sources[index] == null)
                     continue;
                 Transform transf  = _boneCatalog[sources[index].name];
@@ -142,17 +142,20 @@ namespace ProjectOC.PinchFace
             //更换Mat 的 _MainTex 参数
         }
 
-        public void ChangeBoneScale(PinchPartType2 boneType2, Vector3 scaleValue)
+        public void ChangeBoneScale(BoneWeightType boneWeightType, Vector3 scaleValue)
         {
-            //上半身要缩放两跟骨骼，需要单独处理
-            if (boneType2 == PinchPartType2.Arm)
+            if (boneWeightDictionary.ContainsKey(boneWeightType))
             {
-                
-            }
-            else
-            {
-                //身体骨骼部分的排序
-                boneTransf[(int)boneType2 - (int)(PinchPartType2.Body)].localScale = scaleValue;    
+                //上半身要缩放两跟骨骼，需要单独处理
+                //考虑用一根骨骼约束驱动两根骨骼
+                if (boneWeightType == BoneWeightType.Arm)
+                {
+                       
+                }
+                else
+                {
+                    boneWeightDictionary[boneWeightType].localScale = scaleValue;                    
+                }
             }
         }
 
@@ -171,27 +174,61 @@ namespace ProjectOC.PinchFace
         #endregion
         
         #region TransformCatalog
-        
+            string AddStr = "Add_";
+            string WeightStr = "Weight_";
+            [ShowInInspector]
+            Dictionary<PinchPartType2, Transform> boneTransfsDictionary = new Dictionary<PinchPartType2, Transform>();
+            [ShowInInspector]
+            Dictionary<BoneWeightType, Transform> boneWeightDictionary = new Dictionary<BoneWeightType, Transform>();
             void Awake()
             {
+                Array enumValues = Enum.GetValues(typeof(PinchPartType2));
+                for(int i = 0;i<enumValues.Length;i++)
+                    replaceGo.Add(null);
+                
                 avatar = transform.Find("AnMiXiuBone");
                 Catalog(boneCatalog,avatar);
+                // boneWeightDictionary.Add(BoneWeightType.Head,transform);
+                // boneWeightDictionary.Add(BoneWeightType.Chest,transform);
+                // boneWeightDictionary.Add(BoneWeightType.Waist,transform);
+                // boneWeightDictionary.Add(BoneWeightType.Leg,transform);
+                // boneWeightDictionary.Add(BoneWeightType.Root,transform);
+                this.enabled = false;
             }
             
-            //将子物体加入字典
+            
+            //将子物体加入字典    containThis : 需不需要把自身加入字典
             private void Catalog (Dictionary<string,Transform>dic, Transform transform,bool containThis = true)
             {
-                if (containThis)
+                if (transform.name.StartsWith(AddStr))
                 {
-                    if(dic.ContainsKey(transform.name))
+                    string tempName = transform.name.Replace(AddStr, "");
+                    PinchPartType2 pinchPartType2;
+                    if (Enum.TryParse(tempName, out pinchPartType2))
                     {
-                        dic.Remove(transform.name); 
-                        dic.Add(transform.name, transform);
+                        boneTransfsDictionary[pinchPartType2] = transform;
+                        // boneTransfsDictionary.Add(pinchPartType2,transform);
                     }
                     else
                     {
-                        dic.Add(transform.name, transform);
+                        Debug.LogWarning($"无法匹配PinchType2 Enum ： {tempName}");
                     }
+                }
+                else if(transform.name.StartsWith(WeightStr))
+                {
+                    //目前只有Tail 是通过这里匹配的
+                    string tempName = transform.name.Replace(WeightStr, "");
+                    BoneWeightType boneWeightType;
+                    if (Enum.TryParse(tempName, out boneWeightType))
+                    {
+                        boneWeightDictionary[boneWeightType] = transform;
+                    }
+                }
+                
+                
+                if (containThis)
+                {
+                    dic[transform.name] = transform;
                 }
                 
                 foreach (Transform child in transform)
@@ -240,7 +277,5 @@ namespace ProjectOC.PinchFace
                 return null;
             }
             #endregion
-    
-        
     }
 }

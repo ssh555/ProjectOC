@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e04c33259d65b934fa9ee5353f84593e, type: 3}
-  m_Name: PinchPartType1
+  m_Name: BoneWeightType
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -27,21 +27,24 @@ MonoBehaviour:
     displayName: None
     value: 0
   EnumList:
-  - name: HeadPart
+  - name: Head
     displayName: "\u5934\u90E8"
     value: 1
-  - name: FacePart
-    displayName: "\u9762\u90E8"
+  - name: Chest
+    displayName: "\u80F8\u90E8"
     value: 2
-  - name: TrunkPart
-    displayName: "\u8EAF\u5E72"
+  - name: Waist
+    displayName: "\u8170\u90E8"
     value: 3
-  - name: ArmPart
-    displayName: "\u624B\u90E8"
+  - name: Arm
+    displayName: "\u4E0A\u80A2"
     value: 4
-  - name: LegPart
-    displayName: "\u817F\u90E8"
+  - name: Leg
+    displayName: "\u4E0B\u80A2"
     value: 5
-  - name: Common
-    displayName: "\u901A\u7528"
+  - name: Tail
+    displayName: "\u5C3E\u5DF4"
     value: 6
+  - name: Root
+    displayName: "\u6574\u4F53"
+    value: 7
