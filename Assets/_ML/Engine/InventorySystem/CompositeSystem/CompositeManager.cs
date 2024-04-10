@@ -1,5 +1,6 @@
 using ML.Engine.Manager;
 using ML.Engine.Manager.LocalManager;
+using ProjectOC.ManagerNS;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
     public class CompositionTableData
     {
         public string id;
+        public string compositionid;
         public int compositionnum;
         public Formula[] formula;
         public TextContent.TextContent name;
@@ -114,15 +116,15 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// 能否合成对应物品
         /// </summary>
         /// <param name="resource"></param>
-        /// <param name="compositonID"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public bool CanComposite(IInventory resource, string compositonID)
+        public bool CanComposite(IInventory resource, string id)
         {
-            if (string.IsNullOrEmpty(compositonID) || !this.CompositeData.ContainsKey(compositonID) || this.CompositeData[compositonID].formula == null)
+            if (string.IsNullOrEmpty(id) || !this.CompositeData.ContainsKey(id) || this.CompositeData[id].formula == null)
             {
                 return false;
             }
-            foreach(var formula in this.CompositeData[compositonID].formula)
+            foreach(var formula in this.CompositeData[id].formula)
             {
                 // 数量不够
                 if(resource.GetItemAllNum(formula.id) < formula.num)
@@ -137,37 +139,44 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// 合成物品
         /// </summary>
         /// <param name="resource"></param>
-        /// <param name="compositonID"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public CompositionObjectType Composite(IInventory resource, string compositonID, out IComposition composition)
+        public CompositionObjectType Composite(IInventory resource, string id, out IComposition composition)
         {
             composition = null;
 
             // 移除消耗的资源
             lock (resource)
             {
-                if (!this.CanComposite(resource, compositonID))
+                if (!this.CanComposite(resource, id))
                 {
                     return CompositionObjectType.Error;
                 }
-                foreach (var formula in this.CompositeData[compositonID].formula)
+                foreach (var formula in this.CompositeData[id].formula)
                 {
                     resource.RemoveItem(formula.id, formula.num);
                 }
             }
 
             // 是 Item
-            if (ItemManager.Instance.IsValidItemID(compositonID))
+            if (ItemManager.Instance.IsValidItemID(id))
             {
-                Item item = ItemManager.Instance.SpawnItem(compositonID);
-                item.Amount = this.CompositeData[compositonID].compositionnum;
+                Item item = ItemManager.Instance.SpawnItem(id);
+                item.Amount = this.CompositeData[id].compositionnum;
+                composition = item as IComposition;
+                return CompositionObjectType.Item;
+            }
+            else if (LocalGameManager.Instance.RecipeManager.IsValidID(id))
+            {
+                Item item = ItemManager.Instance.SpawnItem(CompositeData[id].compositionid);
+                item.Amount = this.CompositeData[id].compositionnum;
                 composition = item as IComposition;
                 return CompositionObjectType.Item;
             }
             // 是 BuildingPart
-            else if(BuildingSystem.BuildingManager.Instance.IsValidBPartID(compositonID))
+            else if(BuildingSystem.BuildingManager.Instance.IsValidBPartID(id))
             {
-                composition = BuildingSystem.BuildingManager.Instance.GetOneBPartInstance(compositonID) as IComposition;
+                composition = BuildingSystem.BuildingManager.Instance.GetOneBPartInstance(id) as IComposition;
                 return CompositionObjectType.BuildingPart;
             }
             return CompositionObjectType.Error;
@@ -177,18 +186,18 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// 消耗Item 但不生成合成物
         /// </summary>
         /// <param name="resource"></param>
-        /// <param name="compositonID"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public bool OnlyCostResource(IInventory resource, string compositonID)
+        public bool OnlyCostResource(IInventory resource, string id)
         {
             // 移除消耗的资源
             lock (resource)
             {
-                if (!this.CanComposite(resource, compositonID))
+                if (!this.CanComposite(resource, id))
                 {
                     return false;
                 }
-                foreach (var formula in this.CompositeData[compositonID].formula)
+                foreach (var formula in this.CompositeData[id].formula)
                 {
                     resource.RemoveItem(formula.id, formula.num);
                 }
@@ -198,14 +207,14 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <summary>
         /// 返回需要消耗的资源
         /// </summary>
-        public bool OnlyReturnResource(IInventory resource, string compositonID)
+        public bool OnlyReturnResource(IInventory resource, string id)
         {
             // 返回需要消耗的资源
             lock (resource)
             {
-                if (!string.IsNullOrEmpty(compositonID) && this.CompositeData.ContainsKey(compositonID) && this.CompositeData[compositonID].formula != null)
+                if (!string.IsNullOrEmpty(id) && this.CompositeData.ContainsKey(id) && this.CompositeData[id].formula != null)
                 {
-                    foreach (var formula in this.CompositeData[compositonID].formula)
+                    foreach (var formula in this.CompositeData[id].formula)
                     {
                         List<Item> items = ItemManager.Instance.SpawnItems(formula.id, formula.num);
                         foreach (var item in items)
@@ -269,7 +278,4 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             return this.CompositeData[id].formula;
         }
     }
-
-
-
 }

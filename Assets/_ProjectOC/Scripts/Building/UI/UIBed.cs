@@ -291,16 +291,8 @@ namespace ProjectOC.Building.UI
             }
 
             #region BotKeyTips
-            if (CurMode == Mode.Bed)
-            {
-                BotKeyTips.Find("KT_Confirm").gameObject.SetActive(false);
-                BotKeyTips.Find("KT_Back").gameObject.SetActive(true);
-            }
-            else if(CurMode == Mode.ChangeClan)
-            {
-                BotKeyTips.Find("KT_Confirm").gameObject.SetActive(false);
-                BotKeyTips.Find("KT_Back").gameObject.SetActive(true);
-            }
+            BotKeyTips.Find("KT_Confirm").gameObject.SetActive(CurMode == Mode.ChangeClan);
+            BotKeyTips.Find("KT_Back").gameObject.SetActive(true);
             #endregion
         }
         #endregion
