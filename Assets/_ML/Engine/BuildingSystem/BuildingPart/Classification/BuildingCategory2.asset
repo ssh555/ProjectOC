@@ -115,5 +115,26 @@ MonoBehaviour:
     displayName: "\u7A97"
     value: 208
   - name: Bed
-    displayName: "\u5E8A"
+    displayName: "\u5367\u5177"
     value: 300
+  - name: Seat
+    displayName: "\u5750\u5177"
+    value: 301
+  - name: Table
+    displayName: "\u684C\u53F0"
+    value: 302
+  - name: Cupboard
+    displayName: "\u7BB1\u67DC"
+    value: 303
+  - name: Rack
+    displayName: "\u67B6"
+    value: 304
+  - name: Pool
+    displayName: "\u6C60"
+    value: 305
+  - name: Lamp
+    displayName: "\u706F"
+    value: 306
+  - name: Decoration
+    displayName: "\u88C5\u9970"
+    value: 307
