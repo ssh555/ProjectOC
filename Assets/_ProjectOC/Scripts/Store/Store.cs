@@ -1,14 +1,10 @@
 using System;
 using System.Collections.Generic;
-using ML.Engine.BuildingSystem;
 using ML.Engine.InventorySystem;
-using ML.Engine.InventorySystem.CompositeSystem;
-using ProjectOC.ManagerNS;
 using ProjectOC.MissionNS;
-using ProjectOC.ProNodeNS;
-using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using UnityEngine;
+
 
 namespace ProjectOC.StoreNS
 {
@@ -701,68 +697,6 @@ namespace ProjectOC.StoreNS
                 return ChangeStoreData(index, itemID, player.Inventory);
             }
             return false;
-        }
-
-        public List<Formula> GetUpgradeRaw()
-        {
-            List<Formula> result = new List<Formula>();
-            if (this.WorldStore != null)
-            {
-                string upgradeCID = BuildingManager.Instance.GetUpgradeCID(this.WorldStore.Classification.ToString());
-                List<Formula> formulas = BuildingManager.Instance.GetRaw(upgradeCID);
-                if (formulas != null)
-                {
-                    result.AddRange(formulas);
-                }
-            }
-            return result;
-        }
-        
-        public List<Formula> GetUpgradeRawCurrent(Player.PlayerCharacter player)
-        {
-            List<Formula> result = new List<Formula>();
-            if (this.WorldStore != null)
-            {
-                List<Formula> formulas = GetUpgradeRaw();
-                foreach (Formula formula in formulas)
-                {
-                    int num = player.Inventory.GetItemAllNum(formula.id);
-                    Formula newFormula = new Formula();
-                    newFormula.id = formula.id;
-                    newFormula.num = num;
-                    result.Add(newFormula);
-                }
-            }
-            return result;
-        }
-        public void Upgrade(Player.PlayerCharacter player)
-        {
-            if (this.WorldStore != null)
-            {
-                string ID = BuildingManager.Instance.GetID(this.WorldStore.Classification.ToString());
-                string upgradeID = BuildingManager.Instance.GetUpgradeID(this.WorldStore.Classification.ToString());
-                string upgradeCID = BuildingManager.Instance.GetClassification(upgradeID);
-                Transform parent = this.WorldStore.transform.parent;
-
-                if (!string.IsNullOrEmpty(upgradeID)
-                    && !string.IsNullOrEmpty(upgradeCID)
-                    && BuildingManager.Instance.IsValidBPartID(upgradeCID)
-                    && CompositeManager.Instance.OnlyCostResource(player.Inventory, upgradeID))
-                {
-                    // ·µ»Ø²ÄÁÏ
-                    CompositeManager.Instance.OnlyReturnResource(player.Inventory, ID);
-                    if (BuildingManager.Instance.GetOneBPartInstance(upgradeCID) is WorldStore upgrade)
-                    {
-                        upgrade.transform.SetParent(parent);
-                        upgrade.InstanceID = this.WorldStore.InstanceID;
-                        upgrade.transform.position = this.WorldStore.transform.position;
-                        upgrade.transform.rotation = this.WorldStore.transform.rotation;
-                        ML.Engine.Manager.GameManager.DestroyObj(this.WorldStore.gameObject);
-                        LocalGameManager.Instance.StoreManager.WorldStoreSetData(upgrade, this);
-                        this.SetLevel(upgrade.Classification.Category4 - 1);
-                    }
-                }
-            }
         }
         #endregion
 

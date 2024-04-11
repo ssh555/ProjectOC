@@ -520,7 +520,7 @@ namespace ProjectOC.InventorySystem.UI
             }
             else if (CurMode == Mode.Upgrade)
             {
-                this.Store.Upgrade(Player);
+                BuildingManager.Instance.Upgrade(Store.WorldStore, Player.Inventory);
             }
             Refresh();
         }
@@ -1015,8 +1015,7 @@ namespace ProjectOC.InventorySystem.UI
 
                 #region Raw
                 bool flagUpgradeBtn = true;
-                List<Formula> raw = this.Store.GetUpgradeRaw();
-                List<Formula> rawCur = this.Store.GetUpgradeRawCurrent(Player);
+                List<Formula> raw = BuildingManager.Instance.GetUpgradeRaw(buildCID);
                 int delta = tempUIItemDatasUpgrade.Count - raw.Count;
                 if (delta > 0)
                 {
@@ -1039,7 +1038,7 @@ namespace ProjectOC.InventorySystem.UI
                     var uiItemData = tempUIItemDatasUpgrade[i];
                     string itemID = raw[i].id;
                     int need = raw[i].num;
-                    int current = rawCur[i].num;
+                    int current = Player.Inventory.GetItemAllNum(itemID);
                     // Active
                     uiItemData.SetActive(true);
                     // ¸üÐÂIcon

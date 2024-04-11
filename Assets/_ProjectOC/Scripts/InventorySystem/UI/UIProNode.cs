@@ -16,7 +16,7 @@ using ProjectOC.MissionNS;
 using static ProjectOC.InventorySystem.UI.UIProNode;
 using ML.Engine.Utility;
 using UnityEngine.U2D;
-
+using ML.Engine.Manager;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -448,7 +448,7 @@ namespace ProjectOC.InventorySystem.UI
             }
             else if (CurMode == Mode.Upgrade)
             {
-                this.ProNode.Upgrade(Player);
+                BuildingManager.Instance.Upgrade(ProNode.WorldProNode, Player.Inventory);
             }
             Refresh();
         }
@@ -661,7 +661,7 @@ namespace ProjectOC.InventorySystem.UI
                         imgProduct.sprite = EmptySprite;
                     }
                     ProNode_Product.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(productID);
-                    ProNode_Product.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.GetItemAllNum(productID).ToString();
+                    ProNode_Product.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.StackAll.ToString();
                     #endregion
 
                     #region Raw
@@ -1149,8 +1149,7 @@ namespace ProjectOC.InventorySystem.UI
 
                 #region Raw
                 bool flagUpgradeBtn = true;
-                List<Formula> raw = this.ProNode.GetUpgradeRaw();
-                List<Formula> rawCur = this.ProNode.GetUpgradeRawCurrent(Player);
+                List<Formula> raw = BuildingManager.Instance.GetUpgradeRaw(buildCID);
                 int delta = tempUIItemsUpgrade.Count - raw.Count;
                 if (delta > 0)
                 {
@@ -1173,7 +1172,7 @@ namespace ProjectOC.InventorySystem.UI
                     var uiItemData = tempUIItemsUpgrade[i];
                     string itemID = raw[i].id;
                     int need = raw[i].num;
-                    int current = rawCur[i].num;
+                    int current = Player.Inventory.GetItemAllNum(itemID);
                     // Active
                     uiItemData.SetActive(true);
                     // 更新Icon

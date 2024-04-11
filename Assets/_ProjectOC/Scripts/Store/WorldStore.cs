@@ -2,15 +2,17 @@ using ML.Engine.BuildingSystem;
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InteractSystem;
 using ML.Engine.InventorySystem;
+using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.Manager;
 using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ProjectOC.StoreNS
 {
-    public class WorldStore : BuildingPart, IInteraction
+    public class WorldStore : BuildingPart, IInteraction, IBuildingUpgrade
     {
         [ShowInInspector, ReadOnly, SerializeField]
         public Store Store;
@@ -43,17 +45,50 @@ namespace ProjectOC.StoreNS
 
         public void Interact(InteractComponent component)
         {
-            // TODO
             GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIStorePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
             {
                 InventorySystem.UI.UIStore uiPanel = (handle.Result).GetComponent<InventorySystem.UI.UIStore>();
                 uiPanel.Player = component.GetComponentInParent<Player.PlayerCharacter>();
-                // 初始化相关数据
                 uiPanel.Store = this.Store;
                 uiPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
-                // Push
                 GameManager.Instance.UIManager.PushPanel(uiPanel);
             };
+        }
+
+        public bool CanUpgrade(IInventory inventory)
+        {
+            string CID = Classification.ToString();
+            if (BuildingManager.Instance.GetUpgradeID(CID) != null && BuildingManager.Instance.IsValidBPartID(CID))
+            {
+                List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(CID);
+                foreach (Formula formula in formulas)
+                {
+                    if (inventory.GetItemAllNum(formula.id) < formula.num)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public void OnUpgrade(IBuildingUpgrade lastLevelBuild, IInventory inventory)
+        {
+            string lastLevelID = BuildingManager.Instance.GetID(lastLevelBuild.Classification.ToString());
+            string upgradeID = BuildingManager.Instance.GetID(Classification.ToString());
+            CompositeManager.Instance.OnlyCostResource(inventory, upgradeID);
+            CompositeManager.Instance.OnlyReturnResource(inventory, lastLevelID);
+            transform.SetParent(lastLevelBuild.transform.parent);
+            InstanceID = lastLevelBuild.InstanceID;
+            transform.position = lastLevelBuild.transform.position;
+            transform.rotation = lastLevelBuild.transform.rotation;
+            if (lastLevelBuild is WorldStore worldStore)
+            {
+                LocalGameManager.Instance.StoreManager.WorldStoreSetData(this, worldStore.Store);
+            }
+            Store.SetLevel(Classification.Category4 - 1);
+            ML.Engine.Manager.GameManager.DestroyObj(lastLevelBuild.gameObject);
         }
     }
 }

@@ -6,8 +6,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using ML.Engine.InventorySystem.CompositeSystem;
-using ML.Engine.BuildingSystem;
-using ProjectOC.ManagerNS;
+
 
 namespace ProjectOC.ProNodeNS
 {
@@ -755,68 +754,6 @@ namespace ProjectOC.ProNodeNS
                 StartProduce();
             }
         }
-        public List<Formula> GetUpgradeRaw()
-        {
-            List<Formula> result = new List<Formula>();
-            if (this.WorldProNode != null)
-            {
-                string upgradeCID = BuildingManager.Instance.GetUpgradeCID(this.WorldProNode.Classification.ToString());
-                List<Formula> formulas = BuildingManager.Instance.GetRaw(upgradeCID);
-                if (formulas != null)
-                {
-                    result.AddRange(formulas);
-                }
-            }
-            return result;
-        }
-
-        public List<Formula> GetUpgradeRawCurrent(Player.PlayerCharacter player)
-        {
-            List<Formula> result = new List<Formula>();
-            if (this.WorldProNode != null)
-            {
-                List<Formula> formulas = GetUpgradeRaw();
-                foreach (Formula formula in formulas)
-                {
-                    int num = player.Inventory.GetItemAllNum(formula.id);
-                    Formula newFormula = new Formula();
-                    newFormula.id = formula.id;
-                    newFormula.num = num;
-                    result.Add(newFormula);
-                }
-            }
-            return result;
-        }
-
-        public void Upgrade(Player.PlayerCharacter player)
-        {
-            if (this.WorldProNode != null)
-            {
-                string ID = BuildingManager.Instance.GetID(this.WorldProNode.Classification.ToString());
-                string upgradeID = BuildingManager.Instance.GetUpgradeID(this.WorldProNode.Classification.ToString());
-                string upgradeCID = BuildingManager.Instance.GetClassification(upgradeID);
-                Transform parent = this.WorldProNode.transform.parent;
-
-                if (!string.IsNullOrEmpty(upgradeID)
-                    && !string.IsNullOrEmpty(upgradeCID)
-                    && BuildingManager.Instance.IsValidBPartID(upgradeCID)
-                    && CompositeManager.Instance.OnlyCostResource(player.Inventory, upgradeID))
-                {
-                    // 返回材料
-                    CompositeManager.Instance.OnlyReturnResource(player.Inventory, ID);
-                    if (BuildingManager.Instance.GetOneBPartInstance(upgradeCID) is WorldProNode upgrade)
-                    {
-                        upgrade.transform.SetParent(parent);
-                        upgrade.InstanceID = this.WorldProNode.InstanceID;
-                        upgrade.transform.position = this.WorldProNode.transform.position;
-                        upgrade.transform.rotation = this.WorldProNode.transform.rotation;
-                        ML.Engine.Manager.GameManager.DestroyObj(this.WorldProNode.gameObject);
-                        LocalGameManager.Instance.ProNodeManager.WorldNodeSetData(upgrade, this);
-                        this.SetLevel(upgrade.Classification.Category4 - 1);
-                    }
-                }
-            }
-        }
         #endregion
 
         #region IMission接口
@@ -999,7 +936,7 @@ namespace ProjectOC.ProNodeNS
                 }
                 else if (ProductItem == id)
                 {
-                    return StackAll;
+                    return Stack;
                 }
             }
             //Debug.LogError($"Item {id} is not in ProNode {ID}");

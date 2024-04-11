@@ -5,7 +5,9 @@ using UnityEngine;
 using ML.Engine.BuildingSystem.BuildingPart;
 using System.Linq;
 using System;
-using UnityEditor;
+using ML.Engine.InventorySystem.CompositeSystem;
+using ML.Engine.InventorySystem;
+
 
 namespace ML.Engine.BuildingSystem
 {
@@ -890,6 +892,22 @@ namespace ML.Engine.BuildingSystem
 
         #endregion
 
+        #region ½¨ÖþÉý¼¶
+        public IBuildingUpgrade Upgrade(IBuildingUpgrade build, IInventory inventory)
+        {
+            if (build != null && build.CanUpgrade(inventory))
+            {
+                IBuildingPart upgradeBP = GetOneBPartInstance(GetUpgradeCID(build.Classification.ToString()));
+                if (upgradeBP is IBuildingUpgrade upgrade)
+                {
+                    upgrade.OnUpgrade(build, inventory);
+                    return upgrade;
+                }
+            }
+            return null;
+        }
+        #endregion
+
         #region ¶Á±í
         public const string Tex2DABPath = "UI/BuildingSystem/Texture2D/type";
         // Materials/Character/Player
@@ -971,6 +989,17 @@ namespace ML.Engine.BuildingSystem
                 return GetClassification(upgradeID);
             }
             return null;
+        }
+
+        public List<Formula> GetUpgradeRaw(string CID)
+        {
+            List<Formula> result = new List<Formula>();
+            List<Formula> formulas = GetRaw(GetUpgradeCID(CID));
+            if (formulas != null)
+            {
+                result.AddRange(formulas);
+            }
+            return result;
         }
 
         public string GetClassification(string ID)
