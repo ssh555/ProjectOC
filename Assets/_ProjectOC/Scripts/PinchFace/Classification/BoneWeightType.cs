@@ -19,7 +19,9 @@ namespace ProjectOC.PinchFace
 		Leg = 5,
 		[LabelText("尾巴")]
 		Tail = 6,
+		[LabelText("头顶")]
+		HeadTop = 7,
 		[LabelText("整体")]
-		Root = 7,
+		Root = 8,
 	}
 }

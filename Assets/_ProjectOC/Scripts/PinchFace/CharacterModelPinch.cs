@@ -6,20 +6,12 @@ using ProjectOC.PinchFace;
 using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ProjectOC.PinchFace
 {
     public class CharacterModelPinch : MonoBehaviour
     {
-        private Transform avatar;
-        [SerializeField] 
-        List<GameObject> replaceGo = new List<GameObject>();
-
-        
-        public 
-        List<GameObject> tempTail = new List<GameObject>();
-        [ShowInInspector]
-        private Dictionary<string, Transform> boneCatalog = new Dictionary<string, Transform>();
         #region 捏脸函数
         public void ChangeType(PinchPartType2 boneType2, int typeIndex)
         {
@@ -29,10 +21,26 @@ namespace ProjectOC.PinchFace
             }
             EquipItem(boneType2,tempTail[typeIndex]);
         }
-        
+
+        public Slider _slider;
         public void TempChangeType(int index)
         {
-            ChangeType(PinchPartType2.Tail, index);
+            if (index < 2)
+            {
+                ChangeType(PinchPartType2.Tail, index);
+            }
+            else if (index == 2)
+            {
+                ChangeType(PinchPartType2.TopHorn, index);
+            }
+            else if (index == 3)
+            {
+                ChangeTransform(PinchPartType2.EarTop,index,Vector2.right * _slider.value);
+            }
+            else
+            {
+                topEar.Release();
+            }
         }
         public void EquipItem(PinchPartType2 boneType2, GameObject _PinchGo)
         {
@@ -104,6 +112,7 @@ namespace ProjectOC.PinchFace
             SkinnedMeshRenderer[] smrs = sourceClothing.GetComponentsInChildren<SkinnedMeshRenderer>();
             foreach (var smr in smrs)
             {
+                Debug.LogWarning(smr.bones.Length);
                 SkinnedMeshRenderer targetRenderer = AddSkinnedMeshRenderer(smr,targetClothingBone);
                 targetRenderer.bones = TranslateTransforms (smr.bones, boneCatalog);
             }
@@ -111,7 +120,19 @@ namespace ProjectOC.PinchFace
         }
         private SkinnedMeshRenderer AddSkinnedMeshRenderer (SkinnedMeshRenderer source, GameObject parent)
         {
-            SkinnedMeshRenderer target = parent.AddComponent<SkinnedMeshRenderer> ();
+            SkinnedMeshRenderer target = null;
+            //如果有多个，则新建子物体添加SkinMesh
+            if (parent.GetComponent<SkinnedMeshRenderer>() != null)
+            {
+                GameObject _newGO = new GameObject(source.gameObject.name);
+                _newGO.transform.SetParent(parent.transform);
+                target = _newGO.AddComponent<SkinnedMeshRenderer>();
+            }
+            else
+            {
+                target = parent.AddComponent<SkinnedMeshRenderer> ();
+            }
+
             target.sharedMesh = source.sharedMesh;
             target.materials = source.materials;
             return target;
@@ -126,8 +147,11 @@ namespace ProjectOC.PinchFace
                     continue;
                 Transform transf  = _boneCatalog[sources[index].name];
 
-                if(transf != null)
+                if (transf != null)
+                {
                     targets[index] = transf;
+                    Debug.Log(sources[index].name);
+                }
                 else
                 {
                     Debug.Log("can't find: "+ sources [index].name);
@@ -135,7 +159,29 @@ namespace ProjectOC.PinchFace
             }
             return targets;
         }
-        
+
+        public void ChangeTransform(PinchPartType2 boneType2,int index,Vector2 param)
+        {
+            if(boneType2 == PinchPartType2.EarTop)
+            {
+
+                if (topEar == null || topEar.index != index)
+                {
+                    BezierComponent _bezier = 
+                        boneTransfsDictionary[PinchPartType2.EarTop].GetComponent<BezierComponent>();
+                    topEar = new PinchJiao(_bezier,tempTail[index],index);
+                }
+                topEar.ModifyValue(param);
+            }
+            else if (boneType2 == PinchPartType2.HairBraid)
+            {
+                if (braid == null || braid.index != index)
+                {
+                    braid = new PinchBraid(tempTail[index], index);
+                }
+                braid.ModifyValue(param);
+            }
+        }
         
         public void ChangeTexture(PinchPartType2 boneType2, int textureIndex)
         {
@@ -158,7 +204,7 @@ namespace ProjectOC.PinchFace
                 }
             }
         }
-
+        
         public void ChangeBoneScale(Transform boneTransf, Vector3 scaleValue)
         {
             boneTransf.localScale = scaleValue;
@@ -168,7 +214,7 @@ namespace ProjectOC.PinchFace
         {
             //从boneType找到对应的两个 Mat，更改Mat的_Color 属性
         }
-        
+        public 
                 
 
         #endregion
@@ -176,10 +222,22 @@ namespace ProjectOC.PinchFace
         #region TransformCatalog
             string AddStr = "Add_";
             string WeightStr = "Weight_";
+            private Transform avatar;
+            [SerializeField] 
+            List<GameObject> replaceGo = new List<GameObject>();
+            
+            public 
+                List<GameObject> tempTail = new List<GameObject>();
+            [ShowInInspector]
+            private Dictionary<string, Transform> boneCatalog = new Dictionary<string, Transform>();
             [ShowInInspector]
             Dictionary<PinchPartType2, Transform> boneTransfsDictionary = new Dictionary<PinchPartType2, Transform>();
             [ShowInInspector]
             Dictionary<BoneWeightType, Transform> boneWeightDictionary = new Dictionary<BoneWeightType, Transform>();
+            
+            PinchJiao topEar;
+            PinchBraid braid;
+            
             void Awake()
             {
                 Array enumValues = Enum.GetValues(typeof(PinchPartType2));
@@ -188,11 +246,15 @@ namespace ProjectOC.PinchFace
                 
                 avatar = transform.Find("AnMiXiuBone");
                 Catalog(boneCatalog,avatar);
-                // boneWeightDictionary.Add(BoneWeightType.Head,transform);
-                // boneWeightDictionary.Add(BoneWeightType.Chest,transform);
-                // boneWeightDictionary.Add(BoneWeightType.Waist,transform);
-                // boneWeightDictionary.Add(BoneWeightType.Leg,transform);
-                // boneWeightDictionary.Add(BoneWeightType.Root,transform);
+                
+                //骨骼字典初始化
+                boneWeightDictionary.Add(BoneWeightType.Head,boneCatalog["Head"]);
+                //boneWeightDictionary.Add(BoneWeightType.Chest,transform);
+                //boneWeightDictionary.Add(BoneWeightType.Arm,transform);
+                boneWeightDictionary.Add(BoneWeightType.Waist,boneCatalog["Spine"]);
+                boneWeightDictionary.Add(BoneWeightType.Leg,boneCatalog["Weight_Thin"]);
+                boneWeightDictionary.Add(BoneWeightType.HeadTop,boneCatalog["Add_HeadTop"]);
+                boneWeightDictionary.Add(BoneWeightType.Root,boneCatalog["Root"]);
                 this.enabled = false;
             }
             
@@ -277,5 +339,6 @@ namespace ProjectOC.PinchFace
                 return null;
             }
             #endregion
+            
     }
 }

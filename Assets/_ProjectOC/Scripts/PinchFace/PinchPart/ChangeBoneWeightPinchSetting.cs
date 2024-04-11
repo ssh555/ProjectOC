@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ProjectOC.PinchFace
 {
-    public class TypeChangePinchSetting : IPinchSettingComp
+    public class ChangeBoneWeightPinchSetting : IPinchSettingComp
     {
         public int Index { get; }
         public void LoadData()
