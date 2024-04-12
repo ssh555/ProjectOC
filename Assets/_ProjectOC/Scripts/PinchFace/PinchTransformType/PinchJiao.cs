@@ -32,7 +32,7 @@ namespace ProjectOC.PinchFace
             jiaoTransfR.localPosition = _pos;
             //ÐÞ¸ÄÐý×ª
             float startRotate = 0f, endRotate = 30f;
-            _value.x = PinchPartDataManager.RemapValue(_value.x, 0f, 0.8f);
+            _value.x = PinchFaceManager.RemapValue(_value.x, 0f, 0.8f);
             float resRotateX = Mathf.Lerp(startRotate, endRotate, _value.x);
             Vector3 resRotate = new Vector3(resRotateX, 0, 0);
             jiaoTransfL.localRotation = Quaternion.Euler(resRotate);

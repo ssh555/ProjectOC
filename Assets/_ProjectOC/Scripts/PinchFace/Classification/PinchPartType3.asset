@@ -138,7 +138,7 @@ MonoBehaviour:
   - name: AR_Tattoo
     displayName: "\u624B\u81C2\u7EB9\u7406"
     value: 37
-  - name: AR_Hand
+  - name: HA_Hand
     displayName: "\u624B"
     value: 38
   - name: L_Tattoo
@@ -162,3 +162,6 @@ MonoBehaviour:
   - name: O_Orbit
     displayName: "\u773C\u7736"
     value: 45
+  - name: FD_FaceDress
+    displayName: "\u9762\u5986"
+    value: 46

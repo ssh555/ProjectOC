@@ -16,8 +16,8 @@ namespace ProjectOC.LandMassExpand
         public Vector2Int maxSize;
         private List<IslandMain> islandMains;
         public IslandBase[,] islandGrids;
-        
-        public void Init()
+
+        public void OnRegister()
         {
             mapGridSize = 100;
             maxSize = new Vector2Int(15, 15);
@@ -27,7 +27,7 @@ namespace ProjectOC.LandMassExpand
             islandMains = new List<IslandMain>();
             islandMains.Add(mainIsland as IslandMain);
         }
-        
+
         bool UnlockIsland(int island_Index)
         {
             return true;

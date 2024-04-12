@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ProjectOC.PinchFace
 {
-    public class ChangeTypePinchSetting : IPinchSettingComp
+    public class ChangeTypePinchSetting : MonoBehaviour,IPinchSettingComp
     {
         public int Index { get; }
         public void LoadData()
@@ -12,9 +12,16 @@ namespace ProjectOC.PinchFace
             throw new System.NotImplementedException();
         }
 
-        public void GenerateUI()
+        public  void GenerateUI()
         {
-            throw new System.NotImplementedException();
+            //Éú³ÉUI
+            
         }
+        
+        private void Awake()
+        {
+            this.enabled = false;
+        }
+        
     }
 }

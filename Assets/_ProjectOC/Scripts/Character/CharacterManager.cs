@@ -16,11 +16,11 @@ namespace ML.PlayerCharacterNS
         int CurrentControllerIndex;
 
         //暂定Scene1 的触发时间
-        public void Scene1Init()
+        public void CharacterControllerInit()
         {
-            AddPlayerController(new PlayerController());
             CurrentControllerIndex = 0;
-            
+            AddPlayerController(new PlayerController());
+
             //Player生成
             GetPlayerController().SpawnCharacter(0,playerStartPoints[Random.Range(0,playerStartPoints.Count)]);
         }

@@ -4,12 +4,16 @@ using UnityEngine;
 
 namespace ProjectOC.PinchFace
 {
-    public interface IPinchSettingComp
+    public interface IPinchSettingComp 
     {
-        int Index { get; }
-        public void LoadData();
+        public int Index { get; }
+        //PinchPartType2
+        public void LoadData(){}
 
         //生成UI时顺便加入ButtonAction，读取相关Data
-        public void GenerateUI();
+        public void GenerateUI()
+        {
+            
+        }
     }
 }

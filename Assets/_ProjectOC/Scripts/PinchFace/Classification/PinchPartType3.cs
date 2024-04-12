@@ -82,7 +82,7 @@ namespace ProjectOC.PinchFace
 		[LabelText("手臂纹理")]
 		AR_Tattoo = 37,
 		[LabelText("手")]
-		AR_Hand = 38,
+		HA_Hand = 38,
 		[LabelText("腿部纹理")]
 		L_Tattoo = 39,
 		[LabelText("体型")]
@@ -97,5 +97,7 @@ namespace ProjectOC.PinchFace
 		HB_HairBraid = 44,
 		[LabelText("眼眶")]
 		O_Orbit = 45,
+		[LabelText("面妆")]
+		FD_FaceDress = 46,
 	}
 }
