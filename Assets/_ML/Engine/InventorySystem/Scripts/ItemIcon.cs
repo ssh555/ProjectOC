@@ -58,6 +58,10 @@ namespace ML.Engine.InventorySystem
 
         private void OnDestroy()
         {
+            if (Image != null)
+            {
+                Image.enabled = false;
+            }
             (this as ML.Engine.Timer.ITickComponent).DisposeTick();
             if (Manager.GameManager.Instance != null && Image != null)
                 Manager.GameManager.Instance.ABResourceManager.ReleaseInstance(Image.transform.gameObject);

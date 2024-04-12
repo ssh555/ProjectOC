@@ -461,7 +461,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 {
                     if (this.SelectedPartInstance.ActiveSocket.GetMatchTransformOnSocket(out tmpP, out tmpR))
                     {
-                        pos = tmpP - this.SelectedPartInstance.ActiveSocket.transform.localPosition;
+                        pos = tmpP;
                         rot = tmpR;
                         return true;
                     }
