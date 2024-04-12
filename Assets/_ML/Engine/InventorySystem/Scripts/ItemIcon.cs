@@ -10,6 +10,9 @@ namespace ML.Engine.InventorySystem
     {
         private UnityEngine.UI.Image Image;
         public PlayerCharacter Player;
+        private SpriteRenderer Renderer;
+        private bool IsShow;
+
 
         #region ITickComponent
         public int tickPriority { get; set; }
@@ -19,6 +22,7 @@ namespace ML.Engine.InventorySystem
 
         private void Start()
         {
+            Renderer = GetComponent<SpriteRenderer>();
             Image = GetComponentInChildren<UnityEngine.UI.Image>();
             Image.transform.SetParent(Manager.GameManager.Instance.UIManager.GetCanvas.transform);
             Image.enabled = false;
@@ -28,17 +32,18 @@ namespace ML.Engine.InventorySystem
 
         public void LateTick(float deltatime)
         {
-            if (Image.sprite != null && Vector3.Distance(transform.position, Player.transform.position) <= 5f)
+            if (Renderer.isVisible && Image.sprite != null && Vector3.Distance(transform.position, Player.transform.position) <= 5f)
             {
                 Image.enabled = true;
+                IsShow = true;
                 Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
-                screenPosition.x = Mathf.Clamp(screenPosition.x, 0, Screen.width);
-                screenPosition.y = Mathf.Clamp(screenPosition.y, 0, Screen.height);
                 Image.transform.position = screenPosition;
             }
-            else
+            // ²»Âú×ãÌõ¼þ
+            else if(IsShow)
             {
                 Image.enabled = false;
+                IsShow = false;
             }
         }
 
@@ -53,6 +58,10 @@ namespace ML.Engine.InventorySystem
 
         private void OnDestroy()
         {
+            if (Image != null)
+            {
+                Image.enabled = false;
+            }
             (this as ML.Engine.Timer.ITickComponent).DisposeTick();
             if (Manager.GameManager.Instance != null && Image != null)
                 Manager.GameManager.Instance.ABResourceManager.ReleaseInstance(Image.transform.gameObject);

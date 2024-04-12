@@ -62,7 +62,7 @@ namespace ProjectOC.Building
             foreach (RaycastHit hit in Physics.BoxCastAll(posUp, sizeUp, transform.up, rotUp))
             {
                 BuildingPart bp = hit.collider.GetComponent<BuildingPart>();
-                if (bp != null && bp.Classification.Category2 == BuildingCategory2.Roof)
+                if (bp != null && (bp.Classification.Category2 == BuildingCategory2.Roof || bp.Classification.Category2 == BuildingCategory2.Floor))
                 {
                     flagUp = true;
                     break;
