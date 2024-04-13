@@ -18,7 +18,7 @@ namespace ML.PlayerCharacterNS
         public PlayerController()
         {
             SpawnedCharacters = new List<ICharacter>();
-            //ABResource Path ¼ÓÈë
+            //ABResource Path Initæ—¶åŠ å…¥
             ICharacterABResourcePath.Add("OC/Character/Player/Prefabs/PlayerCharacter.prefab");
         }
         
@@ -28,7 +28,6 @@ namespace ML.PlayerCharacterNS
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.
                 InstantiateAsync(ICharacterABResourcePath[_index],isGlobal:true).Completed += (handle) =>
             {
-                // ÊµÀý»¯
                 var playerCharacter = handle.Result.GetComponent<PlayerCharacter>();
                 SetCharacterTransform(playerCharacter.transform, _startPoint);
                 currentCharacter = playerCharacter;

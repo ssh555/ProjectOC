@@ -6,12 +6,43 @@ using UnityEngine;
 
 namespace ProjectOC.StoreNS
 {
+    [System.Serializable]
+    public struct StoreIconTableData
+    {
+        public string ID;
+        public string Icon;
+    }
+
     /// <summary>
     /// 仓库管理器
     /// </summary>
     [System.Serializable]
     public sealed class StoreManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
+        #region Load And Data
+        /// <summary>
+        /// 是否已加载完数据
+        /// </summary>
+        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
+
+        private Dictionary<string, StoreIconTableData> StoreIconTableDict = new Dictionary<string, StoreIconTableData>();
+
+        public ML.Engine.ABResources.ABJsonAssetProcessor<StoreIconTableData[]> ABJAProcessor;
+
+        public void LoadTableData()
+        {
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StoreIconTableData[]>("OC/Json/TableData", "StoreIcon", (datas) =>
+            {
+                foreach (var data in datas)
+                {
+                    this.StoreIconTableDict.Add(data.ID, data);
+                }
+            }, "仓库图标表数据");
+            ABJAProcessor.StartLoadJsonAssetData();
+        }
+        #endregion
+
+
         /// <summary>
         /// 实例化生成的仓库，键为UID
         /// </summary>
@@ -122,6 +153,16 @@ namespace ProjectOC.StoreNS
                         }
                     }
                 }
+            }
+            return result;
+        }
+
+        public List<string> GetStoreIconItems()
+        {
+            List<string> result = new List<string>();
+            foreach (var data in this.StoreIconTableDict.Values)
+            {
+                result.Add(data.ID);
             }
             return result;
         }

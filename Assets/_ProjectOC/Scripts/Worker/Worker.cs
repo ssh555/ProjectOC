@@ -19,6 +19,7 @@ namespace ProjectOC.WorkerNS
     [System.Serializable]
     public class Worker : SerializedMonoBehaviour, ITickComponent,IAICharacter
     {
+        public string InstanceID;
         #region 策划配置项
         [LabelText("名字")]
         public string Name = "Worker";
@@ -117,6 +118,8 @@ namespace ProjectOC.WorkerNS
 
         [LabelText("是否到达生产节点")]
         public bool ArriveProNode = false;
+
+        public Vector3 LastPosition;
         
         [LabelText("搬运")]
         public Transport Transport = null;
@@ -227,6 +230,7 @@ namespace ProjectOC.WorkerNS
 
         public void ClearDestination()
         {
+            ArriveProNode = false;
             HasDestination = false;
             if (Agent != null && Agent.enabled)
             {
@@ -323,6 +327,37 @@ namespace ProjectOC.WorkerNS
         public void OnDespose(IController controller)
         {
 
+        }
+
+        public class Sort : IComparer<Worker>
+        {
+            public WorkType WorkType;
+
+            public int Compare(Worker x, Worker y)
+            {
+                if (x == null)
+                {
+                    if (y == null)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        return 1;
+                    }
+                }
+                if (y == null)
+                {
+                    return -1;
+                }
+                int effX = x.Eff[WorkType];
+                int effY = y.Eff[WorkType];
+                if (effX != effY)
+                {
+                    return effY.CompareTo(effX);
+                }
+                return x.InstanceID.CompareTo(y.InstanceID);
+            }
         }
     }
 }

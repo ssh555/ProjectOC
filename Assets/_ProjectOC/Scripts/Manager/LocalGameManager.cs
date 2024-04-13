@@ -68,6 +68,7 @@ namespace ProjectOC.ManagerNS
             GM.RegisterLocalManager(RecipeManager);
             RecipeManager.LoadTableData();
             GM.RegisterLocalManager(StoreManager);
+            StoreManager.LoadTableData();
             GM.RegisterLocalManager(WorkerManager);
             GM.RegisterLocalManager(EffectManager);
             EffectManager.LoadTableData();
@@ -137,7 +138,7 @@ namespace ProjectOC.ManagerNS
         //在PlayerCharacter生成之后调用
         IEnumerator AfterPlayerCharacter()
         {
-            PlayerController playerController = GameManager.Instance.CharacterManager.GetController();
+            PlayerController playerController = GameManager.Instance.CharacterManager.GetPlayerController();
             while (playerController.currentCharacter == null)
             {
                 yield return null;

@@ -60,7 +60,7 @@ namespace ML.Engine.InventorySystem
 
         public Item Composite(IInventory inventory)
         {
-            CompositeManager.CompositionObjectType compObjType = CompositeManager.Instance.Composite(inventory, ProductID, out var composition);
+            CompositeManager.CompositionObjectType compObjType = CompositeManager.Instance.Composite(inventory, ID, out var composition);
             switch (compObjType)
             {
                 case CompositeManager.CompositionObjectType.Item:

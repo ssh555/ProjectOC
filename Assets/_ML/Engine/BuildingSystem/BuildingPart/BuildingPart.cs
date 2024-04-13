@@ -268,6 +268,10 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             }
         }
 
+        public void OnTriggerEnter(Collider other)
+        {
+            (this as IBuildingPart).CheckTriggerStay(other);
+        }
         public void OnTriggerStay(Collider other)
         {
             (this as IBuildingPart).CheckTriggerStay(other);
