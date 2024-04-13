@@ -96,6 +96,7 @@ namespace ML.Engine.UI
         {
             image = this.GetComponentInChildren<UnityEngine.UI.Image>();
             Selected = this.transform.Find("Selected");
+            if(Selected != null) { Selected.gameObject.SetActive(false); }
             this.targetGraphic = image;
             this.OnSelectedEnter = OnSelectedEnter;
             this.OnSelectedExit = OnSelectedExit;   

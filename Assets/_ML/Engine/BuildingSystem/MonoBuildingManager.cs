@@ -101,7 +101,7 @@ namespace ML.Engine.BuildingSystem
             RegisterBPartPrefab();
             InitUITextContents();
         }
-
+        [ShowInInspector]
         public Dictionary<BuildingPartClassification, IBuildingPart> LoadedBPart = new Dictionary<BuildingPartClassification, IBuildingPart>();
 
 

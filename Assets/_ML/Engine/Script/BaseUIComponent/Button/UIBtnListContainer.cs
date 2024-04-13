@@ -696,11 +696,11 @@ namespace ML.Engine.UI
             }
         }
 
-        public void AddBtn(int BtnListIndex, string prefabpath)
+        public void AddBtn(int BtnListIndex, string prefabpath,UnityAction action = null,string BtnText = null)
         {
             if (BtnListIndex >= 0 || BtnListIndex < this.uIBtnLists.Count)
             {
-                this.uIBtnLists[BtnListIndex].AddBtn(prefabpath); 
+                this.uIBtnLists[BtnListIndex].AddBtn(prefabpath, action, BtnText);
             }
             else
             {

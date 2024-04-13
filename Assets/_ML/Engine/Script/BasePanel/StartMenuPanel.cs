@@ -48,6 +48,12 @@ namespace ML.Engine.UI
             base.Exit();
         }
 
+        public override void OnRecovery()
+        {
+            base.OnRecovery();
+            this.UIBtnList.ResetCurselected();
+        }
+
         #endregion
 
         #region Internal

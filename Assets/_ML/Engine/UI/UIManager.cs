@@ -288,7 +288,11 @@ namespace ML.Engine.UI
                     panelGo = GameObject.Instantiate(this.PopUpUIPrefab);
                     PopUpUIData popUpData = (PopUpUIData)(object)data;
                     panelGo.GetComponent<PopUpUI>().CopyInstance(popUpData);
+
+                    
+                    GameManager.Instance.UIManager.GetTopUIPanel().SetHidePanel();
                     GameManager.Instance.UIManager.PushPanel(panelGo.GetComponent<PopUpUI>());
+
                     panelGo.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
                     break;
                 case NoticeUIType.SideBarUI:

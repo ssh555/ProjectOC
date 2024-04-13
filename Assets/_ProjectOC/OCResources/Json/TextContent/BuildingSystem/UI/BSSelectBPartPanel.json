@@ -66,5 +66,74 @@
             "English": ""
         }
     }
+],
+"FurnitureCategoryBtns" : [
+    {
+        "name" : "Bed",
+        "description" : {
+            "Chinese": "卧具",
+            "English": "Bed"
+        }
+    },
+    {
+        "name" : "Table",
+        "description" : {
+            "Chinese": "桌台",
+            "English": "Table"
+        }
+    },
+    {
+        "name" : "Seat",
+        "description" : {
+            "Chinese": "坐具",
+            "English": "Seat"
+        }
+    },
+    {
+        "name" : "Cupboard",
+          "description" : {
+            "Chinese": "箱柜",
+            "English": "Cupboard"
+          }
+    },
+    {
+      "name" : "Rack",
+        "description" : {
+          "Chinese": "屏架",
+          "English": "Rack"
+        }
+  },
+  {
+    "name" : "Pool",
+      "description" : {
+        "Chinese": "池",
+        "English": "Pool"
+      }
+  },
+  {
+    "name" : "Lamp",
+      "description" : {
+        "Chinese": "灯",
+        "English": "Lamp"
+      }
+  },
+  {
+    "name" : "Decoration",
+      "description" : {
+        "Chinese": "装饰",
+        "English": "Decoration"
+      }
+  }
+    
+],
+"ChangeFurnitureDisplay":[
+    {
+        "Chinese": "按类别",
+        "English": "By category"
+    },
+    {
+        "Chinese": "按主题",
+        "English": "By theme"
+    }
 ]
 }

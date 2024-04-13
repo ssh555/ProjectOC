@@ -221,6 +221,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - NoticeUI
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 05067739c558b5a428057adad68ca4e0
+    m_Address: ML/BaseUIPanel/PanelNavagation
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - NoticeUI
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 72d1a89784032c94ea3b026b42e20dcf, type: 2}
   m_SchemaSet:
