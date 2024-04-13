@@ -32,6 +32,8 @@ namespace ML.Engine.UI
         /// <summary>
         /// 所属UIManager
         /// </summary>
+
+        private bool hidePanel = true;
         public UIManager UIMgr
         {
             get
@@ -58,8 +60,6 @@ namespace ML.Engine.UI
             this.InitObjectPool();
             this.InitBtnInfo();
             this.Enter();
-            
-     
         }
 
         /// <summary>
@@ -78,7 +78,10 @@ namespace ML.Engine.UI
         public virtual void OnPause()
         {
             this.Exit();
-            this.gameObject.SetActive(false);
+            if(hidePanel)
+            { 
+                this.gameObject.SetActive(false);
+            }
         }
 
         /// <summary>
@@ -86,11 +89,17 @@ namespace ML.Engine.UI
         /// </summary>
         public virtual void OnRecovery()
         {
-            this.gameObject.SetActive(true);
+            if(hidePanel)
+            {
+                this.gameObject.SetActive(true);
+            }
             this.Enter();
         }
 
-
+        public void SetHidePanel()
+        {
+            this.hidePanel = !hidePanel;
+        }
 
 
         protected virtual void Enter()

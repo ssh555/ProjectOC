@@ -83,8 +83,8 @@ namespace ProjectOC.ManagerNS
             MonoBuildingManager.Init();
             GM.RegisterLocalManager(TechTreeManager);
             TechTreeManager.Init();
-            GM.RegisterLocalManager(OrderManager);
-            OrderManager.Init();
+/*            GM.RegisterLocalManager(OrderManager);
+            OrderManager.Init();*/
             GM.RegisterLocalManager(ItemManager);
             ItemManager.Init();
             GM.RegisterLocalManager(CompositeManager);
