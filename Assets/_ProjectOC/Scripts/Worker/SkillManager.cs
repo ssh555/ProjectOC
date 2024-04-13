@@ -21,6 +21,11 @@ namespace ProjectOC.WorkerNS
     [System.Serializable]
     public sealed class SkillManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
+        public void OnRegister()
+        {
+            LoadTableData();
+        }
+
         #region Load And Data
         /// <summary>
         /// Skill Êý¾Ý±í

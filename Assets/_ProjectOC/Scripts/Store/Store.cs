@@ -8,84 +8,49 @@ using UnityEngine;
 
 namespace ProjectOC.StoreNS
 {
-    /// <summary>
-    /// 仓库
-    /// </summary>
-    [System.Serializable]
+    [LabelText("仓库"), Serializable]
     public class Store: IMissionObj, IInventory
     {
+        #region 当前数据
+        [LabelText("世界仓库"), ReadOnly]
         public WorldStore WorldStore;
-
+        [ShowInInspector, ReadOnly]
         public string UID { get { return WorldStore?.InstanceID ?? ""; } }
-
-        [LabelText("仓库名字")]
+        [LabelText("仓库名字"), ReadOnly]
         public string Name = "";
-
-        [LabelText("仓库类型")]
+        [LabelText("仓库类型"), ReadOnly]
         public StoreType StoreType;
-
-        [LabelText("仓库存储数据")]
+        [LabelText("仓库存储数据"), ReadOnly]
         public List<StoreData> StoreDatas = new List<StoreData>();
-
-        [LabelText("仓库对应的搬运")]
+        [LabelText("仓库对应的搬运"), ReadOnly]
         public List<Transport> Transports = new List<Transport>();
-
-        /// <summary>
-        /// 仓库容量，仓库能放多少种物品
-        /// </summary>
-        public int StoreCapacity
-        {
-            get
-            {
-                return this.LevelStoreCapacity[this.Level];
-            }
-        }
-        
-        /// <summary>
-        /// 仓库数据的容量，单种物品的最大存储数量
-        /// </summary>
-        public int StoreDataCapacity
-        {
-            get
-            {
-                return this.LevelStoreDataCapacity[this.Level];
-            }
-        }
-
-        /// <summary>
-        /// 仓库等级
-        /// </summary>
+        [LabelText("仓库等级"), ReadOnly]
         public int Level;
-        
-        /// <summary>
-        /// 仓库最大等级
-        /// </summary>
-        public int LevelMax = 2;
-
-        /// <summary>
-        /// 每个级别仓库的存储格子数量
-        /// </summary>
-        public List<int> LevelStoreCapacity = new List<int>() { 2, 4, 8 };
-
-        /// <summary>
-        /// 每个级别仓库单个格子的容量上限
-        /// </summary>
-        public List<int> LevelStoreDataCapacity = new List<int>() { 50, 100, 200 };
-
-        /// <summary>
-        /// 搬运优先级
-        /// </summary>
+        [LabelText("搬运优先级"), ReadOnly]
         public TransportPriority TransportPriority = TransportPriority.Normal;
-        /// <summary>
-        /// 玩家是否正在与此仓库交互
-        /// 只要玩家正在与某一个仓库进行交互，就将此项设为true,生成任务时不能考虑此项为true的仓库
-        /// </summary>
+        [LabelText("玩家是否正在与此仓库交互"), ReadOnly]
         public bool IsInteracting;
-        public event Action OnStoreDataChange;
-        /// <summary>
-        /// 场景Icon对应的Item
-        /// </summary>
+        [LabelText("场景Icon对应的Item"), ReadOnly]
         public string WorldIconItemID;
+        #endregion
+
+        #region 配置
+        [LabelText("仓库最大等级"), FoldoutGroup("配置")]
+        public int LevelMax = 2;
+        [LabelText("每个级别的仓库容量"), FoldoutGroup("配置")]
+        public List<int> LevelStoreCapacity = new List<int>() { 2, 4, 8 };
+        [LabelText("每个级别的仓库数据容量"), FoldoutGroup("配置")]
+        public List<int> LevelStoreDataCapacity = new List<int>() { 50, 100, 200 };
+        #endregion
+
+        #region Property
+        [LabelText("仓库容量"), ShowInInspector, ReadOnly]
+        public int StoreCapacity { get { return this.LevelStoreCapacity[this.Level]; } }
+        [LabelText("仓库数据的容量"), ShowInInspector, ReadOnly]
+        public int StoreDataCapacity { get { return this.LevelStoreDataCapacity[this.Level]; } }
+        #endregion
+
+        public event Action OnStoreDataChange;
 
         public Store(StoreType storeType)
         {
@@ -225,8 +190,8 @@ namespace ProjectOC.StoreNS
                 data.EmptyReserve = 0;
                 data.ItemID = itemID;
 
-                int storageReserve = GetStoreStorageReserve(oldItemID);
-                int emptyReserve = GetStoreEmptyReserve(oldItemID);
+                int storageReserve = GetStorage(oldItemID, false, true);
+                int emptyReserve = GetEmpty(oldItemID, false, true);
                 foreach (Transport transport in Transports)
                 {
                     if (transport!=null && transport.ItemID == oldItemID)
@@ -254,246 +219,24 @@ namespace ProjectOC.StoreNS
             return false;
         }
 
-        #region 给刁民的接口
-        /// <summary>
-        /// 给刁民预留存入的量
-        /// </summary>
-        public int ReserveEmptyToWorker(string itemID, int amount, Transport transport)
-        {
-            if (!string.IsNullOrEmpty(itemID))
-            {
-                int reserveNum = 0;
-                foreach (StoreData data in this.StoreDatas)
-                {
-                    if (data.ItemID != "" && data.CanIn && data.ItemID == itemID)
-                    {
-                        if (data.Empty >= amount)
-                        {
-                            data.EmptyReserve += amount;
-                            reserveNum += amount;
-                            amount = 0;
-                            break;
-                        }
-                        else
-                        {
-                            amount -= data.Empty;
-                            data.EmptyReserve += data.Empty;
-                            reserveNum += data.Empty;
-                        }
-                    }
-                }
-                if (amount > 0)
-                {
-                    foreach (StoreData data in this.StoreDatas)
-                    {
-                        if (data.ItemID != "" && data.CanIn && data.ItemID == itemID)
-                        {
-                            data.EmptyReserve += amount;
-                            reserveNum += amount;
-                            amount = 0;
-                            break;
-                        }
-                    }
-                }
-                transport.TargetReserveNum = reserveNum;
-            }
-            return amount;
-        }
-        /// <summary>
-        /// 给刁民预留取出的量
-        /// </summary>
-        public int ReserveStorageToWorker(string itemID, int amount, Transport transport)
-        {
-            if (!string.IsNullOrEmpty(itemID))
-            {
-                int reserveNum = 0;
-                foreach (StoreData data in this.StoreDatas)
-                {
-                    if (data.ItemID != "" && data.CanOut && data.ItemID == itemID)
-                    {
-                        if (data.Storage >= amount)
-                        {
-                            data.Storage -= amount;
-                            data.StorageReserve += amount;
-                            reserveNum += amount;
-                            amount = 0;
-                            break;
-                        }
-                        else
-                        {
-                            data.StorageReserve += data.Storage;
-                            reserveNum += data.Storage;
-                            amount -= data.Storage;
-                            data.Storage = 0;
-                        }
-                    }
-                }
-                transport.SoureceReserveNum = reserveNum;
-            }
-            return amount;
-        }
-        /// <summary>
-        /// 移除预留存入量
-        /// </summary>
-        public int RemoveReserveEmpty(string itemID, int amount)
-        {
-            if (!string.IsNullOrEmpty(itemID))
-            {
-                foreach (StoreData data in this.StoreDatas)
-                {
-                    if (data.ItemID != "" && data.ItemID == itemID && data.EmptyReserve > 0)
-                    {
-                        if (data.EmptyReserve >= amount)
-                        {
-                            data.EmptyReserve -= amount;
-                            amount = 0;
-                            break;
-                        }
-                        else
-                        {
-                            amount -= data.EmptyReserve;
-                            data.EmptyReserve = 0;
-                        }
-                    }
-                }
-            }
-            return amount;
-        }
-        /// <summary>
-        /// 移除预留取出量
-        /// </summary>
-        public int RemoveReserveStorage(string itemID, int amount)
-        {
-            if (!string.IsNullOrEmpty(itemID))
-            {
-                foreach (StoreData data in this.StoreDatas)
-                {
-                    if (data.ItemID != "" && data.ItemID == itemID && data.StorageReserve > 0)
-                    {
-                        if (data.StorageReserve >= amount)
-                        {
-                            data.Storage += amount;
-                            data.StorageReserve -= amount;
-                            amount = 0;
-                            break;
-                        }
-                        else
-                        {
-                            data.Storage += data.StorageReserve;
-                            amount -= data.StorageReserve;
-                            data.StorageReserve = 0;
-                        }
-                    }
-                }
-            }
-            return amount;
-        }
 
-
-        /// <summary>
-        /// 仓库中有多少数量的刁民能够取出的该物品
-        /// </summary>
-        /// <param name="itemID">物品ID</param>
-        /// <returns></returns>
-        public int GetCanOutStoreStorage(string itemID)
-        {
-            int result = 0;
-            if (!string.IsNullOrEmpty(itemID))
-            {
-                foreach (StoreData data in this.StoreDatas)
-                {
-                    if (data.ItemID == itemID && data.CanOut)
-                    {
-                        result += data.Storage;
-                    }
-                }
-            }
-            return result;
-        }
-        /// <summary>
-        /// 仓库中有多少数量的刁民能够存入的该物品
-        /// </summary>
-        /// <param name="itemID">物品ID</param>
-        /// <returns></returns>
-        public int GetCanInStoreEmpty(string itemID)
-        {
-            int result = 0;
-            if (!string.IsNullOrEmpty(itemID))
-            {
-                foreach (StoreData data in this.StoreDatas)
-                {
-                    if (data.ItemID == itemID && data.CanIn)
-                    {
-                        result += data.Empty;
-                    }
-                }
-            }
-            return result;
-        }
+        #region 数据方法
         /// <summary>
         /// 仓库是否有该物品
         /// </summary>
-        /// <param name="itemID">物品ID</param>
-        /// <returns></returns>
-        public bool IsStoreHaveItem(string itemID)
+        public bool IsStoreHaveItem(string itemID, bool needCanIn = false, bool needCanOut = false)
         {
             if (!string.IsNullOrEmpty(itemID))
             {
-                foreach (StoreData data in this.StoreDatas)
+                foreach (StoreData data in StoreDatas)
                 {
-                    if (data.ItemID == itemID)
+                    if (data.ItemID == itemID && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
                     {
                         return true;
                     }
                 }
             }
             return false;
-        }
-        public bool IsStoreCanInItem(string itemID)
-        {
-            if (!string.IsNullOrEmpty(itemID))
-            {
-                foreach (StoreData data in this.StoreDatas)
-                {
-                    if (data.ItemID == itemID && data.CanIn)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-        public bool IsStoreCanOutItem(string itemID)
-        {
-            if (!string.IsNullOrEmpty(itemID))
-            {
-                foreach (StoreData data in this.StoreDatas)
-                {
-                    if (data.ItemID == itemID && data.CanOut)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-        #endregion
-
-        #region Getter
-        public int GetStoreStorageAll(string itemID)
-        {
-            int result = 0;
-            if (!string.IsNullOrEmpty(itemID))
-            {
-                foreach (StoreData data in this.StoreDatas)
-                {
-                    if (data.ItemID == itemID)
-                    {
-                        result += data.StorageAll;
-                    }
-                }
-            }
-            return result;
         }
 
         /// <summary>
@@ -501,32 +244,16 @@ namespace ProjectOC.StoreNS
         /// </summary>
         /// <param name="itemID">物品ID</param>
         /// <returns></returns>
-        public int GetStoreStorage(string itemID)
+        public int GetStorage(string itemID, bool needCanOut=false, bool isReserve=false)
         {
             int result = 0;
             if (!string.IsNullOrEmpty(itemID))
             {
-                foreach (StoreData data in this.StoreDatas)
+                foreach (StoreData data in StoreDatas)
                 {
-                    if (data.ItemID == itemID)
+                    if (data.ItemID == itemID && (!needCanOut || data.CanOut))
                     {
-                        result += data.Storage;
-                    }
-                }
-            }
-            return result;
-        }
-
-        public int GetStoreStorageReserve(string itemID)
-        {
-            int result = 0;
-            if (!string.IsNullOrEmpty(itemID))
-            {
-                foreach (StoreData data in this.StoreDatas)
-                {
-                    if (data.ItemID == itemID)
-                    {
-                        result += data.StorageReserve;
+                        result += isReserve ? data.StorageReserve : data.Storage;
                     }
                 }
             }
@@ -538,37 +265,31 @@ namespace ProjectOC.StoreNS
         /// </summary>
         /// <param name="itemID">物品ID</param>
         /// <returns></returns>
-        public int GetStoreEmpty(string itemID)
+        public int GetEmpty(string itemID, bool needCanIn=false, bool isReserve=false)
         {
             int result = 0;
             if (!string.IsNullOrEmpty(itemID))
             {
-                foreach (StoreData data in this.StoreDatas)
+                foreach (StoreData data in StoreDatas)
                 {
-                    if (data.ItemID == itemID)
+                    if (data.ItemID == itemID && (!needCanIn || data.CanIn))
                     {
-                        result += data.Empty;
+                        result += isReserve ? data.EmptyReserve : data.Empty;
                     }
                 }
             }
             return result;
         }
 
-        public int GetStoreEmptyReserve(string itemID)
+        public int AddItem()
         {
-            int result = 0;
-            if (!string.IsNullOrEmpty(itemID))
-            {
-                foreach (StoreData data in this.StoreDatas)
-                {
-                    if (data.ItemID == itemID)
-                    {
-                        result += data.EmptyReserve;
-                    }
-                }
-            }
-            return result;
+
         }
+        public int RemoveItem()
+        {
+
+        }
+
         #endregion
 
         /// <summary>
@@ -604,26 +325,6 @@ namespace ProjectOC.StoreNS
         }
 
         #region UI接口
-        public void UIAdd(Player.PlayerCharacter player, StoreData storeData, int amount)
-        {
-            if (player != null && storeData != null && amount > 0)
-            {
-                if (ItemManager.Instance.IsValidItemID(storeData.ItemID) && storeData.Empty >= amount)
-                {
-                    if (player.Inventory.GetItemAllNum(storeData.ItemID) >= amount)
-                    {
-                        if (player.Inventory.RemoveItem(storeData.ItemID, amount))
-                        {
-                            storeData.Storage += amount;
-                        }
-                        else
-                        {
-                            //Debug.LogError("UIAdd Error");
-                        }
-                    }
-                }
-            }
-        }
         public void UIRemove(Player.PlayerCharacter player, StoreData storeData, int amount)
         {
             if (player != null && storeData != null && amount > 0)
@@ -640,7 +341,6 @@ namespace ProjectOC.StoreNS
                         }
                         else
                         {
-                            //Debug.LogError("UIRemove Error");
                             break;
                         }
                     }
@@ -658,34 +358,6 @@ namespace ProjectOC.StoreNS
                     if (player.Inventory.RemoveItem(storeData.ItemID, amount))
                     {
                         storeData.Storage += amount;
-                    }
-                    else
-                    {
-                        //Debug.LogError("UIFastAdd Error");
-                    }
-                }
-            }
-        }
-        public void UIFastRemove(Player.PlayerCharacter player, StoreData storeData)
-        {
-            if (player != null && storeData != null)
-            {
-                if (ItemManager.Instance.IsValidItemID(storeData.ItemID))
-                {
-                    int amount = storeData.Storage;
-                    List<Item> items = ItemManager.Instance.SpawnItems(storeData.ItemID, amount);
-                    foreach (Item item in items)
-                    {
-                        int itemAmount = item.Amount;
-                        if (player.Inventory.AddItem(item))
-                        {
-                            storeData.Storage -= itemAmount;
-                        }
-                        else
-                        {
-                            //Debug.LogError("UIFastRemove Error");
-                            break;
-                        }
                     }
                 }
             }
@@ -721,8 +393,6 @@ namespace ProjectOC.StoreNS
         {
             this.Transports.Remove(transport);
         }
-        public void AddMissionTranport(MissionTransport mission) {}
-        public void RemoveMissionTranport(MissionTransport mission) {}
         public bool PutIn(string itemID, int amount)
         {
             if (!string.IsNullOrEmpty(itemID) && amount >= 0)
@@ -792,128 +462,274 @@ namespace ProjectOC.StoreNS
             }
             return 0;
         }
+        /// <summary>
+        /// 给刁民预留存入的量
+        /// </summary>
+        public int ReservePutIn(string itemID, int amount, Transport transport)
+        {
+            if (!string.IsNullOrEmpty(itemID))
+            {
+                int reserveNum = 0;
+                foreach (StoreData data in this.StoreDatas)
+                {
+                    if (data.ItemID != "" && data.CanIn && data.ItemID == itemID)
+                    {
+                        if (data.Empty >= amount)
+                        {
+                            data.EmptyReserve += amount;
+                            reserveNum += amount;
+                            amount = 0;
+                            break;
+                        }
+                        else
+                        {
+                            amount -= data.Empty;
+                            data.EmptyReserve += data.Empty;
+                            reserveNum += data.Empty;
+                        }
+                    }
+                }
+                if (amount > 0)
+                {
+                    foreach (StoreData data in this.StoreDatas)
+                    {
+                        if (data.ItemID != "" && data.CanIn && data.ItemID == itemID)
+                        {
+                            data.EmptyReserve += amount;
+                            reserveNum += amount;
+                            amount = 0;
+                            break;
+                        }
+                    }
+                }
+                transport.TargetReserveNum = reserveNum;
+            }
+            return amount;
+        }
+        /// <summary>
+        /// 给刁民预留取出的量
+        /// </summary>
+        public int ReservePutOut(string itemID, int amount, Transport transport)
+        {
+            if (!string.IsNullOrEmpty(itemID))
+            {
+                int reserveNum = 0;
+                foreach (StoreData data in this.StoreDatas)
+                {
+                    if (data.ItemID != "" && data.CanOut && data.ItemID == itemID)
+                    {
+                        if (data.Storage >= amount)
+                        {
+                            data.Storage -= amount;
+                            data.StorageReserve += amount;
+                            reserveNum += amount;
+                            amount = 0;
+                            break;
+                        }
+                        else
+                        {
+                            data.StorageReserve += data.Storage;
+                            reserveNum += data.Storage;
+                            amount -= data.Storage;
+                            data.Storage = 0;
+                        }
+                    }
+                }
+                transport.SoureceReserveNum = reserveNum;
+            }
+            return amount;
+        }
+        /// <summary>
+        /// 移除预留存入量
+        /// </summary>
+        public int RemoveReservePutIn(string itemID, int amount)
+        {
+            if (!string.IsNullOrEmpty(itemID))
+            {
+                foreach (StoreData data in this.StoreDatas)
+                {
+                    if (data.ItemID != "" && data.ItemID == itemID && data.EmptyReserve > 0)
+                    {
+                        if (data.EmptyReserve >= amount)
+                        {
+                            data.EmptyReserve -= amount;
+                            amount = 0;
+                            break;
+                        }
+                        else
+                        {
+                            amount -= data.EmptyReserve;
+                            data.EmptyReserve = 0;
+                        }
+                    }
+                }
+            }
+            return amount;
+        }
+        /// <summary>
+        /// 移除预留取出量
+        /// </summary>
+        public int RemoveReservePutOut(string itemID, int amount)
+        {
+            if (!string.IsNullOrEmpty(itemID))
+            {
+                foreach (StoreData data in this.StoreDatas)
+                {
+                    if (data.ItemID != "" && data.ItemID == itemID && data.StorageReserve > 0)
+                    {
+                        if (data.StorageReserve >= amount)
+                        {
+                            data.Storage += amount;
+                            data.StorageReserve -= amount;
+                            amount = 0;
+                            break;
+                        }
+                        else
+                        {
+                            data.Storage += data.StorageReserve;
+                            amount -= data.StorageReserve;
+                            data.StorageReserve = 0;
+                        }
+                    }
+                }
+            }
+            return amount;
+        }
         #endregion
 
         #region IInventory接口
         public bool AddItem(Item item)
         {
-            int amount = item.Amount;
-            if (GetStoreEmpty(item.ID) < amount || amount < 0)
+            lock (this)
             {
-                return false;
-            }
-            foreach (StoreData data in this.StoreDatas)
-            {
-                if (data.ItemID != "" && data.ItemID == item.ID)
+                int amount = item.Amount;
+                if (GetEmpty(item.ID) < amount || amount < 0)
                 {
-                    if (data.Empty >= amount)
+                    return false;
+                }
+                foreach (StoreData data in this.StoreDatas)
+                {
+                    if (data.ItemID != "" && data.ItemID == item.ID)
                     {
-                        data.Storage += amount;
-                        amount = 0;
-                        break;
-                    }
-                    else
-                    {
-                        amount -= data.Empty;
-                        data.Storage += data.Empty;
+                        if (data.Empty >= amount)
+                        {
+                            data.Storage += amount;
+                            amount = 0;
+                            break;
+                        }
+                        else
+                        {
+                            amount -= data.Empty;
+                            data.Storage += data.Empty;
+                        }
                     }
                 }
+                OnStoreDataChange?.Invoke();
+                return true;
             }
-            OnStoreDataChange?.Invoke();
-            return true;
         }
 
         public bool RemoveItem(Item item)
         {
-            int amount = item.Amount;
-            if (GetStoreStorage(item.ID) < amount || amount < 0)
+            lock (this)
             {
-                return false;
-            }
-            foreach (StoreData data in this.StoreDatas)
-            {
-                if (data.ItemID != "" && data.ItemID == item.ID)
+                int amount = item.Amount;
+                if (GetStorage(item.ID) < amount || amount < 0)
                 {
-                    if (data.Storage >= amount)
+                    return false;
+                }
+                foreach (StoreData data in this.StoreDatas)
+                {
+                    if (data.ItemID != "" && data.ItemID == item.ID)
                     {
-                        data.Storage -= amount;
-                        amount = 0;
-                        break;
-                    }
-                    else
-                    {
-                        amount -= data.Storage;
-                        data.Storage = 0;
+                        if (data.Storage >= amount)
+                        {
+                            data.Storage -= amount;
+                            amount = 0;
+                            break;
+                        }
+                        else
+                        {
+                            amount -= data.Storage;
+                            data.Storage = 0;
+                        }
                     }
                 }
+                OnStoreDataChange?.Invoke();
+                return true;
             }
-            OnStoreDataChange?.Invoke();
-            return true;
         }
 
         public Item RemoveItem(Item item, int amount)
         {
-            int oldAmount = amount;
-            if (amount > 0)
+            lock (this)
             {
-                if (GetStoreStorage(item.ID) >= amount)
+                int oldAmount = amount;
+                if (amount > 0)
                 {
-                    foreach (StoreData data in this.StoreDatas)
+                    if (GetStorage(item.ID) >= amount)
                     {
-                        if (data.ItemID != "" && data.ItemID == item.ID)
+                        foreach (StoreData data in this.StoreDatas)
                         {
-                            if (data.Storage >= amount)
+                            if (data.ItemID != "" && data.ItemID == item.ID)
                             {
-                                data.Storage -= amount;
-                                amount = 0;
-                                break;
-                            }
-                            else
-                            {
-                                amount -= data.Storage;
-                                data.Storage = 0;
+                                if (data.Storage >= amount)
+                                {
+                                    data.Storage -= amount;
+                                    amount = 0;
+                                    break;
+                                }
+                                else
+                                {
+                                    amount -= data.Storage;
+                                    data.Storage = 0;
+                                }
                             }
                         }
                     }
                 }
+                Item result = ItemManager.Instance.SpawnItem(item.ID);
+                int newAmount = oldAmount - amount;
+                result.Amount = newAmount;
+                OnStoreDataChange?.Invoke();
+                return result;
             }
-            Item result = ItemManager.Instance.SpawnItem(item.ID);
-            int newAmount = oldAmount - amount;
-            result.Amount = newAmount;
-            OnStoreDataChange?.Invoke();
-            return result;
         }
 
         public bool RemoveItem(string itemID, int amount)
         {
-            if (!string.IsNullOrEmpty(itemID) && GetStoreStorage(itemID) < amount || amount < 0)
+            lock(this)
             {
-                return false;
-            }
-            foreach (StoreData data in this.StoreDatas)
-            {
-                if (data.ItemID != "" && data.ItemID == itemID)
+                if (!string.IsNullOrEmpty(itemID) && GetStorage(itemID) < amount || amount < 0)
                 {
-                    if (data.Storage >= amount)
+                    return false;
+                }
+                foreach (StoreData data in this.StoreDatas)
+                {
+                    if (data.ItemID != "" && data.ItemID == itemID)
                     {
-                        data.Storage -= amount;
-                        amount = 0;
-                        break;
-                    }
-                    else
-                    {
-                        amount -= data.Storage;
-                        data.Storage = 0;
+                        if (data.Storage >= amount)
+                        {
+                            data.Storage -= amount;
+                            amount = 0;
+                            break;
+                        }
+                        else
+                        {
+                            amount -= data.Storage;
+                            data.Storage = 0;
+                        }
                     }
                 }
+                OnStoreDataChange?.Invoke();
+                return true;
             }
-            OnStoreDataChange?.Invoke();
-            return true;
         }
+            
 
         public int GetItemAllNum(string id)
         {
-            return GetStoreStorage(id);
+            return GetStorage(id);
         }
 
         public Item[] GetItemList()

@@ -74,6 +74,7 @@ namespace ProjectOC.InventorySystem.UI
             BotKeyTips_ChangeItem.gameObject.SetActive(false);
             #endregion
 
+            HasUpgrade = (Store.WorldStore as IBuildingUpgrade).HasUpgrade() || Store.Level > 0;
             IsInit = true;
             Refresh();
         }
@@ -300,6 +301,11 @@ namespace ProjectOC.InventorySystem.UI
             }
         }
 
+        /// <summary>
+        /// 是否有升级功能，决定是否禁用升级
+        /// </summary>
+        private bool HasUpgrade;
+
         public Player.PlayerCharacter Player;
 
         protected override void UnregisterInput()
@@ -359,7 +365,7 @@ namespace ProjectOC.InventorySystem.UI
         }
         private void Upgrade_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurMode != Mode.Upgrade)
+            if (CurMode != Mode.Upgrade && HasUpgrade)
             {
                 CurMode = Mode.Upgrade;
             }
@@ -520,7 +526,7 @@ namespace ProjectOC.InventorySystem.UI
             }
             else if (CurMode == Mode.Upgrade)
             {
-                BuildingManager.Instance.Upgrade(Store.WorldStore, Player.Inventory);
+                BuildingManager.Instance.Upgrade(Store.WorldStore);
             }
             Refresh();
         }

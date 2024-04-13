@@ -71,7 +71,7 @@ namespace ProjectOC.Player.UI
         public void Tick(float deltatime)
         {
             if(LocalGameManager.Instance!=null)
-                TimeText.text = LocalGameManager.Instance.DispatchTimeManager.CurrentTimeFrame.ToString()+" : "+ LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString();
+                TimeText.text = LocalGameManager.Instance.DispatchTimeManager.CurrentHour.ToString()+" : "+ LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString();
         }
 
         #endregion

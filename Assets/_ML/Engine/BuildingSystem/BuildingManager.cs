@@ -894,14 +894,14 @@ namespace ML.Engine.BuildingSystem
         #endregion
 
         #region ½¨ÖþÉý¼¶
-        public IBuildingUpgrade Upgrade(IBuildingUpgrade build, IInventory inventory)
+        public IBuildingUpgrade Upgrade(IBuildingUpgrade build)
         {
-            if (build != null && build.CanUpgrade(inventory))
+            if (build != null && build.CanUpgrade())
             {
                 IBuildingPart upgradeBP = GetOneBPartInstance(GetUpgradeCID(build.Classification.ToString()));
                 if (upgradeBP is IBuildingUpgrade upgrade)
                 {
-                    upgrade.OnUpgrade(build, inventory);
+                    upgrade.OnUpgrade(build);
                     return upgrade;
                 }
             }

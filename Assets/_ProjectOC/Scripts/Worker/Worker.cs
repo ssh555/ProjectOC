@@ -71,7 +71,6 @@ namespace ProjectOC.WorkerNS
         public List<Feature> Features = new List<Feature>();
 
         [LabelText("每个时段的安排")]
-        // 数据
         public TimeArrangement TimeArrangement = new TimeArrangement();
 
         [LabelText("当前时段的安排应该所处的状态")]
@@ -82,7 +81,7 @@ namespace ProjectOC.WorkerNS
                 ManagerNS.DispatchTimeManager timeManager = ManagerNS.LocalGameManager.Instance.DispatchTimeManager;
                 if (timeManager != null)
                 {
-                    return TimeArrangement[timeManager.CurrentTimeFrame];
+                    return TimeArrangement[timeManager.CurrentHour];
                 }
                 return TimeStatus.Relax;
             } 
@@ -110,7 +109,7 @@ namespace ProjectOC.WorkerNS
         public Action<int> APChangeAction;
         
         [LabelText("是否在值班")]
-        public bool IsOnDuty { get { return HasProNode && this.Status != Status.Relaxing && ArriveProNode; } }
+        public bool IsOnDuty { get { return HasProNode && this.Status != Status.Relaxing && ProNode.IsWorkerArrive; } }
         
         [LabelText("生产节点")]
         public ProNode ProNode = null;
@@ -230,11 +229,19 @@ namespace ProjectOC.WorkerNS
 
         public void ClearDestination()
         {
-            ArriveProNode = false;
             HasDestination = false;
             if (Agent != null && Agent.enabled)
             {
                 Agent.isStopped = true;
+            }
+        }
+
+        public void RecoverLastPosition()
+        {
+            if (!Agent.enabled)
+            {
+                transform.position = LastPosition;
+                Agent.enabled = true;
             }
         }
 
@@ -251,6 +258,7 @@ namespace ProjectOC.WorkerNS
             this.ProNode = proNode;
         }
 
+        
 
         /// <summary>
         /// 修改经验值

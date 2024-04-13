@@ -19,12 +19,8 @@ namespace ProjectOC.MissionNS
     [System.Serializable]
     public sealed class MissionManager : ILocalManager
     {
-        /// <summary>
-        /// 搬运任务列表
-        /// </summary>
-        [ShowInInspector]
-        public HashSet<MissionTransport> MissionTransports = new HashSet<MissionTransport>();
-
+        [LabelText("搬运任务列表"), ShowInInspector, ReadOnly]
+        private HashSet<MissionTransport> MissionTransports = new HashSet<MissionTransport>();
         private CounterDownTimer timer;
         /// <summary>
         /// 代替Tick的更新任务的计时器
@@ -42,9 +38,22 @@ namespace ProjectOC.MissionNS
             }
         }
 
-        public void Init()
+        public void OnRegister()
         {
             this.Timer.Start();
+        }
+
+        public void OnUnregister()
+        {
+            if (timer != null)
+            {
+                timer.End();
+            }
+            foreach (MissionTransport mission in MissionTransports)
+            {
+                mission?.End(false);
+            }
+            MissionTransports.Clear();
         }
 
         /// <summary>
@@ -64,6 +73,15 @@ namespace ProjectOC.MissionNS
             }
         }
 
+        public bool RemoveMissionTransport(MissionTransport mission)
+        {
+            if (mission != null)
+            {
+                return MissionTransports.Remove(mission);
+            }
+            return false;
+        }
+
         /// <summary>
         /// 发起者到仓库，存入仓库
         /// </summary>
@@ -78,11 +96,10 @@ namespace ProjectOC.MissionNS
                     int maxBurNum = (int)(worker.BURMax / ItemManager.Instance.GetWeight(mission.ItemID));
                     missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
                 }
-                Store store = ManagerNS.LocalGameManager.Instance.StoreManager.GetCanPutInStore(mission.ItemID, missionNum, 1);
+                Store store = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutInStore(mission.ItemID, missionNum, 1, true, true);
                 if (worker != null && store != null && missionNum > 0)
                 {
                     Transport transport = new Transport(mission, mission.ItemID, missionNum, mission.Initiator, store, worker);
-                    store.ReserveEmptyToWorker(mission.ItemID, missionNum, transport);
                 }
                 else
                 {
@@ -99,7 +116,7 @@ namespace ProjectOC.MissionNS
         {
             if (mission.NeedAssignNum > 0)
             {
-                Dictionary<Store, int> result = ManagerNS.LocalGameManager.Instance.StoreManager.GetCanPutOutStore(mission.ItemID, mission.NeedAssignNum, 1);
+                Dictionary<Store, int> result = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutOutStore(mission.ItemID, mission.NeedAssignNum, 1, true, true);
                 foreach (var kv in result)
                 {
                     Store store = kv.Key;
@@ -113,7 +130,6 @@ namespace ProjectOC.MissionNS
                     if (worker != null && store != null && missionNum > 0)
                     {
                         Transport transport = new Transport(mission, mission.ItemID, missionNum, store, mission.Initiator, worker);
-                        store.ReserveStorageToWorker(mission.ItemID, missionNum, transport);
                     }
                     else
                     {

@@ -4,20 +4,19 @@ namespace ProjectOC.StoreNS
 {
     /// <summary>
     /// 仓库里面每个存储格子的数据
-    /// 只有当此容器存储量为0时，才能更改ItemID
     /// </summary>
     [System.Serializable]
     public class StoreData
     {
-        [LabelText("存储的Item ID")]
+        [LabelText("存储的Item ID"), ReadOnly]
         public string ItemID = "";
-        [LabelText("总存放量")]
+        [LabelText("总存放量"), ShowInInspector, ReadOnly]
         public int StorageAll { get { return Storage + StorageReserve; } }
-        [LabelText("实际存放量")]
+        [LabelText("实际存放量"), ReadOnly]
         public int Storage;
-        [LabelText("任务占用存放量")]
+        [LabelText("任务占用存放量"), ReadOnly]
         public int StorageReserve;
-        [LabelText("实际空余量")]
+        [LabelText("实际空余量"), ShowInInspector, ReadOnly]
         public int Empty 
         { 
             get
@@ -26,21 +25,18 @@ namespace ProjectOC.StoreNS
                 return emptyCapacity > 0 ? emptyCapacity : 0;
             } 
         }
-        [LabelText("任务占用空余量")]
+        [LabelText("任务占用空余量"), ReadOnly]
         public int EmptyReserve;
-        [LabelText("最大容量")]
+        [LabelText("最大容量"), ReadOnly]
         public int MaxCapacity;
-        [LabelText("刁民能否存入")]
+        [LabelText("刁民能否存入"), ReadOnly]
         public bool CanIn = true;
-        [LabelText("刁民能否取出")]
+        [LabelText("刁民能否取出"), ReadOnly]
         public bool CanOut = true;
-        public StoreData()
-        {
-        }
         public StoreData(string itemID, int maxCapacity)
         {
-            this.ItemID = itemID;
-            this.MaxCapacity = maxCapacity;
+            ItemID = itemID;
+            MaxCapacity = maxCapacity;
         }
     }
 }

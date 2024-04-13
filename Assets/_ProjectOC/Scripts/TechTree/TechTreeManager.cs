@@ -17,6 +17,11 @@ namespace ProjectOC.TechTree
     [System.Serializable]
     public sealed class TechTreeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
+        public void OnRegister()
+        {
+            Init();
+        }
+
         #region Base
         public static TechTreeManager Instance;
 

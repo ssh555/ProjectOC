@@ -97,7 +97,7 @@ namespace ProjectOC.InventorySystem.UI
         protected override void Enter()
         {
             ProNode.OnActionChange += RefreshDynamic;
-            ProNode.OnProduceTimerUpdate += OnProduceTimerUpdateAction;
+            ProNode.OnProduceUpdate += OnProduceTimerUpdateAction;
             ProNode.OnProduceEnd += Refresh;
             base.Enter();
         }
@@ -105,7 +105,7 @@ namespace ProjectOC.InventorySystem.UI
         protected override void Exit()
         {
             ProNode.OnActionChange -= RefreshDynamic;
-            ProNode.OnProduceTimerUpdate -= OnProduceTimerUpdateAction;
+            ProNode.OnProduceUpdate -= OnProduceTimerUpdateAction;
             ProNode.OnProduceEnd -= Refresh;
             ClearTemp();
             base.Exit();
@@ -448,7 +448,7 @@ namespace ProjectOC.InventorySystem.UI
             }
             else if (CurMode == Mode.Upgrade)
             {
-                BuildingManager.Instance.Upgrade(ProNode.WorldProNode, Player.Inventory);
+                BuildingManager.Instance.Upgrade(ProNode.WorldProNode);
             }
             Refresh();
         }

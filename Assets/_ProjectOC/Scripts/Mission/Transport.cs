@@ -1,4 +1,5 @@
 using ML.Engine.InventorySystem;
+using ProjectOC.StoreNS;
 using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System;
@@ -13,30 +14,31 @@ namespace ProjectOC.MissionNS
     [System.Serializable]
     public class Transport
     {
-        [LabelText("搬运物品ID")]
+        [LabelText("搬运物品ID"), ReadOnly]
         public string ItemID = "";
-        [LabelText("搬运所属的任务"), NonSerialized]
+        [LabelText("搬运所属的任务"), ReadOnly]
         public MissionTransport Mission;
-        [LabelText("取货地")]
+        [LabelText("取货地"), ReadOnly]
         public IMissionObj Source;
-        [LabelText("送货地")]
+        [LabelText("送货地"), ReadOnly]
         public IMissionObj Target;
-        [LabelText("负责该搬运的刁民")]
+        [LabelText("负责该搬运的刁民"), ReadOnly]
         public Worker Worker;
-
-        [LabelText("需要搬运的数量")]
+        [LabelText("需要搬运的数量"), ReadOnly]
         public int MissionNum;
-        [LabelText("当前拿到的数量")]
-        public int CurNum;
-        [LabelText("完成的数量")]
-        public int FinishNum;
-        [LabelText("取货地预留的数量")]
-        public int SoureceReserveNum;
-        [LabelText("送货地预留的数量")]
-        public int TargetReserveNum;
 
-        [LabelText("是否到达取货地")]
+        [LabelText("当前拿到的数量"), ReadOnly]
+        public int CurNum;
+        [LabelText("完成的数量"), ReadOnly]
+        public int FinishNum;
+        [LabelText("取货地预留的数量"), ReadOnly]
+        public int SoureceReserveNum;
+        [LabelText("送货地预留的数量"), ReadOnly]
+        public int TargetReserveNum;
+        [LabelText("是否到达取货地"), ReadOnly]
         public bool ArriveSource;
+        [LabelText("是否到达目的地"), ReadOnly]
+        public bool ArriveTarget;
 
 
         public Transport(MissionTransport mission, string itemID, int missionNum, IMissionObj source, IMissionObj destination, Worker worker)
@@ -48,8 +50,11 @@ namespace ProjectOC.MissionNS
             this.Worker = worker;
             this.MissionNum = missionNum;
 
-            this.Mission.Transports.Add(this);
+            this.Mission.AddTransport(this);
             this.Source.AddTransport(this);
+            this.Source.ReservePutOut(mission.ItemID, missionNum, this);
+            this.Target.ReservePutIn(mission.ItemID, missionNum, this);
+
             this.Target.AddTransport(this);
             this.Worker.Transport = this;
             this.Worker.SetDestination(this.Source.GetTransform().position, Transport_Source_Action);
@@ -83,6 +88,7 @@ namespace ProjectOC.MissionNS
         private void Transport_Target_Action(Worker worker)
         {
             worker.Transport.PutInTarget();
+            worker.Transport.ArriveTarget = true;
         }
 
         /// <summary>
@@ -150,7 +156,7 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// 强制结束搬运
         /// </summary>
-        public void End(bool remove=true)
+        public void End(bool removeMission=true)
         {
             List<Item> items = ItemManager.Instance.SpawnItems(ItemID, CurNum);
             foreach (Item item in items)
@@ -179,18 +185,17 @@ namespace ProjectOC.MissionNS
             Worker.TransportItems.RemoveAll(item => item.Amount == 0);
             Worker.Transport = null;
             Worker.ClearDestination();
-            if (Source != null && Source is StoreNS.Store source)
+            if (!ArriveSource)
             {
-                source.RemoveReserveStorage(ItemID, SoureceReserveNum);
+                Source?.RemoveReservePutOut(ItemID, SoureceReserveNum);
             }
-            if (Target != null && Target is StoreNS.Store target)
+            if (!ArriveTarget)
             {
-                target.RemoveReserveEmpty(ItemID, TargetReserveNum);
+                Target?.RemoveReservePutIn(ItemID, TargetReserveNum);
             }
-
-            if (remove)
+            if (removeMission)
             {
-                Mission.Transports.Remove(this);
+                Mission.RemoveTransport(this);
             }
             Source?.RemoveTranport(this);
             Target?.RemoveTranport(this);

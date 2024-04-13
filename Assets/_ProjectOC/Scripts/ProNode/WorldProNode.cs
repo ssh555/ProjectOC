@@ -1,5 +1,4 @@
 using ML.Engine.BuildingSystem;
-using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InteractSystem;
 using ML.Engine.InventorySystem;
 using ML.Engine.InventorySystem.CompositeSystem;
@@ -11,14 +10,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Cinemachine.DocumentationSortingAttribute;
+
 
 
 namespace ProjectOC.ProNodeNS
 {
     public class WorldProNode : ElectAppliance, IInteraction, IBuildingUpgrade
     {
-        [ShowInInspector, ReadOnly, SerializeField]
+        [LabelText("生产节点"), ShowInInspector, ReadOnly, SerializeField]
         public ProNode ProNode;
         public ItemIcon ItemIcon { get => GetComponentInChildren<ItemIcon>(); }
         public string InteractType { get; set; } = "WorldProNode";
@@ -27,7 +26,6 @@ namespace ProjectOC.ProNodeNS
 
         public override void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
-            // 第一次新建
             if (isFirstBuild)
             {
                 string actorID = BuildingManager.Instance.GetActorID(this.Classification.ToString());
@@ -54,30 +52,25 @@ namespace ProjectOC.ProNodeNS
             };
         }
 
-        public bool CanUpgrade(IInventory inventory)
+        public bool CanUpgrade()
         {
             string CID = Classification.ToString();
-            if (BuildingManager.Instance.GetUpgradeID(CID) != null && BuildingManager.Instance.IsValidBPartID(CID))
+            if ((this as IBuildingUpgrade).CanUpgrade())
             {
                 List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(CID);
-                foreach (Formula formula in formulas)
-                {
-                    if (inventory.GetItemAllNum(formula.id) < formula.num)
-                    {
-                        return false;
-                    }
-                }
-                return true;
+                Player.PlayerCharacter player = GameObject.Find("PlayerCharacter(Clone)")?.GetComponent<Player.PlayerCharacter>();
+                return player.InventoryHasItems(formulas);
             }
             return false;
         }
 
-        public void OnUpgrade(IBuildingUpgrade lastLevelBuild, IInventory inventory)
+        public void OnUpgrade(IBuildingUpgrade lastLevelBuild)
         {
             string lastLevelID = BuildingManager.Instance.GetID(lastLevelBuild.Classification.ToString());
             string upgradeID = BuildingManager.Instance.GetID(Classification.ToString());
-            CompositeManager.Instance.OnlyCostResource(inventory, upgradeID);
-            CompositeManager.Instance.OnlyReturnResource(inventory, lastLevelID);
+            CompositeManager.Instance.OnlyCostResource(upgradeID);
+            Player.PlayerCharacter player = GameObject.Find("PlayerCharacter(Clone)")?.GetComponent<Player.PlayerCharacter>();
+            CompositeManager.Instance.OnlyReturnResource(player.Inventory, lastLevelID);
             transform.SetParent(lastLevelBuild.transform.parent);
             InstanceID = lastLevelBuild.InstanceID;
             transform.position = lastLevelBuild.transform.position;
@@ -87,7 +80,12 @@ namespace ProjectOC.ProNodeNS
                 LocalGameManager.Instance.ProNodeManager.WorldNodeSetData(this, worldProNode.ProNode);
             }
             ProNode.SetLevel(Classification.Category4 - 1);
-            ML.Engine.Manager.GameManager.DestroyObj(lastLevelBuild.gameObject);
+            GameManager.DestroyObj(lastLevelBuild.gameObject);
+        }
+
+        public void OnUpgrade(IBuildingUpgrade lastLevelBuild, IBuildingUpgradeParam param)
+        {
+            OnUpgrade(lastLevelBuild);
         }
     }
 }

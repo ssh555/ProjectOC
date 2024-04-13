@@ -12,6 +12,9 @@ using ML.PlayerCharacterNS;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.Layouts;
 using UnityEngine.InputSystem.Utilities;
+using ProjectOC.StoreNS;
+using ProjectOC.ManagerNS;
+using ML.Engine.InventorySystem.CompositeSystem;
 
 //ML.PlayerCharacterNS
 namespace ProjectOC.Player
@@ -72,8 +75,130 @@ namespace ProjectOC.Player
         #region 背包 to-do : 临时测试使用
         [ShowInInspector, ReadOnly]
         public ML.Engine.InventorySystem.IInventory Inventory;
-        #endregion
 
+        /// <summary>
+        /// 背包和仓库中是否有对应数量的物品。
+        /// </summary>
+        public bool InventoryHasItems(string itemID, int num, bool containStore = true)
+        {
+            int current = Inventory.GetItemAllNum(itemID);
+            if (containStore && num - current > 0)
+            {
+                Dictionary<Store, int> dict = LocalGameManager.Instance.StoreManager.GetPutOutStore(itemID, num - current, -1);
+                foreach (var kv in dict)
+                {
+                    current += kv.Value;
+                }
+            }
+            return current >= num;
+        }
+
+        /// <summary>
+        /// 背包和仓库中是否有对应数量的物品。
+        /// </summary>
+        public bool InventoryHasItems(List<Formula> formulas, bool containStore = true)
+        {
+            if (formulas == null)
+            {
+                return false;
+            }
+            List<Formula> currents = new List<Formula>();
+            foreach (Formula formula in formulas)
+            {
+                int num = Inventory.GetItemAllNum(formula.id);
+                num = num <= formula.num ? num : formula.num;
+                currents.Add(new Formula() { id = formula.id, num = num });
+            }
+            if (containStore)
+            {
+                List<Store> stores = LocalGameManager.Instance.StoreManager.GetStores(-1);
+                foreach (Store store in stores)
+                {
+                    for (int i=0; i < formulas.Count; i++)
+                    {
+                        int need = formulas[i].num - currents[i].num;
+                        if (need > 0 && store.IsStoreHaveItem(formulas[i].id))
+                        {
+                            int num = store.GetStorage(formulas[i].id);
+                            num = num <= need ? num : need;
+                            currents[i] = new Formula() { id = currents[i].id, num = currents[i].num + num };
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < formulas.Count; i++)
+            {
+                if (currents[i].num < formulas[i].num)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// 从背包和仓库中消耗对应数量的物品，返回消耗的数量
+        /// </summary>
+        /// <param name="containStore">是否包括仓库</param>
+        /// <param name="needJudgeNum">是否需要判断数量</param>
+        /// <param name="priority">消耗的优先级，0表示没有优先级，1表示从高优先级消耗，-1表示从低优先级消耗</param>
+        public int InventoryCostItems(string itemID, int num, bool containStore = true, bool needJudgeNum = false, int priority = 0)
+        {
+            if (!needJudgeNum || InventoryHasItems(itemID, num, containStore))
+            {
+                int bagItemNum = Inventory.GetItemAllNum(itemID);
+                bagItemNum = bagItemNum >= num ? num : bagItemNum;
+                int current = Inventory.RemoveItem(itemID, bagItemNum) ? bagItemNum : 0;
+                if (containStore && num - current > 0)
+                {
+                    Dictionary<Store, int> dict = LocalGameManager.Instance.StoreManager.GetPutOutStore(itemID, num - current, priority);
+                    foreach (var kv in dict)
+                    {
+                        current += kv.Key.RemoveItem(itemID, kv.Value) ? kv.Value : 0;
+                    }
+                }
+                return current;
+            }
+            return 0;
+        }
+
+        public List<Formula> InventoryCostItems(List<Formula> formulas, bool containStore = true, bool needJudgeNum = false, int priority = 0)
+        {
+            if (formulas == null)
+            {
+                return null;
+            }
+            if (!needJudgeNum || InventoryHasItems(formulas, containStore))
+            {
+                List<Formula> currents = new List<Formula>();
+                foreach (Formula formula in formulas)
+                {
+                    int num = Inventory.GetItemAllNum(formula.id);
+                    num = num <= formula.num ? num : formula.num;
+                    currents.Add(new Formula() { id = formula.id, num = num });
+                }
+                if (containStore)
+                {
+                    List<Store> stores = LocalGameManager.Instance.StoreManager.GetStores(priority);
+                    foreach (Store store in stores)
+                    {
+                        for (int i = 0; i < formulas.Count; i++)
+                        {
+                            int need = formulas[i].num - currents[i].num;
+                            if (need > 0 && store.IsStoreHaveItem(formulas[i].id))
+                            {
+                                int num = store.GetStorage(formulas[i].id);
+                                num = num <= need ? num : need;
+                                currents[i] = new Formula() { id = currents[i].id, num = currents[i].num + num };
+                            }
+                        }
+                    }
+                }
+                return currents;
+            }
+            return null;
+        }
+        #endregion
 
         #region Init
         /// <summary>

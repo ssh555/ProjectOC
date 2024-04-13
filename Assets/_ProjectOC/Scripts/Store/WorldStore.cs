@@ -10,22 +10,21 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 namespace ProjectOC.StoreNS
 {
     public class WorldStore : BuildingPart, IInteraction, IBuildingUpgrade
     {
-        [ShowInInspector, ReadOnly, SerializeField]
+        [LabelText("仓库"), ShowInInspector, ReadOnly, SerializeField]
         public Store Store;
         public ItemIcon ItemIcon { get => GetComponentInChildren<ItemIcon>(); }
         public string InteractType { get; set; } = "WorldStore";
         public Vector3 PosOffset { get; set; } = Vector3.zero;
-        
+
         public override void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
-            // 第一次新建
             if (isFirstBuild)
             {
-                // 生成逻辑对象
                 string actorID = BuildingManager.Instance.GetActorID(this.Classification.ToString());
                 if (!string.IsNullOrEmpty(actorID) && actorID.Split('_').Length == 3)
                 {
@@ -39,46 +38,40 @@ namespace ProjectOC.StoreNS
             {
                 Store.OnPositionChange();
             }
-            //isFirstBuild的更新放在基类里，要要到引用后面
-            base.OnChangePlaceEvent(oldPos,newPos);
+            base.OnChangePlaceEvent(oldPos, newPos);
         }
 
         public void Interact(InteractComponent component)
         {
-            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIStorePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
+            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIStorePanel.prefab", GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
             {
                 InventorySystem.UI.UIStore uiPanel = (handle.Result).GetComponent<InventorySystem.UI.UIStore>();
                 uiPanel.Player = component.GetComponentInParent<Player.PlayerCharacter>();
                 uiPanel.Store = this.Store;
-                uiPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                uiPanel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
                 GameManager.Instance.UIManager.PushPanel(uiPanel);
             };
         }
 
-        public bool CanUpgrade(IInventory inventory)
+        public bool CanUpgrade()
         {
             string CID = Classification.ToString();
-            if (BuildingManager.Instance.GetUpgradeID(CID) != null && BuildingManager.Instance.IsValidBPartID(CID))
+            if ((this as IBuildingUpgrade).CanUpgrade())
             {
                 List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(CID);
-                foreach (Formula formula in formulas)
-                {
-                    if (inventory.GetItemAllNum(formula.id) < formula.num)
-                    {
-                        return false;
-                    }
-                }
-                return true;
+                Player.PlayerCharacter player = GameObject.Find("PlayerCharacter(Clone)")?.GetComponent<Player.PlayerCharacter>();
+                return player.InventoryHasItems(formulas);
             }
             return false;
         }
 
-        public void OnUpgrade(IBuildingUpgrade lastLevelBuild, IInventory inventory)
+        public void OnUpgrade(IBuildingUpgrade lastLevelBuild)
         {
             string lastLevelID = BuildingManager.Instance.GetID(lastLevelBuild.Classification.ToString());
             string upgradeID = BuildingManager.Instance.GetID(Classification.ToString());
-            CompositeManager.Instance.OnlyCostResource(inventory, upgradeID);
-            CompositeManager.Instance.OnlyReturnResource(inventory, lastLevelID);
+            CompositeManager.Instance.OnlyCostResource(upgradeID);
+            Player.PlayerCharacter player = GameObject.Find("PlayerCharacter(Clone)")?.GetComponent<Player.PlayerCharacter>();
+            CompositeManager.Instance.OnlyReturnResource(player.Inventory, lastLevelID);
             transform.SetParent(lastLevelBuild.transform.parent);
             InstanceID = lastLevelBuild.InstanceID;
             transform.position = lastLevelBuild.transform.position;
@@ -88,7 +81,12 @@ namespace ProjectOC.StoreNS
                 LocalGameManager.Instance.StoreManager.WorldStoreSetData(this, worldStore.Store);
             }
             Store.SetLevel(Classification.Category4 - 1);
-            ML.Engine.Manager.GameManager.DestroyObj(lastLevelBuild.gameObject);
+            GameManager.DestroyObj(lastLevelBuild.gameObject);
+        }
+
+        public void OnUpgrade(IBuildingUpgrade lastLevelBuild, IBuildingUpgradeParam param)
+        {
+            OnUpgrade(lastLevelBuild);
         }
     }
 }

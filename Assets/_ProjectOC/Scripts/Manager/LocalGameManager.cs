@@ -11,13 +11,13 @@ using ProjectOC.ProNodeNS;
 using ML.Engine.InventorySystem;
 using ProjectOC.LandMassExpand;
 using Sirenix.OdinInspector;
-using ML.Engine.UI;
 using ProjectOC.TechTree;
 using ML.Engine.Manager;
 using ProjectOC.Order;
 using ML.PlayerCharacterNS;
 using ProjectOC.ClanNS;
 using ML.Engine.InventorySystem.CompositeSystem;
+
 
 namespace ProjectOC.ManagerNS
 {
@@ -60,37 +60,22 @@ namespace ProjectOC.ManagerNS
             //DontDestroyOnLoad(this);
             GM.RegisterLocalManager(this);
             GM.RegisterLocalManager(DispatchTimeManager);
-            DispatchTimeManager.Init();
             GM.RegisterLocalManager(MissionManager);
-            MissionManager.Init();
             GM.RegisterLocalManager(ProNodeManager);
-            ProNodeManager.LoadTableData();
             GM.RegisterLocalManager(RecipeManager);
-            RecipeManager.LoadTableData();
             GM.RegisterLocalManager(StoreManager);
-            StoreManager.LoadTableData();
             GM.RegisterLocalManager(WorkerManager);
             GM.RegisterLocalManager(EffectManager);
-            EffectManager.LoadTableData();
             GM.RegisterLocalManager(FeatureManager);
-            FeatureManager.LoadTableData();
             GM.RegisterLocalManager(SkillManager);
-            SkillManager.LoadTableData();
             GM.RegisterLocalManager(WorkerEchoManager);
-            WorkerEchoManager.LoadTableData();
             GM.RegisterLocalManager(ClanManager);
             GM.RegisterLocalManager(MonoBuildingManager);
-            MonoBuildingManager.Init();
             GM.RegisterLocalManager(TechTreeManager);
-            TechTreeManager.Init();
-/*            GM.RegisterLocalManager(OrderManager);
-            OrderManager.Init();*/
+            //GM.RegisterLocalManager(OrderManager);
             GM.RegisterLocalManager(ItemManager);
-            ItemManager.Init();
             GM.RegisterLocalManager(CompositeManager);
-            CompositeManager.Init();
             GM.RegisterLocalManager(IslandManager);
-            IslandManager.Init();
             GM.RegisterLocalManager(BuildPowerIslandManager);
             GameManager.Instance.CharacterManager.Scene1Init();
             //Òª»ñÈ¡Placer
@@ -128,7 +113,7 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<IslandModelManager>();
                 GM?.UnregisterLocalManager<BuildPowerIslandManager>();
                 GM?.UnregisterLocalManager<IslandAreaManager>();
-                GM?.UnregisterLocalManager<OrderManager>();
+                //GM?.UnregisterLocalManager<OrderManager>();
                 GM?.UnregisterLocalManager<ItemManager>();
                 GM?.UnregisterLocalManager<CompositeManager>();
                 Instance = null;
@@ -179,5 +164,3 @@ namespace ProjectOC.ManagerNS
 
     }
 }
-
-

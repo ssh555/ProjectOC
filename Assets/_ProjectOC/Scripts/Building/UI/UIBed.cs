@@ -188,7 +188,7 @@ namespace ProjectOC.Building.UI
             }
             else if (CurMode == Mode.ChangeClan)
             {
-                if (this.CurClan != null && this.Bed.CanSetClan)
+                if (this.CurClan != null && this.Bed.CanSetClan && (!Bed.HasClan || Bed.Clan != CurClan))
                 {
                     if (CurClan.HasBed)
                     {

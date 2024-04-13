@@ -23,6 +23,11 @@ namespace ML.Engine.InventorySystem
     [System.Serializable]
     public sealed class RecipeManager : Manager.LocalManager.ILocalManager
     {
+        public void OnRegister()
+        {
+            LoadTableData();
+        }
+
         #region Load And Data
         /// <summary>
         /// 是否已加载完数据
@@ -63,7 +68,6 @@ namespace ML.Engine.InventorySystem
             {
                 return new Recipe(RecipeTableDict[id]);
             }
-            //Debug.LogError("没有对应ID为 " + id + " 的配方");
             return null;
         }
         #endregion
@@ -77,6 +81,25 @@ namespace ML.Engine.InventorySystem
                 result.AddRange(RecipeCategorys[category]);
             }
             return result;
+        }
+
+        public List<string> SortRecipeIDs(List<string> recipeIDs)
+        {
+            List<string> resultes = new List<string>();
+            if (recipeIDs != null)
+            {
+                List<Tuple<string, int>> temps = new List<Tuple<string, int>>();
+                foreach (string id in recipeIDs)
+                {
+                    temps.Add(new Tuple<string, int>(id, GetSort(id)));
+                }
+                temps.Sort((t1, t2) => { return t1.Item2 != t2.Item2 ? t1.Item2.CompareTo(t2.Item2) : t1.Item1.CompareTo(t2.Item1); });
+                foreach (var tuple in temps)
+                {
+                    resultes.Add(tuple.Item1);
+                }
+            }
+            return resultes;
         }
         
         public string[] GetAllID()

@@ -62,6 +62,7 @@ namespace ML.Engine.InventorySystem
             if (instance == null)
             {
                 instance = this;
+                Init();
             }
         }
 
