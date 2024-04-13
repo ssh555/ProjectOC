@@ -55,7 +55,10 @@ namespace ML.Engine.UI
         private BindType NavigationBindType;
         private BindType ButtonInteractBindType;
 
-        private bool isEnable = false;
+        [ShowInInspector]
+        private bool isEnable = true;
+
+        public bool IsEnable { get { return isEnable; } }
 
         private Transform parent;
         public Transform Parent { get { return parent; } }
@@ -686,21 +689,27 @@ namespace ML.Engine.UI
             btn.SetPreAndPostInteract(preAction, postAction);
             Action<InputAction.CallbackContext> buttonClickAction = (context) => { preAction?.Invoke(); btn.onClick.Invoke(); postAction?.Invoke(); };
 
-            switch (bindType)
+            try
             {
-                case BindType.started:
-                    InputActionBindDic.Add((InputAction, BindType.started), buttonClickAction);
-                    InputAction.started += buttonClickAction;
-                    break;
-                case BindType.performed:
-                    InputActionBindDic.Add((InputAction, BindType.performed), buttonClickAction);
-                    InputAction.performed += buttonClickAction;
-                    break;
-                case BindType.canceled:
-                    InputActionBindDic.Add((InputAction, BindType.canceled), buttonClickAction);
-                    InputAction.canceled += buttonClickAction;
-                    break;
+                switch (bindType)
+                {
+                    case BindType.started:
+                        InputActionBindDic.Add((InputAction, BindType.started), buttonClickAction);
+                        InputAction.started += buttonClickAction;
+                        break;
+                    case BindType.performed:
+                        InputActionBindDic.Add((InputAction, BindType.performed), buttonClickAction);
+                        InputAction.performed += buttonClickAction;
+                        break;
+                    case BindType.canceled:
+                        InputActionBindDic.Add((InputAction, BindType.canceled), buttonClickAction);
+                        InputAction.canceled += buttonClickAction;
+                        break;
+                }
+
             }
+            catch { }
+            
 
         }
 
@@ -821,7 +830,12 @@ namespace ML.Engine.UI
 
         public void OnSelectEnter()
         {
-            this.EnableBtnList();
+
+            if (this.uiBtnListContainer == null)
+            {
+                this.EnableBtnList();
+            }
+            
             this.Selected?.gameObject.SetActive(true);
 
             if (this.uiBtnListContainer != null)
@@ -856,14 +870,18 @@ namespace ML.Engine.UI
         public void OnSelectExit()
         {
             this.SetCurSelectedNull();
-            this.DisableBtnList();
+            if (this.uiBtnListContainer == null)
+            {
+                this.DisableBtnList();
+            }
+            
             this.Selected?.gameObject.SetActive(false);
         }
 
         //从选中Btnlist退出然后进入Inner
         public void OnExitToInner()
         {
-            this.DisableBtnList();
+            //this.DisableBtnList();
             this.Selected.gameObject.SetActive(false);
         }
 
@@ -871,7 +889,7 @@ namespace ML.Engine.UI
         public void OnEnterToBtnlist()
         {
             this.SetCurSelectedNull();
-            this.EnableBtnList();
+            //this.EnableBtnList();
             this.Selected.gameObject.SetActive(true);
         }
 

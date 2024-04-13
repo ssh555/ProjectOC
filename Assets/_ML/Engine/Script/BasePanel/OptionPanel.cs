@@ -64,8 +64,8 @@ namespace ML.Engine.UI
             this.UIBtnList.SetBtnAction("GraphicBtn",
             () =>
             {
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("<color=yellow>氏族名称</color>  发布了紧急征求", "订单名称"));
-/*                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/BaseUIPanel/PanelNavagation/PanelNavagation.prefab").Completed += (handle) =>
+                //GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("<color=yellow>氏族名称</color>  发布了紧急征求", "订单名称"));
+                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/BaseUIPanel/PanelNavagation/PanelNavagation.prefab").Completed += (handle) =>
                 {
                     // 实例化
                     var panel = handle.Result.GetComponent<PanelNavagation>();
@@ -73,15 +73,15 @@ namespace ML.Engine.UI
                     panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
 
                     GameManager.Instance.UIManager.PushPanel(panel);
-                };*/
+                };
             }
             );
             //AudioBtn
             this.UIBtnList.SetBtnAction("AudioBtn",
             () =>
             {
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData("确定取消该订单吗？", "您将面临违约惩罚", null, () => { Debug.Log("确定响应！"); }));
-/*                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/BaseUIPanel/GridNavagation/GridTestPanelA.prefab").Completed += (handle) =>
+                //GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData("确定取消该订单吗？", "您将面临违约惩罚", null, () => { Debug.Log("确定响应！"); }));
+                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/BaseUIPanel/GridNavagation/GridTestPanelA.prefab").Completed += (handle) =>
                 {
                     // 实例化
                     var panel = handle.Result.GetComponent<TestPanelA>();
@@ -89,15 +89,15 @@ namespace ML.Engine.UI
                     panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
 
                     GameManager.Instance.UIManager.PushPanel(panel);
-                };*/
+                };
             }
             );
             //ControllerBtn
             this.UIBtnList.SetBtnAction("ControllerBtn",
             () =>
             {
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.BtnUI, new UIManager.BtnUIData("message1", () => { Debug.Log("按钮响应！"); }));
-/*                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/BaseUIPanel/GridNavagation/GridTestPanelB.prefab").Completed += (handle) =>
+                //GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.BtnUI, new UIManager.BtnUIData("message1", () => { Debug.Log("按钮响应！"); }));
+                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/BaseUIPanel/GridNavagation/GridTestPanelB.prefab").Completed += (handle) =>
                 {
                     // 实例化
                     var panel = handle.Result.GetComponent<TestPanelB>();
@@ -105,7 +105,7 @@ namespace ML.Engine.UI
                     panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
 
                     GameManager.Instance.UIManager.PushPanel(panel);
-                };*/
+                };
             }
             );
             //TutorialBtn
