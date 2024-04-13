@@ -225,6 +225,9 @@ namespace ML.Engine.BuildingSystem.UI
                 this.FurnitureCategoryBtnList.BindNavigationInputAction(this.Placer.BInput.BuildSelection.SwichBtn, UIBtnListContainer.BindType.started);
                 this.FurnitureCategoryBtnList.BindButtonInteractInputAction(this.Placer.comfirmInputAction, UIBtnListContainer.BindType.started);
 
+                this.FurnitureDisplayBtnList.BindNavigationInputAction(this.Placer.BInput.BuildSelection.SwichBtn, UIBtnListContainer.BindType.started);
+                this.FurnitureDisplayBtnList.BindButtonInteractInputAction(this.Placer.comfirmInputAction, UIBtnListContainer.BindType.started);
+
                 this.FurnitureThemeBtnList.BindNavigationInputAction(this.Placer.BInput.BuildSelection.SwichBtn, UIBtnListContainer.BindType.started);
                 this.FurnitureThemeBtnList.BindButtonInteractInputAction(this.Placer.comfirmInputAction, UIBtnListContainer.BindType.started);
 
