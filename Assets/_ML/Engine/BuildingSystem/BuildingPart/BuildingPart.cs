@@ -61,7 +61,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             get => mode;
             set
             {
-
+                Debug.Log(value);
                 mode = value;
                 this.SetColliderTrigger((mode == BuildingMode.Place || mode == BuildingMode.Destroy || mode == BuildingMode.Edit));
                 if (mode == BuildingMode.Edit || mode == BuildingMode.Place)
@@ -96,7 +96,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         public Quaternion BaseRotation { get => baseRotation; private set => baseRotation = value; }
 
         [SerializeField]
-        private Quaternion rotOffset;
+        private Quaternion rotOffset = Quaternion.identity;
         public Quaternion RotOffset { get => rotOffset; set => rotOffset = value; }
         private BuildingArea.BuildingArea attachedArea;
         public BuildingArea.BuildingArea AttachedArea
@@ -248,14 +248,14 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                     col.isTrigger = isTrigger;
                 }
             }
-            foreach(var socket in this.GetComponentsInChildren<BuildingSocket.BuildingSocket>())
-            {
-                socket.enabled = !isTrigger;
-            }
-            foreach (var area in this.GetComponentsInChildren<BuildingArea.BuildingArea>())
-            {
-                area.enabled = !isTrigger;
-            }
+            //foreach(var socket in this.GetComponentsInChildren<BuildingSocket.BuildingSocket>())
+            //{
+            //    socket.enabled = !isTrigger;
+            //}
+            //foreach (var area in this.GetComponentsInChildren<BuildingArea.BuildingArea>())
+            //{
+            //    area.enabled = !isTrigger;
+            //}
 
             if(isTrigger == true && this.GetComponent<Rigidbody>() == null)
             {

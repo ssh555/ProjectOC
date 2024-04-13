@@ -120,6 +120,12 @@ MonoBehaviour:
   - name: Stool
     displayName: "\u51F3"
     value: 712
+  - name: Cabinet
+    displayName: "\u6A71\u67DC"
+    value: 731
+  - name: Functional
+    displayName: "\u529F\u80FD\u684C"
+    value: 724
   - name: Tea
     displayName: "\u8336\u51E0"
     value: 720
@@ -132,15 +138,9 @@ MonoBehaviour:
   - name: StorageDesk
     displayName: "\u7F6E\u7269\u53F0"
     value: 723
-  - name: Functional
-    displayName: "\u529F\u80FD\u684C"
-    value: 724
   - name: Bookcase
     displayName: "\u4E66\u67DC"
     value: 730
-  - name: Cabinet
-    displayName: "\u6A71\u67DC"
-    value: 731
   - name: Wardrobe
     displayName: "\u8863\u67DC"
     value: 732
