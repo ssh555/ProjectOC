@@ -363,7 +363,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u9009\u9879"
+  m_text: "\u8303\u5F0FB"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d13a2a5ff0d170d45a80f5d9f8a31edf, type: 2}
   m_sharedMaterial: {fileID: 1958496136511095935, guid: d13a2a5ff0d170d45a80f5d9f8a31edf, type: 2}
@@ -2423,7 +2423,8 @@ MonoBehaviour:
       btnlist1type: 6
       btnlist2type: 5
       linktype: 1
-    navagations: []
+    isLoop: 0
+    isHorizontal: 0
 --- !u!1 &6214325544507381315
 GameObject:
   m_ObjectHideFlags: 0

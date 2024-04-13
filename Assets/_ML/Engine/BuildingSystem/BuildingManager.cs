@@ -455,6 +455,7 @@ namespace ML.Engine.BuildingSystem
         /// <summary>
         /// 基于BuildingStyle的三级分类
         /// </summary>
+        [ShowInInspector]
         private Dictionary<BuildingCategory1, Dictionary<BuildingCategory2, Dictionary<BuildingCategory3, Deque<IBuildingPart>>>> BPartClassificationOnStyle = new Dictionary<BuildingCategory1, Dictionary<BuildingCategory2, Dictionary<BuildingCategory3, Deque<IBuildingPart>>>>();
 
         private void AddBPartPrefabOnStyle(IBuildingPart BPart)
