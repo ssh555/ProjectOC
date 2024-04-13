@@ -199,7 +199,7 @@ namespace ProjectOC.Player.UI
                     this.UIBtnList.DeBindInputAction();
                 });
             this.Ring.gameObject.SetActive(true);
-            this.UIKeyTipList.RefreshKetTip();
+            this.UIKeyTipList?.RefreshKetTip();
             ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
 
         }

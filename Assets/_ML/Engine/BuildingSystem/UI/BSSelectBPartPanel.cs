@@ -225,6 +225,8 @@ namespace ML.Engine.BuildingSystem.UI
                 this.FurnitureCategoryBtnList.BindNavigationInputAction(this.Placer.BInput.BuildSelection.SwichBtn, UIBtnListContainer.BindType.started);
                 this.FurnitureCategoryBtnList.BindButtonInteractInputAction(this.Placer.comfirmInputAction, UIBtnListContainer.BindType.started);
 
+                
+
                 this.FurnitureThemeBtnList.BindNavigationInputAction(this.Placer.BInput.BuildSelection.SwichBtn, UIBtnListContainer.BindType.started);
                 this.FurnitureThemeBtnList.BindButtonInteractInputAction(this.Placer.comfirmInputAction, UIBtnListContainer.BindType.started);
 
@@ -311,6 +313,19 @@ namespace ML.Engine.BuildingSystem.UI
             base.OnExit();
             this.ClearInstance();
             this.UnloadAsset();
+        }
+
+        protected override void Exit()
+        {
+            base.Exit();
+            this.FurnitureCategoryBtnList.DeBindInputAction();
+            this.FurnitureCategoryBtnList.RemoveAllListener();
+
+            this.FurnitureDisplayBtnList.DeBindInputAction();
+            this.FurnitureDisplayBtnList.RemoveAllListener();
+
+            this.FurnitureThemeBtnList.DeBindInputAction();
+            this.FurnitureThemeBtnList.RemoveAllListener();
         }
 
         #endregion
@@ -435,10 +450,12 @@ namespace ML.Engine.BuildingSystem.UI
                     }
 
                     this.FurnitureDisplayBtnList.OnSelectEnter();
+                    this.FurnitureDisplayBtnList.BindNavigationInputAction(this.Placer.BInput.BuildSelection.SwichBtn, UIBtnListContainer.BindType.started);
+                    this.FurnitureDisplayBtnList.BindButtonInteractInputAction(this.Placer.comfirmInputAction, UIBtnListContainer.BindType.started);
                 }
                 else
                 {
-                    this.FurnitureDisplayBtnList.GetCurSelected()?.Interact();
+                    //this.FurnitureDisplayBtnList.GetCurSelected()?.Interact();
                 }
                 
 
