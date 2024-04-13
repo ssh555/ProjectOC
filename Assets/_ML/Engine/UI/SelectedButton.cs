@@ -104,8 +104,8 @@ namespace ML.Engine.UI
 
         public void Interact()
         {
-            
-            if(this.Interactable)
+            Debug.Log("Interact");
+            if (this.Interactable)
             {
                 this.PreInteract?.Invoke();
                 this.onClick.Invoke();

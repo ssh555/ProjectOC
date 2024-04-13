@@ -56,7 +56,7 @@ namespace ML.Engine.UI
         private BindType ButtonInteractBindType;
 
         [ShowInInspector]
-        private bool isEnable = true;
+        private bool isEnable = false;
 
         public bool IsEnable { get { return isEnable; } }
 
@@ -621,7 +621,6 @@ namespace ML.Engine.UI
         public void ButtonInteract(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (this.isEnable == false) return;
-
             this.ButtonInteractPreAction?.Invoke();
             this.CurSelected.Interact();
             this.ButtonInteractPostAction?.Invoke();
