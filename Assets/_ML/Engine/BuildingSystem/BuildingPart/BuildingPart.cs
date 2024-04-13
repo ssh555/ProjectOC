@@ -11,6 +11,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
     public class BuildingPart : MonoBehaviour, IBuildingPart, IComposition
     {
         #region IBuildingPart
+        [ShowInInspector]
         public string ID { get => BuildingManager.Instance.BPartTableDictOnClass[this.classification.ToString()].id; set => throw new Exception("不允许设置建筑物的ID"); }
 
         [SerializeField, LabelText("分类")]
@@ -267,6 +268,10 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             }
         }
 
+        public void OnTriggerEnter(Collider other)
+        {
+            (this as IBuildingPart).CheckTriggerStay(other);
+        }
         public void OnTriggerStay(Collider other)
         {
             (this as IBuildingPart).CheckTriggerStay(other);

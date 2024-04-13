@@ -471,6 +471,24 @@ namespace ML.Engine.BuildingSystem.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ChangeFurnitureDisplay"",
+                    ""type"": ""Button"",
+                    ""id"": ""2a6bc70c-f1c5-4edc-a1d5-e1de4276a6ae"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwichBtn"",
+                    ""type"": ""Value"",
+                    ""id"": ""89b0c7a5-5248-4377-9380-8e9e42fce4ca"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -603,6 +621,138 @@ namespace ML.Engine.BuildingSystem.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""AlterCategory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c02710b0-c2f1-400b-a853-b2506f4d75f1"",
+                    ""path"": ""<XInputController>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeFurnitureDisplay"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c1922873-5dbc-4e47-8d56-8476b3a58ac7"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ChangeFurnitureDisplay"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""KeyBoard"",
+                    ""id"": ""4791472b-c80c-4ca4-9519-b8440a26bb0d"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""c8e882c2-ec80-49ee-8726-49403fc4adac"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""67bad660-62e1-4479-9a2d-4baac1b41ce4"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""02745c08-c255-4fb3-84c2-40267e2ffd26"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""cce6280b-7543-4896-924e-be9e06394f55"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""7350bd6f-2c16-4584-b6f2-1f31dfdb4602"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""819c2542-10fb-46d1-ace7-0c6023c4ffd8"",
+                    ""path"": ""<XInputController>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""7ddd5fc7-8db8-4119-b232-c418ede44828"",
+                    ""path"": ""<XInputController>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""5712e882-4d0d-48c4-8466-791bc3a87aae"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""0c5d8ee6-5a34-4223-8cc6-330f1d673b8b"",
+                    ""path"": ""<XInputController>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -1166,6 +1316,8 @@ namespace ML.Engine.BuildingSystem.Input
             m_BuildSelection = asset.FindActionMap("BuildSelection", throwIfNotFound: true);
             m_BuildSelection_AlternativeType = m_BuildSelection.FindAction("AlternativeType", throwIfNotFound: true);
             m_BuildSelection_AlterCategory = m_BuildSelection.FindAction("AlterCategory", throwIfNotFound: true);
+            m_BuildSelection_ChangeFurnitureDisplay = m_BuildSelection.FindAction("ChangeFurnitureDisplay", throwIfNotFound: true);
+            m_BuildSelection_SwichBtn = m_BuildSelection.FindAction("SwichBtn", throwIfNotFound: true);
             // BuildingAppearance
             m_BuildingAppearance = asset.FindActionMap("BuildingAppearance", throwIfNotFound: true);
             m_BuildingAppearance_AlterMaterial = m_BuildingAppearance.FindAction("AlterMaterial", throwIfNotFound: true);
@@ -1398,12 +1550,16 @@ namespace ML.Engine.BuildingSystem.Input
         private List<IBuildSelectionActions> m_BuildSelectionActionsCallbackInterfaces = new List<IBuildSelectionActions>();
         private readonly InputAction m_BuildSelection_AlternativeType;
         private readonly InputAction m_BuildSelection_AlterCategory;
+        private readonly InputAction m_BuildSelection_ChangeFurnitureDisplay;
+        private readonly InputAction m_BuildSelection_SwichBtn;
         public struct BuildSelectionActions
         {
             private @BuildingInput m_Wrapper;
             public BuildSelectionActions(@BuildingInput wrapper) { m_Wrapper = wrapper; }
             public InputAction @AlternativeType => m_Wrapper.m_BuildSelection_AlternativeType;
             public InputAction @AlterCategory => m_Wrapper.m_BuildSelection_AlterCategory;
+            public InputAction @ChangeFurnitureDisplay => m_Wrapper.m_BuildSelection_ChangeFurnitureDisplay;
+            public InputAction @SwichBtn => m_Wrapper.m_BuildSelection_SwichBtn;
             public InputActionMap Get() { return m_Wrapper.m_BuildSelection; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1419,6 +1575,12 @@ namespace ML.Engine.BuildingSystem.Input
                 @AlterCategory.started += instance.OnAlterCategory;
                 @AlterCategory.performed += instance.OnAlterCategory;
                 @AlterCategory.canceled += instance.OnAlterCategory;
+                @ChangeFurnitureDisplay.started += instance.OnChangeFurnitureDisplay;
+                @ChangeFurnitureDisplay.performed += instance.OnChangeFurnitureDisplay;
+                @ChangeFurnitureDisplay.canceled += instance.OnChangeFurnitureDisplay;
+                @SwichBtn.started += instance.OnSwichBtn;
+                @SwichBtn.performed += instance.OnSwichBtn;
+                @SwichBtn.canceled += instance.OnSwichBtn;
             }
 
             private void UnregisterCallbacks(IBuildSelectionActions instance)
@@ -1429,6 +1591,12 @@ namespace ML.Engine.BuildingSystem.Input
                 @AlterCategory.started -= instance.OnAlterCategory;
                 @AlterCategory.performed -= instance.OnAlterCategory;
                 @AlterCategory.canceled -= instance.OnAlterCategory;
+                @ChangeFurnitureDisplay.started -= instance.OnChangeFurnitureDisplay;
+                @ChangeFurnitureDisplay.performed -= instance.OnChangeFurnitureDisplay;
+                @ChangeFurnitureDisplay.canceled -= instance.OnChangeFurnitureDisplay;
+                @SwichBtn.started -= instance.OnSwichBtn;
+                @SwichBtn.performed -= instance.OnSwichBtn;
+                @SwichBtn.canceled -= instance.OnSwichBtn;
             }
 
             public void RemoveCallbacks(IBuildSelectionActions instance)
@@ -1614,6 +1782,8 @@ namespace ML.Engine.BuildingSystem.Input
         {
             void OnAlternativeType(InputAction.CallbackContext context);
             void OnAlterCategory(InputAction.CallbackContext context);
+            void OnChangeFurnitureDisplay(InputAction.CallbackContext context);
+            void OnSwichBtn(InputAction.CallbackContext context);
         }
         public interface IBuildingAppearanceActions
         {

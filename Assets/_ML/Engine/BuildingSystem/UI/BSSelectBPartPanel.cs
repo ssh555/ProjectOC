@@ -16,6 +16,9 @@ using UnityEngine.UI;
 using UnityEngine.Windows;
 using Unity.VisualScripting;
 using static ML.Engine.BuildingSystem.UI.BSSelectBPartPanel;
+using ML.Engine.UI;
+using UnityEngine.Rendering.Universal;
+using static ML.Engine.UI.OptionPanel;
 
 namespace ML.Engine.BuildingSystem.UI
 {
@@ -130,6 +133,15 @@ namespace ML.Engine.BuildingSystem.UI
         private RectTransform templateCategory;
         private RectTransform typeParent;
         private RectTransform templateType;
+
+
+        private Transform ChangeFurnitureDisplay;
+        private TextMeshProUGUI TipText;
+        private Transform FurniturePanel;
+        private Transform SelectType;
+        private Transform FurnitureCategoryBtnListTransform;
+        private Transform FurnitureThemeBtnListTransform;
+
         #endregion
 
         #endregion
@@ -147,6 +159,13 @@ namespace ML.Engine.BuildingSystem.UI
             this.typeParent = this.transform.Find("SelectType").Find("Content") as RectTransform;
             this.templateType = this.typeParent.Find("TypeTemplate") as RectTransform;
             this.templateType.gameObject.SetActive(false);
+
+            this.ChangeFurnitureDisplay = this.transform.Find("SelectType").Find("ChangeFurnitureDisplay");
+            this.TipText = this.ChangeFurnitureDisplay.Find("TipText").GetComponent<TextMeshProUGUI>();
+            this.FurniturePanel = this.transform.Find("FurniturePanel");
+            this.SelectType = this.transform.Find("SelectType");
+            this.FurnitureCategoryBtnListTransform = this.SelectType.Find("FurnitureCategoryBtnList");
+            this.FurnitureThemeBtnListTransform = this.SelectType.Find("FurnitureThemeBtnList");
         }
 
         #endregion
@@ -154,7 +173,7 @@ namespace ML.Engine.BuildingSystem.UI
         #region Refresh
         public override void Refresh()
         {
-            if (IsInit < 1)
+            if (IsInit < 1 || this.FurnitureDisplayBtnList == null || !this.objectPool.IsLoadFinish())
             {
                 return;
             }
@@ -183,7 +202,6 @@ namespace ML.Engine.BuildingSystem.UI
                 go.GetComponentInChildren<Image>().sprite = GetTypeSprite(category2);
                 go.GetComponentInChildren<TextMeshProUGUI>().text = monoBM.Category2Dict[category2.ToString()].GetDescription();
                 go.SetActive(true);
-
                 this.typeInstance.Add(category2, go.transform as RectTransform);
 
                 if(category2 == this.SelectedCategory2)
@@ -193,6 +211,42 @@ namespace ML.Engine.BuildingSystem.UI
             }
             LayoutRebuilder.ForceRebuildLayoutImmediate(this.templateCategory.parent.GetComponent<RectTransform>());
             LayoutRebuilder.ForceRebuildLayoutImmediate(this.templateType.parent.GetComponent<RectTransform>());
+
+
+            //家具特殊处理
+            if(this.SelectedCategory1 == BuildingCategory1.Furniture && this.FurnitureCategoryBtnListTransform.gameObject.activeInHierarchy == false)
+            {
+                this.SelectType.Find("Content").gameObject.SetActive(false);
+                this.FurnitureCategoryBtnListTransform.gameObject.SetActive(true);
+                this.ChangeFurnitureDisplay.gameObject.SetActive(true);
+                this.TipText.text = this.PanelTextContent.ChangeFurnitureDisplay[0].GetText();
+
+                this.FurnitureCategoryBtnList.OnSelectEnter();
+                this.FurnitureCategoryBtnList.BindNavigationInputAction(this.Placer.BInput.BuildSelection.SwichBtn, UIBtnListContainer.BindType.started);
+                this.FurnitureCategoryBtnList.BindButtonInteractInputAction(this.Placer.comfirmInputAction, UIBtnListContainer.BindType.started);
+
+                this.FurnitureThemeBtnList.BindNavigationInputAction(this.Placer.BInput.BuildSelection.SwichBtn, UIBtnListContainer.BindType.started);
+                this.FurnitureThemeBtnList.BindButtonInteractInputAction(this.Placer.comfirmInputAction, UIBtnListContainer.BindType.started);
+
+            }
+            else if(this.SelectedCategory1 != BuildingCategory1.Furniture)
+            {
+                this.SelectType.Find("Content").gameObject.SetActive(true);
+                this.FurnitureCategoryBtnListTransform.gameObject.SetActive(false);
+                this.FurnitureThemeBtnListTransform.gameObject.SetActive(false);
+
+                this.ChangeFurnitureDisplay.gameObject.SetActive(false);
+
+                this.FurniturePanel.gameObject.SetActive(false);
+                
+                this.FurnitureCategoryBtnList.OnSelectExit();
+                this.FurnitureCategoryBtnList.DeBindInputAction();
+                this.FurnitureCategoryBtnList.RemoveAllListener();
+                this.FurnitureDisplayBtnList.OnSelectExit();
+                this.FurnitureDisplayBtnList.DeleteAllButton();
+                this.FurnitureDisplayBtnList.DeBindInputAction();
+                this.FurnitureDisplayBtnList.RemoveAllListener();
+            }
         }
 
         /// <summary>
@@ -247,6 +301,8 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.Mode = BuildingMode.Place;
             this.Placer.InteractBPartList.Clear();
             this.Placer.SelectedPartInstance = null;
+
+
         }
         public override void OnExit()
         {
@@ -256,6 +312,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.ClearInstance();
             this.UnloadAsset();
         }
+
         #endregion
 
         #region KeyFunction
@@ -268,6 +325,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.BInput.BuildSelection.AlterCategory.performed -= Placer_AlterCategory1;
 
             this.Placer.BInput.BuildSelection.AlternativeType.started -= Placer_AlterCategory2;
+            this.Placer.BInput.BuildSelection.ChangeFurnitureDisplay.started -= ChangeFurnitureSortWay;
         }
 
         protected override void RegisterInput()
@@ -279,10 +337,15 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.BInput.BuildSelection.AlterCategory.performed += Placer_AlterCategory1;
 
             this.Placer.BInput.BuildSelection.AlternativeType.started += Placer_AlterCategory2;
+            this.Placer.BInput.BuildSelection.ChangeFurnitureDisplay.started += ChangeFurnitureSortWay;
         }
 
         private void Placer_AlterCategory2(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
+            if (this.SelectedCategory1 == BuildingCategory1.Furniture)
+            {
+                return;
+            }
             int offset = obj.ReadValue<float>() > 0 ? 1 : -1;
             this.SelectedCategory2Index = (this.SelectedCategory2Index + offset + this.CanSelectCategory2.Length) % this.CanSelectCategory2.Length;
 
@@ -302,14 +365,124 @@ namespace ML.Engine.BuildingSystem.UI
 
         private void Placer_CancelSelection(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            this.Placer.Mode = BuildingMode.Interact;
-            monoBM.PopPanel();
+            if(this.FurniturePanel.gameObject.activeInHierarchy == false)
+            {
+                this.Placer.Mode = BuildingMode.Interact;
+                monoBM.PopPanel();
+            }
+            else
+            {
+                
+                this.FurnitureDisplayBtnList.OnSelectExit();
+                this.FurnitureDisplayBtnList.DeleteAllButton(() => { this.FurniturePanel.gameObject.SetActive(false); });
+       
+                if (this.FurnitureCategoryBtnListTransform.gameObject.activeInHierarchy == true)
+                {
+                    this.FurnitureCategoryBtnList.EnableBtnList();
+                }
+                else
+                {
+                    this.FurnitureThemeBtnList.EnableBtnList();
+                }
+                    
+            }
+            
         }
 
         private void Placer_ComfirmSelection(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(this.CanSelectCategory1[this.SelectedCategory1Index], this.CanSelectCategory2[this.SelectedCategory2Index]);
-            monoBM.PopAndPushPanel<BSPlaceModePanel>();
+            if (this.SelectedCategory1 == BuildingCategory1.Furniture) 
+            {
+
+                if(this.FurniturePanel.gameObject.activeInHierarchy == false)
+                {
+                    this.FurniturePanel.gameObject.SetActive(true);
+                    if(this.FurnitureCategoryBtnListTransform.gameObject.activeInHierarchy == true)
+                    {
+                        //当前为类别排序
+
+                        this.FurnitureCategoryBtnList.DisableBtnList();
+                        //当前所选类别对应的家具列表
+                        List<(BuildingCategory3, IBuildingPart)> furnitureList = new List<(BuildingCategory3, IBuildingPart)>();
+                        foreach (var item in LocalGameManager.Instance.MonoBuildingManager.LoadedBPart)
+                        {
+/*                            if (item.Key.Category1 == BuildingCategory1.Furniture)
+                            {
+                                Debug.Log(item.Key.Category2.ToString() + " " + this.FurnitureCategoryBtnList.GetCurSelected().gameObject.name);
+                            }*/
+                            if (item.Key.Category1 == BuildingCategory1.Furniture && item.Key.Category2.ToString() == this.FurnitureCategoryBtnList.GetCurSelected().gameObject.name)
+                            {
+                                furnitureList.Add((item.Key.Category3, item.Value));
+                            }
+                        }
+
+                        furnitureList.Sort((x, y) => x.Item1.CompareTo(y.Item1));
+
+                        foreach (var item in furnitureList)
+                        {
+                            this.FurnitureDisplayBtnList.AddBtn("ML/BuildingSystem/UI/FurnitureBtn.prefab", () =>
+                            {
+                                Debug.Log("放置家具 " + item.Item2.Classification.ToString());
+                                this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(item.Item2.Classification);
+                                monoBM.PopAndPushPanel<BSPlaceModePanel>();
+                            }, item.Item2.Classification.Category3.ToString());
+                        }
+                    }
+                    else
+                    {
+                        //当前为主题排序
+                        this.FurnitureThemeBtnList.DisableBtnList();
+                    }
+
+                    this.FurnitureDisplayBtnList.OnSelectEnter();
+                }
+                else
+                {
+                    this.FurnitureDisplayBtnList.GetCurSelected()?.Interact();
+                }
+                
+
+            }
+            else
+            {
+                this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(this.CanSelectCategory1[this.SelectedCategory1Index], this.CanSelectCategory2[this.SelectedCategory2Index]);
+                monoBM.PopAndPushPanel<BSPlaceModePanel>();
+            }
+            
+        }
+
+        private void ChangeFurnitureSortWay(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            if (this.SelectedCategory1 != BuildingCategory1.Furniture)
+            {
+                return;
+            }
+
+
+            if (this.FurniturePanel.gameObject.activeInHierarchy == true)
+            {
+                this.FurniturePanel.gameObject.SetActive(false);
+                this.FurnitureDisplayBtnList.DeleteAllButton();
+            }
+
+
+            if(this.FurnitureCategoryBtnListTransform.gameObject.activeInHierarchy == true)
+            {
+                this.TipText.text = this.PanelTextContent.ChangeFurnitureDisplay[1].GetText();
+                this.FurnitureCategoryBtnListTransform.gameObject.SetActive(false);
+                this.FurnitureCategoryBtnList.DisableBtnList();
+                this.FurnitureThemeBtnListTransform.gameObject.SetActive(true);
+                this.FurnitureThemeBtnList.EnableBtnList();
+            }
+            else
+            {
+                this.TipText.text = this.PanelTextContent.ChangeFurnitureDisplay[0].GetText();
+                this.FurnitureThemeBtnListTransform.gameObject.SetActive(false);
+                this.FurnitureThemeBtnList.DisableBtnList();
+                this.FurnitureCategoryBtnListTransform.gameObject.SetActive(true);
+                this.FurnitureCategoryBtnList.EnableBtnList();
+                
+            }
         }
         #endregion
 
@@ -370,6 +543,10 @@ namespace ML.Engine.BuildingSystem.UI
         public struct BSSelectBPartPanelStruct
         {
             public KeyTip[] KeyTips;
+
+            public TextTip[] FurnitureCategoryBtns;
+
+            public ML.Engine.TextContent.TextContent[] ChangeFurnitureDisplay;
         }
 
         protected override void InitTextContentPathData()
@@ -378,6 +555,32 @@ namespace ML.Engine.BuildingSystem.UI
             this.abname = "BSSelectBPartPanel";
             this.description = "BSSelectBPartPanel数据加载完成";
         }
+        #endregion
+
+        #region ButtonList
+        private UIBtnList FurnitureDisplayBtnList = null;
+        private UIBtnList FurnitureCategoryBtnList = null;
+        private UIBtnList FurnitureThemeBtnList = null;
+        protected override void InitBtnInfo()
+        {
+            this.FurnitureDisplayBtnList = new UIBtnList(this.FurniturePanel.Find("ButtonList").GetComponent<UIBtnListInitor>());
+            this.FurnitureCategoryBtnList = new UIBtnList(this.FurnitureCategoryBtnListTransform.GetComponent<UIBtnListInitor>());
+            this.FurnitureThemeBtnList = new UIBtnList(this.FurnitureThemeBtnListTransform.GetComponent<UIBtnListInitor>());
+
+        }
+        protected override void OnLoadJsonAssetComplete(BSSelectBPartPanelStruct datas)
+        {
+            base.OnLoadJsonAssetComplete(datas);
+            InitBtnData(datas);
+        }
+        private void InitBtnData(BSSelectBPartPanelStruct datas)
+        {
+            foreach (var tt in datas.FurnitureCategoryBtns)
+            {
+                this.FurnitureCategoryBtnList.SetBtnText(tt.name, tt.description.GetText());
+            }
+        }
+
         #endregion
     }
 
