@@ -142,6 +142,14 @@ namespace ML.Engine.UI
                 RefreshBtnListNavagation();
                 RefreshEdge();
             }
+
+            for (int i = 0; i < this.uIBtnLists.Count; i++)
+            {
+                if(this.uIBtnLists[i].IsEnable==false)
+                {
+                    this.uIBtnLists[i].EnableBtnList();
+                }
+            }
             
         }
 
