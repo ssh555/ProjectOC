@@ -12,9 +12,9 @@ using ML.PlayerCharacterNS;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.Layouts;
 using UnityEngine.InputSystem.Utilities;
+using ML.Engine.InventorySystem.CompositeSystem;
 using ProjectOC.StoreNS;
 using ProjectOC.ManagerNS;
-using ML.Engine.InventorySystem.CompositeSystem;
 
 //ML.PlayerCharacterNS
 namespace ProjectOC.Player
@@ -74,8 +74,9 @@ namespace ProjectOC.Player
 
         #region 背包 to-do : 临时测试使用
         [ShowInInspector, ReadOnly]
-        public ML.Engine.InventorySystem.IInventory Inventory;
-
+        public ML.Engine.InventorySystem.IInventory Inventory => (Controller.State as PlayerControllerState).Inventory;
+        #endregion
+        
         /// <summary>
         /// 背包和仓库中是否有对应数量的物品。
         /// </summary>
@@ -204,22 +205,10 @@ namespace ProjectOC.Player
         /// <summary>
         /// 处理物体引用
         /// </summary>
-        private void Awake()
-        {
-            this.playerViewer = this.transform.Find("PlayerViewer");
-            this.playerModel = this.transform.Find("PlayerModel");
-            this.playerTerrainDetect = this.transform.Find("PlayerTerrainDetect");
-            this.InternalInit();
-        }
 
         /// <summary>
         /// 处理初始化
         /// </summary>
-        private void Start()
-        {
-            this.moveStateParams.RuntimeInit(this.playerInputActions.Acc, this.playerInputActions.Crouch);
-            this.enabled = false;
-        }
         private void InternalInit()
         {
             this.playerModelStateController = new PlayerModelStateController(0, this.playerModel.GetComponentInChildren<Animator>(), this.GetComponent<Animator>(), this);
@@ -253,8 +242,9 @@ namespace ProjectOC.Player
             botui.player = this;
             ML.Engine.Manager.GameManager.Instance.UIManager.ChangeBotUIPanel(botui);
 
-            this.Inventory = new ML.Engine.InventorySystem.InfiniteInventory(this.transform, 999);
-
+            (this.Controller.State as PlayerControllerState).Inventory 
+                = new ML.Engine.InventorySystem.InfiniteInventory(this.transform, 999);
+            // this.Inventory = new ML.Engine.InventorySystem.InfiniteInventory(this.transform, 999);
 
             // 进入建造系统要可移动
             ML.Engine.BuildingSystem.BuildingManager.Instance.Placer.OnBuildingModeEnter += () =>
@@ -273,9 +263,7 @@ namespace ProjectOC.Player
 
         private void OnDestroy()
         {
-            (this.thirdPersonRotateComp as ML.Engine.Timer.ITickComponent).DisposeTick();
-            (this as ML.Engine.Timer.ITickComponent).DisposeTick();
-            this.playerModelStateController.Stop();
+
         }
         #endregion
 
@@ -364,12 +352,21 @@ namespace ProjectOC.Player
         public IController Controller { get; set; }
         public void OnSpawn(IController controller)
         {
+            Controller = controller;
+            this.playerViewer = this.transform.Find("PlayerViewer");
+            this.playerModel = this.transform.Find("PlayerModel");
+            this.playerTerrainDetect = this.transform.Find("PlayerTerrainDetect");
+            this.InternalInit();
             
+            this.moveStateParams.RuntimeInit(this.playerInputActions.Acc, this.playerInputActions.Crouch);
+            this.enabled = false;
         }
 
         public void OnDespose(IController controller)
         {
-            throw new NotImplementedException();
+            (this.thirdPersonRotateComp as ML.Engine.Timer.ITickComponent).DisposeTick();
+            (this as ML.Engine.Timer.ITickComponent).DisposeTick();
+            this.playerModelStateController.Stop();
         }
 
         #endregion

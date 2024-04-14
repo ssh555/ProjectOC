@@ -5,41 +5,49 @@ namespace ProjectOC.PinchFace
 	[System.Serializable]
 	public enum PinchPartType2
 	{
+		[LabelText("None")]
+		None = 0,
 		[LabelText("头顶")]
-		HeadTop = 0,
+		HeadTop = 1,
 		[LabelText("耳")]
-		Ear = 1,
+		Ear = 2,
 		[LabelText("顶耳")]
-		EarTop = 2,
+		EarTop = 3,
 		[LabelText("额")]
-		Brow = 3,
+		Brow = 4,
 		[LabelText("顶角")]
-		TopHorn = 4,
+		TopHorn = 5,
 		[LabelText("脸")]
-		Face = 5,
+		Face = 6,
 		[LabelText("牙")]
-		Tooth = 6,
+		Tooth = 7,
 		[LabelText("体表")]
-		Trunk = 7,
+		Trunk = 8,
 		[LabelText("背心")]
-		Back = 8,
+		Back = 9,
 		[LabelText("腰侧")]
-		Lumbar = 9,
+		Lumbar = 10,
 		[LabelText("尾")]
-		Tail = 10,
+		Tail = 11,
 		[LabelText("手臂")]
-		Arm = 11,
+		Arm = 12,
 		[LabelText("手")]
-		Hand = 12,
+		Hand = 13,
 		[LabelText("腿")]
-		Leg = 13,
+		Leg = 14,
 		[LabelText("体型")]
-		Body = 14,
-		[LabelText("头发")]
-		Hair = 15,
+		Body = 15,
+		[LabelText("前发")]
+		HairFront = 16,
+		[LabelText("后发")]
+		HairBack = 17,
+		[LabelText("呆毛")]
+		HairDai = 18,
+		[LabelText("辫子")]
+		HairBraid = 19,
 		[LabelText("眼睛")]
-		Eye = 16,
+		Eye = 20,
 		[LabelText("面妆")]
-		FaceDress = 17,
+		FaceDress = 21,
 	}
 }
