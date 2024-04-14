@@ -61,7 +61,6 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             get => mode;
             set
             {
-                Debug.Log(value);
                 mode = value;
                 this.SetColliderTrigger((mode == BuildingMode.Place || mode == BuildingMode.Destroy || mode == BuildingMode.Edit));
                 if (mode == BuildingMode.Edit || mode == BuildingMode.Place)
@@ -243,7 +242,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         {
             foreach(var col in this.GetComponentsInChildren<Collider>())
             {
-                if(col.gameObject.layer == 7)
+                if(col.gameObject.layer != 8)
                 {
                     col.isTrigger = isTrigger;
                 }

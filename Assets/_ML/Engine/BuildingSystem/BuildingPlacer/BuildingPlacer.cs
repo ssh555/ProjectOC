@@ -500,13 +500,12 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
 
                 Vector3 rotAroundPoint = this.SelectedPartInstance.ActiveSocket.transform.position;
-
                 // Up-Y
                 this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, Vector3.up, euler.y);
                 // Right-X
-                this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, Vector3.right, euler.x);
+                this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, this.SelectedPartInstance.transform.right, euler.x);
                 // Forward-Z
-                this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, Vector3.forward, euler.z);
+                this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, this.SelectedPartInstance.transform.forward, euler.z);
                 
                 if (this.SelectedPartInstance.AttachedArea == null && this.SelectedPartInstance.AttachedSocket == null)
                 {

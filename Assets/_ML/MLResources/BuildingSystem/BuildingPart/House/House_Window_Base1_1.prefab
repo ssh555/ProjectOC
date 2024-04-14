@@ -125,7 +125,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 256
   InTakeType: 0
-  IsCanRotate: 1
+  IsCanRotate: 0
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
   CanPlaceAreaType: 2048

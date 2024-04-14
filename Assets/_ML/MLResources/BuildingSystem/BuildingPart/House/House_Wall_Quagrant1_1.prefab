@@ -176,10 +176,10 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 393409410268826659}
-  - {fileID: 3710140558205037879}
-  - {fileID: 6404465461453215703}
   - {fileID: 1207346367624786419}
   - {fileID: 1982877271432346897}
+  - {fileID: 3710140558205037879}
+  - {fileID: 6404465461453215703}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &5216436304137379300
@@ -392,7 +392,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e36ce1d7be917034dacd3f9955d674b8, type: 2}
+  - {fileID: 2100000, guid: e4460453ed5bc89459bfb5df21109574, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
