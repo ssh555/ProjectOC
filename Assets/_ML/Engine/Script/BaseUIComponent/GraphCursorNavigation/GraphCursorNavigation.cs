@@ -1,13 +1,17 @@
 using ML.Engine.Timer;
+using ML.Engine.UI;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class GraphCursorNavigation : UIBehaviour
+[Serializable]
+public class GraphCursorNavigation : UIBehaviour ,ITickComponent
 {
     private ScrollRect ScrollRect;
     private Scrollbar VerticalScrollbar, HorizontalScrollbar;
@@ -19,6 +23,12 @@ public class GraphCursorNavigation : UIBehaviour
     private Vector2 maxBounds;
 
     private InputAction BindInputAction = null;
+
+    private Transform content;
+    public Transform Content { get { return content; } }
+    [ShowInInspector]
+    private UIBtnList uiBtnList;
+    public UIBtnList UIBtnList { get { return uiBtnList; } }    
 
     [LabelText("边距配置（左右间距，上下间距）")]
     public Vector2 Margin = new Vector2();
@@ -34,7 +44,49 @@ public class GraphCursorNavigation : UIBehaviour
         this.LimitBound = new Vector2(rec.rect.width / 2, rec.rect.height / 2);
         this.minBounds = -LimitBound + Margin;
         this.maxBounds = LimitBound - Margin;
+        this.content = this.ScrollRect.content;
     }
+
+    #region Tick
+    public int tickPriority { get; set; }
+    public int fixedTickPriority { get; set; }
+    public int lateTickPriority { get; set; }
+
+    private GameObject lastSelected = null;
+    public void Tick(float deltatime)
+    {
+        // 获取 UI 元素的屏幕坐标 ScreenOverLay即为世界坐标
+        Vector3 worldPosition = this.Center.position;
+
+        // 构造射线
+        PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
+        pointerEventData.position = worldPosition;
+
+/*        foreach (var result in LastFrameResults)
+        {
+            result.gameObject.transform.Find("Selected")?.gameObject.SetActive(false);
+        }*/
+
+        // 进行射线投射
+        List<RaycastResult> results = new List<RaycastResult>();// 可以根据需要设置射线检测的最大数量
+        EventSystem.current.RaycastAll(pointerEventData, results);
+
+        // 处理击中的 UI 元素
+        if (results.Count > 0)
+        {
+            if(lastSelected!= results[0].gameObject)
+            {
+                this.uiBtnList.RefreshSelected(results[0].gameObject.transform.GetComponent<SelectedButton>());
+                lastSelected = results[0].gameObject;
+            }
+        }
+        else
+        {
+            this.uiBtnList.SetCurSelectedNull();
+        }
+    }
+
+    #endregion
 
     public void BindNavigationInput(InputAction inputAction)
     {
@@ -53,11 +105,14 @@ public class GraphCursorNavigation : UIBehaviour
     private float TimeInterval = 0.01f;
     CounterDownTimer timer = null;
 
+    [ShowInInspector]
     private bool canControlCenterxLeft;
+    [ShowInInspector]
     private bool canControlCenterxRight;
+    [ShowInInspector]
     private bool canControlCenteryUP;
+    [ShowInInspector]
     private bool canControlCenteryDown;
-
     #endregion
 
 
@@ -179,6 +234,22 @@ public class GraphCursorNavigation : UIBehaviour
         timer = null;
     }
 
+    public void EnableGraphCursorNavigation(InputAction inputAction)
+    {
+        this.BindNavigationInput(inputAction);
+        this.uiBtnList.EnableBtnList();
+        ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
+    }
 
+    public void DisableGraphCursorNavigation()
+    {
+        this.DeBindNavigationInput();
+        this.uiBtnList.DisableBtnList();
+        ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
+    }
 
+    public void InitUIBtnList()
+    {
+        this.uiBtnList = new UIBtnList(this.content.GetComponentInChildren<UIBtnListInitor>());
+    }
 }
