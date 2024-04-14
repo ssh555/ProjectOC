@@ -119,6 +119,9 @@ namespace ML.Engine.UI
         {
             this.UIBtnListContainer = new UIBtnListContainer(this.transform.GetComponentInChildren<UIBtnListContainerInitor>());
             this.TestBtnList = new UIBtnList(ButtonList.GetComponentInChildren<UIBtnListInitor>());
+
+            this.UIBtnListContainer.AddOnSelectButtonChangedAction(() => { Debug.Log("SelectButtonChanged!"); });
+            this.UIBtnListContainer.AddOnSelectButtonListChangedAction(() => { Debug.Log("SelectButtonListChanged!"); });
         }
     }
 
