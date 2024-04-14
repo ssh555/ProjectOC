@@ -64,6 +64,11 @@ namespace ProjectOC.PinchFace
         {
             // 将 value 从 fromMin 到 fromMax 范围映射到 toMin 到 toMax 范围
             return toMin + (value - fromMin) / (fromMax - fromMin) * (toMax - toMin);
-        }   
+        }
+
+        #region 捏脸数据结构体
+
+
+        #endregion
     }
 }

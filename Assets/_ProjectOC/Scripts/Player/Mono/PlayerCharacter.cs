@@ -70,7 +70,7 @@ namespace ProjectOC.Player
 
         #region 背包 to-do : 临时测试使用
         [ShowInInspector, ReadOnly]
-        public ML.Engine.InventorySystem.IInventory Inventory => (Controller.State as PlayerControllerState).Inventory;
+        public ML.Engine.InventorySystem.IInventory Inventory => (Controller as OCPlayerController).OCState.Inventory;
         #endregion
 
 
@@ -115,7 +115,7 @@ namespace ProjectOC.Player
             botui.player = this;
             ML.Engine.Manager.GameManager.Instance.UIManager.ChangeBotUIPanel(botui);
 
-            (this.Controller.State as PlayerControllerState).Inventory 
+            (this.Controller as OCPlayerController).OCState.Inventory 
                 = new ML.Engine.InventorySystem.InfiniteInventory(this.transform, 999);
             // this.Inventory = new ML.Engine.InventorySystem.InfiniteInventory(this.transform, 999);
 

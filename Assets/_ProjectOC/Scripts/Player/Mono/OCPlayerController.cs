@@ -10,9 +10,10 @@ namespace ProjectOC.Player
         public PlayerCharacter currentCharacter = null;
 
         private List<string> ICharacterABResourcePath = new List<string>();
-
+        public OCPlayerControllerState OCState =>State as OCPlayerControllerState;
         public OCPlayerController()
         {
+            State = new OCPlayerControllerState(this);
             //ABResource Path Init ±º”»Î
             ICharacterABResourcePath.Add("OC/Character/Player/Prefabs/PlayerCharacter.prefab");
         }
@@ -32,5 +33,6 @@ namespace ProjectOC.Player
             };
             return playerCharacter as ICharacter;
         }
+        
     }
 }

@@ -131,6 +131,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7094520283161411664}
+  - component: {fileID: 2613414087939395872}
   m_Layer: 5
   m_Name: CreateNewRace
   m_TagString: Untagged
@@ -158,6 +159,24 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0}
+--- !u!114 &2613414087939395872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592450545008465872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3988da8222f461e4e9032c2c636facbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  btnListInitData:
+    limitNum: 1
+    hasInitSelect: 0
+    isLoop: 0
+    isWheel: 0
+    hasBtnListContainer: 1
 --- !u!1 &1072243567136344609
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,6 +334,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5975379159073883166}
   - component: {fileID: 2401021051693285521}
+  - component: {fileID: 8874425581980838618}
   m_Layer: 5
   m_Name: RaceButtonGroup
   m_TagString: Untagged
@@ -335,8 +355,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3934164293135619742}
-  - {fileID: 7094520283161411664}
   - {fileID: 1240185190914294330}
+  - {fileID: 7094520283161411664}
   m_Father: {fileID: 4546365264729427253}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -352,6 +372,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1784261190373108046}
   m_CullTransparentMesh: 1
+--- !u!114 &8874425581980838618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1784261190373108046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e2623f0fe50df24386af5ad13d6afeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  btnListContainerInitData:
+    containerType: 1
+    LinkDatas:
+    - btnlist1: 0
+      btnlist2: 1
+      btnlist1type: 2
+      btnlist2type: 1
+      linktype: 0
+    isLoop: 0
+    isHorizontal: 0
 --- !u!1 &1787778227872180830
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,6 +526,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4672811464960490835}
   - component: {fileID: 5090130920508378305}
+  - component: {fileID: 3180800136140198670}
   m_Layer: 5
   m_Name: ButtonList
   m_TagString: Untagged
@@ -540,6 +583,24 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &3180800136140198670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1894448523691984218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3988da8222f461e4e9032c2c636facbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  btnListInitData:
+    limitNum: 1
+    hasInitSelect: 0
+    isLoop: 0
+    isWheel: 0
+    hasBtnListContainer: 1
 --- !u!1 &1966615384337926440
 GameObject:
   m_ObjectHideFlags: 0
