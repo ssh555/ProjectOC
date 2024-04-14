@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -25,7 +26,7 @@ namespace ML.Engine.UI
         private List<UIBtnList> uIBtnLists = new List<UIBtnList>();
         public List<UIBtnList> UIBtnLists { get { return uIBtnLists; } }
         [ShowInInspector]
-        private UIBtnList curSelectUIBtnList;
+        private UIBtnList curSelectUIBtnList = null;
         public UIBtnList CurSelectUIBtnList { 
             set 
             {
@@ -34,9 +35,6 @@ namespace ML.Engine.UI
             }
             get { return curSelectUIBtnList; }
         }
-
-        //private SelectedButton curSelectSelectedButton = null;
-        //private SelectedButton lastSelectSelectedButton = null;
         public enum NavagationMode
         {
             BtnList = 0,
@@ -71,7 +69,6 @@ namespace ML.Engine.UI
         private Transform parent;
         public void RefreshIsEmpty()
         {
-
             foreach (var btnlist in this.uIBtnLists)
             {
                 if(btnlist.IsEmpty == false)
@@ -83,6 +80,30 @@ namespace ML.Engine.UI
             this.isEmpty = true;
         }
 
+        private event Action OnSelectButtonChanged = null;
+        private event Action OnSelectButtonListChanged = null;
+
+        public void AddOnSelectButtonChangedAction(Action action)
+        {
+            if (action != null)
+            {
+                this.OnSelectButtonChanged += action;
+            }
+        }
+
+        public void AddOnSelectButtonListChangedAction(Action action)
+        {
+            if (action != null)
+            {
+                this.OnSelectButtonListChanged += action;
+            }
+        }
+
+        public void InvokeOnSelectButtonChanged()
+        {
+            this.OnSelectButtonChanged?.Invoke();
+        }
+
         public UIBtnListContainer(UIBtnListContainerInitor uIBtnListContainerInitor)
         {
             this.parent = uIBtnListContainerInitor.transform;
@@ -90,33 +111,11 @@ namespace ML.Engine.UI
             this.gridNavagationType = btnListContainerInitData.containerType;
             this.btnListContainerInitData = btnListContainerInitData;
             this.InitBtnlistInfo();
-
-            //加入UIBtnList之间的导航关系
-            /*for (int i = 0; i < btnListContainerInitData.navagations.Count; i++) 
-            {
-                if(btnListContainerInitData.navagations[i].Up!=null&& tmpDic.ContainsKey(btnListContainerInitData.navagations[i].Up))
-                {
-                    uIBtnLists[i].UpUI = tmpDic[btnListContainerInitData.navagations[i].Up];
-                }
-                if (btnListContainerInitData.navagations[i].Down != null && tmpDic.ContainsKey(btnListContainerInitData.navagations[i].Down))
-                {
-                    uIBtnLists[i].DownUI = tmpDic[btnListContainerInitData.navagations[i].Down];
-                }
-                if (btnListContainerInitData.navagations[i].Left != null && tmpDic.ContainsKey(btnListContainerInitData.navagations[i].Left))
-                {
-                    uIBtnLists[i].LeftUI = tmpDic[btnListContainerInitData.navagations[i].Left];
-                }
-                if (btnListContainerInitData.navagations[i].Right != null && tmpDic.ContainsKey(btnListContainerInitData.navagations[i].Right))
-                {
-                    uIBtnLists[i].RightUI = tmpDic[btnListContainerInitData.navagations[i].Right];
-                }
-            }*/
         }
 
         private Dictionary<UIBtnListInitor, UIBtnList> UIBtnListDic = new Dictionary<UIBtnListInitor, UIBtnList>();
         public void InitBtnlistInfo()
         {
-
             UIBtnListInitor[] uIBtnListInitors = this.parent.GetComponentsInChildren<UIBtnListInitor>();
 
             for (int i = 0; i < uIBtnListInitors.Length; i++)
@@ -550,9 +549,7 @@ namespace ML.Engine.UI
         public void MoveToBtnList(UIBtnList uIBtnList)
         {
             if (this.CurSelectUIBtnList == uIBtnList || uIBtnList == null) return;
-/*            //绑定输入
-            uIBtnList.BindNavigationInputAction(this.gridNavagationInputAction, this.bindType);*/
-            //this.CurSelectUIBtnList = uIBtnList;
+
             if(gridNavagationType == ContainerType.A)
             {
                 if(navagationMode == NavagationMode.BtnList)
@@ -569,9 +566,15 @@ namespace ML.Engine.UI
                 //当前退出
                 this.CurSelectUIBtnList?.OnExitInner();
             }
-            
+
+            if (this.CurSelectUIBtnList != null) 
+            {
+                this.OnSelectButtonListChanged?.Invoke();
+            }
+
             //更改CurSelectUIBtnList
             this.CurSelectUIBtnList = uIBtnList;
+            
             //当前进入
             this.CurSelectUIBtnList.OnSelectEnter();
         }
@@ -588,7 +591,6 @@ namespace ML.Engine.UI
                 navagationMode = NavagationMode.SelectedButton;
                 this.curSelectUIBtnList?.OnEnterInner();
             }
-            
         }
 
         public void MoveToDown()
@@ -708,7 +710,7 @@ namespace ML.Engine.UI
         {
             if (BtnListIndex >= 0 || BtnListIndex < this.uIBtnLists.Count)
             {
-                this.uIBtnLists[BtnListIndex].AddBtn(prefabpath, action, BtnText);
+                this.uIBtnLists[BtnListIndex].AddBtn(prefabpath, action, BtnText: BtnText);
             }
             else
             {

@@ -68,47 +68,55 @@ namespace ProjectOC.TechTree
 
         public TechPoint GetTechPoint(string ID)
         {
+            if (string.IsNullOrEmpty(ID)) return null;
             return this.registerTechPoints.ContainsKey(ID) ? this.registerTechPoints[ID] : null;
         }
 
         public Texture2D GetTPTexture2D(string ID)
         {
-
+            if (string.IsNullOrEmpty(ID)) return null;
             return this.registerTechPoints.ContainsKey(ID) ? this.techAtlas.GetSprite(this.registerTechPoints[ID].Icon).texture : null;
         }
 
         public string GetTPName(string ID)
         {
+            if (string.IsNullOrEmpty(ID)) return "";
             return this.registerTechPoints.ContainsKey(ID) ?  this.registerTechPoints[ID].Name.GetText() : "";
         }
 
         public int[] GetTPGrid(string ID)
         {
+            if (string.IsNullOrEmpty(ID)) return null;
             return this.registerTechPoints.ContainsKey(ID) ? this.registerTechPoints[ID].Grid : null;
         }
 
         public TechPointCategory GetTPCategory(string ID)
         {
+            if (string.IsNullOrEmpty(ID)) return TechPointCategory.None;
             return this.registerTechPoints.ContainsKey(ID) ? this.registerTechPoints[ID].Category : TechPointCategory.None;
         }
 
         public Sprite GetTPSprite(string ID)
         {
+            if (string.IsNullOrEmpty(ID)) return null;
             return this.registerTechPoints.ContainsKey(ID)? techAtlas.GetSprite(this.registerTechPoints[ID].Icon) : null;
         }
 
         public string GetTPDescription(string ID)
         {
+            if (string.IsNullOrEmpty(ID)) return "";
             return this.registerTechPoints.ContainsKey(ID) ? this.registerTechPoints[ID].Description.GetText() : "";
         }
 
         public bool IsUnlockedTP(string ID)
         {
+            if (string.IsNullOrEmpty(ID)) return false;
             return this.registerTechPoints.ContainsKey(ID) ? this.registerTechPoints[ID].IsUnlocked : false;
         }
 
         public string[] GetTPCanUnlockedID(string ID)
         {
+            if (string.IsNullOrEmpty(ID)) return null;
             var retVal = this.registerTechPoints[ID].UnLockRecipe.ToList();
             retVal.AddRange(this.registerTechPoints[ID].UnLockBuild);
             return this.registerTechPoints.ContainsKey(ID) ? retVal.ToArray() : null;
@@ -116,12 +124,14 @@ namespace ProjectOC.TechTree
 
         public string[] GetPreTechPoints(string ID)
         {
+            if (string.IsNullOrEmpty(ID)) return null;
             return this.registerTechPoints.ContainsKey(ID) ? this.registerTechPoints[ID].PrePoint : null;
         }
 
         public bool IsAllUnlockedPreTP(string ID)
         {
-            if(this.registerTechPoints.ContainsKey(ID))
+            if (string.IsNullOrEmpty(ID)) return false;
+            if (this.registerTechPoints.ContainsKey(ID))
             {
                 foreach(var point in this.registerTechPoints[ID].PrePoint)
                 {
@@ -137,11 +147,13 @@ namespace ProjectOC.TechTree
 
         public ML.Engine.InventorySystem.CompositeSystem.Formula[] GetTPItemCost(string ID)
         {
+            if (string.IsNullOrEmpty(ID)) return null;
             return this.registerTechPoints.ContainsKey(ID) ? this.registerTechPoints[ID].ItemCost : null;
         }
 
         public int GetTPTimeCost(string ID)
         {
+            if (string.IsNullOrEmpty(ID)) return -1;
             return this.registerTechPoints.ContainsKey(ID) ? this.registerTechPoints[ID].TimeCost : -1;
         }
 
@@ -440,8 +452,6 @@ namespace ProjectOC.TechTree
         #endregion
 
         #region TextContent
-        public Dictionary<string, TextTip> CategoryDict = new Dictionary<string, TextTip>();
-
 
         [System.Serializable]
         public struct TPPanel
