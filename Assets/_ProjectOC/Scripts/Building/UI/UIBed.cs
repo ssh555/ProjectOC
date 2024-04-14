@@ -83,6 +83,7 @@ namespace ProjectOC.Building.UI
         public Bed Bed;
 
         #region Clans
+        [ShowInInspector]
         private List<Clan> Clans = new List<Clan>();
         /// <summary>
         /// 当前选中的Index
@@ -178,9 +179,11 @@ namespace ProjectOC.Building.UI
             if (CurMode == Mode.Bed)
             {
                 this.CurMode = Mode.ChangeClan;
+                index = 0;
+                this.Clans.Clear();
                 this.Clans.AddRange(LocalGameManager.Instance.ClanManager.Clans);
                 this.Clans.Sort(new Clan.Sort());
-                if (this.Clan != null)
+                if (this.Bed.HasClan)
                 {
                     this.Clans.Remove(this.Clan);
                     this.Clans.Insert(0, this.Clan);
@@ -263,7 +266,7 @@ namespace ProjectOC.Building.UI
                 if (CurClan != null)
                 {
                     ChangeClan.Find("Background1").gameObject.SetActive(CurClan.HasBed);
-                    ChangeClan.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = CurClan?.Name ?? "";
+                    ChangeClan.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = CurClan.Name ?? "";
                     ChangeClan.Find("Background3").gameObject.SetActive(true);
                     ChangeClan.Find("Name").gameObject.SetActive(true);
                     ChangeClan.Find("Icon").gameObject.SetActive(true);
