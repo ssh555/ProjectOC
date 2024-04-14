@@ -208,6 +208,11 @@ namespace ProjectOC.InventorySystem.UI
             }
         }
 
+        /// <summary>
+        /// 是否有升级功能
+        /// </summary>
+        public bool HasUpgrade;
+
        // ProNode Raw
         private List<Formula> Raws => ProNode.Recipe?.Raw;
         public bool IsInitCurRecipe;
@@ -372,7 +377,7 @@ namespace ProjectOC.InventorySystem.UI
         }
         private void Upgrade_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurMode != Mode.Upgrade)
+            if (CurMode != Mode.Upgrade && HasUpgrade)
             {
                 CurMode = Mode.Upgrade;
             }
@@ -612,6 +617,7 @@ namespace ProjectOC.InventorySystem.UI
             this.BotKeyTips.gameObject.SetActive(CurMode == Mode.ProNode);
             this.BotKeyTips1.gameObject.SetActive(CurMode != Mode.ProNode);
             this.BotKeyTips1.Find("KT_Confirm").gameObject.SetActive(CurMode != Mode.Upgrade);
+            transform.Find("TopTitle").Find("KT_Upgrade").gameObject.SetActive(HasUpgrade);
 
             if (CurMode == Mode.ProNode)
             {
@@ -790,7 +796,7 @@ namespace ProjectOC.InventorySystem.UI
                 BotKeyTips.Find("KT_ChangeRecipe").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Recipe);
                 BotKeyTips.Find("KT_Remove1").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Recipe);
                 BotKeyTips.Find("KT_Remove10").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Recipe);
-                BotKeyTips.Find("KT_FastAdd").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Recipe);
+                BotKeyTips.Find("KT_FastAdd").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Recipe && Raws != null && Raws.Count > 0);
                 BotKeyTips.Find("KT_Return").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Recipe);
                 #endregion
             }

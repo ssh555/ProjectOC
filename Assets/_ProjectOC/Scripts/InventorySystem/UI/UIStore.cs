@@ -76,7 +76,6 @@ namespace ProjectOC.InventorySystem.UI
             BotKeyTips_ChangeItem.gameObject.SetActive(false);
             #endregion
 
-            HasUpgrade = (Store.WorldStore as IBuildingUpgrade).HasUpgrade() || Store.Level > 0;
             IsInit = true;
             Refresh();
         }
@@ -154,6 +153,10 @@ namespace ProjectOC.InventorySystem.UI
                 Priority.Find("Selected").gameObject.SetActive(true);
             }
         }
+        /// <summary>
+        /// 是否有升级功能
+        /// </summary>
+        public bool HasUpgrade;
 
         /// <summary>
         /// UIPanel.Store区域控制处理的StoreData列表
@@ -303,10 +306,6 @@ namespace ProjectOC.InventorySystem.UI
             }
         }
 
-        /// <summary>
-        /// 是否有升级功能，决定是否禁用升级
-        /// </summary>
-        private bool HasUpgrade;
 
         protected override void UnregisterInput()
         {
@@ -619,6 +618,7 @@ namespace ProjectOC.InventorySystem.UI
             this.BotKeyTips_KeyTips.gameObject.SetActive(CurMode == Mode.Store);
             this.BotKeyTips_ChangeItem.gameObject.SetActive(CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon);
             this.BotKeyTips_Upgrade.gameObject.SetActive(CurMode == Mode.Upgrade);
+            transform.Find("TopTitle").Find("KT_Upgrade").gameObject.SetActive(HasUpgrade);
 
             if (this.CurMode == Mode.Store)
             {

@@ -46,6 +46,7 @@ namespace ProjectOC.ProNodeNS
             {
                 InventorySystem.UI.UIProNode uiPanel = handle.Result.GetComponent<InventorySystem.UI.UIProNode>();
                 uiPanel.ProNode = ProNode;
+                uiPanel.HasUpgrade = (this as IBuildingUpgrade).HasUpgrade() || this.ProNode.Level > 0;
                 GameManager.Instance.UIManager.PushPanel(uiPanel);
             };
         }

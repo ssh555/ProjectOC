@@ -46,7 +46,7 @@ namespace ProjectOC.StoreNS
             {
                 InventorySystem.UI.UIStore uiPanel = (handle.Result).GetComponent<InventorySystem.UI.UIStore>();
                 uiPanel.Store = this.Store;
-                uiPanel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+                uiPanel.HasUpgrade = (this as IBuildingUpgrade).HasUpgrade() || this.Store.Level > 0;
                 GameManager.Instance.UIManager.PushPanel(uiPanel);
             };
         }

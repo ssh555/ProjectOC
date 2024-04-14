@@ -355,11 +355,17 @@ namespace ProjectOC.WorkerNS
                 {
                     return -1;
                 }
-                int effX = x.Eff[WorkType];
-                int effY = y.Eff[WorkType];
-                if (effX != effY)
+                int stateX = (x.HasProNode || x.HasTransport) ? 1 : 0;
+                int stateY = (y.HasProNode || y.HasTransport) ? 1 : 0;
+                if (stateX != stateY)
                 {
-                    return effY.CompareTo(effX);
+                    return stateX.CompareTo(stateY);
+                }
+                int levelX = x.Skill[WorkType].Level;
+                int levelY = y.Skill[WorkType].Level;
+                if (levelX != levelY)
+                {
+                    return levelY.CompareTo(levelX);
                 }
                 return x.InstanceID.CompareTo(y.InstanceID);
             }
