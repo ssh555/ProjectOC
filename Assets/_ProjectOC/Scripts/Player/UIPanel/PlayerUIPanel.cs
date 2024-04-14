@@ -78,7 +78,7 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("EnterBuild",
             () =>
             {
-                if (ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.WasPressedThisFrame() && BM.Mode == BuildingMode.None)
+                if (BM.Mode == BuildingMode.None)
                 {
                     if (BM.GetRegisterBPartCount() > 0)
                     {
@@ -183,7 +183,6 @@ namespace ProjectOC.Player.UI
         protected override void OnLoadJsonAssetComplete(PlayerUIPanelStruct datas)
         {
             InitBtnData(datas);
-            
         }
 
         protected override void InitTextContentPathData()

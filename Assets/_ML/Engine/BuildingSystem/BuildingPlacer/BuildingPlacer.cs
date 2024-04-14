@@ -214,6 +214,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             var tmp = BuildingManager.Instance.PollingBPartPeekInstanceOnStyle(this.SelectedPartInstance, isForward);
             //tmp.BaseRotation = SelectedPartInstance.BaseRotation;
             tmp.RotOffset = SelectedPartInstance.RotOffset;
+            tmp.Mode = this.SelectedPartInstance.Mode;
             this.ResetBPart();
             this.SelectedPartInstance = tmp;
             // to-do : 只有PlaceMode会调用
@@ -232,6 +233,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             var tmp = BuildingManager.Instance.PollingBPartPeekInstanceOnHeight(this.SelectedPartInstance, isForward);
             //tmp.BaseRotation = SelectedPartInstance.BaseRotation;
             tmp.RotOffset = SelectedPartInstance.RotOffset;
+            tmp.Mode = this.SelectedPartInstance.Mode;
             this.ResetBPart();
             this.SelectedPartInstance = tmp;
             // to-do : 只有PlaceMode会调用
@@ -498,18 +500,16 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
 
                 Vector3 rotAroundPoint = this.SelectedPartInstance.ActiveSocket.transform.position;
-
                 // Up-Y
                 this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, Vector3.up, euler.y);
                 // Right-X
-                this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, Vector3.right, euler.x);
+                this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, this.SelectedPartInstance.transform.right, euler.x);
                 // Forward-Z
-                this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, Vector3.forward, euler.z);
+                this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, this.SelectedPartInstance.transform.forward, euler.z);
                 
                 if (this.SelectedPartInstance.AttachedArea == null && this.SelectedPartInstance.AttachedSocket == null)
                 {
                     this.SelectedPartInstance.transform.position = pos + this.Camera.transform.rotation * posOffset;
-                    
                 }
             }
             // else if((_pos - pos).sqrMagnitude >0.001f)

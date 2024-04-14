@@ -42,7 +42,7 @@ namespace ML.Engine.UI
         /// </summary>
         public UIBasePanel PopPanel()
         {
-            //Debug.Log("PopPanel "+Time.frameCount);
+            //Debug.Log("PopPanel " +GetTopUIPanel().name + " " + Time.frameCount);
             ClearNull();
             // ×îµ×²ãUI->startÎÞ·¨ÒÆ³ý
             if (panelStack.Count < 2)
@@ -63,7 +63,7 @@ namespace ML.Engine.UI
         /// <param name="panelType"></param>
         public void PushPanel(UIBasePanel panel)
         {
-            //Debug.Log("PushPanel " + Time.frameCount);
+            //Debug.Log("PushPanel " + panel.name+" "+Time.frameCount);
             ClearNull();
             // ÔÝÍ£Õ»¶¥
             if (panelStack.Count > 0)
@@ -288,7 +288,11 @@ namespace ML.Engine.UI
                     panelGo = GameObject.Instantiate(this.PopUpUIPrefab);
                     PopUpUIData popUpData = (PopUpUIData)(object)data;
                     panelGo.GetComponent<PopUpUI>().CopyInstance(popUpData);
+
+                    
+                    GameManager.Instance.UIManager.GetTopUIPanel().SetHidePanel();
                     GameManager.Instance.UIManager.PushPanel(panelGo.GetComponent<PopUpUI>());
+
                     panelGo.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
                     break;
                 case NoticeUIType.SideBarUI:

@@ -4,6 +4,7 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -20,38 +21,6 @@ namespace ML.Engine.UI
     [Serializable]
     public class UIBtnListContainer
     {
-
-        public struct BtnListinitData1
-        {
-            public int i;
-            public int j;
-            public bool isloop;
-            public bool hasinitselect;
-            public string prefabpath;
-            public BtnListinitData1(int i,int j, bool isloop, bool hasinitselect, string prefabpath)
-            {
-                this.i = i;
-                this.j = j;
-                this.isloop = isloop;
-                this.hasinitselect = hasinitselect;
-                this.prefabpath = prefabpath;
-            }
-        }
-
-        public struct BtnListinitData2
-        {
-            public Transform transform;
-            public int j;
-            public bool isloop;
-            public bool hasinitselect;
-            public BtnListinitData2(Transform transform, int j, bool isloop, bool hasinitselect)
-            {
-                this.transform = transform;
-                this.j = j;
-                this.isloop = isloop;
-                this.hasinitselect = hasinitselect;
-            }
-        }
         [ShowInInspector]
         private List<UIBtnList> uIBtnLists = new List<UIBtnList>();
         public List<UIBtnList> UIBtnLists { get { return uIBtnLists; } }
@@ -94,10 +63,12 @@ namespace ML.Engine.UI
 
         private BtnListContainerInitData btnListContainerInitData;
 
+        [ShowInInspector]
         private bool isEmpty;
 
         public bool IsEmpty { get { return isEmpty; } }
 
+        private Transform parent;
         public void RefreshIsEmpty()
         {
 
@@ -112,27 +83,16 @@ namespace ML.Engine.UI
             this.isEmpty = true;
         }
 
-        public UIBtnListContainer(Transform transform, BtnListContainerInitData btnListContainerInitData)
+        public UIBtnListContainer(UIBtnListContainerInitor uIBtnListContainerInitor)
         {
+            this.parent = uIBtnListContainerInitor.transform;
+            BtnListContainerInitData btnListContainerInitData = uIBtnListContainerInitor.btnListContainerInitData;
             this.gridNavagationType = btnListContainerInitData.containerType;
             this.btnListContainerInitData = btnListContainerInitData;
-            UIBtnListInitor[] uIBtnListInitors = transform.GetComponentsInChildren<UIBtnListInitor>();
-
-            Dictionary<UIBtnListInitor, UIBtnList> tmpDic = new Dictionary<UIBtnListInitor, UIBtnList>();
-            
-
-            for (int i = 0; i < uIBtnListInitors.Length; i++) 
-            {
-                UIBtnList uIBtnList = new UIBtnList(uIBtnListInitors[i])
-                {
-                    UIBtnListContainer = this
-                };
-                uIBtnLists.Add(uIBtnList);
-                tmpDic.Add(uIBtnListInitors[i], uIBtnList);
-            }
+            this.InitBtnlistInfo();
 
             //加入UIBtnList之间的导航关系
-            for (int i = 0; i < btnListContainerInitData.navagations.Count; i++) 
+            /*for (int i = 0; i < btnListContainerInitData.navagations.Count; i++) 
             {
                 if(btnListContainerInitData.navagations[i].Up!=null&& tmpDic.ContainsKey(btnListContainerInitData.navagations[i].Up))
                 {
@@ -150,7 +110,47 @@ namespace ML.Engine.UI
                 {
                     uIBtnLists[i].RightUI = tmpDic[btnListContainerInitData.navagations[i].Right];
                 }
+            }*/
+        }
+
+        private Dictionary<UIBtnListInitor, UIBtnList> UIBtnListDic = new Dictionary<UIBtnListInitor, UIBtnList>();
+        public void InitBtnlistInfo()
+        {
+
+            UIBtnListInitor[] uIBtnListInitors = this.parent.GetComponentsInChildren<UIBtnListInitor>();
+
+            for (int i = 0; i < uIBtnListInitors.Length; i++)
+            {
+                if(UIBtnListDic.ContainsKey(uIBtnListInitors[i]))
+                {
+                    continue;
+                }
+                else
+                {
+                    UIBtnList uIBtnList = new UIBtnList(uIBtnListInitors[i])
+                    {
+                        UIBtnListContainer = this
+                    };
+                    uIBtnLists.Add(uIBtnList);
+                    UIBtnListDic.Add(uIBtnListInitors[i], uIBtnList);
+                }
+                
             }
+
+            if(this.gridNavagationType == ContainerType.A)
+            {
+                RefreshBtnListNavagation();
+                RefreshEdge();
+            }
+
+            for (int i = 0; i < this.uIBtnLists.Count; i++)
+            {
+                if(this.uIBtnLists[i].IsEnable==false)
+                {
+                    this.uIBtnLists[i].EnableBtnList();
+                }
+            }
+            
         }
 
         public void BindNavigationInputAction(InputAction NavigationInputAction, BindType bindType)
@@ -269,14 +269,50 @@ namespace ML.Engine.UI
                 case EdgeType.LP:
                     for (int i = 0; i < rowCount; i++)
                     {
-                        selectedButtons.Add(btnlist[rowCount - i - 1][0]);
+                        if (btnlist[rowCount - i - 1][0] != null) 
+                        {
+                            selectedButtons.Add(btnlist[rowCount - i - 1][0]);
+                        }
+                        else
+                        {
+                            for (int j = 0; j < colCount; j++) 
+                            {
+                                if (btnlist[rowCount - i - 1][j] != null)
+                                {
+                                    if (btnlist[rowCount - i - 1][j] != null)
+                                    {
+                                        selectedButtons.Add(btnlist[rowCount - i - 1][j]);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        
                     }
 
                     break;
                 case EdgeType.LN:
                     for (int i = 0; i < rowCount; i++)
                     {
-                        selectedButtons.Add(btnlist[i][0]);
+                        if (btnlist[i][0] != null)
+                        {
+                            selectedButtons.Add(btnlist[i][0]);
+                        }
+                        else
+                        {
+                            for (int j = 0; j < colCount; j++)
+                            {
+                                if (btnlist[i][j] != null)
+                                {
+                                    if (btnlist[i][j] != null)
+                                    {
+                                        selectedButtons.Add(btnlist[i][j]);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
                     }
                     break;
                 case EdgeType.RP:
@@ -322,13 +358,41 @@ namespace ML.Engine.UI
                 case EdgeType.UP:
                     for (int i = 0; i < colCount; i++)
                     {
-                        selectedButtons.Add(btnlist[0][i]);
+                        if (btnlist[0][i] != null)
+                        {
+                            selectedButtons.Add(btnlist[0][i]);
+                        }
+                        else
+                        {
+                            for (int j = 0; j < rowCount; j++)
+                            {
+                                if (btnlist[j][i] != null)
+                                {
+                                    selectedButtons.Add(btnlist[j][i]);
+                                    break;
+                                }
+                            }
+                        }
                     }
                     break; 
                 case EdgeType.UN:
                     for (int i = 0; i < colCount; i++)
                     {
-                        selectedButtons.Add(btnlist[0][colCount - i - 1]);
+                        if (btnlist[0][colCount - i - 1] != null)
+                        {
+                            selectedButtons.Add(btnlist[0][colCount - i - 1]);
+                        }
+                        else
+                        {
+                            for (int j = 0; j < rowCount; j++)
+                            {
+                                if (btnlist[j][colCount - i - 1] != null)
+                                {
+                                    selectedButtons.Add(btnlist[j][colCount - i - 1]);
+                                    break;
+                                }
+                            }
+                        }
                     }
                     break;
                 case EdgeType.DP:
@@ -360,7 +424,7 @@ namespace ML.Engine.UI
                         }
                         else
                         {
-                            for (int j = colCount - 1; j >= 0; j--)
+                            for (int j = rowCount - 1; j >= 0; j--)
                             {
                                 if (btnlist[j][i] != null)
                                 {
@@ -573,30 +637,78 @@ namespace ML.Engine.UI
         {
             RefreshEdge();
 
-            for (int i = 0; i < this.UIBtnLists.Count; i++)
+            if(this.gridNavagationType == ContainerType.B)
             {
-                if (this.UIBtnLists[i].BtnCnt>0)
+                for (int i = 0; i < this.UIBtnLists.Count; i++)
                 {
-                    MoveToBtnList(this.UIBtnLists[i]);
-                    return;
+                    if (this.UIBtnLists[i].BtnCnt > 0)
+                    {
+                        MoveToBtnList(this.UIBtnLists[i]);
+                        return;
+                    }
                 }
             }
+            else if(this.gridNavagationType == ContainerType.A)
+            {
+                for (int i = 0; i < this.UIBtnLists.Count; i++)
+                {
+                    if (this.UIBtnLists[i] != null) 
+                    {
+                        MoveToBtnList(this.UIBtnLists[i]);
+                        return;
+                    }
+                }
+            }
+
+            
         }
 
         public void RefreshEdge()
         {
             //连边
-            foreach (var linkData in btnListContainerInitData.LinkDatas)
+            if (this.uIBtnLists.Count == 0) return;
+            
+            if(gridNavagationType == ContainerType.B)
             {
-                this.LinkTwoEdge(GetEdge(uIBtnLists[linkData.btnlist1], linkData.btnlist1type), GetEdge(uIBtnLists[linkData.btnlist2], linkData.btnlist2type), linkData.linktype);
+                //B类连边数据固定
+                foreach (var linkData in btnListContainerInitData.LinkDatas)
+                {
+                    this.LinkTwoEdge(GetEdge(uIBtnLists[linkData.btnlist1], linkData.btnlist1type), GetEdge(uIBtnLists[linkData.btnlist2], linkData.btnlist2type), linkData.linktype);
+                }
+            }
+            else if(gridNavagationType == ContainerType.A)
+            {
+                //A类连边数据根据 isHorizontal来处理
+                if(this.btnListContainerInitData.isHorizontal)
+                {
+                    for (int i = 0; i < this.uIBtnLists.Count - 1; i++)
+                    {
+                        this.LinkTwoEdge(GetEdge(uIBtnLists[i], EdgeType.RP), GetEdge(uIBtnLists[i + 1], EdgeType.LN), LinkType.LTR);
+                    }
+                    if(this.btnListContainerInitData.isLoop)
+                    {
+                        this.LinkTwoEdge(GetEdge(uIBtnLists[this.uIBtnLists.Count - 1], EdgeType.RP), GetEdge(uIBtnLists[0], EdgeType.LN), LinkType.LTR);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < this.uIBtnLists.Count - 1; i++)
+                    {
+                        this.LinkTwoEdge(GetEdge(uIBtnLists[i], EdgeType.DN), GetEdge(uIBtnLists[i + 1], EdgeType.UP), LinkType.UTD);
+                    }
+                    if (this.btnListContainerInitData.isLoop)
+                    {
+                        this.LinkTwoEdge(GetEdge(uIBtnLists[this.uIBtnLists.Count - 1], EdgeType.DN), GetEdge(uIBtnLists[0], EdgeType.UP), LinkType.UTD);
+                    }
+                }
             }
         }
 
-        public void AddBtn(int index,string prefabpath)
+        public void AddBtn(int BtnListIndex, string prefabpath,UnityAction action = null,string BtnText = null)
         {
-            if (index >= 0 || index < this.uIBtnLists.Count)
+            if (BtnListIndex >= 0 || BtnListIndex < this.uIBtnLists.Count)
             {
-                this.uIBtnLists[index].AddBtn(prefabpath); 
+                this.uIBtnLists[BtnListIndex].AddBtn(prefabpath, action, BtnText);
             }
             else
             {
@@ -614,6 +726,99 @@ namespace ML.Engine.UI
             else
             {
                 Debug.LogError("不存在该BtnList或SelectedButton!");
+            }
+        }
+
+        public void AddBtnList(string prefabpath)
+        {
+            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(prefabpath).Completed += (handle) =>
+            {
+                var btnlist = handle.Result.GetComponent<UIBtnListInitor>();
+                btnlist.gameObject.name = btnlist.GetHashCode().ToString();
+                btnlist.transform.SetParent(this.parent, false);
+
+                bool needMoveToBtnList = this.IsEmpty;
+                InitBtnlistInfo();
+                if(needMoveToBtnList)FindEnterableUIBtnList();
+                RefreshIsEmpty();
+            };
+        }
+
+        public void DeleteBtnList(int BtnListIndex)
+        {
+            if (BtnListIndex >= 0 || BtnListIndex < this.uIBtnLists.Count)
+            {
+                
+                
+                GameManager.Instance.StartCoroutine(DestroyAndRefreshBtnList(BtnListIndex));
+            }
+            else
+            {
+                Debug.LogError("不存在该BtnList!");
+            }
+        }
+        private IEnumerator DestroyAndRefreshBtnList(int BtnListIndex)
+        {
+            bool NeedMoveToBtnList = false;
+            if (this.uIBtnLists[BtnListIndex] == this.curSelectUIBtnList)
+            {
+                NeedMoveToBtnList = true;
+            }
+            for (int i = 0; i < this.UIBtnListDic.Count; i++)
+            {
+                if (this.UIBtnListDic.ElementAt(i).Value == this.uIBtnLists[BtnListIndex])
+                {
+                    UIBtnListDic.Remove(this.UIBtnListDic.ElementAt(i).Key);
+                    uIBtnLists.RemoveAt(BtnListIndex);
+                }
+            }
+
+            //销毁物体
+            GameManager.DestroyObj(this.parent.GetChild(BtnListIndex).gameObject);
+
+            // 等待一帧 原因是当前帧销毁 transform.childCount在当前帧并不会马上更新，需要下一帧
+            yield return null;
+
+            // 在下一帧更新BtnListContainer
+            if (NeedMoveToBtnList)
+            {
+                this.curSelectUIBtnList = null;
+                FindEnterableUIBtnList();
+            }
+                
+            InitBtnlistInfo();
+            RefreshIsEmpty();
+
+
+        }
+        public void RefreshBtnListNavagation()
+        {
+            if (this.uIBtnLists.Count == 0) return;
+            if (this.btnListContainerInitData.isHorizontal)
+            {
+                for (int i = 0; i < this.uIBtnLists.Count - 1; i++)
+                {
+                    uIBtnLists[i].RightUI = uIBtnLists[i + 1];
+                    uIBtnLists[i + 1].LeftUI = uIBtnLists[i];
+                }
+                if (this.btnListContainerInitData.isLoop)
+                {
+                    uIBtnLists[0].LeftUI = uIBtnLists[this.uIBtnLists.Count - 1];
+                    uIBtnLists[this.uIBtnLists.Count - 1].RightUI = uIBtnLists[0];
+                }
+            }
+            else
+            {
+                for (int i = 0; i < this.uIBtnLists.Count - 1; i++)
+                {
+                    uIBtnLists[i].DownUI = uIBtnLists[i + 1];
+                    uIBtnLists[i + 1].UpUI = uIBtnLists[i];
+                }
+                if (this.btnListContainerInitData.isLoop)
+                {
+                    uIBtnLists[0].UpUI = uIBtnLists[this.uIBtnLists.Count - 1];
+                    uIBtnLists[this.uIBtnLists.Count - 1].DownUI = uIBtnLists[0];
+                }
             }
         }
     }

@@ -169,7 +169,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   language: 0
   platform: 0
-  inputDevice: 1
+  inputDevice: 0
   Version:
     Major: 1
     Minor: 0
