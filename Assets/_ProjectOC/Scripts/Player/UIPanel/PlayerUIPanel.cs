@@ -183,7 +183,6 @@ namespace ProjectOC.Player.UI
         protected override void OnLoadJsonAssetComplete(PlayerUIPanelStruct datas)
         {
             InitBtnData(datas);
-            
         }
 
         protected override void InitTextContentPathData()

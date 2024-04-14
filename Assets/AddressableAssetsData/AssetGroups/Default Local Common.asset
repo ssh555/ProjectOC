@@ -227,6 +227,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - NoticeUI
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1266afa4d944f7845acd8b9efd1189b7
+    m_Address: Assets/_ProjectOC/Scripts/PinchFace/Classification/TypePackage
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PinchFaceType
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 72d1a89784032c94ea3b026b42e20dcf, type: 2}
   m_SchemaSet:

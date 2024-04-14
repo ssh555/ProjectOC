@@ -18,6 +18,8 @@ using ProjectOC.Order;
 using ML.PlayerCharacterNS;
 using ProjectOC.ClanNS;
 using ML.Engine.InventorySystem.CompositeSystem;
+using ProjectOC.PinchFace;
+using ProjectOC.Player;
 
 namespace ProjectOC.ManagerNS
 {
@@ -45,6 +47,7 @@ namespace ProjectOC.ManagerNS
         public OrderManager OrderManager;
         public ItemManager ItemManager;
         public CompositeManager CompositeManager;
+        public PinchFace.PinchFaceManager PinchFaceManager;
         /// <summary>
         /// 单例管理
         /// </summary>
@@ -90,11 +93,10 @@ namespace ProjectOC.ManagerNS
             GM.RegisterLocalManager(CompositeManager);
             CompositeManager.Init();
             GM.RegisterLocalManager(IslandManager);
-            IslandManager.Init();
             GM.RegisterLocalManager(BuildPowerIslandManager);
-            GameManager.Instance.CharacterManager.Scene1Init();
-            //要获取Placer
-            GM.RegisterLocalManager(IslandAreaManager);
+            //生成Character
+            GameManager.Instance.CharacterManager.SceneInit();
+
             
             StartCoroutine(AfterPlayerCharacter());
         }
@@ -131,6 +133,7 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<OrderManager>();
                 GM?.UnregisterLocalManager<ItemManager>();
                 GM?.UnregisterLocalManager<CompositeManager>();
+                GM?.UnregisterLocalManager<PinchFaceManager>(); //可能会提前注销，关闭捏脸面板的时候
                 Instance = null;
             }
         }
@@ -138,15 +141,17 @@ namespace ProjectOC.ManagerNS
         //在PlayerCharacter生成之后调用
         IEnumerator AfterPlayerCharacter()
         {
-            PlayerController playerController = GameManager.Instance.CharacterManager.GetPlayerController();
+            ProjectOC.Player.OCPlayerController playerController = GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController;
             while (playerController.currentCharacter == null)
             {
                 yield return null;
             }
-            
-            IslandAreaManager.Init();
-        }
 
+            //要获取玩家模型，放在后面
+            GM.RegisterLocalManager(IslandAreaManager);
+            GM.RegisterLocalManager(PinchFaceManager);  
+        }
+    
         #region Gizmos管理
 #if UNITY_EDITOR
         [System.Flags]
@@ -161,7 +166,7 @@ namespace ProjectOC.ManagerNS
             [LabelText("Test2")]
             Test2 = 1 << 1
         }
-
+        [Space(20)]
         public GizmosEnableControl gizmosEnableControl; 
         private void OnDrawGizmosSelected()
         {
