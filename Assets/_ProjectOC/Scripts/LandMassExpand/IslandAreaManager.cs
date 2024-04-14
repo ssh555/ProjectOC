@@ -17,34 +17,46 @@ public class IslandAreaManager :ML.Engine.Manager.LocalManager.ILocalManager
 #region 岛屿区域管理
 
         public List<Transform> updatedFieldTransforms = new List<Transform>();
+
         /// <summary>
         /// 区域建筑发生变化事件，退出建造模式的时候调用一次
         /// </summary>
+        private BuildingPlacer buildingPlacer;
         public Action UpdatedFieldTransformsAction;
 
-        public void Init()
+        private Action<IBuildingPart> OnPlaceModeSuccessHandler;
+        private Action<IBuildingPart,Vector3,Vector3> OnEditModeSuccessHandler;
+        private Action OnBuildingModeExitHandler;
+        private Action<IBuildingPart> OnDestroySelectedBPartHandler;
+        public void OnRegister()
         {
-            BuildingPlacer buildingPlacer = BuildingManager.Instance.Placer;
-            buildingPlacer.OnPlaceModeSuccess += (bpart) =>
+            OnPlaceModeSuccessHandler += (bpart) =>
             {
                 JudgeUpdateField(bpart.transform);
             };
-            buildingPlacer.OnEditModeSuccess += (bpart, pos1, pos2) =>
+            
+            OnEditModeSuccessHandler += (bpart, pos1, pos2) =>
             {
                 JudgeUpdateField(bpart.transform);
                 UpdatedFieldTransformsAction?.Invoke();
             };
-            buildingPlacer.OnBuildingModeExit += () =>
+            OnBuildingModeExitHandler += () =>
             {
                 UpdateNaveMeshSurfaces();
                 UpdatedFieldTransformsAction?.Invoke();
                 ClearUpdateTransform();
             };
-            buildingPlacer.OnDestroySelectedBPart += (bpart) =>
+            OnDestroySelectedBPartHandler += (bpart) =>
             {
                 JudgeUpdateField(bpart.transform);
                 UpdatedFieldTransformsAction?.Invoke();
             };
+            
+            buildingPlacer = BuildingManager.Instance.Placer;
+            buildingPlacer.OnPlaceModeSuccess += OnPlaceModeSuccessHandler;
+            buildingPlacer.OnEditModeSuccess += OnEditModeSuccessHandler;
+            buildingPlacer.OnBuildingModeExit += OnBuildingModeExitHandler;
+            buildingPlacer.OnDestroySelectedBPart += OnDestroySelectedBPartHandler;
         }
         //UpdateFieldTransform List控制
         public void JudgeUpdateField(Transform _transf)
@@ -117,5 +129,14 @@ public class IslandAreaManager :ML.Engine.Manager.LocalManager.ILocalManager
                 }
             }
         }
+
+        public void OnUnregister()
+        {
+            buildingPlacer.OnPlaceModeSuccess -= OnPlaceModeSuccessHandler;
+            buildingPlacer.OnEditModeSuccess -= OnEditModeSuccessHandler;
+            buildingPlacer.OnBuildingModeExit -= OnBuildingModeExitHandler;
+            buildingPlacer.OnDestroySelectedBPart -= OnDestroySelectedBPartHandler;
+        }
+
         #endregion
     }
