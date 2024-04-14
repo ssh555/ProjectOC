@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace ProjectOC.PinchFace
 {
-    public class PinchRacePanel : ML.Engine.UI.UIBasePanel<PinchRacePanel.PinchRacePanelStruct>
+    public class UIPinchRacePanel : ML.Engine.UI.UIBasePanel<UIPinchRacePanel.PinchRacePanelStruct>
     {
         #region ML
         protected override void Enter()
@@ -69,7 +70,7 @@ namespace ProjectOC.PinchFace
         {
             this.abpath = "OC/Json/TextContent/PlayerUIPanel";
             this.abname = "PlayerUIPanel";
-            this.description = "PlayerUIPanel鏁版嵁鍔犺浇瀹屾垚";
+            this.description = "PinchRace";
         }
 
         private UIBtnList UIBtnList;
@@ -89,9 +90,15 @@ namespace ProjectOC.PinchFace
         #endregion
 
         #region PinchRacePanel
-
+        [ShowInInspector]
+        private UIBtnListContainer UIBtnListContainer;
         
+        //临时用成可序列化，方便
+        [SerializeField]
+        public List<RacePinchData> RacePinchDatas;
 
         #endregion
+
+
     }   
 }

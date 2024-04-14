@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-public class BezierComponent : MonoBehaviour
+
+namespace ML.MathExtension
+{
+    public class BezierComponent : MonoBehaviour
 {
     private void Awake()
     {
@@ -94,3 +97,5 @@ public class BezierComponent : MonoBehaviour
        
    } 
 }
+}
+
