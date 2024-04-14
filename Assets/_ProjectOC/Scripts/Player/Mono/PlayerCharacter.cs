@@ -75,7 +75,6 @@ namespace ProjectOC.Player
         #region 背包 to-do : 临时测试使用
         [ShowInInspector, ReadOnly]
         public ML.Engine.InventorySystem.IInventory Inventory => (Controller.State as PlayerControllerState).Inventory;
-        #endregion
         
         /// <summary>
         /// 背包和仓库中是否有对应数量的物品。
@@ -120,7 +119,7 @@ namespace ProjectOC.Player
                         int need = formulas[i].num - currents[i].num;
                         if (need > 0 && store.IsStoreHaveItem(formulas[i].id))
                         {
-                            int num = store.GetStorage(formulas[i].id);
+                            int num = store.GetDataNum(formulas[i].id, Store.DataType.Storage);
                             num = num <= need ? num : need;
                             currents[i] = new Formula() { id = currents[i].id, num = currents[i].num + num };
                         }
@@ -188,7 +187,7 @@ namespace ProjectOC.Player
                             int need = formulas[i].num - currents[i].num;
                             if (need > 0 && store.IsStoreHaveItem(formulas[i].id))
                             {
-                                int num = store.GetStorage(formulas[i].id);
+                                int num = store.GetDataNum(formulas[i].id, Store.DataType.Storage);
                                 num = num <= need ? num : need;
                                 currents[i] = new Formula() { id = currents[i].id, num = currents[i].num + num };
                             }

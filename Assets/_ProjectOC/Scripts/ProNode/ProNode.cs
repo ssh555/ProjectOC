@@ -554,7 +554,7 @@ namespace ProjectOC.ProNodeNS
             }
             return result;
         }
-        protected int AddItem(string itemID, int amount, bool exceed = false, bool complete = true)
+        protected int Add(string itemID, int amount, bool exceed = false, bool complete = true)
         {
             lock (this)
             {
@@ -592,7 +592,7 @@ namespace ProjectOC.ProNodeNS
                 return 0;
             }
         }
-        protected int RemoveItem(string itemID, int amount, bool complete = true, bool isReserve = false)
+        protected int Remove(string itemID, int amount, bool complete = true, bool isReserve = false)
         {
             lock (this)
             {
@@ -710,33 +710,44 @@ namespace ProjectOC.ProNodeNS
         }
         public bool PutIn(string itemID, int amount)
         {
-            return AddItem(itemID, amount, true) >= amount;
+            return Add(itemID, amount, true) >= amount;
         }
         public int PutOut(string itemID, int amount)
         {
-            return RemoveItem(itemID, amount, false, true);
+            return Remove(itemID, amount, false, true);
         }
         #endregion
 
         #region IInventory½Ó¿Ú
         public bool AddItem(Item item)
         {
-            return AddItem(item.ID, item.Amount) >= item.Amount;
+            if (item != null)
+            {
+                return Add(item.ID, item.Amount) >= item.Amount;
+            }
+            return false;
         }
         public bool RemoveItem(Item item)
         {
-            return RemoveItem(item.ID, item.Amount, true) >= item.Amount;
+            if (item != null)
+            {
+                return Remove(item.ID, item.Amount, true) >= item.Amount;
+            }
+            return false;
         }
         public Item RemoveItem(Item item, int amount)
         {
-            int num = RemoveItem(item.ID, amount, false);
-            Item result = ItemManager.Instance.SpawnItem(item.ID);
-            result.Amount = num;
-            return result;
+            if (item != null)
+            {
+                Item result = ItemManager.Instance.SpawnItem(item.ID);
+                result.Amount = Remove(item.ID, amount, false);
+                return result;
+            }
+            return null;
         }
         public bool RemoveItem(string itemID, int amount)
         {
-            return RemoveItem(itemID, amount, true) >= amount;
+            return Remove(itemID, amount, true) >= amount;
         }
         public int GetItemAllNum(string id)
         {

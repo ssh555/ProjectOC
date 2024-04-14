@@ -2,10 +2,7 @@ using Sirenix.OdinInspector;
 
 namespace ProjectOC.StoreNS
 {
-    /// <summary>
-    /// 仓库里面每个存储格子的数据
-    /// </summary>
-    [System.Serializable]
+    [LabelText("仓库存储数据"), System.Serializable]
     public class StoreData
     {
         [LabelText("存储的Item ID"), ReadOnly]
@@ -33,10 +30,54 @@ namespace ProjectOC.StoreNS
         public bool CanIn = true;
         [LabelText("刁民能否取出"), ReadOnly]
         public bool CanOut = true;
+
         public StoreData(string itemID, int maxCapacity)
         {
             ItemID = itemID;
             MaxCapacity = maxCapacity;
+        }
+
+        public void Clear()
+        {
+            this.ItemID = "";
+            this.Storage = 0;
+            this.StorageReserve = 0;
+            this.EmptyReserve = 0;
+        }
+
+        public int GetNum(Store.DataType dataType)
+        {
+            switch (dataType)
+            {
+                case Store.DataType.Storage:
+                    return Storage;
+                case Store.DataType.StorageReserve:
+                    return StorageReserve;
+                case Store.DataType.EmptyReserve:
+                    return EmptyReserve;
+                case Store.DataType.Empty:
+                    return Empty;
+            }
+            return 0;
+        }
+
+        public void ChangeData(Store.DataType dataType, int num)
+        {
+            switch (dataType)
+            {
+                case Store.DataType.Storage:
+                    Storage += num;
+                    break;
+                case Store.DataType.StorageReserve:
+                    StorageReserve += num;
+                    break;
+                case Store.DataType.EmptyReserve:
+                    EmptyReserve += num;
+                    EmptyReserve = EmptyReserve >= 0 ? EmptyReserve : 0;
+                    break;
+                case Store.DataType.Empty: 
+                    break;
+            }
         }
     }
 }

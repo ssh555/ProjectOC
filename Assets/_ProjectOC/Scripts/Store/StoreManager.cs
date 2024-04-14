@@ -105,7 +105,7 @@ namespace ProjectOC.StoreNS
                 {
                     if ((!judgeInteracting || !store.IsInteracting) && (!judgeCanOut || store.IsStoreHaveItem(itemID, false, true)))
                     {
-                        int storeAmount = store.GetStorage(itemID);
+                        int storeAmount = store.GetDataNum(itemID, Store.DataType.Storage);
                         if (storeAmount > 0)
                         {
                             if (resultAmount + storeAmount >= amount)
@@ -144,7 +144,7 @@ namespace ProjectOC.StoreNS
                 {
                     // 优先寻找第一个可以一次性存完的仓库
                     // 若没有，则寻找第一个可以存入的，可溢出存入
-                    int empty = store.GetEmpty(itemID, true);
+                    int empty = store.GetDataNum(itemID, Store.DataType.Empty, true);
                     if (result == null && empty > 0)
                     {
                         result = store;

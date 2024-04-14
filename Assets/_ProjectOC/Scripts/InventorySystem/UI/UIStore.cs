@@ -83,14 +83,14 @@ namespace ProjectOC.InventorySystem.UI
         #region Override
         protected override void Enter()
         {
-            Store.OnStoreDataChange += Refresh;
+            Store.OnStoreDataChangeAction += Refresh;
             Store.IsInteracting = true;
             base.Enter();
         }
 
         protected override void Exit()
         {
-            Store.OnStoreDataChange -= Refresh;
+            Store.OnStoreDataChangeAction -= Refresh;
             Store.IsInteracting = false;
             ClearTemp();
             base.Exit();
