@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using ML.PlayerCharacterNS;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace ML.PlayerCharacterNS
 {
@@ -10,12 +12,33 @@ namespace ML.PlayerCharacterNS
         public int tickPriority { get; set; }
         public int fixedTickPriority { get; set; }
         public int lateTickPriority { get; set; }
-        public List<ICharacter> SpawnedCharacters { get; set; }
+        public List<ICharacter> SpawnedCharacters { get; set; } = new List<ICharacter>();
         public IControllerState State { get; set; }
+        public List<int> CurrentCharacterIndexs { get; set; }
 
         //记得触发Character.OnSpawn()
+        public List<ICharacter> GetCurrentCharacters()
+        {
+            List<ICharacter> _characters = new List<ICharacter>();
+            foreach (var _index in CurrentCharacterIndexs)
+            {
+                ICharacter _character = SpawnedCharacters[_index];
+                if (_character != null)
+                {
+                    _characters.Add(_character);    
+                }
+            }
+            return _characters;
+        }
+
+        public ICharacter GetCharacter(int index)
+        {
+            return SpawnedCharacters[index];
+        }
+
         public virtual ICharacter SpawnCharacter(int _index = 0, IStartPoint _startPoint = null)
         {
+            //有对应的Controller具体实现
             return null;
         }
 

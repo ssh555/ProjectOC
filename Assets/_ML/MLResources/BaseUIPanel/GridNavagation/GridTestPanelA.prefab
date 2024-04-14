@@ -3759,6 +3759,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BaseUISelectedBtn
       objectReference: {fileID: 0}
+    - target: {fileID: 7783856600298987799, guid: b8074846cd694eb4a9791b340e8fb00c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8874853183482865154, guid: b8074846cd694eb4a9791b340e8fb00c, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

@@ -7,5 +7,6 @@ namespace ML.PlayerCharacterNS
     public interface IControllerState : IState
     {
         IController controller { get; set; }
+
     }
 }

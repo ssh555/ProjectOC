@@ -19,6 +19,7 @@ using ML.PlayerCharacterNS;
 using ProjectOC.ClanNS;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ProjectOC.PinchFace;
+using ProjectOC.Player;
 
 namespace ProjectOC.ManagerNS
 {
@@ -93,7 +94,8 @@ namespace ProjectOC.ManagerNS
             CompositeManager.Init();
             GM.RegisterLocalManager(IslandManager);
             GM.RegisterLocalManager(BuildPowerIslandManager);
-            GameManager.Instance.CharacterManager.CharacterControllerInit();
+            //生成Character
+            GameManager.Instance.CharacterManager.SceneInit();
 
             
             StartCoroutine(AfterPlayerCharacter());
@@ -139,7 +141,7 @@ namespace ProjectOC.ManagerNS
         //在PlayerCharacter生成之后调用
         IEnumerator AfterPlayerCharacter()
         {
-            PlayerController playerController = GameManager.Instance.CharacterManager.GetPlayerController();
+            ProjectOC.Player.OCPlayerController playerController = GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController;
             while (playerController.currentCharacter == null)
             {
                 yield return null;
