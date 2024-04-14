@@ -1044,7 +1044,7 @@ namespace ProjectOC.InventorySystem.UI
                     var uiItemData = tempUIItemDatasUpgrade[i];
                     string itemID = raw[i].id;
                     int need = raw[i].num;
-                    int current = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory.GetItemAllNum(itemID);
+                    int current = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).InventoryItemAmount(itemID);
                     // Active
                     uiItemData.SetActive(true);
                     // ¸üÐÂIcon

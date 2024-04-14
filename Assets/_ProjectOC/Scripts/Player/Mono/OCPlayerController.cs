@@ -114,6 +114,19 @@ namespace ProjectOC.Player
             return true;
         }
 
+        public int InventoryItemAmount(string itemID, bool containStore = true)
+        {
+            int current = OCState.Inventory.GetItemAllNum(itemID);
+            if (containStore)
+            {
+                foreach (var store in ManagerNS.LocalGameManager.Instance.StoreManager.GetStores(-1))
+                {
+                    current += store.GetDataNum(itemID, StoreNS.Store.DataType.Storage);
+                }
+            }
+            return current;
+        }
+
         /// <summary>
         /// 从背包和仓库中消耗对应数量的物品，返回消耗的数量
         /// </summary>

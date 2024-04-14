@@ -85,7 +85,7 @@ namespace ProjectOC.StoreNS
                     items.AddRange(ItemManager.Instance.SpawnItems(data.ItemID, data.StorageAll));
                 }
             }
-            items = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory.AddItem(items, true);
+            items = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory.AddItem(items);
             foreach (Item item in items)
             {
                 #pragma warning disable CS4014
@@ -170,12 +170,15 @@ namespace ProjectOC.StoreNS
                 {
                     items.AddRange(ItemManager.Instance.SpawnItems(data.ItemID, data.Storage));
                 }
-                items = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory.AddItem(items, true);
-                foreach (Item item in items)
+                items = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory.AddItem(items);
+                if (items != null)
                 {
-                    #pragma warning disable CS4014
-                    ItemManager.Instance.SpawnWorldItem(item, WorldStore.transform.position, WorldStore.transform.rotation);
-                    #pragma warning restore CS4014
+                    foreach (Item item in items)
+                    {
+#pragma warning disable CS4014
+                        ItemManager.Instance.SpawnWorldItem(item, WorldStore.transform.position, WorldStore.transform.rotation);
+#pragma warning restore CS4014
+                    }
                 }
 
                 data.Clear();
