@@ -7,6 +7,8 @@ using System;
 using UnityEngine;
 using ML.Engine.InventorySystem.CompositeSystem;
 using Sirenix.OdinInspector;
+using ML.Engine.Manager;
+using ProjectOC.Player;
 
 namespace ProjectOC.ProNodeNS
 {
@@ -155,10 +157,10 @@ namespace ProjectOC.ProNodeNS
             ID = config.ID ?? "";
         }
 
-        public void Destroy(Player.PlayerCharacter player = null)
+        public void Destroy()
         {
             StopRun();
-            RemoveRecipe(player);
+            RemoveRecipe();
             RemoveWorker();
         }
 
@@ -221,35 +223,30 @@ namespace ProjectOC.ProNodeNS
         /// <summary>
         /// 更改生产项
         /// </summary>
-        /// <param name="recipeID">配方ID</param>
-        /// <returns>更改是否成功</returns>
-        public bool ChangeRecipe(Player.PlayerCharacter player, string recipeID)
+        public bool ChangeRecipe(string recipeID)
         {
             lock (this)
             {
-                if (player != null)
+                if (!string.IsNullOrEmpty(recipeID))
                 {
-                    if (!string.IsNullOrEmpty(recipeID))
+                    Recipe recipe = ManagerNS.LocalGameManager.Instance.RecipeManager.SpawnRecipe(recipeID);
+                    if (recipe != null)
                     {
-                        Recipe recipe = ManagerNS.LocalGameManager.Instance.RecipeManager.SpawnRecipe(recipeID);
-                        if (recipe != null)
+                        RemoveRecipe();
+                        Recipe = recipe;
+                        foreach (Formula raw in Recipe.Raw)
                         {
-                            RemoveRecipe(player);
-                            Recipe = recipe;
-                            foreach (Formula raw in Recipe.Raw)
-                            {
-                                RawItems.Add(raw.id, 0);
-                            }
-                            StartRun();
-                            return true;
+                            RawItems.Add(raw.id, 0);
                         }
-                    }
-                    else
-                    {
-                        RemoveRecipe(player);
-                        Recipe = null;
+                        StartRun();
                         return true;
                     }
+                }
+                else
+                {
+                    RemoveRecipe();
+                    Recipe = null;
+                    return true;
                 }
                 return false;
             }
@@ -258,12 +255,13 @@ namespace ProjectOC.ProNodeNS
         /// <summary>
         /// 移除当前生产项
         /// </summary>
-        public void RemoveRecipe(Player.PlayerCharacter player)
+        public void RemoveRecipe()
         {
             StopRun();
             // 将堆放的成品，素材，全部返还至玩家背包
             bool flag = false;
             List<Item> resItems = new List<Item>();
+            var inventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
             // 堆放的成品
             if (HasRecipe && StackAll > 0)
             {
@@ -276,7 +274,7 @@ namespace ProjectOC.ProNodeNS
                     }
                     else
                     {
-                        if (player == null || !player.Inventory.AddItem(item))
+                        if (!inventory.AddItem(item))
                         {
                             flag = true;
                         }
@@ -296,7 +294,7 @@ namespace ProjectOC.ProNodeNS
                     }
                     else
                     {
-                        if (player == null || !player.Inventory.AddItem(item))
+                        if (!inventory.AddItem(item))
                         {
                             flag = true;
                         }
@@ -306,9 +304,9 @@ namespace ProjectOC.ProNodeNS
             // 没有加到玩家背包的都变成WorldItem
             foreach (Item item in resItems)
             {
-#pragma warning disable CS4014
+                #pragma warning disable CS4014
                 ItemManager.Instance.SpawnWorldItem(item, WorldProNode.transform.position, WorldProNode.transform.rotation);
-#pragma warning restore CS4014
+                #pragma warning restore CS4014
             }
             // 清空数据
             List<MissionTransport> missions = new List<MissionTransport>();
@@ -606,7 +604,6 @@ namespace ProjectOC.ProNodeNS
                         }
                         amount = !complete && RawItems[itemID] < amount ? RawItems[itemID] : amount;
                         RawItems[itemID] -= amount;
-                        OnActionChange?.Invoke();
                         return amount;
                     }
                     else if (ProductItem == itemID)
@@ -619,7 +616,6 @@ namespace ProjectOC.ProNodeNS
                             }
                             amount = !complete && Stack < amount ? Stack : amount;
                             Stack -= amount;
-                            StartProduce();
                             OnActionChange?.Invoke();
                         }
                         else
@@ -631,6 +627,8 @@ namespace ProjectOC.ProNodeNS
                             amount = !complete && StackReserve < amount ? Stack : amount;
                             StackReserve -= amount;
                         }
+                        OnActionChange?.Invoke();
+                        StartProduce();
                         return amount;
                     }
                 }
@@ -640,17 +638,18 @@ namespace ProjectOC.ProNodeNS
         #endregion
 
         #region UI接口
-        public void UIRemove(Player.PlayerCharacter player, int amount)
+        public void UIRemove(int amount)
         {
             lock (this)
             {
-                if (player != null && amount > 0 && Stack >= amount)
+                if (amount > 0 && Stack >= amount)
                 {
                     List<Item> items = ItemManager.Instance.SpawnItems(ProductItem, amount);
+                    var inventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
                     foreach (Item item in items)
                     {
                         int itemAmount = item.Amount;
-                        if (player.Inventory.AddItem(item))
+                        if (inventory.AddItem(item))
                         {
                             Stack -= itemAmount;
                         }
@@ -663,24 +662,22 @@ namespace ProjectOC.ProNodeNS
                 }
             }
         }
-        public void UIFastAdd(Player.PlayerCharacter player)
+        public void UIFastAdd()
         {
             lock (this)
             {
-                if (player != null)
+                Dictionary<string, int> tempRawItems = new Dictionary<string, int>(RawItems);
+                var inventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
+                foreach (var kv in tempRawItems)
                 {
-                    Dictionary<string, int> tempRawItems = new Dictionary<string, int>(RawItems);
-                    foreach (var kv in tempRawItems)
+                    string itemID = kv.Key;
+                    int amount = inventory.GetItemAllNum(itemID);
+                    int maxAmount = StackMaxNum * Recipe.GetRawNum(itemID) - kv.Value;
+                    amount = amount <= maxAmount ? amount : maxAmount;
+                    if (inventory.RemoveItem(itemID, amount))
                     {
-                        string itemID = kv.Key;
-                        int amount = player.Inventory.GetItemAllNum(itemID);
-                        int maxAmount = StackMaxNum * Recipe.GetRawNum(itemID) - kv.Value;
-                        amount = amount >= maxAmount ? maxAmount : amount;
-                        if (player.Inventory.RemoveItem(itemID, amount))
-                        {
-                            RawItems[itemID] += amount;
-                            StartProduce();
-                        }
+                        RawItems[itemID] += amount;
+                        StartProduce();
                     }
                 }
             }
@@ -731,7 +728,7 @@ namespace ProjectOC.ProNodeNS
         {
             if (item != null)
             {
-                return Remove(item.ID, item.Amount, true) >= item.Amount;
+                return Remove(item.ID, item.Amount) >= item.Amount;
             }
             return false;
         }
@@ -747,7 +744,7 @@ namespace ProjectOC.ProNodeNS
         }
         public bool RemoveItem(string itemID, int amount)
         {
-            return Remove(itemID, amount, true) >= amount;
+            return Remove(itemID, amount) >= amount;
         }
         public int GetItemAllNum(string id)
         {

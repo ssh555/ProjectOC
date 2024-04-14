@@ -161,9 +161,9 @@ namespace ProjectOC.MissionNS
             List<Item> items = ItemManager.Instance.SpawnItems(ItemID, CurNum);
             foreach (Item item in items)
             {
-#pragma warning disable CS4014
+                #pragma warning disable CS4014
                 ItemManager.Instance.SpawnWorldItem(item, Worker.transform.position, Worker.transform.rotation);
-#pragma warning restore CS4014
+                #pragma warning restore CS4014
             }
             foreach (Item item in Worker.TransportItems)
             {

@@ -11,35 +11,33 @@ using ML.PlayerCharacterNS;
 using UnityEngine;
 using UnityEngine.AI;
 
+
 namespace ProjectOC.WorkerNS
 {
-    /// <summary>
-    /// 刁民
-    /// </summary>
-    [System.Serializable]
+    [LabelText("刁民"), System.Serializable]
     public class Worker : SerializedMonoBehaviour, ITickComponent,IAICharacter
     {
         public string InstanceID;
         #region 策划配置项
-        [LabelText("名字")]
+        [LabelText("名字"), FoldoutGroup("配置")]
         public string Name = "Worker";
-        [LabelText("性别")]
+        [LabelText("性别"), FoldoutGroup("配置")]
         public Gender Gender = Gender.Male;
-        [LabelText("当前体力值")]
+        [LabelText("当前体力值"), ReadOnly]
         public int APCurrent = 10;
-        [LabelText("体力上限")]
+        [LabelText("体力上限"), FoldoutGroup("配置")]
         public int APMax = 10;
-        [LabelText("体力工作阈值")]
+        [LabelText("体力工作阈值"), FoldoutGroup("配置")]
         public int APWorkThreshold = 8;
-        [LabelText("体力休息阈值")]
+        [LabelText("体力休息阈值"), FoldoutGroup("配置")]
         public int APRelaxThreshold = 9;
-        [LabelText("完成一次任务消耗的体力值")]
+        [LabelText("完成一次任务消耗的体力值"), FoldoutGroup("配置")]
         public int APCost = 1;
-        [LabelText("完成一次搬运消耗的体力值")]
+        [LabelText("完成一次搬运消耗的体力值"), FoldoutGroup("配置")]
         public int APCostTransport = 1;
-        [LabelText("移动速度")]
+        [LabelText("移动速度"), FoldoutGroup("配置")]
         public float WalkSpeed = 10;
-        [LabelText("当前负重")]
+        [LabelText("当前负重"), ShowInInspector, ReadOnly]
         public int BURCurrent
         {
             get
@@ -52,28 +50,29 @@ namespace ProjectOC.WorkerNS
                 return result;
             }
         }
-        [LabelText("负重上限")]
+        [LabelText("负重上限"), FoldoutGroup("配置")]
         public int BURMax = 100;
-        [LabelText("搬运经验值")]
+        [LabelText("搬运经验值"), FoldoutGroup("配置")]
         public int ExpTransport = 10;
-        [LabelText("刁民类型")]
+        [LabelText("刁民类型"), FoldoutGroup("配置")]
         public WorkType WorkType;
+        [LabelText("技能配置"), FoldoutGroup("配置"), ShowInInspector]
         public Dictionary<WorkType, string> SkillConfig = new Dictionary<WorkType, string>();
-        [LabelText("技能")]
+        [LabelText("技能"), ShowInInspector, ReadOnly]
         public Dictionary<WorkType, Skill> Skill = new Dictionary<WorkType, Skill>();
-        [LabelText("技能经验获取速度")]
+        [LabelText("技能经验获取速度"), ShowInInspector, ReadOnly]
         public Dictionary<WorkType, int> ExpRate = new Dictionary<WorkType, int>();
-        [LabelText("职业效率加成")]
+        [LabelText("职业效率加成"), ShowInInspector, ReadOnly]
         public Dictionary<WorkType, int> Eff = new Dictionary<WorkType, int>();
         #endregion
 
-        [LabelText("特性")]
+        [LabelText("特性"), ReadOnly]
         public List<Feature> Features = new List<Feature>();
 
-        [LabelText("每个时段的安排")]
+        [LabelText("每个时段的安排"), FoldoutGroup("配置")]
         public TimeArrangement TimeArrangement = new TimeArrangement();
 
-        [LabelText("当前时段的安排应该所处的状态")]
+        [LabelText("当前时段的安排应该所处的状态"), ShowInInspector, ReadOnly]
         public TimeStatus CurTimeFrameStatus 
         { 
             get 
@@ -87,14 +86,14 @@ namespace ProjectOC.WorkerNS
             } 
         }
 
-        [LabelText("状态机控制器")]
+        [LabelText("状态机控制器"), ShowInInspector, ReadOnly]
         protected StateController StateController = null;
         
-        [LabelText("状态机")]
+        [LabelText("状态机"), ShowInInspector, ReadOnly]
         protected WorkerStateMachine StateMachine = null;
 
         public Status status;
-        [LabelText("当前实际状态")]
+        [LabelText("当前实际状态"), ShowInInspector, ReadOnly]
         public Status Status
         {
             get { return status; }
@@ -108,26 +107,24 @@ namespace ProjectOC.WorkerNS
         public Action<Status> StatusChangeAction;
         public Action<int> APChangeAction;
         
-        [LabelText("是否在值班")]
+        [LabelText("是否在值班"), ShowInInspector, ReadOnly]
         public bool IsOnDuty { get { return HasProNode && this.Status != Status.Relaxing && ProNode.IsWorkerArrive; } }
-        
-        [LabelText("生产节点")]
+
+        [LabelText("生产节点"), ReadOnly]
         public ProNode ProNode = null;
+        [LabelText("是否有生产节点"), ShowInInspector, ReadOnly]
         public bool HasProNode { get => this.ProNode != null && !string.IsNullOrEmpty(this.ProNode.UID); }
-
-        [LabelText("是否到达生产节点")]
-        public bool ArriveProNode = false;
-
+        [ShowInInspector, ReadOnly]
         public Vector3 LastPosition;
         
-        [LabelText("搬运")]
+        [LabelText("搬运"), ReadOnly]
         public Transport Transport = null;
-        [ShowInInspector]
+        [LabelText("是否有搬运"), ShowInInspector, ReadOnly]
         public bool HasTransport { get => this.Transport != null && !string.IsNullOrEmpty(this.Transport.ItemID); }
-        [ShowInInspector]
+        [LabelText("搬运状态"), ShowInInspector, ReadOnly]
         public TransportState TransportState { get => (HasTransport && this.Transport.CurNum > 0) ? TransportState.HoldingObjects : TransportState.EmptyHanded; }
 
-        [LabelText("搬运物品")]
+        [LabelText("搬运物品"), ReadOnly]
         public List<Item> TransportItems = new List<Item>();
 
         #region ITickComponent
@@ -135,9 +132,9 @@ namespace ProjectOC.WorkerNS
         public int fixedTickPriority { get; set; }
         public int lateTickPriority { get; set; }
         #endregion
-
         public NavMeshAgent Agent = null;
         public float Threshold = 2f;
+        [ReadOnly]
         public Vector3 Target;
         public event Action<Worker> OnArrival;
         private event Action<Worker> OnArrivalDisposable;

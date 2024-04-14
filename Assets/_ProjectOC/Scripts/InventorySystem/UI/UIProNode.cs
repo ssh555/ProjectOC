@@ -17,6 +17,7 @@ using static ProjectOC.InventorySystem.UI.UIProNode;
 using ML.Engine.Utility;
 using UnityEngine.U2D;
 using ML.Engine.Manager;
+using ProjectOC.Player;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -344,8 +345,6 @@ namespace ProjectOC.InventorySystem.UI
         }
         #endregion
 
-        public Player.PlayerCharacter Player;
-
         protected override void UnregisterInput()
         {
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Disable();
@@ -435,7 +434,7 @@ namespace ProjectOC.InventorySystem.UI
             }
             else if (CurMode == Mode.ChangeRecipe)
             {
-                ProNode.ChangeRecipe(Player, CurrentRecipe);
+                ProNode.ChangeRecipe(CurrentRecipe);
                 IsInitCurRecipe = false;
                 CurMode = Mode.ProNode;
             }
@@ -484,7 +483,7 @@ namespace ProjectOC.InventorySystem.UI
                 }
                 else
                 {
-                    ProNode.UIRemove(Player, 1);
+                    ProNode.UIRemove(1);
                     Refresh();
                 }
             }
@@ -496,11 +495,11 @@ namespace ProjectOC.InventorySystem.UI
                 this.ItemIsDestroyed = true;
                 if (ProNode.Stack < 10)
                 {
-                    ProNode.UIRemove(Player, ProNode.Stack);
+                    ProNode.UIRemove(ProNode.Stack);
                 }
                 else
                 {
-                    ProNode.UIRemove(Player, 10);
+                    ProNode.UIRemove(10);
                 }
                 Refresh();
             }
@@ -515,7 +514,7 @@ namespace ProjectOC.InventorySystem.UI
                 }
                 else
                 {
-                    ProNode.UIFastAdd(Player);
+                    ProNode.UIFastAdd();
                 }
             }
             Refresh();
@@ -1172,7 +1171,7 @@ namespace ProjectOC.InventorySystem.UI
                     var uiItemData = tempUIItemsUpgrade[i];
                     string itemID = raw[i].id;
                     int need = raw[i].num;
-                    int current = Player.Inventory.GetItemAllNum(itemID);
+                    int current = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory.GetItemAllNum(itemID);
                     // Active
                     uiItemData.SetActive(true);
                     // 更新Icon

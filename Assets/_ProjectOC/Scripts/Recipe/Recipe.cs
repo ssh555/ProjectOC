@@ -7,10 +7,7 @@ using Sirenix.OdinInspector;
 
 namespace ML.Engine.InventorySystem
 {
-    /// <summary>
-    /// ≈‰∑Ω
-    /// </summary>
-    [System.Serializable]
+    [LabelText("≈‰∑Ω"), System.Serializable]
     public class Recipe
     {
         [LabelText("ID"), ReadOnly]

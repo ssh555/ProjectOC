@@ -21,6 +21,9 @@ namespace ML.Engine.BuildingSystem
         /// 升级时的回调，用于回调和更新数据
         /// </summary>
         public void OnUpgrade(IBuildingUpgrade lastLevelBuild);
+        /// <summary>
+        /// 升级时的回调，用于回调和更新数据
+        /// </summary>
         public void OnUpgrade(IBuildingUpgrade lastLevelBuild, IBuildingUpgradeParam param);
     }
 }

@@ -11,6 +11,8 @@ using static ProjectOC.InventorySystem.UI.UIStore;
 using System;
 using ML.Engine.BuildingSystem;
 using ProjectOC.ManagerNS;
+using ML.Engine.Manager;
+using ProjectOC.Player;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -306,8 +308,6 @@ namespace ProjectOC.InventorySystem.UI
         /// </summary>
         private bool HasUpgrade;
 
-        public Player.PlayerCharacter Player;
-
         protected override void UnregisterInput()
         {
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Disable();
@@ -434,7 +434,7 @@ namespace ProjectOC.InventorySystem.UI
         {
             if (CurMode == Mode.Store && CurStoreMode == StoreMode.ChangeItem)
             {
-                Store.UIFastAdd(Player, CurrentStoreData);
+                Store.UIFastAdd(CurrentStoreData);
                 Refresh();
             }
         }
@@ -448,7 +448,7 @@ namespace ProjectOC.InventorySystem.UI
                 }
                 else
                 {
-                    Store.UIRemove(Player, CurrentStoreData, 1);
+                    Store.UIRemove(CurrentStoreData, 1);
                     Refresh();
                 }
             }
@@ -460,11 +460,11 @@ namespace ProjectOC.InventorySystem.UI
                 this.ItemIsDestroyed = true;
                 if (CurrentStoreData.Storage < 10)
                 {
-                    Store.UIRemove(Player, CurrentStoreData, CurrentStoreData.Storage);
+                    Store.UIRemove(CurrentStoreData, CurrentStoreData.Storage);
                 }
                 else
                 {
-                    Store.UIRemove(Player, CurrentStoreData, 10);
+                    Store.UIRemove(CurrentStoreData, 10);
                 }
                 Refresh();
             }
@@ -513,7 +513,7 @@ namespace ProjectOC.InventorySystem.UI
             }
             else if (CurMode == Mode.ChangeItem)
             {
-                Store.UIChangeStoreData(Player, CurrentDataIndex, CurrentItemData);
+                Store.UIChangeStoreData(CurrentDataIndex, CurrentItemData);
                 this.CurMode = Mode.Store;
                 this.ItemDatas.Clear();
                 this.lastItemIndex = 0;
@@ -1044,7 +1044,7 @@ namespace ProjectOC.InventorySystem.UI
                     var uiItemData = tempUIItemDatasUpgrade[i];
                     string itemID = raw[i].id;
                     int need = raw[i].num;
-                    int current = Player.Inventory.GetItemAllNum(itemID);
+                    int current = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory.GetItemAllNum(itemID);
                     // Active
                     uiItemData.SetActive(true);
                     // ¸üÐÂIcon

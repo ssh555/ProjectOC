@@ -1,10 +1,10 @@
 using ML.Engine.BuildingSystem;
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InteractSystem;
-using ML.Engine.InventorySystem;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.Manager;
 using ProjectOC.ManagerNS;
+using ProjectOC.Player;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,6 @@ namespace ProjectOC.StoreNS
     {
         [LabelText("²Ö¿â"), ShowInInspector, ReadOnly, SerializeField]
         public Store Store;
-        public ItemIcon ItemIcon { get => GetComponentInChildren<ItemIcon>(); }
         public string InteractType { get; set; } = "WorldStore";
         public Vector3 PosOffset { get; set; } = Vector3.zero;
 
@@ -46,7 +45,6 @@ namespace ProjectOC.StoreNS
             GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIStorePanel.prefab", GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
             {
                 InventorySystem.UI.UIStore uiPanel = (handle.Result).GetComponent<InventorySystem.UI.UIStore>();
-                uiPanel.Player = component.GetComponentInParent<Player.PlayerCharacter>();
                 uiPanel.Store = this.Store;
                 uiPanel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
                 GameManager.Instance.UIManager.PushPanel(uiPanel);
@@ -56,11 +54,10 @@ namespace ProjectOC.StoreNS
         public bool CanUpgrade()
         {
             string CID = Classification.ToString();
-            if ((this as IBuildingUpgrade).CanUpgrade())
+            if ((this as IBuildingUpgrade).HasUpgrade())
             {
                 List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(CID);
-                Player.PlayerCharacter player = GameObject.Find("PlayerCharacter(Clone)")?.GetComponent<Player.PlayerCharacter>();
-                return player.InventoryHasItems(formulas);
+                return (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).InventoryHasItems(formulas);
             }
             return false;
         }
@@ -70,8 +67,7 @@ namespace ProjectOC.StoreNS
             string lastLevelID = BuildingManager.Instance.GetID(lastLevelBuild.Classification.ToString());
             string upgradeID = BuildingManager.Instance.GetID(Classification.ToString());
             CompositeManager.Instance.OnlyCostResource(upgradeID);
-            Player.PlayerCharacter player = GameObject.Find("PlayerCharacter(Clone)")?.GetComponent<Player.PlayerCharacter>();
-            CompositeManager.Instance.OnlyReturnResource(player.Inventory, lastLevelID);
+            CompositeManager.Instance.OnlyReturnResource(lastLevelID);
             transform.SetParent(lastLevelBuild.transform.parent);
             InstanceID = lastLevelBuild.InstanceID;
             transform.position = lastLevelBuild.transform.position;

@@ -9,11 +9,6 @@ namespace ProjectOC.LandMassExpand
     [System.Serializable]
     public class IslandModelManager :  ML.Engine.Manager.LocalManager.ILocalManager
     {
-        public void OnRegister()
-        {
-            Init();
-        }
-
         public IslandBase currentIsland;
         
 

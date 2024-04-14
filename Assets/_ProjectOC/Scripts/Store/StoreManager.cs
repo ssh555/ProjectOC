@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,10 +13,7 @@ namespace ProjectOC.StoreNS
         public string Icon;
     }
 
-    /// <summary>
-    /// 仓库管理器
-    /// </summary>
-    [System.Serializable]
+    [LabelText("仓库管理器"), System.Serializable]
     public sealed class StoreManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         public void OnRegister()
@@ -103,9 +101,9 @@ namespace ProjectOC.StoreNS
                 List<Store> stores = GetStores(priorityType);
                 foreach (Store store in stores)
                 {
-                    if ((!judgeInteracting || !store.IsInteracting) && (!judgeCanOut || store.IsStoreHaveItem(itemID, false, true)))
+                    if ((!judgeInteracting || !store.IsInteracting) && (!judgeCanOut || store.IsStoreHaveItem(itemID, false, judgeCanOut)))
                     {
-                        int storeAmount = store.GetDataNum(itemID, Store.DataType.Storage);
+                        int storeAmount = store.GetDataNum(itemID, Store.DataType.Storage, false, judgeCanOut);
                         if (storeAmount > 0)
                         {
                             if (resultAmount + storeAmount >= amount)
@@ -137,14 +135,13 @@ namespace ProjectOC.StoreNS
         {
             List<Store> stores = GetStores(priorityType);
             Store result = null;
-            // 从头到尾遍历仓库(跳过玩家正在交互的仓库)
             foreach (Store store in stores)
             {
-                if ((!judgeInteracting || !store.IsInteracting) && (!judgeCanIn || store.IsStoreHaveItem(itemID, true)))
+                if ((!judgeInteracting || !store.IsInteracting) && (!judgeCanIn || store.IsStoreHaveItem(itemID, judgeCanIn)))
                 {
                     // 优先寻找第一个可以一次性存完的仓库
                     // 若没有，则寻找第一个可以存入的，可溢出存入
-                    int empty = store.GetDataNum(itemID, Store.DataType.Empty, true);
+                    int empty = store.GetDataNum(itemID, Store.DataType.Empty, judgeCanIn);
                     if (result == null && empty > 0)
                     {
                         result = store;
@@ -199,10 +196,6 @@ namespace ProjectOC.StoreNS
                     worldStore.Store = store;
                     store.WorldStore = worldStore;
                     store.SetLevel(level);
-                }
-                else
-                {
-                    //Debug.LogError($"StoreType {storeType} cannot create store");
                 }
             }
         }

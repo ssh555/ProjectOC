@@ -4,10 +4,9 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.U2D;
 using System.Threading.Tasks;
-using UnityEngine.AddressableAssets;
 using ML.Engine.Manager.LocalManager;
-using ML.Engine.Manager;
 using ProjectOC.Player;
+
 
 namespace ML.Engine.InventorySystem
 {
@@ -321,14 +320,9 @@ namespace ML.Engine.InventorySystem
                 }
                 obj.transform.localScale = scale;
                 itemIcon = obj.GetComponentInChildren<ItemIcon>();
-                itemIcon.SetSprite(GetItemSprite(itemID ?? ""));
-                itemIcon.Player = GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>();
             }
-            else
-            {
-                itemIcon.SetSprite(GetItemSprite(itemID ?? ""));
-                itemIcon.Player = GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>();
-            }
+            itemIcon.SetSprite(GetItemSprite(itemID ?? ""));
+            itemIcon.Target = (Manager.GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).currentCharacter.transform;
         }
 
         public string GetItemName(string id)

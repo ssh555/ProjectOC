@@ -13,10 +13,7 @@ using UnityEngine;
 
 namespace ProjectOC.MissionNS
 {
-    /// <summary>
-    /// 任务调度管理器
-    /// </summary>
-    [System.Serializable]
+    [LabelText("任务调度管理器"), System.Serializable]
     public sealed class MissionManager : ILocalManager
     {
         [LabelText("搬运任务列表"), ShowInInspector, ReadOnly]

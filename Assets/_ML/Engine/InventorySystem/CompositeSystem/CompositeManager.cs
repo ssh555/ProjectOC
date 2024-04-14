@@ -1,9 +1,9 @@
 using ML.Engine.Manager;
-using ML.Engine.Manager.LocalManager;
-using ProjectOC.ManagerNS;
+using ProjectOC.Player;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
 
 namespace ML.Engine.InventorySystem.CompositeSystem
 {
@@ -21,26 +21,19 @@ namespace ML.Engine.InventorySystem.CompositeSystem
     }
 
     [System.Serializable]
-    public sealed class CompositeManager : ILocalManager
+    public sealed class CompositeManager : Manager.LocalManager.ILocalManager
     {
         public CompositeManager() { }
 
         public static CompositeManager Instance { get { return instance; } }
 
         private static CompositeManager instance;
-        /// <summary>
-        /// 单例管理
-        /// </summary>
-        public void Init()
-        {
-            LoadTableData();
-        }
         public void OnRegister()
         {
             if (instance == null)
             {
                 instance = this;
-                Init();
+                LoadTableData();
             }
         }
 
@@ -65,7 +58,6 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             Item,
             BuildingPart
         }
-
 
 
         public ML.Engine.ABResources.ABJsonAssetProcessor<CompositionTableData[]> ABJAProcessor;
@@ -116,19 +108,6 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <summary>
         /// 能否合成对应物品
         /// </summary>
-        public bool CanComposite(string id)
-        {
-            if (string.IsNullOrEmpty(id) || !this.CompositeData.ContainsKey(id) || this.CompositeData[id].formula == null)
-            {
-                return false;
-            }
-            ProjectOC.Player.PlayerCharacter player = GameObject.Find("PlayerCharacter(Clone)")?.GetComponent<ProjectOC.Player.PlayerCharacter>();
-            return player != null && player.InventoryHasItems(CompositeData[id].formula.ToList());
-        }
-
-        /// <summary>
-        /// 能否合成对应物品
-        /// </summary>
         /// <param name="resource"></param>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -138,15 +117,23 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             {
                 return false;
             }
-            foreach(var formula in this.CompositeData[id].formula)
+            foreach (var formula in this.CompositeData[id].formula)
             {
                 // 数量不够
-                if(resource.GetItemAllNum(formula.id) < formula.num)
+                if (resource.GetItemAllNum(formula.id) < formula.num)
                 {
                     return false;
                 }
             }
             return true;
+        }
+        public bool CanComposite(string id)
+        {
+            if (string.IsNullOrEmpty(id) || !this.CompositeData.ContainsKey(id) || this.CompositeData[id].formula == null)
+            {
+                return false;
+            }
+            return (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).InventoryHasItems(CompositeData[id].formula.ToList());
         }
 
         /// <summary>
@@ -186,7 +173,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
                 composition = item as IComposition;
                 return CompositionObjectType.Item;
             }
-            else if (LocalGameManager.Instance.RecipeManager.IsValidID(id))
+            else if (ProjectOC.ManagerNS.LocalGameManager.Instance.RecipeManager.IsValidID(id))
             {
                 Item item = ItemManager.Instance.SpawnItem(CompositeData[id].compositionid);
                 item.Amount = this.CompositeData[id].compositionnum;
@@ -223,9 +210,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         }
         public bool OnlyCostResource(string id)
         {
-            ProjectOC.Player.PlayerCharacter player = GameObject.Find("PlayerCharacter(Clone)")?.GetComponent<ProjectOC.Player.PlayerCharacter>();
-            var costItems = player.InventoryCostItems(CompositeData[id].formula.ToList(), true, true, -1);
-            return costItems != null;
+            return (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).InventoryCostItems(CompositeData[id].formula.ToList(), true, true, -1) != null;
         }
 
         /// <summary>
@@ -242,6 +227,23 @@ namespace ML.Engine.InventorySystem.CompositeSystem
                     foreach (var item in items)
                     {
                         resource.AddItem(item);
+                    }
+                }
+            }
+            return true;
+        }
+        public bool OnlyReturnResource(string id)
+        {
+            // 返回需要消耗的资源
+            if (!string.IsNullOrEmpty(id) && this.CompositeData.ContainsKey(id) && this.CompositeData[id].formula != null)
+            {
+                var inventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
+                foreach (var formula in this.CompositeData[id].formula)
+                {
+                    List<Item> items = ItemManager.Instance.SpawnItems(formula.id, formula.num);
+                    foreach (var item in items)
+                    {
+                        inventory.AddItem(item);
                     }
                 }
             }

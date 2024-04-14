@@ -1,54 +1,38 @@
 using ProjectOC.ManagerNS;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ProjectOC.WorkerNS
 {
-    /// <summary>
-    /// 技能
-    /// </summary>
-    [System.Serializable]
+    [LabelText("技能"), System.Serializable]
     public class Skill
     {
+        [LabelText("ID"), ReadOnly]
         public string ID = "";
-        /// <summary>
-        /// 效果
-        /// </summary>
+        [LabelText("效果"), ReadOnly]
         public List<Effect> Effects = new List<Effect>();
-        /// <summary>
-        /// 当前等级
-        /// </summary>
+        [LabelText("当前等级"), ReadOnly]
         public int Level = 0;
-        /// <summary>
-        /// 最大等级
-        /// </summary>
+        [LabelText("最大等级"), ReadOnly]
         public int LevelMax = 10;
-        /// <summary>
-        /// 当前经验
-        /// </summary>
+        [LabelText("当前经验"), ShowInInspector, ReadOnly]
         private int Exp;
 
         #region 读表属性
-        /// <summary>
-        /// 序号，用于排序
-        /// </summary>
+        [LabelText("序号"), ShowInInspector, ReadOnly]
         public int Sort { get => LocalGameManager.Instance.SkillManager.GetSort(ID); }
-        /// <summary>
-        /// 技能类型
-        /// </summary>
+        [LabelText("技能类型"), ShowInInspector, ReadOnly]
         public WorkType SkillType { get => LocalGameManager.Instance.SkillManager.GetSkillType(ID); }
-        /// <summary>
-        /// 技能描述
-        /// </summary>
+        [LabelText("技能描述"), ShowInInspector, ReadOnly]
         public string Desciption { get => LocalGameManager.Instance.SkillManager.GetItemDescription(ID); }
-        /// <summary>
-        /// 技能效果描述
-        /// </summary>
+        [LabelText("技能效果描述"), ShowInInspector, ReadOnly]
         public string EffectsDescription { get => LocalGameManager.Instance.SkillManager.GetEffectsDescription(ID); }
         #endregion
         public Skill()
         {
+
         }
         public Skill(SkillTableData config)
         {

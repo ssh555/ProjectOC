@@ -1,4 +1,5 @@
 using ProjectOC.ManagerNS;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,36 +7,21 @@ using UnityEngine;
 
 namespace ProjectOC.WorkerNS
 {
-    /// <summary>
-    /// 刁民效果
-    /// </summary>
-    [System.Serializable]
+    [LabelText("效果"), System.Serializable]
     public class Effect
     {
-        /// <summary>
-        /// ID
-        /// </summary>
+        [LabelText("ID"), ReadOnly]
         public string ID = "";
-        /// <summary>
-        /// 效果参数1 string
-        /// </summary>
+        [LabelText("效果参数1 string"), ReadOnly]
         public string ParamStr = "";
-        /// <summary>
-        /// 效果参数2 int
-        /// </summary>
+        [LabelText("效果参数2 int"), ReadOnly]
         public int ParamInt;
-        /// <summary>
-        /// 效果参数3 float
-        /// </summary>
+        [LabelText("效果参数3 float"), ReadOnly]
         public float ParamFloat;
         #region 读表属性
-        /// <summary>
-        /// 效果名称
-        /// </summary>
+        [LabelText("效果名称"), ShowInInspector, ReadOnly]
         public string Name { get => LocalGameManager.Instance.EffectManager.GetName(ID); }
-        /// <summary>
-        /// 效果类型
-        /// </summary>
+        [LabelText("效果类型"), ShowInInspector, ReadOnly]
         public EffectType EffectType { get => LocalGameManager.Instance.EffectManager.GetEffectType(ID); }
         #endregion
 
