@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 161a78b8e18f47d429e6cd903568d02a
   m_currentHash:
     serializedVersion: 2
-    Hash: 48a3c77951d677118889fe65f7ff76cc
+    Hash: dfb6f0fd0009f6ce54edadb8e75c03e4
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -98,6 +98,8 @@ MonoBehaviour:
     - BuildingPart
     - BPartMatPackage
     - NoticeUI
+    - PinchFaceType
+    - PinchFacePart
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: c4fe07db2f63a424e946087755813f1e, type: 2}

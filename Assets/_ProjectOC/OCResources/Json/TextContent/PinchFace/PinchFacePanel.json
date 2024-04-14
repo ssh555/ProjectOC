@@ -1,0 +1,46 @@
+{
+    "Btns" : [
+        {
+            "name" : "EnterBuild",
+            "description" : {
+                "Chinese" : "建造模式",
+                "English" : "EntetBuild"
+            }
+        },
+        {
+            "name" : "EnterTechTree",
+            "description" : {
+                "Chinese" : "科技树",
+                "English" : "TechTree"
+            }
+        },
+        {
+            "name" : "EnterInventory",
+            "description" : {
+                "Chinese" : "背包",
+                "English" : "Inventory"
+            }
+        },
+        {
+            "name" : "EnterBeastPanel",
+            "description" : {
+                "Chinese" : "查看隐兽",
+                "English" : "View Hidden Beasts"
+            }
+        },
+        {
+            "name" : "CreateWorker",
+            "description" : {
+                "Chinese" : "刁民",
+                "English" : "Worker"
+            }
+        },
+        {
+            "name" : "AddItem",
+            "description" : {
+                "Chinese" : "加入物品",
+                "English" : "AddItem"
+            }
+        }
+    ]
+}

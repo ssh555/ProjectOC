@@ -188,6 +188,10 @@ namespace ProjectOC.TechTree.UI
 
         #endregion
 
+        #region GraphCursorNavigation
+        private GraphCursorNavigation cursorNavigation;
+        #endregion
+
         #region Unity
         protected override void Awake()
         {
@@ -237,6 +241,8 @@ namespace ProjectOC.TechTree.UI
             this.TPUnlockingProgressBar = this.TPUnlockingState.Find("ProgressBar").GetComponent<Slider>();
             this.TPUnlockingState.gameObject.SetActive(false);
             #endregion
+
+            this.cursorNavigation = this.transform.GetComponentInChildren<GraphCursorNavigation>();
         }
 
         protected override void Start()
@@ -306,7 +312,7 @@ namespace ProjectOC.TechTree.UI
             //    this.inventory.AddItem(ItemSpawner.Instance.SpawnItem("100002"));
             //    this.inventory.AddItem(ItemSpawner.Instance.SpawnItem("100003"));
             //}
-
+            this.cursorNavigation.BindNavigationInput(ProjectOC.Input.InputManager.PlayerInput.TechTree.AlterTP);
         }
 
         public override void OnPause()
@@ -326,6 +332,7 @@ namespace ProjectOC.TechTree.UI
         {
             base.OnExit();
             ProjectOC.Input.InputManager.PlayerInput.TechTree.Disable();
+            this.cursorNavigation.DeBindNavigationInput();
         }
 
         protected override void Enter()

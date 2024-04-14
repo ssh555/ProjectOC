@@ -36,8 +36,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             Debug.Log(GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction);
             Debug.Log(GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding);
             Debug.Log((GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho);*/
-            workerEcho = (GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
-
+            //workerEcho = (GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
+            workerEcho = ((GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).currentCharacter
+                .interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
             //exclusivePart
             exclusivePart = this.transform.Find("ExclusivePart");
             exclusivePart.gameObject.SetActive(true);
