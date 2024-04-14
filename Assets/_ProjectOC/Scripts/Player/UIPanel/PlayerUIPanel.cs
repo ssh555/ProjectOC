@@ -78,7 +78,7 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("EnterBuild",
             () =>
             {
-                if (ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.WasPressedThisFrame() && BM.Mode == BuildingMode.None)
+                if (BM.Mode == BuildingMode.None)
                 {
                     if (BM.GetRegisterBPartCount() > 0)
                     {
