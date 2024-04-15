@@ -12,23 +12,38 @@ namespace ML.Engine.InventorySystem
     {
         [LabelText("ID"), ReadOnly]
         public string ID = "";
-
         #region 读表数据
-        [LabelText("排序"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 排序
+        /// </summary>
         public int Sort { get => LocalGameManager.Instance.RecipeManager.GetSort(ID); }
-        [LabelText("类目"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 类目
+        /// </summary>
         public RecipeCategory Category { get => LocalGameManager.Instance.RecipeManager.GetCategory(ID); }
-        [LabelText("原料"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 原料
+        /// </summary>
         public List<Formula> Raw { get => LocalGameManager.Instance.RecipeManager.GetRaw(ID); }
-        [LabelText("成品"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 成品
+        /// </summary>
         public Formula Product { get => LocalGameManager.Instance.RecipeManager.GetProduct(ID); }
-        [LabelText("成品ID"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 成品ID
+        /// </summary>
         public string ProductID { get => LocalGameManager.Instance.RecipeManager.GetProduct(ID).id; }
-        [LabelText("成品数量"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 成品数量
+        /// </summary>
         public int ProductNum { get => LocalGameManager.Instance.RecipeManager.GetProduct(ID).num; }
-        [LabelText("时间消耗，进行1次生产需要多少秒"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 时间消耗，进行1次生产需要多少秒
+        /// </summary>
         public int TimeCost { get => LocalGameManager.Instance.RecipeManager.GetTimeCost(ID); }
-        [LabelText("配方经验"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 配方经验
+        /// </summary>
         public int ExpRecipe { get => LocalGameManager.Instance.RecipeManager.GetExpRecipe(ID); }
         #endregion
 

@@ -57,38 +57,64 @@ namespace ProjectOC.ProNodeNS
         #endregion
 
         #region 读表数据
-        [LabelText("名称"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 名称
+        /// </summary>
         public string Name { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetName(ID); }
-        [LabelText("生产节点类型"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 生产节点类型
+        /// </summary>
         public ProNodeType ProNodeType { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetProNodeType(ID); }
-        [LabelText("生产节点类目"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 生产节点类目
+        /// </summary>
         public RecipeCategory Category { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetCategory(ID); }
-        [LabelText("生产节点可执行配方类目"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 生产节点可执行配方类目
+        /// </summary>
         public List<RecipeCategory> RecipeCategoryFilter { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetRecipeCategoryFilterd(ID); }
-        [LabelText("经验类型"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 经验类型
+        /// </summary>
         public WorkType ExpType { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetExpType(ID); }
-        [LabelText("堆放上限份数"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 堆放上限份数
+        /// </summary>
         public int StackMaxNum { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetStack(ID); }
-        [LabelText("堆放阈值份数"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 堆放阈值份数
+        /// </summary>
         public int StackThresholdNum { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetStackThreshold(ID); }
-        [LabelText("需求阈值份数"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 需求阈值份数
+        /// </summary>
         public int RawThresholdNum { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetRawThreshold(ID); }
         #endregion
 
         #region Property
         [LabelText("是否有生产配方"), ShowInInspector, ReadOnly]
         public bool HasRecipe { get => Recipe != null && !string.IsNullOrEmpty(Recipe.ID); }
-        [LabelText("是否有刁民"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 是否有刁民
+        /// </summary>
         public bool HasWorker { get => ProNodeType == ProNodeType.Mannul && Worker != null && !string.IsNullOrEmpty(Worker.Name); }
         [LabelText("总堆积数量"), ShowInInspector, ReadOnly]
         public int StackAll { get { return StackReserve + Stack; } }
-        [LabelText("总堆积份数"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 总堆积份数
+        /// </summary>
         public int StackAllNum { get => (ProductNum != 0) ? (StackAll / ProductNum) : StackAll; }
-        [LabelText("没有分配任务的堆积份数"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 没有分配任务的堆积份数
+        /// </summary>
         public int StackNum { get => (ProductNum != 0) ? (Stack / ProductNum): Stack; }
-        [LabelText("生产物ID"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 生产物ID
+        /// </summary>
         public string ProductItem { get => Recipe?.ProductID ?? ""; }
-        [LabelText("一次生产的生产物数量"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 一次生产的生产物数量
+        /// </summary>
         public int ProductNum { get => Recipe?.ProductNum ?? 0; }
         [LabelText("是否正在运行"), ShowInInspector, ReadOnly]
         public bool IsOnRunning { get => timerForMission != null && !timerForMission.IsStoped; }
@@ -96,7 +122,9 @@ namespace ProjectOC.ProNodeNS
         public bool IsOnProduce { get => timerForProduce != null && !timerForProduce.IsStoped; }
         [LabelText("生产节点状态"), ShowInInspector, ReadOnly]
         public ProNodeState State { get => HasRecipe ? (IsOnProduce ? ProNodeState.Production : ProNodeState.Stagnation) : ProNodeState.Vacancy; }
-        [LabelText("生产效率"), PropertyTooltip("单位 %"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 生产效率 单位%
+        /// </summary>
         public int Eff { get => HasWorker ? EffBase + Worker.Eff[ExpType] : EffBase; }
         [LabelText("生产一次所需要的时间"), ShowInInspector, ReadOnly]
         public int TimeCost { get => HasRecipe && Eff > 0 ? (int)Math.Ceiling((double)100 * Recipe.TimeCost / Eff) : 0; }

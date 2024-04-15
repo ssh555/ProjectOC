@@ -46,9 +46,13 @@ namespace ProjectOC.StoreNS
         #endregion
 
         #region Property
-        [LabelText("仓库容量"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 仓库容量
+        /// </summary>
         public int StoreCapacity { get { return this.LevelStoreCapacity[this.Level]; } }
-        [LabelText("仓库数据的容量"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 仓库数据的容量
+        /// </summary>
         public int StoreDataCapacity { get { return this.LevelStoreDataCapacity[this.Level]; } }
         #endregion
 

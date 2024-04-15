@@ -21,13 +21,21 @@ namespace ProjectOC.WorkerNS
         private int Exp;
 
         #region 读表属性
-        [LabelText("序号"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 序号
+        /// </summary>
         public int Sort { get => LocalGameManager.Instance.SkillManager.GetSort(ID); }
-        [LabelText("技能类型"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 技能类型
+        /// </summary>
         public WorkType SkillType { get => LocalGameManager.Instance.SkillManager.GetSkillType(ID); }
-        [LabelText("技能描述"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 技能描述
+        /// </summary>
         public string Desciption { get => LocalGameManager.Instance.SkillManager.GetItemDescription(ID); }
-        [LabelText("技能效果描述"), ShowInInspector, ReadOnly]
+        /// <summary>
+        /// 技能效果描述
+        /// </summary>
         public string EffectsDescription { get => LocalGameManager.Instance.SkillManager.GetEffectsDescription(ID); }
         #endregion
         public Skill()
