@@ -17,7 +17,7 @@ namespace ProjectOC.Order
 
         //剩余没扣除的物品
         private Dictionary<string,int> remainRequireItemDic = new Dictionary<string,int>();
-
+        private Dictionary<string, int> RequireItem = new Dictionary<string, int>();
         public Dictionary<string, int> RemainRequireItemDic
         {
             get { return remainRequireItemDic; }
@@ -42,18 +42,28 @@ namespace ProjectOC.Order
             foreach (var item in RequireItemList)
             {
                 this.remainRequireItemDic.Add(item.id, item.num);
+                RequireItem.Add(item.id, item.num);
                 addedItemDic.Add(item.id, 0);
             }
 
         }
 
-        public void ChangeRequireItemDic(string ItemId,int ItemNum)
+        public bool ChangeRequireItemDic(string ItemId,int ItemNum)
         {
             if(this.remainRequireItemDic.ContainsKey(ItemId))
             {
                 remainRequireItemDic[ItemId] -= ItemNum;
                 addedItemDic[ItemId] += ItemNum;
             }
+
+            foreach (var item in RequireItem)
+            {
+                if (addedItemDic[item.Key] != item.Value)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
     }

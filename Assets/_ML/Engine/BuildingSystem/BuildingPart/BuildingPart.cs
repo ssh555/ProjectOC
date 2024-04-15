@@ -30,6 +30,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         {
             get
             {
+                //Debug.Log($"{this.canPlaceInPlaceMode} {this.AttachedArea != null} {this.AttachedSocket != null} {this.CheckCanInPlaceMode.Invoke(this)}");
                 return this.canPlaceInPlaceMode && (this.AttachedArea != null || this.AttachedSocket != null) && (this.CheckCanInPlaceMode == null ? true : this.CheckCanInPlaceMode.Invoke(this));
             }
             set => canPlaceInPlaceMode = value; 
@@ -109,7 +110,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 }
                 else if (value != null)
                 {
-                    if ((value.Type & this.ActiveSocket.CanPlaceAreaType) != 0)
+                    if (value.CheckAreaTypeMatch(this))
                     {
                         this.attachedArea = value;
                     }
@@ -132,7 +133,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 }
                 else if(value != null)
                 {
-                    if ((value.InTakeType & this.ActiveSocket.Type) != 0)
+                    if (this.ActiveSocket.CheckMatch(value))
                     {
                         this.attachedSocket = value;
                     }
@@ -162,7 +163,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         {
             ActiveSocket.OnDisactive();
             this.activeSocketIndex = (this.activeSocketIndex + 1) % this.OwnedSocketList.Count;
-            while(this.ActiveSocket.Type == BuildingSocket.BuildingSocketType.None)
+            while(!this.ActiveSocket.IsActiveSocket)
             {
                 this.activeSocketIndex = (this.activeSocketIndex + 1) % this.OwnedSocketList.Count;
             }
@@ -229,6 +230,13 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             this.OwnedSocketList = new List<BuildingSocket.BuildingSocket>();
             this.OwnedSocketList.AddRange(this.GetComponentsInChildren<BuildingSocket.BuildingSocket>());
 
+            // 指向第一个可切换的Socket
+            this.activeSocketIndex = 0;
+            while (!this.ActiveSocket.IsActiveSocket)
+            {
+                this.activeSocketIndex = (this.activeSocketIndex + 1) % this.OwnedSocketList.Count;
+            }
+
             //this.ActiveSocket = this.OwnedSocketList[0];
             this.enabled = true;
         }
@@ -244,19 +252,37 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             {
                 if(col.gameObject.layer != 8)
                 {
-                    col.isTrigger = isTrigger;
+                    if(col is MeshCollider)
+                    {
+                        MeshCollider mcol = col as MeshCollider;
+                        // 赋值顺序不能颠倒
+                        if(isTrigger)
+                        {
+                            mcol.convex = true;
+                            mcol.isTrigger = true;
+                        }
+                        else
+                        {
+                            mcol.isTrigger = false;
+                            mcol.convex = false;
+                        }
+                    }
+                    else
+                    {
+                        col.isTrigger = isTrigger;
+                    }
                 }
             }
-            //foreach(var socket in this.GetComponentsInChildren<BuildingSocket.BuildingSocket>())
-            //{
-            //    socket.enabled = !isTrigger;
-            //}
-            //foreach (var area in this.GetComponentsInChildren<BuildingArea.BuildingArea>())
-            //{
-            //    area.enabled = !isTrigger;
-            //}
+            foreach (var socket in this.GetComponentsInChildren<BuildingSocket.BuildingSocket>())
+            {
+                socket.enabled = !isTrigger;
+            }
+            foreach (var area in this.GetComponentsInChildren<BuildingArea.BuildingArea>())
+            {
+                area.enabled = !isTrigger;
+            }
 
-            if(isTrigger == true && this.GetComponent<Rigidbody>() == null)
+            if (isTrigger == true && this.GetComponent<Rigidbody>() == null)
             {
                 this.gameObject.AddComponent<Rigidbody>().isKinematic = true;
             }
@@ -302,6 +328,18 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         {
 
         }
+
+        //private void OnDrawGizmosSelected()
+        //{
+        //    foreach(var col in this.GetComponentsInChildren<BuildingSocket.BuildingSocket>())
+        //    {
+        //        Extension.GizmosExtension.DrawWireCollider(col.GetComponent<Collider>(), Color.yellow);
+        //    }
+        //    foreach (var col in this.GetComponentsInChildren<BuildingArea.BuildingArea>())
+        //    {
+        //        Extension.GizmosExtension.DrawWireCollider(col.GetComponent<Collider>(), Color.blue);
+        //    }
+        //}
     }
 
 

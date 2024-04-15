@@ -121,7 +121,11 @@ namespace ML.Engine.BuildingSystem
                     var bpart = obj.GetComponent<IBuildingPart>();
                     if (bpart != null)
                     {
-                        this.LoadedBPart.Add(bpart.Classification, bpart);
+                        if(!this.LoadedBPart.TryAdd(bpart.Classification, bpart))
+                        {
+                            Debug.LogError($"{bpart.Classification.ToString()} 重复配置: {bpart.gameObject.name}");
+                        }
+                        
                         // to-do : 仅测试用，后续接入科技树后需注释掉
 #if UNITY_EDITOR
                         if (IsAddBPartOnRegister)

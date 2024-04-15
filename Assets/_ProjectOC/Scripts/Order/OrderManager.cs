@@ -14,6 +14,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static ProjectOC.TechTree.TechTreeManager;
 
 
 
@@ -35,26 +36,31 @@ namespace ProjectOC.Order
         /// <summary>
         /// 当前每个种类的已经解锁的订单ID 订单类型，该类型已解锁的订单ID数组
         /// </summary>
+        [ShowInInspector]
         private Dictionary<OrderType, List<string>>  UnlockedOrderMap = new Dictionary<OrderType, List<string>>();
 
         /// <summary>
         /// 当前每个氏族已经解锁的紧急订单
         /// </summary>
+        [ShowInInspector]
         private Dictionary<string, List<string>> UnlockedUrgentOrderMap = new Dictionary<string, List<string>>();
 
         /// <summary>
         /// 当前订单委托中存在的订单(string 氏族ID,OrderType type)，List<Order>
         /// </summary>
+        [ShowInInspector]
         private Dictionary<(string, OrderType), List<Order>> OrderDelegationMap = new Dictionary<(string, OrderType), List<Order>>();
 
         /// <summary>
         /// 当前正在等待刷新的常规订单 (string 氏族ID,OrderType type)，List<Order>
         /// </summary>
+        [ShowInInspector]
         private List<OrderNormal> WaitingForRefreshNormalOrders = new List<OrderNormal>();
 
         /// <summary>
         /// 已承接订单结构体
         /// </summary>
+        [Serializable]
         private struct AcceptedOrder : IComparable<AcceptedOrder>
         {
             public Order order;
@@ -100,6 +106,7 @@ namespace ProjectOC.Order
         /// <summary>
         /// 已承接列表的订单 (string 氏族ID,OrderType type)，List<Order>
         /// </summary>
+        [ShowInInspector]
         private List<AcceptedOrder> AcceptedList = new List<AcceptedOrder>();
         private static int curAcceptOrder = 0;
 
@@ -133,17 +140,17 @@ namespace ProjectOC.Order
         public void Init()
         {
             //TODO 之后由氏族模块处理
-            OrderDelegationMap.Add(("ID1",OrderType.Urgent), new List<Order>(2));
+            OrderDelegationMap.Add(("ID1", OrderType.Urgent), new List<Order>() { null, null });
             OrderDelegationMap.Add(("ID1", OrderType.Special), new List<Order>());
             OrderDelegationMap.Add(("ID1", OrderType.Normal), new List<Order>());
 
 
-            OrderDelegationMap.Add(("ID2", OrderType.Urgent), new List<Order>(2));
+            OrderDelegationMap.Add(("ID2", OrderType.Urgent), new List<Order>() { null, null });
             OrderDelegationMap.Add(("ID2", OrderType.Special), new List<Order>());
             OrderDelegationMap.Add(("ID2", OrderType.Normal), new List<Order>());
 
 
-            OrderDelegationMap.Add(("ID3", OrderType.Urgent), new List<Order>(2));
+            OrderDelegationMap.Add(("ID3", OrderType.Urgent), new List<Order>() { null, null });
             OrderDelegationMap.Add(("ID3", OrderType.Special), new List<Order>());
             OrderDelegationMap.Add(("ID3", OrderType.Normal), new List<Order>());
 
@@ -254,31 +261,25 @@ namespace ProjectOC.Order
         {
             for (int i = 0; i < AcceptedList.Count; i++) 
             {
-                OrderTableData orderTableData = OrderTableDataDic[AcceptedList[i].order.OrderID];
-
-                // 能扣先扣
-
-                //扣背包
-                foreach (var requireItem in orderTableData.RequireList)
+                
+                Order order = AcceptedList[i].order;
+                OrderTableData orderTableData = OrderTableDataDic[order.OrderID];
+                List<Formula> formulaList = new List<Formula>();
+                foreach (var requireItem in AcceptedList[i].order.RemainRequireItemDic)
                 {
-                    //够扣全扣
-                    if (PlayerInventory.RemoveItem(requireItem.id, requireItem.num))
-                    {
-                        AcceptedList[i].order.ChangeRequireItemDic(requireItem.id, requireItem.num);
-                    }
-                    else//不够把有的扣
-                    {
-                        AcceptedList[i].SetCanBeCommit(false);
-                        var hasnum = PlayerInventory.GetItemAllNum(requireItem.id);
-                        PlayerInventory.RemoveItem(requireItem.id, hasnum);
-                        AcceptedList[i].order.ChangeRequireItemDic(requireItem.id, hasnum);
-                    }
+                    formulaList.Add(new Formula() { id = requireItem.Key,num = requireItem.Value});
                 }
 
-                //TODO按顺序扣仓库
-                if (!AcceptedList[i].canBeCommit) 
+                //扣除
+                formulaList = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).InventoryCostItems(formulaList, priority:-1);
+
+                foreach (var AddedItem in formulaList)
                 {
-                    //LocalGameManager.Instance.StoreManager.GetStores
+                    bool isFinish = order.ChangeRequireItemDic(AddedItem.id, AddedItem.num);
+                    if(isFinish)
+                    {
+                        AcceptedList[i].SetCanBeCommit(true);
+                    }
                 }
             }
 
@@ -521,7 +522,17 @@ namespace ProjectOC.Order
         #region Load
         private void LoadTableData()
         {
-            
+            ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]> ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]>("OC/Json/TableData", "Order", (datas) =>
+            {
+                foreach (var data in datas)
+                {
+                    //TODO 暂时直接解锁
+                    UnlockOrder(data.ID);
+                    this.OrderTableDataDic.Add(data.ID, data);
+                }
+                
+            }, "订单数据");
+            ABJAProcessor.StartLoadJsonAssetData();
 
         }
         #endregion

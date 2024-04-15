@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89cc96c1e7cb84a4f8fb2f7a53cc3a93, type: 3}
+  m_Script: {fileID: 11500000, guid: e04c33259d65b934fa9ee5353f84593e, type: 3}
   m_Name: BuildingSocketType
   m_EditorClassIdentifier: 
   serializationData:
@@ -22,108 +22,17 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   enumNamespace: ML.Engine.BuildingSystem.BuildingSocket
-  AllName:
-    name: All
-    displayName: All
-    value: 
   NoneName:
     name: None
     displayName: None
     value: 
-  Enums:
-  - name: Foundation
-    displayName: "\u5730\u57FA\u5C42"
+  EnumList:
+  - name: Floor_Base_AdjacementCenter
+    displayName: Floor_Base_AdjacementCenter
     value: 
-  - name: Floor
-    displayName: "\u5730\u677F\u5C42"
+  - name: Floor_Triangle_AdjacementCenter
+    displayName: Floor_Triangle_AdjacementCenter
     value: 
-  - name: Wall
-    displayName: "\u5899\u5C42"
-    value: 
-  - name: Ground
-    displayName: "\u5730\u9762\u5C42"
-    value: 
-  - name: Piliar
-    displayName: "\u67F1"
-    value: 
-  - name: Beam
-    displayName: "\u6881"
-    value: 
-  - name: Roof
-    displayName: "\u5C4B\u9876"
-    value: 
-  - name: Door
-    displayName: "\u95E8"
-    value: 
-  - name: Window
-    displayName: "\u7A97"
-    value: 
-  - name: FoundationEdge
-    displayName: "\u5730\u57FA\u5916\u56F4"
-    value: 
-  - name: UnderFloor
-    displayName: "\u5730\u677F\u4E0B"
-    value: 
-  - name: WallSpace
-    displayName: "\u5899\u9762"
-    value: 
-  - name: PowerCore
-    displayName: "\u751F\u547D\u5BFC\u6D41\u6869"
-    value: 
-  - name: PowerSub
-    displayName: "\u5BFC\u6D41\u8282\u70B9"
-    value: 
-  - name: 
-    displayName: 
-    value: 
-  - name: 
-    displayName: 
-    value: 
-  - name: 
-    displayName: 
-    value: 
-  - name: 
-    displayName: 
-    value: 
-  - name: 
-    displayName: 
-    value: 
-  - name: 
-    displayName: 
-    value: 
-  - name: 
-    displayName: 
-    value: 
-  - name: 
-    displayName: 
-    value: 
-  - name: 
-    displayName: 
-    value: 
-  - name: 
-    displayName: 
-    value: 
-  - name: 
-    displayName: 
-    value: 
-  - name: 
-    displayName: 
-    value: 
-  - name: 
-    displayName: 
-    value: 
-  - name: 
-    displayName: 
-    value: 
-  - name: 
-    displayName: 
-    value: 
-  - name: 
-    displayName: 
-    value: 
-  - name: 
-    displayName: 
-    value: 
-  - name: 
-    displayName: 
+  - name: Floor_Quagrant_AdjacementCenter
+    displayName: Floor_Quagrant_AdjacementCenter
     value: 

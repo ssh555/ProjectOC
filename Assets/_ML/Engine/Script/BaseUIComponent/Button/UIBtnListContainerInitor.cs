@@ -42,6 +42,11 @@ namespace ML.Engine.UI
                 isHorizontal = false
             };
 
+            public void AddLinkData(LinkData linkData)
+            {
+                this.LinkDatas.Add(linkData);
+            }
+
             // 根据 containerType 显示 LinkDatas 字段
             private bool ShowLinkDatas()
             {
@@ -63,20 +68,20 @@ namespace ML.Engine.UI
 
         public enum EdgeType
         {
-            LP = 0,
-            LN,
-            RP,
-            RN,
-            UP,
-            UN,
-            DP,
-            DN
+            左侧顺时针 = 0,
+            左侧逆时针,
+            右侧顺时针,
+            右侧逆时针,
+            上侧顺时针,
+            上侧逆时针,
+            下侧顺时针,
+            下侧逆时针
         }
 
         public enum LinkType
         {
-            LTR = 0,
-            UTD
+            左右相连 = 0,
+            上下相连
         }
 
         [Serializable]
@@ -90,6 +95,16 @@ namespace ML.Engine.UI
 
             [LabelText("该连接的类型")]
             public LinkType linktype;
+
+            public LinkData(int btnlist1, int btnlist2, EdgeType btnlist1type, EdgeType btnlist2type, LinkType linktype)
+            {
+                this.btnlist1 = btnlist1;
+                this.btnlist2 = btnlist2;
+
+                this.btnlist1type = btnlist1type;
+                this.btnlist2type = btnlist2type;
+                this.linktype = linktype;
+            }
         }
 
         public enum ContainerType

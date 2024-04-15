@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e04c33259d65b934fa9ee5353f84593e, type: 3}
+  m_Name: BuildingAreaType
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  enumNamespace: ML.Engine.BuildingSystem.BuildingArea
+  NoneName:
+    name: None
+    displayName: None
+    value: 
+  EnumList:
+  - name: Ground
+    displayName: Ground
+    value: 
+  - name: Floor
+    displayName: Floor
+    value: 
+  - name: Table
+    displayName: Table
+    value: 
+  - name: Wall
+    displayName: Wall
+    value: 
