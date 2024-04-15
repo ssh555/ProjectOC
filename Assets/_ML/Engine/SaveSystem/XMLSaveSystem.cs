@@ -32,13 +32,16 @@ namespace ML.Engine.SaveSystem
                             XDocument xml = XDocument.Parse(xmlFromFile);
                             T loadedData = Activator.CreateInstance<T>();
                             Dictionary<string, PropertyInfo> properties = typeof(T).GetProperties().ToDictionary(p => p.Name);
+                            Dictionary<string, FieldInfo> fields = typeof(T).GetFields().ToDictionary(p => p.Name);
                             foreach (XElement element in xml.Descendants())
                             {
-                                string propertyName = element.Name.LocalName;
-                                if (properties.TryGetValue(propertyName, out PropertyInfo property))
+                                if (properties.TryGetValue(element.Name.LocalName, out PropertyInfo property))
                                 {
-                                    object value = Convert.ChangeType(element.Value, property.PropertyType);
-                                    property.SetValue(loadedData, value);
+                                    property.SetValue(loadedData, Convert.ChangeType(element.Value, property.PropertyType));
+                                }
+                                if (fields.TryGetValue(element.Name.LocalName, out FieldInfo field))
+                                {
+                                    field.SetValue(loadedData, Convert.ChangeType(element.Value, field.FieldType));
                                 }
                             }
                             loadedData.SavePath = Path.GetDirectoryName(relativePath);
@@ -67,13 +70,16 @@ namespace ML.Engine.SaveSystem
                     XDocument xml = XDocument.Parse(xmlFromFile);
                     T loadedData = Activator.CreateInstance<T>();
                     Dictionary<string, PropertyInfo> properties = typeof(T).GetProperties().ToDictionary(p => p.Name);
+                    Dictionary<string, FieldInfo> fields = typeof(T).GetFields().ToDictionary(p => p.Name);
                     foreach (XElement element in xml.Descendants())
                     {
-                        string propertyName = element.Name.LocalName;
-                        if (properties.TryGetValue(propertyName, out PropertyInfo property))
+                        if (properties.TryGetValue(element.Name.LocalName, out PropertyInfo property))
                         {
-                            object value = Convert.ChangeType(element.Value, property.PropertyType);
-                            property.SetValue(loadedData, value);
+                            property.SetValue(loadedData, Convert.ChangeType(element.Value, property.PropertyType));
+                        }
+                        if (fields.TryGetValue(element.Name.LocalName, out FieldInfo field))
+                        {
+                            field.SetValue(loadedData, Convert.ChangeType(element.Value, field.FieldType));
                         }
                     }
                     reader.Close();

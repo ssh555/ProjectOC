@@ -104,11 +104,14 @@ namespace ML.Engine.SaveSystem
                     }
                     string fileName = Path.GetFileName(kv.Key);
                     object loadData = MethodDict[kv.Value].Invoke(oldSystem, new object[] { Path.Combine(saveDataFolder.SavePath, fileName), Config.UseEncrption });
-                    ISaveData data = (ISaveData)loadData;
-                    data.IsDirty = true;
-                    data.SaveName = fileName;
-                    data.SavePath = saveDataFolder.SavePath;
-                    newSystem.SaveData(data, Temp.UseEncrption);
+                    if (loadData != null)
+                    {
+                        ISaveData data = (ISaveData)loadData;
+                        data.IsDirty = true;
+                        data.SaveName = fileName;
+                        data.SavePath = saveDataFolder.SavePath;
+                        newSystem.SaveData(data, Temp.UseEncrption);
+                    }
                 }
                 newSystem.SaveData(saveDataFolder, Temp.UseEncrption);
             }

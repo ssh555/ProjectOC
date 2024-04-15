@@ -86,7 +86,7 @@ namespace ML.Engine.SaveSystem
                     {
                         for (int i = 0; i < MAXSAVEDATACOUNT; i++)
                         {
-                            if (configs[i] != null && File.Exists(Path.Combine(configs[i], "SaveConfig")))
+                            if (configs[i] != null && File.Exists(Path.Combine(SavePath, configs[i], "SaveConfig")))
                             {
                                 ConfigPaths[i] = configs[i];
                                 SaveDataFolders[i] = LoadData<SaveDataFolder>(Path.Combine(ConfigPaths[i], "SaveConfig"));
@@ -338,11 +338,14 @@ namespace ML.Engine.SaveSystem
                         }
                         string fileName = Path.GetFileName(kv.Key);
                         object loadData = MethodDict[kv.Value].Invoke(this, new object[] { Path.Combine(saveDataFolder.Name, fileName) });
-                        ISaveData data = (ISaveData) loadData;
-                        data.SavePath = saveDataFolder.Name;
-                        data.SaveName = fileName;
-                        data.IsDirty = false;
-                        this.Datas.Add(data);
+                        if (loadData != null) 
+                        {
+                            ISaveData data = (ISaveData)loadData;
+                            data.SavePath = saveDataFolder.Name;
+                            data.SaveName = fileName;
+                            data.IsDirty = false;
+                            this.Datas.Add(data);
+                        }
                     }
                 });
                 this.IsLoadedSaveData = true;

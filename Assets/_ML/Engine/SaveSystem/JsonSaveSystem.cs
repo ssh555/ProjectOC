@@ -30,14 +30,20 @@ namespace ML.Engine.SaveSystem
                             string jsonFromFile = reader.ReadToEnd();
                             JObject json = JObject.Parse(jsonFromFile);
                             T objFromFile = Activator.CreateInstance<T>();
-                            PropertyInfo[] properties = typeof(T).GetProperties();
-                            foreach (PropertyInfo property in properties)
+                            foreach (PropertyInfo property in typeof(T).GetProperties())
                             {
-                                string propertyName = property.Name;
-                                if (json.ContainsKey(propertyName))
+                                if (json.ContainsKey(property.Name))
                                 {
-                                    JToken value = json.GetValue(propertyName);
+                                    JToken value = json.GetValue(property.Name);
                                     property.SetValue(objFromFile, value.ToObject(property.PropertyType));
+                                }
+                            }
+                            foreach (FieldInfo field in typeof(T).GetFields())
+                            {
+                                if (json.ContainsKey(field.Name))
+                                {
+                                    JToken value = json.GetValue(field.Name);
+                                    field.SetValue(objFromFile, value.ToObject(field.FieldType));
                                 }
                             }
                             objFromFile.SavePath = Path.GetDirectoryName(relativePath);
@@ -65,14 +71,20 @@ namespace ML.Engine.SaveSystem
                     string jsonFromFile = reader.ReadToEnd();
                     JObject json = JObject.Parse(jsonFromFile);
                     T objFromFile = Activator.CreateInstance<T>();
-                    PropertyInfo[] newProperties = typeof(T).GetProperties();
-                    foreach (PropertyInfo property in newProperties)
+                    foreach (PropertyInfo property in typeof(T).GetProperties())
                     {
-                        string propertyName = property.Name;
-                        if (json.ContainsKey(propertyName))
+                        if (json.ContainsKey(property.Name))
                         {
-                            JToken value = json.GetValue(propertyName);
+                            JToken value = json.GetValue(property.Name);
                             property.SetValue(objFromFile, value.ToObject(property.PropertyType));
+                        }
+                    }
+                    foreach (FieldInfo field in typeof(T).GetFields())
+                    {
+                        if (json.ContainsKey(field.Name))
+                        {
+                            JToken value = json.GetValue(field.Name);
+                            field.SetValue(objFromFile, value.ToObject(field.FieldType));
                         }
                     }
                     reader.Close();
