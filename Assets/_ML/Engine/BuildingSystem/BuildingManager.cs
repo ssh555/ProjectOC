@@ -36,7 +36,6 @@ namespace ML.Engine.BuildingSystem
         }
     }
 
-
     [System.Serializable]
     public struct FurnitureThemeTableData
     {
@@ -46,7 +45,6 @@ namespace ML.Engine.BuildingSystem
         public string Icon;
         public string BuildID;
     }
-
 
     [LabelText("建造模式")]
     public enum BuildingMode

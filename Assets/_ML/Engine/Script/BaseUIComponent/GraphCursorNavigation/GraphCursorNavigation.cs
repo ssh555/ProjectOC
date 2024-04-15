@@ -62,11 +62,6 @@ public class GraphCursorNavigation : UIBehaviour ,ITickComponent
         PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
         pointerEventData.position = worldPosition;
 
-/*        foreach (var result in LastFrameResults)
-        {
-            result.gameObject.transform.Find("Selected")?.gameObject.SetActive(false);
-        }*/
-
         // 进行射线投射
         List<RaycastResult> results = new List<RaycastResult>();// 可以根据需要设置射线检测的最大数量
         EventSystem.current.RaycastAll(pointerEventData, results);
@@ -83,6 +78,7 @@ public class GraphCursorNavigation : UIBehaviour ,ITickComponent
         else
         {
             this.uiBtnList.SetCurSelectedNull();
+            lastSelected = null;
         }
     }
 
