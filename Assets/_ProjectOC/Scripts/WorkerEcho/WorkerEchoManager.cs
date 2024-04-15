@@ -29,6 +29,11 @@ namespace ProjectOC.WorkerEchoNS
     [System.Serializable]
     public sealed class WorkerEchoManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
+        public void OnRegister()
+        {
+            LoadTableData();
+        }
+
         /// <summary>
         /// 基础数据表
         /// </summary>

@@ -16,7 +16,8 @@ using ProjectOC.MissionNS;
 using static ProjectOC.InventorySystem.UI.UIProNode;
 using ML.Engine.Utility;
 using UnityEngine.U2D;
-
+using ML.Engine.Manager;
+using ProjectOC.Player;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -97,7 +98,7 @@ namespace ProjectOC.InventorySystem.UI
         protected override void Enter()
         {
             ProNode.OnActionChange += RefreshDynamic;
-            ProNode.OnProduceTimerUpdate += OnProduceTimerUpdateAction;
+            ProNode.OnProduceUpdate += OnProduceTimerUpdateAction;
             ProNode.OnProduceEnd += Refresh;
             base.Enter();
         }
@@ -105,7 +106,7 @@ namespace ProjectOC.InventorySystem.UI
         protected override void Exit()
         {
             ProNode.OnActionChange -= RefreshDynamic;
-            ProNode.OnProduceTimerUpdate -= OnProduceTimerUpdateAction;
+            ProNode.OnProduceUpdate -= OnProduceTimerUpdateAction;
             ProNode.OnProduceEnd -= Refresh;
             ClearTemp();
             base.Exit();
@@ -206,6 +207,11 @@ namespace ProjectOC.InventorySystem.UI
                 ProNode_Priority.Find("Selected").gameObject.SetActive(true);
             }
         }
+
+        /// <summary>
+        /// 是否有升级功能
+        /// </summary>
+        public bool HasUpgrade;
 
        // ProNode Raw
         private List<Formula> Raws => ProNode.Recipe?.Raw;
@@ -344,8 +350,6 @@ namespace ProjectOC.InventorySystem.UI
         }
         #endregion
 
-        public Player.PlayerCharacter Player;
-
         protected override void UnregisterInput()
         {
             ProjectOC.Input.InputManager.PlayerInput.UIProNode.Disable();
@@ -373,7 +377,7 @@ namespace ProjectOC.InventorySystem.UI
         }
         private void Upgrade_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurMode != Mode.Upgrade)
+            if (CurMode != Mode.Upgrade && HasUpgrade)
             {
                 CurMode = Mode.Upgrade;
             }
@@ -435,7 +439,7 @@ namespace ProjectOC.InventorySystem.UI
             }
             else if (CurMode == Mode.ChangeRecipe)
             {
-                ProNode.ChangeRecipe(Player, CurrentRecipe);
+                ProNode.ChangeRecipe(CurrentRecipe);
                 IsInitCurRecipe = false;
                 CurMode = Mode.ProNode;
             }
@@ -448,7 +452,7 @@ namespace ProjectOC.InventorySystem.UI
             }
             else if (CurMode == Mode.Upgrade)
             {
-                this.ProNode.Upgrade(Player);
+                BuildingManager.Instance.Upgrade(ProNode.WorldProNode);
             }
             Refresh();
         }
@@ -484,7 +488,7 @@ namespace ProjectOC.InventorySystem.UI
                 }
                 else
                 {
-                    ProNode.UIRemove(Player, 1);
+                    ProNode.UIRemove(1);
                     Refresh();
                 }
             }
@@ -496,11 +500,11 @@ namespace ProjectOC.InventorySystem.UI
                 this.ItemIsDestroyed = true;
                 if (ProNode.Stack < 10)
                 {
-                    ProNode.UIRemove(Player, ProNode.Stack);
+                    ProNode.UIRemove(ProNode.Stack);
                 }
                 else
                 {
-                    ProNode.UIRemove(Player, 10);
+                    ProNode.UIRemove(10);
                 }
                 Refresh();
             }
@@ -515,7 +519,7 @@ namespace ProjectOC.InventorySystem.UI
                 }
                 else
                 {
-                    ProNode.UIFastAdd(Player);
+                    ProNode.UIFastAdd();
                 }
             }
             Refresh();
@@ -613,6 +617,7 @@ namespace ProjectOC.InventorySystem.UI
             this.BotKeyTips.gameObject.SetActive(CurMode == Mode.ProNode);
             this.BotKeyTips1.gameObject.SetActive(CurMode != Mode.ProNode);
             this.BotKeyTips1.Find("KT_Confirm").gameObject.SetActive(CurMode != Mode.Upgrade);
+            transform.Find("TopTitle").Find("KT_Upgrade").gameObject.SetActive(HasUpgrade);
 
             if (CurMode == Mode.ProNode)
             {
@@ -661,7 +666,7 @@ namespace ProjectOC.InventorySystem.UI
                         imgProduct.sprite = EmptySprite;
                     }
                     ProNode_Product.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(productID);
-                    ProNode_Product.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.GetItemAllNum(productID).ToString();
+                    ProNode_Product.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.StackAll.ToString();
                     #endregion
 
                     #region Raw
@@ -789,10 +794,13 @@ namespace ProjectOC.InventorySystem.UI
                 BotKeyTips.Find("KT_ChangeWorker").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Worker);
                 BotKeyTips.Find("KT_RemoveWorker").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Worker);
                 BotKeyTips.Find("KT_ChangeRecipe").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Recipe);
-                BotKeyTips.Find("KT_Remove1").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Recipe);
-                BotKeyTips.Find("KT_Remove10").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Recipe);
-                BotKeyTips.Find("KT_FastAdd").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Recipe);
+                bool hasRaw = Raws != null && Raws.Count > 0;
+                bool hasProduct = ProNode.HasRecipe;
+                BotKeyTips.Find("KT_Remove1").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Recipe && hasProduct);
+                BotKeyTips.Find("KT_Remove10").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Recipe && hasProduct);
+                BotKeyTips.Find("KT_FastAdd").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Recipe && hasRaw);
                 BotKeyTips.Find("KT_Return").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Recipe);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(BotKeyTips.GetComponent<GridLayoutGroup>().GetComponent<RectTransform>());
                 #endregion
             }
             else if (CurMode == Mode.ChangeRecipe)
@@ -1149,8 +1157,7 @@ namespace ProjectOC.InventorySystem.UI
 
                 #region Raw
                 bool flagUpgradeBtn = true;
-                List<Formula> raw = this.ProNode.GetUpgradeRaw();
-                List<Formula> rawCur = this.ProNode.GetUpgradeRawCurrent(Player);
+                List<Formula> raw = BuildingManager.Instance.GetUpgradeRaw(buildCID);
                 int delta = tempUIItemsUpgrade.Count - raw.Count;
                 if (delta > 0)
                 {
@@ -1173,7 +1180,7 @@ namespace ProjectOC.InventorySystem.UI
                     var uiItemData = tempUIItemsUpgrade[i];
                     string itemID = raw[i].id;
                     int need = raw[i].num;
-                    int current = rawCur[i].num;
+                    int current = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).InventoryItemAmount(itemID);
                     // Active
                     uiItemData.SetActive(true);
                     // 更新Icon
@@ -1226,7 +1233,7 @@ namespace ProjectOC.InventorySystem.UI
 
                 #region Level
                 Upgrade_LvOld.Find("Lv").GetComponent<TMPro.TextMeshProUGUI>().text = "Lv: " + ProNode.Level.ToString();
-                Upgrade_LvOld.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textLvDesc + ProNode.EffBase;
+                Upgrade_LvOld.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textLvDesc + ProNode.EffBase + "%";
 
                 if (this.ProNode.Level + 1 <= this.ProNode.LevelMax)
                 {
@@ -1235,7 +1242,7 @@ namespace ProjectOC.InventorySystem.UI
 
                     Upgrade_Build.Find("Image").gameObject.SetActive(true);
                     Upgrade_LvNew.Find("Lv").GetComponent<TMPro.TextMeshProUGUI>().text = "Lv: " + (ProNode.Level + 1).ToString();
-                    Upgrade_LvNew.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textLvDesc + (ProNode.EffBase + ProNode.LevelUpgradeEff[ProNode.Level + 1]);
+                    Upgrade_LvNew.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textLvDesc + (ProNode.EffBase + ProNode.LevelUpgradeEff[ProNode.Level + 1]) + "%";
                 }
                 else
                 {
@@ -1306,24 +1313,21 @@ namespace ProjectOC.InventorySystem.UI
         #region Action
         private void OnProduceTimerUpdateAction(double time)
         {
-            if (CurMode == Mode.ProNode)
-            {
-                ProNode_Product.Find("Mask").GetComponent<Image>().fillAmount = 1 - (float)(time / ProNode.TimeCost);
-            }
+            ProNode_Product.Find("Mask").GetComponent<Image>().fillAmount = 1 - (float)(time / ProNode.TimeCost);
         }
 
         public void RefreshDynamic()
         {
-            if (CurMode == Mode.ProNode)
+            if (!ProNode.HasRecipe || ProNode.State != ProNodeState.Production)
             {
-                if (!ProNode.HasRecipe || ProNode.State != ProNodeState.Production)
+                ProNode_Product.Find("Mask").GetComponent<Image>().fillAmount = 0;
+            }
+            if (ProNode.HasRecipe)
+            {
+                ProNode_Product.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.GetItemAllNum(ProNode.Recipe.ProductID).ToString();
+                for (int i = 0; i < Raws.Count; ++i)
                 {
-                    ProNode_Product.Find("Mask").GetComponent<Image>().fillAmount = 0;
-                }
-                if (ProNode.HasRecipe)
-                {
-                    ProNode_Product.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.GetItemAllNum(ProNode.Recipe.ProductID).ToString();
-                    for (int i = 0; i < Raws.Count; ++i)
+                    if (i < tempUIItems.Count)
                     {
                         GameObject item = tempUIItems[i];
                         var amount = item.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
@@ -1343,27 +1347,27 @@ namespace ProjectOC.InventorySystem.UI
                         }
                     }
                 }
-                if (ProNode.HasWorker)
+            }
+            if (ProNode.HasWorker)
+            {
+                var onDuty = ProNode_Worker.transform.Find("OnDuty").GetComponent<TMPro.TextMeshProUGUI>();
+                onDuty.text = PanelTextContent.workerStatus[(int)Worker.Status];
+                ProNode_Eff.Find("EffPrefix").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textEff;
+                ProNode_Eff.Find("Eff").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + ProNode.Eff.ToString() + "%";
+                string buildCID = ProNode.WorldProNode.Classification.ToString();
+                string buildID = BuildingManager.Instance.GetID(buildCID);
+                if (!tempSprite.ContainsKey(buildID))
                 {
-                    var onDuty = ProNode_Worker.transform.Find("OnDuty").GetComponent<TMPro.TextMeshProUGUI>();
-                    onDuty.text = PanelTextContent.workerStatus[(int)Worker.Status];
-                    ProNode_Eff.Find("EffPrefix").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textEff;
-                    ProNode_Eff.Find("Eff").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + ProNode.Eff.ToString() + "%";
-                    string buildCID = ProNode.WorldProNode.Classification.ToString();
-                    string buildID = BuildingManager.Instance.GetID(buildCID);
-                    if (!tempSprite.ContainsKey(buildID))
-                    {
-                        tempSprite[buildID] = CompositeManager.Instance.GetCompositonSprite(buildID);
-                    }
-                    ProNode_Eff.Find("IconProNode").GetComponent<Image>().sprite = tempSprite[buildID];
-                    ProNode_Eff.Find("EffProNode").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + ProNode.EffBase.ToString() + "%";
-                    ProNode_Eff.Find("IconWorker").GetComponent<Image>().sprite = WorkerIcon;
-                    ProNode_Eff.Find("EffWorker").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + (ProNode.Eff - ProNode.EffBase).ToString() + "%";
-
-                    var bar1 = ProNode_Worker.Find("Bar1").GetComponent<Image>();
-                    bar1.fillAmount = (float)Worker.APCurrent / Worker.APMax;
-                    bar1.color = GetAPBarColor(Worker.APCurrent);
+                    tempSprite[buildID] = CompositeManager.Instance.GetCompositonSprite(buildID);
                 }
+                ProNode_Eff.Find("IconProNode").GetComponent<Image>().sprite = tempSprite[buildID];
+                ProNode_Eff.Find("EffProNode").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + ProNode.EffBase.ToString() + "%";
+                ProNode_Eff.Find("IconWorker").GetComponent<Image>().sprite = WorkerIcon;
+                ProNode_Eff.Find("EffWorker").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + (ProNode.Eff - ProNode.EffBase).ToString() + "%";
+
+                var bar1 = ProNode_Worker.Find("Bar1").GetComponent<Image>();
+                bar1.fillAmount = (float)Worker.APCurrent / Worker.APMax;
+                bar1.color = GetAPBarColor(Worker.APCurrent);
             }
         }
         #endregion

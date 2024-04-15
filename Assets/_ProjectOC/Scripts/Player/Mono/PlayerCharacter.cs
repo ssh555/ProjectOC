@@ -12,6 +12,10 @@ using ML.PlayerCharacterNS;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.Layouts;
 using UnityEngine.InputSystem.Utilities;
+using ML.Engine.InventorySystem.CompositeSystem;
+using ProjectOC.StoreNS;
+using ProjectOC.ManagerNS;
+
 //ML.PlayerCharacterNS
 namespace ProjectOC.Player
 {
@@ -72,7 +76,7 @@ namespace ProjectOC.Player
         [ShowInInspector, ReadOnly]
         public ML.Engine.InventorySystem.IInventory Inventory => (Controller as OCPlayerController).OCState.Inventory;
         #endregion
-
+        
 
         #region Init
         /// <summary>

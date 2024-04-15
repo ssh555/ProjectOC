@@ -65,7 +65,8 @@ PrefabInstance:
       value: House_Roof_Base2_1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 8838355787680715937, guid: 3b2d53fbaae062d4b9b304c477f43a5f, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b2d53fbaae062d4b9b304c477f43a5f, type: 3}
