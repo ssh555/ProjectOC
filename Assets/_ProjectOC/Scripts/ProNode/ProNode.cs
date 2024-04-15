@@ -227,12 +227,12 @@ namespace ProjectOC.ProNodeNS
         {
             lock (this)
             {
+                RemoveRecipe();
                 if (!string.IsNullOrEmpty(recipeID))
                 {
                     Recipe recipe = ManagerNS.LocalGameManager.Instance.RecipeManager.SpawnRecipe(recipeID);
                     if (recipe != null)
                     {
-                        RemoveRecipe();
                         Recipe = recipe;
                         foreach (Formula raw in Recipe.Raw)
                         {
@@ -244,7 +244,6 @@ namespace ProjectOC.ProNodeNS
                 }
                 else
                 {
-                    RemoveRecipe();
                     Recipe = null;
                     return true;
                 }
@@ -259,46 +258,17 @@ namespace ProjectOC.ProNodeNS
         {
             StopRun();
             // 将堆放的成品，素材，全部返还至玩家背包
-            bool flag = false;
             List<Item> resItems = new List<Item>();
             var inventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
-            // 堆放的成品
             if (HasRecipe && StackAll > 0)
             {
-                List<Item> items = ItemManager.Instance.SpawnItems(ProductItem, StackAll);
-                foreach (var item in items)
-                {
-                    if (flag)
-                    {
-                        resItems.Add(item);
-                    }
-                    else
-                    {
-                        if (!inventory.AddItem(item))
-                        {
-                            flag = true;
-                        }
-                    }
-                }
+                resItems.AddRange(inventory.AddItem(ItemManager.Instance.SpawnItems(ProductItem, StackAll)));
             }
-            // 素材
             foreach (var raw in RawItems)
             {
-                flag = false;
-                List<Item> items = ItemManager.Instance.SpawnItems(raw.Key, raw.Value);
-                foreach (var item in items)
+                if (raw.Value > 0)
                 {
-                    if (flag)
-                    {
-                        resItems.Add(item);
-                    }
-                    else
-                    {
-                        if (!inventory.AddItem(item))
-                        {
-                            flag = true;
-                        }
-                    }
+                    resItems.AddRange(inventory.AddItem(ItemManager.Instance.SpawnItems(raw.Key, raw.Value)));
                 }
             }
             // 没有加到玩家背包的都变成WorldItem
@@ -394,7 +364,6 @@ namespace ProjectOC.ProNodeNS
         {
             if (CanWorking() && !IsOnProduce)
             {
-                // 启动生产计时器
                 TimerForProduce.Reset(TimeCost);
                 return true;
             }
@@ -616,7 +585,6 @@ namespace ProjectOC.ProNodeNS
                             }
                             amount = !complete && Stack < amount ? Stack : amount;
                             Stack -= amount;
-                            OnActionChange?.Invoke();
                         }
                         else
                         {
@@ -668,6 +636,7 @@ namespace ProjectOC.ProNodeNS
             {
                 Dictionary<string, int> tempRawItems = new Dictionary<string, int>(RawItems);
                 var inventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
+                bool flag = false;
                 foreach (var kv in tempRawItems)
                 {
                     string itemID = kv.Key;
@@ -677,8 +646,12 @@ namespace ProjectOC.ProNodeNS
                     if (inventory.RemoveItem(itemID, amount))
                     {
                         RawItems[itemID] += amount;
-                        StartProduce();
+                        flag = true;
                     }
+                }
+                if (flag)
+                {
+                    StartProduce();
                 }
             }
         }
