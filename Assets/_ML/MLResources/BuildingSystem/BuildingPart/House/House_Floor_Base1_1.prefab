@@ -334,7 +334,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.25
+  m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1635005795503547485
 MonoBehaviour:
@@ -349,9 +349,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 1
-  InTakeType: 8
+  InTakeType: 12
   IsCanRotate: 1
-  PositionOffset: {x: 0, y: 0.1, z: 0}
+  PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
   CanPlaceAreaType: 8
 --- !u!1 &2895474935007761445
@@ -478,7 +478,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.25
+  m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4902756438511456460
 MonoBehaviour:
