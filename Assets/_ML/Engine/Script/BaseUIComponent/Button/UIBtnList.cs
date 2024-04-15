@@ -277,7 +277,7 @@ namespace ML.Engine.UI
                 // สตภýปฏ
                 var btn = handle.Result.GetComponent<SelectedButton>();
                 btn.gameObject.name = btn.GetHashCode().ToString();
-                btn.transform.SetParent(this.parent.Find("Container"), false);
+                btn.transform.SetParent(this.parent.Find("Container"), true);
 
                 if (BtnAction != null)
                 {

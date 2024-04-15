@@ -706,11 +706,11 @@ namespace ML.Engine.UI
             }
         }
 
-        public void AddBtn(int BtnListIndex, string prefabpath,UnityAction action = null,string BtnText = null)
+        public void AddBtn(int BtnListIndex, string prefabpath, UnityAction BtnAction = null, Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null, string BtnText = null)
         {
             if (BtnListIndex >= 0 || BtnListIndex < this.uIBtnLists.Count)
             {
-                this.uIBtnLists[BtnListIndex].AddBtn(prefabpath, action, BtnText: BtnText);
+                this.uIBtnLists[BtnListIndex].AddBtn(prefabpath, BtnAction, OnSelectEnter, OnSelectExit, BtnSettingAction, BtnText);
             }
             else
             {

@@ -22,12 +22,59 @@ namespace ProjectOC.TechTree.UI
 {
     public sealed class UITechPointPanel : UIBasePanel<TPPanel>, ITickComponent
     {
+        #region DrawCircle
+        [LabelText("间距")]
+        public float gapDistance = 100;
+        private int sliceNum = 16;
+        private Vector3 BasePos;
+
+        private void SetBtnPos(RectTransform rectTransform,int[] cor)
+        {
+            if (cor.Length != 2) return;
+            float angle = 270 - cor[0] * ((float)360.0 / sliceNum);
+            angle = angle * Mathf.PI / 180;
+
+            Vector3 dir = new Vector3(Mathf.Sin(angle), Mathf.Cos(angle), 0);
+
+            rectTransform.anchoredPosition = BasePos + dir * cor[1] * gapDistance;
+        }
+
+        private void LinkEdge(Transform edge, Transform obj)
+        {
+            // 旋转 -> Self to Target
+            RectTransform UIA = edge.transform as RectTransform;
+            RectTransform UIB = obj.transform as RectTransform;
+
+            Vector3 v1 = UIB.anchoredPosition;//target
+            Vector3 v2 = (UIA.parent.parent as RectTransform).anchoredPosition;//self
+            Vector3 v3 = new Vector3(1, 0, 0);
+            Vector3 v4 = v1 - v2;
+            float angle = Vector3.Angle(v4, v3);
+            angle = v1.y < v2.y ? -angle : angle;
+
+            UIA.rotation = Quaternion.Euler(0, 0, angle);
+
+            // Width : Distance(Self, Target) - Size
+            float dis = Vector3.Distance(UIB.anchoredPosition, (UIA.parent.parent as RectTransform).anchoredPosition);// 
+
+            var e = (edge as RectTransform);
+            e.sizeDelta = new Vector2(dis, e.sizeDelta.y);
+
+        }
+
+        #endregion
+
+
         #region 数据初始化
-        private Dictionary<Transform, string> btn_IdDic = new Dictionary<Transform, string>();
+        private Dictionary<string, Transform> btn_IdDic = new Dictionary<string, Transform>();
         private void InitData()
         {
-            foreach (string id in TechTreeManager.Instance.GetAllTPID())
+            this.BasePos = this.cursorNavigation.Content.Find("UIBtnList").Find("Container").transform.position;
+            this.EdgeParent = this.cursorNavigation.Content.Find("UIBtnList").Find("Container").Find("Edges");
+            var AllID = TechTreeManager.Instance.GetAllTPID();
+            for (int i = 0; i < AllID.Length; i++) 
             {
+                string id = AllID[i];
                 if (!this.TTTPGO.TryGetValue(id, out var obj))
                 {
                     this.cursorNavigation.UIBtnList.AddBtn("Assets/_ProjectOC/OCResources/UI/TechPoint/TechPointTemplate.prefab",
@@ -46,9 +93,13 @@ namespace ProjectOC.TechTree.UI
                         BtnSettingAction:
                         (btn) =>
                         {
+                            
                             this.TTTPGO.Add(id, btn.gameObject);
                             btn.name = id;
-                            btn.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+                            var rec = btn.GetComponent<RectTransform>();
+                            rec.localScale = new Vector3(1, 1, 1);
+                            rec.anchoredPosition = Vector2.zero;
+                            Debug.Log(btn.GetComponent<RectTransform>().anchoredPosition);
                             var icon = btn.transform.Find("Icon").GetComponent<Image>();
                             if (!tempSprite.ContainsKey(id))
                             {
@@ -56,8 +107,10 @@ namespace ProjectOC.TechTree.UI
                             }
                             icon.sprite = tempSprite[id];
 
-                            btn_IdDic.Add(btn.transform, id);
+                            btn_IdDic.Add(id, btn.transform);
 
+                            SetBtnPos(rec, TechTreeManager.Instance.GetTPGrid(id));
+                            
                             // 0 : Locked | 1 : Unlocked | 2 : Unlocking
                             int status = TechTreeManager.Instance.IsUnlockedTP(id) ? 1 : (TechTreeManager.Instance.UnlockingTPTimers.ContainsKey(id) ? 2 : 0);
                             // Mask & Timer
@@ -81,13 +134,36 @@ namespace ProjectOC.TechTree.UI
                                 mask.fillAmount = (float)(timer.CurrentTime / TechTreeManager.Instance.GetTPTimeCost(id));
                                 tempTimer.Add(timer);
                             }
+
+                            if(btn_IdDic.Count == AllID.Length)
+                            {
+                                //连边
+                                foreach (var (id, tbtn) in btn_IdDic)
+                                {
+                                    Transform edgetmp = tbtn.Find("EdgeParent").Find("EdgeTemplate");
+                                    string[] ts = TechTreeManager.Instance.GetPreTechPoints(id);
+
+                                    foreach (var s in ts)
+                                    {
+                                        if (btn_IdDic.ContainsKey(s))
+                                        {
+                                            var edge = GameObject.Instantiate(edgetmp.gameObject, edgetmp.parent).transform;
+                                            edge.gameObject.SetActive(true);
+                                            var obj = btn_IdDic[s];
+                                            LinkEdge(edge, obj);
+                                            edge.SetParent(this.EdgeParent, true);
+                                        }
+                                    }
+                                }
+                            }
+
                         }
                         );
                 }
             }
 
 
-
+            
 
         }
 
@@ -191,6 +267,7 @@ namespace ProjectOC.TechTree.UI
         #region GraphCursorNavigation
         [ShowInInspector]
         private GraphCursorNavigation cursorNavigation;
+        private Transform EdgeParent;
         #endregion
 
         #region Unity
@@ -232,6 +309,8 @@ namespace ProjectOC.TechTree.UI
             #endregion
 
             this.cursorNavigation = this.transform.GetComponentInChildren<GraphCursorNavigation>();
+
+
         }
 
         protected override void Start()
@@ -587,7 +666,7 @@ namespace ProjectOC.TechTree.UI
             }
             #endregion
 
-            foreach (var (btn,id) in btn_IdDic)
+            foreach (var (id, btn) in btn_IdDic) 
             {
                 // 0 : Locked | 1 : Unlocked | 2 : Unlocking
                 int status = TechTreeManager.Instance.IsUnlockedTP(id) ? 1 : (TechTreeManager.Instance.UnlockingTPTimers.ContainsKey(id) ? 2 : 0);
