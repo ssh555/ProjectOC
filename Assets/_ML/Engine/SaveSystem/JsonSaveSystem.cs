@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
+using Newtonsoft.Json.Linq;
+using System.Reflection;
+using System;
 
 namespace ML.Engine.SaveSystem
 {
@@ -25,7 +28,18 @@ namespace ML.Engine.SaveSystem
                         using(StreamReader reader = new StreamReader(stream))
                         {
                             string jsonFromFile = reader.ReadToEnd();
-                            T objFromFile = JsonConvert.DeserializeObject<T>(jsonFromFile);
+                            JObject json = JObject.Parse(jsonFromFile);
+                            T objFromFile = Activator.CreateInstance<T>();
+                            PropertyInfo[] properties = typeof(T).GetProperties();
+                            foreach (PropertyInfo property in properties)
+                            {
+                                string propertyName = property.Name;
+                                if (json.ContainsKey(propertyName))
+                                {
+                                    JToken value = json.GetValue(propertyName);
+                                    property.SetValue(objFromFile, value.ToObject(property.PropertyType));
+                                }
+                            }
                             objFromFile.SavePath = Path.GetDirectoryName(relativePath);
                             objFromFile.SaveName = Path.GetFileName(relativePath);
                             reader.Close();
@@ -49,7 +63,18 @@ namespace ML.Engine.SaveSystem
                 using(StreamReader reader = new StreamReader(stream))
                 {
                     string jsonFromFile = reader.ReadToEnd();
-                    T objFromFile = JsonConvert.DeserializeObject<T>(jsonFromFile);
+                    JObject json = JObject.Parse(jsonFromFile);
+                    T objFromFile = Activator.CreateInstance<T>();
+                    PropertyInfo[] newProperties = typeof(T).GetProperties();
+                    foreach (PropertyInfo property in newProperties)
+                    {
+                        string propertyName = property.Name;
+                        if (json.ContainsKey(propertyName))
+                        {
+                            JToken value = json.GetValue(propertyName);
+                            property.SetValue(objFromFile, value.ToObject(property.PropertyType));
+                        }
+                    }
                     reader.Close();
                     stream.Close();
                     return objFromFile;
