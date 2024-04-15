@@ -72,6 +72,7 @@ namespace ProjectOC.StoreNS
             InstanceID = lastLevelBuild.InstanceID;
             transform.position = lastLevelBuild.transform.position;
             transform.rotation = lastLevelBuild.transform.rotation;
+            isFirstBuild = lastLevelBuild.isFirstBuild;
             if (lastLevelBuild is WorldStore worldStore)
             {
                 LocalGameManager.Instance.StoreManager.WorldStoreSetData(this, worldStore.Store);

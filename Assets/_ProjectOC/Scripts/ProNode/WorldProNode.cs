@@ -72,6 +72,7 @@ namespace ProjectOC.ProNodeNS
             InstanceID = lastLevelBuild.InstanceID;
             transform.position = lastLevelBuild.transform.position;
             transform.rotation = lastLevelBuild.transform.rotation;
+            isFirstBuild = lastLevelBuild.isFirstBuild;
             if (lastLevelBuild is WorldProNode worldProNode)
             {
                 LocalGameManager.Instance.ProNodeManager.WorldNodeSetData(this, worldProNode.ProNode);
