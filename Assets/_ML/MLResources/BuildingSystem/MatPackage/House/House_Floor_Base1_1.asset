@@ -26,7 +26,7 @@ MonoBehaviour:
     Category2: 202
     Category3: 100
     Category4: 1
-  MatStruct: ffffffff
+  MatStruct: 00000000
   MatPackages:
   - Tex: {fileID: 2800000, guid: 54c2641c5e3b2cf4ba95947a755fa385, type: 3}
     MPs:

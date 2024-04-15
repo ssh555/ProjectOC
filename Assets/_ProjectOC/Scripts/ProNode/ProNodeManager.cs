@@ -27,6 +27,11 @@ namespace ProjectOC.ProNodeNS
     [System.Serializable]
     public sealed class ProNodeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
+        public void OnRegister()
+        {
+            LoadTableData();
+        }
+
         #region Load And Data
         /// <summary>
         /// 是否已加载完数据
@@ -68,7 +73,6 @@ namespace ProjectOC.ProNodeNS
             {
                 return new ProNode(ProNodeTableDict[id]);
             }
-            //Debug.LogError("没有对应ID为 " + id + " 的生产节点");
             return null;
         }
 

@@ -99,7 +99,7 @@ namespace ML.Engine.BuildingSystem.BuildingArea
         private void Awake()
         {
             this.collider = this.GetComponent<Collider>();
-            this.collider.isTrigger = true;
+            this.collider.isTrigger = false;
         }
 
         private void Start()

@@ -1,17 +1,16 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ProjectOC.ClanNS
 {
-    /// <summary>
-    /// 临时用的氏族管理类
-    /// </summary>
-    [System.Serializable]
+    [LabelText("临时的氏族管理"), System.Serializable]
     public sealed class ClanManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
+        [LabelText("氏族")]
         public List<Clan> Clans = new List<Clan>();
-        public ClanManager() 
+        public void OnRegister() 
         {
             Clans.Add(new Clan("1", "氏族1"));
             Clans.Add(new Clan("2", "氏族2"));

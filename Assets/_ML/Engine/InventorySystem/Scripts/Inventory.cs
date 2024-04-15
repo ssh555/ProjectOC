@@ -60,50 +60,49 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public int AddItem(Item item, bool IsFillToNullItem = false)
         {
-            
-            if (item == null ||(IsFillToNullItem && this.Size == this.MaxSize))
+            lock (this)
             {
-                return -1;
-            }
-
-            // 寻找合适格子装入
-            for(int i = 0; i < MaxSize; ++i)
-            {
-                // 为 null
-                if(this.itemList[i] == null)
+                if (item == null || (IsFillToNullItem && this.Size == this.MaxSize))
                 {
-                    this.itemList[i] = item;
-                    item.OwnInventory = this;
-                    ++this.Size;
-                    this.OnItemListChanged?.Invoke(this);
-                    return 1;
+                    return -1;
                 }
-                // 同类未满 && 允许装入非null格子
-                else if (this.itemList[i].ID == item.ID && !IsFillToNullItem && !this.itemList[i].IsFillUp)
+
+                // 寻找合适格子装入
+                for (int i = 0; i < MaxSize; ++i)
                 {
-                    // 能完全装下
-                    if (this.itemList[i].Amount + item.Amount <= ItemManager.Instance.GetMaxAmount(this.itemList[i].ID))
+                    // 为 null
+                    if (this.itemList[i] == null)
                     {
-                        this.itemList[i].Amount += item.Amount;
+                        this.itemList[i] = item;
+                        item.OwnInventory = this;
+                        ++this.Size;
                         this.OnItemListChanged?.Invoke(this);
                         return 1;
                     }
-                    // 不能完全装下
-                    else
+                    // 同类未满 && 允许装入非null格子
+                    else if (this.itemList[i].ID == item.ID && !IsFillToNullItem && !this.itemList[i].IsFillUp)
                     {
-                        int delta = ItemManager.Instance.GetMaxAmount(this.itemList[i].ID) - this.itemList[i].Amount;
-                        this.itemList[i].Amount = ItemManager.Instance.GetMaxAmount(this.itemList[i].ID);
-                        item.Amount -= delta;
-                        continue;
+                        // 能完全装下
+                        if (this.itemList[i].Amount + item.Amount <= ItemManager.Instance.GetMaxAmount(this.itemList[i].ID))
+                        {
+                            this.itemList[i].Amount += item.Amount;
+                            this.OnItemListChanged?.Invoke(this);
+                            return 1;
+                        }
+                        // 不能完全装下
+                        else
+                        {
+                            int delta = ItemManager.Instance.GetMaxAmount(this.itemList[i].ID) - this.itemList[i].Amount;
+                            this.itemList[i].Amount = ItemManager.Instance.GetMaxAmount(this.itemList[i].ID);
+                            item.Amount -= delta;
+                            continue;
+                        }
                     }
                 }
+                this.OnItemListChanged?.Invoke(this);
+                // 未完全装入
+                return 0;
             }
-            this.OnItemListChanged?.Invoke(this);
-            // 未完全装入
-
-
-            
-            return 0;
         }
 
         /// <summary>
@@ -122,20 +121,23 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public bool RemoveItem(Item item)
         {
-            if (item == null || item.OwnInventory != this)
-                return false;
-            for (int i = 0; i < MaxSize; ++i)
+            lock (this)
             {
-                if(this.itemList[i] == item)
+                if (item == null || item.OwnInventory != this)
+                    return false;
+                for (int i = 0; i < MaxSize; ++i)
                 {
-                    item.OwnInventory = null;
-                    this.itemList[i] = null;
-                    --this.Size;
-                    this.OnItemListChanged?.Invoke(this);
-                    return true;
+                    if (this.itemList[i] == item)
+                    {
+                        item.OwnInventory = null;
+                        this.itemList[i] = null;
+                        --this.Size;
+                        this.OnItemListChanged?.Invoke(this);
+                        return true;
+                    }
                 }
+                return false;
             }
-            return false;
         }
 
         /// <summary>
@@ -146,30 +148,33 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public Item RemoveItem(Item item, int amount)
         {
-            if (item == null || item.OwnInventory != this || amount <= 0)
+            lock (this)
+            {
+                if (item == null || item.OwnInventory != this || amount <= 0)
+                    return null;
+
+                if (!ItemManager.Instance.GetCanStack(item.ID) && amount == 1)
+                {
+                    if (this.RemoveItem(item))
+                    {
+                        return item;
+                    }
+                }
+
+                for (int i = 0; i < MaxSize; ++i)
+                {
+                    if (this.itemList[i] == item)
+                    {
+                        Item ans = ItemManager.Instance.SpawnItem(item.ID);
+                        ans.Amount = Mathf.Min(amount, item.Amount);
+
+                        item.Amount -= amount;
+                        this.OnItemListChanged?.Invoke(this);
+                        return ans;
+                    }
+                }
                 return null;
-
-            if (!ItemManager.Instance.GetCanStack(item.ID) && amount == 1)
-            {
-                if (this.RemoveItem(item))
-                {
-                    return item;
-                }
             }
-
-            for (int i = 0; i < MaxSize; ++i)
-            {
-                if (this.itemList[i] == item)
-                {
-                    Item ans = ItemManager.Instance.SpawnItem(item.ID);
-                    ans.Amount = Mathf.Min(amount, item.Amount);
-
-                    item.Amount -= amount;
-                    this.OnItemListChanged?.Invoke(this);
-                    return ans;
-                }
-            }
-            return null;
         }
 
         /// <summary>
@@ -180,36 +185,39 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public bool RemoveItem(string itemID, int amount)
         {
-            // 数量不够
-            if (this.GetItemAllNum(itemID) < amount)
-                return false;
-
-            for (int i = 0; i < MaxSize; ++i)
+            lock (this)
             {
-                if(this.itemList[i] == null)
+                // 数量不够
+                if (this.GetItemAllNum(itemID) < amount)
+                    return false;
+
+                for (int i = 0; i < MaxSize; ++i)
                 {
-                    continue;
-                }
-                if (this.itemList[i].ID == itemID)
-                {
-                    // 数量足够
-                    if(this.itemList[i].Amount >= amount)
+                    if (this.itemList[i] == null)
                     {
-                        this.itemList[i].Amount -= amount;
-                        this.OnItemListChanged?.Invoke(this);
-                        break;
-                    }
-                    // 数量不够
-                    else
-                    {
-                        amount -= this.itemList[i].Amount;
-                        // 清零
-                        this.itemList[i].Amount = 0;
                         continue;
                     }
+                    if (this.itemList[i].ID == itemID)
+                    {
+                        // 数量足够
+                        if (this.itemList[i].Amount >= amount)
+                        {
+                            this.itemList[i].Amount -= amount;
+                            this.OnItemListChanged?.Invoke(this);
+                            break;
+                        }
+                        // 数量不够
+                        else
+                        {
+                            amount -= this.itemList[i].Amount;
+                            // 清零
+                            this.itemList[i].Amount = 0;
+                            continue;
+                        }
+                    }
                 }
+                return true;
             }
-            return true;
         }
 
         /// <summary>

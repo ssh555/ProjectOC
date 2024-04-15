@@ -322,11 +322,11 @@ namespace ML.Engine.BuildingSystem.UI
             int offset = obj.ReadValue<float>() > 0 ? 1 : -1;
             if (this.Placer.IsEnableGridSupport)
             {
-                if(obj.started)
+                if (obj.started)
                 {
                     this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, this.Placer.SelectedPartInstance.transform.up);
+                    Debug.Log(this.Placer.SelectedPartInstance.RotOffset + " " + Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, this.Placer.SelectedPartInstance.transform.up));
                 }
-
             }
             else
             {
@@ -354,7 +354,7 @@ namespace ML.Engine.BuildingSystem.UI
         #region Event
         private bool CheckCostResources(IBuildingPart bpart)
         {
-            if (CompositeManager.Instance.CanComposite(Player.Inventory, BuildingManager.Instance.GetID(bpart.Classification.ToString())))
+            if (CompositeManager.Instance.CanComposite(BuildingManager.Instance.GetID(bpart.Classification.ToString())))
             {
                 return true;
             }
@@ -367,7 +367,7 @@ namespace ML.Engine.BuildingSystem.UI
 
         private void OnPlaceModeSuccess(IBuildingPart bpart)
         {
-            CompositeManager.Instance.OnlyCostResource(Player.Inventory, BuildingManager.Instance.GetID(bpart.Classification.ToString()));
+            CompositeManager.Instance.OnlyCostResource(BuildingManager.Instance.GetID(bpart.Classification.ToString()));
             BM.Placer.SelectedPartInstance.CheckCanInPlaceMode -= CheckCostResources;
         }
 

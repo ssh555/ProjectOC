@@ -7,6 +7,8 @@ using static ProjectOC.Building.UI.UIBed;
 using ProjectOC.ClanNS;
 using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
+using ML.Engine.Manager;
+using ML.Engine.UI;
 
 namespace ProjectOC.Building.UI
 {
@@ -23,7 +25,6 @@ namespace ProjectOC.Building.UI
             Bed_Clan = transform.Find("Bed").Find("Clan");
             ChangeClan = transform.Find("ChangeClan");
             ChangeClan_Clan = ChangeClan.Find("Clan");
-            ConfirmClan = transform.Find("ConfirmClan");
             BotKeyTips = transform.Find("BotKeyTips").Find("KeyTips");
 
             ChangeClan.gameObject.SetActive(false);
@@ -74,8 +75,7 @@ namespace ProjectOC.Building.UI
         private enum Mode
         {
             Bed = 0,
-            ChangeClan = 1,
-            ConfirmClan = 2
+            ChangeClan = 1
         }
         [ShowInInspector]
         private Mode CurMode;
@@ -83,6 +83,7 @@ namespace ProjectOC.Building.UI
         public Bed Bed;
 
         #region Clans
+        [ShowInInspector]
         private List<Clan> Clans = new List<Clan>();
         /// <summary>
         /// 当前选中的Index
@@ -178,9 +179,11 @@ namespace ProjectOC.Building.UI
             if (CurMode == Mode.Bed)
             {
                 this.CurMode = Mode.ChangeClan;
+                index = 0;
+                this.Clans.Clear();
                 this.Clans.AddRange(LocalGameManager.Instance.ClanManager.Clans);
                 this.Clans.Sort(new Clan.Sort());
-                if (this.Clan != null)
+                if (this.Bed.HasClan)
                 {
                     this.Clans.Remove(this.Clan);
                     this.Clans.Insert(0, this.Clan);
@@ -188,15 +191,18 @@ namespace ProjectOC.Building.UI
             }
             else if (CurMode == Mode.ChangeClan)
             {
-                if (this.CurClan != null && this.Bed.CanSetClan)
+                if (this.CurClan != null && this.Bed.CanSetClan && (!Bed.HasClan || Bed.Clan != CurClan))
                 {
-                    this.CurMode = Mode.ConfirmClan;
+                    if (CurClan.HasBed)
+                    {
+                        string text = PanelTextContent.textConfirmPrefix + CurClan.Name + PanelTextContent.textConfirmSuffix;
+                        GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData(text, null, null, () => { Bed.SetClan(this.CurClan); }));
+                    }
+                    else
+                    {
+                        Bed.SetClan(this.CurClan);
+                    }
                 }
-            }
-            else if (CurMode == Mode.ConfirmClan)
-            {
-                this.Bed.SetClan(this.CurClan);
-                this.CurMode = Mode.ChangeClan;
             }
             Refresh();
         }
@@ -211,11 +217,6 @@ namespace ProjectOC.Building.UI
                 CurMode = Mode.Bed;
                 this.Clans.Clear();
                 index = 0;
-                Refresh();
-            }
-            else if(CurMode == Mode.ConfirmClan)
-            {
-                CurMode = Mode.ChangeClan;
                 Refresh();
             }
         }
@@ -239,7 +240,6 @@ namespace ProjectOC.Building.UI
         private Transform Bed_Clan;
         private Transform ChangeClan;
         private Transform ChangeClan_Clan;
-        private Transform ConfirmClan;
         private Transform BotKeyTips;
         #endregion
         public override void Refresh()
@@ -249,11 +249,10 @@ namespace ProjectOC.Building.UI
             {
                 return;
             }
+
+            ChangeClan.gameObject.SetActive(CurMode == Mode.ChangeClan);
             if (CurMode == Mode.Bed)
             {
-                ChangeClan.gameObject.SetActive(false);
-                ConfirmClan.gameObject.SetActive(false);
-
                 Text_Title.text = PanelTextContent.textBed;
                 Bed_Clan.gameObject.SetActive(Bed.HasClan);
                 Bed_Clan.Find("TopTitle").Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = Clan?.Name ?? "";
@@ -261,16 +260,13 @@ namespace ProjectOC.Building.UI
             }
             else if (CurMode == Mode.ChangeClan)
             {
-                ChangeClan.gameObject.SetActive(true);
-                ConfirmClan.gameObject.SetActive(false);
-
                 ChangeClan_Clan.gameObject.SetActive(Bed.HasClan);
                 ChangeClan_Clan.Find("TopTitle").Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = Clan?.Name ?? "";
 
                 if (CurClan != null)
                 {
                     ChangeClan.Find("Background1").gameObject.SetActive(CurClan.HasBed);
-                    ChangeClan.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = CurClan?.Name ?? "";
+                    ChangeClan.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = CurClan.Name ?? "";
                     ChangeClan.Find("Background3").gameObject.SetActive(true);
                     ChangeClan.Find("Name").gameObject.SetActive(true);
                     ChangeClan.Find("Icon").gameObject.SetActive(true);
@@ -282,12 +278,6 @@ namespace ProjectOC.Building.UI
                     ChangeClan.Find("Name").gameObject.SetActive(false);
                     ChangeClan.Find("Icon").gameObject.SetActive(false);
                 }
-            }
-            else if (CurMode == Mode.ConfirmClan)
-            {
-                ChangeClan.gameObject.SetActive(true);
-                ConfirmClan.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textConfirmPrefix + CurClan.Name + PanelTextContent.textConfirmSuffix;
-                ConfirmClan.gameObject.SetActive(true);
             }
 
             #region BotKeyTips
