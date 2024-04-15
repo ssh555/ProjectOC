@@ -8,7 +8,7 @@ using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.InventorySystem;
 using UnityEngine.U2D;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using ML.Engine.UI;
+using Sirenix.OdinInspector;
 
 namespace ProjectOC.WorkerNS
 {
@@ -31,20 +31,16 @@ namespace ProjectOC.WorkerNS
             };
         }
 
-        ~WorkerManager()
+        public void OnUnregister()
         {
-            this?.DeleteAllWorker();
+            this.DeleteAllWorker();
             GameManager.Instance.ABResourceManager.Release(spriteAtalsHandle);
         }
 
-        /// <summary>
-        /// 刁民数量
-        /// </summary>
+        [LabelText("刁民数量"), ShowInInspector, ReadOnly]
         public int WorkerNum { get { return Workers.Count; } }
 
-        /// <summary>
-        /// 刁民
-        /// </summary>
+        [LabelText("刁民"), ShowInInspector, ReadOnly]
         private HashSet<Worker> Workers = new HashSet<Worker>();
 
         public string GetOneNewWorkerInstanceID()

@@ -3,37 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ProjectOC.ManagerNS;
+using Sirenix.OdinInspector;
 
 namespace ML.Engine.InventorySystem
 {
-    /// <summary>
-    /// 配方
-    /// </summary>
-    [System.Serializable]
+    [LabelText("配方"), System.Serializable]
     public class Recipe
     {
+        [LabelText("ID"), ReadOnly]
         public string ID = "";
 
         #region 读表数据
+        [LabelText("排序"), ShowInInspector, ReadOnly]
         public int Sort { get => LocalGameManager.Instance.RecipeManager.GetSort(ID); }
+        [LabelText("类目"), ShowInInspector, ReadOnly]
         public RecipeCategory Category { get => LocalGameManager.Instance.RecipeManager.GetCategory(ID); }
-        /// <summary>
-        /// 原料
-        /// </summary>
+        [LabelText("原料"), ShowInInspector, ReadOnly]
         public List<Formula> Raw { get => LocalGameManager.Instance.RecipeManager.GetRaw(ID); }
-        /// <summary>
-        /// 成品
-        /// </summary>
+        [LabelText("成品"), ShowInInspector, ReadOnly]
         public Formula Product { get => LocalGameManager.Instance.RecipeManager.GetProduct(ID); }
+        [LabelText("成品ID"), ShowInInspector, ReadOnly]
         public string ProductID { get => LocalGameManager.Instance.RecipeManager.GetProduct(ID).id; }
+        [LabelText("成品数量"), ShowInInspector, ReadOnly]
         public int ProductNum { get => LocalGameManager.Instance.RecipeManager.GetProduct(ID).num; }
-        /// <summary>
-        /// 时间消耗，进行1次生产需要多少秒
-        /// </summary>
+        [LabelText("时间消耗，进行1次生产需要多少秒"), ShowInInspector, ReadOnly]
         public int TimeCost { get => LocalGameManager.Instance.RecipeManager.GetTimeCost(ID); }
-        /// <summary>
-        /// 配方经验，该配方制作完成时可获得的经验值
-        /// </summary>
+        [LabelText("配方经验"), ShowInInspector, ReadOnly]
         public int ExpRecipe { get => LocalGameManager.Instance.RecipeManager.GetExpRecipe(ID); }
         #endregion
 
@@ -54,7 +49,6 @@ namespace ML.Engine.InventorySystem
                     }
                 }
             }
-            //Debug.LogError($"Raw {itemID} is not exist in recipe {ID}");
             return 0;
         }
 
@@ -65,16 +59,10 @@ namespace ML.Engine.InventorySystem
             {
                 case CompositeManager.CompositionObjectType.Item:
                     Item item = composition as Item;
-                    if (item.Amount != ProductNum)
-                    {
-                        //Debug.LogError($"Recipe {ID} Product {ProductID} Item Num is Error");
-                    }
                     return item;
                 default:
-                    //Debug.LogError($"Recipe {ID} Product {ProductID} Composite {compObjType}");
                     break;
             }
-            //Debug.LogError("Recipe Product Num is Error");
             return null;
         }
     }

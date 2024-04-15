@@ -98,13 +98,13 @@ namespace ML.Engine.UI
             Selected = this.transform.Find("Selected");
             if(Selected != null) { Selected.gameObject.SetActive(false); }
             this.targetGraphic = image;
-            this.OnSelectedEnter = OnSelectedEnter;
-            this.OnSelectedExit = OnSelectedExit;   
+/*            this.OnSelectedEnter = OnSelectedEnter;
+            this.OnSelectedExit = OnSelectedExit; */  
         }
 
         public void Interact()
         {
-            Debug.Log("Interact");
+            
             if (this.Interactable)
             {
                 this.PreInteract?.Invoke();
@@ -137,6 +137,22 @@ namespace ML.Engine.UI
         public override void OnPointerClick(PointerEventData eventData)
         {
             this.UIBtnList?.ButtonInteract(new InputAction.CallbackContext());
+        }
+
+        public void SetOnSelectEnter(System.Action action)
+        {
+            if (action != null)
+            {
+                this.OnSelectedEnter += action;
+            }
+        }
+
+        public void SetOnSelectExit(System.Action action)
+        {
+            if (action != null)
+            {
+                this.OnSelectedExit += action;
+            }
         }
 
     }

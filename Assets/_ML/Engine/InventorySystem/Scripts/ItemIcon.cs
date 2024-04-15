@@ -1,7 +1,4 @@
 using ML.Engine.Timer;
-using ProjectOC.Player;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ML.Engine.InventorySystem
@@ -9,7 +6,7 @@ namespace ML.Engine.InventorySystem
     public class ItemIcon : MonoBehaviour, ITickComponent
     {
         private UnityEngine.UI.Image Image;
-        public PlayerCharacter Player;
+        public Transform Target;
         private SpriteRenderer Renderer;
         private bool IsShow;
 
@@ -26,20 +23,19 @@ namespace ML.Engine.InventorySystem
             Image = GetComponentInChildren<UnityEngine.UI.Image>();
             Image.transform.SetParent(Manager.GameManager.Instance.UIManager.GetCanvas.transform);
             Image.enabled = false;
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterLateTick(0, this);
+            Manager.GameManager.Instance.TickManager.RegisterLateTick(0, this);
             this.enabled = false;
         }
 
         public void LateTick(float deltatime)
         {
-            if (Renderer.isVisible && Image.sprite != null && Vector3.Distance(transform.position, Player.transform.position) <= 5f)
+            if (Renderer.isVisible && Image.sprite != null && Vector3.Distance(transform.position, Target.position) <= 5f)
             {
                 Image.enabled = true;
                 IsShow = true;
                 Vector3 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
                 Image.transform.position = screenPosition;
             }
-            // ²»Âú×ãÌõ¼þ
             else if(IsShow)
             {
                 Image.enabled = false;

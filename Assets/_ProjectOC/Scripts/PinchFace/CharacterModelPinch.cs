@@ -7,7 +7,7 @@ using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-
+using ML.MathExtension;
 namespace ProjectOC.PinchFace
 {
     public class CharacterModelPinch : MonoBehaviour

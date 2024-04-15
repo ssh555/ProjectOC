@@ -23,7 +23,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
         GameObject IBuildingPart.gameObject { get => this.gameObject;  }
         Transform IBuildingPart.transform { get => this.transform;  }
-        public bool isFirstBuild { get; private set; }= true;
+        public bool isFirstBuild { get; protected set; }= true;
         [SerializeField, LabelText("ƒ‹∑Ò∑≈÷√"), ReadOnly]
         private bool canPlaceInPlaceMode = true;
         public bool CanPlaceInPlaceMode 

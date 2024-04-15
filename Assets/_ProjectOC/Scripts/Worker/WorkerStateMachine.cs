@@ -63,9 +63,8 @@ namespace ProjectOC.WorkerNS
             {
                 return false;
             }
-            //Debug.Log($"{Time.frameCount} {IsAPAboveWorkThreshold} {Worker.IsOnDuty} {Worker.ProNode.State == ProNodeState.Production}");
             // 体力高于工作阈值 && 在生产节点 && 生产节点在生产
-            return IsAPAboveWorkThreshold && Worker.IsOnDuty && Worker.HasProNode && Worker.ProNode.State == ProNodeState.Production;
+            return IsAPAboveWorkThreshold && Worker.IsOnDuty && Worker.ProNode.State == ProNodeState.Production;
         }
         /// <summary>
         /// 生产节点工作到摸鱼
@@ -77,7 +76,7 @@ namespace ProjectOC.WorkerNS
                 return false;
             }
             // 体力低于工作阈值 || 没在生产节点 || 生产节点未在生产
-            return !IsAPAboveWorkThreshold || !Worker.IsOnDuty || !Worker.HasProNode || Worker.ProNode.State != ProNodeState.Production;
+            return !IsAPAboveWorkThreshold || !Worker.IsOnDuty || Worker.ProNode.State != ProNodeState.Production;
         }
         /// <summary>
         /// 摸鱼到搬运

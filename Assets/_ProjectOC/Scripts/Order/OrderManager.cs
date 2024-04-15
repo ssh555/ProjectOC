@@ -14,9 +14,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
-using static ProjectOC.Order.OrderManager;
-using static UnityEditor.Timeline.Actions.MenuPriority;
+
 
 
 namespace ProjectOC.Order
@@ -180,6 +178,7 @@ namespace ProjectOC.Order
             if (instance == null)
             {
                 instance = this;
+                Init();
             }
         }
 

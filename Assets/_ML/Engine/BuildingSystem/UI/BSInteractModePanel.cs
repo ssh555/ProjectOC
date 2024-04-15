@@ -187,11 +187,11 @@ namespace ML.Engine.BuildingSystem.UI
         {
             if (bpart is WorldStore worldStore)
             {
-                worldStore.Store.Destroy(Player);
+                worldStore.Store.Destroy();
             }
             else if (bpart is WorldProNode worldProNode)
             {
-                worldProNode.ProNode.Destroy(Player);
+                worldProNode.ProNode.Destroy();
             }
 
             bool flag = false;

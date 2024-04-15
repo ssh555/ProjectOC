@@ -18,6 +18,11 @@ namespace ProjectOC.WorkerNS
     [System.Serializable]
     public sealed class EffectManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
+        public void OnRegister()
+        {
+            LoadTableData();
+        }
+
         #region Load And Data
         /// <summary>
         /// 是否已加载完数据
