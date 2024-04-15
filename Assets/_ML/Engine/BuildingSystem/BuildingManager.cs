@@ -33,6 +33,19 @@ namespace ML.Engine.BuildingSystem
             return new BuildingPartClassification(GetClassificationString());
         }
     }
+
+
+    [System.Serializable]
+    public struct FurnitureThemeTableData
+    {
+        public string ID;
+        public int Sort;
+        public string Name;
+        public string Icon;
+        public string BuildID;
+    }
+
+
     [LabelText("建造模式")]
     public enum BuildingMode
     {
@@ -897,6 +910,8 @@ namespace ML.Engine.BuildingSystem
 
         public Dictionary<string, BuildingTableData> BPartTableDictOnID = new Dictionary<string, BuildingTableData>();
         public Dictionary<string, BuildingTableData> BPartTableDictOnClass = new Dictionary<string, BuildingTableData>();
+
+        public Dictionary<string, FurnitureThemeTableData> FurnitureThemeTableDataDic = new Dictionary<string, FurnitureThemeTableData>();
         public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
 
         public ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]> ABJAProcessor;

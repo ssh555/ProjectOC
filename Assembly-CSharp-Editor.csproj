@@ -65,6 +65,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Editor\Object Drawers\IntSliderDrawer.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Editor\Object Drawers\StackedActionDrawer.cs" />
     <Compile Include="Assets\_ML\Engine\Utility\Editor\BuildBundle.cs" />
+    <Compile Include="Assets\_ML\Engine\MathExtension\Bezier\Editor\BezierComponentEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\_ML\Engine\_Addons\Amazing Assets\Terrain To Mesh\Shaders\Editor\Editor.shader" />
