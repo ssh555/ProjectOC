@@ -278,7 +278,8 @@ namespace ML.Engine.UI
                 // สตภýปฏ
                 var btn = handle.Result.GetComponent<SelectedButton>();
                 btn.gameObject.name = btn.GetHashCode().ToString();
-                btn.transform.SetParent(this.parent.Find("Container"), true);
+                btn.transform.SetParent(this.parent.Find("Container"), false);
+                btn.transform.localScale = Vector3.one;
 
                 if (BtnAction != null)
                 {

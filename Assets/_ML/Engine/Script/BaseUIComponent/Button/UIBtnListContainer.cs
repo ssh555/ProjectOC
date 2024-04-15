@@ -25,6 +25,7 @@ namespace ML.Engine.UI
         [ShowInInspector]
         private List<UIBtnList> uIBtnLists = new List<UIBtnList>();
         public List<UIBtnList> UIBtnLists { get { return uIBtnLists; } }
+        public int UIBtnListNum { get { return uIBtnLists.Count; } }
         [ShowInInspector]
         private UIBtnList curSelectUIBtnList = null;
         public UIBtnList CurSelectUIBtnList { 
@@ -59,6 +60,7 @@ namespace ML.Engine.UI
         private BindType bindType;
         public BindType curBindType { get { return bindType; } }
 
+        [ShowInInspector]
         private BtnListContainerInitData btnListContainerInitData;
 
         [ShowInInspector]
@@ -725,7 +727,7 @@ namespace ML.Engine.UI
             }
         }
 
-        public void AddBtnList(string prefabpath,InputAction inputAction = null,BindType bindType = BindType.started,List<UnityAction> actions = null)
+        public void AddBtnListAType(string prefabpath,InputAction inputAction = null,BindType bindType = BindType.started,List<UnityAction> actions = null)
         {
             Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(prefabpath).Completed += (handle) =>
             {
@@ -758,6 +760,20 @@ namespace ML.Engine.UI
                 if (needMoveToBtnList)FindEnterableUIBtnList();
                 RefreshIsEmpty();
             };
+        }
+
+
+        public void AddBtnListBType(string prefabpath, LinkData linkData)
+        {
+            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(prefabpath).Completed += (handle) =>
+            {
+                var btnlist = handle.Result.GetComponent<UIBtnListInitor>();
+                btnlist.gameObject.name = btnlist.GetHashCode().ToString();
+                btnlist.transform.SetParent(this.parent, false);
+
+                this.btnListContainerInitData.AddLinkData(linkData);
+                UIBtnList uIBtnList = InitBtnlistInfo();
+            }; 
         }
 
         public void DeleteBtnList(int BtnListIndex)

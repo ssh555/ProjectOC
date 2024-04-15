@@ -60,7 +60,7 @@ namespace ML.Engine.UI
             this.TestBtnList.SetBtnAction("AddBtn",
             () =>
             {
-                this.UIBtnListContainer.AddBtnList("ML/BaseUIPanel/GridNavagation/TestButtonList.prefab", ML.Engine.Input.InputManager.Instance.Common.Common.Confirm,
+                this.UIBtnListContainer.AddBtnListAType("ML/BaseUIPanel/GridNavagation/TestButtonListA.prefab", ML.Engine.Input.InputManager.Instance.Common.Common.Confirm,
                     BindType.started, new List<UnityAction>() { ()=> { Debug.Log("回调1"); }, () => { Debug.Log("回调2"); }, () => { Debug.Log("回调3"); } }
                     );
             });
