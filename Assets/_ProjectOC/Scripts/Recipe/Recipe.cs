@@ -15,21 +15,109 @@ namespace ML.Engine.InventorySystem
 
         #region 读表数据
         [LabelText("排序"), ShowInInspector, ReadOnly]
-        public int Sort { get => LocalGameManager.Instance.RecipeManager.GetSort(ID); }
+        public int Sort
+        { 
+            get
+            {
+                if(LocalGameManager.Instance)
+                {
+                    return LocalGameManager.Instance.RecipeManager.GetSort(ID);
+
+                }
+                return -1;
+            }
+        }
         [LabelText("类目"), ShowInInspector, ReadOnly]
-        public RecipeCategory Category { get => LocalGameManager.Instance.RecipeManager.GetCategory(ID); }
+        public RecipeCategory Category
+        {
+            get
+            {
+                if (LocalGameManager.Instance)
+                {
+                    return LocalGameManager.Instance.RecipeManager.GetCategory(ID);
+
+                }
+                return 0;
+            }
+        }
         [LabelText("原料"), ShowInInspector, ReadOnly]
-        public List<Formula> Raw { get => LocalGameManager.Instance.RecipeManager.GetRaw(ID); }
+        public List<Formula> Raw
+        {
+            get
+            {
+                if (LocalGameManager.Instance)
+                {
+                    return LocalGameManager.Instance.RecipeManager.GetRaw(ID);
+
+                }
+                return null;
+            }
+        }
         [LabelText("成品"), ShowInInspector, ReadOnly]
-        public Formula Product { get => LocalGameManager.Instance.RecipeManager.GetProduct(ID); }
+        public Formula Product
+        {
+            get
+            {
+                if (LocalGameManager.Instance)
+                {
+                    return LocalGameManager.Instance.RecipeManager.GetProduct(ID);
+
+                }
+                return default(Formula);
+            }
+        }
         [LabelText("成品ID"), ShowInInspector, ReadOnly]
-        public string ProductID { get => LocalGameManager.Instance.RecipeManager.GetProduct(ID).id; }
+        public string ProductID
+        {
+            get
+            {
+                if (LocalGameManager.Instance)
+                {
+                    return LocalGameManager.Instance.RecipeManager.GetProduct(ID).id;
+
+                }
+                return null;
+            }
+        }
         [LabelText("成品数量"), ShowInInspector, ReadOnly]
-        public int ProductNum { get => LocalGameManager.Instance.RecipeManager.GetProduct(ID).num; }
+        public int ProductNum
+        {
+            get
+            {
+                if (LocalGameManager.Instance)
+                {
+                    return LocalGameManager.Instance.RecipeManager.GetProduct(ID).num;
+
+                }
+                return 0;
+            }
+        }
         [LabelText("时间消耗，进行1次生产需要多少秒"), ShowInInspector, ReadOnly]
-        public int TimeCost { get => LocalGameManager.Instance.RecipeManager.GetTimeCost(ID); }
+        public int TimeCost
+        {
+            get
+            {
+                if (LocalGameManager.Instance)
+                {
+                    return LocalGameManager.Instance.RecipeManager.GetTimeCost(ID);
+
+                }
+                return 0;
+            }
+        }
         [LabelText("配方经验"), ShowInInspector, ReadOnly]
-        public int ExpRecipe { get => LocalGameManager.Instance.RecipeManager.GetExpRecipe(ID); }
+        public int ExpRecipe
+        {
+            get
+            {
+                if (LocalGameManager.Instance)
+                {
+                    return LocalGameManager.Instance.RecipeManager.GetExpRecipe(ID);
+
+                }
+                return 0;
+            }
+        }
         #endregion
 
         public Recipe(RecipeTableData config)

@@ -76,7 +76,7 @@ namespace ML.Engine.BuildingSystem.BuildingArea
         /// 用于匹配的AreaType
         /// </summary>
         [LabelText("匹配类型")]
-        public BuildingSocket.BuildingSocketType Type;
+        public BuildingAreaType Type;
 
         /// <summary>
         /// 目标Part是否能放置于此区域
@@ -85,7 +85,7 @@ namespace ML.Engine.BuildingSystem.BuildingArea
         /// <returns></returns>
         public bool CheckAreaTypeMatch(IBuildingPart BPart)
         {
-            return (BPart.ActiveAreaType & this.Type) != 0;
+            return BuildingManager.Instance.Placer.AreaSocketMatch.IsMatch(BPart.ActiveSocket.ID, this.Type);
         }
         
         /// <summary>

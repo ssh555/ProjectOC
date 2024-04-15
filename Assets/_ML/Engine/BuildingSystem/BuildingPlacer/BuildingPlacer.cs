@@ -7,6 +7,8 @@ using ProjectOC.ManagerNS;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static ML.Engine.BuildingSystem.MonoBuildingManager;
+using System.Net.Sockets;
+using ML.Engine.BuildingSystem.Config;
 
 namespace ML.Engine.BuildingSystem.BuildingPlacer
 {
@@ -116,6 +118,11 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// 一次成功放置
         /// </summary>
         public event System.Action<IBuildingPart> OnPlaceModeSuccess;
+        #endregion
+
+        #region MatchConfig
+        public Config.BuildingAreaSocketMatchAsset AreaSocketMatch { get; private set; }
+        public Config.BuildingSocket2SocketMatchAsset Socket2SocketMatch { get; private set; }
         #endregion
 
         #region 网格辅助
@@ -386,28 +393,50 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 if (hits != null && hits.Length > 0)
                 {
                     bool bisHit = false;
-                    bool bArea = false;
+                    bool bSocket = false;
                     RaycastHit hitInfo = hits[0];
                     foreach (var h in hits)
                     {
                         var socket = h.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
                         if (socket != null)
                         {
-                            if((socket.InTakeType & this.SelectedPartInstance.ActiveSocket.Type) != 0)
+                            if(this.SelectedPartInstance.ActiveSocket.CheckMatch(socket))
                             {
-                                bisHit = true;
-                                hitInfo = h;
-                                break;
+                                if(hitInfo.collider.GetComponentInParent<IBuildingPart>() != null)
+                                {
+                                    if (h.distance < hitInfo.distance || (h.distance == hitInfo.distance && Vector3.Distance(h.collider.GetComponentInParent<IBuildingPart>().gameObject.transform.position, this.transform.position) <= Vector3.Distance(hitInfo.collider.GetComponentInParent<IBuildingPart>().gameObject.transform.position, this.transform.position)))
+                                    {
+                                        bisHit = true;
+                                        bSocket = true;
+                                        hitInfo = h;
+                                    }
+                                }
+                                else
+                                {
+                                    bisHit = true;
+                                    bSocket = true;
+                                    hitInfo = h;
+                                }
                             }
                         }
-                        else if(bArea == false)
+                        else if(bSocket == false)
                         {
                             var area = h.collider.GetComponentInParent<BuildingArea.BuildingArea>();
-                            if (area != null && (area.Type & this.SelectedPartInstance.ActiveAreaType) != 0)
+                            if (area != null && area.CheckAreaTypeMatch(this.SelectedPartInstance))
                             {
-                                hitInfo = h;
-                                bisHit = true;
-                                bArea = true;
+                                if (hitInfo.collider.GetComponentInParent<IBuildingPart>() != null)
+                                {
+                                    if (h.distance < hitInfo.distance || (h.distance == hitInfo.distance && Vector3.Distance(h.collider.GetComponentInParent<IBuildingPart>().gameObject.transform.position, this.transform.position) <= Vector3.Distance(hitInfo.collider.GetComponentInParent<IBuildingPart>().gameObject.transform.position, this.transform.position)))
+                                    {
+                                        hitInfo = h;
+                                        bisHit = true;
+                                    }
+                                }
+                                else
+                                {
+                                    hitInfo = h;
+                                    bisHit = true;
+                                }
                             }
                         }
                     }
@@ -423,12 +452,12 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                         pos = hitInfo.point;
                         this.SelectedPartInstance.AttachedSocket = hitInfo.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
                         this.SelectedPartInstance.AttachedArea = hitInfo.collider.GetComponentInParent<BuildingArea.BuildingArea>();
-
-                        if (this.SelectedPartInstance.AttachedSocket && (this.SelectedPartInstance.ActiveSocket.Type & this.SelectedPartInstance.AttachedSocket.InTakeType) == 0)
+                        
+                        if (this.SelectedPartInstance.AttachedSocket && !this.SelectedPartInstance.ActiveSocket.CheckMatch(this.SelectedPartInstance.AttachedSocket))
                         {
                             this.SelectedPartInstance.AttachedSocket = null;
                         }
-                        if (this.SelectedPartInstance.AttachedArea && (this.SelectedPartInstance.ActiveAreaType & this.SelectedPartInstance.AttachedArea.Type) == 0)
+                        if (this.SelectedPartInstance.AttachedArea && !this.SelectedPartInstance.AttachedArea.CheckAreaTypeMatch(this.SelectedPartInstance))
                         {
                             this.SelectedPartInstance.AttachedArea = null;
                         }
@@ -611,6 +640,16 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         #region Unity
         private void Awake()
         {
+            // 载入匹配数据
+            string path = "ML/BuildingSystem/MatchConfig";
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<BuildingAreaSocketMatchAsset>(path + "/AreaSocketMatchConfig.asset").Completed += (handle) =>
+            {
+                AreaSocketMatch = handle.Result;
+            };
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<BuildingSocket2SocketMatchAsset>(path + "/Socket2SocketMatchConfig.asset").Completed += (handle) =>
+            {
+                Socket2SocketMatch = handle.Result;
+            };
             this.enabled = false;
         }
         #endregion
