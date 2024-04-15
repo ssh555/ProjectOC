@@ -440,7 +440,7 @@ namespace ML.Engine.BuildingSystem.UI
                                 Debug.Log("∑≈÷√º“æﬂ " + item.Item2.Classification.ToString());
                                 this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(item.Item2.Classification);
                                 monoBM.PopAndPushPanel<BSPlaceModePanel>();
-                            }, item.Item2.Classification.Category3.ToString());
+                            },BtnText: item.Item2.Classification.Category3.ToString());
                         }
                     }
                     else

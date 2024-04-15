@@ -11,6 +11,8 @@ using static ProjectOC.InventorySystem.UI.UIStore;
 using System;
 using ML.Engine.BuildingSystem;
 using ProjectOC.ManagerNS;
+using ML.Engine.Manager;
+using ProjectOC.Player;
 
 namespace ProjectOC.InventorySystem.UI
 {
@@ -82,14 +84,14 @@ namespace ProjectOC.InventorySystem.UI
         #region Override
         protected override void Enter()
         {
-            Store.OnStoreDataChange += Refresh;
+            Store.OnStoreDataChangeAction += Refresh;
             Store.IsInteracting = true;
             base.Enter();
         }
 
         protected override void Exit()
         {
-            Store.OnStoreDataChange -= Refresh;
+            Store.OnStoreDataChangeAction -= Refresh;
             Store.IsInteracting = false;
             ClearTemp();
             base.Exit();
@@ -151,6 +153,10 @@ namespace ProjectOC.InventorySystem.UI
                 Priority.Find("Selected").gameObject.SetActive(true);
             }
         }
+        /// <summary>
+        /// 是否有升级功能
+        /// </summary>
+        public bool HasUpgrade;
 
         /// <summary>
         /// UIPanel.Store区域控制处理的StoreData列表
@@ -300,7 +306,6 @@ namespace ProjectOC.InventorySystem.UI
             }
         }
 
-        public Player.PlayerCharacter Player;
 
         protected override void UnregisterInput()
         {
@@ -359,7 +364,7 @@ namespace ProjectOC.InventorySystem.UI
         }
         private void Upgrade_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurMode != Mode.Upgrade)
+            if (CurMode != Mode.Upgrade && HasUpgrade)
             {
                 CurMode = Mode.Upgrade;
             }
@@ -428,7 +433,7 @@ namespace ProjectOC.InventorySystem.UI
         {
             if (CurMode == Mode.Store && CurStoreMode == StoreMode.ChangeItem)
             {
-                Store.UIFastAdd(Player, CurrentStoreData);
+                Store.UIFastAdd(CurrentStoreData);
                 Refresh();
             }
         }
@@ -442,7 +447,7 @@ namespace ProjectOC.InventorySystem.UI
                 }
                 else
                 {
-                    Store.UIRemove(Player, CurrentStoreData, 1);
+                    Store.UIRemove(CurrentStoreData, 1);
                     Refresh();
                 }
             }
@@ -454,11 +459,11 @@ namespace ProjectOC.InventorySystem.UI
                 this.ItemIsDestroyed = true;
                 if (CurrentStoreData.Storage < 10)
                 {
-                    Store.UIRemove(Player, CurrentStoreData, CurrentStoreData.Storage);
+                    Store.UIRemove(CurrentStoreData, CurrentStoreData.Storage);
                 }
                 else
                 {
-                    Store.UIRemove(Player, CurrentStoreData, 10);
+                    Store.UIRemove(CurrentStoreData, 10);
                 }
                 Refresh();
             }
@@ -507,7 +512,7 @@ namespace ProjectOC.InventorySystem.UI
             }
             else if (CurMode == Mode.ChangeItem)
             {
-                Store.UIChangeStoreData(Player, CurrentDataIndex, CurrentItemData);
+                Store.UIChangeStoreData(CurrentDataIndex, CurrentItemData);
                 this.CurMode = Mode.Store;
                 this.ItemDatas.Clear();
                 this.lastItemIndex = 0;
@@ -520,7 +525,7 @@ namespace ProjectOC.InventorySystem.UI
             }
             else if (CurMode == Mode.Upgrade)
             {
-                this.Store.Upgrade(Player);
+                BuildingManager.Instance.Upgrade(Store.WorldStore);
             }
             Refresh();
         }
@@ -613,6 +618,7 @@ namespace ProjectOC.InventorySystem.UI
             this.BotKeyTips_KeyTips.gameObject.SetActive(CurMode == Mode.Store);
             this.BotKeyTips_ChangeItem.gameObject.SetActive(CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon);
             this.BotKeyTips_Upgrade.gameObject.SetActive(CurMode == Mode.Upgrade);
+            transform.Find("TopTitle").Find("KT_Upgrade").gameObject.SetActive(HasUpgrade);
 
             if (this.CurMode == Mode.Store)
             {
@@ -1015,8 +1021,7 @@ namespace ProjectOC.InventorySystem.UI
 
                 #region Raw
                 bool flagUpgradeBtn = true;
-                List<Formula> raw = this.Store.GetUpgradeRaw();
-                List<Formula> rawCur = this.Store.GetUpgradeRawCurrent(Player);
+                List<Formula> raw = BuildingManager.Instance.GetUpgradeRaw(buildCID);
                 int delta = tempUIItemDatasUpgrade.Count - raw.Count;
                 if (delta > 0)
                 {
@@ -1039,7 +1044,7 @@ namespace ProjectOC.InventorySystem.UI
                     var uiItemData = tempUIItemDatasUpgrade[i];
                     string itemID = raw[i].id;
                     int need = raw[i].num;
-                    int current = rawCur[i].num;
+                    int current = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).InventoryItemAmount(itemID);
                     // Active
                     uiItemData.SetActive(true);
                     // 更新Icon

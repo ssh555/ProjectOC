@@ -56,45 +56,48 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public bool AddItem(Item item)
         {
-            if (this.Size >= this.MaxSize || item == null || !ItemManager.Instance.IsValidItemID(item.ID))
+            lock (this)
             {
-                return false;
-            }
-            // 不可以堆叠
-            if(!ItemManager.Instance.GetCanStack(item.ID))
-            {
-                item.OwnInventory = this;
-                this.itemList.Add(item);
-            }
-            // 可以堆叠
-            else
-            {
-                Item it = this.itemList.Find(i => i.ID == item.ID);
-                // 寻找合适格子装入
-                if (it != null)
+                if (this.Size >= this.MaxSize || item == null || !ItemManager.Instance.IsValidItemID(item.ID))
                 {
-                    var ma = ItemManager.Instance.GetMaxAmount(it.ID);
-                    // 没有达到数量上限
-                    if (it.Amount + item.Amount <= ma)
-                    {
-                        it.Amount += item.Amount;
-                    }
-                    else
-                    {
-                        item.Amount = it.Amount + item.Amount - ma;
-                        it.Amount = ma;
-                        item.OwnInventory = this;
-                        this.itemList.Add(item);
-                    }
+                    return false;
                 }
-                else
+                // 不可以堆叠
+                if (!ItemManager.Instance.GetCanStack(item.ID))
                 {
                     item.OwnInventory = this;
                     this.itemList.Add(item);
                 }
+                // 可以堆叠
+                else
+                {
+                    Item it = this.itemList.Find(i => i.ID == item.ID);
+                    // 寻找合适格子装入
+                    if (it != null)
+                    {
+                        var ma = ItemManager.Instance.GetMaxAmount(it.ID);
+                        // 没有达到数量上限
+                        if (it.Amount + item.Amount <= ma)
+                        {
+                            it.Amount += item.Amount;
+                        }
+                        else
+                        {
+                            item.Amount = it.Amount + item.Amount - ma;
+                            it.Amount = ma;
+                            item.OwnInventory = this;
+                            this.itemList.Add(item);
+                        }
+                    }
+                    else
+                    {
+                        item.OwnInventory = this;
+                        this.itemList.Add(item);
+                    }
+                }
+                this.SortItem();
+                return true;
             }
-            this.SortItem();
-            return true;
         }
 
         /// <summary>
@@ -113,18 +116,21 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public bool RemoveItem(Item item)
         {
-            if (item == null)
+            lock (this)
             {
-                return false;
+                if (item == null)
+                {
+                    return false;
+                }
+                var it = this.itemList.Find(i => i == item);
+                if (it == null)
+                {
+                    return false;
+                }
+                this.itemList.Remove(it);
+                this.OnItemListChanged?.Invoke(this);
+                return true;
             }
-            var it = this.itemList.Find(i => i == item);
-            if(it == null)
-            {
-                return false;
-            }
-            this.itemList.Remove(it);
-            this.OnItemListChanged?.Invoke(this);
-            return true;
         }
 
         /// <summary>
@@ -135,29 +141,32 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public Item RemoveItem(Item item, int amount = 1)
         {
-            if (item == null || amount <= 0)
+            lock (this)
             {
-                return null;
-            }
-            var it = this.itemList.Find(i => i == item);
-            if (it == null)
-            {
-                return null;
-            }
+                if (item == null || amount <= 0)
+                {
+                    return null;
+                }
+                var it = this.itemList.Find(i => i == item);
+                if (it == null)
+                {
+                    return null;
+                }
 
-            if(it.Amount <= amount)
-            {
-                this.itemList.Remove(it);
-                this.OnItemListChanged?.Invoke(this);
-                return it;
-            }
-            else
-            {
-                it.Amount -= amount;
-                this.OnItemListChanged?.Invoke(this);
-                var res = ItemManager.Instance.SpawnItem(item.ID);
-                res.Amount = amount;
-                return res;
+                if (it.Amount <= amount)
+                {
+                    this.itemList.Remove(it);
+                    this.OnItemListChanged?.Invoke(this);
+                    return it;
+                }
+                else
+                {
+                    it.Amount -= amount;
+                    this.OnItemListChanged?.Invoke(this);
+                    var res = ItemManager.Instance.SpawnItem(item.ID);
+                    res.Amount = amount;
+                    return res;
+                }
             }
         }
 
@@ -169,29 +178,32 @@ namespace ML.Engine.InventorySystem
         /// <returns></returns>
         public bool RemoveItem(string itemID, int amount = 1)
         {
-            // 数量不够
-            if (this.GetItemAllNum(itemID) < amount)
+            lock (this)
             {
-                return false;
-            }
-
-            var items = this.itemList.FindAll(i => i.ID == itemID);
-            foreach(var item in items)
-            {
-                if(item.Amount >= amount)
+                // 数量不够
+                if (this.GetItemAllNum(itemID) < amount)
                 {
-                    item.Amount -= amount;
-                    break;
+                    return false;
                 }
-                else
-                {
-                    amount -= item.Amount;
-                    item.Amount = 0;
-                }
-            }
 
-            this.OnItemListChanged?.Invoke(this);
-            return true;
+                var items = this.itemList.FindAll(i => i.ID == itemID);
+                foreach (var item in items)
+                {
+                    if (item.Amount >= amount)
+                    {
+                        item.Amount -= amount;
+                        break;
+                    }
+                    else
+                    {
+                        amount -= item.Amount;
+                        item.Amount = 0;
+                    }
+                }
+
+                this.OnItemListChanged?.Invoke(this);
+                return true;
+            }
         }
 
         /// <summary>

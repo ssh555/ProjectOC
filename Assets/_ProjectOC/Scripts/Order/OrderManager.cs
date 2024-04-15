@@ -14,9 +14,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
-using static ProjectOC.Order.OrderManager;
-using static UnityEditor.Timeline.Actions.MenuPriority;
+
 
 
 namespace ProjectOC.Order
@@ -170,7 +168,6 @@ namespace ProjectOC.Order
                 this.RefreshAcceptedList();
             };
 
-            //PlayerInventory = GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().Inventory;
             // 载入表格数据 
             LoadTableData();
 
@@ -180,6 +177,7 @@ namespace ProjectOC.Order
             if (instance == null)
             {
                 instance = this;
+                Init();
             }
         }
 

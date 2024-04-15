@@ -1,4 +1,5 @@
 using ProjectOC.Building;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,26 +7,16 @@ using UnityEngine;
 
 namespace ProjectOC.ClanNS
 {
-    /// <summary>
-    /// 临时的氏族类
-    /// </summary>
+    [LabelText("临时的氏族"), System.Serializable]
     public class Clan
     {
-        /// <summary>
-        /// ID
-        /// </summary>
+        [LabelText("ID"), ReadOnly]
         public string ID = "";
-        /// <summary>
-        /// 名称
-        /// </summary>
+        [LabelText("名称"), ReadOnly]
         public string Name = "";
-        /// <summary>
-        /// 拥有的床
-        /// </summary>
+        [LabelText("拥有的床"), ReadOnly]
         public Bed Bed;
-        /// <summary>
-        /// 是否拥有床
-        /// </summary>
+        [LabelText("是否拥有床"), ShowInInspector, ReadOnly]
         public bool HasBed { get { return Bed != null && !string.IsNullOrEmpty(Bed.InstanceID); } }
 
         public Clan() { }

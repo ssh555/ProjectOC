@@ -1,21 +1,15 @@
+using Sirenix.OdinInspector;
+
 namespace ProjectOC.WorkerNS
 {
-    /// <summary>
-    /// 状态
-    /// </summary>
+    [LabelText("状态")]
     public enum Status
     {
-        /// <summary>
-        /// 摸鱼
-        /// </summary>
+        [LabelText("摸鱼")]
         Fishing = 0,
-        /// <summary>
-        /// 休息
-        /// </summary>
+        [LabelText("休息")]
         Relaxing = 1,
-        /// <summary>
-        /// 工作
-        /// </summary>
+        [LabelText("工作")]
         Working = 2,
     }
 }

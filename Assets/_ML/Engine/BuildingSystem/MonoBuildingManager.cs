@@ -13,6 +13,11 @@ namespace ML.Engine.BuildingSystem
     [System.Serializable]
     public class MonoBuildingManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
+        public void OnRegister()
+        {
+            Init();
+        }
+
         #region Property|Field
         [SerializeField]
         public BuildingManager BM;

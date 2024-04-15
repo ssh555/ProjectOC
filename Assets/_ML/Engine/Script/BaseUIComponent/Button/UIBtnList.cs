@@ -238,7 +238,7 @@ namespace ML.Engine.UI
         /// <summary>
         /// 加入按钮
         /// </summary>
-        public void AddBtn(string prefabpath, UnityAction action = null, string BtnText = null)
+        public void AddBtn(string prefabpath, UnityAction BtnAction = null,Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null,string BtnText = null)
         {
             /*if (selectedButton == null) return;
             int i = OneDimCnt / limitNum;
@@ -277,11 +277,26 @@ namespace ML.Engine.UI
                 // 实例化
                 var btn = handle.Result.GetComponent<SelectedButton>();
                 btn.gameObject.name = btn.GetHashCode().ToString();
-                btn.transform.SetParent(this.parent.Find("Container"), false);
+                btn.transform.SetParent(this.parent.Find("Container"), true);
 
-                if (action != null)
+                if (BtnAction != null)
                 {
-                    btn.onClick.AddListener(action);
+                    btn.onClick.AddListener(BtnAction);
+                }
+
+                if (OnSelectEnter != null)
+                {
+                    btn.SetOnSelectEnter(OnSelectEnter);
+                }
+
+                if (OnSelectExit != null)
+                {
+                    btn.SetOnSelectExit(OnSelectExit);
+                }
+
+                if (BtnSettingAction != null)
+                {
+                    BtnSettingAction(btn);
                 }
 
                 if(BtnText != null)
@@ -797,6 +812,7 @@ namespace ML.Engine.UI
             {
                 var (i, j) = SBPosDic[sb];
                 this.UIBtnListContainer?.MoveToBtnList(sb.GetUIBtnList());
+                this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
                 return MoveIndexIUISelected(i, j);
             }
             else if(sb.GetUIBtnList() != this)
@@ -806,6 +822,7 @@ namespace ML.Engine.UI
                 sb.GetUIBtnList().CurSelected = sb;
                 this.UIBtnListContainer.CurnavagationMode = NavagationMode.SelectedButton;
                 this.UIBtnListContainer?.MoveToBtnList(sb.GetUIBtnList());
+                this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
             }
             
             return null;
@@ -873,7 +890,6 @@ namespace ML.Engine.UI
             {
                 this.DisableBtnList();
             }
-            
             this.Selected?.gameObject.SetActive(false);
         }
 
@@ -953,6 +969,17 @@ namespace ML.Engine.UI
             }
         }
 
+        /// <summary>
+        /// 获取当前选中按钮的坐标 若没有选中则返回（-1，-1）
+        /// </summary>
+        public (int,int) GetCurSelectedPos()
+        {
+            if (this.CurSelected != null)
+            {
+                return (TwoDimI, TwoDimJ);
+            }
+            return (-1, -1);
+        }
     }
 
 }

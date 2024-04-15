@@ -40,29 +40,27 @@ namespace ML.Engine.Timer
         public void Update(float deltaTime)
         {
             deltaTime *= TimeScale;
-            foreach (var timer in this.updateCounterDownTimers)
+            for (int i = 0; i < this.updateCounterDownTimers.Count; i++) 
             {
-                
-                timer.UpdateCurrentTime(deltaTime);
+                this.updateCounterDownTimers[i].UpdateCurrentTime(deltaTime);
             }
-            
         }
 
         public void FixedUpdate(float deltaTime)
         {
             deltaTime *= TimeScale;
-            foreach (var timer in fixedCounterDownTimers)
+            for (int i = 0; i < this.fixedCounterDownTimers.Count; i++) 
             {
-                timer.UpdateCurrentTime(deltaTime);
+                this.fixedCounterDownTimers[i].UpdateCurrentTime(deltaTime);
             }
         }
 
         private float _lastRealTime = 0;
         public void LateUpdate(float deltaTime)
         {
-            foreach (var timer in realCounterDownTimers)
+            for (int i = 0; i < this.realCounterDownTimers.Count; i++) 
             {
-                timer.UpdateCurrentTime(Time.realtimeSinceStartup - this._lastRealTime);
+                this.realCounterDownTimers[i].UpdateCurrentTime(Time.realtimeSinceStartup - this._lastRealTime);
                 this._lastRealTime = Time.realtimeSinceStartup;
             }
 
