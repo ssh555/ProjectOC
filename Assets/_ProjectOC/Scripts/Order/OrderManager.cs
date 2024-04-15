@@ -140,23 +140,17 @@ namespace ProjectOC.Order
         public void Init()
         {
             //TODO 之后由氏族模块处理
-
-            List<Order> UrgentOrders = new List<Order>();
-            for (int i = 0; i < 2; i++)
-            {
-                UrgentOrders.Add(null);
-            }
-            OrderDelegationMap.Add(("ID1",OrderType.Urgent), new List<Order>(UrgentOrders));
+            OrderDelegationMap.Add(("ID1", OrderType.Urgent), new List<Order>() { null, null });
             OrderDelegationMap.Add(("ID1", OrderType.Special), new List<Order>());
             OrderDelegationMap.Add(("ID1", OrderType.Normal), new List<Order>());
 
 
-            OrderDelegationMap.Add(("ID2", OrderType.Urgent), new List<Order>(UrgentOrders));
+            OrderDelegationMap.Add(("ID2", OrderType.Urgent), new List<Order>() { null, null });
             OrderDelegationMap.Add(("ID2", OrderType.Special), new List<Order>());
             OrderDelegationMap.Add(("ID2", OrderType.Normal), new List<Order>());
 
 
-            OrderDelegationMap.Add(("ID3", OrderType.Urgent), new List<Order>(UrgentOrders));
+            OrderDelegationMap.Add(("ID3", OrderType.Urgent), new List<Order>() { null, null });
             OrderDelegationMap.Add(("ID3", OrderType.Special), new List<Order>());
             OrderDelegationMap.Add(("ID3", OrderType.Normal), new List<Order>());
 
