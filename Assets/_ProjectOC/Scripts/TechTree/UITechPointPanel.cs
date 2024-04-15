@@ -34,7 +34,7 @@ namespace ProjectOC.TechTree.UI
             float angle = 270 - cor[0] * ((float)360.0 / sliceNum);
             angle = angle * Mathf.PI / 180;
 
-            Vector3 dir = new Vector3(Mathf.Sin(angle), Mathf.Cos(angle), 0);
+            Vector3 dir = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
 
             rectTransform.anchoredPosition = BasePos + dir * cor[1] * gapDistance;
         }
@@ -688,8 +688,6 @@ namespace ProjectOC.TechTree.UI
         {
             this.cursorNavigation.InitUIBtnList();
         }
-
         #endregion
     }
-
 }
