@@ -361,7 +361,6 @@ namespace ML.Engine.BuildingSystem.UI
             else
             {
                 return false;
-
             }
         }
 

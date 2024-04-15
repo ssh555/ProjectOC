@@ -41,7 +41,7 @@ namespace ProjectOC.MissionNS
         [LabelText("任务发起者"), ShowInInspector, ReadOnly]
         public IMissionObj Initiator;
 
-        [LabelText("分配的搬运"), ShowInInspector, ReadOnly]
+        [LabelText("分配的搬运"), ShowInInspector, ReadOnly, System.NonSerialized]
         private List<Transport> Transports = new List<Transport>();
 
         public MissionTransport(MissionTransportType type, string itemID, int missionNum, IMissionObj imission)
