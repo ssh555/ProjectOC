@@ -6,6 +6,7 @@ using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using static ML.Engine.UI.OptionPanel;
 using static ML.Engine.UI.UIBtnListContainer;
@@ -59,7 +60,9 @@ namespace ML.Engine.UI
             this.TestBtnList.SetBtnAction("AddBtn",
             () =>
             {
-                this.UIBtnListContainer.AddBtnList("ML/BaseUIPanel/GridNavagation/TestButtonList.prefab");
+                this.UIBtnListContainer.AddBtnList("ML/BaseUIPanel/GridNavagation/TestButtonList.prefab", ML.Engine.Input.InputManager.Instance.Common.Common.Confirm,
+                    BindType.started, new List<UnityAction>() { ()=> { Debug.Log("回调1"); }, () => { Debug.Log("回调2"); }, () => { Debug.Log("回调3"); } }
+                    );
             });
 
             this.TestBtnList.SetBtnAction("DeleteBtn",
@@ -71,7 +74,6 @@ namespace ML.Engine.UI
                     Debug.Log("请重新输入");
                     return;
                 }
-
                 this.UIBtnListContainer.DeleteBtnList(number1);
             });
         }
@@ -82,12 +84,12 @@ namespace ML.Engine.UI
         }
 
         #endregion
-        [ShowInInspector]
+
         
         private Transform ButtonList;
         private UIBtnList TestBtnList;
         private TMP_InputField DeleteBtnInputField;
-
+        [ShowInInspector]
         private UIBtnListContainer UIBtnListContainer;
         protected override void InitBtnInfo()
         {

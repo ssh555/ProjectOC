@@ -114,10 +114,10 @@ namespace ML.Engine.UI
         }
 
         private Dictionary<UIBtnListInitor, UIBtnList> UIBtnListDic = new Dictionary<UIBtnListInitor, UIBtnList>();
-        public void InitBtnlistInfo()
+        public UIBtnList InitBtnlistInfo()
         {
             UIBtnListInitor[] uIBtnListInitors = this.parent.GetComponentsInChildren<UIBtnListInitor>();
-
+            UIBtnList uIBtnList = null;
             for (int i = 0; i < uIBtnListInitors.Length; i++)
             {
                 if(UIBtnListDic.ContainsKey(uIBtnListInitors[i]))
@@ -126,7 +126,7 @@ namespace ML.Engine.UI
                 }
                 else
                 {
-                    UIBtnList uIBtnList = new UIBtnList(uIBtnListInitors[i])
+                    uIBtnList = new UIBtnList(uIBtnListInitors[i])
                     {
                         UIBtnListContainer = this
                     };
@@ -142,13 +142,7 @@ namespace ML.Engine.UI
                 RefreshEdge();
             }
 
-            for (int i = 0; i < this.uIBtnLists.Count; i++)
-            {
-                if(this.uIBtnLists[i].IsEnable==false)
-                {
-                    this.uIBtnLists[i].EnableBtnList();
-                }
-            }
+            return uIBtnList;
             
         }
 
@@ -265,7 +259,7 @@ namespace ML.Engine.UI
             int colCount = (rowCount > 0) ? btnlist[0].Count : 0;
             switch (edgeType)
             {
-                case EdgeType.LP:
+                case EdgeType.左侧顺时针:
                     for (int i = 0; i < rowCount; i++)
                     {
                         if (btnlist[rowCount - i - 1][0] != null) 
@@ -290,7 +284,7 @@ namespace ML.Engine.UI
                     }
 
                     break;
-                case EdgeType.LN:
+                case EdgeType.左侧逆时针:
                     for (int i = 0; i < rowCount; i++)
                     {
                         if (btnlist[i][0] != null)
@@ -314,7 +308,7 @@ namespace ML.Engine.UI
 
                     }
                     break;
-                case EdgeType.RP:
+                case EdgeType.右侧顺时针:
                     for (int i = 0; i < rowCount; i++)
                     {
                         if(btnlist[i][colCount - 1]!=null)
@@ -334,7 +328,7 @@ namespace ML.Engine.UI
                         }
                     }
                     break;
-                case EdgeType.RN:
+                case EdgeType.右侧逆时针:
                     for (int i = 0; i < rowCount; i++)
                     {
                         if (btnlist[rowCount - i - 1][colCount - 1] != null) 
@@ -354,7 +348,7 @@ namespace ML.Engine.UI
                         }
                     }
                     break;
-                case EdgeType.UP:
+                case EdgeType.上侧顺时针:
                     for (int i = 0; i < colCount; i++)
                     {
                         if (btnlist[0][i] != null)
@@ -374,7 +368,7 @@ namespace ML.Engine.UI
                         }
                     }
                     break; 
-                case EdgeType.UN:
+                case EdgeType.上侧逆时针:
                     for (int i = 0; i < colCount; i++)
                     {
                         if (btnlist[0][colCount - i - 1] != null)
@@ -394,7 +388,7 @@ namespace ML.Engine.UI
                         }
                     }
                     break;
-                case EdgeType.DP:
+                case EdgeType.下侧顺时针:
                     for (int i = 0; i < colCount; i++)
                     {
                         if (btnlist[rowCount - 1][colCount - i - 1] != null) 
@@ -414,7 +408,7 @@ namespace ML.Engine.UI
                         }
                     }
                     break;
-                case EdgeType.DN:
+                case EdgeType.下侧逆时针:
                     for (int i = 0; i < colCount; i++)
                     {
                         if (btnlist[rowCount - 1][i] != null)
@@ -451,11 +445,11 @@ namespace ML.Engine.UI
                 for(int i = 0; i < l2; i++) 
                 {
                     Navigation navigation = edge1[i].navigation;
-                    if(linkType == LinkType.LTR)
+                    if(linkType == LinkType.左右相连)
                     {
                         navigation.selectOnRight = edge2[i];
                     }
-                    else if(linkType == LinkType.UTD)
+                    else if(linkType == LinkType.上下相连)
                     {
                         navigation.selectOnDown = edge2[i];
                     }
@@ -464,11 +458,11 @@ namespace ML.Engine.UI
                     
 
                     navigation = edge2[i].navigation;
-                    if (linkType == LinkType.LTR)
+                    if (linkType == LinkType.左右相连)
                     {
                         navigation.selectOnLeft = edge1[i];
                     }
-                    else if (linkType == LinkType.UTD)
+                    else if (linkType == LinkType.上下相连)
                     {
                         navigation.selectOnUp = edge1[i];
                     }
@@ -478,11 +472,11 @@ namespace ML.Engine.UI
                 for(int i = l2; i < l1; i++) 
                 {
                     Navigation navigation = edge1[i].navigation;
-                    if (linkType == LinkType.LTR)
+                    if (linkType == LinkType.左右相连)
                     {
                         navigation.selectOnRight = edge2[l2 - 1];
                     }
-                    else if (linkType == LinkType.UTD)
+                    else if (linkType == LinkType.上下相连)
                     {
                         navigation.selectOnDown = edge2[l2 - 1];
                     }
@@ -495,11 +489,11 @@ namespace ML.Engine.UI
                 for (int i = 0; i < l1; i++)
                 {
                     Navigation navigation = edge2[i].navigation;
-                    if (linkType == LinkType.LTR)
+                    if (linkType == LinkType.左右相连)
                     {
                         navigation.selectOnLeft = edge1[i];
                     }
-                    else if (linkType == LinkType.UTD)
+                    else if (linkType == LinkType.上下相连)
                     {
                         navigation.selectOnUp = edge1[i];
                     }
@@ -507,11 +501,11 @@ namespace ML.Engine.UI
                     edge2[i].navigation = navigation;
 
                     navigation = edge1[i].navigation;
-                    if (linkType == LinkType.LTR)
+                    if (linkType == LinkType.左右相连)
                     {
                         navigation.selectOnRight = edge2[i];
                     }
-                    else if (linkType == LinkType.UTD)
+                    else if (linkType == LinkType.上下相连)
                     {
                         navigation.selectOnDown = edge2[i];
                     }
@@ -521,11 +515,11 @@ namespace ML.Engine.UI
                 for (int i = l1; i < l2; i++)
                 {
                     Navigation navigation = edge2[i].navigation;
-                    if (linkType == LinkType.LTR)
+                    if (linkType == LinkType.左右相连)
                     {
                         navigation.selectOnLeft = edge1[l1 - 1];
                     }
-                    else if (linkType == LinkType.UTD)
+                    else if (linkType == LinkType.上下相连)
                     {
                         navigation.selectOnUp = edge1[l1 - 1];
                     }
@@ -685,22 +679,22 @@ namespace ML.Engine.UI
                 {
                     for (int i = 0; i < this.uIBtnLists.Count - 1; i++)
                     {
-                        this.LinkTwoEdge(GetEdge(uIBtnLists[i], EdgeType.RP), GetEdge(uIBtnLists[i + 1], EdgeType.LN), LinkType.LTR);
+                        this.LinkTwoEdge(GetEdge(uIBtnLists[i], EdgeType.右侧顺时针), GetEdge(uIBtnLists[i + 1], EdgeType.左侧逆时针), LinkType.左右相连);
                     }
                     if(this.btnListContainerInitData.isLoop)
                     {
-                        this.LinkTwoEdge(GetEdge(uIBtnLists[this.uIBtnLists.Count - 1], EdgeType.RP), GetEdge(uIBtnLists[0], EdgeType.LN), LinkType.LTR);
+                        this.LinkTwoEdge(GetEdge(uIBtnLists[this.uIBtnLists.Count - 1], EdgeType.右侧顺时针), GetEdge(uIBtnLists[0], EdgeType.左侧逆时针), LinkType.左右相连);
                     }
                 }
                 else
                 {
                     for (int i = 0; i < this.uIBtnLists.Count - 1; i++)
                     {
-                        this.LinkTwoEdge(GetEdge(uIBtnLists[i], EdgeType.DN), GetEdge(uIBtnLists[i + 1], EdgeType.UP), LinkType.UTD);
+                        this.LinkTwoEdge(GetEdge(uIBtnLists[i], EdgeType.下侧逆时针), GetEdge(uIBtnLists[i + 1], EdgeType.上侧顺时针), LinkType.上下相连);
                     }
                     if (this.btnListContainerInitData.isLoop)
                     {
-                        this.LinkTwoEdge(GetEdge(uIBtnLists[this.uIBtnLists.Count - 1], EdgeType.DN), GetEdge(uIBtnLists[0], EdgeType.UP), LinkType.UTD);
+                        this.LinkTwoEdge(GetEdge(uIBtnLists[this.uIBtnLists.Count - 1], EdgeType.下侧逆时针), GetEdge(uIBtnLists[0], EdgeType.上侧顺时针), LinkType.上下相连);
                     }
                 }
             }
@@ -731,7 +725,7 @@ namespace ML.Engine.UI
             }
         }
 
-        public void AddBtnList(string prefabpath)
+        public void AddBtnList(string prefabpath,InputAction inputAction = null,BindType bindType = BindType.started,List<UnityAction> actions = null)
         {
             Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(prefabpath).Completed += (handle) =>
             {
@@ -739,9 +733,29 @@ namespace ML.Engine.UI
                 btnlist.gameObject.name = btnlist.GetHashCode().ToString();
                 btnlist.transform.SetParent(this.parent, false);
 
+                //给btnlist中的btn加入回调
+                var btns = btnlist.GetComponentsInChildren<SelectedButton>();
+
+                if(actions.Count == btns.Length)
+                {
+                    for (int i = 0; i < btns.Length; i++)
+                    {
+                        btns[i].onClick.AddListener(actions[i]);
+                    }
+                }
+                else
+                {
+                    Debug.LogError("按钮数量与回调数量不匹配！");
+                }
+
                 bool needMoveToBtnList = this.IsEmpty;
-                InitBtnlistInfo();
-                if(needMoveToBtnList)FindEnterableUIBtnList();
+                if (inputAction != null)
+                {
+                    UIBtnList uIBtnList = InitBtnlistInfo();
+                    uIBtnList.BindButtonInteractInputAction(inputAction, bindType);
+                }
+                
+                if (needMoveToBtnList)FindEnterableUIBtnList();
                 RefreshIsEmpty();
             };
         }

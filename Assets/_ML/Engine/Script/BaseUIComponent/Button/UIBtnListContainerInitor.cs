@@ -63,20 +63,20 @@ namespace ML.Engine.UI
 
         public enum EdgeType
         {
-            LP = 0,
-            LN,
-            RP,
-            RN,
-            UP,
-            UN,
-            DP,
-            DN
+            左侧顺时针 = 0,
+            左侧逆时针,
+            右侧顺时针,
+            右侧逆时针,
+            上侧顺时针,
+            上侧逆时针,
+            下侧顺时针,
+            下侧逆时针
         }
 
         public enum LinkType
         {
-            LTR = 0,
-            UTD
+            左右相连 = 0,
+            上下相连
         }
 
         [Serializable]
