@@ -83,6 +83,7 @@ public class GraphCursorNavigation : UIBehaviour ,ITickComponent
         else
         {
             this.uiBtnList.SetCurSelectedNull();
+            lastSelected = null;
         }
     }
 
