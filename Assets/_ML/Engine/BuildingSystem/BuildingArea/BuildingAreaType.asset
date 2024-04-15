@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e04c33259d65b934fa9ee5353f84593e, type: 3}
-  m_Name: BuildingSocketType
+  m_Name: BuildingAreaType
   m_EditorClassIdentifier: 
   serializationData:
     SerializedFormat: 2
@@ -21,18 +21,21 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  enumNamespace: ML.Engine.BuildingSystem.BuildingSocket
+  enumNamespace: ML.Engine.BuildingSystem.BuildingArea
   NoneName:
     name: None
     displayName: None
     value: 
   EnumList:
-  - name: Floor_Base_AdjacementCenter
-    displayName: Floor_Base_AdjacementCenter
+  - name: Ground
+    displayName: Ground
     value: 
-  - name: Floor_Triangle_AdjacementCenter
-    displayName: Floor_Triangle_AdjacementCenter
+  - name: Floor
+    displayName: Floor
     value: 
-  - name: Floor_Quagrant_AdjacementCenter
-    displayName: Floor_Quagrant_AdjacementCenter
+  - name: Table
+    displayName: Table
+    value: 
+  - name: Wall
+    displayName: Wall
     value: 

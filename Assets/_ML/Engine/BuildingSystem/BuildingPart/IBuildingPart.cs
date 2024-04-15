@@ -97,7 +97,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         {
             get
             {
-                return this.ActiveSocket == null ? BuildingSocket.BuildingSocketType.None : this.ActiveSocket.CanPlaceAreaType;
+                return this.ActiveSocket == null ? BuildingSocket.BuildingSocketType.None : this.ActiveSocket.ID;
             }
         }
         #endregion
