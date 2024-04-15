@@ -26,30 +26,12 @@ namespace ML.Engine.SaveSystem
                         {
                             stream = DecryptorStream(fs);
                         }
-                        using(StreamReader reader = new StreamReader(stream))
-                        {
-                            string xmlFromFile = reader.ReadToEnd();
-                            XDocument xml = XDocument.Parse(xmlFromFile);
-                            T loadedData = Activator.CreateInstance<T>();
-                            Dictionary<string, PropertyInfo> properties = typeof(T).GetProperties().ToDictionary(p => p.Name);
-                            Dictionary<string, FieldInfo> fields = typeof(T).GetFields().ToDictionary(p => p.Name);
-                            foreach (XElement element in xml.Descendants())
-                            {
-                                if (properties.TryGetValue(element.Name.LocalName, out PropertyInfo property))
-                                {
-                                    property.SetValue(loadedData, Convert.ChangeType(element.Value, property.PropertyType));
-                                }
-                                if (fields.TryGetValue(element.Name.LocalName, out FieldInfo field))
-                                {
-                                    field.SetValue(loadedData, Convert.ChangeType(element.Value, field.FieldType));
-                                }
-                            }
-                            loadedData.SavePath = Path.GetDirectoryName(relativePath);
-                            loadedData.SaveName = Path.GetFileName(relativePath);
-                            reader.Close();
-                            stream.Close();
-                            return loadedData;
-                        }
+                        DataContractSerializer serializer = new DataContractSerializer(typeof(T));
+                        T loadedData = (T)serializer.ReadObject(stream);
+                        loadedData.SavePath = Path.GetDirectoryName(relativePath);
+                        loadedData.SaveName = Path.GetFileName(relativePath);
+                        stream.Close();
+                        return loadedData;
                     }
                 }
             }
@@ -64,28 +46,10 @@ namespace ML.Engine.SaveSystem
                 {
                     stream = DecryptorStream(memory);
                 }
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    string xmlFromFile = reader.ReadToEnd();
-                    XDocument xml = XDocument.Parse(xmlFromFile);
-                    T loadedData = Activator.CreateInstance<T>();
-                    Dictionary<string, PropertyInfo> properties = typeof(T).GetProperties().ToDictionary(p => p.Name);
-                    Dictionary<string, FieldInfo> fields = typeof(T).GetFields().ToDictionary(p => p.Name);
-                    foreach (XElement element in xml.Descendants())
-                    {
-                        if (properties.TryGetValue(element.Name.LocalName, out PropertyInfo property))
-                        {
-                            property.SetValue(loadedData, Convert.ChangeType(element.Value, property.PropertyType));
-                        }
-                        if (fields.TryGetValue(element.Name.LocalName, out FieldInfo field))
-                        {
-                            field.SetValue(loadedData, Convert.ChangeType(element.Value, field.FieldType));
-                        }
-                    }
-                    reader.Close();
-                    stream.Close();
-                    return loadedData;
-                }
+                DataContractSerializer serializer = new DataContractSerializer(typeof(ISaveData));
+                T loadedData = (T)serializer.ReadObject(stream);
+                stream.Close();
+                return loadedData;
             }
             return default(T);
         }

@@ -19,14 +19,10 @@ namespace ProjectOC.WorkerNS
         [LabelText("效果参数3 float"), ReadOnly]
         public float ParamFloat;
         #region 读表属性
-        /// <summary>
-        /// 效果名称
-        /// </summary>
-        public string Name { get => LocalGameManager.Instance.EffectManager.GetName(ID); }
-        /// <summary>
-        /// 效果类型
-        /// </summary>
-        public EffectType EffectType { get => LocalGameManager.Instance.EffectManager.GetEffectType(ID); }
+        [LabelText("效果名称"), ShowInInspector, ReadOnly]
+        public string Name { get => LocalGameManager.Instance!=null ? LocalGameManager.Instance.EffectManager.GetName(ID) : ""; }
+        [LabelText("效果类型"), ShowInInspector, ReadOnly]
+        public EffectType EffectType { get => LocalGameManager.Instance != null ? LocalGameManager.Instance.EffectManager.GetEffectType(ID) : EffectType.None; }
         #endregion
 
         public Effect(EffectTableData config, string value)

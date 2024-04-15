@@ -46,14 +46,10 @@ namespace ProjectOC.StoreNS
         #endregion
 
         #region Property
-        /// <summary>
-        /// 仓库容量
-        /// </summary>
-        public int StoreCapacity { get { return this.LevelStoreCapacity[this.Level]; } }
-        /// <summary>
-        /// 仓库数据的容量
-        /// </summary>
-        public int StoreDataCapacity { get { return this.LevelStoreDataCapacity[this.Level]; } }
+        [LabelText("仓库容量"), ShowInInspector, ReadOnly]
+        public int StoreCapacity { get { return Level < LevelStoreCapacity .Count ? LevelStoreCapacity[Level] : 0; } }
+        [LabelText("仓库数据的容量"), ShowInInspector, ReadOnly]
+        public int StoreDataCapacity { get { return Level < LevelStoreDataCapacity.Count ? LevelStoreDataCapacity[Level] : 0; } }
         #endregion
 
         public event Action OnStoreDataChangeAction;
