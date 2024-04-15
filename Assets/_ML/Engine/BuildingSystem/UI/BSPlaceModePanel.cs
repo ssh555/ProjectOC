@@ -322,11 +322,11 @@ namespace ML.Engine.BuildingSystem.UI
             int offset = obj.ReadValue<float>() > 0 ? 1 : -1;
             if (this.Placer.IsEnableGridSupport)
             {
-                if(obj.started)
+                if (obj.started)
                 {
                     this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, this.Placer.SelectedPartInstance.transform.up);
+                    Debug.Log(this.Placer.SelectedPartInstance.RotOffset + " " + Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, this.Placer.SelectedPartInstance.transform.up));
                 }
-
             }
             else
             {

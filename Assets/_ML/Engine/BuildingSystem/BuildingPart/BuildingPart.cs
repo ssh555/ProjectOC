@@ -11,7 +11,6 @@ namespace ML.Engine.BuildingSystem.BuildingPart
     public class BuildingPart : MonoBehaviour, IBuildingPart, IComposition
     {
         #region IBuildingPart
-        [ShowInInspector]
         public string ID { get => BuildingManager.Instance.BPartTableDictOnClass[this.classification.ToString()].id; set => throw new Exception("不允许设置建筑物的ID"); }
 
         [SerializeField, LabelText("分类")]
@@ -62,7 +61,6 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             get => mode;
             set
             {
-
                 mode = value;
                 this.SetColliderTrigger((mode == BuildingMode.Place || mode == BuildingMode.Destroy || mode == BuildingMode.Edit));
                 if (mode == BuildingMode.Edit || mode == BuildingMode.Place)
@@ -244,19 +242,19 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         {
             foreach(var col in this.GetComponentsInChildren<Collider>())
             {
-                if(col.gameObject.layer == 7)
+                if(col.gameObject.layer != 8)
                 {
                     col.isTrigger = isTrigger;
                 }
             }
-            // foreach(var socket in this.GetComponentsInChildren<BuildingSocket.BuildingSocket>())
-            // {
-            //     socket.enabled = !isTrigger;
-            // }
-            // foreach (var area in this.GetComponentsInChildren<BuildingArea.BuildingArea>())
-            // {
-            //     area.enabled = !isTrigger;
-            // }
+            //foreach(var socket in this.GetComponentsInChildren<BuildingSocket.BuildingSocket>())
+            //{
+            //    socket.enabled = !isTrigger;
+            //}
+            //foreach (var area in this.GetComponentsInChildren<BuildingArea.BuildingArea>())
+            //{
+            //    area.enabled = !isTrigger;
+            //}
 
             if(isTrigger == true && this.GetComponent<Rigidbody>() == null)
             {
@@ -268,10 +266,6 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             }
         }
 
-        public void OnTriggerEnter(Collider other)
-        {
-            (this as IBuildingPart).CheckTriggerStay(other);
-        }
         public void OnTriggerStay(Collider other)
         {
             (this as IBuildingPart).CheckTriggerStay(other);
