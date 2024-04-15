@@ -99,7 +99,6 @@ namespace ProjectOC.TechTree.UI
                             var rec = btn.GetComponent<RectTransform>();
                             rec.localScale = new Vector3(1, 1, 1);
                             rec.anchoredPosition = Vector2.zero;
-                            Debug.Log(btn.GetComponent<RectTransform>().anchoredPosition);
                             var icon = btn.transform.Find("Icon").GetComponent<Image>();
                             if (!tempSprite.ContainsKey(id))
                             {
@@ -161,33 +160,12 @@ namespace ProjectOC.TechTree.UI
                         );
                 }
             }
-
-
-            
-
         }
 
-        private static string[] TechPointList;
-        private static Vector2Int GridRange;
+
         [ShowInInspector]
 
         private string CurrentID = null;
-        private static Vector2Int LastGrid;
-        private static string LastID
-        {
-            get
-            {
-                try
-                {
-                    return TechPointList[LastGrid.x * GridRange.y + LastGrid.y];
-                }
-                catch
-                {
-                    return null;
-                }
-                
-            }
-        }
 
         public int tickPriority { get; set; }
         public int fixedTickPriority { get; set; }
@@ -334,18 +312,6 @@ namespace ProjectOC.TechTree.UI
         /// </summary>
         public void Tick(float deltatime)
         {
-            /*// 向前
-            if (ProjectOC.Input.InputManager.PlayerInput.TechTree.LastTerm.WasPressedThisFrame())
-            {
-                RefreshCategory((cIndex - 1 + category.Length) % category.Length);
-                Refresh();
-            }
-            // 向后
-            if (ProjectOC.Input.InputManager.PlayerInput.TechTree.NextTerm.WasPressedThisFrame())
-            {
-                RefreshCategory((cIndex + 1 + category.Length) % category.Length);
-                Refresh();
-            }*/
             // 破译
             if (ProjectOC.Input.InputManager.PlayerInput.TechTree.Decipher.WasPressedThisFrame())
             {
