@@ -87,8 +87,8 @@ namespace ProjectOC.MissionNS
 
         private void Transport_Target_Action(Worker worker)
         {
-            worker.Transport.PutInTarget();
             worker.Transport.ArriveTarget = true;
+            worker.Transport.PutInTarget();
         }
 
         /// <summary>
