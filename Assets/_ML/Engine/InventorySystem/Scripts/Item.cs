@@ -161,6 +161,11 @@ namespace ML.Engine.InventorySystem
             return true;
         }
 
+        public virtual WorldItem.IWorldItemData GetItemWorldData()
+        {
+            return new WorldItem.WorldItemData(amount);
+        }
+
         #region °´ID±È½Ï
         public class SortByID : IComparer<Item>
         {

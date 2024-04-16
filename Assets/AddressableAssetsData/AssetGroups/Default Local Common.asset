@@ -238,13 +238,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e371fd1ccdce3144ab0019ca7d82c65b
-    m_Address: OC/UI/PinchFace
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 3a7c224e0c90d5f409bb357f68d80913
-    m_Address: OC/Character/PinchFace/Prefabs
+  - m_GUID: c0b2280865f42b844808df6da818ab76
+    m_Address: ML/BuildingSystem/MatchConfig
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -9,70 +9,87 @@ namespace ML.Engine.InventorySystem
     [RequireComponent(typeof(Collider))]
     public class WorldItem : MonoBehaviour, InteractSystem.IInteraction
     {
-        [SerializeField, ReadOnly]
-        protected string _id = "";
+        public interface IWorldItemData
+        {
+            public int Amount { get; }
+            public void SetItemData(Item item)
+            {
+                item.Amount = Amount;
+            }
+        }
 
-        /// <summary>
-        /// 拥有的 Item
-        /// </summary>
-        [ShowInInspector, ReadOnly, SerializeField]
-        protected Item item;
+        [System.Serializable]
+        public struct WorldItemData : IWorldItemData
+        {
+            [LabelText("Item 数量")]
+            public int amount;
+            public int Amount { get => amount; }
 
+            public WorldItemData(int num)
+            {
+                amount = num;
+            }
+        }
+
+
+        [LabelText("ItemID"), SerializeField]
+        protected string itemID = null;
+
+        [LabelText("Item 生成时的数据"), SerializeField]
+        protected IWorldItemData itemData = new WorldItemData();
+        public void SetItem(string id, IWorldItemData Data)
+        {
+            if(ItemManager.Instance.IsValidItemID(id))
+            {
+                this.itemID = id;
+                itemData = Data;
+            }
+        }
 
         public void SetItem(Item item)
         {
-            this.item = item;
-            _id = this.item != null ? this.item.ID : "";
+            this.itemID = item.ID;
+            this.itemData = item.GetItemWorldData();
         }
 
-        private void Start()
+        /// <summary>
+        /// 可更改初始化
+        /// </summary>
+        protected virtual void Start()
         {
-            InitItem();
-
             // 不需要 Update
             this.enabled = false;
         }
 
-        protected void InitItem()
-        {
-            if (this.item == null && ItemManager.Instance.IsValidItemID(this._id))
-            {
-                this.item = ItemManager.Instance.SpawnItem(this._id);
-            }
-        }
+
 
         /// <summary>
         /// 拾取
         /// </summary>
         /// <param name="inventory"></param>
-        public void PickUp(IInventory inventory)
+        public virtual void PickUp(IInventory inventory)
         {
-            if (this.item == null)
+            if (ItemManager.Instance.IsValidItemID(this.itemID))
             {
-                if(ItemManager.Instance.IsValidItemID(this._id))
-                {
-                    this.item = ItemManager.Instance.SpawnItem(this._id);
-
-                }
-                else
-                {
-                    throw new System.Exception(this.gameObject.name + " WorldItem.Item == null !!!");
-                }
+                var item = ItemManager.Instance.SpawnItem(this.itemID);
+                this.itemData.SetItemData(item);
+                inventory.AddItem(item);
+                Manager.GameManager.DestroyObj(this.gameObject);
+            }
+            else
+            {
+                throw new System.Exception(this.gameObject.name + " WorldItem.Item == null !!!");
             }
 
-
-            inventory.AddItem(item);
-
-            Manager.GameManager.DestroyObj(this.gameObject);
         }
 
         #region IInteraction
-        public string InteractType { get; set; } = "";
+        public string InteractType { get; set; } = "Item";
         public Vector3 PosOffset { get; set; } = Vector3.zero;
 
-        public void Interact(InteractComponent component)
+        public virtual void Interact(InteractComponent component)
         {
-            component.SetInteractionNull();
+            //component.SetInteractionNull();
             // to-do : Inventory 更改时这里也需要更改
             PickUp(component.gameObject.GetComponentInParent<ProjectOC.Player.PlayerCharacter>().Inventory);
         }

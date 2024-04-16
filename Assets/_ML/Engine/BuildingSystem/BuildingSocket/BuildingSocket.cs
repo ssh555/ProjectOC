@@ -2,6 +2,8 @@ using ML.Engine.BuildingSystem.BuildingPart;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 namespace ML.Engine.BuildingSystem.BuildingSocket
@@ -12,14 +14,16 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         /// <summary>
         /// 自身的SocketType
         /// </summary>
-        [LabelText("SocketType"), FoldoutGroup("SocketProperty"), PropertyTooltip("自身的SocketType,即ID")]
-        public BuildingSocketType Type;
+        [LabelText("ID"), FoldoutGroup("SocketProperty"), PropertyTooltip("自身的SocketType,即ID")]
+        public BuildingSocketType ID;
+        [LabelText("是否可切换"), FoldoutGroup("SocketProperty"), PropertyTooltip("为true时，表示这个Socket能作为切换激活点使用")]
+        public bool IsActiveSocket = true;
 
-        /// <summary>
-        /// 可以容纳的SocketType
-        /// </summary>
-        [LabelText("MatchType"), FoldoutGroup("SocketProperty"), PropertyTooltip("可以容纳的SocketType,即与Active匹配用的Type")]
-        public BuildingSocketType InTakeType;
+        ///// <summary>
+        ///// 可以容纳的SocketType
+        ///// </summary>
+        //[ReadOnly, LabelText("MatchType"), FoldoutGroup("SocketProperty"), PropertyTooltip("可以容纳的SocketType,即与Active匹配用的Type")]
+        //public BuildingSocketType InTakeType;
 
         /// <summary>
         /// to-do : 作为AcitveSocket时调用
@@ -37,7 +41,10 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 
         }
 
-
+        public bool CheckMatch(BuildingSocket target)
+        {
+            return BuildingManager.Instance.Placer.Socket2SocketMatch.IsMatch(this.ID, target.ID, out PositionOffset, out RotationOffset);
+        }
         #endregion
 
         #region Transform
@@ -50,9 +57,9 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         /// 放置BPart时是否允许旋转
         /// </summary>
         [LabelText("启用BPart旋转偏移"), PropertyTooltip("放置BPart时是否允许有旋转偏移"), FoldoutGroup("Transform"), SerializeField]
-        protected bool IsCanRotate = false;
+        protected bool IsCanRotate = true;
 
-        [LabelText("BPart位置偏移量"), FoldoutGroup("Transform"), SerializeField]
+        [LabelText("BPart位置偏移量"), FoldoutGroup("Transform"), SerializeField, HideInInspector]
         protected Vector3 PositionOffset;
 
         /// <summary>
@@ -63,7 +70,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
             get => this.transform.position + this.PositionOffset;
         }
 
-        [LabelText("BPart旋转偏移量"), FoldoutGroup("Transform"), SerializeField]
+        [LabelText("BPart旋转偏移量"), FoldoutGroup("Transform"), SerializeField, HideInInspector]
         protected Quaternion RotationOffset = Quaternion.identity;
         /// <summary>
         /// 放置的BPart的旋转
@@ -116,11 +123,11 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         #endregion
 
         #region Area
-        /// <summary>
-        /// 可放置区域Area类型
-        /// </summary>
-        [LabelText("可放置区域Area类型"), FoldoutGroup("Area")]
-        public BuildingSocketType CanPlaceAreaType;
+        ///// <summary>
+        ///// 可放置区域Area类型
+        ///// </summary>
+        //[LabelText("可放置区域Area类型"), FoldoutGroup("Area")]
+        //public BuildingSocketType CanPlaceAreaType;
 
         /// <summary>
         /// 用于area检测时的判断半径，即Socket与Area使用两套判定逻辑
@@ -171,6 +178,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         //}
         #endregion
 
+        #region Unity
         private void Start()
         {
             BuildingManager.Instance.BuildingSocketList.Add(this);
@@ -215,6 +223,44 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
                 }
             }
         }
+
+        private void OnDrawGizmosSelected()
+        {
+            //float arrowLength = 2f;
+            //float circleRadius = 0.3f;
+            //Color arrowColor = Color.red;
+
+            //// 设置箭头的颜色
+            //Gizmos.color = arrowColor;
+
+            //// 获取物体的位置、旋转和X轴
+            //Vector3 position = transform.position;
+            //Quaternion rotation = transform.rotation;
+            //Vector3 xAxis = transform.right;
+
+            //// 计算箭头末端的位置
+            //Vector3 arrowEnd = position + xAxis * arrowLength;
+
+            //// 绘制箭头线段
+            //Gizmos.DrawLine(position, arrowEnd);
+
+            ////// 计算箭头头部的位置
+            ////Vector3 arrowHead1 = arrowEnd + (rotation * Quaternion.Euler(0, 160, 0) * xAxis) * 0.2f * arrowLength;
+            ////Vector3 arrowHead2 = arrowEnd + (rotation * Quaternion.Euler(0, -160, 0) * xAxis) * 0.2f * arrowLength;
+
+            ////// 绘制箭头头部的两个线段
+            ////Gizmos.DrawLine(arrowEnd, arrowHead1);
+            ////Gizmos.DrawLine(arrowEnd, arrowHead2);
+            //// 绘制箭头头部的圆锥体
+
+            //// 绘制起点处的圆圈
+            //Gizmos.DrawWireSphere(position, circleRadius);
+
+            Gizmos.DrawIcon(this.transform.position, "Socket");
+        }
+
+        #endregion
+
     }
 
 }
