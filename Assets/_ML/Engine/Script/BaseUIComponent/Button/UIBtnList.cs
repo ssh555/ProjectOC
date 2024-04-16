@@ -85,6 +85,7 @@ namespace ML.Engine.UI
         /// <summary>
         /// SelectedButton,BtnPos
         /// </summary>
+        [ShowInInspector]
         private Dictionary<SelectedButton, (int, int)> SBPosDic = new Dictionary<SelectedButton, (int, int)>();
 
         private Dictionary<(InputAction, BindType), Action<InputAction.CallbackContext>> InputActionBindDic = new Dictionary<(InputAction, BindType), Action<InputAction.CallbackContext>>();
@@ -846,8 +847,9 @@ namespace ML.Engine.UI
             {
                 var (i, j) = SBPosDic[sb];
                 this.UIBtnListContainer?.MoveToBtnList(sb.GetUIBtnList());
-                this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
-                return MoveIndexIUISelected(i, j);
+                 SelectedButton btn =  MoveIndexIUISelected(i, j);
+                 this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
+                 return btn;
             }
             else if(sb.GetUIBtnList() != this)
             {
@@ -933,7 +935,7 @@ namespace ML.Engine.UI
         public void OnExitToInner()
         {
             //this.DisableBtnList();
-            this.Selected.gameObject.SetActive(false);
+            this.Selected?.gameObject.SetActive(false);
         }
 
         //从选中Inner退出然后进入Btnlist
@@ -941,7 +943,7 @@ namespace ML.Engine.UI
         {
             this.SetCurSelectedNull();
             //this.EnableBtnList();
-            this.Selected.gameObject.SetActive(true);
+            this.Selected?.gameObject.SetActive(true);
         }
 
         public void OnEnterInner()
@@ -1005,13 +1007,14 @@ namespace ML.Engine.UI
         /// <summary>
         /// 获取当前选中按钮的坐标 若没有选中则返回（-1，-1）
         /// </summary>
-        public (int,int) GetCurSelectedPos()
+        public Vector2Int GetCurSelectedPos()
         {
-            if (this.CurSelected != null)
+            if (this.CurSelected != null && this.SBPosDic.ContainsKey((this.CurSelected)))
             {
-                return (TwoDimI, TwoDimJ);
+                var (i, j) = this.SBPosDic[this.CurSelected];
+                return new Vector2Int(i, j);
             }
-            return (-1, -1);
+            return -Vector2Int.one;
         }
     }
 

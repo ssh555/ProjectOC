@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
+using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace ProjectOC.PinchFace
@@ -10,15 +13,21 @@ namespace ProjectOC.PinchFace
     public class UIPinchRacePanel : ML.Engine.UI.UIBasePanel<UIPinchRacePanel.PinchRacePanelStruct>
     {
         #region ML
+
+        protected override void Awake()
+        {
+            raceNameText = transform.Find("RaceInfo/RaceText").GetComponent<TextMeshProUGUI>();
+            raceDescription = transform.Find("RaceInfo/RaceDesciption").GetComponent<TextMeshProUGUI>();
+            base.Awake();
+        }
+
         protected override void Enter()
         {
-            this.UIBtnList.EnableBtnList();
             base.Enter();
         }
 
         protected override void Exit()
         {
-            this.UIBtnList.DisableBtnList();
             base.Exit();
         }
         #endregion
@@ -26,26 +35,35 @@ namespace ProjectOC.PinchFace
         #region Internal
         protected override void RegisterInput()
         {
-            //创建种族
-            //进入种族(int _index)
             
-            //最后一个是创建
+            for(int i = 0;i<RacePinchDatas.Count;i++)
+            {
+                int tmpI = i;
+                this.UIBtnListContainer.AddBtn(0, "OC/UI/PinchFace/PinchRaceButtonTemplate.prefab"
+                    , () =>
+                    {
+                        //创建种族
+                        // Debug.Log(RacePinchDatas[tmpI].raceName);
+                        
+                    });
+            }
+            
+            UIBtnListContainer.UIBtnLists[1].SetBtnAction(0,0,() =>
+            {
+                //创建种族
+                ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
+                LocalGameManager.Instance.PinchFaceManager.GenerateCustomRaceUI();
+            });
+            
+ 
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Enable();
-            this.UIBtnList.BindNavigationInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUI.AlterSelected, UIBtnListContainer.BindType.started);
-            this.UIBtnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm, UIBtnListContainer.BindType.started);
-            
+            UIBtnListContainer.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
         }
         
         protected override void UnregisterInput()
         {
-            this.UIBtnList.RemoveAllListener();
-
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Disable();
-
-            this.UIBtnList.DeBindInputAction();
-
-            // 杩斿洖
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
         }
         
@@ -72,30 +90,47 @@ namespace ProjectOC.PinchFace
             this.abname = "PlayerUIPanel";
             this.description = "PinchRace";
         }
-
-        private UIBtnList UIBtnList;
+        
         protected override void InitBtnInfo()
         {
-            UIBtnListInitor uIBtnListInitor = this.transform.GetComponentInChildren<UIBtnListInitor>(true);
-            this.UIBtnList = new UIBtnList(uIBtnListInitor);
+            this.UIBtnListContainer = new UIBtnListContainer(this.transform.GetComponentInChildren<UIBtnListContainerInitor>());
+            //
+            this.UIBtnListContainer.AddOnSelectButtonChangedAction(() =>
+            {
+                //右侧种族描述更新，中英文切换直接换RacePinchData
+                Vector2Int _curPos = UIBtnListContainer.UIBtnLists[0].GetCurSelectedPos();
+                if (_curPos == -Vector2Int.one)
+                {
+                    raceNameText.text = "";
+                    raceDescription.text = "";
+                }
+                else
+                {
+                    RacePinchData raceData = RacePinchDatas[_curPos.x];
+                    raceNameText.SetText(raceData.raceName);
+                    raceDescription.SetText(raceData.raceDescription);
+                }
+            });
         }
         private void InitBtnData(PinchRacePanelStruct datas)
         {
-            foreach (var tt in datas.Btns)
-            {
-                this.UIBtnList.SetBtnText(tt.name, tt.description.GetText());
-            }
+            // foreach (var tt in datas.Btns)
+            // {
+            //     this.UIBtnList.SetBtnText(tt.name, tt.description.GetText());
+            // }
         }
         
         #endregion
 
+
         #region PinchRacePanel
         [ShowInInspector]
         private UIBtnListContainer UIBtnListContainer;
-        
         //临时用成可序列化，方便
         [SerializeField]
         public List<RacePinchData> RacePinchDatas;
+
+        private TextMeshProUGUI raceNameText, raceDescription;
 
         #endregion
 

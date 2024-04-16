@@ -25,6 +25,7 @@ namespace ML.Engine.UI
         [ShowInInspector]
         private List<UIBtnList> uIBtnLists = new List<UIBtnList>();
         public List<UIBtnList> UIBtnLists { get { return uIBtnLists; } }
+        [ShowInInspector]
         public int UIBtnListNum { get { return uIBtnLists.Count; } }
         [ShowInInspector]
         private UIBtnList curSelectUIBtnList = null;
@@ -701,7 +702,7 @@ namespace ML.Engine.UI
                 }
             }
         }
-
+        
         public void AddBtn(int BtnListIndex, string prefabpath, UnityAction BtnAction = null, Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null, string BtnText = null)
         {
             if (BtnListIndex >= 0 || BtnListIndex < this.uIBtnLists.Count)
@@ -770,8 +771,10 @@ namespace ML.Engine.UI
                 var btnlist = handle.Result.GetComponent<UIBtnListInitor>();
                 btnlist.gameObject.name = btnlist.GetHashCode().ToString();
                 btnlist.transform.SetParent(this.parent, false);
-
-                this.btnListContainerInitData.AddLinkData(linkData);
+                if (linkData.btnlist1 >= 0 && linkData.btnlist2 >= 0) 
+                {
+                    this.btnListContainerInitData.AddLinkData(linkData);
+                }
                 UIBtnList uIBtnList = InitBtnlistInfo();
             }; 
         }
