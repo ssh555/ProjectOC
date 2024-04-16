@@ -354,20 +354,19 @@ namespace ML.Engine.BuildingSystem.UI
         #region Event
         private bool CheckCostResources(IBuildingPart bpart)
         {
-            if (CompositeManager.Instance.CanComposite(Player.Inventory, BuildingManager.Instance.GetID(bpart.Classification.ToString())))
+            if (CompositeManager.Instance.CanComposite(BuildingManager.Instance.GetID(bpart.Classification.ToString())))
             {
                 return true;
             }
             else
             {
                 return false;
-
             }
         }
 
         private void OnPlaceModeSuccess(IBuildingPart bpart)
         {
-            CompositeManager.Instance.OnlyCostResource(Player.Inventory, BuildingManager.Instance.GetID(bpart.Classification.ToString()));
+            CompositeManager.Instance.OnlyCostResource(BuildingManager.Instance.GetID(bpart.Classification.ToString()));
             BM.Placer.SelectedPartInstance.CheckCanInPlaceMode -= CheckCostResources;
         }
 

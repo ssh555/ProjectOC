@@ -24,14 +24,14 @@ namespace ProjectOC.Order
 
                 //TODO 记录当前游戏日，于当日00：00加入常规列表中 AddOrderToOrderDelegationMap
 
-                LocalGameManager.Instance.DispatchTimeManager.OnDayChanged += OnDayChangedAction;
+                LocalGameManager.Instance.DispatchTimeManager.OnDayChangedAction += OnDayChangedAction;
 
             };
         }
         private void OnDayChangedAction(int day)
         {
             LocalGameManager.Instance.OrderManager.AddOrderToOrderDelegationMap(this.OrderID);
-            LocalGameManager.Instance.DispatchTimeManager.OnDayChanged -= OnDayChangedAction;
+            LocalGameManager.Instance.DispatchTimeManager.OnDayChangedAction -= OnDayChangedAction;
         }
         public void StartRefreshTimer()
         {

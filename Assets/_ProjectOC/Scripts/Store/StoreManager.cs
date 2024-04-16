@@ -1,7 +1,7 @@
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace ProjectOC.StoreNS
@@ -13,12 +13,14 @@ namespace ProjectOC.StoreNS
         public string Icon;
     }
 
-    /// <summary>
-    /// 仓库管理器
-    /// </summary>
-    [System.Serializable]
+    [LabelText("仓库管理器"), System.Serializable]
     public sealed class StoreManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
+        public void OnRegister()
+        {
+            LoadTableData();
+        }
+
         #region Load And Data
         /// <summary>
         /// 是否已加载完数据
@@ -42,7 +44,6 @@ namespace ProjectOC.StoreNS
         }
         #endregion
 
-
         /// <summary>
         /// 实例化生成的仓库，键为UID
         /// </summary>
@@ -62,7 +63,7 @@ namespace ProjectOC.StoreNS
         /// </summary>
         /// <param name="priorityType">是否按照优先级获取 0表示不需要，1表示优先级从高到低，-1表示优先级从低到高</param>
         /// <returns></returns>
-        private List<Store> GetStores(int priorityType = 0)
+        public List<Store> GetStores(int priorityType = 0)
         {
             List<Store> stores = new List<Store>();
             foreach (WorldStore worldStore in this.WorldStoreDict.Values)
@@ -85,58 +86,24 @@ namespace ProjectOC.StoreNS
         }
 
         /// <summary>
-        /// 获取满足存入条件的仓库
-        /// </summary>
-        /// <param name="itemID">物品ID</param>
-        /// <param name="amount">数量</param>
-        /// <param name="priorityType">是否按照优先级获取 0表示不需要，1表示优先级从高到低，-1表示优先级从低到高</param>
-        /// <returns></returns>
-        public Store GetCanPutInStore(string itemID, int amount, int priorityType = 0)
-        {
-            List<Store> stores = GetStores(priorityType);
-            Store result = null;
-            // 从头到尾遍历仓库(跳过玩家正在交互的仓库)
-            foreach (Store store in stores)
-            {
-                if (!store.IsInteracting && store.IsStoreCanInItem(itemID))
-                {
-                    // 优先寻找第一个可以一次性存完的仓库
-                    // 若没有，则寻找第一个可以存入的，可溢出存入
-                    int empty = store.GetCanInStoreEmpty(itemID);
-                    if (result == null && empty > 0)
-                    {
-                        result = store;
-                    }
-                    if (empty >= amount)
-                    {
-                        result = store;
-                        break;
-                    }
-                }
-            }
-            return result;
-        }
-
-        /// <summary>
         /// 获取满足取出条件的仓库
         /// </summary>
         /// <param name="itemID">物品ID</param>
         /// <param name="amount">数量</param>
         /// <param name="priorityType">是否按照优先级获取 0表示不需要，1表示优先级从高到低，-1表示优先级从低到高</param>
         /// <returns>取出数量和对应仓库列表</returns>
-        public Dictionary<Store, int> GetCanPutOutStore(string itemID, int amount, int priorityType = 0)
+        public Dictionary<Store, int> GetPutOutStore(string itemID, int amount, int priorityType = 0, bool judgeInteracting = false, bool judgeCanOut = false)
         {
             Dictionary<Store, int> result = new Dictionary<Store, int>();
             if (!string.IsNullOrEmpty(itemID) && amount > 0)
             {
                 int resultAmount = 0;
                 List<Store> stores = GetStores(priorityType);
-                // 从头到尾遍历仓库(跳过玩家正在交互的仓库)
                 foreach (Store store in stores)
                 {
-                    if (!store.IsInteracting && store.IsStoreCanOutItem(itemID))
+                    if ((!judgeInteracting || !store.IsInteracting) && (!judgeCanOut || store.IsStoreHaveItem(itemID, false, judgeCanOut)))
                     {
-                        int storeAmount = store.GetCanOutStoreStorage(itemID);
+                        int storeAmount = store.GetDataNum(itemID, Store.DataType.Storage, false, judgeCanOut);
                         if (storeAmount > 0)
                         {
                             if (resultAmount + storeAmount >= amount)
@@ -151,6 +118,38 @@ namespace ProjectOC.StoreNS
                                 resultAmount += storeAmount;
                             }
                         }
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 获取满足存入条件的仓库
+        /// </summary>
+        /// <param name="itemID">物品ID</param>
+        /// <param name="amount">数量</param>
+        /// <param name="priorityType">是否按照优先级获取 0表示不需要，1表示优先级从高到低，-1表示优先级从低到高</param>
+        /// <returns></returns>
+        public Store GetPutInStore(string itemID, int amount, int priorityType = 0, bool judgeInteracting = false, bool judgeCanIn = false)
+        {
+            List<Store> stores = GetStores(priorityType);
+            Store result = null;
+            foreach (Store store in stores)
+            {
+                if ((!judgeInteracting || !store.IsInteracting) && (!judgeCanIn || store.IsStoreHaveItem(itemID, judgeCanIn)))
+                {
+                    // 优先寻找第一个可以一次性存完的仓库
+                    // 若没有，则寻找第一个可以存入的，可溢出存入
+                    int empty = store.GetDataNum(itemID, Store.DataType.Empty, judgeCanIn);
+                    if (result == null && empty > 0)
+                    {
+                        result = store;
+                    }
+                    if (empty >= amount)
+                    {
+                        result = store;
+                        break;
                     }
                 }
             }
@@ -198,10 +197,6 @@ namespace ProjectOC.StoreNS
                     store.WorldStore = worldStore;
                     store.SetLevel(level);
                 }
-                else
-                {
-                    //Debug.LogError($"StoreType {storeType} cannot create store");
-                }
             }
         }
 
@@ -227,4 +222,3 @@ namespace ProjectOC.StoreNS
         }
     }
 }
-

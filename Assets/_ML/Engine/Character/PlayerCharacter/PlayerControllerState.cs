@@ -13,13 +13,7 @@ namespace ML.PlayerCharacterNS
         {
             controller = _controller;
         }
-        public enum PlayerState
-        {
-            normal,
-            death
-        }
         
-        
-        public ML.Engine.InventorySystem.IInventory Inventory;
+
     }
 }

@@ -5,7 +5,9 @@ using UnityEngine;
 using ML.Engine.BuildingSystem.BuildingPart;
 using System.Linq;
 using System;
-using UnityEditor;
+using ML.Engine.InventorySystem.CompositeSystem;
+using ML.Engine.InventorySystem;
+
 
 namespace ML.Engine.BuildingSystem
 {
@@ -33,6 +35,17 @@ namespace ML.Engine.BuildingSystem
             return new BuildingPartClassification(GetClassificationString());
         }
     }
+
+    [System.Serializable]
+    public struct FurnitureThemeTableData
+    {
+        public string ID;
+        public int Sort;
+        public string Name;
+        public string Icon;
+        public string BuildID;
+    }
+
     [LabelText("建造模式")]
     public enum BuildingMode
     {
@@ -891,12 +904,30 @@ namespace ML.Engine.BuildingSystem
 
         #endregion
 
+        #region 建筑升级
+        public IBuildingUpgrade Upgrade(IBuildingUpgrade build)
+        {
+            if (build != null && build.CanUpgrade())
+            {
+                IBuildingPart upgradeBP = GetOneBPartInstance(GetUpgradeCID(build.Classification.ToString()));
+                if (upgradeBP is IBuildingUpgrade upgrade)
+                {
+                    upgrade.OnUpgrade(build);
+                    return upgrade;
+                }
+            }
+            return null;
+        }
+        #endregion
+
         #region 读表
         public const string Tex2DABPath = "UI/BuildingSystem/Texture2D/type";
         // Materials/Character/Player
 
         public Dictionary<string, BuildingTableData> BPartTableDictOnID = new Dictionary<string, BuildingTableData>();
         public Dictionary<string, BuildingTableData> BPartTableDictOnClass = new Dictionary<string, BuildingTableData>();
+
+        public Dictionary<string, FurnitureThemeTableData> FurnitureThemeTableDataDic = new Dictionary<string, FurnitureThemeTableData>();
         public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
 
         public ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]> ABJAProcessor;
@@ -972,6 +1003,17 @@ namespace ML.Engine.BuildingSystem
                 return GetClassification(upgradeID);
             }
             return null;
+        }
+
+        public List<Formula> GetUpgradeRaw(string CID)
+        {
+            List<Formula> result = new List<Formula>();
+            List<Formula> formulas = GetRaw(GetUpgradeCID(CID));
+            if (formulas != null)
+            {
+                result.AddRange(formulas);
+            }
+            return result;
         }
 
         public string GetClassification(string ID)

@@ -71,7 +71,7 @@ namespace ProjectOC.Player.UI
         public void Tick(float deltatime)
         {
             if(LocalGameManager.Instance!=null)
-                TimeText.text = LocalGameManager.Instance.DispatchTimeManager.CurrentTimeFrame.ToString()+" : "+ LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString();
+                TimeText.text = LocalGameManager.Instance.DispatchTimeManager.CurrentHour.ToString()+" : "+ LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString();
         }
 
         #endregion
@@ -192,11 +192,12 @@ namespace ProjectOC.Player.UI
         {
             this.UIBtnList.BindNavigationInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid, UIBtnListContainer.BindType.performed);
             this.UIBtnList.BindButtonInteractInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid, UIBtnListContainer.BindType.canceled,
-                null, () => { 
+                () => { this.UIBtnList.DisableBtnList(); }, () => { 
                     Ring.gameObject.SetActive(false);
                     ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
                     this.UIBtnList.SetCurSelectedNull();
                     this.UIBtnList.DeBindInputAction();
+                    this.UIBtnList.EnableBtnList();
                 });
             this.Ring.gameObject.SetActive(true);
             this.UIKeyTipList?.RefreshKetTip();

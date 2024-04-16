@@ -1,53 +1,65 @@
-using System.Collections;
-using System.Collections.Generic;
-using System;
 using UnityEngine;
-using ProjectOC.ClanNS;
 using Sirenix.OdinInspector;
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InteractSystem;
-using ML.Engine.Manager;
-using ProjectOC.ManagerNS;
-using ML.Engine.InventorySystem;
 
 
 namespace ProjectOC.Building
 {
+    [LabelText("床")]
     public class Bed : BuildingPart, IInteraction
     {
         #region 参数
         [LabelText("关联氏族"), ShowInInspector, ReadOnly]
-        public Clan Clan;
+        public ClanNS.Clan Clan;
         [LabelText("是否有关联氏族"), ShowInInspector, ReadOnly]
         public bool HasClan { get { return Clan != null && !string.IsNullOrEmpty(Clan.ID); } }
         [LabelText("是否能放置"), ShowInInspector, ReadOnly]
         public bool CanSetClan { get; private set; }
 
-        [LabelText("向上检测参数"), ShowInInspector]
+        [LabelText("向上检测参数"), FoldoutGroup("配置"), ShowInInspector]
         public RaycastConfig ConfigUp;
-        [LabelText("向下检测参数"), ShowInInspector]
+        [LabelText("向下检测参数"), FoldoutGroup("配置"), ShowInInspector]
         public RaycastConfig ConfigDown;
+
+        public ML.Engine.InventorySystem.ItemIcon ItemIcon { get => GetComponentInChildren<ML.Engine.InventorySystem.ItemIcon>(); }
+
         public string InteractType { get; set; } = "Bed";
         public Vector3 PosOffset { get; set; } = Vector3.zero;
-
-        public ItemIcon ItemIcon { get => GetComponentInChildren<ItemIcon>(); }
         #endregion
 
         protected override void Start()
         {
-            this.enabled = false;
+            enabled = false;
+        }
+
+        public void OnDestroy()
+        {
+            if (ManagerNS.LocalGameManager.Instance?.IslandAreaManager != null)
+            {
+                ManagerNS.LocalGameManager.Instance.IslandAreaManager.UpdatedFieldTransformsAction -= HouseDetectionAction;
+            }
         }
 
         public override void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
-            // 第一次新建
             if (isFirstBuild)
             {
-                LocalGameManager.Instance.IslandAreaManager.UpdatedFieldTransformsAction += HouseDetectionAction;
-                ItemManager.Instance.AddItemIconObject("", transform, new Vector3(0, transform.GetComponent<BoxCollider>().size.y * 1.5f, 0), Quaternion.Euler(Vector3.zero), Vector3.one);
+                ManagerNS.LocalGameManager.Instance.IslandAreaManager.UpdatedFieldTransformsAction += HouseDetectionAction;
+                ML.Engine.InventorySystem.ItemManager.Instance.AddItemIconObject("", transform, new Vector3(0, transform.GetComponent<BoxCollider>().size.y * 1.5f, 0), Quaternion.Euler(Vector3.zero), Vector3.one);
             }
-            //isFirstBuild的更新放在基类里，要要到引用后面
             base.OnChangePlaceEvent(oldPos, newPos);
+        }
+
+        public void Interact(InteractComponent component)
+        {
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIBedPanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
+            {
+                ProjectOC.Building.UI.UIBed uiPanel = (handle.Result).GetComponent<ProjectOC.Building.UI.UIBed>();
+                uiPanel.Bed = this;
+                uiPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uiPanel);
+            };
         }
 
         public bool HouseDetection()
@@ -84,17 +96,16 @@ namespace ProjectOC.Building
                     break;
                 }
             }
-            this.CanSetClan = flagUp && flagDown;
-            string icon = this.CanSetClan ? "UI_Bed_Icon_Enable" : "UI_Bed_Icon_Disable";
-            ItemIcon?.SetSprite(ItemManager.Instance.GetItemSprite(icon));
-            return this.CanSetClan;
+            CanSetClan = flagUp && flagDown;
+            string icon = CanSetClan ? "UI_Bed_Icon_Enable" : "UI_Bed_Icon_Disable";
+            ItemIcon?.SetSprite(ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(icon));
+            return CanSetClan;
         }
 
         private void HouseDetectionAction()
         {
-            if (LocalGameManager.Instance.IslandAreaManager.updatedFieldTransforms.Contains(this.transform.parent))
+            if (ManagerNS.LocalGameManager.Instance.IslandAreaManager.updatedFieldTransforms.Contains(this.transform.parent))
             {
-                // 床不在屋子里时，清空氏族数据
                 if (!HouseDetection())
                 {
                     SetEmpty();
@@ -105,18 +116,18 @@ namespace ProjectOC.Building
         /// <summary>
         /// 设置关联氏族
         /// </summary>
-        public void SetClan(Clan clan)
+        public void SetClan(ClanNS.Clan clan)
         {
-            if (this.HasClan)
+            if (HasClan)
             {
-                this.Clan.Bed = null;
+                Clan.Bed = null;
             }
             if (clan != null && clan.HasBed)
             {
                 clan.Bed.Clan = null;
             }
-            this.Clan = clan;
-            if (this.HasClan)
+            Clan = clan;
+            if (HasClan)
             {
                 clan.Bed = this;
             }
@@ -124,11 +135,11 @@ namespace ProjectOC.Building
 
         public void SetEmpty()
         {
-            if (this.HasClan)
+            if (HasClan)
             {
-                this.Clan.Bed = null;
+                Clan.Bed = null;
             }
-            this.Clan = null;
+            Clan = null;
         }
 
         private void OnDrawGizmosSelected()
@@ -147,26 +158,6 @@ namespace ProjectOC.Building
             Gizmos.color = UnityEngine.Color.green;
             Gizmos.matrix = Matrix4x4.TRS(posDown, rotDown, scaleDown);
             Gizmos.DrawWireCube(Vector3.zero, ConfigDown.Size);
-        }
-
-        public void Interact(InteractComponent component)
-        {
-            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIBedPanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
-            {
-                ProjectOC.Building.UI.UIBed uiPanel = (handle.Result).GetComponent<ProjectOC.Building.UI.UIBed>();
-                // 初始化相关数据
-                uiPanel.Bed = this;
-                uiPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
-                // Push
-                GameManager.Instance.UIManager.PushPanel(uiPanel);
-            };
-        }
-        public void OnDestroy()
-        {
-            if (LocalGameManager.Instance?.IslandAreaManager != null)
-            {
-                LocalGameManager.Instance.IslandAreaManager.UpdatedFieldTransformsAction -= HouseDetectionAction;
-            }
         }
     }
 }

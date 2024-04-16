@@ -14,6 +14,7 @@ using static ML.Engine.UI.UIBtnListContainer;
 using Sirenix.OdinInspector;
 using static ML.Engine.UI.UIBtnListContainerInitor;
 using static ML.Engine.UI.UIBtnListInitor;
+using static UnityEngine.InputSystem.InputAction;
 
 namespace ML.Engine.UI
 {
@@ -238,7 +239,7 @@ namespace ML.Engine.UI
         /// <summary>
         /// 加入按钮
         /// </summary>
-        public void AddBtn(string prefabpath, UnityAction action = null, string BtnText = null)
+        public void AddBtn(string prefabpath, UnityAction BtnAction = null,Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null,string BtnText = null)
         {
             /*if (selectedButton == null) return;
             int i = OneDimCnt / limitNum;
@@ -278,10 +279,26 @@ namespace ML.Engine.UI
                 var btn = handle.Result.GetComponent<SelectedButton>();
                 btn.gameObject.name = btn.GetHashCode().ToString();
                 btn.transform.SetParent(this.parent.Find("Container"), false);
+                btn.transform.localScale = Vector3.one;
 
-                if (action != null)
+                if (BtnAction != null)
                 {
-                    btn.onClick.AddListener(action);
+                    btn.onClick.AddListener(BtnAction);
+                }
+
+                if (OnSelectEnter != null)
+                {
+                    btn.SetOnSelectEnter(OnSelectEnter);
+                }
+
+                if (OnSelectExit != null)
+                {
+                    btn.SetOnSelectExit(OnSelectExit);
+                }
+
+                if (BtnSettingAction != null)
+                {
+                    BtnSettingAction(btn);
                 }
 
                 if(BtnText != null)
@@ -392,6 +409,33 @@ namespace ML.Engine.UI
                 SBDic[BtnName].onClick.AddListener(action);
             }
         }
+
+        /// <summary>
+        /// 传入SelectedButton设置按钮列表action
+        /// </summary>
+        public void SetBtnAction(SelectedButton selectedButton, UnityAction action)
+        {
+            if(selectedButton.GetUIBtnList() == this)
+            {
+                selectedButton.onClick.AddListener(action);
+            }
+        }
+
+
+        /// <summary>
+        /// 设置全部Btn的Action
+        /// </summary>
+        public void SetAllBtnAction(UnityAction action)
+        {
+            foreach (var item in this.TwoDimSelectedButtons)
+            {
+                foreach (var btn in item)
+                {
+                    this.SetBtnAction(btn, action);
+                }
+            }
+        }
+
         /// <summary>
         /// 获取指定按钮
         /// </summary>
@@ -620,13 +664,14 @@ namespace ML.Engine.UI
         /// </summary>
         public void ButtonInteract(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (this.isEnable == false) return;
-            this.ButtonInteractPreAction?.Invoke();
-            this.CurSelected.Interact();
-            this.ButtonInteractPostAction?.Invoke();
+            if (this.isEnable == false || this.CurSelected == null) return;
+            if ((this.inputCondition != null && this.inputCondition(obj)) || this.inputCondition == null) 
+            {
+                this.ButtonInteractPreAction?.Invoke();
+                this.CurSelected.Interact();
+                this.ButtonInteractPostAction?.Invoke();
+            }
         }
-
-
 
 
         /// <summary>
@@ -656,12 +701,16 @@ namespace ML.Engine.UI
         /// <summary>
         /// 该函数功能为绑定按钮确认InputAction的回调函数
         /// </summary>
-        public void BindButtonInteractInputAction(InputAction ButtonInteractInputAction, BindType bindType, Action preAction = null, Action postAction = null)
+        
+        public delegate bool InputCondition(CallbackContext context);
+        private InputCondition inputCondition = null;
+        public void BindButtonInteractInputAction(InputAction ButtonInteractInputAction, BindType bindType, Action preAction = null, Action postAction = null, InputCondition inputCondition = null)
         {
             this.ButtonInteractPreAction = preAction;
             this.ButtonInteractPostAction = postAction;
             this.ButtonInteractInputAction = ButtonInteractInputAction;
             this.ButtonInteractBindType = bindType;
+            this.inputCondition = inputCondition;
 
             switch (bindType)
             {
@@ -715,7 +764,7 @@ namespace ML.Engine.UI
         /// <summary>
         /// 该函数功能为解绑按钮导航和按钮确认InputAction的回调函数
         /// </summary>
-        public void DeBindInputAction()
+        public void DeBindInputAction(bool NotIncludeButtonInteractInputAction = false)
         {
             if (this.NavigationInputAction != null)
             {
@@ -733,7 +782,7 @@ namespace ML.Engine.UI
                 }
             }
 
-            if (this.ButtonInteractInputAction != null)
+            if (NotIncludeButtonInteractInputAction == false && this.ButtonInteractInputAction != null)
             {
                 switch (this.ButtonInteractBindType)
                 {
@@ -797,6 +846,7 @@ namespace ML.Engine.UI
             {
                 var (i, j) = SBPosDic[sb];
                 this.UIBtnListContainer?.MoveToBtnList(sb.GetUIBtnList());
+                this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
                 return MoveIndexIUISelected(i, j);
             }
             else if(sb.GetUIBtnList() != this)
@@ -806,8 +856,8 @@ namespace ML.Engine.UI
                 sb.GetUIBtnList().CurSelected = sb;
                 this.UIBtnListContainer.CurnavagationMode = NavagationMode.SelectedButton;
                 this.UIBtnListContainer?.MoveToBtnList(sb.GetUIBtnList());
+                this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
             }
-            
             return null;
         }
 
@@ -830,11 +880,13 @@ namespace ML.Engine.UI
         public void OnSelectEnter()
         {
 
-            if (this.uiBtnListContainer == null)
-            {
-                this.EnableBtnList();
-            }
-            
+            /*            if (this.uiBtnListContainer == null)
+                        {
+                            this.EnableBtnList();
+                        }*/
+
+            this.EnableBtnList();
+
             this.Selected?.gameObject.SetActive(true);
 
             if (this.uiBtnListContainer != null)
@@ -869,11 +921,11 @@ namespace ML.Engine.UI
         public void OnSelectExit()
         {
             this.SetCurSelectedNull();
-            if (this.uiBtnListContainer == null)
-            {
-                this.DisableBtnList();
-            }
-            
+            /*            if (this.uiBtnListContainer == null)
+                        {
+                            this.DisableBtnList();
+                        }*/
+            this.DisableBtnList();
             this.Selected?.gameObject.SetActive(false);
         }
 
@@ -902,9 +954,7 @@ namespace ML.Engine.UI
                 this.TwoDimJ = 0;
                 this.CurSelected = TwoDimSelectedButtons[TwoDimI][TwoDimJ];
             }
-
             this.CurSelected?.OnSelect(null);
-
 
             if (this.uiBtnListContainer.Grid_NavagationType == ContainerType.B)
             {
@@ -928,14 +978,13 @@ namespace ML.Engine.UI
             if (this.uiBtnListContainer.Grid_NavagationType == ContainerType.B)
             {
                 //解绑
-                DeBindInputAction();
+                DeBindInputAction(true);
                 this.OnSelectExit();
             }
             else if(this.uiBtnListContainer.Grid_NavagationType == ContainerType.A)
             {
-
                 //解绑
-                DeBindInputAction();
+                DeBindInputAction(true);
                 //加绑父项导航
                 this.uiBtnListContainer.BindNavigationInputAction();
                 if(this.uiBtnListContainer.CurnavagationMode == NavagationMode.SelectedButton)
@@ -953,6 +1002,17 @@ namespace ML.Engine.UI
             }
         }
 
+        /// <summary>
+        /// 获取当前选中按钮的坐标 若没有选中则返回（-1，-1）
+        /// </summary>
+        public (int,int) GetCurSelectedPos()
+        {
+            if (this.CurSelected != null)
+            {
+                return (TwoDimI, TwoDimJ);
+            }
+            return (-1, -1);
+        }
     }
 
 }

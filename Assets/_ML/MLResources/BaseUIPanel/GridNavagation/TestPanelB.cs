@@ -11,6 +11,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static ML.Engine.UI.OptionPanel;
 using static ML.Engine.UI.UIBtnListContainer;
+using static ML.Engine.UI.UIBtnListContainerInitor;
 
 namespace ML.Engine.UI
 {
@@ -73,6 +74,15 @@ namespace ML.Engine.UI
                 
             });
 
+            this.TestBtnList.SetBtnAction("AddBtnList",
+            () =>
+            {
+                LinkData linkData = new LinkData(this.UIBtnListContainer.UIBtnListNum-1, this.UIBtnListContainer.UIBtnListNum,EdgeType.下侧顺时针,EdgeType.上侧逆时针,LinkType.上下相连);
+
+                this.UIBtnListContainer.AddBtnListBType("ML/BaseUIPanel/GridNavagation/TestButtonListB.prefab", linkData);
+
+            });
+
             this.TestBtnList.SetBtnAction("DeleteBtn",
             () =>
             {
@@ -119,6 +129,9 @@ namespace ML.Engine.UI
         {
             this.UIBtnListContainer = new UIBtnListContainer(this.transform.GetComponentInChildren<UIBtnListContainerInitor>());
             this.TestBtnList = new UIBtnList(ButtonList.GetComponentInChildren<UIBtnListInitor>());
+
+            this.UIBtnListContainer.AddOnSelectButtonChangedAction(() => { Debug.Log("SelectButtonChanged!"); });
+            this.UIBtnListContainer.AddOnSelectButtonListChangedAction(() => { Debug.Log("SelectButtonListChanged!"); });
         }
     }
 

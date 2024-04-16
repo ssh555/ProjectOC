@@ -1,4 +1,5 @@
 using ML.Engine.Manager;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,44 +11,17 @@ namespace ProjectOC.MissionNS
     [System.Serializable]
     public class MissionTransport
     {
-        /// <summary>
-        /// 搬运类型
-        /// </summary>
+        [LabelText("搬运类型"), ReadOnly]
         public MissionTransportType Type;
-
-        /// <summary>
-        /// 搬运物品ID
-        /// </summary>
+        [LabelText("搬运物品ID"), ReadOnly]
         public string ItemID = "";
-
-        /// <summary>
-        /// 已经分配的数量
-        /// </summary>
-        public int AssignNum
-        {
-            get
-            {
-                int result = 0;
-                foreach (Transport transport in this.Transports)
-                {
-                    result += transport.MissionNum;
-                }
-                return result;
-            }
-        }
-
-        /// <summary>
-        /// 需要分配的数量
-        /// </summary>
+        [LabelText("已经分配的数量"), ShowInInspector, ReadOnly]
+        public int AssignNum;
+        [LabelText("需要分配的数量"), ShowInInspector, ReadOnly]
         public int NeedAssignNum{ get{ return MissionNum - FinishNum - AssignNum; } }
 
-        /// <summary>
-        /// 完成的数量
-        /// </summary>
         private int finishNum = 0;
-        /// <summary>
-        /// 完成的数量
-        /// </summary>
+        [LabelText("完成的数量"), ShowInInspector, ReadOnly]
         public int FinishNum 
         {
             get { return finishNum; }
@@ -61,20 +35,14 @@ namespace ProjectOC.MissionNS
             }
         }
 
-        /// <summary>
-        /// 需要搬运的数量
-        /// </summary>
+        [LabelText("需要搬运的数量"), ShowInInspector, ReadOnly]
         public int MissionNum;
 
-        /// <summary>
-        /// 任务发起者
-        /// </summary>
+        [LabelText("任务发起者"), ShowInInspector, ReadOnly]
         public IMissionObj Initiator;
 
-        /// <summary>
-        /// 分配的搬运
-        /// </summary>
-        public List<Transport> Transports = new List<Transport>();
+        [LabelText("分配的搬运"), ShowInInspector, ReadOnly, System.NonSerialized]
+        private List<Transport> Transports = new List<Transport>();
 
         public MissionTransport(MissionTransportType type, string itemID, int missionNum, IMissionObj imission)
         {
@@ -83,6 +51,30 @@ namespace ProjectOC.MissionNS
             this.MissionNum = missionNum;
             this.Initiator = imission;
             this.Initiator.AddMissionTranport(this);
+        }
+
+        public bool AddTransport(Transport transport)
+        {
+            if (transport != null)
+            {
+                this.Transports.Add(transport);
+                AssignNum += transport.MissionNum;
+                return true;
+            }
+            return false;
+        }
+
+        public bool RemoveTransport(Transport transport)
+        {
+            if (transport != null)
+            {
+                if (this.Transports.Remove(transport))
+                {
+                    AssignNum -= transport.MissionNum;
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -104,18 +96,17 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// 终止任务
         /// </summary>
-        public void End(bool remove=true)
+        public void End(bool removeManager = true)
         {
             foreach (Transport transport in this.Transports)
             {
                 transport?.End(false);
             }
-            if (remove)
+            this.Initiator.RemoveMissionTranport(this);
+            if (removeManager)
             {
-                this.Initiator.RemoveMissionTranport(this);
+                GameManager.Instance.GetLocalManager<MissionManager>().RemoveMissionTransport(this);
             }
-            MissionManager missionManager = GameManager.Instance.GetLocalManager<MissionManager>();
-            missionManager?.MissionTransports?.Remove(this);
         }
 
         /// <summary>
