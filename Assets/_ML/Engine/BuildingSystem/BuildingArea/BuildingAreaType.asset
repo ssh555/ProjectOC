@@ -39,3 +39,6 @@ MonoBehaviour:
   - name: Wall
     displayName: Wall
     value: 
+  - name: Ceiling
+    displayName: Ceiling
+    value: 
