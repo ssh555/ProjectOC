@@ -666,7 +666,7 @@ namespace ProjectOC.InventorySystem.UI
                         imgProduct.sprite = EmptySprite;
                     }
                     ProNode_Product.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(productID);
-                    ProNode_Product.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.StackAll.ToString();
+                    ProNode_Product.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.Stack.ToString();
                     #endregion
 
                     #region Raw

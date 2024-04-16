@@ -120,6 +120,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Light\GetRange.cs" />
     <Compile Include="Assets\_ML\Engine\BuildingSystem\UI\BSInteractMode_KeyComPanel.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetCenterOfMass.cs" />
+    <Compile Include="Assets\_ProjectOC\Scripts\MainInteract\ControllerPanel.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector2\GetRightVector.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Input\IsKeyUp.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedObject.cs" />
@@ -737,8 +738,8 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedGameObjectList.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\SetRightVector.cs" />
     <Compile Include="Assets\_ML\Engine\SaveSystem\SaveType.cs" />
-    <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\AddRelativeForce.cs" />
     <Compile Include="Assets\_ML\Engine\BuildingSystem\BuildingArea\BuildingAreaType.cs" />
+    <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\AddRelativeForce.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\PinchFace\PinchPart\ChangeColorPinchSetting.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Scripts\Tasks\Patrol.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\GameObject\Instantiate.cs" />
