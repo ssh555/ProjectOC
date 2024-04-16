@@ -1,5 +1,3 @@
-using ML.Engine.Manager;
-using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 
@@ -11,7 +9,7 @@ namespace ML.Engine.SaveSystem
         public string SavePath { get; set; } = "";
         public string SaveName { get; set; } = "GlobalSaveConfig";
         public bool IsDirty { get; set; }
-        public Utility.Version Version { get; set; }
+        public Manager.GameManager.Version Version { get; set; }
         #endregion
 
         /// <summary>
@@ -19,7 +17,7 @@ namespace ML.Engine.SaveSystem
         /// </summary>
         public List<string> SaveDataFolders = new List<string>();
         public GlobalSaveDataFolder(){}
-        public GlobalSaveDataFolder(List<string> saveDataFolders, Utility.Version version)
+        public GlobalSaveDataFolder(List<string> saveDataFolders, Manager.GameManager.Version version)
         {
             this.SaveDataFolders = new List<string>(saveDataFolders);
             this.Version = version;

@@ -12,7 +12,7 @@ namespace ML.Engine.SaveSystem
         public string SavePath { get; set; } = "";
         public string SaveName { get; set; } = "";
         public bool IsDirty { get; set; }
-        public ML.Engine.Utility.Version Version { get; set; }
+        public Manager.GameManager.Version Version { get; set; }
         #endregion
 
         public List<TechPoint> Datas = new List<TechPoint>();

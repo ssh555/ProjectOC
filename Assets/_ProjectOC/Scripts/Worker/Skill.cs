@@ -22,13 +22,13 @@ namespace ProjectOC.WorkerNS
 
         #region 读表属性
         [LabelText("序号"), ShowInInspector, ReadOnly]
-        public int Sort { get => LocalGameManager.Instance.SkillManager.GetSort(ID); }
+        public int Sort { get => LocalGameManager.Instance != null ? LocalGameManager.Instance.SkillManager.GetSort(ID) : 0; }
         [LabelText("技能类型"), ShowInInspector, ReadOnly]
-        public WorkType SkillType { get => LocalGameManager.Instance.SkillManager.GetSkillType(ID); }
+        public WorkType SkillType { get => LocalGameManager.Instance != null ? LocalGameManager.Instance.SkillManager.GetSkillType(ID) : WorkType.None; }
         [LabelText("技能描述"), ShowInInspector, ReadOnly]
-        public string Desciption { get => LocalGameManager.Instance.SkillManager.GetItemDescription(ID); }
+        public string Desciption { get => LocalGameManager.Instance != null ? LocalGameManager.Instance.SkillManager.GetItemDescription(ID) : ""; }
         [LabelText("技能效果描述"), ShowInInspector, ReadOnly]
-        public string EffectsDescription { get => LocalGameManager.Instance.SkillManager.GetEffectsDescription(ID); }
+        public string EffectsDescription { get => LocalGameManager.Instance != null ? LocalGameManager.Instance.SkillManager.GetEffectsDescription(ID) : ""; }
         #endregion
         public Skill()
         {

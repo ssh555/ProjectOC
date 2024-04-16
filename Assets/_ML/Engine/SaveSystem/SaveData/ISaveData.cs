@@ -26,7 +26,7 @@ namespace ML.Engine.SaveSystem
         /// °æ±¾ºÅ
         /// </summary>
         [DataMember]
-        public ML.Engine.Utility.Version Version { get; set; }
+        public Manager.GameManager.Version Version { get; set; }
         public object Clone();
     }
 }

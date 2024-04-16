@@ -58,21 +58,21 @@ namespace ProjectOC.ProNodeNS
 
         #region 读表数据
         [LabelText("名称"), ShowInInspector, ReadOnly]
-        public string Name { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetName(ID); }
+        public string Name { get => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetName(ID) : ""; }
         [LabelText("生产节点类型"), ShowInInspector, ReadOnly]
-        public ProNodeType ProNodeType { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetProNodeType(ID); }
+        public ProNodeType ProNodeType { get => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetProNodeType(ID) : ProNodeType.None; }
         [LabelText("生产节点类目"), ShowInInspector, ReadOnly]
-        public RecipeCategory Category { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetCategory(ID); }
+        public RecipeCategory Category { get => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetCategory(ID) : RecipeCategory.None; }
         [LabelText("生产节点可执行配方类目"), ShowInInspector, ReadOnly]
-        public List<RecipeCategory> RecipeCategoryFilter { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetRecipeCategoryFilterd(ID); }
+        public List<RecipeCategory> RecipeCategoryFilter { get => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetRecipeCategoryFilterd(ID) : null; }
         [LabelText("经验类型"), ShowInInspector, ReadOnly]
-        public WorkType ExpType { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetExpType(ID); }
+        public WorkType ExpType { get => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetExpType(ID) : WorkType.None; }
         [LabelText("堆放上限份数"), ShowInInspector, ReadOnly]
-        public int StackMaxNum { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetStack(ID); }
+        public int StackMaxNum { get => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetStack(ID) : 0; }
         [LabelText("堆放阈值份数"), ShowInInspector, ReadOnly]
-        public int StackThresholdNum { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetStackThreshold(ID); }
+        public int StackThresholdNum { get => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetStackThreshold(ID) : 0; }
         [LabelText("需求阈值份数"), ShowInInspector, ReadOnly]
-        public int RawThresholdNum { get => ManagerNS.LocalGameManager.Instance.ProNodeManager.GetRawThreshold(ID); }
+        public int RawThresholdNum { get => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetRawThreshold(ID) : 0; }
         #endregion
 
         #region Property
@@ -96,7 +96,7 @@ namespace ProjectOC.ProNodeNS
         public bool IsOnProduce { get => timerForProduce != null && !timerForProduce.IsStoped; }
         [LabelText("生产节点状态"), ShowInInspector, ReadOnly]
         public ProNodeState State { get => HasRecipe ? (IsOnProduce ? ProNodeState.Production : ProNodeState.Stagnation) : ProNodeState.Vacancy; }
-        [LabelText("生产效率"), PropertyTooltip("单位 %"), ShowInInspector, ReadOnly]
+        [LabelText("生产效率"), PropertyTooltip("单位%"), ShowInInspector, ReadOnly]
         public int Eff { get => HasWorker ? EffBase + Worker.Eff[ExpType] : EffBase; }
         [LabelText("生产一次所需要的时间"), ShowInInspector, ReadOnly]
         public int TimeCost { get => HasRecipe && Eff > 0 ? (int)Math.Ceiling((double)100 * Recipe.TimeCost / Eff) : 0; }
@@ -227,12 +227,12 @@ namespace ProjectOC.ProNodeNS
         {
             lock (this)
             {
+                RemoveRecipe();
                 if (!string.IsNullOrEmpty(recipeID))
                 {
                     Recipe recipe = ManagerNS.LocalGameManager.Instance.RecipeManager.SpawnRecipe(recipeID);
                     if (recipe != null)
                     {
-                        RemoveRecipe();
                         Recipe = recipe;
                         foreach (Formula raw in Recipe.Raw)
                         {
@@ -244,7 +244,6 @@ namespace ProjectOC.ProNodeNS
                 }
                 else
                 {
-                    RemoveRecipe();
                     Recipe = null;
                     return true;
                 }
@@ -259,46 +258,17 @@ namespace ProjectOC.ProNodeNS
         {
             StopRun();
             // 将堆放的成品，素材，全部返还至玩家背包
-            bool flag = false;
             List<Item> resItems = new List<Item>();
             var inventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
-            // 堆放的成品
             if (HasRecipe && StackAll > 0)
             {
-                List<Item> items = ItemManager.Instance.SpawnItems(ProductItem, StackAll);
-                foreach (var item in items)
-                {
-                    if (flag)
-                    {
-                        resItems.Add(item);
-                    }
-                    else
-                    {
-                        if (!inventory.AddItem(item))
-                        {
-                            flag = true;
-                        }
-                    }
-                }
+                resItems.AddRange(inventory.AddItem(ItemManager.Instance.SpawnItems(ProductItem, StackAll)));
             }
-            // 素材
             foreach (var raw in RawItems)
             {
-                flag = false;
-                List<Item> items = ItemManager.Instance.SpawnItems(raw.Key, raw.Value);
-                foreach (var item in items)
+                if (raw.Value > 0)
                 {
-                    if (flag)
-                    {
-                        resItems.Add(item);
-                    }
-                    else
-                    {
-                        if (!inventory.AddItem(item))
-                        {
-                            flag = true;
-                        }
-                    }
+                    resItems.AddRange(inventory.AddItem(ItemManager.Instance.SpawnItems(raw.Key, raw.Value)));
                 }
             }
             // 没有加到玩家背包的都变成WorldItem
@@ -394,7 +364,6 @@ namespace ProjectOC.ProNodeNS
         {
             if (CanWorking() && !IsOnProduce)
             {
-                // 启动生产计时器
                 TimerForProduce.Reset(TimeCost);
                 return true;
             }
@@ -616,7 +585,6 @@ namespace ProjectOC.ProNodeNS
                             }
                             amount = !complete && Stack < amount ? Stack : amount;
                             Stack -= amount;
-                            OnActionChange?.Invoke();
                         }
                         else
                         {
@@ -668,6 +636,7 @@ namespace ProjectOC.ProNodeNS
             {
                 Dictionary<string, int> tempRawItems = new Dictionary<string, int>(RawItems);
                 var inventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
+                bool flag = false;
                 foreach (var kv in tempRawItems)
                 {
                     string itemID = kv.Key;
@@ -677,8 +646,12 @@ namespace ProjectOC.ProNodeNS
                     if (inventory.RemoveItem(itemID, amount))
                     {
                         RawItems[itemID] += amount;
-                        StartProduce();
+                        flag = true;
                     }
+                }
+                if (flag)
+                {
+                    StartProduce();
                 }
             }
         }

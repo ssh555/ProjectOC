@@ -1,6 +1,6 @@
-using ML.Engine.Manager;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace ML.Engine.SaveSystem
@@ -14,7 +14,7 @@ namespace ML.Engine.SaveSystem
         public string SavePath { get; set; } = "";
         public string SaveName { get; set; } = "SaveConfig";
         public bool IsDirty { get; set; }
-        public Utility.Version Version { get; set; }
+        public Manager.GameManager.Version Version { get; set; }
         #endregion
 
         /// <summary>
@@ -33,14 +33,13 @@ namespace ML.Engine.SaveSystem
         public string LastSaveTime;
 
         /// <summary>
-        /// 存档文件名称-对应的数据结构类型全名字符串的映射表
-        /// SaveName -> Path+Name+SaveName+文件后缀
+        /// Path+Name+SaveName-对应的数据结构类型全名字符串的映射表
         /// </summary>
         public Dictionary<string, string> FileMap = new Dictionary<string, string>();
 
         public SaveDataFolder(){}
 
-        public SaveDataFolder(string name, Utility.Version version)
+        public SaveDataFolder(string name, Manager.GameManager.Version version)
         {
             this.SavePath = name;
             this.Version = version;
@@ -52,14 +51,27 @@ namespace ML.Engine.SaveSystem
 
         public void ChangeName(string name)
         {
-            this.LastSaveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            this.IsDirty = true;
-            this.SavePath = name;
-            foreach (var kv in FileMap.ToList())
+            if (!string.IsNullOrEmpty(name))
             {
-                FileMap[kv.Key] = kv.Value.Replace(this.Name, name);
+                this.LastSaveTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                this.IsDirty = true;
+                this.SavePath = name;
+                Dictionary<string, string> map = new Dictionary<string, string>();
+
+                foreach (var kv in FileMap.ToList())
+                {
+                    string[] directories = Path.GetDirectoryName(kv.Key).Split(Path.DirectorySeparatorChar);
+                    if (directories.Length >= 2)
+                    {
+                        directories[directories.Length - 1] = name;
+                        string updatedDirectory = string.Join(Path.DirectorySeparatorChar, directories);
+                        string updatedPath = Path.Combine(updatedDirectory, Path.GetFileName(kv.Key));
+                        map[updatedPath] = kv.Value;
+                    }
+                }
+                this.FileMap = map;
+                this.Name = name;
             }
-            this.Name = name;
         }
         public object Clone()
         {

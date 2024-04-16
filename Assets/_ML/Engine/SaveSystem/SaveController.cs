@@ -82,23 +82,19 @@ namespace ML.Engine.SaveSystem
                 if (globalSaveDataFolder != null)
                 {
                     List<string> configs = globalSaveDataFolder.SaveDataFolders;
-                    Utility.Version version = globalSaveDataFolder.Version;
                     if (configs != null)
                     {
                         for (int i = 0; i < MAXSAVEDATACOUNT; i++)
                         {
-                            ConfigPaths[i] = configs[i];
-                            if (ConfigPaths[i] != null)
+                            if (configs[i] != null && File.Exists(Path.Combine(SavePath, configs[i], "SaveConfig")))
                             {
+                                ConfigPaths[i] = configs[i];
                                 SaveDataFolders[i] = LoadData<SaveDataFolder>(Path.Combine(ConfigPaths[i], "SaveConfig"));
                                 SaveDataFolders[i].SavePath = ConfigPaths[i];
                             }
                         }
                     }
-                    if (version < GameManager.Instance.Version)
-                    {
-                        UpdateVersion();
-                    }
+                    UpdateVersion();
                 }
             }
         }
@@ -108,33 +104,49 @@ namespace ML.Engine.SaveSystem
         /// </summary>
         private void UpdateVersion()
         {
-            ML.Engine.Utility.Version version = GameManager.Instance.Version;
+            Manager.GameManager.Version version = GameManager.Instance.version;
+            GlobalSaveDataFolder globalSaveDataFolder = LoadData<GlobalSaveDataFolder>("GlobalSaveConfig");
+            if (globalSaveDataFolder != null && globalSaveDataFolder.Version < GameManager.Instance.version)
+            {
+                SaveGlobalSaveDataFolder();
+            }
+
             foreach (SaveDataFolder saveDataFolder in this.SaveDataFolders)
             {
                 if (saveDataFolder != null)
                 {
                     foreach (var kv in saveDataFolder.FileMap)
                     {
-                        if (!MethodDict.ContainsKey(kv.Key))
+                        if (!MethodDict.ContainsKey(kv.Value))
                         {
-                            Type type = Type.GetType(kv.Key);
+                            Type type = Type.GetType(kv.Value);
                             MethodInfo method = typeof(SaveController).GetMethod("LoadData").MakeGenericMethod(type);
-                            MethodDict.Add(kv.Key, method);
+                            MethodDict.Add(kv.Value, method);
                         }
-                        object loadData = MethodDict[kv.Key].Invoke(this, new object[] { Path.Combine(saveDataFolder.Name, kv.Key) });
-                        ISaveData data = (ISaveData)loadData;
-                        data.SaveName = kv.Key;
-                        data.SavePath = saveDataFolder.SavePath;
-                        data.Version = version;
-                        data.IsDirty = true;
-                        SaveData(data);
+                        string fileName = Path.GetFileName(kv.Key);
+                        object loadData = MethodDict[kv.Value].Invoke(this, new object[] { Path.Combine(saveDataFolder.Name, fileName) });
+                        if (loadData != null)
+                        {
+                            ISaveData data = (ISaveData)loadData;
+                            if (data.Version < version)
+                            {
+                                data.SaveName = fileName;
+                                data.SavePath = saveDataFolder.SavePath;
+                                data.Version = version;
+                                data.IsDirty = true;
+                                SaveData(data);
+                            }
+                        }
                     }
-                    saveDataFolder.Version = version;
-                    saveDataFolder.IsDirty = true;
-                    SaveData(saveDataFolder);
+
+                    if (saveDataFolder.Version < version)
+                    {
+                        saveDataFolder.Version = version;
+                        saveDataFolder.IsDirty = true;
+                        SaveData(saveDataFolder);
+                    }
                 }
             }
-            SaveGlobalSaveDataFolder();
         }
 
         public SaveDataFolder GetSaveDataFolder(int index)
@@ -145,6 +157,7 @@ namespace ML.Engine.SaveSystem
             }
             return null;
         }
+
         /// <summary>
         /// 获取对应类型的存档数据
         /// </summary>
@@ -177,10 +190,10 @@ namespace ML.Engine.SaveSystem
                 {
                     this.Datas.Add(data);
                     data.SavePath = saveDataFolder.Name;
-                    data.SaveName = data.GetType().ToString();
-                    data.Version = GameManager.Instance.Version;
+                    data.SaveName = data.GetType().Name;
+                    data.Version = GameManager.Instance.version;
                     data.IsDirty = true;
-                    saveDataFolder.FileMap[data.SaveName] = Path.Combine(SavePath, data.SavePath, data.SaveName);
+                    saveDataFolder.FileMap[Path.Combine(SavePath, data.SavePath, data.SaveName)] = data.GetType().ToString();
                     saveDataFolder.IsDirty = true;
                     if (isSave)
                     {
@@ -266,7 +279,7 @@ namespace ML.Engine.SaveSystem
             if (!string.IsNullOrEmpty(name) && index >= 0 && index < MAXSAVEDATACOUNT && string.IsNullOrEmpty(ConfigPaths[index]) && !ConfigPaths.Contains(name))
             {
                 await Task.Run(() => Directory.CreateDirectory(Path.Combine(SavePath, name)));
-                SaveDataFolder saveDataFolder = new SaveDataFolder(name, GameManager.Instance.Version);
+                SaveDataFolder saveDataFolder = new SaveDataFolder(name, GameManager.Instance.version);
                 saveDataFolder.IsDirty = true;
                 ConfigPaths[index] = name;
                 SaveDataFolders[index] = saveDataFolder;
@@ -317,18 +330,22 @@ namespace ML.Engine.SaveSystem
                 {
                     foreach (var kv in saveDataFolder.FileMap)
                     {
-                        if (!MethodDict.ContainsKey(kv.Key))
+                        if (!MethodDict.ContainsKey(kv.Value))
                         {
-                            Type type = Type.GetType(kv.Key);
+                            Type type = Type.GetType(kv.Value);
                             MethodInfo method = typeof(SaveController).GetMethod("LoadData").MakeGenericMethod(type);
-                            MethodDict.Add(kv.Key, method);
+                            MethodDict.Add(kv.Value, method);
                         }
-                        object loadData = MethodDict[kv.Key].Invoke(this, new object[] { Path.Combine(saveDataFolder.Name, kv.Key) });
-                        ISaveData data = (ISaveData) loadData;
-                        data.SavePath = saveDataFolder.Name;
-                        data.SaveName = kv.Key;
-                        data.IsDirty = false;
-                        this.Datas.Add(data);
+                        string fileName = Path.GetFileName(kv.Key);
+                        object loadData = MethodDict[kv.Value].Invoke(this, new object[] { Path.Combine(saveDataFolder.Name, fileName) });
+                        if (loadData != null) 
+                        {
+                            ISaveData data = (ISaveData)loadData;
+                            data.SavePath = saveDataFolder.Name;
+                            data.SaveName = fileName;
+                            data.IsDirty = false;
+                            this.Datas.Add(data);
+                        }
                     }
                 });
                 this.IsLoadedSaveData = true;
@@ -414,7 +431,7 @@ namespace ML.Engine.SaveSystem
         /// </summary>
         public void SaveGlobalSaveDataFolder()
         {
-            GlobalSaveDataFolder global = new GlobalSaveDataFolder(ConfigPaths.ToList(), GameManager.Instance.Version);
+            GlobalSaveDataFolder global = new GlobalSaveDataFolder(ConfigPaths.ToList(), GameManager.Instance.version);
             global.IsDirty = true;
             SaveData(global);
         }
