@@ -447,6 +447,24 @@ namespace ML.Engine.UI
             }
             return null;
         }
+        public SelectedButton GetBtn(int index1,int index2)
+        {
+            if (index1 >= 0 && index1 < TwoDimH && index2 >= 0 && index2 < TwoDimW)
+            {
+                return this.TwoDimSelectedButtons[index1][index2];
+            }
+            return null;
+            
+        }
+        public SelectedButton GetBtn(int index)
+        {
+            int i = index / TwoDimW;
+            int j = index % TwoDimW;
+            return GetBtn(i,j);
+        }
+
+
+
         /// <summary>
         /// 获取当前选中按钮
         /// </summary>
@@ -550,6 +568,7 @@ namespace ML.Engine.UI
         /// </summary>
         public SelectedButton MoveIndexIUISelected(int i, int j)
         {
+            if(GetBtn(i,j) == null) return null;
             this.CurSelected?.OnDeselect(null);
             this.CurSelected = TwoDimSelectedButtons[i][j];
             this.TwoDimI = i;
@@ -559,10 +578,14 @@ namespace ML.Engine.UI
         }
         public SelectedButton MoveIndexIUISelected(int i)
         {
+            if(GetBtn(i) == null)return null;
+
             this.CurSelected?.OnDeselect(null);
-            this.CurSelected = TwoDimSelectedButtons[i][0];
-            this.TwoDimI = i;
-            this.TwoDimJ = 0;
+            this.CurSelected = GetBtn(i);
+
+            var (x, y) = SBPosDic[this.CurSelected];
+            this.TwoDimI = x;
+            this.TwoDimJ = y;
             this.CurSelected.OnSelect(null);
             return CurSelected;
         }
