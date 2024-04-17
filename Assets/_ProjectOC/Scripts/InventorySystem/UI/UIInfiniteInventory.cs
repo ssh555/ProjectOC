@@ -59,7 +59,7 @@ namespace ProjectOC.InventorySystem.UI
 
             var kt = this.transform.Find("BotKeyTips").Find("KeyTips");
             KT_Use = kt.Find("KT_Use");
-            KT_Drop = kt.Find("KT_Drop");
+
             KT_Destroy = kt.Find("KT_Destroy");
 
             IsInit = true;
@@ -278,7 +278,8 @@ namespace ProjectOC.InventorySystem.UI
 
         private void Comfirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if(this.CurrentItem.CanUse())
+            //TODO 
+            if (ItemManager.Instance.GetCanUse(this.CurrentItem.ID))
             {
                 this.CurrentItem.Execute(1);
                 this.CurrentItemIndex = this.CurrentItemIndex;
@@ -385,7 +386,7 @@ namespace ProjectOC.InventorySystem.UI
         private TMPro.TextMeshProUGUI Info_ItemEffectDescription;
 
         private Transform KT_Use;
-        private Transform KT_Drop;
+
         private Transform KT_Destroy;
 
 
@@ -505,7 +506,7 @@ namespace ProjectOC.InventorySystem.UI
                 // Amount
                 var amounttext = item.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
                 amounttext.gameObject.SetActive(ItemManager.Instance.GetCanStack(SelectedItems[i].ID));
-                amounttext.text = SelectedItems[i].Amount.ToString();
+                amounttext.text = SelectedItems[i].Amount > 999 ? SelectedItems[i].Amount.ToString() + "+" : SelectedItems[i].Amount.ToString();
                 // Selected
                 var selected = item.transform.Find("Selected");
                 if(CurrentItem == SelectedItems[i])
@@ -620,9 +621,9 @@ namespace ProjectOC.InventorySystem.UI
             #region BotKeyTips
             if (CurrentItem != null)
             {
-                KT_Use.gameObject.SetActive(CurrentItem.CanUse());
-                KT_Drop.gameObject.SetActive(CurrentItem.CanDrop());
-                KT_Destroy.gameObject.SetActive(CurrentItem.CanDestroy());
+                //TODO
+                KT_Use.gameObject.SetActive(ItemManager.Instance.GetCanUse(this.CurrentItem.ID));
+                KT_Destroy.gameObject.SetActive(ItemManager.Instance.GetCanDestroy(this.CurrentItem.ID));
             }
             #endregion
 

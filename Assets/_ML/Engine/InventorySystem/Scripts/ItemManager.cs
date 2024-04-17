@@ -23,6 +23,8 @@ namespace ML.Engine.InventorySystem
         public TextContent.TextContent effectsdescription;
         public string type;
         public bool bcanstack;
+        public bool bcanuse;
+        public bool bcandestroy;
         public int maxamount;
         public string worldobject;
     }
@@ -341,6 +343,24 @@ namespace ML.Engine.InventorySystem
                 return false;
             }
             return this.ItemTypeStrDict[id].bcanstack;
+        }
+        //TODO GetCanUse GetCanDestroy
+        public bool GetCanUse(string id)
+        {
+            if (!this.ItemTypeStrDict.ContainsKey(id))
+            {
+                return false;
+            }
+            return this.ItemTypeStrDict[id].bcanuse;
+        }
+
+        public bool GetCanDestroy(string id)
+        {
+            if (!this.ItemTypeStrDict.ContainsKey(id))
+            {
+                return false;
+            }
+            return this.ItemTypeStrDict[id].bcandestroy;
         }
 
         public int GetWeight(string id)

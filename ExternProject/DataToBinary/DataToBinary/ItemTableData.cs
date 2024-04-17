@@ -55,7 +55,7 @@ namespace ML.Engine.InventorySystem
             // TODO: Change
             this.type = "ResourceItem";
             this.bcanstack = true;
-            this.maxamount = 999;
+            this.maxamount = int.MaxValue;
             this.worldobject = "Item";
             return true;
         }
