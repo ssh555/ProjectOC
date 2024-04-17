@@ -149,12 +149,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 8192
-  InTakeType: 11
+  ID: 0
+  IsActiveSocket: 1
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  CanPlaceAreaType: 11
 --- !u!1 &5929378708047268126
 GameObject:
   m_ObjectHideFlags: 0
@@ -286,6 +285,10 @@ MonoBehaviour:
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 0, z: 0, w: 0}
   activeSocketIndex: 0
+  Clan:
+    ID: 
+    Name: 
+    Bed: {fileID: 0}
   ConfigUp:
     Offset: {x: 0, y: 5.89, z: 0}
     Size: {x: 2.26, y: 10, z: 2.7}

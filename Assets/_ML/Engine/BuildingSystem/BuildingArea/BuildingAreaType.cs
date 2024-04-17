@@ -15,5 +15,7 @@ namespace ML.Engine.BuildingSystem.BuildingArea
 		Table,
 		[LabelText("Wall")]
 		Wall,
+		[LabelText("Ceiling")]
+		Ceiling,
 	}
 }
