@@ -56,14 +56,11 @@ namespace ProjectOC.TechTree.UI
 
             // Width : Distance(Self, Target) - Size
             float dis = Vector3.Distance(UIB.anchoredPosition, (UIA.parent.parent as RectTransform).anchoredPosition);// 
-
             var e = (edge as RectTransform);
             e.sizeDelta = new Vector2(dis, e.sizeDelta.y);
-
         }
 
         #endregion
-
 
         #region 数据初始化
         private Dictionary<string, Transform> btn_IdDic = new Dictionary<string, Transform>();
@@ -155,7 +152,6 @@ namespace ProjectOC.TechTree.UI
                                     }
                                 }
                             }
-
                         }
                         );
                 }
@@ -285,10 +281,7 @@ namespace ProjectOC.TechTree.UI
 
             this.EmptyPanel = this.transform.Find("ContentPanel").Find("EmptyPanel");
             #endregion
-
             this.cursorNavigation = this.transform.GetComponentInChildren<GraphCursorNavigation>();
-
-
         }
 
         protected override void Start()

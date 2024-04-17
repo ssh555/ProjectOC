@@ -36,6 +36,15 @@ namespace ML.Engine.UI
             }
             get { return curSelectUIBtnList; }
         }
+        [ShowInInspector]
+        public int CurSelectUIBtnListIndex { get { if (curSelectUIBtnList != null && this.UIBtnListIndexDic.ContainsKey(curSelectUIBtnList))
+                    {
+                    return this.UIBtnListIndexDic[curSelectUIBtnList];
+                }
+                return -1;
+
+
+            } }
         public enum NavagationMode
         {
             BtnList = 0,
@@ -115,18 +124,18 @@ namespace ML.Engine.UI
             this.InitBtnlistInfo();
         }
 
+        [ShowInInspector]
         private Dictionary<UIBtnListInitor, UIBtnList> UIBtnListDic = new Dictionary<UIBtnListInitor, UIBtnList>();
+        [ShowInInspector]
+        private Dictionary<UIBtnList, int> UIBtnListIndexDic = new Dictionary<UIBtnList, int>();
         public UIBtnList InitBtnlistInfo()
         {
+            this.UIBtnListIndexDic.Clear();
             UIBtnListInitor[] uIBtnListInitors = this.parent.GetComponentsInChildren<UIBtnListInitor>();
             UIBtnList uIBtnList = null;
             for (int i = 0; i < uIBtnListInitors.Length; i++)
             {
-                if(UIBtnListDic.ContainsKey(uIBtnListInitors[i]))
-                {
-                    continue;
-                }
-                else
+                if(!UIBtnListDic.ContainsKey(uIBtnListInitors[i])) 
                 {
                     uIBtnList = new UIBtnList(uIBtnListInitors[i])
                     {
@@ -138,11 +147,17 @@ namespace ML.Engine.UI
                 
             }
 
-            if(this.gridNavagationType == ContainerType.A)
+            for (int i = 0; i < uIBtnListInitors.Length; i++)
             {
+                UIBtnListIndexDic.Add(this.uIBtnLists[i], i);
+            }
+
+
+            //if (this.gridNavagationType == ContainerType.A)
+            //{
                 RefreshBtnListNavagation();
                 RefreshEdge();
-            }
+            //}
 
             return uIBtnList;
             
@@ -801,6 +816,7 @@ namespace ML.Engine.UI
                 if (this.UIBtnListDic.ElementAt(i).Value == this.uIBtnLists[BtnListIndex])
                 {
                     UIBtnListDic.Remove(this.UIBtnListDic.ElementAt(i).Key);
+                    UIBtnListIndexDic.Remove(this.uIBtnLists[BtnListIndex]);
                     uIBtnLists.RemoveAt(BtnListIndex);
                 }
             }

@@ -586,6 +586,12 @@ namespace ML.Engine.UI
         private void GridNavigation(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (this.isEnable == false) return;
+            if (this.BindNavigationInputCondition != null)
+            {
+                bool canPerformed = this.BindNavigationInputCondition(obj);
+                if (canPerformed == false) return;
+            }
+            
             this.NavigationPreAction?.Invoke();
             string actionName = obj.action.name;
 
@@ -600,6 +606,7 @@ namespace ML.Engine.UI
             {
                 angle = angle + 360;
             }
+            
 
             if (angle < 45 || angle > 315)
             {
@@ -665,7 +672,7 @@ namespace ML.Engine.UI
         public void ButtonInteract(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (this.isEnable == false || this.CurSelected == null) return;
-            if ((this.inputCondition != null && this.inputCondition(obj)) || this.inputCondition == null) 
+            if ((this.BindButtonInteractInputCondition != null && this.BindButtonInteractInputCondition(obj)) || this.BindButtonInteractInputCondition == null) 
             {
                 this.ButtonInteractPreAction?.Invoke();
                 this.CurSelected.Interact();
@@ -703,14 +710,28 @@ namespace ML.Engine.UI
         /// </summary>
         
         public delegate bool InputCondition(CallbackContext context);
-        private InputCondition inputCondition = null;
+        private InputCondition BindButtonInteractInputCondition = null;
+
+        //目前暂时仅限制格子导航
+        private InputCondition BindNavigationInputCondition = null;
+
+        public void ChangeBindButtonInteractInputCondition(InputCondition inputCondition)
+        {
+            this.BindButtonInteractInputCondition = inputCondition;
+        }
+
+        public void ChangeBindNavigationInputCondition(InputCondition inputCondition)
+        {
+            this.BindNavigationInputCondition = inputCondition;
+        }
+
         public void BindButtonInteractInputAction(InputAction ButtonInteractInputAction, BindType bindType, Action preAction = null, Action postAction = null, InputCondition inputCondition = null)
         {
             this.ButtonInteractPreAction = preAction;
             this.ButtonInteractPostAction = postAction;
             this.ButtonInteractInputAction = ButtonInteractInputAction;
             this.ButtonInteractBindType = bindType;
-            this.inputCondition = inputCondition;
+            this.BindButtonInteractInputCondition = inputCondition;
 
             switch (bindType)
             {
@@ -726,6 +747,8 @@ namespace ML.Engine.UI
             }
 
         }
+
+
 
         /// <summary>
         /// 该函数功能为绑定按钮 对应哪个InputAction触发
