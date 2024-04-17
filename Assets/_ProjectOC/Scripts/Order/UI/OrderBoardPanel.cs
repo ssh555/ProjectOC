@@ -24,6 +24,8 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         this.FunctionPanel = transform.Find("FunctionPanel");
         this.FunctionType = this.Function.transform.childCount;
 
+        this.AcceptedOrder = this.FunctionPanel.Find("AcceptedOrder");
+        this.OrderDelegation = this.FunctionPanel.Find("OrderDelegation");
     }
 
     #endregion
@@ -47,6 +49,9 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         ProjectOC.Input.InputManager.PlayerInput.OrderBoardPanel.LastTerm.performed -= LastTerm_performed;
         ProjectOC.Input.InputManager.PlayerInput.OrderBoardPanel.NextTerm.performed -= NextTerm_performed;
 
+        this.ClanBtnList.RemoveAllListener();
+        this.ClanBtnList.DeBindInputAction();
+
         // 返回
         ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
     }
@@ -58,6 +63,8 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         // 切换类目
         ProjectOC.Input.InputManager.PlayerInput.OrderBoardPanel.LastTerm.performed += LastTerm_performed;
         ProjectOC.Input.InputManager.PlayerInput.OrderBoardPanel.NextTerm.performed += NextTerm_performed;
+
+        this.ClanBtnList.BindButtonInteractInputAction(ProjectOC.Input.InputManager.PlayerInput.OrderBoardPanel.SwichBtn, UIBtnListContainer.BindType.performed);
 
         // 返回
         ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
@@ -74,6 +81,18 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     {
         FunctionIndex = (FunctionIndex + 1) % FunctionType;
         this.Refresh();
+    }
+
+    private void SwitchBtn_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        if(FunctionIndex == 1) 
+        {
+            //氏族选择
+            if (OrderDelegationIndex == 0)
+            {
+
+            }
+        }
     }
     private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
@@ -95,10 +114,17 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     #endregion
 
     #region UI对象引用
+    //初始选中订单委托
     private int FunctionIndex = 1;
+    //初始选中氏族选择
+    private int OrderDelegationIndex = 0;
+
     private int FunctionType;
     private Transform Function;
     private Transform FunctionPanel;
+
+    private Transform AcceptedOrder;
+    private Transform OrderDelegation;
 
     #endregion
 
@@ -122,6 +148,31 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             {
                 Function.GetChild(i).Find("Selected").gameObject.SetActive(false);
                 FunctionPanel.GetChild(i).gameObject.SetActive(false);
+            }
+            //订单委托选择
+            if(FunctionIndex == 1)
+            {
+                for (int j = 0; j < this.OrderDelegation.childCount; j++)
+                {
+                    if(this.OrderDelegationIndex == j)
+                    {
+                        this.OrderDelegation.GetChild(j).gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        this.OrderDelegation.GetChild(j).gameObject.SetActive(false);
+                    }
+                    //ClanBtnList 激活
+                    if (j == 0)
+                    {
+                        this.ClanBtnList.EnableBtnList();
+                    }
+                    else
+                    {
+                        this.ClanBtnList.DisableBtnList();
+                    }
+                    
+                }
             }
             
         }

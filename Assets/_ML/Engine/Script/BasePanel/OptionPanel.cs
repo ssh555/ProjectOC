@@ -80,15 +80,15 @@ namespace ML.Engine.UI
             () =>
             {
                 //GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData("确定取消该订单吗？", "您将面临违约惩罚", null, () => { Debug.Log("确定响应！"); }));
-                /*                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/BaseUIPanel/GridNavagation/GridTestPanelA.prefab").Completed += (handle) =>
-                                {
-                                    // 实例化
-                                    var panel = handle.Result.GetComponent<TestPanelA>();
+ /*               Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/BaseUIPanel/GridNavagation/GridTestPanelA.prefab").Completed += (handle) =>
+                {
+                    // 实例化
+                    var panel = handle.Result.GetComponent<TestPanelA>();
 
-                                    panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
 
-                                    GameManager.Instance.UIManager.PushPanel(panel);
-                                };*/
+                    GameManager.Instance.UIManager.PushPanel(panel);
+                };*/
                 Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/MainInteract/AudioPanel.prefab").Completed += (handle) =>
                 {
                     // 实例化

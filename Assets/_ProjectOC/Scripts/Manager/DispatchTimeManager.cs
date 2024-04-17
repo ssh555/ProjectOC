@@ -17,7 +17,7 @@ namespace ProjectOC.ManagerNS
         /// <summary>
         /// 时间流速比例
         /// </summary>
-        private float timeScale = 0.1f;
+        private float timeScale = 1f;
         [LabelText("现实多少秒等于游戏内1分钟"), FoldoutGroup("配置"), ShowInInspector]
         public float TimeScale
         {

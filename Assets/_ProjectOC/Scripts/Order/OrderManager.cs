@@ -221,6 +221,7 @@ namespace ProjectOC.Order
             if(emptyList.Count == 0)
             {
                 //重新开始计时
+                Debug.Log("没有空位，重新开始计时");
                 this.UrgentOrderRefreshTimer.Start();
                 return;
             }
@@ -241,6 +242,7 @@ namespace ProjectOC.Order
             if (strings == null || strings.Count == 0)
             {
                 //重新开始计时
+                Debug.Log("对应氏族没有可解锁订单，重新开始计时");
                 this.UrgentOrderRefreshTimer.Start();
                 return;
             }

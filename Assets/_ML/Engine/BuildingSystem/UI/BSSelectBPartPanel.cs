@@ -217,6 +217,7 @@ namespace ML.Engine.BuildingSystem.UI
             if(this.SelectedCategory1 == BuildingCategory1.Furniture && this.FurnitureCategoryBtnListTransform.gameObject.activeInHierarchy == false)
             {
                 this.SelectType.Find("Content").gameObject.SetActive(false);
+                //默认先用类别排序
                 this.FurnitureCategoryBtnListTransform.gameObject.SetActive(true);
                 this.ChangeFurnitureDisplay.gameObject.SetActive(true);
                 this.TipText.text = this.PanelTextContent.ChangeFurnitureDisplay[0].GetText();
@@ -225,10 +226,10 @@ namespace ML.Engine.BuildingSystem.UI
                 this.FurnitureCategoryBtnList.BindNavigationInputAction(this.Placer.BInput.BuildSelection.SwichBtn, UIBtnListContainer.BindType.started);
                 this.FurnitureCategoryBtnList.BindButtonInteractInputAction(this.Placer.comfirmInputAction, UIBtnListContainer.BindType.started);
 
-                
-
                 this.FurnitureThemeBtnList.BindNavigationInputAction(this.Placer.BInput.BuildSelection.SwichBtn, UIBtnListContainer.BindType.started);
                 this.FurnitureThemeBtnList.BindButtonInteractInputAction(this.Placer.comfirmInputAction, UIBtnListContainer.BindType.started);
+
+
 
             }
             else if(this.SelectedCategory1 != BuildingCategory1.Furniture)
@@ -412,11 +413,12 @@ namespace ML.Engine.BuildingSystem.UI
                 if(this.FurniturePanel.gameObject.activeInHierarchy == false)
                 {
                     this.FurniturePanel.gameObject.SetActive(true);
-                    if(this.FurnitureCategoryBtnListTransform.gameObject.activeInHierarchy == true)
+                    if (this.FurnitureCategoryBtnListTransform.gameObject.activeInHierarchy == true)
                     {
+                        this.FurnitureCategoryBtnList.DisableBtnList();
                         //当前为类别排序
 
-                        this.FurnitureCategoryBtnList.DisableBtnList();
+
                         //当前所选类别对应的家具列表
                         List<(BuildingCategory3, IBuildingPart)> furnitureList = new List<(BuildingCategory3, IBuildingPart)>();
                         foreach (var item in LocalGameManager.Instance.MonoBuildingManager.LoadedBPart)
@@ -445,17 +447,24 @@ namespace ML.Engine.BuildingSystem.UI
                     }
                     else
                     {
-                        //当前为主题排序
                         this.FurnitureThemeBtnList.DisableBtnList();
+                        //当前为主题排序
+                        var curSelectedThemeID = this.FurnitureThemeBtnList.GetCurSelected().gameObject.name;
+                        
+
+
                     }
 
                     this.FurnitureDisplayBtnList.OnSelectEnter();
                     this.FurnitureDisplayBtnList.BindNavigationInputAction(this.Placer.BInput.BuildSelection.SwichBtn, UIBtnListContainer.BindType.started);
                     this.FurnitureDisplayBtnList.BindButtonInteractInputAction(this.Placer.comfirmInputAction, UIBtnListContainer.BindType.started);
+
+
                 }
                 else
                 {
                     //this.FurnitureDisplayBtnList.GetCurSelected()?.Interact();
+                    
                 }
                 
 
@@ -468,6 +477,8 @@ namespace ML.Engine.BuildingSystem.UI
             
         }
 
+
+        private bool isFirstAddThemeBtn = true;
         private void ChangeFurnitureSortWay(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (this.SelectedCategory1 != BuildingCategory1.Furniture)
@@ -490,6 +501,20 @@ namespace ML.Engine.BuildingSystem.UI
                 this.FurnitureCategoryBtnList.DisableBtnList();
                 this.FurnitureThemeBtnListTransform.gameObject.SetActive(true);
                 this.FurnitureThemeBtnList.EnableBtnList();
+
+
+                if(isFirstAddThemeBtn)
+                {
+                    //给主题btnlist加入按钮
+                    foreach (var (id, data) in BuildingManager.Instance.FurnitureThemeTableDataDic)
+                    {
+                        this.FurnitureThemeBtnList.AddBtn("ML/BuildingSystem/UI/ThemeBtn.prefab",BtnSettingAction: (btn) =>
+                        {
+                            btn.gameObject.name = data.ID;
+                        }, BtnText: data.Name);
+                    }
+                    isFirstAddThemeBtn = false;
+                }
             }
             else
             {
