@@ -448,6 +448,24 @@ namespace ML.Engine.UI
             }
             return null;
         }
+        public SelectedButton GetBtn(int index1,int index2)
+        {
+            if (index1 >= 0 && index1 < TwoDimH && index2 >= 0 && index2 < TwoDimW)
+            {
+                return this.TwoDimSelectedButtons[index1][index2];
+            }
+            return null;
+            
+        }
+        public SelectedButton GetBtn(int index)
+        {
+            int i = index / TwoDimW;
+            int j = index % TwoDimW;
+            return GetBtn(i,j);
+        }
+
+
+
         /// <summary>
         /// 获取当前选中按钮
         /// </summary>
@@ -551,6 +569,7 @@ namespace ML.Engine.UI
         /// </summary>
         public SelectedButton MoveIndexIUISelected(int i, int j)
         {
+            if(GetBtn(i,j) == null) return null;
             this.CurSelected?.OnDeselect(null);
             this.CurSelected = TwoDimSelectedButtons[i][j];
             this.TwoDimI = i;
@@ -560,10 +579,14 @@ namespace ML.Engine.UI
         }
         public SelectedButton MoveIndexIUISelected(int i)
         {
+            if(GetBtn(i) == null)return null;
+
             this.CurSelected?.OnDeselect(null);
-            this.CurSelected = TwoDimSelectedButtons[i][0];
-            this.TwoDimI = i;
-            this.TwoDimJ = 0;
+            this.CurSelected = GetBtn(i);
+
+            var (x, y) = SBPosDic[this.CurSelected];
+            this.TwoDimI = x;
+            this.TwoDimJ = y;
             this.CurSelected.OnSelect(null);
             return CurSelected;
         }
@@ -587,6 +610,12 @@ namespace ML.Engine.UI
         private void GridNavigation(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (this.isEnable == false) return;
+            if (this.BindNavigationInputCondition != null)
+            {
+                bool canPerformed = this.BindNavigationInputCondition(obj);
+                if (canPerformed == false) return;
+            }
+            
             this.NavigationPreAction?.Invoke();
             string actionName = obj.action.name;
 
@@ -601,6 +630,7 @@ namespace ML.Engine.UI
             {
                 angle = angle + 360;
             }
+            
 
             if (angle < 45 || angle > 315)
             {
@@ -666,7 +696,7 @@ namespace ML.Engine.UI
         public void ButtonInteract(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (this.isEnable == false || this.CurSelected == null) return;
-            if ((this.inputCondition != null && this.inputCondition(obj)) || this.inputCondition == null) 
+            if ((this.BindButtonInteractInputCondition != null && this.BindButtonInteractInputCondition(obj)) || this.BindButtonInteractInputCondition == null) 
             {
                 this.ButtonInteractPreAction?.Invoke();
                 this.CurSelected.Interact();
@@ -704,14 +734,28 @@ namespace ML.Engine.UI
         /// </summary>
         
         public delegate bool InputCondition(CallbackContext context);
-        private InputCondition inputCondition = null;
+        private InputCondition BindButtonInteractInputCondition = null;
+
+        //目前暂时仅限制格子导航
+        private InputCondition BindNavigationInputCondition = null;
+
+        public void ChangeBindButtonInteractInputCondition(InputCondition inputCondition)
+        {
+            this.BindButtonInteractInputCondition = inputCondition;
+        }
+
+        public void ChangeBindNavigationInputCondition(InputCondition inputCondition)
+        {
+            this.BindNavigationInputCondition = inputCondition;
+        }
+
         public void BindButtonInteractInputAction(InputAction ButtonInteractInputAction, BindType bindType, Action preAction = null, Action postAction = null, InputCondition inputCondition = null)
         {
             this.ButtonInteractPreAction = preAction;
             this.ButtonInteractPostAction = postAction;
             this.ButtonInteractInputAction = ButtonInteractInputAction;
             this.ButtonInteractBindType = bindType;
-            this.inputCondition = inputCondition;
+            this.BindButtonInteractInputCondition = inputCondition;
 
             switch (bindType)
             {
@@ -727,6 +771,8 @@ namespace ML.Engine.UI
             }
 
         }
+
+
 
         /// <summary>
         /// 该函数功能为绑定按钮 对应哪个InputAction触发

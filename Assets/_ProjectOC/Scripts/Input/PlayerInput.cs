@@ -2258,6 +2258,15 @@ namespace ProjectOC.Input
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""SwichBtn"",
+                    ""type"": ""Value"",
+                    ""id"": ""40675377-02a5-48b1-8f3e-c75afd2c2591"",
+                    ""expectedControlType"": ""Stick"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""LastTerm"",
                     ""type"": ""Button"",
                     ""id"": ""5831ea61-4e1f-4117-82cf-7d480bfa2348"",
@@ -2311,6 +2320,116 @@ namespace ProjectOC.Input
                     ""action"": ""LastTerm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""KeyBoard"",
+                    ""id"": ""a808884a-dc80-44d9-a4c0-a9538bba8097"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""afbc7dae-8780-4cc7-9b81-2a551da8a284"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""616fc0a1-9dc0-402f-b309-6d5ae948c2f3"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""ec89b4bd-a9cd-45aa-b89a-71e9b5253c15"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""948c25bf-646a-4f71-8e74-543938635041"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""501b178d-a493-42d3-b94f-521f8ac36f7d"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""2b8f5651-4907-459f-8993-75494c565898"",
+                    ""path"": ""<XInputController>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""9e9a1fa2-578a-45e6-86da-7061d2bc6182"",
+                    ""path"": ""<XInputController>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""7c7030bf-14bf-412b-9d0e-88f732a19587"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""6231266d-3cc0-4171-a7a5-124be33f5814"",
+                    ""path"": ""<XInputController>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwichBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -2763,6 +2882,7 @@ namespace ProjectOC.Input
             // OrderBoardPanel
             m_OrderBoardPanel = asset.FindActionMap("OrderBoardPanel", throwIfNotFound: true);
             m_OrderBoardPanel_NextTerm = m_OrderBoardPanel.FindAction("NextTerm", throwIfNotFound: true);
+            m_OrderBoardPanel_SwichBtn = m_OrderBoardPanel.FindAction("SwichBtn", throwIfNotFound: true);
             m_OrderBoardPanel_LastTerm = m_OrderBoardPanel.FindAction("LastTerm", throwIfNotFound: true);
             // ResonanceWheelUI_sub1
             m_ResonanceWheelUI_sub1 = asset.FindActionMap("ResonanceWheelUI_sub1", throwIfNotFound: true);
@@ -3526,12 +3646,14 @@ namespace ProjectOC.Input
         private readonly InputActionMap m_OrderBoardPanel;
         private List<IOrderBoardPanelActions> m_OrderBoardPanelActionsCallbackInterfaces = new List<IOrderBoardPanelActions>();
         private readonly InputAction m_OrderBoardPanel_NextTerm;
+        private readonly InputAction m_OrderBoardPanel_SwichBtn;
         private readonly InputAction m_OrderBoardPanel_LastTerm;
         public struct OrderBoardPanelActions
         {
             private @PlayerInput m_Wrapper;
             public OrderBoardPanelActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
             public InputAction @NextTerm => m_Wrapper.m_OrderBoardPanel_NextTerm;
+            public InputAction @SwichBtn => m_Wrapper.m_OrderBoardPanel_SwichBtn;
             public InputAction @LastTerm => m_Wrapper.m_OrderBoardPanel_LastTerm;
             public InputActionMap Get() { return m_Wrapper.m_OrderBoardPanel; }
             public void Enable() { Get().Enable(); }
@@ -3545,6 +3667,9 @@ namespace ProjectOC.Input
                 @NextTerm.started += instance.OnNextTerm;
                 @NextTerm.performed += instance.OnNextTerm;
                 @NextTerm.canceled += instance.OnNextTerm;
+                @SwichBtn.started += instance.OnSwichBtn;
+                @SwichBtn.performed += instance.OnSwichBtn;
+                @SwichBtn.canceled += instance.OnSwichBtn;
                 @LastTerm.started += instance.OnLastTerm;
                 @LastTerm.performed += instance.OnLastTerm;
                 @LastTerm.canceled += instance.OnLastTerm;
@@ -3555,6 +3680,9 @@ namespace ProjectOC.Input
                 @NextTerm.started -= instance.OnNextTerm;
                 @NextTerm.performed -= instance.OnNextTerm;
                 @NextTerm.canceled -= instance.OnNextTerm;
+                @SwichBtn.started -= instance.OnSwichBtn;
+                @SwichBtn.performed -= instance.OnSwichBtn;
+                @SwichBtn.canceled -= instance.OnSwichBtn;
                 @LastTerm.started -= instance.OnLastTerm;
                 @LastTerm.performed -= instance.OnLastTerm;
                 @LastTerm.canceled -= instance.OnLastTerm;
@@ -3826,6 +3954,7 @@ namespace ProjectOC.Input
         public interface IOrderBoardPanelActions
         {
             void OnNextTerm(InputAction.CallbackContext context);
+            void OnSwichBtn(InputAction.CallbackContext context);
             void OnLastTerm(InputAction.CallbackContext context);
         }
         public interface IResonanceWheelUI_sub1Actions
