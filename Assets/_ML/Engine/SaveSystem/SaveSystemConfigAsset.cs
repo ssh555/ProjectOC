@@ -82,9 +82,12 @@ namespace ML.Engine.SaveSystem
             {
                 DirectoryInfo info = new DirectoryInfo(dir);
                 SaveDataFolder saveDataFolder = oldSystem.LoadData<SaveDataFolder>(Path.Combine(info.Name, "SaveConfig"), Config.UseEncrption);
-                saveDataFolder.SavePath = info.Name;
-                saveDataFolder.IsDirty = true;
-                saveDataFolders.Add(saveDataFolder);
+                if (saveDataFolder != null)
+                {
+                    saveDataFolder.SavePath = info.Name;
+                    saveDataFolder.IsDirty = true;
+                    saveDataFolders.Add(saveDataFolder);
+                }
             }
 
             Dictionary<string, MethodInfo> MethodDict = new Dictionary<string, MethodInfo>();
@@ -93,18 +96,22 @@ namespace ML.Engine.SaveSystem
                 saveDataFolder.IsDirty = true;
                 foreach (var kv in saveDataFolder.FileMap)
                 {
-                    if (!MethodDict.ContainsKey(kv.Key))
+                    if (!MethodDict.ContainsKey(kv.Value))
                     {
-                        Type type = Type.GetType(kv.Key);
+                        Type type = Type.GetType(kv.Value);
                         MethodInfo method = oldSystem.GetType().GetMethod("LoadData", new[] { typeof(string), typeof(bool) }).MakeGenericMethod(type);
-                        MethodDict.Add(kv.Key, method);
+                        MethodDict.Add(kv.Value, method);
                     }
-                    object loadData = MethodDict[kv.Key].Invoke(oldSystem, new object[] { Path.Combine(saveDataFolder.SavePath, kv.Key), Config.UseEncrption });
-                    ISaveData data = (ISaveData)loadData;
-                    data.IsDirty = true;
-                    data.SaveName = kv.Key;
-                    data.SavePath = saveDataFolder.SavePath;
-                    newSystem.SaveData(data, Temp.UseEncrption);
+                    string fileName = Path.GetFileName(kv.Key);
+                    object loadData = MethodDict[kv.Value].Invoke(oldSystem, new object[] { Path.Combine(saveDataFolder.SavePath, fileName), Config.UseEncrption });
+                    if (loadData != null)
+                    {
+                        ISaveData data = (ISaveData)loadData;
+                        data.IsDirty = true;
+                        data.SaveName = fileName;
+                        data.SavePath = saveDataFolder.SavePath;
+                        newSystem.SaveData(data, Temp.UseEncrption);
+                    }
                 }
                 newSystem.SaveData(saveDataFolder, Temp.UseEncrption);
             }

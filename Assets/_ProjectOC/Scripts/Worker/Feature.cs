@@ -1,4 +1,5 @@
 using ProjectOC.ManagerNS;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,40 +7,28 @@ using UnityEngine;
 
 namespace ProjectOC.WorkerNS
 {
-    /// <summary>
-    /// 特性
-    /// </summary>
-    [System.Serializable]
+    [LabelText("特性"), System.Serializable]
     public class Feature
     {
         public string ID = "";
         public List<Effect> Effects = new List<Effect>();
 
         #region 读表属性
-        /// <summary>
-        /// 互斥键，会发生矛盾的特性
-        /// </summary>
-        public string IDExclude { get => LocalGameManager.Instance.FeatureManager.GetIDExclude(ID); }
+        [LabelText("互斥键"), ShowInInspector, ReadOnly]
+        public string IDExclude { get => LocalGameManager.Instance != null ? LocalGameManager.Instance.FeatureManager.GetIDExclude(ID) : ""; }
         /// <summary>
         /// 序号，用于排序，从上到下的顺序为种族、增益、减益、整活特性
         /// </summary>
-        public int Sort { get => LocalGameManager.Instance.FeatureManager.GetSort(ID); }
-        /// <summary>
-        /// 名称
-        /// </summary>
-        public string Name { get => LocalGameManager.Instance.FeatureManager.GetName(ID); }
-        /// <summary>
-        /// 类型
-        /// </summary>        
-        public FeatureType FeatureType { get => LocalGameManager.Instance.FeatureManager.GetFeatureType(ID); }
-        /// <summary>
-        /// 特性本身的描述性文本
-        /// </summary>
-        public string Description { get => LocalGameManager.Instance.FeatureManager.GetItemDescription(ID); }
-        /// <summary>
-        /// 特性效果的描述性文本
-        /// </summary>
-        public string EffectsDescription { get => LocalGameManager.Instance.FeatureManager.GetEffectsDescription(ID); }
+        [LabelText("序号"), ShowInInspector, ReadOnly]
+        public int Sort { get => LocalGameManager.Instance != null ? LocalGameManager.Instance.FeatureManager.GetSort(ID) : 10; }
+        [LabelText("名称"), ShowInInspector, ReadOnly]
+        public string Name { get => LocalGameManager.Instance != null ? LocalGameManager.Instance.FeatureManager.GetName(ID) : ""; }
+        [LabelText("类型"), ShowInInspector, ReadOnly]
+        public FeatureType FeatureType { get => LocalGameManager.Instance != null ? LocalGameManager.Instance.FeatureManager.GetFeatureType(ID) : FeatureType.None; }
+        [LabelText("特性描述性文本"), ShowInInspector, ReadOnly]
+        public string Description { get => LocalGameManager.Instance != null ? LocalGameManager.Instance.FeatureManager.GetItemDescription(ID) : ""; }
+        [LabelText("特性效果描述性文本"), ShowInInspector, ReadOnly]
+        public string EffectsDescription { get => LocalGameManager.Instance != null ? LocalGameManager.Instance.FeatureManager.GetEffectsDescription(ID) : ""; }
         #endregion
 
         public Feature(FeatureTableData config)

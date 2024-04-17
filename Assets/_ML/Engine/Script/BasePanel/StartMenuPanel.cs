@@ -120,7 +120,10 @@ namespace ML.Engine.UI
             this.UIBtnList.SetBtnAction("ContinueGameBtn",
             async () =>
             {
-
+                if (SC.GetSaveDataFolder(0) == null)
+                {
+                    await SC.CreateSaveDataFolderAsync(0, "newgame", null);
+                }
                 await SC.SelectSaveDataFolderAsync(0, null);
                 await SC.LoadSaveDataAsync(null);
                 UIBasePanel panel = null;

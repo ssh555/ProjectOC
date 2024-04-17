@@ -26,10 +26,10 @@ MonoBehaviour:
       Data: 0|System.Boolean[,], mscorlib
     - Name: 
       Entry: 12
-      Data: 12
+      Data: 15
     - Name: ranks
       Entry: 1
-      Data: 3|4
+      Data: 3|5
     - Name: 
       Entry: 5
       Data: false
@@ -39,6 +39,15 @@ MonoBehaviour:
     - Name: 
       Entry: 5
       Data: false
+    - Name: 
+      Entry: 5
+      Data: true
+    - Name: 
+      Entry: 5
+      Data: false
+    - Name: 
+      Entry: 5
+      Data: true
     - Name: 
       Entry: 5
       Data: false
