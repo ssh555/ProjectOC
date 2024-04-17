@@ -12,6 +12,7 @@ namespace ProjectOC.PinchFace
         public PinchPartType1 pinchPartType1;
         public PinchPartType2 pinchPartType2;
         public PinchPartType3 pinchPartType3;
+        public List<PinchPartType3> pinchPartType3s;
         public bool couldNaked;//是否可以裸漏，影响是否生成 空部件按钮
 
         private void InitType(string id)

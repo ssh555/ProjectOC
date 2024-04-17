@@ -3082,13 +3082,17 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -76.568
       objectReference: {fileID: 0}
+    - target: {fileID: 6587935962481762413, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
+      propertyPath: m_text
+      value: "\u624B\u90E8"
+      objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_Pivot.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_AnchorMax.x
@@ -3148,7 +3152,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -299.158
+      value: -260.874
       objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3165,6 +3169,10 @@ PrefabInstance:
     - target: {fileID: 8602280286676065947, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_Name
       value: ButtonList (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8737459862998460935, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
+      propertyPath: btnListInitData.limitNum
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3209,6 +3217,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4963785004773052049, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4963785004773052049, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 300
       objectReference: {fileID: 0}
@@ -3222,7 +3234,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_Pivot.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_AnchorMax.x
@@ -3282,7 +3294,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -38.284
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3299,6 +3311,10 @@ PrefabInstance:
     - target: {fileID: 8602280286676065947, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_Name
       value: ButtonList
+      objectReference: {fileID: 0}
+    - target: {fileID: 8737459862998460935, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
+      propertyPath: btnListInitData.limitNum
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3350,13 +3366,17 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -76.568
       objectReference: {fileID: 0}
+    - target: {fileID: 6587935962481762413, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
+      propertyPath: m_text
+      value: "\u817F\u90E8"
+      objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_Pivot.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_AnchorMax.x
@@ -3416,7 +3436,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -386.116
+      value: -347.832
       objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3433,6 +3453,10 @@ PrefabInstance:
     - target: {fileID: 8602280286676065947, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_Name
       value: ButtonList (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8737459862998460935, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
+      propertyPath: btnListInitData.limitNum
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3484,13 +3508,17 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -76.568
       objectReference: {fileID: 0}
+    - target: {fileID: 6587935962481762413, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
+      propertyPath: m_text
+      value: "\u8EAF\u5E72"
+      objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_Pivot.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_AnchorMax.x
@@ -3550,7 +3578,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -212.2
+      value: -173.916
       objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3567,6 +3595,10 @@ PrefabInstance:
     - target: {fileID: 8602280286676065947, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_Name
       value: ButtonList (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8737459862998460935, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
+      propertyPath: btnListInitData.limitNum
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3618,13 +3650,17 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -76.568
       objectReference: {fileID: 0}
+    - target: {fileID: 6587935962481762413, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
+      propertyPath: m_text
+      value: "\u9762\u90E8"
+      objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_Pivot.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_AnchorMax.x
@@ -3684,7 +3720,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -125.242004
+      value: -86.958
       objectReference: {fileID: 0}
     - target: {fileID: 6931829411039771037, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3701,6 +3737,10 @@ PrefabInstance:
     - target: {fileID: 8602280286676065947, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_Name
       value: ButtonList (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8737459862998460935, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
+      propertyPath: btnListInitData.limitNum
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

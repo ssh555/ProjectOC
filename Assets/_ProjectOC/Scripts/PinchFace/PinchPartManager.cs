@@ -14,10 +14,13 @@ namespace ProjectOC.PinchFace
     public class PinchFaceManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         [ShowInInspector]
-        public Dictionary<PinchPartType3, PinchPartType> pinchPartType3Dic;
-        public Dictionary<PinchPartType2, PinchPartType1> pinchPartType2Dic;
-        [ShowInInspector]
-        public List<List<PinchPartType3>> pinchPartType2Inclusion;  //
+        //public Dictionary<PinchPartType3, PinchPartType> pinchPartType3Dic;
+        public Dictionary<PinchPartType2, PinchPartType> pinchPartType2Dic;
+        //存储每一个的Type1下的每一个Type2
+        [SerializeField]
+        public List<List<PinchPartType2>> pinchPartType1Inclusion;  //
+
+        // public List<PinchType1Struct> PinchType1Structs;
         private const string PinchPartTypePath = "PinchFaceType";
         private const string PinchPartPath = "PinchFacePart";
         private AsyncOperationHandle PinchPartHandle;
@@ -38,10 +41,21 @@ namespace ProjectOC.PinchFace
 
         void DataStructInit()
         {
-            pinchPartType2Inclusion = new List<List<PinchPartType3>>(Enum.GetValues(typeof(PinchPartType2)).Length);
-            for (int i = 0; i < pinchPartType2Inclusion.Capacity; i++)
+            // PinchType1Structs = new List<PinchType1Struct>(Enum.GetValues(typeof(PinchPartType1)).Length);
+            // for (int i = 0; i < PinchType1Structs.Capacity; i++)
+            // {
+            //     PinchType1Structs[0].Type1 = PinchPartType1.None; 
+            //     PinchType1Structs.Add(new PinchType1Struct());
+            // }
+            
+            
+            
+            
+            //1-6,不需要存0
+            pinchPartType1Inclusion = new List<List<PinchPartType2>>(Enum.GetValues(typeof(PinchPartType1)).Length-1);
+            for (int i = 0; i < pinchPartType1Inclusion.Capacity; i++)
             {
-                pinchPartType2Inclusion.Add(new List<PinchPartType3>());
+                pinchPartType1Inclusion.Add(new List<PinchPartType2>());
             }
         }
         /// <summary>
@@ -49,20 +63,33 @@ namespace ProjectOC.PinchFace
         /// </summary>
         public void RegisterPinchPartType()
         {
-            pinchPartType3Dic = new Dictionary<PinchPartType3, PinchPartType>();
-            pinchPartType2Dic = new Dictionary<PinchPartType2, PinchPartType1>();
+            // pinchPartType3Dic = new Dictionary<PinchPartType3, PinchPartType>();
+            pinchPartType2Dic = new Dictionary<PinchPartType2, PinchPartType>();
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetsAsync<PinchPartType>(PinchPartTypePath, (ppt) =>
             {
-                lock (pinchPartType3Dic)
-                {
-                    pinchPartType3Dic.Add(ppt.pinchPartType3,ppt);
-                }
-
+                // lock (pinchPartType3Dic)
+                // {
+                //     pinchPartType3Dic.Add(ppt.pinchPartType3,ppt);
+                // }
                 lock (pinchPartType2Dic)
                 {
-                    pinchPartType2Dic[ppt.pinchPartType2] = ppt.pinchPartType1;
+                    //有效的Capacity
+                    if (ppt.pinchPartType3s.Capacity != 0)
+                    {
+                        pinchPartType2Dic.Add(ppt.pinchPartType2,ppt);
+                        pinchPartType1Inclusion[(int)ppt.pinchPartType1 -1].Add(ppt.pinchPartType2);
+                    }
                 }
-                pinchPartType2Inclusion[(int)ppt.pinchPartType2 -1].Add(ppt.pinchPartType3);
+                // lock (pinchPartType2Dic)
+                // {
+                //     //如果第一次，初始化Struct
+                //     if (!pinchPartType2Dic.ContainsKey(ppt.pinchPartType2))
+                //     {
+                //         pinchPartType2Dic[ppt.pinchPartType2] = ppt.pinchPartType1;
+                //
+                //         // PinchType1Structs[(int)ppt.pinchPartType1].Type1].PinchType1Structs = new List<PinchType1Struct>();
+                //     }
+                // }
             }).Completed+= (handle) =>
             {
                 PinchPartTypeHandle = handle;
@@ -84,16 +111,28 @@ namespace ProjectOC.PinchFace
         //     };
         // }
         /// <summary>
-        /// 值 Remap
+        /// 将 value 从 fromMin 到 fromMax 范围映射到 toMin 到 toMax 范围
         /// </summary>
         public static float RemapValue(float value, float fromMin, float fromMax, float toMin = 0f, float toMax = 1f)
         {
-            // 将 value 从 fromMin 到 fromMax 范围映射到 toMin 到 toMax 范围
+
             return toMin + (value - fromMin) / (fromMax - fromMin) * (toMax - toMin);
         }
 
         #region 捏脸数据结构体
-
+        //可优化为结构体，主要是结构体初始化修改太麻烦了
+        [System.Serializable]
+        public class PinchType1Struct
+        {
+            public PinchPartType1 Type1;
+            public List<PinchPartType2> Type2s;
+        }
+        [System.Serializable]
+        public class PinchType2Struct
+        {
+            public PinchPartType2 Type2;
+            public List<PinchPartType3> Type3s;
+        }
         
         #endregion
 

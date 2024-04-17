@@ -15,4 +15,5 @@ MonoBehaviour:
   pinchPartType1: 1
   pinchPartType2: 5
   pinchPartType3: 19
+  pinchPartType3s: 10000000110000001200000013000000140000001500000011000000
   couldNaked: 1
