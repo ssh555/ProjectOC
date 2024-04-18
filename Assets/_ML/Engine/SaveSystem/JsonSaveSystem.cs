@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
+using Newtonsoft.Json.Linq;
+using System.Reflection;
+using System;
 
 namespace ML.Engine.SaveSystem
 {
@@ -25,7 +28,24 @@ namespace ML.Engine.SaveSystem
                         using(StreamReader reader = new StreamReader(stream))
                         {
                             string jsonFromFile = reader.ReadToEnd();
-                            T objFromFile = JsonConvert.DeserializeObject<T>(jsonFromFile);
+                            JObject json = JObject.Parse(jsonFromFile);
+                            T objFromFile = Activator.CreateInstance<T>();
+                            foreach (PropertyInfo property in typeof(T).GetProperties())
+                            {
+                                if (json.ContainsKey(property.Name))
+                                {
+                                    JToken value = json.GetValue(property.Name);
+                                    property.SetValue(objFromFile, value.ToObject(property.PropertyType));
+                                }
+                            }
+                            foreach (FieldInfo field in typeof(T).GetFields())
+                            {
+                                if (json.ContainsKey(field.Name))
+                                {
+                                    JToken value = json.GetValue(field.Name);
+                                    field.SetValue(objFromFile, value.ToObject(field.FieldType));
+                                }
+                            }
                             objFromFile.SavePath = Path.GetDirectoryName(relativePath);
                             objFromFile.SaveName = Path.GetFileName(relativePath);
                             reader.Close();
@@ -49,7 +69,24 @@ namespace ML.Engine.SaveSystem
                 using(StreamReader reader = new StreamReader(stream))
                 {
                     string jsonFromFile = reader.ReadToEnd();
-                    T objFromFile = JsonConvert.DeserializeObject<T>(jsonFromFile);
+                    JObject json = JObject.Parse(jsonFromFile);
+                    T objFromFile = Activator.CreateInstance<T>();
+                    foreach (PropertyInfo property in typeof(T).GetProperties())
+                    {
+                        if (json.ContainsKey(property.Name))
+                        {
+                            JToken value = json.GetValue(property.Name);
+                            property.SetValue(objFromFile, value.ToObject(property.PropertyType));
+                        }
+                    }
+                    foreach (FieldInfo field in typeof(T).GetFields())
+                    {
+                        if (json.ContainsKey(field.Name))
+                        {
+                            JToken value = json.GetValue(field.Name);
+                            field.SetValue(objFromFile, value.ToObject(field.FieldType));
+                        }
+                    }
                     reader.Close();
                     stream.Close();
                     return objFromFile;

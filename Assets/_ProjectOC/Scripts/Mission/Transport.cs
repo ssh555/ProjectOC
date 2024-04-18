@@ -114,11 +114,16 @@ namespace ProjectOC.MissionNS
                     flagSource = true;
                 }
                 Worker.TransportItems.Add(item);
+                SoureceReserveNum -= item.Amount;
                 CurNum += item.Amount;
                 if (flagBurden || flagSource)
                 {
                     break;
                 }
+            }
+            if (SoureceReserveNum > 0)
+            {
+                Source.RemoveReservePutOut(ItemID, SoureceReserveNum);
             }
         }
 

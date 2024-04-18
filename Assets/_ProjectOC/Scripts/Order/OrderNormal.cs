@@ -16,6 +16,7 @@ namespace ProjectOC.Order
 
         public OrderNormal(string orderId, List<OrderMap> RequireItemList, int DemandCycle) : base(orderId, RequireItemList)
         {
+            
             this.RefreshTimer = new CounterDownTimer(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DemandCycle, autocycle: false, autoStart: false);
             this.RefreshTimer.OnEndEvent += () =>
             {

@@ -64,11 +64,10 @@ namespace ML.Engine.UI
             this.UIBtnList.SetBtnAction("GraphicBtn",
             () =>
             {
-                //GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("<color=yellow>氏族名称</color>  发布了紧急征求", "订单名称"));
-                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/BaseUIPanel/PanelNavagation/PanelNavagation.prefab").Completed += (handle) =>
+                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/MainInteract/GraphPanel.prefab").Completed += (handle) =>
                 {
                     // 实例化
-                    var panel = handle.Result.GetComponent<PanelNavagation>();
+                    var panel = handle.Result.GetComponent<ControllerPanel>();
 
                     panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
 
@@ -81,10 +80,19 @@ namespace ML.Engine.UI
             () =>
             {
                 //GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData("确定取消该订单吗？", "您将面临违约惩罚", null, () => { Debug.Log("确定响应！"); }));
-                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/BaseUIPanel/GridNavagation/GridTestPanelA.prefab").Completed += (handle) =>
+ /*               Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/BaseUIPanel/GridNavagation/GridTestPanelA.prefab").Completed += (handle) =>
                 {
                     // 实例化
                     var panel = handle.Result.GetComponent<TestPanelA>();
+
+                    panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+
+                    GameManager.Instance.UIManager.PushPanel(panel);
+                };*/
+                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/MainInteract/AudioPanel.prefab").Completed += (handle) =>
+                {
+                    // 实例化
+                    var panel = handle.Result.GetComponent<ControllerPanel>();
 
                     panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
 
@@ -97,7 +105,7 @@ namespace ML.Engine.UI
             () =>
             {
 
-                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/MainInteract/Controller.prefab").Completed += (handle) =>
+                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/MainInteract/ControllerPanel.prefab").Completed += (handle) =>
                 {
                     // 实例化
                     var panel = handle.Result.GetComponent<ControllerPanel>();
@@ -113,11 +121,20 @@ namespace ML.Engine.UI
             () =>
             {
                 GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("message1"));
-                
-                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/BaseUIPanel/GridNavagation/GridTestPanelB.prefab").Completed += (handle) =>
+
+                /*                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/BaseUIPanel/GridNavagation/GridTestPanelB.prefab").Completed += (handle) =>
+                                {
+                                    // 实例化
+                                    var panel = handle.Result.GetComponent<TestPanelB>();
+
+                                    panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
+
+                                    GameManager.Instance.UIManager.PushPanel(panel);
+                                };*/
+                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/MainInteract/TutorialPanel.prefab").Completed += (handle) =>
                 {
                     // 实例化
-                    var panel = handle.Result.GetComponent<TestPanelB>();
+                    var panel = handle.Result.GetComponent<ControllerPanel>();
 
                     panel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
 
