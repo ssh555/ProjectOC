@@ -312,6 +312,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector2\SetValue.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Mission\MissionTransportType.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedVector2Int.cs" />
+    <Compile Include="Assets\_ML\Engine\UI\TMPro\MLTextMeshProUGUI.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Math\SetFloat.cs" />
     <Compile Include="Assets\_ML\Engine\BuildingSystem\BuildingPlacer\BuildingPlacer.cs" />
     <Compile Include="Assets\_ML\Example\InventorySystem\CompositeSystem\UI\Usage\UsageItemBtn.cs" />
