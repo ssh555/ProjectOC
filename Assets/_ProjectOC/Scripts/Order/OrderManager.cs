@@ -159,12 +159,10 @@ namespace ProjectOC.Order
             UnlockedOrderMap.Add(OrderType.Special, new List<string>());
             UnlockedOrderMap.Add(OrderType.Normal, new List<string>());
 
-            UnlockedUrgentOrderMap.Add("ID1",new List<string>());
-            UnlockedUrgentOrderMap.Add("ID2", new List<string>());
-            UnlockedUrgentOrderMap.Add("ID3", new List<string>());
+
 
             //初始化Timer
-            this.UrgentOrderRefreshTimer = new CounterDownTimer(this.UrgentRefreshInterval * 60, autocycle: false, autoStart: true);
+            this.UrgentOrderRefreshTimer = new CounterDownTimer(this.UrgentRefreshInterval * 60 * LocalGameManager.Instance.DispatchTimeManager.TimeScale, autocycle: false, autoStart: true);
             this.CanBeCommitRefreshTimer = new CounterDownTimer(5, autocycle: true, autoStart: true);
             this.UrgentOrderRefreshTimer.OnEndEvent += () =>
             {
@@ -223,6 +221,7 @@ namespace ProjectOC.Order
             if(emptyList.Count == 0)
             {
                 //重新开始计时
+                Debug.Log("没有空位，重新开始计时");
                 this.UrgentOrderRefreshTimer.Start();
                 return;
             }
@@ -233,11 +232,17 @@ namespace ProjectOC.Order
 
             //抽选对应氏族紧急订单
             string extractOrderId = null;
-            List<string> strings = UnlockedUrgentOrderMap[clanId];
 
-            if (strings.Count == 0)
+            List<string> strings = null;
+            if (UnlockedUrgentOrderMap.ContainsKey(clanId))
+            {
+                strings = UnlockedUrgentOrderMap[clanId];
+            }
+
+            if (strings == null || strings.Count == 0)
             {
                 //重新开始计时
+                Debug.Log("对应氏族没有可解锁订单，重新开始计时");
                 this.UrgentOrderRefreshTimer.Start();
                 return;
             }
@@ -295,10 +300,29 @@ namespace ProjectOC.Order
         public void UnlockOrder(string OrderId)
         {
             if (!OrderTableDataDic.ContainsKey(OrderId)) return;
+            Debug.Log("UnlockOrder " + OrderId);
             OrderTableData orderTableData = OrderTableDataDic[OrderId];
             string ClanID = OrderIDToClanIDDic[orderTableData.ID];
             UnlockedOrderMap[orderTableData.OrderType].Add(OrderId);
-            UnlockedUrgentOrderMap[ClanID].Add(OrderId);
+            
+
+
+            if(orderTableData.OrderType == OrderType.Normal)
+            {
+                AddOrderToOrderDelegationMap(OrderId);
+            }
+            else if(orderTableData.OrderType == OrderType.Urgent)
+            {
+                if(UnlockedUrgentOrderMap.ContainsKey(ClanID))
+                {
+                    UnlockedUrgentOrderMap[ClanID].Add(OrderId);
+                }
+                else
+                {
+                    UnlockedUrgentOrderMap.Add(ClanID,new List<string> { OrderId});
+                }
+                
+            }
         }
 
         /// <summary>
@@ -307,13 +331,23 @@ namespace ProjectOC.Order
         public void AddOrderToOrderDelegationMap(string OrderId)
         {
             if (!OrderTableDataDic.ContainsKey(OrderId)) return;
+            Debug.Log("接取订单 " + OrderId + " " + LocalGameManager.Instance.DispatchTimeManager.CurrentHour.ToString() + " : " + LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString());
             OrderTableData orderTableData = OrderTableDataDic[OrderId];
             string ClanID = OrderIDToClanIDDic[orderTableData.ID];
             if (orderTableData.OrderType == OrderType.Urgent)
             {
                 OrderUrgent orderUrgent = new OrderUrgent(orderTableData.ID, orderTableData.RequireList, orderTableData.ReceiveDDL, orderTableData.DeliverDDL);
                 orderUrgent.StartReceiveDDLTimer();
-                OrderDelegationMap[(ClanID, orderTableData.OrderType)].Add(orderUrgent);
+                List<Order> orders = OrderDelegationMap[(ClanID, orderTableData.OrderType)];
+                for (int i = 0; i < orders.Count; i++)
+                {
+                    if (orders[i] == null)
+                    {
+                        orders[i] = orderUrgent;
+                        break; 
+                    }
+                }
+                
                 //通知UI
                 GM.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("<color=yellow>" + ClanID + "</color>  发布了紧急征求", orderTableData.OrderName));
             }
@@ -343,6 +377,7 @@ namespace ProjectOC.Order
             {
                 if (olist[i].OrderID == OrderId)
                 {
+                    Debug.Log("订单超时 " + olist[i].OrderID+" "+ LocalGameManager.Instance.DispatchTimeManager.CurrentHour.ToString() + " : " + LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString());
                     olist[i] = null;
                     break;
                 }
@@ -512,7 +547,7 @@ namespace ProjectOC.Order
             public string[] UnlockOrders_LV5;//解锁订单ID数组
         }
 
-
+        [ShowInInspector]
         private Dictionary<string,OrderTableData> OrderTableDataDic = new Dictionary<string,OrderTableData>();
         private List<OrderUnlock> OrderUnlockTableDataList = new List<OrderUnlock>();
 
@@ -524,12 +559,19 @@ namespace ProjectOC.Order
         {
             ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]> ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]>("OC/Json/TableData", "Order", (datas) =>
             {
+                OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_1", "ID1");
+                OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_2", "ID2");
+                OrderIDToClanIDDic.Add("Order_Normal_LiYuan_1", "ID3");
+                OrderIDToClanIDDic.Add("Order_Special_LiYuan_1", "ID1");
+
                 foreach (var data in datas)
                 {
                     //TODO 暂时直接解锁
-                    UnlockOrder(data.ID);
                     this.OrderTableDataDic.Add(data.ID, data);
+                    UnlockOrder(data.ID);
                 }
+
+
                 
             }, "订单数据");
             ABJAProcessor.StartLoadJsonAssetData();
