@@ -91,7 +91,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
             if (this.ParentBPart.AttachedSocket != null && CheckMatch(this.ParentBPart.AttachedSocket))
             {
                 pos = this.ParentBPart.AttachedSocket.BPartPosition - (this.transform.position - this.ParentBPart.transform.position);
-                rot = ParentBPart.BaseRotation * this.ParentBPart.AttachedSocket.BPartRotation * (this.ParentBPart.AttachedSocket.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
+                rot = ParentBPart.BaseRotation * this.BPartRotation * (this.ParentBPart.AttachedSocket.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
                 return true;
             }
 
