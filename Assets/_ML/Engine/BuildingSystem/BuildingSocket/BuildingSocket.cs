@@ -59,26 +59,11 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         [LabelText("启用BPart旋转偏移"), PropertyTooltip("放置BPart时是否允许有旋转偏移"), FoldoutGroup("Transform"), SerializeField]
         protected bool IsCanRotate = true;
 
-        [LabelText("BPart位置偏移量"), FoldoutGroup("Transform"), SerializeField, HideInInspector]
+        [LabelText("BPart位置偏移量"), FoldoutGroup("Transform"), SerializeField, ReadOnly]
         protected Vector3 PositionOffset;
 
-        /// <summary>
-        /// 放置的BPart的位置
-        /// </summary>
-        public Vector3 BPartPosition
-        {
-            get => this.transform.position + this.PositionOffset;
-        }
-
-        [LabelText("BPart旋转偏移量"), FoldoutGroup("Transform"), SerializeField, HideInInspector]
+        [LabelText("BPart旋转偏移量"), FoldoutGroup("Transform"), SerializeField, ReadOnly]
         protected Quaternion RotationOffset = Quaternion.identity;
-        /// <summary>
-        /// 放置的BPart的旋转
-        /// </summary>
-        public Quaternion BPartRotation
-        {
-            get => this.transform.rotation * this.RotationOffset;
-        }
 
         /// <summary>
         /// 获取匹配点的坐标
@@ -90,8 +75,8 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         {
             if (this.ParentBPart.AttachedSocket != null && CheckMatch(this.ParentBPart.AttachedSocket))
             {
-                pos = this.ParentBPart.AttachedSocket.BPartPosition - (this.transform.position - this.ParentBPart.transform.position);
-                rot = ParentBPart.BaseRotation * this.BPartRotation * (this.ParentBPart.AttachedSocket.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
+                pos = this.ParentBPart.AttachedSocket.transform.position - (this.transform.position - this.ParentBPart.transform.position) + this.PositionOffset;
+                rot = ParentBPart.BaseRotation * this.ParentBPart.AttachedSocket.transform.rotation * this.transform.localRotation * this.RotationOffset * (this.ParentBPart.AttachedSocket.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
                 return true;
             }
 

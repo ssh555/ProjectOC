@@ -99,6 +99,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         private Quaternion rotOffset = Quaternion.identity;
         public Quaternion RotOffset { get => rotOffset; set => rotOffset = value; }
         private BuildingArea.BuildingArea attachedArea;
+        [ShowInInspector, ReadOnly]
         public BuildingArea.BuildingArea AttachedArea
         {
             get => this.attachedArea;
@@ -122,6 +123,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             }
         }
         private BuildingSocket.BuildingSocket attachedSocket;
+        [ShowInInspector, ReadOnly]
         public BuildingSocket.BuildingSocket AttachedSocket
         {
             get => this.attachedSocket;
@@ -145,8 +147,9 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             }
         }
         
-        [SerializeField]
+        [SerializeField, ReadOnly]
         private int activeSocketIndex;
+        [ShowInInspector, ReadOnly]
         public BuildingSocket.BuildingSocket ActiveSocket { 
             get => this.OwnedSocketList[activeSocketIndex];
             set 
