@@ -46,19 +46,19 @@ MonoBehaviour:
     displayName: "\u5730\u677F\u4E2D\u5FC3\u5438\u9644\u70B9A"
     value: 
   - name: Floor_Base
-    displayName: "\u88AB\u52A8\u5730\u677F\u8FDE\u63A5"
+    displayName: "\u88AB\u52A8\u5730\u677F\u8FDE\u63A5C"
     value: 
   - name: Wall_Base_A
     displayName: "\u6807\u51C6\u9AD8\u5899A"
     value: 
   - name: Wall_Base
-    displayName: "\u9AD8\u65B9\u5899\u8FDE\u63A5"
+    displayName: "\u9AD8\u65B9\u5899\u8FDE\u63A5C"
     value: 
   - name: Wall_Base_1A
     displayName: "\u77EE\u65B9\u5899A"
     value: 
   - name: Wall_Base1
-    displayName: "\u77EE\u65B9\u5899\u8FDE\u63A5"
+    displayName: "\u77EE\u65B9\u5899\u8FDE\u63A5C"
     value: 
   - name: Wall_LB_A
     displayName: "\u957F\u5899A"
@@ -73,16 +73,16 @@ MonoBehaviour:
     displayName: "\u77EE\u5F27\u5899A"
     value: 
   - name: Floor_Lbase
-    displayName: "\u957F\u5730\u677F\u8FDE\u63A5"
+    displayName: "\u957F\u5730\u677F\u8FDE\u63A5C"
     value: 
   - name: Floor_Qua
-    displayName: "\u5F27\u5730\u677F\u8FDE\u63A5"
+    displayName: "\u5F27\u5730\u677F\u8FDE\u63A5C"
     value: 
   - name: Wall_Qua
-    displayName: "\u9AD8\u5F27\u5899\u8FDE\u63A5"
+    displayName: "\u9AD8\u5F27\u5899\u8FDE\u63A5C"
     value: 
   - name: Wall_Qua1
-    displayName: "\u77EE\u5F27\u5899\u8FDE\u63A5"
+    displayName: "\u77EE\u5F27\u5899\u8FDE\u63A5C"
     value: 
   - name: Pillar_A
     displayName: "\u957F\u67F1A"
@@ -110,4 +110,22 @@ MonoBehaviour:
     value: 
   - name: Floor_p_C
     displayName: "\u5730\u677F\u89D2\u70B9C"
+    value: 
+  - name: Wall_LB_C
+    displayName: "\u9AD8\u957F\u5899C"
+    value: 
+  - name: Wall_LB1_C
+    displayName: "\u77EE\u957F\u5899C"
+    value: 
+  - name: Wall_tri_A
+    displayName: "\u4E09\u89D2\u5899A"
+    value: 
+  - name: Wall_tri_C
+    displayName: "\u4E09\u89D2\u5899\u914D\u5C4B\u9876C"
+    value: 
+  - name: Wall_tri1_A
+    displayName: "\u77EE\u4E09\u89D2\u5899A"
+    value: 
+  - name: Wall_tri1_C
+    displayName: "\u77EE\u4E09\u89D2\u5899\u914D\u5C4B\u9876C"
     value: 

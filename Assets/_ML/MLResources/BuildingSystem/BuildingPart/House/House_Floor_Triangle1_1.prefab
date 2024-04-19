@@ -279,7 +279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsCanRotate: 0
-  Type: 4
+  Type: 0
 --- !u!1 &4567725318501840142
 GameObject:
   m_ObjectHideFlags: 0
@@ -826,7 +826,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsCanRotate: 0
-  Type: 1024
+  Type: 5
 --- !u!1 &8401859906006007184
 GameObject:
   m_ObjectHideFlags: 0

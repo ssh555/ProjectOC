@@ -68,7 +68,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 9
   IsActiveSocket: 0
-  IsCanRotate: 0
+  IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &3962808441941487255
@@ -330,7 +330,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 22
   IsActiveSocket: 0
-  IsCanRotate: 0
+  IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &6341554100421307458
@@ -401,7 +401,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 9
   IsActiveSocket: 0
-  IsCanRotate: 0
+  IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &8340607972005620727

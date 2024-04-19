@@ -19,15 +19,15 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 		Ceiling_A,
 		[LabelText("地板中心吸附点A")]
 		Floor_Base_Center_A,
-		[LabelText("被动地板连接")]
+		[LabelText("被动地板连接C")]
 		Floor_Base,
 		[LabelText("标准高墙A")]
 		Wall_Base_A,
-		[LabelText("高方墙连接")]
+		[LabelText("高方墙连接C")]
 		Wall_Base,
 		[LabelText("矮方墙A")]
 		Wall_Base_1A,
-		[LabelText("矮方墙连接")]
+		[LabelText("矮方墙连接C")]
 		Wall_Base1,
 		[LabelText("长墙A")]
 		Wall_LB_A,
@@ -37,13 +37,13 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 		Wall_Qua_A,
 		[LabelText("矮弧墙A")]
 		Wall_Qua_1A,
-		[LabelText("长地板连接")]
+		[LabelText("长地板连接C")]
 		Floor_Lbase,
-		[LabelText("弧地板连接")]
+		[LabelText("弧地板连接C")]
 		Floor_Qua,
-		[LabelText("高弧墙连接")]
+		[LabelText("高弧墙连接C")]
 		Wall_Qua,
-		[LabelText("矮弧墙连接")]
+		[LabelText("矮弧墙连接C")]
 		Wall_Qua1,
 		[LabelText("长柱A")]
 		Pillar_A,
@@ -63,5 +63,17 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 		Roof_Base1,
 		[LabelText("地板角点C")]
 		Floor_p_C,
+		[LabelText("高长墙C")]
+		Wall_LB_C,
+		[LabelText("矮长墙C")]
+		Wall_LB1_C,
+		[LabelText("三角墙A")]
+		Wall_tri_A,
+		[LabelText("三角墙配屋顶C")]
+		Wall_tri_C,
+		[LabelText("矮三角墙A")]
+		Wall_tri1_A,
+		[LabelText("矮三角墙配屋顶C")]
+		Wall_tri1_C,
 	}
 }

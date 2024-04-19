@@ -68,7 +68,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsCanRotate: 0
-  Type: 2048
+  Type: 4
 --- !u!1 &1428975161260479815
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,7 +137,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsCanRotate: 0
-  Type: 2048
+  Type: 4
 --- !u!1 &2892260193517037542
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,7 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 9
+  ID: 29
   IsActiveSocket: 0
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
