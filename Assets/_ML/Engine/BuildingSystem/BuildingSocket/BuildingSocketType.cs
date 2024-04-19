@@ -17,7 +17,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 		Wallsurface_A,
 		[LabelText("天花板A")]
 		Ceiling_A,
-		[LabelText("地板中心吸附点")]
+		[LabelText("地板中心吸附点A")]
 		Floor_Base_Center_A,
 		[LabelText("被动地板连接")]
 		Floor_Base,
@@ -45,5 +45,23 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 		Wall_Qua,
 		[LabelText("矮弧墙连接")]
 		Wall_Qua1,
+		[LabelText("长柱A")]
+		Pillar_A,
+		[LabelText("短柱A")]
+		Pillar_A1,
+		[LabelText("长柱C")]
+		Pillar,
+		[LabelText("短柱C")]
+		Pillar1,
+		[LabelText("标准屋顶A")]
+		Roof_Base_A,
+		[LabelText("矮标准屋顶A")]
+		Roof_Base_A1,
+		[LabelText("标准屋顶C")]
+		Roof_Base,
+		[LabelText("矮标准屋顶C")]
+		Roof_Base1,
+		[LabelText("地板角点C")]
+		Floor_p_C,
 	}
 }
