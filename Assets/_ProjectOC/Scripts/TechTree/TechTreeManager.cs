@@ -17,10 +17,6 @@ namespace ProjectOC.TechTree
     [System.Serializable]
     public sealed class TechTreeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
-        public void OnRegister()
-        {
-            Init();
-        }
 
         #region Base
         public static TechTreeManager Instance;
@@ -45,8 +41,13 @@ namespace ProjectOC.TechTree
 
         }
 
+        public void OnRegister()
+        {
+            Init();
+        }
 
-        private void OnDestroy()
+
+        public void OnUnregister()
         {
             if (Instance == this)
             {
