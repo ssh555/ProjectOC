@@ -75,8 +75,8 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         {
             if (this.ParentBPart.AttachedSocket != null && CheckMatch(this.ParentBPart.AttachedSocket))
             {
-                pos = this.ParentBPart.AttachedSocket.transform.position - (this.transform.position - this.ParentBPart.transform.position) + (this.ParentBPart.AttachedSocket.transform.rotation * this.PositionOffset);
-                rot = ParentBPart.BaseRotation * this.RotationOffset * (this.ParentBPart.AttachedSocket.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
+                pos = this.ParentBPart.AttachedSocket.transform.position - (this.transform.position - this.ParentBPart.transform.position) + (this.ParentBPart.AttachedSocket.transform.rotation * this.RotationOffset * this.PositionOffset);
+                rot = ParentBPart.BaseRotation * this.ParentBPart.AttachedSocket.transform.rotation * this.RotationOffset * (this.ParentBPart.AttachedSocket.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
                 return true;
             }
 
