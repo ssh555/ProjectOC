@@ -7,25 +7,43 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 	{
 		[LabelText("None")]
 		None,
-		[LabelText("Floor_Base_AdjacementCenter")]
-		Floor_Base_AdjacementCenter,
-		[LabelText("Floor_Triangle_AdjacementCenter")]
-		Floor_Triangle_AdjacementCenter,
-		[LabelText("Floor_Quagrant_AdjacementCenter")]
-		Floor_Quagrant_AdjacementCenter,
 		[LabelText("生命导流桩吸附点")]
 		LifeDiversion,
 		[LabelText("功能建筑吸附点")]
 		PronodeAndInteract,
-		[LabelText("地板表层")]
-		Floorsurface,
-		[LabelText("天花板")]
-		Ceiling,
-		[LabelText("墙面")]
-		Wallsurface,
+		[LabelText("地板表层A")]
+		Floorsurface_A,
+		[LabelText("墙面A")]
+		Wallsurface_A,
+		[LabelText("天花板A")]
+		Ceiling_A,
 		[LabelText("地板中心吸附点")]
-		Floor_Base_Center,
-		[LabelText("地板顶点吸附点")]
-		Floor_Base_Vertex,
+		Floor_Base_Center_A,
+		[LabelText("被动地板连接")]
+		Floor_Base,
+		[LabelText("标准高墙A")]
+		Wall_Base_A,
+		[LabelText("高方墙连接")]
+		Wall_Base,
+		[LabelText("矮方墙A")]
+		Wall_Base_1A,
+		[LabelText("矮方墙连接")]
+		Wall_Base1,
+		[LabelText("长墙A")]
+		Wall_LB_A,
+		[LabelText("矮长墙A")]
+		Wall_LB_1A,
+		[LabelText("弧墙A")]
+		Wall_Qua_A,
+		[LabelText("矮弧墙A")]
+		Wall_Qua_1A,
+		[LabelText("长地板连接")]
+		Floor_Lbase,
+		[LabelText("弧地板连接")]
+		Floor_Qua,
+		[LabelText("高弧墙连接")]
+		Wall_Qua,
+		[LabelText("矮弧墙连接")]
+		Wall_Qua1,
 	}
 }
