@@ -153,7 +153,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         public BuildingSocket.BuildingSocket ActiveSocket { 
             get
             {
-                if(this.OwnedSocketList == null || activeSocketIndex < 0 || this.OwnedSocketList.Count >= activeSocketIndex)
+                if(this.OwnedSocketList == null || activeSocketIndex < 0 || this.OwnedSocketList.Count <= activeSocketIndex)
                 {
                     return null;
                 }
