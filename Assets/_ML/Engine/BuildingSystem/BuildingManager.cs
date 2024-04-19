@@ -41,9 +41,9 @@ namespace ML.Engine.BuildingSystem
     {
         public string ID;
         public int Sort;
-        public string Name;
+        public TextContent.TextContent Name;
         public string Icon;
-        public string BuildID;
+        public List<string> BuildID;
     }
 
     [LabelText("建造模式")]

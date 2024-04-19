@@ -54,9 +54,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Editor\ExternalBehaviorTreeInspector.cs" />
+    <Compile Include="Assets\_ML\Editor\UI\TMPro\MLTextMeshProUGUIEditor.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Editor\Object Drawers\FloatSliderDrawer.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Editor\BehaviorTreeInspector.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Editor\Object Drawers\StackedConditionalDrawer.cs" />
+    <Compile Include="Assets\_ML\Editor\Prefab\PrefabUtility.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Editor\Object Drawers\IntSliderDrawer.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Editor\Object Drawers\StackedActionDrawer.cs" />
     <Compile Include="Assets\_ML\Engine\Utility\Editor\BuildBundle.cs" />
