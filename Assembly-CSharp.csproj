@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{114B2E37-3A1A-A3DB-0860-6D0B3B67D754}</ProjectGuid>
+    <ProjectGuid>{A43F54BC-59D1-C5B2-02BA-7C46496C9715}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -52,11 +52,6 @@
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2022.3.8f1c1</UnityVersion>
   </PropertyGroup>
-  <ItemGroup>
-    <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
-    <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.8f1c1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
-    <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.8f1c1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\_ML\Engine\UI\UIManager.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Time\GetRealtimeSinceStartup.cs" />
@@ -338,7 +333,6 @@
     <Compile Include="Assets\_ML\Engine\BuildingSystem\BuildingInput\BuildingInput.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetLoop.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Light\SetShadowBias.cs" />
-    <Compile Include="Assets\_ML\Engine\SaveSystem\ISaveData.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\LayerMask\GetLayer.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Mission\TransportPriority.cs" />
     <Compile Include="Assets\_ML\Engine\InventorySystem\Scripts\WorldItem.cs" />
@@ -546,7 +540,6 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Composites\RandomSequence.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedFloat.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetAngularDrag.cs" />
-    <Compile Include="Assets\_ProjectOC\Scripts\TechTree\TechTreeSaveData.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedVector3.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Player\Mono\OCPlayerController.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\GameObject\GetTag.cs" />
@@ -568,6 +561,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\Pause.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\Resume.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedMaterial.cs" />
+    <Compile Include="Assets\_ML\Engine\SaveSystem\SaveData\TechTreeSaveData.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\PinchFace\PinchPart\ChangeTexturePinchSetting.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Decorators\Cooldown.cs" />
     <Compile Include="Assets\_ML\Engine\Script\BaseUIComponent\Button\UIBtnListInitor.cs" />
@@ -649,7 +643,7 @@
     <Compile Include="Assets\_ProjectOC\Scripts\Worker\Gender.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Lerp.cs" />
     <Compile Include="Assets\_ML\Engine\BuildingSystem\UI\BSAppearancePanel.cs" />
-    <Compile Include="Assets\_ML\Engine\SaveSystem\SaveDataFolder.cs" />
+    <Compile Include="Assets\_ML\Engine\SaveSystem\SaveData\SaveDataFolder.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Animator\SetLookAtPosition.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Scripts\Tasks\CanSeeObject.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedString.cs" />
@@ -744,7 +738,6 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Behavior Designer Movement\Scripts\Tasks\Patrol.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\GameObject\Instantiate.cs" />
     <Compile Include="Assets\_ML\Engine\BuildingSystem\BuildingManager.cs" />
-    <Compile Include="Assets\_ML\Engine\SaveSystem\GlobalSaveDataFolder.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Collider\SetEnabled.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\GameObject\FindWithTag.cs" />
     <Compile Include="Assets\_ML\Engine\InventorySystem\Scripts\Inventory.cs" />
@@ -797,6 +790,7 @@
     <Compile Include="Assets\_ProjectOC\Scripts\InventorySystem\UI\UIStore.cs" />
     <Compile Include="Assets\_ProjectOC\Scripts\Temp\TempNavmeshAgent.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedObject.cs" />
+    <Compile Include="Assets\_ML\Engine\SaveSystem\SaveData\GlobalSaveDataFolder.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetDrag.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\GetParent.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetSpread.cs" />
@@ -854,6 +848,7 @@
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Variables\SharedUInt.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Math\BoolFlip.cs" />
     <Compile Include="Assets\_ML\Engine\BuildingSystem\BuildingMatchConfig\BuildingSocket2SocketMatchAsset.cs" />
+    <Compile Include="Assets\_ML\Engine\SaveSystem\SaveData\ISaveData.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetPitch.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Vector3\Lerp.cs" />
     <Compile Include="Assets\_ML\Engine\_Addons\Behavior Designer\Runtime\Tasks\Unity\Transform\SetParent.cs" />
@@ -1956,23 +1951,23 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Animancer.FSM.csproj">
-      <Project>{99DE5C12-9523-5895-3416-65DC6505A853}</Project>
+      <Project>{9FE9C3DD-0123-2C11-43B3-8B9CAC8724D3}</Project>
       <Name>Animancer.FSM</Name>
     </ProjectReference>
     <ProjectReference Include="Sirenix.OdinInspector.Modules.UnityMathematics.csproj">
-      <Project>{4603630D-7F99-126A-C564-823B980AF85C}</Project>
+      <Project>{95D32012-70E8-D86F-0614-4190F88F9787}</Project>
       <Name>Sirenix.OdinInspector.Modules.UnityMathematics</Name>
     </ProjectReference>
     <ProjectReference Include="Sirenix.OdinInspector.Modules.Unity.Addressables.csproj">
-      <Project>{38BA1658-8A86-FB99-D493-79EAC927DA4C}</Project>
+      <Project>{D5A725F1-8175-CC09-BA14-3DE91B73FDC3}</Project>
       <Name>Sirenix.OdinInspector.Modules.Unity.Addressables</Name>
     </ProjectReference>
     <ProjectReference Include="Animancer.Examples.csproj">
-      <Project>{03088162-57F8-046A-A6DF-85BF216D665F}</Project>
+      <Project>{EAA4AB15-DDB5-9C3C-E4E8-A713B137F896}</Project>
       <Name>Animancer.Examples</Name>
     </ProjectReference>
     <ProjectReference Include="Animancer.csproj">
-      <Project>{13C007D4-6AB1-6A03-BECC-0C4E5B24503B}</Project>
+      <Project>{1E2AFD03-D260-61F5-1B7B-46C707B19967}</Project>
       <Name>Animancer</Name>
     </ProjectReference>
   </ItemGroup>

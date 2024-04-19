@@ -22,11 +22,6 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   configs:
-  - ID: 1
-    ToSocket:
-    - ID: 1
-      offsetPosition: {x: 0, y: 0, z: 0}
-      offsetRotation: {x: 0, y: 0.38268346, z: 0, w: 0.9238795}
   - ID: 2
     ToSocket:
     - ID: 2
@@ -37,3 +32,13 @@ MonoBehaviour:
     - ID: 3
       offsetPosition: {x: 0, y: 0, z: 0}
       offsetRotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  - ID: 4
+    ToSocket:
+    - ID: 4
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 9
+    ToSocket:
+    - ID: 10
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 1}

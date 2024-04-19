@@ -53,7 +53,7 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 0.25
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &604194563549083349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,12 +66,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 8192
-  InTakeType: 0
+  ID: 5
+  IsActiveSocket: 1
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0.2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  CanPlaceAreaType: 8
 --- !u!1 &3691990917349564993
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,7 +176,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 23.752502, y: 7.5784736, z: 13.25293}
+  m_Size: {x: 23.752502, y: 7.06, z: 13.25293}
   m_Center: {x: -0.47326565, y: 3.7887342, z: 0.8263693}
 --- !u!114 &9164606221619924991
 MonoBehaviour:
@@ -206,11 +205,12 @@ MonoBehaviour:
   ProNode:
     WorldProNode: {fileID: 0}
     ID: 
-    LevelUpgradeEff: 
     Level: 0
     TransportPriority: 0
     Recipe:
       ID: 
     Worker: {fileID: 0}
+    IsWorkerArrive: 0
     MissionTransports: []
+    LevelUpgradeEff: 
     RequirePower: 0

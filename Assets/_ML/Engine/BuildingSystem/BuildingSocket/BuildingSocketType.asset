@@ -36,3 +36,24 @@ MonoBehaviour:
   - name: Floor_Quagrant_AdjacementCenter
     displayName: Floor_Quagrant_AdjacementCenter
     value: 
+  - name: LifeDiversion
+    displayName: "\u751F\u547D\u5BFC\u6D41\u6869\u5438\u9644\u70B9"
+    value: 
+  - name: PronodeAndInteract
+    displayName: "\u529F\u80FD\u5EFA\u7B51\u5438\u9644\u70B9"
+    value: 
+  - name: Floorsurface
+    displayName: "\u5730\u677F\u8868\u5C42"
+    value: 
+  - name: Ceiling
+    displayName: "\u5929\u82B1\u677F"
+    value: 
+  - name: Wallsurface
+    displayName: "\u5899\u9762"
+    value: 
+  - name: Floor_Base_Center
+    displayName: "\u5730\u677F\u4E2D\u5FC3\u5438\u9644\u70B9"
+    value: 
+  - name: Floor_Base_Vertex
+    displayName: "\u5730\u677F\u9876\u70B9\u5438\u9644\u70B9"
+    value: 
