@@ -17,10 +17,11 @@ namespace ML.Engine.InventorySystem
         public TextContent.TextContent name;
         public int weight;
         public string icon;
-        public bool canstack;
-        public bool candestroy;
+        public bool bcanstack;
+        public bool bcandestroy;
         public TextContent.TextContent itemdescription;
         public TextContent.TextContent effectsdescription;
+        public bool bcanuse;
         public string type;
         public int maxamount;
         public string worldobject;
@@ -44,14 +45,15 @@ namespace ML.Engine.InventorySystem
             // 5 -> Icon
             this.icon = Program.ParseString(row[5]);
             // 6 -> CanStack
-            this.canstack = Program.ParseBool(row[6]); ;
+            this.bcanstack = Program.ParseBool(row[6]); ;
             // 7 -> CanDestroy
-            this.candestroy = Program.ParseBool(row[7]); ;
+            this.bcandestroy = Program.ParseBool(row[7]); ;
             // 8 -> ItemsDescription
             this.itemdescription = Program.ParseTextContent(row[8]);
             // 9 -> EffectsDescription
             this.effectsdescription = Program.ParseTextContent(row[9]);
             // TODO: Change
+            this.bcanuse = false;
             this.type = "ResourceItem";
             this.maxamount = int.MaxValue;
             this.worldobject = "Item";

@@ -19,14 +19,12 @@ namespace ML.Engine.InventorySystem
         public TextContent.TextContent name;
         public int weight;
         public string icon;
-        public bool canstack;
-        public bool candestroy;
+        public bool bcanstack;
+        public bool bcandestroy;
         public TextContent.TextContent itemdescription;
         public TextContent.TextContent effectsdescription;
-        public string type;
-        public bool bcanstack;
         public bool bcanuse;
-        public bool bcandestroy;
+        public string type;
         public int maxamount;
         public string worldobject;
     }
@@ -368,7 +366,7 @@ namespace ML.Engine.InventorySystem
             {
                 return false;
             }
-            return this.ItemTypeStrDict[id].canstack;
+            return this.ItemTypeStrDict[id].bcanstack;
         }
         //TODO GetCanUse GetCanDestroy
         public bool GetCanUse(string id)
