@@ -15,6 +15,7 @@ using UnityEngine.InputSystem.Utilities;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ProjectOC.StoreNS;
 using ProjectOC.ManagerNS;
+using static ML.Engine.UI.UIBtnListContainerInitor;
 
 //ML.PlayerCharacterNS
 namespace ProjectOC.Player
@@ -75,8 +76,11 @@ namespace ProjectOC.Player
         #region 背包 to-do : 临时测试使用
         [ShowInInspector, ReadOnly]
         public ML.Engine.InventorySystem.IInventory Inventory => (Controller as OCPlayerController).OCState.Inventory;
+
+        [LabelText("背包容量 单位格子 目前为999")]
+        public int InventoryCapacity = 999;
         #endregion
-        
+
 
         #region Init
         /// <summary>
@@ -119,8 +123,8 @@ namespace ProjectOC.Player
             botui.player = this;
             ML.Engine.Manager.GameManager.Instance.UIManager.ChangeBotUIPanel(botui);
 
-            (this.Controller as OCPlayerController).OCState.Inventory 
-                = new ML.Engine.InventorySystem.InfiniteInventory(this.transform, 999);
+            (this.Controller as OCPlayerController).OCState.Inventory
+                = new ML.Engine.InventorySystem.InfiniteInventory(this.transform, this.InventoryCapacity);
             // this.Inventory = new ML.Engine.InventorySystem.InfiniteInventory(this.transform, 999);
 
             // 进入建造系统要可移动

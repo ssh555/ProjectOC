@@ -1062,15 +1062,6 @@ namespace ProjectOC.Input
             ""id"": ""7057597f-dd83-480d-a439-81cedab5aa7f"",
             ""actions"": [
                 {
-                    ""name"": ""Drop"",
-                    ""type"": ""Button"",
-                    ""id"": ""4014e338-cad2-4b21-9c9f-9a0fe97b8566"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Hold"",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Destroy"",
                     ""type"": ""Button"",
                     ""id"": ""b9b4cd53-3dac-468c-ae83-a5ce6333b3e0"",
@@ -1290,28 +1281,6 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Destroy"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""7a2ac9e2-2be2-4b70-a2f2-dfd5651084e7"",
-                    ""path"": ""<XInputController>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Drop"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""794b91b9-d9b4-4cd8-9079-d5c66b54d76b"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Drop"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -2274,6 +2243,15 @@ namespace ProjectOC.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OCInfo"",
+                    ""type"": ""Button"",
+                    ""id"": ""b180f68e-cfc6-434d-b7df-34ea0ec279e7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -2430,6 +2408,28 @@ namespace ProjectOC.Input
                     ""action"": ""SwichBtn"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""582e942c-acf7-4c17-b4b6-124ded186f2d"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OCInfo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8c3cd1b7-1610-49d2-9d9b-fa19d9d24fcd"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OCInfo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -2845,7 +2845,6 @@ namespace ProjectOC.Input
             m_PlayerUI_AlterSelected = m_PlayerUI.FindAction("AlterSelected", throwIfNotFound: true);
             // UIInventory
             m_UIInventory = asset.FindActionMap("UIInventory", throwIfNotFound: true);
-            m_UIInventory_Drop = m_UIInventory.FindAction("Drop", throwIfNotFound: true);
             m_UIInventory_Destroy = m_UIInventory.FindAction("Destroy", throwIfNotFound: true);
             m_UIInventory_Use = m_UIInventory.FindAction("Use", throwIfNotFound: true);
             m_UIInventory_AlterItem = m_UIInventory.FindAction("AlterItem", throwIfNotFound: true);
@@ -2884,6 +2883,7 @@ namespace ProjectOC.Input
             m_OrderBoardPanel_NextTerm = m_OrderBoardPanel.FindAction("NextTerm", throwIfNotFound: true);
             m_OrderBoardPanel_SwichBtn = m_OrderBoardPanel.FindAction("SwichBtn", throwIfNotFound: true);
             m_OrderBoardPanel_LastTerm = m_OrderBoardPanel.FindAction("LastTerm", throwIfNotFound: true);
+            m_OrderBoardPanel_OCInfo = m_OrderBoardPanel.FindAction("OCInfo", throwIfNotFound: true);
             // ResonanceWheelUI_sub1
             m_ResonanceWheelUI_sub1 = asset.FindActionMap("ResonanceWheelUI_sub1", throwIfNotFound: true);
             m_ResonanceWheelUI_sub1_Expel = m_ResonanceWheelUI_sub1.FindAction("Expel", throwIfNotFound: true);
@@ -3247,7 +3247,6 @@ namespace ProjectOC.Input
         // UIInventory
         private readonly InputActionMap m_UIInventory;
         private List<IUIInventoryActions> m_UIInventoryActionsCallbackInterfaces = new List<IUIInventoryActions>();
-        private readonly InputAction m_UIInventory_Drop;
         private readonly InputAction m_UIInventory_Destroy;
         private readonly InputAction m_UIInventory_Use;
         private readonly InputAction m_UIInventory_AlterItem;
@@ -3257,7 +3256,6 @@ namespace ProjectOC.Input
         {
             private @PlayerInput m_Wrapper;
             public UIInventoryActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
-            public InputAction @Drop => m_Wrapper.m_UIInventory_Drop;
             public InputAction @Destroy => m_Wrapper.m_UIInventory_Destroy;
             public InputAction @Use => m_Wrapper.m_UIInventory_Use;
             public InputAction @AlterItem => m_Wrapper.m_UIInventory_AlterItem;
@@ -3272,9 +3270,6 @@ namespace ProjectOC.Input
             {
                 if (instance == null || m_Wrapper.m_UIInventoryActionsCallbackInterfaces.Contains(instance)) return;
                 m_Wrapper.m_UIInventoryActionsCallbackInterfaces.Add(instance);
-                @Drop.started += instance.OnDrop;
-                @Drop.performed += instance.OnDrop;
-                @Drop.canceled += instance.OnDrop;
                 @Destroy.started += instance.OnDestroy;
                 @Destroy.performed += instance.OnDestroy;
                 @Destroy.canceled += instance.OnDestroy;
@@ -3294,9 +3289,6 @@ namespace ProjectOC.Input
 
             private void UnregisterCallbacks(IUIInventoryActions instance)
             {
-                @Drop.started -= instance.OnDrop;
-                @Drop.performed -= instance.OnDrop;
-                @Drop.canceled -= instance.OnDrop;
                 @Destroy.started -= instance.OnDestroy;
                 @Destroy.performed -= instance.OnDestroy;
                 @Destroy.canceled -= instance.OnDestroy;
@@ -3648,6 +3640,7 @@ namespace ProjectOC.Input
         private readonly InputAction m_OrderBoardPanel_NextTerm;
         private readonly InputAction m_OrderBoardPanel_SwichBtn;
         private readonly InputAction m_OrderBoardPanel_LastTerm;
+        private readonly InputAction m_OrderBoardPanel_OCInfo;
         public struct OrderBoardPanelActions
         {
             private @PlayerInput m_Wrapper;
@@ -3655,6 +3648,7 @@ namespace ProjectOC.Input
             public InputAction @NextTerm => m_Wrapper.m_OrderBoardPanel_NextTerm;
             public InputAction @SwichBtn => m_Wrapper.m_OrderBoardPanel_SwichBtn;
             public InputAction @LastTerm => m_Wrapper.m_OrderBoardPanel_LastTerm;
+            public InputAction @OCInfo => m_Wrapper.m_OrderBoardPanel_OCInfo;
             public InputActionMap Get() { return m_Wrapper.m_OrderBoardPanel; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -3673,6 +3667,9 @@ namespace ProjectOC.Input
                 @LastTerm.started += instance.OnLastTerm;
                 @LastTerm.performed += instance.OnLastTerm;
                 @LastTerm.canceled += instance.OnLastTerm;
+                @OCInfo.started += instance.OnOCInfo;
+                @OCInfo.performed += instance.OnOCInfo;
+                @OCInfo.canceled += instance.OnOCInfo;
             }
 
             private void UnregisterCallbacks(IOrderBoardPanelActions instance)
@@ -3686,6 +3683,9 @@ namespace ProjectOC.Input
                 @LastTerm.started -= instance.OnLastTerm;
                 @LastTerm.performed -= instance.OnLastTerm;
                 @LastTerm.canceled -= instance.OnLastTerm;
+                @OCInfo.started -= instance.OnOCInfo;
+                @OCInfo.performed -= instance.OnOCInfo;
+                @OCInfo.canceled -= instance.OnOCInfo;
             }
 
             public void RemoveCallbacks(IOrderBoardPanelActions instance)
@@ -3912,7 +3912,6 @@ namespace ProjectOC.Input
         }
         public interface IUIInventoryActions
         {
-            void OnDrop(InputAction.CallbackContext context);
             void OnDestroy(InputAction.CallbackContext context);
             void OnUse(InputAction.CallbackContext context);
             void OnAlterItem(InputAction.CallbackContext context);
@@ -3956,6 +3955,7 @@ namespace ProjectOC.Input
             void OnNextTerm(InputAction.CallbackContext context);
             void OnSwichBtn(InputAction.CallbackContext context);
             void OnLastTerm(InputAction.CallbackContext context);
+            void OnOCInfo(InputAction.CallbackContext context);
         }
         public interface IResonanceWheelUI_sub1Actions
         {

@@ -75,7 +75,6 @@ namespace ProjectOC.ManagerNS
             GM.RegisterLocalManager(ClanManager);
             GM.RegisterLocalManager(MonoBuildingManager);
             GM.RegisterLocalManager(TechTreeManager);
-/*            GM.RegisterLocalManager(OrderManager);*/
             GM.RegisterLocalManager(ItemManager);
             GM.RegisterLocalManager(CompositeManager);
             GM.RegisterLocalManager(IslandManager);
@@ -116,7 +115,7 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<IslandModelManager>();
                 GM?.UnregisterLocalManager<BuildPowerIslandManager>();
                 GM?.UnregisterLocalManager<IslandAreaManager>();
-/*                GM?.UnregisterLocalManager<OrderManager>();*/
+                GM?.UnregisterLocalManager<OrderManager>();
                 GM?.UnregisterLocalManager<ItemManager>();
                 GM?.UnregisterLocalManager<CompositeManager>();
                 GM?.UnregisterLocalManager<PinchFaceManager>(); //可能会提前注销，关闭捏脸面板的时候
@@ -135,7 +134,8 @@ namespace ProjectOC.ManagerNS
 
             //要获取玩家模型，放在后面
             GM.RegisterLocalManager(IslandAreaManager);
-            GM.RegisterLocalManager(PinchFaceManager);  
+            GM.RegisterLocalManager(PinchFaceManager);
+            GM.RegisterLocalManager(OrderManager);
         }
     
         #region Gizmos管理

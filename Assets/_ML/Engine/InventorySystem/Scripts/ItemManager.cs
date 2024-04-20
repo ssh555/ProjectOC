@@ -24,8 +24,32 @@ namespace ML.Engine.InventorySystem
         public TextContent.TextContent itemdescription;
         public TextContent.TextContent effectsdescription;
         public string type;
+        public bool bcanstack;
+        public bool bcanuse;
+        public bool bcandestroy;
         public int maxamount;
         public string worldobject;
+    }
+
+    public enum ApplicationScenario
+    {
+        Bag=0,
+    }
+    [System.Serializable]
+    public struct CategoryManage
+    {
+        public TextContent.TextContent CategoryName;
+        public string CategoryIcon;
+        public List<ItemType> ItemTypes;
+    }
+
+
+    [System.Serializable]
+    public struct ItemCategoryTableData
+    {
+        public string id;
+        public ApplicationScenario applicationScenario;
+        public CategoryManage categoryManage;
     }
 
     [System.Serializable]
@@ -92,6 +116,9 @@ namespace ML.Engine.InventorySystem
         /// 基础Item数据表 => 可加入联合体包含具体类型应有的数据
         /// </summary>
         private Dictionary<string, ItemTableData> ItemTypeStrDict = new Dictionary<string, ItemTableData>();
+
+        private Dictionary<string,ItemCategoryTableData> ItemCategoryTableDataDicOnID = new Dictionary<string, ItemCategoryTableData>();
+        private Dictionary<ApplicationScenario, List<CategoryManage>> ItemCategoryTableDataDicOnApplicationScenario = new Dictionary<ApplicationScenario, List<CategoryManage>>();
 
         #region to-do : 需读表导入所有所需的 Item 数据
         public const string TypePath = "ML.Engine.InventorySystem.";
@@ -343,6 +370,24 @@ namespace ML.Engine.InventorySystem
             }
             return this.ItemTypeStrDict[id].canstack;
         }
+        //TODO GetCanUse GetCanDestroy
+        public bool GetCanUse(string id)
+        {
+            if (!this.ItemTypeStrDict.ContainsKey(id))
+            {
+                return false;
+            }
+            return this.ItemTypeStrDict[id].bcanuse;
+        }
+
+        public bool GetCanDestroy(string id)
+        {
+            if (!this.ItemTypeStrDict.ContainsKey(id))
+            {
+                return false;
+            }
+            return this.ItemTypeStrDict[id].bcandestroy;
+        }
 
         public int GetWeight(string id)
         {
@@ -412,6 +457,15 @@ namespace ML.Engine.InventorySystem
                 }
             }
             return null;
+        }
+
+        public List<CategoryManage> GetCategoryManageByApplicationScenario(ApplicationScenario applicationScenario)
+        {
+            if(this.ItemCategoryTableDataDicOnApplicationScenario.ContainsKey(applicationScenario))
+            {
+                return this.ItemCategoryTableDataDicOnApplicationScenario[applicationScenario];
+            }
+            return new List<CategoryManage>();
         }
         #endregion
     }
