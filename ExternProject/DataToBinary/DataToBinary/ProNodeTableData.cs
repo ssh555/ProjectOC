@@ -18,47 +18,34 @@ namespace ProjectOC.ProNodeNS
         public int MaxStack;
         public int StackThreshold;
         public int RawThreshold;
+        public bool CanCharge;
 
         public bool GenData(string[] row)
         {
-            if (row[0] == null || row[0] == "")
+            if (string.IsNullOrEmpty(row[0]))
             {
                 return false;
             }
             // 0 -> ID
-            this.ID = row[0];
+            this.ID = Program.ParseString(row[0]);
             // 1 -> Name
-            this.Name = new ML.Engine.TextContent.TextContent();
-            this.Name.Chinese = row[1];
-            this.Name.English = row[1];
+            this.Name = Program.ParseTextContent(row[1]);
             // 2 -> Type
-            this.Type = (ProNodeType)Enum.Parse(typeof(ProNodeType), row[2]);
+            this.Type = Program.ParseEnum<ProNodeType>(row[2]);
             // 3 -> Category
-            this.Category = (ML.Engine.InventorySystem.RecipeCategory)Enum.Parse(typeof(ML.Engine.InventorySystem.RecipeCategory), row[3]);
+            this.Category = Program.ParseEnum<ML.Engine.InventorySystem.RecipeCategory>(row[3]);
             // 4 -> RecipeCategoryFiltered
-            this.RecipeCategoryFiltered = new List<ML.Engine.InventorySystem.RecipeCategory>();
-            foreach (string str in row[4].Split(',').Where(x => !string.IsNullOrEmpty(x)).ToList())
-            {
-                this.RecipeCategoryFiltered.Add((ML.Engine.InventorySystem.RecipeCategory)Enum.Parse(typeof(ML.Engine.InventorySystem.RecipeCategory), str));
-            }
+            this.RecipeCategoryFiltered = Program.ParseEnumList<ML.Engine.InventorySystem.RecipeCategory>(row[4]);
             // 5 -> ExpType
-            if (!string.IsNullOrEmpty(row[5]))
-            {
-                this.ExpType = (WorkerNS.WorkType)Enum.Parse(typeof(WorkerNS.WorkType), row[5]);
-            }
-            else
-            {
-                this.ExpType = WorkerNS.WorkType.None;
-            }
-            // 6 -> MaxStack
-            this.MaxStack = int.Parse(row[6]);
+            this.ExpType = Program.ParseEnum<WorkerNS.WorkType>(row[5]);
+            // 6 -> Stack
+            this.MaxStack = Program.ParseInt(row[6]);
             // 7 -> StackThreshold
-            this.StackThreshold = int.Parse(row[7]);
+            this.StackThreshold = Program.ParseInt(row[7]);
             // 8 -> RawThreshold
-            if (!string.IsNullOrEmpty(row[8]))
-            {
-                this.RawThreshold = int.Parse(row[8]);
-            }
+            this.RawThreshold = Program.ParseInt(row[8]);
+            // 9 -> CanCharge
+            this.CanCharge = Program.ParseBool(row[9]);
             return true;
         }
     }
