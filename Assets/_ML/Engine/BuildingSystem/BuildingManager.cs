@@ -367,6 +367,19 @@ namespace ML.Engine.BuildingSystem
             this.AddBPartPrefabOnHeight(BPart);
 
             this.registeredBPart.Add(BPart.Classification, BPart);
+
+            //家具类别
+            if (BPart.Classification.Category1 == BuildingCategory1.Furniture)
+            {
+                if (FurnitureCategoryDic.ContainsKey(BPart.Classification.Category2))
+                {
+                    FurnitureCategoryDic[BPart.Classification.Category2].Add(BPart);
+                }
+                else
+                {
+                    FurnitureCategoryDic.Add(BPart.Classification.Category2, new List<IBuildingPart>());
+                }
+            }
         }
 
         /// <summary>
@@ -928,6 +941,8 @@ namespace ML.Engine.BuildingSystem
         public Dictionary<string, BuildingTableData> BPartTableDictOnClass = new Dictionary<string, BuildingTableData>();
 
         public Dictionary<string, FurnitureThemeTableData> FurnitureThemeTableDataDic = new Dictionary<string, FurnitureThemeTableData>();
+
+        private Dictionary<BuildingCategory2, List<IBuildingPart>> FurnitureCategoryDic = new Dictionary<BuildingCategory2, List<IBuildingPart>>();
         public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
 
         public ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]> ABJAProcessor;
@@ -1024,6 +1039,25 @@ namespace ML.Engine.BuildingSystem
             }
             return null;
         }
+
+        public List<IBuildingPart> GetFurnitureIBuildingParts(BuildingCategory2 buildingCategory2)
+        {
+            if (FurnitureCategoryDic.ContainsKey(buildingCategory2))
+            {
+                return FurnitureCategoryDic[buildingCategory2];
+            }
+            return new List<IBuildingPart>();
+        }
+        public List<string> GetThemeContainBuildings(string ID)
+        {
+            if (!string.IsNullOrEmpty(ID) && FurnitureThemeTableDataDic.ContainsKey(ID))
+            {
+                return FurnitureThemeTableDataDic[ID].BuildID;
+            }
+            return null;
+        }
+
+        
         #endregion
 
 
