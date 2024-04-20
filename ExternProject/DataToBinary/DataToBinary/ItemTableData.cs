@@ -53,7 +53,7 @@ namespace ML.Engine.InventorySystem
             this.effectsdescription = Program.ParseTextContent(row[9]);
             // TODO: Change
             this.type = "ResourceItem";
-            this.maxamount = 999;
+            this.maxamount = int.MaxValue;
             this.worldobject = "Item";
             return true;
         }
