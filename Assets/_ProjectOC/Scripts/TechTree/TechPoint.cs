@@ -11,11 +11,11 @@ namespace ProjectOC.TechTree
     public class TechPoint
     {
         public string ID;
-        public ML.Engine.TextContent.TextContent Name;
-        public int[] Grid;
         public TechPointCategory Category;
+        public ML.Engine.TextContent.TextContent Name;
         public string Icon;
         public ML.Engine.TextContent.TextContent Description;
+        public int[] Grid;
         public bool IsUnlocked;
         public string[] UnLockRecipe;
         public string[] UnLockBuild;
