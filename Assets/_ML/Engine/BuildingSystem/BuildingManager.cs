@@ -15,6 +15,7 @@ namespace ML.Engine.BuildingSystem
     public struct BuildingTableData
     {
         public string id;
+        public int sort;
         public TextContent.TextContent name;
         public string icon;
         public string category1;

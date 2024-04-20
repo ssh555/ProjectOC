@@ -14,18 +14,18 @@ namespace ProjectOC.WorkerEchoNS
 
         public bool GenData(string[] row)
         {
-            if (row[0] == null || row[0] == "")
+            if (string.IsNullOrEmpty(row[0]))
             {
                 return false;
             }
             // 0 -> ID
-            this.ID = row[0];
+            this.ID = Program.ParseString(row[0]);
             // 1 -> Category
-            this.Category = (Category)Enum.Parse(typeof(Category), row[1]);
+            this.Category = Program.ParseEnum<Category>(row[1]);
             // 2 -> Raw
-            this.Raw = Program.ParseFormula(row[2]);
+            this.Raw = Program.ParseFormulaList(row[2]);
             // 3 -> TimeCost
-            this.TimeCost = int.Parse(row[3]);
+            this.TimeCost = Program.ParseInt(row[3]);
             return true;
         }
     }
@@ -34,11 +34,11 @@ namespace ProjectOC.WorkerEchoNS
     {
         None,
         Random,
-        Cat,
-        Deer,
-        Fox,
-        Rabbit,
-        Dog,
-        Seal,
+        CookWorker,
+        HandCraftWorker,
+        IndustryWorker,
+        MagicWorker,
+        TransportWorker,
+        CollectWorker
     }
 }

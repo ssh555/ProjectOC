@@ -52,8 +52,6 @@ namespace ProjectOC.ProNodeNS
         public int LevelMax { get; private set; } = 2;
         [LabelText("升级提高的基础生产效率"), FoldoutGroup("配置"), ShowInInspector]
         public List<int> LevelUpgradeEff = new List<int>() { 50, 50, 50 };
-        [LabelText("是否需要供电"), FoldoutGroup("配置")]
-        public bool RequirePower = false;
         #endregion
 
         #region 读表数据
@@ -73,6 +71,8 @@ namespace ProjectOC.ProNodeNS
         public int StackThresholdNum { get => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetStackThreshold(ID) : 0; }
         [LabelText("需求阈值份数"), ShowInInspector, ReadOnly]
         public int RawThresholdNum { get => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetRawThreshold(ID) : 0; }
+        [LabelText("是否需要供电"), ShowInInspector, FoldoutGroup("配置")]
+        public bool RequirePower => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetCanCharge(ID) : false;
         #endregion
 
         #region Property
