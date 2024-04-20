@@ -141,12 +141,15 @@ namespace ML.Engine.BuildingSystem
             };
         }
 
-        ~MonoBuildingManager()
+        public void OnUnregister()
         {
-            if(Manager.GameManager.Instance != null)
+            if (Manager.GameManager.Instance != null)
                 Manager.GameManager.Instance.ABResourceManager.Release(BPartHandle);
+            if(this.BM != null)
+            {
+                this.BM.UnregisterAllBPartPrefab();
+            }
         }
-
         #endregion
 
 #if UNITY_EDITOR
