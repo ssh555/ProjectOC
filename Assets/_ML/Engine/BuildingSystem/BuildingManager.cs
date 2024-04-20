@@ -444,6 +444,7 @@ namespace ML.Engine.BuildingSystem
 
         public IBuildingPart GetOneBPartInstance(string classification)
         {
+            //Debug.Log("GetOneBPartInstance "+classification);
             return GetOneBPartInstance(new BuildingPartClassification(classification));
         }
 
@@ -939,18 +940,21 @@ namespace ML.Engine.BuildingSystem
         // Materials/Character/Player
 
         public Dictionary<string, BuildingTableData> BPartTableDictOnID = new Dictionary<string, BuildingTableData>();
+        [ShowInInspector]
         public Dictionary<string, BuildingTableData> BPartTableDictOnClass = new Dictionary<string, BuildingTableData>();
 
+        [ShowInInspector]
         public Dictionary<string, FurnitureThemeTableData> FurnitureThemeTableDataDic = new Dictionary<string, FurnitureThemeTableData>();
 
         private Dictionary<BuildingCategory2, List<IBuildingPart>> FurnitureCategoryDic = new Dictionary<BuildingCategory2, List<IBuildingPart>>();
-        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
+        public bool IsLoadOvered => ABJAProcessorBuildingTableData != null && ABJAProcessorBuildingTableData.IsLoaded;
 
-        public ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]> ABJAProcessor;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]> ABJAProcessorBuildingTableData;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<FurnitureThemeTableData[]> ABJAProcessorFurnitureThemeTableData;
 
         public void LoadTableData()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]>("OC/Json/TableData", "Building", (datas) =>
+            ABJAProcessorBuildingTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]>("OC/Json/TableData", "Building", (datas) =>
             {
                 foreach (var data in datas)
                 {
@@ -958,7 +962,17 @@ namespace ML.Engine.BuildingSystem
                     BPartTableDictOnClass.Add(data.GetClassificationString(), data);
                 }
             }, "建筑表数据");
-            ABJAProcessor.StartLoadJsonAssetData();
+            ABJAProcessorBuildingTableData.StartLoadJsonAssetData();
+
+            ABJAProcessorFurnitureThemeTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<FurnitureThemeTableData[]>("OC/Json/TableData", "FurnitureTheme", (datas) =>
+            {
+                foreach (var data in datas)
+                {
+                    FurnitureThemeTableDataDic.Add(data.ID, data);
+                }
+            }, "家具主题表数据");
+            ABJAProcessorFurnitureThemeTableData.StartLoadJsonAssetData();
+
         }
 
         public string GetID(string CID)
@@ -986,6 +1000,7 @@ namespace ML.Engine.BuildingSystem
 
         public string GetName(string CID)
         {
+            Debug.Log("GetName " + CID+" "+ BPartTableDictOnClass.ContainsKey(CID));
             if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
             {
                 return BPartTableDictOnClass[CID].name;

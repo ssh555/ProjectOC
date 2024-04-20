@@ -21,6 +21,11 @@ namespace ML.Engine.Extension
             return new Vector2Int(rows, columns);
         }
 
+        public static Vector2Int GetGridSize(this GridLayoutGroup gridLayout,int ItemCnt)
+        {
+            return new Vector2Int(Mathf.CeilToInt((float)ItemCnt/ gridLayout.constraintCount), gridLayout.constraintCount);
+        }
+
         public static int GetElementCount(this GridLayoutGroup gridLayout, bool IsCountHide = true)
         {
             if (IsCountHide)

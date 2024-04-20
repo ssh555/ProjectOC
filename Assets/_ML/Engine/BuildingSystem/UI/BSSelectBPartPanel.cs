@@ -409,7 +409,6 @@ namespace ML.Engine.BuildingSystem.UI
         {
             if (this.SelectedCategory1 == BuildingCategory1.Furniture) 
             {
-
                 if(this.FurniturePanel.gameObject.activeInHierarchy == false)
                 {
                     this.FurniturePanel.gameObject.SetActive(true);
@@ -433,12 +432,15 @@ namespace ML.Engine.BuildingSystem.UI
 
                         foreach (var item in furnitureList)
                         {
+                            IBuildingPart buildingPart = BuildingManager.Instance.GetOneBPartInstance(item.Item2.Classification);
+                            if (buildingPart == null || buildingPart.Classification == null) continue;
+                            string BuildingName = BuildingManager.Instance.GetName(buildingPart.Classification.ToString());
                             this.FurnitureDisplayBtnList.AddBtn("ML/BuildingSystem/UI/FurnitureBtn.prefab", BtnAction: () =>
                             {
                                 Debug.Log("放置家具 " + item.Item2.Classification.ToString());
-                                this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(item.Item2.Classification);
+                                this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(buildingPart.Classification);
                                 monoBM.PopAndPushPanel<BSPlaceModePanel>();
-                            },BtnText: item.Item2.Classification.Category3.ToString());
+                            },BtnText: BuildingName);
                         }
                     }
                     else
@@ -448,33 +450,32 @@ namespace ML.Engine.BuildingSystem.UI
 
                         //当前选中的主题ID
                         var curSelectedThemeID = this.FurnitureThemeBtnList.GetCurSelected().gameObject.name;
-                        
+                        Debug.Log("curSelectedThemeID " + curSelectedThemeID);
                         List<(SelectedButton, IBuildingPart)> furnitureList = new List<(SelectedButton, IBuildingPart)>();
 
-                        foreach (var buildingID in BuildingManager.Instance.GetThemeContainBuildings(curSelectedThemeID))
+                        List<string> Buildings = BuildingManager.Instance.GetThemeContainBuildings(curSelectedThemeID);
+                        foreach (var buildingID in Buildings)
                         {
-                            IBuildingPart buildingPart = BuildingManager.Instance.GetOneBPartInstance(buildingID);
-
-                            this.FurnitureDisplayBtnList.AddBtn("ML/BuildingSystem/UI/FurnitureBtn.prefab",BtnAction: () =>
+                            string classification = BuildingManager.Instance.GetClassification(buildingID);
+                            IBuildingPart buildingPart = BuildingManager.Instance.GetOneBPartInstance(classification);
+                            if (buildingPart == null|| buildingPart.Classification == null) continue;
+                            string BuildingName = BuildingManager.Instance.GetName(buildingPart.Classification.ToString());
+                            this.FurnitureDisplayBtnList.AddBtn("ML/BuildingSystem/UI/FurnitureBtn.prefab", BtnAction: () =>
                             {
                                 Debug.Log("放置家具 " + buildingPart.Classification.ToString());
                                 this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(buildingPart.Classification);
                                 monoBM.PopAndPushPanel<BSPlaceModePanel>();
-                            }, BtnText: buildingPart.Classification.Category3.ToString());
+                            }, BtnText: BuildingName);//buildingPart.Classification.Category3.ToString()
                         }
-
                     }
 
                     this.FurnitureDisplayBtnList.OnSelectEnter();
                     this.FurnitureDisplayBtnList.BindNavigationInputAction(this.Placer.BInput.BuildSelection.SwichBtn, UIBtnListContainer.BindType.started);
                     this.FurnitureDisplayBtnList.BindButtonInteractInputAction(this.Placer.comfirmInputAction, UIBtnListContainer.BindType.started);
-
-
                 }
                 else
                 {
                     //this.FurnitureDisplayBtnList.GetCurSelected()?.Interact();
-                    
                 }
                 
 
@@ -496,13 +497,11 @@ namespace ML.Engine.BuildingSystem.UI
                 return;
             }
 
-
             if (this.FurniturePanel.gameObject.activeInHierarchy == true)
             {
                 this.FurniturePanel.gameObject.SetActive(false);
                 this.FurnitureDisplayBtnList.DeleteAllButton();
             }
-
 
             if(this.FurnitureCategoryBtnListTransform.gameObject.activeInHierarchy == true)
             {
@@ -511,13 +510,12 @@ namespace ML.Engine.BuildingSystem.UI
                 this.FurnitureCategoryBtnList.DisableBtnList();
                 this.FurnitureThemeBtnListTransform.gameObject.SetActive(true);
                 this.FurnitureThemeBtnList.EnableBtnList();
-
-
                 if(isFirstAddThemeBtn)
                 {
                     //给主题btnlist加入按钮
                     foreach (var (id, data) in BuildingManager.Instance.FurnitureThemeTableDataDic)
                     {
+                        Debug.Log(id + " " + data.Name);
                         this.FurnitureThemeBtnList.AddBtn("ML/BuildingSystem/UI/ThemeBtn.prefab",BtnSettingAction: (btn) =>
                         {
                             btn.gameObject.name = data.ID;
@@ -613,8 +611,11 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region ButtonList
+        [ShowInInspector]
         private UIBtnList FurnitureDisplayBtnList = null;
+        [ShowInInspector]
         private UIBtnList FurnitureCategoryBtnList = null;
+        [ShowInInspector]
         private UIBtnList FurnitureThemeBtnList = null;
         protected override void InitBtnInfo()
         {

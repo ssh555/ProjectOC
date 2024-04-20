@@ -102,7 +102,7 @@ namespace ML.Engine.InventorySystem
         /// <summary>
         /// 是否已加载完数据
         /// </summary>
-        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
+        public bool IsLoadOvered => ABJAProcessorItemTableData != null && ABJAProcessorItemTableData.IsLoaded;
 
         /// <summary>
         /// 根据需求自动添加
@@ -125,18 +125,34 @@ namespace ML.Engine.InventorySystem
 
 
 
-        public ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableData[]> ABJAProcessor;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableData[]> ABJAProcessorItemTableData;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<ItemCategoryTableData[]> ABJAProcessorItemCategoryTableData;
 
         public void LoadTableData()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableData[]>("OC/Json/TableData", "Item", (datas) =>
+            ABJAProcessorItemTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableData[]>("OC/Json/TableData", "Item", (datas) =>
             {
                 foreach (var data in datas)
                 {
                     this.ItemTypeStrDict.Add(data.id, data);
                 }
             }, "背包系统物品Item表数据");
-            ABJAProcessor.StartLoadJsonAssetData();
+            ABJAProcessorItemTableData.StartLoadJsonAssetData();
+
+            ABJAProcessorItemCategoryTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemCategoryTableData[]>("OC/Json/TableData", "ItemCategory", (datas) =>
+            {
+                foreach (var data in datas)
+                {
+                    this.ItemCategoryTableDataDicOnID.Add(data.id, data);
+
+                    if(!this.ItemCategoryTableDataDicOnApplicationScenario.ContainsKey(data.applicationScenario))
+                    {
+                        this.ItemCategoryTableDataDicOnApplicationScenario.Add(data.applicationScenario, new List<CategoryManage>());
+                    }
+                    this.ItemCategoryTableDataDicOnApplicationScenario[data.applicationScenario].Add(data.categoryManage);
+                }
+            }, "ItemCategoryTable数据");
+            ABJAProcessorItemCategoryTableData.StartLoadJsonAssetData();
         }
         #endregion
 
