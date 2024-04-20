@@ -17,44 +17,42 @@ namespace ML.Engine.InventorySystem
         public TextContent.TextContent name;
         public int weight;
         public string icon;
+        public bool canstack;
+        public bool candestroy;
         public TextContent.TextContent itemdescription;
         public TextContent.TextContent effectsdescription;
         public string type;
-        public bool bcanstack;
         public int maxamount;
         public string worldobject;
-
+        
         public bool GenData(string[] row)
         {
-            if (row[0] == null || row[0] == "")
+            if (string.IsNullOrEmpty(row[0]))
             {
                 return false;
             }
             // 0 -> ID
-            this.id = row[0];
+            this.id = Program.ParseString(row[0]);
             // 1 -> Sort
-            this.sort = int.Parse(row[1]);
+            this.sort = Program.ParseInt(row[1]);
             // 2 -> ItemType
-            this.itemtype = (ItemType)Enum.Parse(typeof(ItemType), row[2]);
+            this.itemtype = Program.ParseEnum<ItemType>(row[2]);
             // 3 -> Name
-            this.name = new TextContent.TextContent();
-            this.name.Chinese = row[3];
-            this.name.English = row[3];
+            this.name = Program.ParseTextContent(row[3]);
             // 4 -> Weight
-            this.weight = int.Parse(row[4]);
+            this.weight = Program.ParseInt(row[4]);
             // 5 -> Icon
-            this.icon = row[5];
-            // 6 -> ItemsDescription
-            this.itemdescription = new TextContent.TextContent();
-            this.itemdescription.Chinese = row[6];
-            this.itemdescription.English = row[6];
-            // 7 -> EffectsDescription
-            this.effectsdescription = new TextContent.TextContent();
-            this.effectsdescription.Chinese = row[7];
-            this.effectsdescription.English = row[7];
+            this.icon = Program.ParseString(row[5]);
+            // 6 -> CanStack
+            this.canstack = Program.ParseBool(row[6]); ;
+            // 7 -> CanDestroy
+            this.candestroy = Program.ParseBool(row[7]); ;
+            // 8 -> ItemsDescription
+            this.itemdescription = Program.ParseTextContent(row[8]);
+            // 9 -> EffectsDescription
+            this.effectsdescription = Program.ParseTextContent(row[9]);
             // TODO: Change
             this.type = "ResourceItem";
-            this.bcanstack = true;
             this.maxamount = 999;
             this.worldobject = "Item";
             return true;
@@ -65,10 +63,22 @@ namespace ML.Engine.InventorySystem
     public enum ItemType
     {
         None,
-        Equip,
-        Food,
-        Material,
-        Mission,
+        Vegetable,
+        Meat,
+        Feed,
+        BoxLunch,
+        Juice,
+        Snack,
+        MedicalPro,
+        Medicine,
+        Wood,
+        Fabric,
+        Stone,
+        Metal,
+        Magic,
+        Calculus,
         Creature,
+        Cloth,
+        Mission,
     }
 }
