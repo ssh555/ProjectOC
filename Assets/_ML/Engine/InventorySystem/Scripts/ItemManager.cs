@@ -46,6 +46,7 @@ namespace ML.Engine.InventorySystem
     public struct ItemCategoryTableData
     {
         public string id;
+        public int sort;
         public ApplicationScenario applicationScenario;
         public CategoryManage categoryManage;
     }
@@ -102,7 +103,7 @@ namespace ML.Engine.InventorySystem
         /// <summary>
         /// 是否已加载完数据
         /// </summary>
-        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
+        public bool IsLoadOvered => ABJAProcessorItemTableData != null && ABJAProcessorItemTableData.IsLoaded;
 
         /// <summary>
         /// 根据需求自动添加
@@ -116,7 +117,7 @@ namespace ML.Engine.InventorySystem
         private Dictionary<string, ItemTableData> ItemTypeStrDict = new Dictionary<string, ItemTableData>();
 
         private Dictionary<string,ItemCategoryTableData> ItemCategoryTableDataDicOnID = new Dictionary<string, ItemCategoryTableData>();
-        private Dictionary<ApplicationScenario, List<CategoryManage>> ItemCategoryTableDataDicOnApplicationScenario = new Dictionary<ApplicationScenario, List<CategoryManage>>();
+        private Dictionary<ApplicationScenario, List<(int,CategoryManage)>> ItemCategoryTableDataDicOnApplicationScenario = new Dictionary<ApplicationScenario, List<(int, CategoryManage)>>();
 
         #region to-do : 需读表导入所有所需的 Item 数据
         public const string TypePath = "ML.Engine.InventorySystem.";
@@ -125,18 +126,34 @@ namespace ML.Engine.InventorySystem
 
 
 
-        public ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableData[]> ABJAProcessor;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableData[]> ABJAProcessorItemTableData;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<ItemCategoryTableData[]> ABJAProcessorItemCategoryTableData;
 
         public void LoadTableData()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableData[]>("OC/Json/TableData", "Item", (datas) =>
+            ABJAProcessorItemTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableData[]>("OC/Json/TableData", "Item", (datas) =>
             {
                 foreach (var data in datas)
                 {
                     this.ItemTypeStrDict.Add(data.id, data);
                 }
             }, "背包系统物品Item表数据");
-            ABJAProcessor.StartLoadJsonAssetData();
+            ABJAProcessorItemTableData.StartLoadJsonAssetData();
+
+            ABJAProcessorItemCategoryTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemCategoryTableData[]>("OC/Json/TableData", "ItemCategory", (datas) =>
+            {
+                foreach (var data in datas)
+                {
+                    this.ItemCategoryTableDataDicOnID.Add(data.id, data);
+
+                    if(!this.ItemCategoryTableDataDicOnApplicationScenario.ContainsKey(data.applicationScenario))
+                    {
+                        this.ItemCategoryTableDataDicOnApplicationScenario.Add(data.applicationScenario, new List<(int, CategoryManage)>());
+                    }
+                    this.ItemCategoryTableDataDicOnApplicationScenario[data.applicationScenario].Add((data.sort, data.categoryManage));
+                }
+            }, "ItemCategoryTable数据");
+            ABJAProcessorItemCategoryTableData.StartLoadJsonAssetData();
         }
         #endregion
 
@@ -297,7 +314,6 @@ namespace ML.Engine.InventorySystem
         {
             if (!this.ItemTypeStrDict.ContainsKey(id))
             {
-
                 foreach (var sa in this.itemAtlasList)
                 {
                     var s = sa.GetSprite(id);
@@ -461,7 +477,14 @@ namespace ML.Engine.InventorySystem
         {
             if(this.ItemCategoryTableDataDicOnApplicationScenario.ContainsKey(applicationScenario))
             {
-                return this.ItemCategoryTableDataDicOnApplicationScenario[applicationScenario];
+                List<(int, CategoryManage)> tmp = this.ItemCategoryTableDataDicOnApplicationScenario[applicationScenario];
+                tmp.Sort((x, y) => x.Item1.CompareTo(y.Item1));
+                List<CategoryManage> categoryManages = new List<CategoryManage>();
+                foreach (var(a, b) in tmp)
+                {
+                    categoryManages.Add(b);
+                }
+                return categoryManages;
             }
             return new List<CategoryManage>();
         }
