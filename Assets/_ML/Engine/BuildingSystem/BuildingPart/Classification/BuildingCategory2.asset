@@ -42,17 +42,17 @@ MonoBehaviour:
   - name: SeedPlot
     displayName: "\u82D7\u5703"
     value: 004
-  - name: Detector
-    displayName: "\u6355\u635E\u7AD9"
+  - name: DiveStation
+    displayName: "\u77FF\u77F3\u951A\u5B9A\u6F5C\u822A\u5668"
     value: 005
   - name: Refine
     displayName: "\u7CBE\u70BC\u7089"
     value: 006
-  - name: Sawn
-    displayName: "\u952F\u6728\u5E8A"
+  - name: Handwork
+    displayName: "\u624B\u5DE5\u4F5C\u4E1A\u53F0"
     value: 007
-  - name: Textile
-    displayName: "\u7EBA\u7EC7\u673A"
+  - name: Pharmacy
+    displayName: "\u5236\u836F\u53F0"
     value: 008
   - name: Aggregator
     displayName: "\u805A\u5408\u5668"
@@ -66,14 +66,14 @@ MonoBehaviour:
   - name: Calculus
     displayName: "\u6F14\u7B97\u4EEA"
     value: 012
-  - name: Store
-    displayName: "\u4ED3\u5E93"
+  - name: SolidStore
+    displayName: "\u7269\u6D41\u8F6C\u8FD0\u7BB1"
     value: 100
-  - name: Reservoir
-    displayName: "\u50A8\u6DB2\u7F50"
+  - name: LiquidStore
+    displayName: "\u6DB2\u4F53\u8F6C\u8FD0\u7F50"
     value: 101
-  - name: Incubator
-    displayName: "\u6052\u6E29\u4ED3"
+  - name: Canteen
+    displayName: "\u9910\u5385"
     value: 102
   - name: EchoWheel
     displayName: "\u5171\u9E23\u8F6E"
@@ -87,15 +87,12 @@ MonoBehaviour:
   - name: Projector
     displayName: "\u751F\u6001\u6295\u5F71\u88C5\u7F6E"
     value: 106
-  - name: Foundation
-    displayName: "\u5730\u57FA"
-    value: 200
-  - name: FoundationEdge
-    displayName: "\u5730\u57FA\u5916\u6CBF"
-    value: 201
   - name: Floor
     displayName: "\u5730\u677F"
     value: 202
+  - name: Edge
+    displayName: "\u5730\u57FA\u5916\u6CBF"
+    value: 201
   - name: Wall
     displayName: "\u5899"
     value: 203
@@ -138,3 +135,18 @@ MonoBehaviour:
   - name: Decoration
     displayName: "\u88C5\u9970"
     value: 307
+  - name: Liquor
+    displayName: "\u53D1\u9175\u6876"
+    value: 013
+  - name: CreaturePro
+    displayName: "\u517B\u6B96\u751F\u7269\u57F9\u80B2\u8231"
+    value: 014
+  - name: CreatureBreed
+    displayName: "\u517B\u6B96\u751F\u7269\u7E41\u80B2\u4EEA"
+    value: 015
+  - name: Nest
+    displayName: "\u7A9D"
+    value: 107
+  - name: FeatureModifier
+    displayName: "\u55B5\u55B5\u7A9D"
+    value: 108
