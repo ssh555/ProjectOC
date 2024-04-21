@@ -115,7 +115,7 @@ namespace ProjectOC.InventorySystem.UI
         /// 当前选中的ItemType
         /// </summary>
         [ShowInInspector]
-        private List<ItemType> CurrentItemCategory => this.categoryManages.Count > 0 ? this.categoryManages[CurrentItemTypeIndex].ItemTypes : new List<ItemType>();
+        private List<ItemType> CurrentItemCategory => this.categoryManages != null ? (this.categoryManages.Count > 0 ? this.categoryManages[CurrentItemTypeIndex].ItemTypes : new List<ItemType>()) : null;
         /// <summary>
         /// 封装的ItemTypeIndex，便于在更新值时一并更新其他数据并Refresh
         /// </summary>
