@@ -341,7 +341,7 @@ namespace ProjectOC.Order
         {
             if (OrderId == null) return;
             if (!OrderTableDataDic.ContainsKey(OrderId)) return;
-            Debug.Log("接取订单 " + OrderId + " " + LocalGameManager.Instance.DispatchTimeManager.CurrentHour.ToString() + " : " + LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString());
+            //Debug.Log("接取订单 " + OrderId + " " + LocalGameManager.Instance.DispatchTimeManager.CurrentHour.ToString() + " : " + LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString());
             OrderTableData orderTableData = OrderTableDataDic[OrderId];
             string ClanID = OrderIDToClanIDDic[orderTableData.ID];
             if (orderTableData.OrderType == OrderType.Urgent)
@@ -389,7 +389,7 @@ namespace ProjectOC.Order
             {
                 if (olist[i]?.OrderID == OrderId)
                 {
-                    Debug.Log("订单超时 " + olist[i].OrderID+" "+ LocalGameManager.Instance.DispatchTimeManager.CurrentHour.ToString() + " : " + LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString());
+                    //Debug.Log("订单超时 " + olist[i].OrderID+" "+ LocalGameManager.Instance.DispatchTimeManager.CurrentHour.ToString() + " : " + LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString());
                     olist[i] = null;
                     break;
                 }
@@ -638,7 +638,18 @@ namespace ProjectOC.Order
                 OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_2", "Clan2");
                 OrderIDToClanIDDic.Add("Order_Normal_LiYuan_1", "Clan3");
                 OrderIDToClanIDDic.Add("Order_Special_LiYuan_1", "Clan1");
-
+                OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_3", "Clan1");
+                OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_4", "Clan1");
+                OrderIDToClanIDDic.Add("Order_Normal_LiYuan_2", "Clan2");
+                OrderIDToClanIDDic.Add("Order_Special_LiYuan_2", "Clan1");
+                OrderIDToClanIDDic.Add("Order_Normal_LiYuan_3", "Clan1");
+                OrderIDToClanIDDic.Add("Order_Normal_LiYuan_4", "Clan2");
+                OrderIDToClanIDDic.Add("Order_Normal_LiYuan_5", "Clan3");
+                OrderIDToClanIDDic.Add("Order_Normal_LiYuan_6", "Clan1");
+                OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_5", "Clan2");
+                OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_6", "Clan3");
+                OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_7", "Clan3");
+                OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_8", "Clan1");
                 foreach (var data in datas)
                 {
                     //TODO 暂时直接解锁

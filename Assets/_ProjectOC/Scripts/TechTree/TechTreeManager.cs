@@ -64,8 +64,9 @@ namespace ProjectOC.TechTree
         /// <summary>
         /// 载入的科技点表格数据
         /// </summary>
+        [ShowInInspector]
         private Dictionary<string, TechPoint> registerTechPoints = new Dictionary<string, TechPoint>();
-
+        [ShowInInspector]
         private SpriteAtlas techAtlas;
         public string[] GetAllTPID()
         {
