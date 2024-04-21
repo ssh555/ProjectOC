@@ -658,26 +658,11 @@ namespace ProjectOC.ProNodeNS
         #endregion
 
         #region IMission½Ó¿Ú
-        public Transform GetTransform()
-        {
-            return WorldProNode?.transform;
-        }
-        public TransportPriority GetTransportPriority()
-        {
-            return TransportPriority;
-        }
-        public string GetUID()
-        {
-            return UID;
-        }
-        public void AddMissionTranport(MissionTransport mission)
-        {
-            MissionTransports.Add(mission);
-        }
-        public void RemoveMissionTranport(MissionTransport mission)
-        {
-            MissionTransports.Remove(mission);
-        }
+        public Transform GetTransform() { return WorldProNode?.transform; }
+        public TransportPriority GetTransportPriority() { return TransportPriority; }
+        public string GetUID() { return UID; }
+        public void AddMissionTranport(MissionTransport mission) { MissionTransports.Add(mission); }
+        public void RemoveMissionTranport(MissionTransport mission) { MissionTransports.Remove(mission); }
         public bool PutIn(string itemID, int amount)
         {
             return Add(itemID, amount, true) >= amount;

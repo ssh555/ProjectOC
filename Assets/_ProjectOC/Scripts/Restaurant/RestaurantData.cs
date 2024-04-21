@@ -35,9 +35,9 @@ namespace ProjectOC.RestaurantNS
 
         #region 属性
         [LabelText("是否有设置食物"), ShowInInspector, ReadOnly]
-        public bool HasSetFood => !string.IsNullOrEmpty(ID) && LocalGameManager.Instance != null && LocalGameManager.Instance.RestaurantManager.WorkerFood_IsValidID(ID);
+        public bool HaveSetFood => !string.IsNullOrEmpty(ID) && LocalGameManager.Instance != null && LocalGameManager.Instance.RestaurantManager.WorkerFood_IsValidID(ID);
         [LabelText("是否有食物"), ShowInInspector, ReadOnly]
-        public bool HasFood => HasSetFood && Amount > 0;
+        public bool HaveFood => HaveSetFood && Amount > 0;
         #endregion
 
         public class Sort : IComparer<RestaurantData>
@@ -45,9 +45,9 @@ namespace ProjectOC.RestaurantNS
             public int Compare(RestaurantData x, RestaurantData y)
             {
                 //1.设置食物的排在前面
-                if (x.HasSetFood != y.HasSetFood)
+                if (x.HaveSetFood != y.HaveSetFood)
                 {
-                    return y.HasSetFood.CompareTo(x.HasSetFood);
+                    return y.HaveSetFood.CompareTo(x.HaveSetFood);
                 }
                 //2.优先级大的排在前面
                 if (x.Priority != y.Priority)
@@ -55,9 +55,9 @@ namespace ProjectOC.RestaurantNS
                     return y.Priority.CompareTo(x.Priority);
                 }
                 //3.有食物的排在前面
-                if (x.HasFood != y.HasFood)
+                if (x.HaveFood != y.HaveFood)
                 {
-                    return y.HasFood.CompareTo(x.HasFood);
+                    return y.HaveFood.CompareTo(x.HaveFood);
                 }
                 //4.变更体力值小的排在前面
                 if (x.AlterAP != y.AlterAP)

@@ -29,7 +29,7 @@ namespace ML.Engine.InventorySystem
 
         public void LateTick(float deltatime)
         {
-            if (Renderer.isVisible && Image.sprite != null && Vector3.Distance(transform.position, Target.position) <= 5f)
+            if (Renderer.isVisible && Image.sprite != null && Target != null && Vector3.Distance(transform.position, Target.position) <= 5f)
             {
                 Image.enabled = true;
                 IsShow = true;

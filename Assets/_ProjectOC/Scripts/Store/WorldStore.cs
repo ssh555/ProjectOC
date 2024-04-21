@@ -1,6 +1,7 @@
 using ML.Engine.BuildingSystem;
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InteractSystem;
+using ML.Engine.InventorySystem;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.Manager;
 using ProjectOC.ManagerNS;
@@ -66,8 +67,10 @@ namespace ProjectOC.StoreNS
         {
             string lastLevelID = BuildingManager.Instance.GetID(lastLevelBuild.Classification.ToString());
             string upgradeID = BuildingManager.Instance.GetID(Classification.ToString());
-            CompositeManager.Instance.OnlyCostResource(upgradeID);
-            CompositeManager.Instance.OnlyReturnResource(lastLevelID);
+            List<IInventory> inventorys = (GameManager.Instance.CharacterManager.GetLocalController() as ProjectOC.Player.OCPlayerController).GetInventorys(true, -1);
+            CompositeManager.Instance.OnlyCostResource(inventorys, upgradeID);
+            IInventory inventory = (GameManager.Instance.CharacterManager.GetLocalController() as ProjectOC.Player.OCPlayerController).OCState.Inventory;
+            CompositeManager.Instance.OnlyReturnResource(inventory, lastLevelID);
             transform.SetParent(lastLevelBuild.transform.parent);
             InstanceID = lastLevelBuild.InstanceID;
             transform.position = lastLevelBuild.transform.position;
