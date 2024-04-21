@@ -85,7 +85,7 @@ namespace ML.Engine.UI
             this.currentObjectBeingObserved.transform.Rotate(x, y, 0, Space.World);
         }
 
-        protected override void OnDestroy()
+        public void DisableUICameraImage()
         {
             base.OnDestroy();
             GameManager.DestroyObj(this.cameraParent);

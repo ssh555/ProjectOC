@@ -179,7 +179,6 @@ namespace ProjectOC.Order
 
             //初始化背包
             this.PlayerInventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
-            Debug.Log("初始化背包 "+this.PlayerInventory);
 
             // 载入表格数据 
             LoadTableData();
@@ -309,7 +308,7 @@ namespace ProjectOC.Order
         {
             if (OrderId == null) return;
             if (!OrderTableDataDic.ContainsKey(OrderId)) return;
-            Debug.Log("UnlockOrder " + OrderId);
+            //Debug.Log("UnlockOrder " + OrderId);
             OrderTableData orderTableData = OrderTableDataDic[OrderId];
             string ClanID = OrderIDToClanIDDic[orderTableData.ID];
             UnlockedOrderMap[orderTableData.OrderType].Add(OrderId);
