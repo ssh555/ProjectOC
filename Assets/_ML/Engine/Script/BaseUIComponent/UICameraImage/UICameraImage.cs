@@ -60,6 +60,7 @@ namespace ML.Engine.UI
 
         public void LookAtGameObject(GameObject go)
         {
+            if (go == null) return;
             if (currentObjectBeingObserved != null)
             {
                 GameManager.DestroyObj(currentObjectBeingObserved);
