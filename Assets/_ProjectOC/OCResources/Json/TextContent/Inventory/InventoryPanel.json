@@ -3,43 +3,6 @@
         "Chinese" : "背包",
         "English" : "Inventory"
     },
-    "itemtype" : [
-        {
-            "name" : "Equip",
-            "description" : {
-                "Chinese" : "装备",
-                "English" : "Equip"
-            }
-        },
-        {
-            "name" : "Food",
-            "description" : {
-                "Chinese" : "食物",
-                "English" : "Food"
-            }
-        },
-        {
-            "name" : "Material",
-            "description" : {
-                "Chinese" : "材料",
-                "English" : "Material"
-            }
-        },
-        {
-            "name" : "Mission",
-            "description" : {
-                "Chinese" : "任务",
-                "English" : "Mission"
-            }
-        },
-        {
-            "name" : "Creature",
-            "description" : {
-                "Chinese" : "生物",
-                "English" : "Creature"
-            }
-        }
-    ],
     "LastTerm" : {
         "keyname" : "KT_LastTerm",
         "keymap": {

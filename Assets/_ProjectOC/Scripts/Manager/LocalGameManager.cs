@@ -14,7 +14,6 @@ using Sirenix.OdinInspector;
 using ProjectOC.TechTree;
 using ML.Engine.Manager;
 using ProjectOC.Order;
-using ML.PlayerCharacterNS;
 using ProjectOC.ClanNS;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ProjectOC.PinchFace;
@@ -48,6 +47,8 @@ namespace ProjectOC.ManagerNS
         public ItemManager ItemManager;
         public CompositeManager CompositeManager;
         public PinchFace.PinchFaceManager PinchFaceManager;
+        //public RestaurantNS.RestaurantManager RestaurantManager;
+
         /// <summary>
         /// 单例管理
         /// </summary>
@@ -75,11 +76,12 @@ namespace ProjectOC.ManagerNS
             GM.RegisterLocalManager(ClanManager);
             GM.RegisterLocalManager(MonoBuildingManager);
             GM.RegisterLocalManager(TechTreeManager);
-/*            GM.RegisterLocalManager(OrderManager);*/
+            GM.RegisterLocalManager(OrderManager);
             GM.RegisterLocalManager(ItemManager);
             GM.RegisterLocalManager(CompositeManager);
             GM.RegisterLocalManager(IslandManager);
             GM.RegisterLocalManager(BuildPowerIslandManager);
+            //GM.RegisterLocalManager(RestaurantManager);
             //生成Character
             GameManager.Instance.CharacterManager.SceneInit();
 
@@ -116,10 +118,11 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<IslandModelManager>();
                 GM?.UnregisterLocalManager<BuildPowerIslandManager>();
                 GM?.UnregisterLocalManager<IslandAreaManager>();
-/*                GM?.UnregisterLocalManager<OrderManager>();*/
+                GM?.UnregisterLocalManager<OrderManager>();
                 GM?.UnregisterLocalManager<ItemManager>();
                 GM?.UnregisterLocalManager<CompositeManager>();
                 GM?.UnregisterLocalManager<PinchFaceManager>(); //可能会提前注销，关闭捏脸面板的时候
+                //GM?.UnregisterLocalManager<RestaurantNS.RestaurantManager>();
                 Instance = null;
             }
         }
@@ -135,7 +138,8 @@ namespace ProjectOC.ManagerNS
 
             //要获取玩家模型，放在后面
             GM.RegisterLocalManager(IslandAreaManager);
-            GM.RegisterLocalManager(PinchFaceManager);  
+            GM.RegisterLocalManager(PinchFaceManager);
+            GM.RegisterLocalManager(OrderManager);
         }
     
         #region Gizmos管理

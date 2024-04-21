@@ -15,7 +15,7 @@ namespace ML.Engine.Utility
     /// <summary>
     /// 管理整个UI的资源，包括TextContent,Texture2D,Prefabs
     /// </summary>
-    public class ObjectPool
+    public class UIObjectPool
     {
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace ML.Engine.Utility
         }
 
 
-        public ObjectPool()
+        public UIObjectPool()
         {
             functionExecutor = new FunctionExecutor<List<AsyncOperationHandle>>();
             goPoolDic = new Dictionary<string, PoolStruct<GameObject>>();

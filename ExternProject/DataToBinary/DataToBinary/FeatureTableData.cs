@@ -20,7 +20,7 @@ namespace ProjectOC.WorkerNS
 
         public bool GenData(string[] row)
         {
-            if (row[0] == null || row[0] == "")
+            if (string.IsNullOrEmpty(row[0]))
             {
                 return false;
             }

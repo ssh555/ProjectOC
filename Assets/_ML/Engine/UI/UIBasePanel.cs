@@ -24,7 +24,7 @@ namespace ML.Engine.UI
         /// <summary>
         /// 对象池
         /// </summary>
-        public ObjectPool objectPool;
+        public UIObjectPool objectPool;
         /// <summary>
         /// 所属UIManager
         /// </summary>
@@ -56,7 +56,7 @@ namespace ML.Engine.UI
         public virtual void OnEnter()
         {
             this.gameObject.SetActive(true);
-            this.objectPool = new ObjectPool();
+            this.objectPool = new UIObjectPool();
             this.InitObjectPool();
             this.InitBtnInfo();
             this.Enter();

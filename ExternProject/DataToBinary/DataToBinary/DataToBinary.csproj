@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>DataToBinary</RootNamespace>
     <AssemblyName>DataToBinary</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -88,6 +88,8 @@
     <Compile Include="BuildingTableData.cs" />
     <Compile Include="EffectTableData.cs" />
     <Compile Include="FeatureTableData.cs" />
+    <Compile Include="FurnitureThemeTableData.cs" />
+    <Compile Include="ItemCategoryTableData.cs" />
     <Compile Include="OrderTableData.cs" />
     <Compile Include="OrderUnlock.cs" />
     <Compile Include="ProNodeTableData.cs" />

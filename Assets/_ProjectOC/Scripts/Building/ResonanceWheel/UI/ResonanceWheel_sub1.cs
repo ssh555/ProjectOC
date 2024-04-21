@@ -265,7 +265,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
         protected override void InitObjectPool()
         {
-            this.objectPool.RegisterPool(ObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
             "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2", (handle) =>
             {
                 SpriteAtlas resonanceWheelAtlas = handle.Result as SpriteAtlas;

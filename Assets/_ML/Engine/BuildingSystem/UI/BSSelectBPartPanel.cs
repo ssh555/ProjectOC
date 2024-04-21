@@ -421,23 +421,19 @@ namespace ML.Engine.BuildingSystem.UI
 
                         //当前所选类别对应的家具列表
                         List<(BuildingCategory3, IBuildingPart)> furnitureList = new List<(BuildingCategory3, IBuildingPart)>();
-                        foreach (var item in LocalGameManager.Instance.MonoBuildingManager.LoadedBPart)
-                        {
-/*                            if (item.Key.Category1 == BuildingCategory1.Furniture)
-                            {
-                                Debug.Log(item.Key.Category2.ToString() + " " + this.FurnitureCategoryBtnList.GetCurSelected().gameObject.name);
-                            }*/
-                            if (item.Key.Category1 == BuildingCategory1.Furniture && item.Key.Category2.ToString() == this.FurnitureCategoryBtnList.GetCurSelected().gameObject.name)
-                            {
-                                furnitureList.Add((item.Key.Category3, item.Value));
-                            }
-                        }
 
+                        var IBuildingPartList = BuildingManager.Instance.GetFurnitureIBuildingParts((BuildingCategory2)Enum.Parse(typeof(BuildingCategory2), this.FurnitureCategoryBtnList.GetCurSelected().gameObject.name));
+
+                        foreach ( var ib in IBuildingPartList)
+                        {
+                            furnitureList.Add((ib.Classification.Category3, ib));
+                        }
+                        
                         furnitureList.Sort((x, y) => x.Item1.CompareTo(y.Item1));
 
                         foreach (var item in furnitureList)
                         {
-                            this.FurnitureDisplayBtnList.AddBtn("ML/BuildingSystem/UI/FurnitureBtn.prefab", () =>
+                            this.FurnitureDisplayBtnList.AddBtn("ML/BuildingSystem/UI/FurnitureBtn.prefab", BtnAction: () =>
                             {
                                 Debug.Log("放置家具 " + item.Item2.Classification.ToString());
                                 this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(item.Item2.Classification);
@@ -449,9 +445,23 @@ namespace ML.Engine.BuildingSystem.UI
                     {
                         this.FurnitureThemeBtnList.DisableBtnList();
                         //当前为主题排序
+
+                        //当前选中的主题ID
                         var curSelectedThemeID = this.FurnitureThemeBtnList.GetCurSelected().gameObject.name;
                         
+                        List<(SelectedButton, IBuildingPart)> furnitureList = new List<(SelectedButton, IBuildingPart)>();
 
+                        foreach (var buildingID in BuildingManager.Instance.GetThemeContainBuildings(curSelectedThemeID))
+                        {
+                            IBuildingPart buildingPart = BuildingManager.Instance.GetOneBPartInstance(buildingID);
+
+                            this.FurnitureDisplayBtnList.AddBtn("ML/BuildingSystem/UI/FurnitureBtn.prefab",BtnAction: () =>
+                            {
+                                Debug.Log("放置家具 " + buildingPart.Classification.ToString());
+                                this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(buildingPart.Classification);
+                                monoBM.PopAndPushPanel<BSPlaceModePanel>();
+                            }, BtnText: buildingPart.Classification.Category3.ToString());
+                        }
 
                     }
 
@@ -511,6 +521,9 @@ namespace ML.Engine.BuildingSystem.UI
                         this.FurnitureThemeBtnList.AddBtn("ML/BuildingSystem/UI/ThemeBtn.prefab",BtnSettingAction: (btn) =>
                         {
                             btn.gameObject.name = data.ID;
+
+                            //TODO 找图集
+
                         }, BtnText: data.Name);
                     }
                     isFirstAddThemeBtn = false;
