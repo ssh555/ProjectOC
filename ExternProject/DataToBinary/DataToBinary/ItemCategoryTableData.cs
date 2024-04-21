@@ -9,6 +9,7 @@ namespace ML.Engine.InventorySystem
     public struct ItemCategoryTableData : IGenData
     {
         public string id;
+        public int sort;
         public ApplicationScenario applicationScenario;
         public CategoryManage categoryManage;
 
@@ -20,13 +21,15 @@ namespace ML.Engine.InventorySystem
             }
             // 0 -> ID
             this.id = Program.ParseString(row[0]);
-            // 1 -> Type
-            this.applicationScenario = Program.ParseEnum<ApplicationScenario>(row[1]);
-            // 2 3 4 -> CategoryManage
+            // 1 -> Sort
+            this.sort = Program.ParseInt(row[1]);
+            // 2 -> Type
+            this.applicationScenario = Program.ParseEnum<ApplicationScenario>(row[2]);
+            // 3 4 5 -> CategoryManage
             this.categoryManage = new CategoryManage();
-            this.categoryManage.CategoryName = Program.ParseTextContent(row[2]);
-            this.categoryManage.CategoryIcon = Program.ParseString(row[3]);
-            this.categoryManage.ItemTypes = Program.ParseEnumList<ItemType>(row[4]);
+            this.categoryManage.CategoryName = Program.ParseTextContent(row[3]);
+            this.categoryManage.CategoryIcon = Program.ParseString(row[4]);
+            this.categoryManage.ItemTypes = Program.ParseEnumList<ItemType>(row[5]);
             return true;
         }
     }

@@ -96,6 +96,7 @@ namespace ExcelToJson
             List<EBConfig> configs = new List<EBConfig>();
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 1, BinaryFilePath = rootPath + "ProNode.json", type = typeof(ProjectOC.ProNodeNS.ProNodeTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 2, BinaryFilePath = rootPath + "StoreIcon.json", type = typeof(ProjectOC.StoreNS.StoreIconTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 8, BinaryFilePath = rootPath + "WorkerFood.json", type = typeof(ProjectOC.RestaurantNS.WorkerFoodTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 11, BinaryFilePath = rootPath + "FurnitureTheme.json", type = typeof(ML.Engine.BuildingSystem.FurnitureThemeTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 12, BinaryFilePath = rootPath + "TechPoint.json", type = typeof(ProjectOC.TechTree.TechPoint) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 15, BinaryFilePath = rootPath + "Order.json", type = typeof(ProjectOC.Order.OrderTableData) });
@@ -194,6 +195,15 @@ namespace ExcelToJson
         public static int ParseInt(string data, int defaultValue = 0)
         {
             if (!string.IsNullOrEmpty(data) && int.TryParse(data.Trim(), out int result))
+            {
+                return result;
+            }
+            return defaultValue;
+        }
+
+        public static float ParseFloat(string data, float defaultValue = 0)
+        {
+            if (!string.IsNullOrEmpty(data) && float.TryParse(data.Trim(), out float result))
             {
                 return result;
             }

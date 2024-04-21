@@ -109,6 +109,7 @@
     <Compile Include="TextContent.cs" />
     <Compile Include="TextTip.cs" />
     <Compile Include="WorkerEchoTableData.cs" />
+    <Compile Include="WorkerFoodTableData.cs" />
     <Compile Include="WorkType.cs" />
   </ItemGroup>
   <ItemGroup>
