@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using ML.PlayerCharacterNS;
 using UnityEngine;
 
 namespace ML.PlayerCharacterNS

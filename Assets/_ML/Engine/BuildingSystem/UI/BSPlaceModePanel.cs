@@ -1,22 +1,16 @@
 using ML.Engine.BuildingSystem.BuildingPart;
-using ML.Engine.InventorySystem;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.TextContent;
-using Sirenix.OdinInspector;
-using ProjectOC.ProNodeNS;
-using ProjectOC.StoreNS;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.U2D;
 using UnityEngine.UI;
-using UnityEngine.Windows;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using Unity.VisualScripting;
 using static ML.Engine.BuildingSystem.UI.BSPlaceModePanel;
+using ML.Engine.Manager;
+using ML.Engine.InventorySystem;
 
 namespace ML.Engine.BuildingSystem.UI
 {
@@ -29,7 +23,6 @@ namespace ML.Engine.BuildingSystem.UI
 
         private BuildingManager BM => BuildingManager.Instance;
         private BuildingPlacer.BuildingPlacer Placer => BM.Placer;
-        private ProjectOC.Player.PlayerCharacter Player => GameObject.Find("PlayerCharacter(Clone)")?.GetComponent<ProjectOC.Player.PlayerCharacter>();
         private MonoBuildingManager monoBM;
 
         #region UIGOÒýÓÃ
@@ -354,7 +347,8 @@ namespace ML.Engine.BuildingSystem.UI
         #region Event
         private bool CheckCostResources(IBuildingPart bpart)
         {
-            if (CompositeManager.Instance.CanComposite(BuildingManager.Instance.GetID(bpart.Classification.ToString())))
+            List<IInventory> inventorys = (GameManager.Instance.CharacterManager.GetLocalController() as ProjectOC.Player.OCPlayerController).GetInventorys();
+            if (CompositeManager.Instance.CanComposite(inventorys, BuildingManager.Instance.GetID(bpart.Classification.ToString())))
             {
                 return true;
             }
@@ -366,7 +360,8 @@ namespace ML.Engine.BuildingSystem.UI
 
         private void OnPlaceModeSuccess(IBuildingPart bpart)
         {
-            CompositeManager.Instance.OnlyCostResource(BuildingManager.Instance.GetID(bpart.Classification.ToString()));
+            List<IInventory> inventorys = (GameManager.Instance.CharacterManager.GetLocalController() as ProjectOC.Player.OCPlayerController).GetInventorys(true, -1);
+            CompositeManager.Instance.OnlyCostResource(inventorys, BuildingManager.Instance.GetID(bpart.Classification.ToString()));
             BM.Placer.SelectedPartInstance.CheckCanInPlaceMode -= CheckCostResources;
         }
 

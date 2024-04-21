@@ -46,7 +46,10 @@ namespace ProjectOC.Building
             if (isFirstBuild)
             {
                 ManagerNS.LocalGameManager.Instance.IslandAreaManager.UpdatedFieldTransformsAction += HouseDetectionAction;
-                ML.Engine.InventorySystem.ItemManager.Instance.AddItemIconObject("", transform, new Vector3(0, transform.GetComponent<BoxCollider>().size.y * 1.5f, 0), Quaternion.Euler(Vector3.zero), Vector3.one);
+                ML.Engine.InventorySystem.ItemManager.Instance.AddItemIconObject("", transform, 
+                    new Vector3(0, transform.GetComponent<BoxCollider>().size.y * 1.5f, 0), 
+                    Quaternion.Euler(Vector3.zero), Vector3.one,
+                    (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).currentCharacter.transform);
             }
             base.OnChangePlaceEvent(oldPos, newPos);
         }

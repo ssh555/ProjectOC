@@ -1,8 +1,6 @@
+using ProjectOC.Player;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using ProjectOC.ManagerNS;
-using ProjectOC.Player;
 using UnityEngine;
 
 namespace ML.PlayerCharacterNS

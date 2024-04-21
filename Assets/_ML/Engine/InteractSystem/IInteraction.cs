@@ -28,7 +28,6 @@ namespace ML.Engine.InteractSystem
         /// <param name="component"></param>
         public void OnSelectedEnter(InteractComponent component)
         {
-            ProjectOC.Input.InputManager.PlayerInput.Player.Jump.Disable();
         }
 
         /// <summary>
@@ -37,7 +36,6 @@ namespace ML.Engine.InteractSystem
         /// <param name="component"></param>
         public void OnSelectedExit(InteractComponent component)
         {
-            ProjectOC.Input.InputManager.PlayerInput.Player.Jump.Enable();
         }
 
         /// <summary>

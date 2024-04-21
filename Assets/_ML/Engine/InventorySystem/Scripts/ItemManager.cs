@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.U2D;
 using System.Threading.Tasks;
 using ML.Engine.Manager.LocalManager;
-using ProjectOC.Player;
 
 
 namespace ML.Engine.InventorySystem
@@ -337,7 +336,7 @@ namespace ML.Engine.InventorySystem
             return null;
         }
 
-        public async void AddItemIconObject(string itemID, Transform parent, Vector3 pos, Quaternion rot, Vector3 scale, bool isLocal = true)
+        public async void AddItemIconObject(string itemID, Transform parent, Vector3 pos, Quaternion rot, Vector3 scale, Transform target=null, bool isLocal = true)
         {
             ItemIcon itemIcon = parent.GetComponentInChildren<ItemIcon>();
             if (itemIcon == null)
@@ -364,7 +363,7 @@ namespace ML.Engine.InventorySystem
                 itemIcon = obj.GetComponentInChildren<ItemIcon>();
             }
             itemIcon.SetSprite(GetItemSprite(itemID ?? ""));
-            itemIcon.Target = (Manager.GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).currentCharacter.transform;
+            itemIcon.Target = target;
         }
 
         public string GetItemName(string id)
