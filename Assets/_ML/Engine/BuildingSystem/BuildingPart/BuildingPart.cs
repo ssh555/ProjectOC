@@ -17,7 +17,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         private BuildingPartClassification classification;
         public BuildingPartClassification Classification { get => classification; private set => classification = value; }
 
-        [SerializeField, LabelText("实例ID")]
+        [SerializeField, LabelText("实例ID"), ReadOnly]
         private string instanceID;
         public string InstanceID { get => instanceID; set => instanceID = value; }
 
@@ -55,7 +55,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             return CheckCanDestory == null || (CheckCanDestory != null && CheckCanDestory.Invoke(this));
         }
 
-        [SerializeField, LabelText("模式")]
+        [SerializeField, LabelText("模式"), ReadOnly]
         private BuildingMode mode;
         public BuildingMode Mode
         {
@@ -99,6 +99,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         private Quaternion rotOffset = Quaternion.identity;
         public Quaternion RotOffset { get => rotOffset; set => rotOffset = value; }
         private BuildingArea.BuildingArea attachedArea;
+        [ShowInInspector, ReadOnly]
         public BuildingArea.BuildingArea AttachedArea
         {
             get => this.attachedArea;
@@ -122,6 +123,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             }
         }
         private BuildingSocket.BuildingSocket attachedSocket;
+        [ShowInInspector, ReadOnly]
         public BuildingSocket.BuildingSocket AttachedSocket
         {
             get => this.attachedSocket;
@@ -145,10 +147,18 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             }
         }
         
-        [SerializeField]
+        [SerializeField, ReadOnly]
         private int activeSocketIndex;
+        [ShowInInspector, ReadOnly]
         public BuildingSocket.BuildingSocket ActiveSocket { 
-            get => this.OwnedSocketList[activeSocketIndex];
+            get
+            {
+                if(this.OwnedSocketList == null || activeSocketIndex < 0 || this.OwnedSocketList.Count <= activeSocketIndex)
+                {
+                    return null;
+                }
+                return this.OwnedSocketList[activeSocketIndex];
+            }
             set 
             {
                 activeSocketIndex = this.OwnedSocketList.IndexOf(value);

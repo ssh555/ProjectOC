@@ -28,17 +28,17 @@ MonoBehaviour:
     value: 
   EnumList:
   - name: Ground
-    displayName: Ground
+    displayName: "\u5730\u9762"
     value: 
   - name: Floor
-    displayName: Floor
+    displayName: "\u5730\u677F\u8868\u9762"
     value: 
   - name: Table
     displayName: Table
     value: 
   - name: Wall
-    displayName: Wall
+    displayName: "\u5899\u9762"
     value: 
   - name: Ceiling
-    displayName: Ceiling
+    displayName: "\u5929\u82B1\u677F"
     value: 

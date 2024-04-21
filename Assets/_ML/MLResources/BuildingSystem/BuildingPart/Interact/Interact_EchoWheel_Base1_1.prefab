@@ -52,7 +52,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.09
+  m_Radius: 0.25
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4855666842098978940
 MonoBehaviour:
@@ -66,12 +66,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Type: 8192
-  InTakeType: 8
+  ID: 2
+  IsActiveSocket: 1
   IsCanRotate: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  CanPlaceAreaType: 8
 --- !u!1 &6255720643049910108
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,7 +177,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 7.657976, y: 0.6761554, z: 7.7761126}
-  m_Center: {x: 0.00000011920929, y: 0.3379738, z: 0}
+  m_Center: {x: 0.00000011920929, y: 0.46, z: 0}
 --- !u!114 &8448638176998682551
 MonoBehaviour:
   m_ObjectHideFlags: 0
