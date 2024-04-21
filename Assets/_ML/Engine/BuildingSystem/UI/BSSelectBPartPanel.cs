@@ -433,13 +433,15 @@ namespace ML.Engine.BuildingSystem.UI
 
 
                         //当前所选类别对应的家具列表
-                        List<(BuildingCategory3, IBuildingPart)> furnitureList = new List<(BuildingCategory3, IBuildingPart)>();
+                        List<(int, IBuildingPart)> furnitureList = new List<(int, IBuildingPart)>();
 
                         var IBuildingPartList = BuildingManager.Instance.GetFurnitureIBuildingParts((BuildingCategory2)Enum.Parse(typeof(BuildingCategory2), this.FurnitureCategoryBtnList.GetCurSelected().gameObject.name));
 
                         foreach ( var ib in IBuildingPartList)
                         {
-                            furnitureList.Add((ib.Classification.Category3, ib));
+                            int s = BuildingManager.Instance.GetSort(ib.Classification.ToString());
+                            if (s == -1) continue;
+                            furnitureList.Add((s, ib));
                         }
                         
                         furnitureList.Sort((x, y) => x.Item1.CompareTo(y.Item1));
