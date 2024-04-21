@@ -17,14 +17,14 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		Integrator = 003,
 		[LabelText("苗圃")]
 		SeedPlot = 004,
-		[LabelText("捕捞站")]
-		Detector = 005,
+		[LabelText("矿石锚定潜航器")]
+		DiveStation = 005,
 		[LabelText("精炼炉")]
 		Refine = 006,
-		[LabelText("锯木床")]
-		Sawn = 007,
-		[LabelText("纺织机")]
-		Textile = 008,
+		[LabelText("手工作业台")]
+		Handwork = 007,
+		[LabelText("制药台")]
+		Pharmacy = 008,
 		[LabelText("聚合器")]
 		Aggregator = 009,
 		[LabelText("精密加工机")]
@@ -33,12 +33,12 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		Kitchen = 011,
 		[LabelText("演算仪")]
 		Calculus = 012,
-		[LabelText("仓库")]
-		Store = 100,
-		[LabelText("储液罐")]
-		Reservoir = 101,
-		[LabelText("恒温仓")]
-		Incubator = 102,
+		[LabelText("物流转运箱")]
+		SolidStore = 100,
+		[LabelText("液体转运罐")]
+		LiquidStore = 101,
+		[LabelText("餐厅")]
+		Canteen = 102,
 		[LabelText("共鸣轮")]
 		EchoWheel = 103,
 		[LabelText("导流节点")]
@@ -47,12 +47,10 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		LifeDiversion = 105,
 		[LabelText("生态投影装置")]
 		Projector = 106,
-		[LabelText("地基")]
-		Foundation = 200,
-		[LabelText("地基外沿")]
-		FoundationEdge = 201,
 		[LabelText("地板")]
 		Floor = 202,
+		[LabelText("地基外沿")]
+		Edge = 201,
 		[LabelText("墙")]
 		Wall = 203,
 		[LabelText("柱")]
@@ -81,5 +79,15 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		Lamp = 306,
 		[LabelText("装饰")]
 		Decoration = 307,
+		[LabelText("发酵桶")]
+		Liquor = 013,
+		[LabelText("养殖生物培育舱")]
+		CreaturePro = 014,
+		[LabelText("养殖生物繁育仪")]
+		CreatureBreed = 015,
+		[LabelText("窝")]
+		Nest = 107,
+		[LabelText("喵喵窝")]
+		FeatureModifier = 108,
 	}
 }

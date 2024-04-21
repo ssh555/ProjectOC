@@ -7,15 +7,15 @@ namespace ML.Engine.BuildingSystem.BuildingArea
 	{
 		[LabelText("None")]
 		None,
-		[LabelText("Ground")]
+		[LabelText("地面")]
 		Ground,
-		[LabelText("Floor")]
+		[LabelText("地板表面")]
 		Floor,
 		[LabelText("Table")]
 		Table,
-		[LabelText("Wall")]
+		[LabelText("墙面")]
 		Wall,
-		[LabelText("Ceiling")]
+		[LabelText("天花板")]
 		Ceiling,
 	}
 }

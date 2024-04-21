@@ -8,7 +8,7 @@
         }
     },
     {
-        "name": "FoundationEdge",
+        "name": "Edge",
         "description": {
             "Chinese": "地基外沿",
             "English": "FoundationEdge"
@@ -92,10 +92,10 @@
         }
     },
     {
-        "name": "Detector",
+        "name": "DiveStation",
         "description": {
-            "Chinese": "捕捞站",
-            "English": "Detector"
+            "Chinese": "矿石锚定潜航器",
+            "English": "DiveStation"
         }
     },
     {
@@ -106,17 +106,17 @@
         }
     },
     {
-        "name": "Sawn",
+        "name": "Handwork",
         "description": {
-            "Chinese": "锯木床",
-            "English": "Sawn"
+            "Chinese": "手工作业台",
+            "English": "Handwork"
         }
     },
     {
-        "name": "Textile",
+        "name": "Pharmacy",
         "description": {
-            "Chinese": "纺织机",
-            "English": "Textile"
+            "Chinese": "制药台",
+            "English": "Pharmacy"
         }
     },
     {
@@ -148,24 +148,24 @@
         }
     },
     {
-        "name": "Store",
+        "name": "SolidStore",
         "description": {
-            "Chinese": "仓库",
+            "Chinese": "物流转运箱",
             "English": "Store"
         }
     },
     {
-        "name": "Reservoir",
+        "name": "LiquidStore",
         "description": {
-            "Chinese": "储液罐",
-            "English": "Reservoir"
+            "Chinese": "液体转运罐",
+            "English": "LiquidStore"
         }
     },
     {
-        "name": "Incubator",
+        "name": "Canteen",
         "description": {
-            "Chinese": "恒温仓",
-            "English": "Incubator"
+            "Chinese": "餐厅",
+            "English": "Canteen"
         }
     },
     {
@@ -250,6 +250,41 @@
         "description": {
             "Chinese": "装饰",
             "English": "Decoration"
+        }
+    },
+    {
+        "name": "Liquor",
+        "description": {
+            "Chinese": "发酵桶",
+            "English": "Tun"
+        }
+    },
+    {
+        "name": "Nest",
+        "description": {
+            "Chinese": "窝",
+            "English": "Nest"
+        }
+    },
+    {
+        "name": "FeatureModifier",
+        "description": {
+            "Chinese": "喵喵窝",
+            "English": "FeatureModifier"
+        }
+    },
+    {
+        "name": "CreaturePro",
+        "description": {
+            "Chinese": "养殖生物培育舱",
+            "English": "Ranch"
+        }
+    },
+    {
+        "name": "CreatureBreed",
+        "description": {
+            "Chinese": "养殖生物繁育仪",
+            "English": "CreatureBreed"
         }
     }
 ]
