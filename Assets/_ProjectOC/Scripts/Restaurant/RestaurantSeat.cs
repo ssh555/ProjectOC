@@ -27,6 +27,8 @@ namespace ProjectOC.RestaurantNS
         [LabelText("是否有绑定刁民"), ShowInInspector, ReadOnly]
         public bool HasWorker => !string.IsNullOrEmpty(Worker?.InstanceID);
 
+        public bool IsEat => !string.IsNullOrEmpty(EatFoodID) && timer != null && !timer.IsStoped;
+
         private CounterDownTimer timer;
         [LabelText("进食计时器"), ReadOnly]
         public CounterDownTimer Timer
@@ -59,14 +61,6 @@ namespace ProjectOC.RestaurantNS
         {
             Worker.Restaurant = null;
             Worker.RecoverLastPosition();
-        }
-
-        /// <summary>
-        /// 刁民达到该餐厅后执行，扣除一份刁民选择的食物，更新座位信息，启动座位的计时器
-        /// </summary>
-        private void EatFood(RestaurantSeat seat)
-        {
-
         }
 
         private void EndActionForTimer()
