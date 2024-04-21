@@ -69,6 +69,7 @@ MonoBehaviour:
   ID: 3
   IsActiveSocket: 1
   IsCanRotate: 1
+  IsRotateOnArea: 0
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &2937728711425392841

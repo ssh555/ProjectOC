@@ -144,7 +144,7 @@ MonoBehaviour:
       offsetPosition: {x: 0, y: 0, z: 0}
       offsetRotation: {x: 0, y: -0.38268346, z: 0, w: 0.9238795}
     - ID: 23
-      offsetPosition: {x: -1, y: 0.5, z: -1}
+      offsetPosition: {x: -1, y: 0.5, z: 1}
       offsetRotation: {x: 0, y: 0, z: 0, w: 0}
     - ID: 19
       offsetPosition: {x: -1, y: 0.5, z: 1}
@@ -157,7 +157,7 @@ MonoBehaviour:
       offsetRotation: {x: 0, y: 0.3826835, z: 0, w: -0.9238795}
     - ID: 32
       offsetPosition: {x: 0, y: 0, z: 0}
-      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+      offsetRotation: {x: 0, y: -0.70710677, z: 0, w: 0.70710677}
   - ID: 25
     ToSocket:
     - ID: 27
@@ -189,26 +189,49 @@ MonoBehaviour:
       offsetRotation: {x: 0, y: 0, z: 0, w: 0}
     - ID: 34
       offsetPosition: {x: 0, y: 0, z: 0}
-      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+      offsetRotation: {x: 0, y: -0.70710677, z: 0, w: 0.70710677}
   - ID: 33
     ToSocket:
     - ID: 7
-      offsetPosition: {x: -1, y: 0.45, z: 0}
-      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+      offsetPosition: {x: 1, y: 0.45, z: 0}
+      offsetRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
     - ID: 9
       offsetPosition: {x: 0, y: -0.5, z: 0}
-      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+      offsetRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
     - ID: 11
       offsetPosition: {x: 0, y: 0, z: 0}
-      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+      offsetRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   - ID: 31
     ToSocket:
     - ID: 7
-      offsetPosition: {x: -1, y: 0.95, z: 0}
-      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+      offsetPosition: {x: 1, y: 0.95, z: 0}
+      offsetRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
     - ID: 9
       offsetPosition: {x: 0, y: 0, z: 0}
-      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+      offsetRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
     - ID: 11
       offsetPosition: {x: 0, y: 0.5, z: 0}
+      offsetRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+  - ID: 36
+    ToSocket:
+    - ID: 38
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 40
+    ToSocket:
+    - ID: 41
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+    - ID: 7
+      offsetPosition: {x: -1, y: -0.05, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 43
+    ToSocket:
+    - ID: 16
+      offsetPosition: {x: 0, y: -0.05, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 44
+    ToSocket:
+    - ID: 45
+      offsetPosition: {x: 0, y: -0.1, z: 0}
       offsetRotation: {x: 0, y: 0, z: 0, w: 0}

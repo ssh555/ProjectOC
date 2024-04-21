@@ -129,3 +129,36 @@ MonoBehaviour:
   - name: Wall_tri1_C
     displayName: "\u77EE\u4E09\u89D2\u5899\u914D\u5C4B\u9876C"
     value: 
+  - name: Canteen_Seat_C
+    displayName: "\u9910\u5385\u5EA7\u4F4DC"
+    value: 
+  - name: Beam_A
+    displayName: "\u957F\u6881A"
+    value: 
+  - name: Beam_A1
+    displayName: "\u77ED\u6881A"
+    value: 
+  - name: Beam_C
+    displayName: "\u957F\u6881C"
+    value: 
+  - name: Beam_C1
+    displayName: "\u77ED\u6881C"
+    value: 
+  - name: Edge_A
+    displayName: "\u5916\u5EF6A"
+    value: 
+  - name: Edge_C
+    displayName: "\u5916\u5EF6C"
+    value: 
+  - name: Edge_L_C
+    displayName: "\u957F\u5916\u5EF6C"
+    value: 
+  - name: Edge_L_A
+    displayName: "\u957F\u5916\u5EF6A"
+    value: 
+  - name: Edge_Qua_A
+    displayName: "\u5F27\u5916\u5EF6A"
+    value: 
+  - name: Edge_Qua_C
+    displayName: "\u5F27\u5916\u5EF6C"
+    value: 
