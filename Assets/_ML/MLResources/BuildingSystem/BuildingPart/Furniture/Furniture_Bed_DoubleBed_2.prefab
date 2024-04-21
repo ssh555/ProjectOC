@@ -225,8 +225,8 @@ MonoBehaviour:
   classification:
     Category1: 3
     Category2: 300
-    Category3: 100
-    Category4: 1
+    Category3: 701
+    Category4: 2
   instanceID: 
   canPlaceInPlaceMode: 1
   mode: 0

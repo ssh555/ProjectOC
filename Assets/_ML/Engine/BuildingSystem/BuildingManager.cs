@@ -372,14 +372,11 @@ namespace ML.Engine.BuildingSystem
             //家具类别
             if (BPart.Classification.Category1 == BuildingCategory1.Furniture)
             {
-                if (FurnitureCategoryDic.ContainsKey(BPart.Classification.Category2))
-                {
-                    FurnitureCategoryDic[BPart.Classification.Category2].Add(BPart);
-                }
-                else
+                if (!FurnitureCategoryDic.ContainsKey(BPart.Classification.Category2))
                 {
                     FurnitureCategoryDic.Add(BPart.Classification.Category2, new List<IBuildingPart>());
                 }
+                FurnitureCategoryDic[BPart.Classification.Category2].Add(BPart);
             }
         }
 
