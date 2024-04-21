@@ -1035,6 +1035,15 @@ namespace ML.Engine.BuildingSystem
             return null;
         }
 
+        public int GetSort(string CID)
+        {
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
+            {
+                return BPartTableDictOnClass[CID].sort;
+            }
+            return -1;
+        }
+
         public string GetUpgradeCID(string CID)
         {
             string upgradeID = GetUpgradeID(CID);
