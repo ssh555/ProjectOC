@@ -55,13 +55,49 @@ namespace ML.Engine.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextTerm"",
+                    ""type"": ""Button"",
+                    ""id"": ""76ef039b-0a7a-48b5-995a-585f282f741c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LastTerm"",
+                    ""type"": ""Button"",
+                    ""id"": ""ee2967d4-6afd-4b4f-a006-ce4b4956bfec"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MainInteract"",
+                    ""type"": ""Button"",
+                    ""id"": ""4d85639f-8f55-4c71-955b-d62bf03bbd82"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SubInteract"",
+                    ""type"": ""Button"",
+                    ""id"": ""420ccfdc-bc41-450b-89b4-4ddd37420e68"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
                     ""id"": ""380f7fa1-f483-4987-a17c-3827a5fcb70c"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -211,6 +247,94 @@ namespace ML.Engine.Input
                     ""action"": ""SwichBtn"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""858a8040-3508-4ba6-a6ba-2bc3479924f5"",
+                    ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""03c436fc-68c9-42da-ac22-610b88744e3b"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c1268ff3-c630-4b18-b70b-3383c9661077"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LastTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""19c0683d-bd06-4878-9217-f8baa8cede63"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LastTerm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cd370cd5-fc50-4ca9-8763-ab094b11d38a"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MainInteract"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""22286a56-fbc5-4350-bcd2-2a302f42443d"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MainInteract"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8bc1fc65-2cf2-451b-bad1-e02fbd1cdf25"",
+                    ""path"": ""<XInputController>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SubInteract"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""38f6b071-66c9-4780-a859-2f66a932762c"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SubInteract"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -476,6 +600,10 @@ namespace ML.Engine.Input
             m_Common_Confirm = m_Common.FindAction("Confirm", throwIfNotFound: true);
             m_Common_SwichBtn = m_Common.FindAction("SwichBtn", throwIfNotFound: true);
             m_Common_Back = m_Common.FindAction("Back", throwIfNotFound: true);
+            m_Common_NextTerm = m_Common.FindAction("NextTerm", throwIfNotFound: true);
+            m_Common_LastTerm = m_Common.FindAction("LastTerm", throwIfNotFound: true);
+            m_Common_MainInteract = m_Common.FindAction("MainInteract", throwIfNotFound: true);
+            m_Common_SubInteract = m_Common.FindAction("SubInteract", throwIfNotFound: true);
             // StartMenu
             m_StartMenu = asset.FindActionMap("StartMenu", throwIfNotFound: true);
             m_StartMenu_SwichBtn = m_StartMenu.FindAction("SwichBtn", throwIfNotFound: true);
@@ -546,6 +674,10 @@ namespace ML.Engine.Input
         private readonly InputAction m_Common_Confirm;
         private readonly InputAction m_Common_SwichBtn;
         private readonly InputAction m_Common_Back;
+        private readonly InputAction m_Common_NextTerm;
+        private readonly InputAction m_Common_LastTerm;
+        private readonly InputAction m_Common_MainInteract;
+        private readonly InputAction m_Common_SubInteract;
         public struct CommonActions
         {
             private @CommomInput m_Wrapper;
@@ -553,6 +685,10 @@ namespace ML.Engine.Input
             public InputAction @Confirm => m_Wrapper.m_Common_Confirm;
             public InputAction @SwichBtn => m_Wrapper.m_Common_SwichBtn;
             public InputAction @Back => m_Wrapper.m_Common_Back;
+            public InputAction @NextTerm => m_Wrapper.m_Common_NextTerm;
+            public InputAction @LastTerm => m_Wrapper.m_Common_LastTerm;
+            public InputAction @MainInteract => m_Wrapper.m_Common_MainInteract;
+            public InputAction @SubInteract => m_Wrapper.m_Common_SubInteract;
             public InputActionMap Get() { return m_Wrapper.m_Common; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -571,6 +707,18 @@ namespace ML.Engine.Input
                 @Back.started += instance.OnBack;
                 @Back.performed += instance.OnBack;
                 @Back.canceled += instance.OnBack;
+                @NextTerm.started += instance.OnNextTerm;
+                @NextTerm.performed += instance.OnNextTerm;
+                @NextTerm.canceled += instance.OnNextTerm;
+                @LastTerm.started += instance.OnLastTerm;
+                @LastTerm.performed += instance.OnLastTerm;
+                @LastTerm.canceled += instance.OnLastTerm;
+                @MainInteract.started += instance.OnMainInteract;
+                @MainInteract.performed += instance.OnMainInteract;
+                @MainInteract.canceled += instance.OnMainInteract;
+                @SubInteract.started += instance.OnSubInteract;
+                @SubInteract.performed += instance.OnSubInteract;
+                @SubInteract.canceled += instance.OnSubInteract;
             }
 
             private void UnregisterCallbacks(ICommonActions instance)
@@ -584,6 +732,18 @@ namespace ML.Engine.Input
                 @Back.started -= instance.OnBack;
                 @Back.performed -= instance.OnBack;
                 @Back.canceled -= instance.OnBack;
+                @NextTerm.started -= instance.OnNextTerm;
+                @NextTerm.performed -= instance.OnNextTerm;
+                @NextTerm.canceled -= instance.OnNextTerm;
+                @LastTerm.started -= instance.OnLastTerm;
+                @LastTerm.performed -= instance.OnLastTerm;
+                @LastTerm.canceled -= instance.OnLastTerm;
+                @MainInteract.started -= instance.OnMainInteract;
+                @MainInteract.performed -= instance.OnMainInteract;
+                @MainInteract.canceled -= instance.OnMainInteract;
+                @SubInteract.started -= instance.OnSubInteract;
+                @SubInteract.performed -= instance.OnSubInteract;
+                @SubInteract.canceled -= instance.OnSubInteract;
             }
 
             public void RemoveCallbacks(ICommonActions instance)
@@ -698,6 +858,10 @@ namespace ML.Engine.Input
             void OnConfirm(InputAction.CallbackContext context);
             void OnSwichBtn(InputAction.CallbackContext context);
             void OnBack(InputAction.CallbackContext context);
+            void OnNextTerm(InputAction.CallbackContext context);
+            void OnLastTerm(InputAction.CallbackContext context);
+            void OnMainInteract(InputAction.CallbackContext context);
+            void OnSubInteract(InputAction.CallbackContext context);
         }
         public interface IStartMenuActions
         {

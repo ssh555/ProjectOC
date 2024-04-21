@@ -1,13 +1,9 @@
-﻿using ML.Engine.BuildingSystem;
-using ML.Engine.InventorySystem;
-using ML.Engine.InventorySystem.CompositeSystem;
-using ProjectOC.TechTree;
-using ProjectOC.WorkerEchoNS;
+﻿using ML.Engine.TextContent;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
+using ML.Engine.InventorySystem.CompositeSystem;
+
 
 namespace ExcelToJson
 {
@@ -69,23 +65,23 @@ namespace ExcelToJson
             // 在处理前或处理后需要根据Recipe表、Build表需要合成表Binary文件，用于合成系统
             List<CompositionTableData> compositionTableDatas = new List<CompositionTableData>();
             // 1. 读入需要的EXCEL表
-            List<WorkerEchoTableData> workerEchoTableDatas = DBMgr.ReadExcel<WorkerEchoTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 8);
-            List<BuildingTableData> buildingTableDatas = DBMgr.ReadExcel<BuildingTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 11);
-            List<ItemTableData> itemTableDatas = DBMgr.ReadExcel<ItemTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 14);
-            List<RecipeTableData> recipeTableDatas = DBMgr.ReadExcel<RecipeTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 16);
-            Dictionary<string, BuildingTableData> buildDict = new Dictionary<string, BuildingTableData>();
+            List<ProjectOC.WorkerEchoNS.WorkerEchoTableData> workerEchoTableDatas = DBMgr.ReadExcel<ProjectOC.WorkerEchoNS.WorkerEchoTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 7);
+            List<ML.Engine.BuildingSystem.BuildingTableData> buildingTableDatas = DBMgr.ReadExcel<ML.Engine.BuildingSystem.BuildingTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 10);
+            List<ML.Engine.InventorySystem.ItemTableData> itemTableDatas = DBMgr.ReadExcel<ML.Engine.InventorySystem.ItemTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 16);
+            List<ML.Engine.InventorySystem.RecipeTableData> recipeTableDatas = DBMgr.ReadExcel<ML.Engine.InventorySystem.RecipeTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 18);
+            Dictionary<string, ML.Engine.BuildingSystem.BuildingTableData> buildDict = new Dictionary<string, ML.Engine.BuildingSystem.BuildingTableData>();
             // 2. 分别解析表格并将数据暂存在内存中
-            foreach (BuildingTableData data in buildingTableDatas)
+            foreach (var data in buildingTableDatas)
             {
                 buildDict.Add(data.GetClassificationString(), data);
                 compositionTableDatas.Add(new CompositionTableData(data));
             }
 
-            foreach (RecipeTableData data in recipeTableDatas)
+            foreach (var data in recipeTableDatas)
             {
                 compositionTableDatas.Add(new CompositionTableData(data, itemTableDatas.Find(item => item.id == data.Product.id)));
             }
-            foreach (WorkerEchoTableData data in workerEchoTableDatas)
+            foreach (var data in workerEchoTableDatas)
             {
                 compositionTableDatas.Add(new CompositionTableData(data));
             }
@@ -99,10 +95,14 @@ namespace ExcelToJson
             // 必须是.json后缀
             List<EBConfig> configs = new List<EBConfig>();
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 1, BinaryFilePath = rootPath + "ProNode.json", type = typeof(ProjectOC.ProNodeNS.ProNodeTableData) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 3, BinaryFilePath = rootPath + "StoreIcon.json", type = typeof(ProjectOC.StoreNS.StoreIconTableData) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 12, BinaryFilePath = rootPath + "TechPoint.json", type = typeof(TechPoint) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 13, BinaryFilePath = rootPath + "Order.json", type = typeof(ProjectOC.Order.OrderTableData) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 14, BinaryFilePath = rootPath + "Item.json", type = typeof(ItemTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 2, BinaryFilePath = rootPath + "StoreIcon.json", type = typeof(ProjectOC.StoreNS.StoreIconTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 8, BinaryFilePath = rootPath + "WorkerFood.json", type = typeof(ProjectOC.RestaurantNS.WorkerFoodTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 11, BinaryFilePath = rootPath + "FurnitureTheme.json", type = typeof(ML.Engine.BuildingSystem.FurnitureThemeTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 12, BinaryFilePath = rootPath + "TechPoint.json", type = typeof(ProjectOC.TechTree.TechPoint) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 15, BinaryFilePath = rootPath + "Order.json", type = typeof(ProjectOC.Order.OrderTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 16, BinaryFilePath = rootPath + "Item.json", type = typeof(ML.Engine.InventorySystem.ItemTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 17, BinaryFilePath = rootPath + "ItemCategory.json", type = typeof(ML.Engine.InventorySystem.ItemCategoryTableData) });
+
             //configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 9, BinaryFilePath = rootPath + "Feature.json", type = typeof(ProjectOC.WorkerNS.FeatureTableData) });
             //configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 17, BinaryFilePath = rootPath + "Effect.json", type = typeof(ProjectOC.WorkerNS.EffectTableData) });
             //configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 11, BinaryFilePath = rootPath + "Skill.json", type = typeof(ProjectOC.WorkerNS.SkillTableData) });
@@ -182,29 +182,126 @@ namespace ExcelToJson
             Console.Read();
         }
 
-        public static List<ML.Engine.InventorySystem.CompositeSystem.Formula> ParseFormula(string data)
+        #region Parse
+        public static string ParseString(string data, string defaultValue = "")
         {
-            List<ML.Engine.InventorySystem.CompositeSystem.Formula> formulas = new List<ML.Engine.InventorySystem.CompositeSystem.Formula>();
             if (!string.IsNullOrEmpty(data))
             {
-                string[] sfs = data.Split(';').Where(x => !string.IsNullOrEmpty(x)).ToArray();
-                foreach (var sf in sfs)
+                return data.Trim();
+            }
+            return defaultValue;
+        }
+
+        public static int ParseInt(string data, int defaultValue = 0)
+        {
+            if (!string.IsNullOrEmpty(data) && int.TryParse(data.Trim(), out int result))
+            {
+                return result;
+            }
+            return defaultValue;
+        }
+
+        public static float ParseFloat(string data, float defaultValue = 0)
+        {
+            if (!string.IsNullOrEmpty(data) && float.TryParse(data.Trim(), out float result))
+            {
+                return result;
+            }
+            return defaultValue;
+        }
+
+        public static TextContent ParseTextContent(string data, string defaultValue = "")
+        {
+            TextContent result = new TextContent();
+            if (!string.IsNullOrEmpty(data))
+            {
+                result.Chinese = ParseString(data.Trim());
+            }
+            else
+            {
+                result.Chinese = defaultValue;
+            }
+            result.English = result.Chinese;
+            return result;
+        }
+
+        public static T ParseEnum<T>(string data, string defaultValue = "None") where T : struct, Enum
+        {
+            if (!string.IsNullOrEmpty(data) && Enum.IsDefined(typeof(T), data.Trim()))
+            {
+                return (T)Enum.Parse(typeof(T), data);
+            }
+            // defaultValue
+            if (!string.IsNullOrEmpty(data) && Enum.IsDefined(typeof(T), defaultValue))
+            {
+                return (T)Enum.Parse(typeof(T), defaultValue);
+            }
+            return default(T);
+        }
+
+        public static bool ParseBool(string data, bool defaultValue = false)
+        {
+            if (!string.IsNullOrEmpty(data))
+            {
+                if (bool.TryParse(data.Trim(), out bool resultBool))
                 {
-                    var t = sf.Split(',', '，');
-                    if (t.Length == 2)
+                    return resultBool;
+                }
+                if (int.TryParse(data.Trim(), out int resultInt))
+                {
+                    return resultInt != 0;
+                }
+            }
+            return defaultValue;
+        }
+
+        public static Formula ParseFormula(string data, Formula defaultValue=new Formula())
+        {
+            if (!string.IsNullOrEmpty(data) && !string.IsNullOrEmpty(data.Trim()))
+            {
+                string[] s = data.Trim().Split(':', '：');
+                if (s.Length == 2 && !string.IsNullOrEmpty(s[0].Trim()) && !string.IsNullOrEmpty(s[1].Trim()))
+                {
+                    Formula f = new Formula();
+                    if (int.TryParse(s[1].Trim(), out f.num))
                     {
-                        var f = new ML.Engine.InventorySystem.CompositeSystem.Formula();
-                        f.id = t[0];
-                        f.num = int.Parse(t[1]);
-                        formulas.Add(f);
-                    }
-                    else
-                    {
-                        Debug.Print($"Error {t}");
+                        f.id = s[0].Trim();
+                        return f;
                     }
                 }
             }
-            return formulas;
+            return defaultValue;
+        }
+
+        public static List<string> ParseStringList(string data)
+        {
+            List<string> result = new List<string>();
+            if (!string.IsNullOrEmpty(data))
+            {
+                foreach (var s in data.Trim().Split(',', '，'))
+                {
+                    if (!string.IsNullOrEmpty(s) && !string.IsNullOrEmpty(s.Trim()))
+                    {
+                        result.Add(s.Trim());
+                    }
+                }
+            }
+            return result;
+        }
+
+        public static List<Formula> ParseFormulaList(string data)
+        {
+            List<string> strings = ParseStringList(data);
+            List<Formula> results = new List<Formula>();
+            foreach (string s in strings)
+            {
+                Formula result = ParseFormula(s);
+                if (!string.IsNullOrEmpty(result.id))
+                {
+                    results.Add(result);
+                }
+            }
+            return results;
         }
 
         public static List<ProjectOC.Order.OrderMap> ParseOrderMap(string data)
@@ -212,24 +309,36 @@ namespace ExcelToJson
             List<ProjectOC.Order.OrderMap> ordermaps = new List<ProjectOC.Order.OrderMap>();
             if (!string.IsNullOrEmpty(data))
             {
-                string[] sfs = data.Split(';').Where(x => !string.IsNullOrEmpty(x)).ToArray();
-                foreach (var sf in sfs)
+                foreach (var s in data.Trim().Split(',', '，'))
                 {
-                    var t = sf.Split(',', '，');
-                    if (t.Length == 2)
+                    if (!string.IsNullOrEmpty(s) && !string.IsNullOrEmpty(s.Trim()))
                     {
-                        var f = new ProjectOC.Order.OrderMap();
-                        f.id = t[0];
-                        f.num = int.Parse(t[1]);
-                        ordermaps.Add(f);
-                    }
-                    else
-                    {
-                        Debug.Print($"Error {t}");
+                        var t = s.Split(':', '：');
+                        if (t.Length == 2 && !string.IsNullOrEmpty(t[0].Trim()) && !string.IsNullOrEmpty(t[1].Trim()))
+                        {
+                            var f = new ProjectOC.Order.OrderMap();
+                            if (int.TryParse(t[1].Trim(), out f.num))
+                            {
+                                f.id = t[0].Trim();
+                                ordermaps.Add(f);
+                            }
+                        }
                     }
                 }
             }
             return ordermaps;
         }
+
+        public static List<T> ParseEnumList<T>(string data, string defaultValue = "None") where T : struct, Enum
+        {
+            List<string> strings = ParseStringList(data);
+            List<T> result = new List<T>();
+            foreach (string s in strings)
+            {
+                result.Add(ParseEnum<T>(s, defaultValue));
+            }
+            return result;
+        }
+        #endregion
     }
 }

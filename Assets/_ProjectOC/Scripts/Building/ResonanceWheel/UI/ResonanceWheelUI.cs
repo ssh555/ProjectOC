@@ -859,7 +859,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         protected override void InitObjectPool()
         {
-            this.objectPool.RegisterPool(ObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
             "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2", (handle) =>
             {
                 var resonanceAtlas = handle.Result as SpriteAtlas;
@@ -876,7 +876,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 beastTypeDic.Add(BeastType.WorkerEcho_Random, resonanceAtlas.GetSprite("Random"));
             }
             );
-            this.objectPool.RegisterPool(ObjectPool.HandleType.Prefab, "SlotPrefabPool", 1, "OC/UI/ResonanceWheel/Prefabs/Slot.prefab", (handle) =>
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SlotPrefabPool", 1, "OC/UI/ResonanceWheel/Prefabs/Slot.prefab", (handle) =>
             {
                 SlotPrefab = handle.Result as GameObject;
             });

@@ -2,7 +2,10 @@ using ML.Engine.Timer;
 using ProjectOC.ManagerNS;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 using static ProjectOC.Order.OrderManager;
 
 namespace ProjectOC.Order
@@ -12,7 +15,8 @@ namespace ProjectOC.Order
         /// <summary>
         /// 接取时限计时器 单位为现实时间min
         /// </summary>
-        private CounterDownTimer ReceiveDDLTimer;
+        private CounterDownTimer receiveDDLTimer;
+        public CounterDownTimer ReceiveDDLTimer {  get { return receiveDDLTimer; } }
 
         /// <summary>
         /// 交付时限计时器 单位为游戏内的日
@@ -20,11 +24,11 @@ namespace ProjectOC.Order
         private CounterDownTimer DeliverDDLTimer;
         public OrderUrgent(string orderId, List<OrderMap> RequireItemList, int ReceiveDDL, int DeliverDDL) : base(orderId, RequireItemList)
         {
-            this.ReceiveDDLTimer = new CounterDownTimer(ReceiveDDL * 60, autocycle: false, autoStart: false);
-            this.ReceiveDDLTimer.OnEndEvent += () =>
+            this.receiveDDLTimer = new CounterDownTimer(ReceiveDDL * 60, autocycle: false, autoStart: false);
+            this.receiveDDLTimer.OnEndEvent += () =>
             {
                 //重置计时器
-                this.ReceiveDDLTimer.Reset(ReceiveDDL * 60, isStoped: true);
+                this.receiveDDLTimer.Reset(ReceiveDDL * 60, isStoped: true);
                 //调用拒绝订单函数
                 LocalGameManager.Instance.OrderManager.RefuseOrder(orderId);
             };
@@ -42,12 +46,18 @@ namespace ProjectOC.Order
 
         public void StartReceiveDDLTimer()
         {
-            this.ReceiveDDLTimer.Start();
+            this.receiveDDLTimer.Start();
         }
 
         public void StartDeliverDDLTimer()
         {
             this.DeliverDDLTimer.Start();
+        }
+
+        public void Reset()
+        {
+            this.receiveDDLTimer.Reset(this.receiveDDLTimer.Duration, isStoped: true);
+            this.DeliverDDLTimer.Reset(this.DeliverDDLTimer.Duration, isStoped: true);
         }
     }
 

@@ -3,43 +3,6 @@
         "Chinese" : "背包",
         "English" : "Inventory"
     },
-    "itemtype" : [
-        {
-            "name" : "Equip",
-            "description" : {
-                "Chinese" : "装备",
-                "English" : "Equip"
-            }
-        },
-        {
-            "name" : "Food",
-            "description" : {
-                "Chinese" : "食物",
-                "English" : "Food"
-            }
-        },
-        {
-            "name" : "Material",
-            "description" : {
-                "Chinese" : "材料",
-                "English" : "Material"
-            }
-        },
-        {
-            "name" : "Mission",
-            "description" : {
-                "Chinese" : "任务",
-                "English" : "Mission"
-            }
-        },
-        {
-            "name" : "Creature",
-            "description" : {
-                "Chinese" : "生物",
-                "English" : "Creature"
-            }
-        }
-    ],
     "LastTerm" : {
         "keyname" : "KT_LastTerm",
         "keymap": {
@@ -62,18 +25,6 @@
             "English" : ""
         }
     },
-    "weightprefix" : {
-        "Chinese" : "单个重量：",
-        "English" : "Per Weight: "
-    },
-    "descriptionprefix" : {
-        "Chinese" : "物品描述：",
-        "English" : "Description: "
-    },
-    "effectdescriptionprefix" : {
-        "Chinese" : "效果描述：",
-        "English" : "Effect Description: "
-    },
     "Back" : {
         "keyname" : "KT_Back",
         "keymap": {
@@ -94,17 +45,6 @@
         "description" : {
             "Chinese" : "使用",
             "English" : "Use"
-        }
-    },
-    "Drop" : {
-        "keyname" : "KT_Drop",
-        "keymap": {
-            "ActionMapName": "UIInventory",
-            "ActionName": "Drop"
-          },
-        "description" : {
-            "Chinese" : "丢弃",
-            "English" : "Drop"
         }
     },
     "Destroy" : {
