@@ -47,7 +47,7 @@ namespace ProjectOC.ManagerNS
         public ItemManager ItemManager;
         public CompositeManager CompositeManager;
         public PinchFace.PinchFaceManager PinchFaceManager;
-        //public RestaurantNS.RestaurantManager RestaurantManager;
+        public RestaurantNS.RestaurantManager RestaurantManager;
 
         /// <summary>
         /// 单例管理
@@ -81,7 +81,7 @@ namespace ProjectOC.ManagerNS
             GM.RegisterLocalManager(CompositeManager);
             GM.RegisterLocalManager(IslandManager);
             GM.RegisterLocalManager(BuildPowerIslandManager);
-            //GM.RegisterLocalManager(RestaurantManager);
+            GM.RegisterLocalManager(RestaurantManager);
             //生成Character
             GameManager.Instance.CharacterManager.SceneInit();
 
@@ -122,7 +122,7 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<ItemManager>();
                 GM?.UnregisterLocalManager<CompositeManager>();
                 GM?.UnregisterLocalManager<PinchFaceManager>(); //可能会提前注销，关闭捏脸面板的时候
-                //GM?.UnregisterLocalManager<RestaurantNS.RestaurantManager>();
+                GM?.UnregisterLocalManager<RestaurantNS.RestaurantManager>();
                 Instance = null;
             }
         }

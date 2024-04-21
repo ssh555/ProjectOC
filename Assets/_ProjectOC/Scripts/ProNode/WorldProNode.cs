@@ -80,10 +80,5 @@ namespace ProjectOC.ProNodeNS
             ProNode.SetLevel(Classification.Category4 - 1);
             GameManager.DestroyObj(lastLevelBuild.gameObject);
         }
-
-        public void OnUpgrade(IBuildingUpgrade lastLevelBuild, IBuildingUpgradeParam param)
-        {
-            OnUpgrade(lastLevelBuild);
-        }
     }
 }

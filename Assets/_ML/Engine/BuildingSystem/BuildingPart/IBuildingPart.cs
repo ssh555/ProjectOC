@@ -55,10 +55,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         }
 
         public bool isFirstBuild { get; }
-        /// <summary>
-        /// 在PlaceMode或者EditMode更改之后调用
-        /// </summary>
-        public void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos);
+
 
         /// <summary>
         /// 当前所处的建造模式
@@ -206,9 +203,25 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
         #region Event
         /// <summary>
+        /// 在PlaceMode或者EditMode更改之后调用
+        /// </summary>
+        public virtual void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
+        {
+
+        }
+
+        /// <summary>
         /// InteractMode下销毁时调用
         /// </summary>
         public virtual void OnBPartDestroy()
+        {
+
+        }
+
+        /// <summary>
+        /// 此建筑物开始移动时调用 -> 新建的时候不会调用
+        /// </summary>
+        public virtual void OnEnterEdit()
         {
 
         }

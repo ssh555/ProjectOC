@@ -46,6 +46,9 @@ namespace ML.Engine.BuildingSystem.UI
         {
             base.OnEnter();
 
+            // TODO : 放置于UI中调用不是很合理
+            this.Placer.SelectedPartInstance.OnEnterEdit();
+
             // 记录原 Transform
             this._editOldPos = this.Placer.SelectedPartInstance.transform.position;
             this._editOldRotation = this.Placer.SelectedPartInstance.transform.rotation;
