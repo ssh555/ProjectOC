@@ -328,7 +328,10 @@ namespace ProjectOC.ProNodeNS
                     Worker.APChangeAction -= OnWorkerAPChangeAction;
                     Worker.ClearDestination();
                     Worker.ProNode = null;
-                    Worker.RecoverLastPosition();
+                    if (IsWorkerArrive)
+                    {
+                        Worker.RecoverLastPosition();
+                    }
                     Worker = null;
                 }
                 return true;

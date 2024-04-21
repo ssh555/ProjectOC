@@ -80,7 +80,7 @@ namespace ProjectOC.Building.UI
         [ShowInInspector]
         private Mode CurMode;
         private Clan Clan => Bed.Clan;
-        public Bed Bed;
+        public ClanBed Bed;
 
         #region Clans
         [ShowInInspector]

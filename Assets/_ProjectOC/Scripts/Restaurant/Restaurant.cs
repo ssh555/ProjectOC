@@ -175,6 +175,15 @@ namespace ProjectOC.RestaurantNS
             }
             return -1;
         }
+        public string EatFood(Worker worker)
+        {
+            int index = FindFood(worker);
+            if (0 <= index && index < Datas.Length && Change(index, -1) == 1)
+            {
+                return Datas[index].ID;
+            }
+            return null;
+        }
         #endregion
 
         #region Action + Event
@@ -187,19 +196,17 @@ namespace ProjectOC.RestaurantNS
             int seatIndex = GetWorkerSeatIndex(worker);
             if (worker != null && seatIndex > 0)
             {
+                Seats[seatIndex].HasArrive = true;
                 if (HasFood)
                 {
                     int index = FindFood(worker);
-                    if (0 <= index && index < Datas.Length)
+                    if (Change(index, -1) == 1)
                     {
                         worker.Agent.enabled = false;
                         worker.LastPosition = worker.transform.position;
                         worker.transform.position = Seats[seatIndex].Socket.position + new Vector3(0, 2f, 0);
-                        if (Change(index, -1) == 1)
-                        {
-                            Seats[index].SetFood(Datas[index].ID);
-                            return;
-                        }
+                        Seats[seatIndex].SetFood(Datas[index].ID);
+                        return;
                     }
                 }
                 Seats[seatIndex].ClearData();
@@ -263,7 +270,7 @@ namespace ProjectOC.RestaurantNS
         #endregion
 
         #region 数据方法
-        public bool ChangeFood(int index, string id)
+        private bool ChangeFood(int index, string id)
         {
             if (0 <= index && index < Datas.Length)
             {
@@ -302,7 +309,7 @@ namespace ProjectOC.RestaurantNS
             return false;
         }
 
-        public int Change(int index, int amount, bool exceed = false, bool complete = true)
+        private int Change(int index, int amount, bool exceed = false, bool complete = true)
         {
             lock (this)
             {
@@ -320,7 +327,7 @@ namespace ProjectOC.RestaurantNS
             }
         }
 
-        public int Change(string id, int amount, bool isFoodID = true, bool exceed = false, bool complete = true)
+        private int Change(string id, int amount, bool isFoodID = true, bool exceed = false, bool complete = true)
         {
             lock (this)
             {

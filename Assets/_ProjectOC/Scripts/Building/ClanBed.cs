@@ -7,7 +7,7 @@ using ML.Engine.InteractSystem;
 namespace ProjectOC.Building
 {
     [LabelText("床")]
-    public class Bed : BuildingPart, IInteraction
+    public class ClanBed : BuildingPart, IInteraction
     {
         #region 参数
         [LabelText("关联氏族"), ShowInInspector, ReadOnly]
@@ -27,11 +27,6 @@ namespace ProjectOC.Building
         public string InteractType { get; set; } = "Bed";
         public Vector3 PosOffset { get; set; } = Vector3.zero;
         #endregion
-
-        protected override void Start()
-        {
-            enabled = false;
-        }
 
         public void OnDestroy()
         {

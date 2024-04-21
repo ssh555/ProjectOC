@@ -39,6 +39,8 @@ namespace ProjectOC.WorkerNS
         public float WalkSpeed = 10;
         [LabelText("当前心情"), ReadOnly]
         public int Mood;
+        [LabelText("心情最大值"), FoldoutGroup("配置")]
+        public int MoodMax = 100;
         [LabelText("当前负重"), ShowInInspector, ReadOnly]
         public int BURCurrent
         {
@@ -128,8 +130,14 @@ namespace ProjectOC.WorkerNS
 
         [LabelText("搬运物品"), ReadOnly]
         public List<Item> TransportItems = new List<Item>();
-
-        public RestaurantNS.Restaurant Restaurant;
+        [LabelText("餐厅"), ReadOnly]
+        public RestaurantNS.Restaurant Restaurant; 
+        [LabelText("是否有餐厅"), ShowInInspector, ReadOnly]
+        public bool HasRestaurant { get => Restaurant != null && !string.IsNullOrEmpty(Restaurant.UID); }
+        [LabelText("窝"), ReadOnly]
+        public Building.WorkerHome Home;
+        [LabelText("是否有窝"), ShowInInspector, ReadOnly]
+        public bool HasHome { get => Home != null && !string.IsNullOrEmpty(Home.UID); }
 
         #region ITickComponent
         public int tickPriority { get; set; }
@@ -282,6 +290,17 @@ namespace ProjectOC.WorkerNS
             {
                 this.APCurrent = ap;
                 this.APChangeAction?.Invoke(this.APCurrent);
+                return true;
+            }
+            return false;
+        }
+
+        public bool AlterMood(int value)
+        {
+            int mood = Mood + value;
+            if (mood >= 0 && mood <= MoodMax)
+            {
+                Mood = mood;
                 return true;
             }
             return false;
