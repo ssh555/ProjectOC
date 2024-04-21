@@ -352,6 +352,7 @@ namespace ML.Engine.BuildingSystem
             return this.registeredBPart.ContainsKey(classification);
         }
 
+
         /// <summary>
         /// 将BPart加入管理队列
         /// </summary>
@@ -448,7 +449,19 @@ namespace ML.Engine.BuildingSystem
             return GetOneBPartInstance(new BuildingPartClassification(classification));
         }
 
+        public GameObject GetOneBPartInstanceGO(BuildingPartClassification classification)
+        {
+            if (this.registeredBPart.ContainsKey(classification))
+            {
+                return GameObject.Instantiate<GameObject>(this.registeredBPart[classification].gameObject);
+            }
+            return null;
+        }
 
+        public GameObject GetOneBPartInstanceGO(string classification)
+        {
+            return GetOneBPartInstanceGO(new BuildingPartClassification(classification));
+        }
         /// <summary>
         /// 若BPart可以复制，则获得一个复制的实例
         /// 若不可以复制，则直接返回BPart
@@ -1000,7 +1013,6 @@ namespace ML.Engine.BuildingSystem
 
         public string GetName(string CID)
         {
-            Debug.Log("GetName " + CID+" "+ BPartTableDictOnClass.ContainsKey(CID));
             if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
             {
                 return BPartTableDictOnClass[CID].name;

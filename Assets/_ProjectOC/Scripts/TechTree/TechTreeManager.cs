@@ -66,7 +66,7 @@ namespace ProjectOC.TechTree
         /// </summary>
         [ShowInInspector]
         private Dictionary<string, TechPoint> registerTechPoints = new Dictionary<string, TechPoint>();
-
+        [ShowInInspector]
         private SpriteAtlas techAtlas;
         public string[] GetAllTPID()
         {
@@ -105,7 +105,6 @@ namespace ProjectOC.TechTree
 
         public Sprite GetTPSprite(string ID)
         {
-            Debug.Log(ID + " " + this.registerTechPoints[ID].Icon);
             if (string.IsNullOrEmpty(ID)) return null;
             return this.registerTechPoints.ContainsKey(ID)? techAtlas.GetSprite(this.registerTechPoints[ID].Icon) : null;
         }
