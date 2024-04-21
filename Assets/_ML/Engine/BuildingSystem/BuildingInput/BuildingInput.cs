@@ -627,7 +627,7 @@ namespace ML.Engine.BuildingSystem.Input
                 {
                     ""name"": """",
                     ""id"": ""c02710b0-c2f1-400b-a853-b2506f4d75f1"",
-                    ""path"": ""<XInputController>/rightTrigger"",
+                    ""path"": ""<XInputController>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

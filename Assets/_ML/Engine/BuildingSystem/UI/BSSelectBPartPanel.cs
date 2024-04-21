@@ -524,6 +524,7 @@ namespace ML.Engine.BuildingSystem.UI
         private bool isFirstAddThemeBtn = true;
         private void ChangeFurnitureSortWay(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
+            Debug.Log("ChangeFurnitureSortWay");
             if (this.SelectedCategory1 != BuildingCategory1.Furniture)
             {
                 return;
@@ -547,7 +548,6 @@ namespace ML.Engine.BuildingSystem.UI
                     //给主题btnlist加入按钮
                     foreach (var (id, data) in BuildingManager.Instance.FurnitureThemeTableDataDic)
                     {
-                        Debug.Log(id + " " + data.Name);
                         this.FurnitureThemeBtnList.AddBtn("ML/BuildingSystem/UI/ThemeBtn.prefab",BtnSettingAction: (btn) =>
                         {
                             btn.gameObject.name = data.ID;
