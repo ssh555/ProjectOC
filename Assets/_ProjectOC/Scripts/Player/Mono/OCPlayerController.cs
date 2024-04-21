@@ -4,7 +4,6 @@ using ML.PlayerCharacterNS;
 using UnityEngine;
 using ML.Engine.InventorySystem.CompositeSystem;
 
-
 namespace ProjectOC.Player
 {
     public class OCPlayerController : PlayerController
@@ -38,6 +37,23 @@ namespace ProjectOC.Player
         }
 
         #region Inventory
+        /// <summary>
+        /// 获取玩家的Inventory
+        /// </summary>
+        /// <param name="containStore">是否包含仓库</param>
+        /// <param name="priority">消耗的优先级，0表示没有优先级，1表示从高优先级消耗，-1表示从低优先级消耗</param>
+        public List<ML.Engine.InventorySystem.IInventory> GetInventorys(bool containStore = true, int priority = 0)
+        {
+            List<ML.Engine.InventorySystem.IInventory> result = new List<ML.Engine.InventorySystem.IInventory>();
+            result.Add(OCState.Inventory);
+            if (containStore)
+            {
+                var stores = ManagerNS.LocalGameManager.Instance.StoreManager.GetStores(priority);
+                result.AddRange(stores);
+            }
+            return result;
+        }
+
         /// <summary>
         /// 背包和仓库中是否有对应数量的物品。
         /// </summary>

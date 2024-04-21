@@ -190,7 +190,6 @@ namespace ProjectOC.StoreNS
             return false;
         }
 
-
         #region 数据方法
         /// <summary>
         /// 仓库是否有该物品
@@ -382,26 +381,11 @@ namespace ProjectOC.StoreNS
         #endregion
 
         #region IMission接口
-        public Transform GetTransform()
-        {
-            return WorldStore?.transform;
-        }
-        public TransportPriority GetTransportPriority()
-        {
-            return this.TransportPriority;
-        }
-        public string GetUID()
-        {
-            return this.UID;
-        }
-        public void AddTransport(Transport transport)
-        {
-            this.Transports.Add(transport);
-        }
-        public void RemoveTranport(Transport transport)
-        {
-            this.Transports.Remove(transport);
-        }
+        public Transform GetTransform() { return WorldStore?.transform; }
+        public TransportPriority GetTransportPriority() { return TransportPriority; }
+        public string GetUID() { return UID; }
+        public void AddTransport(Transport transport) { Transports.Add(transport); }
+        public void RemoveTranport(Transport transport) { Transports.Remove(transport); }
         public bool PutIn(string itemID, int amount)
         {
             return ChangeData(itemID, amount, DataType.Storage, DataType.EmptyReserve, exceed:true) >= amount;

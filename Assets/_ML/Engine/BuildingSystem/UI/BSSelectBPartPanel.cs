@@ -1,24 +1,17 @@
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
-using ML.Engine.Timer;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using ProjectOC.ManagerNS;
 using TMPro;
 using UnityEngine;
 using UnityEngine.U2D;
 using UnityEngine.UI;
-using UnityEngine.Windows;
-using Unity.VisualScripting;
 using static ML.Engine.BuildingSystem.UI.BSSelectBPartPanel;
 using ML.Engine.UI;
-using UnityEngine.Rendering.Universal;
-using static ML.Engine.UI.OptionPanel;
 
 namespace ML.Engine.BuildingSystem.UI
 {
@@ -135,7 +128,7 @@ namespace ML.Engine.BuildingSystem.UI
                 go.SetActive(true);
                 this.categoryInstance.Add(category, go.transform as RectTransform);
             }
-
+            this.FurniturePanel.gameObject.SetActive(false);
             this.Refresh();
         }
         #endregion
@@ -196,13 +189,13 @@ namespace ML.Engine.BuildingSystem.UI
         #region Refresh
         public override void Refresh()
         {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(this.templateCategory.parent.GetComponent<RectTransform>());
+            LayoutRebuilder.ForceRebuildLayoutImmediate(this.templateType.parent.GetComponent<RectTransform>());
             if (IsInit < 1 || this.FurnitureDisplayBtnList == null || !this.objectPool.IsLoadFinish())
             {
                 return;
             }
-
             this.ClearCategory2Instance();
-
             // 更换 Category1
             foreach (var instance in this.categoryInstance)
             {
@@ -232,12 +225,9 @@ namespace ML.Engine.BuildingSystem.UI
                     Active(go.GetComponentInChildren<Image>());
                 }
             }
-            LayoutRebuilder.ForceRebuildLayoutImmediate(this.templateCategory.parent.GetComponent<RectTransform>());
-            LayoutRebuilder.ForceRebuildLayoutImmediate(this.templateType.parent.GetComponent<RectTransform>());
-
 
             //家具特殊处理
-            if(this.SelectedCategory1 == BuildingCategory1.Furniture && this.FurnitureCategoryBtnListTransform.gameObject.activeInHierarchy == false)
+            if(this.SelectedCategory1 == BuildingCategory1.Furniture)
             {
                 this.SelectType.Find("Content").gameObject.SetActive(false);
                 //默认先用类别排序
@@ -251,7 +241,7 @@ namespace ML.Engine.BuildingSystem.UI
 
                 this.FurnitureThemeBtnList.BindNavigationInputAction(this.Placer.BInput.BuildSelection.SwichBtn, UIBtnListContainer.BindType.started);
                 this.FurnitureThemeBtnList.BindButtonInteractInputAction(this.Placer.comfirmInputAction, UIBtnListContainer.BindType.started);
-
+                
 
 
             }
@@ -337,6 +327,7 @@ namespace ML.Engine.BuildingSystem.UI
             base.OnExit();
             this.ClearInstance();
             this.UnloadAsset();
+            this.UICameraImage.DisableUICameraImage();
         }
 
         protected override void Exit()
@@ -364,7 +355,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.BInput.BuildSelection.AlterCategory.performed -= Placer_AlterCategory1;
 
             this.Placer.BInput.BuildSelection.AlternativeType.started -= Placer_AlterCategory2;
-            this.Placer.BInput.BuildSelection.ChangeFurnitureDisplay.started -= ChangeFurnitureSortWay;
+            this.Placer.BInput.BuildSelection.ChangeFurnitureDisplay.performed -= ChangeFurnitureSortWay;
         }
 
         protected override void RegisterInput()
@@ -376,7 +367,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.BInput.BuildSelection.AlterCategory.performed += Placer_AlterCategory1;
 
             this.Placer.BInput.BuildSelection.AlternativeType.started += Placer_AlterCategory2;
-            this.Placer.BInput.BuildSelection.ChangeFurnitureDisplay.started += ChangeFurnitureSortWay;
+            this.Placer.BInput.BuildSelection.ChangeFurnitureDisplay.performed += ChangeFurnitureSortWay;
         }
 
         private void Placer_AlterCategory2(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -477,9 +468,6 @@ namespace ML.Engine.BuildingSystem.UI
 
                         //当前选中的主题ID
                         var curSelectedThemeID = this.FurnitureThemeBtnList.GetCurSelected().gameObject.name;
-                        Debug.Log("curSelectedThemeID " + curSelectedThemeID);
-                        List<(SelectedButton, IBuildingPart)> furnitureList = new List<(SelectedButton, IBuildingPart)>();
-
                         List<string> Buildings = BuildingManager.Instance.GetThemeContainBuildings(curSelectedThemeID);
                         foreach (var buildingID in Buildings)
                         {
@@ -655,7 +643,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.FurnitureDisplayBtnList = new UIBtnList(this.FurniturePanel.Find("ButtonList").GetComponent<UIBtnListInitor>());
             this.FurnitureCategoryBtnList = new UIBtnList(this.FurnitureCategoryBtnListTransform.GetComponent<UIBtnListInitor>());
             this.FurnitureThemeBtnList = new UIBtnList(this.FurnitureThemeBtnListTransform.GetComponent<UIBtnListInitor>());
-
+            this.Refresh();
         }
         protected override void OnLoadJsonAssetComplete(BSSelectBPartPanelStruct datas)
         {
@@ -676,6 +664,7 @@ namespace ML.Engine.BuildingSystem.UI
                 GameObject buildingPart = BuildingManager.Instance.GetOneBPartInstanceGO(curSelectedBuilding);
                 this.UICameraImage.LookAtGameObject(buildingPart);
             };
+            
         }
         #endregion
     }
