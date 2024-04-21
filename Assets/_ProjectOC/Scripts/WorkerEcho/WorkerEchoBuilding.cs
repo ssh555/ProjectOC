@@ -43,7 +43,7 @@ namespace ProjectOC.WorkerEchoNS
                 GameManager.Instance.ABResourceManager.InstantiateAsync(uIResonanceWheelPrefab).Completed += (handle) =>
                 {
                     uIResonanceWheelInstance = handle.Result.GetComponent<ResonanceWheelUI>();
-                    uIResonanceWheelInstance.GetComponentInParent<ResonanceWheelUI>().inventory = component.gameObject.GetComponentInParent<PlayerCharacter>().Inventory;
+                    uIResonanceWheelInstance.GetComponentInParent<ResonanceWheelUI>().inventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
                     uIResonanceWheelInstance.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uIResonanceWheelInstance);
                 };

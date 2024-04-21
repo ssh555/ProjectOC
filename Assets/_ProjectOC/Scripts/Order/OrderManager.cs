@@ -61,7 +61,7 @@ namespace ProjectOC.Order
         /// 已承接订单结构体
         /// </summary>
         [Serializable]
-        private struct AcceptedOrder : IComparable<AcceptedOrder>
+        public struct AcceptedOrder : IComparable<AcceptedOrder>
         {
             public Order order;
             public OrderType orderType;
@@ -75,7 +75,8 @@ namespace ProjectOC.Order
                 this.canBeCommit = true;
                 this.acceptOrder = curAcceptOrder++;
             }
-            
+
+            public static AcceptedOrder None = new AcceptedOrder();
             public void SetCanBeCommit(bool canBeCommit)
             {
                 this.canBeCommit = canBeCommit;
@@ -107,7 +108,10 @@ namespace ProjectOC.Order
         /// 已承接列表的订单 (string 氏族ID,OrderType type)，List<Order>
         /// </summary>
         [ShowInInspector]
-        private List<AcceptedOrder> AcceptedList = new List<AcceptedOrder>();
+        private List<AcceptedOrder> acceptedList = new List<AcceptedOrder>();
+        private Dictionary<string, AcceptedOrder> acceptedListDic = new Dictionary<string, AcceptedOrder>();
+
+        public List<AcceptedOrder> AcceptedOrders { get { return acceptedList; } }
         private static int curAcceptOrder = 0;
 
         /// <summary>
@@ -140,19 +144,19 @@ namespace ProjectOC.Order
         public void Init()
         {
             //TODO 之后由氏族模块处理
-            OrderDelegationMap.Add(("ID1", OrderType.Urgent), new List<Order>() { null, null });
-            OrderDelegationMap.Add(("ID1", OrderType.Special), new List<Order>());
-            OrderDelegationMap.Add(("ID1", OrderType.Normal), new List<Order>());
+            OrderDelegationMap.Add(("Clan1", OrderType.Urgent), new List<Order>() { null, null });
+            OrderDelegationMap.Add(("Clan1", OrderType.Special), new List<Order>());
+            OrderDelegationMap.Add(("Clan1", OrderType.Normal), new List<Order>());
 
 
-            OrderDelegationMap.Add(("ID2", OrderType.Urgent), new List<Order>() { null, null });
-            OrderDelegationMap.Add(("ID2", OrderType.Special), new List<Order>());
-            OrderDelegationMap.Add(("ID2", OrderType.Normal), new List<Order>());
+            OrderDelegationMap.Add(("Clan2", OrderType.Urgent), new List<Order>() { null, null });
+            OrderDelegationMap.Add(("Clan2", OrderType.Special), new List<Order>());
+            OrderDelegationMap.Add(("Clan2", OrderType.Normal), new List<Order>());
 
 
-            OrderDelegationMap.Add(("ID3", OrderType.Urgent), new List<Order>() { null, null });
-            OrderDelegationMap.Add(("ID3", OrderType.Special), new List<Order>());
-            OrderDelegationMap.Add(("ID3", OrderType.Normal), new List<Order>());
+            OrderDelegationMap.Add(("Clan3", OrderType.Urgent), new List<Order>() { null, null });
+            OrderDelegationMap.Add(("Clan3", OrderType.Special), new List<Order>());
+            OrderDelegationMap.Add(("Clan3", OrderType.Normal), new List<Order>());
 
 
             UnlockedOrderMap.Add(OrderType.Urgent,new List<string>());
@@ -172,6 +176,9 @@ namespace ProjectOC.Order
             {
                 this.RefreshAcceptedList();
             };
+
+            //初始化背包
+            this.PlayerInventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
 
             // 载入表格数据 
             LoadTableData();
@@ -264,13 +271,13 @@ namespace ProjectOC.Order
         /// </summary>
         private void RefreshAcceptedList()
         {
-            for (int i = 0; i < AcceptedList.Count; i++) 
+            for (int i = 0; i < acceptedList.Count; i++) 
             {
                 
-                Order order = AcceptedList[i].order;
+                Order order = acceptedList[i].order;
                 OrderTableData orderTableData = OrderTableDataDic[order.OrderID];
                 List<Formula> formulaList = new List<Formula>();
-                foreach (var requireItem in AcceptedList[i].order.RemainRequireItemDic)
+                foreach (var requireItem in acceptedList[i].order.RemainRequireItemDic)
                 {
                     formulaList.Add(new Formula() { id = requireItem.Key,num = requireItem.Value});
                 }
@@ -283,7 +290,7 @@ namespace ProjectOC.Order
                     bool isFinish = order.ChangeRequireItemDic(AddedItem.id, AddedItem.num);
                     if(isFinish)
                     {
-                        AcceptedList[i].SetCanBeCommit(true);
+                        acceptedList[i].SetCanBeCommit(true);
                     }
                 }
             }
@@ -291,7 +298,7 @@ namespace ProjectOC.Order
             
             //
 
-            AcceptedList.Sort();
+            acceptedList.Sort();
         }
 
         /// <summary>
@@ -299,8 +306,9 @@ namespace ProjectOC.Order
         /// </summary>
         public void UnlockOrder(string OrderId)
         {
+            if (OrderId == null) return;
             if (!OrderTableDataDic.ContainsKey(OrderId)) return;
-            Debug.Log("UnlockOrder " + OrderId);
+            //Debug.Log("UnlockOrder " + OrderId);
             OrderTableData orderTableData = OrderTableDataDic[OrderId];
             string ClanID = OrderIDToClanIDDic[orderTableData.ID];
             UnlockedOrderMap[orderTableData.OrderType].Add(OrderId);
@@ -330,8 +338,9 @@ namespace ProjectOC.Order
         /// </summary>
         public void AddOrderToOrderDelegationMap(string OrderId)
         {
+            if (OrderId == null) return;
             if (!OrderTableDataDic.ContainsKey(OrderId)) return;
-            Debug.Log("接取订单 " + OrderId + " " + LocalGameManager.Instance.DispatchTimeManager.CurrentHour.ToString() + " : " + LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString());
+            //Debug.Log("接取订单 " + OrderId + " " + LocalGameManager.Instance.DispatchTimeManager.CurrentHour.ToString() + " : " + LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString());
             OrderTableData orderTableData = OrderTableDataDic[OrderId];
             string ClanID = OrderIDToClanIDDic[orderTableData.ID];
             if (orderTableData.OrderType == OrderType.Urgent)
@@ -369,15 +378,17 @@ namespace ProjectOC.Order
         /// </summary>
         public void RefuseOrder(string OrderId)
         {
+            if (OrderId == null) return;
             if (!OrderTableDataDic.ContainsKey(OrderId)) return;
             OrderTableData orderTableData = OrderTableDataDic[OrderId];
+            if (orderTableData.OrderType != OrderType.Urgent) return;
             string ClanID = OrderIDToClanIDDic[orderTableData.ID];
             var olist = OrderDelegationMap[(ClanID, OrderType.Urgent)];
             for(int i = 0; i < olist.Count; i++)
             {
-                if (olist[i].OrderID == OrderId)
+                if (olist[i]?.OrderID == OrderId)
                 {
-                    Debug.Log("订单超时 " + olist[i].OrderID+" "+ LocalGameManager.Instance.DispatchTimeManager.CurrentHour.ToString() + " : " + LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString());
+                    //Debug.Log("订单超时 " + olist[i].OrderID+" "+ LocalGameManager.Instance.DispatchTimeManager.CurrentHour.ToString() + " : " + LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString());
                     olist[i] = null;
                     break;
                 }
@@ -389,6 +400,7 @@ namespace ProjectOC.Order
         /// </summary>
         public void ReceiveOrder(string OrderId)
         {
+            if(OrderId == null) return;
             if (!OrderTableDataDic.ContainsKey(OrderId)) return;
             OrderTableData orderTableData = OrderTableDataDic[OrderId];
             string ClanID = OrderIDToClanIDDic[orderTableData.ID];
@@ -396,28 +408,36 @@ namespace ProjectOC.Order
             var olist = OrderDelegationMap[(ClanID, orderTableData.OrderType)];
             for (int i = 0; i < olist.Count; i++)
             {
-                if (olist[i].OrderID == OrderId)
+                if (olist[i] != null && olist[i].OrderID == OrderId) 
                 {
                     //加入已承接列表
-                    
+                    AcceptedOrder acceptedOrder = AcceptedOrder.None;
                     if(olist[i] is OrderUrgent)
                     {
                         OrderUrgent orderUrgent = (OrderUrgent)olist[i];
                         orderUrgent.StartDeliverDDLTimer();
-                        AcceptedList.Add(new AcceptedOrder(orderUrgent, orderTableData.OrderType));
+                        acceptedOrder = new AcceptedOrder(orderUrgent, orderTableData.OrderType);
+                        //重置紧急订单状态
+                        orderUrgent.Reset();
+                        //紧急留空槽
+                        olist[i] = null;
                     }
                     else if(olist[i] is OrderSpecial)
                     {
-                        AcceptedList.Add(new AcceptedOrder((OrderSpecial)olist[i], orderTableData.OrderType));
+                        acceptedOrder = new AcceptedOrder((OrderSpecial)olist[i], orderTableData.OrderType);
                     }
                     else if (olist[i] is OrderNormal)
                     {
-                        AcceptedList.Add(new AcceptedOrder((OrderNormal)olist[i], orderTableData.OrderType));
+                        acceptedOrder = new AcceptedOrder((OrderNormal)olist[i], orderTableData.OrderType);
+                        
+                        //常规直接删
+                        olist.Remove(olist[i]);
                     }
-
+                    acceptedList.Add(acceptedOrder);
+                    acceptedListDic.Add(orderTableData.ID, acceptedOrder);
                     //加入已承接列表后立即执行一次RefreshAcceptedList函数
 
-                    olist[i] = null;
+
                     break;
                 }
             }
@@ -428,15 +448,16 @@ namespace ProjectOC.Order
         /// </summary>
         public void CancleOrder(string OrderId)
         {
-            for (int i = 0; i < AcceptedList.Count; i++)
+            if (OrderId == null) return;
+            for (int i = 0; i < acceptedList.Count; i++)
             {
-                if (AcceptedList[i].order.OrderID == OrderId)
+                if (acceptedList[i].order.OrderID == OrderId)
                 {
                     //TODO 已扣除返还玩家背包 暂时考虑背包无限
 
-                    OrderTableData orderTableData = OrderTableDataDic[AcceptedList[i].order.OrderID];
+                    OrderTableData orderTableData = OrderTableDataDic[acceptedList[i].order.OrderID];
                     
-                    foreach (var addedItem in AcceptedList[i].order.AddedItemDic)
+                    foreach (var addedItem in acceptedList[i].order.AddedItemDic)
                     {
                         foreach (var item in ItemManager.Instance.SpawnItems(addedItem.Key, addedItem.Value))
                         {
@@ -447,9 +468,12 @@ namespace ProjectOC.Order
 
 
                     //TODO 受到惩罚
-
-                    AcceptedList.Remove(AcceptedList[i]);
+                    Debug.Log("受到惩罚");
+                    acceptedListDic.Remove(acceptedList[i].order.OrderID);
+                    acceptedList.Remove(acceptedList[i]);
+                    
                     this.RefreshAcceptedList();
+                    break;
                 }
             }
 
@@ -461,12 +485,14 @@ namespace ProjectOC.Order
         /// </summary>
         public void CommitOrder(string OrderId)
         {
+            Debug.Log("提交订单 " + OrderId);
+            if (OrderId == null) return;
             if (!OrderTableDataDic.ContainsKey(OrderId)) return;
             OrderTableData orderTableData = OrderTableDataDic[OrderId];
 
-            for (int i = 0; i < AcceptedList.Count; i++)
+            for (int i = 0; i < acceptedList.Count; i++)
             {
-                if (AcceptedList[i].order.OrderID == OrderId)
+                if (acceptedList[i].order.OrderID == OrderId)
                 {
                     //获得Item奖励
 
@@ -484,14 +510,16 @@ namespace ProjectOC.Order
 
                     //加入等待重新进入的常规订单列表
 
-                    if (AcceptedList[i].order is OrderNormal)
+                    if (acceptedList[i].order is OrderNormal)
                     {
-                        OrderNormal orderNormal = (OrderNormal)AcceptedList[i].order;
+                        OrderNormal orderNormal = (OrderNormal)acceptedList[i].order;
                         orderNormal.StartRefreshTimer();
                         this.WaitingForRefreshNormalOrders.Add(orderNormal);
                     }
-
-                    AcceptedList.Remove(AcceptedList[i]);
+                    Debug.Log("1提交订单 " + acceptedList[i].order.OrderID);
+                    acceptedListDic.Remove(acceptedList[i].order.OrderID);
+                    acceptedList.Remove(acceptedList[i]);
+                    
                     this.RefreshAcceptedList();
                 }
             }
@@ -504,6 +532,50 @@ namespace ProjectOC.Order
 
         #endregion
 
+        #region DataFetch
+        public List<Order> GetOrderDelegationOrders(string ClanId, OrderType orderType)
+        {
+            if(this.OrderDelegationMap.ContainsKey((ClanId,orderType)))
+            {
+                return this.OrderDelegationMap[(ClanId, orderType)];
+            }
+            return new List<Order>();
+        }
+        public OrderTableData GetOrderTableData(string orderId)
+        {
+            if(this.OrderTableDataDic.ContainsKey((orderId)))
+            {
+                return this.OrderTableDataDic[orderId];
+            }
+            return OrderTableData.None;
+        }
+        public OrderTableData GetOrderTableData(Order order)
+        {
+            if (order == null) return OrderTableData.None;
+            if (this.OrderTableDataDic.ContainsKey(order.OrderID))
+            {
+                return this.OrderTableDataDic[order.OrderID];
+            }
+            return OrderTableData.None;
+        }
+
+        public bool IsValidOrderID(string orderID)
+        {
+            if (orderID == null) return false;
+            if (this.OrderTableDataDic.ContainsKey(orderID)) return true;
+            return false;
+        }
+
+        public AcceptedOrder GetAcceptedOrder(string orderID)
+        {
+            if(this.acceptedListDic.ContainsKey(orderID))
+            {
+                return this.acceptedListDic[orderID];
+            }
+            return AcceptedOrder.None;
+        }
+
+        #endregion
 
         #region TableData
         [System.Serializable]
@@ -531,6 +603,7 @@ namespace ProjectOC.Order
             public List<OrderMap> PayBack;//TODO 暂时用Formula 偿还
             public string[] Contacter;//接洽人
             //事件函数
+            public static OrderTableData None = new OrderTableData();
         }
 
 
@@ -559,11 +632,23 @@ namespace ProjectOC.Order
         {
             ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]> ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]>("OC/Json/TableData", "Order", (datas) =>
             {
-                OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_1", "ID1");
-                OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_2", "ID2");
-                OrderIDToClanIDDic.Add("Order_Normal_LiYuan_1", "ID3");
-                OrderIDToClanIDDic.Add("Order_Special_LiYuan_1", "ID1");
-
+                //TODO 之后从氏族模块获取
+                OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_1", "Clan1");
+                OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_2", "Clan2");
+                OrderIDToClanIDDic.Add("Order_Normal_LiYuan_1", "Clan3");
+                OrderIDToClanIDDic.Add("Order_Special_LiYuan_1", "Clan1");
+                OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_3", "Clan1");
+                OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_4", "Clan1");
+                OrderIDToClanIDDic.Add("Order_Normal_LiYuan_2", "Clan2");
+                OrderIDToClanIDDic.Add("Order_Special_LiYuan_2", "Clan1");
+                OrderIDToClanIDDic.Add("Order_Normal_LiYuan_3", "Clan1");
+                OrderIDToClanIDDic.Add("Order_Normal_LiYuan_4", "Clan2");
+                OrderIDToClanIDDic.Add("Order_Normal_LiYuan_5", "Clan3");
+                OrderIDToClanIDDic.Add("Order_Normal_LiYuan_6", "Clan1");
+                OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_5", "Clan2");
+                OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_6", "Clan3");
+                OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_7", "Clan3");
+                OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_8", "Clan1");
                 foreach (var data in datas)
                 {
                     //TODO 暂时直接解锁

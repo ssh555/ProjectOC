@@ -37,6 +37,8 @@ namespace ProjectOC.WorkerNS
         public int APCostTransport = 1;
         [LabelText("移动速度"), FoldoutGroup("配置")]
         public float WalkSpeed = 10;
+        [LabelText("当前心情"), ReadOnly]
+        public int Mood;
         [LabelText("当前负重"), ShowInInspector, ReadOnly]
         public int BURCurrent
         {
@@ -126,6 +128,8 @@ namespace ProjectOC.WorkerNS
 
         [LabelText("搬运物品"), ReadOnly]
         public List<Item> TransportItems = new List<Item>();
+
+        public RestaurantNS.Restaurant Restaurant;
 
         #region ITickComponent
         public int tickPriority { get; set; }

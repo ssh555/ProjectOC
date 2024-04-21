@@ -1,21 +1,14 @@
 using ML.Engine.Manager;
-using OpenCover.Framework.Model;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
-using static ML.Engine.UI.UIBtnList;
-using static ML.Engine.UI.UIBtnListContainer;
 using static ML.Engine.UI.UIBtnListContainerInitor;
-using static ML.Engine.UI.UIBtnListInitor;
 
 namespace ML.Engine.UI
 {
@@ -45,6 +38,12 @@ namespace ML.Engine.UI
 
 
             } }
+
+        [ShowInInspector]
+        private bool isEnable = false;
+
+        public bool IsEnable { get { return isEnable; } }
+
         public enum NavagationMode
         {
             BtnList = 0,
@@ -559,7 +558,7 @@ namespace ML.Engine.UI
 
         public void MoveToBtnList(UIBtnList uIBtnList)
         {
-            if (this.CurSelectUIBtnList == uIBtnList || uIBtnList == null) return;
+            if (this.isEnable == false || this.CurSelectUIBtnList == uIBtnList || uIBtnList == null) return;
 
             if(gridNavagationType == ContainerType.A)
             {
@@ -592,6 +591,7 @@ namespace ML.Engine.UI
 
         public void MoveToUp()
         {
+            if(this.isEnable == false) return;
             UIBtnList uIBtnList = this.CurSelectUIBtnList.UpUI as UIBtnList;
             if(uIBtnList != null) 
             { 
@@ -606,6 +606,7 @@ namespace ML.Engine.UI
 
         public void MoveToDown()
         {
+            if (this.isEnable == false) return;
             UIBtnList uIBtnList = this.CurSelectUIBtnList.DownUI as UIBtnList;
             if (uIBtnList != null)
             {
@@ -620,6 +621,7 @@ namespace ML.Engine.UI
 
         public void MoveToLeft()
         {
+            if (this.isEnable == false) return;
             UIBtnList uIBtnList = this.CurSelectUIBtnList.LeftUI as UIBtnList;
             if (uIBtnList != null)
             {
@@ -634,6 +636,7 @@ namespace ML.Engine.UI
 
         public void MoveToRight()
         {
+            if (this.isEnable == false) return;
             UIBtnList uIBtnList = this.CurSelectUIBtnList.RightUI as UIBtnList;
             if (uIBtnList != null)
             {
@@ -717,11 +720,11 @@ namespace ML.Engine.UI
             }
         }
 
-        public void AddBtn(int BtnListIndex, string prefabpath, UnityAction BtnAction = null, Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null, string BtnText = null)
+        public void AddBtn(int BtnListIndex, string prefabpath, UnityAction BtnAction = null, Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null, Action OnFinishAdd = null, string BtnText = null)
         {
             if (BtnListIndex >= 0 || BtnListIndex < this.uIBtnLists.Count)
             {
-                this.uIBtnLists[BtnListIndex].AddBtn(prefabpath, BtnAction, OnSelectEnter, OnSelectExit, BtnSettingAction, BtnText);
+                this.uIBtnLists[BtnListIndex].AddBtn(prefabpath, BtnAction, OnSelectEnter, OnSelectExit, BtnSettingAction, OnFinishAdd, BtnText);
             }
             else
             {
@@ -868,6 +871,22 @@ namespace ML.Engine.UI
                     uIBtnLists[this.uIBtnLists.Count - 1].DownUI = uIBtnLists[0];
                 }
             }
+        }
+
+        /// <summary>
+        /// 该函数功能为启用BtnListContainer
+        /// </summary>
+        public void SetIsEnableTrue()
+        {
+            this.isEnable = true;
+        }
+
+        /// <summary>
+        /// 该函数功能为禁用BtnListContainer
+        /// </summary>
+        public void SetIsEnableFalse()
+        {
+            this.isEnable = false;
         }
     }
 }

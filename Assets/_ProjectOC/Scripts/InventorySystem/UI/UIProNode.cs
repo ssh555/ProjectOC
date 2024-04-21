@@ -467,7 +467,8 @@ namespace ProjectOC.InventorySystem.UI
                                                            ProNode.WorldProNode.transform,
                                                            new Vector3(0, ProNode.WorldProNode.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),
                                                            Quaternion.Euler(Vector3.zero),
-                                                           Vector3.one);
+                                                           Vector3.one,
+                                                           (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).currentCharacter.transform);
                 }
                 UIMgr.PopPanel();
             }
@@ -1295,7 +1296,7 @@ namespace ProjectOC.InventorySystem.UI
 
         protected override void InitObjectPool()
         {
-            this.objectPool.RegisterPool(ObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
             "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2", (handle) =>
             {
                 SpriteAtlas resonanceWheelAtlas = handle.Result as SpriteAtlas;

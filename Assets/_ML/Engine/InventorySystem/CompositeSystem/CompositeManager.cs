@@ -1,5 +1,4 @@
-using ML.Engine.Manager;
-using ProjectOC.Player;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -127,13 +126,31 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             }
             return true;
         }
-        public bool CanComposite(string id)
+
+        public bool CanComposite(List<IInventory> resources, string id)
         {
-            if (string.IsNullOrEmpty(id) || !this.CompositeData.ContainsKey(id) || this.CompositeData[id].formula == null)
+            if (string.IsNullOrEmpty(id) || !this.CompositeData.ContainsKey(id) || this.CompositeData[id].formula == null || resources == null)
             {
                 return false;
             }
-            return (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).InventoryHasItems(CompositeData[id].formula.ToList());
+
+            foreach (var formula in this.CompositeData[id].formula)
+            {
+                int curNum = 0;
+                foreach (IInventory inventory in resources)
+                {
+                    curNum += inventory.GetItemAllNum(formula.id);
+                    if (curNum >= formula.num)
+                    {
+                        break;
+                    }
+                }
+                if (curNum < formula.num)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>
@@ -147,18 +164,6 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             composition = null;
             // 移除消耗的资源
             OnlyCostResource(resource, id);
-            return OnlyReturnComposition(id, out composition);
-        }
-        public CompositionObjectType Composite(string id, out IComposition composition)
-        {
-            composition = null;
-
-            // 移除消耗的资源
-            if (!this.CanComposite(id))
-            {
-                return CompositionObjectType.Error;
-            }
-            this.OnlyCostResource(id);
             return OnlyReturnComposition(id, out composition);
         }
 
@@ -208,9 +213,43 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             }
             return true;
         }
-        public bool OnlyCostResource(string id)
+        public bool OnlyCostResource(List<IInventory> resources, string id)
         {
-            return (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).InventoryCostItems(CompositeData[id].formula.ToList(), true, true, -1) != null;
+            if (!this.CanComposite(resources, id))
+            {
+                return false;
+            }
+
+            Dictionary<IInventory, List<Item>> dict = new Dictionary<IInventory, List<Item>>();
+            foreach (var formula in this.CompositeData[id].formula)
+            {
+                int amount = formula.num;
+                foreach (IInventory inventory in resources)
+                {
+                    if (amount <= 0)
+                    {
+                        break;
+                    }
+                    int num = inventory.GetItemAllNum(formula.id);
+                    num = num <= amount ? num : amount;
+                    num = inventory.RemoveItem(formula.id, num) ? num : 0;
+                    amount -= num;
+                    if (!dict.ContainsKey(inventory))
+                    {
+                        dict[inventory] = new List<Item>();
+                    }
+                    dict[inventory].AddRange(ItemManager.Instance.SpawnItems(formula.id, num));
+                }
+                if (amount > 0)
+                {
+                    foreach (var kv in dict)
+                    {
+                        kv.Key.AddItem(kv.Value);
+                    }
+                    return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>
@@ -227,23 +266,6 @@ namespace ML.Engine.InventorySystem.CompositeSystem
                     foreach (var item in items)
                     {
                         resource.AddItem(item);
-                    }
-                }
-            }
-            return true;
-        }
-        public bool OnlyReturnResource(string id)
-        {
-            // 返回需要消耗的资源
-            if (!string.IsNullOrEmpty(id) && this.CompositeData.ContainsKey(id) && this.CompositeData[id].formula != null)
-            {
-                var inventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
-                foreach (var formula in this.CompositeData[id].formula)
-                {
-                    List<Item> items = ItemManager.Instance.SpawnItems(formula.id, formula.num);
-                    foreach (var item in items)
-                    {
-                        inventory.AddItem(item);
                     }
                 }
             }

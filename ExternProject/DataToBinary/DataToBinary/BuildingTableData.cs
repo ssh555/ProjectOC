@@ -8,6 +8,7 @@ namespace ML.Engine.BuildingSystem
     public struct BuildingTableData : IGenData
     {
         public string id;
+        public int sort;
         public TextContent.TextContent name;
         public string icon;
         public string category1;
@@ -25,32 +26,32 @@ namespace ML.Engine.BuildingSystem
 
         public bool GenData(string[] row)
         {
-            if (row[0] == null || row[0] == "")
+            if (string.IsNullOrEmpty(row[0]))
             {
                 return false;
             }
-            // 0 -> id
-            this.id = row[0];
-            // 1 -> name
-            this.name = new TextContent.TextContent();
-            this.name.Chinese = row[1];
-            this.name.English = row[1];
-            // 2 -> icon
-            this.icon = row[2];
-            // 3 -> category1
-            this.category1 = row[3];
-            // 4 -> category2
-            this.category2 = row[4];
-            // 5 -> category3
-            this.category3 = row[5];
-            // 6 -> category4
-            this.category4 = row[6];
-            // 7 -> actorID
-            this.actorID = !string.IsNullOrEmpty(row[7]) ? row[7] : "";
-            // 8 -> raw
-            this.raw = Program.ParseFormula(row[8]);
-            //// 9 -> upgradeID
-            this.upgradeID = !string.IsNullOrEmpty(row[9]) ? row[9] : "";
+            // 0 -> ID
+            this.id = Program.ParseString(row[0]);
+            // 1 -> Sort
+            this.sort = Program.ParseInt(row[1]);
+            // 2 -> Name
+            this.name = Program.ParseTextContent(row[2]);
+            // 3 -> Icon
+            this.icon = Program.ParseString(row[3]);
+            // 4 -> Category1
+            this.category1 = Program.ParseString(row[4]);
+            // 5 -> Category2
+            this.category2 = Program.ParseString(row[5]);
+            // 6 -> Category3
+            this.category3 = Program.ParseString(row[6]);
+            // 7 -> Category4
+            this.category4 = Program.ParseString(row[7]);
+            // 8 -> ActorID
+            this.actorID = Program.ParseString(row[8]);
+            // 9 -> Raw
+            this.raw = Program.ParseFormulaList(row[9]);
+            // 10 -> UpgradeID
+            this.upgradeID = Program.ParseString(row[10]);
             return true;
         }
     }

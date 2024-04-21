@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using ML.Engine.BuildingSystem.BuildingPart;
-using ML.Engine.Manager;
 using ML.Engine.UI;
 using Sirenix.OdinInspector;
 using ML.Engine.TextContent;
@@ -108,8 +107,6 @@ namespace ML.Engine.BuildingSystem
         }
         [ShowInInspector]
         public Dictionary<BuildingPartClassification, IBuildingPart> LoadedBPart = new Dictionary<BuildingPartClassification, IBuildingPart>();
-
-
 
         private AsyncOperationHandle BPartHandle;
         private void RegisterBPartPrefab()

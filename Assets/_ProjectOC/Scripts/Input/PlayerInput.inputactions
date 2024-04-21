@@ -1038,15 +1038,6 @@
             "id": "7057597f-dd83-480d-a439-81cedab5aa7f",
             "actions": [
                 {
-                    "name": "Drop",
-                    "type": "Button",
-                    "id": "4014e338-cad2-4b21-9c9f-9a0fe97b8566",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Hold",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Destroy",
                     "type": "Button",
                     "id": "b9b4cd53-3dac-468c-ae83-a5ce6333b3e0",
@@ -1266,28 +1257,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Destroy",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7a2ac9e2-2be2-4b70-a2f2-dfd5651084e7",
-                    "path": "<XInputController>/buttonWest",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Drop",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "794b91b9-d9b4-4cd8-9079-d5c66b54d76b",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Drop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -2250,6 +2219,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "OCInfo",
+                    "type": "Button",
+                    "id": "b180f68e-cfc6-434d-b7df-34ea0ec279e7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -2406,6 +2384,28 @@
                     "action": "SwichBtn",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "582e942c-acf7-4c17-b4b6-124ded186f2d",
+                    "path": "<XInputController>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OCInfo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8c3cd1b7-1610-49d2-9d9b-fa19d9d24fcd",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OCInfo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

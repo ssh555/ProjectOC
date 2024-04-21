@@ -175,7 +175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   classification:
     Category1: 3
-    Category2: 300
+    Category2: 304
     Category3: 742
     Category4: 1
   instanceID: 

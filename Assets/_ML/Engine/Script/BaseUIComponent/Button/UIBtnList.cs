@@ -1,14 +1,11 @@
 using ML.Engine.Manager;
-using OpenCover.Framework.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 using static ML.Engine.UI.UIBtnListContainer;
 using Sirenix.OdinInspector;
@@ -88,6 +85,8 @@ namespace ML.Engine.UI
         private Dictionary<SelectedButton, (int, int)> SBPosDic = new Dictionary<SelectedButton, (int, int)>();
 
         private Dictionary<(InputAction, BindType), Action<InputAction.CallbackContext>> InputActionBindDic = new Dictionary<(InputAction, BindType), Action<InputAction.CallbackContext>>();
+
+        public event Action OnSelectButtonChanged;
 
         /// <summary>
         /// parent: 按钮父物体 limitNum：一行多少个按钮 hasInitSelect:是否有初始选中 isLoop:是否为循环按钮 isWheel：是否为轮转按钮 OnSelectedEnter：选中回调 OnSelectedExit：选出回调
@@ -216,11 +215,14 @@ namespace ML.Engine.UI
             if (OneDimCnt > 0 && (hasInitSelect || (NeedToResetCurSelected && this.uiBtnListContainer?.CurSelectUIBtnList == this))) 
             {
                 //初始化选择对象
+                Debug.Log("初始化选择对象 ");
                 this.TwoDimI = 0;
                 this.TwoDimJ = 0;
                 this.CurSelected = TwoDimSelectedButtons[TwoDimI, TwoDimJ];
                 this.CurSelected.OnSelect(null);
                 this.NeedToResetCurSelected = false;
+                this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
+                this.OnSelectButtonChanged?.Invoke();
             }
 
 
@@ -239,7 +241,7 @@ namespace ML.Engine.UI
         /// <summary>
         /// 加入按钮
         /// </summary>
-        public void AddBtn(string prefabpath, UnityAction BtnAction = null,Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null,string BtnText = null)
+        public void AddBtn(string prefabpath, UnityAction BtnAction = null,Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null,Action OnFinishAdd = null, string BtnText = null)
         {
             /*if (selectedButton == null) return;
             int i = OneDimCnt / limitNum;
@@ -309,6 +311,7 @@ namespace ML.Engine.UI
                 if(this.uiBtnListContainer == null)
                 {
                     InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+                    OnFinishAdd?.Invoke();
                     return;
                 }
 
@@ -322,6 +325,7 @@ namespace ML.Engine.UI
                 {
                     this.UIBtnListContainer?.RefreshEdge();
                 }
+                OnFinishAdd?.Invoke();
             };
             
         }
@@ -892,8 +896,10 @@ namespace ML.Engine.UI
             {
                 var (i, j) = SBPosDic[sb];
                 this.UIBtnListContainer?.MoveToBtnList(sb.GetUIBtnList());
+                SelectedButton btn = MoveIndexIUISelected(i, j);
                 this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
-                return MoveIndexIUISelected(i, j);
+                this.OnSelectButtonChanged?.Invoke();
+                return btn;
             }
             else if(sb.GetUIBtnList() != this)
             {
@@ -903,6 +909,7 @@ namespace ML.Engine.UI
                 this.UIBtnListContainer.CurnavagationMode = NavagationMode.SelectedButton;
                 this.UIBtnListContainer?.MoveToBtnList(sb.GetUIBtnList());
                 this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
+                
             }
             return null;
         }
@@ -959,6 +966,7 @@ namespace ML.Engine.UI
                     this.CurSelected = TwoDimSelectedButtons[TwoDimI][TwoDimJ];
                     this.CurSelected.OnSelect(null);
                     this.NeedToResetCurSelected = false;
+                    this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
                 }
             }
             
@@ -979,7 +987,7 @@ namespace ML.Engine.UI
         public void OnExitToInner()
         {
             //this.DisableBtnList();
-            this.Selected.gameObject.SetActive(false);
+            this.Selected?.gameObject.SetActive(false);
         }
 
         //从选中Inner退出然后进入Btnlist
@@ -987,7 +995,7 @@ namespace ML.Engine.UI
         {
             this.SetCurSelectedNull();
             //this.EnableBtnList();
-            this.Selected.gameObject.SetActive(true);
+            this.Selected?.gameObject.SetActive(true);
         }
 
         public void OnEnterInner()
@@ -999,6 +1007,7 @@ namespace ML.Engine.UI
                 this.TwoDimI = 0;
                 this.TwoDimJ = 0;
                 this.CurSelected = TwoDimSelectedButtons[TwoDimI][TwoDimJ];
+                this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
             }
             this.CurSelected?.OnSelect(null);
 
