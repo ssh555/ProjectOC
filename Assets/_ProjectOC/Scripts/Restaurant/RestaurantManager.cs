@@ -32,6 +32,7 @@ namespace ProjectOC.RestaurantNS
         }
 
         #region 当前数据
+        private HashSet<Worker> WorkerSets = new HashSet<Worker>();
         [LabelText("等待去餐厅的刁民队列"), ReadOnly]
         public List<Worker> Workers = new List<Worker>();
         [LabelText("实例化的餐厅"), ReadOnly]
@@ -43,18 +44,70 @@ namespace ProjectOC.RestaurantNS
 
         public void AddWorker(Worker worker)
         {
-            if (worker != null && !Workers.Contains(worker))
+            if (worker != null && !WorkerSets.Contains(worker))
             {
                 Workers.Add(worker);
+                WorkerSets.Add(worker);
             }
         }
 
         public void RemoveWorker(Worker worker)
         {
-            if (worker != null)
+            if (worker != null && WorkerSets.Contains(worker))
             {
                 Workers.Remove(worker);
+                WorkerSets.Remove(worker);
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="priorityType">是否按照优先级获取 0表示不需要，1表示优先级从高到低，-1表示优先级从低到高</param>
+        /// <returns></returns>
+        public List<Restaurant> GetRestaurants(int priorityType = 0)
+        {
+            List<Restaurant> restaurants = new List<Restaurant>();
+            foreach (WorldRestaurant world in this.WorldRestaurants.Values)
+            {
+                if (world != null)
+                {
+                    restaurants.Add(world.Restaurant);
+                }
+            }
+            if (priorityType == 1)
+            {
+                restaurants.Sort(new Restaurant.Sort());
+            }
+            else if (priorityType == -1)
+            {
+                restaurants.Sort(new Restaurant.Sort());
+                restaurants.Reverse();
+            }
+            return restaurants;
+        }
+
+        public Restaurant GetPutInRestaurant(string itemID, int amount, int priorityType = 0)
+        {
+            List<Restaurant> restaurants = GetRestaurants(priorityType);
+            Restaurant result = null;
+            foreach (var restaurant in restaurants)
+            {
+                if (restaurant.HaveSetFood(itemID, false))
+                {
+                    int empty = restaurant.GetAmount(itemID, false, false);
+                    if (result == null && empty > 0)
+                    {
+                        result = restaurant;
+                    }
+                    if (empty >= amount)
+                    {
+                        result = restaurant;
+                        break;
+                    }
+                }
+            }
+            return result;
         }
 
         #region Spawn
@@ -183,6 +236,7 @@ namespace ProjectOC.RestaurantNS
         public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
 
         private Dictionary<string, WorkerFoodTableData> WorkerFoodTableDict = new Dictionary<string, WorkerFoodTableData>();
+        private Dictionary<string, string> ItemToFoodDict = new Dictionary<string, string>();
 
         public ML.Engine.ABResources.ABJsonAssetProcessor<WorkerFoodTableData[]> ABJAProcessor;
 
@@ -193,6 +247,7 @@ namespace ProjectOC.RestaurantNS
                 foreach (var data in datas)
                 {
                     WorkerFoodTableDict.Add(data.ID, data);
+                    ItemToFoodDict.Add(data.ItemID, data.ID);
                 }
             }, "隐兽食物表数据");
             ABJAProcessor.StartLoadJsonAssetData();

@@ -4,10 +4,7 @@ namespace ProjectOC.WorkerNS
 {
     public class WorkerStateFishing : State
     {
-        public WorkerStateFishing(string name) : base(name)
-        {
-
-        }
+        public WorkerStateFishing(string name) : base(name) { }
         public override void ConfigState()
         {
             this.BindEnterAction
@@ -17,7 +14,6 @@ namespace ProjectOC.WorkerNS
                     if (machine is WorkerStateMachine workerMachine && workerMachine.Worker != null)
                     {
                         workerMachine.Worker.Status = Status.Fishing;
-
                     }
                 }
             );

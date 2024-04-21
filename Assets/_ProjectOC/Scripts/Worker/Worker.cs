@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using ML.PlayerCharacterNS;
 using UnityEngine;
 using UnityEngine.AI;
-
+using ProjectOC.ManagerNS;
 
 namespace ProjectOC.WorkerNS
 {
@@ -41,6 +41,8 @@ namespace ProjectOC.WorkerNS
         public int Mood;
         [LabelText("心情最大值"), FoldoutGroup("配置")]
         public int MoodMax = 100;
+        [LabelText("超过DestroyTime分钟，未绑定窝的刁民会被销毁"), FoldoutGroup("配置")]
+        public int DestroyTimeForNoHome = 15;
         [LabelText("当前负重"), ShowInInspector, ReadOnly]
         public int BURCurrent
         {
@@ -134,8 +136,34 @@ namespace ProjectOC.WorkerNS
         public RestaurantNS.Restaurant Restaurant; 
         [LabelText("是否有餐厅"), ShowInInspector, ReadOnly]
         public bool HasRestaurant { get => Restaurant != null && !string.IsNullOrEmpty(Restaurant.UID); }
+
+        private Building.WorkerHome home;
         [LabelText("窝"), ReadOnly]
-        public Building.WorkerHome Home;
+        public Building.WorkerHome Home
+        {
+            get { return home; }
+            set
+            {
+                home = value;
+                if (home == null)
+                {
+                    if (TimerForNoHome == null)
+                    {
+                        TimerForNoHome = new CounterDownTimer(60 * DestroyTimeForNoHome, false, false);
+                        TimerForNoHome.OnEndEvent += () =>
+                        {
+                            LocalGameManager.Instance.WorkerManager.DeleteWorker(this);
+                        };
+                    }
+                    TimerForNoHome.Start();
+                }
+                else
+                {
+                    TimerForNoHome.End();
+                }
+            }
+        }
+        private CounterDownTimer TimerForNoHome;
         [LabelText("是否有窝"), ShowInInspector, ReadOnly]
         public bool HasHome { get => Home != null && !string.IsNullOrEmpty(Home.UID); }
 
