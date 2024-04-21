@@ -6,7 +6,6 @@ using ML.Engine.BuildingSystem.BuildingPart;
 using System.Linq;
 using System;
 using ML.Engine.InventorySystem.CompositeSystem;
-using ML.Engine.InventorySystem;
 
 
 namespace ML.Engine.BuildingSystem
@@ -15,6 +14,7 @@ namespace ML.Engine.BuildingSystem
     public struct BuildingTableData
     {
         public string id;
+        public int sort;
         public TextContent.TextContent name;
         public string icon;
         public string category1;
@@ -351,6 +351,7 @@ namespace ML.Engine.BuildingSystem
             return this.registeredBPart.ContainsKey(classification);
         }
 
+
         /// <summary>
         /// 将BPart加入管理队列
         /// </summary>
@@ -367,6 +368,16 @@ namespace ML.Engine.BuildingSystem
             this.AddBPartPrefabOnHeight(BPart);
 
             this.registeredBPart.Add(BPart.Classification, BPart);
+
+            //家具类别
+            if (BPart.Classification.Category1 == BuildingCategory1.Furniture)
+            {
+                if (!FurnitureCategoryDic.ContainsKey(BPart.Classification.Category2))
+                {
+                    FurnitureCategoryDic.Add(BPart.Classification.Category2, new List<IBuildingPart>());
+                }
+                FurnitureCategoryDic[BPart.Classification.Category2].Add(BPart);
+            }
         }
 
         /// <summary>
@@ -430,10 +441,23 @@ namespace ML.Engine.BuildingSystem
 
         public IBuildingPart GetOneBPartInstance(string classification)
         {
+            //Debug.Log("GetOneBPartInstance "+classification);
             return GetOneBPartInstance(new BuildingPartClassification(classification));
         }
 
+        public GameObject GetOneBPartInstanceGO(BuildingPartClassification classification)
+        {
+            if (this.registeredBPart.ContainsKey(classification))
+            {
+                return GameObject.Instantiate<GameObject>(this.registeredBPart[classification].gameObject);
+            }
+            return null;
+        }
 
+        public GameObject GetOneBPartInstanceGO(string classification)
+        {
+            return GetOneBPartInstanceGO(new BuildingPartClassification(classification));
+        }
         /// <summary>
         /// 若BPart可以复制，则获得一个复制的实例
         /// 若不可以复制，则直接返回BPart
@@ -925,16 +949,21 @@ namespace ML.Engine.BuildingSystem
         // Materials/Character/Player
 
         public Dictionary<string, BuildingTableData> BPartTableDictOnID = new Dictionary<string, BuildingTableData>();
+        [ShowInInspector]
         public Dictionary<string, BuildingTableData> BPartTableDictOnClass = new Dictionary<string, BuildingTableData>();
 
+        [ShowInInspector]
         public Dictionary<string, FurnitureThemeTableData> FurnitureThemeTableDataDic = new Dictionary<string, FurnitureThemeTableData>();
-        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
 
-        public ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]> ABJAProcessor;
+        private Dictionary<BuildingCategory2, List<IBuildingPart>> FurnitureCategoryDic = new Dictionary<BuildingCategory2, List<IBuildingPart>>();
+        public bool IsLoadOvered => ABJAProcessorBuildingTableData != null && ABJAProcessorBuildingTableData.IsLoaded;
+
+        public ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]> ABJAProcessorBuildingTableData;
+        public ML.Engine.ABResources.ABJsonAssetProcessor<FurnitureThemeTableData[]> ABJAProcessorFurnitureThemeTableData;
 
         public void LoadTableData()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]>("OC/Json/TableData", "Building", (datas) =>
+            ABJAProcessorBuildingTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]>("OC/Json/TableData", "Building", (datas) =>
             {
                 foreach (var data in datas)
                 {
@@ -942,7 +971,17 @@ namespace ML.Engine.BuildingSystem
                     BPartTableDictOnClass.Add(data.GetClassificationString(), data);
                 }
             }, "建筑表数据");
-            ABJAProcessor.StartLoadJsonAssetData();
+            ABJAProcessorBuildingTableData.StartLoadJsonAssetData();
+
+            ABJAProcessorFurnitureThemeTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<FurnitureThemeTableData[]>("OC/Json/TableData", "FurnitureTheme", (datas) =>
+            {
+                foreach (var data in datas)
+                {
+                    FurnitureThemeTableDataDic.Add(data.ID, data);
+                }
+            }, "家具主题表数据");
+            ABJAProcessorFurnitureThemeTableData.StartLoadJsonAssetData();
+
         }
 
         public string GetID(string CID)
@@ -1024,6 +1063,34 @@ namespace ML.Engine.BuildingSystem
             }
             return null;
         }
+
+        public List<IBuildingPart> GetFurnitureIBuildingParts(BuildingCategory2 buildingCategory2)
+        {
+            if (FurnitureCategoryDic.ContainsKey(buildingCategory2))
+            {
+                return FurnitureCategoryDic[buildingCategory2];
+            }
+            return new List<IBuildingPart>();
+        }
+        public List<string> GetThemeContainBuildings(string ID)
+        {
+            if (!string.IsNullOrEmpty(ID) && FurnitureThemeTableDataDic.ContainsKey(ID))
+            {
+                return FurnitureThemeTableDataDic[ID].BuildID;
+            }
+            return null;
+        }
+
+        //仅获取家具建筑的icon
+        public string GetBuildingIcon(string classification)
+        {
+            if(this.BPartTableDictOnClass.ContainsKey(classification))
+            {
+                return this.BPartTableDictOnClass[classification].icon;
+            }
+            return null;
+        }
+        
         #endregion
 
 

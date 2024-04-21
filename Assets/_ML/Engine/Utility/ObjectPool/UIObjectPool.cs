@@ -1,11 +1,7 @@
 using ML.Engine.Manager;
-using ML.Engine.UI;
-using ProjectOC.ManagerNS;
-using ProjectOC.WorkerNS;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.U2D;
@@ -15,7 +11,7 @@ namespace ML.Engine.Utility
     /// <summary>
     /// 管理整个UI的资源，包括TextContent,Texture2D,Prefabs
     /// </summary>
-    public class ObjectPool
+    public class UIObjectPool
     {
 
         /// <summary>
@@ -54,7 +50,7 @@ namespace ML.Engine.Utility
         }
 
 
-        public ObjectPool()
+        public UIObjectPool()
         {
             functionExecutor = new FunctionExecutor<List<AsyncOperationHandle>>();
             goPoolDic = new Dictionary<string, PoolStruct<GameObject>>();

@@ -91,7 +91,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             // 2 -> tag
             this.tag = row[2].Split(',').Where(x => !string.IsNullOrEmpty(x)).ToArray();
             // 3 -> formula
-            formula = Program.ParseFormula(row[3]).ToArray();
+            formula = Program.ParseFormulaList(row[3]).ToArray();
             // 4 -> compositionnum
             this.compositionnum = int.Parse(row[4]);
             // 5 -> texture2d

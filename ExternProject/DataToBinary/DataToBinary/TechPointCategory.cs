@@ -5,13 +5,7 @@ namespace ProjectOC.TechTree
     public enum TechPointCategory
     {
         None,
-        Energy,
-        Plant,
-        Calculus,
-        Smelt,
-        Storage,
-        Craft,
-        Echo,
-        Cook,
+        Other,
+        Product
     }
 }

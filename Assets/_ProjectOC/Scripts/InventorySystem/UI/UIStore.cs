@@ -474,7 +474,8 @@ namespace ProjectOC.InventorySystem.UI
             {
                 ItemManager.Instance.AddItemIconObject(Store.WorldIconItemID, Store.WorldStore.transform,
                                                         new Vector3(0, this.Store.WorldStore.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),
-                                                        Quaternion.Euler(Vector3.zero), Vector3.one);
+                                                        Quaternion.Euler(Vector3.zero), Vector3.one,
+                                                        (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).currentCharacter.transform);
                 UIMgr.PopPanel();
             }
             else if (CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon || CurMode == Mode.Upgrade)

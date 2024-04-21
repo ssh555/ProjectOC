@@ -1,16 +1,10 @@
-using ML.Engine.ABResources;
-using ML.Engine.Manager;
-using ML.Engine.TextContent;
 using ML.Engine.Utility;
-using ProjectOC.ManagerNS;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.U2D;
 
 
 namespace ML.Engine.UI
@@ -24,7 +18,7 @@ namespace ML.Engine.UI
         /// <summary>
         /// 对象池
         /// </summary>
-        public ObjectPool objectPool;
+        public UIObjectPool objectPool;
         /// <summary>
         /// 所属UIManager
         /// </summary>
@@ -56,7 +50,7 @@ namespace ML.Engine.UI
         public virtual void OnEnter()
         {
             this.gameObject.SetActive(true);
-            this.objectPool = new ObjectPool();
+            this.objectPool = new UIObjectPool();
             this.InitObjectPool();
             this.InitBtnInfo();
             this.Enter();

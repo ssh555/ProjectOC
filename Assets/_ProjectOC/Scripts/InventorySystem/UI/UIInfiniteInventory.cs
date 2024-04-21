@@ -20,8 +20,14 @@ namespace ProjectOC.InventorySystem.UI
 {
     public class UIInfiniteInventory : ML.Engine.UI.UIBasePanel<InventoryPanel>
     {
-        #region Input
-        private bool ItemIsDestroyed = false;
+        #region 数据初始化
+        //应用场景为背包的categoryManages
+        [ShowInInspector]
+        private List<CategoryManage> categoryManages;
+        private void InitData()
+        {
+            this.categoryManages = ItemManager.Instance.GetCategoryManageByApplicationScenario(ApplicationScenario.Bag);
+        }
         #endregion
 
         #region Unity
@@ -54,12 +60,10 @@ namespace ProjectOC.InventorySystem.UI
             Info_ItemEffectDescription = info.Find("EffectDescription").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
 
 
-            ItemTypes = Enum.GetValues(typeof(ML.Engine.InventorySystem.ItemType)).Cast<ML.Engine.InventorySystem.ItemType>().Where(e => (int)e > 0).ToArray();
-
 
             var kt = this.transform.Find("BotKeyTips").Find("KeyTips");
             KT_Use = kt.Find("KT_Use");
-            KT_Drop = kt.Find("KT_Drop");
+
             KT_Destroy = kt.Find("KT_Destroy");
 
             IsInit = true;
@@ -77,6 +81,12 @@ namespace ProjectOC.InventorySystem.UI
         #endregion
 
         #region Override
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            InitData();
+        }
+
         protected override void Enter()
         {
             ML.Engine.Manager.GameManager.Instance.SetAllGameTimeRate(0);
@@ -97,11 +107,6 @@ namespace ProjectOC.InventorySystem.UI
         /// 对应的逻辑背包
         /// </summary>
         public ML.Engine.InventorySystem.InfiniteInventory inventory;
-
-        /// <summary>
-        /// UI显示的ItemType枚举
-        /// </summary>
-        private ItemType[] ItemTypes;
         /// <summary>
         /// 当前选中的ItemTypes的Index
         /// </summary>
@@ -109,7 +114,8 @@ namespace ProjectOC.InventorySystem.UI
         /// <summary>
         /// 当前选中的ItemType
         /// </summary>
-        private ItemType CurrentItemType => ItemTypes[CurrentItemTypeIndex];
+        [ShowInInspector]
+        private List<ItemType> CurrentItemCategory => this.categoryManages != null ? (this.categoryManages.Count > 0 ? this.categoryManages[CurrentItemTypeIndex].ItemTypes : new List<ItemType>()) : null;
         /// <summary>
         /// 封装的ItemTypeIndex，便于在更新值时一并更新其他数据并Refresh
         /// </summary>
@@ -120,7 +126,11 @@ namespace ProjectOC.InventorySystem.UI
             {
                 _currentItemTypeIndex = value;
                 SelectedItems.Clear();
-                SelectedItems.AddRange(inventory.GetItemList().Where(item => ItemManager.Instance.GetItemType(item.ID) == CurrentItemType));
+
+                foreach (var Category in CurrentItemCategory)
+                {
+                    SelectedItems.AddRange(inventory.GetItemList().Where(item => ItemManager.Instance.GetItemType(item.ID) == Category));
+                }
                 CurrentItemIndex = 0;
             }
         }
@@ -159,7 +169,7 @@ namespace ProjectOC.InventorySystem.UI
                     }
                     else
                     {
-                        var grid = Inventory_GridLayout.GetGridSize();
+                        var grid = Inventory_GridLayout.GetGridSize(SelectedItems.Count);
                         if (_currentItemIndex < 0)
                         {
                             _currentItemIndex += (grid.x * grid.y);
@@ -219,13 +229,8 @@ namespace ProjectOC.InventorySystem.UI
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
 
-            // 丢弃
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Drop.performed -= Drop_performed;
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Drop.canceled -= Drop_canceled;
-            /*            // 销毁
-                        ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.started -= Destroy_started;
-                        ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.performed -= Destroy_performed;
-                        ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.canceled -= Destroy_canceled;*/
+            // 销毁
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.performed -= Destroy_performed;
         }
 
         protected override void RegisterInput()
@@ -241,29 +246,14 @@ namespace ProjectOC.InventorySystem.UI
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
 
-            // 丢弃
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Drop.performed += Drop_performed;
-            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Drop.canceled += Drop_canceled;
-            /*            // 销毁
-                        ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.started += Destroy_started;
-                        ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.performed += Destroy_performed;
-                        ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.canceled += Destroy_canceled;*/
+            // 销毁
+
+            ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.performed += Destroy_performed;
+
 
         }
 
-        public void DropItem()
-        {
-            var item = this.CurrentItem;
-            this.inventory.RemoveItem(item);
-            SelectedItems.Remove(item);
-            this.CurrentItemIndex = this.CurrentItemIndex;
-            // 将Item生成为世界物体
-#pragma warning disable CS4014
-            ItemManager.Instance.SpawnWorldItem(item, this.inventory.Owner.position, this.inventory.Owner.rotation);
-#pragma warning restore CS4014
-        }
-
-        public void DestroyItem()
+        private void Destroy_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             var item = this.CurrentItem;
             this.inventory.RemoveItem(item);
@@ -278,7 +268,7 @@ namespace ProjectOC.InventorySystem.UI
 
         private void Comfirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if(this.CurrentItem.CanUse())
+            if (ItemManager.Instance.GetCanUse(this.CurrentItem.ID))
             {
                 this.CurrentItem.Execute(1);
                 this.CurrentItemIndex = this.CurrentItemIndex;
@@ -287,54 +277,23 @@ namespace ProjectOC.InventorySystem.UI
 
         private void AlterItem_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-
             var f_offset = obj.ReadValue<Vector2>();
             var offset = new Vector2Int(Mathf.RoundToInt(f_offset.x), Mathf.RoundToInt(f_offset.y));
-
-            var grid = Inventory_GridLayout.GetGridSize();
+            var grid = Inventory_GridLayout.GetGridSize(SelectedItems.Count);
             this.CurrentItemIndex += -offset.y * grid.y + offset.x;
-
-
         }
 
         private void LastTerm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            CurrentItemTypeIndex = (CurrentItemTypeIndex - 1 + ItemTypes.Length) % ItemTypes.Length;
+            if (categoryManages.Count == 0) return;
+            CurrentItemTypeIndex = (CurrentItemTypeIndex - 1 + categoryManages.Count) % categoryManages.Count;
         }
 
         private void NextTerm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            CurrentItemTypeIndex = (CurrentItemTypeIndex + 1 + ItemTypes.Length) % ItemTypes.Length;
+            if (categoryManages.Count == 0) return;
+            CurrentItemTypeIndex = (CurrentItemTypeIndex + 1 + categoryManages.Count) % categoryManages.Count;
         }
-
-
-        /// <summary>
-        /// Drop
-        /// </summary>
-        /// <param name="obj"></param>
-        private void Drop_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            if (this.ItemIsDestroyed)
-            {
-                this.ItemIsDestroyed = false;
-            }
-            else
-            {
-                DropItem();
-            }
-        }
-
-        /// <summary>
-        /// Destroy
-        /// </summary>
-        /// <param name="obj"></param>
-        private void Drop_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-        {
-            this.ItemIsDestroyed = true;
-            DestroyItem();
-        }
-
-
         /// <summary>
         /// Destroy
         /// </summary>
@@ -362,15 +321,11 @@ namespace ProjectOC.InventorySystem.UI
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s);
             }
-
         }
 
         #endregion
 
         #region UI对象引用
-
-        private UIKeyTipComponent[] UIKeyTipComponents;
-
         private TMPro.TextMeshProUGUI TopTitleText;
 
         private Transform ItemTypeTemplate;
@@ -385,9 +340,11 @@ namespace ProjectOC.InventorySystem.UI
         private TMPro.TextMeshProUGUI Info_ItemEffectDescription;
 
         private Transform KT_Use;
-        private Transform KT_Drop;
+
         private Transform KT_Destroy;
 
+        //初始化Category 只初始化一次
+        private bool isInitCategory = false;
 
         #endregion
 
@@ -405,55 +362,47 @@ namespace ProjectOC.InventorySystem.UI
             #endregion
 
             #region ItemType
- 
-            foreach (var itemtype in ItemTypes)
+            if(isInitCategory == false)
             {
-                // 对应的ItemType显示对象不存在，则实例化生成
-                if (!tempItemType.TryGetValue(itemtype, out var obj))
+                foreach (var itemtype in this.categoryManages)
                 {
                     // 实例化
-                    obj = Instantiate(ItemTypeTemplate.gameObject, ItemTypeTemplate.parent, false);
+                    var obj = Instantiate(ItemTypeTemplate.gameObject, ItemTypeTemplate.parent, false);
                     // 模板是false,需要设置为true
                     obj.SetActive(true);
-                    // 加入临时内存管理
-                    tempItemType.Add(itemtype, obj);
                     // 载入ItemType对应的Texture2D
                     Sprite sprite = null;
-                    if(!spriteDictionart.TryGetValue(itemtype.ToString(),out sprite))
-                        sprite = inventoryAtlas.GetSprite(itemtype.ToString());
+                    sprite = inventoryAtlas.GetSprite(itemtype.CategoryIcon);
                     //var tex = ab.LoadAsset<Texture2D>(itemtype.ToString());
                     // 创建Sprite并加入临时内存管理
-                    
+
                     if (sprite != null)
                     {
-                        spriteDictionart.Add(itemtype.ToString(),sprite);
                         obj.transform.Find("Image").GetComponent<Image>().sprite = sprite;
-
                     }
+
+                    // 刷新显示文本
+                    obj.transform.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = itemtype.CategoryName.ToString();
+
+
+                    // 更新 Selected
+                    var selected = obj.transform.Find("Selected").gameObject;
+                    selected.SetActive(CurrentItemCategory == itemtype.ItemTypes);
                 }
 
-                // 刷新显示文本
-                TextTip textTip = PanelTextContent.itemtype.FirstOrDefault(it => it.name == itemtype.ToString());
 
-                if (textTip != null)
-                {
-                    obj.transform.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = textTip.GetDescription();
-                }
-                else
-                {
-                    Debug.LogWarning("找不到匹配的ItemType");
-                }
-                
-                // 更新 Selected
-                var selected = obj.transform.Find("Selected").gameObject;
-                selected.SetActive(CurrentItemType == itemtype);
+                // 强制刷新Layout布局
+                // Unity 底层不会自动更新，需要手动调用
+
+                LayoutRebuilder.ForceRebuildLayoutImmediate(this.ItemTypeTemplate.parent.GetComponent<RectTransform>());
+                isInitCategory = true;
             }
 
-
-            // 强制刷新Layout布局
-            // Unity 底层不会自动更新，需要手动调用
-
-            LayoutRebuilder.ForceRebuildLayoutImmediate(this.ItemTypeTemplate.parent.GetComponent<RectTransform>());
+            //更新选中
+            for (int i = 0; i < this.ItemTypeTemplate.parent.childCount; i++)
+            {
+                this.ItemTypeTemplate.parent.GetChild(i).Find("Selected").gameObject.SetActive(i - 1 == this.CurrentItemTypeIndex);
+            }
             #endregion
 
             #region Inventory
@@ -505,7 +454,7 @@ namespace ProjectOC.InventorySystem.UI
                 // Amount
                 var amounttext = item.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
                 amounttext.gameObject.SetActive(ItemManager.Instance.GetCanStack(SelectedItems[i].ID));
-                amounttext.text = SelectedItems[i].Amount.ToString();
+                amounttext.text = SelectedItems[i].Amount > 999 ? SelectedItems[i].Amount.ToString() + "+" : SelectedItems[i].Amount.ToString();
                 // Selected
                 var selected = item.transform.Find("Selected");
                 if(CurrentItem == SelectedItems[i])
@@ -593,18 +542,17 @@ namespace ProjectOC.InventorySystem.UI
                 Sprite _sprite = spriteDictionart[CurrentItem.ID];
                 // 更新图标 => 必定是载入了的
                 Info_ItemIcon.sprite = _sprite;
-                // 更新单个重量: JsonText + Amount
-                Info_ItemWeight.text = PanelTextContent.weightprefix + ItemManager.Instance.GetWeight(CurrentItem.ID);
+                // 更新单个重量: Amount
+                Info_ItemWeight.text = ItemManager.Instance.GetWeight(CurrentItem.ID).ToString();
 
-                // 更新描述文本: JsonText + ItemDescription
-                Info_ItemDescription.text = PanelTextContent.descriptionprefix + "\n" + ItemManager.Instance.GetItemDescription(CurrentItem.ID);
+                // 更新描述文本: ItemDescription
+                Info_ItemDescription.text = ItemManager.Instance.GetItemDescription(CurrentItem.ID);
                 // 强制更新布局 => 更新文本高度 -> 用于更新父物体的高度，适配UI显示
                 LayoutRebuilder.ForceRebuildLayoutImmediate(Info_ItemDescription.GetComponent<RectTransform>());
                 // 更新父物体的高度
                 Info_ItemDescription.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(Info_ItemDescription.transform.parent.GetComponent<RectTransform>().sizeDelta.x, Info_ItemDescription.GetComponent<RectTransform>().sizeDelta.y);
 
-
-                Info_ItemEffectDescription.text = PanelTextContent.effectdescriptionprefix + "\n" + ItemManager.Instance.GetEffectDescription(CurrentItem.ID);
+                Info_ItemEffectDescription.text = ItemManager.Instance.GetEffectDescription(CurrentItem.ID);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(Info_ItemEffectDescription.GetComponent<RectTransform>());
                 Info_ItemEffectDescription.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(Info_ItemEffectDescription.transform.parent.GetComponent<RectTransform>().sizeDelta.x, Info_ItemEffectDescription.GetComponent<RectTransform>().sizeDelta.y);
 
@@ -620,9 +568,8 @@ namespace ProjectOC.InventorySystem.UI
             #region BotKeyTips
             if (CurrentItem != null)
             {
-                KT_Use.gameObject.SetActive(CurrentItem.CanUse());
-                KT_Drop.gameObject.SetActive(CurrentItem.CanDrop());
-                KT_Destroy.gameObject.SetActive(CurrentItem.CanDestroy());
+                KT_Use.gameObject.SetActive(ItemManager.Instance.GetCanUse(this.CurrentItem.ID));
+                KT_Destroy.gameObject.SetActive(ItemManager.Instance.GetCanDestroy(this.CurrentItem.ID));
             }
             #endregion
 
@@ -635,15 +582,10 @@ namespace ProjectOC.InventorySystem.UI
         public struct InventoryPanel
         {
             public TextContent toptitle;
-            public TextTip[] itemtype;
             public KeyTip LastTerm;
             public KeyTip NextTerm;
-            public TextContent weightprefix;
-            public TextContent descriptionprefix;
-            public TextContent effectdescriptionprefix;
             public KeyTip Use;
             public KeyTip Back;
-            public KeyTip Drop;
             public KeyTip Destroy;
         }
 
@@ -656,7 +598,7 @@ namespace ProjectOC.InventorySystem.UI
 
         protected override void InitObjectPool()
         {
-            this.objectPool.RegisterPool(ObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
             "OC/UI/Inventory/Texture/SA_Inventory_UI.spriteatlasv2", (handle) =>
             {
                 inventoryAtlas = handle.Result as SpriteAtlas;

@@ -25,33 +25,38 @@ namespace ProjectOC.Order
 
         public bool GenData(string[] row)
         {
-            if (row[0] == null || row[0] == "")
+            if (string.IsNullOrEmpty(row[0]))
             {
                 return false;
             }
-            this.ID = row[0];
-            this.OrderType = (OrderType)Enum.Parse(typeof(OrderType), row[1]);
-            this.OrderName = row[2];
-            this.OrderDescription = row[3];
+            // 0 -> ID
+            this.ID = Program.ParseString(row[0]);
+            // 1 -> Type
+            this.OrderType = Program.ParseEnum<OrderType>(row[1], "Normal");
+            // 2 -> Name
+            this.OrderName = Program.ParseString(row[2]);
+            // 3 -> ItemDescription
+            this.OrderDescription = Program.ParseString(row[3]);
+            // 4 -> RequireList
             this.RequireList = Program.ParseOrderMap(row[4]);
+            // 5 -> ItemReward
             this.ItemReward = Program.ParseOrderMap(row[5]);
+            // 6 -> ClanReward
             this.ClanReward = Program.ParseOrderMap(row[6]);
+            // 7 -> CharaReward
             this.CharaReward = Program.ParseOrderMap(row[7]);
-            this.IsFirstOrder = int.Parse(row[8]) != 0;
-            if (!string.IsNullOrEmpty(row[9]))
-            {
-                this.CD = int.Parse(row[9]);
-            }
-            if (!string.IsNullOrEmpty(row[10]))
-            {
-                this.ReceiveDDL = int.Parse(row[10]);
-            }
-            if (!string.IsNullOrEmpty(row[11]))
-            {
-                this.DeliverDDL = int.Parse(row[11]);
-            }
+            // 8 -> IsFirstOrder
+            this.IsFirstOrder = Program.ParseBool(row[8]);
+            // 9 -> CD
+            this.CD = Program.ParseInt(row[9]);
+            // 10 -> ReceiveDDL
+            this.ReceiveDDL = Program.ParseInt(row[10]);
+            // 11 -> DeliverDDL
+            this.DeliverDDL = Program.ParseInt(row[11]);
+            // 12 -> PayBack
             this.PayBack = Program.ParseOrderMap(row[12]);
-            this.Contacter = new List<string>().ToArray();
+            // 13 -> Contacter
+            this.Contacter = Program.ParseStringList(row[13]).ToArray();
             return true;
         }
     }
