@@ -1073,6 +1073,15 @@ namespace ML.Engine.BuildingSystem
             return null;
         }
 
+        //仅获取家具建筑的icon
+        public string GetBuildingIcon(string classification)
+        {
+            if(this.BPartTableDictOnClass.ContainsKey(classification))
+            {
+                return this.BPartTableDictOnClass[classification].icon;
+            }
+            return null;
+        }
         
         #endregion
 

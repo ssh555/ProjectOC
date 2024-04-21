@@ -64,6 +64,7 @@ namespace ProjectOC.TechTree
         /// <summary>
         /// 载入的科技点表格数据
         /// </summary>
+        [ShowInInspector]
         private Dictionary<string, TechPoint> registerTechPoints = new Dictionary<string, TechPoint>();
 
         private SpriteAtlas techAtlas;
@@ -104,6 +105,7 @@ namespace ProjectOC.TechTree
 
         public Sprite GetTPSprite(string ID)
         {
+            Debug.Log(ID + " " + this.registerTechPoints[ID].Icon);
             if (string.IsNullOrEmpty(ID)) return null;
             return this.registerTechPoints.ContainsKey(ID)? techAtlas.GetSprite(this.registerTechPoints[ID].Icon) : null;
         }

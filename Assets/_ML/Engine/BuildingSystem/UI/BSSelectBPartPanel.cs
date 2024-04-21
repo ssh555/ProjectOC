@@ -35,6 +35,12 @@ namespace ML.Engine.BuildingSystem.UI
 
         private SpriteAtlas typeAtlas = null,categoryAtlas = null;
         private MonoBuildingManager monoBM;
+
+        //家具图集
+        public const string FurnitureSpriteAtlasPath = "Assets/_ProjectOC/OCResources/UI/Building/Furniture/Furniture.spriteatlasv2";
+        public const string FurnitureThemeSpriteAtlasPath = "Assets/_ProjectOC/OCResources/UI/Building/FurnitureTheme/FurnitureTheme.spriteatlasv2";
+        private SpriteAtlas FurnitureSpriteAtlas = null, FurnitureThemeSpriteAtlas = null;
+
         public Sprite GetCategorySprite(BuildingCategory1 category)
         {
             Sprite sprite = categoryAtlas.GetSprite(category.ToString());;
@@ -83,6 +89,18 @@ namespace ML.Engine.BuildingSystem.UI
                 {
                     InitAsset();
                 }
+            };
+        }
+
+        private void InitFurnitureTexture2D()
+        {
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>(FurnitureSpriteAtlasPath).Completed += (handle) =>
+            {
+                FurnitureSpriteAtlas = handle.Result as SpriteAtlas;
+            };
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>(FurnitureThemeSpriteAtlasPath).Completed += (handle) =>
+            {
+                FurnitureThemeSpriteAtlas = handle.Result as SpriteAtlas;
             };
         }
 
@@ -151,6 +169,7 @@ namespace ML.Engine.BuildingSystem.UI
         {
             InitCategoryTexture2D();
             InitTypeTexture2D();
+            InitFurnitureTexture2D();
             monoBM = GameManager.Instance.GetLocalManager<MonoBuildingManager>();
             this.categoryParent = this.transform.Find("SelectCategory").Find("Content") as RectTransform;
             this.templateCategory = this.categoryParent.Find("CategoryTemplate") as RectTransform;
@@ -440,7 +459,12 @@ namespace ML.Engine.BuildingSystem.UI
                                 Debug.Log("放置家具 " + item.Item2.Classification.ToString());
                                 this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(buildingPart.Classification);
                                 monoBM.PopAndPushPanel<BSPlaceModePanel>();
-                            },BtnText: BuildingName);
+                            },BtnSettingAction:
+                            (btn) =>
+                            {
+                                btn.transform.Find("Image2").GetComponent<Image>().sprite = FurnitureSpriteAtlas.GetSprite(BuildingManager.Instance.GetBuildingIcon(buildingPart.Classification.ToString()));
+                            }
+                            ,BtnText: BuildingName);
                         }
                     }
                     else
@@ -465,7 +489,12 @@ namespace ML.Engine.BuildingSystem.UI
                                 Debug.Log("放置家具 " + buildingPart.Classification.ToString());
                                 this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(buildingPart.Classification);
                                 monoBM.PopAndPushPanel<BSPlaceModePanel>();
-                            }, BtnText: BuildingName);//buildingPart.Classification.Category3.ToString()
+                            }, BtnSettingAction:
+                            (btn) =>
+                            {
+                                btn.transform.Find("Image2").GetComponent<Image>().sprite = FurnitureSpriteAtlas.GetSprite(BuildingManager.Instance.GetBuildingIcon(buildingPart.Classification.ToString()));
+                            }
+                            , BtnText: BuildingName);
                         }
                     }
 
@@ -521,6 +550,7 @@ namespace ML.Engine.BuildingSystem.UI
                             btn.gameObject.name = data.ID;
 
                             //TODO 找图集
+                            btn.transform.Find("Image").Find("Image1").GetComponent<Image>().sprite = FurnitureThemeSpriteAtlas.GetSprite(data.Icon);
 
                         }, BtnText: data.Name);
                     }
@@ -636,7 +666,6 @@ namespace ML.Engine.BuildingSystem.UI
                 this.FurnitureCategoryBtnList.SetBtnText(tt.name, tt.description.GetText());
             }
         }
-
         #endregion
     }
 
