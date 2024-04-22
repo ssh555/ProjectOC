@@ -193,6 +193,16 @@ namespace ProjectOC.LandMassExpand
         
         void OnDrawGizmosSelected()
         {
+            //Draw 区域包围盒Bounds
+            Gizmos.color = Color.blue;
+            foreach (var islandFieldPart in islandFieldParts)
+            {
+                foreach (var _bound in islandFieldPart.fieldBounds)
+                {
+                    Gizmos.DrawWireCube(transform.position+_bound.center,_bound.size);   
+                }   
+            }
+            
             if (!Application.isPlaying)
                 return;
             
@@ -212,15 +222,7 @@ namespace ProjectOC.LandMassExpand
                     Vector3.one * islandManager.mapGridSize);
             }
             
-            //Draw 区域包围盒Bounds
-            Gizmos.color = Color.blue;
-            foreach (var islandFieldPart in islandFieldParts)
-            {
-                foreach (var _bound in islandFieldPart.fieldBounds)
-                {
-                    Gizmos.DrawWireCube(transform.position+_bound.center,_bound.size);   
-                }   
-            }
+ 
         }
     }
 }
