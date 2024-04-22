@@ -69,7 +69,7 @@ namespace ProjectOC.RestaurantNS
         }
         #endregion
 
-        public Restaurant()
+        public void Init()
         {
             Seats = new RestaurantSeat[LocalGameManager.Instance.RestaurantManager.SeatNum];
             for (int i = 0; i < Seats.Length; i++)
@@ -175,9 +175,20 @@ namespace ProjectOC.RestaurantNS
             }
             return -1;
         }
+        public string EatFood(Worker worker)
+        {
+            int index = FindFood(worker);
+            if (0 <= index && index < Datas.Length && Change(index, -1) == 1)
+            {
+                return Datas[index].ID;
+            }
+            return null;
+        }
         #endregion
 
         #region Action + Event
+        public event Action OnDataChangeEvent;
+
         /// <summary>
         /// 刁民到达座位后调用，如果餐厅的HasFood为false，则清空刁民的座位数据，将刁民加入Manager的队列中；
         /// 反之调用FindFood给刁民分配食物，更新座位的食物ID，然后调用EatFood。
@@ -187,19 +198,17 @@ namespace ProjectOC.RestaurantNS
             int seatIndex = GetWorkerSeatIndex(worker);
             if (worker != null && seatIndex > 0)
             {
+                Seats[seatIndex].HasArrive = true;
                 if (HasFood)
                 {
                     int index = FindFood(worker);
-                    if (0 <= index && index < Datas.Length)
+                    if (Change(index, -1) == 1)
                     {
                         worker.Agent.enabled = false;
                         worker.LastPosition = worker.transform.position;
                         worker.transform.position = Seats[seatIndex].Socket.position + new Vector3(0, 2f, 0);
-                        if (Change(index, -1) == 1)
-                        {
-                            Seats[index].SetFood(Datas[index].ID);
-                            return;
-                        }
+                        Seats[seatIndex].SetFood(Datas[index].ID);
+                        return;
                     }
                 }
                 Seats[seatIndex].ClearData();
@@ -260,10 +269,18 @@ namespace ProjectOC.RestaurantNS
             }
             return result;
         }
+        public RestaurantData GetRestaurantData(int index)
+        {
+            if (0 <= index && index < Datas.Length)
+            {
+                return Datas[index];
+            }
+            return default(RestaurantData);
+        }
         #endregion
 
         #region 数据方法
-        public bool ChangeFood(int index, string id)
+        private bool ChangeFood(int index, string id)
         {
             if (0 <= index && index < Datas.Length)
             {
@@ -297,12 +314,13 @@ namespace ProjectOC.RestaurantNS
                     }
                 }
                 Datas[index].ID = id ?? "";
+                OnDataChangeEvent?.Invoke();
                 return true;
             }
             return false;
         }
 
-        public int Change(int index, int amount, bool exceed = false, bool complete = true)
+        private int Change(int index, int amount, bool exceed = false, bool complete = true)
         {
             lock (this)
             {
@@ -314,13 +332,14 @@ namespace ProjectOC.RestaurantNS
                     }
                     amount = !complete && amount + Datas[index].Amount < 0 ? Datas[index].Amount : amount;
                     Datas[index].Amount += amount;
+                    OnDataChangeEvent?.Invoke();
                     return amount;
                 }
                 return 0;
             }
         }
 
-        public int Change(string id, int amount, bool isFoodID = true, bool exceed = false, bool complete = true)
+        private int Change(string id, int amount, bool isFoodID = true, bool exceed = false, bool complete = true)
         {
             lock (this)
             {
@@ -361,6 +380,7 @@ namespace ProjectOC.RestaurantNS
                         Datas[firstIndex].Amount += amount;
                         amount = 0;
                     }
+                    OnDataChangeEvent?.Invoke();
                     return total - amount;
                 }
                 return 0;
@@ -369,6 +389,58 @@ namespace ProjectOC.RestaurantNS
         #endregion
 
         #region UI接口
+        public void UIRemove(int index, int amount)
+        {
+            lock (this)
+            {
+                if (0 <= index && index < Datas.Length && amount > 0)
+                {
+                    string itemID = Datas[index].ItemID;
+                    if (ItemManager.Instance.IsValidItemID(itemID) && Datas[index].Amount >= amount)
+                    {
+                        List<Item> items = ItemManager.Instance.SpawnItems(itemID, amount);
+                        var inventory = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory;
+                        foreach (Item item in items)
+                        {
+                            int itemAmount = item.Amount;
+                            if (inventory.AddItem(item))
+                            {
+                                Change(index, -itemAmount);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        public void UIFastAdd(int index)
+        {
+            lock (this)
+            {
+                if (0 <= index && index < Datas.Length)
+                {
+                    string itemID = Datas[index].ItemID;
+                    if (ItemManager.Instance.IsValidItemID(itemID))
+                    {
+                        var inventory = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory;
+                        int amount = inventory.GetItemAllNum(itemID);
+                        int empty = Datas[index].MaxCapacity - Datas[index].Amount;
+                        amount = amount <= empty  ? amount : empty;
+                        if (amount > 0 && inventory.RemoveItem(itemID, amount))
+                        {
+                            Change(index, amount);
+                        }
+                    }
+                }
+            }
+        }
+        public bool UIChangeFood(int index, string itemID)
+        {
+            return ChangeFood(index, itemID);
+        }
         #endregion
 
         #region IInventory
