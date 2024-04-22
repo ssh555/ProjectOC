@@ -18,40 +18,26 @@ namespace ML.Engine.InventorySystem
         public int ExpRecipe;
         public bool GenData(string[] row)
         {
-            if (row[0] == null || row[0] == "")
+            if (string.IsNullOrEmpty(row[0]))
             {
                 return false;
             }
             // 0 -> ID
-            this.ID = row[0];
+            this.ID = Program.ParseString(row[0]);
             // 1 -> Sort
-            this.Sort = int.Parse(row[1]);
+            this.Sort = Program.ParseInt(row[1]);
             // 2 -> Category
-            this.Category = (RecipeCategory)Enum.Parse(typeof(RecipeCategory), row[2]);
+            this.Category = Program.ParseEnum<RecipeCategory>(row[2]);
             // 3 -> Name
-            this.Name = new TextContent.TextContent();
-            this.Name.Chinese = row[3];
-            this.Name.English = row[3];
+            this.Name = Program.ParseTextContent(row[3]);
             // 4 -> Raw
-            this.Raw = Program.ParseFormula(row[4]);
+            this.Raw = Program.ParseFormulaList(row[4]);
             // 5 -> Product
-            List<CompositeSystem.Formula> temp = Program.ParseFormula(row[5]);
-            if (temp.Count >= 1)
-            {
-                this.Product = temp[0];
-            }
-            else
-            {
-                this.Product = new CompositeSystem.Formula();
-                return false;
-            }
+            this.Product = Program.ParseFormula(row[5]);
             // 6 -> TimeCost
-            this.TimeCost = int.Parse(row[6]);
+            this.TimeCost = Program.ParseInt(row[6]);
             // 7 -> ExpRecipe
-            if (!string.IsNullOrEmpty(row[7]))
-            {
-                this.ExpRecipe = int.Parse(row[7]);
-            }
+            this.ExpRecipe = Program.ParseInt(row[7]);
             return true;
         }
     }
@@ -64,23 +50,16 @@ namespace ML.Engine.InventorySystem
         SeedBox,
         Integrator,
         SeedPlot,
-        Detector,
+        DiveStation,
         Refine,
-        Sawn,
-        Textile,
+        Handwork,
+        Pharmacy,
+        Liquor,
         Aggregator,
         Processor,
         Kitchen,
-        Calculus,
-        Store,
-        Reservoir,
-        Incubator,
-        EchoWheel,
-        DiversionNode,
-        LifeDiversion,
-        Projector,
-        DiveStation,
-        BreedingCenter,
-        Farm
+        CreaturePro,
+        CreatureBreed,
+        Calculus
     }
 }

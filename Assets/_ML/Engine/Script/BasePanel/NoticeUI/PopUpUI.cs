@@ -1,16 +1,9 @@
-using Cysharp.Threading.Tasks;
 using ML.Engine.Manager;
-using ML.Engine.SaveSystem;
 using ML.Engine.TextContent;
-using ProjectOC.ResonanceWheelSystem.UI;
-using Sirenix.OdinInspector;
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
-using static ML.Engine.UI.OptionPanel;
 using static ML.Engine.UI.PopUpUI;
-using static ML.Engine.UI.UIManager;
 
 namespace ML.Engine.UI
 {

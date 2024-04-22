@@ -1,0 +1,97 @@
+{
+    "textTitleRestaurant" : {
+        "Chinese" : "餐厅",
+        "English" : "Restaurant"
+    },
+    "textTitleChangeFood" : {
+        "Chinese" : "更换食物",
+        "English" : "Change Food"
+    },
+    "textEmpty" : {
+        "Chinese" : "空置",
+        "English" : "Empty"
+    },
+    "textNo1" : {
+        "Chinese" : "招牌NO.1",
+        "English" : "No.1"
+    },
+
+    "ChangeFood" : {
+        "keyname" : "KT_ChangeFood",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "更换食物",
+            "English" : "Change Food"
+        }
+    },
+    "Remove1" : {
+        "keyname" : "KT_Remove1",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "Remove"
+          },
+        "description" : {
+            "Chinese" : "取出1个",
+            "English" : "Remove 1"
+        }
+    },
+    "Remove10" : {
+        "keyname" : "KT_Remove10",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "Remove"
+          },
+        "description" : {
+            "Chinese" : "取出10个",
+            "English" : "Remove 10"
+        }
+    },
+    "FastAdd" : {
+        "keyname" : "KT_FastAdd",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "FastAdd"
+          },
+        "description" : {
+            "Chinese" : "快捷存放",
+            "English" : "Fast Add"
+        }
+    },
+    "Return" : {
+        "keyname" : "KT_Return",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
+        "description" : {
+            "Chinese" : "返回",
+            "English" : "Return"
+        }
+    },
+    "Confirm" : {
+        "keyname" : "KT_Confirm",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "确认",
+            "English" : "Confirm"
+        }
+    },
+    "Back" : {
+        "keyname" : "KT_Back",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
+        "description" : {
+            "Chinese" : "返回",
+            "English" : "Back"
+        }
+    }
+}
+

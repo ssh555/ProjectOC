@@ -21,7 +21,7 @@ namespace ProjectOC.StoreNS
         [LabelText("仓库名字"), ReadOnly]
         public string Name = "";
         [LabelText("仓库类型"), ReadOnly]
-        public StoreType StoreType;
+        public ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 StoreType;
         [LabelText("仓库存储数据"), ReadOnly]
         public List<StoreData> StoreDatas = new List<StoreData>();
         [LabelText("仓库对应的搬运"), ReadOnly]
@@ -54,7 +54,7 @@ namespace ProjectOC.StoreNS
 
         public event Action OnStoreDataChangeAction;
 
-        public Store(StoreType storeType)
+        public Store(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType)
         {
             for (int i = 0; i < this.StoreCapacity; i++)
             {
@@ -189,7 +189,6 @@ namespace ProjectOC.StoreNS
             }
             return false;
         }
-
 
         #region 数据方法
         /// <summary>
@@ -382,26 +381,11 @@ namespace ProjectOC.StoreNS
         #endregion
 
         #region IMission接口
-        public Transform GetTransform()
-        {
-            return WorldStore?.transform;
-        }
-        public TransportPriority GetTransportPriority()
-        {
-            return this.TransportPriority;
-        }
-        public string GetUID()
-        {
-            return this.UID;
-        }
-        public void AddTransport(Transport transport)
-        {
-            this.Transports.Add(transport);
-        }
-        public void RemoveTranport(Transport transport)
-        {
-            this.Transports.Remove(transport);
-        }
+        public Transform GetTransform() { return WorldStore?.transform; }
+        public TransportPriority GetTransportPriority() { return TransportPriority; }
+        public string GetUID() { return UID; }
+        public void AddTransport(Transport transport) { Transports.Add(transport); }
+        public void RemoveTranport(Transport transport) { Transports.Remove(transport); }
         public bool PutIn(string itemID, int amount)
         {
             return ChangeData(itemID, amount, DataType.Storage, DataType.EmptyReserve, exceed:true) >= amount;

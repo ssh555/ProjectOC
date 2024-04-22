@@ -17,10 +17,6 @@ namespace ProjectOC.TechTree
     [System.Serializable]
     public sealed class TechTreeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
-        public void OnRegister()
-        {
-            Init();
-        }
 
         #region Base
         public static TechTreeManager Instance;
@@ -45,8 +41,13 @@ namespace ProjectOC.TechTree
 
         }
 
+        public void OnRegister()
+        {
+            Init();
+        }
 
-        private void OnDestroy()
+
+        public void OnUnregister()
         {
             if (Instance == this)
             {
@@ -63,8 +64,9 @@ namespace ProjectOC.TechTree
         /// <summary>
         /// 载入的科技点表格数据
         /// </summary>
+        [ShowInInspector]
         private Dictionary<string, TechPoint> registerTechPoints = new Dictionary<string, TechPoint>();
-
+        [ShowInInspector]
         private SpriteAtlas techAtlas;
         public string[] GetAllTPID()
         {

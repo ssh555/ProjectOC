@@ -65,6 +65,17 @@
             "Chinese": "",
             "English": ""
         }
+    },
+    {
+        "keyname": "KT_ChangeFurnitureDisplay",
+        "keymap": {
+            "KeyBoard": "3",
+            "XBOX": "RT"
+        },
+        "description": {
+            "Chinese": "",
+            "English": ""
+        }
     }
 ],
 "FurnitureCategoryBtns" : [

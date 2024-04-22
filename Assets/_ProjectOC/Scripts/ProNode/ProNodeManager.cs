@@ -19,6 +19,7 @@ namespace ProjectOC.ProNodeNS
         public int MaxStack;
         public int StackThreshold;
         public int RawThreshold;
+        public bool CanCharge;
     }
 
     /// <summary>
@@ -216,6 +217,14 @@ namespace ProjectOC.ProNodeNS
                 return ProNodeTableDict[id].RawThreshold;
             }
             return 0;
+        }
+        public bool GetCanCharge(string id)
+        {
+            if (IsValidID(id))
+            {
+                return ProNodeTableDict[id].CanCharge;
+            }
+            return false;
         }
         #endregion
     }

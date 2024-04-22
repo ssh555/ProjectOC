@@ -2,16 +2,9 @@ using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.InventorySystem;
 using ML.Engine.TextContent;
-using ProjectOC.ProNodeNS;
-using ProjectOC.StoreNS;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Windows;
-using ML.Engine.UI;
-using Unity.VisualScripting;
 using static ML.Engine.BuildingSystem.UI.BSInteractModePanel;
 
 namespace ML.Engine.BuildingSystem.UI
@@ -21,7 +14,8 @@ namespace ML.Engine.BuildingSystem.UI
         #region Property|Field
         private BuildingManager BM => BuildingManager.Instance;
         private BuildingPlacer.BuildingPlacer Placer => BM.Placer;
-        private ProjectOC.Player.PlayerCharacter Player => GameObject.Find("PlayerCharacter(Clone)")?.GetComponent<ProjectOC.Player.PlayerCharacter>();
+        private ProjectOC.Player.PlayerCharacter Player => (Manager.GameManager.Instance.CharacterManager.GetLocalController() as ProjectOC.Player.OCPlayerController).currentCharacter;
+
         private MonoBuildingManager monoBM;
         #region KeyTip
         private UIKeyTip keycom;
@@ -185,13 +179,17 @@ namespace ML.Engine.BuildingSystem.UI
         #region OnEvent
         private void OnDestroySelectedBPart(IBuildingPart bpart)
         {
-            if (bpart is WorldStore worldStore)
+            if (bpart is ProjectOC.StoreNS.WorldStore worldStore)
             {
                 worldStore.Store.Destroy();
             }
-            else if (bpart is WorldProNode worldProNode)
+            else if (bpart is ProjectOC.ProNodeNS.WorldProNode worldProNode)
             {
                 worldProNode.ProNode.Destroy();
+            }
+            else if (bpart is ProjectOC.RestaurantNS.WorldRestaurant worldRestaurant)
+            {
+                worldRestaurant.Restaurant.Destroy();
             }
 
             bool flag = false;

@@ -4,13 +4,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
-using UnityEngine.Windows;
 using static ML.Engine.BuildingSystem.UI.BSAppearancePanel;
 
 namespace ML.Engine.BuildingSystem.UI

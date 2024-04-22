@@ -1038,15 +1038,6 @@
             "id": "7057597f-dd83-480d-a439-81cedab5aa7f",
             "actions": [
                 {
-                    "name": "Drop",
-                    "type": "Button",
-                    "id": "4014e338-cad2-4b21-9c9f-9a0fe97b8566",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Hold",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Destroy",
                     "type": "Button",
                     "id": "b9b4cd53-3dac-468c-ae83-a5ce6333b3e0",
@@ -1266,28 +1257,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Destroy",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7a2ac9e2-2be2-4b70-a2f2-dfd5651084e7",
-                    "path": "<XInputController>/buttonWest",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Drop",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "794b91b9-d9b4-4cd8-9079-d5c66b54d76b",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Drop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -2250,6 +2219,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "OCInfo",
+                    "type": "Button",
+                    "id": "b180f68e-cfc6-434d-b7df-34ea0ec279e7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -2406,6 +2384,28 @@
                     "action": "SwichBtn",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "582e942c-acf7-4c17-b4b6-124ded186f2d",
+                    "path": "<XInputController>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OCInfo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8c3cd1b7-1610-49d2-9d9b-fa19d9d24fcd",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OCInfo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -2786,6 +2786,76 @@
                     "processors": "",
                     "groups": "",
                     "action": "Expel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "UIRestaurant",
+            "id": "6e33a395-6966-4442-9dd9-3547d7e58069",
+            "actions": [
+                {
+                    "name": "Remove",
+                    "type": "Button",
+                    "id": "bdb10921-48de-4858-b3b8-24ee96cd523e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "FastAdd",
+                    "type": "Button",
+                    "id": "ab2f44e6-e002-44a3-9a08-f50a7c561944",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "b912e4bb-754a-45e0-8dba-9ca97c17a8b4",
+                    "path": "<XInputController>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Remove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b812b3b3-b0c5-4ee5-b6c3-49c93eeb7099",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Remove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1d52d7e0-fd55-4f53-84c1-a58d8e4ddb75",
+                    "path": "<XInputController>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FastAdd",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "37d28b28-c179-49fb-8946-1a0aaf062305",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FastAdd",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

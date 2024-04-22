@@ -1,4 +1,3 @@
-using ML.Engine.InventorySystem.CompositeSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -55,10 +54,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         }
 
         public bool isFirstBuild { get; }
-        /// <summary>
-        /// 在PlaceMode或者EditMode更改之后调用
-        /// </summary>
-        public void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos);
+
 
         /// <summary>
         /// 当前所处的建造模式
@@ -187,7 +183,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 {
                     this.tmpTriggerMode = this.Mode;
                 }
-                if (other.GetComponent<IBuildingPart>() != null)
+                if (other != null && other.GetComponent<IBuildingPart>() != null)
                 {
                     this.CanPlaceInPlaceMode = false;
                     this.Mode = BuildingMode.Destroy;
@@ -206,9 +202,25 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
         #region Event
         /// <summary>
+        /// 在PlaceMode或者EditMode更改之后调用
+        /// </summary>
+        public virtual void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
+        {
+
+        }
+
+        /// <summary>
         /// InteractMode下销毁时调用
         /// </summary>
         public virtual void OnBPartDestroy()
+        {
+
+        }
+
+        /// <summary>
+        /// 此建筑物开始移动时调用 -> 新建的时候不会调用
+        /// </summary>
+        public virtual void OnEnterEdit()
         {
 
         }

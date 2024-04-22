@@ -3,7 +3,6 @@ using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
 
 namespace ML.Engine.BuildingSystem.BuildingSocket
@@ -59,26 +58,14 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         [LabelText("启用BPart旋转偏移"), PropertyTooltip("放置BPart时是否允许有旋转偏移"), FoldoutGroup("Transform"), SerializeField]
         protected bool IsCanRotate = true;
 
-        [LabelText("BPart位置偏移量"), FoldoutGroup("Transform"), SerializeField, HideInInspector]
+        [LabelText("吸附Area时旋转"), FoldoutGroup("Transform"), SerializeField]
+        protected bool IsRotateOnArea = true;
+
+        [LabelText("BPart位置偏移量"), FoldoutGroup("Transform"), SerializeField, ReadOnly]
         protected Vector3 PositionOffset;
 
-        /// <summary>
-        /// 放置的BPart的位置
-        /// </summary>
-        public Vector3 BPartPosition
-        {
-            get => this.transform.position + this.PositionOffset;
-        }
-
-        [LabelText("BPart旋转偏移量"), FoldoutGroup("Transform"), SerializeField, HideInInspector]
+        [LabelText("BPart旋转偏移量"), FoldoutGroup("Transform"), SerializeField, ReadOnly]
         protected Quaternion RotationOffset = Quaternion.identity;
-        /// <summary>
-        /// 放置的BPart的旋转
-        /// </summary>
-        public Quaternion BPartRotation
-        {
-            get => this.transform.rotation * this.RotationOffset;
-        }
 
         /// <summary>
         /// 获取匹配点的坐标
@@ -88,10 +75,10 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         /// <returns></returns>
         public bool GetMatchTransformOnSocket(out Vector3 pos, out Quaternion rot)
         {
-            if (this.ParentBPart.AttachedSocket != null)
+            if (this.ParentBPart.AttachedSocket != null && CheckMatch(this.ParentBPart.AttachedSocket))
             {
-                pos = this.ParentBPart.AttachedSocket.BPartPosition - (this.transform.position - this.ParentBPart.transform.position);
-                rot = ParentBPart.BaseRotation * this.ParentBPart.AttachedSocket.BPartRotation * (this.ParentBPart.AttachedSocket.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
+                pos = this.ParentBPart.AttachedSocket.transform.position - (this.transform.position - this.ParentBPart.transform.position) + (this.ParentBPart.AttachedSocket.transform.rotation * this.RotationOffset * this.PositionOffset);
+                rot = ParentBPart.BaseRotation * this.ParentBPart.AttachedSocket.transform.rotation * this.RotationOffset * (this.ParentBPart.AttachedSocket.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
                 return true;
             }
 
@@ -111,7 +98,14 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
                     rot = new Quaternion(float.NaN, float.NaN, float.NaN, float.NaN);
                     return false;
                 }
-                rot *= (this.ParentBPart.AttachedArea.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
+                if (IsRotateOnArea)
+                {
+                    rot *= ParentBPart.BaseRotation * (this.ParentBPart.AttachedArea.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
+                }
+                else
+                {
+                    rot = ParentBPart.BaseRotation * (this.ParentBPart.AttachedArea.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
+                }
                 return true;
             }
 

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using ML.Engine.BuildingSystem.BuildingPart;
-using ML.Engine.Manager;
 using ML.Engine.UI;
 using Sirenix.OdinInspector;
 using ML.Engine.TextContent;
@@ -109,8 +108,6 @@ namespace ML.Engine.BuildingSystem
         [ShowInInspector]
         public Dictionary<BuildingPartClassification, IBuildingPart> LoadedBPart = new Dictionary<BuildingPartClassification, IBuildingPart>();
 
-
-
         private AsyncOperationHandle BPartHandle;
         private void RegisterBPartPrefab()
         {
@@ -143,12 +140,15 @@ namespace ML.Engine.BuildingSystem
             };
         }
 
-        ~MonoBuildingManager()
+        public void OnUnregister()
         {
-            if(Manager.GameManager.Instance != null)
+            if (Manager.GameManager.Instance != null)
                 Manager.GameManager.Instance.ABResourceManager.Release(BPartHandle);
+            if(this.BM != null)
+            {
+                this.BM.UnregisterAllBPartPrefab();
+            }
         }
-
         #endregion
 
 #if UNITY_EDITOR

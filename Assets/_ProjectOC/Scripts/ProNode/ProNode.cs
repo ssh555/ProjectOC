@@ -52,8 +52,6 @@ namespace ProjectOC.ProNodeNS
         public int LevelMax { get; private set; } = 2;
         [LabelText("升级提高的基础生产效率"), FoldoutGroup("配置"), ShowInInspector]
         public List<int> LevelUpgradeEff = new List<int>() { 50, 50, 50 };
-        [LabelText("是否需要供电"), FoldoutGroup("配置")]
-        public bool RequirePower = false;
         #endregion
 
         #region 读表数据
@@ -73,6 +71,8 @@ namespace ProjectOC.ProNodeNS
         public int StackThresholdNum { get => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetStackThreshold(ID) : 0; }
         [LabelText("需求阈值份数"), ShowInInspector, ReadOnly]
         public int RawThresholdNum { get => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetRawThreshold(ID) : 0; }
+        [LabelText("是否需要供电"), ShowInInspector, FoldoutGroup("配置")]
+        public bool RequirePower => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetCanCharge(ID) : false;
         #endregion
 
         #region Property
@@ -328,7 +328,10 @@ namespace ProjectOC.ProNodeNS
                     Worker.APChangeAction -= OnWorkerAPChangeAction;
                     Worker.ClearDestination();
                     Worker.ProNode = null;
-                    Worker.RecoverLastPosition();
+                    if (IsWorkerArrive)
+                    {
+                        Worker.RecoverLastPosition();
+                    }
                     Worker = null;
                 }
                 return true;
@@ -450,7 +453,8 @@ namespace ProjectOC.ProNodeNS
             missionNum = StackReserve - GetAssignNum(ProductItem, false);
             if (missionNum > 0)
             {
-                ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionTransportType.ProNode_Store, ProductItem, missionNum, this);
+                var missionType = ItemManager.Instance.GetItemType(ProductItem) == ItemType.Feed ? MissionTransportType.ProNode_Restaurant : MissionTransportType.ProNode_Store;
+                ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(missionType, ProductItem, missionNum, this);
             }
         }
 
@@ -658,26 +662,11 @@ namespace ProjectOC.ProNodeNS
         #endregion
 
         #region IMission接口
-        public Transform GetTransform()
-        {
-            return WorldProNode?.transform;
-        }
-        public TransportPriority GetTransportPriority()
-        {
-            return TransportPriority;
-        }
-        public string GetUID()
-        {
-            return UID;
-        }
-        public void AddMissionTranport(MissionTransport mission)
-        {
-            MissionTransports.Add(mission);
-        }
-        public void RemoveMissionTranport(MissionTransport mission)
-        {
-            MissionTransports.Remove(mission);
-        }
+        public Transform GetTransform() { return WorldProNode?.transform; }
+        public TransportPriority GetTransportPriority() { return TransportPriority; }
+        public string GetUID() { return UID; }
+        public void AddMissionTranport(MissionTransport mission) { MissionTransports.Add(mission); }
+        public void RemoveMissionTranport(MissionTransport mission) { MissionTransports.Remove(mission); }
         public bool PutIn(string itemID, int amount)
         {
             return Add(itemID, amount, true) >= amount;

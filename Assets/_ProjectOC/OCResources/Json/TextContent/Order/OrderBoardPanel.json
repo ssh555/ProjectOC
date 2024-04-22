@@ -1,1 +1,90 @@
-{}
+{
+    "AcceptedOrderCancel": {
+        "keyname": "KT_AcceptedOrderCancel",
+        "keymap": {
+          "ActionMapName": "Common",
+          "ActionName": "SubInteract"
+        },
+        "description": {
+          "Chinese": "取消订单",
+          "English": "Cancel Order"
+        }
+      },
+    "AcceptedOrderConfirm": {
+        "keyname": "KT_AcceptedOrderConfirm",
+        "keymap": {
+          "ActionMapName": "Common",
+          "ActionName": "MainInteract"
+        },
+        "description": {
+          "Chinese": "提交订单",
+          "English": "Commit Order"
+        }
+      },
+      "OrderDelegationCancel": {
+        "keyname": "KT_OrderDelegationCancel",
+        "keymap": {
+          "ActionMapName": "Common",
+          "ActionName": "SubInteract"
+        },
+        "description": {
+          "Chinese": "拒绝订单",
+          "English": "Refuse Order"
+        }
+      },
+    "OrderDelegationConfirm": {
+        "keyname": "KT_OrderDelegationConfirm",
+        "keymap": {
+          "ActionMapName": "Common",
+          "ActionName": "MainInteract"
+        },
+        "description": {
+          "Chinese": "承接订单",
+          "English": "ReceiveOrder Order"
+        }
+      },
+      "CommitOrder": {
+        "keyname": "KT_CommitOrder",
+        "keymap": {
+          "ActionMapName": "Common",
+          "ActionName": "MainInteractHold"
+        },
+        "description": {
+          "Chinese": "快捷提交订单",
+          "English": "Quick order submission"
+        }
+      },
+      "ViewMoreInformation": {
+        "keyname": "KT_ViewMoreInformation",
+        "keymap": {
+          "ActionMapName": "Common",
+          "ActionName": "MainInteract"
+        },
+        "description": {
+          "Chinese": "查看更多信息",
+          "English": "ReceiveOrder Order"
+        }
+      },
+      "CancelMoreInformation": {
+        "keyname": "KT_CancelMoreInformation",
+        "keymap": {
+          "ActionMapName": "Common",
+          "ActionName": "MainInteract"
+        },
+        "description": {
+          "Chinese": "查看更多信息",
+          "English": "ReceiveOrder Order"
+        }
+      },
+      "Back": {
+        "keyname": "KT_Back",
+        "keymap": {
+          "ActionMapName": "Common",
+          "ActionName": "Back"
+        },
+        "description": {
+          "Chinese": "退出",
+          "English": "Back"
+        }
+      }
+}

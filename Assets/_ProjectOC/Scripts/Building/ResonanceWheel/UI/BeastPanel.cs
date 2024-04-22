@@ -409,7 +409,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             public TextContent Collect;
 
             public KeyTip Expel;
-            //BotKeyTips
             public KeyTip Back;
         }
         protected override void InitTextContentPathData()
@@ -422,7 +421,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         protected override void InitObjectPool()
         {
-            this.objectPool.RegisterPool(ObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
             "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2", (handle) =>
             {
                 SpriteAtlas resonanceWheelAtlas = handle.Result as SpriteAtlas;
@@ -430,8 +429,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite("icon_gendermale");
             }
             );
-            this.objectPool.RegisterPool(ObjectPool.HandleType.Prefab, "BeastBioPool", LocalGameManager.Instance.WorkerManager.GetWorkers().Count, "OC/UI/ResonanceWheel/Prefabs/BeastBio.prefab");
-            this.objectPool.RegisterPool(ObjectPool.HandleType.Prefab, "DescriptionPool", 5, "OC/UI/ResonanceWheel/Prefabs/Description.prefab");
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "BeastBioPool", LocalGameManager.Instance.WorkerManager.GetWorkers().Count, "OC/UI/ResonanceWheel/Prefabs/BeastBio.prefab");
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "DescriptionPool", 5, "OC/UI/ResonanceWheel/Prefabs/Description.prefab");
             base.InitObjectPool();
         }
 

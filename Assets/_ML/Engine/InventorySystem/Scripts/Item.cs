@@ -4,8 +4,7 @@ using System.Collections.Generic;
 #if ENABLE_NETWORK && ML_NGO_SUPPROT
 using Unity.Netcode;
 #endif
-using UnityEngine;
-using UnityEngine.Events;
+
 
 namespace ML.Engine.InventorySystem
 {
@@ -85,62 +84,7 @@ namespace ML.Engine.InventorySystem
             this.Amount -= amount;
         }
 
-        /// <summary>
-        /// 是否能使用 -> 仅供UI使用
-        /// </summary>
-        /// <returns></returns>
-        public bool CanUse()
-        {
-            switch (ItemManager.Instance.GetItemType(ID))
-            {
-                case ItemType.Equip:
-                case ItemType.Food:
-                    return true;
-                case ItemType.Material:
-                case ItemType.Mission:
-                    return false;
-                default:
-                    return true;
-            }
-        }
 
-        /// <summary>
-        /// 是否能丢弃 -> 仅供UI使用
-        /// </summary>
-        /// <returns></returns>
-        public bool CanDrop()
-        {
-            switch (ItemManager.Instance.GetItemType(ID))
-            {
-                case ItemType.Equip:
-                case ItemType.Food:
-                case ItemType.Material:
-                    return true;
-                case ItemType.Mission:
-                    return false;
-                default:
-                    return true;
-            }
-        }
-
-        /// <summary>
-        /// 是否能销毁 -> 仅供UI使用
-        /// </summary>
-        /// <returns></returns>
-        public bool CanDestroy()
-        {
-            switch (ItemManager.Instance.GetItemType(ID))
-            {
-                case ItemType.Equip:
-                case ItemType.Food:
-                case ItemType.Material:
-                    return true;
-                case ItemType.Mission:
-                    return false;
-                default:
-                    return true;
-            }
-        }
 
         /// <summary>
         /// 合并 Item

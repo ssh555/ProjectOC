@@ -1,4 +1,5 @@
 using ML.Engine.InventorySystem.CompositeSystem;
+using ProjectOC.Order;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -17,7 +18,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         private BuildingPartClassification classification;
         public BuildingPartClassification Classification { get => classification; private set => classification = value; }
 
-        [SerializeField, LabelText("实例ID")]
+        [SerializeField, LabelText("实例ID"), ReadOnly]
         private string instanceID;
         public string InstanceID { get => instanceID; set => instanceID = value; }
 
@@ -30,11 +31,33 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         {
             get
             {
-                //Debug.Log($"{this.canPlaceInPlaceMode} {this.AttachedArea != null} {this.AttachedSocket != null} {this.CheckCanInPlaceMode.Invoke(this)}");
-                return this.canPlaceInPlaceMode && (this.AttachedArea != null || this.AttachedSocket != null) && (this.CheckCanInPlaceMode == null ? true : this.CheckCanInPlaceMode.Invoke(this));
+                //Debug.Log($"{this.canPlaceInPlaceMode} {this.AttachedArea != null} {this.AttachedSocket != null} {this.CheckCanInPlaceMode.Invoke(this)}");\
+                bool ans = (mode == BuildingMode.Edit || mode == BuildingMode.Place) && (this.GetComponent<Collider>() == null ? true : this.canPlaceInPlaceMode) && (this.AttachedArea != null || this.AttachedSocket != null) && (this.CheckCanInPlaceMode == null ? true : this.CheckCanInPlaceMode.Invoke(this));
+                if (this.Mode == BuildingMode.Place || this.Mode == BuildingMode.Destroy || this.Mode == BuildingMode.Edit)
+                {
+                    if (this.Mode != BuildingMode.Destroy)
+                    {
+                        this.tmpTriggerMode = this.Mode;
+                    }
+                    this.Mode = ans ? this.tmpTriggerMode : BuildingMode.Destroy;
+                }
+                return ans;
             }
             set => canPlaceInPlaceMode = value; 
         }
+        protected void CheckPladeMode()
+        {
+            bool ans = (this.GetComponent<Collider>() == null ? true : this.canPlaceInPlaceMode) && (this.AttachedArea != null || this.AttachedSocket != null) && (this.CheckCanInPlaceMode == null ? true : this.CheckCanInPlaceMode.Invoke(this));
+            if (this.Mode == BuildingMode.Place || this.Mode == BuildingMode.Destroy || this.Mode == BuildingMode.Edit)
+            {
+                if (this.Mode != BuildingMode.Destroy)
+                {
+                    this.tmpTriggerMode = this.Mode;
+                }
+                this.Mode = ans ? this.tmpTriggerMode : BuildingMode.Destroy;
+            }
+        }
+
         public event IBuildingPart.CheckMode CheckCanInPlaceMode;
         public event IBuildingPart.CheckMode CheckCanEdit;
         public event IBuildingPart.CheckMode CheckCanDestory;
@@ -55,7 +78,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             return CheckCanDestory == null || (CheckCanDestory != null && CheckCanDestory.Invoke(this));
         }
 
-        [SerializeField, LabelText("模式")]
+        [SerializeField, LabelText("模式"), ReadOnly]
         private BuildingMode mode;
         public BuildingMode Mode
         {
@@ -64,14 +87,14 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             {
                 mode = value;
                 this.SetColliderTrigger((mode == BuildingMode.Place || mode == BuildingMode.Destroy || mode == BuildingMode.Edit));
-                if (mode == BuildingMode.Edit || mode == BuildingMode.Place)
-                {
-                    this.canPlaceInPlaceMode = true;
-                }
-                else
-                {
-                    this.canPlaceInPlaceMode = false;
-                }
+                //if (mode == BuildingMode.Edit || mode == BuildingMode.Place) 
+                //{
+                //    this.CanPlaceInPlaceMode = true;
+                //}
+                //else
+                //{
+                //    this.CanPlaceInPlaceMode = false;
+                //}
                 
                 Material mat = BuildingManager.Instance.GetBuldingMat(mode);
                 if(mat != null)
@@ -99,6 +122,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         private Quaternion rotOffset = Quaternion.identity;
         public Quaternion RotOffset { get => rotOffset; set => rotOffset = value; }
         private BuildingArea.BuildingArea attachedArea;
+        [ShowInInspector, ReadOnly]
         public BuildingArea.BuildingArea AttachedArea
         {
             get => this.attachedArea;
@@ -119,9 +143,11 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                         this.attachedArea = null;
                     }
                 }
+                CheckPladeMode();
             }
         }
         private BuildingSocket.BuildingSocket attachedSocket;
+        [ShowInInspector, ReadOnly]
         public BuildingSocket.BuildingSocket AttachedSocket
         {
             get => this.attachedSocket;
@@ -142,13 +168,22 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                         this.attachedSocket = null;
                     }
                 }
+                CheckPladeMode();
             }
         }
         
-        [SerializeField]
+        [SerializeField, ReadOnly]
         private int activeSocketIndex;
+        [ShowInInspector, ReadOnly]
         public BuildingSocket.BuildingSocket ActiveSocket { 
-            get => this.OwnedSocketList[activeSocketIndex];
+            get
+            {
+                if(this.OwnedSocketList == null || activeSocketIndex < 0 || this.OwnedSocketList.Count <= activeSocketIndex)
+                {
+                    return null;
+                }
+                return this.OwnedSocketList[activeSocketIndex];
+            }
             set 
             {
                 activeSocketIndex = this.OwnedSocketList.IndexOf(value);
@@ -237,6 +272,9 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 this.activeSocketIndex = (this.activeSocketIndex + 1) % this.OwnedSocketList.Count;
             }
 
+            CheckPladeMode();
+
+
             //this.ActiveSocket = this.OwnedSocketList[0];
             this.enabled = true;
         }
@@ -292,6 +330,11 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             }
         }
 
+        public void OnTriggerEnter(Collider other)
+        {
+            (this as IBuildingPart).CheckTriggerStay(other);
+        }
+
         public void OnTriggerStay(Collider other)
         {
             (this as IBuildingPart).CheckTriggerStay(other);
@@ -325,6 +368,11 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 #endif
 
         public virtual void OnBPartDestroy()
+        {
+
+        }
+
+        public virtual void OnEnterEdit()
         {
 
         }
