@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8072528907506429373}
   - component: {fileID: 1200197081626543752}
-  - component: {fileID: -5277678864829611448}
+  - component: {fileID: 2874430556247896072}
   m_Layer: 7
   m_Name: Furniture_Bed_SingleBed_1
   m_TagString: Untagged
@@ -56,7 +56,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.946697, y: 1.4417145, z: 2.6660535}
   m_Center: {x: 0, y: 0.18, z: 0}
---- !u!114 &-5277678864829611448
+--- !u!114 &2874430556247896072
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1832851619854833819}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 974314051b0ba36448a331d7e4c173cf, type: 3}
+  m_Script: {fileID: 11500000, guid: 3b980966fe0a3a6498a82079d5797d26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
