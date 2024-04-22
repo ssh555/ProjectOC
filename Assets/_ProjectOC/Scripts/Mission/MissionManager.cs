@@ -152,7 +152,7 @@ namespace ProjectOC.MissionNS
                     int maxBurNum = (int)(worker.BURMax / ItemManager.Instance.GetWeight(mission.ItemID));
                     missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
                 }
-                Restaurant restaurant = ManagerNS.LocalGameManager.Instance.RestaurantManager.GetPutInRestaurant(mission.ItemID, missionNum, 1);
+                Restaurant restaurant = ManagerNS.LocalGameManager.Instance.RestaurantManager.GetPutInRestaurant(mission.ItemID, missionNum);
                 if (worker != null && restaurant != null && missionNum > 0)
                 {
                     Transport transport = new Transport(mission, mission.ItemID, missionNum, mission.Initiator, restaurant, worker);

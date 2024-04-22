@@ -60,12 +60,7 @@ namespace ProjectOC.RestaurantNS
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="priorityType">是否按照优先级获取 0表示不需要，1表示优先级从高到低，-1表示优先级从低到高</param>
-        /// <returns></returns>
-        public List<Restaurant> GetRestaurants(int priorityType = 0)
+        public List<Restaurant> GetRestaurants()
         {
             List<Restaurant> restaurants = new List<Restaurant>();
             foreach (WorldRestaurant world in this.WorldRestaurants.Values)
@@ -75,21 +70,12 @@ namespace ProjectOC.RestaurantNS
                     restaurants.Add(world.Restaurant);
                 }
             }
-            if (priorityType == 1)
-            {
-                restaurants.Sort(new Restaurant.Sort());
-            }
-            else if (priorityType == -1)
-            {
-                restaurants.Sort(new Restaurant.Sort());
-                restaurants.Reverse();
-            }
             return restaurants;
         }
 
-        public Restaurant GetPutInRestaurant(string itemID, int amount, int priorityType = 0)
+        public Restaurant GetPutInRestaurant(string itemID, int amount)
         {
-            List<Restaurant> restaurants = GetRestaurants(priorityType);
+            List<Restaurant> restaurants = GetRestaurants();
             Restaurant result = null;
             foreach (var restaurant in restaurants)
             {

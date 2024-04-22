@@ -1,0 +1,85 @@
+{
+    "textEmpty" : {
+        "Chinese" : "空置",
+        "English" : "Empty"
+    },
+
+    "ChangeRecipe" : {
+        "keyname" : "KT_ChangeRecipe",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "更改食物",
+            "English" : "Change Recipe"
+        }
+    },
+    "Remove1" : {
+        "keyname" : "KT_Remove1",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "Remove"
+          },
+        "description" : {
+            "Chinese" : "取出1",
+            "English" : "Remove 1"
+        }
+    },
+    "Remove10" : {
+        "keyname" : "KT_Remove10",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "Remove"
+          },
+        "description" : {
+            "Chinese" : "取出10",
+            "English" : "Remove 10"
+        }
+    },
+    "FastAdd" : {
+        "keyname" : "KT_FastAdd",
+        "keymap": {
+            "ActionMapName": "UIProNode",
+            "ActionName": "FastAdd"
+          },
+        "description" : {
+            "Chinese" : "快捷投入",
+            "English" : "Fast Add"
+        }
+    },
+    "Return" : {
+        "keyname" : "KT_Return",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
+        "description" : {
+            "Chinese" : "返回",
+            "English" : "Return"
+        }
+    },
+    "Confirm" : {
+        "keyname" : "KT_Confirm",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "确认",
+            "English" : "Confirm"
+        }
+    },
+    "Back" : {
+        "keyname" : "KT_Back",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
+        "description" : {
+            "Chinese" : "返回",
+            "English" : "Back"
+        }
+    }
+}
+

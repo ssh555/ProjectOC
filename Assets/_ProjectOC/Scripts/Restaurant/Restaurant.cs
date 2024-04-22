@@ -375,35 +375,6 @@ namespace ProjectOC.RestaurantNS
         }
         #endregion
 
-        public class Sort : IComparer<Restaurant>
-        {
-            public int Compare(Restaurant x, Restaurant y)
-            {
-                if (x == null)
-                {
-                    if (y == null)
-                    {
-                        return 0;
-                    }
-                    else
-                    {
-                        return 1;
-                    }
-                }
-                if (y == null)
-                {
-                    return -1;
-                }
-                int priorityX = (int)x.TransportPriority;
-                int priorityY = (int)y.TransportPriority;
-                if (priorityX != priorityY)
-                {
-                    return priorityX.CompareTo(priorityY);
-                }
-                return x.UID.CompareTo(y.UID);
-            }
-        }
-
         #region UI½Ó¿Ú
         #endregion
 
