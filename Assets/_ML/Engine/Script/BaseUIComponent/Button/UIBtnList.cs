@@ -362,6 +362,7 @@ namespace ML.Engine.UI
             {
                 var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(prefabpath);
                 handles.Add(handle);
+
                 handle.Completed += (handle) =>
                  {
                      // สตภýปฏ

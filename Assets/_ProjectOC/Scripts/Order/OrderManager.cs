@@ -80,6 +80,7 @@ namespace ProjectOC.Order
             public void SetCanBeCommit(bool canBeCommit)
             {
                 this.canBeCommit = canBeCommit;
+                Debug.Log(this.canBeCommit + " " + canBeCommit);
             }
 
             // 实现 IComparable 接口中的 CompareTo 方法
@@ -291,7 +292,9 @@ namespace ProjectOC.Order
                     bool isFinish = order.ChangeRequireItemDic(AddedItem.id, AddedItem.num);
                     if(isFinish)
                     {
+                        
                         acceptedList[i].SetCanBeCommit(true);
+                        Debug.Log(acceptedList[i].order.OrderID + " isFinish "+ acceptedList[i].canBeCommit);
                     }
                 }
             }
