@@ -21,26 +21,33 @@ namespace  ProjectOC.PinchFace
         public string SaveName { get; set; }
         public bool IsDirty { get; set; }
         public ML.Engine.Manager.GameManager.Version Version { get; set; }
-        private int sortCount = 0;
-        
+
         public object Clone()
         {
             return null;
         }
-        //外部引用
+
+
+        #region 引用和变量
         private PinchFaceManager PinchFaceManager;
         private CharacterModelPinch ModelPinch => PinchFaceManager.ModelPinch;
         private UIPinchFacePanel PinchFacePanel;
         private PinchDataConfig Config;
         private SpriteAtlas pinchPartSA;
         
-        
         public List<IPinchSettingComp> pinchSettingComps = new List<IPinchSettingComp>();
+        public List<UIBtnListInitor> btnListInitors = new List<UIBtnListInitor>();
         private Transform containerTransf;
         private List<string> uiPrefabPaths = new List<string>();
         private int isInit = 0;
         private PinchPartType2 PinchPartType2;
         private PinchPartType3 PinchPartType3;
+        
+        private int sortCount = 0;
+        private int BtnListCount = 0;
+        #endregion
+        //外部引用
+
         private void Init()
         {
             uiPrefabPaths.Add("OC/UI/PinchFace/Setting/Pinch_SettingHead.prefab");
@@ -64,7 +71,7 @@ namespace  ProjectOC.PinchFace
         }
         
         //控制_pinchSettingComps Buttons的生成
-        public PinchPart(PinchPartType3 _type3,PinchPartType2 _type2, IPinchSettingComp[] _settingComps,Transform _containerTransf)
+        public PinchPart(UIPinchFacePanel _PinchFacePanel,PinchPartType3 _type3,PinchPartType2 _type2, IPinchSettingComp[] _settingComps,Transform _containerTransf)
         {
             Init();
             
@@ -72,7 +79,7 @@ namespace  ProjectOC.PinchFace
             PinchPartType2 = _type2;
             pinchSettingComps = _settingComps.ToList();
             containerTransf = _containerTransf;
-            
+            PinchFacePanel = _PinchFacePanel;
             
             foreach (var _comp in _settingComps)
             {
@@ -329,12 +336,13 @@ namespace  ProjectOC.PinchFace
             _uiTransf.SetParent(containerTransf);
             _uiTransf.localScale = Vector3.one;
             _uiTransf.name = _counter.ToString();
+            
             //排序
             isInit--;
             if (isInit == 0)
             {
                 Debug.Log("全部加载完成*1");
-                PinchFaceManager.pinchFaceHelper.SortUIAfterGenerate(_uiTransf,containerTransf);
+                PinchFaceManager.pinchFaceHelper.SortUIAfterGenerate(_uiTransf,containerTransf,PinchFacePanel);
             }
             
         }

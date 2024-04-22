@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using ML.Engine.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,12 +30,23 @@ namespace ProjectOC.PinchFace
             return toMin + (value - fromMin) / (fromMax - fromMin) * (toMax - toMin);
         }
 
-        public void SortUIAfterGenerate(Transform _transf,Transform _parent)
+        public void SortUIAfterGenerate(Transform _transf,Transform _parent,UIPinchFacePanel _pinchFacePanel)
         {
             Transform[] childTransforms = _parent.GetComponentsInChildren<Transform>();
             System.Array.Sort(childTransforms,(x,y)=>string.Compare(x.name,y.name));
             int newIndex = System.Array.IndexOf(childTransforms, _transf.transform);
-            _transf.transform.SetSiblingIndex(newIndex);
+            //_transf.transform.SetSiblingIndex(newIndex);
+
+            List<UIBtnListInitor> btnListInitors = new List<UIBtnListInitor>();
+            for (int i = 0; i < childTransforms.Length; i++)
+            {
+                childTransforms[i].transform.SetSiblingIndex(i);
+                UIBtnListInitor[] btnLists = childTransforms[i].transform.GetComponentsInChildren<UIBtnListInitor>();
+                btnListInitors.AddRange(btnLists);
+            }
+ 
+
+            _pinchFacePanel.ReGenerateBtnListContainer(btnListInitors);
             
             Transform _pinchFacePanelTransf = _parent.GetComponentInParent<UIPinchFacePanel>().transform;
             RefreshPanelLayout(_pinchFacePanelTransf);

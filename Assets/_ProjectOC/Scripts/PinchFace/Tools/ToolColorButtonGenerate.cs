@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class ToolColorButtonGenerate : MonoBehaviour
 {
     //To-Delete
-    public List<Vector2Int> SV;
+    public List<Vector2> SV;
     [Button("Éú³ÉÑÕÉ«")]
     public void GenerateColorButton()
     {
@@ -22,7 +22,7 @@ public class ToolColorButtonGenerate : MonoBehaviour
             for (int j = 0; j < 10; j++)
             {
                 int _btnIndex = i * 10 + j;
-                Color _color = Color.HSVToRGB(0.1f*j,SV[i].x/255f,SV[i].y/255f);
+                Color _color = Color.HSVToRGB(0.1f*j,SV[i].x,SV[i].y);
                 buttons[_btnIndex].GetComponent<Image>().color = _color;
             }
         }

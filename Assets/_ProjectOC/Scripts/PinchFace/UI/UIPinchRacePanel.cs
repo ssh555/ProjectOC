@@ -59,6 +59,7 @@ namespace ProjectOC.PinchFace
  
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Enable();
             UIBtnListContainer.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
+            
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
         }
         

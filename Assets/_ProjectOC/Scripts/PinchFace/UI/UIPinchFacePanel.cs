@@ -44,13 +44,30 @@ namespace ProjectOC.PinchFace
         //btnList0 随机
         //btnList1 2
         //btnList3 完成创建 
+        
         //btnList4--？  样式、颜色
         protected override void InitBtnInfo()
         {
             this.uIBtnListContainer =
                 new UIBtnListContainer(this.transform.GetComponentInChildren<UIBtnListContainerInitor>());
         }
-
+        
+        //返回右侧BtnList，重新生成
+        public void ReGenerateBtnListContainer(List<UIBtnListInitor> _btnLists)
+        {
+            rightBtnLists = _btnLists;
+            UIBtnListContainerInitor newBtnListContainers = this.transform.GetComponentInChildren<UIBtnListContainerInitor>();
+            //对 btnList 排序
+            //最后一个不需要加连接线
+            for (int i = 0; i < _btnLists.Count-1; i++)
+            {
+                // _listContainer.LinkTwoEdge();
+                UIBtnListContainerInitor.LinkData _linkData = new UIBtnListContainerInitor
+                    .LinkData(i+4,i+5,UIBtnListContainerInitor.EdgeType.下侧顺时针,UIBtnListContainerInitor.EdgeType.上侧逆时针,UIBtnListContainerInitor.LinkType.上下相连);
+                newBtnListContainers.btnListContainerInitData.AddLinkData(_linkData);
+            }
+            this.uIBtnListContainer = new UIBtnListContainer(newBtnListContainers);
+        }
         #endregion
 
         
@@ -89,7 +106,7 @@ namespace ProjectOC.PinchFace
         private List<PinchPart> pinchParts;
         private Dictionary<PinchPartType3, SelectedButton> type3ButtonDic = new Dictionary<PinchPartType3, SelectedButton>();
         private Dictionary<PinchPartType3, PinchPartType2> type3Type2Dic = new Dictionary<PinchPartType3, PinchPartType2>();
-        
+        public List<UIBtnListInitor> rightBtnLists = new List<UIBtnListInitor>();
         public void InitRaceData(RacePinchData _racePinchData)
         {
             raceData = _racePinchData;
@@ -155,7 +172,7 @@ namespace ProjectOC.PinchFace
                 .Completed += (handle) =>
             {
                 var _comps = handle.Result.GetComponents<IPinchSettingComp>();
-                pinchParts.Add(new PinchPart(_type3,_type2,_comps,containerTransf));
+                pinchParts.Add(new PinchPart(this,_type3,_type2,_comps,containerTransf));
             };
             //加载Type3，是否有com
         }
