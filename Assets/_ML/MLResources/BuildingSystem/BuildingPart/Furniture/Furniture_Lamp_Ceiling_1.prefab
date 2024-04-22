@@ -69,6 +69,7 @@ MonoBehaviour:
   ID: 5
   IsActiveSocket: 1
   IsCanRotate: 1
+  IsRotateOnArea: 0
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &3207367500114225191
@@ -126,7 +127,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1.0107933, y: 0.4110658, z: 1.0107933}
-  m_Center: {x: 0, y: -0.20553292, z: 0}
+  m_Center: {x: 0, y: -0.22, z: 0}
 --- !u!114 &7567986160033970262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,7 +149,7 @@ MonoBehaviour:
   canPlaceInPlaceMode: 1
   mode: 0
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
-  rotOffset: {x: 0, y: 0, z: 0, w: 0}
+  rotOffset: {x: 0, y: 0, z: 0, w: 1}
   activeSocketIndex: 0
 --- !u!1 &4415551796080365777
 GameObject:

@@ -377,17 +377,21 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
                 // 位置 -> 自身
                 pos = this.transform.position - this.SelectedPartInstance.ActiveSocket.transform.position + this.SelectedPartInstance.transform.position;
-
                 // ScreenCenter->ScreenNormal 射线检测
                 var hits = Physics.RaycastAll(this.GetCameraRay(), this.checkRadius, this.checkLayer);
                 if (hits == null || hits.Length == 0)
                 {
                     hits = Physics.RaycastAll(this.GetCameraRayEndPointDownRay(), this.checkRadius, this.checkLayer);
                 }
-
                 // 命中 || 未命中 => 在终点处向下检测
                 if (hits != null && hits.Length > 0)
                 {
+                    //string str = $"";
+                    //foreach (var h in hits)
+                    //{
+                    //    str += $" {h.collider.gameObject.name}";
+                    //}
+                    //Debug.Log(str);
                     bool bisHit = false;
                     bool bSocket = false;
                     RaycastHit hitInfo = hits[0];
@@ -398,9 +402,9 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                         {
                             if(this.SelectedPartInstance.ActiveSocket.CheckMatch(socket))
                             {
-                                if(hitInfo.collider.GetComponentInParent<IBuildingPart>() != null)
+                                if(hitInfo.collider.GetComponent<BuildingSocket.BuildingSocket>() != null)
                                 {
-                                    if (h.distance < hitInfo.distance || (h.distance == hitInfo.distance && Vector3.Distance(h.collider.GetComponentInParent<IBuildingPart>().gameObject.transform.position, this.transform.position) <= Vector3.Distance(hitInfo.collider.GetComponentInParent<IBuildingPart>().gameObject.transform.position, this.transform.position)))
+                                    if (h.distance < hitInfo.distance || (h.distance == hitInfo.distance && Vector3.Distance(h.collider.transform.position, this.transform.position) <= Vector3.Distance(hitInfo.collider.transform.position, this.transform.position)))
                                     {
                                         bisHit = true;
                                         bSocket = true;
@@ -418,11 +422,13 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                         else if(bSocket == false)
                         {
                             var area = h.collider.GetComponentInParent<BuildingArea.BuildingArea>();
-                            if (area != null && area.CheckAreaTypeMatch(this.SelectedPartInstance))
+                            
+                            if (area != null && area.CheckAreaTypeMatch(this.SelectedPartInstance) && (Vector3.Dot(h.point - Camera.transform.position, area.transform.up) < 0)) 
                             {
-                                if (hitInfo.collider.GetComponentInParent<IBuildingPart>() != null)
+                                if (hitInfo.collider.GetComponentInParent<BuildingArea.BuildingArea>() != null)
                                 {
-                                    if (h.distance < hitInfo.distance || (h.distance == hitInfo.distance && Vector3.Distance(h.collider.GetComponentInParent<IBuildingPart>().gameObject.transform.position, this.transform.position) <= Vector3.Distance(hitInfo.collider.GetComponentInParent<IBuildingPart>().gameObject.transform.position, this.transform.position)))
+                                    //Debug.Log(Time.frameCount + " " + area.name);
+                                    if (h.distance < hitInfo.distance || (h.distance == hitInfo.distance && Vector3.Distance(h.collider.transform.position, this.transform.position) <= Vector3.Distance(hitInfo.collider.transform.position, this.transform.position)))
                                     {
                                         hitInfo = h;
                                         bisHit = true;
@@ -475,7 +481,8 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 {
                     if (this.SelectedPartInstance.ActiveSocket.GetMatchTransformOnArea(pos, out tmpP, out tmpR))
                     {
-                        pos = tmpP - this.SelectedPartInstance.ActiveSocket.transform.localPosition;
+                        pos = tmpP - (this.SelectedPartInstance.ActiveSocket.transform.position - this.SelectedPartInstance.transform.position);
+                        //pos = tmpP - Vector3.Scale(this.SelectedPartInstance.ActiveSocket.transform.localPosition, this.SelectedPartInstance.transform.localScale);
                         rot = tmpR;
                         return true;
                     }

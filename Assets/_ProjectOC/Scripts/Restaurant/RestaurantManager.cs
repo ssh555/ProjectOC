@@ -32,29 +32,99 @@ namespace ProjectOC.RestaurantNS
         }
 
         #region 当前数据
+        private HashSet<Worker> WorkerSets = new HashSet<Worker>();
         [LabelText("等待去餐厅的刁民队列"), ReadOnly]
         public List<Worker> Workers = new List<Worker>();
         [LabelText("实例化的餐厅"), ReadOnly]
-        public List<WorldRestaurant> WorldRestaurants = new List<WorldRestaurant>();
+        public Dictionary<string, WorldRestaurant> WorldRestaurants = new Dictionary<string, WorldRestaurant>();
+
         [LabelText("分配计时器"), ReadOnly]
         public CounterDownTimer Timer;
         #endregion
 
+        #region 方法
         public void AddWorker(Worker worker)
         {
-            if (worker != null && !Workers.Contains(worker))
+            if (worker != null && !WorkerSets.Contains(worker))
             {
                 Workers.Add(worker);
+                WorkerSets.Add(worker);
             }
         }
 
         public void RemoveWorker(Worker worker)
         {
-            if (worker != null)
+            if (worker != null && WorkerSets.Contains(worker))
             {
                 Workers.Remove(worker);
+                WorkerSets.Remove(worker);
             }
         }
+
+        public List<Restaurant> GetRestaurants()
+        {
+            List<Restaurant> restaurants = new List<Restaurant>();
+            foreach (WorldRestaurant world in this.WorldRestaurants.Values)
+            {
+                if (world != null)
+                {
+                    restaurants.Add(world.Restaurant);
+                }
+            }
+            return restaurants;
+        }
+
+        public Restaurant GetPutInRestaurant(string itemID, int amount)
+        {
+            List<Restaurant> restaurants = GetRestaurants();
+            Restaurant result = null;
+            foreach (var restaurant in restaurants)
+            {
+                if (restaurant.HaveSetFood(itemID, false))
+                {
+                    int empty = restaurant.GetAmount(itemID, false, false);
+                    if (result == null && empty > 0)
+                    {
+                        result = restaurant;
+                    }
+                    if (empty >= amount)
+                    {
+                        result = restaurant;
+                        break;
+                    }
+                }
+            }
+            return result;
+        }
+        #endregion
+
+        #region Spawn
+        public void WorldRestaurantSetData(WorldRestaurant worldRestaurant)
+        {
+            if (worldRestaurant != null)
+            {
+                if (!WorldRestaurants.ContainsKey(worldRestaurant.InstanceID))
+                {
+                    WorldRestaurants.Add(worldRestaurant.InstanceID, worldRestaurant);
+                }
+                else
+                {
+                    WorldRestaurants[worldRestaurant.InstanceID] = worldRestaurant;
+                }
+                Restaurant restaurant = new Restaurant();
+                restaurant.Init();
+                if (restaurant != null)
+                {
+                    if (worldRestaurant.Restaurant != null)
+                    {
+                        worldRestaurant.Restaurant.WorldRestaurant = null;
+                    }
+                    worldRestaurant.Restaurant = restaurant;
+                    restaurant.WorldRestaurant = worldRestaurant;
+                }
+            }
+        }
+        #endregion
 
         #region 配置数据
         [LabelText("分配一次的时间"), FoldoutGroup("配置")]
@@ -71,7 +141,7 @@ namespace ProjectOC.RestaurantNS
         private void EndActionForTimer()
         {
             Workers.RemoveAll(x => x == null);
-            List<WorldRestaurant> worldRestaurants = WorldRestaurants.Where(worldRestaurant => worldRestaurant.Restaurant.HasFood && worldRestaurant.Restaurant.HasSeat).ToList();
+            List<WorldRestaurant> worldRestaurants = WorldRestaurants.Values.Where(worldRestaurant => worldRestaurant.Restaurant.HasFood && worldRestaurant.Restaurant.HasSeat).ToList();
             
             if (Workers.Count > 0 && worldRestaurants.Count > 0)
             {
@@ -155,6 +225,7 @@ namespace ProjectOC.RestaurantNS
         public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
 
         private Dictionary<string, WorkerFoodTableData> WorkerFoodTableDict = new Dictionary<string, WorkerFoodTableData>();
+        private Dictionary<string, string> ItemToFoodDict = new Dictionary<string, string>();
 
         public ML.Engine.ABResources.ABJsonAssetProcessor<WorkerFoodTableData[]> ABJAProcessor;
 
@@ -165,6 +236,7 @@ namespace ProjectOC.RestaurantNS
                 foreach (var data in datas)
                 {
                     WorkerFoodTableDict.Add(data.ID, data);
+                    ItemToFoodDict.Add(data.ItemID, data.ID);
                 }
             }, "隐兽食物表数据");
             ABJAProcessor.StartLoadJsonAssetData();

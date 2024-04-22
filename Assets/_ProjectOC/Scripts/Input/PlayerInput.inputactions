@@ -2790,6 +2790,76 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "UIRestaurant",
+            "id": "6e33a395-6966-4442-9dd9-3547d7e58069",
+            "actions": [
+                {
+                    "name": "Remove",
+                    "type": "Button",
+                    "id": "bdb10921-48de-4858-b3b8-24ee96cd523e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "FastAdd",
+                    "type": "Button",
+                    "id": "ab2f44e6-e002-44a3-9a08-f50a7c561944",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "b912e4bb-754a-45e0-8dba-9ca97c17a8b4",
+                    "path": "<XInputController>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Remove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b812b3b3-b0c5-4ee5-b6c3-49c93eeb7099",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Remove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1d52d7e0-fd55-4f53-84c1-a58d8e4ddb75",
+                    "path": "<XInputController>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FastAdd",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "37d28b28-c179-49fb-8946-1a0aaf062305",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FastAdd",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

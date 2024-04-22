@@ -1,4 +1,5 @@
 using ML.Engine.InventorySystem.CompositeSystem;
+using ProjectOC.Order;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -30,11 +31,33 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         {
             get
             {
-                //Debug.Log($"{this.canPlaceInPlaceMode} {this.AttachedArea != null} {this.AttachedSocket != null} {this.CheckCanInPlaceMode.Invoke(this)}");
-                return this.canPlaceInPlaceMode && (this.AttachedArea != null || this.AttachedSocket != null) && (this.CheckCanInPlaceMode == null ? true : this.CheckCanInPlaceMode.Invoke(this));
+                //Debug.Log($"{this.canPlaceInPlaceMode} {this.AttachedArea != null} {this.AttachedSocket != null} {this.CheckCanInPlaceMode.Invoke(this)}");\
+                bool ans = (mode == BuildingMode.Edit || mode == BuildingMode.Place) && (this.GetComponent<Collider>() == null ? true : this.canPlaceInPlaceMode) && (this.AttachedArea != null || this.AttachedSocket != null) && (this.CheckCanInPlaceMode == null ? true : this.CheckCanInPlaceMode.Invoke(this));
+                if (this.Mode == BuildingMode.Place || this.Mode == BuildingMode.Destroy || this.Mode == BuildingMode.Edit)
+                {
+                    if (this.Mode != BuildingMode.Destroy)
+                    {
+                        this.tmpTriggerMode = this.Mode;
+                    }
+                    this.Mode = ans ? this.tmpTriggerMode : BuildingMode.Destroy;
+                }
+                return ans;
             }
             set => canPlaceInPlaceMode = value; 
         }
+        protected void CheckPladeMode()
+        {
+            bool ans = (this.GetComponent<Collider>() == null ? true : this.canPlaceInPlaceMode) && (this.AttachedArea != null || this.AttachedSocket != null) && (this.CheckCanInPlaceMode == null ? true : this.CheckCanInPlaceMode.Invoke(this));
+            if (this.Mode == BuildingMode.Place || this.Mode == BuildingMode.Destroy || this.Mode == BuildingMode.Edit)
+            {
+                if (this.Mode != BuildingMode.Destroy)
+                {
+                    this.tmpTriggerMode = this.Mode;
+                }
+                this.Mode = ans ? this.tmpTriggerMode : BuildingMode.Destroy;
+            }
+        }
+
         public event IBuildingPart.CheckMode CheckCanInPlaceMode;
         public event IBuildingPart.CheckMode CheckCanEdit;
         public event IBuildingPart.CheckMode CheckCanDestory;
@@ -64,14 +87,14 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             {
                 mode = value;
                 this.SetColliderTrigger((mode == BuildingMode.Place || mode == BuildingMode.Destroy || mode == BuildingMode.Edit));
-                if (mode == BuildingMode.Edit || mode == BuildingMode.Place)
-                {
-                    this.canPlaceInPlaceMode = true;
-                }
-                else
-                {
-                    this.canPlaceInPlaceMode = false;
-                }
+                //if (mode == BuildingMode.Edit || mode == BuildingMode.Place) 
+                //{
+                //    this.CanPlaceInPlaceMode = true;
+                //}
+                //else
+                //{
+                //    this.CanPlaceInPlaceMode = false;
+                //}
                 
                 Material mat = BuildingManager.Instance.GetBuldingMat(mode);
                 if(mat != null)
@@ -120,6 +143,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                         this.attachedArea = null;
                     }
                 }
+                CheckPladeMode();
             }
         }
         private BuildingSocket.BuildingSocket attachedSocket;
@@ -144,6 +168,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                         this.attachedSocket = null;
                     }
                 }
+                CheckPladeMode();
             }
         }
         
@@ -247,6 +272,9 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 this.activeSocketIndex = (this.activeSocketIndex + 1) % this.OwnedSocketList.Count;
             }
 
+            CheckPladeMode();
+
+
             //this.ActiveSocket = this.OwnedSocketList[0];
             this.enabled = true;
         }
@@ -340,6 +368,11 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 #endif
 
         public virtual void OnBPartDestroy()
+        {
+
+        }
+
+        public virtual void OnEnterEdit()
         {
 
         }

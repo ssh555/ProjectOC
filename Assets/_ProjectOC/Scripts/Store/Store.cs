@@ -21,7 +21,7 @@ namespace ProjectOC.StoreNS
         [LabelText("仓库名字"), ReadOnly]
         public string Name = "";
         [LabelText("仓库类型"), ReadOnly]
-        public StoreType StoreType;
+        public ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 StoreType;
         [LabelText("仓库存储数据"), ReadOnly]
         public List<StoreData> StoreDatas = new List<StoreData>();
         [LabelText("仓库对应的搬运"), ReadOnly]
@@ -54,7 +54,7 @@ namespace ProjectOC.StoreNS
 
         public event Action OnStoreDataChangeAction;
 
-        public Store(StoreType storeType)
+        public Store(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType)
         {
             for (int i = 0; i < this.StoreCapacity; i++)
             {

@@ -169,12 +169,12 @@ namespace ProjectOC.StoreNS
         /// <summary>
         /// 创建新的仓库
         /// </summary>
-        public Store SpawnStore(StoreType storeType)
+        public Store SpawnStore(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType)
         {
             Store store = new Store(storeType);
             return store;
         }
-        public void WorldStoreSetData(WorldStore worldStore, StoreType storeType, int level)
+        public void WorldStoreSetData(WorldStore worldStore, ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType, int level)
         {
             if (worldStore != null && level >= 0)
             {

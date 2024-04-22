@@ -328,7 +328,10 @@ namespace ProjectOC.ProNodeNS
                     Worker.APChangeAction -= OnWorkerAPChangeAction;
                     Worker.ClearDestination();
                     Worker.ProNode = null;
-                    Worker.RecoverLastPosition();
+                    if (IsWorkerArrive)
+                    {
+                        Worker.RecoverLastPosition();
+                    }
                     Worker = null;
                 }
                 return true;
@@ -450,7 +453,8 @@ namespace ProjectOC.ProNodeNS
             missionNum = StackReserve - GetAssignNum(ProductItem, false);
             if (missionNum > 0)
             {
-                ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionTransportType.ProNode_Store, ProductItem, missionNum, this);
+                var missionType = ItemManager.Instance.GetItemType(ProductItem) == ItemType.Feed ? MissionTransportType.ProNode_Restaurant : MissionTransportType.ProNode_Store;
+                ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(missionType, ProductItem, missionNum, this);
             }
         }
 
