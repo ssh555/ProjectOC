@@ -95,6 +95,8 @@ namespace ML.Engine.UI
                 this.btnlist2type = btnlist2type;
                 this.linktype = linktype;
             }
+
+            public static LinkData Null = new LinkData();
         }
 
         public enum ContainerType

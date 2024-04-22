@@ -205,6 +205,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 
     private bool isNeedRefreshAcceptedOrder = true;
     private bool isNeedRefreshOrderDelegation = true;
+    private int OrderDelegationCnt = 0;
 
     private Transform AcceptedOrderOrderInfo;
     private Transform OrderDelegationOrderInfo;
@@ -276,7 +277,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             this.ClanBtnList.DisableBtnList();
         }
         #endregion
-
+        Debug.Log("Refresh");
         #region OrderDelegation -> OrderDelegation 
         if (isNeedRefreshOrderDelegation && FunctionIndex == 1 && OrderDelegationIndex == 1)
         {
@@ -321,12 +322,12 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                         }
                     },
                     OnFinishAdd: () => {
-                        //按钮更新完毕刷新
-                        this.Refresh();
+                        /*//按钮更新完毕刷新
+                        this.Refresh();*/
                     });
                 }
-                //按钮更新完毕刷新
-                this.Refresh();
+/*                //按钮更新完毕刷新
+                this.Refresh();*/
             });
             #endregion
             Debug.Log(this.isInitNormalOrder);
@@ -348,13 +349,11 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                         },
                         OnFinishAdd: () =>
                         {
-                            this.Refresh();
-                            this.OrderDelegationUIBtnListContainer.FindEnterableUIBtnList();
-                            Debug.Log("完毕刷新");
+                            this.OrderDelegationUIBtnListContainer.UIBtnLists[1].InitSelectBtn();
                         });
                     }
-                    //按钮更新完毕刷新
-                    this.Refresh();
+/*                    //按钮更新完毕刷新
+                    this.Refresh();*/
                 });
                 //常规订单槽初始化完毕
                 

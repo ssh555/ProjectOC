@@ -45,7 +45,7 @@ namespace ProjectOC.Player
         protected ProjectOC.Input.PlayerInput.PlayerActions playerInputActions => Input.InputManager.PlayerInput.Player;
 
         public ML.Engine.InteractSystem.InteractComponent interactComponent;
-
+        public bool LoadOver = false;
         #endregion
 
         #region 基础视角和移动参数
@@ -240,6 +240,8 @@ namespace ProjectOC.Player
             this.InternalInit();
             
             this.moveStateParams.RuntimeInit(this.playerInputActions.Acc, this.playerInputActions.Crouch);
+            LoadOver = true;
+           
             this.enabled = false;
         }
 

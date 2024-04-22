@@ -15,10 +15,10 @@
             }
         },
         {
-            "name" : "友人",
+            "name" : "捏脸",
             "description" : {
-                "Chinese" : "友人",
-                "English" : "Friends"
+                "Chinese" : "捏脸",
+                "English" : "PinchFace"
             }
         },
         {

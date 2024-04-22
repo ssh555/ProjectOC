@@ -55,7 +55,11 @@ namespace ML.Engine.Manager
         public SaveSystem.SaveManager SaveManager { get; private set; }
 
         public EnterPoint EnterPoint { get; private set; }
-        public CharacterManager CharacterManager { get; private set; }
+
+        [SerializeField]
+        private CharacterManager _character;
+
+        public CharacterManager CharacterManager => _character;
         #endregion
 
         #region µ¥Àı¹ÜÀí
@@ -93,7 +97,7 @@ namespace ML.Engine.Manager
             this.InputManager = this.RegisterGlobalManager<Input.InputManager>();
 
             this.SaveManager = this.RegisterGlobalManager<SaveSystem.SaveManager>();
-            this.CharacterManager = this.RegisterGlobalManager<CharacterManager>();
+            this.RegisterGlobalManager(this.CharacterManager);
         }
         
         private void OnDestroy()

@@ -161,7 +161,7 @@ namespace ProjectOC.TechTree.UI
 
         [ShowInInspector]
 
-        private string CurrentID = null;
+        private string CurrentID = "";
 
         public int tickPriority { get; set; }
         public int fixedTickPriority { get; set; }

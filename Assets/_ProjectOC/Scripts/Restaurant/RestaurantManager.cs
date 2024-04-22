@@ -112,7 +112,6 @@ namespace ProjectOC.RestaurantNS
                     WorldRestaurants[worldRestaurant.InstanceID] = worldRestaurant;
                 }
                 Restaurant restaurant = new Restaurant();
-                restaurant.Init();
                 if (restaurant != null)
                 {
                     if (worldRestaurant.Restaurant != null)
@@ -122,6 +121,7 @@ namespace ProjectOC.RestaurantNS
                     worldRestaurant.Restaurant = restaurant;
                     restaurant.WorldRestaurant = worldRestaurant;
                 }
+                restaurant.Init();
             }
         }
         #endregion
@@ -287,6 +287,15 @@ namespace ProjectOC.RestaurantNS
                 return WorkerFoodTableDict[id].AlterMoodOdds;
             }
             return new Tuple<float, int>(0, 0);
+        }
+
+        public string ItemIDToFoodID(string itemID)
+        {
+            if (!string.IsNullOrEmpty(itemID) && ItemToFoodDict.ContainsKey(itemID))
+            {
+                return ItemToFoodDict[itemID];
+            }
+            return "";
         }
         #endregion
     }

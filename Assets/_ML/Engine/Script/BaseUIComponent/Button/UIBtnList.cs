@@ -225,18 +225,7 @@ namespace ML.Engine.UI
                 }
             }
 
-            if (OneDimCnt > 0 && (hasInitSelect || (NeedToResetCurSelected && this.uiBtnListContainer?.CurSelectUIBtnList == this))) 
-            {
-                //初始化选择对象
-                Debug.Log("初始化选择对象 ");
-                this.TwoDimI = 0;
-                this.TwoDimJ = 0;
-                this.CurSelected = TwoDimSelectedButtons[TwoDimI, TwoDimJ];
-                this.CurSelected?.OnSelect(null);
-                this.NeedToResetCurSelected = false;
-                this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
-                this.OnSelectButtonChanged?.Invoke();
-            }
+            
 
 
             for (int i = 0; i < TwoDimSelectedButtons.GetLength(0); i++) // 遍历行
@@ -247,6 +236,20 @@ namespace ML.Engine.UI
                     row.Add(TwoDimSelectedButtons[i, j]);
                 }
                 this.TwoDimSelectedButtons.Add(row);
+            }
+            Debug.Log((OneDimCnt > 0) +" "+ hasInitSelect+" "+ (NeedToResetCurSelected && this.uiBtnListContainer?.CurSelectUIBtnList == this));
+            if (OneDimCnt > 0 && (hasInitSelect || (NeedToResetCurSelected && this.uiBtnListContainer?.CurSelectUIBtnList == this)))
+            {
+                //初始化选择对象
+                
+                this.TwoDimI = 0;
+                this.TwoDimJ = 0;
+                this.CurSelected = TwoDimSelectedButtons[TwoDimI, TwoDimJ];
+                this.CurSelected?.OnSelect(null);
+                this.NeedToResetCurSelected = false;
+                this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
+                this.OnSelectButtonChanged?.Invoke();
+                Debug.Log("初始化选择对象 "+ this.CurSelected.GetHashCode().ToString());
             }
 
         }
@@ -349,7 +352,7 @@ namespace ML.Engine.UI
             FunctionExecutor<List<AsyncOperationHandle>> functionExecutor = new FunctionExecutor<List<AsyncOperationHandle>>();
             functionExecutor.AddFunction(()=> { return AddBtnsHandles(num, prefabpath, BtnActions, OnSelectEnter, OnSelectExit, BtnSettingAction, BtnTexts); });
             functionExecutor.SetOnAllFunctionsCompleted(OnAllBtnAdded);
-            functionExecutor.Execute();
+            GameManager.Instance.StartCoroutine(functionExecutor.Execute());
         }
 
         private List<AsyncOperationHandle> AddBtnsHandles(int num, string prefabpath, List<UnityAction>  BtnActions = null, Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null, List<string> BtnTexts = null)
@@ -367,7 +370,7 @@ namespace ML.Engine.UI
                      btn.transform.SetParent(this.parent.Find("Container"), false);
                      btn.transform.localScale = Vector3.one;
 
-                     if (BtnActions[i] != null)
+                     if (BtnActions!=null && BtnActions[i] != null)
                      {
                          btn.onClick.AddListener(BtnActions[i]);
                      }
@@ -387,7 +390,7 @@ namespace ML.Engine.UI
                          BtnSettingAction(btn);
                      }
 
-                     if (BtnTexts[i] != null)
+                     if (BtnTexts!=null && BtnTexts[i] != null)
                      {
                          this.SetBtnText(btn, BtnTexts[i]);
                      }
@@ -493,7 +496,7 @@ namespace ML.Engine.UI
                 GameManager.DestroyObj(this.parent.Find("Container").GetChild(i).gameObject);
             }
             // 等待一帧 原因是当前帧销毁 transform.childCount在当前帧并不会马上更新，需要下一帧
-            yield return null;
+            yield return new WaitForSeconds(0.1f);
 
             // 在下一帧更新BtnList
             InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
@@ -502,15 +505,15 @@ namespace ML.Engine.UI
             action?.Invoke();
         }
 
-        public void ChangBtnNum(int newNum,string prefabpath)
+        public void ChangBtnNum(int newNum,string prefabpath,Action OnAllBtnChanged = null)
         {
             if (newNum > this.OneDimCnt)
             {
-                this.AddBtns(newNum - this.OneDimCnt, prefabpath);
+                this.AddBtns(newNum - this.OneDimCnt, prefabpath,OnAllBtnAdded: OnAllBtnChanged);
             }
             else if(newNum < this.OneDimCnt)
             {
-                this.DeleteButtons(this.OneDimCnt - newNum);
+                this.DeleteButtons(this.OneDimCnt - newNum, OnAllBtnDeleted: OnAllBtnChanged);
             }
         }
 
@@ -616,7 +619,11 @@ namespace ML.Engine.UI
         /// </summary>
         public void SetCurSelectedNull()
         {
-            this.CurSelected?.OnDeselect(null);
+            if(this.CurSelected != null)
+            {
+                this.CurSelected.OnDeselect(null);
+            }
+            
             this.CurSelected = null;
         }
         /// <summary>
@@ -1135,6 +1142,7 @@ namespace ML.Engine.UI
                 this.TwoDimI = 0;
                 this.TwoDimJ = 0;
                 this.CurSelected = TwoDimSelectedButtons[TwoDimI][TwoDimJ];
+
                 Debug.Log(this.CurSelected.name);
                 this.CurSelected.OnSelect(null);
                 Debug.Log("1 " + this.CurSelected);
@@ -1192,13 +1200,13 @@ namespace ML.Engine.UI
         /// <summary>
         /// 获取当前选中按钮的二维坐标 若没有选中则返回（-1，-1）
         /// </summary>
-        public (int,int) GetCurSelectedPos2()
+        public Vector2Int GetCurSelectedPos2()
         {
             if (this.CurSelected != null)
             {
-                return (TwoDimI, TwoDimJ);
+                return new Vector2Int(TwoDimI, TwoDimJ);
             }
-            return (-1, -1);
+            return -Vector2Int.one;
         }
         /// <summary>
         /// 获取当前选中按钮的一维坐标 若没有选中则返回（-1，-1）
@@ -1210,6 +1218,16 @@ namespace ML.Engine.UI
                 return TwoDimI * TwoDimW + TwoDimJ;
             }
             return -1;
+        }
+
+        public void InitSelectBtn()
+        {
+            this.TwoDimI = 0;
+            this.TwoDimJ = 0;
+            this.CurSelected = TwoDimSelectedButtons[TwoDimI][TwoDimJ];
+            this.CurSelected?.OnSelect(null);
+            this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
+            this.OnSelectButtonChanged?.Invoke();
         }
     }
 
