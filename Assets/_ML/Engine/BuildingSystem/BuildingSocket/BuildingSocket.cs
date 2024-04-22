@@ -58,6 +58,9 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         [LabelText("启用BPart旋转偏移"), PropertyTooltip("放置BPart时是否允许有旋转偏移"), FoldoutGroup("Transform"), SerializeField]
         protected bool IsCanRotate = true;
 
+        [LabelText("吸附Area时旋转"), FoldoutGroup("Transform"), SerializeField]
+        protected bool IsRotateOnArea = true;
+
         [LabelText("BPart位置偏移量"), FoldoutGroup("Transform"), SerializeField, ReadOnly]
         protected Vector3 PositionOffset;
 
@@ -95,7 +98,14 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
                     rot = new Quaternion(float.NaN, float.NaN, float.NaN, float.NaN);
                     return false;
                 }
-                rot *= ParentBPart.BaseRotation * (this.ParentBPart.AttachedArea.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
+                if (IsRotateOnArea)
+                {
+                    rot *= ParentBPart.BaseRotation * (this.ParentBPart.AttachedArea.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
+                }
+                else
+                {
+                    rot = ParentBPart.BaseRotation * (this.ParentBPart.AttachedArea.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
+                }
                 return true;
             }
 

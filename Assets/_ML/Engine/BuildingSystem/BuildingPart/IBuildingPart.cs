@@ -183,7 +183,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 {
                     this.tmpTriggerMode = this.Mode;
                 }
-                if (other.GetComponent<IBuildingPart>() != null)
+                if (other != null && other.GetComponent<IBuildingPart>() != null)
                 {
                     this.CanPlaceInPlaceMode = false;
                     this.Mode = BuildingMode.Destroy;

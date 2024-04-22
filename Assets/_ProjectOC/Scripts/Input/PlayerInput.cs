@@ -2814,6 +2814,76 @@ namespace ProjectOC.Input
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UIRestaurant"",
+            ""id"": ""6e33a395-6966-4442-9dd9-3547d7e58069"",
+            ""actions"": [
+                {
+                    ""name"": ""Remove"",
+                    ""type"": ""Button"",
+                    ""id"": ""bdb10921-48de-4858-b3b8-24ee96cd523e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FastAdd"",
+                    ""type"": ""Button"",
+                    ""id"": ""ab2f44e6-e002-44a3-9a08-f50a7c561944"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""b912e4bb-754a-45e0-8dba-9ca97c17a8b4"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b812b3b3-b0c5-4ee5-b6c3-49c93eeb7099"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Remove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1d52d7e0-fd55-4f53-84c1-a58d8e4ddb75"",
+                    ""path"": ""<XInputController>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FastAdd"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""37d28b28-c179-49fb-8946-1a0aaf062305"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FastAdd"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -2898,6 +2968,10 @@ namespace ProjectOC.Input
             m_BeastPanel = asset.FindActionMap("BeastPanel", throwIfNotFound: true);
             m_BeastPanel_SwitchBeast = m_BeastPanel.FindAction("SwitchBeast", throwIfNotFound: true);
             m_BeastPanel_Expel = m_BeastPanel.FindAction("Expel", throwIfNotFound: true);
+            // UIRestaurant
+            m_UIRestaurant = asset.FindActionMap("UIRestaurant", throwIfNotFound: true);
+            m_UIRestaurant_Remove = m_UIRestaurant.FindAction("Remove", throwIfNotFound: true);
+            m_UIRestaurant_FastAdd = m_UIRestaurant.FindAction("FastAdd", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -3881,6 +3955,60 @@ namespace ProjectOC.Input
             }
         }
         public BeastPanelActions @BeastPanel => new BeastPanelActions(this);
+
+        // UIRestaurant
+        private readonly InputActionMap m_UIRestaurant;
+        private List<IUIRestaurantActions> m_UIRestaurantActionsCallbackInterfaces = new List<IUIRestaurantActions>();
+        private readonly InputAction m_UIRestaurant_Remove;
+        private readonly InputAction m_UIRestaurant_FastAdd;
+        public struct UIRestaurantActions
+        {
+            private @PlayerInput m_Wrapper;
+            public UIRestaurantActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Remove => m_Wrapper.m_UIRestaurant_Remove;
+            public InputAction @FastAdd => m_Wrapper.m_UIRestaurant_FastAdd;
+            public InputActionMap Get() { return m_Wrapper.m_UIRestaurant; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(UIRestaurantActions set) { return set.Get(); }
+            public void AddCallbacks(IUIRestaurantActions instance)
+            {
+                if (instance == null || m_Wrapper.m_UIRestaurantActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_UIRestaurantActionsCallbackInterfaces.Add(instance);
+                @Remove.started += instance.OnRemove;
+                @Remove.performed += instance.OnRemove;
+                @Remove.canceled += instance.OnRemove;
+                @FastAdd.started += instance.OnFastAdd;
+                @FastAdd.performed += instance.OnFastAdd;
+                @FastAdd.canceled += instance.OnFastAdd;
+            }
+
+            private void UnregisterCallbacks(IUIRestaurantActions instance)
+            {
+                @Remove.started -= instance.OnRemove;
+                @Remove.performed -= instance.OnRemove;
+                @Remove.canceled -= instance.OnRemove;
+                @FastAdd.started -= instance.OnFastAdd;
+                @FastAdd.performed -= instance.OnFastAdd;
+                @FastAdd.canceled -= instance.OnFastAdd;
+            }
+
+            public void RemoveCallbacks(IUIRestaurantActions instance)
+            {
+                if (m_Wrapper.m_UIRestaurantActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IUIRestaurantActions instance)
+            {
+                foreach (var item in m_Wrapper.m_UIRestaurantActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_UIRestaurantActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public UIRestaurantActions @UIRestaurant => new UIRestaurantActions(this);
         public interface IPlayerActions
         {
             void OnMove(InputAction.CallbackContext context);
@@ -3973,6 +4101,11 @@ namespace ProjectOC.Input
         {
             void OnSwitchBeast(InputAction.CallbackContext context);
             void OnExpel(InputAction.CallbackContext context);
+        }
+        public interface IUIRestaurantActions
+        {
+            void OnRemove(InputAction.CallbackContext context);
+            void OnFastAdd(InputAction.CallbackContext context);
         }
     }
 }

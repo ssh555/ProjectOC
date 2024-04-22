@@ -75,5 +75,27 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 		Wall_tri1_A,
 		[LabelText("矮三角墙配屋顶C")]
 		Wall_tri1_C,
+		[LabelText("餐厅座位C")]
+		Canteen_Seat_C,
+		[LabelText("长梁A")]
+		Beam_A,
+		[LabelText("短梁A")]
+		Beam_A1,
+		[LabelText("长梁C")]
+		Beam_C,
+		[LabelText("短梁C")]
+		Beam_C1,
+		[LabelText("外延A")]
+		Edge_A,
+		[LabelText("外延C")]
+		Edge_C,
+		[LabelText("长外延C")]
+		Edge_L_C,
+		[LabelText("长外延A")]
+		Edge_L_A,
+		[LabelText("弧外延A")]
+		Edge_Qua_A,
+		[LabelText("弧外延C")]
+		Edge_Qua_C,
 	}
 }
