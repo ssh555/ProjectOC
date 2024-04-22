@@ -6,6 +6,7 @@ using ML.Engine.InventorySystem.CompositeSystem;
 
 namespace ProjectOC.Player
 {
+    [System.Serializable]
     public class OCPlayerController : PlayerController
     {
         public PlayerCharacter currentCharacter = null;

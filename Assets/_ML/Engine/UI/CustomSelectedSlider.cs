@@ -1,0 +1,50 @@
+using System;
+using ML.Engine.UI;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
+
+
+namespace ML.Engine.UI
+{
+    [RequireComponent(typeof(Slider))]
+    public class CustomSelectedSlider :MonoBehaviour
+    {
+        
+        #region CustomPart
+
+        private TextMeshProUGUI headText, numText;
+        private Slider slider;
+        private Action<float> OnSliderValueChange;
+        public void InitData(string _str,int _value)
+        {
+            if(headText!=null)
+                headText.text = _str;
+            // slider.value = _value;
+        }
+        
+        protected void Awake()
+        {
+            slider = GetComponent<Slider>();
+            headText = transform.parent.Find("Text").GetComponentInChildren<TextMeshProUGUI>();
+            numText = transform.parent.Find("Num").GetComponentInChildren<TextMeshProUGUI>();
+            slider.onValueChanged.AddListener(HandleSliderValueChange);
+        }
+
+        private void HandleSliderValueChange(float _value)
+        {
+            numText.text = _value.ToString();
+        }
+  
+        #endregion
+
+        
+
+    }
+
+}
