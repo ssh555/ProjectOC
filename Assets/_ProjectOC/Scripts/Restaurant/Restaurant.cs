@@ -332,7 +332,7 @@ namespace ProjectOC.RestaurantNS
             {
                 if (0 <= index && index < Datas.Length && Datas[index].HaveSetFood && amount != 0)
                 {
-                    if ((!exceed && Datas[index].Amount >= Datas[index].MaxCapacity) || (complete && amount + Datas[index].Amount < 0))
+                    if ((!exceed && amount > 0 && Datas[index].Amount >= Datas[index].MaxCapacity) || (complete && amount + Datas[index].Amount < 0))
                     {
                         return 0;
                     }
@@ -445,7 +445,7 @@ namespace ProjectOC.RestaurantNS
         }
         public bool UIChangeFood(int index, string itemID)
         {
-            return ChangeFood(index, itemID);
+            return ChangeFood(index, LocalGameManager.Instance.RestaurantManager.ItemIDToFoodID(itemID));
         }
         #endregion
 

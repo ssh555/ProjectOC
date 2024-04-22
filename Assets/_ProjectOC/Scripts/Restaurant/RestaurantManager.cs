@@ -288,6 +288,15 @@ namespace ProjectOC.RestaurantNS
             }
             return new Tuple<float, int>(0, 0);
         }
+
+        public string ItemIDToFoodID(string itemID)
+        {
+            if (!string.IsNullOrEmpty(itemID) && ItemToFoodDict.ContainsKey(itemID))
+            {
+                return ItemToFoodDict[itemID];
+            }
+            return "";
+        }
         #endregion
     }
 }
