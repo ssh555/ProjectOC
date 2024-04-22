@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using UnityEngine.U2D;
 using ML.Engine.Manager;
 using ML.Engine.SaveSystem;
+using Unity.VisualScripting;
 
 namespace ProjectOC.TechTree
 {
@@ -181,6 +182,29 @@ namespace ProjectOC.TechTree
 
             return _res;
         }
+        public int GetWaitingOrder(string ID)
+        {
+            if(this.WaitingLockSet.Contains(ID))
+            {
+                var t = this.WaitingLockQueue.IndexOf(ID);
+                return t == 0 ? -1 : t;
+            }
+            return -1;
+        }
+
+        public void CancelWaitingOrder(string ID)
+        {
+            if (this.WaitingLockSet.Contains(ID))
+            {
+                var t = this.WaitingLockQueue.IndexOf(ID);
+                if (t != -1)
+                {
+                    this.WaitingLockSet.Remove(ID);
+                    this.WaitingLockQueue.RemoveAt(t);
+                }
+            }
+        }
+
         #endregion
 
         #region SaveAndLoadData
@@ -217,6 +241,13 @@ namespace ProjectOC.TechTree
         /// 用于计时解锁以及判断是否正在解锁
         /// </summary>
         public Dictionary<string, CounterDownTimer> UnlockingTPTimers = new Dictionary<string, CounterDownTimer>();
+
+        [ShowInInspector]
+        [LabelText("登待解锁队列大小")]
+        public int QueueSize = 5;
+        public List<string> WaitingLockQueue = new List<string>();
+        public HashSet<string> WaitingLockSet = new HashSet<string>();
+
         private void OnTimerStart(CounterDownTimer timer, string ID, bool isSave = true)
         {
             this.UnlockingTPTimers.Add(ID, timer);
@@ -228,13 +259,21 @@ namespace ProjectOC.TechTree
             {
                 this.SaveData(false, true);
             }
-
         }
         private void OnTimerEnd(CounterDownTimer timer, string id, bool isSave = true)
         {
             this.__Intenal__UnlockTechPoint(id);
             this.UnlockingTPTimers.Remove(id);
             this.UnlockingTechPointDict.Remove(id);
+            this.WaitingLockQueue.RemoveAt(0);
+            this.WaitingLockSet.Remove(id);
+            if(this.WaitingLockQueue.Count>0)
+            {
+                string TopID = this.WaitingLockQueue[0] ;
+                this.UnlockTechPoint(this.inventory, TopID, this.IsCheck);
+            }
+            
+            
             if (isSave)
             {
                 this.SaveData();
@@ -244,6 +283,7 @@ namespace ProjectOC.TechTree
         /// <summary>
         /// 正在解锁的科技点
         /// </summary>
+        [ShowInInspector]
         public Dictionary<string, UnlockingTechPoint> UnlockingTechPointDict = new Dictionary<string, UnlockingTechPoint>();
 
         #endregion
@@ -403,6 +443,8 @@ namespace ProjectOC.TechTree
             return !this.UnlockingTechPointDict.ContainsKey(ID) && this.IsAllUnlockedPreTP(ID) && this.ItemIsEnough(inventory, ID);
         }
 
+        private IInventory inventory;
+        private bool IsCheck;
         /// <summary>
         /// 解锁
         /// </summary>
@@ -414,7 +456,19 @@ namespace ProjectOC.TechTree
             {
                 return false;
             }
+            this.inventory = inventory;
+            this.IsCheck = IsCheck;
 
+            if (!this.WaitingLockSet.Contains(ID) && this.WaitingLockQueue.Count < this.QueueSize + 1) 
+            {
+                this.WaitingLockQueue.Add(ID);
+                this.WaitingLockSet.Add(ID);
+            }
+
+            if (this.UnlockingTechPointDict.Count > 0)
+            {
+                return false;
+            }
             // to-do : 暂定为提前消耗
             this.CostItem(inventory, ID);
 
