@@ -25,14 +25,7 @@ namespace ProjectOC.StoreNS
         {
             if (isFirstBuild)
             {
-                string actorID = BuildingManager.Instance.GetActorID(this.Classification.ToString());
-                if (!string.IsNullOrEmpty(actorID) && actorID.Split('_').Length == 3)
-                {
-                    string[] split = actorID.Split("_");
-                    StoreType storeType = (StoreType)Enum.Parse(typeof(StoreType), split[1]);
-                    int level = int.Parse(split[2]);
-                    LocalGameManager.Instance.StoreManager.WorldStoreSetData(this, storeType, level - 1);
-                }
+                LocalGameManager.Instance.StoreManager.WorldStoreSetData(this, Classification.Category2, Classification.Category4 - 1);
             }
             if (oldPos != newPos)
             {

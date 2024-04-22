@@ -195,7 +195,7 @@ namespace ProjectOC.InventorySystem.UI
         {
             if (CurMode == Mode.Restaurant)
             {
-                this.ItemIsDestroyed = true;
+                //this.ItemIsDestroyed = true;
                 //if (Restaurant.GetItemAllNum() < 10)
                 //{
                 //    ProNode.UIRemove(ProNode.Stack);
@@ -204,7 +204,7 @@ namespace ProjectOC.InventorySystem.UI
                 //{
                 //    ProNode.UIRemove(10);
                 //}
-                Refresh();
+                //Refresh();
             }
         }
         private void FastAdd_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -247,9 +247,9 @@ namespace ProjectOC.InventorySystem.UI
                     }
                     uidata.Find("Icon").GetComponent<Image>().sprite = tempSprite[itemID];
                     uidata.Find("Amount").GetComponent<TMPro.TextMeshPro>().text = data.Amount.ToString();
-                    uidata.Find("NeedAmount").GetComponent<TMPro.TextMeshPro>().text = maxCapacity.ToString();
+                    uidata.Find("MaxCapacity").GetComponent<TMPro.TextMeshPro>().text = maxCapacity.ToString();
                     var bar = uidata.Find("Bar").Find("Cur").GetComponent<RectTransform>();
-                    float sizeDeltaX = 100 * (float)data.Amount / maxCapacity;
+                    float sizeDeltaX = 180 * (float)data.Amount / maxCapacity;
                     bar.sizeDelta = new Vector2(sizeDeltaX, bar.sizeDelta.y);
 
                     uidata.Find("Name").GetComponent<TMPro.TextMeshPro>().text = ItemManager.Instance.GetItemName(itemID) ?? "";
