@@ -325,8 +325,8 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                         this.Refresh();
                     });
                 }
-                //按钮更新完毕刷新
-                this.Refresh();
+/*                //按钮更新完毕刷新
+                this.Refresh();*/
             });
             #endregion
             Debug.Log(this.isInitNormalOrder);
@@ -349,12 +349,11 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                         OnFinishAdd: () =>
                         {
                             this.Refresh();
-                            this.OrderDelegationUIBtnListContainer.FindEnterableUIBtnList();
                             Debug.Log("完毕刷新");
                         });
                     }
-                    //按钮更新完毕刷新
-                    this.Refresh();
+/*                    //按钮更新完毕刷新
+                    this.Refresh();*/
                 });
                 //常规订单槽初始化完毕
                 

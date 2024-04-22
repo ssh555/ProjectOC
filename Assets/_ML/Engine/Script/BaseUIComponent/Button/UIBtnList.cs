@@ -616,7 +616,13 @@ namespace ML.Engine.UI
         /// </summary>
         public void SetCurSelectedNull()
         {
-            this.CurSelected?.OnDeselect(null);
+            Debug.Log(this.CurSelected);
+            Debug.Log((this.CurSelected == null));
+            if(this.CurSelected != null)
+            {
+                this.CurSelected.OnDeselect(null);
+            }
+            
             this.CurSelected = null;
         }
         /// <summary>
