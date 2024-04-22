@@ -84,12 +84,30 @@ namespace ML.Engine.Input
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""MainInteractHold"",
+                    ""type"": ""Button"",
+                    ""id"": ""8c55ffc6-06aa-4643-be06-87afc6fad4bf"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""SubInteract"",
                     ""type"": ""Button"",
                     ""id"": ""420ccfdc-bc41-450b-89b4-4ddd37420e68"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SubInteractHold"",
+                    ""type"": ""Button"",
+                    ""id"": ""1a60b90a-4b60-407e-b29f-5158576d18f4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
                 }
             ],
@@ -333,6 +351,50 @@ namespace ML.Engine.Input
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""SubInteract"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""41f83e4e-349f-4c5b-bbb2-57d9ced70a81"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MainInteractHold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5aae12d7-d95c-4e04-8407-6b0a9c5d5548"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MainInteractHold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""50fc1a45-96e0-4454-9f1e-883134fb8153"",
+                    ""path"": ""<XInputController>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SubInteractHold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dc02504a-6cbb-4c1f-903e-70914b6731c8"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SubInteractHold"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -603,7 +665,9 @@ namespace ML.Engine.Input
             m_Common_NextTerm = m_Common.FindAction("NextTerm", throwIfNotFound: true);
             m_Common_LastTerm = m_Common.FindAction("LastTerm", throwIfNotFound: true);
             m_Common_MainInteract = m_Common.FindAction("MainInteract", throwIfNotFound: true);
+            m_Common_MainInteractHold = m_Common.FindAction("MainInteractHold", throwIfNotFound: true);
             m_Common_SubInteract = m_Common.FindAction("SubInteract", throwIfNotFound: true);
+            m_Common_SubInteractHold = m_Common.FindAction("SubInteractHold", throwIfNotFound: true);
             // StartMenu
             m_StartMenu = asset.FindActionMap("StartMenu", throwIfNotFound: true);
             m_StartMenu_SwichBtn = m_StartMenu.FindAction("SwichBtn", throwIfNotFound: true);
@@ -677,7 +741,9 @@ namespace ML.Engine.Input
         private readonly InputAction m_Common_NextTerm;
         private readonly InputAction m_Common_LastTerm;
         private readonly InputAction m_Common_MainInteract;
+        private readonly InputAction m_Common_MainInteractHold;
         private readonly InputAction m_Common_SubInteract;
+        private readonly InputAction m_Common_SubInteractHold;
         public struct CommonActions
         {
             private @CommomInput m_Wrapper;
@@ -688,7 +754,9 @@ namespace ML.Engine.Input
             public InputAction @NextTerm => m_Wrapper.m_Common_NextTerm;
             public InputAction @LastTerm => m_Wrapper.m_Common_LastTerm;
             public InputAction @MainInteract => m_Wrapper.m_Common_MainInteract;
+            public InputAction @MainInteractHold => m_Wrapper.m_Common_MainInteractHold;
             public InputAction @SubInteract => m_Wrapper.m_Common_SubInteract;
+            public InputAction @SubInteractHold => m_Wrapper.m_Common_SubInteractHold;
             public InputActionMap Get() { return m_Wrapper.m_Common; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -716,9 +784,15 @@ namespace ML.Engine.Input
                 @MainInteract.started += instance.OnMainInteract;
                 @MainInteract.performed += instance.OnMainInteract;
                 @MainInteract.canceled += instance.OnMainInteract;
+                @MainInteractHold.started += instance.OnMainInteractHold;
+                @MainInteractHold.performed += instance.OnMainInteractHold;
+                @MainInteractHold.canceled += instance.OnMainInteractHold;
                 @SubInteract.started += instance.OnSubInteract;
                 @SubInteract.performed += instance.OnSubInteract;
                 @SubInteract.canceled += instance.OnSubInteract;
+                @SubInteractHold.started += instance.OnSubInteractHold;
+                @SubInteractHold.performed += instance.OnSubInteractHold;
+                @SubInteractHold.canceled += instance.OnSubInteractHold;
             }
 
             private void UnregisterCallbacks(ICommonActions instance)
@@ -741,9 +815,15 @@ namespace ML.Engine.Input
                 @MainInteract.started -= instance.OnMainInteract;
                 @MainInteract.performed -= instance.OnMainInteract;
                 @MainInteract.canceled -= instance.OnMainInteract;
+                @MainInteractHold.started -= instance.OnMainInteractHold;
+                @MainInteractHold.performed -= instance.OnMainInteractHold;
+                @MainInteractHold.canceled -= instance.OnMainInteractHold;
                 @SubInteract.started -= instance.OnSubInteract;
                 @SubInteract.performed -= instance.OnSubInteract;
                 @SubInteract.canceled -= instance.OnSubInteract;
+                @SubInteractHold.started -= instance.OnSubInteractHold;
+                @SubInteractHold.performed -= instance.OnSubInteractHold;
+                @SubInteractHold.canceled -= instance.OnSubInteractHold;
             }
 
             public void RemoveCallbacks(ICommonActions instance)
@@ -861,7 +941,9 @@ namespace ML.Engine.Input
             void OnNextTerm(InputAction.CallbackContext context);
             void OnLastTerm(InputAction.CallbackContext context);
             void OnMainInteract(InputAction.CallbackContext context);
+            void OnMainInteractHold(InputAction.CallbackContext context);
             void OnSubInteract(InputAction.CallbackContext context);
+            void OnSubInteractHold(InputAction.CallbackContext context);
         }
         public interface IStartMenuActions
         {
