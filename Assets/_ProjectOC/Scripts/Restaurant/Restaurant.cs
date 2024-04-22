@@ -42,11 +42,14 @@ namespace ProjectOC.RestaurantNS
         {
             get
             {
-                foreach (RestaurantSeat seat in Seats)
+                if (Seats != null)
                 {
-                    if (!seat.HasWorker)
+                    foreach (RestaurantSeat seat in Seats)
                     {
-                        return true;
+                        if (!seat.HasWorker)
+                        {
+                            return true;
+                        }
                     }
                 }
                 return false;
@@ -57,11 +60,14 @@ namespace ProjectOC.RestaurantNS
         {
             get
             {
-                foreach (RestaurantData data in Datas)
+                if (Datas != null)
                 {
-                    if (LocalGameManager.Instance.RestaurantManager.WorkerFood_IsValidID(data.ID))
+                    foreach (RestaurantData data in Datas)
                     {
-                        return true;
+                        if (LocalGameManager.Instance.RestaurantManager.WorkerFood_IsValidID(data.ID))
+                        {
+                            return true;
+                        }
                     }
                 }
                 return false;

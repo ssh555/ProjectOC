@@ -415,9 +415,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btnListInitData:
-    limitNum: 6
+    limitNum: 1
     hasInitSelect: 1
-    isLoop: 0
+    isLoop: 1
     isWheel: 0
     hasBtnListContainer: 0
 --- !u!1 &2090555522105063850
@@ -560,7 +560,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btnListInitData:
-    limitNum: 5
+    limitNum: 1
     hasInitSelect: 1
     isLoop: 1
     isWheel: 0
