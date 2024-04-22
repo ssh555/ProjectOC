@@ -14,11 +14,13 @@ namespace ProjectOC.MissionNS
         [LabelText("None")]
         None = 0,
         [LabelText("生产节点到仓库")]
-        ProNode_Store = 1,
+        ProNode_Store,
+        [LabelText("生产节点到餐厅")]
+        ProNode_Restaurant,
         [LabelText("仓库到生产节点")]
-        Store_ProNode = 2,
+        Store_ProNode,
         [LabelText("外部到仓库")]
-        Outside_Store = 3,
+        Outside_Store,
     }
 }
 

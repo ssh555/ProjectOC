@@ -372,6 +372,11 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
         }
 
+        public virtual void OnEnterEdit()
+        {
+
+        }
+
         //private void OnDrawGizmosSelected()
         //{
         //    foreach(var col in this.GetComponentsInChildren<BuildingSocket.BuildingSocket>())

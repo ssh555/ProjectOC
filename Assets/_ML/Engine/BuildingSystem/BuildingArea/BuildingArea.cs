@@ -45,7 +45,12 @@ namespace ML.Engine.BuildingSystem.BuildingArea
         public bool GetMatchPointOnArea(Vector3 point, float radius, out Vector3 pos, out Quaternion rot)
         {
             // Î»ÓÚ Bound ÄÚ
-            if(this.collider.bounds.Contains(point))
+            Bounds bs = new Bounds(this.collider.bounds.center, this.collider.bounds.size);
+            if (bs.extents.y == 0)
+            {
+                bs.extents = new Vector3(bs.extents.x, 0.001f, bs.extents.z);
+            }
+            if(bs.Contains(point))
             {
                 Vector3 scale = this.transform.localScale;
                 this.transform.localScale = Vector3.one;

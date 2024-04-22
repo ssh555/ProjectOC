@@ -1,6 +1,7 @@
 using ML.Engine.InventorySystem;
 using ML.Engine.Manager.LocalManager;
 using ML.Engine.Timer;
+using ProjectOC.RestaurantNS;
 using ProjectOC.StoreNS;
 using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
@@ -138,6 +139,33 @@ namespace ProjectOC.MissionNS
         }
 
         /// <summary>
+        /// 发起者到餐厅，存入餐厅
+        /// </summary>
+        private int InitiatorToRestaurant(MissionTransport mission)
+        {
+            int missionNum = mission.NeedAssignNum;
+            if (missionNum > 0)
+            {
+                Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
+                if (worker != null)
+                {
+                    int maxBurNum = (int)(worker.BURMax / ItemManager.Instance.GetWeight(mission.ItemID));
+                    missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
+                }
+                Restaurant restaurant = ManagerNS.LocalGameManager.Instance.RestaurantManager.GetPutInRestaurant(mission.ItemID, missionNum);
+                if (worker != null && restaurant != null && missionNum > 0)
+                {
+                    Transport transport = new Transport(mission, mission.ItemID, missionNum, mission.Initiator, restaurant, worker);
+                }
+                else
+                {
+                    return worker == null ? -1 : -2;
+                }
+            }
+            return 1;
+        }
+
+        /// <summary>
         /// 计时器结束时执行一次分配任务
         /// </summary>
         public void Timer_OnEndEvent()
@@ -156,6 +184,13 @@ namespace ProjectOC.MissionNS
                 else if(mission.Type == MissionTransportType.Store_ProNode)
                 {
                     if (StoreToInitiator(mission) == -1)
+                    {
+                        return;
+                    }
+                }
+                else if (mission.Type == MissionTransportType.ProNode_Restaurant)
+                {
+                    if (InitiatorToRestaurant(mission) == -1)
                     {
                         return;
                     }

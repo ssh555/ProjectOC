@@ -409,7 +409,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             public TextContent Collect;
 
             public KeyTip Expel;
-            //BotKeyTips
             public KeyTip Back;
         }
         protected override void InitTextContentPathData()

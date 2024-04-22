@@ -15,7 +15,7 @@ namespace ProjectOC.ClanNS
         [LabelText("名称"), ReadOnly]
         public string Name = "";
         [LabelText("拥有的床"), ReadOnly]
-        public Bed Bed;
+        public ClanBed Bed;
         [LabelText("是否拥有床"), ShowInInspector, ReadOnly]
         public bool HasBed { get { return Bed != null && !string.IsNullOrEmpty(Bed.InstanceID); } }
 
