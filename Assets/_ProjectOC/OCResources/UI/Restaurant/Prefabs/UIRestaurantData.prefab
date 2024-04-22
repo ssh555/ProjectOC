@@ -1065,7 +1065,7 @@ GameObject:
   - component: {fileID: 430996604883588524}
   - component: {fileID: 5426720307906128569}
   m_Layer: 0
-  m_Name: NeedAmount
+  m_Name: MaxCapacity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

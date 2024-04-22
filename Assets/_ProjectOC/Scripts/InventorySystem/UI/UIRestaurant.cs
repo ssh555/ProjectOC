@@ -109,7 +109,7 @@ namespace ProjectOC.InventorySystem.UI
             base.Start();
             InitTextContentPathData();
             Text_Title = transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
-            EmptySprite = transform.Find("Restaurant").Find("Food").Find("Viewport").Find("UIBtnList").Find("Container").Find("UIItemTemplate").Find("Icon").GetComponent<Image>().sprite;
+            EmptySprite = transform.Find("Restaurant").Find("Food").Find("Viewport").Find("UIBtnList").Find("Container").Find("UIRestaurantData").Find("Icon").GetComponent<Image>().sprite;
             Food_Desc = transform.Find("ChangeFood").Find("Desc");
             BotKeyTips = transform.Find("BotKeyTips").Find("KeyTips");
             BotKeyTips1 = transform.Find("BotKeyTips").Find("KeyTips1");

@@ -112,7 +112,6 @@ namespace ProjectOC.RestaurantNS
                     WorldRestaurants[worldRestaurant.InstanceID] = worldRestaurant;
                 }
                 Restaurant restaurant = new Restaurant();
-                restaurant.Init();
                 if (restaurant != null)
                 {
                     if (worldRestaurant.Restaurant != null)
@@ -122,6 +121,7 @@ namespace ProjectOC.RestaurantNS
                     worldRestaurant.Restaurant = restaurant;
                     restaurant.WorldRestaurant = worldRestaurant;
                 }
+                restaurant.Init();
             }
         }
         #endregion

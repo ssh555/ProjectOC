@@ -1634,6 +1634,8 @@ MonoBehaviour:
     Name: 
     TransportPriority: 1
     Transports: []
+  RestaurantUITransform: {fileID: 0}
+  ChangeFoodUITransform: {fileID: 0}
   IsInit: 0
 --- !u!1 &5857351733357598392
 GameObject:
@@ -2253,10 +2255,6 @@ PrefabInstance:
     - target: {fileID: 3482183208918778215, guid: 8e855025411d24741a1e3e2c3d23b7bd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8272797921214056867, guid: 8e855025411d24741a1e3e2c3d23b7bd, type: 3}
-      propertyPath: m_Name
-      value: MaxCapacity
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

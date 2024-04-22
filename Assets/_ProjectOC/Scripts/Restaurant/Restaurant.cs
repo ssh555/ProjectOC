@@ -81,7 +81,7 @@ namespace ProjectOC.RestaurantNS
             for (int i = 0; i < Seats.Length; i++)
             {
                 Seats[i].Restaurant = this;
-                Seats[i].Socket = WorldRestaurant.transform;
+                Seats[i].Socket = WorldRestaurant.transform.Find($"seat{i+1}");
             }
             Datas = new RestaurantData[LocalGameManager.Instance.RestaurantManager.DataNum];
             if (Datas.Length >= 1)
@@ -212,7 +212,7 @@ namespace ProjectOC.RestaurantNS
                     {
                         worker.Agent.enabled = false;
                         worker.LastPosition = worker.transform.position;
-                        worker.transform.position = Seats[seatIndex].Socket.position + new Vector3(0, 2f, 0);
+                        worker.transform.position = Seats[seatIndex].Socket.position;
                         Seats[seatIndex].SetFood(Datas[index].ID);
                         return;
                     }
