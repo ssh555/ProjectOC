@@ -43,7 +43,7 @@ namespace ML.Engine.Utility
             }
             yield return null;
             this.isFinished = true;
-            this.onAllFunctionsCompleted.Invoke();
+            this.onAllFunctionsCompleted?.Invoke();
             
         }
 
