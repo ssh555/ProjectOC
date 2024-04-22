@@ -42,6 +42,7 @@ namespace ProjectOC.RestaurantNS
         public CounterDownTimer Timer;
         #endregion
 
+        #region ·½·¨
         public void AddWorker(Worker worker)
         {
             if (worker != null && !WorkerSets.Contains(worker))
@@ -95,6 +96,7 @@ namespace ProjectOC.RestaurantNS
             }
             return result;
         }
+        #endregion
 
         #region Spawn
         public void WorldRestaurantSetData(WorldRestaurant worldRestaurant)
@@ -110,6 +112,7 @@ namespace ProjectOC.RestaurantNS
                     WorldRestaurants[worldRestaurant.InstanceID] = worldRestaurant;
                 }
                 Restaurant restaurant = new Restaurant();
+                restaurant.Init();
                 if (restaurant != null)
                 {
                     if (worldRestaurant.Restaurant != null)

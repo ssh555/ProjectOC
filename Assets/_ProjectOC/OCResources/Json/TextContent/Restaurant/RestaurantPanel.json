@@ -1,18 +1,30 @@
 {
+    "textTitleRestaurant" : {
+        "Chinese" : "餐厅",
+        "English" : "Restaurant"
+    },
+    "textTitleChangeFood" : {
+        "Chinese" : "更换食物",
+        "English" : "Change Food"
+    },
     "textEmpty" : {
         "Chinese" : "空置",
         "English" : "Empty"
     },
+    "textNo1" : {
+        "Chinese" : "招牌NO.1",
+        "English" : "No.1"
+    },
 
-    "ChangeRecipe" : {
-        "keyname" : "KT_ChangeRecipe",
+    "ChangeFood" : {
+        "keyname" : "KT_ChangeFood",
         "keymap": {
             "ActionMapName": "Common",
             "ActionName": "Confirm"
           },
         "description" : {
-            "Chinese" : "更改食物",
-            "English" : "Change Recipe"
+            "Chinese" : "更换食物",
+            "English" : "Change Food"
         }
     },
     "Remove1" : {
@@ -22,7 +34,7 @@
             "ActionName": "Remove"
           },
         "description" : {
-            "Chinese" : "取出1",
+            "Chinese" : "取出1个",
             "English" : "Remove 1"
         }
     },
@@ -33,7 +45,7 @@
             "ActionName": "Remove"
           },
         "description" : {
-            "Chinese" : "取出10",
+            "Chinese" : "取出10个",
             "English" : "Remove 10"
         }
     },
@@ -44,7 +56,7 @@
             "ActionName": "FastAdd"
           },
         "description" : {
-            "Chinese" : "快捷投入",
+            "Chinese" : "快捷存放",
             "English" : "Fast Add"
         }
     },
