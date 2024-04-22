@@ -108,13 +108,14 @@ public class IslandAreaManager :ML.Engine.Manager.LocalManager.ILocalManager
             {
                 navMeshSurfacesToReBake.Add(_transf.GetComponentInParent<NavMeshSurface>());
             }
-            SetSurfacesTrigger(navMeshSurfacesToReBake,false);
+            //BuildingArea 后续不需要设为Trigger
+            //SetSurfacesTrigger(navMeshSurfacesToReBake,false);
 
             foreach (var _nms in navMeshSurfacesToReBake)
             {
                 _nms.UpdateNavMesh(_nms.navMeshData);
             }
-            SetSurfacesTrigger(navMeshSurfacesToReBake);
+            //SetSurfacesTrigger(navMeshSurfacesToReBake);
         }
         
         //设置NavmeshSurface collider Trigger为碰撞，碰撞时才能有效烘焙
