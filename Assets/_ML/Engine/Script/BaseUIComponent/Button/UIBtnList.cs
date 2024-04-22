@@ -1200,13 +1200,13 @@ namespace ML.Engine.UI
         /// <summary>
         /// 获取当前选中按钮的二维坐标 若没有选中则返回（-1，-1）
         /// </summary>
-        public (int,int) GetCurSelectedPos2()
+        public Vector2Int GetCurSelectedPos2()
         {
             if (this.CurSelected != null)
             {
-                return (TwoDimI, TwoDimJ);
+                return new Vector2Int(TwoDimI, TwoDimJ);
             }
-            return (-1, -1);
+            return -Vector2Int.one;
         }
         /// <summary>
         /// 获取当前选中按钮的一维坐标 若没有选中则返回（-1，-1）
