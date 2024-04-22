@@ -83,6 +83,10 @@ namespace ML.Engine.UI
         /// </summary>
         private Dictionary<string, SelectedButton> SBDic = new Dictionary<string, SelectedButton>();
         /// <summary>
+        /// btnName,Index
+        /// </summary>
+        private Dictionary<string, int> SBDicIndex = new Dictionary<string, int>();
+        /// <summary>
         /// SelectedButton,BtnPos
         /// </summary>
         private Dictionary<SelectedButton, (int, int)> SBPosDic = new Dictionary<SelectedButton, (int, int)>();
@@ -137,6 +141,7 @@ namespace ML.Engine.UI
         public void InitBtnInfo(Transform parent, int limitNum = 1, bool hasInitSelect = true, bool isLoop = false, bool isWheel = false, Action OnSelectedEnter = null, Action OnSelectedExit = null)
         {
             this.SBDic.Clear();
+            this.SBDicIndex.Clear();
             this.SBPosDic.Clear();
             this.TwoDimSelectedButtons.Clear();
 
@@ -157,14 +162,16 @@ namespace ML.Engine.UI
             }
             this.uiBtnListContainer?.RefreshIsEmpty();
 
-            foreach (var btn in OneDimSelectedButtons)
+            for (int i = 0; i < OneDimSelectedButtons.Length; i++) 
             {
+                var btn = OneDimSelectedButtons[i];
                 btn.SetUIBtnList(this);
                 btn.Init(OnSelectedEnter, OnSelectedExit);
                 Navigation navigation = btn.navigation;
                 navigation.mode = Navigation.Mode.None;
                 btn.navigation = navigation;
                 SBDic.Add(btn.gameObject.name, btn);
+                SBDicIndex.Add(btn.gameObject.name, i);
             }
 
             this.TwoDimW = limitNum;
@@ -355,6 +362,14 @@ namespace ML.Engine.UI
                 this.NeedToResetCurSelected = true;
             }
             GameManager.Instance.StartCoroutine(DestroyAndRefreshBtnList(SelectedButtonIndex));
+        }
+
+        public void DeleteButton(string btnName)
+        {
+            if(this.SBDicIndex.ContainsKey(btnName))
+            {
+                this.DeleteButton(this.SBDicIndex[btnName]);
+            }
         }
 
         public void DeleteAllButton(Action action = null)

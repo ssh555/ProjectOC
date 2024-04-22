@@ -1,5 +1,6 @@
 using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
+using ML.Engine.TextContent;
 using ML.Engine.Timer;
 using ML.Engine.UI;
 using ML.Engine.Utility;
@@ -119,7 +120,16 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             {
                 //承接订单
                 OrderManager.Instance.ReceiveOrder(curSelectedOrderIDInOrderDelegation);
-                isNeedRefreshOrderDelegation = true;
+                OrderTableData orderTableData = OrderManager.Instance.GetOrderTableData(curSelectedOrderIDInOrderDelegation);
+                if(orderTableData.OrderType == OrderType.Urgent)
+                {
+                    isNeedRefreshOrderDelegation = true;
+                }
+                else if(orderTableData.OrderType == OrderType.Normal)
+                {
+                    this.OrderDelegationUIBtnListContainer.UIBtnLists[1].DeleteButton(curSelectedOrderIDInOrderDelegation);
+                }
+                
                 Debug.Log("承接订单");
             }
         }
@@ -199,6 +209,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     private Transform AcceptedOrderOrderInfo;
     private Transform OrderDelegationOrderInfo;
 
+    private bool isInitNormalOrder = false;
 
     private string curSelectedOrderIDInOrderDelegation 
     {   get 
@@ -318,28 +329,40 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                 this.Refresh();
             });
             #endregion
-
+            Debug.Log(this.isInitNormalOrder);
             #region 常规订单槽
-            this.OrderDelegationUIBtnListContainer.UIBtnLists[1].DeleteAllButton(() =>
+            if (this.isInitNormalOrder ==  false)
             {
-                foreach (var order in OrderManager.Instance.GetOrderDelegationOrders(CurSelectedClanID, OrderType.Normal))
+                Debug.Log("常规订单槽");
+                this.OrderDelegationUIBtnListContainer.UIBtnLists[1].DeleteAllButton(() =>
                 {
-                    OrderTableData orderTableData = OrderManager.Instance.GetOrderTableData(order);
-
-                    this.OrderDelegationUIBtnListContainer.UIBtnLists[1].AddBtn("Assets/_ProjectOC/OCResources/UI/OrderBoard/Prefabs/NormalDelegationBtn.prefab", BtnSettingAction: (btn) =>
+                    foreach (var order in OrderManager.Instance.GetOrderDelegationOrders(CurSelectedClanID, OrderType.Normal))
                     {
-                        //更新信息
-                        btn.transform.Find("Image").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.OrderName;
-                        btn.name = orderTableData.ID;
-                    },
-                    OnFinishAdd: () => {
-                        //按钮更新完毕刷新
-                        this.Refresh();
-                    });
-                }
-                //按钮更新完毕刷新
-                this.Refresh();
-            });
+                        OrderTableData orderTableData = OrderManager.Instance.GetOrderTableData(order);
+
+                        this.OrderDelegationUIBtnListContainer.UIBtnLists[1].AddBtn("Assets/_ProjectOC/OCResources/UI/OrderBoard/Prefabs/NormalDelegationBtn.prefab", BtnSettingAction: (btn) =>
+                        {
+                            //更新信息
+                            btn.transform.Find("Image").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.OrderName;
+                            btn.name = orderTableData.ID;
+                        },
+                        OnFinishAdd: () =>
+                        {
+                            //按钮更新完毕刷新
+                            this.Refresh();
+                        });
+                    }
+                    //按钮更新完毕刷新
+                    this.Refresh();
+                });
+                //初始化完毕
+                this.isInitNormalOrder = true;
+            }
+            else
+            {
+                //初始化完毕刷新
+            }
+
             #endregion
             isNeedRefreshOrderDelegation = false;
         }
@@ -350,7 +373,9 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             Debug.Log("失活OrderDelegationUIBtnListContainer");
             this.OrderDelegationUIBtnListContainer.SetIsEnableFalse();
 
+            //退出 订单承接 界面
             isNeedRefreshOrderDelegation = true;
+            this.isInitNormalOrder = false;
         }
 
         #region 右侧订单详细信息
@@ -515,7 +540,9 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     [System.Serializable]
     public struct OrderBoardPanelStruct
     {
-        
+        public KeyTip CommitOrder;
+        public KeyTip ViewMoreInformation;
+        public KeyTip Back;
     }
     protected override void InitTextContentPathData()
     {

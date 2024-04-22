@@ -60,12 +60,30 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "MainInteractHold",
+                    "type": "Button",
+                    "id": "8c55ffc6-06aa-4643-be06-87afc6fad4bf",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "SubInteract",
                     "type": "Button",
                     "id": "420ccfdc-bc41-450b-89b4-4ddd37420e68",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SubInteractHold",
+                    "type": "Button",
+                    "id": "1a60b90a-4b60-407e-b29f-5158576d18f4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold",
                     "initialStateCheck": false
                 }
             ],
@@ -309,6 +327,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "SubInteract",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "41f83e4e-349f-4c5b-bbb2-57d9ced70a81",
+                    "path": "<XInputController>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MainInteractHold",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5aae12d7-d95c-4e04-8407-6b0a9c5d5548",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MainInteractHold",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "50fc1a45-96e0-4454-9f1e-883134fb8153",
+                    "path": "<XInputController>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SubInteractHold",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dc02504a-6cbb-4c1f-903e-70914b6731c8",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SubInteractHold",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
