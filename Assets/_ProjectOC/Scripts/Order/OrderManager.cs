@@ -179,7 +179,7 @@ namespace ProjectOC.Order
 
             //初始化背包
             this.PlayerInventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
-
+            Debug.Log($"初始化背包 {PlayerInventory!= null}");
             // 载入表格数据 
             LoadTableData();
 
@@ -456,7 +456,7 @@ namespace ProjectOC.Order
                     //TODO 已扣除返还玩家背包 暂时考虑背包无限
 
                     OrderTableData orderTableData = OrderTableDataDic[acceptedList[i].order.OrderID];
-                    
+                    Debug.Log(PlayerInventory);
                     foreach (var addedItem in acceptedList[i].order.AddedItemDic)
                     {
                         foreach (var item in ItemManager.Instance.SpawnItems(addedItem.Key, addedItem.Value))

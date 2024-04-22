@@ -76,7 +76,6 @@ namespace ProjectOC.ManagerNS
             GM.RegisterLocalManager(ClanManager);
             GM.RegisterLocalManager(MonoBuildingManager);
             GM.RegisterLocalManager(TechTreeManager);
-            GM.RegisterLocalManager(OrderManager);
             GM.RegisterLocalManager(ItemManager);
             GM.RegisterLocalManager(CompositeManager);
             GM.RegisterLocalManager(IslandManager);
@@ -131,7 +130,8 @@ namespace ProjectOC.ManagerNS
         IEnumerator AfterPlayerCharacter()
         {
             ProjectOC.Player.OCPlayerController playerController = GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController;
-            while (playerController.currentCharacter == null)
+            
+            while (playerController.currentCharacter == null || !playerController.currentCharacter.LoadOver)
             {
                 yield return null;
             }
