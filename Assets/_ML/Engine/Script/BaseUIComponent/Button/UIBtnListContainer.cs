@@ -47,6 +47,12 @@ namespace ML.Engine.UI
 
 
             } }
+        
+        [ShowInInspector]
+        private bool isEnable = false;
+
+        public bool IsEnable { get { return isEnable; } }
+        
         public enum NavagationMode
         {
             BtnList = 0,
@@ -753,7 +759,7 @@ namespace ML.Engine.UI
         {
             if (BtnListIndex >= 0 || BtnListIndex < this.uIBtnLists.Count)
             {
-                this.uIBtnLists[BtnListIndex].AddBtn(prefabpath, BtnAction, OnSelectEnter, OnSelectExit, BtnSettingAction, BtnText);
+                this.uIBtnLists[BtnListIndex].AddBtn(prefabpath, BtnAction, OnSelectEnter, OnSelectExit, BtnSettingAction, BtnText:BtnText);
             }
             else
             {
@@ -915,6 +921,22 @@ namespace ML.Engine.UI
                     uIBtnLists[this.uIBtnLists.Count - 1].DownUI = uIBtnLists[0];
                 }
             }
+        }
+        
+        /// <summary>
+        /// 该函数功能为启用BtnListContainer
+        /// </summary>
+        public void SetIsEnableTrue()
+        {
+            this.isEnable = true;
+        }
+
+        /// <summary>
+        /// 该函数功能为禁用BtnListContainer
+        /// </summary>
+        public void SetIsEnableFalse()
+        {
+            this.isEnable = false;
         }
     }
 }

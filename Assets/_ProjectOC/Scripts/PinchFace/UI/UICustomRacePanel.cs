@@ -73,7 +73,7 @@ namespace ProjectOC.PinchFace
             UIBtnListContainer.UIBtnLists[7].DeleteAllButton();  
             
             int _curListIndex = UIBtnListContainer.CurSelectUIBtnListIndex;
-            Vector2Int _curPos = UIBtnListContainer.UIBtnLists[_curListIndex].GetCurSelectedPos();
+            Vector2Int _curPos = UIBtnListContainer.UIBtnLists[_curListIndex].GetCurSelectedPos2();
             int _curPosOne = _curPos.x * OneRowCount + _curPos.y;
             
             curType2 = pinchFaceManager.pinchPartType1Inclusion[_curListIndex-1][_curPosOne];

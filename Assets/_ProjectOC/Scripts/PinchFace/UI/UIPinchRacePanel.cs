@@ -99,7 +99,7 @@ namespace ProjectOC.PinchFace
             this.UIBtnListContainer.AddOnSelectButtonChangedAction(() =>
             {
                 //右侧种族描述更新，中英文切换直接换RacePinchData
-                Vector2Int _curPos = UIBtnListContainer.UIBtnLists[0].GetCurSelectedPos();
+                 Vector2Int _curPos = UIBtnListContainer.UIBtnLists[0].GetCurSelectedPos2();
                 if (_curPos == -Vector2Int.one)
                 {
                     raceNameText.text = "";
