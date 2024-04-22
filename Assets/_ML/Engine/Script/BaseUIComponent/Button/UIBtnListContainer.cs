@@ -597,8 +597,9 @@ namespace ML.Engine.UI
 
         public void MoveToBtnList(UIBtnList uIBtnList)
         {
-            if (this.CurSelectUIBtnList == uIBtnList || uIBtnList == null) return;
-
+            //Debug.Log("this.isEnable == false " + (this.isEnable == false) + " this.CurSelectUIBtnList == uIBtnList " + (this.CurSelectUIBtnList == uIBtnList) + " uIBtnList == null " + (uIBtnList == null));
+            if (this.isEnable == false || this.CurSelectUIBtnList == uIBtnList || uIBtnList == null || uIBtnList.IsEmpty) return;
+            
             if(gridNavagationType == ContainerType.A)
             {
                 if(navagationMode == NavagationMode.BtnList)
