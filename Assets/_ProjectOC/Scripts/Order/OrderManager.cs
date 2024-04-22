@@ -72,7 +72,7 @@ namespace ProjectOC.Order
             {
                 this.order = order;
                 this.orderType = orderType;
-                this.canBeCommit = true;
+                this.canBeCommit = false;
                 this.acceptOrder = curAcceptOrder++;
             }
 
@@ -128,7 +128,7 @@ namespace ProjectOC.Order
 
         #region 策划配置项
         [LabelText("紧急订单刷新时间间隔（现实时间的min为单位）")]
-        public int UrgentRefreshInterval = 1;
+        public float UrgentRefreshInterval = 0.1f;
         #endregion
 
         #region Base
@@ -277,15 +277,16 @@ namespace ProjectOC.Order
                 Order order = acceptedList[i].order;
                 OrderTableData orderTableData = OrderTableDataDic[order.OrderID];
                 List<Formula> formulaList = new List<Formula>();
+                List<Formula> AddedItems = new List<Formula>();
                 foreach (var requireItem in acceptedList[i].order.RemainRequireItemDic)
                 {
                     formulaList.Add(new Formula() { id = requireItem.Key,num = requireItem.Value});
                 }
 
                 //扣除
-                formulaList = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).InventoryCostItems(formulaList, priority:-1);
+                AddedItems = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).InventoryCostItems(formulaList, priority:-1);
 
-                foreach (var AddedItem in formulaList)
+                foreach (var AddedItem in AddedItems)
                 {
                     bool isFinish = order.ChangeRequireItemDic(AddedItem.id, AddedItem.num);
                     if(isFinish)
@@ -340,7 +341,7 @@ namespace ProjectOC.Order
         {
             if (OrderId == null) return;
             if (!OrderTableDataDic.ContainsKey(OrderId)) return;
-            //Debug.Log("接取订单 " + OrderId + " " + LocalGameManager.Instance.DispatchTimeManager.CurrentHour.ToString() + " : " + LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString());
+            Debug.Log("接取订单 " + OrderId + " " + LocalGameManager.Instance.DispatchTimeManager.CurrentHour.ToString() + " : " + LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString());
             OrderTableData orderTableData = OrderTableDataDic[OrderId];
             string ClanID = OrderIDToClanIDDic[orderTableData.ID];
             if (orderTableData.OrderType == OrderType.Urgent)
@@ -352,11 +353,17 @@ namespace ProjectOC.Order
                 {
                     if (orders[i] == null)
                     {
+                        Debug.Log(orderUrgent);
                         orders[i] = orderUrgent;
                         break; 
                     }
                 }
-                
+
+                for(int i = 0;i< OrderDelegationMap[(ClanID, orderTableData.OrderType)].Count;i++)
+                {
+                    Debug.Log(" asdas "+OrderDelegationMap[(ClanID, orderTableData.OrderType)][i]);
+                }
+
                 //通知UI
                 GM.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("<color=yellow>" + ClanID + "</color>  发布了紧急征求", orderTableData.OrderName));
             }
@@ -436,7 +443,6 @@ namespace ProjectOC.Order
                     acceptedList.Add(acceptedOrder);
                     acceptedListDic.Add(orderTableData.ID, acceptedOrder);
                     //加入已承接列表后立即执行一次RefreshAcceptedList函数
-
 
                     break;
                 }
