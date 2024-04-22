@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2001996878086578145}
-  - component: {fileID: 2980782550905227229}
   - component: {fileID: 3807956012259747644}
   - component: {fileID: 1223636147856542266}
   - component: {fileID: 1686399163492116749}
@@ -35,19 +34,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2980782550905227229
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1936703053065708330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c996a1e2533a5b4c9c54651ea7368f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PinchPartType3: 1
 --- !u!114 &3807956012259747644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d4266ab2b90dc147a5340641698dd7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  distributionMode: 0
 --- !u!114 &1223636147856542266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,9 +60,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boneWeightChangeType: 3
-  scaleValueRange: {x: 0, y: 0}
-  currentScaleValue: 0
-  offsetValueRange: {x: 0, y: 0}
+  scaleValueRange: {x: 0.5, y: 1.5}
+  currentScaleValue: 1
+  offsetValueRange: {x: -2, y: 2}
   currentOffsetValue: 0
 --- !u!114 &1686399163492116749
 MonoBehaviour:

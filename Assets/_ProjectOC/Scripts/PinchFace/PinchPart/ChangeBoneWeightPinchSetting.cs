@@ -22,7 +22,7 @@ namespace ProjectOC.PinchFace
             Offset = 1 << 1
         }
         public BoneWeightChangeType boneWeightChangeType;
-
+        public BoneWeightType boneWeightType;
         public Vector2 scaleValueRange;
         public float currentScaleValue;
         [Space(20)]

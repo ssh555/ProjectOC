@@ -130,6 +130,7 @@ namespace ProjectOC.ManagerNS
         //在PlayerCharacter生成之后调用
         IEnumerator AfterPlayerCharacter()
         {
+            // Debug.Log(GameManager.Instance.CharacterManager.GetLocalController().GetType() );
             ProjectOC.Player.OCPlayerController playerController = GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController;
             while (playerController.currentCharacter == null)
             {
@@ -157,8 +158,8 @@ namespace ProjectOC.ManagerNS
             Test2 = 1 << 1
         }
         [Space(20)]
-        public GizmosEnableControl gizmosEnableControl; 
-        private void OnDrawGizmosSelected()
+        public GizmosEnableControl gizmosEnableControl = GizmosEnableControl.IslandManager; 
+        private void OnDrawGizmos()
         {
             if (Application.isPlaying && (GizmosEnableControl.IslandManager & gizmosEnableControl) != 0)
             {
