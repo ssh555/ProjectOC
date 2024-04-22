@@ -232,7 +232,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.TransformSelectedPartInstance();
             if(this.IsRotate)
             {
-                this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.DisableGridRotRate * Time.deltaTime * rotOffset, this.Placer.SelectedPartInstance.transform.up);
+                this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.DisableGridRotRate * Time.deltaTime * rotOffset, Vector3.up);
             }
         }
 
@@ -317,8 +317,7 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 if (obj.started)
                 {
-                    this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, this.Placer.SelectedPartInstance.transform.up);
-                    Debug.Log(this.Placer.SelectedPartInstance.RotOffset + " " + Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, this.Placer.SelectedPartInstance.transform.up));
+                    this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, Vector3.up);
                 }
             }
             else

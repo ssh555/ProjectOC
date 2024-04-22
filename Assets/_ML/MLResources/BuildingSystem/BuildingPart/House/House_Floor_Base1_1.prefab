@@ -1,74 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &570872475543135706
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6405752331053016215}
-  - component: {fileID: 3831055124562473500}
-  - component: {fileID: 8106853854678677819}
-  m_Layer: 8
-  m_Name: BuildingArea_wall
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6405752331053016215
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 570872475543135706}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.05, z: 0}
-  m_LocalScale: {x: 2, y: 1, z: 2}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4295218756866766863}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &3831055124562473500
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 570872475543135706}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 6471ea449c6f9e24cbcd5366a9810d67, type: 2}
---- !u!114 &8106853854678677819
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 570872475543135706}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 88dfd9a1d40070e45bc302b503615a5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsCanRotate: 0
-  Type: 0
 --- !u!1 &1794958686399250777
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,6 +69,7 @@ MonoBehaviour:
   ID: 28
   IsActiveSocket: 0
   IsCanRotate: 1
+  IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &2182269713340536826
@@ -207,7 +139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88dfd9a1d40070e45bc302b503615a5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsCanRotate: 0
+  IsCanRotate: 1
   Type: 5
 --- !u!1 &2233737879068423476
 GameObject:
@@ -278,6 +210,7 @@ MonoBehaviour:
   ID: 7
   IsActiveSocket: 0
   IsCanRotate: 1
+  IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &2404160151333991133
@@ -349,6 +282,7 @@ MonoBehaviour:
   ID: 28
   IsActiveSocket: 0
   IsCanRotate: 1
+  IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &2821359411738599049
@@ -420,6 +354,7 @@ MonoBehaviour:
   ID: 28
   IsActiveSocket: 0
   IsCanRotate: 1
+  IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &5558420745046844579
@@ -491,6 +426,7 @@ MonoBehaviour:
   ID: 28
   IsActiveSocket: 0
   IsCanRotate: 1
+  IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &5627383931919621266
@@ -562,6 +498,7 @@ MonoBehaviour:
   ID: 6
   IsActiveSocket: 1
   IsCanRotate: 1
+  IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &5857797735803684169
@@ -736,7 +673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88dfd9a1d40070e45bc302b503615a5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsCanRotate: 0
+  IsCanRotate: 1
   Type: 2
 --- !u!1 &6755840835105800947
 GameObject:
@@ -807,6 +744,7 @@ MonoBehaviour:
   ID: 7
   IsActiveSocket: 0
   IsCanRotate: 1
+  IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &6947585618851283714
@@ -851,7 +789,6 @@ Transform:
   - {fileID: 5954699012052657086}
   - {fileID: 3452475659252961456}
   - {fileID: 5975347462200550167}
-  - {fileID: 6405752331053016215}
   - {fileID: 81056508167532623}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -968,6 +905,7 @@ MonoBehaviour:
   ID: 7
   IsActiveSocket: 0
   IsCanRotate: 1
+  IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &7883404419804122715
@@ -1039,5 +977,6 @@ MonoBehaviour:
   ID: 7
   IsActiveSocket: 0
   IsCanRotate: 1
+  IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
