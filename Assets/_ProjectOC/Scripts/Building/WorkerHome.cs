@@ -3,6 +3,7 @@ using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -47,8 +48,8 @@ namespace ProjectOC.Building
             set
             {
                 hasArrive = value;
-                if (hasArrive) { Timer.Start(); }
-                else { Timer.End(); }
+                if (hasArrive) { Timer?.Start(); }
+                else { Timer?.End(); }
             }
         }
         #endregion
@@ -77,6 +78,7 @@ namespace ProjectOC.Building
                 if (TempWorker != null)
                 {
                     BindWorker(TempWorker);
+                    HasArrive = TempHasArrive;
                     if (HasArrive)
                     {
                         Worker.transform.position = transform.position + new Vector3(0, 2f, 0);
@@ -101,6 +103,12 @@ namespace ProjectOC.Building
 
         public void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIWorkerHomePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
+            {
+                ProjectOC.Building.UI.UIWorkerHome uiPanel = (handle.Result).GetComponent<ProjectOC.Building.UI.UIWorkerHome>();
+                uiPanel.Home = this;
+                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uiPanel);
+            };
         }
         #endregion
 
@@ -129,7 +137,7 @@ namespace ProjectOC.Building
         public void BindWorkerDefault()
         {
             List<Worker> workers = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkers();
-            foreach (Worker worker in workers)
+            foreach (Worker worker in workers.OrderBy(worker => worker.InstanceID).ToList())
             {
                 if (!worker.HasHome)
                 {

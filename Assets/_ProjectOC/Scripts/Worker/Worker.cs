@@ -38,11 +38,11 @@ namespace ProjectOC.WorkerNS
         [LabelText("移动速度"), FoldoutGroup("配置")]
         public float WalkSpeed = 10;
         [LabelText("当前心情"), ReadOnly]
-        public int Mood;
+        public int Mood = 100;
         [LabelText("心情最大值"), FoldoutGroup("配置")]
         public int MoodMax = 100;
         [LabelText("超过DestroyTime分钟，未绑定窝的刁民会被销毁"), FoldoutGroup("配置")]
-        public int DestroyTimeForNoHome = 15;
+        public float DestroyTimeForNoHome = 0.2f;
         [LabelText("当前负重"), ShowInInspector, ReadOnly]
         public int BURCurrent
         {
@@ -155,11 +155,11 @@ namespace ProjectOC.WorkerNS
                             LocalGameManager.Instance.WorkerManager.DeleteWorker(this);
                         };
                     }
-                    TimerForNoHome.Start();
+                    TimerForNoHome?.Start();
                 }
                 else
                 {
-                    TimerForNoHome.End();
+                    TimerForNoHome?.End();
                 }
             }
         }
@@ -225,6 +225,8 @@ namespace ProjectOC.WorkerNS
             StateController = new StateController(0);
             StateMachine = new WorkerStateMachine(this);
             StateController.SetStateMachine(StateMachine);
+
+            Home = null;
         }
         private void Awake()
         {
