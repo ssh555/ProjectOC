@@ -18,6 +18,7 @@ namespace ProjectOC.PinchFace
         {
             raceNameText = transform.Find("RaceInfo/RaceText").GetComponent<TextMeshProUGUI>();
             raceDescription = transform.Find("RaceInfo/RaceDesciption").GetComponent<TextMeshProUGUI>();
+            pinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
             base.Awake();
         }
 
@@ -124,11 +125,12 @@ namespace ProjectOC.PinchFace
 
 
         #region PinchRacePanel
+
+        private PinchFaceManager pinchFaceManager;
         [ShowInInspector]
         private UIBtnListContainer UIBtnListContainer;
-        //临时用成可序列化，方便
-        [SerializeField]
-        public List<RacePinchData> RacePinchDatas;
+        
+        public List<RacePinchData> RacePinchDatas=>pinchFaceManager.RacePinchDatas;
 
         private TextMeshProUGUI raceNameText, raceDescription;
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
 using UnityEngine;
 using ML.MathExtension;
+using ProjectOC.ManagerNS;
 
 namespace ProjectOC.PinchFace
 {
@@ -10,8 +11,11 @@ namespace ProjectOC.PinchFace
     {
         BezierComponent bezier;
         Transform jiaoTransfL, jiaoTransfR;
+        private PinchFaceHelper PinchFaceHelper;
         public PinchJiao(BezierComponent _bezier,GameObject _go, int _index) : base(_index)
         {
+            PinchFaceHelper = LocalGameManager.Instance.PinchFaceManager.pinchFaceHelper;
+            
             transformType = TransformType.Bezier;
             bezier = _bezier;
             //暂时还没有单双耳的需求
@@ -33,7 +37,7 @@ namespace ProjectOC.PinchFace
             jiaoTransfR.localPosition = _pos;
             //修改旋转
             float startRotate = 0f, endRotate = 30f;
-            _value.x = PinchFaceManager.RemapValue(_value.x, 0f, 0.8f);
+            _value.x =  PinchFaceHelper.RemapValue(_value.x, 0f, 0.8f);
             float resRotateX = Mathf.Lerp(startRotate, endRotate, _value.x);
             Vector3 resRotate = new Vector3(resRotateX, 0, 0);
             jiaoTransfL.localRotation = Quaternion.Euler(resRotate);

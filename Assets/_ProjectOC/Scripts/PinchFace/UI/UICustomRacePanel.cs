@@ -19,9 +19,8 @@ namespace ProjectOC.PinchFace
         {
             base.Awake();
             pinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
-
         }
-
+        
         #endregion
 
 
@@ -48,67 +47,119 @@ namespace ProjectOC.PinchFace
         {
             
             this.UIBtnListContainer = new UIBtnListContainer(this.transform.GetComponentInChildren<UIBtnListContainerInitor>());
-            //0-5
-            for (int i = 0; i < pinchFaceManager.pinchPartType1Inclusion.Count; i++)
+            //0-4,5是通用不需要加
+            for (int i = 0; i < pinchFaceManager.pinchPartType1Inclusion.Count-1; i++)
             {
                 foreach (var _type2 in pinchFaceManager.pinchPartType1Inclusion[i])
                 {
-                    this.UIBtnListContainer.AddBtn(i,"OC/UI/PinchFace/Pinch_BaseUISelectedBtn.prefab"
+                    this.UIBtnListContainer.AddBtn(i+1,"OC/UI/PinchFace/Pinch_BaseUISelectedBtn.prefab"
                         ,BtnText: _type2.ToString()
                         ,BtnAction:LeftButton_BtnAction
                         ,BtnSettingAction:(btn) =>
                         {
                             //To-Do 应该是异步加载完刷新一次的，而不是每次生成完Button都刷新，不过看上去也不卡
-                            this.RefreshPanelLayout();
+                            leftButtonDic.Add(_type2, btn);
+                            pinchFaceManager.pinchFaceHelper.RefreshPanelLayout(this.transform);
+                            SetLeftBtnText(btn, isNake:true);
                         });
                 }
-                
-            }
-            
-            this.UIBtnListContainer.AddOnSelectButtonChangedAction(RefreshCurrentSelect);
-            
-        }
-
-        private void RefreshCurrentSelect()
-        {
-            //Temp，最好有函数直接返回当前btnList下标
-            for (int i = 1; i < 6; i++)
-            {
-                var _selectPos = UIBtnListContainer.UIBtnLists[i].GetCurSelectedPos();
-                if (_selectPos != -Vector2Int.one)
-                {
-                    curbtnListIndex = i;
-                    curBtnPos = _selectPos;
-                    int _type2Index = curBtnPos.x * 5 + curBtnPos.y +1;
-                    curType2 = pinchFaceManager.pinchPartType1Inclusion[curbtnListIndex][_type2Index];
-                    return;
-                }
             }
         }
+        
+        
         
         private void LeftButton_BtnAction()
         {
-            //naked ?
+            UIBtnListContainer.UIBtnLists[7].DeleteAllButton();  
             
-            foreach (var _pinchFaceType3 in    pinchFaceManager.pinchPartType2Dic[curType2].pinchPartType3s)
+            int _curListIndex = UIBtnListContainer.CurSelectUIBtnListIndex;
+            Vector2Int _curPos = UIBtnListContainer.UIBtnLists[_curListIndex].GetCurSelectedPos();
+            int _curPosOne = _curPos.x * OneRowCount + _curPos.y;
+            
+            curType2 = pinchFaceManager.pinchPartType1Inclusion[_curListIndex-1][_curPosOne];
+            PinchPartType2 _type2 = curType2;
+            PinchPartType _ppt = pinchFaceManager.pinchPartType2Dic[curType2];
+                
+            if (_ppt.couldNaked)
             {
                 this.UIBtnListContainer.AddBtn(7, "OC/UI/PinchFace/Pinch_BaseUISelectedBtn.prefab"
-                    , BtnText: _pinchFaceType3.ToString()
-                    ,BtnAction:RightButton_BtnAction);
+                    , BtnText: "Naked"
+                    ,BtnAction: () =>
+                    {
+                        RightButton_BtnAction(_type2,0);
+                    });
             }
+
+
+            for (int i = 0;i < _ppt.pinchPartType3s.Count; i++)
+            {
+                this.UIBtnListContainer.AddBtn(7, "OC/UI/PinchFace/Pinch_BaseUISelectedBtn.prefab"
+                    , BtnText: _ppt.pinchPartType3s[i].ToString()
+                    ,BtnAction: () =>
+                    {
+                        RightButton_BtnAction(_type2,i+1);
+                    }
+                    ,BtnSettingAction: (_btn) =>
+                    {
+                        SetLeftBtnText(_btn, isNake:true);
+                    });
+            }
+
             UIBtnListContainer.CurSelectUIBtnList = UIBtnListContainer.UIBtnLists[7];
         }
         
-        //右侧面部Button相关函数
-        private void RightButton_BtnAction()
+                
+
+        private void RightButton_BtnAction(PinchPartType2 _type2,int _type3)
         {
+            //修改Panel text、图片  ,加入种族
+            PinchPartType ppt = pinchFaceManager.pinchPartType2Dic[curType2];
+            SelectedButton _btn = leftButtonDic[_type2];
+            
+            
+            
+            if (_type3 == 0)
+            {
+                
+                SetLeftBtnText(_btn, ppt.pinchPartType1.ToString(),true);
+            }
+            else
+            {
+                SetLeftBtnText(_btn, ppt.pinchPartType3s[_type3].ToString(),false);
+            }
+            
+            AddType3(_type2, _type3);
+            BackActionOfList7();
+        }
+        //右侧面部Button相关函数
+        private void AddType3(PinchPartType2 _type2,int _type3)
+        {
+            PinchPartType dicType = pinchFaceManager.pinchPartType2Dic[_type2];
+            
+            foreach (var _dicType3 in dicType.pinchPartType3s)
+            {
+                if (raceData.pinchPartType3s.Contains(_dicType3))
+                {
+                    raceData.pinchPartType3s.Remove(_dicType3);
+                }
+            }
+            
+            //删除之前的
+            _type3--;
+            if (_type3 >= 0)
+            {
+                raceData.pinchPartType3s.Add(dicType.pinchPartType3s[_type3-1]);    
+            }
+        }
+
+        
+        private void BackActionOfList7()
+        {            
             // 返回 selectType
-            var _selectPos = UIBtnListContainer.UIBtnLists[7].GetCurSelectedPos();
-            int _type2Index = _selectPos.x * 5 + _selectPos.y +1;
-            UIBtnListContainer.UIBtnLists[(int)curType2].
-            
-            
+            int _listIndex = (int)pinchFaceManager.pinchPartType2Dic[curType2].pinchPartType1;
+            UIBtnListContainer.CurSelectUIBtnList = UIBtnListContainer.UIBtnLists[_listIndex];
             UIBtnListContainer.UIBtnLists[7].DeleteAllButton();
+            curType2 = PinchPartType2.None;
         }
         
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -145,31 +196,33 @@ namespace ProjectOC.PinchFace
         #endregion
 
         #region CustomRace
-
+        
         private PinchFaceManager pinchFaceManager;
         private UIBtnListContainer UIBtnListContainer;
+        private const int OneRowCount = 5;
         private int curbtnListIndex = -1;
-        private Vector2Int curBtnPos = new Vector2Int(-1,-1);
-        private Vector3Int selectType = new Vector3Int(-1,-1,-1);
         private PinchPartType2 curType2 = PinchPartType2.None;
-        public void RefreshPanelLayout()
-        {
-            LayoutGroup[] layoutGroups = this.transform.GetComponentsInChildren<LayoutGroup>();
-            foreach (var group in layoutGroups)
-            {
-                LayoutRebuilder.ForceRebuildLayoutImmediate(group.transform as RectTransform);
-            }
-        }
-
-
+        private Dictionary<PinchPartType2, SelectedButton> leftButtonDic = new Dictionary<PinchPartType2, SelectedButton>();
+        private RacePinchData raceData = new RacePinchData();
         
-        private void SetLeftBtnText(int _listIndex,Vector2Int _pos, string _str,bool isNake = false)
+        
+        
+        
+        private void SetLeftBtnText(SelectedButton _btn,string _str = "",bool isNake = false)
         {
-            var btn = UIBtnListContainer.UIBtnLists[_listIndex].GetTwoDimSelectedButtons[_pos.x][_pos.y];
-            btn.GetComponent<TextMeshPro>().SetText(_str);
+            if (_str != "")
+            {
+                _btn.GetComponent<TextMeshPro>().SetText(_str);    
+            }
+            
+            Image _image = _btn.transform.Find("Image").GetComponent<Image>();
             if (isNake)
             {
-                
+                _image.color = Color.gray;
+            }
+            else
+            {
+                _image.color = Color.white;
             }
         }
         #endregion

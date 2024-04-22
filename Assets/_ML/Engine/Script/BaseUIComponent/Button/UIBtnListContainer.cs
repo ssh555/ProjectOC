@@ -11,6 +11,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 using static ML.Engine.UI.UIBtnList;
 using static ML.Engine.UI.UIBtnListContainer;
@@ -129,6 +130,8 @@ namespace ML.Engine.UI
         private Dictionary<UIBtnListInitor, UIBtnList> UIBtnListDic = new Dictionary<UIBtnListInitor, UIBtnList>();
         [ShowInInspector]
         private Dictionary<UIBtnList, int> UIBtnListIndexDic = new Dictionary<UIBtnList, int>();
+        
+        //保留以前的btnlist
         public UIBtnList InitBtnlistInfo()
         {
             this.UIBtnListIndexDic.Clear();
@@ -162,6 +165,34 @@ namespace ML.Engine.UI
 
             return uIBtnList;
             
+        }
+        
+        //重新刷新所有BtnList
+        public void RefreshAll()
+        {
+            this.UIBtnListIndexDic.Clear();
+            this.uIBtnLists.Clear();
+            this.UIBtnListDic.Clear();
+            UIBtnListInitor[] uIBtnListInitors = this.parent.GetComponentsInChildren<UIBtnListInitor>();
+            UIBtnList uIBtnList = null;
+            for (int i = 0; i < uIBtnListInitors.Length; i++)
+            {
+                if(!UIBtnListDic.ContainsKey(uIBtnListInitors[i])) 
+                {
+                    uIBtnList = new UIBtnList(uIBtnListInitors[i])
+                    {
+                        UIBtnListContainer = this
+                    };
+                    uIBtnLists.Add(uIBtnList);
+                    UIBtnListDic.Add(uIBtnListInitors[i], uIBtnList);
+                }
+            }
+            for (int i = 0; i < uIBtnListInitors.Length; i++)
+            {
+                UIBtnListIndexDic.Add(this.uIBtnLists[i], i);
+            }
+            RefreshBtnListNavagation();
+            RefreshEdge();
         }
 
         public void BindNavigationInputAction(InputAction NavigationInputAction, BindType bindType)
@@ -743,9 +774,10 @@ namespace ML.Engine.UI
             }
         }
 
-        public void AddBtnListAType(string prefabpath,InputAction inputAction = null,BindType bindType = BindType.started,List<UnityAction> actions = null)
+        public AsyncOperationHandle<GameObject> AddBtnListAType(string prefabpath,InputAction inputAction = null,BindType bindType = BindType.started,List<UnityAction> actions = null)
         {
-            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(prefabpath).Completed += (handle) =>
+            var ans = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(prefabpath);
+                ans.Completed += (handle) =>
             {
                 var btnlist = handle.Result.GetComponent<UIBtnListInitor>();
                 btnlist.gameObject.name = btnlist.GetHashCode().ToString();
@@ -776,10 +808,11 @@ namespace ML.Engine.UI
                 if (needMoveToBtnList)FindEnterableUIBtnList();
                 RefreshIsEmpty();
             };
+                return ans;
         }
 
 
-        public void AddBtnListBType(string prefabpath, LinkData linkData)
+        public void AddBtnListBType(string prefabpath, LinkData linkData,InputAction inputAction = null,BindType bindType = BindType.started)
         {
             Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(prefabpath).Completed += (handle) =>
             {
@@ -791,8 +824,19 @@ namespace ML.Engine.UI
                     this.btnListContainerInitData.AddLinkData(linkData);
                 }
                 UIBtnList uIBtnList = InitBtnlistInfo();
+                if (inputAction != null)
+                {
+                    uIBtnList.BindButtonInteractInputAction(inputAction, bindType);
+                }
             }; 
         }
+
+        public void RefreshBtnListContainer(BtnListContainerInitData btnListContainerInitData)
+        {
+            this.btnListContainerInitData = btnListContainerInitData;
+            RefreshAll();
+        }
+        
 
         public void DeleteBtnList(int BtnListIndex)
         {
