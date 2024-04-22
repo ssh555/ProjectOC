@@ -67,8 +67,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ID: 9
-  IsActiveSocket: 1
+  IsActiveSocket: 0
   IsCanRotate: 1
+  IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &384224245113111153
@@ -138,8 +139,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ID: 9
-  IsActiveSocket: 1
+  IsActiveSocket: 0
   IsCanRotate: 1
+  IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &1226402951039002562
@@ -247,6 +249,78 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.17924257, y: 3.0008965, z: 3.0000002}
   m_Center: {x: -0.014620945, y: 0.00013929605, z: 0}
+--- !u!1 &3119219629904515648
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6403975220205003006}
+  - component: {fileID: 1196704000227523571}
+  - component: {fileID: 128811211336245002}
+  m_Layer: 8
+  m_Name: BS (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6403975220205003006
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3119219629904515648}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2983648498577638585}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &1196704000227523571
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3119219629904515648}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.2
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &128811211336245002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3119219629904515648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ID: 38
+  IsActiveSocket: 0
+  IsCanRotate: 1
+  IsRotateOnArea: 1
+  PositionOffset: {x: 0, y: 0, z: 0}
+  RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &3644328939181074879
 GameObject:
   m_ObjectHideFlags: 0
@@ -259,7 +333,7 @@ GameObject:
   - component: {fileID: 2573384292624250681}
   - component: {fileID: 3983241078559401118}
   m_Layer: 8
-  m_Name: BSA_c
+  m_Name: BSA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -316,6 +390,7 @@ MonoBehaviour:
   ID: 8
   IsActiveSocket: 1
   IsCanRotate: 1
+  IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &4621519091620937235
@@ -354,6 +429,7 @@ Transform:
   - {fileID: 1239091110876126365}
   - {fileID: 8976165833653523346}
   - {fileID: 296457180371484780}
+  - {fileID: 6403975220205003006}
   - {fileID: 3570935887255824335}
   - {fileID: 4460805311962686490}
   m_Father: {fileID: 0}
@@ -469,7 +545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88dfd9a1d40070e45bc302b503615a5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsCanRotate: 0
+  IsCanRotate: 1
   Type: 4
 --- !u!1 &8150968814488402076
 GameObject:
@@ -538,7 +614,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88dfd9a1d40070e45bc302b503615a5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsCanRotate: 0
+  IsCanRotate: 1
   Type: 4
 --- !u!1 &8850374687790182984
 GameObject:
@@ -607,7 +683,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ID: 9
-  IsActiveSocket: 1
+  IsActiveSocket: 0
   IsCanRotate: 1
+  IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
