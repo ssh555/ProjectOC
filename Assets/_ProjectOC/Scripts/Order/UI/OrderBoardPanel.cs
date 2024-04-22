@@ -348,22 +348,26 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                         },
                         OnFinishAdd: () =>
                         {
-                            //按钮更新完毕刷新
                             this.Refresh();
+                            this.OrderDelegationUIBtnListContainer.FindEnterableUIBtnList();
+                            Debug.Log("完毕刷新");
                         });
                     }
                     //按钮更新完毕刷新
                     this.Refresh();
                 });
-                //初始化完毕
+                //常规订单槽初始化完毕
+                
                 this.isInitNormalOrder = true;
             }
             else
             {
-                //初始化完毕刷新
+                //常规订单槽初始化完毕刷新
             }
 
             #endregion
+            
+            
             isNeedRefreshOrderDelegation = false;
         }
         else if(FunctionIndex != 1 || OrderDelegationIndex != 1)
@@ -540,6 +544,11 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     [System.Serializable]
     public struct OrderBoardPanelStruct
     {
+        public KeyTip AcceptedOrderCancel;
+        public KeyTip AcceptedOrderConfirm;
+        public KeyTip OrderDelegationCancel;
+        public KeyTip OrderDelegationConfirm;
+
         public KeyTip CommitOrder;
         public KeyTip ViewMoreInformation;
         public KeyTip Back;

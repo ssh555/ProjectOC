@@ -12,6 +12,10 @@ using Sirenix.OdinInspector;
 using static ML.Engine.UI.UIBtnListContainerInitor;
 using static ML.Engine.UI.UIBtnListInitor;
 using static UnityEngine.InputSystem.InputAction;
+using ML.Engine.Utility;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using System.IO.Pipes;
+using UnityEngine.InputSystem.iOS;
 
 namespace ML.Engine.UI
 {
@@ -91,6 +95,8 @@ namespace ML.Engine.UI
         private Dictionary<(InputAction, BindType), Action<InputAction.CallbackContext>> InputActionBindDic = new Dictionary<(InputAction, BindType), Action<InputAction.CallbackContext>>();
 
         public event Action OnSelectButtonChanged;
+
+
 
         /// <summary>
         /// parent: 按钮父物体 limitNum：一行多少个按钮 hasInitSelect:是否有初始选中 isLoop:是否为循环按钮 isWheel：是否为轮转按钮 OnSelectedEnter：选中回调 OnSelectedExit：选出回调
@@ -226,7 +232,7 @@ namespace ML.Engine.UI
                 this.TwoDimI = 0;
                 this.TwoDimJ = 0;
                 this.CurSelected = TwoDimSelectedButtons[TwoDimI, TwoDimJ];
-                this.CurSelected.OnSelect(null);
+                this.CurSelected?.OnSelect(null);
                 this.NeedToResetCurSelected = false;
                 this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
                 this.OnSelectButtonChanged?.Invoke();
@@ -337,6 +343,76 @@ namespace ML.Engine.UI
             
         }
 
+
+        public void AddBtns(int num, string prefabpath,Action OnAllBtnAdded = null ,List<UnityAction> BtnActions = null, Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null, List<string> BtnTexts = null)
+        {
+            FunctionExecutor<List<AsyncOperationHandle>> functionExecutor = new FunctionExecutor<List<AsyncOperationHandle>>();
+            functionExecutor.AddFunction(()=> { return AddBtnsHandles(num, prefabpath, BtnActions, OnSelectEnter, OnSelectExit, BtnSettingAction, BtnTexts); });
+            functionExecutor.SetOnAllFunctionsCompleted(OnAllBtnAdded);
+            functionExecutor.Execute();
+        }
+
+        private List<AsyncOperationHandle> AddBtnsHandles(int num, string prefabpath, List<UnityAction>  BtnActions = null, Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null, List<string> BtnTexts = null)
+        {
+            List<AsyncOperationHandle> handles = new List<AsyncOperationHandle>();
+            for (int i = 0; i < num; i++)
+            {
+                var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(prefabpath);
+                handles.Add(handle);
+                handle.Completed += (handle) =>
+                 {
+                     // 实例化
+                     var btn = handle.Result.GetComponent<SelectedButton>();
+                     btn.gameObject.name = btn.GetHashCode().ToString();
+                     btn.transform.SetParent(this.parent.Find("Container"), false);
+                     btn.transform.localScale = Vector3.one;
+
+                     if (BtnActions[i] != null)
+                     {
+                         btn.onClick.AddListener(BtnActions[i]);
+                     }
+
+                     if (OnSelectEnter != null)
+                     {
+                         btn.SetOnSelectEnter(OnSelectEnter);
+                     }
+
+                     if (OnSelectExit != null)
+                     {
+                         btn.SetOnSelectExit(OnSelectExit);
+                     }
+
+                     if (BtnSettingAction != null)
+                     {
+                         BtnSettingAction(btn);
+                     }
+
+                     if (BtnTexts[i] != null)
+                     {
+                         this.SetBtnText(btn, BtnTexts[i]);
+                     }
+
+                     if (this.uiBtnListContainer == null)
+                     {
+                         InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+                         return;
+                     }
+
+                     bool needMoveToBtnList = this.uiBtnListContainer.IsEmpty;
+                     InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+                     if (needMoveToBtnList)
+                     {
+                         this.UIBtnListContainer?.FindEnterableUIBtnList();
+                     }
+                     else
+                     {
+                         this.UIBtnListContainer?.RefreshEdge();
+                     }
+                 };
+            }
+            return handles;
+        }
+
         public void DeleteButton(int SelectedButtonIndex)
         {
             /*int rowIndex = index / limitNum;
@@ -369,9 +445,9 @@ namespace ML.Engine.UI
             }
         }
 
-        public void DeleteAllButton(Action action = null)
+        public void DeleteAllButton(Action OnAllBtnDeleted = null)
         {
-            GameManager.Instance.StartCoroutine(DestroyAllAndRefreshBtnList(action));
+            GameManager.Instance.StartCoroutine(DestroyAllAndRefreshBtnList(OnAllBtnDeleted));
         }
 
         private IEnumerator DestroyAndRefreshBtnList(int SelectedButtonIndex)
@@ -385,6 +461,28 @@ namespace ML.Engine.UI
             // 在下一帧更新BtnList
             InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
             this.UIBtnListContainer?.RefreshEdge();
+        }
+
+        private IEnumerator DestroyNumAndRefreshBtnList(int num, Action OnAllBtnDeleted = null)
+        {
+            //倒序销毁物体
+            var con = this.parent.Find("Container");
+            for (int i = 0; i < num; i++)
+            {
+                GameManager.DestroyObj(con.GetChild(con.childCount - 1 - i).gameObject);
+            }
+            // 等待一帧 原因是当前帧销毁 transform.childCount在当前帧并不会马上更新，需要下一帧
+            yield return null;
+
+            // 在下一帧更新BtnList
+            InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+            this.UIBtnListContainer?.RefreshEdge();
+            OnAllBtnDeleted?.Invoke();
+        }
+
+        public void DeleteButtons(int num,Action OnAllBtnDeleted = null)
+        {
+            GameManager.Instance.StartCoroutine(DestroyNumAndRefreshBtnList(num,OnAllBtnDeleted));
         }
 
         private IEnumerator DestroyAllAndRefreshBtnList(Action action = null)
@@ -402,6 +500,18 @@ namespace ML.Engine.UI
             this.UIBtnListContainer?.RefreshEdge();
 
             action?.Invoke();
+        }
+
+        public void ChangBtnNum(int newNum,string prefabpath)
+        {
+            if (newNum > this.OneDimCnt)
+            {
+                this.AddBtns(newNum - this.OneDimCnt, prefabpath);
+            }
+            else if(newNum < this.OneDimCnt)
+            {
+                this.DeleteButtons(this.OneDimCnt - newNum);
+            }
         }
 
         public void Check()
@@ -482,7 +592,7 @@ namespace ML.Engine.UI
             return GetBtn(i,j);
         }
 
-
+        
 
         /// <summary>
         /// 获取当前选中按钮
@@ -491,6 +601,9 @@ namespace ML.Engine.UI
         {
             return this.CurSelected;
         }
+
+        
+
         /// <summary>
         /// 获取当前选中按钮
         /// </summary>
@@ -1022,7 +1135,11 @@ namespace ML.Engine.UI
                 this.TwoDimI = 0;
                 this.TwoDimJ = 0;
                 this.CurSelected = TwoDimSelectedButtons[TwoDimI][TwoDimJ];
+                Debug.Log(this.CurSelected.name);
+                this.CurSelected.OnSelect(null);
+                Debug.Log("1 " + this.CurSelected);
                 this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
+                Debug.Log("2 "+this.CurSelected);
             }
             this.CurSelected?.OnSelect(null);
 
@@ -1073,15 +1190,26 @@ namespace ML.Engine.UI
         }
 
         /// <summary>
-        /// 获取当前选中按钮的坐标 若没有选中则返回（-1，-1）
+        /// 获取当前选中按钮的二维坐标 若没有选中则返回（-1，-1）
         /// </summary>
-        public (int,int) GetCurSelectedPos()
+        public (int,int) GetCurSelectedPos2()
         {
             if (this.CurSelected != null)
             {
                 return (TwoDimI, TwoDimJ);
             }
             return (-1, -1);
+        }
+        /// <summary>
+        /// 获取当前选中按钮的一维坐标 若没有选中则返回（-1，-1）
+        /// </summary>
+        public int GetCurSelectedPos1()
+        {
+            if (this.CurSelected != null)
+            {
+                return TwoDimI * TwoDimW + TwoDimJ;
+            }
+            return -1;
         }
     }
 
