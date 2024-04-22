@@ -29,6 +29,9 @@ namespace ML.Engine.BuildingSystem.UI
         private Dictionary<BuildingCategory3, RectTransform> styleInstance = new Dictionary<BuildingCategory3, RectTransform>();
         private RectTransform styleParent;
         private RectTransform templateStyle;
+
+        private Transform KT_AlterHeight;
+        private Transform KT_AlterSocket;
         #endregion
 
         #endregion
@@ -42,6 +45,9 @@ namespace ML.Engine.BuildingSystem.UI
             this.styleParent = this.transform.Find("KT_AlterHeight").Find("KT_AlterStyle").Find("Content") as RectTransform;
             this.templateStyle = this.styleParent.Find("StyleTemplate") as RectTransform;
             this.templateStyle.gameObject.SetActive(false);
+
+            this.KT_AlterHeight = this.transform.Find("KT_AlterHeight");
+            this.KT_AlterSocket = this.transform.Find("KeyTip").Find("KT_AlterSocket");
         }
 
         #endregion
@@ -93,6 +99,7 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 return;
             }
+
             var styles = BM.GetAllStyleByBPartHeight(this.Placer.SelectedPartInstance);
             var heights = BM.GetAllHeightByBPartStyle(this.Placer.SelectedPartInstance);
             int sIndex = Array.IndexOf(styles, this.Placer.SelectedPartInstance.Classification.Category3);
@@ -133,6 +140,10 @@ namespace ML.Engine.BuildingSystem.UI
             // 下侧显示
             bool active = (BuildingManager.Instance.GetBPartPrefabCountOnHeight(this.Placer.SelectedPartInstance) > 1 || BuildingManager.Instance.GetBPartPrefabCountOnStyle(this.Placer.SelectedPartInstance) > 1);
             this.transform.Find("KT_AlterHeight").gameObject.SetActive(active);
+
+            //家具特殊处理
+            this.KT_AlterHeight.gameObject.SetActive(this.Placer.SelectedPartInstance.Classification.Category1 != BuildingCategory1.Furniture);
+            this.KT_AlterSocket.gameObject.SetActive(this.Placer.SelectedPartInstance.Classification.Category1 != BuildingCategory1.Furniture);
         }
 
         /// <summary>

@@ -7,7 +7,7 @@ namespace ProjectOC.PinchFace
     public class ChangeTransformPinchSetting : MonoBehaviour, IPinchSettingComp
     {
         public int Index { get; }
-        
+        public PinchTransfType.TransformType TransformType;
         
         public void LoadData()
         {

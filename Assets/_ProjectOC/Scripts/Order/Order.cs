@@ -58,6 +58,7 @@ namespace ProjectOC.Order
 
             foreach (var item in RequireItem)
             {
+                Debug.Log(item.Key+" "+addedItemDic[item.Key] + " "+item.Value);
                 if (addedItemDic[item.Key] != item.Value)
                 {
                     return false;

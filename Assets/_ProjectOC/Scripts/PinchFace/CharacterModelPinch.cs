@@ -25,6 +25,9 @@ namespace ProjectOC.PinchFace
         public Slider _slider;
         public void TempChangeType(int index)
         {
+            ChangeType(PinchPartType2.HeadTop,index);
+            return;
+            
             if (index < 2)
             {
                 ChangeType(PinchPartType2.Tail, index);
@@ -103,7 +106,7 @@ namespace ProjectOC.PinchFace
                     SNewBone.transform.localPosition = _transBone.localPosition;
                     SNewBone.transform.localRotation = _transBone.localRotation;
                     SNewBone.transform.localScale = _transBone.localScale;
-                    Catalog(boneCatalog,SNewBone.transform);
+                    CataBonelog(boneCatalog,SNewBone.transform);
                 }
                 
             }
@@ -245,7 +248,7 @@ namespace ProjectOC.PinchFace
                     replaceGo.Add(null);
                 
                 avatar = transform.Find("AnMiXiuBone");
-                Catalog(boneCatalog,avatar);
+                CataBonelog(boneCatalog,avatar);
                 
                 //骨骼字典初始化
                 boneWeightDictionary.Add(BoneWeightType.Head,boneCatalog["Head"]);
@@ -255,12 +258,13 @@ namespace ProjectOC.PinchFace
                 boneWeightDictionary.Add(BoneWeightType.Leg,boneCatalog["Weight_Thin"]);
                 boneWeightDictionary.Add(BoneWeightType.HeadTop,boneCatalog["Add_HeadTop"]);
                 boneWeightDictionary.Add(BoneWeightType.Root,boneCatalog["Root"]);
+                
                 this.enabled = false;
             }
             
             
             //将子物体加入字典    containThis : 需不需要把自身加入字典
-            private void Catalog (Dictionary<string,Transform>dic, Transform transform,bool containThis = true)
+            private void CataBonelog (Dictionary<string,Transform>dic, Transform transform,bool containThis = true)
             {
                 if (transform.name.StartsWith(AddStr))
                 {
@@ -294,7 +298,7 @@ namespace ProjectOC.PinchFace
                 }
                 
                 foreach (Transform child in transform)
-                    Catalog (dic,child);
+                    CataBonelog (dic,child);
             }
 
             private void DisCatalog(Dictionary<string,Transform>dic, Transform transform)
