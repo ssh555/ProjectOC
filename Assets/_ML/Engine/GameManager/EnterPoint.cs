@@ -1,8 +1,6 @@
 using ML.Engine.UI;
-using ProjectOC.InventorySystem.UI;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 namespace ML.Engine.Manager

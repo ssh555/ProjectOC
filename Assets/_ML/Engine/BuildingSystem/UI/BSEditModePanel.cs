@@ -1,11 +1,7 @@
 using ML.Engine.TextContent;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Windows;
 using static ML.Engine.BuildingSystem.UI.BSEditModePanel;
 
 namespace ML.Engine.BuildingSystem.UI
@@ -45,6 +41,9 @@ namespace ML.Engine.BuildingSystem.UI
         public override void OnEnter()
         {
             base.OnEnter();
+
+            // TODO : 放置于UI中调用不是很合理
+            this.Placer.SelectedPartInstance.OnEnterEdit();
 
             // 记录原 Transform
             this._editOldPos = this.Placer.SelectedPartInstance.transform.position;
