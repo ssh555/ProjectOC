@@ -1580,7 +1580,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""f4d49e6c-7a66-43ce-a9aa-b95d4326b994"",
-                    ""path"": ""<Keyboard>/f"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1699,7 +1699,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""c6ba8d4b-99d5-4d61-ac2b-d55a9675ca86"",
-                    ""path"": ""<Keyboard>/f"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -2853,7 +2853,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""b812b3b3-b0c5-4ee5-b6c3-49c93eeb7099"",
-                    ""path"": ""<Keyboard>/f"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

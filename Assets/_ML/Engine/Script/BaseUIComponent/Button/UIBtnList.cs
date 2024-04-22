@@ -349,7 +349,7 @@ namespace ML.Engine.UI
             FunctionExecutor<List<AsyncOperationHandle>> functionExecutor = new FunctionExecutor<List<AsyncOperationHandle>>();
             functionExecutor.AddFunction(()=> { return AddBtnsHandles(num, prefabpath, BtnActions, OnSelectEnter, OnSelectExit, BtnSettingAction, BtnTexts); });
             functionExecutor.SetOnAllFunctionsCompleted(OnAllBtnAdded);
-            functionExecutor.Execute();
+            GameManager.Instance.StartCoroutine(functionExecutor.Execute());
         }
 
         private List<AsyncOperationHandle> AddBtnsHandles(int num, string prefabpath, List<UnityAction>  BtnActions = null, Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null, List<string> BtnTexts = null)
@@ -367,7 +367,7 @@ namespace ML.Engine.UI
                      btn.transform.SetParent(this.parent.Find("Container"), false);
                      btn.transform.localScale = Vector3.one;
 
-                     if (BtnActions[i] != null)
+                     if (BtnActions!=null && BtnActions[i] != null)
                      {
                          btn.onClick.AddListener(BtnActions[i]);
                      }
@@ -387,7 +387,7 @@ namespace ML.Engine.UI
                          BtnSettingAction(btn);
                      }
 
-                     if (BtnTexts[i] != null)
+                     if (BtnTexts!=null && BtnTexts[i] != null)
                      {
                          this.SetBtnText(btn, BtnTexts[i]);
                      }
@@ -502,15 +502,15 @@ namespace ML.Engine.UI
             action?.Invoke();
         }
 
-        public void ChangBtnNum(int newNum,string prefabpath)
+        public void ChangBtnNum(int newNum,string prefabpath,Action OnAllBtnChanged = null)
         {
             if (newNum > this.OneDimCnt)
             {
-                this.AddBtns(newNum - this.OneDimCnt, prefabpath);
+                this.AddBtns(newNum - this.OneDimCnt, prefabpath,OnAllBtnAdded: OnAllBtnChanged);
             }
             else if(newNum < this.OneDimCnt)
             {
-                this.DeleteButtons(this.OneDimCnt - newNum);
+                this.DeleteButtons(this.OneDimCnt - newNum, OnAllBtnDeleted: OnAllBtnChanged);
             }
         }
 

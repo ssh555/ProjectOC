@@ -270,7 +270,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ef5a504aab2cfbf4c81ec1fa7fa95186
-    m_Address: OC/UI/Restaurant/Prefabs
+    m_Address: Assets/_ProjectOC/OCResources/UI/Restaurant/Prefabs
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
