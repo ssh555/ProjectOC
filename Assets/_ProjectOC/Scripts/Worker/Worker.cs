@@ -45,7 +45,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("心情最大值"), FoldoutGroup("配置")]
         public int MoodMax = 100;
         [LabelText("超过DestroyTime分钟，未绑定窝的刁民会被销毁"), FoldoutGroup("配置")]
-        public float DestroyTimeForNoHome = 0.2f;
+        public float DestroyTimeForNoHome = 1f;
         [LabelText("当前负重"), ShowInInspector, ReadOnly]
         public int BURCurrent
         {
@@ -264,7 +264,7 @@ namespace ProjectOC.WorkerNS
             string icon = lowMood ? "LowMood" : "";
             icon = inSeq ? "LowAP" : icon;
             icon = lowMood && inSeq ? "LowAPMood" : icon;
-            WorldIcon.SetSprite(LocalGameManager.Instance.WorkerManager.GetSprite(icon));
+            WorldIcon?.SetSprite(LocalGameManager.Instance.WorkerManager.GetSprite(icon));
         }
 
         public bool SetDestination(Vector3 target, Action<Worker> action = null)
