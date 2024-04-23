@@ -1,5 +1,6 @@
 using ML.Engine.Timer;
 using ProjectOC.ManagerNS;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -10,6 +11,7 @@ using static ProjectOC.Order.OrderManager;
 
 namespace ProjectOC.Order
 {
+    [Serializable]
     public class OrderUrgent : Order
     {
         /// <summary>

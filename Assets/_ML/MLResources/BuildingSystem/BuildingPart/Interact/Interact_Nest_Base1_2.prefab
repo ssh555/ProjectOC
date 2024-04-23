@@ -69,6 +69,7 @@ MonoBehaviour:
   ID: 2
   IsActiveSocket: 1
   IsCanRotate: 1
+  IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &8034424630954855357
@@ -83,7 +84,7 @@ GameObject:
   - component: {fileID: 398077504217139471}
   - component: {fileID: 5092037616627785291}
   - component: {fileID: 9060190368047450666}
-  - component: {fileID: 7570610256652727922}
+  - component: {fileID: 8363813574793304021}
   m_Layer: 7
   m_Name: Interact_Nest_Base1_2
   m_TagString: Untagged
@@ -178,7 +179,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.1052077, y: 0.5983005, z: 0.7853849}
   m_Center: {x: 0.0017246902, y: 0.18, z: -0.0007993132}
---- !u!114 &7570610256652727922
+--- !u!114 &8363813574793304021
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -187,17 +188,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 8034424630954855357}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84b45a722afc9f748bdef2e991e7ddaf, type: 3}
+  m_Script: {fileID: 11500000, guid: d64c9f25abfb08b41b785945f3a2b8cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
     Category1: 1
     Category2: 107
     Category3: 100
-    Category4: 1
+    Category4: 2
   instanceID: 
   canPlaceInPlaceMode: 1
   mode: 0
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 0, z: 0, w: 1}
   activeSocketIndex: 0
+  Time: 1
+  Mood: 5
+  Worker: {fileID: 0}

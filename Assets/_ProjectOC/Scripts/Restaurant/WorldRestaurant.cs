@@ -27,12 +27,12 @@ namespace ProjectOC.RestaurantNS
 
         public void Interact(InteractComponent component)
         {
-            //GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIRestaurantPanel.prefab", GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
-            //{
-            //    InventorySystem.UI.UIRestaurant uiPanel = handle.Result.GetComponent<InventorySystem.UI.UIRestaurant>();
-            //    uiPanel.Restaurant = Restaurant;
-            //    GameManager.Instance.UIManager.PushPanel(uiPanel);
-            //};
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIRestaurantPanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
+            {
+                InventorySystem.UI.UIRestaurant uiPanel = handle.Result.GetComponent<InventorySystem.UI.UIRestaurant>();
+                uiPanel.Restaurant = Restaurant;
+                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uiPanel);
+            };
         }
     }
 }
