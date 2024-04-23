@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4210128681346500923
+--- !u!1 &3976460065637795062
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,23 +8,23 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5093075735548400531}
-  - component: {fileID: 1481773501930369479}
-  - component: {fileID: 3582665397646665479}
+  - component: {fileID: 8706873520633754240}
+  - component: {fileID: 6933032564312383446}
+  - component: {fileID: 8604808098194187077}
   m_Layer: 0
-  m_Name: TemplatePinchType
+  m_Name: 12_Hand_PinchType2Template
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5093075735548400531
+--- !u!4 &8706873520633754240
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4210128681346500923}
+  m_GameObject: {fileID: 3976460065637795062}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -33,30 +33,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1481773501930369479
+--- !u!114 &6933032564312383446
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4210128681346500923}
+  m_GameObject: {fileID: 3976460065637795062}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 350f321420e1bf94a930e2e6111cd3e2, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d4266ab2b90dc147a5340641698dd7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneWeightChangeType: 1
-  scaleValueRange: {x: 0.5, y: 1.5}
-  currentScaleValue: 1
-  offsetValueRange: {x: 0, y: 0}
-  currentOffsetValue: 0
---- !u!114 &3582665397646665479
+  distributionMode: 0
+--- !u!114 &8604808098194187077
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4210128681346500923}
+  m_GameObject: {fileID: 3976460065637795062}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2bb0c00045473944a988c7989b1eb22, type: 3}

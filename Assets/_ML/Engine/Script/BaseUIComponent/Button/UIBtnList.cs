@@ -73,7 +73,7 @@ namespace ML.Engine.UI
         private bool hasInitSelect;
         private bool isLoop;
         private bool isWheel;
-
+        private bool readUnActive;
         private bool NeedToResetCurSelected = false;
         [ShowInInspector]
         private bool isEmpty;
@@ -111,7 +111,7 @@ namespace ML.Engine.UI
             this.isWheel = isWheel;
             if (parent != null)
             {
-                InitBtnInfo(parent, limitNum, hasInitSelect, isLoop, isWheel, OnSelectedEnter, OnSelectedExit);
+                InitBtnInfo(parent, limitNum, hasInitSelect, isLoop, isWheel, true,OnSelectedEnter, OnSelectedExit);
                 try
                 {
                     this.Selected = parent.Find("Selected");
@@ -129,9 +129,11 @@ namespace ML.Engine.UI
             this.hasInitSelect = btnListInitData.hasInitSelect;
             this.isLoop = btnListInitData.isLoop;
             this.isWheel = btnListInitData.isWheel;
+            this.readUnActive = btnListInitData.readUnActiveButton;
+            
             if (parent != null)
             {
-                InitBtnInfo(parent, limitNum, hasInitSelect, isLoop, isWheel, null, null);
+                InitBtnInfo(parent, limitNum, hasInitSelect, isLoop, isWheel, this.readUnActive,null, null);
                 try
                 {
                     this.Selected = parent.Find("Selected");
@@ -141,7 +143,7 @@ namespace ML.Engine.UI
             }
         }
 
-        public void InitBtnInfo(Transform parent, int limitNum = 1, bool hasInitSelect = true, bool isLoop = false, bool isWheel = false, Action OnSelectedEnter = null, Action OnSelectedExit = null)
+        public void InitBtnInfo(Transform parent, int limitNum = 1, bool hasInitSelect = true, bool isLoop = false, bool isWheel = false,bool _readUnActive = true, Action OnSelectedEnter = null, Action OnSelectedExit = null)
         {
             this.SBDic.Clear();
             this.SBDicIndex.Clear();
@@ -150,7 +152,7 @@ namespace ML.Engine.UI
 
 
 
-            SelectedButton[] OneDimSelectedButtons = parent.GetComponentsInChildren<SelectedButton>(true);
+            SelectedButton[] OneDimSelectedButtons = parent.GetComponentsInChildren<SelectedButton>(_readUnActive);
             this.OneDimCnt = OneDimSelectedButtons.Length;
 
             if(this.OneDimCnt == 0)
@@ -323,13 +325,13 @@ namespace ML.Engine.UI
 
                 if(this.uiBtnListContainer == null)
                 {
-                    InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+                    InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
                     OnFinishAdd?.Invoke();
                     return;
                 }
 
                 bool needMoveToBtnList = this.uiBtnListContainer.IsEmpty;
-                InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+                InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
                 if(needMoveToBtnList)
                 {
                     this.UIBtnListContainer?.FindEnterableUIBtnList();
@@ -394,12 +396,12 @@ namespace ML.Engine.UI
 
                      if (this.uiBtnListContainer == null)
                      {
-                         InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+                         InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
                          return;
                      }
 
                      bool needMoveToBtnList = this.uiBtnListContainer.IsEmpty;
-                     InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+                     InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
                      if (needMoveToBtnList)
                      {
                          this.UIBtnListContainer?.FindEnterableUIBtnList();
@@ -459,7 +461,7 @@ namespace ML.Engine.UI
             yield return null;
 
             // 在下一帧更新BtnList
-            InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+            InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
             this.UIBtnListContainer?.RefreshEdge();
         }
 
@@ -475,7 +477,7 @@ namespace ML.Engine.UI
             yield return null;
 
             // 在下一帧更新BtnList
-            InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+            InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
             this.UIBtnListContainer?.RefreshEdge();
             OnAllBtnDeleted?.Invoke();
         }
@@ -496,7 +498,7 @@ namespace ML.Engine.UI
             yield return null;
 
             // 在下一帧更新BtnList
-            InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+            InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
             this.UIBtnListContainer?.RefreshEdge();
 
             action?.Invoke();
@@ -516,7 +518,7 @@ namespace ML.Engine.UI
 
         public void Check()
         {
-            InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+            InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
             this.UIBtnListContainer?.RefreshEdge();
         }
         
@@ -1102,6 +1104,7 @@ namespace ML.Engine.UI
 
         public void OnSelectExit()
         {
+            
             this.SetCurSelectedNull();
             /*            if (this.uiBtnListContainer == null)
                         {

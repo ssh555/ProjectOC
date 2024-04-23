@@ -75,7 +75,7 @@ namespace ML.Engine.UI
         }
 
         [Serializable]
-        public struct LinkData
+        public class LinkData
         {
             [LabelText("连接双方两个BtnList的下标")]
             public int btnlist1, btnlist2;
@@ -86,6 +86,10 @@ namespace ML.Engine.UI
             [LabelText("该连接的类型")]
             public LinkType linktype;
 
+            public LinkData()
+            {
+                
+            }
             public LinkData(int btnlist1, int btnlist2, EdgeType btnlist1type, EdgeType btnlist2type, LinkType linktype)
             {
                 this.btnlist1 = btnlist1;

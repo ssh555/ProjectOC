@@ -30,12 +30,16 @@ namespace ProjectOC.LandMassExpand
             get => powerCount;
             set
             {
+                int lastPowerCount = PowerCount;            
                 powerCount = value;
-                
-                bool inPower = powerCount > 0;
+                //count
+                if ((lastPowerCount > 0 && powerCount == 0) || (lastPowerCount == 0 && powerCount > 0))
+                {
+                    PowerStateChange();
+                }
             }
         }
-        
+        public bool InPower => PowerCount > 0;
 
 
 
@@ -66,7 +70,6 @@ namespace ProjectOC.LandMassExpand
                 bpIslandManager.electAppliances.Add(this);
             }
             //重置
-            PowerCount = 0;
             RemoveFromAllPowerCores();
             //重新计算
             RecalculatePowerCount();
@@ -93,7 +96,7 @@ namespace ProjectOC.LandMassExpand
                     tempCount++;                    
                 }
             }
-
+            
             PowerCount = tempCount;
         }
         
@@ -108,6 +111,20 @@ namespace ProjectOC.LandMassExpand
             {
                 (powerSub as ISupportPowerBPart).RemoveNeedPowerBpart(this);
             }
+        }
+
+        public virtual void PowerStateChange()
+        {
+            string debugText;
+            if (InPower)
+            {
+                debugText = "无电变有电";
+            }
+            else
+            {
+                debugText = "有电变无电";
+            }
+            Debug.Log(debugText);
         }
 
         void OnDrawGizmos()
