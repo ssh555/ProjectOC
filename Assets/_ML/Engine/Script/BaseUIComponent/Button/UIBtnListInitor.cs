@@ -29,14 +29,17 @@ namespace ML.Engine.UI
             public bool isWheel;
             [LabelText("是否在BtnListContainer里")]
             public bool hasBtnListContainer;
-
+            [LabelText("是否读取UnActive Button")] 
+            public bool readUnActiveButton;
+            
             public static BtnListInitData defaultTemplate = new BtnListInitData()
             {
                 limitNum = 1,
                 hasInitSelect = false,
                 isLoop = false,
                 isWheel = false,
-                hasBtnListContainer = false
+                hasBtnListContainer = false,
+                readUnActiveButton = true
             };
         }
 

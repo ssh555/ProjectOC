@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
 using ProjectOC.ManagerNS;
+using ProjectOC.PinchFace.Config;
+using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.U2D;
 
 namespace ProjectOC.PinchFace
 {
@@ -14,6 +17,27 @@ namespace ProjectOC.PinchFace
         {
             base.Awake();
             pinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
+            uICameraImage = transform.Find("UICameraImage").GetComponentInChildren<UICameraImage>();
+            uICameraImage.Init();
+            // GameObject go = null;
+            // uICameraImage.LookAtGameObject(go); //自动移动位置
+            
+            
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<PinchDataConfig>("OC/Configs/PinchFace/PinchFaceConfig/PinchDataConfig.asset").Completed+=(handle) =>
+            {
+                Config = handle.Result;
+            };
+
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>("OC/UI/PinchFace/Texture/SA_PinchFace.spriteatlasv2").Completed+=(handle) =>
+            {
+                SA_PinchPart = handle.Result;
+            };
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+            uICameraImage.DisableUICameraImage();
         }
 
         #endregion
@@ -24,21 +48,28 @@ namespace ProjectOC.PinchFace
         {
             base.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Enable();
-            uIBtnListContainer.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
+            UIBtnListContainer.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
         }
         protected override void UnregisterInput()
         {
             base.UnregisterInput();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Disable();
-            this.uIBtnListContainer.DisableUIBtnListContainer();
+            this.UIBtnListContainer.DisableUIBtnListContainer();
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
         }
 
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             //如果当前在btnList[7]
-            ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
+            if (CurrentState == CurrentMouseState.Left)
+            {
+                ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
+            }
+            else if (CurrentState == CurrentMouseState.Right)
+            {
+                ReturnBtnList(1);
+            }
         }
         
         //btnList0 随机
@@ -48,16 +79,22 @@ namespace ProjectOC.PinchFace
         //btnList4--？  样式、颜色
         protected override void InitBtnInfo()
         {
-            this.uIBtnListContainer =
+            this.UIBtnListContainer =
                 new UIBtnListContainer(this.transform.GetComponentInChildren<UIBtnListContainerInitor>());
+            foreach (var _btnList in UIBtnListContainer.UIBtnLists)
+            {
+                _btnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm,UIBtnListContainer.BindType.started);
+            }
         }
         
         //返回右侧BtnList，重新生成
         public void ReGenerateBtnListContainer(List<UIBtnListInitor> _btnLists)
         {
+            UIBtnListContainer.DisableUIBtnListContainer();
             rightBtnLists = _btnLists;
             UIBtnListContainerInitor newBtnListContainers = this.transform.GetComponentInChildren<UIBtnListContainerInitor>();
-            //对 btnList 排序
+            
+            //从4连到倒数第一个
             //最后一个不需要加连接线
             for (int i = 0; i < _btnLists.Count-1; i++)
             {
@@ -66,7 +103,14 @@ namespace ProjectOC.PinchFace
                     .LinkData(i+4,i+5,UIBtnListContainerInitor.EdgeType.下侧顺时针,UIBtnListContainerInitor.EdgeType.上侧逆时针,UIBtnListContainerInitor.LinkType.上下相连);
                 newBtnListContainers.btnListContainerInitData.AddLinkData(_linkData);
             }
-            this.uIBtnListContainer = new UIBtnListContainer(newBtnListContainers);
+            this.UIBtnListContainer = new UIBtnListContainer(newBtnListContainers);
+            UIBtnListContainer.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
+
+            foreach (var _btnList in UIBtnListContainer.UIBtnLists)
+            {
+                _btnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm,UIBtnListContainer.BindType.started);
+            }
+            
         }
         #endregion
 
@@ -100,13 +144,27 @@ namespace ProjectOC.PinchFace
         #region FacePanel
 
         private PinchFaceManager pinchFaceManager;
-        private UIBtnListContainer uIBtnListContainer;
+        [ShowInInspector]
+        private UIBtnListContainer UIBtnListContainer;
         public Transform containerTransf;
         private RacePinchData raceData;
         private List<PinchPart> pinchParts;
         private Dictionary<PinchPartType3, SelectedButton> type3ButtonDic = new Dictionary<PinchPartType3, SelectedButton>();
         private Dictionary<PinchPartType3, PinchPartType2> type3Type2Dic = new Dictionary<PinchPartType3, PinchPartType2>();
         public List<UIBtnListInitor> rightBtnLists = new List<UIBtnListInitor>();
+
+        public PinchDataConfig Config;
+        public SpriteAtlas SA_PinchPart;
+
+        public UICameraImage uICameraImage;
+        enum CurrentMouseState
+        {
+            Left,
+            Right
+        }
+
+        private CurrentMouseState CurrentState = CurrentMouseState.Left; 
+        
         public void InitRaceData(RacePinchData _racePinchData)
         {
             raceData = _racePinchData;
@@ -129,7 +187,7 @@ namespace ProjectOC.PinchFace
             {
                 PinchPartType2 _type2 = type3Type2Dic[_partType3];
                 PinchPartType _type = pinchFaceManager.pinchPartType2Dic[_type2];
-                this.uIBtnListContainer.AddBtn(1, "OC/UI/PinchFace/Pinch_BaseUISelectedBtn.prefab"
+                this.UIBtnListContainer.AddBtn(1, "OC/UI/PinchFace/Pinch_BaseUISelectedBtn.prefab"
                     ,BtnText:_partType3.ToString()
                     ,BtnSettingAction:(_btn)=>
                     {
@@ -161,12 +219,10 @@ namespace ProjectOC.PinchFace
             PinchPartType _type = pinchFaceManager.pinchPartType2Dic[_type2];
             PinchPartType1 _type1 = _type.pinchPartType1;
             
-            //OC/Character/PinchFace/Prefabs/
-            //5_Common_PinchType1/20_FaceDress_PinchType2/45_FD_FaceDress_PinchType3
-            string pathFore = "OC/Character/PinchFace/Prefabs";
-            string pathTemplate = "TemplatePinchType.Prefab";
-            string type2Path = pinchFaceManager.pinchFaceHelper.GetType2Path(_type2);
-            string templatePath = $"{pathFore}/{type2Path}/{pathTemplate}";
+            //OC/Configs/PinchFace/PinchFaceConfig/PinchTypeConfig/1_Ear_PinchType2Template.prefab
+
+            string pathFore = "OC/Configs/PinchFace/PinchFaceConfig/PinchTypeConfig";
+            string templatePath = $"{pathFore}/{(int)_type2-1}_{_type2.ToString()}_PinchType2Template.prefab";
 
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(templatePath)
                 .Completed += (handle) =>
@@ -178,6 +234,18 @@ namespace ProjectOC.PinchFace
         }
 
 
+        public void ReturnBtnList(int _index)
+        {
+            UIBtnListContainer.MoveToBtnList(UIBtnListContainer.UIBtnLists[_index]);
+            if (_index > 3)
+            {
+                CurrentState = CurrentMouseState.Right;
+            }
+            else
+            {
+                CurrentState = CurrentMouseState.Left;
+            }
+        }
         #endregion
     }
 }

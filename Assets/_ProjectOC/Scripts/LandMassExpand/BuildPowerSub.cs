@@ -42,11 +42,15 @@ namespace ProjectOC.LandMassExpand
             get=>powerCount;
             set
             {
-                powerCount = value;
-                if (powerCount > 0)
+                //防止互相触发死循环调用
+                
+                if (powerCount == 0 && value > 0)
                     InPower = true;
-                else
+                else if(powerCount > 0 && value == 0)
                     InPower = false;
+                
+                powerCount = value;
+
             }
         }
 
@@ -102,18 +106,19 @@ namespace ProjectOC.LandMassExpand
             
             //重置 powerCore.needPowers、PowerCount、needPowers
             RemoveFromAllPowerCores();
-            PowerCount = 0;            
             needPowerBparts.Clear();
             
+            int _powercount = 0;
             //重新计算powerCore
             foreach (var powerCore in bpIslandManager.powerCores)
             {
                 if(bpIslandManager.CoverEachOther(powerCore,this))
                 {
                     powerCore.needPowerBparts.Add(this);
-                    PowerCount++;
+                    _powercount++;
                 }
             }
+            PowerCount = _powercount;  
             CalculatePowerCount();
             base.OnChangePlaceEvent(oldPos,newPos);
         }
@@ -166,6 +171,8 @@ namespace ProjectOC.LandMassExpand
                 powerCore.RemoveNeedPowerBpart(this);
             }
         }
+
+        public void PowerStateChange(){}
     }
     
 }

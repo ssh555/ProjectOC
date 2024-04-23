@@ -42,7 +42,7 @@ namespace ProjectOC.PinchFace
             
             // GeneratePinchRaceUI();
             // GenerateCustomRaceUI();
-            //GeneratePinchFaceUI(RacePinchDatas[0]);
+            //GeneratePinchFaceUI(); 
         }
 
         public void UnRegister()
@@ -64,7 +64,6 @@ namespace ProjectOC.PinchFace
         /// </summary>
         public void RegisterPinchPartType()
         {
-            // pinchPartType3Dic = new Dictionary<PinchPartType3, PinchPartType>();
             pinchPartType2Dic = new Dictionary<PinchPartType2, PinchPartType>();
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetsAsync<PinchPartType>(PinchPartTypePath, (ppt) =>
             {
@@ -101,7 +100,6 @@ namespace ProjectOC.PinchFace
                 var panel = handle.Result.GetComponent<UIPinchRacePanel>();
                 panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
-                
             };
         }
         public void GenerateCustomRaceUI()
@@ -116,6 +114,10 @@ namespace ProjectOC.PinchFace
             };
         }
 
+        public void GeneratePinchFaceUI()
+        {
+            GeneratePinchFaceUI(RacePinchDatas[0]); 
+        }
         public void GeneratePinchFaceUI(RacePinchData _raceData)
         {
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(PinchFacePath)

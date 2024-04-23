@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
 using ML.Engine.SaveSystem;
 using ML.Engine.UI;
 using ProjectOC.ManagerNS;
@@ -12,6 +13,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.U2D;
 using UnityEngine.UI;
+using Object = System.Object;
 
 namespace  ProjectOC.PinchFace
 {
@@ -32,11 +34,10 @@ namespace  ProjectOC.PinchFace
         private PinchFaceManager PinchFaceManager;
         private CharacterModelPinch ModelPinch => PinchFaceManager.ModelPinch;
         private UIPinchFacePanel PinchFacePanel;
-        private PinchDataConfig Config;
-        private SpriteAtlas pinchPartSA;
         
+        private SpriteAtlas SA_PinchPart=>PinchFacePanel.SA_PinchPart;
+        private PinchDataConfig Config => PinchFacePanel.Config;
         public List<IPinchSettingComp> pinchSettingComps = new List<IPinchSettingComp>();
-        public List<UIBtnListInitor> btnListInitors = new List<UIBtnListInitor>();
         private Transform containerTransf;
         private List<string> uiPrefabPaths = new List<string>();
         private int isInit = 0;
@@ -60,14 +61,7 @@ namespace  ProjectOC.PinchFace
             uiPrefabPaths.Add("OC/UI/PinchFace/Setting/Pinch_TransformSettingPanel.prefab");
 
             PinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<PinchDataConfig>("OC/Configs/PinchFace/PinchFaceConfig/PinchDataConfig.asset").Completed+=(handle) =>
-            {
-                Config = handle.Result;
-            };
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>("OC/UI/PinchFace/Texture/SA_PinchFace.spriteatlasv2").Completed+=(handle) =>
-            {
-                pinchPartSA = handle.Result;
-            };
+            
         }
         
         //控制_pinchSettingComps Buttons的生成
@@ -140,7 +134,7 @@ namespace  ProjectOC.PinchFace
         public void GenerateHeadUI(string _str)
         {
             int _counter = sortCount;
-            sortCount++;
+            GenerateUIPre();
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(uiPrefabPaths[0])
                 .Completed += (handle) =>
             {
@@ -164,29 +158,26 @@ namespace  ProjectOC.PinchFace
             {
                 Transform _trans = handle.Result.transform;
                 //查询对应目录下所有的Texture，加载
-                // string pathFore = "OC/UI/PinchFace/Texture";
-                // string type3Path = PinchFaceManager.pinchFaceHelper.GetType3PrefabPath(PinchPartType2,_type3);
-                //加载对应的Type3 icon button
-                // UIBtnList btnList = _trans.GetComponentInChildren<UIBtnList>();
-                //
-                // int prefabCount = Config.typesData[(int)_type3 - 1];
-                // for (int i = 0; i <prefabCount; i++)
-                // {
-                //     string spriteName = $"{_type3.ToString()}_{i}";
-                //     btnList.AddBtn("OC/UI/PinchFace/Pinch_BaseUISelectedBtn.prefab"
-                //         ,BtnSettingAction: (btn) =>
-                //         {
-                //             btn.transform.Find("Image").GetComponentInChildren<Image>().sprite = pinchPartSA.GetSprite("spriteName");
-                //         }
-                //         ,BtnAction: () =>
-                //         {
-                //             ModelPinch.ChangeType(PinchPartType2,i);
-                //         });
-                // }
-                
-                
-                
-                
+                 string pathFore = "OC/UI/PinchFace/Texture";
+                 //string type3Path = PinchFaceManager.pinchFaceHelper.GetType3PrefabPath(PinchPartType2,_type3);
+                 //加载对应的Type3 icon button
+                 SelectedButton btnTemplate = _trans.GetComponentInChildren<SelectedButton>();
+                 int prefabCount = Config.typesData[(int)_type3 - 1];
+                 Debug.LogWarning($"{_type3.ToString()}:{prefabCount}");
+                 for (int i = 0; i <prefabCount; i++)
+                 {
+                     var btn = GameObject.Instantiate(btnTemplate.gameObject, btnTemplate.transform.parent).GetComponent<SelectedButton>();
+                     btn.name = $"TypeBtn{i}";
+                     
+                     string spriteName = $"{_type3.ToString()}_{i}"; 
+                     btn.transform.Find("Image").GetComponent<Image>().sprite = SA_PinchPart.GetSprite(spriteName);
+                     btn.onClick.AddListener(() =>
+                     {
+                        ModelPinch.ChangeType(PinchPartType2,i);
+                     });
+                 }
+                 btnTemplate.gameObject.SetActive(false);
+                 //ML.Engine.Manager.GameManager.DestroyObj();
                 GenerateUICallBack(_trans,_counter);
             };
         }
@@ -341,7 +332,6 @@ namespace  ProjectOC.PinchFace
             isInit--;
             if (isInit == 0)
             {
-                Debug.Log("全部加载完成*1");
                 PinchFaceManager.pinchFaceHelper.SortUIAfterGenerate(_uiTransf,containerTransf,PinchFacePanel);
             }
             
