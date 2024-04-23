@@ -383,6 +383,7 @@ namespace ML.Engine.InventorySystem
             }
             return this.ItemTypeStrDict[id].bcanstack;
         }
+
         //TODO GetCanUse GetCanDestroy
         public bool GetCanUse(string id)
         {
