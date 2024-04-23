@@ -155,6 +155,7 @@ namespace ProjectOC.InventorySystem.UI
             get => _currentItemIndex;
             set
             {
+                int tmp = _currentItemIndex;
                 int last = _currentItemIndex;
                 if (SelectedItems.Count > 0)
                 {
@@ -172,15 +173,17 @@ namespace ProjectOC.InventorySystem.UI
                         var grid = Inventory_GridLayout.GetGridSize(SelectedItems.Count);
                         if (_currentItemIndex < 0)
                         {
-                            _currentItemIndex += (grid.x * grid.y);
+                            //_currentItemIndex += (grid.x * grid.y);
+                            _currentItemIndex = tmp;
                         }
                         else if (_currentItemIndex >= SelectedItems.Count)
                         {
-                            _currentItemIndex -= (grid.x * grid.y);
+                            /*_currentItemIndex -= (grid.x * grid.y);
                             if (_currentItemIndex < 0)
                             {
                                 _currentItemIndex += grid.y;
-                            }
+                            }*/
+                            _currentItemIndex = tmp;
                         }
                         // 不计算隐藏的模板
                         while (this._currentItemIndex >= SelectedItems.Count)
@@ -556,7 +559,7 @@ namespace ProjectOC.InventorySystem.UI
                 // 更新父物体的高度
                 Info_ItemDescription.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(Info_ItemDescription.transform.parent.GetComponent<RectTransform>().sizeDelta.x, Info_ItemDescription.GetComponent<RectTransform>().sizeDelta.y);
 
-                Info_ItemEffectDescription.text = ItemManager.Instance.GetEffectDescription(CurrentItem.ID);
+                Info_ItemEffectDescription.text = "<color=orange>" + ItemManager.Instance.GetEffectDescription(CurrentItem.ID) + "</color>";
                 LayoutRebuilder.ForceRebuildLayoutImmediate(Info_ItemEffectDescription.GetComponent<RectTransform>());
                 Info_ItemEffectDescription.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(Info_ItemEffectDescription.transform.parent.GetComponent<RectTransform>().sizeDelta.x, Info_ItemEffectDescription.GetComponent<RectTransform>().sizeDelta.y);
 
