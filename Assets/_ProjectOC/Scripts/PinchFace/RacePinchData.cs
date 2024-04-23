@@ -4,13 +4,19 @@ using UnityEngine;
 
 namespace ProjectOC.PinchFace
 {
+    [System.Serializable]
     public class RacePinchData
     {
         public string raceName;
         public string raceDescription;
         public List<PinchPartType3> pinchPartType3s;
+        public bool isDefault = false;
 
-        RacePinchData(string _raceName, string _raceDescription, List<PinchPartType3> _pinchPartType3s)
+        public RacePinchData()
+        {
+            pinchPartType3s = new List<PinchPartType3>();
+        }
+        public RacePinchData(string _raceName, string _raceDescription, List<PinchPartType3> _pinchPartType3s)
         {
             this.raceName = _raceName;
             this.raceDescription = _raceDescription;

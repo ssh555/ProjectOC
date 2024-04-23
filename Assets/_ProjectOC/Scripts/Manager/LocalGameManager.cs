@@ -76,7 +76,6 @@ namespace ProjectOC.ManagerNS
             GM.RegisterLocalManager(ClanManager);
             GM.RegisterLocalManager(MonoBuildingManager);
             GM.RegisterLocalManager(TechTreeManager);
-            GM.RegisterLocalManager(OrderManager);
             GM.RegisterLocalManager(ItemManager);
             GM.RegisterLocalManager(CompositeManager);
             GM.RegisterLocalManager(IslandManager);
@@ -130,8 +129,10 @@ namespace ProjectOC.ManagerNS
         //在PlayerCharacter生成之后调用
         IEnumerator AfterPlayerCharacter()
         {
+            // Debug.Log(GameManager.Instance.CharacterManager.GetLocalController().GetType() );
             ProjectOC.Player.OCPlayerController playerController = GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController;
-            while (playerController.currentCharacter == null)
+            
+            while (playerController.currentCharacter == null || !playerController.currentCharacter.LoadOver)
             {
                 yield return null;
             }
@@ -139,7 +140,7 @@ namespace ProjectOC.ManagerNS
             //要获取玩家模型，放在后面
             GM.RegisterLocalManager(IslandAreaManager);
             GM.RegisterLocalManager(PinchFaceManager);
-            GM.RegisterLocalManager(OrderManager);
+            //GM.RegisterLocalManager(OrderManager);
         }
     
         #region Gizmos管理
@@ -157,8 +158,8 @@ namespace ProjectOC.ManagerNS
             Test2 = 1 << 1
         }
         [Space(20)]
-        public GizmosEnableControl gizmosEnableControl; 
-        private void OnDrawGizmosSelected()
+        public GizmosEnableControl gizmosEnableControl = GizmosEnableControl.IslandManager; 
+        private void OnDrawGizmos()
         {
             if (Application.isPlaying && (GizmosEnableControl.IslandManager & gizmosEnableControl) != 0)
             {

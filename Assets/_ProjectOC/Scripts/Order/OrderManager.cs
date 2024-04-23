@@ -10,11 +10,16 @@ using ProjectOC.Player;
 using ProjectOC.TechTree;
 using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
+using static ProjectOC.Order.OrderManager;
 using static ProjectOC.TechTree.TechTreeManager;
+using Formula = ML.Engine.InventorySystem.CompositeSystem.Formula;
 
 
 
@@ -46,11 +51,16 @@ namespace ProjectOC.Order
         private Dictionary<string, List<string>> UnlockedUrgentOrderMap = new Dictionary<string, List<string>>();
 
         /// <summary>
-        /// 当前订单委托中存在的订单(string 氏族ID,OrderType type)，List<Order>
+        /// 当前订单委托中存在的订单 string 氏族ID，List<Order>
         /// </summary>
         [ShowInInspector]
-        private Dictionary<(string, OrderType), List<Order>> OrderDelegationMap = new Dictionary<(string, OrderType), List<Order>>();
+        private Dictionary<string, List<Order>> OrderNormalDelegationMap = new Dictionary<string, List<Order>>();
 
+        [ShowInInspector]
+        private Dictionary<string, List<Order>> OrderSpecialDelegationMap = new Dictionary<string, List<Order>>();
+
+        [ShowInInspector]
+        private Dictionary<string, List<Order>> OrderUrgentDelegationMap = new Dictionary<string, List<Order>>();
         /// <summary>
         /// 当前正在等待刷新的常规订单 (string 氏族ID,OrderType type)，List<Order>
         /// </summary>
@@ -61,7 +71,7 @@ namespace ProjectOC.Order
         /// 已承接订单结构体
         /// </summary>
         [Serializable]
-        public struct AcceptedOrder : IComparable<AcceptedOrder>
+        public class AcceptedOrder : IComparable<AcceptedOrder>
         {
             public Order order;
             public OrderType orderType;
@@ -72,14 +82,8 @@ namespace ProjectOC.Order
             {
                 this.order = order;
                 this.orderType = orderType;
-                this.canBeCommit = true;
+                this.canBeCommit = false;
                 this.acceptOrder = curAcceptOrder++;
-            }
-
-            public static AcceptedOrder None = new AcceptedOrder();
-            public void SetCanBeCommit(bool canBeCommit)
-            {
-                this.canBeCommit = canBeCommit;
             }
 
             // 实现 IComparable 接口中的 CompareTo 方法
@@ -124,11 +128,14 @@ namespace ProjectOC.Order
         /// </summary>
         private CounterDownTimer CanBeCommitRefreshTimer;
 
+        public event Action OnCanBeCommitRefresh;
+
         private IInventory PlayerInventory;
 
         #region 策划配置项
-        [LabelText("紧急订单刷新时间间隔（现实时间的min为单位）")]
-        public int UrgentRefreshInterval = 1;
+        /*        [LabelText("紧急订单刷新时间间隔（现实时间的min为单位）")]*/
+        [ShowInInspector]
+        public float UrgentRefreshInterval = 0.1f;
         #endregion
 
         #region Base
@@ -144,19 +151,19 @@ namespace ProjectOC.Order
         public void Init()
         {
             //TODO 之后由氏族模块处理
-            OrderDelegationMap.Add(("Clan1", OrderType.Urgent), new List<Order>() { null, null });
-            OrderDelegationMap.Add(("Clan1", OrderType.Special), new List<Order>());
-            OrderDelegationMap.Add(("Clan1", OrderType.Normal), new List<Order>());
+            OrderUrgentDelegationMap.Add("Clan1", new List<Order>() { null, null });
+            OrderSpecialDelegationMap.Add("Clan1", new List<Order>());
+            OrderNormalDelegationMap.Add("Clan1", new List<Order>());
 
 
-            OrderDelegationMap.Add(("Clan2", OrderType.Urgent), new List<Order>() { null, null });
-            OrderDelegationMap.Add(("Clan2", OrderType.Special), new List<Order>());
-            OrderDelegationMap.Add(("Clan2", OrderType.Normal), new List<Order>());
+            OrderUrgentDelegationMap.Add("Clan2", new List<Order>() { null, null });
+            OrderSpecialDelegationMap.Add("Clan2", new List<Order>());
+            OrderNormalDelegationMap.Add("Clan2", new List<Order>());
 
 
-            OrderDelegationMap.Add(("Clan3", OrderType.Urgent), new List<Order>() { null, null });
-            OrderDelegationMap.Add(("Clan3", OrderType.Special), new List<Order>());
-            OrderDelegationMap.Add(("Clan3", OrderType.Normal), new List<Order>());
+            OrderUrgentDelegationMap.Add("Clan3", new List<Order>() { null, null });
+            OrderSpecialDelegationMap.Add("Clan3", new List<Order>());
+            OrderNormalDelegationMap.Add("Clan3", new List<Order>());
 
 
             UnlockedOrderMap.Add(OrderType.Urgent,new List<string>());
@@ -166,7 +173,7 @@ namespace ProjectOC.Order
 
 
             //初始化Timer
-            this.UrgentOrderRefreshTimer = new CounterDownTimer(this.UrgentRefreshInterval * 60 * LocalGameManager.Instance.DispatchTimeManager.TimeScale, autocycle: false, autoStart: true);
+            this.UrgentOrderRefreshTimer = new CounterDownTimer(0.1f * 60 * LocalGameManager.Instance.DispatchTimeManager.TimeScale, autocycle: false, autoStart: true);
             this.CanBeCommitRefreshTimer = new CounterDownTimer(5, autocycle: true, autoStart: true);
             this.UrgentOrderRefreshTimer.OnEndEvent += () =>
             {
@@ -179,7 +186,7 @@ namespace ProjectOC.Order
 
             //初始化背包
             this.PlayerInventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
-
+            Debug.Log($"初始化背包 {PlayerInventory!= null}");
             // 载入表格数据 
             LoadTableData();
 
@@ -215,15 +222,12 @@ namespace ProjectOC.Order
             List<Tuple<string, Order>> emptyList = new List<Tuple<string, Order>>();
             HashSet<string> alreadyHaveOrderId = new HashSet<string>();
 
-            foreach ( ((string ClanID,OrderType OrderType),List<Order> orders) in OrderDelegationMap)
+            foreach ( (string ClanID,List<Order> orders) in OrderUrgentDelegationMap)
             {
-                if(OrderType == OrderType.Urgent)
-                {
-                    if (orders[0] == null) emptyList.Add(new Tuple<string, Order>(ClanID, orders[0]));
-                    else alreadyHaveOrderId.Add(orders[0].OrderID);
-                    if (orders[1] == null) emptyList.Add(new Tuple<string, Order>(ClanID, orders[1]));
-                    else alreadyHaveOrderId.Add(orders[1].OrderID);
-                }
+                if (orders[0] == null) emptyList.Add(new Tuple<string, Order>(ClanID, orders[0]));
+                else alreadyHaveOrderId.Add(orders[0].OrderID);
+                if (orders[1] == null) emptyList.Add(new Tuple<string, Order>(ClanID, orders[1]));
+                else alreadyHaveOrderId.Add(orders[1].OrderID);
             }
             if(emptyList.Count == 0)
             {
@@ -277,28 +281,28 @@ namespace ProjectOC.Order
                 Order order = acceptedList[i].order;
                 OrderTableData orderTableData = OrderTableDataDic[order.OrderID];
                 List<Formula> formulaList = new List<Formula>();
+                List<Formula> AddedItems = new List<Formula>();
                 foreach (var requireItem in acceptedList[i].order.RemainRequireItemDic)
                 {
                     formulaList.Add(new Formula() { id = requireItem.Key,num = requireItem.Value});
                 }
 
                 //扣除
-                formulaList = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).InventoryCostItems(formulaList, priority:-1);
+                AddedItems = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).InventoryCostItems(formulaList, priority:-1);
 
-                foreach (var AddedItem in formulaList)
+                foreach (var AddedItem in AddedItems)
                 {
                     bool isFinish = order.ChangeRequireItemDic(AddedItem.id, AddedItem.num);
                     if(isFinish)
                     {
-                        acceptedList[i].SetCanBeCommit(true);
+                        Debug.Log("isFinish");
+                        acceptedList[i].canBeCommit = true;
                     }
                 }
             }
-
-            
             //
-
             acceptedList.Sort();
+            OnCanBeCommitRefresh?.Invoke();
         }
 
         /// <summary>
@@ -347,26 +351,31 @@ namespace ProjectOC.Order
             {
                 OrderUrgent orderUrgent = new OrderUrgent(orderTableData.ID, orderTableData.RequireList, orderTableData.ReceiveDDL, orderTableData.DeliverDDL);
                 orderUrgent.StartReceiveDDLTimer();
-                List<Order> orders = OrderDelegationMap[(ClanID, orderTableData.OrderType)];
+                
+                List<Order> orders = new List<Order>(this.OrderUrgentDelegationMap[ClanID].ToArray());
                 for (int i = 0; i < orders.Count; i++)
                 {
                     if (orders[i] == null)
                     {
                         orders[i] = orderUrgent;
+                        //通知UI
+                        GM.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("<color=yellow>" + ClanID + "</color>  发布了紧急征求", orderTableData.OrderName));
                         break; 
                     }
                 }
-                
-                //通知UI
-                GM.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("<color=yellow>" + ClanID + "</color>  发布了紧急征求", orderTableData.OrderName));
+/*                this.OrderUrgentDelegationMap[ClanID].Clear();*/
+                /*                foreach (var order in orders)
+                                {
+                                    this.OrderUrgentDelegationMap[ClanID].Add(order);
+                                }*/
             }
             else if(orderTableData.OrderType == OrderType.Normal)
             {
-                OrderDelegationMap[(ClanID, orderTableData.OrderType)].Add(new OrderNormal(orderTableData.ID, orderTableData.RequireList, orderTableData.CD));
+                OrderNormalDelegationMap[ClanID].Add(new OrderNormal(orderTableData.ID, orderTableData.RequireList, orderTableData.CD));
             }
             else if(orderTableData.OrderType == OrderType.Special)
             {
-                OrderDelegationMap[(ClanID, orderTableData.OrderType)].Add(new OrderSpecial(orderTableData.ID, orderTableData.RequireList));
+                OrderSpecialDelegationMap[ClanID].Add(new OrderSpecial(orderTableData.ID, orderTableData.RequireList));
             }
             
         }
@@ -383,12 +392,12 @@ namespace ProjectOC.Order
             OrderTableData orderTableData = OrderTableDataDic[OrderId];
             if (orderTableData.OrderType != OrderType.Urgent) return;
             string ClanID = OrderIDToClanIDDic[orderTableData.ID];
-            var olist = OrderDelegationMap[(ClanID, OrderType.Urgent)];
+            var olist = OrderUrgentDelegationMap[ClanID];
             for(int i = 0; i < olist.Count; i++)
             {
                 if (olist[i]?.OrderID == OrderId)
                 {
-                    //Debug.Log("订单超时 " + olist[i].OrderID+" "+ LocalGameManager.Instance.DispatchTimeManager.CurrentHour.ToString() + " : " + LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString());
+                    Debug.Log("订单超时 " + olist[i].OrderID+" "+ LocalGameManager.Instance.DispatchTimeManager.CurrentHour.ToString() + " : " + LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString());
                     olist[i] = null;
                     break;
                 }
@@ -404,14 +413,27 @@ namespace ProjectOC.Order
             if (!OrderTableDataDic.ContainsKey(OrderId)) return;
             OrderTableData orderTableData = OrderTableDataDic[OrderId];
             string ClanID = OrderIDToClanIDDic[orderTableData.ID];
+            List<Order> olist = new List<Order>();
+            if (orderTableData.OrderType == OrderType.Urgent)
+            {
+                olist = OrderUrgentDelegationMap[ClanID];
+            }
+            else if(orderTableData.OrderType == OrderType.Normal)
+            {
+                olist = OrderNormalDelegationMap[ClanID];
+            }
+            else if(orderTableData.OrderType == OrderType.Special)
+            {
+                olist = OrderSpecialDelegationMap[ClanID];
+            }
 
-            var olist = OrderDelegationMap[(ClanID, orderTableData.OrderType)];
+            
             for (int i = 0; i < olist.Count; i++)
             {
                 if (olist[i] != null && olist[i].OrderID == OrderId) 
                 {
                     //加入已承接列表
-                    AcceptedOrder acceptedOrder = AcceptedOrder.None;
+                    AcceptedOrder acceptedOrder = null;
                     if(olist[i] is OrderUrgent)
                     {
                         OrderUrgent orderUrgent = (OrderUrgent)olist[i];
@@ -437,7 +459,6 @@ namespace ProjectOC.Order
                     acceptedListDic.Add(orderTableData.ID, acceptedOrder);
                     //加入已承接列表后立即执行一次RefreshAcceptedList函数
 
-
                     break;
                 }
             }
@@ -456,7 +477,6 @@ namespace ProjectOC.Order
                     //TODO 已扣除返还玩家背包 暂时考虑背包无限
 
                     OrderTableData orderTableData = OrderTableDataDic[acceptedList[i].order.OrderID];
-                    
                     foreach (var addedItem in acceptedList[i].order.AddedItemDic)
                     {
                         foreach (var item in ItemManager.Instance.SpawnItems(addedItem.Key, addedItem.Value))
@@ -465,7 +485,6 @@ namespace ProjectOC.Order
                         }
                         
                     }
-
 
                     //TODO 受到惩罚
                     Debug.Log("受到惩罚");
@@ -535,10 +554,43 @@ namespace ProjectOC.Order
         #region DataFetch
         public List<Order> GetOrderDelegationOrders(string ClanId, OrderType orderType)
         {
-            if(this.OrderDelegationMap.ContainsKey((ClanId,orderType)))
+            /*string debugDict = "";
+            foreach (var item in this.OrderDelegationMap)
             {
-                return this.OrderDelegationMap[(ClanId, orderType)];
+                string itemValue = "";
+                item.Value.Where(e => e != null).Select(e => e.OrderID).ForEach(e => itemValue += e);
+                debugDict += item.Key + "--" + "Count: " + item.Value.Where(e => e != null).Count() + " " + "itemValue: " + itemValue + "\n";
             }
+            Debug.Log($"{Time.frameCount} GetOrderDelegationOrders ClanId {ClanId} orderType {orderType} debugDict {debugDict}");
+            foreach (var item in this.OrderDelegationMap)
+            {
+                if(item.Key.Item1 == ClanId && item.Key.Item2 == orderType)
+                {
+                    return item.Value;
+                }
+            }*/
+            if (orderType == OrderType.Urgent)
+            {
+                if(OrderUrgentDelegationMap.ContainsKey(ClanId))
+                {
+                    return OrderUrgentDelegationMap[ClanId];
+                }
+            }
+            else if (orderType == OrderType.Normal)
+            {
+                if (OrderNormalDelegationMap.ContainsKey(ClanId))
+                {
+                    return OrderNormalDelegationMap[ClanId];
+                }
+            }
+            else if (orderType == OrderType.Special)
+            {
+                if (OrderSpecialDelegationMap.ContainsKey(ClanId))
+                {
+                    return OrderSpecialDelegationMap[ClanId];
+                }
+            }
+
             return new List<Order>();
         }
         public OrderTableData GetOrderTableData(string orderId)
@@ -572,9 +624,13 @@ namespace ProjectOC.Order
             {
                 return this.acceptedListDic[orderID];
             }
-            return AcceptedOrder.None;
+            return null;
         }
 
+        public IInventory GetInventory()
+        {
+            return this.PlayerInventory;
+        }
         #endregion
 
         #region TableData
@@ -623,7 +679,7 @@ namespace ProjectOC.Order
         [ShowInInspector]
         private Dictionary<string,OrderTableData> OrderTableDataDic = new Dictionary<string,OrderTableData>();
         private List<OrderUnlock> OrderUnlockTableDataList = new List<OrderUnlock>();
-
+        [ShowInInspector]
         private Dictionary<string,string> OrderIDToClanIDDic = new Dictionary<string,string>();
         #endregion
 

@@ -55,7 +55,7 @@ namespace ProjectOC.InventorySystem.UI
             var info = this.transform.Find("ItemInfo").Find("Info");
             Info_ItemName = info.Find("Name").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             Info_ItemIcon = info.Find("Icon").Find("IconImage").GetComponent<Image>();
-            Info_ItemWeight = info.Find("Weight").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
+            Info_ItemWeight = info.Find("Weight").Find("Image").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             Info_ItemDescription = info.Find("ItemDescription").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             Info_ItemEffectDescription = info.Find("EffectDescription").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
 
@@ -155,6 +155,7 @@ namespace ProjectOC.InventorySystem.UI
             get => _currentItemIndex;
             set
             {
+                int tmp = _currentItemIndex;
                 int last = _currentItemIndex;
                 if (SelectedItems.Count > 0)
                 {
@@ -172,15 +173,17 @@ namespace ProjectOC.InventorySystem.UI
                         var grid = Inventory_GridLayout.GetGridSize(SelectedItems.Count);
                         if (_currentItemIndex < 0)
                         {
-                            _currentItemIndex += (grid.x * grid.y);
+                            //_currentItemIndex += (grid.x * grid.y);
+                            _currentItemIndex = tmp;
                         }
                         else if (_currentItemIndex >= SelectedItems.Count)
                         {
-                            _currentItemIndex -= (grid.x * grid.y);
+                            /*_currentItemIndex -= (grid.x * grid.y);
                             if (_currentItemIndex < 0)
                             {
                                 _currentItemIndex += grid.y;
-                            }
+                            }*/
+                            _currentItemIndex = tmp;
                         }
                         // 不计算隐藏的模板
                         while (this._currentItemIndex >= SelectedItems.Count)
@@ -256,9 +259,13 @@ namespace ProjectOC.InventorySystem.UI
         private void Destroy_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             var item = this.CurrentItem;
-            this.inventory.RemoveItem(item);
-            SelectedItems.Remove(item);
-            this.CurrentItemIndex = this.CurrentItemIndex;
+
+            if(ItemManager.Instance.GetCanDestroy(item.ID))
+            {
+                this.inventory.RemoveItem(item);
+                SelectedItems.Remove(item);
+                this.CurrentItemIndex = this.CurrentItemIndex;
+            }
         }
 
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -454,7 +461,7 @@ namespace ProjectOC.InventorySystem.UI
                 // Amount
                 var amounttext = item.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
                 amounttext.gameObject.SetActive(ItemManager.Instance.GetCanStack(SelectedItems[i].ID));
-                amounttext.text = SelectedItems[i].Amount > 999 ? SelectedItems[i].Amount.ToString() + "+" : SelectedItems[i].Amount.ToString();
+                amounttext.text = SelectedItems[i].Amount > 999 ? "999+" : SelectedItems[i].Amount.ToString();
                 // Selected
                 var selected = item.transform.Find("Selected");
                 if(CurrentItem == SelectedItems[i])
@@ -552,7 +559,7 @@ namespace ProjectOC.InventorySystem.UI
                 // 更新父物体的高度
                 Info_ItemDescription.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(Info_ItemDescription.transform.parent.GetComponent<RectTransform>().sizeDelta.x, Info_ItemDescription.GetComponent<RectTransform>().sizeDelta.y);
 
-                Info_ItemEffectDescription.text = ItemManager.Instance.GetEffectDescription(CurrentItem.ID);
+                Info_ItemEffectDescription.text = "<color=orange>" + ItemManager.Instance.GetEffectDescription(CurrentItem.ID) + "</color>";
                 LayoutRebuilder.ForceRebuildLayoutImmediate(Info_ItemEffectDescription.GetComponent<RectTransform>());
                 Info_ItemEffectDescription.transform.parent.GetComponent<RectTransform>().sizeDelta = new Vector2(Info_ItemEffectDescription.transform.parent.GetComponent<RectTransform>().sizeDelta.x, Info_ItemEffectDescription.GetComponent<RectTransform>().sizeDelta.y);
 

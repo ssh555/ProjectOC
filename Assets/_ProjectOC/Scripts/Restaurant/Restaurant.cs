@@ -42,11 +42,14 @@ namespace ProjectOC.RestaurantNS
         {
             get
             {
-                foreach (RestaurantSeat seat in Seats)
+                if (Seats != null)
                 {
-                    if (!seat.HasWorker)
+                    foreach (RestaurantSeat seat in Seats)
                     {
-                        return true;
+                        if (!seat.HasWorker)
+                        {
+                            return true;
+                        }
                     }
                 }
                 return false;
@@ -57,11 +60,14 @@ namespace ProjectOC.RestaurantNS
         {
             get
             {
-                foreach (RestaurantData data in Datas)
+                if (Datas != null)
                 {
-                    if (LocalGameManager.Instance.RestaurantManager.WorkerFood_IsValidID(data.ID))
+                    foreach (RestaurantData data in Datas)
                     {
-                        return true;
+                        if (LocalGameManager.Instance.RestaurantManager.WorkerFood_IsValidID(data.ID))
+                        {
+                            return true;
+                        }
                     }
                 }
                 return false;
@@ -75,7 +81,7 @@ namespace ProjectOC.RestaurantNS
             for (int i = 0; i < Seats.Length; i++)
             {
                 Seats[i].Restaurant = this;
-                Seats[i].Socket = WorldRestaurant.transform;
+                Seats[i].Socket = WorldRestaurant.transform.Find($"seat{i+1}");
             }
             Datas = new RestaurantData[LocalGameManager.Instance.RestaurantManager.DataNum];
             if (Datas.Length >= 1)
@@ -206,7 +212,7 @@ namespace ProjectOC.RestaurantNS
                     {
                         worker.Agent.enabled = false;
                         worker.LastPosition = worker.transform.position;
-                        worker.transform.position = Seats[seatIndex].Socket.position + new Vector3(0, 2f, 0);
+                        worker.transform.position = Seats[seatIndex].Socket.position;
                         Seats[seatIndex].SetFood(Datas[index].ID);
                         return;
                     }
@@ -326,7 +332,7 @@ namespace ProjectOC.RestaurantNS
             {
                 if (0 <= index && index < Datas.Length && Datas[index].HaveSetFood && amount != 0)
                 {
-                    if ((!exceed && Datas[index].Amount >= Datas[index].MaxCapacity) || (complete && amount + Datas[index].Amount < 0))
+                    if ((!exceed && amount > 0 && Datas[index].Amount >= Datas[index].MaxCapacity) || (complete && amount + Datas[index].Amount < 0))
                     {
                         return 0;
                     }
@@ -439,7 +445,7 @@ namespace ProjectOC.RestaurantNS
         }
         public bool UIChangeFood(int index, string itemID)
         {
-            return ChangeFood(index, itemID);
+            return ChangeFood(index, LocalGameManager.Instance.RestaurantManager.ItemIDToFoodID(itemID));
         }
         #endregion
 

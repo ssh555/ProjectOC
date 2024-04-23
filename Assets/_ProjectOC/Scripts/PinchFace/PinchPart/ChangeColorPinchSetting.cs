@@ -8,7 +8,7 @@ namespace ProjectOC.PinchFace
 {
     public class ChangeColorPinchSetting : MonoBehaviour,IPinchSettingComp
     {
-        [System.Flags]
+        [System.Flags,Serializable]
         public enum ColorChangeType
         {
             [LabelText("All")]
@@ -24,8 +24,7 @@ namespace ProjectOC.PinchFace
             [LabelText("静态渐变")]
             GradientColorDynamic = 1 << 3
         }
-        [NonSerialized] //固定不需要参与存档，不需要序列化存储
-        public ColorChangeType colorChangeType;
+        public ColorChangeType colorChangeType = ColorChangeType.PureColor;
         public int Index { get; } = -1;
         //需要存储
         public float param1,param2; //渐变程度，渐变高度

@@ -262,6 +262,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AnMiXiu_Mesh
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 2f3468f2bcf10ce46a104fd621efe7b1, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 75138a0ece260724494dacfe053082c5, type: 2}
     - target: {fileID: 6016641584411554205, guid: 2f3468f2bcf10ce46a104fd621efe7b1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -314,10 +318,10 @@ MonoBehaviour:
   AddStr: Add_
   replaceGo: []
   tempTail:
-  - {fileID: 3963729622682105320, guid: a38b7eb8ecef1704bb8daefc84c3d2ca, type: 3}
-  - {fileID: 7599690285446188360, guid: c6680102b0a23cf41b436cd3f47f89db, type: 3}
-  - {fileID: 919132149155446097, guid: cccd29d23536c7d48905f8ab71a8ed2f, type: 3}
-  - {fileID: 150595403816932596, guid: a67b0f12e28b670498b7dbdd76e62337, type: 3}
+  - {fileID: 919132149155446097, guid: 9e462844dde3bf74dbd20d52dba82550, type: 3}
+  - {fileID: 919132149155446097, guid: 70c7a96308ec720438a85a61105e3204, type: 3}
+  - {fileID: 919132149155446097, guid: f7d9a915d6dd6404ba5b851e95d0edf7, type: 3}
+  - {fileID: 919132149155446097, guid: 23daf57b63190624197ce0b8fd80cf43, type: 3}
 --- !u!1 &250850834
 GameObject:
   m_ObjectHideFlags: 0

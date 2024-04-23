@@ -29,136 +29,190 @@ MonoBehaviour:
   EnumList:
   - name: LifeDiversion
     displayName: "\u751F\u547D\u5BFC\u6D41\u6869\u5438\u9644\u70B9"
-    value: 
+    value: 1
   - name: PronodeAndInteract
     displayName: "\u529F\u80FD\u5EFA\u7B51\u5438\u9644\u70B9"
-    value: 
+    value: 2
   - name: Floorsurface_A
     displayName: "\u5730\u677F\u8868\u5C42A"
-    value: 
+    value: 3
   - name: Wallsurface_A
     displayName: "\u5899\u9762A"
-    value: 
+    value: 4
   - name: Ceiling_A
     displayName: "\u5929\u82B1\u677FA"
-    value: 
+    value: 5
   - name: Floor_Base_Center_A
-    displayName: "\u5730\u677F\u4E2D\u5FC3\u5438\u9644\u70B9A"
-    value: 
+    displayName: "B\u5730\u677FA"
+    value: 6
   - name: Floor_Base
-    displayName: "\u88AB\u52A8\u5730\u677F\u8FDE\u63A5C"
-    value: 
+    displayName: "B\u5730\u677FC"
+    value: 7
   - name: Wall_Base_A
-    displayName: "\u6807\u51C6\u9AD8\u5899A"
-    value: 
+    displayName: "B\u5899A"
+    value: 8
   - name: Wall_Base
-    displayName: "\u9AD8\u65B9\u5899\u8FDE\u63A5C"
-    value: 
+    displayName: "B\u5899C"
+    value: 9
   - name: Wall_Base_1A
     displayName: "\u77EE\u65B9\u5899A"
-    value: 
+    value: 10
   - name: Wall_Base1
     displayName: "\u77EE\u65B9\u5899\u8FDE\u63A5C"
-    value: 
+    value: 11
   - name: Wall_LB_A
-    displayName: "\u957F\u5899A"
-    value: 
+    displayName: "L\u5899A"
+    value: 12
   - name: Wall_LB_1A
     displayName: "\u77EE\u957F\u5899A"
-    value: 
+    value: 13
   - name: Wall_Qua_A
-    displayName: "\u5F27\u5899A"
-    value: 
+    displayName: "Q\u5899A"
+    value: 14
   - name: Wall_Qua_1A
     displayName: "\u77EE\u5F27\u5899A"
-    value: 
+    value: 15
   - name: Floor_Lbase
-    displayName: "\u957F\u5730\u677F\u8FDE\u63A5C"
-    value: 
+    displayName: "L\u5730\u677FC"
+    value: 16
   - name: Floor_Qua
-    displayName: "\u5F27\u5730\u677F\u8FDE\u63A5C"
-    value: 
+    displayName: "Q\u5730\u677FC"
+    value: 17
   - name: Wall_Qua
-    displayName: "\u9AD8\u5F27\u5899\u8FDE\u63A5C"
-    value: 
+    displayName: "Q\u5899C"
+    value: 18
   - name: Wall_Qua1
     displayName: "\u77EE\u5F27\u5899\u8FDE\u63A5C"
-    value: 
+    value: 19
   - name: Pillar_A
     displayName: "\u957F\u67F1A"
-    value: 
+    value: 20
   - name: Pillar_A1
     displayName: "\u77ED\u67F1A"
-    value: 
+    value: 21
   - name: Pillar
     displayName: "\u957F\u67F1C"
-    value: 
-  - name: Pillar1
-    displayName: "\u77ED\u67F1C"
-    value: 
+    value: 22
+  - name: RoofToPillar
+    displayName: "\u67F1\u548C\u5C4B\u9876"
+    value: 23
   - name: Roof_Base_A
     displayName: "\u6807\u51C6\u5C4B\u9876A"
-    value: 
+    value: 24
   - name: Roof_Base_A1
     displayName: "\u77EE\u6807\u51C6\u5C4B\u9876A"
-    value: 
+    value: 25
   - name: Roof_Base
     displayName: "\u6807\u51C6\u5C4B\u9876C"
-    value: 
+    value: 26
   - name: Roof_Base1
     displayName: "\u77EE\u6807\u51C6\u5C4B\u9876C"
-    value: 
+    value: 27
   - name: Floor_p_C
     displayName: "\u5730\u677F\u89D2\u70B9C"
-    value: 
+    value: 28
   - name: Wall_LB_C
-    displayName: "\u9AD8\u957F\u5899C"
-    value: 
+    displayName: "L\u5899C"
+    value: 29
   - name: Wall_LB1_C
     displayName: "\u77EE\u957F\u5899C"
-    value: 
+    value: 30
   - name: Wall_tri_A
-    displayName: "\u4E09\u89D2\u5899A"
-    value: 
+    displayName: "\u4E09\u89D2\u5899LA"
+    value: 31
   - name: Wall_tri_C
-    displayName: "\u4E09\u89D2\u5899\u914D\u5C4B\u9876C"
-    value: 
+    displayName: "\u4E09\u89D2\u5899LC"
+    value: 32
   - name: Wall_tri1_A
-    displayName: "\u77EE\u4E09\u89D2\u5899A"
-    value: 
+    displayName: "\u77EE\u4E09\u89D2\u5899LA"
+    value: 33
   - name: Wall_tri1_C
-    displayName: "\u77EE\u4E09\u89D2\u5899\u914D\u5C4B\u9876C"
-    value: 
+    displayName: "\u77EE\u4E09\u89D2\u5899LC"
+    value: 34
   - name: Canteen_Seat_C
     displayName: "\u9910\u5385\u5EA7\u4F4DC"
-    value: 
+    value: 35
   - name: Beam_A
     displayName: "\u957F\u6881A"
-    value: 
+    value: 36
   - name: Beam_A1
     displayName: "\u77ED\u6881A"
-    value: 
+    value: 37
   - name: Beam_C
     displayName: "\u957F\u6881C"
-    value: 
+    value: 38
   - name: Beam_C1
     displayName: "\u77ED\u6881C"
-    value: 
+    value: 39
   - name: Edge_A
     displayName: "\u5916\u5EF6A"
-    value: 
+    value: 40
   - name: Edge_C
     displayName: "\u5916\u5EF6C"
-    value: 
+    value: 41
   - name: Edge_L_C
     displayName: "\u957F\u5916\u5EF6C"
-    value: 
+    value: 42
   - name: Edge_L_A
     displayName: "\u957F\u5916\u5EF6A"
-    value: 
+    value: 43
   - name: Edge_Qua_A
     displayName: "\u5F27\u5916\u5EF6A"
-    value: 
+    value: 44
   - name: Edge_Qua_C
     displayName: "\u5F27\u5916\u5EF6C"
-    value: 
+    value: 45
+  - name: Floor_Qua_A
+    displayName: "T\u5730\u677FA"
+    value: 46
+  - name: Floor_Tri_A
+    displayName: "Q\u5730\u677FA"
+    value: 47
+  - name: roof_T_A
+    displayName: "T\u9AD8\u5C4B\u9876A"
+    value: 48
+  - name: roof_T_C
+    displayName: "T\u9AD8\u5C4B\u9876C"
+    value: 49
+  - name: roof_Q_A
+    displayName: "Q\u9AD8\u5C4B\u9876A"
+    value: 50
+  - name: roof_Q_C
+    displayName: "Q\u9AD8\u5C4B\u9876C"
+    value: 51
+  - name: roof_L_A
+    displayName: "L\u9AD8\u5C4B\u9876A"
+    value: 52
+  - name: roof_L_C
+    displayName: "L\u9AD8\u5C4B\u9876C"
+    value: 53
+  - name: wall_Tr_A
+    displayName: "\u4E09\u89D2RA"
+    value: 54
+  - name: wall_Tr_C
+    displayName: "\u4E09\u89D2RC"
+    value: 55
+  - name: wall_Tr1_A
+    displayName: "\u77EE\u4E09\u89D2RA"
+    value: 56
+  - name: wall_Tr1_C
+    displayName: "\u77EE\u4E09\u89D2RC"
+    value: 57
+  - name: roof_Q_1A
+    displayName: "Q\u77EE\u5C4B\u9876A"
+    value: 58
+  - name: roof_Q_1C
+    displayName: "Q\u77EE\u5C4B\u9876C"
+    value: 59
+  - name: roof_T_1A
+    displayName: "T\u77EE\u5C4B\u9876A"
+    value: 60
+  - name: roof_T_1C
+    displayName: "T\u77EE\u5C4B\u9876C"
+    value: 61
+  - name: roof_L_1A
+    displayName: "L\u77EE\u5C4B\u9876A"
+    value: 62
+  - name: roof_L_1C
+    displayName: "L\u77EE\u5C4B\u9876C"
+    value: 63

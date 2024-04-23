@@ -1,3 +1,5 @@
+using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,10 +7,13 @@ using static ProjectOC.Order.OrderManager;
 
 namespace ProjectOC.Order
 {
+    [Serializable]
     public abstract class Order
     {
+        
         private string orderID;
 
+        [ShowInInspector]
         public string OrderID
         {
             get { return orderID; }
@@ -46,6 +51,11 @@ namespace ProjectOC.Order
                 addedItemDic.Add(item.id, 0);
             }
 
+        }
+
+        public Order()
+        {
+            this.OrderID = "";
         }
 
         public bool ChangeRequireItemDic(string ItemId,int ItemNum)
