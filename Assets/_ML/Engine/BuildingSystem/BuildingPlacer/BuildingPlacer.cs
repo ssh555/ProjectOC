@@ -397,7 +397,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     RaycastHit hitInfo = hits[0];
                     foreach (var h in hits)
                     {
-                        var socket = h.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
+                        var socket = h.collider.GetComponent<BuildingSocket.BuildingSocket>();
                         if (socket != null)
                         {
                             if(this.SelectedPartInstance.ActiveSocket.CheckMatch(socket))
@@ -421,11 +421,11 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                         }
                         else if(bSocket == false)
                         {
-                            var area = h.collider.GetComponentInParent<BuildingArea.BuildingArea>();
-                            
+                            var area = h.collider.GetComponent<BuildingArea.BuildingArea>();
+                            // 类型匹配 & 位于正面
                             if (area != null && area.CheckAreaTypeMatch(this.SelectedPartInstance) && (Vector3.Dot(h.point - Camera.transform.position, area.transform.up) < 0)) 
                             {
-                                if (hitInfo.collider.GetComponentInParent<BuildingArea.BuildingArea>() != null)
+                                if (hitInfo.collider.GetComponent<BuildingArea.BuildingArea>() != null)
                                 {
                                     //Debug.Log(Time.frameCount + " " + area.name);
                                     if (h.distance < hitInfo.distance || (h.distance == hitInfo.distance && Vector3.Distance(h.collider.transform.position, this.transform.position) <= Vector3.Distance(hitInfo.collider.transform.position, this.transform.position)))
