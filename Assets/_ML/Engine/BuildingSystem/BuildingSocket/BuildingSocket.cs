@@ -2,6 +2,7 @@ using ML.Engine.BuildingSystem.BuildingPart;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using UnityEngine;
 
@@ -29,15 +30,19 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         /// </summary>
         public virtual void OnActive()
         {
-
+            //#if UNITY_EDITOR
+            //Gizmos_Active = true;
+            //#endif
         }
 
-        /// <summary>
-        /// to-do : 不在激活，即置为Disactieve时调用
-        /// </summary>
+    /// <summary>
+    /// to-do : 不在激活，即置为Disactieve时调用
+    /// </summary>
         public virtual void OnDisactive()
         {
-
+//#if UNITY_EDITOR
+//            Gizmos_Active = false;
+//#endif
         }
 
         public bool CheckMatch(BuildingSocket target)
@@ -193,8 +198,11 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
             BuildingManager.Instance.BuildingSocketList.Remove(this);
         }
 
-
-        private void OnDrawGizmos()
+#if UNITY_EDITOR
+        public bool Gizmos_Active = false;
+        public bool Gizmos_Attached = false;
+#endif
+        public void OnDrawGizmos()
         {
             if (BuildingManager.Instance == null)
             {
@@ -205,7 +213,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
                 var cols = this.GetComponentsInChildren<Collider>();
                 foreach(Collider col in cols)
                 {
-                    Extension.GizmosExtension.DrawWireCollider(col, BuildingManager.Instance.DrawActiveSocket.color);
+                    Extension.GizmosExtension.DrawMeshCollider(col, BuildingManager.Instance.DrawActiveSocket.color);
                 }
             }
             else if (BuildingManager.Instance.DrawSocket.IsDraw)
@@ -213,7 +221,28 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
                 var cols = this.GetComponentsInChildren<Collider>();
                 foreach (Collider col in cols)
                 {
-                    Extension.GizmosExtension.DrawWireCollider(col, BuildingManager.Instance.DrawSocket.color);
+                    Extension.GizmosExtension.DrawMeshCollider(col, BuildingManager.Instance.DrawSocket.color);
+                }
+            }
+
+            //if(Gizmos_Active)
+            //{
+            //    var cols = this.GetComponentsInChildren<Collider>();
+            //    foreach (Collider col in cols)
+            //    {
+            //        var gcolor = Gizmos.color;
+            //        Gizmos.color = BuildingManager.Instance.DrawActiveSocket.color;
+            //        Gizmos.DrawSphere(this.transform.position, 0.3f); ;
+            //        //Extension.GizmosExtension.DrawMeshCollider(col, BuildingManager.Instance.DrawActiveSocket.color);
+            //        Gizmos.color = gcolor;
+            //    }
+            //}
+            if(Gizmos_Attached)
+            {
+                var cols = this.GetComponentsInChildren<Collider>();
+                foreach (Collider col in cols)
+                {
+                    Extension.GizmosExtension.DrawMeshCollider(col, BuildingManager.Instance.DrawSocket.color);
                 }
             }
         }
