@@ -5,7 +5,6 @@ using ProjectOC.MissionNS;
 using ProjectOC.ProNodeNS;
 using Sirenix.OdinInspector;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using ML.PlayerCharacterNS;
 using UnityEngine;
@@ -37,12 +36,16 @@ namespace ProjectOC.WorkerNS
         public int APCostTransport = 1;
         [LabelText("移动速度"), FoldoutGroup("配置")]
         public float WalkSpeed = 10;
+        [LabelText("完成一次任务消耗的心情值"), FoldoutGroup("配置")]
+        public int MoodCost = 10;
+        [LabelText("心情阈值"), FoldoutGroup("配置")]
+        public int MoodThreshold = 50;
         [LabelText("当前心情"), ReadOnly]
-        public int Mood;
+        public int Mood = 100;
         [LabelText("心情最大值"), FoldoutGroup("配置")]
         public int MoodMax = 100;
         [LabelText("超过DestroyTime分钟，未绑定窝的刁民会被销毁"), FoldoutGroup("配置")]
-        public int DestroyTimeForNoHome = 15;
+        public float DestroyTimeForNoHome = 1f;
         [LabelText("当前负重"), ShowInInspector, ReadOnly]
         public int BURCurrent
         {
@@ -154,18 +157,20 @@ namespace ProjectOC.WorkerNS
                         {
                             LocalGameManager.Instance.WorkerManager.DeleteWorker(this);
                         };
+                        TimerForNoHome?.Start();
                     }
-                    TimerForNoHome.Start();
                 }
                 else
                 {
-                    TimerForNoHome.End();
+                    TimerForNoHome?.End();
                 }
             }
         }
         private CounterDownTimer TimerForNoHome;
         [LabelText("是否有窝"), ShowInInspector, ReadOnly]
         public bool HasHome { get => Home != null && !string.IsNullOrEmpty(Home.UID); }
+
+        public ML.Engine.InventorySystem.ItemIcon WorldIcon { get => GetComponentInChildren<ML.Engine.InventorySystem.ItemIcon>(); }
 
         #region ITickComponent
         public int tickPriority { get; set; }
@@ -225,6 +230,15 @@ namespace ProjectOC.WorkerNS
             StateController = new StateController(0);
             StateMachine = new WorkerStateMachine(this);
             StateController.SetStateMachine(StateMachine);
+
+            if (!HasHome)
+            {
+                Home = null;
+            }
+
+            ItemManager.Instance.AddItemIconObject("", this.transform, new Vector3(0, this.transform.GetComponent<CapsuleCollider>().height * 1.5f, 0),
+                                        Quaternion.Euler(Vector3.zero), Vector3.one,
+                                        (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).currentCharacter.transform);
         }
         private void Awake()
         {
@@ -245,6 +259,12 @@ namespace ProjectOC.WorkerNS
                 OnArrivalDisposable?.Invoke(this);
                 OnArrival?.Invoke(this);
             }
+            bool lowMood = Mood < MoodThreshold;
+            bool inSeq = LocalGameManager.Instance.RestaurantManager.ContainWorker(this);
+            string icon = lowMood ? "LowMood" : "";
+            icon = inSeq ? "LowAP" : icon;
+            icon = lowMood && inSeq ? "LowAPMood" : icon;
+            WorldIcon?.SetSprite(LocalGameManager.Instance.WorkerManager.GetSprite(icon));
         }
 
         public bool SetDestination(Vector3 target, Action<Worker> action = null)
@@ -295,8 +315,6 @@ namespace ProjectOC.WorkerNS
             this.ProNode = proNode;
         }
 
-        
-
         /// <summary>
         /// 修改经验值
         /// </summary>
@@ -311,27 +329,19 @@ namespace ProjectOC.WorkerNS
         /// 修改体力值
         /// </summary>
         /// <param name="value">体力值</param>
-        public bool AlterAP(int value)
+        public void AlterAP(int value)
         {
-            int ap = this.APCurrent + value;
-            if (ap >= 0 && ap <= this.APMax)
-            {
-                this.APCurrent = ap;
-                this.APChangeAction?.Invoke(this.APCurrent);
-                return true;
-            }
-            return false;
+            APCurrent += value;
+            APCurrent = APCurrent < 0 ? 0 : APCurrent;
+            APCurrent = APCurrent > APMax ? APMax : APCurrent;
+            APChangeAction?.Invoke(APCurrent);
         }
 
-        public bool AlterMood(int value)
+        public void AlterMood(int value)
         {
-            int mood = Mood + value;
-            if (mood >= 0 && mood <= MoodMax)
-            {
-                Mood = mood;
-                return true;
-            }
-            return false;
+            Mood += value;
+            Mood = Mood < 0 ? 0 : Mood;
+            Mood = Mood > MoodMax ? MoodMax : Mood;
         }
 
         /// <summary>
@@ -339,8 +349,9 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         public void SettleTransport()
         {
-            this.AlterAP(-1 * APCostTransport);
-            this.AlterExp(WorkType.Transport, ExpTransport);
+            AlterAP(-1 * APCostTransport);
+            AlterExp(WorkType.Transport, ExpTransport);
+            AlterMood(-1 * MoodCost);
         }
 
         public void SetTimeStatus(int time, TimeStatus timeStatus)
@@ -370,6 +381,14 @@ namespace ProjectOC.WorkerNS
             if (HasProNode)
             {
                 this.ProNode?.RemoveWorker();
+            }
+            if (HasHome)
+            {
+                this.Home.UnBindWorker();
+            }
+            if (HasRestaurant)
+            {
+                Restaurant.RemoveWorker(this);
             }
         }
 

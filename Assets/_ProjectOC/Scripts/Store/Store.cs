@@ -47,9 +47,9 @@ namespace ProjectOC.StoreNS
 
         #region Property
         [LabelText("仓库容量"), ShowInInspector, ReadOnly]
-        public int StoreCapacity { get { return Level < LevelStoreCapacity .Count ? LevelStoreCapacity[Level] : 0; } }
+        public int StoreCapacity => Level < LevelStoreCapacity.Count ? LevelStoreCapacity[Level] : 0;
         [LabelText("仓库数据的容量"), ShowInInspector, ReadOnly]
-        public int StoreDataCapacity { get { return Level < LevelStoreDataCapacity.Count ? LevelStoreDataCapacity[Level] : 0; } }
+        public int StoreDataCapacity => Level<LevelStoreDataCapacity.Count? LevelStoreDataCapacity[Level] : 0;
         #endregion
 
         public event Action OnStoreDataChangeAction;
@@ -365,7 +365,7 @@ namespace ProjectOC.StoreNS
                     {
                         var inventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
                         int amount = inventory.GetItemAllNum(storeData.ItemID);
-                        amount = amount >= storeData.Empty ? storeData.Empty : amount;
+                        amount = amount <= storeData.Empty ? amount : storeData.Empty;
                         if (inventory.RemoveItem(storeData.ItemID, amount))
                         {
                             storeData.ChangeData(DataType.Storage, amount);

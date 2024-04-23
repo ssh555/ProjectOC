@@ -597,8 +597,9 @@ namespace ML.Engine.UI
 
         public void MoveToBtnList(UIBtnList uIBtnList)
         {
-            if (this.CurSelectUIBtnList == uIBtnList || uIBtnList == null) return;
-
+            //Debug.Log("this.isEnable == false " + (this.isEnable == false) + " this.CurSelectUIBtnList == uIBtnList " + (this.CurSelectUIBtnList == uIBtnList) + " uIBtnList == null " + (uIBtnList == null));
+            if (this.isEnable == false || this.CurSelectUIBtnList == uIBtnList || uIBtnList == null || uIBtnList.IsEmpty) return;
+            
             if(gridNavagationType == ContainerType.A)
             {
                 if(navagationMode == NavagationMode.BtnList)
@@ -857,6 +858,11 @@ namespace ML.Engine.UI
                 Debug.LogError("不存在该BtnList!");
             }
         }
+
+        public void SetEmptyAllBtnList(Action OnResetFinish)
+        {
+            GameManager.Instance.StartCoroutine(DestroyAndRefreshBtnList(OnResetFinish));
+        }
         private IEnumerator DestroyAndRefreshBtnList(int BtnListIndex)
         {
             bool NeedMoveToBtnList = false;
@@ -889,8 +895,27 @@ namespace ML.Engine.UI
                 
             InitBtnlistInfo();
             RefreshIsEmpty();
+        }
+        private IEnumerator DestroyAndRefreshBtnList(Action OnResetFinish)
+        {
+            for (int i = 0; i < this.UIBtnListDic.Count; i++)
+            {
+                UIBtnListDic.Clear();
+                UIBtnListIndexDic.Clear();
+                uIBtnLists.Clear();
+            }
 
+            SelectedButton[] selectedButtons = this.parent.GetComponentsInChildren<SelectedButton>();
+            for(int i = 0;i < selectedButtons.Length;i++)
+            {
+                GameManager.DestroyObj(selectedButtons[i].gameObject);
+            }
+            // 等待一帧 原因是当前帧销毁 transform.childCount在当前帧并不会马上更新，需要下一帧
+            yield return null;
 
+            InitBtnlistInfo();
+            RefreshIsEmpty();
+            OnResetFinish?.Invoke();
         }
         public void RefreshBtnListNavagation()
         {

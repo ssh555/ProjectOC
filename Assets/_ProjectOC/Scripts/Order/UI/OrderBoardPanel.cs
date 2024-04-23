@@ -20,6 +20,7 @@ using UnityEngine.UI;
 using static ML.Engine.UI.UIBtnListContainer;
 using static OrderBoardPanel;
 using static ProjectOC.Order.OrderManager;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 {
@@ -41,7 +42,16 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     #endregion
 
     #region Override
-
+    public override void OnEnter()
+    {
+        base.OnEnter();
+        OrderManager.Instance.OnCanBeCommitRefresh += Refresh;
+    }
+    public override void OnExit()
+    {
+        base.OnExit();
+        OrderManager.Instance.OnCanBeCommitRefresh -= Refresh;
+    }
     protected override void Exit()
     {
         base.Exit();
@@ -205,6 +215,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 
     private bool isNeedRefreshAcceptedOrder = true;
     private bool isNeedRefreshOrderDelegation = true;
+    private int OrderDelegationCnt = 0;
 
     private Transform AcceptedOrderOrderInfo;
     private Transform OrderDelegationOrderInfo;
@@ -276,8 +287,8 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             this.ClanBtnList.DisableBtnList();
         }
         #endregion
-
         #region OrderDelegation -> OrderDelegation 
+        
         if (isNeedRefreshOrderDelegation && FunctionIndex == 1 && OrderDelegationIndex == 1)
         {
             //激活OrderDelegationUIBtnListContainer
@@ -285,18 +296,23 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             this.OrderDelegationUIBtnListContainer.SetIsEnableTrue();
             //当前所选氏族的ID
             string CurSelectedClanID = this.ClanBtnList.GetCurSelected().name;
-
-            #region 紧急订单槽
-            this.OrderDelegationUIBtnListContainer.UIBtnLists[0].DeleteAllButton(()=>
+            UIBtnList.Synchronizer synchronizer = new UIBtnList.Synchronizer(2 + OrderManager.Instance.GetOrderDelegationOrders(CurSelectedClanID, OrderType.Normal).Count, () =>
             {
+                this.OrderDelegationUIBtnListContainer.InitBtnlistInfo();
+            });
+
+            this.OrderDelegationUIBtnListContainer.SetEmptyAllBtnList(() =>
+            {
+                #region 紧急订单槽
+
                 foreach (var order in OrderManager.Instance.GetOrderDelegationOrders(CurSelectedClanID, OrderType.Urgent))
                 {
                     OrderUrgent orderUrgent = (OrderUrgent)order;
                     OrderTableData orderTableData = OrderManager.Instance.GetOrderTableData(order);
-                    
+
                     this.OrderDelegationUIBtnListContainer.UIBtnLists[0].AddBtn("Assets/_ProjectOC/OCResources/UI/OrderBoard/Prefabs/UrgentDelegationBtn.prefab", BtnSettingAction: (btn) =>
                     {
-                        if (order != null) 
+                        if (order != null)
                         {
                             //更新计时信息
                             btn.transform.Find("StripImage").Find("OrderName").GetComponent<TextMeshProUGUI>().text = orderTableData.OrderName;
@@ -307,13 +323,13 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                                 RemainTimeText.text = timer.CurrentTime.ToString();
                                 slider.value = (float)(timer.CurrentTime / timer.Duration);
                             };
-                            timer.OnEndEvent += ()=> { this.isNeedRefreshOrderDelegation = true; this.Refresh(); };
+                            timer.OnEndEvent += () => { this.isNeedRefreshOrderDelegation = true; this.Refresh(); };
                             btn.name = orderTableData.ID;
                         }
                         else
                         {
                             //若为空槽则只激活Selected
-                            for (int i = 0;i<btn.transform.childCount;i++)
+                            for (int i = 0; i < btn.transform.childCount; i++)
                             {
                                 btn.transform.GetChild(i).gameObject.SetActive(btn.transform.GetChild(i).name == "Selected");
                             }
@@ -321,53 +337,29 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                         }
                     },
                     OnFinishAdd: () => {
-                        //按钮更新完毕刷新
-                        this.Refresh();
+                        synchronizer.Check();
                     });
                 }
-                //按钮更新完毕刷新
-                this.Refresh();
-            });
-            #endregion
-            Debug.Log(this.isInitNormalOrder);
-            #region 常规订单槽
-            if (this.isInitNormalOrder ==  false)
-            {
-                Debug.Log("常规订单槽");
-                this.OrderDelegationUIBtnListContainer.UIBtnLists[1].DeleteAllButton(() =>
+                #endregion
+                #region 常规订单槽
+                foreach (var order in OrderManager.Instance.GetOrderDelegationOrders(CurSelectedClanID, OrderType.Normal))
                 {
-                    foreach (var order in OrderManager.Instance.GetOrderDelegationOrders(CurSelectedClanID, OrderType.Normal))
+                    OrderTableData orderTableData = OrderManager.Instance.GetOrderTableData(order);
+
+                    this.OrderDelegationUIBtnListContainer.UIBtnLists[1].AddBtn("Assets/_ProjectOC/OCResources/UI/OrderBoard/Prefabs/NormalDelegationBtn.prefab", BtnSettingAction: (btn) =>
                     {
-                        OrderTableData orderTableData = OrderManager.Instance.GetOrderTableData(order);
+                        //更新信息
+                        btn.transform.Find("Image").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.OrderName;
+                        btn.name = orderTableData.ID;
+                    },
+                    OnFinishAdd: () =>
+                    {
+                        synchronizer.Check();
+                    });
+                }
+                #endregion
 
-                        this.OrderDelegationUIBtnListContainer.UIBtnLists[1].AddBtn("Assets/_ProjectOC/OCResources/UI/OrderBoard/Prefabs/NormalDelegationBtn.prefab", BtnSettingAction: (btn) =>
-                        {
-                            //更新信息
-                            btn.transform.Find("Image").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.OrderName;
-                            btn.name = orderTableData.ID;
-                        },
-                        OnFinishAdd: () =>
-                        {
-                            this.Refresh();
-                            this.OrderDelegationUIBtnListContainer.FindEnterableUIBtnList();
-                            Debug.Log("完毕刷新");
-                        });
-                    }
-                    //按钮更新完毕刷新
-                    this.Refresh();
-                });
-                //常规订单槽初始化完毕
-                
-                this.isInitNormalOrder = true;
-            }
-            else
-            {
-                //常规订单槽初始化完毕刷新
-            }
-
-            #endregion
-            
-            
+            });
             isNeedRefreshOrderDelegation = false;
         }
         else if(FunctionIndex != 1 || OrderDelegationIndex != 1)
@@ -383,12 +375,11 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         }
 
         #region 右侧订单详细信息
+
         //重置对象池
         this.objectPool.ResetAllObject();
-        
-        if(OrderManager.Instance.IsValidOrderID(curSelectedOrderIDInOrderDelegation))
+        if (OrderManager.Instance.IsValidOrderID(curSelectedOrderIDInOrderDelegation))
         {
-            Debug.Log(curSelectedOrderIDInOrderDelegation);
             OrderTableData orderTableData = OrderManager.Instance.GetOrderTableData(curSelectedOrderIDInOrderDelegation);
             this.OrderDelegationOrderInfo.gameObject.SetActive(true);
 
@@ -411,26 +402,43 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             //ItemList
             var ItemList = this.OrderDelegationOrderInfo.Find("ItemList");
             var Slots = ItemList.Find("Slots");
+            Debug.Log("rtr " + orderTableData.RequireList.Count +" "+ Slots);
             for (int i = 0; i < orderTableData.RequireList.Count; i++)
             {
                 var slot = this.objectPool.GetNextObject("SlotPool", Slots);
-                slot.transform.Find("ItemNumber").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.RequireList[i].num.ToString();
+                slot.transform.Find("ItemNumber").Find("Background").GetComponent<Image>().color = UnityEngine.Color.black;
+
+                int needNum = orderTableData.RequireList[i].num;
+                int haveNum = OrderManager.Instance.GetInventory().GetItemAllNum(orderTableData.RequireList[i].id);
+                
+                if (needNum > haveNum)
+                {
+                    slot.transform.Find("ItemNumber").Find("Background").GetComponent<Image>().color = UnityEngine.Color.red;
+                    slot.transform.Find("ItemNumber").Find("Text").GetComponent<TextMeshProUGUI>().text = needNum.ToString() + "/" + haveNum.ToString();
+                }
+                else
+                {
+                    slot.transform.Find("ItemNumber").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.RequireList[i].num.ToString();
+                }
                 slot.transform.Find("ItemName").GetComponent<TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(orderTableData.RequireList[i].id);
+
+
             }
             //RewardList
-            /*var RewardList = this.OrderInfo.Find("RewardList");
+            var RewardList = this.OrderDelegationOrderInfo.Find("RewardList");
             var Tokens = RewardList.Find("Tokens");
-            for (int i = 0; i < orderTableData.ClanReward.Count; i++)
+            for (int i = 0; i < orderTableData.ItemReward.Count; i++)
             {
                 var slot = this.objectPool.GetNextObject("SlotPool", Tokens);
-                slot.transform.Find("ItemNumber").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.ClanReward[i].num.ToString();
-                slot.transform.Find("ItemName").GetComponent<TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(orderTableData.ClanReward[i].id);
-            }*/
+                slot.transform.Find("ItemNumber").Find("Background").GetComponent<Image>().color = UnityEngine.Color.black;
 
-
+                slot.transform.Find("ItemNumber").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.ItemReward[i].num.ToString();
+                slot.transform.Find("ItemName").GetComponent<TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(orderTableData.ItemReward[i].id);
+            }
             //按钮隐藏
-            this.OrderDelegationOrderInfo.Find("CancleBtn").gameObject.SetActive(orderTableData.OrderType == OrderType.Urgent);
-
+            Debug.Log(this.OrderDelegationOrderInfo);
+            Debug.Log(this.OrderDelegationOrderInfo.Find("CancelBtn"));
+            this.OrderDelegationOrderInfo.Find("CancelBtn").gameObject.SetActive(orderTableData.OrderType == OrderType.Urgent);
         }
         else
         {
@@ -457,6 +465,22 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                         this.AcceptedOrderBtnList.AddBtn("Assets/_ProjectOC/OCResources/UI/OrderBoard/Prefabs/AcceptedOrderListBtn.prefab", BtnSettingAction: (btn) =>
                         {
                             btn.transform.Find("Image").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.OrderName;
+
+                            if(orderTableData.OrderType == OrderType.Urgent)
+                            {
+                                btn.transform.Find("Image").Find("Image1").GetComponent<Image>().color = Color.red;
+                            }
+                            else if(orderTableData.OrderType == OrderType.Special)
+                            {
+                                btn.transform.Find("Image").Find("Image1").GetComponent<Image>().color = Color.blue;
+                            }
+                            else if(orderTableData.OrderType == OrderType.Normal)
+                            {
+                                btn.transform.Find("Image").Find("Image1").GetComponent<Image>().color = Color.gray;
+                            }
+
+                            
+
                             btn.transform.Find("Image").Find("Image2").gameObject.SetActive(acceptedOrder.canBeCommit);
                             btn.name = orderTableData.ID;
                         },
@@ -471,7 +495,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                 });
                 isNeedRefreshAcceptedOrder = false;
             }
-            
+
         }
         else
         {
@@ -480,8 +504,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         }
 
         #region 右侧订单详细信息
-        //重置对象池
-        this.objectPool.ResetAllObject();
+        
         if (OrderManager.Instance.IsValidOrderID(curSelectedOrderIDInAcceptedOrder))
         {
             Debug.Log(curSelectedOrderIDInAcceptedOrder);
@@ -507,24 +530,40 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             //ItemList
             var ItemList = this.AcceptedOrderOrderInfo.Find("ItemList");
             var Slots = ItemList.Find("Slots");
+
             for (int i = 0; i < orderTableData.RequireList.Count; i++)
             {
                 var slot = this.objectPool.GetNextObject("SlotPool", Slots);
-                slot.transform.Find("ItemNumber").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.RequireList[i].num.ToString();
+                slot.transform.Find("ItemNumber").Find("Background").GetComponent<Image>().color = UnityEngine.Color.black;
+
+                int needNum = orderTableData.RequireList[i].num;
+                int haveNum = OrderManager.Instance.GetInventory().GetItemAllNum(orderTableData.RequireList[i].id);
+
+                if (needNum > haveNum)
+                {
+                    slot.transform.Find("ItemNumber").Find("Background").GetComponent<Image>().color = UnityEngine.Color.red;
+                    slot.transform.Find("ItemNumber").Find("Text").GetComponent<TextMeshProUGUI>().text = needNum.ToString() + "/" + haveNum.ToString();
+                }
+                else
+                {
+                    slot.transform.Find("ItemNumber").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.RequireList[i].num.ToString();
+                }
                 slot.transform.Find("ItemName").GetComponent<TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(orderTableData.RequireList[i].id);
             }
             //RewardList
-            /*var RewardList = this.OrderInfo.Find("RewardList");
+            var RewardList = this.AcceptedOrderOrderInfo.Find("RewardList");
             var Tokens = RewardList.Find("Tokens");
-            for (int i = 0; i < orderTableData.ClanReward.Count; i++)
+            for (int i = 0; i < orderTableData.ItemReward.Count; i++)
             {
                 var slot = this.objectPool.GetNextObject("SlotPool", Tokens);
-                slot.transform.Find("ItemNumber").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.ClanReward[i].num.ToString();
-                slot.transform.Find("ItemName").GetComponent<TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(orderTableData.ClanReward[i].id);
-            }*/
+                slot.transform.Find("ItemNumber").Find("Background").GetComponent<Image>().color = UnityEngine.Color.black;
+
+                slot.transform.Find("ItemNumber").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.ItemReward[i].num.ToString();
+                slot.transform.Find("ItemName").GetComponent<TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(orderTableData.ItemReward[i].id);
+            }
 
             //按钮隐藏
-            this.OrderDelegationOrderInfo.Find("CancleBtn").gameObject.SetActive(!OrderManager.Instance.GetAcceptedOrder(curSelectedOrderIDInAcceptedOrder).canBeCommit);
+            this.OrderDelegationOrderInfo.Find("CancelBtn").gameObject.SetActive(!OrderManager.Instance.GetAcceptedOrder(curSelectedOrderIDInAcceptedOrder).canBeCommit);
         }
         else
         {

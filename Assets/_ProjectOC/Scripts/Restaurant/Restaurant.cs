@@ -1,6 +1,5 @@
 using ML.Engine.InventorySystem;
 using Sirenix.OdinInspector;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -135,6 +134,20 @@ namespace ProjectOC.RestaurantNS
             {
                 transport?.UpdateDestination();
             }
+            foreach (var seat in Seats)
+            {
+                if (seat.HasWorker)
+                {
+                    if (seat.HasArrive)
+                    {
+                        seat.Worker.transform.position = seat.Socket.transform.position;
+                    }
+                    else
+                    {
+                        seat.Worker.SetDestination(seat.Socket.transform.position, OnArriveEvent);
+                    }
+                }
+            }
         }
 
         #region 方法
@@ -149,6 +162,11 @@ namespace ProjectOC.RestaurantNS
                 {
                     if (!Seats[i].HasWorker)
                     {
+                        if (worker.HasHome && worker.Home.HasArrive)
+                        {
+                            worker.RecoverLastPosition();
+                            worker.Home.HasArrive = false;
+                        }
                         Seats[i].SetWorker(worker);
                         worker.SetDestination(Seats[i].Socket.position, OnArriveEvent);
                         LocalGameManager.Instance.RestaurantManager.RemoveWorker(worker);
@@ -158,6 +176,18 @@ namespace ProjectOC.RestaurantNS
             }
             return false;
         }
+        public void RemoveWorker(Worker worker)
+        {
+            if (worker != null)
+            {
+                int index = GetWorkerSeatIndex(worker);
+                if (0 <= index && index < Seats.Length && Seats[index].Worker == worker)
+                {
+                    Seats[index].ClearData();
+                }
+            }
+        }
+
         /// <summary>
         /// 给玩家分配食物
         /// 将Datas转为列表并排序，遍历该列表，如果有No1和No2的食物，则返回No1或No2，
@@ -165,6 +195,7 @@ namespace ProjectOC.RestaurantNS
         /// </summary>
         public int FindFood(Worker worker)
         {
+            int result = -1;
             if (worker != null)
             {
                 List<Tuple<RestaurantData, int>> tuples = Datas.Select((data, index) => Tuple.Create(data, index)).ToList();
@@ -172,14 +203,17 @@ namespace ProjectOC.RestaurantNS
                 foreach (var tuple in tuples)
                 {
                     RestaurantData data = tuple.Item1;
-                    if (data.HaveFood && (data.Priority != FoodPriority.None || worker.APCurrent + data.AlterAP >= worker.APMax))
+                    if (data.HaveFood)
                     {
-                        return tuple.Item2;
+                        result = tuple.Item2;
+                        if (data.Priority != FoodPriority.None || worker.APCurrent + data.AlterAP >= worker.APMax)
+                        {
+                            break;
+                        }
                     }
                 }
-                return tuples.Count > 0 ? tuples.Count - 1 : -1;
             }
-            return -1;
+            return result;
         }
         public string EatFood(Worker worker)
         {
@@ -202,7 +236,7 @@ namespace ProjectOC.RestaurantNS
         private void OnArriveEvent(Worker worker)
         {
             int seatIndex = GetWorkerSeatIndex(worker);
-            if (worker != null && seatIndex > 0)
+            if (worker != null && seatIndex >= 0)
             {
                 Seats[seatIndex].HasArrive = true;
                 if (HasFood)
@@ -217,7 +251,10 @@ namespace ProjectOC.RestaurantNS
                         return;
                     }
                 }
-                Seats[seatIndex].ClearData();
+                else
+                {
+                    Seats[seatIndex].ClearData();
+                }
             }
             LocalGameManager.Instance.RestaurantManager.AddWorker(worker);
         }
@@ -294,11 +331,11 @@ namespace ProjectOC.RestaurantNS
                 int amount = Datas[index].Amount;
                 Datas[index].ID = "";
                 Datas[index].Amount = 0;
+                bool haveSetFood = HaveSetFood(itemID, false);
 
                 foreach (Transport transport in Transports)
                 {
-                    if (transport != null && transport.ItemID == itemID 
-                        && transport.Target == this && !HaveSetFood(itemID, false))
+                    if (transport != null && transport.ItemID == itemID && transport.Target == this && !haveSetFood)
                     {
                         transport.End();
                     }
@@ -336,10 +373,10 @@ namespace ProjectOC.RestaurantNS
                     {
                         return 0;
                     }
-                    amount = !complete && amount + Datas[index].Amount < 0 ? Datas[index].Amount : amount;
+                    amount = !complete && amount + Datas[index].Amount < 0 ? -1 * Datas[index].Amount : amount;
                     Datas[index].Amount += amount;
                     OnDataChangeEvent?.Invoke();
-                    return amount;
+                    return amount < 0 ? -1 * amount : amount;
                 }
                 return 0;
             }
