@@ -142,7 +142,6 @@ MonoBehaviour:
     IsWorkerArrive: 0
     MissionTransports: []
     LevelUpgradeEff: 
-    RequirePower: 0
 --- !u!1 &8005316495401465773
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,5 +211,6 @@ MonoBehaviour:
   ID: 2
   IsActiveSocket: 1
   IsCanRotate: 1
+  IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0.2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
