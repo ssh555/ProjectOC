@@ -154,8 +154,8 @@ namespace ProjectOC.WorkerNS
                         {
                             LocalGameManager.Instance.WorkerManager.DeleteWorker(this);
                         };
+                        TimerForNoHome?.Start();
                     }
-                    TimerForNoHome?.Start();
                 }
                 else
                 {
@@ -226,7 +226,10 @@ namespace ProjectOC.WorkerNS
             StateMachine = new WorkerStateMachine(this);
             StateController.SetStateMachine(StateMachine);
 
-            Home = null;
+            if (!HasHome)
+            {
+                Home = null;
+            }
         }
         private void Awake()
         {

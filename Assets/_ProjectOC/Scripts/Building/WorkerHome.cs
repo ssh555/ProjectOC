@@ -1,4 +1,5 @@
 using ML.Engine.Timer;
+using ProjectOC.ManagerNS;
 using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System.Collections;
@@ -60,6 +61,10 @@ namespace ProjectOC.Building
         /// </summary>
         public void OnDestroy()
         {
+            if (LocalGameManager.Instance != null && !HasWorker)
+            {
+                LocalGameManager.Instance.WorkerManager.OnAddWokerEvent -= OnAddWorkerEvent;
+            }
             UnBindWorker();
             Timer?.End();
         }
@@ -112,6 +117,26 @@ namespace ProjectOC.Building
         }
         #endregion
 
+        public void OnAddWorkerEvent(Worker worker)
+        {
+            if (!worker.HasHome && !HasWorker)
+            {
+                BindWorker(worker);
+            }
+        }
+
+        public void ManageAddWorkerEvent()
+        {
+            if (HasWorker)
+            {
+                LocalGameManager.Instance.WorkerManager.OnAddWokerEvent -= OnAddWorkerEvent;
+            }
+            else
+            {
+                LocalGameManager.Instance.WorkerManager.OnAddWokerEvent += OnAddWorkerEvent;
+            }
+        }
+
         private void EndActionForTimer()
         {
             if (Worker != null && Worker.Mood < Worker.MoodMax)
@@ -125,13 +150,11 @@ namespace ProjectOC.Building
             UnBindWorker();
             if (worker != null)
             {
-                worker.Home?.UnBindWorker();
-            }
-            Worker = worker;
-            if (HasWorker)
-            {
+                worker.Home?.UnBindWorker(true);
+                Worker = worker;
                 worker.Home = this;
             }
+            ManageAddWorkerEvent();
         }
 
         public void BindWorkerDefault()
@@ -144,9 +167,10 @@ namespace ProjectOC.Building
                     BindWorker(worker);
                 }
             }
+            ManageAddWorkerEvent();
         }
 
-        public void UnBindWorker()
+        public void UnBindWorker(bool addListener = false)
         {
             if (HasWorker)
             {
@@ -158,6 +182,10 @@ namespace ProjectOC.Building
             }
             HasArrive = false;
             Worker = null;
+            if (addListener)
+            {
+                ManageAddWorkerEvent();
+            }
         }
     }
 }
