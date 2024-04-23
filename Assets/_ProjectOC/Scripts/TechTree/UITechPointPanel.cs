@@ -404,6 +404,7 @@ namespace ProjectOC.TechTree.UI
 
         private void Decipher()
         {
+
             if (this.CanDecipher)
             {
                 TechTreeManager.Instance.UnlockTechPoint(inventory, CurrentID, false);
