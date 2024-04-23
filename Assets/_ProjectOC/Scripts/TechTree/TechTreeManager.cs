@@ -186,7 +186,6 @@ namespace ProjectOC.TechTree
         {
             if(this.WaitingLockSet.Contains(ID))
             {
-
                 return this.WaitingLockQueue.IndexOf(ID) + 1;
             }
             return -1;

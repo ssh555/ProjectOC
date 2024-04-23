@@ -55,7 +55,7 @@ namespace ProjectOC.InventorySystem.UI
             var info = this.transform.Find("ItemInfo").Find("Info");
             Info_ItemName = info.Find("Name").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             Info_ItemIcon = info.Find("Icon").Find("IconImage").GetComponent<Image>();
-            Info_ItemWeight = info.Find("Weight").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
+            Info_ItemWeight = info.Find("Weight").Find("Image").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             Info_ItemDescription = info.Find("ItemDescription").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             Info_ItemEffectDescription = info.Find("EffectDescription").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
 
@@ -256,9 +256,13 @@ namespace ProjectOC.InventorySystem.UI
         private void Destroy_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             var item = this.CurrentItem;
-            this.inventory.RemoveItem(item);
-            SelectedItems.Remove(item);
-            this.CurrentItemIndex = this.CurrentItemIndex;
+
+            if(ItemManager.Instance.GetCanDestroy(item.ID))
+            {
+                this.inventory.RemoveItem(item);
+                SelectedItems.Remove(item);
+                this.CurrentItemIndex = this.CurrentItemIndex;
+            }
         }
 
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -454,7 +458,7 @@ namespace ProjectOC.InventorySystem.UI
                 // Amount
                 var amounttext = item.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
                 amounttext.gameObject.SetActive(ItemManager.Instance.GetCanStack(SelectedItems[i].ID));
-                amounttext.text = SelectedItems[i].Amount > 999 ? SelectedItems[i].Amount.ToString() + "+" : SelectedItems[i].Amount.ToString();
+                amounttext.text = SelectedItems[i].Amount > 999 ? "999+" : SelectedItems[i].Amount.ToString();
                 // Selected
                 var selected = item.transform.Find("Selected");
                 if(CurrentItem == SelectedItems[i])

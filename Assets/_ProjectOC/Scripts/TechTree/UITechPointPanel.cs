@@ -350,7 +350,7 @@ namespace ProjectOC.TechTree.UI
             //取消计划
             if(ML.Engine.Input.InputManager.Instance.Common.Common.SubInteract.WasPerformedThisFrame())
             {
-                if (TechTreeManager.Instance.GetWaitingOrder(CurrentID) != -1) 
+                if (TechTreeManager.Instance.GetWaitingOrder(CurrentID) > 1) 
                 {
                     TechTreeManager.Instance.CancelWaitingOrder(CurrentID);
                     this.Refresh();
@@ -657,7 +657,7 @@ namespace ProjectOC.TechTree.UI
                     //tempTimer.Add(timer);
                 }
                 var t = TechTreeManager.Instance.GetWaitingOrder(CurrentID);
-                this.CancelBtn.gameObject.SetActive(t != -1);
+                this.CancelBtn.gameObject.SetActive(t > 1);
                 this.TPKT_Decipher.gameObject.SetActive(t == -1);
             }
 
