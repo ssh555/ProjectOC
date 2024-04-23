@@ -271,6 +271,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             {
                 this.activeSocketIndex = (this.activeSocketIndex + 1) % this.OwnedSocketList.Count;
             }
+            this.ActiveSocket.OnActive();
 
             CheckPladeMode();
 
