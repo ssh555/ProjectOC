@@ -383,7 +383,7 @@ namespace ProjectOC.ProNodeNS
         {
             if (IsOnProduce)
             {
-                TimerForProduce.End();
+                timerForProduce?.End();
             }
         }
 
