@@ -352,7 +352,7 @@ namespace ProjectOC.Order
                 OrderUrgent orderUrgent = new OrderUrgent(orderTableData.ID, orderTableData.RequireList, orderTableData.ReceiveDDL, orderTableData.DeliverDDL);
                 orderUrgent.StartReceiveDDLTimer();
                 
-                List<Order> orders = new List<Order>(this.OrderUrgentDelegationMap[ClanID].ToArray());
+                List<Order> orders = this.OrderUrgentDelegationMap[ClanID];
                 for (int i = 0; i < orders.Count; i++)
                 {
                     if (orders[i] == null)

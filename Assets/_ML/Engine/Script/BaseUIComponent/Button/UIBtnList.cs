@@ -16,6 +16,7 @@ using ML.Engine.Utility;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.IO.Pipes;
 using UnityEngine.InputSystem.iOS;
+using UnityEditor;
 
 namespace ML.Engine.UI
 {
@@ -96,7 +97,7 @@ namespace ML.Engine.UI
 
         public event Action OnSelectButtonChanged;
 
-
+        private bool isBtnListContainerDeleteAll = false;
 
         /// <summary>
         /// parent: 按钮父物体 limitNum：一行多少个按钮 hasInitSelect:是否有初始选中 isLoop:是否为循环按钮 isWheel：是否为轮转按钮 OnSelectedEnter：选中回调 OnSelectedExit：选出回调
@@ -153,7 +154,7 @@ namespace ML.Engine.UI
             SelectedButton[] OneDimSelectedButtons = parent.GetComponentsInChildren<SelectedButton>(true);
             this.OneDimCnt = OneDimSelectedButtons.Length;
 
-            if(this.OneDimCnt == 0)
+            if(this.OneDimCnt == 0 && !isBtnListContainerDeleteAll)
             {
                 this.CurSelected = null;
                 this.isEmpty = true;
@@ -345,75 +346,89 @@ namespace ML.Engine.UI
             
         }
 
+        //同步变量
+        public class Synchronizer
+        {
+            private int CheckNum;
+            private int curCheckNum;
+            private Action OnAllFinish;
+
+            public Synchronizer(int checkNum, Action OnAllFinish)
+            {
+                this.curCheckNum = 0;
+                this.CheckNum = checkNum;
+                this.OnAllFinish = OnAllFinish;
+            }
+            public void Check()
+            {
+                ++curCheckNum;
+                if (curCheckNum == CheckNum)
+                {
+                    OnAllFinish?.Invoke();
+                }
+            }
+        }
+
 
         public void AddBtns(int num, string prefabpath,Action OnAllBtnAdded = null ,List<UnityAction> BtnActions = null, Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null, List<string> BtnTexts = null)
         {
-            FunctionExecutor<List<AsyncOperationHandle>> functionExecutor = new FunctionExecutor<List<AsyncOperationHandle>>();
-            functionExecutor.AddFunction(()=> { return AddBtnsHandles(num, prefabpath, BtnActions, OnSelectEnter, OnSelectExit, BtnSettingAction, BtnTexts); });
-            functionExecutor.SetOnAllFunctionsCompleted(OnAllBtnAdded);
-            GameManager.Instance.StartCoroutine(functionExecutor.Execute());
-        }
-
-        private List<AsyncOperationHandle> AddBtnsHandles(int num, string prefabpath, List<UnityAction>  BtnActions = null, Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null, List<string> BtnTexts = null)
-        {
-            List<AsyncOperationHandle> handles = new List<AsyncOperationHandle>();
+            Synchronizer Checker = new Synchronizer(num, OnAllBtnAdded);
             for (int i = 0; i < num; i++)
             {
                 var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(prefabpath);
-                handles.Add(handle);
-
                 handle.Completed += (handle) =>
-                 {
-                     // 实例化
-                     var btn = handle.Result.GetComponent<SelectedButton>();
-                     btn.gameObject.name = btn.GetHashCode().ToString();
-                     btn.transform.SetParent(this.parent.Find("Container"), false);
-                     btn.transform.localScale = Vector3.one;
+                {
+                    // 实例化
+                    var btn = handle.Result.GetComponent<SelectedButton>();
+                    btn.gameObject.name = btn.GetHashCode().ToString();
+                    btn.transform.SetParent(this.parent.Find("Container"), false);
+                    btn.transform.localScale = Vector3.one;
 
-                     if (BtnActions!=null && BtnActions[i] != null)
-                     {
-                         btn.onClick.AddListener(BtnActions[i]);
-                     }
+                    if (BtnActions != null && BtnActions[i] != null)
+                    {
+                        btn.onClick.AddListener(BtnActions[i]);
+                    }
 
-                     if (OnSelectEnter != null)
-                     {
-                         btn.SetOnSelectEnter(OnSelectEnter);
-                     }
+                    if (OnSelectEnter != null)
+                    {
+                        btn.SetOnSelectEnter(OnSelectEnter);
+                    }
 
-                     if (OnSelectExit != null)
-                     {
-                         btn.SetOnSelectExit(OnSelectExit);
-                     }
+                    if (OnSelectExit != null)
+                    {
+                        btn.SetOnSelectExit(OnSelectExit);
+                    }
 
-                     if (BtnSettingAction != null)
-                     {
-                         BtnSettingAction(btn);
-                     }
+                    if (BtnSettingAction != null)
+                    {
+                        BtnSettingAction(btn);
+                    }
 
-                     if (BtnTexts!=null && BtnTexts[i] != null)
-                     {
-                         this.SetBtnText(btn, BtnTexts[i]);
-                     }
+                    if (BtnTexts != null && BtnTexts[i] != null)
+                    {
+                        this.SetBtnText(btn, BtnTexts[i]);
+                    }
 
-                     if (this.uiBtnListContainer == null)
-                     {
-                         InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
-                         return;
-                     }
+                    if (this.uiBtnListContainer == null)
+                    {
+                        InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+                        Checker.Check();
+                        return;
+                    }
 
-                     bool needMoveToBtnList = this.uiBtnListContainer.IsEmpty;
-                     InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
-                     if (needMoveToBtnList)
-                     {
-                         this.UIBtnListContainer?.FindEnterableUIBtnList();
-                     }
-                     else
-                     {
-                         this.UIBtnListContainer?.RefreshEdge();
-                     }
-                 };
+                    bool needMoveToBtnList = this.uiBtnListContainer.IsEmpty;
+                    InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+                    if (needMoveToBtnList)
+                    {
+                        this.UIBtnListContainer?.FindEnterableUIBtnList();
+                    }
+                    else
+                    {
+                        this.UIBtnListContainer?.RefreshEdge();
+                    }
+                    Checker.Check();
+                };
             }
-            return handles;
         }
 
         public void DeleteButton(int SelectedButtonIndex)

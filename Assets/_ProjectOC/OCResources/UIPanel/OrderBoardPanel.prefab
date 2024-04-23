@@ -7312,7 +7312,7 @@ GameObject:
   - component: {fileID: 825012792017289975}
   - component: {fileID: 7807154927584257683}
   m_Layer: 0
-  m_Name: CancleBtn
+  m_Name: CancelBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11422,7 +11422,7 @@ GameObject:
   - component: {fileID: 7049062694778993668}
   - component: {fileID: 6428014404368062199}
   m_Layer: 0
-  m_Name: CancleBtn
+  m_Name: CancelBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11665,7 +11665,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -370.99408, y: 136.00229}
+  m_AnchoredPosition: {x: -370.99408, y: 136.00226}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &979336352237113279
