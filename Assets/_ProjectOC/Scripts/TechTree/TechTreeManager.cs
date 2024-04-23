@@ -186,8 +186,8 @@ namespace ProjectOC.TechTree
         {
             if(this.WaitingLockSet.Contains(ID))
             {
-                var t = this.WaitingLockQueue.IndexOf(ID);
-                return t == 0 ? -1 : t;
+
+                return this.WaitingLockQueue.IndexOf(ID) + 1;
             }
             return -1;
         }
@@ -459,7 +459,7 @@ namespace ProjectOC.TechTree
             this.inventory = inventory;
             this.IsCheck = IsCheck;
 
-            if (!this.WaitingLockSet.Contains(ID) && this.WaitingLockQueue.Count < this.QueueSize + 1) 
+            if (!this.WaitingLockSet.Contains(ID) && this.WaitingLockQueue.Count < this.QueueSize) 
             {
                 this.WaitingLockQueue.Add(ID);
                 this.WaitingLockSet.Add(ID);

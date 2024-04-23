@@ -28,6 +28,8 @@ namespace ProjectOC.TechTree.UI
         private int sliceNum = 16;
         private Vector3 BasePos;
 
+
+
         private void SetBtnPos(RectTransform rectTransform,int[] cor)
         {
             if (cor.Length != 2) return;
@@ -78,12 +80,30 @@ namespace ProjectOC.TechTree.UI
                         OnSelectEnter: () =>
                         {
                             CurrentID = id;
+                            int[] cor = TechTreeManager.Instance.GetTPGrid(id);
+                            if (cor != null)
+                            {
+                                pos.x = cor[0];
+                                pos.y = cor[1];
+                            }
+                            
                             this.Refresh();
                         },
 
                         OnSelectExit: () =>
                         {
                             CurrentID = "";
+                            int[] cor = TechTreeManager.Instance.GetTPGrid(id);
+                            if (cor != null)
+                            {
+                                pos.x = cor[0];
+                                pos.y = cor[1];
+                            }
+                            else
+                            {
+                                pos.x = -1;
+                                pos.y = -1;
+                            }
                             ClearTempOnAlterTP();
                             this.Refresh();
                         },
@@ -167,8 +187,8 @@ namespace ProjectOC.TechTree.UI
                 }
             }
         }
-
-
+        [ShowInInspector]
+        public Vector2 pos;
         [ShowInInspector]
 
         private string CurrentID = "";
