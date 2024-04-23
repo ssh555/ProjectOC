@@ -69,6 +69,11 @@ namespace ProjectOC.RestaurantNS
             }
         }
 
+        public bool ContainWorker(Worker worker)
+        {
+            return worker != null && WorkerSets.Contains(worker);
+        }
+
         public List<Restaurant> GetRestaurants()
         {
             List<Restaurant> restaurants = new List<Restaurant>();

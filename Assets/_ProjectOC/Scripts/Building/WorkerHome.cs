@@ -1,5 +1,4 @@
 using ML.Engine.Timer;
-using ProjectOC.ManagerNS;
 using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System.Collections;
@@ -56,17 +55,13 @@ namespace ProjectOC.Building
         #endregion
 
         #region 接口方法
-        /// <summary>
-        /// 停止Timer，调用UnBindWorker()，解绑隐兽。
-        /// </summary>
         public void OnDestroy()
         {
-            if (LocalGameManager.Instance != null && !HasWorker)
+            if (ManagerNS.LocalGameManager.Instance != null && !HasWorker)
             {
-                LocalGameManager.Instance.WorkerManager.OnAddWokerEvent -= OnAddWorkerEvent;
+                ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent -= OnAddWorkerEvent;
             }
             UnBindWorker();
-            Timer?.End();
         }
         
         public override void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
@@ -129,11 +124,11 @@ namespace ProjectOC.Building
         {
             if (HasWorker)
             {
-                LocalGameManager.Instance.WorkerManager.OnAddWokerEvent -= OnAddWorkerEvent;
+                ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent -= OnAddWorkerEvent;
             }
             else
             {
-                LocalGameManager.Instance.WorkerManager.OnAddWokerEvent += OnAddWorkerEvent;
+                ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent += OnAddWorkerEvent;
             }
         }
 

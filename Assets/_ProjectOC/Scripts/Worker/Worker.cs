@@ -5,7 +5,6 @@ using ProjectOC.MissionNS;
 using ProjectOC.ProNodeNS;
 using Sirenix.OdinInspector;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using ML.PlayerCharacterNS;
 using UnityEngine;
@@ -37,6 +36,10 @@ namespace ProjectOC.WorkerNS
         public int APCostTransport = 1;
         [LabelText("移动速度"), FoldoutGroup("配置")]
         public float WalkSpeed = 10;
+        [LabelText("完成一次任务消耗的心情值"), FoldoutGroup("配置")]
+        public int MoodCost = 10;
+        [LabelText("心情阈值"), FoldoutGroup("配置")]
+        public int MoodThreshold = 50;
         [LabelText("当前心情"), ReadOnly]
         public int Mood = 100;
         [LabelText("心情最大值"), FoldoutGroup("配置")]
@@ -167,6 +170,8 @@ namespace ProjectOC.WorkerNS
         [LabelText("是否有窝"), ShowInInspector, ReadOnly]
         public bool HasHome { get => Home != null && !string.IsNullOrEmpty(Home.UID); }
 
+        public ML.Engine.InventorySystem.ItemIcon WorldIcon { get => GetComponentInChildren<ML.Engine.InventorySystem.ItemIcon>(); }
+
         #region ITickComponent
         public int tickPriority { get; set; }
         public int fixedTickPriority { get; set; }
@@ -230,6 +235,10 @@ namespace ProjectOC.WorkerNS
             {
                 Home = null;
             }
+
+            ItemManager.Instance.AddItemIconObject("", this.transform, new Vector3(0, this.transform.GetComponent<CapsuleCollider>().height * 1.5f, 0),
+                                        Quaternion.Euler(Vector3.zero), Vector3.one,
+                                        (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).currentCharacter.transform);
         }
         private void Awake()
         {
@@ -250,6 +259,12 @@ namespace ProjectOC.WorkerNS
                 OnArrivalDisposable?.Invoke(this);
                 OnArrival?.Invoke(this);
             }
+            bool lowMood = Mood < MoodThreshold;
+            bool inSeq = LocalGameManager.Instance.RestaurantManager.ContainWorker(this);
+            string icon = lowMood ? "LowMood" : "";
+            icon = inSeq ? "LowAP" : icon;
+            icon = lowMood && inSeq ? "LowAPMood" : icon;
+            WorldIcon.SetSprite(LocalGameManager.Instance.WorkerManager.GetSprite(icon));
         }
 
         public bool SetDestination(Vector3 target, Action<Worker> action = null)
@@ -300,8 +315,6 @@ namespace ProjectOC.WorkerNS
             this.ProNode = proNode;
         }
 
-        
-
         /// <summary>
         /// 修改经验值
         /// </summary>
@@ -344,8 +357,9 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         public void SettleTransport()
         {
-            this.AlterAP(-1 * APCostTransport);
-            this.AlterExp(WorkType.Transport, ExpTransport);
+            AlterAP(-1 * APCostTransport);
+            AlterExp(WorkType.Transport, ExpTransport);
+            AlterMood(-1 * MoodCost);
         }
 
         public void SetTimeStatus(int time, TimeStatus timeStatus)
@@ -375,6 +389,14 @@ namespace ProjectOC.WorkerNS
             if (HasProNode)
             {
                 this.ProNode?.RemoveWorker();
+            }
+            if (HasHome)
+            {
+                this.Home.UnBindWorker();
+            }
+            if (HasRestaurant)
+            {
+                Restaurant.RemoveWorker(this);
             }
         }
 

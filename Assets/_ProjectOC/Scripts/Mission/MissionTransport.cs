@@ -1,14 +1,10 @@
 using ML.Engine.Manager;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace ProjectOC.MissionNS
 {
-    /// <summary>
-    /// 搬运任务
-    /// </summary>
-    [System.Serializable]
+    [LabelText("搬运任务"), System.Serializable]
     public class MissionTransport
     {
         [LabelText("搬运类型"), ReadOnly]
@@ -30,7 +26,7 @@ namespace ProjectOC.MissionNS
                 finishNum = value;
                 if (finishNum >= MissionNum)
                 {
-                    this.End();
+                    End();
                 }
             }
         }
@@ -77,9 +73,6 @@ namespace ProjectOC.MissionNS
             return false;
         }
 
-        /// <summary>
-        /// 获取UID
-        /// </summary>
         public string GetUID()
         {
             return this.Initiator?.GetUID() ?? "";
@@ -93,9 +86,6 @@ namespace ProjectOC.MissionNS
             }
         }
 
-        /// <summary>
-        /// 终止任务
-        /// </summary>
         public void End(bool removeManager = true)
         {
             foreach (Transport transport in this.Transports)
@@ -109,9 +99,6 @@ namespace ProjectOC.MissionNS
             }
         }
 
-        /// <summary>
-        /// 排序
-        /// </summary>
         public class Sort : IComparer<MissionTransport>
         {
             public int Compare(MissionTransport x, MissionTransport y)
