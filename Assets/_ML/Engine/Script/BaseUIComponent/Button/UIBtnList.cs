@@ -237,7 +237,7 @@ namespace ML.Engine.UI
                 }
                 this.TwoDimSelectedButtons.Add(row);
             }
-            Debug.Log((OneDimCnt > 0) +" "+ hasInitSelect+" "+ (NeedToResetCurSelected && this.uiBtnListContainer?.CurSelectUIBtnList == this));
+            
             if (OneDimCnt > 0 && (hasInitSelect || (NeedToResetCurSelected && this.uiBtnListContainer?.CurSelectUIBtnList == this)))
             {
                 //初始化选择对象
@@ -249,7 +249,6 @@ namespace ML.Engine.UI
                 this.NeedToResetCurSelected = false;
                 this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
                 this.OnSelectButtonChanged?.Invoke();
-                Debug.Log("初始化选择对象 "+ this.CurSelected.GetHashCode().ToString());
             }
 
         }

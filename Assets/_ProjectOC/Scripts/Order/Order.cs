@@ -1,3 +1,5 @@
+using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,10 +7,13 @@ using static ProjectOC.Order.OrderManager;
 
 namespace ProjectOC.Order
 {
+    [Serializable]
     public abstract class Order
     {
+        
         private string orderID;
 
+        [ShowInInspector]
         public string OrderID
         {
             get { return orderID; }
@@ -48,6 +53,11 @@ namespace ProjectOC.Order
 
         }
 
+        public Order()
+        {
+            this.OrderID = "";
+        }
+
         public bool ChangeRequireItemDic(string ItemId,int ItemNum)
         {
             if(this.remainRequireItemDic.ContainsKey(ItemId))
@@ -58,7 +68,6 @@ namespace ProjectOC.Order
 
             foreach (var item in RequireItem)
             {
-                Debug.Log(item.Key+" "+addedItemDic[item.Key] + " "+item.Value);
                 if (addedItemDic[item.Key] != item.Value)
                 {
                     return false;
