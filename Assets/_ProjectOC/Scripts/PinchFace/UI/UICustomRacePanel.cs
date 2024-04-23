@@ -47,6 +47,11 @@ namespace ProjectOC.PinchFace
         {
             
             this.UIBtnListContainer = new UIBtnListContainer(this.transform.GetComponentInChildren<UIBtnListContainerInitor>());
+            foreach (var _btnList in UIBtnListContainer.UIBtnLists)
+            {
+                _btnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm,UIBtnListContainer.BindType.started);
+            }
+            
             //0-4,5是通用不需要加
             for (int i = 0; i < pinchFaceManager.pinchPartType1Inclusion.Count-1; i++)
             {

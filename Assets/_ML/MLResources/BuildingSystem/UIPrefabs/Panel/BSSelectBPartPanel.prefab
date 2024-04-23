@@ -3898,6 +3898,7 @@ MonoBehaviour:
     isLoop: 0
     isWheel: 0
     hasBtnListContainer: 0
+    readUnActiveButton: 1
 --- !u!222 &2956861738565644453
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4785,6 +4786,7 @@ MonoBehaviour:
     isLoop: 0
     isWheel: 0
     hasBtnListContainer: 0
+    readUnActiveButton: 1
 --- !u!222 &7715557263370932734
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5791,6 +5793,7 @@ MonoBehaviour:
     isLoop: 0
     isWheel: 0
     hasBtnListContainer: 0
+    readUnActiveButton: 1
 --- !u!114 &5133850383323218677
 MonoBehaviour:
   m_ObjectHideFlags: 0

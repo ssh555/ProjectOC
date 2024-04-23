@@ -13,12 +13,19 @@ namespace ProjectOC.PinchFace
     public class CharacterModelPinch : MonoBehaviour
     {
         #region ÄóÁ³º¯Êý
+
+        public void GeneratePinchTypePrefab(PinchPartType3 _type3,int typeIndex)
+        {
+            
+        }
+        
         public void ChangeType(PinchPartType2 boneType2, int typeIndex)
         {
             if (replaceGo[(int)boneType2] != null)
             {
                 UnEquipItem(boneType2,replaceGo[(int)boneType2]);
             }
+            
             EquipItem(boneType2,tempTail[typeIndex]);
         }
 

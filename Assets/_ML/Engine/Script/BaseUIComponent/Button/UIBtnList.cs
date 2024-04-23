@@ -24,7 +24,7 @@ namespace ML.Engine.UI
     {
         #region ISelected
         [ShowInInspector]
-        public ISelected LeftUI { get ; set ; }
+        public ISelected LeftUI { get; set; }
         [ShowInInspector]
         public ISelected RightUI { get; set; }
         [ShowInInspector]
@@ -34,11 +34,11 @@ namespace ML.Engine.UI
         #endregion
 
         [ShowInInspector]
-        private List<List<SelectedButton>> TwoDimSelectedButtons = new List<List<SelectedButton>>();//¶þÎ¬ÁÐ±í
+        private List<List<SelectedButton>> TwoDimSelectedButtons = new List<List<SelectedButton>>();//ï¿½ï¿½Î¬ï¿½Ð±ï¿½
 
         public List<List<SelectedButton>> GetTwoDimSelectedButtons { get { return TwoDimSelectedButtons; } }
         private int OneDimCnt = 0;
-        public int BtnCnt {  get { return OneDimCnt; } }
+        public int BtnCnt { get { return OneDimCnt; } }
         private int TwoDimH = 0;
         private int TwoDimW = 0;
         [ShowInInspector]
@@ -74,7 +74,7 @@ namespace ML.Engine.UI
         private bool hasInitSelect;
         private bool isLoop;
         private bool isWheel;
-
+        private bool readUnActive;
         private bool NeedToResetCurSelected = false;
         [ShowInInspector]
         private bool isEmpty;
@@ -100,7 +100,7 @@ namespace ML.Engine.UI
         private bool isBtnListContainerDeleteAll = false;
 
         /// <summary>
-        /// parent: °´Å¥¸¸ÎïÌå limitNum£ºÒ»ÐÐ¶àÉÙ¸ö°´Å¥ hasInitSelect:ÊÇ·ñÓÐ³õÊ¼Ñ¡ÖÐ isLoop:ÊÇ·ñÎªÑ­»·°´Å¥ isWheel£ºÊÇ·ñÎªÂÖ×ª°´Å¥ OnSelectedEnter£ºÑ¡ÖÐ»Øµ÷ OnSelectedExit£ºÑ¡³ö»Øµ÷
+        /// parent: ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ limitNumï¿½ï¿½Ò»ï¿½Ð¶ï¿½ï¿½Ù¸ï¿½ï¿½ï¿½Å¥ hasInitSelect:ï¿½Ç·ï¿½ï¿½Ð³ï¿½Ê¼Ñ¡ï¿½ï¿½ isLoop:ï¿½Ç·ï¿½ÎªÑ­ï¿½ï¿½ï¿½ï¿½Å¥ isWheelï¿½ï¿½ï¿½Ç·ï¿½Îªï¿½ï¿½×ªï¿½ï¿½Å¥ OnSelectedEnterï¿½ï¿½Ñ¡ï¿½Ð»Øµï¿½ OnSelectedExitï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½Øµï¿½
         /// </summary>
         public UIBtnList(Transform parent, int limitNum = 1, bool hasInitSelect = true, bool isLoop = false, bool isWheel = false, Action OnSelectedEnter = null, Action OnSelectedExit = null)
         {
@@ -112,7 +112,7 @@ namespace ML.Engine.UI
             this.isWheel = isWheel;
             if (parent != null)
             {
-                InitBtnInfo(parent, limitNum, hasInitSelect, isLoop, isWheel, OnSelectedEnter, OnSelectedExit);
+                InitBtnInfo(parent, limitNum, hasInitSelect, isLoop, isWheel, true, OnSelectedEnter, OnSelectedExit);
                 try
                 {
                     this.Selected = parent.Find("Selected");
@@ -130,9 +130,11 @@ namespace ML.Engine.UI
             this.hasInitSelect = btnListInitData.hasInitSelect;
             this.isLoop = btnListInitData.isLoop;
             this.isWheel = btnListInitData.isWheel;
+            this.readUnActive = btnListInitData.readUnActiveButton;
+
             if (parent != null)
             {
-                InitBtnInfo(parent, limitNum, hasInitSelect, isLoop, isWheel, null, null);
+                InitBtnInfo(parent, limitNum, hasInitSelect, isLoop, isWheel, this.readUnActive, null, null);
                 try
                 {
                     this.Selected = parent.Find("Selected");
@@ -142,7 +144,7 @@ namespace ML.Engine.UI
             }
         }
 
-        public void InitBtnInfo(Transform parent, int limitNum = 1, bool hasInitSelect = true, bool isLoop = false, bool isWheel = false, Action OnSelectedEnter = null, Action OnSelectedExit = null)
+        public void InitBtnInfo(Transform parent, int limitNum = 1, bool hasInitSelect = true, bool isLoop = false, bool isWheel = false, bool _readUnActive = true, Action OnSelectedEnter = null, Action OnSelectedExit = null)
         {
             this.SBDic.Clear();
             this.SBDicIndex.Clear();
@@ -151,10 +153,10 @@ namespace ML.Engine.UI
 
 
 
-            SelectedButton[] OneDimSelectedButtons = parent.GetComponentsInChildren<SelectedButton>(true);
+            SelectedButton[] OneDimSelectedButtons = parent.GetComponentsInChildren<SelectedButton>(_readUnActive);
             this.OneDimCnt = OneDimSelectedButtons.Length;
 
-            if(this.OneDimCnt == 0 && !isBtnListContainerDeleteAll)
+            if (this.OneDimCnt == 0 && !isBtnListContainerDeleteAll)
             {
                 this.CurSelected = null;
                 this.isEmpty = true;
@@ -166,7 +168,7 @@ namespace ML.Engine.UI
             }
             this.uiBtnListContainer?.RefreshIsEmpty();
 
-            for (int i = 0; i < OneDimSelectedButtons.Length; i++) 
+            for (int i = 0; i < OneDimSelectedButtons.Length; i++)
             {
                 var btn = OneDimSelectedButtons[i];
                 btn.SetUIBtnList(this);
@@ -186,7 +188,7 @@ namespace ML.Engine.UI
             {
                 for (int j = 0; j < TwoDimW; j++)
                 {
-                    
+
                     if (cnt >= OneDimCnt)
                     {
                         TwoDimSelectedButtons[i, j] = null;
@@ -199,7 +201,7 @@ namespace ML.Engine.UI
                 }
             }
 
-            //ÉèÖÃ¶þÎ¬°´Å¥Ïà¶ÔÎ»ÖÃ
+            //ï¿½ï¿½ï¿½Ã¶ï¿½Î¬ï¿½ï¿½Å¥ï¿½ï¿½ï¿½Î»ï¿½ï¿½
             for (int i = 0; i < TwoDimH; i++)
             {
                 for (int j = 0; j < TwoDimW; j++)
@@ -226,23 +228,23 @@ namespace ML.Engine.UI
                 }
             }
 
-            
 
 
-            for (int i = 0; i < TwoDimSelectedButtons.GetLength(0); i++) // ±éÀúÐÐ
+
+            for (int i = 0; i < TwoDimSelectedButtons.GetLength(0); i++) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             {
                 List<SelectedButton> row = new List<SelectedButton>();
-                for (int j = 0; j < TwoDimSelectedButtons.GetLength(1); j++) // ±éÀúÁÐ
+                for (int j = 0; j < TwoDimSelectedButtons.GetLength(1); j++) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 {
                     row.Add(TwoDimSelectedButtons[i, j]);
                 }
                 this.TwoDimSelectedButtons.Add(row);
             }
-            
+
             if (OneDimCnt > 0 && (hasInitSelect || (NeedToResetCurSelected && this.uiBtnListContainer?.CurSelectUIBtnList == this)))
             {
-                //³õÊ¼»¯Ñ¡Ôñ¶ÔÏó
-                
+                //ï¿½ï¿½Ê¼ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½
+
                 this.TwoDimI = 0;
                 this.TwoDimJ = 0;
                 this.CurSelected = TwoDimSelectedButtons[TwoDimI, TwoDimJ];
@@ -255,9 +257,9 @@ namespace ML.Engine.UI
         }
 
         /// <summary>
-        /// ¼ÓÈë°´Å¥
+        /// ï¿½ï¿½ï¿½ë°´Å¥
         /// </summary>
-        public void AddBtn(string prefabpath, UnityAction BtnAction = null,Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null,Action OnFinishAdd = null, string BtnText = null)
+        public void AddBtn(string prefabpath, UnityAction BtnAction = null, Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null, Action OnFinishAdd = null, string BtnText = null)
         {
             /*if (selectedButton == null) return;
             int i = OneDimCnt / limitNum;
@@ -293,7 +295,7 @@ namespace ML.Engine.UI
             this.UIBtnListContainer?.RefreshEdge();*/
             Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(prefabpath).Completed += (handle) =>
             {
-                // ÊµÀý»¯
+                // Êµï¿½ï¿½ï¿½ï¿½
                 var btn = handle.Result.GetComponent<SelectedButton>();
                 btn.gameObject.name = btn.GetHashCode().ToString();
                 btn.transform.SetParent(this.parent.Find("Container"), false);
@@ -319,21 +321,21 @@ namespace ML.Engine.UI
                     BtnSettingAction(btn);
                 }
 
-                if(BtnText != null)
+                if (BtnText != null)
                 {
                     this.SetBtnText(btn, BtnText);
                 }
 
-                if(this.uiBtnListContainer == null)
+                if (this.uiBtnListContainer == null)
                 {
-                    InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+                    InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
                     OnFinishAdd?.Invoke();
                     return;
                 }
 
                 bool needMoveToBtnList = this.uiBtnListContainer.IsEmpty;
-                InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
-                if(needMoveToBtnList)
+                InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
+                if (needMoveToBtnList)
                 {
                     this.UIBtnListContainer?.FindEnterableUIBtnList();
                 }
@@ -343,10 +345,10 @@ namespace ML.Engine.UI
                 }
                 OnFinishAdd?.Invoke();
             };
-            
+
         }
 
-        //Í¬²½±äÁ¿
+        //Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         public class Synchronizer
         {
             private int CheckNum;
@@ -370,7 +372,7 @@ namespace ML.Engine.UI
         }
 
 
-        public void AddBtns(int num, string prefabpath,Action OnAllBtnAdded = null ,List<UnityAction> BtnActions = null, Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null, List<string> BtnTexts = null)
+        public void AddBtns(int num, string prefabpath, Action OnAllBtnAdded = null, List<UnityAction> BtnActions = null, Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null, List<string> BtnTexts = null)
         {
             Synchronizer Checker = new Synchronizer(num, OnAllBtnAdded);
             for (int i = 0; i < num; i++)
@@ -378,7 +380,7 @@ namespace ML.Engine.UI
                 var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(prefabpath);
                 handle.Completed += (handle) =>
                 {
-                    // ÊµÀý»¯
+                    // Êµï¿½ï¿½ï¿½ï¿½
                     var btn = handle.Result.GetComponent<SelectedButton>();
                     btn.gameObject.name = btn.GetHashCode().ToString();
                     btn.transform.SetParent(this.parent.Find("Container"), false);
@@ -409,15 +411,16 @@ namespace ML.Engine.UI
                         this.SetBtnText(btn, BtnTexts[i]);
                     }
 
+
                     if (this.uiBtnListContainer == null)
                     {
-                        InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+                        InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
                         Checker.Check();
                         return;
                     }
 
                     bool needMoveToBtnList = this.uiBtnListContainer.IsEmpty;
-                    InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+                    InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
                     if (needMoveToBtnList)
                     {
                         this.UIBtnListContainer?.FindEnterableUIBtnList();
@@ -448,7 +451,7 @@ namespace ML.Engine.UI
             this.UIBtnListContainer?.RefreshEdge();*/
             int i = SelectedButtonIndex / TwoDimW;
             int j = SelectedButtonIndex % TwoDimW;
-            if (this.TwoDimSelectedButtons[i][j] == this.CurSelected) 
+            if (this.TwoDimSelectedButtons[i][j] == this.CurSelected)
             {
                 this.NeedToResetCurSelected = true;
             }
@@ -457,7 +460,7 @@ namespace ML.Engine.UI
 
         public void DeleteButton(string btnName)
         {
-            if(this.SBDicIndex.ContainsKey(btnName))
+            if (this.SBDicIndex.ContainsKey(btnName))
             {
                 this.DeleteButton(this.SBDicIndex[btnName]);
             }
@@ -470,63 +473,63 @@ namespace ML.Engine.UI
 
         private IEnumerator DestroyAndRefreshBtnList(int SelectedButtonIndex)
         {
-            //Ïú»ÙÎïÌå
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             GameManager.DestroyObj(this.parent.Find("Container").GetChild(SelectedButtonIndex).gameObject);
 
-            // µÈ´ýÒ»Ö¡ Ô­ÒòÊÇµ±Ç°Ö¡Ïú»Ù transform.childCountÔÚµ±Ç°Ö¡²¢²»»áÂíÉÏ¸üÐÂ£¬ÐèÒªÏÂÒ»Ö¡
+            // ï¿½È´ï¿½Ò»Ö¡ Ô­ï¿½ï¿½ï¿½Çµï¿½Ç°Ö¡ï¿½ï¿½ï¿½ï¿½ transform.childCountï¿½Úµï¿½Ç°Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½Â£ï¿½ï¿½ï¿½Òªï¿½ï¿½Ò»Ö¡
             yield return null;
 
-            // ÔÚÏÂÒ»Ö¡¸üÐÂBtnList
-            InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+            // ï¿½ï¿½ï¿½ï¿½Ò»Ö¡ï¿½ï¿½ï¿½ï¿½BtnList
+            InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
             this.UIBtnListContainer?.RefreshEdge();
         }
 
         private IEnumerator DestroyNumAndRefreshBtnList(int num, Action OnAllBtnDeleted = null)
         {
-            //µ¹ÐòÏú»ÙÎïÌå
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             var con = this.parent.Find("Container");
             for (int i = 0; i < num; i++)
             {
                 GameManager.DestroyObj(con.GetChild(con.childCount - 1 - i).gameObject);
             }
-            // µÈ´ýÒ»Ö¡ Ô­ÒòÊÇµ±Ç°Ö¡Ïú»Ù transform.childCountÔÚµ±Ç°Ö¡²¢²»»áÂíÉÏ¸üÐÂ£¬ÐèÒªÏÂÒ»Ö¡
+            // ï¿½È´ï¿½Ò»Ö¡ Ô­ï¿½ï¿½ï¿½Çµï¿½Ç°Ö¡ï¿½ï¿½ï¿½ï¿½ transform.childCountï¿½Úµï¿½Ç°Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½Â£ï¿½ï¿½ï¿½Òªï¿½ï¿½Ò»Ö¡
             yield return null;
 
-            // ÔÚÏÂÒ»Ö¡¸üÐÂBtnList
-            InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+            // ï¿½ï¿½ï¿½ï¿½Ò»Ö¡ï¿½ï¿½ï¿½ï¿½BtnList
+            InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
             this.UIBtnListContainer?.RefreshEdge();
             OnAllBtnDeleted?.Invoke();
         }
 
-        public void DeleteButtons(int num,Action OnAllBtnDeleted = null)
+        public void DeleteButtons(int num, Action OnAllBtnDeleted = null)
         {
-            GameManager.Instance.StartCoroutine(DestroyNumAndRefreshBtnList(num,OnAllBtnDeleted));
+            GameManager.Instance.StartCoroutine(DestroyNumAndRefreshBtnList(num, OnAllBtnDeleted));
         }
 
         private IEnumerator DestroyAllAndRefreshBtnList(Action action = null)
         {
             for (int i = 0; i < this.parent.Find("Container").childCount; i++)
             {
-                //Ïú»ÙÎïÌå
+                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 GameManager.DestroyObj(this.parent.Find("Container").GetChild(i).gameObject);
             }
-            // µÈ´ýÒ»Ö¡ Ô­ÒòÊÇµ±Ç°Ö¡Ïú»Ù transform.childCountÔÚµ±Ç°Ö¡²¢²»»áÂíÉÏ¸üÐÂ£¬ÐèÒªÏÂÒ»Ö¡
+            // ï¿½È´ï¿½Ò»Ö¡ Ô­ï¿½ï¿½ï¿½Çµï¿½Ç°Ö¡ï¿½ï¿½ï¿½ï¿½ transform.childCountï¿½Úµï¿½Ç°Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½Â£ï¿½ï¿½ï¿½Òªï¿½ï¿½Ò»Ö¡
             yield return new WaitForSeconds(0.1f);
 
-            // ÔÚÏÂÒ»Ö¡¸üÐÂBtnList
-            InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+            // ï¿½ï¿½ï¿½ï¿½Ò»Ö¡ï¿½ï¿½ï¿½ï¿½BtnList
+            InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
             this.UIBtnListContainer?.RefreshEdge();
 
             action?.Invoke();
         }
 
-        public void ChangBtnNum(int newNum,string prefabpath,Action OnAllBtnChanged = null)
+        public void ChangBtnNum(int newNum, string prefabpath, Action OnAllBtnChanged = null)
         {
             if (newNum > this.OneDimCnt)
             {
-                this.AddBtns(newNum - this.OneDimCnt, prefabpath,OnAllBtnAdded: OnAllBtnChanged);
+                this.AddBtns(newNum - this.OneDimCnt, prefabpath, OnAllBtnAdded: OnAllBtnChanged);
             }
-            else if(newNum < this.OneDimCnt)
+            else if (newNum < this.OneDimCnt)
             {
                 this.DeleteButtons(this.OneDimCnt - newNum, OnAllBtnDeleted: OnAllBtnChanged);
             }
@@ -534,20 +537,20 @@ namespace ML.Engine.UI
 
         public void Check()
         {
-            InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+            InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
             this.UIBtnListContainer?.RefreshEdge();
         }
-        
+
 
         /// <summary>
-        /// ´«ÈëÏÂ±êÉèÖÃ¶þÎ¬°´Å¥ÁÐ±íaction
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½Â±ï¿½ï¿½ï¿½ï¿½Ã¶ï¿½Î¬ï¿½ï¿½Å¥ï¿½Ð±ï¿½action
         /// </summary>
         public void SetBtnAction(int i, int j, UnityAction action)
         {
             this.TwoDimSelectedButtons[i][j].onClick.AddListener(action);
         }
         /// <summary>
-        /// ´«Èë×Ö·û´®ÉèÖÃ°´Å¥ÁÐ±íaction
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã°ï¿½Å¥ï¿½Ð±ï¿½action
         /// </summary>
         public void SetBtnAction(string BtnName, UnityAction action)
         {
@@ -558,11 +561,11 @@ namespace ML.Engine.UI
         }
 
         /// <summary>
-        /// ´«ÈëSelectedButtonÉèÖÃ°´Å¥ÁÐ±íaction
+        /// ï¿½ï¿½ï¿½ï¿½SelectedButtonï¿½ï¿½ï¿½Ã°ï¿½Å¥ï¿½Ð±ï¿½action
         /// </summary>
         public void SetBtnAction(SelectedButton selectedButton, UnityAction action)
         {
-            if(selectedButton.GetUIBtnList() == this)
+            if (selectedButton.GetUIBtnList() == this)
             {
                 selectedButton.onClick.AddListener(action);
             }
@@ -570,7 +573,7 @@ namespace ML.Engine.UI
 
 
         /// <summary>
-        /// ÉèÖÃÈ«²¿BtnµÄAction
+        /// ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½Btnï¿½ï¿½Action
         /// </summary>
         public void SetAllBtnAction(UnityAction action)
         {
@@ -584,7 +587,7 @@ namespace ML.Engine.UI
         }
 
         /// <summary>
-        /// »ñÈ¡Ö¸¶¨°´Å¥
+        /// ï¿½ï¿½È¡Ö¸ï¿½ï¿½ï¿½ï¿½Å¥
         /// </summary>
         public SelectedButton GetBtn(string BtnName)
         {
@@ -594,74 +597,74 @@ namespace ML.Engine.UI
             }
             return null;
         }
-        public SelectedButton GetBtn(int index1,int index2)
+        public SelectedButton GetBtn(int index1, int index2)
         {
             if (index1 >= 0 && index1 < TwoDimH && index2 >= 0 && index2 < TwoDimW)
             {
                 return this.TwoDimSelectedButtons[index1][index2];
             }
             return null;
-            
+
         }
         public SelectedButton GetBtn(int index)
         {
             int i = index / TwoDimW;
             int j = index % TwoDimW;
-            return GetBtn(i,j);
+            return GetBtn(i, j);
         }
 
-        
+
 
         /// <summary>
-        /// »ñÈ¡µ±Ç°Ñ¡ÖÐ°´Å¥
+        /// ï¿½ï¿½È¡ï¿½ï¿½Ç°Ñ¡ï¿½Ð°ï¿½Å¥
         /// </summary>
         public SelectedButton GetCurSelected()
         {
             return this.CurSelected;
         }
 
-        
+
 
         /// <summary>
-        /// »ñÈ¡µ±Ç°Ñ¡ÖÐ°´Å¥
+        /// ï¿½ï¿½È¡ï¿½ï¿½Ç°Ñ¡ï¿½Ð°ï¿½Å¥
         /// </summary>
         public void SetCurSelected(SelectedButton selectedButton)
         {
             this.CurSelected = selectedButton;
         }
         /// <summary>
-        /// ÖÃ¿Õµ±Ç°Ñ¡ÖÐ°´Å¥
+        /// ï¿½Ã¿Õµï¿½Ç°Ñ¡ï¿½Ð°ï¿½Å¥
         /// </summary>
         public void SetCurSelectedNull()
         {
-            if(this.CurSelected != null)
+            if (this.CurSelected != null)
             {
                 this.CurSelected.OnDeselect(null);
             }
-            
+
             this.CurSelected = null;
         }
         /// <summary>
-        /// ÏòÉÏ
+        /// ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public SelectedButton MoveUPIUISelected()
         {
-            if(this.isEnable == false || CurSelected == null)return null;
+            if (this.isEnable == false || CurSelected == null) return null;
             SelectedButton selectedButton = CurSelected.navigation.selectOnUp as SelectedButton;
             if (selectedButton == CurSelected)
             {
-                if(this.uiBtnListContainer?.Grid_NavagationType == ContainerType.A)
+                if (this.uiBtnListContainer?.Grid_NavagationType == ContainerType.A)
                 {
                     this.uiBtnListContainer.CurnavagationMode = NavagationMode.BtnList;
                     this.OnExitInner();
                 }
                 return null;
             }
-                
+
             return RefreshSelected(selectedButton);
         }
         /// <summary>
-        /// ÏòÏÂ
+        /// ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public SelectedButton MoveDownIUISelected()
         {
@@ -680,7 +683,7 @@ namespace ML.Engine.UI
             return RefreshSelected(selectedButton);
         }
         /// <summary>
-        /// Ïò×ó
+        /// ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public SelectedButton MoveLeftIUISelected()
         {
@@ -699,7 +702,7 @@ namespace ML.Engine.UI
             return RefreshSelected(selectedButton);
         }
         /// <summary>
-        /// ÏòÓÒ
+        /// ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public SelectedButton MoveRightIUISelected()
         {
@@ -718,11 +721,11 @@ namespace ML.Engine.UI
             return RefreshSelected(selectedButton);
         }
         /// <summary>
-        /// ÏòÖ¸¶¨×ø±êÒÆ¶¯
+        /// ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½
         /// </summary>
         public SelectedButton MoveIndexIUISelected(int i, int j)
         {
-            if(GetBtn(i,j) == null) return null;
+            if (GetBtn(i, j) == null) return null;
             this.CurSelected?.OnDeselect(null);
             this.CurSelected = TwoDimSelectedButtons[i][j];
             this.TwoDimI = i;
@@ -732,7 +735,7 @@ namespace ML.Engine.UI
         }
         public SelectedButton MoveIndexIUISelected(int i)
         {
-            if(GetBtn(i) == null)return null;
+            if (GetBtn(i) == null) return null;
 
             this.CurSelected?.OnDeselect(null);
             this.CurSelected = GetBtn(i);
@@ -745,7 +748,7 @@ namespace ML.Engine.UI
         }
 
         /// <summary>
-        /// ÉèÖÃ°´Å¥°´¼üÌáÊ¾ÎÄ±¾
+        /// ï¿½ï¿½ï¿½Ã°ï¿½Å¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½Ä±ï¿½
         /// </summary>
         public void SetBtnText(string btnName, string showText)
         {
@@ -758,7 +761,7 @@ namespace ML.Engine.UI
         }
 
         /// <summary>
-        /// Íø¸ñ°´Å¥µ¼º½»Øµ÷
+        /// ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½
         /// </summary>
         private void GridNavigation(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
@@ -768,11 +771,11 @@ namespace ML.Engine.UI
                 bool canPerformed = this.BindNavigationInputCondition(obj);
                 if (canPerformed == false) return;
             }
-            
+
             this.NavigationPreAction?.Invoke();
             string actionName = obj.action.name;
 
-            // Ê¹ÓÃ ReadValue<T>() ·½·¨»ñÈ¡¸½¼ÓÊý¾Ý
+            // Ê¹ï¿½ï¿½ ReadValue<T>() ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             string actionMapName = obj.action.actionMap.name;
 
             var vector2 = obj.ReadValue<UnityEngine.Vector2>();
@@ -783,7 +786,7 @@ namespace ML.Engine.UI
             {
                 angle = angle + 360;
             }
-            
+
 
             if (angle < 45 || angle > 315)
             {
@@ -806,7 +809,7 @@ namespace ML.Engine.UI
         }
 
         /// <summary>
-        /// ÂÖÅÌ°´Å¥µ¼º½»Øµ÷ ÂÖ×ª°´Å¥¹æ¶¨ÕýÉÏ·½ÎªÏÂ±ê0
+        /// ï¿½ï¿½ï¿½Ì°ï¿½Å¥ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ ï¿½ï¿½×ªï¿½ï¿½Å¥ï¿½æ¶¨ï¿½ï¿½ï¿½Ï·ï¿½Îªï¿½Â±ï¿½0
         /// </summary>
         private void RingNavigation(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
@@ -815,7 +818,7 @@ namespace ML.Engine.UI
 
             string actionName = obj.action.name;
 
-            // Ê¹ÓÃ ReadValue<T>() ·½·¨»ñÈ¡¸½¼ÓÊý¾Ý
+            // Ê¹ï¿½ï¿½ ReadValue<T>() ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             string actionMapName = obj.action.actionMap.name;
 
             var vector2 = obj.ReadValue<UnityEngine.Vector2>();
@@ -844,12 +847,12 @@ namespace ML.Engine.UI
         }
 
         /// <summary>
-        /// °´Å¥È·ÈÏ´¥·¢»Øµ÷
+        /// ï¿½ï¿½Å¥È·ï¿½Ï´ï¿½ï¿½ï¿½ï¿½Øµï¿½
         /// </summary>
         public void ButtonInteract(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (this.isEnable == false || this.CurSelected == null) return;
-            if ((this.BindButtonInteractInputCondition != null && this.BindButtonInteractInputCondition(obj)) || this.BindButtonInteractInputCondition == null) 
+            if ((this.BindButtonInteractInputCondition != null && this.BindButtonInteractInputCondition(obj)) || this.BindButtonInteractInputCondition == null)
             {
                 this.ButtonInteractPreAction?.Invoke();
                 this.CurSelected.Interact();
@@ -859,7 +862,7 @@ namespace ML.Engine.UI
 
 
         /// <summary>
-        /// ¸Ãº¯Êý¹¦ÄÜÎª°ó¶¨°´Å¥µ¼º½InputActionµÄ»Øµ÷º¯Êý
+        /// ï¿½Ãºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ó¶¨°ï¿½Å¥ï¿½ï¿½ï¿½ï¿½InputActionï¿½Ä»Øµï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public void BindNavigationInputAction(InputAction NavigationInputAction, BindType bindType, Action preAction = null, Action postAction = null)
         {
@@ -883,13 +886,13 @@ namespace ML.Engine.UI
         }
 
         /// <summary>
-        /// ¸Ãº¯Êý¹¦ÄÜÎª°ó¶¨°´Å¥È·ÈÏInputActionµÄ»Øµ÷º¯Êý
+        /// ï¿½Ãºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ó¶¨°ï¿½Å¥È·ï¿½ï¿½InputActionï¿½Ä»Øµï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
-        
+
         public delegate bool InputCondition(CallbackContext context);
         private InputCondition BindButtonInteractInputCondition = null;
 
-        //Ä¿Ç°ÔÝÊ±½öÏÞÖÆ¸ñ×Óµ¼º½
+        //Ä¿Ç°ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Æ¸ï¿½ï¿½Óµï¿½ï¿½ï¿½
         private InputCondition BindNavigationInputCondition = null;
 
         public void ChangeBindButtonInteractInputCondition(InputCondition inputCondition)
@@ -928,11 +931,11 @@ namespace ML.Engine.UI
 
 
         /// <summary>
-        /// ¸Ãº¯Êý¹¦ÄÜÎª°ó¶¨°´Å¥ ¶ÔÓ¦ÄÄ¸öInputAction´¥·¢
+        /// ï¿½Ãºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ó¶¨°ï¿½Å¥ ï¿½ï¿½Ó¦ï¿½Ä¸ï¿½InputActionï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public void BindInputAction(string btnName, InputAction InputAction, BindType bindType, Action preAction = null, Action postAction = null)
         {
-            //Í³Ò»µã»÷Óë°´¼ü ²¢ÇÒ¼ÓÈëpreAction Óë postAction
+            //Í³Ò»ï¿½ï¿½ï¿½ï¿½ë°´ï¿½ï¿½ ï¿½ï¿½ï¿½Ò¼ï¿½ï¿½ï¿½preAction ï¿½ï¿½ postAction
             SelectedButton btn = GetBtn(btnName);
             btn.SetPreAndPostInteract(preAction, postAction);
             Action<InputAction.CallbackContext> buttonClickAction = (context) => { preAction?.Invoke(); btn.onClick.Invoke(); postAction?.Invoke(); };
@@ -957,12 +960,12 @@ namespace ML.Engine.UI
 
             }
             catch { }
-            
+
 
         }
 
         /// <summary>
-        /// ¸Ãº¯Êý¹¦ÄÜÎª½â°ó°´Å¥µ¼º½ºÍ°´Å¥È·ÈÏInputActionµÄ»Øµ÷º¯Êý
+        /// ï¿½Ãºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½Å¥È·ï¿½ï¿½InputActionï¿½Ä»Øµï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public void DeBindInputAction(bool NotIncludeButtonInteractInputAction = false)
         {
@@ -1017,7 +1020,7 @@ namespace ML.Engine.UI
         }
 
         /// <summary>
-        /// ¸Ãº¯Êý¹¦ÄÜÎªÒÆ³ýËùÓÐµÄListener
+        /// ï¿½Ãºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½Æ³ï¿½ï¿½ï¿½ï¿½Ðµï¿½Listener
         /// </summary>
         public void RemoveAllListener()
         {
@@ -1036,7 +1039,7 @@ namespace ML.Engine.UI
         }
 
         /// <summary>
-        /// ¸Ãº¯Êý¹¦ÄÜÎª¸üÐÂÊó±êÑ¡ÖÐ
+        /// ï¿½Ãºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½
         /// </summary>
         public SelectedButton RefreshSelected(SelectedButton sb)
         {
@@ -1051,21 +1054,21 @@ namespace ML.Engine.UI
                 this.OnSelectButtonChanged?.Invoke();
                 return btn;
             }
-            else if(sb.GetUIBtnList() != this)
+            else if (sb.GetUIBtnList() != this)
             {
                 //this.CurSelected?.OnDeselect(null);
-                //×ªÒÆbtnlist½øÈëÑ¡ÖÐ
+                //×ªï¿½ï¿½btnlistï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½
                 sb.GetUIBtnList().CurSelected = sb;
                 this.UIBtnListContainer.CurnavagationMode = NavagationMode.SelectedButton;
                 this.UIBtnListContainer?.MoveToBtnList(sb.GetUIBtnList());
                 this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
-                
+
             }
             return null;
         }
 
         /// <summary>
-        /// ¸Ãº¯Êý¹¦ÄÜÎªÆôÓÃBtnList
+        /// ï¿½Ãºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½BtnList
         /// </summary>
         public void EnableBtnList()
         {
@@ -1073,7 +1076,7 @@ namespace ML.Engine.UI
         }
 
         /// <summary>
-        /// ¸Ãº¯Êý¹¦ÄÜÎª½ûÓÃBtnList
+        /// ï¿½Ãºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½BtnList
         /// </summary>
         public void DisableBtnList()
         {
@@ -1108,9 +1111,9 @@ namespace ML.Engine.UI
             }
             else
             {
-                if(this.hasInitSelect && OneDimCnt > 0)
+                if (this.hasInitSelect && OneDimCnt > 0)
                 {
-                    //³õÊ¼»¯Ñ¡Ôñ¶ÔÏó
+                    //ï¿½ï¿½Ê¼ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½
                     this.TwoDimI = 0;
                     this.TwoDimJ = 0;
                     this.CurSelected = TwoDimSelectedButtons[TwoDimI][TwoDimJ];
@@ -1119,11 +1122,12 @@ namespace ML.Engine.UI
                     this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
                 }
             }
-            
+
         }
 
         public void OnSelectExit()
         {
+
             this.SetCurSelectedNull();
             /*            if (this.uiBtnListContainer == null)
                         {
@@ -1133,14 +1137,14 @@ namespace ML.Engine.UI
             this.Selected?.gameObject.SetActive(false);
         }
 
-        //´ÓÑ¡ÖÐBtnlistÍË³öÈ»ºó½øÈëInner
+        //ï¿½ï¿½Ñ¡ï¿½ï¿½Btnlistï¿½Ë³ï¿½È»ï¿½ï¿½ï¿½ï¿½ï¿½Inner
         public void OnExitToInner()
         {
             //this.DisableBtnList();
             this.Selected?.gameObject.SetActive(false);
         }
 
-        //´ÓÑ¡ÖÐInnerÍË³öÈ»ºó½øÈëBtnlist
+        //ï¿½ï¿½Ñ¡ï¿½ï¿½Innerï¿½Ë³ï¿½È»ï¿½ï¿½ï¿½ï¿½ï¿½Btnlist
         public void OnEnterToBtnlist()
         {
             this.SetCurSelectedNull();
@@ -1151,9 +1155,9 @@ namespace ML.Engine.UI
         public void OnEnterInner()
         {
             this.OnExitToInner();
-            if(this.OneDimCnt > 0 && this.CurSelected == null)
+            if (this.OneDimCnt > 0 && this.CurSelected == null)
             {
-                //³õÊ¼»¯Ñ¡Ôñ¶ÔÏó
+                //ï¿½ï¿½Ê¼ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½
                 this.TwoDimI = 0;
                 this.TwoDimJ = 0;
                 this.CurSelected = TwoDimSelectedButtons[TwoDimI][TwoDimJ];
@@ -1162,20 +1166,20 @@ namespace ML.Engine.UI
                 this.CurSelected.OnSelect(null);
                 Debug.Log("1 " + this.CurSelected);
                 this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
-                Debug.Log("2 "+this.CurSelected);
+                Debug.Log("2 " + this.CurSelected);
             }
             this.CurSelected?.OnSelect(null);
 
             if (this.uiBtnListContainer.Grid_NavagationType == ContainerType.B)
             {
-                //¼Ó°ó
+                //ï¿½Ó°ï¿½
                 this.BindNavigationInputAction(uiBtnListContainer.curGridNavagationInputAction, uiBtnListContainer.curBindType);
             }
-            else if(this.uiBtnListContainer.Grid_NavagationType == ContainerType.A)
+            else if (this.uiBtnListContainer.Grid_NavagationType == ContainerType.A)
             {
-                //¼Ó°ó
+                //ï¿½Ó°ï¿½
                 this.BindNavigationInputAction(uiBtnListContainer.curGridNavagationInputAction, uiBtnListContainer.curBindType);
-                //½â°ó¸¸Ïîµ¼º½
+                //ï¿½ï¿½ï¿½ï¿½îµ¼ï¿½ï¿½
                 this.uiBtnListContainer.DeBindNavigationInputAction();
             }
 
@@ -1187,17 +1191,17 @@ namespace ML.Engine.UI
 
             if (this.uiBtnListContainer.Grid_NavagationType == ContainerType.B)
             {
-                //½â°ó
+                //ï¿½ï¿½ï¿½
                 DeBindInputAction(true);
                 this.OnSelectExit();
             }
-            else if(this.uiBtnListContainer.Grid_NavagationType == ContainerType.A)
+            else if (this.uiBtnListContainer.Grid_NavagationType == ContainerType.A)
             {
-                //½â°ó
+                //ï¿½ï¿½ï¿½
                 DeBindInputAction(true);
-                //¼Ó°ó¸¸Ïîµ¼º½
+                //ï¿½Ó°ï¿½ï¿½îµ¼ï¿½ï¿½
                 this.uiBtnListContainer.BindNavigationInputAction();
-                if(this.uiBtnListContainer.CurnavagationMode == NavagationMode.SelectedButton)
+                if (this.uiBtnListContainer.CurnavagationMode == NavagationMode.SelectedButton)
                 {
                     this.OnSelectExit();
                 }
@@ -1208,12 +1212,12 @@ namespace ML.Engine.UI
         {
             if (OneDimCnt > 0)
             {
-                MoveIndexIUISelected(0,0);
+                MoveIndexIUISelected(0, 0);
             }
         }
 
         /// <summary>
-        /// »ñÈ¡µ±Ç°Ñ¡ÖÐ°´Å¥µÄ¶þÎ¬×ø±ê ÈôÃ»ÓÐÑ¡ÖÐÔò·µ»Ø£¨-1£¬-1£©
+        /// ï¿½ï¿½È¡ï¿½ï¿½Ç°Ñ¡ï¿½Ð°ï¿½Å¥ï¿½Ä¶ï¿½Î¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã»ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ò·µ»Ø£ï¿½-1ï¿½ï¿½-1ï¿½ï¿½
         /// </summary>
         public Vector2Int GetCurSelectedPos2()
         {
@@ -1224,7 +1228,7 @@ namespace ML.Engine.UI
             return -Vector2Int.one;
         }
         /// <summary>
-        /// »ñÈ¡µ±Ç°Ñ¡ÖÐ°´Å¥µÄÒ»Î¬×ø±ê ÈôÃ»ÓÐÑ¡ÖÐÔò·µ»Ø£¨-1£¬-1£©
+        /// ï¿½ï¿½È¡ï¿½ï¿½Ç°Ñ¡ï¿½Ð°ï¿½Å¥ï¿½ï¿½Ò»Î¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã»ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ò·µ»Ø£ï¿½-1ï¿½ï¿½-1ï¿½ï¿½
         /// </summary>
         public int GetCurSelectedPos1()
         {
