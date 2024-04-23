@@ -140,7 +140,7 @@ namespace ProjectOC.ManagerNS
             //要获取玩家模型，放在后面
             GM.RegisterLocalManager(IslandAreaManager);
             GM.RegisterLocalManager(PinchFaceManager);
-/*            GM.RegisterLocalManager(OrderManager);*/
+            GM.RegisterLocalManager(OrderManager);
         }
     
         #region Gizmos管理

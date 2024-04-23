@@ -220,24 +220,25 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     private Transform AcceptedOrderOrderInfo;
     private Transform OrderDelegationOrderInfo;
 
-    private bool isInitNormalOrder = false;
 
+    [ShowInInspector]
     private string curSelectedOrderIDInOrderDelegation 
     {   get 
         {
             SelectedButton btn = null;
             btn = this.OrderDelegationUIBtnListContainer.CurSelectUIBtnList?.GetCurSelected();
-            return btn != null ? btn.name : null;
+            return btn != null ? btn.name.Split('|')[0] : null;
         } 
     }
 
+    [ShowInInspector]
     private string curSelectedOrderIDInAcceptedOrder
     {
         get
         {
             SelectedButton btn = null;
             btn = this.AcceptedOrderBtnList.GetCurSelected();
-            return btn != null ? btn.name : null;
+            return btn != null ? btn.name.Split('|')[0] : null;
         }
     }
 
@@ -324,7 +325,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                                 slider.value = (float)(timer.CurrentTime / timer.Duration);
                             };
                             timer.OnEndEvent += () => { this.isNeedRefreshOrderDelegation = true; this.Refresh(); };
-                            btn.name = orderTableData.ID;
+                            btn.name = orderTableData.ID + "|" + btn.GetHashCode().ToString();
                         }
                         else
                         {
@@ -350,7 +351,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                     {
                         //更新信息
                         btn.transform.Find("Image").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.OrderName;
-                        btn.name = orderTableData.ID;
+                        btn.name = orderTableData.ID+"|"+btn.GetHashCode().ToString();
                     },
                     OnFinishAdd: () =>
                     {
@@ -371,7 +372,6 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 
             //退出 订单承接 界面
             isNeedRefreshOrderDelegation = true;
-            this.isInitNormalOrder = false;
         }
 
         #region 右侧订单详细信息
@@ -482,7 +482,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                             
 
                             btn.transform.Find("Image").Find("Image2").gameObject.SetActive(acceptedOrder.canBeCommit);
-                            btn.name = orderTableData.ID;
+                            btn.name = orderTableData.ID + "|" + btn.GetHashCode().ToString();
                         },
                         OnFinishAdd: () => { 
                             //按钮更新完毕刷新
@@ -563,7 +563,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             }
 
             //按钮隐藏
-            this.OrderDelegationOrderInfo.Find("CancelBtn").gameObject.SetActive(!OrderManager.Instance.GetAcceptedOrder(curSelectedOrderIDInAcceptedOrder).canBeCommit);
+            this.AcceptedOrderOrderInfo.Find("CancelBtn").gameObject.SetActive(!OrderManager.Instance.GetAcceptedOrder(curSelectedOrderIDInAcceptedOrder).canBeCommit);
         }
         else
         {
@@ -627,7 +627,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             this.Refresh();
         });
 
-        UIBtnListContainerInitor OrderDelegationUIBtnListContainerInitor = this.OrderDelegation.Find("OrderDelegation").Find("Panel1").GetComponent<UIBtnListContainerInitor>();
+        UIBtnListContainerInitor OrderDelegationUIBtnListContainerInitor = this.OrderDelegation.Find("OrderDelegation").Find("Panel1").Find("BtnContainer").GetComponent<UIBtnListContainerInitor>();
         this.OrderDelegationUIBtnListContainer = new UIBtnListContainer(OrderDelegationUIBtnListContainerInitor);
         this.OrderDelegationUIBtnListContainer.AddOnSelectButtonChangedAction(() => { this.Refresh(); });
 
