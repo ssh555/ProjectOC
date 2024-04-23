@@ -272,7 +272,7 @@ GameObject:
   m_Component:
   - component: {fileID: 709428852350601546}
   - component: {fileID: 2662500737224624553}
-  - component: {fileID: 2502720773018761330}
+  - component: {fileID: 5750346887881806178}
   m_Layer: 7
   m_Name: Furniture_Bed_DoubleBed_1
   m_TagString: Untagged
@@ -318,7 +318,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.87, y: 1, z: 3.04}
   m_Center: {x: 0, y: -0.05, z: 0}
---- !u!114 &2502720773018761330
+--- !u!114 &5750346887881806178
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -327,7 +327,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7143276263683204710}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 974314051b0ba36448a331d7e4c173cf, type: 3}
+  m_Script: {fileID: 11500000, guid: 3b980966fe0a3a6498a82079d5797d26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
@@ -346,13 +346,13 @@ MonoBehaviour:
     Name: 
     Bed: {fileID: 0}
   ConfigUp:
-    Offset: {x: 0, y: 3.7, z: 0}
-    Size: {x: 2, y: 6, z: 3}
+    Offset: {x: 0, y: 4.53, z: 0}
+    Size: {x: 2, y: 8, z: 2}
     Rotation: {x: 0, y: 0, z: 0}
     Scale: {x: 1, y: 1, z: 1}
   ConfigDown:
-    Offset: {x: 0, y: -2.32, z: 0}
-    Size: {x: 2, y: 3, z: 3}
+    Offset: {x: 0, y: -2.6, z: 0}
+    Size: {x: 2, y: 4, z: 2}
     Rotation: {x: 0, y: 0, z: 0}
     Scale: {x: 1, y: 1, z: 1}
 --- !u!1 &8040471232958182722
