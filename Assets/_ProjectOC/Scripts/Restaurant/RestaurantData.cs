@@ -64,8 +64,10 @@ namespace ProjectOC.RestaurantNS
                 {
                     return x.AlterAP.CompareTo(y.AlterAP);
                 }
+                string idx = x.ID ?? "";
+                string idy = y.ID ?? "";
                 //5.ID小的排在前面
-                return x.ID.CompareTo(y.ID);
+                return idx.CompareTo(idy);
             }
         }
     }

@@ -134,6 +134,20 @@ namespace ProjectOC.RestaurantNS
             {
                 transport?.UpdateDestination();
             }
+            foreach (var seat in Seats)
+            {
+                if (seat.HasWorker)
+                {
+                    if (seat.HasArrive)
+                    {
+                        seat.Worker.transform.position = seat.Socket.transform.position;
+                    }
+                    else
+                    {
+                        seat.Worker.SetDestination(seat.Socket.transform.position, OnArriveEvent);
+                    }
+                }
+            }
         }
 
         #region ·½·¨
@@ -148,6 +162,11 @@ namespace ProjectOC.RestaurantNS
                 {
                     if (!Seats[i].HasWorker)
                     {
+                        if (worker.HasHome && worker.Home.HasArrive)
+                        {
+                            worker.RecoverLastPosition();
+                            worker.Home.HasArrive = false;
+                        }
                         Seats[i].SetWorker(worker);
                         worker.SetDestination(Seats[i].Socket.position, OnArriveEvent);
                         LocalGameManager.Instance.RestaurantManager.RemoveWorker(worker);
@@ -217,7 +236,7 @@ namespace ProjectOC.RestaurantNS
         private void OnArriveEvent(Worker worker)
         {
             int seatIndex = GetWorkerSeatIndex(worker);
-            if (worker != null && seatIndex > 0)
+            if (worker != null && seatIndex >= 0)
             {
                 Seats[seatIndex].HasArrive = true;
                 if (HasFood)
