@@ -43,6 +43,11 @@ namespace ProjectOC.WorkerNS
         [LabelText("刁民"), ShowInInspector, ReadOnly]
         private HashSet<Worker> Workers = new HashSet<Worker>();
 
+        #region Event
+        public Action<Worker> OnAddWokerEvent;
+        public Action<Worker> OnDeleteWokerEvent;
+        #endregion
+
         public string GetOneNewWorkerInstanceID()
         {
             return ML.Engine.Utility.OSTime.OSCurMilliSeconedTime.ToString();
@@ -69,6 +74,7 @@ namespace ProjectOC.WorkerNS
 
         public bool DeleteWorker(Worker worker)
         {
+            OnDeleteWokerEvent?.Invoke(worker);
             ML.Engine.Manager.GameManager.DestroyObj(worker.gameObject);
             // 通过ManagerSpawn的Worker都是这个流程产生的，所以必须Release
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.ReleaseInstance(worker.gameObject);
@@ -116,6 +122,7 @@ namespace ProjectOC.WorkerNS
                     if (isAdd)
                     {
                         Workers.Add(worker);
+                        OnAddWokerEvent?.Invoke(worker);
                     }
                 }
                 else
@@ -130,6 +137,7 @@ namespace ProjectOC.WorkerNS
             if (worker != null && !this.Workers.Contains(worker))
             {
                 this.Workers.Add(worker);
+                OnAddWokerEvent?.Invoke(worker);
                 return true;
             }
             return false;

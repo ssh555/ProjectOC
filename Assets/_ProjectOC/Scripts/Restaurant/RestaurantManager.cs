@@ -27,7 +27,7 @@ namespace ProjectOC.RestaurantNS
         public void OnRegister()
         {
             LoadTableData();
-            Timer = new CounterDownTimer(BroadcastTime, true, true);
+            Timer = new CounterDownTimer(BroadcastTime, true, false);
             Timer.OnEndEvent += EndActionForTimer;
         }
 
@@ -49,6 +49,10 @@ namespace ProjectOC.RestaurantNS
             {
                 Workers.Add(worker);
                 WorkerSets.Add(worker);
+                if (Timer.IsStoped)
+                {
+                    Timer.Start();
+                }
             }
         }
 
@@ -58,7 +62,16 @@ namespace ProjectOC.RestaurantNS
             {
                 Workers.Remove(worker);
                 WorkerSets.Remove(worker);
+                if (Workers.Count == 0)
+                {
+                    Timer.End();
+                }
             }
+        }
+
+        public bool ContainWorker(Worker worker)
+        {
+            return worker != null && WorkerSets.Contains(worker);
         }
 
         public List<Restaurant> GetRestaurants()

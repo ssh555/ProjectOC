@@ -1,17 +1,11 @@
 using ML.Engine.InventorySystem;
-using ProjectOC.StoreNS;
 using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
-using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace ProjectOC.MissionNS
 {
-    /// <summary>
-    /// 搬运
-    /// </summary>
-    [System.Serializable]
+    [LabelText("搬运"), System.Serializable]
     public class Transport
     {
         [LabelText("搬运物品ID"), ReadOnly]
@@ -123,7 +117,7 @@ namespace ProjectOC.MissionNS
             }
             if (SoureceReserveNum > 0)
             {
-                Source.RemoveReservePutOut(ItemID, SoureceReserveNum);
+                SoureceReserveNum -= Source.RemoveReservePutOut(ItemID, SoureceReserveNum);
             }
         }
 
@@ -190,7 +184,7 @@ namespace ProjectOC.MissionNS
             Worker.TransportItems.RemoveAll(item => item.Amount == 0);
             Worker.Transport = null;
             Worker.ClearDestination();
-            if (!ArriveSource)
+            if (!ArriveSource || SoureceReserveNum > 0)
             {
                 Source?.RemoveReservePutOut(ItemID, SoureceReserveNum);
             }

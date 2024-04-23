@@ -1,8 +1,6 @@
 using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace ProjectOC.RestaurantNS
@@ -103,7 +101,7 @@ namespace ProjectOC.RestaurantNS
                 {
                     WorkerNS.Worker worker = Worker;
                     ClearData();
-                    if (!Restaurant.HasFood)
+                    if (!Restaurant.HasFood && Worker.APCurrent < Worker.APMax)
                     {
                         restaurantManager.AddWorker(worker);
                     }

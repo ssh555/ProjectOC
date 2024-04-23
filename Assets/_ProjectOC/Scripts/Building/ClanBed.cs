@@ -55,7 +55,6 @@ namespace ProjectOC.Building
             {
                 ProjectOC.Building.UI.UIBed uiPanel = (handle.Result).GetComponent<ProjectOC.Building.UI.UIBed>();
                 uiPanel.Bed = this;
-                uiPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uiPanel);
             };
         }

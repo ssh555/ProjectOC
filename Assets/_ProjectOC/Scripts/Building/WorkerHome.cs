@@ -3,6 +3,7 @@ using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -47,20 +48,20 @@ namespace ProjectOC.Building
             set
             {
                 hasArrive = value;
-                if (hasArrive) { Timer.Start(); }
-                else { Timer.End(); }
+                if (hasArrive) { Timer?.Start(); }
+                else { Timer?.End(); }
             }
         }
         #endregion
 
         #region 接口方法
-        /// <summary>
-        /// 停止Timer，调用UnBindWorker()，解绑隐兽。
-        /// </summary>
         public void OnDestroy()
         {
+            if (ManagerNS.LocalGameManager.Instance != null && !HasWorker)
+            {
+                ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent -= OnAddWorkerEvent;
+            }
             UnBindWorker();
-            Timer?.End();
         }
         
         public override void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
@@ -77,6 +78,7 @@ namespace ProjectOC.Building
                 if (TempWorker != null)
                 {
                     BindWorker(TempWorker);
+                    HasArrive = TempHasArrive;
                     if (HasArrive)
                     {
                         Worker.transform.position = transform.position + new Vector3(0, 2f, 0);
@@ -101,8 +103,34 @@ namespace ProjectOC.Building
 
         public void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIWorkerHomePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
+            {
+                ProjectOC.Building.UI.UIWorkerHome uiPanel = (handle.Result).GetComponent<ProjectOC.Building.UI.UIWorkerHome>();
+                uiPanel.Home = this;
+                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uiPanel);
+            };
         }
         #endregion
+
+        public void OnAddWorkerEvent(Worker worker)
+        {
+            if (!worker.HasHome && !HasWorker)
+            {
+                BindWorker(worker);
+            }
+        }
+
+        public void ManageAddWorkerEvent()
+        {
+            if (HasWorker)
+            {
+                ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent -= OnAddWorkerEvent;
+            }
+            else
+            {
+                ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent += OnAddWorkerEvent;
+            }
+        }
 
         private void EndActionForTimer()
         {
@@ -117,28 +145,27 @@ namespace ProjectOC.Building
             UnBindWorker();
             if (worker != null)
             {
-                worker.Home?.UnBindWorker();
-            }
-            Worker = worker;
-            if (HasWorker)
-            {
+                worker.Home?.UnBindWorker(true);
+                Worker = worker;
                 worker.Home = this;
             }
+            ManageAddWorkerEvent();
         }
 
         public void BindWorkerDefault()
         {
             List<Worker> workers = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkers();
-            foreach (Worker worker in workers)
+            foreach (Worker worker in workers.OrderBy(worker => worker.InstanceID).ToList())
             {
                 if (!worker.HasHome)
                 {
                     BindWorker(worker);
                 }
             }
+            ManageAddWorkerEvent();
         }
 
-        public void UnBindWorker()
+        public void UnBindWorker(bool addListener = false)
         {
             if (HasWorker)
             {
@@ -150,6 +177,10 @@ namespace ProjectOC.Building
             }
             HasArrive = false;
             Worker = null;
+            if (addListener)
+            {
+                ManageAddWorkerEvent();
+            }
         }
     }
 }
