@@ -130,15 +130,36 @@ namespace ProjectOC.Building.UI
             EmptySprite = UIItemTemplate.Find("Icon").GetComponent<Image>().sprite;
             HomeMain = transform.Find("Home").Find("Main");
             KeyTips = transform.Find("BotKeyTips").Find("KeyTips");
-            tempSprite.Add("HasHome", LocalGameManager.Instance.WorkerManager.GetSprite("HasHome"));
-            tempSprite.Add("NoHome", LocalGameManager.Instance.WorkerManager.GetSprite("NoHome"));
-            tempSprite.Add("Worker", LocalGameManager.Instance.WorkerManager.GetSprite("Worker"));
-            tempSprite.Add("WorkerHome", LocalGameManager.Instance.WorkerManager.GetSprite("WorkerHome"));
             IsInit = true;
         }
         #endregion
 
         #region Override Internal
+        protected override void Enter()
+        {
+            tempSprite.Add("HasHome", LocalGameManager.Instance.WorkerManager.GetSprite("HasHome"));
+            tempSprite.Add("NoHome", LocalGameManager.Instance.WorkerManager.GetSprite("NoHome"));
+            tempSprite.Add("Worker", LocalGameManager.Instance.WorkerManager.GetSprite("Worker"));
+            tempSprite.Add("WorkerHome", LocalGameManager.Instance.WorkerManager.GetSprite("WorkerHome"));
+            LocalGameManager.Instance.WorkerManager.OnDeleteWokerEvent += OnDeleteWokerEvent;
+            base.Enter();
+        }
+        public void OnDeleteWokerEvent(Worker worker)
+        {
+            IsInitWorkers = false;
+            Refresh();
+        }
+
+        protected override void Exit()
+        {
+            LocalGameManager.Instance.WorkerManager.OnDeleteWokerEvent -= OnDeleteWokerEvent;
+            foreach (var s in tempSprite)
+            {
+                ML.Engine.Manager.GameManager.DestroyObj(s.Value);
+            }
+            base.Exit();
+        }
+
         private Dictionary<string, Sprite> tempSprite = new Dictionary<string, Sprite>();
         private List<GameObject> tempUIItems = new List<GameObject>();
 
@@ -176,7 +197,6 @@ namespace ProjectOC.Building.UI
                     () => 
                     {
                         Home.BindWorker(worker);
-                        IsInitWorkers = false;
                     }
                 ));
             }
@@ -201,7 +221,7 @@ namespace ProjectOC.Building.UI
             {
                 Workers = new List<Worker>() {};
                 Workers.AddRange(LocalGameManager.Instance.WorkerManager.GetWorkers());
-                Workers = Workers.OrderBy(worker => worker.HasHome).ThenBy(worker => worker.InstanceID).ToList();
+                Workers = Workers.OrderBy(worker => worker.HasHome).ThenBy(worker => worker != null).ThenBy(worker => worker.InstanceID).ToList();
                 if (Worker != null)
                 {
                     Workers.Remove(Worker);
@@ -244,7 +264,7 @@ namespace ProjectOC.Building.UI
                 // Icon
                 item.transform.Find("Icon").GetComponent<Image>().sprite = worker != null ? tempSprite["Worker"] : EmptySprite;
                 // Name
-                item.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = worker?.Name ?? PanelTextContent.textEmpty;
+                item.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = !string.IsNullOrEmpty(worker?.Name) ? worker.Name : PanelTextContent.textEmpty;
                 // HomeIcon
                 item.transform.Find("HomeIcon").GetComponent<Image>().sprite = worker != null && worker.HasHome ? tempSprite["HasHome"] : tempSprite["NoHome"];
 
