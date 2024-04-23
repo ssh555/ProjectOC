@@ -63,7 +63,7 @@ namespace ProjectOC.RestaurantNS
                 {
                     foreach (RestaurantData data in Datas)
                     {
-                        if (LocalGameManager.Instance.RestaurantManager.WorkerFood_IsValidID(data.ID))
+                        if (LocalGameManager.Instance.RestaurantManager.WorkerFood_IsValidID(data.ID) && data.HaveFood)
                         {
                             return true;
                         }

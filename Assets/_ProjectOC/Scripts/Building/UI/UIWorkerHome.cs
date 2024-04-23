@@ -137,10 +137,10 @@ namespace ProjectOC.Building.UI
         #region Override Internal
         protected override void Enter()
         {
-            tempSprite.Add("HasHome", LocalGameManager.Instance.WorkerManager.GetSprite("HasHome"));
-            tempSprite.Add("NoHome", LocalGameManager.Instance.WorkerManager.GetSprite("NoHome"));
-            tempSprite.Add("Worker", LocalGameManager.Instance.WorkerManager.GetSprite("Worker"));
-            tempSprite.Add("WorkerHome", LocalGameManager.Instance.WorkerManager.GetSprite("WorkerHome"));
+            tempSprite["HasHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("HasHome");
+            tempSprite["NoHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("NoHome");
+            tempSprite["Worker"] = LocalGameManager.Instance.WorkerManager.GetSprite("Worker");
+            tempSprite["WorkerHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("WorkerHome");
             LocalGameManager.Instance.WorkerManager.OnDeleteWokerEvent += OnDeleteWokerEvent;
             base.Enter();
         }
