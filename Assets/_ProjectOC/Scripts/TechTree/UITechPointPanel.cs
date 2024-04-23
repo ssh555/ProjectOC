@@ -28,6 +28,8 @@ namespace ProjectOC.TechTree.UI
         private int sliceNum = 16;
         private Vector3 BasePos;
 
+
+
         private void SetBtnPos(RectTransform rectTransform,int[] cor)
         {
             if (cor.Length != 2) return;
@@ -78,12 +80,30 @@ namespace ProjectOC.TechTree.UI
                         OnSelectEnter: () =>
                         {
                             CurrentID = id;
+                            int[] cor = TechTreeManager.Instance.GetTPGrid(id);
+                            if (cor != null)
+                            {
+                                pos.x = cor[0];
+                                pos.y = cor[1];
+                            }
+                            
                             this.Refresh();
                         },
 
                         OnSelectExit: () =>
                         {
                             CurrentID = "";
+                            int[] cor = TechTreeManager.Instance.GetTPGrid(id);
+                            if (cor != null)
+                            {
+                                pos.x = cor[0];
+                                pos.y = cor[1];
+                            }
+                            else
+                            {
+                                pos.x = -1;
+                                pos.y = -1;
+                            }
                             ClearTempOnAlterTP();
                             this.Refresh();
                         },
@@ -106,7 +126,17 @@ namespace ProjectOC.TechTree.UI
                             btn_IdDic.Add(id, btn.transform);
 
                             SetBtnPos(rec, TechTreeManager.Instance.GetTPGrid(id));
-                            
+
+
+
+                            int order = TechTreeManager.Instance.GetWaitingOrder(id);
+                            btn.transform.Find("Image").gameObject.SetActive(order != -1);
+                            if (order != -1)
+                            {
+                                btn.transform.Find("Image").Find("Text").GetComponent<TextMeshProUGUI>().text = order.ToString();
+                            }
+
+
                             // 0 : Locked | 1 : Unlocked | 2 : Unlocking
                             int status = TechTreeManager.Instance.IsUnlockedTP(id) ? 1 : (TechTreeManager.Instance.UnlockingTPTimers.ContainsKey(id) ? 2 : 0);
                             // Mask & Timer
@@ -157,8 +187,8 @@ namespace ProjectOC.TechTree.UI
                 }
             }
         }
-
-
+        [ShowInInspector]
+        public Vector2 pos;
         [ShowInInspector]
 
         private string CurrentID = "";
@@ -236,6 +266,7 @@ namespace ProjectOC.TechTree.UI
         private Slider TPUnlockingProgressBar;
 
         private Transform EmptyPanel;
+        private Transform CancelBtn;
         #endregion
 
         #region GraphCursorNavigation
@@ -280,6 +311,7 @@ namespace ProjectOC.TechTree.UI
             this.TPUnlockingState.gameObject.SetActive(false);
 
             this.EmptyPanel = this.transform.Find("ContentPanel").Find("EmptyPanel");
+            this.CancelBtn = ContentPanel.Find("InformationInspector").Find("CancelBtn");
             #endregion
             this.cursorNavigation = this.transform.GetComponentInChildren<GraphCursorNavigation>();
         }
@@ -314,6 +346,15 @@ namespace ProjectOC.TechTree.UI
             if (ML.Engine.Input.InputManager.Instance.Common.Common.Back.WasPressedThisFrame())
             {
                 ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
+            }
+            //取消计划
+            if(ML.Engine.Input.InputManager.Instance.Common.Common.SubInteract.WasPerformedThisFrame())
+            {
+                if (TechTreeManager.Instance.GetWaitingOrder(CurrentID) > 1) 
+                {
+                    TechTreeManager.Instance.CancelWaitingOrder(CurrentID);
+                    this.Refresh();
+                }
             }
         }
 
@@ -615,6 +656,9 @@ namespace ProjectOC.TechTree.UI
                     // 不需要加入，因为前面 TechTree 时已经加入了
                     //tempTimer.Add(timer);
                 }
+                var t = TechTreeManager.Instance.GetWaitingOrder(CurrentID);
+                this.CancelBtn.gameObject.SetActive(t > 1);
+                this.TPKT_Decipher.gameObject.SetActive(t == -1);
             }
 
             
@@ -644,6 +688,12 @@ namespace ProjectOC.TechTree.UI
                     timer.OnEndEvent += Refresh;
                     mask.fillAmount = (float)(timer.CurrentTime / TechTreeManager.Instance.GetTPTimeCost(id));
                     tempTimer.Add(timer);
+                }
+                int order = TechTreeManager.Instance.GetWaitingOrder(id);
+                btn.Find("Image").gameObject.SetActive(order != -1);
+                if (order != -1)
+                {
+                    btn.Find("Image").Find("Text").GetComponent<TextMeshProUGUI>().text = order.ToString();
                 }
             }
         }
