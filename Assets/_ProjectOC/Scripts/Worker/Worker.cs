@@ -329,27 +329,19 @@ namespace ProjectOC.WorkerNS
         /// 修改体力值
         /// </summary>
         /// <param name="value">体力值</param>
-        public bool AlterAP(int value)
+        public void AlterAP(int value)
         {
-            int ap = this.APCurrent + value;
-            if (ap >= 0 && ap <= this.APMax)
-            {
-                this.APCurrent = ap;
-                this.APChangeAction?.Invoke(this.APCurrent);
-                return true;
-            }
-            return false;
+            APCurrent += value;
+            APCurrent = APCurrent < 0 ? 0 : APCurrent;
+            APCurrent = APCurrent > APMax ? APMax : APCurrent;
+            APChangeAction?.Invoke(APCurrent);
         }
 
-        public bool AlterMood(int value)
+        public void AlterMood(int value)
         {
-            int mood = Mood + value;
-            if (mood >= 0 && mood <= MoodMax)
-            {
-                Mood = mood;
-                return true;
-            }
-            return false;
+            Mood += value;
+            Mood = Mood < 0 ? 0 : Mood;
+            Mood = Mood > MoodMax ? MoodMax : Mood;
         }
 
         /// <summary>

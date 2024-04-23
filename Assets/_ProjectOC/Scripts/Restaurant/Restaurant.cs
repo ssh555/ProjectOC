@@ -373,10 +373,10 @@ namespace ProjectOC.RestaurantNS
                     {
                         return 0;
                     }
-                    amount = !complete && amount + Datas[index].Amount < 0 ? Datas[index].Amount : amount;
+                    amount = !complete && amount + Datas[index].Amount < 0 ? -1 * Datas[index].Amount : amount;
                     Datas[index].Amount += amount;
                     OnDataChangeEvent?.Invoke();
-                    return amount;
+                    return amount < 0 ? -1 * amount : amount;
                 }
                 return 0;
             }
