@@ -247,6 +247,8 @@ namespace ProjectOC.TechTree
         public List<string> WaitingLockQueue = new List<string>();
         public HashSet<string> WaitingLockSet = new HashSet<string>();
 
+        private HashSet<string> AlreadyLockTechPoint = new HashSet<string>();
+
         private void OnTimerStart(CounterDownTimer timer, string ID, bool isSave = true)
         {
             this.UnlockingTPTimers.Add(ID, timer);
@@ -266,7 +268,8 @@ namespace ProjectOC.TechTree
             this.UnlockingTechPointDict.Remove(id);
             this.WaitingLockQueue.RemoveAt(0);
             this.WaitingLockSet.Remove(id);
-            if(this.WaitingLockQueue.Count>0)
+            this.AlreadyLockTechPoint.Add(id);
+            if (this.WaitingLockQueue.Count>0)
             {
                 string TopID = this.WaitingLockQueue[0] ;
                 this.UnlockTechPoint(this.inventory, TopID, this.IsCheck);
@@ -439,7 +442,7 @@ namespace ProjectOC.TechTree
         /// <returns></returns>
         public bool CanUnlockTechPoint(IInventory inventory, string ID)
         {
-            return !this.UnlockingTechPointDict.ContainsKey(ID) && this.IsAllUnlockedPreTP(ID) && this.ItemIsEnough(inventory, ID);
+            return !this.UnlockingTechPointDict.ContainsKey(ID) && this.IsAllUnlockedPreTP(ID) && this.ItemIsEnough(inventory, ID) && !this.AlreadyLockTechPoint.Contains(ID);
         }
 
         private IInventory inventory;
