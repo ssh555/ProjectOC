@@ -401,35 +401,42 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     bool bisHit = false;
                     bool bSocket = false;
                     RaycastHit hitInfo = hits[0];
-                    var t = hitInfo.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
-                    if (t != null && this.SelectedPartInstance.ActiveSocket.CheckMatch(t))
+                    int i;
+                    int tmp = 0;
+                    // 找到第一个可以匹配的，Socket优先级更高
+                    for(i = 0; i < hits.Length; ++i)
                     {
-                        bisHit = true;
-                        bSocket = true;
-                    }
-                    foreach (var h in hits)
-                    {
-                        var socket = h.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
-                        if (socket != null)
+                        hitInfo = hits[i];
+                        var socket = hitInfo.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
+
+                        if (socket != null && this.SelectedPartInstance.ActiveSocket.CheckMatch(socket))
                         {
-                            if(this.SelectedPartInstance.ActiveSocket.CheckMatch(socket))
+                            bisHit = true;
+                            bSocket = true;
+                            tmp = i;
+                            break;
+                        }
+                        var area = hitInfo.collider.GetComponentInParent<BuildingArea.BuildingArea>();
+                        if (area != null && area.CheckAreaTypeMatch(this.SelectedPartInstance))
+                        {
+                            if(!bisHit)
                             {
-                                t = hitInfo.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
-                                if (t != null && this.SelectedPartInstance.ActiveSocket.CheckMatch(t))
-                                {
-                                    if (h.distance < hitInfo.distance || (h.distance == hitInfo.distance && Vector3.Distance(h.collider.transform.position, this.transform.position) <= Vector3.Distance(hitInfo.collider.transform.position, this.transform.position)))
-                                    {
-                                        bisHit = true;
-                                        bSocket = true;
-                                        hitInfo = h;
-                                    }
-                                }
-                                else
-                                {
-                                    bisHit = true;
-                                    bSocket = true;
-                                    hitInfo = h;
-                                }
+                                tmp = i;
+                            }
+                            bisHit = true;
+                        }
+                    }
+                    for (i = tmp + 1; i < hits.Length; ++i) 
+                    {
+                        var h = hits[i];
+                        var socket = h.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
+                        if (socket != null && this.SelectedPartInstance.ActiveSocket.CheckMatch(socket))
+                        {
+                            if (h.distance < hitInfo.distance || (h.distance == hitInfo.distance && Vector3.Distance(h.collider.transform.position, this.transform.position) <= Vector3.Distance(hitInfo.collider.transform.position, this.transform.position)))
+                            {
+                                bisHit = true;
+                                bSocket = true;
+                                hitInfo = h;
                             }
                         }
                         else if(bSocket == false)
@@ -438,16 +445,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                             // 类型匹配 & 位于正面
                             if (area != null && area.CheckAreaTypeMatch(this.SelectedPartInstance) && (Vector3.Dot(ray.direction, area.transform.up) < 0)) 
                             {
-                                if (hitInfo.collider.GetComponentInParent<BuildingArea.BuildingArea>() != null)
-                                {
-                                    //Debug.Log(Time.frameCount + " " + area.name);
-                                    if (h.distance < hitInfo.distance || (h.distance == hitInfo.distance && Vector3.Distance(h.collider.transform.position, this.transform.position) <= Vector3.Distance(hitInfo.collider.transform.position, this.transform.position)))
-                                    {
-                                        hitInfo = h;
-                                        bisHit = true;
-                                    }
-                                }
-                                else
+                                if (h.distance < hitInfo.distance || (h.distance == hitInfo.distance && Vector3.Distance(h.collider.transform.position, this.transform.position) <= Vector3.Distance(hitInfo.collider.transform.position, this.transform.position)))
                                 {
                                     hitInfo = h;
                                     bisHit = true;

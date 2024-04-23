@@ -43,15 +43,17 @@ namespace ML.Engine.Extension
         {
             var gcolor = Gizmos.color;
             Gizmos.color = color;
+            Matrix4x4 oldMatrix = Gizmos.matrix;
+            Gizmos.matrix = collider.transform.localToWorldMatrix;
             if (collider is BoxCollider)
             {
                 BoxCollider box = collider as BoxCollider;
-                Gizmos.DrawCube(collider.transform.TransformPoint(box.center), box.size);
+                Gizmos.DrawCube(box.center, box.size);
             }
             else if (collider is SphereCollider)
             {
                 SphereCollider sphere = collider as SphereCollider;
-                Gizmos.DrawSphere(collider.transform.TransformPoint(sphere.center), sphere.radius);
+                Gizmos.DrawSphere(sphere.center, sphere.radius);
             }
             else if (collider is CapsuleCollider)
             {
@@ -64,13 +66,13 @@ namespace ML.Engine.Extension
                 Mesh mesh = meshCollider.sharedMesh;
                 if (mesh != null)
                 {
-                    Matrix4x4 oldMatrix = Gizmos.matrix;
-                    Gizmos.matrix = meshCollider.transform.localToWorldMatrix;
+
                     Gizmos.DrawMesh(mesh, Vector3.zero, Quaternion.identity, Vector3.one);
-                    Gizmos.matrix = oldMatrix;
                 }
             }
             Gizmos.color = gcolor;
+            Gizmos.matrix = oldMatrix;
+
         }
         private static void DrawCapsule(CapsuleCollider capsule)
         {
