@@ -334,7 +334,7 @@ namespace ProjectOC.ProNodeNS
                         return false;
                     }
                 }
-                if (ProNodeType == ProNodeType.Mannul && !(HaveWorker && Worker.IsOnDuty))
+                if (ProNodeType == ProNodeType.Mannul && !(HaveWorker && Worker.IsOnProNodeDuty))
                 {
                     return false;
                 }

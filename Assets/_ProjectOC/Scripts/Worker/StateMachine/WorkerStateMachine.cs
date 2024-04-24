@@ -64,7 +64,7 @@ namespace ProjectOC.WorkerNS
                 return false;
             }
             // 体力高于工作阈值 && 在生产节点 && 生产节点在生产
-            return IsAPAboveWorkThreshold && Worker.IsOnDuty && Worker.ProNode.State == ProNodeState.Production;
+            return IsAPAboveWorkThreshold && Worker.IsOnProNodeDuty && Worker.ProNode.State == ProNodeState.Production;
         }
         /// <summary>
         /// 生产节点工作到摸鱼
@@ -76,7 +76,7 @@ namespace ProjectOC.WorkerNS
                 return false;
             }
             // 体力低于工作阈值 || 没在生产节点 || 生产节点未在生产
-            return !IsAPAboveWorkThreshold || !Worker.IsOnDuty || Worker.ProNode.State != ProNodeState.Production;
+            return !IsAPAboveWorkThreshold || !Worker.IsOnProNodeDuty || Worker.ProNode.State != ProNodeState.Production;
         }
         /// <summary>
         /// 摸鱼到搬运
@@ -88,7 +88,7 @@ namespace ProjectOC.WorkerNS
                 return false;
             }
             // 体力高于工作阈值 && 有任务
-            return IsAPAboveWorkThreshold && Worker.HasTransport;
+            return IsAPAboveWorkThreshold && Worker.HaveTransport;
         }
         /// <summary>
         /// 搬运到摸鱼
@@ -100,7 +100,7 @@ namespace ProjectOC.WorkerNS
                 return false;
             }
             // 体力低于工作阈值 || 没有任务
-            return !IsAPAboveWorkThreshold || !Worker.HasTransport;
+            return !IsAPAboveWorkThreshold || !Worker.HaveTransport;
         }
         /// <summary>
         /// 摸鱼到休息
@@ -111,7 +111,7 @@ namespace ProjectOC.WorkerNS
             {
                 return false;
             }
-            return Worker.CurTimeFrameStatus == TimeStatus.Relax || !IsAPAboveWorkThreshold;
+            return Worker.CurTimeStatus == TimeStatus.Relax || !IsAPAboveWorkThreshold;
         }
         /// <summary>
         /// 休息到摸鱼
@@ -122,7 +122,7 @@ namespace ProjectOC.WorkerNS
             {
                 return false;
             }
-            return Worker.CurTimeFrameStatus != TimeStatus.Relax && IsAPAboveRelaxThreshold;
+            return Worker.CurTimeStatus != TimeStatus.Relax && IsAPAboveRelaxThreshold;
         }
     }
 }

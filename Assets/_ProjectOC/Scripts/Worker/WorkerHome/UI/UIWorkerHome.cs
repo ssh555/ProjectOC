@@ -221,7 +221,7 @@ namespace ProjectOC.Building.UI
             {
                 Workers = new List<Worker>() {};
                 Workers.AddRange(LocalGameManager.Instance.WorkerManager.GetWorkers());
-                Workers = Workers.OrderBy(worker => worker.HasHome).ThenBy(worker => worker != null).ThenBy(worker => worker.InstanceID).ToList();
+                Workers = Workers.OrderBy(worker => worker.HaveHome).ThenBy(worker => worker != null).ThenBy(worker => worker.InstanceID).ToList();
                 if (Worker != null)
                 {
                     Workers.Remove(Worker);
@@ -266,7 +266,7 @@ namespace ProjectOC.Building.UI
                 // Name
                 item.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = !string.IsNullOrEmpty(worker?.Name) ? worker.Name : PanelTextContent.textEmpty;
                 // HomeIcon
-                item.transform.Find("HomeIcon").GetComponent<Image>().sprite = worker != null && worker.HasHome ? tempSprite["HasHome"] : tempSprite["NoHome"];
+                item.transform.Find("HomeIcon").GetComponent<Image>().sprite = worker != null && worker.HaveHome ? tempSprite["HasHome"] : tempSprite["NoHome"];
 
                 bool isSelected = CurrentWorker == worker;
                 item.transform.Find("Selected").gameObject.SetActive(isSelected);
@@ -317,7 +317,7 @@ namespace ProjectOC.Building.UI
             LayoutRebuilder.ForceRebuildLayoutImmediate(GridLayout.GetComponent<RectTransform>());
             #endregion
             #endregion
-            bool hasHome = Worker != null && Worker.HasHome;
+            bool hasHome = Worker != null && Worker.HaveHome;
 
             string text = Worker != null ? Worker.Name : PanelTextContent.textEmpty;
             HomeMain.Find("Title").GetComponent<TMPro.TextMeshProUGUI>().text = "<color=yellow>" + text + "</color>" + PanelTextContent.textHomePost;

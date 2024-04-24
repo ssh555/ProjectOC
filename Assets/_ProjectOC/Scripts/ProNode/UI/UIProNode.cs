@@ -1064,7 +1064,7 @@ namespace ProjectOC.InventorySystem.UI
                     {
                         GridLayoutGroup gridLayout = item.transform.Find("Level").GetComponent<GridLayoutGroup>();
                         Transform template = item.transform.Find("Level").Find("Icon");
-                        int num = GetExpRateIconNum(worker.ExpRate[ProNode.ExpType]);
+                        int num = GetExpRateIconNum(worker.SkillExpRate[ProNode.ExpType]);
                         Image[] images = item.transform.Find("Level").GetComponentsInChildren<Image>();
                         int cnt = 0;
                         foreach (var image in images)
@@ -1086,8 +1086,8 @@ namespace ProjectOC.InventorySystem.UI
                     // Selected
                     bool isCurrentWorker = Worker == worker;
                     item.transform.Find("StateCur").gameObject.SetActive(isCurrentWorker);
-                    item.transform.Find("StateWork").gameObject.SetActive(!isCurrentWorker && (worker.HasProNode || worker.HasTransport));
-                    item.transform.Find("StateRelax").gameObject.SetActive(!isCurrentWorker && !worker.HasProNode && !worker.HasTransport);
+                    item.transform.Find("StateWork").gameObject.SetActive(!isCurrentWorker && (worker.HaveProNode || worker.HaveTransport));
+                    item.transform.Find("StateRelax").gameObject.SetActive(!isCurrentWorker && !worker.HaveProNode && !worker.HaveTransport);
 
                     bool isSelected = CurrentWorker == worker;
                     item.transform.Find("Selected").gameObject.SetActive(isSelected);

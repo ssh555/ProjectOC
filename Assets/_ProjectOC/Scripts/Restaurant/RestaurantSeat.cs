@@ -9,14 +9,15 @@ namespace ProjectOC.RestaurantNS
     [LabelText("餐厅座位"), Serializable]
     public struct RestaurantSeat : IWorkerContainer
     {
-        [LabelText("对应的餐厅"), ReadOnly]
+        [LabelText("对应的餐厅"), ReadOnly, NonSerialized]
         public Restaurant Restaurant;
-        [LabelText("对应的Socket"), ReadOnly]
+        [LabelText("对应的Socket"), ReadOnly, NonSerialized]
         public Transform Socket;
         [LabelText("刁民正在吃的食物"), ShowInInspector, ReadOnly]
         public string FoodID { get; private set; }
         [LabelText("是否正在吃东西"), ShowInInspector, ReadOnly]
         public bool IsEat => !string.IsNullOrEmpty(FoodID) && timer != null && !timer.IsStoped;
+        [NonSerialized]
         private ML.Engine.Timer.CounterDownTimer timer;
         [LabelText("进食计时器")]
         public ML.Engine.Timer.CounterDownTimer Timer

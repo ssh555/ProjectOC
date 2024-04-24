@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System;
 using System.Linq;
-using ML.Engine.InventorySystem.CompositeSystem;
 
 
 namespace ML.Engine.InventorySystem
@@ -13,8 +12,8 @@ namespace ML.Engine.InventorySystem
         public int Sort;
         public RecipeCategory Category;
         public TextContent.TextContent Name;
-        public List<Formula> Raw;
-        public Formula Product;
+        public List<CompositeSystem.Formula> Raw;
+        public CompositeSystem.Formula Product;
         public int TimeCost;
         public int ExpRecipe;
     }
@@ -71,7 +70,7 @@ namespace ML.Engine.InventorySystem
             return null;
         }
 
-        public Sprite GetRecipeIcon(string id)
+        public UnityEngine.Sprite GetRecipeIcon(string id)
         {
             if(RecipeTableDict.ContainsKey(id))
             {
@@ -141,9 +140,9 @@ namespace ML.Engine.InventorySystem
             return RecipeCategory.None;
         }
 
-        public List<Formula> GetRaw(string id)
+        public List<CompositeSystem.Formula> GetRaw(string id)
         {
-            List<Formula> result = new List<Formula>();
+            List<CompositeSystem.Formula> result = new List<CompositeSystem.Formula>();
             if (IsValidID(id))
             {
                 result.AddRange(RecipeTableDict[id].Raw);
@@ -151,13 +150,13 @@ namespace ML.Engine.InventorySystem
             return result;
         }
 
-        public Formula GetProduct(string id)
+        public CompositeSystem.Formula GetProduct(string id)
         {
             if (IsValidID(id))
             {
                 return RecipeTableDict[id].Product;
             }
-            return new Formula() { id = "", num = 0 };
+            return new CompositeSystem.Formula() { id = "", num = 0 };
         }
 
         public int GetTimeCost(string id)

@@ -98,7 +98,7 @@ namespace ProjectOC.Building
 
         public void OnManagerAddWorkerEvent(Worker worker)
         {
-            if (!worker.HasHome && !HaveWorker)
+            if (!worker.HaveHome && !HaveWorker)
             {
                 (this as IWorkerContainer).SetWorker(worker);
             }
@@ -120,7 +120,7 @@ namespace ProjectOC.Building
             workers.RemoveAll(x => x == null);
             foreach (Worker worker in workers.OrderBy(worker => worker.InstanceID).ToList())
             {
-                if (!worker.HasHome)
+                if (!worker.HaveHome)
                 {
                     (this as IWorkerContainer).SetWorker(worker);
                 }

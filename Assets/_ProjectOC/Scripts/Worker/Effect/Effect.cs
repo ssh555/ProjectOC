@@ -92,9 +92,9 @@ namespace ProjectOC.WorkerNS
                     workTypeStr = this.EffectType.ToString().Split('_')[1];
                     if (Enum.TryParse(workTypeStr, out workType))
                     {
-                        if (worker.ExpRate.ContainsKey(workType))
+                        if (worker.SkillExpRate.ContainsKey(workType))
                         {
-                            worker.ExpRate[workType] = ParamInt;
+                            worker.SkillExpRate[workType] = ParamInt;
                         }
                     }
                     break;

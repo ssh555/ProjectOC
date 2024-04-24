@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -24,6 +22,7 @@ namespace ProjectOC.WorkerNS
         public Transform GetTransform();
         public void OnArriveEvent(Worker worker);
 
+        public virtual void SetWorkerRelateData() { }
         public virtual void RemoveWorkerRelateData() { }
         public virtual void TempRemoveWorker()
         {
@@ -37,6 +36,7 @@ namespace ProjectOC.WorkerNS
             RemoveWorker();
             Worker = worker;
             Worker?.SetContainer(this);
+            SetWorkerRelateData();
             OnSetWorkerEvent?.Invoke(worker);
         }
 
@@ -61,6 +61,10 @@ namespace ProjectOC.WorkerNS
         {
             OnArriveSetPosition(worker, GetTransform().position);
         }
+        public void OnArriveSetPosition(Vector3 pos)
+        {
+            OnArriveSetPosition(Worker, pos);
+        }
         public void OnArriveSetPosition(Worker worker, Vector3 pos)
         {
             if (worker != null)
@@ -69,16 +73,6 @@ namespace ProjectOC.WorkerNS
                 worker.Agent.enabled = false;
                 worker.LastPosition = worker.transform.position;
                 worker.transform.position = pos;
-            }
-        }
-        public void OnArriveSetPosition(Vector3 pos)
-        {
-            if (Worker != null)
-            {
-                IsArrive = true;
-                Worker.Agent.enabled = false;
-                Worker.LastPosition = Worker.transform.position;
-                Worker.transform.position = pos;
             }
         }
 
