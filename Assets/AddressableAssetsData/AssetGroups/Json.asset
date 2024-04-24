@@ -17,38 +17,23 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 2b959aa90493bd34c844bd9990e7087b
   m_SerializeEntries:
-  - m_GUID: 861841958640c704b97c93ac8c7e42e5
-    m_Address: LevelTableData
+  - m_GUID: e8966ea3dd24d9a408600a420ef52ab6
+    m_Address: TableData
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bcef7f5bd36a0ca4da2c398643a86197
-    m_Address: LoadingScenePanel
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: dd4b4415e6d56c345b8d49137657ff29
-    m_Address: OptionPanel
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b45190d581b79ec4c97cfe1cc491458d
-    m_Address: PopUpUI
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a4f237da249bc2548932b622d6cf90ae
-    m_Address: StartMenuPanel
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8fc03e6f9194327478462055f8f6f085
+  - m_GUID: fb0ecd8ab3c48844d8e7c3cd060c65ed
     m_Address: TextContent
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8fc03e6f9194327478462055f8f6f085
+    m_Address: OCTextContent
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c97a2e026d87d3d46896a9d40c2eafeb
-    m_Address: TableData
+    m_Address: OCTableData
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -7,8 +7,7 @@ using ProjectOC.Player;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.Serialization;
-using ProjectOC.Player;
+
 
 namespace ProjectOC.PinchFace
 {
@@ -26,7 +25,7 @@ namespace ProjectOC.PinchFace
         public List<List<PinchPartType2>> pinchPartType1Inclusion;  //
 
         // public List<PinchType1Struct> PinchType1Structs;
-        private const string PinchPartTypePath = "PinchFaceType";
+        private const string PinchPartTypePath = "PinchFace_TypePackage";
         private const string PinchPartPath = "PinchFacePart";
         private AsyncOperationHandle PinchPartHandle;
         private AsyncOperationHandle PinchPartTypeHandle;
@@ -35,7 +34,7 @@ namespace ProjectOC.PinchFace
         {
             ModelPinch = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController)
                 .currentCharacter.GetComponentInChildren<CharacterModelPinch>();
-            Debug.LogWarning($"ModelPinch:{ModelPinch != null}");
+            //Debug.LogWarning($"ModelPinch:{ModelPinch != null}");
             // ModelPinch.InitAfterPinchFaceManager(this);
             
             DataStructInit();

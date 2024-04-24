@@ -285,7 +285,7 @@ namespace ProjectOC.ClanNS.UI
         }
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/Building";
+            this.abpath = "OCTextContent/Building";
             this.abname = "BedPanel";
             this.description = "BedPanel数据加载完成";
         }

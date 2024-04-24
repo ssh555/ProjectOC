@@ -146,7 +146,7 @@ namespace ProjectOC.Player.UI
             {
                 foreach (var id in ML.Engine.InventorySystem.ItemManager.Instance.GetAllItemID())//ML.Engine.InventorySystem.ItemManager.Instance.GetCanStack(id) ? UnityEngine.Random.Range(1, 999) : 1
                 {
-                    ItemManager.Instance.SpawnItems(id, 500).ForEach(item => GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().Inventory.AddItem(item));
+                    ItemManager.Instance.SpawnItems(id, 500).ForEach(item => (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory.AddItem(item));
                 }
             }
             );
@@ -187,7 +187,7 @@ namespace ProjectOC.Player.UI
 
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/PlayerUIPanel";
+            this.abpath = "OCTextContent/PlayerUIPanel";
             this.abname = "PlayerUIPanel";
             this.description = "PlayerUIPanel数据加载完成";
         }

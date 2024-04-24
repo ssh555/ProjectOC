@@ -62,7 +62,7 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         public ML.Engine.ABResources.ABJsonAssetProcessor<CompositionTableData[]> ABJAProcessor;
         public void LoadTableData()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<CompositionTableData[]>("OC/Json/TableData", "Composition", (datas) =>
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<CompositionTableData[]>("OCTableData", "Composition", (datas) =>
                 
             {
                 foreach (var data in datas)

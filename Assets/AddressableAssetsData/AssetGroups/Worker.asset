@@ -18,7 +18,7 @@ MonoBehaviour:
   m_GUID: 74f63c466c025f34ab34841278c54b17
   m_SerializeEntries:
   - m_GUID: a151723e4f0a4174ebaab28d2b90424a
-    m_Address: Prefab_Character
+    m_Address: Prefab_AICharacter
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

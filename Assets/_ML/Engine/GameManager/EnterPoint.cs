@@ -31,7 +31,7 @@ namespace ML.Engine.Manager
 
             };
 
-            GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("EnterPointScene", null, postCallback));
+            GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("Scene_PreScene", null, postCallback));
         }
 
         #region Prefab
