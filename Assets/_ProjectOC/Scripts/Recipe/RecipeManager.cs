@@ -73,6 +73,24 @@ namespace ML.Engine.InventorySystem
         #endregion
 
         #region Getter
+        public string GetRecipeName(string id)
+        {
+            if (!string.IsNullOrEmpty(id) && RecipeTableDict.ContainsKey(id))
+            {
+                return RecipeTableDict[id].Name;
+            }
+            return null;
+        }
+
+        public Sprite GetRecipeIcon(string id)
+        {
+            if(RecipeTableDict.ContainsKey(id))
+            {
+                return ItemManager.Instance.GetItemSprite(RecipeTableDict[id].Product.id);
+            }
+            return null;
+        }
+
         public List<string> GetRecipeIDsByCategory(RecipeCategory category)
         {
             List<string> result = new List<string>();

@@ -17,6 +17,7 @@ using UnityEngine.InputSystem;
 using static ProjectOC.TechTree.TechTreeManager;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Sirenix.OdinInspector;
+using ProjectOC.ManagerNS;
 
 namespace ProjectOC.TechTree.UI
 {
@@ -550,8 +551,8 @@ namespace ProjectOC.TechTree.UI
                 this.TPDecipherTip.text = tpStatus == 1 ? PanelTextContent.unlockedtitletip.GetText() : PanelTextContent.lockedtitletip.GetText();
 
 
-                // 可解锁项
-                foreach (var id in TM.GetTPCanUnlockedID(CurrentID))
+                // 可解锁项: 建筑物
+                foreach (var id in TM.GetTPCanUnlockedBuildID(CurrentID))
                 {
                     if (!TPUnlockGO.TryGetValue(id, out var unlock))
                     {
@@ -568,12 +569,37 @@ namespace ProjectOC.TechTree.UI
                     }
                     else
                     {
-                        var s = CompositeManager.Instance.GetCompositonSprite(GetTPIconItemID(id));
+                        var s = BuildingManager.Instance.GetBuildIcon(id);
                         tempSprite.Add(id, s);
                         unlock.GetComponentInChildren<Image>().sprite = s;
                     }
                     // Text
-                    unlock.GetComponentInChildren<TextMeshProUGUI>().text = CompositeManager.Instance.GetCompositonName(GetTPIconItemID(id));
+                    unlock.GetComponentInChildren<TextMeshProUGUI>().text = BuildingManager.Instance.GetName(id);
+                }
+                // 可解锁项: 配方
+                foreach (var id in TM.GetTPCanUnlockedRecipeID(CurrentID))
+                {
+                    if (!TPUnlockGO.TryGetValue(id, out var unlock))
+                    {
+                        unlock = Instantiate(TPUnlockTemplate.gameObject, TPUnlockTemplate.parent, false);
+                        unlock.SetActive(true);
+                        this.TPUnlockGO.Add(id, unlock);
+                    }
+
+                    // Image
+                    if (tempSprite.ContainsKey(id))
+                    {
+                        var s = tempSprite[id];
+                        unlock.GetComponentInChildren<Image>().sprite = s;
+                    }
+                    else
+                    {
+                        var s = LocalGameManager.Instance.RecipeManager.GetRecipeIcon(id);
+                        tempSprite.Add(id, s);
+                        unlock.GetComponentInChildren<Image>().sprite = s;
+                    }
+                    // Text
+                    unlock.GetComponentInChildren<TextMeshProUGUI>().text = LocalGameManager.Instance.RecipeManager.GetRecipeName(id);
                 }
 
                 // 面板状态
@@ -699,18 +725,6 @@ namespace ProjectOC.TechTree.UI
             }
         }
 
-        private string GetTPIconItemID(string id)
-        {
-            if(BuildingManager.Instance.BPartTableDictOnID.ContainsKey(id))
-            {
-                return id;
-            }
-            else if(ManagerNS.LocalGameManager.Instance.RecipeManager.IsValidID(id))
-            {
-                return id;
-            }
-            throw new Exception($"科技树配置中的可解锁项ID\"{id}\"既不是RecipeID，也不是BuildID");
-        }
 
         protected override void OnLoadJsonAssetComplete(TPPanel datas)
         {
