@@ -732,7 +732,7 @@ namespace ProjectOC.TechTree.UI
         }
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/TechTree";
+            this.abpath = "OCTextContent/TechTree";
             this.abname = "TechPointPanel";
             this.description = "TechPointPanel数据加载完成";
         }

@@ -952,7 +952,7 @@ namespace ML.Engine.BuildingSystem
         private SpriteAtlas buildIconAtlas;
         private void LoadItemAtlas()
         {
-            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>("BuildingSystem/SA_UI_BuildIcon").Completed += (handle) =>
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>("SA_UI_BuildIcon").Completed += (handle) =>
             {
                 buildIconAtlas = handle.Result;
             };
@@ -993,7 +993,7 @@ namespace ML.Engine.BuildingSystem
 
         public void LoadTableData()
         {
-            ABJAProcessorBuildingTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]>("OC/Json/TableData", "Building", (datas) =>
+            ABJAProcessorBuildingTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]>("OCTableData", "Building", (datas) =>
             {
                 foreach (var data in datas)
                 {
@@ -1003,7 +1003,7 @@ namespace ML.Engine.BuildingSystem
             }, "建筑表数据");
             ABJAProcessorBuildingTableData.StartLoadJsonAssetData();
 
-            ABJAProcessorFurnitureThemeTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<FurnitureThemeTableData[]>("OC/Json/TableData", "FurnitureTheme", (datas) =>
+            ABJAProcessorFurnitureThemeTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<FurnitureThemeTableData[]>("OCTableData", "FurnitureTheme", (datas) =>
             {
                 foreach (var data in datas)
                 {

@@ -105,7 +105,7 @@ namespace ML.Engine.UI
         }
         protected override void InitTextContentPathData()
         {
-            this.abpath = "ML/Json/TextContent";
+            this.abpath = "TextContent";
             this.abname = "PopUpUI";
             this.description = "PopUpUI数据加载完成";
         }

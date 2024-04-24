@@ -87,7 +87,7 @@ namespace ML.Engine.BuildingSystem.UI
 
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/BuildingSystem/UI";
+            this.abpath = "OCTextContent/BuildingSystem/UI";
             this.abname = "BSInteractMode_KeyComPanel";
             this.description = "BSInteractMode_KeyComPanel数据加载完成";
         }

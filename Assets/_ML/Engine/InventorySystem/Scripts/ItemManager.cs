@@ -112,8 +112,8 @@ namespace ML.Engine.InventorySystem
 
         #region to-do : 需读表导入所有所需的 Item 数据
         public const string TypePath = "ML.Engine.InventorySystem.";
-        public const string ItemIconLabel = "Item/SA_Item_UI_ItemIcon";
-        public const string WorldObjLabel = "Item/Prefab_WorldItem";
+        public const string ItemIconLabel = "SA_Item_UI_ItemIcon";
+        public const string WorldObjLabel = "Prefab_Worlditem";
 
 
 
@@ -122,7 +122,7 @@ namespace ML.Engine.InventorySystem
 
         public void LoadTableData()
         {
-            ABJAProcessorItemTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableData[]>("OC/Json/TableData", "Item", (datas) =>
+            ABJAProcessorItemTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableData[]>("OCTableData", "Item", (datas) =>
             {
                 foreach (var data in datas)
                 {
@@ -131,7 +131,7 @@ namespace ML.Engine.InventorySystem
             }, "背包系统物品Item表数据");
             ABJAProcessorItemTableData.StartLoadJsonAssetData();
 
-            ABJAProcessorItemCategoryTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemCategoryTableData[]>("OC/Json/TableData", "ItemCategory", (datas) =>
+            ABJAProcessorItemCategoryTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemCategoryTableData[]>("OCTableData", "ItemCategory", (datas) =>
             {
                 foreach (var data in datas)
                 {
@@ -306,7 +306,7 @@ namespace ML.Engine.InventorySystem
             if (itemIcon == null)
             {
                 // 异步加载资源
-                var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjLabel + "/ItemIcon.prefab", parent);
+                var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjLabel + "/Prefab_ItemIcon.prefab", parent);
 
                 // 等待加载完成
                 await handle.Task;

@@ -36,7 +36,7 @@ namespace ProjectOC.WorkerNS
 
         public void LoadTableData()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableData[]>("OC/Json/TableData", "Skill", (datas) =>
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<SkillTableData[]>("OCTableData", "Skill", (datas) =>
             {
                 foreach (var data in datas)
                 {

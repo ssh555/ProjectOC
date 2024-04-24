@@ -37,7 +37,7 @@ namespace ML.Engine.BuildingSystem
        
         public void InitUITextContents()
         {
-            var Category_ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextTip[]>("OC/Json/TextContent/BuildingSystem/UI", "Category", (datas) =>
+            var Category_ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextTip[]>("OCTextContent/BuildingSystem/UI", "Category", (datas) =>
             {
                 foreach (var category in datas)
                 {
@@ -47,7 +47,7 @@ namespace ML.Engine.BuildingSystem
             }, "建造系统Category1");
             Category_ABJAProcessor.StartLoadJsonAssetData();
 
-            var Type_ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextTip[]>("OC/Json/TextContent/BuildingSystem/UI", "Type", (datas) =>
+            var Type_ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextTip[]>("OCTextContent/BuildingSystem/UI", "Type", (datas) =>
             {
                 foreach (var type in datas)
                 {
@@ -61,14 +61,15 @@ namespace ML.Engine.BuildingSystem
         #endregion
 
         #region Internal
-        public const string UIPanelABPath = "BuildingSystem/Prefab_UIPanel";
+        public const string UIPanelABPath = "Prefab_UIPanel";
 
-        public const string BPartABPath = "BuildingPart";
+        public const string BPartABPath = "BS_Prefab_BuildingPart";
 
         private RectTransform Canvas { get => Manager.GameManager.Instance.UIManager.GetCanvas.GetComponent<RectTransform>(); }
         public async UniTask<T> GetPanel<T>() where T : UIBasePanel
         {
-            var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(UIPanelABPath + "/Prefab_BS_" + typeof(T).Name + ".prefab");
+            string _path = UIPanelABPath + "/Prefab_BS_" + typeof(T).Name + ".prefab";
+            var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(_path);
             await handle.Task;
             T panel = handle.Result.GetComponent<T>();
             return panel;
