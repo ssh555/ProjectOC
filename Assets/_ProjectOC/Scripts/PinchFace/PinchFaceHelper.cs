@@ -70,8 +70,9 @@ namespace ProjectOC.PinchFace
             return _path;
         }
 
-        public string GetType3PrefabPath(PinchPartType2 _type2,PinchPartType3 _type3)
+        public string GetType3PrefabPath(PinchPartType3 _type3)
         {
+            PinchPartType2 _type2 = pinchFaceManager.pinchPartType3Dic[_type3];
             string _type2Path = GetType2Path(_type2);
             string _type3Path = $"{(int)_type3-1}_{_type3.ToString()}_PinchType3";
             return $"{_type2Path}/{_type3Path}";

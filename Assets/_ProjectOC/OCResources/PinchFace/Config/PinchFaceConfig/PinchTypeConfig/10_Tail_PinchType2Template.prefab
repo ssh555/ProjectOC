@@ -59,12 +59,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 350f321420e1bf94a930e2e6111cd3e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneWeightChangeType: 1
-  boneWeightType: 0
-  scaleValueRange: {x: 0.5, y: 1.5}
-  currentScaleValue: 1
-  offsetValueRange: {x: 0, y: 0}
-  currentOffsetValue: 0
+  BoneWeightDatas:
+  - boneWeightChangeType: 1
+    boneWeightType: 6
+    scaleValueRange: {x: 0.5, y: 1.5}
+    currentScaleValue: 1
+    offsetValueRange: {x: 0.5, y: 1.5}
+    currentOffsetValue: 1
 --- !u!114 &3582665397646665479
 MonoBehaviour:
   m_ObjectHideFlags: 0

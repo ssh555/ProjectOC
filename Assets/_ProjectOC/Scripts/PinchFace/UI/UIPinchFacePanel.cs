@@ -23,12 +23,12 @@ namespace ProjectOC.PinchFace
             // uICameraImage.LookAtGameObject(go); //自动移动位置
             
             
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<PinchDataConfig>("OC/Configs/PinchFace/PinchFaceConfig/PinchDataConfig.asset").Completed+=(handle) =>
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<PinchDataConfig>("PinchAsset_PinchFaceSetting/PinchDataConfig.asset").Completed+=(handle) =>
             {
                 Config = handle.Result;
             };
 
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>("OC/UI/PinchFace/Texture/SA_PinchFace.spriteatlasv2").Completed+=(handle) =>
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>("SA_UI_PinchFace/SA_PinchFace.spriteatlasv2").Completed+=(handle) =>
             {
                 SA_PinchPart = handle.Result;
             };
@@ -150,9 +150,9 @@ namespace ProjectOC.PinchFace
         private RacePinchData raceData;
         private List<PinchPart> pinchParts;
         private Dictionary<PinchPartType3, SelectedButton> type3ButtonDic = new Dictionary<PinchPartType3, SelectedButton>();
-        private Dictionary<PinchPartType3, PinchPartType2> type3Type2Dic = new Dictionary<PinchPartType3, PinchPartType2>();
+        private Dictionary<PinchPartType3, PinchPartType2> type3Type2Dic => pinchFaceManager.pinchPartType3Dic;
         public List<UIBtnListInitor> rightBtnLists = new List<UIBtnListInitor>();
-
+        
         public PinchDataConfig Config;
         public SpriteAtlas SA_PinchPart;
 
@@ -171,23 +171,12 @@ namespace ProjectOC.PinchFace
             pinchParts = new List<PinchPart>();
             
             //生成左侧List<PinchPartType3>
-            foreach (var _DicType in pinchFaceManager.pinchPartType2Dic)
-            {
-                foreach (var _DicType3 in _DicType.Value.pinchPartType3s)
-                {
-                    if (raceData.pinchPartType3s.Contains(_DicType3))
-                    {
-                        type3Type2Dic.Add(_DicType3,_DicType.Key);
-                    }
-                }
-            }
-            
 
             foreach (var _partType3 in raceData.pinchPartType3s)
             {
                 PinchPartType2 _type2 = type3Type2Dic[_partType3];
                 PinchPartType _type = pinchFaceManager.pinchPartType2Dic[_type2];
-                this.UIBtnListContainer.AddBtn(1, "OC/UI/PinchFace/Pinch_BaseUISelectedBtn.prefab"
+                this.UIBtnListContainer.AddBtn(1, "Prefabs_PinchPart/UIPanel/Prefab_Pinch_BaseUISelectedBtn.prefab"
                     ,BtnText:_partType3.ToString()
                     ,BtnSettingAction:(_btn)=>
                     {
@@ -220,8 +209,7 @@ namespace ProjectOC.PinchFace
             PinchPartType1 _type1 = _type.pinchPartType1;
             
             //OC/Configs/PinchFace/PinchFaceConfig/PinchTypeConfig/1_Ear_PinchType2Template.prefab
-
-            string pathFore = "OC/Configs/PinchFace/PinchFaceConfig/PinchTypeConfig";
+            string pathFore = "PinchAsset_PinchFaceSetting/PinchTypeConfig";
             string templatePath = $"{pathFore}/{(int)_type2-1}_{_type2.ToString()}_PinchType2Template.prefab";
 
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(templatePath)
@@ -229,6 +217,7 @@ namespace ProjectOC.PinchFace
             {
                 var _comps = handle.Result.GetComponents<IPinchSettingComp>();
                 pinchParts.Add(new PinchPart(this,_type3,_type2,_comps,containerTransf));
+                Destroy(handle.Result);
             };
             //加载Type3，是否有com
         }
