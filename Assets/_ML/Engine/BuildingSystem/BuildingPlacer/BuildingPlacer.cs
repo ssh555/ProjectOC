@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using ML.Engine.BuildingSystem.Config;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace ML.Engine.BuildingSystem.BuildingPlacer
 {
@@ -377,11 +380,14 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
                 // 位置 -> 自身
                 pos = this.transform.position - this.SelectedPartInstance.ActiveSocket.transform.position + this.SelectedPartInstance.transform.position;
+                var ray = this.GetCameraRay();
+
                 // ScreenCenter->ScreenNormal 射线检测
-                var hits = Physics.RaycastAll(this.GetCameraRay(), this.checkRadius, this.checkLayer);
+                var hits = Physics.RaycastAll(ray, this.checkRadius, this.checkLayer);
                 if (hits == null || hits.Length == 0)
                 {
-                    hits = Physics.RaycastAll(this.GetCameraRayEndPointDownRay(), this.checkRadius, this.checkLayer);
+                    ray = this.GetCameraRayEndPointDownRay();
+                    hits = Physics.RaycastAll(ray, this.checkRadius, this.checkLayer);
                 }
                 // 命中 || 未命中 => 在终点处向下检测
                 if (hits != null && hits.Length > 0)
@@ -395,46 +401,51 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     bool bisHit = false;
                     bool bSocket = false;
                     RaycastHit hitInfo = hits[0];
-                    foreach (var h in hits)
+                    int i;
+                    int tmp = 0;
+                    // 找到第一个可以匹配的，Socket优先级更高
+                    for(i = 0; i < hits.Length; ++i)
                     {
-                        var socket = h.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
-                        if (socket != null)
+                        hitInfo = hits[i];
+                        var socket = hitInfo.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
+
+                        if (socket != null && this.SelectedPartInstance.ActiveSocket.CheckMatch(socket))
                         {
-                            if(this.SelectedPartInstance.ActiveSocket.CheckMatch(socket))
+                            bisHit = true;
+                            bSocket = true;
+                            tmp = i;
+                            break;
+                        }
+                        var area = hitInfo.collider.GetComponentInParent<BuildingArea.BuildingArea>();
+                        if (area != null && area.CheckAreaTypeMatch(this.SelectedPartInstance))
+                        {
+                            if(!bisHit)
                             {
-                                if(hitInfo.collider.GetComponent<BuildingSocket.BuildingSocket>() != null)
-                                {
-                                    if (h.distance < hitInfo.distance || (h.distance == hitInfo.distance && Vector3.Distance(h.collider.transform.position, this.transform.position) <= Vector3.Distance(hitInfo.collider.transform.position, this.transform.position)))
-                                    {
-                                        bisHit = true;
-                                        bSocket = true;
-                                        hitInfo = h;
-                                    }
-                                }
-                                else
-                                {
-                                    bisHit = true;
-                                    bSocket = true;
-                                    hitInfo = h;
-                                }
+                                tmp = i;
+                            }
+                            bisHit = true;
+                        }
+                    }
+                    for (i = tmp + 1; i < hits.Length; ++i) 
+                    {
+                        var h = hits[i];
+                        var socket = h.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
+                        if (socket != null && this.SelectedPartInstance.ActiveSocket.CheckMatch(socket))
+                        {
+                            if (h.distance < hitInfo.distance || (h.distance == hitInfo.distance && Vector3.Distance(h.collider.transform.position, this.transform.position) <= Vector3.Distance(hitInfo.collider.transform.position, this.transform.position)))
+                            {
+                                bisHit = true;
+                                bSocket = true;
+                                hitInfo = h;
                             }
                         }
                         else if(bSocket == false)
                         {
                             var area = h.collider.GetComponentInParent<BuildingArea.BuildingArea>();
-                            
-                            if (area != null && area.CheckAreaTypeMatch(this.SelectedPartInstance) && (Vector3.Dot(h.point - Camera.transform.position, area.transform.up) < 0)) 
+                            // 类型匹配 & 位于正面
+                            if (area != null && area.CheckAreaTypeMatch(this.SelectedPartInstance) && (Vector3.Dot(ray.direction, area.transform.up) < 0)) 
                             {
-                                if (hitInfo.collider.GetComponentInParent<BuildingArea.BuildingArea>() != null)
-                                {
-                                    //Debug.Log(Time.frameCount + " " + area.name);
-                                    if (h.distance < hitInfo.distance || (h.distance == hitInfo.distance && Vector3.Distance(h.collider.transform.position, this.transform.position) <= Vector3.Distance(hitInfo.collider.transform.position, this.transform.position)))
-                                    {
-                                        hitInfo = h;
-                                        bisHit = true;
-                                    }
-                                }
-                                else
+                                if (h.distance < hitInfo.distance || (h.distance == hitInfo.distance && Vector3.Distance(h.collider.transform.position, this.transform.position) <= Vector3.Distance(hitInfo.collider.transform.position, this.transform.position)))
                                 {
                                     hitInfo = h;
                                     bisHit = true;
@@ -454,7 +465,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                         pos = hitInfo.point;
                         this.SelectedPartInstance.AttachedSocket = hitInfo.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
                         this.SelectedPartInstance.AttachedArea = hitInfo.collider.GetComponentInParent<BuildingArea.BuildingArea>();
-                        
+  
                         if (this.SelectedPartInstance.AttachedSocket && !this.SelectedPartInstance.ActiveSocket.CheckMatch(this.SelectedPartInstance.AttachedSocket))
                         {
                             this.SelectedPartInstance.AttachedSocket = null;
@@ -519,7 +530,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// </summary>
         public void TransformSelectedPartInstance()
         {
-            if(this.GetPlacePosAndRot(out Vector3 pos, out Quaternion rot))
+            if (this.GetPlacePosAndRot(out Vector3 pos, out Quaternion rot))
             {
                 //if(pos == Vector3.negativeInfinity || float.IsNaN(rot.x))
                 //{
@@ -644,16 +655,74 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         private void Awake()
         {
             // 载入匹配数据
-            string path = "ML/BuildingSystem/MatchConfig";
-            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<BuildingAreaSocketMatchAsset>(path + "/AreaSocketMatchConfig.asset").Completed += (handle) =>
+            string path = "BuildingSystem/Config";
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<BuildingAreaSocketMatchAsset>(path + "/Config_BS_Match_AreaSocket.asset").Completed += (handle) =>
             {
                 AreaSocketMatch = handle.Result;
             };
-            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<BuildingSocket2SocketMatchAsset>(path + "/Socket2SocketMatchConfig.asset").Completed += (handle) =>
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<BuildingSocket2SocketMatchAsset>(path + "/Config_BS_Match_Socket2Socket.asset").Completed += (handle) =>
             {
                 Socket2SocketMatch = handle.Result;
             };
             this.enabled = false;
+        }
+
+        public void OnDrawGizmos()
+        {
+            if (BuildingManager.Instance == null || this.SelectedPartInstance == null)
+            {
+                return;
+            }
+
+            //// 绘制射线
+            //var ray = GetCameraRay();
+            //Gizmos.color = Color.red;
+            //Vector3 start = ray.origin;
+            //Vector3 end = ray.origin + ray.direction * this.checkRadius;
+            //// 设置线的宽度
+            //float lineWidth = 0.1f;
+            //// 计算线的中心点
+            //Vector3 center = (start + end) * 0.5f;
+            //// 计算线的长度和方向
+            //float lineLength = Vector3.Distance(start, end);
+            //Vector3 lineDirection = ray.direction;
+            //// 计算长方体的尺寸
+            //Vector3 cubeSize = new Vector3(lineWidth, lineWidth, lineLength);
+            //// 将长方体绘制在线的中心点，并根据线的方向和长度进行旋转
+            //Matrix4x4 cubeMatrix = Matrix4x4.TRS(center, Quaternion.LookRotation(lineDirection), cubeSize);
+            //var m = Gizmos.matrix;
+            //Gizmos.matrix = cubeMatrix;
+            //Gizmos.DrawCube(Vector3.zero, Vector3.one);
+            //Gizmos.matrix = m;
+
+            if (this.SelectedPartInstance.ActiveSocket != null)
+            {
+                var cols = this.SelectedPartInstance.gameObject.GetComponentsInChildren<Collider>();
+                foreach (Collider col in cols)
+                {
+                    var gcolor = Gizmos.color;
+                    Gizmos.color = BuildingManager.Instance.DrawActiveSocket.color;
+                    Gizmos.DrawSphere(this.SelectedPartInstance.ActiveSocket.transform.position, 0.1f);
+                    //Extension.GizmosExtension.DrawMeshCollider(col, BuildingManager.Instance.DrawActiveSocket.color);
+                    Gizmos.color = gcolor;
+                }
+            }
+            if(this.SelectedPartInstance.AttachedSocket != null)
+            {
+                var cols = this.SelectedPartInstance.AttachedSocket.GetComponentsInChildren<Collider>();
+                foreach (Collider col in cols)
+                {
+                    Extension.GizmosExtension.DrawMeshCollider(col, BuildingManager.Instance.DrawSocket.color);
+                }
+            }
+            if (this.SelectedPartInstance.AttachedArea != null)
+            {
+                var cols = this.SelectedPartInstance.AttachedArea.GetComponentsInChildren<Collider>();
+                foreach (Collider col in cols)
+                {
+                    Extension.GizmosExtension.DrawMeshCollider(col, BuildingManager.Instance.DrawAreaBaseGrid.color);
+                }
+            }
         }
         #endregion
 
@@ -667,6 +736,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
         public UnityEngine.InputSystem.InputAction backInputAction => ML.Engine.Input.InputManager.Instance.Common.Common.Back;
         #endregion
+
     }
 }
 

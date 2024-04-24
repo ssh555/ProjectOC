@@ -54,17 +54,8 @@ namespace ML.Engine.InventorySystem
     public sealed class ItemManager : ILocalManager
     {
         #region Instance
-        public ItemManager() 
-        {
-        }
 
-        ~ItemManager()
-        {
-            foreach(var sa in this.itemAtlasList)
-            {
-                Manager.GameManager.Instance.ABResourceManager.Release(sa);
-            }
-        }
+
 
         public static ItemManager Instance { get { return instance; } }
 
@@ -94,6 +85,7 @@ namespace ML.Engine.InventorySystem
             {
                 instance = null;
             }
+            Manager.GameManager.Instance.ABResourceManager.Release(itemAtlas);
         }
 
         #endregion
@@ -120,8 +112,8 @@ namespace ML.Engine.InventorySystem
 
         #region to-do : 需读表导入所有所需的 Item 数据
         public const string TypePath = "ML.Engine.InventorySystem.";
-        public const string ItemIconLabel = "ItemTexture2D";
-        public const string WorldObjLabel = "ML/InventorySystem/WorldItemPrefabs";
+        public const string ItemIconLabel = "Item/SA_Item_UI_ItemIcon";
+        public const string WorldObjLabel = "Item/Prefab_WorldItem";
 
 
 
@@ -265,17 +257,13 @@ namespace ML.Engine.InventorySystem
 
         #region SpriteAtlas
 
-        private List<SpriteAtlas> itemAtlasList;
+        private SpriteAtlas itemAtlas;
         public void LoadItemAtlas()
         {
-            itemAtlasList = new List<SpriteAtlas>();
-            Manager.GameManager.Instance.ABResourceManager.LoadAssetsAsync<SpriteAtlas>(ItemIconLabel, (asList) =>
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>(ItemIconLabel).Completed += (handle) =>
             {
-                lock(itemAtlasList)
-                {
-                    itemAtlasList.Add(asList);
-                }
-            });
+                itemAtlas = handle.Result;
+            };
         }
         
 
@@ -294,17 +282,10 @@ namespace ML.Engine.InventorySystem
 
         public Texture2D GetItemTexture2D(string id)
         {
-            if (!this.ItemTypeStrDict.ContainsKey(id))
+            var s = GetItemSprite(id);
+            if(s)
             {
-                return null;
-            }
-            foreach(var sa in this.itemAtlasList)
-            {
-                var s = sa.GetSprite(this.ItemTypeStrDict[id].icon);
-                if(s != null)
-                {
-                    return s.texture;
-                }
+                return s.texture;
             }
             return null;
         }
@@ -313,27 +294,10 @@ namespace ML.Engine.InventorySystem
         {
             if (!this.ItemTypeStrDict.ContainsKey(id))
             {
-                foreach (var sa in this.itemAtlasList)
-                {
-                    var s = sa.GetSprite(id);
-                    if (s != null)
-                    {
-                        return s;
-                    }
-                }
-                return null;
+                return this.itemAtlas.GetSprite(id);
             }
 
-        
-            foreach (var sa in this.itemAtlasList)
-            {
-                var s = sa.GetSprite(this.ItemTypeStrDict[id].icon);
-                if (s != null)
-                {
-                    return s;
-                }
-            }
-            return null;
+            return this.itemAtlas.GetSprite(this.ItemTypeStrDict[id].icon);
         }
 
         public async void AddItemIconObject(string itemID, Transform parent, Vector3 pos, Quaternion rot, Vector3 scale, Transform target=null, bool isLocal = true)

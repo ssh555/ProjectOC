@@ -580,6 +580,7 @@ MonoBehaviour:
     isLoop: 0
     isWheel: 0
     hasBtnListContainer: 1
+    readUnActiveButton: 1
 --- !u!1 &2379418739328238892
 GameObject:
   m_ObjectHideFlags: 0
@@ -1354,6 +1355,7 @@ MonoBehaviour:
     isLoop: 0
     isWheel: 0
     hasBtnListContainer: 1
+    readUnActiveButton: 1
 --- !u!1 &4139907614495388988
 GameObject:
   m_ObjectHideFlags: 0
@@ -2416,6 +2418,7 @@ MonoBehaviour:
     isLoop: 1
     isWheel: 0
     hasBtnListContainer: 0
+    readUnActiveButton: 1
 --- !u!1 &7766884565176363047
 GameObject:
   m_ObjectHideFlags: 0
