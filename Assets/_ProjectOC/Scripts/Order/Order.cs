@@ -8,10 +8,42 @@ using static ProjectOC.Order.OrderManager;
 namespace ProjectOC.Order
 {
     [Serializable]
-    public abstract class Order
+    public abstract class Order: IComparable<Order>
     {
-        
+        //订单实例化
         private string orderID;
+        [ShowInInspector]
+        public OrderType orderType;
+        [ShowInInspector]
+        public bool canBeCommit;
+        [ShowInInspector]
+        public int acceptOrder;
+
+
+        private string orderInstanceID;
+        [ShowInInspector]
+        public string OrderInstanceID { get { return orderInstanceID; } }
+
+        // 实现 IComparable 接口中的 CompareTo 方法
+        public int CompareTo(Order other)
+        {
+            // 首先按照 orderType 升序
+            int result = orderType.CompareTo(other.orderType);
+            if (result != 0)
+            {
+                return result;
+            }
+
+            // 如果 orderType 相同，按照 canBeCommit 升序
+            result = canBeCommit.CompareTo(other.canBeCommit);
+            if (result != 0)
+            {
+                return result;
+            }
+
+            // 如果 canBeCommit 也相同，按照 acceptOrder 升序
+            return acceptOrder.CompareTo(other.acceptOrder);
+        }
 
         [ShowInInspector]
         public string OrderID
@@ -37,14 +69,18 @@ namespace ProjectOC.Order
         }
 
         private readonly bool canBeCancled;
-        //private bool canBeCommit { get; set; }
 
-        public Order(string orderId,List<OrderMap> RequireItemList)
+        public Order(OrderTableData orderTableData)
         { 
-            this.OrderID = orderId;
-            
+            this.OrderID = orderTableData.ID;
+            this.orderType = orderTableData.OrderType;
+            this.canBeCommit = false;
+            //特殊订单不可取消
+            this.canBeCancled = orderTableData.OrderType != OrderType.Special;
+            this.acceptOrder = 0;
+            this.orderInstanceID = OrderManager.Instance.GenerateOrderInstanceID(this.OrderID);
             //深拷贝
-            foreach (var item in RequireItemList)
+            foreach (var item in orderTableData.RequireList)
             {
                 this.remainRequireItemDic.Add(item.id, item.num);
                 RequireItem.Add(item.id, item.num);

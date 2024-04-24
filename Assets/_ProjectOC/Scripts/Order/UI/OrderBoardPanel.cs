@@ -44,12 +44,12 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     #region Override
     private void OrderPanelRefreshOrderDelegationAction()
     {
-        Debug.Log("OrderPanelRefreshOrderDelegationAction");
+        //Debug.Log("OrderPanelRefreshOrderDelegationAction");
         isNeedRefreshOrderDelegation = true; Refresh();
     }
     private void OrderPanelRefreshAcceptedOrderAction()
     {
-        Debug.Log("OrderPanelRefreshAcceptedOrderAction");
+        //Debug.Log("OrderPanelRefreshAcceptedOrderAction");
         isNeedRefreshAcceptedOrder = true; Refresh();
     }
     public override void OnEnter()
@@ -141,15 +141,15 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             else if(OrderDelegationIndex == 1)
             {
                 //承接订单
-                OrderManager.Instance.ReceiveOrder(curSelectedOrderIDInOrderDelegation, curSelectedBtnNameInOrderDelegation);
-                OrderType orderType = OrderManager.Instance.GetOrderType(curSelectedOrderIDInOrderDelegation);
+                OrderManager.Instance.ReceiveOrder(curSelectedOrderInstanceIDInOrderDelegation);
+                OrderType orderType = OrderManager.Instance.GetOrderTypeInOrderDelegation(curSelectedOrderInstanceIDInOrderDelegation);
                 if(orderType == OrderType.Urgent)
                 {
                     isNeedRefreshOrderDelegation = true;
                 }
                 else if(orderType == OrderType.Normal)
                 {
-                    this.OrderDelegationUIBtnListContainer.UIBtnLists[1].DeleteButton(curSelectedBtnNameInOrderDelegation);
+                    this.OrderDelegationUIBtnListContainer.UIBtnLists[1].DeleteButton(curSelectedOrderInstanceIDInOrderDelegation);
                 }
                 
                 Debug.Log("承接订单");
@@ -158,34 +158,32 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         else if(FunctionIndex == 0)
         {
             //点按提交订单
-            OrderManager.Instance.CommitOrder(curSelectedOrderIDInAcceptedOrder);
+            OrderManager.Instance.CommitOrder(curSelectedOrderInstanceIDInAcceptedOrder);
             //TODO 长按快捷提交订单
             isNeedRefreshAcceptedOrder = true;
         }
-        this.Refresh();
     }
 
     private void SubInteract_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-
         if (FunctionIndex == 1)
         {
             if (OrderDelegationIndex == 1)
             {
                 //拒绝订单
-                Debug.Log("拒绝订单 "+ curSelectedOrderIDInOrderDelegation);
-                OrderManager.Instance.RefuseOrder(curSelectedOrderIDInOrderDelegation);
+                Debug.Log("拒绝订单 "+ curSelectedOrderInstanceIDInOrderDelegation);
+                OrderManager.Instance.RefuseOrder(curSelectedOrderInstanceIDInOrderDelegation);
                 isNeedRefreshOrderDelegation = true;
             }
         }
         else if (FunctionIndex == 0)
         {
             //取消订单
-            Debug.Log("取消订单 "+ curSelectedOrderIDInAcceptedOrder);
-            OrderManager.Instance.CancleOrder(curSelectedOrderIDInAcceptedOrder);
+            Debug.Log("取消订单 "+ curSelectedOrderInstanceIDInAcceptedOrder);
+            OrderManager.Instance.CancleOrder(curSelectedOrderInstanceIDInAcceptedOrder);
+            this.AcceptedOrderBtnList.DeleteButton(curSelectedOrderInstanceIDInAcceptedOrder);
             isNeedRefreshAcceptedOrder = true;
         }
-        this.Refresh();
     }
 
     private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -234,45 +232,25 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 
 
     [ShowInInspector]
-    private string curSelectedOrderIDInOrderDelegation 
+    private string curSelectedOrderInstanceIDInOrderDelegation 
     {   get 
-        {
-            var btnName = curSelectedBtnNameInOrderDelegation;
-            return btnName != null ? btnName.Split('|')[0] : null;
-        } 
-    }
-    private string curSelectedBtnNameInOrderDelegation
-    {
-        get
         {
             SelectedButton btn = null;
             btn = this.OrderDelegationUIBtnListContainer.CurSelectUIBtnList?.GetCurSelected();
             return btn != null ? btn.name : null;
-        }
+        } 
     }
 
     [ShowInInspector]
-    private string curSelectedOrderIDInAcceptedOrder
+    private string curSelectedOrderInstanceIDInAcceptedOrder
     {
         get
         {
             SelectedButton btn = null;
             btn = this.AcceptedOrderBtnList.GetCurSelected();
-            return btn != null ? btn.name.Split('%')[0] : null;
+            return btn != null ? btn.name : null;
         }
     }
-
-    [ShowInInspector]
-    private string curSelectedOrderUniqueNameInAcceptedOrder
-    {
-        get
-        {
-            SelectedButton btn = null;
-            btn = this.AcceptedOrderBtnList.GetCurSelected();
-            return btn != null ? btn.name.Split('%')[1] : null;
-        }
-    }
-
 
     #endregion
 
@@ -324,7 +302,6 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         if (isNeedRefreshOrderDelegation && FunctionIndex == 1 && OrderDelegationIndex == 1)
         {
             //激活OrderDelegationUIBtnListContainer
-            Debug.Log("激活OrderDelegationUIBtnListContainer "+Time.frameCount);
             this.OrderDelegationUIBtnListContainer.SetIsEnableTrue();
             //当前所选氏族的ID
             string CurSelectedClanID = this.ClanBtnList.GetCurSelected().name;
@@ -357,7 +334,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                                 slider.value = (float)(timer.CurrentTime / timer.Duration);
                             };
                             //timer.OnEndEvent += () => { this.isNeedRefreshOrderDelegation = true; this.Refresh(); };
-                            btn.name = orderTableData.ID + "|" + btn.GetHashCode().ToString();
+                            btn.name = order.OrderInstanceID;
                         }
                         else
                         {
@@ -384,7 +361,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                     {
                         //更新信息
                         btn.transform.Find("Image").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.OrderName;
-                        btn.name = orderTableData.ID+"|"+btn.GetHashCode().ToString();
+                        btn.name = order.OrderInstanceID;
                     },
                     OnFinishAdd: () =>
                     {
@@ -400,7 +377,6 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         {
             //切出
             //失活OrderDelegationUIBtnListContainer
-            Debug.Log("失活OrderDelegationUIBtnListContainer");
             this.OrderDelegationUIBtnListContainer.SetIsEnableFalse();
 
             //退出 订单承接 界面
@@ -411,9 +387,9 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 
         //重置对象池
         this.objectPool.ResetAllObject();
-        if (OrderManager.Instance.IsValidOrderID(curSelectedOrderIDInOrderDelegation))
+        if (OrderManager.Instance.IsValidOrderIDInOrderDelegation(curSelectedOrderInstanceIDInOrderDelegation))
         {
-            OrderTableData orderTableData = OrderManager.Instance.GetOrderTableData(curSelectedOrderIDInOrderDelegation);
+            OrderTableData orderTableData = OrderManager.Instance.GetOrderTableData(curSelectedOrderInstanceIDInOrderDelegation);
             this.OrderDelegationOrderInfo.gameObject.SetActive(true);
 
             //LimitTime
@@ -468,6 +444,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                 slot.transform.Find("ItemName").GetComponent<TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(orderTableData.ItemReward[i].id);
             }
             //按钮隐藏
+
             this.OrderDelegationOrderInfo.Find("CancelBtn").gameObject.SetActive(orderTableData.OrderType == OrderType.Urgent);
         }
         else
@@ -486,12 +463,18 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         {
             if(isNeedRefreshAcceptedOrder)
             {
+                UIBtnList.Synchronizer synchronizer = new UIBtnList.Synchronizer(OrderManager.Instance.AcceptedOrders.Count, () =>
+                {
+                    this.AcceptedOrderBtnList.InitBtnInfo();
+                    this.AcceptedOrderBtnList.InitSelectBtn();
+                });
+
                 this.AcceptedOrderBtnList.EnableBtnList();
                 this.AcceptedOrderBtnList.DeleteAllButton(() =>
                 {
                     foreach (var acceptedOrder in OrderManager.Instance.AcceptedOrders)
                     {
-                        OrderTableData orderTableData = OrderManager.Instance.GetOrderTableData(acceptedOrder.order);
+                        OrderTableData orderTableData = OrderManager.Instance.GetOrderTableData(acceptedOrder);
                         this.AcceptedOrderBtnList.AddBtn("Assets/_ProjectOC/OCResources/UI/OrderBoard/Prefabs/AcceptedOrderListBtn.prefab", BtnSettingAction: (btn) =>
                         {
                             btn.transform.Find("Image").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.OrderName;
@@ -509,18 +492,14 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                                 btn.transform.Find("Image").Find("Image1").GetComponent<Image>().color = Color.gray;
                             }
 
-                            
-
                             btn.transform.Find("Image").Find("Image2").gameObject.SetActive(acceptedOrder.canBeCommit);
-                            btn.name = acceptedOrder.order.OrderID + "%" + acceptedOrder.UniqueOrderName;
+                            btn.name = acceptedOrder.OrderInstanceID;
                         },
-                        OnFinishAdd: () => { 
-                            //按钮更新完毕刷新
-                            this.Refresh();
-                        });
+                        OnFinishAdd: () => {
+                            synchronizer.Check();
+                        },NeedRefreshBtnInfo: false);
                     }
-                    //按钮更新完毕刷新
-                    this.Refresh();
+                    
 
                 });
                 isNeedRefreshAcceptedOrder = false;
@@ -535,10 +514,9 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 
         #region 右侧订单详细信息
         
-        if (OrderManager.Instance.IsValidOrderID(curSelectedOrderIDInAcceptedOrder))
+        if (OrderManager.Instance.IsValidOrderIDInAcceptedOrder(curSelectedOrderInstanceIDInAcceptedOrder))
         {
-            Debug.Log(curSelectedOrderIDInAcceptedOrder);
-            OrderTableData orderTableData = OrderManager.Instance.GetOrderTableData(curSelectedOrderIDInAcceptedOrder);
+            OrderTableData orderTableData = OrderManager.Instance.GetOrderTableData(curSelectedOrderInstanceIDInAcceptedOrder);
             this.AcceptedOrderOrderInfo.gameObject.SetActive(true);
 
             //LimitTime
@@ -593,9 +571,10 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             }
 
             //按钮隐藏
-            var AcceptedOrder = OrderManager.Instance.GetAcceptedOrder(curSelectedOrderUniqueNameInAcceptedOrder);
+            var AcceptedOrder = OrderManager.Instance.GetAcceptedOrder(curSelectedOrderInstanceIDInAcceptedOrder);
             if (AcceptedOrder != null)
             {
+                this.AcceptedOrderOrderInfo.Find("ConfirmBtn").Find("Image").gameObject.SetActive(!AcceptedOrder.canBeCommit);
                 this.AcceptedOrderOrderInfo.Find("CancelBtn").gameObject.SetActive(!AcceptedOrder.canBeCommit);
             }
         }

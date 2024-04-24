@@ -17,6 +17,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using System.IO.Pipes;
 using UnityEngine.InputSystem.iOS;
 using UnityEditor;
+using Unity.VisualScripting;
 
 namespace ML.Engine.UI
 {
@@ -142,6 +143,118 @@ namespace ML.Engine.UI
             }
         }
 
+        public void InitBtnInfo()
+        {
+            this.SBDic.Clear();
+            this.SBDicIndex.Clear();
+            this.SBPosDic.Clear();
+            this.TwoDimSelectedButtons.Clear();
+
+
+
+            SelectedButton[] OneDimSelectedButtons = parent.GetComponentsInChildren<SelectedButton>(true);
+            this.OneDimCnt = OneDimSelectedButtons.Length;
+
+            if (this.OneDimCnt == 0 && !isBtnListContainerDeleteAll)
+            {
+                this.CurSelected = null;
+                this.isEmpty = true;
+                this.UIBtnListContainer?.FindEnterableUIBtnList();
+            }
+            else
+            {
+                this.isEmpty = false;
+            }
+            this.uiBtnListContainer?.RefreshIsEmpty();
+            Debug.Log("OneDimSelectedButtons.Length "+OneDimSelectedButtons.Length);
+            for (int i = 0; i < OneDimSelectedButtons.Length; i++)
+            {
+                var btn = OneDimSelectedButtons[i];
+                btn.SetUIBtnList(this);
+                btn.Init();
+                Navigation navigation = btn.navigation;
+                navigation.mode = Navigation.Mode.None;
+                btn.navigation = navigation;
+                Debug.Log(i.ToString() + "   " + btn.gameObject.name +" "+Time.frameCount);
+                SBDic.Add(btn.gameObject.name, btn);
+                SBDicIndex.Add(btn.gameObject.name, i);
+            }
+
+            this.TwoDimW = limitNum;
+            this.TwoDimH = OneDimCnt % TwoDimW == 0 ? OneDimCnt / TwoDimW : OneDimCnt / TwoDimW + 1;
+            SelectedButton[,] TwoDimSelectedButtons = new SelectedButton[TwoDimH, TwoDimW];
+            int cnt = 0;
+            for (int i = 0; i < TwoDimH; i++)
+            {
+                for (int j = 0; j < TwoDimW; j++)
+                {
+
+                    if (cnt >= OneDimCnt)
+                    {
+                        TwoDimSelectedButtons[i, j] = null;
+                    }
+                    else
+                    {
+                        SBPosDic.Add(OneDimSelectedButtons[cnt], (i, j));
+                        TwoDimSelectedButtons[i, j] = OneDimSelectedButtons[cnt++];
+                    }
+                }
+            }
+
+            //设置二维按钮相对位置
+            for (int i = 0; i < TwoDimH; i++)
+            {
+                for (int j = 0; j < TwoDimW; j++)
+                {
+                    if (TwoDimSelectedButtons[i, j] == null) continue;
+                    Navigation navigation = TwoDimSelectedButtons[i, j].navigation;
+
+                    if (isLoop)
+                    {
+                        navigation.selectOnUp = i - 1 >= 0 ? TwoDimSelectedButtons[i - 1, j] : TwoDimSelectedButtons[TwoDimH - 1, j];
+                        navigation.selectOnDown = i + 1 < TwoDimH ? TwoDimSelectedButtons[i + 1, j] : TwoDimSelectedButtons[0, j];
+                        navigation.selectOnRight = j + 1 < TwoDimW ? TwoDimSelectedButtons[i, j + 1] : TwoDimSelectedButtons[i, 0];
+                        navigation.selectOnLeft = j - 1 >= 0 ? TwoDimSelectedButtons[i, j - 1] : TwoDimSelectedButtons[i, TwoDimW - 1];
+                    }
+                    else
+                    {
+                        navigation.selectOnUp = i - 1 >= 0 ? TwoDimSelectedButtons[i - 1, j] : TwoDimSelectedButtons[i, j];
+                        navigation.selectOnDown = i + 1 < TwoDimH ? TwoDimSelectedButtons[i + 1, j] : TwoDimSelectedButtons[i, j];
+                        navigation.selectOnRight = j + 1 < TwoDimW ? TwoDimSelectedButtons[i, j + 1] : TwoDimSelectedButtons[i, j];
+                        navigation.selectOnLeft = j - 1 >= 0 ? TwoDimSelectedButtons[i, j - 1] : TwoDimSelectedButtons[i, j];
+                    }
+
+                    TwoDimSelectedButtons[i, j].navigation = navigation;
+                }
+            }
+
+
+
+
+            for (int i = 0; i < TwoDimSelectedButtons.GetLength(0); i++) // 遍历行
+            {
+                List<SelectedButton> row = new List<SelectedButton>();
+                for (int j = 0; j < TwoDimSelectedButtons.GetLength(1); j++) // 遍历列
+                {
+                    row.Add(TwoDimSelectedButtons[i, j]);
+                }
+                this.TwoDimSelectedButtons.Add(row);
+            }
+
+            if (OneDimCnt > 0 && (hasInitSelect || (NeedToResetCurSelected && this.uiBtnListContainer?.CurSelectUIBtnList == this)))
+            {
+                //初始化选择对象
+
+                this.TwoDimI = 0;
+                this.TwoDimJ = 0;
+                this.CurSelected = TwoDimSelectedButtons[TwoDimI, TwoDimJ];
+                this.CurSelected?.OnSelect(null);
+                this.NeedToResetCurSelected = false;
+                this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
+                this.OnSelectButtonChanged?.Invoke();
+            }
+        }
+
         public void InitBtnInfo(Transform parent, int limitNum = 1, bool hasInitSelect = true, bool isLoop = false, bool isWheel = false, Action OnSelectedEnter = null, Action OnSelectedExit = null)
         {
             this.SBDic.Clear();
@@ -170,10 +283,11 @@ namespace ML.Engine.UI
             {
                 var btn = OneDimSelectedButtons[i];
                 btn.SetUIBtnList(this);
-                btn.Init(OnSelectedEnter, OnSelectedExit);
+                btn.Init();
                 Navigation navigation = btn.navigation;
                 navigation.mode = Navigation.Mode.None;
                 btn.navigation = navigation;
+                Debug.Log(i.ToString() + "   " + btn.gameObject.name);
                 SBDic.Add(btn.gameObject.name, btn);
                 SBDicIndex.Add(btn.gameObject.name, i);
             }
@@ -257,7 +371,7 @@ namespace ML.Engine.UI
         /// <summary>
         /// 加入按钮
         /// </summary>
-        public void AddBtn(string prefabpath, UnityAction BtnAction = null,Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null,Action OnFinishAdd = null, string BtnText = null)
+        public void AddBtn(string prefabpath, UnityAction BtnAction = null,Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null,Action OnFinishAdd = null, string BtnText = null,bool NeedRefreshBtnInfo = true)
         {
             /*if (selectedButton == null) return;
             int i = OneDimCnt / limitNum;
@@ -326,13 +440,15 @@ namespace ML.Engine.UI
 
                 if(this.uiBtnListContainer == null)
                 {
-                    InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+                    if(NeedRefreshBtnInfo)
+                        InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
                     OnFinishAdd?.Invoke();
                     return;
                 }
 
                 bool needMoveToBtnList = this.uiBtnListContainer.IsEmpty;
-                InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+                if (NeedRefreshBtnInfo)
+                    InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
                 if(needMoveToBtnList)
                 {
                     this.UIBtnListContainer?.FindEnterableUIBtnList();
@@ -352,19 +468,28 @@ namespace ML.Engine.UI
             private int CheckNum;
             private int curCheckNum;
             private Action OnAllFinish;
+            private System.Object lockObject = new System.Object();
 
+            private bool isTrigger;
             public Synchronizer(int checkNum, Action OnAllFinish)
             {
+                Debug.Log("checkNum " + checkNum);
                 this.curCheckNum = 0;
                 this.CheckNum = checkNum;
                 this.OnAllFinish = OnAllFinish;
+                this.isTrigger = false;
             }
             public void Check()
             {
-                ++curCheckNum;
-                if (curCheckNum == CheckNum)
+                lock(lockObject)
                 {
-                    OnAllFinish?.Invoke();
+                    ++curCheckNum;
+                    Debug.Log("Check " + curCheckNum);
+                    if (isTrigger == false && curCheckNum == CheckNum)
+                    {
+                        OnAllFinish?.Invoke();
+                        isTrigger = true;
+                    }
                 }
             }
         }
@@ -1235,7 +1360,7 @@ namespace ML.Engine.UI
             this.TwoDimI = 0;
             this.TwoDimJ = 0;
             this.CurSelected = TwoDimSelectedButtons[TwoDimI][TwoDimJ];
-            this.CurSelected?.OnSelect(null);
+            this.CurSelected.OnSelect(null);
             this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
             this.OnSelectButtonChanged?.Invoke();
         }
