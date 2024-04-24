@@ -185,7 +185,7 @@ namespace ML.Engine.InteractSystem
 
         private void OnLoadOver()
         {
-            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/InteractSystem/UI/InteractKeyTip.prefab").Completed += (handle) =>
+            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/InteractSystem/UI/Prefab_InteractSystem_KeyTip.prefab").Completed += (handle) =>
              {
                  this.ktHandle = handle;
                  var keyTipInstance = handle.Result;

@@ -125,10 +125,6 @@ namespace ML.Engine.BuildingSystem.BuildingArea
             BuildingManager.Instance.BuildingAreaList.Remove(this);
         }
 
-
-#if UNITY_EDITOR
-        public bool Gizmos_Attached = false;
-#endif
         private void OnDrawGizmos()
         {
             if (BuildingManager.Instance == null)
@@ -172,14 +168,7 @@ namespace ML.Engine.BuildingSystem.BuildingArea
                 }
             }
 
-            if(Gizmos_Attached)
-            {
-                var cols = this.GetComponentsInChildren<Collider>();
-                foreach (Collider col in cols)
-                {
-                    Extension.GizmosExtension.DrawMeshCollider(col, BuildingManager.Instance.DrawAreaBaseGrid.color);
-                }
-            }
+
 
         }
     }

@@ -17,107 +17,8 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 161a78b8e18f47d429e6cd903568d02a
   m_SerializeEntries:
-  - m_GUID: 1c869aa057ce3e54f93f67521cbce091
-    m_Address: OC/UI/Worker/Texture
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bc43fafe9b5c4944fa571545d1ea12b2
-    m_Address: ML/BuildingSystem/UI
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 607bb880f443a8641b41f67c05a733fe
-    m_Address: ML/BuildingSystem/MatPackage
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - BPartMatPackage
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d4b3af60db9e5324ea3c4caa5627d5f6
-    m_Address: ML/BuildingSystem/BuildingPart
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - BuildingPart
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b024a016c71745549b704377774e4c49
-    m_Address: ML/Fonts
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 0bbda1bfd5a43104fb8067b59526ef9f
-    m_Address: ML/InteractSystem/UI
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bec98dc69bc2576468f299b07ac7bded
-    m_Address: ML/BuildingSystem/BuildIcon
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - ItemTexture2D
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f6012575473add94a8f70a21915a4a78
-    m_Address: ML/InventorySystem/WorldItemPrefabs
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - ItemWorldPrefabs
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4abbf6f57d6dd1646b7334dd60afa05b
-    m_Address: ML/InventorySystem/Item/Texture
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - ItemTexture2D
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 861841958640c704b97c93ac8c7e42e5
-    m_Address: ML/LevelTableData
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Json/TableData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c97a2e026d87d3d46896a9d40c2eafeb
-    m_Address: OC/Json/TableData
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Json/TableData
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8fc03e6f9194327478462055f8f6f085
-    m_Address: OC/Json/TextContent
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Json/TextContent
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9ca1c85add22c4047b7add7a4c376ac4
-    m_Address: OC/Character/Player/Prefabs
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 137c7d48c64917249a9db27573f7fd3d
-    m_Address: OC/Character/Worker/Prefabs
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 222319bba00ff9a4ebf0d31296491cb3
-    m_Address: OC/InventorySystem/WorldItemPrefabs
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - ItemWorldPrefabs
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 093effdc47660064e8eac57c56fd7b6a
-    m_Address: OC/UI/ResonanceWheel/Texture
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c96a34a2e39cac94a9e6fffe2f45b821
-    m_Address: OC/UI/TechPoint/Texture
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1f7278ac8ca0bd949afecf030e60b49f
-    m_Address: OC/UI/ResonanceWheel/Prefabs
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5a8861538d068fc41af21cd55c5a611d
-    m_Address: OC/UIPanel
+    m_Address: OC/Prefabs_ResonanceWheel_UI
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -127,51 +28,25 @@ MonoBehaviour:
     m_SerializedLabels:
     - Scene
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 0e312e372058df04eaac5e35104c56f3
-    m_Address: EnterPointScene
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Scene
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ac67a7a20660ce749a76fcb5713551f0
-    m_Address: ML/BuildingSystem/Category
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bf235703be7b3724da99b2a4dacbb455
-    m_Address: ML/BuildingSystem/Style
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 51ad24f5f8e287047aa6e52a76840703
-    m_Address: ML/BuildingSystem/Type
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 08f09a321d9c32244bcfd251fa6ad966
     m_Address: ML/Mat/Transparent
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bba5a9c820373004397eebd59356c009
-    m_Address: OC/UI/Inventory/Texture
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 15527fce55c7d7047b1839153d4bf7ac
-    m_Address: Assets/_ProjectOC/Scripts/Input/PlayerInput.inputactions
+    m_Address: Input/PlayerInput
     m_ReadOnly: 0
     m_SerializedLabels:
     - InputActionAssets
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d09ba243ba2394b4e9a9bc3924362578
-    m_Address: Assets/_ML/Engine/BuildingSystem/BuildingInput/BuildingInput.inputactions
+    m_Address: Input/BuildInput
     m_ReadOnly: 0
     m_SerializedLabels:
     - InputActionAssets
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b852133c4d4345d419e8355b3f4ddc9f
-    m_Address: Assets/_ML/Engine/Input/CommomInput.inputactions
+    m_Address: Input/CommomInput
     m_ReadOnly: 0
     m_SerializedLabels:
     - InputActionAssets
@@ -182,33 +57,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - NoticeUI
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fb0ecd8ab3c48844d8e7c3cd060c65ed
-    m_Address: ML/Json/TextContent
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Json/TextContent
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 458572a514d013d4db22d36640fbd0e3
-    m_Address: ML/Config
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b503664485014544c88bedc884c3eddf
-    m_Address: ML/Config
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 50dc540eb51005b4fbf910c347ed5ed2
-    m_Address: ML/BaseUIPanel/Assets/_ML/MLResources/BaseUIPanel
+    m_Address: ML/BaseUIPanel/Commom
     m_ReadOnly: 0
     m_SerializedLabels:
     - NoticeUI
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 20d8b97e998812b41a900f8b1694575c
-    m_Address: OC/Building/BedIcon
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - ItemTexture2D
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 888b947bf9b89904b920daf00eacd9a9
     m_Address: Assets/_ML/MLResources/BaseUIPrefab
@@ -227,35 +80,8 @@ MonoBehaviour:
     m_SerializedLabels:
     - NoticeUI
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1266afa4d944f7845acd8b9efd1189b7
-    m_Address: Assets/_ProjectOC/Scripts/PinchFace/Classification/TypePackage
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PinchFaceType
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 462ef3d4483c9374bb198571420c4c18
-    m_Address: Assets/_ProjectOC/OCResources/UI/TechPoint
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c0b2280865f42b844808df6da818ab76
-    m_Address: ML/BuildingSystem/MatchConfig
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6f29b2f5036810343988c70ef0c65644
-    m_Address: Assets/_ProjectOC/OCResources/UI/OrderBoard/Prefabs
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 43f2d20b53b56d84d8e65db0aa5884d4
-    m_Address: Assets/_ProjectOC/OCResources/UI/Item
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - ItemTexture2D
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 91e095903bd149c47a535e1efe60940d
-    m_Address: Assets/_ProjectOC/OCResources/UI/Building/FurnitureTheme
+    m_Address: OC/Prefabs_OrderBoard_UI
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -270,27 +96,18 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ef5a504aab2cfbf4c81ec1fa7fa95186
-    m_Address: Assets/_ProjectOC/OCResources/UI/Restaurant/Prefabs
+    m_Address: OC/Prefabs_Restaurant_UI
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3a7c224e0c90d5f409bb357f68d80913
     m_Address: OC/Character/PinchFace/Prefabs
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - PinchFace_Prefab_Part
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a859a04f493633a478b6db96dd837e9a
     m_Address: Assets/_ProjectOC/OCResources/Meshes/Character/PinchPart/PinchDataConfig.asset
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e4840cb4ad35273458914765273add44
-    m_Address: OC/Configs/PinchFace
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e371fd1ccdce3144ab0019ca7d82c65b
-    m_Address: OC/UI/PinchFace
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

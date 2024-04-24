@@ -530,16 +530,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// </summary>
         public void TransformSelectedPartInstance()
         {
-#if UNITY_EDITOR
-            if (this.SelectedPartInstance != null && this.SelectedPartInstance.AttachedSocket != null) 
-            {
-                this.SelectedPartInstance.AttachedSocket.Gizmos_Attached = false;
-            }
-            if (this.SelectedPartInstance != null && this.SelectedPartInstance.AttachedArea != null)
-            {
-                this.SelectedPartInstance.AttachedArea.Gizmos_Attached = false;
-            }
-#endif
             if (this.GetPlacePosAndRot(out Vector3 pos, out Quaternion rot))
             {
                 //if(pos == Vector3.negativeInfinity || float.IsNaN(rot.x))
@@ -572,16 +562,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 
                 this.SelectedPartInstance.transform.position = pos + posOffset;
             }
-#if UNITY_EDITOR
-            if (this.SelectedPartInstance != null && this.SelectedPartInstance.AttachedSocket != null)
-            {
-                this.SelectedPartInstance.AttachedSocket.Gizmos_Attached = true;
-            }
-            if (this.SelectedPartInstance != null && this.SelectedPartInstance.AttachedArea != null)
-            {
-                this.SelectedPartInstance.AttachedArea.Gizmos_Attached = true;
-            }
-#endif
         }
 
         #endregion
@@ -675,12 +655,12 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         private void Awake()
         {
             // ‘ÿ»Î∆•≈‰ ˝æ›
-            string path = "ML/BuildingSystem/MatchConfig";
-            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<BuildingAreaSocketMatchAsset>(path + "/AreaSocketMatchConfig.asset").Completed += (handle) =>
+            string path = "BuildingSystem/Config";
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<BuildingAreaSocketMatchAsset>(path + "/Config_BS_Match_AreaSocket.asset").Completed += (handle) =>
             {
                 AreaSocketMatch = handle.Result;
             };
-            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<BuildingSocket2SocketMatchAsset>(path + "/Socket2SocketMatchConfig.asset").Completed += (handle) =>
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<BuildingSocket2SocketMatchAsset>(path + "/Config_BS_Match_Socket2Socket.asset").Completed += (handle) =>
             {
                 Socket2SocketMatch = handle.Result;
             };
@@ -725,6 +705,22 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     Gizmos.DrawSphere(this.SelectedPartInstance.ActiveSocket.transform.position, 0.1f);
                     //Extension.GizmosExtension.DrawMeshCollider(col, BuildingManager.Instance.DrawActiveSocket.color);
                     Gizmos.color = gcolor;
+                }
+            }
+            if(this.SelectedPartInstance.AttachedSocket != null)
+            {
+                var cols = this.SelectedPartInstance.AttachedSocket.GetComponentsInChildren<Collider>();
+                foreach (Collider col in cols)
+                {
+                    Extension.GizmosExtension.DrawMeshCollider(col, BuildingManager.Instance.DrawSocket.color);
+                }
+            }
+            if (this.SelectedPartInstance.AttachedArea != null)
+            {
+                var cols = this.SelectedPartInstance.AttachedArea.GetComponentsInChildren<Collider>();
+                foreach (Collider col in cols)
+                {
+                    Extension.GizmosExtension.DrawMeshCollider(col, BuildingManager.Instance.DrawAreaBaseGrid.color);
                 }
             }
         }

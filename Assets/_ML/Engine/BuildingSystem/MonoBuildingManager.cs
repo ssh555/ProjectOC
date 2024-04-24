@@ -61,14 +61,14 @@ namespace ML.Engine.BuildingSystem
         #endregion
 
         #region Internal
-        public const string UIPanelABPath = "ML/BuildingSystem/UI/Panel";
+        public const string UIPanelABPath = "BuildingSystem/Prefab_UIPanel";
 
         public const string BPartABPath = "BuildingPart";
 
         private RectTransform Canvas { get => Manager.GameManager.Instance.UIManager.GetCanvas.GetComponent<RectTransform>(); }
         public async UniTask<T> GetPanel<T>() where T : UIBasePanel
         {
-            var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(UIPanelABPath + "/" + typeof(T).Name + ".prefab");
+            var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(UIPanelABPath + "/Prefab_BS_" + typeof(T).Name + ".prefab");
             await handle.Task;
             T panel = handle.Result.GetComponent<T>();
             return panel;
