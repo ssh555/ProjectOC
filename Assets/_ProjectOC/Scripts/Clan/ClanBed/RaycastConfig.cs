@@ -1,7 +1,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace ProjectOC.Building
+namespace ProjectOC.ClanNS
 {
     [LabelText("…‰œﬂºÏ≤‚≈‰÷√"), System.Serializable]
     public struct RaycastConfig

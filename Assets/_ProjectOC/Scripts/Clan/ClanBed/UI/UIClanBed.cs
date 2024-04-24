@@ -3,16 +3,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static ProjectOC.Building.UI.UIBed;
-using ProjectOC.ClanNS;
+using static ProjectOC.ClanNS.UI.UIClanBed;
 using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
 using ML.Engine.Manager;
 using ML.Engine.UI;
 
-namespace ProjectOC.Building.UI
+
+namespace ProjectOC.ClanNS.UI
 {
-    public class UIBed : ML.Engine.UI.UIBasePanel<BedPanel>
+    public class UIClanBed : ML.Engine.UI.UIBasePanel<ClanBedPanel>
     {
         #region Unity
         public bool IsInit = false;
@@ -108,7 +108,7 @@ namespace ProjectOC.Building.UI
             this.Clans.Clear();
             this.Clans.AddRange(LocalGameManager.Instance.ClanManager.Clans);
             this.Clans.Sort(new Clan.Sort());
-            if (this.Bed.HasClan)
+            if (this.Bed.HaveClan)
             {
                 this.Clans.Remove(this.Clan);
                 this.Clans.Insert(0, this.Clan);
@@ -140,7 +140,7 @@ namespace ProjectOC.Building.UI
 
         private void SetEmpty_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurMode == Mode.Bed && this.Bed.HasClan)
+            if (CurMode == Mode.Bed && this.Bed.HaveClan)
             {
                 this.Bed.SetEmpty();
                 Refresh();
@@ -171,7 +171,7 @@ namespace ProjectOC.Building.UI
             }
             else if (CurMode == Mode.ChangeClan)
             {
-                if (this.CurClan != null && this.Bed.CanSetClan && (!Bed.HasClan || Bed.Clan != CurClan))
+                if (this.CurClan != null && this.Bed.CanSetClan && (!Bed.HaveClan || Bed.Clan != CurClan))
                 {
                     if (CurClan.HasBed)
                     {
@@ -234,13 +234,13 @@ namespace ProjectOC.Building.UI
             if (CurMode == Mode.Bed)
             {
                 Text_Title.text = PanelTextContent.textBed;
-                Bed_Clan.gameObject.SetActive(Bed.HasClan);
+                Bed_Clan.gameObject.SetActive(Bed.HaveClan);
                 Bed_Clan.Find("TopTitle").Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = Clan?.Name ?? "";
 
             }
             else if (CurMode == Mode.ChangeClan)
             {
-                ChangeClan_Clan.gameObject.SetActive(Bed.HasClan);
+                ChangeClan_Clan.gameObject.SetActive(Bed.HaveClan);
                 ChangeClan_Clan.Find("TopTitle").Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = Clan?.Name ?? "";
 
                 if (CurClan != null)
@@ -269,7 +269,7 @@ namespace ProjectOC.Building.UI
 
         #region TextContent
         [System.Serializable]
-        public struct BedPanel
+        public struct ClanBedPanel
         {
             public TextContent textBed;
             public TextContent textConfirmPrefix;

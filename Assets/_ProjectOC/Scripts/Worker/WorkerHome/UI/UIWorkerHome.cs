@@ -7,11 +7,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using ML.Engine.Extension;
 using ML.Engine.Manager;
-using static ProjectOC.Building.UI.UIWorkerHome;
+using static ProjectOC.ClanNS.UI.UIWorkerHome;
 using System.Linq;
 
 
-namespace ProjectOC.Building.UI
+namespace ProjectOC.ClanNS.UI
 {
     public class UIWorkerHome : ML.Engine.UI.UIBasePanel<WorkerHomePanel>
     {

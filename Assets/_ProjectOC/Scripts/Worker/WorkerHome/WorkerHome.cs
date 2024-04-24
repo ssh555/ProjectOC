@@ -7,7 +7,7 @@ using System.Linq;
 using UnityEngine;
 
 
-namespace ProjectOC.Building
+namespace ProjectOC.ClanNS
 {
     public class WorkerHome : ML.Engine.BuildingSystem.BuildingPart.BuildingPart, ML.Engine.InteractSystem.IInteraction, IWorkerContainer
     {
@@ -70,7 +70,7 @@ namespace ProjectOC.Building
         {
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIWorkerHomePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
             {
-                ProjectOC.Building.UI.UIWorkerHome uiPanel = (handle.Result).GetComponent<ProjectOC.Building.UI.UIWorkerHome>();
+                ProjectOC.ClanNS.UI.UIWorkerHome uiPanel = (handle.Result).GetComponent<ProjectOC.ClanNS.UI.UIWorkerHome>();
                 uiPanel.Home = this;
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uiPanel);
             };
