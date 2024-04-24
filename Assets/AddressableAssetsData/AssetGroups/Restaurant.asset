@@ -16,7 +16,12 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: c378c6f185effb04f8589b5f559b43cc
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: ef5a504aab2cfbf4c81ec1fa7fa95186
+    m_Address: Prefab_Restaurant_UI
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 72d1a89784032c94ea3b026b42e20dcf, type: 2}
   m_SchemaSet:

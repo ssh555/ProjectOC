@@ -5057,7 +5057,7 @@ GameObject:
   - component: {fileID: 948843532962971231}
   - component: {fileID: 257790905731768433}
   m_Layer: 0
-  m_Name: UIStorePanel
+  m_Name: Prefab_Store_UI_StorePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

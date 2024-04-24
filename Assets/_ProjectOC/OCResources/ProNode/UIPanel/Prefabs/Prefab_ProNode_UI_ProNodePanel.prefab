@@ -8125,7 +8125,7 @@ GameObject:
   - component: {fileID: 257790905731768433}
   - component: {fileID: 2233960137137622005}
   m_Layer: 0
-  m_Name: UIProNodePanel
+  m_Name: Prefab_ProNode_UI_ProNodePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

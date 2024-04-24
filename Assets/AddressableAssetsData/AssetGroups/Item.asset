@@ -18,7 +18,7 @@ MonoBehaviour:
   m_GUID: abaed5b44defcb941abe8cea60bb509f
   m_SerializeEntries:
   - m_GUID: 558fa430a8c38d44d996a5624efdfa5c
-    m_Address: Prefab_Worlditem
+    m_Address: Prefab_WorldItem
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

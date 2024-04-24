@@ -48,7 +48,7 @@ GameObject:
   - component: {fileID: 3482183208918778215}
   - component: {fileID: -7142052585389159281}
   m_Layer: 0
-  m_Name: UIRestaurantData
+  m_Name: Prefab_Restaurant_UI_DataTemplate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

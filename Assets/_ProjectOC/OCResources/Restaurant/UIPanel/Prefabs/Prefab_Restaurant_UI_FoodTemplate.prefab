@@ -161,7 +161,7 @@ GameObject:
   - component: {fileID: 593421007419614888}
   - component: {fileID: 9123328034643406925}
   m_Layer: 0
-  m_Name: UIRestaurantFood
+  m_Name: Prefab_Restaurant_UI_FoodTemplate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

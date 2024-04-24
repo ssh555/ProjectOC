@@ -964,7 +964,7 @@ GameObject:
   - component: {fileID: 257790905731768433}
   - component: {fileID: 6914656973707519788}
   m_Layer: 0
-  m_Name: UIWorkerHomePanel
+  m_Name: Prefab_Worker_UI_WorkerHomePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -12,14 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
   m_Name: Clan
   m_EditorClassIdentifier: 
-  m_GroupName: Packed Assets
+  m_GroupName: Clan
   m_Data:
     m_SerializedData: []
-  m_GUID: 4eb52f83c775c474db1b24bf4a3cd550
-  m_SerializeEntries: []
+  m_GUID: 2842acc3f020b1748997f191884c256b
+  m_SerializeEntries:
+  - m_GUID: f2730e1b5bef57e4495016e9b5291103
+    m_Address: SA_Clan_UI
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ab624af04e4ca1b4d8577743b6242bb2
+    m_Address: Prefab_Clan_UI
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 72d1a89784032c94ea3b026b42e20dcf, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: af3ac4ed38aef014496e36d89250e57d, type: 2}
-    - {fileID: 11400000, guid: bdd3e53baedf7ff4ba9d9077303af197, type: 2}
+    - {fileID: 11400000, guid: 284bbcb6dfe6b024da190254af9513dc, type: 2}
+    - {fileID: 11400000, guid: a16835acf7fe93a46bd9091064a48cb6, type: 2}

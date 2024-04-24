@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2060529126990254476}
   - component: {fileID: 4159052343347142776}
   m_Layer: 0
-  m_Name: Worker
+  m_Name: Prefab_Worker_Worker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
