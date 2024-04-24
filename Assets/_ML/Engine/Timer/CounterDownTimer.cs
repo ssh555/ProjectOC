@@ -249,6 +249,13 @@ namespace ML.Engine.Timer
             int sec = (int)(this.currentTime) - min * 60;
             return min.ToString() + "min" + sec.ToString() + "s";
         }
-        
+        public string ConvertToMin()
+        {
+            int min = (int)(this.currentTime) / 60;
+            int sec = (int)(this.currentTime) - min * 60;
+            min = sec > 0 ? min + 1 : min;
+            return min.ToString();
+        }
+
     }
 }

@@ -45,12 +45,12 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     public override void OnEnter()
     {
         base.OnEnter();
-        OrderManager.Instance.OnCanBeCommitRefresh += Refresh;
+        OrderManager.Instance.OrderPanelRefreshOrderDelegation += ()=> { isNeedRefreshAcceptedOrder = true; Refresh(); };
     }
     public override void OnExit()
     {
         base.OnExit();
-        OrderManager.Instance.OnCanBeCommitRefresh -= Refresh;
+        OrderManager.Instance.OrderPanelRefreshOrderDelegation -= Refresh;
     }
     protected override void Exit()
     {
@@ -312,7 +312,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         if (isNeedRefreshOrderDelegation && FunctionIndex == 1 && OrderDelegationIndex == 1)
         {
             //激活OrderDelegationUIBtnListContainer
-            Debug.Log("激活OrderDelegationUIBtnListContainer");
+            Debug.Log("激活OrderDelegationUIBtnListContainer "+Time.frameCount);
             this.OrderDelegationUIBtnListContainer.SetIsEnableTrue();
             //当前所选氏族的ID
             string CurSelectedClanID = this.ClanBtnList.GetCurSelected().name;
@@ -341,10 +341,10 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                             Slider slider = btn.transform.Find("ReceiveTime").Find("Slider").GetComponent<Slider>();
                             CounterDownTimer timer = orderUrgent.ReceiveDDLTimer;
                             timer.OnUpdateEvent += (time) => {
-                                RemainTimeText.text = timer.CurrentTime.ToString();
+                                RemainTimeText.text = timer.ConvertToMin()+" MIN";
                                 slider.value = (float)(timer.CurrentTime / timer.Duration);
                             };
-                            timer.OnEndEvent += () => { this.isNeedRefreshOrderDelegation = true; this.Refresh(); };
+                            //timer.OnEndEvent += () => { this.isNeedRefreshOrderDelegation = true; this.Refresh(); };
                             btn.name = orderTableData.ID + "|" + btn.GetHashCode().ToString();
                         }
                         else
@@ -581,10 +581,11 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             }
 
             //按钮隐藏
-            Debug.Log(this.AcceptedOrderOrderInfo);
-            Debug.Log(this.AcceptedOrderOrderInfo.Find("CancelBtn"));
-            Debug.Log(this.AcceptedOrderOrderInfo.Find("CancelBtn"));
-            this.AcceptedOrderOrderInfo.Find("CancelBtn").gameObject.SetActive(!OrderManager.Instance.GetAcceptedOrder(curSelectedOrderUniqueNameInAcceptedOrder).canBeCommit);
+            var AcceptedOrder = OrderManager.Instance.GetAcceptedOrder(curSelectedOrderUniqueNameInAcceptedOrder);
+            if (AcceptedOrder != null)
+            {
+                this.AcceptedOrderOrderInfo.Find("CancelBtn").gameObject.SetActive(!AcceptedOrder.canBeCommit);
+            }
         }
         else
         {

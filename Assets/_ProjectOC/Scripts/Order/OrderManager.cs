@@ -135,7 +135,8 @@ namespace ProjectOC.Order
         /// </summary>
         private CounterDownTimer CanBeCommitRefreshTimer;
 
-        public event Action OnCanBeCommitRefresh;
+        public event Action OrderPanelRefreshOrderDelegation;
+        public event Action OrderPanelRefreshAcceptedOrder;
 
         private IInventory PlayerInventory;
 
@@ -309,7 +310,7 @@ namespace ProjectOC.Order
             }
             //
             acceptedList.Sort();
-            OnCanBeCommitRefresh?.Invoke();
+            OrderPanelRefreshOrderDelegation?.Invoke();
         }
 
         /// <summary>
@@ -409,6 +410,7 @@ namespace ProjectOC.Order
                     break;
                 }
             }
+            OrderPanelRefreshOrderDelegation?.Invoke();
         }
 
         /// <summary>
