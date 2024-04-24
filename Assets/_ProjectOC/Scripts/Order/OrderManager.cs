@@ -310,7 +310,7 @@ namespace ProjectOC.Order
             }
             //
             acceptedList.Sort();
-            OrderPanelRefreshOrderDelegation?.Invoke();
+            OrderPanelRefreshAcceptedOrder?.Invoke();
         }
 
         /// <summary>

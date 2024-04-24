@@ -42,15 +42,27 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     #endregion
 
     #region Override
+    private void OrderPanelRefreshOrderDelegationAction()
+    {
+        Debug.Log("OrderPanelRefreshOrderDelegationAction");
+        isNeedRefreshOrderDelegation = true; Refresh();
+    }
+    private void OrderPanelRefreshAcceptedOrderAction()
+    {
+        Debug.Log("OrderPanelRefreshAcceptedOrderAction");
+        isNeedRefreshAcceptedOrder = true; Refresh();
+    }
     public override void OnEnter()
     {
         base.OnEnter();
-        OrderManager.Instance.OrderPanelRefreshOrderDelegation += ()=> { isNeedRefreshAcceptedOrder = true; Refresh(); };
+        OrderManager.Instance.OrderPanelRefreshOrderDelegation += OrderPanelRefreshOrderDelegationAction;
+        OrderManager.Instance.OrderPanelRefreshAcceptedOrder += OrderPanelRefreshAcceptedOrderAction;
     }
     public override void OnExit()
     {
         base.OnExit();
-        OrderManager.Instance.OrderPanelRefreshOrderDelegation -= Refresh;
+        OrderManager.Instance.OrderPanelRefreshOrderDelegation -= OrderPanelRefreshOrderDelegationAction;
+        OrderManager.Instance.OrderPanelRefreshAcceptedOrder -= OrderPanelRefreshAcceptedOrderAction;
     }
     protected override void Exit()
     {
