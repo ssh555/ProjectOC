@@ -457,7 +457,7 @@ namespace ML.Engine.BuildingSystem.UI
                             },BtnSettingAction:
                             (btn) =>
                             {
-                                btn.transform.Find("Image2").GetComponent<Image>().sprite = FurnitureSpriteAtlas.GetSprite(BuildingManager.Instance.GetBuildingIcon(item.Item2.Classification.ToString()));
+                                btn.transform.Find("Image2").GetComponent<Image>().sprite = FurnitureSpriteAtlas.GetSprite(BuildingManager.Instance.GetFurtureBuildingIcon(item.Item2.Classification.ToString()));
                                 btn.name = item.Item2.Classification.ToString();
                             }
                             ,BtnText: BuildingName);
@@ -484,7 +484,7 @@ namespace ML.Engine.BuildingSystem.UI
                             }, BtnSettingAction:
                             (btn) =>
                             {
-                                btn.transform.Find("Image2").GetComponent<Image>().sprite = FurnitureSpriteAtlas.GetSprite(BuildingManager.Instance.GetBuildingIcon(classification));
+                                btn.transform.Find("Image2").GetComponent<Image>().sprite = FurnitureSpriteAtlas.GetSprite(BuildingManager.Instance.GetFurtureBuildingIcon(classification));
                                 btn.name = classification;
                             }
                             , BtnText: BuildingName);

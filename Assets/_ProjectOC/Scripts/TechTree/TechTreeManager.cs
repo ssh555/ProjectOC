@@ -130,6 +130,18 @@ namespace ProjectOC.TechTree
             return this.registerTechPoints.ContainsKey(ID) ? retVal.ToArray() : null;
         }
 
+        public string[] GetTPCanUnlockedBuildID(string ID)
+        {
+            if (string.IsNullOrEmpty(ID)) return null;
+            return this.registerTechPoints.ContainsKey(ID) ? this.registerTechPoints[ID].UnLockBuild : null;
+        }
+
+        public string[] GetTPCanUnlockedRecipeID(string ID)
+        {
+            if (string.IsNullOrEmpty(ID)) return null;
+            return this.registerTechPoints.ContainsKey(ID) ? this.registerTechPoints[ID].UnLockRecipe : null;
+        }
+
         public string[] GetPreTechPoints(string ID)
         {
             if (string.IsNullOrEmpty(ID)) return null;
