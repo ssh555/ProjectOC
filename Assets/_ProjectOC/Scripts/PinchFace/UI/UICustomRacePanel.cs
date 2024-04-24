@@ -57,7 +57,7 @@ namespace ProjectOC.PinchFace
             {
                 foreach (var _type2 in pinchFaceManager.pinchPartType1Inclusion[i])
                 {
-                    this.UIBtnListContainer.AddBtn(i+1,"OC/UI/PinchFace/Pinch_BaseUISelectedBtn.prefab"
+                    this.UIBtnListContainer.AddBtn(i+1,pinchButtonPath
                         ,BtnText: _type2.ToString()
                         ,BtnAction:LeftButton_BtnAction
                         ,BtnSettingAction:(btn) =>
@@ -87,7 +87,7 @@ namespace ProjectOC.PinchFace
                 
             if (_ppt.couldNaked)
             {
-                this.UIBtnListContainer.AddBtn(7, "OC/UI/PinchFace/Pinch_BaseUISelectedBtn.prefab"
+                this.UIBtnListContainer.AddBtn(7, pinchButtonPath
                     , BtnText: "Naked"
                     ,BtnAction: () =>
                     {
@@ -98,7 +98,7 @@ namespace ProjectOC.PinchFace
 
             for (int i = 0;i < _ppt.pinchPartType3s.Count; i++)
             {
-                this.UIBtnListContainer.AddBtn(7, "OC/UI/PinchFace/Pinch_BaseUISelectedBtn.prefab"
+                this.UIBtnListContainer.AddBtn(7, pinchButtonPath
                     , BtnText: _ppt.pinchPartType3s[i].ToString()
                     ,BtnAction: () =>
                     {
@@ -209,7 +209,7 @@ namespace ProjectOC.PinchFace
         private PinchPartType2 curType2 = PinchPartType2.None;
         private Dictionary<PinchPartType2, SelectedButton> leftButtonDic = new Dictionary<PinchPartType2, SelectedButton>();
         private RacePinchData raceData = new RacePinchData();
-        
+        private string pinchButtonPath = "Prefabs_PinchPart/UIPanel/Prefab_Pinch_BaseUISelectedBtn.prefab";
         
         
         

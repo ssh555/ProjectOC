@@ -18,7 +18,7 @@ namespace ProjectOC.Player
         {
             State = new OCPlayerControllerState(this);
             //ABResource Path Init ±º”»Î
-            ICharacterABResourcePath.Add("OC/Character/Player/Prefabs/PlayerCharacter.prefab");
+            ICharacterABResourcePath.Add("Prefab_Character/Prefab_PlayerCharacter.prefab");
         }
         
         

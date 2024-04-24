@@ -18,12 +18,12 @@ MonoBehaviour:
   m_GUID: e8a9995776f32e741b802ff5e9b5ac95
   m_SerializeEntries:
   - m_GUID: 2218c1191a1cd414196707f9088e8278
-    m_Address: Config/PinchFaceSetting
+    m_Address: PinchAsset_PinchFaceSetting
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1266afa4d944f7845acd8b9efd1189b7
-    m_Address: Config/TypePackage
+    m_Address: PinchAsset_TypePackage
     m_ReadOnly: 0
     m_SerializedLabels:
     - PinchFace_TypePackage
@@ -31,8 +31,12 @@ MonoBehaviour:
   - m_GUID: 26e6132dd3f74a342a318e08a6580b4b
     m_Address: Prefabs_PinchPart
     m_ReadOnly: 0
-    m_SerializedLabels:
-    - PinchFace_Prefab_Part
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1b78df2f36552548a95d748b9e56884
+    m_Address: SA_UI_PinchFace
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 72d1a89784032c94ea3b026b42e20dcf, type: 2}
