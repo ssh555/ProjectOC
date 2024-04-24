@@ -33,6 +33,11 @@ namespace ProjectOC.Building.UI
         #endregion
 
         #region Override
+        protected override void Enter()
+        {
+            SortClans();
+            base.Enter();
+        }
         protected override void Exit()
         {
             ClearTemp();
@@ -98,6 +103,19 @@ namespace ProjectOC.Building.UI
         }
         #endregion
 
+        public void SortClans()
+        {
+            this.Clans.Clear();
+            this.Clans.AddRange(LocalGameManager.Instance.ClanManager.Clans);
+            this.Clans.Sort(new Clan.Sort());
+            if (this.Bed.HasClan)
+            {
+                this.Clans.Remove(this.Clan);
+                this.Clans.Insert(0, this.Clan);
+            }
+            index = 0;
+        }
+
         protected override void UnregisterInput()
         {
             ProjectOC.Input.InputManager.PlayerInput.UIBed.Disable();
@@ -149,14 +167,7 @@ namespace ProjectOC.Building.UI
             {
                 this.CurMode = Mode.ChangeClan;
                 index = 0;
-                this.Clans.Clear();
-                this.Clans.AddRange(LocalGameManager.Instance.ClanManager.Clans);
-                this.Clans.Sort(new Clan.Sort());
-                if (this.Bed.HasClan)
-                {
-                    this.Clans.Remove(this.Clan);
-                    this.Clans.Insert(0, this.Clan);
-                }
+                SortClans();
             }
             else if (CurMode == Mode.ChangeClan)
             {
@@ -165,7 +176,7 @@ namespace ProjectOC.Building.UI
                     if (CurClan.HasBed)
                     {
                         string text = PanelTextContent.textConfirmPrefix + CurClan.Name + PanelTextContent.textConfirmSuffix;
-                        GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData(text, null, null, () => { Bed.SetClan(this.CurClan); }));
+                        GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData(text, null, null, () => { Bed.SetClan(this.CurClan); SortClans(); }));
                     }
                     else
                     {

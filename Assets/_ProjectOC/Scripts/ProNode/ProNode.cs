@@ -12,14 +12,17 @@ using ProjectOC.Player;
 
 namespace ProjectOC.ProNodeNS
 {
-    [LabelText("生产节点"), System.Serializable]
-    public class ProNode: IMissionObj, IInventory
+    [LabelText("生产节点"), Serializable]
+    public class ProNode: IMissionObj, IInventory, IWorkerContainer
     {
-        #region 当前数据
+        #region WorldProNode
         [LabelText("对应的全局生产节点"), ReadOnly]
         public WorldProNode WorldProNode;
         [LabelText("建筑实例ID"), ShowInInspector, ReadOnly]
         public string UID { get { return WorldProNode?.InstanceID ?? ""; } }
+        #endregion
+
+        #region Data
         [LabelText("ID"), ReadOnly]
         public string ID = "";
         [LabelText("等级"), ReadOnly]
@@ -28,10 +31,6 @@ namespace ProjectOC.ProNodeNS
         public TransportPriority TransportPriority = TransportPriority.Normal;
         [LabelText("正在生产的配方"), ReadOnly]
         public Recipe Recipe;
-        [LabelText("人工生产节点常驻刁民"), ReadOnly]
-        public Worker Worker;
-        [LabelText("刁民是否到达生产节点"), ReadOnly]
-        public bool IsWorkerArrive;
         [LabelText("已经分配的搬运任务"), ReadOnly]
         public List<MissionTransport> MissionTransports = new List<MissionTransport>();
         [LabelText("没有分配任务的堆积值"), ShowInInspector, ReadOnly]
@@ -42,70 +41,7 @@ namespace ProjectOC.ProNodeNS
         protected Dictionary<string, int> RawItems = new Dictionary<string, int>();
         #endregion
 
-        #region 配置数据
-        [LabelText("基础生产效率"), PropertyTooltip("单位 %"), FoldoutGroup("配置"), ShowInInspector]
-        public int EffBase { get; private set; } = 100;
-        [LabelText("最大等级"), FoldoutGroup("配置"), ShowInInspector]
-        public int LevelMax { get; private set; } = 2;
-        [LabelText("升级提高的基础生产效率"), FoldoutGroup("配置"), ShowInInspector]
-        public List<int> LevelUpgradeEff = new List<int>() { 50, 50, 50 };
-        #endregion
-
-        #region 读表数据
-        [LabelText("名称"), ShowInInspector, ReadOnly]
-        public string Name => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetName(ID) : "";
-        [LabelText("生产节点类型"), ShowInInspector, ReadOnly]
-        public ProNodeType ProNodeType => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetProNodeType(ID) : ProNodeType.None;
-        [LabelText("生产节点类目"), ShowInInspector, ReadOnly]
-        public RecipeCategory Category => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetCategory(ID) : RecipeCategory.None;
-        [LabelText("生产节点可执行配方类目"), ShowInInspector, ReadOnly]
-        public List<RecipeCategory> RecipeCategoryFilter => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetRecipeCategoryFilterd(ID) : new List<RecipeCategory>();
-        [LabelText("经验类型"), ShowInInspector, ReadOnly]
-        public WorkType ExpType => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetExpType(ID) : WorkType.None;
-        [LabelText("堆放上限份数"), ShowInInspector, ReadOnly]
-        public int StackMaxNum => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetStack(ID) : 0;
-        [LabelText("堆放阈值份数"), ShowInInspector, ReadOnly]
-        public int StackThresholdNum => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetStackThreshold(ID) : 0;
-        [LabelText("需求阈值份数"), ShowInInspector, ReadOnly]
-        public int RawThresholdNum => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetRawThreshold(ID) : 0;
-        [LabelText("是否需要供电"), ShowInInspector, FoldoutGroup("配置")]
-        public bool RequirePower => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetCanCharge(ID) : false;
-        #endregion
-
-        #region Property
-        [LabelText("是否有生产配方"), ShowInInspector, ReadOnly]
-        public bool HasRecipe => Recipe != null && !string.IsNullOrEmpty(Recipe.ID);
-        [LabelText("是否有刁民"), ShowInInspector, ReadOnly]
-        public bool HasWorker => ProNodeType == ProNodeType.Mannul && Worker != null && !string.IsNullOrEmpty(Worker.Name);
-        [LabelText("总堆积数量"), ShowInInspector, ReadOnly]
-        public int StackAll => StackReserve + Stack;
-        [LabelText("总堆积份数"), ShowInInspector, ReadOnly]
-        public int StackAllNum => (ProductNum != 0) ? (StackAll / ProductNum) : StackAll;
-        [LabelText("没有分配任务的堆积份数"), ShowInInspector, ReadOnly]
-        public int StackNum => (ProductNum != 0) ? (Stack / ProductNum) : Stack;
-        [LabelText("生产物ID"), ShowInInspector, ReadOnly]
-        public string ProductItem => Recipe?.ProductID ?? "";
-        [LabelText("一次生产的生产物数量"), ShowInInspector, ReadOnly]
-        public int ProductNum => Recipe?.ProductNum ?? 0;
-        [LabelText("是否正在运行"), ShowInInspector, ReadOnly]
-        public bool IsOnRunning => timerForMission != null && !timerForMission.IsStoped;
-        [LabelText("是否正在制作物品"), ShowInInspector, ReadOnly]
-        public bool IsOnProduce => timerForProduce != null && !timerForProduce.IsStoped;
-        [LabelText("生产节点状态"), ShowInInspector, ReadOnly]
-        public ProNodeState State => HasRecipe ? (IsOnProduce ? ProNodeState.Production : ProNodeState.Stagnation) : ProNodeState.Vacancy;
-        [LabelText("生产效率"), PropertyTooltip("单位%"), ShowInInspector, ReadOnly]
-        public int Eff => HasWorker ? EffBase + Worker.Eff[ExpType] : EffBase;
-        [LabelText("生产一次所需要的时间"), ShowInInspector, ReadOnly]
-        public int TimeCost => HasRecipe && Eff > 0 ? (int)Math.Ceiling((double)100 * Recipe.TimeCost / Eff) : 0;
-        #endregion
-
-        #region Action
-        public event Action OnActionChange;
-        public event Action<double> OnProduceUpdate;
-        public event Action OnProduceEnd;
-        #endregion
-
-        #region 计时器
+        #region Timer
         /// <summary>
         /// 生产计时器，时间为配方生产一次所需的时间
         /// </summary>
@@ -148,38 +84,88 @@ namespace ProjectOC.ProNodeNS
         }
         #endregion
 
-        #region 方法
-        public ProNode(ProNodeTableData config)
-        {
-            ID = config.ID ?? "";
-        }
+        #region Property
+        [LabelText("是否有生产配方"), ShowInInspector, ReadOnly]
+        public bool HasRecipe => Recipe != null && !string.IsNullOrEmpty(Recipe.ID);
+        [LabelText("总堆积数量"), ShowInInspector, ReadOnly]
+        public int StackAll => StackReserve + Stack;
+        [LabelText("总堆积份数"), ShowInInspector, ReadOnly]
+        public int StackAllNum => (ProductNum != 0) ? (StackAll / ProductNum) : StackAll;
+        [LabelText("没有分配任务的堆积份数"), ShowInInspector, ReadOnly]
+        public int StackNum => (ProductNum != 0) ? (Stack / ProductNum) : Stack;
+        [LabelText("生产物ID"), ShowInInspector, ReadOnly]
+        public string ProductItem => Recipe?.ProductID ?? "";
+        [LabelText("一次生产的生产物数量"), ShowInInspector, ReadOnly]
+        public int ProductNum => Recipe?.ProductNum ?? 0;
+        [LabelText("是否正在运行"), ShowInInspector, ReadOnly]
+        public bool IsOnRunning => timerForMission != null && !timerForMission.IsStoped;
+        [LabelText("是否正在制作物品"), ShowInInspector, ReadOnly]
+        public bool IsOnProduce => timerForProduce != null && !timerForProduce.IsStoped;
+        [LabelText("生产节点状态"), ShowInInspector, ReadOnly]
+        public ProNodeState State => HasRecipe ? (IsOnProduce ? ProNodeState.Production : ProNodeState.Stagnation) : ProNodeState.Vacancy;
+        [LabelText("生产效率"), PropertyTooltip("单位%"), ShowInInspector, ReadOnly]
+        public int Eff => HaveWorker ? EffBase + Worker.Eff[ExpType] : EffBase;
+        [LabelText("生产一次所需要的时间"), ShowInInspector, ReadOnly]
+        public int TimeCost => HasRecipe && Eff > 0 ? (int)Math.Ceiling((double)100 * Recipe.TimeCost / Eff) : 0;
+        #endregion
 
+        #region Config
+        [LabelText("基础生产效率"), PropertyTooltip("单位 %"), FoldoutGroup("配置"), ShowInInspector]
+        public int EffBase { get; private set; } = 100;
+        [LabelText("最大等级"), FoldoutGroup("配置"), ShowInInspector]
+        public int LevelMax { get; private set; } = 2;
+        [LabelText("升级提高的基础生产效率"), FoldoutGroup("配置"), ShowInInspector]
+        public List<int> LevelUpgradeEff = new List<int>() { 50, 50, 50 };
+        #endregion
+
+        #region Table Property
+        [LabelText("名称"), ShowInInspector, ReadOnly]
+        public string Name => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetName(ID) : "";
+        [LabelText("生产节点类型"), ShowInInspector, ReadOnly]
+        public ProNodeType ProNodeType => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetProNodeType(ID) : ProNodeType.None;
+        [LabelText("生产节点类目"), ShowInInspector, ReadOnly]
+        public RecipeCategory Category => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetCategory(ID) : RecipeCategory.None;
+        [LabelText("生产节点可执行配方类目"), ShowInInspector, ReadOnly]
+        public List<RecipeCategory> RecipeCategoryFilter => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetRecipeCategoryFilterd(ID) : new List<RecipeCategory>();
+        [LabelText("经验类型"), ShowInInspector, ReadOnly]
+        public WorkType ExpType => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetExpType(ID) : WorkType.None;
+        [LabelText("堆放上限份数"), ShowInInspector, ReadOnly]
+        public int StackMaxNum => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetMaxStack(ID) : 0;
+        [LabelText("堆放阈值份数"), ShowInInspector, ReadOnly]
+        public int StackThresholdNum => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetStackThreshold(ID) : 0;
+        [LabelText("需求阈值份数"), ShowInInspector, ReadOnly]
+        public int RawThresholdNum => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetRawThreshold(ID) : 0;
+        [LabelText("是否需要供电"), ShowInInspector, FoldoutGroup("配置")]
+        public bool RequirePower => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetCanCharge(ID) : false;
+        #endregion
+
+        #region Event
+        public event Action OnDataChangeEvent;
+        public event Action<double> OnProduceUpdateEvent;
+        public event Action OnProduceEndEvent;
+        #endregion
+
+        #region Mono
         public void Destroy()
         {
             StopRun();
             RemoveRecipe();
-            RemoveWorker();
+            (this as IWorkerContainer).RemoveWorker();
         }
+        #endregion
 
-        public void OnPositionChange()
+        #region BuildPart
+        public void OnPositionChange(Vector3 differ)
         {
-            if (HasWorker)
-            {
-                if (IsWorkerArrive)
-                {
-                    Worker.transform.position = WorldProNode.transform.position + new Vector3(0, 2f, 0);
-                }
-                else
-                {
-                    Worker.SetDestination(WorldProNode.transform.position, ArriveProNodeAction);
-                }
-            }
+            (this as IWorkerContainer).OnPositionChange(differ);
             foreach (var mission in MissionTransports)
             {
                 mission?.UpdateTransportDestionation();
             }
         }
+        #endregion
 
+        #region Upgrade
         public bool SetLevel(int level)
         {
             if (0 <= level && level <= LevelMax)
@@ -204,6 +190,13 @@ namespace ProjectOC.ProNodeNS
             return false;
         }
 
+        #endregion
+
+        #region Method
+        public ProNode(ProNodeTableData config)
+        {
+            ID = config.ID ?? "";
+        }
         /// <summary>
         /// 获取生产节点可以生产的配方
         /// </summary>
@@ -216,7 +209,6 @@ namespace ProjectOC.ProNodeNS
             }
             return ManagerNS.LocalGameManager.Instance.RecipeManager.SortRecipeIDs(result);
         }
-
         /// <summary>
         /// 更改生产项
         /// </summary>
@@ -255,30 +247,21 @@ namespace ProjectOC.ProNodeNS
         {
             StopRun();
             // 将堆放的成品，素材，全部返还至玩家背包
-            List<Item> resItems = new List<Item>();
-            var inventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
+            List<Item> items = new List<Item>();
             if (HasRecipe && StackAll > 0)
             {
-                resItems.AddRange(inventory.AddItem(ItemManager.Instance.SpawnItems(ProductItem, StackAll)));
+                items.AddRange(ItemManager.Instance.SpawnItems(ProductItem, StackAll));
             }
             foreach (var raw in RawItems)
             {
                 if (raw.Value > 0)
                 {
-                    resItems.AddRange(inventory.AddItem(ItemManager.Instance.SpawnItems(raw.Key, raw.Value)));
+                    items.AddRange(ItemManager.Instance.SpawnItems(raw.Key, raw.Value));
                 }
             }
-            // 没有加到玩家背包的都变成WorldItem
-            foreach (Item item in resItems)
-            {
-                #pragma warning disable CS4014
-                ItemManager.Instance.SpawnWorldItem(item, WorldProNode.transform.position, WorldProNode.transform.rotation);
-                #pragma warning restore CS4014
-            }
-            // 清空数据
-            List<MissionTransport> missions = new List<MissionTransport>();
-            missions.AddRange(MissionTransports);
-            foreach (MissionTransport mission in missions)
+            (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory.AddItem(items);
+
+            foreach (MissionTransport mission in MissionTransports.ToArray())
             {
                 mission.End();
             }
@@ -287,53 +270,6 @@ namespace ProjectOC.ProNodeNS
             StackReserve = 0;
             RawItems.Clear();
             Recipe = null;
-        }
-
-        /// <summary>
-        /// 更改在岗刁民
-        /// </summary>
-        /// <param name="worker">新刁民</param>
-        /// <returns>更改是否成功</returns>
-        public bool ChangeWorker(Worker worker)
-        {
-            if (ProNodeType == ProNodeType.Mannul && worker != null)
-            {
-                RemoveWorker();
-                worker.ChangeProNode(this);
-                worker.SetTimeStatusAll(TimeStatus.Work_OnDuty);
-                worker.SetDestination(WorldProNode.transform.position, ArriveProNodeAction);
-                Worker = worker;
-                worker.StatusChangeAction += OnWorkerStatusChangeAction;
-                worker.APChangeAction += OnWorkerAPChangeAction;
-                return true;
-            }
-            return false;
-        }
-        
-        /// <summary>
-        /// 移除在岗刁民
-        /// </summary>
-        /// <returns>是否成功</returns>
-        public bool RemoveWorker()
-        {
-            if (ProNodeType == ProNodeType.Mannul)
-            {
-                StopProduce();
-                if (HasWorker)
-                {
-                    Worker.StatusChangeAction -= OnWorkerStatusChangeAction;
-                    Worker.APChangeAction -= OnWorkerAPChangeAction;
-                    Worker.ClearDestination();
-                    Worker.ProNode = null;
-                    if (IsWorkerArrive)
-                    {
-                        Worker.RecoverLastPosition();
-                    }
-                    Worker = null;
-                }
-                return true;
-            }
-            return false;
         }
 
         /// <summary>
@@ -398,7 +334,7 @@ namespace ProjectOC.ProNodeNS
                         return false;
                     }
                 }
-                if (ProNodeType == ProNodeType.Mannul && !(HasWorker && Worker.IsOnDuty))
+                if (ProNodeType == ProNodeType.Mannul && !(HaveWorker && Worker.IsOnDuty))
                 {
                     return false;
                 }
@@ -420,18 +356,6 @@ namespace ProjectOC.ProNodeNS
         #endregion
 
         #region Action方法
-        /// <summary>
-        /// 刁民到达生产节点
-        /// </summary>
-        public void ArriveProNodeAction(Worker worker)
-        {
-            worker.Agent.enabled = false;
-            worker.LastPosition = worker.transform.position;
-            worker.transform.position = WorldProNode.transform.position + new Vector3(0, 2f, 0);
-            IsWorkerArrive = true;
-            worker.ProNode.StartProduce();
-        }
-
         /// <summary>
         /// 搬运任务的管理
         /// </summary>
@@ -457,7 +381,7 @@ namespace ProjectOC.ProNodeNS
 
         protected void UpdateActionForProduce(double time)
         {
-            OnProduceUpdate?.Invoke(time);
+            OnProduceUpdateEvent?.Invoke(time);
         }
 
         protected void EndActionForProduce()
@@ -476,11 +400,11 @@ namespace ProjectOC.ProNodeNS
             {
                 StopProduce();
             }
-            OnActionChange?.Invoke();
-            OnProduceEnd?.Invoke();
+            OnDataChangeEvent?.Invoke();
+            OnProduceEndEvent?.Invoke();
         }
 
-        protected void OnWorkerStatusChangeAction(Status status)
+        protected void OnWorkerStatusChangeEvent(Status status)
         {
             if (status != Status.Relaxing)
             {
@@ -490,12 +414,12 @@ namespace ProjectOC.ProNodeNS
             {
                 StopProduce();
             }
-            OnActionChange?.Invoke();
+            OnDataChangeEvent?.Invoke();
         }
 
-        protected void OnWorkerAPChangeAction(int ap)
+        protected void OnWorkerAPChangeEvent(int ap)
         {
-            OnActionChange?.Invoke();
+            OnDataChangeEvent?.Invoke();
         }
         #endregion
 
@@ -539,7 +463,7 @@ namespace ProjectOC.ProNodeNS
                         amount = !exceed && !complete && exceedNum > 0 ? amount - exceedNum : amount;
                         RawItems[itemID] += amount;
                         StartProduce();
-                        OnActionChange?.Invoke();
+                        OnDataChangeEvent?.Invoke();
                         return amount;
                     }
                     else if (ProductItem == itemID)
@@ -554,7 +478,7 @@ namespace ProjectOC.ProNodeNS
                             StackReserve += Stack;
                             Stack = 0;
                         }
-                        OnActionChange?.Invoke();
+                        OnDataChangeEvent?.Invoke();
                         return amount;
                     }
                 }
@@ -597,7 +521,7 @@ namespace ProjectOC.ProNodeNS
                             amount = !complete && StackReserve < amount ? StackReserve : amount;
                             StackReserve -= amount;
                         }
-                        OnActionChange?.Invoke();
+                        OnDataChangeEvent?.Invoke();
                         StartProduce();
                         return amount;
                     }
@@ -659,7 +583,62 @@ namespace ProjectOC.ProNodeNS
         }
         #endregion
 
-        #region IMission接口
+        #region IWorkerContainer
+        public Action<Worker> OnSetWorkerEvent { get; set; }
+        public Action OnRemoveWorkerEvent { get; set; }
+        public Worker Worker { get; set; }
+        public bool IsArrive { get; set; }
+        public bool HaveWorker => ProNodeType == ProNodeType.Mannul && Worker != null && !string.IsNullOrEmpty(Worker.InstanceID);
+
+        public WorkerContainerType GetContainerType() { return WorkerContainerType.Work; }
+        public void OnArriveEvent(Worker worker)
+        {
+
+        }
+        /// <summary>
+        /// 刁民到达生产节点
+        /// </summary>
+        public void ArriveProNodeAction(Worker worker)
+        {
+            worker.Agent.enabled = false;
+            worker.LastPosition = worker.transform.position;
+            worker.transform.position = WorldProNode.transform.position + new Vector3(0, 2f, 0);
+            IsArrive = true;
+            worker.ProNode.StartProduce();
+        }
+        public bool SetWorker(Worker worker)
+        {
+            if (ProNodeType == ProNodeType.Mannul && worker != null)
+            {
+                worker.SetTimeStatusAll(TimeStatus.Work_OnDuty);
+                worker.SetDestination(WorldProNode.transform.position, ArriveProNodeAction);
+                Worker = worker;
+                worker.OnStatusChangeEvent += OnWorkerStatusChangeEvent;
+                worker.OnAPChangeEvent += OnWorkerAPChangeEvent;
+                return true;
+            }
+            return false;
+        }
+
+        public void RemoveWorkerRelateData() 
+        {
+            if (ProNodeType == ProNodeType.Mannul)
+            {
+                StopProduce();
+                if (HaveWorker)
+                {
+                    Worker.OnStatusChangeEvent -= OnWorkerStatusChangeEvent;
+                    Worker.OnAPChangeEvent -= OnWorkerAPChangeEvent;
+                }
+            }
+        }
+        public void TempRemoveWorker()
+        {
+            //RemoveWorker();
+        }
+        #endregion
+
+        #region IMission
         public Transform GetTransform() { return WorldProNode?.transform; }
         public TransportPriority GetTransportPriority() { return TransportPriority; }
         public string GetUID() { return UID; }
@@ -675,7 +654,7 @@ namespace ProjectOC.ProNodeNS
         }
         #endregion
 
-        #region IInventory接口
+        #region IInventory
         public bool AddItem(Item item)
         {
             if (item != null)

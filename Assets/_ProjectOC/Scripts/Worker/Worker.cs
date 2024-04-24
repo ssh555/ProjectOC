@@ -1,29 +1,25 @@
 using ML.Engine.FSM;
 using ML.Engine.InventorySystem;
 using ML.Engine.Timer;
-using ProjectOC.MissionNS;
-using ProjectOC.ProNodeNS;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
-using ML.PlayerCharacterNS;
 using UnityEngine;
 using UnityEngine.AI;
-using ProjectOC.ManagerNS;
+
 
 namespace ProjectOC.WorkerNS
 {
-    [LabelText("刁民"), System.Serializable]
-    public class Worker : SerializedMonoBehaviour, ITickComponent,IAICharacter
+    [LabelText("刁民"), Serializable]
+    public class Worker : SerializedMonoBehaviour, ITickComponent, ML.PlayerCharacterNS.IAICharacter
     {
-        public string InstanceID;
-        #region 策划配置项
+        #region Config
         [LabelText("名字"), FoldoutGroup("配置")]
         public string Name = "Worker";
+        [LabelText("刁民类型"), FoldoutGroup("配置")]
+        public WorkType WorkType;
         [LabelText("性别"), FoldoutGroup("配置")]
         public Gender Gender = Gender.Male;
-        [LabelText("当前体力值"), ReadOnly]
-        public int APCurrent = 10;
         [LabelText("体力上限"), FoldoutGroup("配置")]
         public int APMax = 10;
         [LabelText("体力工作阈值"), FoldoutGroup("配置")]
@@ -34,20 +30,47 @@ namespace ProjectOC.WorkerNS
         public int APCost = 1;
         [LabelText("完成一次搬运消耗的体力值"), FoldoutGroup("配置")]
         public int APCostTransport = 1;
-        [LabelText("移动速度"), FoldoutGroup("配置")]
-        public float WalkSpeed = 10;
-        [LabelText("完成一次任务消耗的心情值"), FoldoutGroup("配置")]
-        public int MoodCost = 10;
-        [LabelText("心情阈值"), FoldoutGroup("配置")]
-        public int MoodThreshold = 50;
-        [LabelText("当前心情"), ReadOnly]
-        public int Mood = 100;
         [LabelText("心情最大值"), FoldoutGroup("配置")]
         public int MoodMax = 100;
+        [LabelText("心情阈值"), FoldoutGroup("配置")]
+        public int MoodThreshold = 50;
+        [LabelText("完成一次任务消耗的心情值"), FoldoutGroup("配置")]
+        public int MoodCost = 10;
+        [LabelText("负重上限"), FoldoutGroup("配置")]
+        public int WeightMax = 100;
+        [LabelText("搬运经验值"), FoldoutGroup("配置")]
+        public int ExpTransport = 10;
+        [LabelText("移动速度"), FoldoutGroup("配置")]
+        public float WalkSpeed = 10;
         [LabelText("超过DestroyTime分钟，未绑定窝的刁民会被销毁"), FoldoutGroup("配置")]
         public float DestroyTimeForNoHome = 1f;
+        [LabelText("技能配置"), FoldoutGroup("配置"), ShowInInspector]
+        public Dictionary<WorkType, string> SkillConfig = new Dictionary<WorkType, string>();
+        #endregion
+
+        #region Data
+        [LabelText("实例ID"), ReadOnly]
+        public string InstanceID;
+        [LabelText("当前体力值"), ReadOnly]
+        public int APCurrent = 10;
+        [LabelText("当前心情"), ReadOnly]
+        public int Mood = 100;
+
+        [LabelText("技能"), ShowInInspector, ReadOnly]
+        public Dictionary<WorkType, Skill> Skill = new Dictionary<WorkType, Skill>();
+        [LabelText("技能经验获取速度"), ShowInInspector, ReadOnly]
+        public Dictionary<WorkType, int> ExpRate = new Dictionary<WorkType, int>();
+        [LabelText("职业效率加成"), ShowInInspector, ReadOnly]
+        public Dictionary<WorkType, int> Eff = new Dictionary<WorkType, int>();
+        [LabelText("特性"), ReadOnly]
+        public List<Feature> Features = new List<Feature>();
+        [LabelText("每个时段的安排")]
+        public TimeArrangement TimeArrangement = new TimeArrangement();
+        #endregion
+
+        #region Property
         [LabelText("当前负重"), ShowInInspector, ReadOnly]
-        public int BURCurrent
+        public int WeightCurrent
         {
             get
             {
@@ -59,86 +82,65 @@ namespace ProjectOC.WorkerNS
                 return result;
             }
         }
-        [LabelText("负重上限"), FoldoutGroup("配置")]
-        public int BURMax = 100;
-        [LabelText("搬运经验值"), FoldoutGroup("配置")]
-        public int ExpTransport = 10;
-        [LabelText("刁民类型"), FoldoutGroup("配置")]
-        public WorkType WorkType;
-        [LabelText("技能配置"), FoldoutGroup("配置"), ShowInInspector]
-        public Dictionary<WorkType, string> SkillConfig = new Dictionary<WorkType, string>();
-        [LabelText("技能"), ShowInInspector, ReadOnly]
-        public Dictionary<WorkType, Skill> Skill = new Dictionary<WorkType, Skill>();
-        [LabelText("技能经验获取速度"), ShowInInspector, ReadOnly]
-        public Dictionary<WorkType, int> ExpRate = new Dictionary<WorkType, int>();
-        [LabelText("职业效率加成"), ShowInInspector, ReadOnly]
-        public Dictionary<WorkType, int> Eff = new Dictionary<WorkType, int>();
-        #endregion
-
-        [LabelText("特性"), ReadOnly]
-        public List<Feature> Features = new List<Feature>();
-
-        [LabelText("每个时段的安排"), FoldoutGroup("配置")]
-        public TimeArrangement TimeArrangement = new TimeArrangement();
-
-        [LabelText("当前时段的安排应该所处的状态"), ShowInInspector, ReadOnly]
-        public TimeStatus CurTimeFrameStatus 
-        { 
-            get 
+        [LabelText("当前时段的安排"), ShowInInspector, ReadOnly]
+        public TimeStatus CurTimeFrameStatus
+        {
+            get
             {
-                ManagerNS.DispatchTimeManager timeManager = ManagerNS.LocalGameManager.Instance.DispatchTimeManager;
+                ManagerNS.DispatchTimeManager timeManager = ManagerNS.LocalGameManager.Instance?.DispatchTimeManager;
                 if (timeManager != null)
                 {
                     return TimeArrangement[timeManager.CurrentHour];
                 }
                 return TimeStatus.Relax;
-            } 
+            }
         }
-
-        [LabelText("状态机控制器"), ShowInInspector, ReadOnly]
-        protected StateController StateController = null;
-        
-        [LabelText("状态机"), ShowInInspector, ReadOnly]
-        protected WorkerStateMachine StateMachine = null;
 
         public Status status;
         [LabelText("当前实际状态"), ShowInInspector, ReadOnly]
         public Status Status
         {
             get { return status; }
-            set 
+            set
             {
                 status = value;
-                StatusChangeAction?.Invoke(status);
+                OnStatusChangeEvent?.Invoke(status);
             }
         }
-
-        public Action<Status> StatusChangeAction;
-        public Action<int> APChangeAction;
-        
         [LabelText("是否在值班"), ShowInInspector, ReadOnly]
-        public bool IsOnDuty { get { return HasProNode && this.Status != Status.Relaxing && ProNode.IsWorkerArrive; } }
-
-        [LabelText("生产节点"), ReadOnly]
-        public ProNode ProNode = null;
+        public bool IsOnDuty { get { return HasProNode && Status != Status.Relaxing && WorkPlace.IsArrive; } }
+        [LabelText("生产节点"), ShowInInspector, ReadOnly]
+        public ProNodeNS.ProNode ProNode => WorkPlace!= null ? WorkPlace as ProNodeNS.ProNode : null;
         [LabelText("是否有生产节点"), ShowInInspector, ReadOnly]
-        public bool HasProNode { get => this.ProNode != null && !string.IsNullOrEmpty(this.ProNode.UID); }
+        public bool HasProNode => HasContainer(WorkerContainerType.Work);
+        [LabelText("是否有餐厅"), ShowInInspector, ReadOnly]
+        public bool HasRestaurant => HasContainer(WorkerContainerType.Relax);
+        public ItemIcon WorldIcon { get => GetComponentInChildren<ItemIcon>(); }
+        #endregion
+
+        #region StateMachine
+        [LabelText("状态机控制器"), ShowInInspector, ReadOnly]
+        protected StateController StateController = null;
+        [LabelText("状态机"), ShowInInspector, ReadOnly]
+        protected WorkerStateMachine StateMachine = null;
+        #endregion
+
+        #region Event
+        public Action<Status> OnStatusChangeEvent;
+        public Action<int> OnAPChangeEvent;
+        #endregion
+       
         [ShowInInspector, ReadOnly]
         public Vector3 LastPosition;
         
         [LabelText("搬运"), ReadOnly]
-        public Transport Transport = null;
+        public MissionNS.Transport Transport = null;
         [LabelText("是否有搬运"), ShowInInspector, ReadOnly]
-        public bool HasTransport { get => this.Transport != null && !string.IsNullOrEmpty(this.Transport.ItemID); }
-        [LabelText("搬运状态"), ShowInInspector, ReadOnly]
-        public TransportState TransportState { get => (HasTransport && this.Transport.CurNum > 0) ? TransportState.HoldingObjects : TransportState.EmptyHanded; }
-
+        public bool HasTransport { get => Transport != null && !string.IsNullOrEmpty(Transport.ItemID); }
+       
         [LabelText("搬运物品"), ReadOnly]
         public List<Item> TransportItems = new List<Item>();
-        [LabelText("餐厅"), ReadOnly]
-        public RestaurantNS.Restaurant Restaurant; 
-        [LabelText("是否有餐厅"), ShowInInspector, ReadOnly]
-        public bool HasRestaurant { get => Restaurant != null && !string.IsNullOrEmpty(Restaurant.UID); }
+        
 
         private Building.WorkerHome home;
         [LabelText("窝"), ReadOnly]
@@ -155,7 +157,7 @@ namespace ProjectOC.WorkerNS
                         TimerForNoHome = new CounterDownTimer(60 * DestroyTimeForNoHome, false, false);
                         TimerForNoHome.OnEndEvent += () =>
                         {
-                            LocalGameManager.Instance.WorkerManager.DeleteWorker(this);
+                            ManagerNS.LocalGameManager.Instance.WorkerManager.DeleteWorker(this);
                         };
                         TimerForNoHome?.Start();
                     }
@@ -168,22 +170,93 @@ namespace ProjectOC.WorkerNS
         }
         private CounterDownTimer TimerForNoHome;
         [LabelText("是否有窝"), ShowInInspector, ReadOnly]
-        public bool HasHome { get => Home != null && !string.IsNullOrEmpty(Home.UID); }
+        public bool HasHome => HasContainer(WorkerContainerType.Home);
 
-        public ML.Engine.InventorySystem.ItemIcon WorldIcon { get => GetComponentInChildren<ML.Engine.InventorySystem.ItemIcon>(); }
 
-        #region ITickComponent
-        public int tickPriority { get; set; }
-        public int fixedTickPriority { get; set; }
-        public int lateTickPriority { get; set; }
+        #region Container
+        public IWorkerContainer WorkPlace;
+        public IWorkerContainer RelaxPlace;
+        public IWorkerContainer HomePlace;
+        public Dictionary<WorkerContainerType, IWorkerContainer> ContainerDict;
+
+        public IWorkerContainer GetContainer(WorkerContainerType type)
+        {
+            return ContainerDict[type];
+        }
+
+        public void SetContainer(IWorkerContainer container)
+        {
+            if (HasTransport && container.GetContainerType() == WorkerContainerType.Work)
+            {
+                Transport.End();
+            }
+            ContainerDict[container.GetContainerType()] = container;
+        }
+
+        public void RemoveContainer(WorkerContainerType type)
+        {
+            ContainerDict[type] = null;
+        }
+
+        public bool HasContainer(WorkerContainerType type)
+        {
+            IWorkerContainer container = ContainerDict[type];
+            return container != null && !string.IsNullOrEmpty(container.GetUID());
+        }
         #endregion
+
+        #region NavMesh
         public NavMeshAgent Agent = null;
         public float Threshold = 2f;
-        [ReadOnly]
         public Vector3 Target;
-        public event Action<Worker> OnArrival;
-        private event Action<Worker> OnArrivalDisposable;
+        public event Action<Worker> OnArrivalEvent;
+        private event Action<Worker> OnArrivalDisposableEvent;
         public bool HasDestination = false;
+
+        public bool SetDestination(Vector3 target, Action<Worker> action = null)
+        {
+            ClearDestination();
+            Agent.isStopped = false;
+            if (Agent.SetDestination(target))
+            {
+                Target = target;
+                HasDestination = true;
+                OnArrivalDisposableEvent = action;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void ClearDestination()
+        {
+            HasDestination = false;
+            if (Agent != null && Agent.enabled)
+            {
+                Agent.isStopped = true;
+            }
+        }
+
+        public void RecoverLastPosition()
+        {
+            if (!Agent.enabled)
+            {
+                transform.position = LastPosition;
+                Agent.enabled = true;
+            }
+        }
+        #endregion
+
+        #region Mono
+        private void Start()
+        {
+            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
+            Agent = GetComponent<NavMeshAgent>();
+            this.Init();
+            this.enabled = false;
+        }
         public void Init()
         {
             this.ExpRate.Add(WorkType.None, 0);
@@ -209,6 +282,13 @@ namespace ProjectOC.WorkerNS
             this.Skill.Add(WorkType.Magic, new Skill());
             this.Skill.Add(WorkType.Transport, new Skill());
             this.Skill.Add(WorkType.Collect, new Skill());
+
+            ContainerDict = new Dictionary<WorkerContainerType, IWorkerContainer>()
+            {
+                { WorkerContainerType.Work, WorkPlace },
+                { WorkerContainerType.Relax, RelaxPlace },
+                { WorkerContainerType.Home, HomePlace }
+            };
 
             this.Features = ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature();
             foreach (Feature feature in this.Features)
@@ -240,101 +320,52 @@ namespace ProjectOC.WorkerNS
                                         Quaternion.Euler(Vector3.zero), Vector3.one,
                                         (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).currentCharacter.transform);
         }
-        private void Awake()
+        public void OnDestroy()
         {
-            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
+            (this as ML.Engine.Timer.ITickComponent).DisposeTick();
+            if (HasTransport)
+            {
+                this.Transport?.End();
+            }
+            foreach (IWorkerContainer container in ContainerDict.Values)
+            {
+                container?.RemoveWorker();
+            }
         }
-        private void Start()
-        {
-            Agent = GetComponent<NavMeshAgent>();
-            this.Init();
-            this.enabled = false;
-        }
+        #endregion
 
+        #region ITickComponent
+        public int tickPriority { get; set; }
+        public int fixedTickPriority { get; set; }
+        public int lateTickPriority { get; set; }
         public void Tick(float deltatime)
         {
             if (HasDestination && Vector3.Distance(transform.position, Target) < Threshold)
             {
                 ClearDestination();
-                OnArrivalDisposable?.Invoke(this);
-                OnArrival?.Invoke(this);
+                OnArrivalDisposableEvent?.Invoke(this);
+                OnArrivalEvent?.Invoke(this);
             }
             bool lowMood = Mood < MoodThreshold;
-            bool inSeq = LocalGameManager.Instance.RestaurantManager.ContainWorker(this);
+            bool inSeq = ManagerNS.LocalGameManager.Instance.RestaurantManager.ContainWorker(this);
             string icon = lowMood ? "LowMood" : "";
             icon = inSeq ? "LowAP" : icon;
             icon = lowMood && inSeq ? "LowAPMood" : icon;
-            WorldIcon?.SetSprite(LocalGameManager.Instance.WorkerManager.GetSprite(icon));
+            WorldIcon?.SetSprite(ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite(icon));
         }
+        #endregion
 
-        public bool SetDestination(Vector3 target, Action<Worker> action = null)
-        {
-            ClearDestination();
-            Agent.isStopped = false;
-            if (Agent.SetDestination(target))
-            {
-                Target = target;
-                HasDestination = true;
-                OnArrivalDisposable = action;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public void ClearDestination()
-        {
-            HasDestination = false;
-            if (Agent != null && Agent.enabled)
-            {
-                Agent.isStopped = true;
-            }
-        }
-
-        public void RecoverLastPosition()
-        {
-            if (!Agent.enabled)
-            {
-                transform.position = LastPosition;
-                Agent.enabled = true;
-            }
-        }
-
-        public void ChangeProNode(ProNode proNode)
-        {
-            if (HasTransport)
-            {
-                this.Transport.End();
-            }
-            if (HasProNode)
-            {
-                this.ProNode.RemoveWorker();
-            }
-            this.ProNode = proNode;
-        }
-
-        /// <summary>
-        /// 修改经验值
-        /// </summary>
-        /// <param name="workType">经验类型</param>
-        /// <param name="value">经验值</param>
         public void AlterExp(WorkType workType, int value)
         {
             this.Skill[workType].AlterExp(value * ExpRate[workType]);
         }
 
-        /// <summary>
-        /// 修改体力值
-        /// </summary>
-        /// <param name="value">体力值</param>
         public void AlterAP(int value)
         {
             APCurrent += value;
             APCurrent = APCurrent < 0 ? 0 : APCurrent;
             APCurrent = APCurrent > APMax ? APMax : APCurrent;
-            APChangeAction?.Invoke(APCurrent);
+            OnAPChangeEvent?.Invoke(APCurrent);
         }
 
         public void AlterMood(int value)
@@ -370,60 +401,16 @@ namespace ProjectOC.WorkerNS
             this.TimeArrangement.SetTimeStatusAll(timeStatus);
         }
 
-
-        public void OnDestroy()
-        {
-            (this as ML.Engine.Timer.ITickComponent).DisposeTick();
-            if (HasTransport)
-            {
-                this.Transport?.End();
-            }
-            if (HasProNode)
-            {
-                this.ProNode?.RemoveWorker();
-            }
-            if (HasHome)
-            {
-                this.Home.UnBindWorker();
-            }
-            if (HasRestaurant)
-            {
-                Restaurant.RemoveWorker(this);
-            }
-        }
-
-        public int prefabIndex { get; } = 0;
-        public ICharacterState State { get; set; }
-        public IController Controller { get; set; }
-        public void OnSpawn(IController controller)
-        {
-        }
-
-        public void OnDespose(IController controller)
-        {
-
-        }
-
-        public class Sort : IComparer<Worker>
+        #region Sort
+        public class SortForProNodeUI : IComparer<Worker>
         {
             public WorkType WorkType;
 
             public int Compare(Worker x, Worker y)
             {
-                if (x == null)
+                if (x == null || y == null)
                 {
-                    if (y == null)
-                    {
-                        return 0;
-                    }
-                    else
-                    {
-                        return 1;
-                    }
-                }
-                if (y == null)
-                {
-                    return -1;
+                    return (x == null).CompareTo((y == null));
                 }
                 int stateX = (x.HasProNode || x.HasTransport) ? 1 : 0;
                 int stateY = (y.HasProNode || y.HasTransport) ? 1 : 0;
@@ -440,5 +427,14 @@ namespace ProjectOC.WorkerNS
                 return x.InstanceID.CompareTo(y.InstanceID);
             }
         }
+        #endregion
+
+        #region ML.PlayerCharacterNS.IAICharacter
+        public int prefabIndex { get; } = 0;
+        public ML.PlayerCharacterNS.ICharacterState State { get; set; }
+        public ML.PlayerCharacterNS.IController Controller { get; set; }
+        public void OnSpawn(ML.PlayerCharacterNS.IController controller) { }
+        public void OnDespose(ML.PlayerCharacterNS.IController controller) { }
+        #endregion
     }
 }

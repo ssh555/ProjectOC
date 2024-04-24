@@ -36,7 +36,7 @@ namespace ProjectOC.ProNodeNS
             }
             if (oldPos != newPos)
             {
-                ProNode.OnPositionChange();
+                ProNode.OnPositionChange(newPos - oldPos);
             }
             base.OnChangePlaceEvent(oldPos, newPos);
         }

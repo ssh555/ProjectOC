@@ -13,7 +13,7 @@ namespace ProjectOC.WorkerNS
         {
             this.BindEnterAction
             (
-                (machine, state1, state2) =>
+                (System.Action<StateMachine, State, State>)((machine, state1, state2) =>
                 {
                     if (machine is WorkerStateMachine workerMachine && workerMachine.Worker != null)
                     {
@@ -21,20 +21,20 @@ namespace ProjectOC.WorkerNS
                         worker.Status = Status.Relaxing;
 
                         worker.ClearDestination();
-                        if (worker.HasProNode && worker.ProNode.IsWorkerArrive)
+                        if (worker.HasProNode && worker.ProNode.IsArrive)
                         {
                             worker.RecoverLastPosition();
-                            worker.ProNode.IsWorkerArrive = false;
+                            worker.ProNode.IsArrive = false;
                         }
 
                         TimerForRandomWalk = new ML.Engine.Timer.CounterDownTimer(2f, false, false);
                     }
-                }    
+                })    
             );
 
             this.BindUpdateAction
             (
-                (machine, state) =>
+                (System.Action<StateMachine, State>)((machine, state) =>
                 {
                     if (machine is WorkerStateMachine workerMachine && workerMachine.Worker != null)
                     {
@@ -51,7 +51,7 @@ namespace ProjectOC.WorkerNS
 
                         if (!worker.HasDestination && !worker.HasRestaurant)
                         {
-                            if (worker.HasHome && !worker.Home.HasArrive)
+                            if (worker.HasHome && !worker.Home.IsArrive)
                             {
                                 worker.SetDestination(worker.Home.transform.position, OnArriveHomeEvent);
                             }
@@ -72,12 +72,12 @@ namespace ProjectOC.WorkerNS
                             }
                         }
                     }
-                }
+                })
             );
 
             this.BindExitAction
             (
-                (machine, state1, state2) =>
+                (System.Action<StateMachine, State, State>)((machine, state1, state2) =>
                 {
                     if (machine is WorkerStateMachine workerMachine && workerMachine.Worker != null)
                     {
@@ -86,19 +86,19 @@ namespace ProjectOC.WorkerNS
                         worker.ClearDestination();
                         if (worker.HasRestaurant)
                         {
-                            worker.Restaurant.RemoveWorker(worker);
+                            worker.RelaxPlace.RemoveWorker();
                         }
-                        if (worker.HasHome && worker.Home.HasArrive)
+                        if (worker.HasHome && worker.Home.IsArrive)
                         {
                             worker.RecoverLastPosition();
-                            worker.Home.HasArrive = false;
+                            worker.Home.IsArrive = false;
                         }
                         if (worker.HasProNode)
                         {
-                            worker.SetDestination(worker.ProNode.GetTransform().position, OnArriveProNodeEvent);
+                            worker.SetDestination(worker.ProNode.GetTransform().position, worker.ProNode.ArriveProNodeAction);
                         }
                     }
-                }
+                })
             ); 
         }
 
@@ -107,16 +107,7 @@ namespace ProjectOC.WorkerNS
             worker.Agent.enabled = false;
             worker.LastPosition = worker.transform.position;
             worker.transform.position = worker.Home.transform.position + new UnityEngine.Vector3(0, 2f, 0);
-            worker.Home.HasArrive = true;
-        }
-
-        private void OnArriveProNodeEvent(Worker worker)
-        {
-            worker.Agent.enabled = false;
-            worker.LastPosition = worker.transform.position;
-            worker.transform.position = worker.ProNode.WorldProNode.transform.position + new UnityEngine.Vector3(0, 2f, 0);
-            worker.ProNode.IsWorkerArrive = true;
-            worker.ProNode.StartProduce();
+            worker.Home.IsArrive = true;
         }
     }
 }

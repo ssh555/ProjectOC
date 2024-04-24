@@ -102,7 +102,7 @@ namespace ProjectOC.WorkerNS
                     worker.WalkSpeed += ParamFloat;
                     break;
                 case EffectType.AlterBURMax:
-                    worker.BURMax += ParamInt;
+                    worker.WeightMax += ParamInt;
                     break;
                 case EffectType.AlterEff_Cook:
                 case EffectType.AlterEff_HandCraft:

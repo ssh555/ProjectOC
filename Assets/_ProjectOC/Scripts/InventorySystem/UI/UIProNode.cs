@@ -97,17 +97,17 @@ namespace ProjectOC.InventorySystem.UI
         #region Override
         protected override void Enter()
         {
-            ProNode.OnActionChange += RefreshDynamic;
-            ProNode.OnProduceUpdate += OnProduceTimerUpdateAction;
-            ProNode.OnProduceEnd += Refresh;
+            ProNode.OnDataChangeEvent += RefreshDynamic;
+            ProNode.OnProduceUpdateEvent += OnProduceTimerUpdateAction;
+            ProNode.OnProduceEndEvent += Refresh;
             base.Enter();
         }
 
         protected override void Exit()
         {
-            ProNode.OnActionChange -= RefreshDynamic;
-            ProNode.OnProduceUpdate -= OnProduceTimerUpdateAction;
-            ProNode.OnProduceEnd -= Refresh;
+            ProNode.OnDataChangeEvent -= RefreshDynamic;
+            ProNode.OnProduceUpdateEvent -= OnProduceTimerUpdateAction;
+            ProNode.OnProduceEndEvent -= Refresh;
             ClearTemp();
             base.Exit();
         }
@@ -445,7 +445,7 @@ namespace ProjectOC.InventorySystem.UI
             }
             else if (CurMode == Mode.ChangeWorker)
             {
-                ProNode.ChangeWorker(CurrentWorker);
+                ProNode.SetWorker(CurrentWorker);
                 lastWorkerIndex = 0;
                 currentWorkerIndex = 0;
                 CurMode = Mode.ProNode;
@@ -516,7 +516,7 @@ namespace ProjectOC.InventorySystem.UI
             {
                 if (CurProNodeMode == ProNodeSelectMode.Worker)
                 {
-                    ProNode.RemoveWorker();
+                    (ProNode as IWorkerContainer).RemoveWorker();
                 }
                 else
                 {
@@ -742,7 +742,7 @@ namespace ProjectOC.InventorySystem.UI
                 #region Worker
                 ProNode_Worker.Find("Selected").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Worker);
                 ProNode_Worker.gameObject.SetActive(ProNode.ProNodeType == ProNodeType.Mannul);
-                bool hasWorker = ProNode.HasWorker;
+                bool hasWorker = ProNode.HaveWorker;
                 if (ProNode.ProNodeType == ProNodeType.Mannul)
                 {
                     ProNode_Worker.Find("Bar").gameObject.SetActive(hasWorker);
@@ -793,7 +793,7 @@ namespace ProjectOC.InventorySystem.UI
 
                 #region BotKeyTips
                 BotKeyTips.Find("KT_ChangeWorker").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Worker);
-                BotKeyTips.Find("KT_RemoveWorker").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Worker && ProNode.HasWorker);
+                BotKeyTips.Find("KT_RemoveWorker").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Worker && ProNode.HaveWorker);
                 BotKeyTips.Find("KT_ChangeRecipe").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Recipe);
                 BotKeyTips.Find("KT_Remove1").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Recipe && ProNode.HasRecipe);
                 BotKeyTips.Find("KT_Remove10").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Recipe && ProNode.HasRecipe);
@@ -1001,7 +1001,7 @@ namespace ProjectOC.InventorySystem.UI
             {
                 Workers = new List<Worker>() {};
                 Workers.AddRange(LocalGameManager.Instance.WorkerManager.GetWorkers());
-                Workers.Sort(new Worker.Sort() { WorkType = ProNode.ExpType});
+                Workers.Sort(new Worker.SortForProNodeUI() { WorkType = ProNode.ExpType});
                 if (Worker != null)
                 {
                     Workers.Remove(Worker);
@@ -1347,7 +1347,7 @@ namespace ProjectOC.InventorySystem.UI
                     }
                 }
             }
-            if (ProNode.HasWorker)
+            if (ProNode.HaveWorker)
             {
                 var onDuty = ProNode_Worker.transform.Find("OnDuty").GetComponent<TMPro.TextMeshProUGUI>();
                 onDuty.text = PanelTextContent.workerStatus[(int)Worker.Status];

@@ -196,7 +196,7 @@ namespace ProjectOC.Building.UI
                 GameManager.Instance.UIManager.PushNoticeUIInstance(ML.Engine.UI.UIManager.NoticeUIType.PopUpUI, new ML.Engine.UI.UIManager.PopUpUIData(text, null, null, 
                     () => 
                     {
-                        Home.BindWorker(worker);
+                        (Home as IWorkerContainer).SetWorker(worker);
                     }
                 ));
             }

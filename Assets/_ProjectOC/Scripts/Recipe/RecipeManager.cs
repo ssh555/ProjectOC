@@ -1,9 +1,8 @@
 using System.Collections.Generic;
-using UnityEngine;
-using System.Collections;
 using System;
 using System.Linq;
 using ML.Engine.InventorySystem.CompositeSystem;
+
 
 namespace ML.Engine.InventorySystem
 {
@@ -29,19 +28,9 @@ namespace ML.Engine.InventorySystem
         }
 
         #region Load And Data
-        /// <summary>
-        /// 是否已加载完数据
-        /// </summary>
-        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
-
         public Dictionary<RecipeCategory, List<string>> RecipeCategorys = new Dictionary<RecipeCategory, List<string>>();
-        /// <summary>
-        /// Recipe 数据表
-        /// </summary>
         private Dictionary<string, RecipeTableData> RecipeTableDict = new Dictionary<string, RecipeTableData>();
-
         public ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]> ABJAProcessor;
-
         public void LoadTableData()
         {
             ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]>("OC/Json/TableData", "Recipe", (datas) =>
