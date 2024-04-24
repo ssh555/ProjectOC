@@ -18,9 +18,9 @@ namespace ProjectOC.PinchFace
         //引用
         public PinchFaceHelper pinchFaceHelper;
         public CharacterModelPinch ModelPinch;
-        [ShowInInspector]
-        //public Dictionary<PinchPartType3, PinchPartType> pinchPartType3Dic;
-        public Dictionary<PinchPartType2, PinchPartType> pinchPartType2Dic;
+
+        public Dictionary<PinchPartType3, PinchPartType2> pinchPartType3Dic = new Dictionary<PinchPartType3, PinchPartType2>();
+        public Dictionary<PinchPartType2, PinchPartType> pinchPartType2Dic = new Dictionary<PinchPartType2, PinchPartType>();
         //存储每一个的Type1下的每一个Type2
         [SerializeField]
         public List<List<PinchPartType2>> pinchPartType1Inclusion;  //
@@ -35,6 +35,9 @@ namespace ProjectOC.PinchFace
         {
             ModelPinch = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController)
                 .currentCharacter.GetComponentInChildren<CharacterModelPinch>();
+            Debug.LogWarning($"ModelPinch:{ModelPinch != null}");
+            // ModelPinch.InitAfterPinchFaceManager(this);
+            
             DataStructInit();
             RegisterPinchPartType();
             pinchFaceHelper = new PinchFaceHelper(this);
@@ -42,7 +45,7 @@ namespace ProjectOC.PinchFace
             
             // GeneratePinchRaceUI();
             // GenerateCustomRaceUI();
-            //GeneratePinchFaceUI(); 
+            GeneratePinchFaceUI(); 
         }
 
         public void UnRegister()
@@ -64,18 +67,21 @@ namespace ProjectOC.PinchFace
         /// </summary>
         public void RegisterPinchPartType()
         {
-            pinchPartType2Dic = new Dictionary<PinchPartType2, PinchPartType>();
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetsAsync<PinchPartType>(PinchPartTypePath, (ppt) =>
             {
-                lock (pinchPartType2Dic)
+                lock (pinchPartType3Dic)
                 {
-                    //有效的Capacity
-                    if (ppt.pinchPartType3s.Capacity != 0)
+                    lock (pinchPartType2Dic)
                     {
                         pinchPartType2Dic.Add(ppt.pinchPartType2,ppt);
                         pinchPartType1Inclusion[(int)ppt.pinchPartType1 -1].Add(ppt.pinchPartType2);
-                    }
+                        foreach (var _ppt3 in ppt.pinchPartType3s)
+                        {
+                            pinchPartType3Dic.Add(_ppt3,ppt.pinchPartType2);
+                        }
+                    } 
                 }
+                
             }).Completed+= (handle) =>
             {
                 PinchPartTypeHandle = handle;

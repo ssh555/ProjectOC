@@ -71,6 +71,7 @@ MonoBehaviour:
     isLoop: 0
     isWheel: 0
     hasBtnListContainer: 1
+    readUnActiveButton: 1
 --- !u!114 &5815807723316230883
 MonoBehaviour:
   m_ObjectHideFlags: 0

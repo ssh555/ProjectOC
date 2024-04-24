@@ -11,9 +11,31 @@ namespace ProjectOC.PinchFace.Config
     {
         //存储Type3 Prefab数量
         public List<int> typesData;
-
+        //骨骼 默认数值
+        public Dictionary<BoneWeightType, BoneTransfData> boneWeightData;
+        public class BoneTransfData
+        {
+            public Vector3 pos, scale;
+        }
+        
+        
+        
+        
+        
+        
         [Button("读取信息")]
         public void LoadConfig()
+        {
+            ReadType3Cofig();
+            ReadBoneWeightConfig();
+        }
+
+        private void ReadBoneWeightConfig()
+        {
+            //
+        }
+
+        private void ReadType3Cofig()
         {
             //根据Texture2D数量来判断Prefab数量
             int enumsValue = (System.Enum.GetValues(typeof(PinchPartType3))).Length -1;
@@ -22,7 +44,6 @@ namespace ProjectOC.PinchFace.Config
             string rootFolderPath = "Assets/_ProjectOC/OCResources/UI/PinchFace/Texture";
             TraverseFolders(rootFolderPath);
         }
-
         private void TraverseFolders(string folderPath)
         {
             // 获取文件夹中的所有子文件夹

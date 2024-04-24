@@ -150,9 +150,9 @@ namespace ProjectOC.PinchFace
         private RacePinchData raceData;
         private List<PinchPart> pinchParts;
         private Dictionary<PinchPartType3, SelectedButton> type3ButtonDic = new Dictionary<PinchPartType3, SelectedButton>();
-        private Dictionary<PinchPartType3, PinchPartType2> type3Type2Dic = new Dictionary<PinchPartType3, PinchPartType2>();
+        private Dictionary<PinchPartType3, PinchPartType2> type3Type2Dic => pinchFaceManager.pinchPartType3Dic;
         public List<UIBtnListInitor> rightBtnLists = new List<UIBtnListInitor>();
-
+        
         public PinchDataConfig Config;
         public SpriteAtlas SA_PinchPart;
 
@@ -171,17 +171,6 @@ namespace ProjectOC.PinchFace
             pinchParts = new List<PinchPart>();
             
             //Éú³É×ó²àList<PinchPartType3>
-            foreach (var _DicType in pinchFaceManager.pinchPartType2Dic)
-            {
-                foreach (var _DicType3 in _DicType.Value.pinchPartType3s)
-                {
-                    if (raceData.pinchPartType3s.Contains(_DicType3))
-                    {
-                        type3Type2Dic.Add(_DicType3,_DicType.Key);
-                    }
-                }
-            }
-            
 
             foreach (var _partType3 in raceData.pinchPartType3s)
             {
@@ -220,7 +209,6 @@ namespace ProjectOC.PinchFace
             PinchPartType1 _type1 = _type.pinchPartType1;
             
             //OC/Configs/PinchFace/PinchFaceConfig/PinchTypeConfig/1_Ear_PinchType2Template.prefab
-
             string pathFore = "OC/Configs/PinchFace/PinchFaceConfig/PinchTypeConfig";
             string templatePath = $"{pathFore}/{(int)_type2-1}_{_type2.ToString()}_PinchType2Template.prefab";
 

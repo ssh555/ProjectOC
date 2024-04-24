@@ -107,6 +107,7 @@ MonoBehaviour:
     isLoop: 0
     isWheel: 0
     hasBtnListContainer: 1
+    readUnActiveButton: 1
 --- !u!114 &7905453208754053215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -872,6 +873,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b52e848cd94f3d64c8acf0dd66a0155c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slider: {fileID: 0}
 --- !u!114 &1047735528716140383
 MonoBehaviour:
   m_ObjectHideFlags: 0

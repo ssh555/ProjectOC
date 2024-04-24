@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pinchPartType1: 6
   pinchPartType2: 18
-  pinchPartType3: 43
+  pinchPartType3s: 2b000000
   couldNaked: 1

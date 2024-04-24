@@ -60,6 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boneWeightChangeType: 3
+  boneWeightType: 7
   scaleValueRange: {x: 0.5, y: 1.5}
   currentScaleValue: 1
   offsetValueRange: {x: -2, y: 2}

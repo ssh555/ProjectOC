@@ -203,6 +203,7 @@ namespace ML.Engine.UI
 
         public void BindNavigationInputAction(InputAction NavigationInputAction, BindType bindType)
         {
+            this.isEnable = true;
             this.gridNavagationInputAction = NavigationInputAction;
             this.bindType = bindType;
             //B¿‡–Õ 
