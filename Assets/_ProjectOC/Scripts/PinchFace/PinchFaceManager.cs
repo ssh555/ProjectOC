@@ -45,7 +45,7 @@ namespace ProjectOC.PinchFace
             
             // GeneratePinchRaceUI();
             // GenerateCustomRaceUI();
-            GeneratePinchFaceUI(); 
+            //GeneratePinchFaceUI(); 
         }
 
         public void UnRegister()
@@ -91,9 +91,9 @@ namespace ProjectOC.PinchFace
 
         #region Temp
 
-        private const string PinchRaceUIPath = "OC/UIPanel/FacePinch_RacePanel.prefab";
-        private const string CustomRacePath = "OC/UIPanel/FacePinch_RacePartPanel.prefab";
-        private const string PinchFacePath = "OC/UIPanel/FacePinch_FacePanel.prefab";
+        private const string PinchRaceUIPath = "Prefabs_PinchPart/UIPanel/Panel/Prefab_FacePinch_RacePanel.prefab";
+        private const string CustomRacePath = "Prefabs_PinchPart/UIPanel/Panel/Prefab_FacePinch_RacePartPanel.prefab";
+        private const string PinchFacePath = "Prefabs_PinchPart/UIPanel/Panel/Prefab_FacePinch_FacePanel.prefab";
         
         [SerializeField]
         public List<RacePinchData> RacePinchDatas;

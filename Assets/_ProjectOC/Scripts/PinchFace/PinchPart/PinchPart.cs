@@ -51,14 +51,14 @@ namespace  ProjectOC.PinchFace
 
         private void Init()
         {
-            uiPrefabPaths.Add("OC/UI/PinchFace/Setting/Pinch_SettingHead.prefab");
-            uiPrefabPaths.Add("OC/UI/PinchFace/Setting/Pinch_TypeSettingPanel.prefab");
-            uiPrefabPaths.Add("OC/UI/PinchFace/Setting/Pinch_BoneWeightSettingPanel.prefab");
-            uiPrefabPaths.Add("OC/UI/PinchFace/Setting/Pinch_ColorSettingPanel1.prefab");
-            uiPrefabPaths.Add("OC/UI/PinchFace/Setting/Pinch_ColorSettingPanel2.prefab");
-            uiPrefabPaths.Add("OC/UI/PinchFace/Setting/Pinch_ColorTypeSetting.prefab");
-            uiPrefabPaths.Add("OC/UI/PinchFace/Setting/Pinch_TextureSettingPanel.prefab");
-            uiPrefabPaths.Add("OC/UI/PinchFace/Setting/Pinch_TransformSettingPanel.prefab");
+            uiPrefabPaths.Add("Prefabs_PinchPart/UIPanel/Setting/Prefab_Pinch_SettingHead.prefab");
+            uiPrefabPaths.Add("Prefabs_PinchPart/UIPanel/Setting/Prefab_Pinch_TypeSettingPanel.prefab");
+            uiPrefabPaths.Add("Prefabs_PinchPart/UIPanel/Setting/Prefab_Pinch_BoneWeightSettingPanel.prefab");
+            uiPrefabPaths.Add("Prefabs_PinchPart/UIPanel/Setting/Prefab_Pinch_ColorSettingPanel1.prefab");
+            uiPrefabPaths.Add("Prefabs_PinchPart/UIPanel/Setting/Prefab_Pinch_ColorSettingPanel2.prefab");
+            uiPrefabPaths.Add("Prefabs_PinchPart/UIPanel/Setting/Prefab_Pinch_ColorTypeSetting.prefab");
+            uiPrefabPaths.Add("Prefabs_PinchPart/UIPanel/Setting/Prefab_Pinch_TextureSettingPanel.prefab");
+            uiPrefabPaths.Add("Prefabs_PinchPart/UIPanel/Setting/Prefab_Pinch_TransformSettingPanel.prefab");
 
             PinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
             
@@ -193,23 +193,49 @@ namespace  ProjectOC.PinchFace
         /// 初始加载的时候是模型原始缩放数值，第二次加载是更换后数值，应该需要加载数值
         public void GenerateBoneWeightUI(ChangeBoneWeightPinchSetting _boneWeightPinchSetting)
         {
-            List<BoneWeightType> boneWeightTypes = new List<BoneWeightType>();
+            int _counter = sortCount;
+            GenerateUIPre();
             
-            
-            if (PinchPartType3 == PinchPartType3.B_Body)
+            //临时BoneWeightType Text字典
+            Dictionary<BoneWeightType, string> boneWeightDic = new Dictionary<BoneWeightType, string>();
+            boneWeightDic.Add(BoneWeightType.Head,"头部");
+            boneWeightDic.Add(BoneWeightType.Chest,"胸部");
+            boneWeightDic.Add(BoneWeightType.Waist,"腰部");
+            boneWeightDic.Add(BoneWeightType.Arm,"上肢");
+            boneWeightDic.Add(BoneWeightType.Leg,"下肢");
+            boneWeightDic.Add(BoneWeightType.HeadTop,"头顶");
+            boneWeightDic.Add(BoneWeightType.Tail,"尾巴");
+            boneWeightDic.Add(BoneWeightType.Root,"整体");
+
+            List<ChangeBoneWeightPinchSetting.BoneWeightData> boneWeightDatas = new List<ChangeBoneWeightPinchSetting.BoneWeightData>();
+                
+            //没有定义骨骼Type，就生成 缩放型
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(uiPrefabPaths[2])
+                .Completed += (handle) =>
             {
-                boneWeightTypes.Add(BoneWeightType.Root);
-                boneWeightTypes.Add(BoneWeightType.Head);
-                // boneWeightTypes.Add(BoneWeightType.Chest);
-                boneWeightTypes.Add(BoneWeightType.Waist);
-                // boneWeightTypes.Add(BoneWeightType.Arm);
-                boneWeightTypes.Add(BoneWeightType.Leg);
-            }
-            else
-            {
-                boneWeightTypes.Add(_boneWeightPinchSetting.boneWeightType);
-            }
-            GenerateBoneWeightUI(boneWeightTypes);
+                //加入 生成的Slider
+                Transform _trans = handle.Result.transform;
+                SelectedButton sliderTemplate = _trans.GetComponentInChildren<SelectedButton>();
+                for (int i = 0; i < boneWeightDatas.Count; i++)
+                {
+                    var btn = GameObject.Instantiate(sliderTemplate.gameObject, sliderTemplate.transform.parent)
+                        .GetComponent<SelectedButton>();
+                    
+                    CustomSelectedSlider _slider = btn.GetComponentInChildren<CustomSelectedSlider>();
+                    _slider.ChangeText(boneWeightDic[boneWeightDatas[i].boneWeightType]);
+                    
+                    //_value 1~100
+                    _slider.slider.onValueChanged.AddListener((_value)=>
+                    {
+                        //_value Remap
+                        Vector3 _boneWeight = _value*Vector3.one;
+                        ModelPinch.ChangeBoneScale(boneWeightDatas[i].boneWeightType,_boneWeight);
+                    });
+                }
+                
+                sliderTemplate.gameObject.SetActive(false);
+                GenerateUICallBack(_trans,_counter);
+            };
         }
         
         

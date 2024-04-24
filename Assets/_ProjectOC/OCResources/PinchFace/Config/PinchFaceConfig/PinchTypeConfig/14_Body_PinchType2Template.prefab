@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4280774634301395310
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7085922709440061500}
+  - component: {fileID: 6931471102352242990}
+  m_Layer: 0
+  m_Name: 14_Body_PinchType2Template
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7085922709440061500
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4280774634301395310}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6931471102352242990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4280774634301395310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 350f321420e1bf94a930e2e6111cd3e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BoneWeightDatas:
+  - boneWeightChangeType: 1
+    boneWeightType: 8
+    scaleValueRange: {x: 0.5, y: 1.5}
+    currentScaleValue: 1
+    offsetValueRange: {x: 0.5, y: 1.5}
+    currentOffsetValue: 1
+  - boneWeightChangeType: 1
+    boneWeightType: 1
+    scaleValueRange: {x: 0.5, y: 1.5}
+    currentScaleValue: 1
+    offsetValueRange: {x: 0.5, y: 1.5}
+    currentOffsetValue: 1
+  - boneWeightChangeType: 1
+    boneWeightType: 5
+    scaleValueRange: {x: 0.5, y: 1.5}
+    currentScaleValue: 1
+    offsetValueRange: {x: 0.5, y: 1.5}
+    currentOffsetValue: 1
+  - boneWeightChangeType: 1
+    boneWeightType: 3
+    scaleValueRange: {x: 0.5, y: 1.5}
+    currentScaleValue: 1
+    offsetValueRange: {x: 0.5, y: 1.5}
+    currentOffsetValue: 1
