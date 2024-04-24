@@ -1157,12 +1157,7 @@ namespace ML.Engine.UI
                 this.TwoDimI = 0;
                 this.TwoDimJ = 0;
                 this.CurSelected = TwoDimSelectedButtons[TwoDimI][TwoDimJ];
-
-                Debug.Log(this.CurSelected.name);
-                this.CurSelected.OnSelect(null);
-                Debug.Log("1 " + this.CurSelected);
                 this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
-                Debug.Log("2 "+this.CurSelected);
             }
             this.CurSelected?.OnSelect(null);
 

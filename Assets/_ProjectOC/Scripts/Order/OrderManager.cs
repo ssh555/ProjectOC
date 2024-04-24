@@ -35,7 +35,8 @@ namespace ProjectOC.Order
         {
             Urgent = 0,
             Special,
-            Normal
+            Normal,
+            None,
         }
 
         /// <summary>
@@ -77,13 +78,15 @@ namespace ProjectOC.Order
             public OrderType orderType;
             public bool canBeCommit;
             public int acceptOrder;
+            public string UniqueOrderName;
 
-            public AcceptedOrder(Order order, OrderType orderType)
+            public AcceptedOrder(Order order, OrderType orderType, string uniqueOrderName)
             {
                 this.order = order;
                 this.orderType = orderType;
                 this.canBeCommit = false;
                 this.acceptOrder = curAcceptOrder++;
+                this.UniqueOrderName = uniqueOrderName;
             }
 
             // 实现 IComparable 接口中的 CompareTo 方法
@@ -113,6 +116,10 @@ namespace ProjectOC.Order
         /// </summary>
         [ShowInInspector]
         private List<AcceptedOrder> acceptedList = new List<AcceptedOrder>();
+        /// <summary>
+        /// UniqueOrderName,AcceptedOrder
+        /// </summary>
+        [ShowInInspector]
         private Dictionary<string, AcceptedOrder> acceptedListDic = new Dictionary<string, AcceptedOrder>();
 
         public List<AcceptedOrder> AcceptedOrders { get { return acceptedList; } }
@@ -407,7 +414,7 @@ namespace ProjectOC.Order
         /// <summary>
         /// 接取订单函数
         /// </summary>
-        public void ReceiveOrder(string OrderId)
+        public void ReceiveOrder(string OrderId,string OrderUniqueName)
         {
             if(OrderId == null) return;
             if (!OrderTableDataDic.ContainsKey(OrderId)) return;
@@ -438,7 +445,7 @@ namespace ProjectOC.Order
                     {
                         OrderUrgent orderUrgent = (OrderUrgent)olist[i];
                         orderUrgent.StartDeliverDDLTimer();
-                        acceptedOrder = new AcceptedOrder(orderUrgent, orderTableData.OrderType);
+                        acceptedOrder = new AcceptedOrder(orderUrgent, orderTableData.OrderType, OrderUniqueName);
                         //重置紧急订单状态
                         orderUrgent.Reset();
                         //紧急留空槽
@@ -446,17 +453,17 @@ namespace ProjectOC.Order
                     }
                     else if(olist[i] is OrderSpecial)
                     {
-                        acceptedOrder = new AcceptedOrder((OrderSpecial)olist[i], orderTableData.OrderType);
+                        acceptedOrder = new AcceptedOrder((OrderSpecial)olist[i], orderTableData.OrderType, OrderUniqueName);
                     }
                     else if (olist[i] is OrderNormal)
                     {
-                        acceptedOrder = new AcceptedOrder((OrderNormal)olist[i], orderTableData.OrderType);
+                        acceptedOrder = new AcceptedOrder((OrderNormal)olist[i], orderTableData.OrderType, OrderUniqueName);
                         
                         //常规直接删
                         olist.Remove(olist[i]);
                     }
                     acceptedList.Add(acceptedOrder);
-                    acceptedListDic.Add(orderTableData.ID, acceptedOrder);
+                    acceptedListDic.Add(OrderUniqueName, acceptedOrder);
                     //加入已承接列表后立即执行一次RefreshAcceptedList函数
 
                     break;
@@ -488,7 +495,10 @@ namespace ProjectOC.Order
 
                     //TODO 受到惩罚
                     Debug.Log("受到惩罚");
-                    acceptedListDic.Remove(acceptedList[i].order.OrderID);
+
+                    //移除唯一命名
+                    acceptedListDic.Remove(acceptedList[i].UniqueOrderName);
+
                     acceptedList.Remove(acceptedList[i]);
                     
                     this.RefreshAcceptedList();
@@ -536,7 +546,10 @@ namespace ProjectOC.Order
                         this.WaitingForRefreshNormalOrders.Add(orderNormal);
                     }
                     Debug.Log("1提交订单 " + acceptedList[i].order.OrderID);
-                    acceptedListDic.Remove(acceptedList[i].order.OrderID);
+
+                    //移除唯一命名
+                    acceptedListDic.Remove(acceptedList[i].UniqueOrderName);
+
                     acceptedList.Remove(acceptedList[i]);
                     
                     this.RefreshAcceptedList();
@@ -611,6 +624,16 @@ namespace ProjectOC.Order
             return OrderTableData.None;
         }
 
+        public OrderType GetOrderType(string orderId)
+        {
+            if (orderId == null) return OrderType.None;
+            if (this.OrderTableDataDic.ContainsKey(orderId))
+            {
+                return this.OrderTableDataDic[orderId].OrderType;
+            }
+            return OrderType.None;
+        }
+
         public bool IsValidOrderID(string orderID)
         {
             if (orderID == null) return false;
@@ -618,11 +641,12 @@ namespace ProjectOC.Order
             return false;
         }
 
-        public AcceptedOrder GetAcceptedOrder(string orderID)
+        public AcceptedOrder GetAcceptedOrder(string orderUniqueName)
         {
-            if(this.acceptedListDic.ContainsKey(orderID))
+            Debug.Log(orderUniqueName);
+            if(this.acceptedListDic.ContainsKey(orderUniqueName))
             {
-                return this.acceptedListDic[orderID];
+                return this.acceptedListDic[orderUniqueName];
             }
             return null;
         }

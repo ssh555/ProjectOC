@@ -203,6 +203,7 @@ namespace ML.Engine.UI
 
         public void BindNavigationInputAction(InputAction NavigationInputAction, BindType bindType)
         {
+            this.isEnable = true;
             this.gridNavagationInputAction = NavigationInputAction;
             this.bindType = bindType;
             //B¿‡–Õ 
@@ -597,7 +598,7 @@ namespace ML.Engine.UI
 
         public void MoveToBtnList(UIBtnList uIBtnList)
         {
-            //Debug.Log("this.isEnable == false " + (this.isEnable == false) + " this.CurSelectUIBtnList == uIBtnList " + (this.CurSelectUIBtnList == uIBtnList) + " uIBtnList == null " + (uIBtnList == null));
+            Debug.Log("this.isEnable == false " + (this.isEnable == false) + " this.CurSelectUIBtnList == uIBtnList " + (this.CurSelectUIBtnList == uIBtnList) + " uIBtnList == null " + (uIBtnList == null)+ " uIBtnList.IsEmpty "+(uIBtnList.IsEmpty));
             if (this.isEnable == false || this.CurSelectUIBtnList == uIBtnList || uIBtnList == null || uIBtnList.IsEmpty) return;
             
             if(gridNavagationType == ContainerType.A)

@@ -129,15 +129,15 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             else if(OrderDelegationIndex == 1)
             {
                 //承接订单
-                OrderManager.Instance.ReceiveOrder(curSelectedOrderIDInOrderDelegation);
-                OrderTableData orderTableData = OrderManager.Instance.GetOrderTableData(curSelectedOrderIDInOrderDelegation);
-                if(orderTableData.OrderType == OrderType.Urgent)
+                OrderManager.Instance.ReceiveOrder(curSelectedOrderIDInOrderDelegation, curSelectedBtnNameInOrderDelegation);
+                OrderType orderType = OrderManager.Instance.GetOrderType(curSelectedOrderIDInOrderDelegation);
+                if(orderType == OrderType.Urgent)
                 {
                     isNeedRefreshOrderDelegation = true;
                 }
-                else if(orderTableData.OrderType == OrderType.Normal)
+                else if(orderType == OrderType.Normal)
                 {
-                    this.OrderDelegationUIBtnListContainer.UIBtnLists[1].DeleteButton(curSelectedOrderIDInOrderDelegation);
+                    this.OrderDelegationUIBtnListContainer.UIBtnLists[1].DeleteButton(curSelectedBtnNameInOrderDelegation);
                 }
                 
                 Debug.Log("承接订单");
@@ -225,10 +225,18 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     private string curSelectedOrderIDInOrderDelegation 
     {   get 
         {
+            var btnName = curSelectedBtnNameInOrderDelegation;
+            return btnName != null ? btnName.Split('|')[0] : null;
+        } 
+    }
+    private string curSelectedBtnNameInOrderDelegation
+    {
+        get
+        {
             SelectedButton btn = null;
             btn = this.OrderDelegationUIBtnListContainer.CurSelectUIBtnList?.GetCurSelected();
-            return btn != null ? btn.name.Split('|')[0] : null;
-        } 
+            return btn != null ? btn.name : null;
+        }
     }
 
     [ShowInInspector]
@@ -238,7 +246,18 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         {
             SelectedButton btn = null;
             btn = this.AcceptedOrderBtnList.GetCurSelected();
-            return btn != null ? btn.name.Split('|')[0] : null;
+            return btn != null ? btn.name.Split('%')[0] : null;
+        }
+    }
+
+    [ShowInInspector]
+    private string curSelectedOrderUniqueNameInAcceptedOrder
+    {
+        get
+        {
+            SelectedButton btn = null;
+            btn = this.AcceptedOrderBtnList.GetCurSelected();
+            return btn != null ? btn.name.Split('%')[1] : null;
         }
     }
 
@@ -300,6 +319,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             UIBtnList.Synchronizer synchronizer = new UIBtnList.Synchronizer(2 + OrderManager.Instance.GetOrderDelegationOrders(CurSelectedClanID, OrderType.Normal).Count, () =>
             {
                 this.OrderDelegationUIBtnListContainer.InitBtnlistInfo();
+                this.OrderDelegationUIBtnListContainer.FindEnterableUIBtnList();
             });
 
             this.OrderDelegationUIBtnListContainer.SetEmptyAllBtnList(() =>
@@ -332,7 +352,8 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                             //若为空槽则只激活Selected
                             for (int i = 0; i < btn.transform.childCount; i++)
                             {
-                                btn.transform.GetChild(i).gameObject.SetActive(btn.transform.GetChild(i).name == "Selected");
+                                //btn.transform.GetChild(i).gameObject.SetActive(btn.transform.GetChild(i).name == "Selected");
+                                btn.transform.GetChild(i).gameObject.SetActive(false);
                             }
                             btn.name = btn.GetHashCode().ToString();
                         }
@@ -402,7 +423,6 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             //ItemList
             var ItemList = this.OrderDelegationOrderInfo.Find("ItemList");
             var Slots = ItemList.Find("Slots");
-            Debug.Log("rtr " + orderTableData.RequireList.Count +" "+ Slots);
             for (int i = 0; i < orderTableData.RequireList.Count; i++)
             {
                 var slot = this.objectPool.GetNextObject("SlotPool", Slots);
@@ -436,8 +456,6 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                 slot.transform.Find("ItemName").GetComponent<TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(orderTableData.ItemReward[i].id);
             }
             //按钮隐藏
-            Debug.Log(this.OrderDelegationOrderInfo);
-            Debug.Log(this.OrderDelegationOrderInfo.Find("CancelBtn"));
             this.OrderDelegationOrderInfo.Find("CancelBtn").gameObject.SetActive(orderTableData.OrderType == OrderType.Urgent);
         }
         else
@@ -482,7 +500,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                             
 
                             btn.transform.Find("Image").Find("Image2").gameObject.SetActive(acceptedOrder.canBeCommit);
-                            btn.name = orderTableData.ID + "|" + btn.GetHashCode().ToString();
+                            btn.name = acceptedOrder.order.OrderID + "%" + acceptedOrder.UniqueOrderName;
                         },
                         OnFinishAdd: () => { 
                             //按钮更新完毕刷新
@@ -563,7 +581,10 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             }
 
             //按钮隐藏
-            this.AcceptedOrderOrderInfo.Find("CancelBtn").gameObject.SetActive(!OrderManager.Instance.GetAcceptedOrder(curSelectedOrderIDInAcceptedOrder).canBeCommit);
+            Debug.Log(this.AcceptedOrderOrderInfo);
+            Debug.Log(this.AcceptedOrderOrderInfo.Find("CancelBtn"));
+            Debug.Log(this.AcceptedOrderOrderInfo.Find("CancelBtn"));
+            this.AcceptedOrderOrderInfo.Find("CancelBtn").gameObject.SetActive(!OrderManager.Instance.GetAcceptedOrder(curSelectedOrderUniqueNameInAcceptedOrder).canBeCommit);
         }
         else
         {
