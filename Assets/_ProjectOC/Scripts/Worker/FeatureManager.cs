@@ -47,7 +47,7 @@ namespace ProjectOC.WorkerNS
 
         public void LoadTableData()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableData[]>("OC/Json/TableData", "Feature", (datas) =>
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<FeatureTableData[]>("OCTableData", "Feature", (datas) =>
             {
                 foreach (var data in datas)
                 {

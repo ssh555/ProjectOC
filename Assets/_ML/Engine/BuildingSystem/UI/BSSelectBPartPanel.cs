@@ -21,8 +21,8 @@ namespace ML.Engine.BuildingSystem.UI
     public class BSSelectBPartPanel : Engine.UI.UIBasePanel<BSSelectBPartPanelStruct>
     {
         #region 载入资源
-        public const string TCategorySpriteAtlasPath = "ML/BuildingSystem/Category/SA_Build_Category.spriteatlasv2";
-        public const string TTypeABPath = "ML/BuildingSystem/Type/SA_Build_Type.spriteatlasv2";
+        public const string TCategorySpriteAtlasPath = "SA_Build_Category";
+        public const string TTypeABPath = "SA_Build_Category3";
 
         public int IsInit = -1;
 
@@ -30,8 +30,8 @@ namespace ML.Engine.BuildingSystem.UI
         private MonoBuildingManager monoBM;
 
         //家具图集
-        public const string FurnitureSpriteAtlasPath = "Assets/_ProjectOC/OCResources/UI/Building/Furniture/Furniture.spriteatlasv2";
-        public const string FurnitureThemeSpriteAtlasPath = "Assets/_ProjectOC/OCResources/UI/Building/FurnitureTheme/FurnitureTheme.spriteatlasv2";
+        public const string FurnitureSpriteAtlasPath = "SA_UI_BuildIcon";
+        public const string FurnitureThemeSpriteAtlasPath = "SA_UI_FurnitureTheme";
         private SpriteAtlas FurnitureSpriteAtlas = null, FurnitureThemeSpriteAtlas = null;
 
         private UICameraImage UICameraImage = null;
@@ -627,7 +627,7 @@ namespace ML.Engine.BuildingSystem.UI
 
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/BuildingSystem/UI";
+            this.abpath = "OCTextContent/BuildingSystem/UI";
             this.abname = "BSSelectBPartPanel";
             this.description = "BSSelectBPartPanel数据加载完成";
         }

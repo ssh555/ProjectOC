@@ -274,7 +274,7 @@ namespace ML.Engine.UI
         }
         protected override void InitTextContentPathData()
         {
-            this.abpath = "ML/Json/TextContent";
+            this.abpath = "TextContent";
             this.abname = "OptionPanel";
             this.description = "OptionPanel数据加载完成";
         }

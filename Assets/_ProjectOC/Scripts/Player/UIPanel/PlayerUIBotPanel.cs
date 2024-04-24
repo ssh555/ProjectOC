@@ -245,7 +245,7 @@ namespace ProjectOC.Player.UI
 
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/PlayerUIBotPanel";
+            this.abpath = "OCTextContent/PlayerUIBotPanel";
             this.abname = "PlayerUIBotPanel";
             this.description = "PlayerUIBotPanel数据加载完成";
         }

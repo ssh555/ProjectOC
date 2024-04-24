@@ -48,7 +48,7 @@ namespace ProjectOC.ProNodeNS
 
         public void LoadTableData()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ProNodeTableData[]>("OC/Json/TableData", "ProNode", (datas) =>
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ProNodeTableData[]>("OCTableData", "ProNode", (datas) =>
             {
                 foreach (var data in datas)
                 {

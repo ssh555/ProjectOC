@@ -655,7 +655,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         private void Awake()
         {
             // ‘ÿ»Î∆•≈‰ ˝æ›
-            string path = "BuildingSystem/Config";
+            string path = "Config";
             Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<BuildingAreaSocketMatchAsset>(path + "/Config_BS_Match_AreaSocket.asset").Completed += (handle) =>
             {
                 AreaSocketMatch = handle.Result;

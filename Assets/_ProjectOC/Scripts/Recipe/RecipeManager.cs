@@ -44,7 +44,7 @@ namespace ML.Engine.InventorySystem
 
         public void LoadTableData()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]>("OC/Json/TableData", "Recipe", (datas) =>
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]>("OCTableData", "Recipe", (datas) =>
             {
                 foreach (var data in datas)
                 {

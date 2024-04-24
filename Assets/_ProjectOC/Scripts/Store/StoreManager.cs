@@ -30,7 +30,7 @@ namespace ProjectOC.StoreNS
 
         public void LoadTableData()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StoreIconTableData[]>("OC/Json/TableData", "StoreIcon", (datas) =>
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StoreIconTableData[]>("OCTableData", "StoreIcon", (datas) =>
             {
                 foreach (var data in datas)
                 {

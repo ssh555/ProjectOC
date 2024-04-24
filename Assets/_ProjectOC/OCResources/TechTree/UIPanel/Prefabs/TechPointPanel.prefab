@@ -4444,6 +4444,7 @@ MonoBehaviour:
     isLoop: 0
     isWheel: 0
     hasBtnListContainer: 0
+    readUnActiveButton: 1
 --- !u!1 &8642660634000729171
 GameObject:
   m_ObjectHideFlags: 0

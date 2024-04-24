@@ -155,8 +155,8 @@ namespace ProjectOC.WorkerNS
             }
         }
 
-        public const string SpriteAtlasPath = "OC/UI/Worker/Texture/SA_Worker_UI.spriteatlasv2";
-        public const string WorldObjPath = "OC/Character/Worker/Prefabs/";
+        public const string SpriteAtlasPath = "SA_Worker_UI";
+        public const string WorldObjPath = "Prefab_AICharacter";
         private SpriteAtlas workerAtlas = null;
         private AsyncOperationHandle spriteAtalsHandle;
 

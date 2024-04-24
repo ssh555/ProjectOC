@@ -269,7 +269,7 @@ namespace ML.Engine.UI
         }
         protected override void InitTextContentPathData()
         {
-            this.abpath = "ML/Json/TextContent";
+            this.abpath = "TextContent";
             this.abname = "StartMenuPanel";
             this.description = "StartMenuPanel数据加载完成";
         }

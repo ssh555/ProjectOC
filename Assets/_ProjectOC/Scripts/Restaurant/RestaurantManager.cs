@@ -244,7 +244,7 @@ namespace ProjectOC.RestaurantNS
 
         public void LoadTableData()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<WorkerFoodTableData[]>("OC/Json/TableData", "WorkerFood", (datas) =>
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<WorkerFoodTableData[]>("OCTableData", "WorkerFood", (datas) =>
             {
                 foreach (var data in datas)
                 {
