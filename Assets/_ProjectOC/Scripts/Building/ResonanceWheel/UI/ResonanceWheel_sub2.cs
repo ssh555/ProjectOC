@@ -159,8 +159,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region UI对象引用
-        private UIKeyTipComponent[] UIKeyTipComponents;
-
         public ResonanceWheelUI parentUI = null;
 
         private Transform ring;
@@ -223,7 +221,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/ResonanceWheel";
+            this.abpath = "OCTextContent/ResonanceWheel";
             this.abname = "ResonanceWheel_sub2";
             this.description = "ResonanceWheel_sub2数据加载完成";
         }

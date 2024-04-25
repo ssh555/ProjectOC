@@ -1,4 +1,5 @@
 using ML.Engine.UI;
+using ProjectOC.MainInteract.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,9 +8,9 @@ namespace ML.Engine.Manager
 {
     public class EnterPoint
     {
-        private string StartMenuPanelPrefab = "ML/BaseUIPanel/StartMenuPanel.prefab";
-        private string LoadingScenePanelPrefab = "ML/BaseUIPanel/LoadingScenePanel.prefab";
-        private string OptionPanelPrefab = "ML/BaseUIPanel/OptionPanel.prefab";
+        private string StartMenuPanelPrefab = "Prefab_MainInteract_UIPanel/Prefab_MainInteract_UI_StartMenuPanel.prefab";
+        private string LoadingScenePanelPrefab = "Prefab_MainInteract_UIPanel/Prefab_MainInteract_UI_LoadingScenePanel.prefab";
+        private string OptionPanelPrefab = "Prefab_MainInteract_UIPanel/Prefab_MainInteract_UI_OptionPanel.prefab";
 
         public EnterPoint()
         {

@@ -1858,7 +1858,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8673872852939766638}
   m_Layer: 0
-  m_Name: SkillGraph
+  m_Name: Prefab_ResonanceWheel_UI_SkillGraph
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

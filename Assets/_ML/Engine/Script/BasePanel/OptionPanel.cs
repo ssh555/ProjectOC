@@ -2,12 +2,13 @@ using Cysharp.Threading.Tasks;
 using ML.Engine.Manager;
 using ML.Engine.SaveSystem;
 using ML.Engine.TextContent;
+using ML.Engine.UI;
 using TMPro;
 using UnityEngine;
-using static ML.Engine.UI.OptionPanel;
 using static ML.Engine.UI.UIBtnListContainer;
+using static ProjectOC.MainInteract.UI.OptionPanel;
 
-namespace ML.Engine.UI
+namespace ProjectOC.MainInteract.UI
 {
     public class OptionPanel : ML.Engine.UI.UIBasePanel<OptionPanelStruct>
     {
@@ -63,7 +64,7 @@ namespace ML.Engine.UI
             this.UIBtnList.SetBtnAction("GraphicBtn",
             () =>
             {
-                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/MainInteract/GraphPanel.prefab").Completed += (handle) =>
+                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_MainInteract_UIPanel/Prefab_MainInteract_UI_GraphPanel.prefab").Completed += (handle) =>
                 {
                     // 实例化
                     var panel = handle.Result.GetComponent<ControllerPanel>();
@@ -88,7 +89,7 @@ namespace ML.Engine.UI
 
                     GameManager.Instance.UIManager.PushPanel(panel);
                 };*/
-                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/MainInteract/AudioPanel.prefab").Completed += (handle) =>
+                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_MainInteract_UIPanel/Prefab_MainInteract_UI_AudioPanel.prefab").Completed += (handle) =>
                 {
                     // 实例化
                     var panel = handle.Result.GetComponent<ControllerPanel>();
@@ -104,7 +105,7 @@ namespace ML.Engine.UI
             () =>
             {
 
-                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/MainInteract/ControllerPanel.prefab").Completed += (handle) =>
+                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_MainInteract_UIPanel/Prefab_MainInteract_UI_ControllerPanel.prefab").Completed += (handle) =>
                 {
                     // 实例化
                     var panel = handle.Result.GetComponent<ControllerPanel>();
@@ -130,7 +131,7 @@ namespace ML.Engine.UI
 
                                     GameManager.Instance.UIManager.PushPanel(panel);
                                 };*/
-                Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/MainInteract/TutorialPanel.prefab").Completed += (handle) =>
+                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_MainInteract_UIPanel/Prefab_MainInteract_UI_TutorialPanel.prefab").Completed += (handle) =>
                 {
                     // 实例化
                     var panel = handle.Result.GetComponent<ControllerPanel>();
@@ -145,7 +146,7 @@ namespace ML.Engine.UI
             this.UIBtnList.SetBtnAction("BackBtn",
             () =>
             {
-                if (GameManager.Instance.LevelSwitchManager.CurSceneName == "EnterPointScene")
+                if (GameManager.Instance.LevelSwitchManager.CurSceneName == "Scene_EnterPoint")
                 {
                     GameManager.Instance.UIManager.PopPanel();
                 }
@@ -193,7 +194,7 @@ namespace ML.Engine.UI
                         };
                     };
                     GameManager.Instance.UIManager.PopPanel();//Pop OptionPanel
-                    GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("EnterPointScene", preCallback, postCallback,isDelay: true));
+                    GameManager.Instance.StartCoroutine(GameManager.Instance.LevelSwitchManager.LoadSceneAsync("Scene_EnterPoint", preCallback, postCallback,isDelay: true));
 
                 }
             }

@@ -5,11 +5,12 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static ML.Engine.UI.LoadingScenePanel;
+using static ProjectOC.MainInteract.UI.LoadingScenePanel;
 
 
 
-namespace ML.Engine.UI
+
+namespace ProjectOC.MainInteract.UI
 {
     public class LoadingScenePanel : ML.Engine.UI.UIBasePanel<LoadingScenePanelStruct>, ITickComponent
     {

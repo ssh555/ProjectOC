@@ -1001,7 +1001,7 @@ GameObject:
   - component: {fileID: 3510374393034869755}
   - component: {fileID: 6583406808451149856}
   m_Layer: 5
-  m_Name: OptionPanel
+  m_Name: Prefab_MainInteract_UI_OptionPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
