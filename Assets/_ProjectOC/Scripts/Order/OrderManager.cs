@@ -99,7 +99,7 @@ namespace ProjectOC.Order
         /// </summary>
         private CounterDownTimer CanBeCommitRefreshTimer;
 
-        public event Action OrderPanelRefreshOrderDelegation;
+        public event Action OrderPanelRefreshOrderUrgentDelegation;
         public event Action OrderPanelRefreshAcceptedOrder;
 
         private IInventory PlayerInventory;
@@ -245,7 +245,7 @@ namespace ProjectOC.Order
         /// <summary>
         /// 刷新已承接列表函数
         /// </summary>
-        private void RefreshAcceptedList()
+        public void RefreshAcceptedList()
         {
             for (int i = 0; i < AcceptedOrderList.Count; i++) 
             {
@@ -274,7 +274,6 @@ namespace ProjectOC.Order
             }
             //
             AcceptedOrderList.Sort();
-            OrderPanelRefreshAcceptedOrder?.Invoke();
         }
 
         /// <summary>
@@ -305,6 +304,10 @@ namespace ProjectOC.Order
                 }
                 
             }
+            else if(orderTableData.OrderType == OrderType.Special)
+            {
+                AddOrderToOrderDelegationMap(OrderId);
+            }
         }
 
         /// <summary>
@@ -334,9 +337,12 @@ namespace ProjectOC.Order
                     }
                 }
                 OrderDelegationListDic.Add(orderUrgent.OrderInstanceID, orderUrgent);
+                //紧急订单需要刷新UI
+                OrderPanelRefreshOrderUrgentDelegation?.Invoke();
             }
             else if(orderTableData.OrderType == OrderType.Normal)
             {
+                Debug.Log("常规订单有刷新！" + orderTableData.ID);
                 OrderNormal orderNormal = new OrderNormal(orderTableData);
                 OrderNormalDelegationMap[ClanID].Add(orderNormal);
                 OrderDelegationListDic.Add(orderNormal.OrderInstanceID, orderNormal);
@@ -349,13 +355,12 @@ namespace ProjectOC.Order
             }
         }
 
-
-
         /// <summary>
         /// 拒绝订单函数 仅限于拒绝紧急订单  对应订单委托拒绝订单按钮
         /// </summary>
         public void RefuseOrder(string OrderInstanceID)
         {
+            Debug.Log("OrderInstanceID " + OrderInstanceID + " " + OrderDelegationListDic.ContainsKey(OrderInstanceID));
             if (OrderInstanceID == null || !OrderDelegationListDic.ContainsKey(OrderInstanceID)) return;
             Order order = OrderDelegationListDic[OrderInstanceID];
 
@@ -367,10 +372,13 @@ namespace ProjectOC.Order
                 if (olist[i]?.OrderInstanceID == order.OrderInstanceID)
                 {
                     Debug.Log("订单超时 " + olist[i].OrderID+" "+ LocalGameManager.Instance.DispatchTimeManager.CurrentHour.ToString() + " : " + LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString());
+                    OrderDelegationListDic.Remove(olist[i].OrderInstanceID);
                     olist[i] = null;
                     break;
                 }
             }
+            //紧急订单需要刷新UI
+            OrderPanelRefreshOrderUrgentDelegation?.Invoke();
         }
 
         /// <summary>
@@ -427,6 +435,7 @@ namespace ProjectOC.Order
                         //常规直接删
                         olist.Remove(olist[i]);
                     }
+                    OrderDelegationListDic.Remove(order.OrderInstanceID);
                     AcceptedOrderList.Add(acceptedOrder);
                     AcceptedOrderListDic.Add(acceptedOrder.OrderInstanceID, acceptedOrder);
                     //加入已承接列表后立即执行一次RefreshAcceptedList函数
@@ -444,7 +453,7 @@ namespace ProjectOC.Order
         {
             if (OrderInstanceID == null || !AcceptedOrderListDic.ContainsKey(OrderInstanceID)) return;
             Order acceptedOrder = AcceptedOrderListDic[OrderInstanceID];
-            if (acceptedOrder.canBeCommit == true) return;
+            if (acceptedOrder.canBeCancled == false) return;
 
             //TODO 已扣除返还玩家背包 暂时考虑背包无限
 
@@ -589,8 +598,8 @@ namespace ProjectOC.Order
 
         public OrderType GetOrderTypeInOrderDelegation(string OrderInstanceID)
         {
-            if (OrderInstanceID == null || !AcceptedOrderListDic.ContainsKey(OrderInstanceID)) return OrderType.None;
-            return AcceptedOrderListDic[OrderInstanceID].orderType;
+            if (OrderInstanceID == null || !OrderDelegationListDic.ContainsKey(OrderInstanceID)) return OrderType.None;
+            return OrderDelegationListDic[OrderInstanceID].orderType;
         }
 
         public bool IsValidOrderIDInOrderDelegation(string OrderInstanceID)
@@ -605,11 +614,11 @@ namespace ProjectOC.Order
             return true;
         }
 
-        public Order GetAcceptedOrder(string orderUniqueName)
+        public Order GetAcceptedOrder(string OrderInstanceID)
         {
-            if(this.AcceptedOrderListDic.ContainsKey(orderUniqueName))
+            if(this.AcceptedOrderListDic.ContainsKey(OrderInstanceID))
             {
-                return this.AcceptedOrderListDic[orderUniqueName];
+                return this.AcceptedOrderListDic[OrderInstanceID];
             }
             return null;
         }

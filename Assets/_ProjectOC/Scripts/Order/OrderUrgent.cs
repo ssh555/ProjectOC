@@ -25,7 +25,7 @@ namespace ProjectOC.Order
         /// </summary>
         private CounterDownTimer DeliverDDLTimer;
 
-        private int ReceiveDDL, DeliverDDL;
+        public int ReceiveDDL, DeliverDDL;
 
         public OrderUrgent(OrderTableData orderTableData) : base(orderTableData)
         {
@@ -37,7 +37,7 @@ namespace ProjectOC.Order
                 //重置计时器
                 this.receiveDDLTimer.Reset(ReceiveDDL * 60, isStoped: true);
                 //调用拒绝订单函数
-                LocalGameManager.Instance.OrderManager.RefuseOrder(this.OrderID);
+                LocalGameManager.Instance.OrderManager.RefuseOrder(this.OrderInstanceID);
             };
 
             this.DeliverDDLTimer = new CounterDownTimer(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DeliverDDL, autocycle: false, autoStart: false);
@@ -46,7 +46,7 @@ namespace ProjectOC.Order
                 //重置计时器
                 this.DeliverDDLTimer.Reset(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DeliverDDL, isStoped: true);
                 //调用取消订单函数
-                LocalGameManager.Instance.OrderManager.CancleOrder(this.OrderID);
+                LocalGameManager.Instance.OrderManager.CancleOrder(this.OrderInstanceID);
             };
 
         }

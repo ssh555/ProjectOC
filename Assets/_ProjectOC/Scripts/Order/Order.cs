@@ -15,6 +15,7 @@ namespace ProjectOC.Order
         [ShowInInspector]
         public OrderType orderType;
         [ShowInInspector]
+        //此变量为物品是否扣除完毕
         public bool canBeCommit;
         [ShowInInspector]
         public int acceptOrder;
@@ -54,7 +55,8 @@ namespace ProjectOC.Order
 
         //剩余没扣除的物品
         private Dictionary<string,int> remainRequireItemDic = new Dictionary<string,int>();
-        private Dictionary<string, int> RequireItem = new Dictionary<string, int>();
+        private Dictionary<string, int> requireItem = new Dictionary<string, int>();
+        public Dictionary<string, int> RequireItem { get { return requireItem; } }
         public Dictionary<string, int> RemainRequireItemDic
         {
             get { return remainRequireItemDic; }
@@ -68,7 +70,7 @@ namespace ProjectOC.Order
             get { return addedItemDic; }
         }
 
-        private readonly bool canBeCancled;
+        public readonly bool canBeCancled;
 
         public Order(OrderTableData orderTableData)
         { 
@@ -83,7 +85,7 @@ namespace ProjectOC.Order
             foreach (var item in orderTableData.RequireList)
             {
                 this.remainRequireItemDic.Add(item.id, item.num);
-                RequireItem.Add(item.id, item.num);
+                requireItem.Add(item.id, item.num);
                 addedItemDic.Add(item.id, 0);
             }
 
@@ -102,7 +104,7 @@ namespace ProjectOC.Order
                 addedItemDic[ItemId] += ItemNum;
             }
 
-            foreach (var item in RequireItem)
+            foreach (var item in requireItem)
             {
                 if (addedItemDic[item.Key] != item.Value)
                 {

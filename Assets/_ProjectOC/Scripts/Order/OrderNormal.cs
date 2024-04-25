@@ -21,11 +21,13 @@ namespace ProjectOC.Order
         public OrderNormal(OrderTableData orderTableData) :base(orderTableData)
         {
             this.DemandCycle = orderTableData.CD;
-            this.RefreshTimer = new CounterDownTimer(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DemandCycle, autocycle: false, autoStart: false);
+            //this.RefreshTimer = new CounterDownTimer(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DemandCycle, autocycle: false, autoStart: false);
+            this.RefreshTimer = new CounterDownTimer(1 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DemandCycle, autocycle: false, autoStart: false);
             this.RefreshTimer.OnEndEvent += () =>
             {
                 //重置计时器
-                this.RefreshTimer.Reset(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DemandCycle, isStoped: true);
+                //this.RefreshTimer.Reset(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DemandCycle, isStoped: true);
+                this.RefreshTimer.Reset(1 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DemandCycle, isStoped: true);
 
                 //TODO 记录当前游戏日，于当日00：00加入常规列表中 AddOrderToOrderDelegationMap
 
