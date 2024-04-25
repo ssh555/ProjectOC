@@ -20,7 +20,7 @@ namespace ProjectOC.RestaurantNS
             }
             if (oldPos != newPos)
             {
-                Restaurant.OnPositionChange();
+                Restaurant.OnPositionChange(newPos - oldPos);
             }
             base.OnChangePlaceEvent(oldPos, newPos);
         }

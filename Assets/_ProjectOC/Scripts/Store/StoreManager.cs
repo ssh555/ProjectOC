@@ -19,31 +19,21 @@ namespace ProjectOC.StoreNS
         }
 
         #region Load And Data
-        /// <summary>
-        /// 是否已加载完数据
-        /// </summary>
-        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
-
         private Dictionary<string, StoreIconTableData> StoreIconTableDict = new Dictionary<string, StoreIconTableData>();
-
         public ML.Engine.ABResources.ABJsonAssetProcessor<StoreIconTableData[]> ABJAProcessor;
-
         public void LoadTableData()
         {
             ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StoreIconTableData[]>("OCTableData", "StoreIcon", (datas) =>
             {
                 foreach (var data in datas)
                 {
-                    this.StoreIconTableDict.Add(data.ID, data);
+                    StoreIconTableDict.Add(data.ID, data);
                 }
             }, "仓库图标表数据");
             ABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
 
-        /// <summary>
-        /// 实例化生成的仓库，键为UID
-        /// </summary>
         private Dictionary<string, WorldStore> WorldStoreDict = new Dictionary<string, WorldStore>();
 
         public bool IsValidUID(string uid)
@@ -163,37 +153,18 @@ namespace ProjectOC.StoreNS
             return result;
         }
 
-        /// <summary>
-        /// 创建新的仓库
-        /// </summary>
         public Store SpawnStore(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType)
         {
             Store store = new Store(storeType);
             return store;
         }
+
         public void WorldStoreSetData(WorldStore worldStore, ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType, int level)
         {
             if (worldStore != null && level >= 0)
             {
-                if (!WorldStoreDict.ContainsKey(worldStore.InstanceID))
-                {
-                    WorldStoreDict.Add(worldStore.InstanceID, worldStore);
-                }
-                else
-                {
-                    WorldStoreDict[worldStore.InstanceID] = worldStore;
-                }
                 Store store = SpawnStore(storeType);
-                if (store != null)
-                {
-                    if (worldStore.Store != null)
-                    {
-                        worldStore.Store.WorldStore = null;
-                    }
-                    worldStore.Store = store;
-                    store.WorldStore = worldStore;
-                    store.SetLevel(level);
-                }
+                WorldStoreSetData(worldStore, store);
             }
         }
 

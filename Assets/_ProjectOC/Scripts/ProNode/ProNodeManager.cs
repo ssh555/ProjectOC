@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using UnityEngine;
 using ML.Engine.InventorySystem;
-using ProjectOC.WorkerNS;
 using ML.Engine.TextContent;
-using System;
+using Sirenix.OdinInspector;
 
 namespace ProjectOC.ProNodeNS
 {
@@ -15,35 +13,23 @@ namespace ProjectOC.ProNodeNS
         public ProNodeType Type;
         public RecipeCategory Category;
         public List<RecipeCategory> RecipeCategoryFiltered;
-        public WorkType ExpType;
+        public WorkerNS.WorkType ExpType;
         public int MaxStack;
         public int StackThreshold;
         public int RawThreshold;
         public bool CanCharge;
     }
 
-    /// <summary>
-    /// 生产节点管理器
-    /// </summary>
-    [System.Serializable]
+    [LabelText("生产节点管理器"), System.Serializable]
     public sealed class ProNodeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         public void OnRegister()
         {
             LoadTableData();
         }
-
+        
         #region Load And Data
-        /// <summary>
-        /// 是否已加载完数据
-        /// </summary>
-        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
-
-        /// <summary>
-        /// 基础ProNode数据表
-        /// </summary>
         private Dictionary<string, ProNodeTableData> ProNodeTableDict = new Dictionary<string, ProNodeTableData>();
-
         public ML.Engine.ABResources.ABJsonAssetProcessor<ProNodeTableData[]> ABJAProcessor;
 
         public void LoadTableData()
@@ -52,7 +38,7 @@ namespace ProjectOC.ProNodeNS
             {
                 foreach (var data in datas)
                 {
-                    this.ProNodeTableDict.Add(data.ID, data);
+                    ProNodeTableDict.Add(data.ID, data);
                 }
             }, "生产节点表数据");
             ABJAProcessor.StartLoadJsonAssetData();
@@ -60,14 +46,8 @@ namespace ProjectOC.ProNodeNS
         #endregion
 
         #region Spawn
-        /// <summary>
-        /// 实例化生成的生产节点，键为UID
-        /// </summary>
         private Dictionary<string, WorldProNode> WorldProNodeDict = new Dictionary<string, WorldProNode>();
 
-        /// <summary>
-        /// 根据id创建新的生产节点
-        /// </summary>
         public ProNode SpawnProNode(string id)
         {
             if (IsValidID(id))
@@ -81,27 +61,14 @@ namespace ProjectOC.ProNodeNS
         {
             if (worldNode != null && IsValidID(nodeID))
             {
-                if (WorldProNodeDict.ContainsKey(worldNode.InstanceID))
-                {
-                    WorldProNodeDict[worldNode.InstanceID] = worldNode;
-                }
-                else
-                {
-                    WorldProNodeDict.Add(worldNode.InstanceID, worldNode);
-                }
                 ProNode node = SpawnProNode(nodeID);
-                if (worldNode.ProNode != null)
-                {
-                    worldNode.ProNode.WorldProNode = null;
-                }
-                worldNode.ProNode = node;
-                node.WorldProNode = worldNode;
+                WorldNodeSetData(worldNode, node);
             }
         }
 
-        public void WorldNodeSetData(WorldProNode worldNode, ProNode proNode)
+        public void WorldNodeSetData(WorldProNode worldNode, ProNode node)
         {
-            if (worldNode != null && proNode != null)
+            if (worldNode != null && node != null)
             {
                 if (WorldProNodeDict.ContainsKey(worldNode.InstanceID))
                 {
@@ -115,8 +82,8 @@ namespace ProjectOC.ProNodeNS
                 {
                     worldNode.ProNode.WorldProNode = null;
                 }
-                worldNode.ProNode = proNode;
-                proNode.WorldProNode = worldNode;
+                worldNode.ProNode = node;
+                node.WorldProNode = worldNode;
             }
         }
         #endregion
@@ -183,16 +150,16 @@ namespace ProjectOC.ProNodeNS
             return new List<RecipeCategory>();
         }
 
-        public WorkType GetExpType(string id)
+        public WorkerNS.WorkType GetExpType(string id)
         {
             if (IsValidID(id))
             {
                 return ProNodeTableDict[id].ExpType;
             }
-            return WorkType.None;
+            return WorkerNS.WorkType.None;
         }
 
-        public int GetStack(string id)
+        public int GetMaxStack(string id)
         {
             if (IsValidID(id))
             {

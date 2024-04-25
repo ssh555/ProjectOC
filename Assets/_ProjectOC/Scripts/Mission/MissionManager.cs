@@ -84,7 +84,7 @@ namespace ProjectOC.MissionNS
                 Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
                 if (worker != null)
                 {
-                    int maxBurNum = (int)(worker.BURMax / ItemManager.Instance.GetWeight(mission.ItemID));
+                    int maxBurNum = (int)(worker.WeightMax / ItemManager.Instance.GetWeight(mission.ItemID));
                     missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
                 }
                 IMissionObj target = null;
@@ -124,7 +124,7 @@ namespace ProjectOC.MissionNS
                     Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
                     if (worker != null)
                     {
-                        int maxBurNum = (int)(worker.BURMax / ItemManager.Instance.GetWeight(mission.ItemID));
+                        int maxBurNum = (int)(worker.WeightMax / ItemManager.Instance.GetWeight(mission.ItemID));
                         missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
                     }
                     if (worker != null && store != null && missionNum > 0)
