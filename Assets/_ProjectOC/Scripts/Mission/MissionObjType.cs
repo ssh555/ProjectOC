@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace ProjectOC.MissionNS
 {
     public enum MissionObjType

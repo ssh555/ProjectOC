@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System;
 using System.Linq;
-
 
 namespace ML.Engine.InventorySystem
 {
@@ -56,23 +54,23 @@ namespace ML.Engine.InventorySystem
             {
                 return new Recipe(RecipeTableDict[id]);
             }
-            return null;
+            return default(Recipe);
         }
         #endregion
 
         #region Getter
-        public string GetRecipeName(string id)
+        public bool IsValidID(string id)
         {
-            if (!string.IsNullOrEmpty(id) && RecipeTableDict.ContainsKey(id))
+            if (!string.IsNullOrEmpty(id))
             {
-                return RecipeTableDict[id].Name;
+                return RecipeTableDict.ContainsKey(id);
             }
-            return null;
+            return false;
         }
 
         public UnityEngine.Sprite GetRecipeIcon(string id)
         {
-            if(RecipeTableDict.ContainsKey(id))
+            if(IsValidID(id))
             {
                 return ItemManager.Instance.GetItemSprite(RecipeTableDict[id].Product.id);
             }
@@ -94,10 +92,10 @@ namespace ML.Engine.InventorySystem
             List<string> resultes = new List<string>();
             if (recipeIDs != null)
             {
-                List<Tuple<string, int>> temps = new List<Tuple<string, int>>();
+                List<System.Tuple<string, int>> temps = new List<System.Tuple<string, int>>();
                 foreach (string id in recipeIDs)
                 {
-                    temps.Add(new Tuple<string, int>(id, GetSort(id)));
+                    temps.Add(new System.Tuple<string, int>(id, GetSort(id)));
                 }
                 temps.Sort((t1, t2) => { return t1.Item2 != t2.Item2 ? t1.Item2.CompareTo(t2.Item2) : t1.Item1.CompareTo(t2.Item1); });
                 foreach (var tuple in temps)
@@ -113,13 +111,13 @@ namespace ML.Engine.InventorySystem
             return RecipeTableDict.Keys.ToArray();
         }
 
-        public bool IsValidID(string id)
+        public string GetRecipeName(string id)
         {
-            if (!string.IsNullOrEmpty(id))
+            if (IsValidID(id))
             {
-                return RecipeTableDict.ContainsKey(id);
+                return RecipeTableDict[id].Name;
             }
-            return false;
+            return null;
         }
 
         public int GetSort(string id)

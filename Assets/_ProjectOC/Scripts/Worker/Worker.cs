@@ -58,13 +58,28 @@ namespace ProjectOC.WorkerNS
         public IWorkerContainer RelaxPlace;
         public IWorkerContainer HomePlace;
         public Dictionary<WorkerContainerType, IWorkerContainer> ContainerDict;
-        private ML.Engine.Timer.CounterDownTimer TimerForNoHome;
+        private ML.Engine.Timer.CounterDownTimer timerForNoHome;
+        private ML.Engine.Timer.CounterDownTimer TimerForNoHome
+        {
+            get
+            {
+                if (TimerForNoHome == null)
+                {
+                    timerForNoHome = new ML.Engine.Timer.CounterDownTimer(60 * DestroyTimeForNoHome, false, false);
+                    TimerForNoHome.OnEndEvent += () =>
+                    {
+                        ManagerNS.LocalGameManager.Instance.WorkerManager.DeleteWorker(this);
+                    };
+                }
+                return timerForNoHome;
+            }
+        }
 
         #region Property
         [LabelText("是否有生产节点"), ShowInInspector, ReadOnly]
         public bool HaveProNode => HasContainer(WorkerContainerType.Work);
         [LabelText("是否有餐厅"), ShowInInspector, ReadOnly]
-        public bool HaveRestaurant => HasContainer(WorkerContainerType.Relax);
+        public bool HaveRestaurantSeat => HasContainer(WorkerContainerType.Relax);
         [LabelText("是否有窝"), ShowInInspector, ReadOnly]
         public bool HaveHome => HasContainer(WorkerContainerType.Home);
         [LabelText("是否在生产节点值班"), ShowInInspector, ReadOnly]
@@ -86,23 +101,15 @@ namespace ProjectOC.WorkerNS
             }
             if (container.GetContainerType() == WorkerContainerType.Home)
             {
-                TimerForNoHome?.End();
+                timerForNoHome?.End();
             }
             ContainerDict[container.GetContainerType()] = container;
         }
 
         public void RemoveContainer(WorkerContainerType type)
         {
-            if (type == WorkerContainerType.Home && (TimerForNoHome == null || TimerForNoHome.IsStoped))
+            if (type == WorkerContainerType.Home && (timerForNoHome == null || timerForNoHome.IsStoped))
             {
-                if (TimerForNoHome == null)
-                {
-                    TimerForNoHome = new ML.Engine.Timer.CounterDownTimer(60 * DestroyTimeForNoHome, false, false);
-                    TimerForNoHome.OnEndEvent += () =>
-                    {
-                        ManagerNS.LocalGameManager.Instance.WorkerManager.DeleteWorker(this);
-                    };
-                }
                 TimerForNoHome.Start();
             }
             ContainerDict[type] = null;
@@ -141,6 +148,11 @@ namespace ProjectOC.WorkerNS
                 { WorkerContainerType.Home, HomePlace }
             };
 
+            if (HomePlace == null)
+            {
+                TimerForNoHome.Start();
+            }
+
             Features = ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature();
             foreach (Feature feature in this.Features)
             {
@@ -150,11 +162,6 @@ namespace ProjectOC.WorkerNS
             StateController = new ML.Engine.FSM.StateController(0);
             StateMachine = new WorkerStateMachine(this);
             StateController.SetStateMachine(StateMachine);
-
-            if (!HaveHome)
-            {
-                HomePlace = null;
-            }
 
             ML.Engine.InventorySystem.ItemManager.Instance.AddItemIconObject("", transform, new Vector3(0, transform.GetComponent<CapsuleCollider>().height * 1.5f, 0),
                                         Quaternion.Euler(Vector3.zero), Vector3.one,
@@ -187,6 +194,10 @@ namespace ProjectOC.WorkerNS
         public bool SetDestination(Vector3 target, Action<Worker> action = null)
         {
             ClearDestination();
+            foreach (var place in ContainerDict.Values)
+            {
+                place?.TempRemoveWorker();
+            }
             Agent.isStopped = false;
             if (Agent.SetDestination(target))
             {
@@ -236,9 +247,9 @@ namespace ProjectOC.WorkerNS
             // World Icon
             bool lowMood = Mood < MoodThreshold;
             bool inSeq = ManagerNS.LocalGameManager.Instance.RestaurantManager.ContainWorker(this);
-            string icon = lowMood ? "LowMood" : "";
-            icon = inSeq ? "LowAP" : icon;
-            icon = lowMood && inSeq ? "LowAPMood" : icon;
+            string icon = lowMood ? "Tex2D_Worker_UI_LowMood" : "";
+            icon = inSeq ? "Tex2D_Worker_UI_LowAP" : icon;
+            icon = lowMood && inSeq ? "Tex2D_Worker_UI_LowAPMood" : icon;
             WorldIcon?.SetSprite(ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite(icon));
         }
         #endregion
