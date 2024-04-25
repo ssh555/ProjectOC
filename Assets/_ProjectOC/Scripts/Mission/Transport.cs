@@ -95,9 +95,9 @@ namespace ProjectOC.MissionNS
             List<Item> items = ItemManager.Instance.SpawnItems(ItemID, this.MissionNum);
             foreach (Item item in items)
             {
-                if (item.Weight + Worker.BURCurrent >= Worker.BURMax)
+                if (item.Weight + Worker.WeightCurrent >= Worker.WeightMax)
                 {
-                    int num = (Worker.BURMax - Worker.BURCurrent) / ItemManager.Instance.GetWeight(item.ID);
+                    int num = (Worker.WeightMax - Worker.WeightCurrent) / ItemManager.Instance.GetWeight(item.ID);
                     item.Amount = num;
                     flagBurden = true;
                 }

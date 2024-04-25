@@ -1,4 +1,5 @@
 using ProjectOC.ManagerNS;
+using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
@@ -6,115 +7,113 @@ using UnityEngine;
 namespace ProjectOC.RestaurantNS
 {
     [LabelText("餐厅座位"), Serializable]
-    public struct RestaurantSeat
+    public struct RestaurantSeat : IWorkerContainer
     {
-        [LabelText("对应的餐厅"), ReadOnly]
+        [LabelText("对应的餐厅"), ReadOnly, NonSerialized]
         public Restaurant Restaurant;
-        [LabelText("对应的Socket"), ReadOnly]
+        [LabelText("对应的Socket"), ReadOnly, NonSerialized]
         public Transform Socket;
-
-        [LabelText("绑定的刁民"), ShowInInspector, ReadOnly]
-        public WorkerNS.Worker Worker { get; private set; }
         [LabelText("刁民正在吃的食物"), ShowInInspector, ReadOnly]
-        public string EatFoodID { get; private set; }
-
-        [LabelText("刁民是否到达"), ReadOnly]
-        public bool HasArrive;
-        [LabelText("是否有绑定刁民"), ShowInInspector, ReadOnly]
-        public bool HasWorker => !string.IsNullOrEmpty(Worker?.InstanceID);
+        public string FoodID { get; private set; }
         [LabelText("是否正在吃东西"), ShowInInspector, ReadOnly]
-        public bool IsEat => !string.IsNullOrEmpty(EatFoodID) && timer != null && !timer.IsStoped;
-
+        public bool IsEat => !string.IsNullOrEmpty(FoodID) && timer != null && !timer.IsStoped;
+        [NonSerialized]
         private ML.Engine.Timer.CounterDownTimer timer;
-        [LabelText("进食计时器"), ReadOnly]
+        [LabelText("进食计时器")]
         public ML.Engine.Timer.CounterDownTimer Timer
         {
             get 
             {
-                if (timer == null && Restaurant != null && HasWorker && HasArrive)
+                if (timer == null && HaveWorker && IsArrive && !string.IsNullOrEmpty(FoodID))
                 {
-                    if (LocalGameManager.Instance.RestaurantManager.WorkerFood_IsValidID(EatFoodID))
-                    {
-                        timer = new ML.Engine.Timer.CounterDownTimer(LocalGameManager.Instance.RestaurantManager.WorkerFood_EatTime(EatFoodID), false, false);
-                        timer.OnEndEvent += EndActionForTimer;
-                    }
+                    timer = new ML.Engine.Timer.CounterDownTimer(LocalGameManager.Instance.RestaurantManager.WorkerFood_EatTime(FoodID), false, false);
+                    timer.OnEndEvent += EndActionForTimer;
                 }
                 return timer; 
             }
         }
 
-        public void SetWorker(WorkerNS.Worker worker)
+        public void Init(Restaurant restaurant, Transform socket)
         {
-            Worker = worker;
-            Worker.Restaurant = Restaurant;
+            Restaurant = restaurant;
+            Socket = socket;
         }
 
         public void SetFood(string foodID)
         {
-            EatFoodID = foodID;
-            if (timer == null)
-            {
-                Timer?.Start();
-            }
-            else
-            {
-                Timer.Reset(LocalGameManager.Instance.RestaurantManager.WorkerFood_EatTime(EatFoodID));
-            }
-        }
-
-        public void ClearData()
-        {
-            if (HasWorker)
-            {
-                Worker.ClearDestination();
-                Worker.Restaurant = null;
-                Worker.RecoverLastPosition();
-                Worker = null;
-            }
-            if (IsEat)
-            {
-                timer?.End();
-                ML.Engine.InventorySystem.Item item = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItem(LocalGameManager.Instance.RestaurantManager.WorkerFood_ItemID(EatFoodID));
-                item.Amount = 1;
-                (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as ProjectOC.Player.OCPlayerController).OCState.Inventory.AddItem(item);
-            }
-
-            HasArrive = false;
-            EatFoodID = "";
+            FoodID = foodID;
+            Timer?.Reset(LocalGameManager.Instance.RestaurantManager.WorkerFood_EatTime(FoodID));
         }
 
         private void EndActionForTimer()
         {
             var restaurantManager = LocalGameManager.Instance.RestaurantManager;
-            if (restaurantManager.WorkerFood_IsValidID(EatFoodID) && Worker != null)
+            Worker.AlterAP(restaurantManager.WorkerFood_AlterAP(FoodID));
+            var mood = restaurantManager.WorkerFood_AlterMoodOdds(FoodID);
+
+            System.Random random = new System.Random();
+            if (random.NextDouble() <= mood.Item1)
             {
-                Worker.AlterAP(restaurantManager.WorkerFood_AlterAP(EatFoodID));
-                var mood = restaurantManager.WorkerFood_AlterMoodOdds(EatFoodID);
+                Worker.AlterMood(mood.Item2);
+            }
 
-                System.Random random = new System.Random();
-                if (random.NextDouble() <= mood.Item1)
+            if (Worker.APCurrent >= Worker.APRelaxThreshold || !Restaurant.HaveFood)
+            {
+                Worker worker = Worker;
+                (this as IWorkerContainer).RemoveWorker();
+                if (!Restaurant.HaveFood && Worker.APCurrent < Worker.APRelaxThreshold)
                 {
-                    Worker.AlterMood(mood.Item2);
+                    restaurantManager.AddWorker(worker);
                 }
-
-                if (Worker.APCurrent >= Worker.APMax || !Restaurant.HasFood)
+            }
+            else
+            {
+                string foodID = Restaurant.EatFood(Worker);
+                if (restaurantManager.WorkerFood_IsValidID(foodID))
                 {
-                    WorkerNS.Worker worker = Worker;
-                    ClearData();
-                    if (!Restaurant.HasFood && Worker.APCurrent < Worker.APMax)
-                    {
-                        restaurantManager.AddWorker(worker);
-                    }
-                }
-                else
-                {
-                    string foodID = Restaurant.EatFood(Worker);
-                    if (restaurantManager.WorkerFood_IsValidID(foodID))
-                    {
-                        SetFood(foodID);
-                    }
+                    SetFood(foodID);
                 }
             }
         }
+
+        #region IWorkerContainer
+        public Worker Worker { get; set; }
+        public bool IsArrive { get; set; }
+        public bool HaveWorker => Worker != null && !string.IsNullOrEmpty(Worker.InstanceID);
+        public Action<Worker> OnSetWorkerEvent { get; set; }
+        public Action OnRemoveWorkerEvent { get; set; }
+
+        public string GetUID() { return Restaurant.UID; }
+        public WorkerContainerType GetContainerType() { return WorkerContainerType.Relax; }
+        public Transform GetTransform() { return Socket; }
+
+        public void RemoveWorkerRelateData()
+        {
+            if (IsEat)
+            {
+                Timer?.End();
+                ML.Engine.InventorySystem.Item item = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItem(LocalGameManager.Instance.RestaurantManager.WorkerFood_ItemID(FoodID));
+                item.Amount = 1;
+                (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory.AddItem(item);
+            }
+            FoodID = "";
+        }
+
+        public void OnArriveEvent(Worker worker)
+        {
+            if (worker != null && Restaurant.HaveFood)
+            {
+                string foodID = Restaurant.EatFood(Worker);
+                if (LocalGameManager.Instance.RestaurantManager.WorkerFood_IsValidID(foodID))
+                {
+                    (this as IWorkerContainer).OnArriveSetPosition(worker);
+                    SetFood(foodID);
+                    return;
+                }
+            }
+            (this as IWorkerContainer).RemoveWorker();
+            LocalGameManager.Instance.RestaurantManager.AddWorker(worker);
+        }
+        #endregion
     }
 }

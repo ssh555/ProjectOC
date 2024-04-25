@@ -275,6 +275,25 @@ namespace ML.Engine.InventorySystem
             return ItemTypeStrDict.Keys.ToArray();
         }
 
+        public List<string> SortItemIDs(List<string> itemIDs)
+        {
+            List<string> resultes = new List<string>();
+            if (itemIDs != null)
+            {
+                List<Tuple<string, int>> temps = new List<Tuple<string, int>>();
+                foreach (string id in itemIDs)
+                {
+                    temps.Add(new Tuple<string, int>(id, GetSortNum(id)));
+                }
+                temps.Sort((t1, t2) => { return t1.Item2 != t2.Item2 ? t1.Item2.CompareTo(t2.Item2) : t1.Item1.CompareTo(t2.Item1); });
+                foreach (var tuple in temps)
+                {
+                    resultes.Add(tuple.Item1);
+                }
+            }
+            return resultes;
+        }
+
         public bool IsValidItemID(string id)
         {
             return this.ItemTypeStrDict.ContainsKey(id);
