@@ -52,8 +52,7 @@ MonoBehaviour:
   - m_GUID: bec98dc69bc2576468f299b07ac7bded
     m_Address: ML/BuildingSystem/BuildIcon
     m_ReadOnly: 0
-    m_SerializedLabels:
-    - ItemTexture2D
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f6012575473add94a8f70a21915a4a78
     m_Address: ML/InventorySystem/WorldItemPrefabs
@@ -293,6 +292,12 @@ MonoBehaviour:
     m_Address: OC/UI/PinchFace
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a67342012d8acc546952ad9f304bbc39
+    m_Address: Assets/_ProjectOC/OCResources/UI/Building/BuildIcon
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemTexture2D
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 72d1a89784032c94ea3b026b42e20dcf, type: 2}
