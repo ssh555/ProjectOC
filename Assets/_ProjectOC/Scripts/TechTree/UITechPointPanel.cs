@@ -77,7 +77,7 @@ namespace ProjectOC.TechTree.UI
                 string id = AllID[i];
                 if (!this.TTTPGO.TryGetValue(id, out var obj))
                 {
-                    this.cursorNavigation.UIBtnList.AddBtn("Assets/_ProjectOC/OCResources/UI/TechPoint/TechPointTemplate.prefab",
+                    this.cursorNavigation.UIBtnList.AddBtn("Prefabs_TechTree_UI/Prefab_TechTree_UI_TechPointTemplate.prefab",
                         OnSelectEnter: () =>
                         {
                             CurrentID = id;

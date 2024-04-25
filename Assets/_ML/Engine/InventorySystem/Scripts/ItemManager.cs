@@ -306,7 +306,7 @@ namespace ML.Engine.InventorySystem
             if (itemIcon == null)
             {
                 // 异步加载资源
-                var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjLabel + "/Prefab_ItemIcon.prefab", parent);
+                var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjLabel + "/Prefab_Item_ItemIcon.prefab", parent);
 
                 // 等待加载完成
                 await handle.Task;

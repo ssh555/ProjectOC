@@ -250,7 +250,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.BInput.BuildingAppearance.Disable();
         }
 
-        private const string MatPABPath = "BPartMatPackage";
+        private const string MatPABPath = "BS_MatAsset_MatPackage";
         private AsyncOperationHandle matHandle;
         protected void LoadMatPackages()
         {

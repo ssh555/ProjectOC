@@ -21,8 +21,8 @@ namespace ML.Engine.BuildingSystem.UI
     public class BSSelectBPartPanel : Engine.UI.UIBasePanel<BSSelectBPartPanelStruct>
     {
         #region 载入资源
-        public const string TCategorySpriteAtlasPath = "SA_Build_Category";
-        public const string TTypeABPath = "SA_Build_Category3";
+        public const string TCategorySpriteAtlasPath = "SA_UI_Category1";
+        public const string TTypeABPath = "SA_UI_Category2";
 
         public int IsInit = -1;
 
@@ -449,7 +449,7 @@ namespace ML.Engine.BuildingSystem.UI
                         foreach (var item in furnitureList)
                         {
                             string BuildingName = BuildingManager.Instance.GetName(item.Item2.Classification.ToString());
-                            this.FurnitureDisplayBtnList.AddBtn("ML/BuildingSystem/UI/FurnitureBtn.prefab", BtnAction: () =>
+                            this.FurnitureDisplayBtnList.AddBtn("Prefab_BuildingSystem/Prefab_BS_FurnitureBtn.prefab", BtnAction: () =>
                             {
                                 Debug.Log("放置家具 " + item.Item2.Classification.ToString());
                                 this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(item.Item2.Classification);
@@ -476,7 +476,7 @@ namespace ML.Engine.BuildingSystem.UI
                             
                             string classification = BuildingManager.Instance.GetClassification(buildingID);
                             string BuildingName = BuildingManager.Instance.GetName(classification);
-                            this.FurnitureDisplayBtnList.AddBtn("ML/BuildingSystem/UI/FurnitureBtn.prefab", BtnAction: () =>
+                            this.FurnitureDisplayBtnList.AddBtn("Prefab_BuildingSystem/Prefab_BS_FurnitureBtn.prefab", BtnAction: () =>
                             {
                                 Debug.Log("放置家具 " + classification);
                                 this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(classification);
@@ -538,7 +538,7 @@ namespace ML.Engine.BuildingSystem.UI
                     //给主题btnlist加入按钮
                     foreach (var (id, data) in BuildingManager.Instance.FurnitureThemeTableDataDic)
                     {
-                        this.FurnitureThemeBtnList.AddBtn("ML/BuildingSystem/UI/ThemeBtn.prefab",BtnSettingAction: (btn) =>
+                        this.FurnitureThemeBtnList.AddBtn("Prefab_BuildingSystem/Prefab_BS_ThemeBtn.prefab",BtnSettingAction: (btn) =>
                         {
                             btn.gameObject.name = data.ID;
 

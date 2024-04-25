@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3579960169101001857}
   - component: {fileID: 7527508041785663787}
   m_Layer: 5
-  m_Name: BaseUIBtn
+  m_Name: Prefab_BaseUIBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

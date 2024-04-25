@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78d1909d11404144d89bc7a9e57fba0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 0}
+  Target: {fileID: 0}
 --- !u!222 &27648383255372573
 CanvasRenderer:
   m_ObjectHideFlags: 0
