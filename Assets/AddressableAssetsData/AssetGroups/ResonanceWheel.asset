@@ -18,7 +18,17 @@ MonoBehaviour:
   m_GUID: 8b72f687a56455e438b4205170a01462
   m_SerializeEntries:
   - m_GUID: 6cc0808d1f209624999124411b06af01
-    m_Address: SA_ResonanceWheel_UI_UIPanel
+    m_Address: SA_ResonanceWheel_UI
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d099ffa5266036543a28a32aa1385d62
+    m_Address: Prefab_ResonanceWheel_UIPanel
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 694c31347c20cb8499702d052e8ed8aa
+    m_Address: Prefab_ResonanceWheel_UIPrefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

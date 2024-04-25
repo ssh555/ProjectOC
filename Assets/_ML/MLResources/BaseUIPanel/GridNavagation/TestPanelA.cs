@@ -8,7 +8,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using static ML.Engine.UI.OptionPanel;
 using static ML.Engine.UI.UIBtnListContainer;
 
 namespace ML.Engine.UI

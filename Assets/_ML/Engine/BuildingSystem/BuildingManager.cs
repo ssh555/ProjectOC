@@ -1141,7 +1141,7 @@ namespace ML.Engine.BuildingSystem
         //仅获取家具建筑的icon
         public string GetFurtureBuildingIcon(string classification)
         {
-            if(this.BPartTableDictOnClass.ContainsKey(classification))
+            if (this.BPartTableDictOnClass.ContainsKey(classification))
             {
                 return this.BPartTableDictOnClass[classification].icon;
             }

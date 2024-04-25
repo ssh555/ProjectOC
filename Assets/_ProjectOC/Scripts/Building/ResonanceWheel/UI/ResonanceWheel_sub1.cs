@@ -145,8 +145,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region UI对象引用
-        private UIKeyTipComponent[] UIKeyTipComponents;
-
         public ResonanceWheelUI parentUI;
         //BeastInfo
         private TMPro.TextMeshProUGUI Stamina;
@@ -228,7 +226,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                 foreach (var feature in worker.Features)
                 {
-                    GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UI/ResonanceWheel/Prefabs/Description.prefab", Info).Completed += (handle) =>
+                    GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_Description.prefab", Info).Completed += (handle) =>
                         {
                             this.descriptionHandle.Add(handle);
                             var descriptionPrefab = handle.Result;
@@ -257,7 +255,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/ResonanceWheel";
+            this.abpath = "OCTextContent/ResonanceWheel";
             this.abname = "ResonanceWheel_sub1";
             this.description = "ResonanceWheel_sub1数据加载完成";
         }
@@ -266,11 +264,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         protected override void InitObjectPool()
         {
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
-            "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2", (handle) =>
+            "SA_ResonanceWheel_UI", (handle) =>
             {
+                string Pre = "Tex2D_Resonance_UI_";
                 SpriteAtlas resonanceWheelAtlas = handle.Result as SpriteAtlas;
-                icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite("icon_genderfemale");
-                icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite("icon_gendermale");
+                icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite(Pre + "icon_genderfemale");
+                icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite(Pre + "icon_gendermale");
             }
             );
             base.InitObjectPool();

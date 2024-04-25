@@ -99,9 +99,10 @@ namespace ProjectOC.WorkerNS
         {
             return ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.OnlyCostResource(inventory, workerID);
         }
-        public AsyncOperationHandle<GameObject> SpawnWorker(Vector3 pos, Quaternion rot, string name = "Worker", bool isAdd=true)
+        public AsyncOperationHandle<GameObject> SpawnWorker(Vector3 pos, Quaternion rot, string name = "Prefab_Worker_Worker", bool isAdd=true)
         {
-            name = "Worker";
+            //TODO 
+            name = "Prefab_Worker_Worker";
             var handle = GetObject(name, pos, rot);
             handle.Completed += (asHandle) =>
             {

@@ -113,7 +113,7 @@ namespace ML.Engine.InventorySystem
         #region to-do : 需读表导入所有所需的 Item 数据
         public const string TypePath = "ML.Engine.InventorySystem.";
         public const string ItemIconLabel = "SA_Item_UI_ItemIcon";
-        public const string WorldObjLabel = "Prefab_Worlditem";
+        public const string WorldObjLabel = "Prefab_WorldItem";
 
 
 

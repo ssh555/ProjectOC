@@ -4,6 +4,7 @@ using ML.Engine.TextContent;
 using ML.Engine.Timer;
 using ML.Engine.UI;
 using ProjectOC.InventorySystem.UI;
+using ProjectOC.MainInteract.UI;
 using ProjectOC.ManagerNS;
 using ProjectOC.Player;
 using ProjectOC.ResonanceWheelSystem.UI;
@@ -94,7 +95,7 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("±³°ü",
             () =>
             {
-                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIInfiniteInventoryPanel.prefab", this.transform.parent, true).Completed += (handle) =>
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefabs_UIInfiniteInventoryPanel", this.transform.parent, true).Completed += (handle) =>
                 {
                     var panel = handle.Result.GetComponent<UIInfiniteInventory>();
                     panel.transform.localScale = Vector3.one;
@@ -153,7 +154,7 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("¿Æ¼¼Ê÷",
             () =>
             {
-                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/TechPointPanel.prefab", this.transform.parent, true).Completed += (handle) =>
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefabs_TechTree_UI/TechPointPanel.prefab", this.transform.parent, true).Completed += (handle) =>
                 {
                     var panel = handle.Result.GetComponent<UITechPointPanel>();
                     panel.transform.localScale = Vector3.one;

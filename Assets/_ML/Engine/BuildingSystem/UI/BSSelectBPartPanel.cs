@@ -541,10 +541,7 @@ namespace ML.Engine.BuildingSystem.UI
                         this.FurnitureThemeBtnList.AddBtn("Prefab_BuildingSystem/Prefab_BS_ThemeBtn.prefab",BtnSettingAction: (btn) =>
                         {
                             btn.gameObject.name = data.ID;
-
-                            //TODO ’“ÕººØ
                             btn.transform.Find("Image").Find("Image1").GetComponent<Image>().sprite = FurnitureThemeSpriteAtlas.GetSprite(data.Icon);
-
                         }, BtnText: data.Name);
                     }
                     isFirstAddThemeBtn = false;

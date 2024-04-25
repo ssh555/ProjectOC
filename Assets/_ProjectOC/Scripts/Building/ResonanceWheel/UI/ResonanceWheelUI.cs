@@ -2,6 +2,7 @@ using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.Timer;
+using ML.Engine.UI;
 using ML.Engine.Utility;
 using ProjectOC.ManagerNS;
 using ProjectOC.Player;
@@ -15,6 +16,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheelUI;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
@@ -150,7 +152,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
             isQuit = false;
-            hasSub1nstance = false;
+            hasSub1Instance = false;
             Invoke("Refresh", 0.01f);
             base.Enter();
         }
@@ -242,7 +244,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
 
-            if(hasSub1nstance)
+            if(hasSub1Instance)
             {
                 isQuit = true;
                 UIMgr.PopPanel();
@@ -291,12 +293,13 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void SwitchTarget_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            var panel = GameObject.Instantiate(resonanceWheel_Sub2);
-            panel.transform.SetParent(this.transform.parent, false);
-            panel.parentUI = this;
-            
-            ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
-
+            GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_ResonanceWheel_UIPanel/Prefab_ResonanceWheel_UI_ResonanceWheelUI_sub2.prefab").Completed += (handle) =>
+            {
+                var panel = handle.Result.GetComponent<ResonanceWheel_sub2>();
+                panel.transform.SetParent(this.transform.parent, false);
+                panel.parentUI = this;
+                GameManager.Instance.UIManager.PushPanel(panel);
+            };
         }
 
         private void StartResonance_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -470,7 +473,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             // 返回
             
 
-            hasSub1nstance = false;
+            hasSub1Instance = false;
         }
 
         public void MainToSub2()
@@ -544,14 +547,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #region UI对象引用
         public WorkerEcho workerEcho;
-        public ResonanceWheel_sub1 resonanceWheel_Sub1;//详细隐兽界面 prefab
-        public ResonanceWheel_sub2 resonanceWheel_Sub2;//随机选择隐兽界面 prefab
-        
 
         public Transform exclusivePart;//主ui独有部分
 
         private ResonanceWheel_sub1 Sub1nstance = null;
-        private bool hasSub1nstance = false;//是否有sub1的单一生成实例
+        private bool hasSub1Instance = false;//是否有sub1的单一生成实例
         public bool isQuit = false;
 
         //topPart
@@ -578,12 +578,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             WorkerEcho_Null=0,
             WorkerEcho_Random,
-            WorkerEcho_Cat,
-            WorkerEcho_Deer,
-            WorkerEcho_Fox,
-            WorkerEcho_Rabbit,
-            WorkerEcho_Dog,
-            WorkerEcho_Seal
+            WorkerEcho_CookWorker,
+            WorkerEcho_HandCraftWorker,
+            WorkerEcho_IndustryWorker,
+            WorkerEcho_MagicWorker,
+            WorkerEcho_TransportWorker,
+            WorkerEcho_CollectWorker,
         }
 
 
@@ -643,10 +643,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             if (Grids[CurrentGridIndex].isNull)//空格子
             {
-                if (hasSub1nstance)
+                if (hasSub1Instance)
                 {
                     UIMgr.PopPanel();
-                    hasSub1nstance=false;
+                    hasSub1Instance=false;
                 }
 
 
@@ -693,10 +693,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             else if (Grids[CurrentGridIndex].isTiming)//计时格子
             {
 
-                if (hasSub1nstance)
+                if (hasSub1Instance)
                 {
                     UIMgr.PopPanel();
-                    hasSub1nstance = false;
+                    hasSub1Instance = false;
                 }
 
                 //更新为共鸣中
@@ -722,14 +722,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             {
                 if(!isQuit)
                 {
-                    if (!hasSub1nstance)
+                    if (!hasSub1Instance)
                     {
-                        var panel = GameObject.Instantiate(resonanceWheel_Sub1);
+                        var panel = GameObject.Instantiate(ResonanceWheel_sub1Instance);
                         panel.transform.SetParent(this.transform.parent, false);
                         panel.parentUI = this;
                         Sub1nstance = panel;
-                        ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
-                        hasSub1nstance = true;
+                        GameManager.Instance.UIManager.PushPanel(panel);
+                        hasSub1Instance = true;
                     }
                     else
                     {
@@ -819,6 +819,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #region Resource
         private GameObject SlotPrefab;
+        private ResonanceWheel_sub1 ResonanceWheel_sub1Instance;
         #region TextContent
         [System.Serializable]
         public struct ResonanceWheelPanel
@@ -851,7 +852,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/ResonanceWheel";
+            this.abpath = "OCTextContent/ResonanceWheel";
             this.abname = "ResonanceWheelPanel";
             this.description = "ResonanceWheelPanel数据加载完成";
         }
@@ -860,25 +861,32 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         protected override void InitObjectPool()
         {
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
-            "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2", (handle) =>
+            "SA_ResonanceWheel_UI", (handle) =>
             {
                 var resonanceAtlas = handle.Result as SpriteAtlas;
-                sprite1 = resonanceAtlas.GetSprite("icon_beast");
-                sprite2 = resonanceAtlas.GetSprite("icon_timing");
-                sprite3 = resonanceAtlas.GetSprite("gray_background");
+                string Pre = "Tex2D_Resonance_UI_";
 
-                beastTypeDic.Add(BeastType.WorkerEcho_Cat, resonanceAtlas.GetSprite("Cat"));
-                beastTypeDic.Add(BeastType.WorkerEcho_Deer, resonanceAtlas.GetSprite("Deer"));
-                beastTypeDic.Add(BeastType.WorkerEcho_Dog, resonanceAtlas.GetSprite("Dog"));
-                beastTypeDic.Add(BeastType.WorkerEcho_Fox, resonanceAtlas.GetSprite("Fox"));
-                beastTypeDic.Add(BeastType.WorkerEcho_Rabbit, resonanceAtlas.GetSprite("Rabbit"));
-                beastTypeDic.Add(BeastType.WorkerEcho_Seal, resonanceAtlas.GetSprite("Seal"));
-                beastTypeDic.Add(BeastType.WorkerEcho_Random, resonanceAtlas.GetSprite("Random"));
+                sprite1 = resonanceAtlas.GetSprite(Pre + "icon_beast");
+                sprite2 = resonanceAtlas.GetSprite(Pre + "icon_timing");
+                sprite3 = resonanceAtlas.GetSprite(Pre + "gray_background");
+
+                beastTypeDic.Add(BeastType.WorkerEcho_CookWorker, resonanceAtlas.GetSprite(Pre + "Cat"));
+                beastTypeDic.Add(BeastType.WorkerEcho_HandCraftWorker, resonanceAtlas.GetSprite(Pre + "Deer"));
+                beastTypeDic.Add(BeastType.WorkerEcho_IndustryWorker, resonanceAtlas.GetSprite(Pre + "Dog"));
+                beastTypeDic.Add(BeastType.WorkerEcho_MagicWorker, resonanceAtlas.GetSprite(Pre + "Fox"));
+                beastTypeDic.Add(BeastType.WorkerEcho_TransportWorker, resonanceAtlas.GetSprite(Pre + "Rabbit"));
+                beastTypeDic.Add(BeastType.WorkerEcho_CollectWorker, resonanceAtlas.GetSprite(Pre + "Seal"));
+                beastTypeDic.Add(BeastType.WorkerEcho_Random, resonanceAtlas.GetSprite(Pre + "Random"));
             }
             );
-            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SlotPrefabPool", 1, "OC/UI/ResonanceWheel/Prefabs/Slot.prefab", (handle) =>
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SlotPrefabPool", 1, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_Slot.prefab", (handle) =>
             {
                 SlotPrefab = handle.Result as GameObject;
+            });
+
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "ResonanceWheelUI_sub1", 1, "Prefab_ResonanceWheel_UIPanel/Prefab_ResonanceWheel_UI_ResonanceWheelUI_sub1.prefab", (handle) =>
+            {
+                ResonanceWheel_sub1Instance = (handle.Result as GameObject).GetComponent<ResonanceWheel_sub1>();
             });
 
             base.InitObjectPool();
