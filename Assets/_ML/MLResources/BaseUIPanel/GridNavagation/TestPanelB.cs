@@ -70,7 +70,7 @@ namespace ML.Engine.UI
                     return;
                 }
 
-                this.UIBtnListContainer.AddBtn(number1, "Assets/_ML/MLResources/BaseUIPrefab/BaseUISelectedBtn.prefab");
+                this.UIBtnListContainer.AddBtn(number1, "ML/BaseUIPrefab/Prefab_BaseUISelectedBtn.prefab");
                 
             });
 

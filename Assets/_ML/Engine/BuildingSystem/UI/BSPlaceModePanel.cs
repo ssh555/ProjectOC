@@ -53,7 +53,7 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region ÔØÈë×Ê²ú
-        public const string TStyleSpriteAtlasPath = "ML/BuildingSystem/Style/SA_Build_Style.spriteatlasv2";
+        public const string TStyleSpriteAtlasPath = "SA_UI_Category3";
         private SpriteAtlas styleAtlas = null;
         private AsyncOperationHandle SAHandle;
         /// <summary>
