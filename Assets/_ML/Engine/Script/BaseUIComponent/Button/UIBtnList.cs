@@ -287,7 +287,6 @@ namespace ML.Engine.UI
                 Navigation navigation = btn.navigation;
                 navigation.mode = Navigation.Mode.None;
                 btn.navigation = navigation;
-                Debug.Log(i.ToString() + "   " + btn.gameObject.name);
                 SBDic.Add(btn.gameObject.name, btn);
                 SBDicIndex.Add(btn.gameObject.name, i);
             }

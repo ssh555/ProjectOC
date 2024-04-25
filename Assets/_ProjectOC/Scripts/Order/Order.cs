@@ -21,7 +21,7 @@ namespace ProjectOC.Order
         public int acceptOrder;
 
 
-        private string orderInstanceID;
+        protected string orderInstanceID;
         [ShowInInspector]
         public string OrderInstanceID { get { return orderInstanceID; } }
 

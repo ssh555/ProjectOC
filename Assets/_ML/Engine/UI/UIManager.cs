@@ -276,9 +276,6 @@ namespace ML.Engine.UI
                         panelGo.GetComponent<BtnUI>().CopyInstance(btnData);
 
                     }
-
-                    
-
                     break;
                 case NoticeUIType.PopUpUI:
                     panelGo = GameObject.Instantiate(this.PopUpUIPrefab);
@@ -298,12 +295,7 @@ namespace ML.Engine.UI
                     panelGo.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
                     break;
             }
-            
-
         }
-
-
-
         #endregion
     }
 

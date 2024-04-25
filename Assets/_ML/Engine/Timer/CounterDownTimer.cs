@@ -256,6 +256,5 @@ namespace ML.Engine.Timer
             min = sec > 0 ? min + 1 : min;
             return min.ToString();
         }
-
     }
 }

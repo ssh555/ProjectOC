@@ -45,12 +45,10 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     #region Override
     private void OrderPanelRefreshOrderUrgentDelegationAction()
     {
-        //Debug.Log("OrderPanelRefreshOrderDelegationAction");
         isNeedRefreshOrderUrgentDelegation = true; Refresh();
     }
     private void OrderPanelRefreshAcceptedOrderAction()
     {
-        //Debug.Log("OrderPanelRefreshAcceptedOrderAction");
         isNeedRefreshAcceptedOrder = true; Refresh();
     }
     public override void OnEnter()
@@ -131,7 +129,6 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 
     private void MainInteract_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        
         if(FunctionIndex == 1)
         {
             //打开 关闭氏族信息
@@ -160,10 +157,12 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         else if(FunctionIndex == 0)
         {
             //点按提交订单
-            OrderManager.Instance.CommitOrder(curSelectedOrderInstanceIDInAcceptedOrder);
-            this.AcceptedOrderBtnList.DeleteButton(curSelectedOrderInstanceIDInAcceptedOrder);
+            bool isCommitSuccess = OrderManager.Instance.CommitOrder(curSelectedOrderInstanceIDInAcceptedOrder);
+            if(isCommitSuccess)
+            {
+                this.AcceptedOrderBtnList.DeleteButton(curSelectedOrderInstanceIDInAcceptedOrder);
+            }
             //TODO 长按快捷提交订单
-            //isNeedRefreshAcceptedOrder = true;
         }
     }
 
@@ -182,12 +181,17 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         {
             //取消订单
             Debug.Log("取消订单 "+ curSelectedOrderInstanceIDInAcceptedOrder);
-            GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData("确定取消该订单吗？", "您将面临违约惩罚", null, () => {
-                OrderManager.Instance.CancleOrder(curSelectedOrderInstanceIDInAcceptedOrder);
-                this.AcceptedOrderBtnList.DeleteButton(curSelectedOrderInstanceIDInAcceptedOrder);
-                //isNeedRefreshAcceptedOrder = true;
-            }));
-            
+            var AcceptedOrder = OrderManager.Instance.GetAcceptedOrder(curSelectedOrderInstanceIDInAcceptedOrder);
+            if (AcceptedOrder != null && AcceptedOrder.canBeCancled)
+            {
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData("确定取消该订单吗？", "您将面临违约惩罚", null, () => {
+                    bool isCancleOrderSuccess = OrderManager.Instance.CancleOrder(curSelectedOrderInstanceIDInAcceptedOrder);
+                    if (isCancleOrderSuccess)
+                    {
+                        this.AcceptedOrderBtnList.DeleteButton(curSelectedOrderInstanceIDInAcceptedOrder);
+                    }
+                }));
+            }
         }
     }
 
@@ -554,9 +558,17 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             var LimitTime = this.AcceptedOrderOrderInfo.Find("LimitTime");
             if (orderTableData.OrderType == OrderType.Urgent)
             {
+                OrderUrgent orderUrgent = (OrderUrgent)AcceptedOrder;
                 LimitTime.gameObject.SetActive(true);
-                //限时 X 日
-                LimitTime.Find("Text2").GetComponent<TextMeshProUGUI>().text = orderTableData.ReceiveDDL.ToString();
+                var LimitToday = LimitTime.Find("LimitToday");
+                var LimitFuture = LimitTime.Find("LimitFuture");
+                //今日截止
+                int remainDays = orderUrgent.GetDeliverDDLTimerRemainGameDays();
+                LimitToday.gameObject.SetActive(remainDays <= 1);
+                LimitFuture.gameObject.SetActive(remainDays > 1);
+                LimitToday.Find("Text3").GetComponent<TextMeshProUGUI>().text = orderUrgent.GetDeliverDDLTimerRemainGameHourAndMin();
+                LimitFuture.Find("Text2").GetComponent<TextMeshProUGUI>().text = remainDays.ToString();
+                
             }
             else
             {

@@ -1,3 +1,4 @@
+using AmazingAssets.TerrainToMesh;
 using ML.Engine.InventorySystem;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.Manager;
@@ -213,6 +214,8 @@ namespace ProjectOC.Order
 
             (string clanId,Order order) = emptyList[rand.Next(0, emptyList.Count)];
 
+
+
             //抽选对应氏族紧急订单
             string extractOrderId = null;
 
@@ -352,6 +355,8 @@ namespace ProjectOC.Order
                 OrderSpecial orderSpecial = new OrderSpecial(orderTableData);
                 OrderSpecialDelegationMap[ClanID].Add(new OrderSpecial(orderTableData));
                 OrderDelegationListDic.Add(orderSpecial.OrderInstanceID, orderSpecial);
+                //特殊订单直接进入已承接列表
+                this.ReceiveOrder(orderSpecial.OrderInstanceID);
             }
         }
 
@@ -426,6 +431,8 @@ namespace ProjectOC.Order
                     {
                         OrderSpecial orderSpecial = (OrderSpecial)olist[i];
                         acceptedOrder = orderSpecial;
+
+                        olist.Remove(olist[i]);
                     }
                     else if (olist[i] is OrderNormal)
                     {
@@ -449,11 +456,11 @@ namespace ProjectOC.Order
         /// <summary>
         /// 取消订单函数
         /// </summary>
-        public void CancleOrder(string OrderInstanceID)
+        public bool CancleOrder(string OrderInstanceID)
         {
-            if (OrderInstanceID == null || !AcceptedOrderListDic.ContainsKey(OrderInstanceID)) return;
+            if (OrderInstanceID == null || !AcceptedOrderListDic.ContainsKey(OrderInstanceID)) return false;
             Order acceptedOrder = AcceptedOrderListDic[OrderInstanceID];
-            if (acceptedOrder.canBeCancled == false) return;
+            if (acceptedOrder.canBeCancled == false) return false;
 
             //TODO 已扣除返还玩家背包 暂时考虑背包无限
 
@@ -468,23 +475,32 @@ namespace ProjectOC.Order
             //TODO 受到惩罚
             Debug.Log("受到惩罚");
 
+
+            if(acceptedOrder is OrderNormal)
+            {
+                //常规订单刷新
+                OrderNormal orderNormal = (OrderNormal)acceptedOrder;
+                orderNormal.StartRefreshTimer();
+            }
+
             //移除唯一命名
             AcceptedOrderListDic.Remove(acceptedOrder.OrderInstanceID);
 
             AcceptedOrderList.Remove(acceptedOrder);
                     
             this.RefreshAcceptedList();
+            return true;
         }
 
         /// <summary>
         /// 提交订单函数
         /// </summary>
-        public void CommitOrder(string OrderInstanceID)
+        public bool CommitOrder(string OrderInstanceID)
         {
             Debug.Log("提交订单 " + OrderInstanceID);
-            if (OrderInstanceID == null || !AcceptedOrderListDic.ContainsKey(OrderInstanceID)) return;
+            if (OrderInstanceID == null || !AcceptedOrderListDic.ContainsKey(OrderInstanceID)) return false;
             Order acceptedOrder = AcceptedOrderListDic[OrderInstanceID];
-            if (acceptedOrder.canBeCommit == false) return;
+            if (acceptedOrder.canBeCommit == false) return false;
 
             OrderTableData orderTableData = OrderTableDataDic[acceptedOrder.OrderID];
 
@@ -506,6 +522,7 @@ namespace ProjectOC.Order
 
             if (acceptedOrder is OrderNormal)
             {
+                //常规订单刷新
                 OrderNormal orderNormal = (OrderNormal)acceptedOrder;
                 orderNormal.StartRefreshTimer();
                 this.WaitingForRefreshNormalOrders.Add(orderNormal);
@@ -518,8 +535,12 @@ namespace ProjectOC.Order
             AcceptedOrderList.Remove(acceptedOrder);
                     
             this.RefreshAcceptedList();
+            return true;
         }
 
+        /// <summary>
+        /// 生成唯一的实例ID
+        /// </summary>
         public string GenerateOrderInstanceID(string orderID)
         {
             return orderID+"|"+ML.Engine.Utility.OSTime.OSCurMilliSeconedTime.ToString();
