@@ -32,19 +32,13 @@ namespace ProjectOC.PinchFace
 
         public void OnRegister()
         {
-            ModelPinch = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController)
-                .currentCharacter.GetComponentInChildren<CharacterModelPinch>();
-            //Debug.LogWarning($"ModelPinch:{ModelPinch != null}");
-            // ModelPinch.InitAfterPinchFaceManager(this);
-            
             DataStructInit();
             RegisterPinchPartType();
             pinchFaceHelper = new PinchFaceHelper(this);
             
-            
             // GeneratePinchRaceUI();
             // GenerateCustomRaceUI();
-            //GeneratePinchFaceUI(); 
+            GeneratePinchFaceUI(); 
         }
 
         public void UnRegister()

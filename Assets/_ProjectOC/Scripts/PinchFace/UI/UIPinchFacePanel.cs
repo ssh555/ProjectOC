@@ -17,11 +17,16 @@ namespace ProjectOC.PinchFace
         {
             base.Awake();
             pinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
+            
             uICameraImage = transform.Find("UICameraImage").GetComponentInChildren<UICameraImage>();
             uICameraImage.Init();
-            // GameObject go = null;
-            // uICameraImage.LookAtGameObject(go); //自动移动位置
-            
+            GameObject characterModel = null;
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefabs_PinchPart/PinchPart/Model_AnMiXiu.prefab").Completed+=(handle) =>
+            {
+                characterModel = handle.Result;
+                //uICameraImage.LookAtGameObject(characterModel); //自动移动位置
+                pinchFaceManager.ModelPinch = characterModel.GetComponentInChildren<CharacterModelPinch>();
+            };
             
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<PinchDataConfig>("PinchAsset_PinchFaceSetting/PinchDataConfig.asset").Completed+=(handle) =>
             {
@@ -127,7 +132,7 @@ namespace ProjectOC.PinchFace
 
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/PlayerUIPanel";
+            this.abpath = "OCTextContent/PlayerUIPanel";
             this.abname = "PlayerUIPanel";
             this.description = "PinchRace";
         }
@@ -148,7 +153,7 @@ namespace ProjectOC.PinchFace
         private UIBtnListContainer UIBtnListContainer;
         public Transform containerTransf;
         private RacePinchData raceData;
-        private List<PinchPart> pinchParts;
+        private List<PinchPart> pinchParts = new List<PinchPart>();
         private Dictionary<PinchPartType3, SelectedButton> type3ButtonDic = new Dictionary<PinchPartType3, SelectedButton>();
         private Dictionary<PinchPartType3, PinchPartType2> type3Type2Dic => pinchFaceManager.pinchPartType3Dic;
         public List<UIBtnListInitor> rightBtnLists = new List<UIBtnListInitor>();
@@ -168,14 +173,20 @@ namespace ProjectOC.PinchFace
         public void InitRaceData(RacePinchData _racePinchData)
         {
             raceData = _racePinchData;
-            pinchParts = new List<PinchPart>();
+            //体型、头发、眼睛、面妆
+            int _pinchPartTypeCount = _racePinchData.pinchPartType3s.Count + 4;
+            for (int i = 0; i < _pinchPartTypeCount; i++)
+            {
+                pinchParts.Add(null);
+            }
+            
             
             //生成左侧List<PinchPartType3>
 
-            foreach (var _partType3 in raceData.pinchPartType3s)
+            for(int i = 0;i<raceData.pinchPartType3s.Count;i++)
             {
-                PinchPartType2 _type2 = type3Type2Dic[_partType3];
-                PinchPartType _type = pinchFaceManager.pinchPartType2Dic[_type2];
+                int _buttonIndex = i;
+                PinchPartType3 _partType3 = _racePinchData.pinchPartType3s[i];
                 this.UIBtnListContainer.AddBtn(1, "Prefabs_PinchPart/UIPanel/Prefab_Pinch_BaseUISelectedBtn.prefab"
                     ,BtnText:_partType3.ToString()
                     ,BtnSettingAction:(_btn)=>
@@ -185,12 +196,12 @@ namespace ProjectOC.PinchFace
                     }
                     ,BtnAction: () =>
                     {
-                        LeftButton_BtnAction(_partType3);
+                        LeftButton_BtnAction(_buttonIndex);
                     });
             }
         }
 
-        private void LeftButton_BtnAction(PinchPartType3 _type3)
+        private void LeftButton_BtnAction(int _index)
         {
             //删除所有ChangeSetting
             foreach (Transform _container in containerTransf)
@@ -198,17 +209,15 @@ namespace ProjectOC.PinchFace
                  _container.gameObject.SetActive(false);
                  Destroy(_container.gameObject);
             }
-            GenerateChangeSetting(_type3);
+            GenerateChangeSetting(_index);
         }
 
-        private void GenerateChangeSetting(PinchPartType3 _type3)
+        private void GenerateChangeSetting(int _index)
         {
+            PinchPartType3 _type3 = raceData.pinchPartType3s[_index];
             //根据Type寻找对应文件，根据上面的Component生成Prefab
             PinchPartType2 _type2 = type3Type2Dic[_type3];
-            PinchPartType _type = pinchFaceManager.pinchPartType2Dic[_type2];
-            PinchPartType1 _type1 = _type.pinchPartType1;
             
-            //OC/Configs/PinchFace/PinchFaceConfig/PinchTypeConfig/1_Ear_PinchType2Template.prefab
             string pathFore = "PinchAsset_PinchFaceSetting/PinchTypeConfig";
             string templatePath = $"{pathFore}/{(int)_type2-1}_{_type2.ToString()}_PinchType2Template.prefab";
 
@@ -216,7 +225,7 @@ namespace ProjectOC.PinchFace
                 .Completed += (handle) =>
             {
                 var _comps = handle.Result.GetComponents<IPinchSettingComp>();
-                pinchParts.Add(new PinchPart(this,_type3,_type2,_comps,containerTransf));
+                pinchParts[_index] = new PinchPart(this, _type3, _type2, _comps, containerTransf);
                 Destroy(handle.Result);
             };
             //加载Type3，是否有com

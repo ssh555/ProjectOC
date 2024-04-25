@@ -90,7 +90,7 @@ namespace  ProjectOC.PinchFace
             if(_comp.GetType()== typeof(ChangeTypePinchSetting))
             {
                 GenerateHeadUI("样式");
-                GenerateTypeUI(PinchPartType3);
+                GenerateTypeUI(_comp as ChangeTypePinchSetting);
             }
             else if (_comp.GetType()== typeof(ChangeBoneWeightPinchSetting))
             {
@@ -108,13 +108,13 @@ namespace  ProjectOC.PinchFace
                     GenerateColorTypeUI(_colorComp);
                 }
                 GenerateHeadUI("颜色");
-                GenerateColorUI1(PinchPartType3,Color.white);
+                GenerateColorUI1(_comp as ChangeColorPinchSetting);
 
             }
             else if (_comp.GetType()== typeof(ChangeTexturePinchSetting))
             {
                 GenerateHeadUI("纹理");
-                GenerateTextureUI(PinchPartType3);
+                GenerateTextureUI(_comp as ChangeTexturePinchSetting);
             }
             else if (_comp.GetType()== typeof(ChangeTransformPinchSetting))
             {
@@ -148,7 +148,7 @@ namespace  ProjectOC.PinchFace
         /// Type,根据type3 Prefab 下标来生成，甚至不需要在comp里加Index
         /// </summary>
         /// <param name="_type3"></param>
-        public void GenerateTypeUI(PinchPartType3 _type3)
+        public void GenerateTypeUI(ChangeTypePinchSetting _typeSetting)
         {
             int _counter = sortCount;
             GenerateUIPre();
@@ -158,26 +158,27 @@ namespace  ProjectOC.PinchFace
             {
                 Transform _trans = handle.Result.transform;
                 //查询对应目录下所有的Texture，加载
-                 string pathFore = "OC/UI/PinchFace/Texture";
-                 //string type3Path = PinchFaceManager.pinchFaceHelper.GetType3PrefabPath(PinchPartType2,_type3);
-                 //加载对应的Type3 icon button
                  SelectedButton btnTemplate = _trans.GetComponentInChildren<SelectedButton>();
-                 int prefabCount = Config.typesData[(int)_type3 - 1];
-                 //Debug.LogWarning($"{_type3.ToString()}:{prefabCount}");
+                 int prefabCount = Config.typesDatas[(int)PinchPartType3 - 1].typeCount;
+                 Debug.LogWarning($"{PinchPartType3.ToString()}:{prefabCount}");
                  for (int i = 0; i <prefabCount; i++)
                  {
                      var btn = GameObject.Instantiate(btnTemplate.gameObject, btnTemplate.transform.parent).GetComponent<SelectedButton>();
                      btn.name = $"TypeBtn{i}";
                      
-                     string spriteName = $"{_type3.ToString()}_{i}"; 
+                     string spriteName = $"{PinchPartType3.ToString()}_{i}"; 
                      btn.transform.Find("Image").GetComponent<Image>().sprite = SA_PinchPart.GetSprite(spriteName);
                      btn.onClick.AddListener(() =>
                      {
-                        ModelPinch.ChangeType(_type3,i);
+                        ModelPinch.ChangeType(PinchPartType3,i);
+                        if (PinchPartType2 == PinchPartType2.Tail)
+                        {
+                            //todo 更新尾巴骨骼字典
+                        }
+                        
                      });
                  }
                  btnTemplate.gameObject.SetActive(false);
-                 //ML.Engine.Manager.GameManager.DestroyObj();
                 GenerateUICallBack(_trans,_counter);
             };
         }
@@ -222,74 +223,38 @@ namespace  ProjectOC.PinchFace
                         .GetComponent<SelectedButton>();
                     
                     CustomSelectedSlider _slider = btn.GetComponentInChildren<CustomSelectedSlider>();
-                    _slider.ChangeText(boneWeightDic[boneWeightDatas[i].boneWeightType]);
                     
-                    //_value 1~100
+                    BoneWeightType _boneWeightType = boneWeightDatas[i].boneWeightType;
+                    _slider.ChangeText(boneWeightDic[_boneWeightType]);
+                    
+                    //设置初始值
+                    //尾巴的骨骼在新增骨骼上，特殊处理
+                    if (_boneWeightType == BoneWeightType.Tail)
+                    {
+                        //
+                    }
+                    else
+                    {
+                        
+                    }
+                    
+                    //_value 1~100 ->
                     _slider.slider.onValueChanged.AddListener((_value)=>
                     {
                         //_value Remap
-                        Vector3 _boneWeight = _value*Vector3.one;
+                        float _realValue = PinchFaceManager.pinchFaceHelper.RemapValue(_value, new Vector2(1, 100),
+                            boneWeightDatas[i].scaleValueRange);
+                        Vector3 _boneWeight = _realValue*Vector3.one;
                         ModelPinch.ChangeBoneScale(boneWeightDatas[i].boneWeightType,_boneWeight);
                     });
+                    
+                    //处理移动型
                 }
                 
                 sliderTemplate.gameObject.SetActive(false);
                 GenerateUICallBack(_trans,_counter);
             };
         }
-        
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="boneWeightTypes"></param>
-        /// 身体部分，可能会生成多条,_value为当前存档数据
-        public void GenerateBoneWeightUI(List<BoneWeightType> boneWeightTypes,List<int> _values = null,List<ChangeBoneWeightPinchSetting.BoneWeightChangeType> _ChangeTypes = null)
-        {
-            int _counter = sortCount;
-            GenerateUIPre();
-            
-            //临时BoneWeightType Text字典
-            Dictionary<BoneWeightType, string> boneWeightDic = new Dictionary<BoneWeightType, string>();
-            boneWeightDic.Add(BoneWeightType.Head,"头部");
-            boneWeightDic.Add(BoneWeightType.Chest,"胸部");
-            boneWeightDic.Add(BoneWeightType.Waist,"腰部");
-            boneWeightDic.Add(BoneWeightType.Arm,"上肢");
-            boneWeightDic.Add(BoneWeightType.Leg,"下肢");
-            boneWeightDic.Add(BoneWeightType.HeadTop,"头顶");
-            boneWeightDic.Add(BoneWeightType.Tail,"尾巴");
-            boneWeightDic.Add(BoneWeightType.Root,"整体");
-            
-            
-            //没有定义骨骼Type，就生成 缩放型
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(uiPrefabPaths[2])
-                .Completed += (handle) =>
-            {
-                //加入 生成的Slider
-                Transform _trans = handle.Result.transform;
-                SelectedButton sliderTemplate = _trans.GetComponentInChildren<SelectedButton>();
-                for (int i = 0; i < boneWeightTypes.Count; i++)
-                {
-                    var btn = GameObject.Instantiate(sliderTemplate.gameObject, sliderTemplate.transform.parent)
-                        .GetComponent<SelectedButton>();
-                    
-                    CustomSelectedSlider _slider = btn.GetComponentInChildren<CustomSelectedSlider>();
-                    _slider.ChangeText(boneWeightDic[boneWeightTypes[i]]);
-                    
-                    //_value 1~100
-                    _slider.slider.onValueChanged.AddListener((_value)=>
-                    {
-                        //_value Remap
-                        Vector3 _boneWeight = _value*Vector3.one;
-                        ModelPinch.ChangeBoneScale(boneWeightTypes[i],_boneWeight);
-                    });
-                }
-                
-                sliderTemplate.gameObject.SetActive(false);
-                GenerateUICallBack(_trans,_counter);
-            };
-        }
-
         
         
         
@@ -298,7 +263,7 @@ namespace  ProjectOC.PinchFace
         /// </summary>
         /// <param name="_type3"></param>
         /// <param name="_color"></param>
-        public void GenerateColorUI1(PinchPartType3 _type3, Color _color)
+        public void GenerateColorUI1(ChangeColorPinchSetting _colorSetting)
         {
             
             int _counter = sortCount;
@@ -334,7 +299,7 @@ namespace  ProjectOC.PinchFace
         /// </summary>
         /// <param name="_type3"></param>
         /// <param name="_color"></param>
-        public void GenerateColorUI2(PinchPartType3 _type3, Color _color)
+        public void GenerateColorUI2(ChangeColorPinchSetting _colorSetting)
         {
             int _counter = 0;
             //to-do color2 的counter应该是继承删除的_counter
@@ -367,7 +332,7 @@ namespace  ProjectOC.PinchFace
             };
         }
         
-        public void GenerateTextureUI(PinchPartType3 _type3)
+        public void GenerateTextureUI(ChangeTexturePinchSetting _texSetting)
         {
             int _counter = sortCount;
             GenerateUIPre();

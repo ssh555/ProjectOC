@@ -23,7 +23,7 @@ namespace ProjectOC.PinchFace
             //OC/Character/PinchFace/Prefabs/
             //0_HeadPart_PinchType1/0_HeadTop_PinchType2/0_HT_Ring_PinchType3/
             //HT_Ring_3.prefab
-            string prePath = "OC/Character/PinchFace/Prefabs";
+            //string prePath = "OC/Character/PinchFace/Prefabs";
             string typePath = pinchFaceManager.pinchFaceHelper.GetType3PrefabPath(_type3);
             string prefabPath = $"{_type3.ToString()}_{typeIndex}.prefab";
             string totalPath = $"{typePath}/{prefabPath}/{prefabPath}";
@@ -45,8 +45,7 @@ namespace ProjectOC.PinchFace
                 EquipItem(_type2,handle.Result);
             };
         }
-
-        public Slider _slider;
+        
         public void TempChangeType(int index)
         {
             // ChangeType(PinchPartType2.HeadTop,index);
@@ -71,10 +70,8 @@ namespace ProjectOC.PinchFace
         }
         public void EquipItem(PinchPartType2 boneType2, GameObject _PinchGo)
         {
-            //生成 gameObejct Asset
-            //装备
-            //删除gameObject Instance
             _PinchGo = GameObject.Instantiate(_PinchGo);
+            
             // sourceClothing衣服 targetAvatar 角色
             replaceGo[(int)boneType2] = Stitch(_PinchGo, avatar.gameObject);
             
@@ -84,12 +81,16 @@ namespace ProjectOC.PinchFace
 
         public void UnEquipItem(PinchPartType2 boneType2, GameObject _PinchGo)
         {
+            if (boneType2 == PinchPartType2.Tail && boneWeightDictionary.ContainsKey(BoneWeightType.Tail))
+                boneWeightDictionary.Remove(BoneWeightType.Tail);
+            
+            
             if (boneTransfsDictionary.TryGetValue(boneType2, out var keyBone))
             {
                 foreach (Transform bone in keyBone)
                 {
                     //去除骨骼 ，移出Parent.Transform，然后 删除 gameObject 
-                    DisCatalog(boneCatalog,bone);
+                    DisCatalog(boneDic,bone);
                     bone.SetParent(this.transform.parent);
                     Destroy(bone.gameObject);
                 }
@@ -117,7 +118,7 @@ namespace ProjectOC.PinchFace
             if (SkeyBone != null && SkeyBone.childCount > 0)
             {
                 //SkeyBone.name = SkeyBone.name.Replace(keyStr, "");
-                Transform TKeyBone = boneCatalog[SkeyBone.name];
+                Transform TKeyBone = boneDic[SkeyBone.name];
             
                 // set parents,localPosition
                 foreach (Transform _transBone in SkeyBone)
@@ -130,7 +131,7 @@ namespace ProjectOC.PinchFace
                     SNewBone.transform.localPosition = _transBone.localPosition;
                     SNewBone.transform.localRotation = _transBone.localRotation;
                     SNewBone.transform.localScale = _transBone.localScale;
-                    CataBonelog(boneCatalog,SNewBone.transform);
+                    CataBonelog(boneDic,SNewBone.transform);
                 }
                 
             }
@@ -141,7 +142,7 @@ namespace ProjectOC.PinchFace
             {
                 Debug.LogWarning(smr.bones.Length);
                 SkinnedMeshRenderer targetRenderer = AddSkinnedMeshRenderer(smr,targetClothingBone);
-                targetRenderer.bones = TranslateTransforms (smr.bones, boneCatalog);
+                targetRenderer.bones = TranslateTransforms (smr.bones, boneDic);
             }
             return targetClothingBone;
         }
@@ -215,26 +216,41 @@ namespace ProjectOC.PinchFace
             //更换Mat 的 _MainTex 参数
         }
 
-        public void ChangeBoneScale(BoneWeightType boneWeightType, Vector3 scaleValue)
+        
+        /// <summary>
+        /// 从 0.5 -- 1.5  乘以默认BoneScale
+        /// </summary>
+        /// <param name="boneWeightType"></param>
+        /// <param name="scaleValue"></param>
+        public void ChangeBoneScale(BoneWeightType boneWeightType, Vector3 scaleValue,bool isScale = true)
         {
             if (boneWeightDictionary.ContainsKey(boneWeightType))
             {
+                if (!isScale)
+                {
+                    //光环
+                    Vector3 _defaultPos = boneWeightDictionary[boneWeightType].defaultPos;
+                    boneWeightDictionary[boneWeightType].boneTransform.localPosition = _defaultPos + scaleValue;  
+                    return;
+                }
+                
                 //上半身要缩放两跟骨骼，需要单独处理
                 //考虑用一根骨骼约束驱动两根骨骼
+                
                 if (boneWeightType == BoneWeightType.Arm)
                 {
-                       
+                    
                 }
-                else
+                else if (boneWeightType == BoneWeightType.Leg || boneWeightType == BoneWeightType.Waist)
                 {
-                    boneWeightDictionary[boneWeightType].localScale = scaleValue;                    
+                    scaleValue = new Vector3(scaleValue.x, 1, scaleValue.z);
                 }
+
+                Vector3 _defaultScale = boneWeightDictionary[boneWeightType].defaultScale;
+                boneWeightDictionary[boneWeightType].boneTransform.localScale = 
+                    new Vector3(_defaultScale.x * scaleValue.x,_defaultScale.y * scaleValue.y,_defaultScale.z * scaleValue.z);                    
+   
             }
-        }
-        
-        public void ChangeBoneScale(Transform boneTransf, Vector3 scaleValue)
-        {
-            boneTransf.localScale = scaleValue;
         }
 
         public void ChangeColor(PinchPartType2 boneType2, Color _color)
@@ -256,11 +272,26 @@ namespace ProjectOC.PinchFace
             public 
                 List<GameObject> tempTail = new List<GameObject>();
             [ShowInInspector]
-            private Dictionary<string, Transform> boneCatalog = new Dictionary<string, Transform>();
+            private Dictionary<string, Transform> boneDic = new Dictionary<string, Transform>();
             [ShowInInspector]
             Dictionary<PinchPartType2, Transform> boneTransfsDictionary = new Dictionary<PinchPartType2, Transform>();
-            [ShowInInspector]
-            Dictionary<BoneWeightType, Transform> boneWeightDictionary = new Dictionary<BoneWeightType, Transform>();
+            public
+            Dictionary<BoneWeightType, BoneData> boneWeightDictionary = new Dictionary<BoneWeightType, BoneData>();
+            
+            public class BoneData
+            {
+                public Transform boneTransform;
+                public Vector3 defaultPos;
+                public Vector3 defaultScale;
+
+                public BoneData(Transform _trans)
+                {
+                    boneTransform = _trans;
+                    defaultPos = _trans.localPosition;
+                    defaultScale = _trans.localScale;
+                }
+            }
+            
             
             PinchJiao topEar;
             PinchBraid braid;
@@ -272,16 +303,16 @@ namespace ProjectOC.PinchFace
                     replaceGo.Add(null);
                 
                 avatar = transform.Find("AnMiXiuBone");
-                CataBonelog(boneCatalog,avatar);
+                CataBonelog(boneDic,avatar);
                 
                 //骨骼字典初始化
-                boneWeightDictionary.Add(BoneWeightType.Head,boneCatalog["Head"]);
+                boneWeightDictionary.Add(BoneWeightType.Head,new BoneData(boneDic["Head"]));
                 //boneWeightDictionary.Add(BoneWeightType.Chest,transform);
                 //boneWeightDictionary.Add(BoneWeightType.Arm,transform);
-                boneWeightDictionary.Add(BoneWeightType.Waist,boneCatalog["Spine"]);
-                boneWeightDictionary.Add(BoneWeightType.Leg,boneCatalog["Weight_Thin"]);
-                boneWeightDictionary.Add(BoneWeightType.HeadTop,boneCatalog["Add_HeadTop"]);
-                boneWeightDictionary.Add(BoneWeightType.Root,boneCatalog["Root"]);
+                boneWeightDictionary.Add(BoneWeightType.Waist,new BoneData(boneDic["Spine"]));
+                boneWeightDictionary.Add(BoneWeightType.Leg,new BoneData(boneDic["Weight_Thin"]));
+                boneWeightDictionary.Add(BoneWeightType.HeadTop,new BoneData(boneDic["Add_HeadTop"]));
+                boneWeightDictionary.Add(BoneWeightType.Root,new BoneData(boneDic["Root"]));
                 
                 this.enabled = false;
             }
@@ -311,7 +342,7 @@ namespace ProjectOC.PinchFace
                     BoneWeightType boneWeightType;
                     if (Enum.TryParse(tempName, out boneWeightType))
                     {
-                        boneWeightDictionary[boneWeightType] = transform;
+                        boneWeightDictionary[boneWeightType] = new BoneData(transform);
                     }
                 }
                 
@@ -329,6 +360,16 @@ namespace ProjectOC.PinchFace
             {
                 if (dic.ContainsKey(transform.name))
                 {
+                    if(transform.name.StartsWith(WeightStr))
+                    {
+                        //目前只有Tail 是通过这里匹配的
+                        string tempName = transform.name.Replace(WeightStr, "");
+                        BoneWeightType boneWeightType;
+                        if (Enum.TryParse(tempName, out boneWeightType))
+                        {
+                            boneWeightDictionary.Remove(boneWeightType);
+                        }
+                    }
                     dic.Remove(transform.name);
                 }
 

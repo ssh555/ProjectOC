@@ -24,7 +24,11 @@ namespace ProjectOC.PinchFace
                 LayoutRebuilder.ForceRebuildLayoutImmediate(group.transform as RectTransform);
             }
         }
-        
+
+        public float RemapValue(float value, Vector2 input, Vector2 output)
+        {
+            return RemapValue(value, input.x, input.y, output.x, output.y);
+        }
         public float RemapValue(float value, float fromMin, float fromMax, float toMin = 0f, float toMax = 1f)
         {
             return toMin + (value - fromMin) / (fromMax - fromMin) * (toMax - toMin);
