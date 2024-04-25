@@ -23,7 +23,7 @@ namespace ProjectOC.ClanNS
         [LabelText("ÊÇ·ñÄÜ·ÅÖÃ"), ShowInInspector, ReadOnly]
         public bool CanSetClan { get; private set; }
 
-        public ML.Engine.InventorySystem.ItemIcon ItemIcon { get => GetComponentInChildren<ML.Engine.InventorySystem.ItemIcon>(); }
+        public ML.Engine.InventorySystem.ItemIcon WorldIcon { get => GetComponentInChildren<ML.Engine.InventorySystem.ItemIcon>(); }
 
         public string InteractType { get; set; } = "Bed";
         public Vector3 PosOffset { get; set; } = Vector3.zero;
@@ -52,7 +52,7 @@ namespace ProjectOC.ClanNS
 
         public void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIBedPanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Clan_UI/Prefab_Clan_UI_ClanBedPanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
             {
                 UI.UIClanBed uiPanel = (handle.Result).GetComponent<UI.UIClanBed>();
                 uiPanel.Bed = this;
@@ -95,8 +95,8 @@ namespace ProjectOC.ClanNS
                 }
             }
             CanSetClan = flagUp && flagDown;
-            string icon = CanSetClan ? "UI_Bed_Icon_Enable" : "UI_Bed_Icon_Disable";
-            ItemIcon?.SetSprite(ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(icon));
+            string icon = CanSetClan ? "Tex2D_Clan_UI_BedEnable" : "Tex2D_Clan_UI_BedDisable";
+            WorldIcon?.SetSprite(ManagerNS.LocalGameManager.Instance.ClanManager.GetItemSprite(icon));
             return CanSetClan;
         }
 

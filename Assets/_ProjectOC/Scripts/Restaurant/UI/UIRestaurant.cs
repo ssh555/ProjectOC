@@ -1,17 +1,14 @@
 ﻿using ML.Engine.InventorySystem;
 using ML.Engine.TextContent;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static ProjectOC.InventorySystem.UI.UIRestaurant;
+using static ProjectOC.RestaurantNS.UI.UIRestaurant;
 using ML.Engine.UI;
-using ProjectOC.RestaurantNS;
 using System.Linq;
 
 
-namespace ProjectOC.InventorySystem.UI
+namespace ProjectOC.RestaurantNS.UI
 {
     public class UIRestaurant : UIBasePanel<RestaurantPanel>
     {
@@ -70,18 +67,12 @@ namespace ProjectOC.InventorySystem.UI
         protected override void InitBtnInfo()
         {
             DataBtnList = new UIBtnList(transform.Find("Restaurant").Find("Food").Find("Viewport").Find("UIBtnList").GetComponentInChildren<UIBtnListInitor>());
-            DataBtnList.OnSelectButtonChanged += () =>
-            {
-                Refresh();
-            };
+            DataBtnList.OnSelectButtonChanged += () => { Refresh(); };
             IsBtnAllInit1 = false;
-            DataBtnList.ChangBtnNum(ManagerNS.LocalGameManager.Instance.RestaurantManager.DataNum, "Assets/_ProjectOC/OCResources/UI/Restaurant/Prefabs/UIRestaurantData.prefab", () => { IsBtnAllInit1 = true;  Refresh(); });
+            DataBtnList.ChangBtnNum(ManagerNS.LocalGameManager.Instance.RestaurantManager.DataNum, "Prefab_Restaurant_UI/Prefab_Restaurant_UI_DataTemplate.prefab", () => { IsBtnAllInit1 = true;  Refresh(); });
 
             FoodBtnList = new UIBtnList(transform.Find("ChangeFood").Find("Select").Find("Viewport").Find("UIBtnList").GetComponentInChildren<UIBtnListInitor>());
-            FoodBtnList.OnSelectButtonChanged += () =>
-            {
-                Refresh();
-            };
+            FoodBtnList.OnSelectButtonChanged += () => { Refresh(); };
             List<string> itemIDs = ItemManager.Instance.GetAllItemID().ToList();
             foreach (var itemID in itemIDs)
             {
@@ -90,8 +81,9 @@ namespace ProjectOC.InventorySystem.UI
                     FoodItemIDs.Add(itemID);
                 }
             }
+            itemIDs = ItemManager.Instance.SortItemIDs(itemIDs);
             IsBtnAllInit2 = false;
-            FoodBtnList.ChangBtnNum(FoodItemIDs.Count, "Assets/_ProjectOC/OCResources/UI/Restaurant/Prefabs/UIRestaurantFood.prefab", () => { IsBtnAllInit2 = true; Refresh(); });
+            FoodBtnList.ChangBtnNum(FoodItemIDs.Count, "Prefab_Restaurant_UI/Prefab_Restaurant_UI_FoodTemplate.prefab", () => { IsBtnAllInit2 = true; Refresh(); });
         }
 
         [System.Serializable]
@@ -111,7 +103,7 @@ namespace ProjectOC.InventorySystem.UI
         }
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/Restaurant";
+            this.abpath = "OCTextContent/Restaurant";
             this.abname = "RestaurantPanel";
             this.description = "RestaurantPanel数据加载完成";
         }

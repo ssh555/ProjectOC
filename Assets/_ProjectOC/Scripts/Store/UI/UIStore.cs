@@ -1,27 +1,16 @@
 using ML.Engine.InventorySystem;
 using ML.Engine.TextContent;
-using ProjectOC.StoreNS;
-using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using ML.Engine.Extension;
-using ML.Engine.InventorySystem.CompositeSystem;
-using static ProjectOC.InventorySystem.UI.UIStore;
-using System;
-using ML.Engine.BuildingSystem;
-using ProjectOC.ManagerNS;
-using ML.Engine.Manager;
-using ProjectOC.Player;
+using static ProjectOC.StoreNS.UI.UIStore;
 
-namespace ProjectOC.InventorySystem.UI
+
+namespace ProjectOC.StoreNS.UI
 {
     public class UIStore : ML.Engine.UI.UIBasePanel<StorePanel>
     {
-        #region Input
-        private bool ItemIsDestroyed = false;
-        #endregion
-
         #region Unity
         public bool IsInit = false;
         protected override void Start()
@@ -84,14 +73,14 @@ namespace ProjectOC.InventorySystem.UI
         #region Override
         protected override void Enter()
         {
-            Store.OnStoreDataChangeAction += Refresh;
+            Store.OnDataChangeEvent += Refresh;
             Store.IsInteracting = true;
             base.Enter();
         }
 
         protected override void Exit()
         {
-            Store.OnStoreDataChangeAction -= Refresh;
+            Store.OnDataChangeEvent -= Refresh;
             Store.IsInteracting = false;
             ClearTemp();
             base.Exit();
@@ -159,11 +148,6 @@ namespace ProjectOC.InventorySystem.UI
         public bool HasUpgrade;
 
         /// <summary>
-        /// UIPanel.Store区域控制处理的StoreData列表
-        /// </summary>
-        [ShowInInspector]
-        private List<StoreData> StoreDatas = new List<StoreData>();
-        /// <summary>
         /// 上一次选中的DataIndex，用于移动滑动窗口
         /// </summary>
         private int lastDataIndex = 0;
@@ -180,14 +164,14 @@ namespace ProjectOC.InventorySystem.UI
             set
             {
                 int last = currentDataIndex;
-                if(StoreDatas.Count > 0)
+                if(Store.StoreDatas.Length > 0)
                 {
                     currentDataIndex = value;
                     if(currentDataIndex == -1)
                     {
-                        currentDataIndex = StoreDatas.Count - 1;
+                        currentDataIndex = Store.StoreDatas.Length - 1;
                     }
-                    else if(currentDataIndex == StoreDatas.Count)
+                    else if(currentDataIndex == Store.StoreDatas.Length)
                     {
                         currentDataIndex = 0;
                     }
@@ -198,7 +182,7 @@ namespace ProjectOC.InventorySystem.UI
                         {
                             currentDataIndex += (grid.x * grid.y);
                         }
-                        else if (currentDataIndex >= StoreDatas.Count)
+                        else if (currentDataIndex >= Store.StoreDatas.Length)
                         {
                             currentDataIndex -= (grid.x * grid.y);
                             if (currentDataIndex < 0)
@@ -207,7 +191,7 @@ namespace ProjectOC.InventorySystem.UI
                             }
                         }
                         // 不计算隐藏的模板
-                        while (this.currentDataIndex >= StoreDatas.Count)
+                        while (this.currentDataIndex >= Store.StoreDatas.Length)
                         {
                             this.currentDataIndex -= grid.y;
                         }
@@ -224,22 +208,7 @@ namespace ProjectOC.InventorySystem.UI
                 this.Refresh();
             }
         }
-        /// <summary>
-        /// 当前选中的StoreData
-        /// </summary>
-        private StoreData CurrentStoreData
-        {
-            get
-            {
-                if(CurrentDataIndex < StoreDatas.Count)
-                {
-                    return StoreDatas[CurrentDataIndex];
-                }
-                return null;
-            }
-        }
 
-        [ShowInInspector]
         private List<string> ItemDatas = new List<string>();
         private bool IsInitCurItemIndex;
         private int lastItemIndex = 0;
@@ -306,6 +275,7 @@ namespace ProjectOC.InventorySystem.UI
             }
         }
 
+        private bool ItemIsDestroyed = false;
 
         protected override void UnregisterInput()
         {
@@ -400,7 +370,7 @@ namespace ProjectOC.InventorySystem.UI
                 var offset = new Vector2Int(Mathf.RoundToInt(f_offset.x), Mathf.RoundToInt(f_offset.y));
                 if (offset.x > 0)
                 {
-                    if ((int)CurStoreMode < Enum.GetValues(typeof(StoreMode)).Length - 1)
+                    if ((int)CurStoreMode < System.Enum.GetValues(typeof(StoreMode)).Length - 1)
                     {
                         this.CurStoreMode++;
                         Refresh();
@@ -433,7 +403,7 @@ namespace ProjectOC.InventorySystem.UI
         {
             if (CurMode == Mode.Store && CurStoreMode == StoreMode.ChangeItem)
             {
-                Store.UIFastAdd(CurrentStoreData);
+                Store.UIFastAdd(CurrentDataIndex);
                 Refresh();
             }
         }
@@ -447,7 +417,7 @@ namespace ProjectOC.InventorySystem.UI
                 }
                 else
                 {
-                    Store.UIRemove(CurrentStoreData, 1);
+                    Store.UIRemove(CurrentDataIndex, 1);
                     Refresh();
                 }
             }
@@ -457,13 +427,13 @@ namespace ProjectOC.InventorySystem.UI
             if (CurMode == Mode.Store && CurStoreMode == StoreMode.ChangeItem)
             {
                 this.ItemIsDestroyed = true;
-                if (CurrentStoreData.Storage < 10)
+                if (Store.StoreDatas[CurrentDataIndex].Storage < 10)
                 {
-                    Store.UIRemove(CurrentStoreData, CurrentStoreData.Storage);
+                    Store.UIRemove(CurrentDataIndex, Store.StoreDatas[CurrentDataIndex].Storage);
                 }
                 else
                 {
-                    Store.UIRemove(CurrentStoreData, 10);
+                    Store.UIRemove(CurrentDataIndex, 10);
                 }
                 Refresh();
             }
@@ -498,17 +468,11 @@ namespace ProjectOC.InventorySystem.UI
                 }
                 else if (CurStoreMode == StoreMode.ChangeIn)
                 {
-                    if (this.CurrentStoreData != null)
-                    {
-                        this.CurrentStoreData.CanIn = !this.CurrentStoreData.CanIn;
-                    }
+                    Store.StoreDatas[CurrentDataIndex].CanIn = !Store.StoreDatas[CurrentDataIndex].CanIn;
                 }
                 else if (CurStoreMode == StoreMode.ChangeOut)
                 {
-                    if (this.CurrentStoreData != null)
-                    {
-                        this.CurrentStoreData.CanOut = !this.CurrentStoreData.CanOut;
-                    }
+                    Store.StoreDatas[CurrentDataIndex].CanOut = !Store.StoreDatas[CurrentDataIndex].CanOut;
                 }
             }
             else if (CurMode == Mode.ChangeItem)
@@ -526,7 +490,7 @@ namespace ProjectOC.InventorySystem.UI
             }
             else if (CurMode == Mode.Upgrade)
             {
-                BuildingManager.Instance.Upgrade(Store.WorldStore);
+                ML.Engine.BuildingSystem.BuildingManager.Instance.Upgrade(Store.WorldStore);
             }
             Refresh();
         }
@@ -623,13 +587,13 @@ namespace ProjectOC.InventorySystem.UI
 
             if (this.CurMode == Mode.Store)
             {
-                StoreDatas = Store.StoreDatas;
+                
                 #region TopTitle
                 Text_Title.text = PanelTextContent.text_Title.GetText();
                 #endregion
 
                 #region Store
-                for (int i = 0; i < StoreDatas.Count; i++)
+                for (int i = 0; i < Store.StoreDatas.Length; i++)
                 {
                     var uiitem = Instantiate(UIItemTemplate, GridLayout.transform, false);
                     uiStoreDatas.Add(uiitem.gameObject);
@@ -642,10 +606,10 @@ namespace ProjectOC.InventorySystem.UI
                 GameObject last = null;
 
                 // 遍历筛选的StoreDataList
-                for (int i = 0; i < StoreDatas.Count; ++i)
+                for (int i = 0; i < Store.StoreDatas.Length; ++i)
                 {
                     var uiStoreData = uiStoreDatas[i];
-                    var storeData = StoreDatas[i];
+                    var storeData = Store.StoreDatas[i];
                     // Active
                     uiStoreData.SetActive(true);
                     // 更新Icon
@@ -769,7 +733,7 @@ namespace ProjectOC.InventorySystem.UI
                     var selectAdd = uiStoreData.transform.Find("Add").Find("Select");
                     var selectARemove = uiStoreData.transform.Find("Remove").Find("Select");
 
-                    if (CurrentStoreData == StoreDatas[i])
+                    if (CurrentDataIndex == i)
                     {
                         selected.gameObject.SetActive(true);
                         selectIcon.gameObject.SetActive(CurStoreMode == StoreMode.ChangeItem);
@@ -869,7 +833,7 @@ namespace ProjectOC.InventorySystem.UI
             else if(this.CurMode == Mode.ChangeItem || this.CurMode == Mode.ChangeIcon)
             {
                 ItemDatas = new List<string>() { "" };
-                ItemDatas.AddRange(LocalGameManager.Instance.StoreManager.GetStoreIconItems());
+                ItemDatas.AddRange(ManagerNS.LocalGameManager.Instance.StoreManager.GetStoreIconItems());
                 #region Item
                 // 临时内存生成的UIItemData数量(只增不减，多的隐藏掉即可) - 当前筛选出来的UIItemData数量
                 int delta = tempUIItemDatas.Count - ItemDatas.Count;
@@ -903,7 +867,7 @@ namespace ProjectOC.InventorySystem.UI
                     for (int i = 0; i < ItemDatas.Count; ++i)
                     {
                         string itemID = ItemDatas[i];
-                        string curItemID = CurMode == Mode.ChangeIcon ? Store.WorldIconItemID : CurrentStoreData.ItemID;
+                        string curItemID = CurMode == Mode.ChangeIcon ? Store.WorldIconItemID : Store.StoreDatas[CurrentDataIndex].ItemID;
                         curItemID = curItemID != null ? curItemID : "";
                         if (curItemID == itemID)
                         {
@@ -1010,19 +974,19 @@ namespace ProjectOC.InventorySystem.UI
                 #region Build
                 // Icon
                 string buildCID = Store.WorldStore.Classification.ToString();
-                string buildID = BuildingManager.Instance.GetID(buildCID);
+                string buildID = ML.Engine.BuildingSystem.BuildingManager.Instance.GetID(buildCID);
                 if (!tempSprite.ContainsKey(buildID))
                 {
-                    tempSprite[buildID] = CompositeManager.Instance.GetCompositonSprite(buildID);
+                    tempSprite[buildID] = ML.Engine.BuildingSystem.BuildingManager.Instance.GetBuildIcon(buildID);
                 }
                 Upgrade_Build.Find("Icon").GetComponent<Image>().sprite = tempSprite[buildID];
                 // Name
-                Upgrade_Build.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = BuildingManager.Instance.GetName(buildCID) ?? "";
+                Upgrade_Build.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ML.Engine.BuildingSystem.BuildingManager.Instance.GetName(buildCID) ?? "";
                 #endregion
 
                 #region Raw
                 bool flagUpgradeBtn = true;
-                List<Formula> raw = BuildingManager.Instance.GetUpgradeRaw(buildCID);
+                var raw = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(buildCID);
                 int delta = tempUIItemDatasUpgrade.Count - raw.Count;
                 if (delta > 0)
                 {
@@ -1045,7 +1009,7 @@ namespace ProjectOC.InventorySystem.UI
                     var uiItemData = tempUIItemDatasUpgrade[i];
                     string itemID = raw[i].id;
                     int need = raw[i].num;
-                    int current = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).InventoryItemAmount(itemID);
+                    int current = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).InventoryItemAmount(itemID);
                     // Active
                     uiItemData.SetActive(true);
                     // 更新Icon
@@ -1155,7 +1119,7 @@ namespace ProjectOC.InventorySystem.UI
         }
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/Store";
+            this.abpath = "OCTextContent/Store";
             this.abname = "StorePanel";
             this.description = "StorePanel数据加载完成";
         }

@@ -24,9 +24,10 @@ namespace ProjectOC.WorkerNS
 
         public virtual void SetWorkerRelateData() { }
         public virtual void RemoveWorkerRelateData() { }
-        public virtual void TempRemoveWorker()
+        public virtual bool TempRemoveWorker()
         {
             RemoveWorker();
+            return true;
         }
 
         public void SetWorker(Worker worker)

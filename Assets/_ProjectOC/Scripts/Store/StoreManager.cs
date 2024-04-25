@@ -36,20 +36,10 @@ namespace ProjectOC.StoreNS
 
         private Dictionary<string, WorldStore> WorldStoreDict = new Dictionary<string, WorldStore>();
 
-        public bool IsValidUID(string uid)
-        {
-            if (!string.IsNullOrEmpty(uid))
-            {
-                return WorldStoreDict.ContainsKey(uid);
-            }
-            return false;
-        }
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="priorityType">是否按照优先级获取 0表示不需要，1表示优先级从高到低，-1表示优先级从低到高</param>
-        /// <returns></returns>
         public List<Store> GetStores(int priorityType = 0)
         {
             List<Store> stores = new List<Store>();
@@ -150,7 +140,7 @@ namespace ProjectOC.StoreNS
             {
                 result.Add(data.ID);
             }
-            return result;
+            return ManagerNS.LocalGameManager.Instance.ItemManager.SortItemIDs(result);
         }
 
         public Store SpawnStore(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType)

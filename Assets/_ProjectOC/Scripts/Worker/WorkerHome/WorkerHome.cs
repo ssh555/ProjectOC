@@ -1,5 +1,4 @@
 using ML.Engine.Timer;
-using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using System.Linq;
 using UnityEngine;
 
 
-namespace ProjectOC.ClanNS
+namespace ProjectOC.WorkerNS
 {
     public class WorkerHome : ML.Engine.BuildingSystem.BuildingPart.BuildingPart, ML.Engine.InteractSystem.IInteraction, IWorkerContainer
     {
@@ -70,7 +69,7 @@ namespace ProjectOC.ClanNS
         {
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIWorkerHomePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
             {
-                ProjectOC.ClanNS.UI.UIWorkerHome uiPanel = (handle.Result).GetComponent<ProjectOC.ClanNS.UI.UIWorkerHome>();
+                UI.UIWorkerHome uiPanel = (handle.Result).GetComponent<UI.UIWorkerHome>();
                 uiPanel.Home = this;
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uiPanel);
             };
