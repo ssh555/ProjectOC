@@ -164,7 +164,7 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         public AsyncOperationHandle<GameObject> GetObject(string name, Vector3 pos, Quaternion rot)
         {
-            return ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjPath +"/"+ name +".prefab", pos, rot);
+            return ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjPath + "/Prefab_Worker_" + name +".prefab", pos, rot);
         }
     }
 }

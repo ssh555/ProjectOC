@@ -1,6 +1,5 @@
 ﻿using ML.Engine.TextContent;
 using ProjectOC.ManagerNS;
-using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
@@ -110,7 +109,7 @@ namespace ProjectOC.WorkerNS.UI
         }
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/Building";
+            this.abpath = "OCTextContent/Building";
             this.abname = "WorkerHomePanel";
             this.description = "WorkerHomePanel数据加载完成";
         }

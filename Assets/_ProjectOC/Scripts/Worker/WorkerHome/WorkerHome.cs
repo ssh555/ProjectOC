@@ -1,4 +1,3 @@
-using ML.Engine.Timer;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -25,7 +24,7 @@ namespace ProjectOC.WorkerNS
         /// <summary>
         /// 有绑定刁民且刁民在窝时循环执行，时间为Time秒，执行一次结束后对该刁民增加Mood点心情值
         /// </summary>
-        private CounterDownTimer Timer;
+        private ML.Engine.Timer.CounterDownTimer Timer;
         #endregion
 
         #region BuildingPart IInteraction
@@ -36,7 +35,7 @@ namespace ProjectOC.WorkerNS
             if (isFirstBuild)
             {
                 BindWorkerDefault();
-                Timer = new CounterDownTimer(Time, true, false);
+                Timer = new ML.Engine.Timer.CounterDownTimer(Time, true, false);
                 Timer.OnEndEvent += EndActionForTimer;
             }
             if (!isFirstBuild && oldPos != newPos)
@@ -67,7 +66,7 @@ namespace ProjectOC.WorkerNS
 
         public void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIWorkerHomePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Worker_UI/Prefab_Worker_UI_WorkerHomePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
             {
                 UI.UIWorkerHome uiPanel = (handle.Result).GetComponent<UI.UIWorkerHome>();
                 uiPanel.Home = this;
@@ -152,6 +151,24 @@ namespace ProjectOC.WorkerNS
         public void OnArriveEvent(Worker worker)
         {
             (this as IWorkerContainer).OnArriveSetPosition(worker, transform.position + new Vector3(0, 2f, 0));
+        }
+
+        public bool TempRemoveWorker()
+        {
+            if (Worker != null)
+            {
+                if (IsArrive)
+                {
+                    Worker.RecoverLastPosition();
+                    IsArrive = false;
+                }
+                else
+                {
+                    Worker.ClearDestination();
+                }
+                return true;
+            }
+            return false;
         }
         #endregion
     }

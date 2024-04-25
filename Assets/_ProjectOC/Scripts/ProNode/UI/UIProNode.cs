@@ -94,6 +94,9 @@ namespace ProjectOC.ProNodeNS.UI
             ProNode.OnDataChangeEvent += RefreshDynamic;
             ProNode.OnProduceUpdateEvent += OnProduceTimerUpdateAction;
             ProNode.OnProduceEndEvent += Refresh;
+            WorkerIcon = ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_Beast");
+            WorkerMaleIcon = ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_GenderMale");
+            WorkerFemalIcon = ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_GenderFemale");
             base.Enter();
         }
 
@@ -177,7 +180,7 @@ namespace ProjectOC.ProNodeNS.UI
         /// <summary>
         /// 对应的生产节点
         /// </summary>
-        public ProNodeNS.ProNode ProNode;
+        public ProNode ProNode;
         /// <summary>
         /// 当前的Priority
         /// </summary>
@@ -532,6 +535,9 @@ namespace ProjectOC.ProNodeNS.UI
 
         private void ClearTemp()
         {
+            ML.Engine.Manager.GameManager.DestroyObj(WorkerIcon);
+            ML.Engine.Manager.GameManager.DestroyObj(WorkerMaleIcon);
+            ML.Engine.Manager.GameManager.DestroyObj(WorkerFemalIcon);
             foreach (var s in tempSprite)
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s.Value);
@@ -1286,20 +1292,6 @@ namespace ProjectOC.ProNodeNS.UI
             this.abpath = "OCTextContent/ProNode";
             this.abname = "ProNodePanel";
             this.description = "ProNodePanel数据加载完成";
-        }
-
-        protected override void InitObjectPool()
-        {
-            this.objectPool.RegisterPool(UIObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
-            "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2", (handle) =>
-            {
-                SpriteAtlas resonanceWheelAtlas = handle.Result as SpriteAtlas;
-                WorkerIcon = resonanceWheelAtlas.GetSprite("icon_beast");
-                WorkerMaleIcon = resonanceWheelAtlas.GetSprite("icon_gendermale");
-                WorkerFemalIcon = resonanceWheelAtlas.GetSprite("icon_genderfemale");
-            }
-            );
-            base.InitObjectPool();
         }
         #endregion
 
