@@ -144,17 +144,6 @@ namespace ProjectOC.ProNodeNS
         }
         #endregion
 
-        #region BuildPart
-        public void OnPositionChange(Vector3 differ)
-        {
-            (this as IWorkerContainer).OnPositionChange(differ);
-            foreach (var mission in MissionTransports)
-            {
-                mission?.UpdateTransportDestionation();
-            }
-        }
-        #endregion
-
         #region Upgrade
         public bool SetLevel(int level)
         {
@@ -589,6 +578,25 @@ namespace ProjectOC.ProNodeNS
         {
             (this as IWorkerContainer).OnArriveSetPosition(worker, WorldProNode.transform.position + new Vector3(0, 2f, 0));
             worker.ProNode.StartProduce();
+        }
+
+        public void OnPositionChange(Vector3 differ)
+        {
+            if (HaveWorker)
+            {
+                if (IsArrive)
+                {
+                    Worker.transform.position += differ;
+                }
+                else
+                {
+                    Worker.SetDestination(GetTransform().position, OnArriveEvent, GetContainerType());
+                }
+            }
+            foreach (var mission in MissionTransports)
+            {
+                mission?.UpdateTransportDestionation();
+            }
         }
 
         public void SetWorkerRelateData()
