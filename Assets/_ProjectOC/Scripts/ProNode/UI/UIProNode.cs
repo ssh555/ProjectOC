@@ -535,9 +535,9 @@ namespace ProjectOC.ProNodeNS.UI
 
         private void ClearTemp()
         {
-            ML.Engine.Manager.GameManager.DestroyObj(WorkerIcon);
-            ML.Engine.Manager.GameManager.DestroyObj(WorkerMaleIcon);
-            ML.Engine.Manager.GameManager.DestroyObj(WorkerFemalIcon);
+            //ML.Engine.Manager.GameManager.DestroyObj(WorkerIcon);
+            //ML.Engine.Manager.GameManager.DestroyObj(WorkerMaleIcon);
+            //ML.Engine.Manager.GameManager.DestroyObj(WorkerFemalIcon);
             foreach (var s in tempSprite)
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s.Value);

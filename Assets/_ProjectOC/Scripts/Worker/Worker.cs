@@ -1,6 +1,7 @@
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -54,19 +55,16 @@ namespace ProjectOC.WorkerNS
         #endregion
 
         #region WorkerContainer
-        public IWorkerContainer WorkPlace;
-        public IWorkerContainer RelaxPlace;
-        public IWorkerContainer HomePlace;
         public Dictionary<WorkerContainerType, IWorkerContainer> ContainerDict;
         private ML.Engine.Timer.CounterDownTimer timerForNoHome;
         private ML.Engine.Timer.CounterDownTimer TimerForNoHome
         {
             get
             {
-                if (TimerForNoHome == null)
+                if (timerForNoHome == null)
                 {
                     timerForNoHome = new ML.Engine.Timer.CounterDownTimer(60 * DestroyTimeForNoHome, false, false);
-                    TimerForNoHome.OnEndEvent += () =>
+                    timerForNoHome.OnEndEvent += () =>
                     {
                         ManagerNS.LocalGameManager.Instance.WorkerManager.DeleteWorker(this);
                     };
@@ -83,9 +81,9 @@ namespace ProjectOC.WorkerNS
         [LabelText("是否有窝"), ShowInInspector, ReadOnly]
         public bool HaveHome => HasContainer(WorkerContainerType.Home);
         [LabelText("是否在生产节点值班"), ShowInInspector, ReadOnly]
-        public bool IsOnProNodeDuty { get { return HaveProNode && Status != Status.Relaxing && WorkPlace.IsArrive; } }
+        public bool IsOnProNodeDuty { get { return HaveProNode && Status != Status.Relaxing && GetContainer(WorkerContainerType.Work).IsArrive; } }
         [LabelText("生产节点"), ShowInInspector, ReadOnly]
-        public ProNodeNS.ProNode ProNode => WorkPlace != null ? WorkPlace as ProNodeNS.ProNode : null;
+        public ProNodeNS.ProNode ProNode => HasContainer(WorkerContainerType.Work) ? GetContainer(WorkerContainerType.Work) as ProNodeNS.ProNode : null;
         #endregion
 
         public IWorkerContainer GetContainer(WorkerContainerType type)
@@ -110,7 +108,7 @@ namespace ProjectOC.WorkerNS
         {
             if (type == WorkerContainerType.Home && (timerForNoHome == null || timerForNoHome.IsStoped))
             {
-                TimerForNoHome.Start();
+                TimerForNoHome?.Start();
             }
             ContainerDict[type] = null;
         }
@@ -143,12 +141,12 @@ namespace ProjectOC.WorkerNS
 
             ContainerDict = new Dictionary<WorkerContainerType, IWorkerContainer>()
             {
-                { WorkerContainerType.Work, WorkPlace },
-                { WorkerContainerType.Relax, RelaxPlace },
-                { WorkerContainerType.Home, HomePlace }
+                { WorkerContainerType.Work, null },
+                { WorkerContainerType.Relax, null },
+                { WorkerContainerType.Home, null }
             };
 
-            if (HomePlace == null)
+            if (HasContainer(WorkerContainerType.Home))
             {
                 TimerForNoHome.Start();
             }
@@ -194,7 +192,7 @@ namespace ProjectOC.WorkerNS
         public bool SetDestination(Vector3 target, Action<Worker> action = null)
         {
             ClearDestination();
-            foreach (var place in ContainerDict.Values)
+            foreach (var place in ContainerDict.Values.ToArray())
             {
                 place?.TempRemoveWorker();
             }

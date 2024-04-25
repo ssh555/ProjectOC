@@ -42,9 +42,9 @@ namespace ProjectOC.WorkerNS
 
                         if (!worker.HaveDestination && !worker.HaveRestaurantSeat)
                         {
-                            if (worker.HaveHome && !worker.HomePlace.IsArrive)
+                            if (worker.HaveHome && !worker.GetContainer(WorkerContainerType.Home).IsArrive)
                             {
-                                worker.SetDestination(worker.HomePlace.GetTransform().position, worker.HomePlace.OnArriveEvent);
+                                worker.SetDestination(worker.GetContainer(WorkerContainerType.Home).GetTransform().position, worker.GetContainer(WorkerContainerType.Home).OnArriveEvent);
                             }
                             else if (!worker.HaveHome && (TimerForRandomWalk == null || TimerForRandomWalk.IsStoped))
                             {
@@ -77,7 +77,7 @@ namespace ProjectOC.WorkerNS
                         worker.ClearDestination();
                         if (worker.HaveProNode)
                         {
-                            worker.SetDestination(worker.WorkPlace.GetTransform().position, worker.WorkPlace.OnArriveEvent);
+                            worker.SetDestination(worker.GetContainer(WorkerContainerType.Work).GetTransform().position, worker.GetContainer(WorkerContainerType.Work).OnArriveEvent);
                         }
                     }
                 })
