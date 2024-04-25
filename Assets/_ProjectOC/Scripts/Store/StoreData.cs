@@ -3,10 +3,10 @@ using Sirenix.OdinInspector;
 namespace ProjectOC.StoreNS
 {
     [LabelText("仓库存储数据"), System.Serializable]
-    public class StoreData
+    public struct StoreData
     {
         [LabelText("存储的Item ID"), ReadOnly]
-        public string ItemID = "";
+        public string ItemID;
         [LabelText("总存放量"), ShowInInspector, ReadOnly]
         public int StorageAll { get { return Storage + StorageReserve; } }
         [LabelText("实际存放量"), ReadOnly]
@@ -27,17 +27,28 @@ namespace ProjectOC.StoreNS
         [LabelText("最大容量"), ReadOnly]
         public int MaxCapacity;
         [LabelText("刁民能否存入"), ReadOnly]
-        public bool CanIn = true;
+        public bool CanIn;
         [LabelText("刁民能否取出"), ReadOnly]
-        public bool CanOut = true;
+        public bool CanOut;
 
         public StoreData(string itemID, int maxCapacity)
         {
             ItemID = itemID;
             MaxCapacity = maxCapacity;
+            CanIn = true;
+            CanOut = true;
+
+            Storage = 0;
+            StorageReserve = 0;
+            EmptyReserve = 0;
         }
 
-        public void Clear()
+        public bool HaveItem()
+        {
+            return !string.IsNullOrEmpty(ItemID) && ManagerNS.LocalGameManager.Instance.ItemManager.IsValidItemID(ItemID);
+        }
+
+        public void ClearData()
         {
             this.ItemID = "";
             this.Storage = 0;

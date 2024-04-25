@@ -7,13 +7,10 @@ namespace ProjectOC.WorkerNS
     public interface IWorkerContainer
     {
         #region Data
-        // 可选初始化
         public Action<Worker> OnSetWorkerEvent { get; set; }
         public Action OnRemoveWorkerEvent { get; set; }
-        // 不需要初始化
         public Worker Worker { get; set; }
         public bool IsArrive { get; set; }
-        // 属性
         public bool HaveWorker => Worker != null && !string.IsNullOrEmpty(Worker.InstanceID);
         #endregion
 
@@ -24,9 +21,10 @@ namespace ProjectOC.WorkerNS
 
         public virtual void SetWorkerRelateData() { }
         public virtual void RemoveWorkerRelateData() { }
-        public virtual void TempRemoveWorker()
+        public virtual bool TempRemoveWorker()
         {
             RemoveWorker();
+            return true;
         }
 
         public void SetWorker(Worker worker)

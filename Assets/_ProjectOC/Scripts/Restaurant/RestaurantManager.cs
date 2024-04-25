@@ -3,9 +3,6 @@ using UnityEngine;
 using System;
 using Sirenix.OdinInspector;
 using ProjectOC.WorkerNS;
-using ML.Engine.Timer;
-using ProjectOC.LandMassExpand;
-using ProjectOC.ManagerNS;
 using System.Linq;
 
 
@@ -27,7 +24,7 @@ namespace ProjectOC.RestaurantNS
         public void OnRegister()
         {
             LoadTableData();
-            Timer = new CounterDownTimer(BroadcastTime, true, false);
+            Timer = new ML.Engine.Timer.CounterDownTimer(BroadcastTime, true, false);
             Timer.OnEndEvent += EndActionForTimer;
         }
 
@@ -48,9 +45,8 @@ namespace ProjectOC.RestaurantNS
         public List<Worker> Workers = new List<Worker>();
         [LabelText("实例化的餐厅"), ReadOnly]
         public Dictionary<string, WorldRestaurant> WorldRestaurants = new Dictionary<string, WorldRestaurant>();
-
         [LabelText("分配计时器"), ReadOnly]
-        public CounterDownTimer Timer;
+        public ML.Engine.Timer.CounterDownTimer Timer;
         #endregion
 
         #region 方法
@@ -92,7 +88,7 @@ namespace ProjectOC.RestaurantNS
         public List<Restaurant> GetRestaurants()
         {
             List<Restaurant> restaurants = new List<Restaurant>();
-            foreach (WorldRestaurant world in this.WorldRestaurants.Values)
+            foreach (WorldRestaurant world in WorldRestaurants.Values)
             {
                 if (world != null)
                 {
@@ -164,7 +160,7 @@ namespace ProjectOC.RestaurantNS
         }
         #endregion
 
-        #region 分配方法
+        #region 分配
         private void EndActionForTimer()
         {
             Workers.RemoveAll(x => x == null);
@@ -177,9 +173,9 @@ namespace ProjectOC.RestaurantNS
                 workers.AddRange(Workers);
 
                 List<Vector3> positions = new List<Vector3>();
-                foreach (var core in LocalGameManager.Instance.BuildPowerIslandManager.powerCores)
+                foreach (var core in ManagerNS.LocalGameManager.Instance.BuildPowerIslandManager.powerCores)
                 {
-                    if (core.GetType() == typeof(BuildPowerCore))
+                    if (core.GetType() == typeof(LandMassExpand.BuildPowerCore))
                     {
                         positions.Add(core.transform.position);
                     }

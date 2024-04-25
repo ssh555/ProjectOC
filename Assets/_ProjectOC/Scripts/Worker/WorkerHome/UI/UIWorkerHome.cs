@@ -1,17 +1,16 @@
 ﻿using ML.Engine.TextContent;
 using ProjectOC.ManagerNS;
-using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using ML.Engine.Extension;
 using ML.Engine.Manager;
-using static ProjectOC.ClanNS.UI.UIWorkerHome;
+using static ProjectOC.WorkerNS.UI.UIWorkerHome;
 using System.Linq;
 
 
-namespace ProjectOC.ClanNS.UI
+namespace ProjectOC.WorkerNS.UI
 {
     public class UIWorkerHome : ML.Engine.UI.UIBasePanel<WorkerHomePanel>
     {
@@ -110,7 +109,7 @@ namespace ProjectOC.ClanNS.UI
         }
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/Building";
+            this.abpath = "OCTextContent/Building";
             this.abname = "WorkerHomePanel";
             this.description = "WorkerHomePanel数据加载完成";
         }

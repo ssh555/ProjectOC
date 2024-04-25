@@ -1,4 +1,3 @@
-using ProjectOC.ManagerNS;
 using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System;
@@ -26,7 +25,7 @@ namespace ProjectOC.RestaurantNS
             {
                 if (timer == null && HaveWorker && IsArrive && !string.IsNullOrEmpty(FoodID))
                 {
-                    timer = new ML.Engine.Timer.CounterDownTimer(LocalGameManager.Instance.RestaurantManager.WorkerFood_EatTime(FoodID), false, false);
+                    timer = new ML.Engine.Timer.CounterDownTimer(ManagerNS.LocalGameManager.Instance.RestaurantManager.WorkerFood_EatTime(FoodID), false, false);
                     timer.OnEndEvent += EndActionForTimer;
                 }
                 return timer; 
@@ -42,12 +41,12 @@ namespace ProjectOC.RestaurantNS
         public void SetFood(string foodID)
         {
             FoodID = foodID;
-            Timer?.Reset(LocalGameManager.Instance.RestaurantManager.WorkerFood_EatTime(FoodID));
+            Timer?.Reset(ManagerNS.LocalGameManager.Instance.RestaurantManager.WorkerFood_EatTime(FoodID));
         }
 
         private void EndActionForTimer()
         {
-            var restaurantManager = LocalGameManager.Instance.RestaurantManager;
+            var restaurantManager = ManagerNS.LocalGameManager.Instance.RestaurantManager;
             Worker.AlterAP(restaurantManager.WorkerFood_AlterAP(FoodID));
             var mood = restaurantManager.WorkerFood_AlterMoodOdds(FoodID);
 
@@ -92,8 +91,7 @@ namespace ProjectOC.RestaurantNS
             if (IsEat)
             {
                 Timer?.End();
-                ML.Engine.InventorySystem.Item item = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItem(LocalGameManager.Instance.RestaurantManager.WorkerFood_ItemID(FoodID));
-                item.Amount = 1;
+                ML.Engine.InventorySystem.Item item = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItem(ManagerNS.LocalGameManager.Instance.RestaurantManager.WorkerFood_ItemID(FoodID));
                 (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory.AddItem(item);
             }
             FoodID = "";
@@ -104,15 +102,16 @@ namespace ProjectOC.RestaurantNS
             if (worker != null && Restaurant.HaveFood)
             {
                 string foodID = Restaurant.EatFood(Worker);
-                if (LocalGameManager.Instance.RestaurantManager.WorkerFood_IsValidID(foodID))
+                if (ManagerNS.LocalGameManager.Instance.RestaurantManager.WorkerFood_IsValidID(foodID))
                 {
                     (this as IWorkerContainer).OnArriveSetPosition(worker);
                     SetFood(foodID);
                     return;
                 }
             }
+            // 没食物就移除刁民
             (this as IWorkerContainer).RemoveWorker();
-            LocalGameManager.Instance.RestaurantManager.AddWorker(worker);
+            ManagerNS.LocalGameManager.Instance.RestaurantManager.AddWorker(worker);
         }
         #endregion
     }

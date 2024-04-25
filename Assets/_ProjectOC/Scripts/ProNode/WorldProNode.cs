@@ -1,22 +1,10 @@
 using ML.Engine.BuildingSystem;
-using ML.Engine.InteractSystem;
-using ML.Engine.InventorySystem;
-using ML.Engine.InventorySystem.CompositeSystem;
-using ML.Engine.Manager;
-using ProjectOC.LandMassExpand;
-using ProjectOC.ManagerNS;
-using ProjectOC.Player;
 using Sirenix.OdinInspector;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
-
 
 namespace ProjectOC.ProNodeNS
 {
-    public class WorldProNode : ElectAppliance, IInteraction, IBuildingUpgrade
+    public class WorldProNode : LandMassExpand.ElectAppliance, ML.Engine.InteractSystem.IInteraction, IBuildingUpgrade
     {
         [LabelText("生产节点"), ShowInInspector, ReadOnly, SerializeField]
         public ProNode ProNode;
@@ -31,7 +19,7 @@ namespace ProjectOC.ProNodeNS
                 string actorID = BuildingManager.Instance.GetActorID(this.Classification.ToString());
                 if (!string.IsNullOrEmpty(actorID))
                 {
-                    LocalGameManager.Instance.ProNodeManager.WorldNodeSetData(this, actorID);
+                    ManagerNS.LocalGameManager.Instance.ProNodeManager.WorldNodeSetData(this, actorID);
                 }
             }
             if (oldPos != newPos)
@@ -41,24 +29,35 @@ namespace ProjectOC.ProNodeNS
             base.OnChangePlaceEvent(oldPos, newPos);
         }
 
-        public void Interact(InteractComponent component)
+        public override void PowerStateChange()
         {
-            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIProNodePanel.prefab", GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
+            if (InPower)
             {
-                InventorySystem.UI.UIProNode uiPanel = handle.Result.GetComponent<InventorySystem.UI.UIProNode>();
+                ProNode.StopProduce();
+            }
+            else
+            {
+                ProNode.StartProduce();
+            }
+        }
+
+        public void Interact(ML.Engine.InteractSystem.InteractComponent component)
+        {
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_ProNode_UI/Prefab_ProNode_UI_ProNodePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
+            {
+                UI.UIProNode uiPanel = handle.Result.GetComponent<UI.UIProNode>();
                 uiPanel.ProNode = ProNode;
                 uiPanel.HasUpgrade = (this as IBuildingUpgrade).HasUpgrade() || this.ProNode.Level > 0;
-                GameManager.Instance.UIManager.PushPanel(uiPanel);
+                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uiPanel);
             };
         }
 
         public bool CanUpgrade()
         {
-            string CID = Classification.ToString();
             if ((this as IBuildingUpgrade).HasUpgrade())
             {
-                List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(CID);
-                return (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).InventoryHasItems(formulas);
+                var formulas = BuildingManager.Instance.GetUpgradeRaw(Classification.ToString());
+                return (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).InventoryHasItems(formulas);
             }
             return false;
         }
@@ -67,10 +66,10 @@ namespace ProjectOC.ProNodeNS
         {
             string lastLevelID = BuildingManager.Instance.GetID(lastLevelBuild.Classification.ToString());
             string upgradeID = BuildingManager.Instance.GetID(Classification.ToString());
-            List<IInventory> inventorys = (GameManager.Instance.CharacterManager.GetLocalController() as ProjectOC.Player.OCPlayerController).GetInventorys(true, -1);
-            CompositeManager.Instance.OnlyCostResource(inventorys, upgradeID);
-            IInventory inventory = (GameManager.Instance.CharacterManager.GetLocalController() as ProjectOC.Player.OCPlayerController).OCState.Inventory;
-            CompositeManager.Instance.OnlyReturnResource(inventory, lastLevelID);
+            var inventorys = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).GetInventorys(true, -1);
+            ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.OnlyCostResource(inventorys, upgradeID);
+            var inventory = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory;
+            ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.OnlyReturnResource(inventory, lastLevelID);
             transform.SetParent(lastLevelBuild.transform.parent);
             InstanceID = lastLevelBuild.InstanceID;
             transform.position = lastLevelBuild.transform.position;
@@ -78,10 +77,10 @@ namespace ProjectOC.ProNodeNS
             isFirstBuild = lastLevelBuild.isFirstBuild;
             if (lastLevelBuild is WorldProNode worldProNode)
             {
-                LocalGameManager.Instance.ProNodeManager.WorldNodeSetData(this, worldProNode.ProNode);
+                ManagerNS.LocalGameManager.Instance.ProNodeManager.WorldNodeSetData(this, worldProNode.ProNode);
             }
             ProNode.SetLevel(Classification.Category4 - 1);
-            GameManager.DestroyObj(lastLevelBuild.gameObject);
+            ML.Engine.Manager.GameManager.DestroyObj(lastLevelBuild.gameObject);
         }
     }
 }

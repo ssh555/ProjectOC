@@ -1,13 +1,10 @@
 using ML.Engine.FSM;
 using ProjectOC.ProNodeNS;
-using UnityEngine;
+using Sirenix.OdinInspector;
 
 namespace ProjectOC.WorkerNS
 {
-    /// <summary>
-    /// 刁民状态机
-    /// </summary>
-    [System.Serializable]
+    [LabelText("刁民状态机"), System.Serializable]
     public sealed class WorkerStateMachine : StateMachine
     {
         /// <summary>

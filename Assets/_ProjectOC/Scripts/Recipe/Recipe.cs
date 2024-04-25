@@ -3,14 +3,15 @@ using ML.Engine.InventorySystem.CompositeSystem;
 using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
 
-
 namespace ML.Engine.InventorySystem
 {
     [LabelText("配方"), System.Serializable]
-    public class Recipe
+    public struct Recipe
     {
         [LabelText("ID"), ReadOnly]
-        public string ID = "";
+        public string ID;
+
+        public bool IsValidRecipe => !string.IsNullOrEmpty(ID) && (LocalGameManager.Instance == null || LocalGameManager.Instance.RecipeManager.IsValidID(ID));
         #region 读表数据
         [LabelText("排序"), ShowInInspector, ReadOnly]
         public int Sort => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetSort(ID) : 999;
@@ -33,6 +34,11 @@ namespace ML.Engine.InventorySystem
         public Recipe(RecipeTableData config)
         {
             this.ID = config.ID;
+        }
+
+        public void ClearData()
+        {
+            this.ID = "";
         }
 
         public int GetRawNum(string itemID)
