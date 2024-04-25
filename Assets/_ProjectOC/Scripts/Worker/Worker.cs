@@ -55,6 +55,7 @@ namespace ProjectOC.WorkerNS
         #endregion
 
         #region WorkerContainer
+        [ShowInInspector]
         public Dictionary<WorkerContainerType, IWorkerContainer> ContainerDict;
         private ML.Engine.Timer.CounterDownTimer timerForNoHome;
         private ML.Engine.Timer.CounterDownTimer TimerForNoHome
@@ -189,12 +190,15 @@ namespace ProjectOC.WorkerNS
         public event Action<Worker> OnArriveEvent;
         private event Action<Worker> OnArriveDisposableEvent;
 
-        public bool SetDestination(Vector3 target, Action<Worker> action = null)
+        public bool SetDestination(Vector3 target, Action<Worker> action = null, WorkerContainerType arriveType = WorkerContainerType.None)
         {
             ClearDestination();
-            foreach (var place in ContainerDict.Values.ToArray())
+            foreach (var kv in ContainerDict)
             {
-                place?.TempRemoveWorker();
+                if (kv.Key != arriveType)
+                {
+                    kv.Value?.TempRemoveWorker();
+                }
             }
             Agent.isStopped = false;
             if (Agent.SetDestination(target))

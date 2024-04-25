@@ -155,12 +155,15 @@ namespace ProjectOC.MissionNS
         /// </summary>
         public void End(bool removeMission=true)
         {
-            List<ML.Engine.InventorySystem.Item> items = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(ItemID, CurNum);
-            foreach (var item in items)
+            if (ML.Engine.InventorySystem.ItemManager.Instance != null)
             {
+                List<ML.Engine.InventorySystem.Item> items = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(ItemID, CurNum);
+                foreach (var item in items)
+                {
 #pragma warning disable CS4014
-                ML.Engine.InventorySystem.ItemManager.Instance.SpawnWorldItem(item, Worker.transform.position, Worker.transform.rotation);
+                    ML.Engine.InventorySystem.ItemManager.Instance.SpawnWorldItem(item, Worker.transform.position, Worker.transform.rotation);
 #pragma warning restore CS4014
+                }
             }
             foreach (var item in Worker.TransportItems)
             {

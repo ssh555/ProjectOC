@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.U2D;
-
+using System.Linq;
 
 namespace ProjectOC.ProNodeNS.UI
 {
@@ -535,12 +535,9 @@ namespace ProjectOC.ProNodeNS.UI
 
         private void ClearTemp()
         {
-            //ML.Engine.Manager.GameManager.DestroyObj(WorkerIcon);
-            //ML.Engine.Manager.GameManager.DestroyObj(WorkerMaleIcon);
-            //ML.Engine.Manager.GameManager.DestroyObj(WorkerFemalIcon);
-            foreach (var s in tempSprite)
+            foreach (var s in tempSprite.Values.ToArray())
             {
-                ML.Engine.Manager.GameManager.DestroyObj(s.Value);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             foreach (var s in tempUIItems)
             {

@@ -596,7 +596,7 @@ namespace ProjectOC.ProNodeNS
             if (ProNodeType == ProNodeType.Mannul && Worker != null)
             {
                 Worker.SetTimeStatusAll(TimeStatus.Work_OnDuty);
-                Worker.SetDestination(WorldProNode.transform.position, OnArriveEvent);
+                Worker.SetDestination(WorldProNode.transform.position, OnArriveEvent, GetContainerType());
                 Worker.OnStatusChangeEvent += OnWorkerStatusChangeEvent;
                 Worker.OnAPChangeEvent += OnWorkerAPChangeEvent;
             }
@@ -617,17 +617,10 @@ namespace ProjectOC.ProNodeNS
 
         public bool TempRemoveWorker()
         {
-            if (Worker != null && !IsOnProduce)
+            if (Worker != null && !IsOnProduce && IsArrive)
             {
-                if (IsArrive)
-                {
-                    Worker.RecoverLastPosition();
-                    IsArrive = false;
-                }
-                else
-                {
-                    Worker.ClearDestination();
-                }
+                Worker.RecoverLastPosition();
+                IsArrive = false;
                 return true;
             }
             return false;
