@@ -212,7 +212,7 @@ namespace ProjectOC.StoreNS
         }
         public bool CheckCanChangeData(DataType addType, DataType removeType, bool exceed=false)
         {
-            if (exceed && (removeType != DataType.Empty || removeType != DataType.EmptyReserve))
+            if (exceed && removeType != DataType.Empty && removeType != DataType.EmptyReserve)
             {
                 return false;
             }
