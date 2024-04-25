@@ -1,8 +1,5 @@
 using Sirenix.OdinInspector;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
 
 namespace ML.Engine.SaveSystem
 {
@@ -29,7 +26,7 @@ namespace ML.Engine.SaveSystem
 
         public SaveManager()
         {
-            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SaveSystemConfigAsset>("ML/Config/SaveSystemConfig.asset").Completed += (handle) =>
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SaveSystemConfigAsset>("Config_Global").Completed += (handle) =>
             {
                 SaveSystemConfigAsset data = handle.Result;
                 this.Config = new SaveConfig(data.Config);
