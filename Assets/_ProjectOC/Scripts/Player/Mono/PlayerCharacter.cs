@@ -75,7 +75,7 @@ namespace ProjectOC.Player
 
         #region 背包 to-do : 临时测试使用
         [ShowInInspector, ReadOnly]
-        public ML.Engine.InventorySystem.IInventory Inventory => (Controller as OCPlayerController).OCState.Inventory;
+        public ML.Engine.InventorySystem.IInventory Inventory => Controller != null ? (Controller as OCPlayerController).OCState.Inventory : null;
 
         [LabelText("背包容量 单位格子 目前为999")]
         public int InventoryCapacity = 999;

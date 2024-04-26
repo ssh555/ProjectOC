@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 
 namespace ProjectOC.PinchFace.Config
@@ -10,39 +12,36 @@ namespace ProjectOC.PinchFace.Config
     public class PinchDataConfig : SerializedScriptableObject
     {
         //存储Type3 Prefab数量
-        public List<int> typesData;
-        //骨骼 默认数值
-        public Dictionary<BoneWeightType, BoneTransfData> boneWeightData;
-        public class BoneTransfData
+        public List<Type3Data> typesDatas;
+        public class Type3Data
         {
-            public Vector3 pos, scale;
+            public PinchPartType3 _type3;
+            public int typeCount;
+
+            public Type3Data(PinchPartType3 _name, int _count)
+            {
+                _type3 = _name;
+                typeCount = _count;
+            }
         }
-        
-        
-        
-        
         
         
         [Button("读取信息")]
         public void LoadConfig()
         {
             ReadType3Cofig();
-            ReadBoneWeightConfig();
         }
-
-        private void ReadBoneWeightConfig()
-        {
-            //
-        }
-
+        
+        
         private void ReadType3Cofig()
         {
             //根据Texture2D数量来判断Prefab数量
             int enumsValue = (System.Enum.GetValues(typeof(PinchPartType3))).Length -1;
-            typesData = new List<int>(enumsValue);
-            
-            string rootFolderPath = "Assets/_ProjectOC/OCResources/UI/PinchFace/Texture";
+            typesDatas = new List<Type3Data>(enumsValue);
+            string rootFolderPath = "Assets/_ProjectOC/OCResources/PinchFace/UI/PinchPart";
             TraverseFolders(rootFolderPath);
+            //排序
+            typesDatas.Sort((a, b) => ((int)a._type3).CompareTo((int)b._type3));
         }
         private void TraverseFolders(string folderPath)
         {
@@ -60,8 +59,9 @@ namespace ProjectOC.PinchFace.Config
                                 + Directory.GetFiles(folderPath, "*.jpg").Length
                                 + Directory.GetFiles(folderPath, "*.jpeg").Length;
 
-                int num = int.Parse(folderName.Split('_')[0]);
-                typesData.Add(fileCount);
+                string type3Name = $"{folderName.Split('_')[1]}_{folderName.Split('_')[2]}";
+                typesDatas.Add(
+                    new Type3Data((PinchPartType3)Enum.Parse(typeof(PinchPartType3),type3Name),fileCount));
                 return;
             }
 

@@ -147,10 +147,10 @@ namespace ML.Engine.UI
         }
 
         #region ֪ͨUI
-        private string SideBarUIPrefabPath = "NoticeUI/SideBarUI.prefab";
-        private string PopUpUIPrefabPath = "NoticeUI/PopUpUI.prefab";
-        private string FloatTextUIPrefabPath = "NoticeUI/FloatTextUI.prefab";
-        private string BtnUIPrefabPath = "NoticeUI/BtnUI.prefab";
+        private string SideBarUIPrefabPath = "Prefab_MainInteract_NoticeUI_UIPanel/Prefab_MainInteract_NoticeUI_UIPanel_SideBarUI.prefab";
+        private string PopUpUIPrefabPath = "Prefab_MainInteract_NoticeUI_UIPanel/Prefab_MainInteract_NoticeUI_UIPanel_PopUpUI.prefab";
+        private string FloatTextUIPrefabPath = "Prefab_MainInteract_NoticeUI_UIPanel/Prefab_MainInteract_NoticeUI_UIPanel_FloatTextUI.prefab";
+        private string BtnUIPrefabPath = "Prefab_MainInteract_NoticeUI_UIPanel/Prefab_MainInteract_NoticeUI_UIPanel_BtnUI.prefab";
         [ShowInInspector]
         private GameObject SideBarUIPrefab, PopUpUIPrefab, FloatTextUIPrefab, BtnUIPrefab;
 

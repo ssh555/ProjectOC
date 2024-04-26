@@ -125,7 +125,7 @@ namespace ML.Engine.BuildingSystem.BuildingArea
             BuildingManager.Instance.BuildingAreaList.Remove(this);
         }
 
-        private void OnDrawGizmos()
+        private void OnDrawGizmosSelected()
         {
             if (BuildingManager.Instance == null)
             {

@@ -8,7 +8,7 @@ namespace  ProjectOC.PinchFace
     {
     public class ToolProcessScriptObject : EditorWindow
     {
-        [MenuItem("Tools/Process ScriptObjects")]
+        [MenuItem("Tools/Asset Process/Process ScriptObjects")]
          
         public static void ShowWindow()
         {
