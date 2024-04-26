@@ -807,7 +807,7 @@ namespace ML.Engine.BuildingSystem
         #region Material
         // to-do :to-change
         [SerializeField]
-        private const string _ABMatName = "ML/Mat/Transparent";
+        private const string _ABMatName = "Materials/Other/Mat_Common_Transparent.mat";
 
         /// <summary>
         /// 建造模式下所用的Material (Place, Edit, Destroy, Interact)
