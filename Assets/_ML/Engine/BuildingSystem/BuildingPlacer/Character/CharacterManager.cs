@@ -20,7 +20,7 @@ namespace ML.PlayerCharacterNS
         int LocalPlayerControllerIndex = -1;
         int LocalAIControllerIndex = -1;
         
-        [TypeFilter("GetAllPlayerControllerClass")]
+        [TypeFilter("GetAllPlayerControllerClass"), SerializeReference]
         public PlayerController playerController;
         public IEnumerable<Type> GetAllPlayerControllerClass()
         {
@@ -36,8 +36,8 @@ namespace ML.PlayerCharacterNS
         public void OnRegister()
         {
             LocalPlayerControllerIndex = 0;
-            //AddPlayerController(playerController);
-            AddPlayerController(new OCPlayerController());
+            AddPlayerController(playerController);
+            //AddPlayerController(new OCPlayerController());
         }
 
         public PlayerController GetLocalController()
