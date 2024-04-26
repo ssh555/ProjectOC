@@ -301,6 +301,7 @@ namespace ProjectOC.WorkerNS
         public Action<int> OnAPChangeEvent;
         [LabelText("当前心情"), ReadOnly]
         public int Mood = 100;
+        public Action<int> OnMoodChangeEvent;
         [LabelText("技能"), ShowInInspector, ReadOnly]
         public Dictionary<WorkType, Skill> Skill = new Dictionary<WorkType, Skill>();
         [LabelText("技能经验获取速度"), ShowInInspector, ReadOnly]
@@ -318,6 +319,7 @@ namespace ProjectOC.WorkerNS
             Mood += value;
             Mood = Mood < 0 ? 0 : Mood;
             Mood = Mood > MoodMax ? MoodMax : Mood;
+            OnMoodChangeEvent?.Invoke(Mood);
         }
         public void AlterExp(WorkType workType, int value)
         {
