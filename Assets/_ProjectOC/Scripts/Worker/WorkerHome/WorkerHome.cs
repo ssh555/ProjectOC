@@ -21,10 +21,23 @@ namespace ProjectOC.WorkerNS
         private Worker TempWorker;
         [LabelText("移动窝时，原来的刁民是否在窝里"), ShowInInspector, ReadOnly]
         private bool TempHasArrive;
+        private Vector3 TempLastPos;
+        private ML.Engine.Timer.CounterDownTimer timer;
         /// <summary>
         /// 有绑定刁民且刁民在窝时循环执行，时间为Time秒，执行一次结束后对该刁民增加Mood点心情值
         /// </summary>
-        private ML.Engine.Timer.CounterDownTimer Timer;
+        private ML.Engine.Timer.CounterDownTimer Timer
+        {
+            get
+            {
+                if (timer == null)
+                {
+                    timer = new ML.Engine.Timer.CounterDownTimer(Time, true, false);
+                    timer.OnEndEvent += EndActionForTimer;
+                }
+                return timer;
+            }
+        }
         #endregion
 
         #region BuildingPart IInteraction
@@ -34,9 +47,7 @@ namespace ProjectOC.WorkerNS
         {
             if (isFirstBuild)
             {
-                BindWorkerDefault();
-                Timer = new ML.Engine.Timer.CounterDownTimer(Time, true, false);
-                Timer.OnEndEvent += EndActionForTimer;
+                Init();
             }
             if (!isFirstBuild && oldPos != newPos)
             {
@@ -46,12 +57,13 @@ namespace ProjectOC.WorkerNS
                     if (TempHasArrive)
                     {
                         OnArriveEvent(TempWorker);
+                        TempWorker.LastPosition = TempLastPos + newPos - oldPos;
                     }
                 }
-                else
-                {
-                    BindWorkerDefault();
-                }
+            }
+            if (!HaveWorker)
+            {
+                BindWorkerDefault();
             }
             base.OnChangePlaceEvent(oldPos, newPos);
         }
@@ -61,6 +73,7 @@ namespace ProjectOC.WorkerNS
             //开始移动时，将TempWorker设置为Worker，将TempHasArrive设置为HasArrive，调用UnBindWorker()，解绑Worker。
             this.TempWorker = Worker;
             this.TempHasArrive = IsArrive;
+            this.TempLastPos = Worker.LastPosition;
             (this as IWorkerContainer).RemoveWorker();
         }
 
@@ -76,14 +89,11 @@ namespace ProjectOC.WorkerNS
         #endregion
 
         #region Mono
-        protected override void Start()
+        public void Init()
         {
-            if (!HaveWorker)
+            if (!HaveWorker && ManagerNS.LocalGameManager.Instance != null)
             {
-                if (ManagerNS.LocalGameManager.Instance != null)
-                {
-                    ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent += OnManagerAddWorkerEvent;
-                }
+                ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent += OnManagerAddWorkerEvent;
             }
             OnSetWorkerEvent += (worker) =>
             {
@@ -92,16 +102,15 @@ namespace ProjectOC.WorkerNS
                     ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent -= OnManagerAddWorkerEvent;
                 }
             };
-            OnRemoveWorkerEvent += (isReset) => 
+            OnRemoveWorkerEvent += (isReset, oldWorker) =>
             {
-                if (ManagerNS.LocalGameManager.Instance != null && !isReset && !BindWorkerDefault())
+                oldWorker = isReset ? oldWorker : null;
+                if (ManagerNS.LocalGameManager.Instance != null && !BindWorkerDefault(oldWorker))
                 {
                     ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent += OnManagerAddWorkerEvent;
                 }
             };
-            this.enabled = false;
         }
-
         public void OnDestroy()
         {
             OnSetWorkerEvent = null;
@@ -121,22 +130,25 @@ namespace ProjectOC.WorkerNS
         #region Method
         private void EndActionForTimer()
         {
-            if (Worker != null && Worker.Mood < Worker.MoodMax)
+            if (HaveWorker && Worker.Mood < Worker.MoodMax)
             {
                 Worker.AlterMood(Mood);
             }
         }
 
-        public bool BindWorkerDefault()
+        public bool BindWorkerDefault(Worker oldWorker = null)
         {
-            List<Worker> workers = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkers();
-            workers.RemoveAll(x => x == null);
-            foreach (Worker worker in workers.OrderBy(worker => worker.InstanceID).ToList())
+            if (!HaveWorker)
             {
-                if (!worker.HaveHome)
+                List<Worker> workers = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkers();
+                workers.RemoveAll(x => x == null);
+                foreach (Worker worker in workers.OrderBy(worker => worker.InstanceID).ToList())
                 {
-                    (this as IWorkerContainer).SetWorker(worker);
-                    return true;
+                    if (!worker.HaveHome && (oldWorker== null || worker != oldWorker))
+                    {
+                        (this as IWorkerContainer).SetWorker(worker);
+                        return true;
+                    }
                 }
             }
             return false;
@@ -154,12 +166,18 @@ namespace ProjectOC.WorkerNS
             {
                 isArrive = value;
                 if (isArrive) { Timer?.Start(); }
-                else { Timer?.End(); }
+                else 
+                {
+                    if (timer != null && !timer.IsStoped)
+                    {
+                        timer?.End();
+                    }
+                }
             }
         }
         public bool HaveWorker => Worker != null && !string.IsNullOrEmpty(Worker.InstanceID);
         public Action<Worker> OnSetWorkerEvent { get; set; }
-        public Action<bool> OnRemoveWorkerEvent { get; set; }
+        public Action<bool, Worker> OnRemoveWorkerEvent { get; set; }
 
         public string GetUID() { return InstanceID; }
         public Transform GetTransform() { return transform; }
@@ -168,6 +186,21 @@ namespace ProjectOC.WorkerNS
         public void OnArriveEvent(Worker worker)
         {
             (this as IWorkerContainer).OnArriveSetPosition(worker, transform.position + new Vector3(0, 2f, 0));
+        }
+        public Action<int> OnWorkerMoodChangeEvent;
+        public void SetWorkerRelateData()
+        {
+            if (HaveWorker)
+            {
+                Worker.OnAPChangeEvent += OnWorkerMoodChangeEvent;
+            }
+        }
+        public void RemoveWorkerRelateData()
+        {
+            if (HaveWorker)
+            {
+                Worker.OnAPChangeEvent -= OnWorkerMoodChangeEvent;
+            }
         }
 
         public bool TempRemoveWorker()
