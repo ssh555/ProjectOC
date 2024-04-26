@@ -1,25 +1,19 @@
 ﻿using ML.Engine.InventorySystem;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.TextContent;
-using ProjectOC.ManagerNS;
-using ProjectOC.ProNodeNS;
+using ML.Engine.Extension;
+using ML.Engine.BuildingSystem;
+using ML.Engine.Utility;
 using ProjectOC.WorkerNS;
+using static ProjectOC.ProNodeNS.UI.UIProNode;
 using Sirenix.OdinInspector;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using ML.Engine.Extension;
-using ML.Engine.BuildingSystem;
-using ProjectOC.MissionNS;
-using static ProjectOC.InventorySystem.UI.UIProNode;
-using ML.Engine.Utility;
 using UnityEngine.U2D;
-using ML.Engine.Manager;
-using ProjectOC.Player;
+using System.Linq;
 
-namespace ProjectOC.InventorySystem.UI
+namespace ProjectOC.ProNodeNS.UI
 {
     public class UIProNode : ML.Engine.UI.UIBasePanel<ProNodePanel>
     {
@@ -100,6 +94,9 @@ namespace ProjectOC.InventorySystem.UI
             ProNode.OnDataChangeEvent += RefreshDynamic;
             ProNode.OnProduceUpdateEvent += OnProduceTimerUpdateAction;
             ProNode.OnProduceEndEvent += Refresh;
+            WorkerIcon = ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_Beast");
+            WorkerMaleIcon = ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_GenderMale");
+            WorkerFemalIcon = ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_GenderFemale");
             base.Enter();
         }
 
@@ -183,7 +180,7 @@ namespace ProjectOC.InventorySystem.UI
         /// <summary>
         /// 对应的生产节点
         /// </summary>
-        public ProNodeNS.ProNode ProNode;
+        public ProNode ProNode;
         /// <summary>
         /// 当前的Priority
         /// </summary>
@@ -214,7 +211,7 @@ namespace ProjectOC.InventorySystem.UI
         public bool HasUpgrade;
 
        // ProNode Raw
-        private List<Formula> Raws => ProNode.Recipe?.Raw;
+        private List<Formula> Raws => ProNode.Recipe.Raw;
         public bool IsInitCurRecipe;
         #region ChangeRecipe
         [ShowInInspector]
@@ -389,7 +386,7 @@ namespace ProjectOC.InventorySystem.UI
         }
         private void NextPriority_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            ProNode.TransportPriority = (TransportPriority)(((int)ProNode.TransportPriority + 1) % System.Enum.GetValues(typeof(TransportPriority)).Length);
+            ProNode.TransportPriority = (MissionNS.TransportPriority)(((int)ProNode.TransportPriority + 1) % System.Enum.GetValues(typeof(MissionNS.TransportPriority)).Length);
             CurPriority = ProNode.TransportPriority;
         }
 
@@ -445,7 +442,7 @@ namespace ProjectOC.InventorySystem.UI
             }
             else if (CurMode == Mode.ChangeWorker)
             {
-                ProNode.SetWorker(CurrentWorker);
+                (ProNode as IWorkerContainer).SetWorker(CurrentWorker);
                 lastWorkerIndex = 0;
                 currentWorkerIndex = 0;
                 CurMode = Mode.ProNode;
@@ -538,9 +535,9 @@ namespace ProjectOC.InventorySystem.UI
 
         private void ClearTemp()
         {
-            foreach (var s in tempSprite)
+            foreach (var s in tempSprite.Values.ToArray())
             {
-                ML.Engine.Manager.GameManager.DestroyObj(s.Value);
+                ML.Engine.Manager.GameManager.DestroyObj(s);
             }
             foreach (var s in tempUIItems)
             {
@@ -777,7 +774,7 @@ namespace ProjectOC.InventorySystem.UI
                 string buildID = BuildingManager.Instance.GetID(buildCID);
                 if (!tempSprite.ContainsKey(buildID))
                 {
-                    tempSprite[buildID] = CompositeManager.Instance.GetCompositonSprite(buildID);
+                    tempSprite[buildID] = BuildingManager.Instance.GetBuildIcon(buildID);
                 }
                 ProNode_Eff.Find("IconProNode").GetComponent<Image>().sprite = tempSprite[buildID];
                 ProNode_Eff.Find("EffProNode").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + ProNode.EffBase.ToString() + "%";
@@ -846,7 +843,7 @@ namespace ProjectOC.InventorySystem.UI
                 for (int i = 0; i < Recipes.Count; ++i)
                 {
                     var recipeID = Recipes[i];
-                    product = LocalGameManager.Instance.RecipeManager.GetProduct(recipeID);
+                    product = ManagerNS.LocalGameManager.Instance.RecipeManager.GetProduct(recipeID);
                     var item = tempUIItemsRecipe[i];
                     // Active
                     item.SetActive(true);
@@ -917,7 +914,7 @@ namespace ProjectOC.InventorySystem.UI
                 #endregion
 
                 #region Product
-                product = LocalGameManager.Instance.RecipeManager.GetProduct(CurrentRecipe);
+                product = ManagerNS.LocalGameManager.Instance.RecipeManager.GetProduct(CurrentRecipe);
                 if (ItemManager.Instance.IsValidItemID(product.id))
                 {
                     if (!tempSprite.ContainsKey(product.id))
@@ -926,7 +923,7 @@ namespace ProjectOC.InventorySystem.UI
                         tempSprite[product.id] = sprite;
                     }
                     Recipe_UI.Find("Recipe").Find("Product").GetComponent<Image>().sprite = tempSprite[product.id];
-                    Recipe_UI.Find("Recipe").Find("Time").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textTime + ":" + LocalGameManager.Instance.RecipeManager.GetTimeCost(CurrentRecipe).ToString() + "s";
+                    Recipe_UI.Find("Recipe").Find("Time").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textTime + ":" + ManagerNS.LocalGameManager.Instance.RecipeManager.GetTimeCost(CurrentRecipe).ToString() + "s";
                     Recipe_Desc.Find("Icon").GetComponent<Image>().sprite = tempSprite[product.id];
                     Recipe_Desc.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(product.id);
                     Recipe_Desc.Find("ItemDesc").GetComponent<TMPro.TextMeshProUGUI>().text = ItemManager.Instance.GetItemDescription(product.id);
@@ -948,7 +945,7 @@ namespace ProjectOC.InventorySystem.UI
                 #endregion
 
                 #region Raw
-                List<Formula> recipeRaws = LocalGameManager.Instance.RecipeManager.GetRaw(CurrentRecipe);
+                List<Formula> recipeRaws = ManagerNS.LocalGameManager.Instance.RecipeManager.GetRaw(CurrentRecipe);
                 delta = tempUIItemsRecipeRaw.Count - recipeRaws.Count;
                 if (delta > 0)
                 {
@@ -1000,7 +997,7 @@ namespace ProjectOC.InventorySystem.UI
             else if (CurMode == Mode.ChangeWorker)
             {
                 Workers = new List<Worker>() {};
-                Workers.AddRange(LocalGameManager.Instance.WorkerManager.GetWorkers());
+                Workers.AddRange(ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkers());
                 Workers.Sort(new Worker.SortForProNodeUI() { WorkType = ProNode.ExpType});
                 if (Worker != null)
                 {
@@ -1055,7 +1052,7 @@ namespace ProjectOC.InventorySystem.UI
                         string workType = ProNode.ExpType.ToString();
                         if (!tempSprite.ContainsKey(workType))
                         {
-                            var sprite = LocalGameManager.Instance.WorkerManager.GetSprite(workType);
+                            var sprite = ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite(workType);
                             tempSprite[workType] = sprite != null ? sprite : EmptySprite;
                         }
                         item.transform.Find("IconWorkType").GetComponent<Image>().sprite = tempSprite[workType];
@@ -1147,7 +1144,7 @@ namespace ProjectOC.InventorySystem.UI
                 string buildID = BuildingManager.Instance.GetID(buildCID);
                 if (!tempSprite.ContainsKey(buildID))
                 {
-                    tempSprite[buildID] = CompositeManager.Instance.GetCompositonSprite(buildID);
+                    tempSprite[buildID] = BuildingManager.Instance.GetBuildIcon(buildID);
                 }
                 Upgrade_Build.Find("Icon").GetComponent<Image>().sprite = tempSprite[buildID];
                 // Name
@@ -1179,7 +1176,7 @@ namespace ProjectOC.InventorySystem.UI
                     var uiItemData = tempUIItemsUpgrade[i];
                     string itemID = raw[i].id;
                     int need = raw[i].num;
-                    int current = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).InventoryItemAmount(itemID);
+                    int current = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).InventoryItemAmount(itemID);
                     // Active
                     uiItemData.SetActive(true);
                     // 更新Icon
@@ -1289,23 +1286,9 @@ namespace ProjectOC.InventorySystem.UI
         }
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/ProNode";
+            this.abpath = "OCTextContent/ProNode";
             this.abname = "ProNodePanel";
             this.description = "ProNodePanel数据加载完成";
-        }
-
-        protected override void InitObjectPool()
-        {
-            this.objectPool.RegisterPool(UIObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
-            "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2", (handle) =>
-            {
-                SpriteAtlas resonanceWheelAtlas = handle.Result as SpriteAtlas;
-                WorkerIcon = resonanceWheelAtlas.GetSprite("icon_beast");
-                WorkerMaleIcon = resonanceWheelAtlas.GetSprite("icon_gendermale");
-                WorkerFemalIcon = resonanceWheelAtlas.GetSprite("icon_genderfemale");
-            }
-            );
-            base.InitObjectPool();
         }
         #endregion
 
@@ -1357,7 +1340,7 @@ namespace ProjectOC.InventorySystem.UI
                 string buildID = BuildingManager.Instance.GetID(buildCID);
                 if (!tempSprite.ContainsKey(buildID))
                 {
-                    tempSprite[buildID] = CompositeManager.Instance.GetCompositonSprite(buildID);
+                    tempSprite[buildID] = BuildingManager.Instance.GetBuildIcon(buildID);
                 }
                 ProNode_Eff.Find("IconProNode").GetComponent<Image>().sprite = tempSprite[buildID];
                 ProNode_Eff.Find("EffProNode").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + ProNode.EffBase.ToString() + "%";

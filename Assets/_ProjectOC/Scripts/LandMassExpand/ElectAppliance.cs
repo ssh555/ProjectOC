@@ -115,16 +115,6 @@ namespace ProjectOC.LandMassExpand
 
         public virtual void PowerStateChange()
         {
-            string debugText;
-            if (InPower)
-            {
-                debugText = "无电变有电";
-            }
-            else
-            {
-                debugText = "有电变无电";
-            }
-            Debug.Log(debugText);
         }
 
         void OnDrawGizmos()

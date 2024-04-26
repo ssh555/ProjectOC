@@ -1,5 +1,3 @@
-using ML.Engine.Timer;
-using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -7,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 
 
-namespace ProjectOC.ClanNS
+namespace ProjectOC.WorkerNS
 {
     public class WorkerHome : ML.Engine.BuildingSystem.BuildingPart.BuildingPart, ML.Engine.InteractSystem.IInteraction, IWorkerContainer
     {
@@ -26,7 +24,7 @@ namespace ProjectOC.ClanNS
         /// <summary>
         /// 有绑定刁民且刁民在窝时循环执行，时间为Time秒，执行一次结束后对该刁民增加Mood点心情值
         /// </summary>
-        private CounterDownTimer Timer;
+        private ML.Engine.Timer.CounterDownTimer Timer;
         #endregion
 
         #region BuildingPart IInteraction
@@ -37,7 +35,7 @@ namespace ProjectOC.ClanNS
             if (isFirstBuild)
             {
                 BindWorkerDefault();
-                Timer = new CounterDownTimer(Time, true, false);
+                Timer = new ML.Engine.Timer.CounterDownTimer(Time, true, false);
                 Timer.OnEndEvent += EndActionForTimer;
             }
             if (!isFirstBuild && oldPos != newPos)
@@ -68,9 +66,9 @@ namespace ProjectOC.ClanNS
 
         public void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIWorkerHomePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Worker_UI/Prefab_Worker_UI_WorkerHomePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
             {
-                ProjectOC.ClanNS.UI.UIWorkerHome uiPanel = (handle.Result).GetComponent<ProjectOC.ClanNS.UI.UIWorkerHome>();
+                UI.UIWorkerHome uiPanel = (handle.Result).GetComponent<UI.UIWorkerHome>();
                 uiPanel.Home = this;
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uiPanel);
             };
@@ -87,7 +85,13 @@ namespace ProjectOC.ClanNS
                     ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent -= OnManagerAddWorkerEvent;
                 }
             };
-            OnRemoveWorkerEvent += () => { ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent += OnManagerAddWorkerEvent; };
+            OnRemoveWorkerEvent += () => 
+            {
+                if (ManagerNS.LocalGameManager.Instance != null)
+                {
+                    ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent += OnManagerAddWorkerEvent;
+                }
+            };
             this.enabled = false;
         }
 
@@ -153,6 +157,17 @@ namespace ProjectOC.ClanNS
         public void OnArriveEvent(Worker worker)
         {
             (this as IWorkerContainer).OnArriveSetPosition(worker, transform.position + new Vector3(0, 2f, 0));
+        }
+
+        public bool TempRemoveWorker()
+        {
+            if (Worker != null && IsArrive)
+            {
+                Worker.RecoverLastPosition();
+                IsArrive = false;
+                return true;
+            }
+            return false;
         }
         #endregion
     }

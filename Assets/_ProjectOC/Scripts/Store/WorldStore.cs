@@ -1,20 +1,10 @@
-using ML.Engine.BuildingSystem;
-using ML.Engine.BuildingSystem.BuildingPart;
-using ML.Engine.InteractSystem;
-using ML.Engine.InventorySystem;
-using ML.Engine.InventorySystem.CompositeSystem;
-using ML.Engine.Manager;
-using ProjectOC.ManagerNS;
-using ProjectOC.Player;
 using Sirenix.OdinInspector;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 namespace ProjectOC.StoreNS
 {
-    public class WorldStore : BuildingPart, IInteraction, IBuildingUpgrade
+    public class WorldStore : ML.Engine.BuildingSystem.BuildingPart.BuildingPart, ML.Engine.InteractSystem.IInteraction, ML.Engine.BuildingSystem.IBuildingUpgrade
     {
         [LabelText("²Ö¿â"), ShowInInspector, ReadOnly, SerializeField]
         public Store Store;
@@ -25,7 +15,7 @@ namespace ProjectOC.StoreNS
         {
             if (isFirstBuild)
             {
-                LocalGameManager.Instance.StoreManager.WorldStoreSetData(this, Classification.Category2, Classification.Category4 - 1);
+                ManagerNS.LocalGameManager.Instance.StoreManager.WorldStoreSetData(this, Classification.Category2, Classification.Category4 - 1);
             }
             if (oldPos != newPos)
             {
@@ -34,36 +24,35 @@ namespace ProjectOC.StoreNS
             base.OnChangePlaceEvent(oldPos, newPos);
         }
 
-        public void Interact(InteractComponent component)
+        public void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
-            GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIStorePanel.prefab", GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Store_UI/Prefab_Store_UI_StorePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
             {
-                InventorySystem.UI.UIStore uiPanel = (handle.Result).GetComponent<InventorySystem.UI.UIStore>();
-                uiPanel.Store = this.Store;
-                uiPanel.HasUpgrade = (this as IBuildingUpgrade).HasUpgrade() || this.Store.Level > 0;
-                GameManager.Instance.UIManager.PushPanel(uiPanel);
+                UI.UIStore uiPanel = (handle.Result).GetComponent<UI.UIStore>();
+                uiPanel.Store = Store;
+                uiPanel.HasUpgrade = (this as ML.Engine.BuildingSystem.IBuildingUpgrade).HasUpgrade() || Store.Level > 0;
+                ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uiPanel);
             };
         }
 
         public bool CanUpgrade()
         {
-            string CID = Classification.ToString();
-            if ((this as IBuildingUpgrade).HasUpgrade())
+            if ((this as ML.Engine.BuildingSystem.IBuildingUpgrade).HasUpgrade())
             {
-                List<Formula> formulas = BuildingManager.Instance.GetUpgradeRaw(CID);
-                return (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).InventoryHasItems(formulas);
+                var formulas = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(Classification.ToString());
+                return (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).InventoryHasItems(formulas);
             }
             return false;
         }
 
-        public void OnUpgrade(IBuildingUpgrade lastLevelBuild)
+        public void OnUpgrade(ML.Engine.BuildingSystem.IBuildingUpgrade lastLevelBuild)
         {
-            string lastLevelID = BuildingManager.Instance.GetID(lastLevelBuild.Classification.ToString());
-            string upgradeID = BuildingManager.Instance.GetID(Classification.ToString());
-            List<IInventory> inventorys = (GameManager.Instance.CharacterManager.GetLocalController() as ProjectOC.Player.OCPlayerController).GetInventorys(true, -1);
-            CompositeManager.Instance.OnlyCostResource(inventorys, upgradeID);
-            IInventory inventory = (GameManager.Instance.CharacterManager.GetLocalController() as ProjectOC.Player.OCPlayerController).OCState.Inventory;
-            CompositeManager.Instance.OnlyReturnResource(inventory, lastLevelID);
+            string lastLevelID = ML.Engine.BuildingSystem.BuildingManager.Instance.GetID(lastLevelBuild.Classification.ToString());
+            string upgradeID = ML.Engine.BuildingSystem.BuildingManager.Instance.GetID(Classification.ToString());
+            List<ML.Engine.InventorySystem.IInventory> inventorys = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).GetInventorys(true, -1);
+            ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.OnlyCostResource(inventorys, upgradeID);
+            ML.Engine.InventorySystem.IInventory inventory = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory;
+            ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.OnlyReturnResource(inventory, lastLevelID);
             transform.SetParent(lastLevelBuild.transform.parent);
             InstanceID = lastLevelBuild.InstanceID;
             transform.position = lastLevelBuild.transform.position;
@@ -71,10 +60,10 @@ namespace ProjectOC.StoreNS
             isFirstBuild = lastLevelBuild.isFirstBuild;
             if (lastLevelBuild is WorldStore worldStore)
             {
-                LocalGameManager.Instance.StoreManager.WorldStoreSetData(this, worldStore.Store);
+                ManagerNS.LocalGameManager.Instance.StoreManager.WorldStoreSetData(this, worldStore.Store);
             }
             Store.SetLevel(Classification.Category4 - 1);
-            GameManager.DestroyObj(lastLevelBuild.gameObject);
+            ML.Engine.Manager.GameManager.DestroyObj(lastLevelBuild.gameObject);
         }
     }
 }

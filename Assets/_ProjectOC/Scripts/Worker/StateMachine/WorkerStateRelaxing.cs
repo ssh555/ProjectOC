@@ -7,7 +7,18 @@ namespace ProjectOC.WorkerNS
     public class WorkerStateRelaxing : State
     {
         public WorkerStateRelaxing(string name) : base(name) { }
-        private ML.Engine.Timer.CounterDownTimer TimerForRandomWalk;
+        private ML.Engine.Timer.CounterDownTimer timer;
+        private ML.Engine.Timer.CounterDownTimer TimerForRandomWalk
+        {
+            get
+            {
+                if (timer == null)
+                {
+                    timer = new ML.Engine.Timer.CounterDownTimer(2f, false, false);
+                }
+                return timer;
+            }
+        }
 
         public override void ConfigState()
         {
@@ -17,17 +28,7 @@ namespace ProjectOC.WorkerNS
                 {
                     if (machine is WorkerStateMachine workerMachine && workerMachine.Worker != null)
                     {
-                        //var worker = workerMachine.Worker;
-                        //worker.Status = Status.Relaxing;
-
-                        //worker.ClearDestination();
-                        //if (worker.HaveProNode && worker.ProNode.IsArrive)
-                        //{
-                        //    worker.RecoverLastPosition();
-                        //    worker.ProNode.IsArrive = false;
-                        //}
-
-                        //TimerForRandomWalk = new ML.Engine.Timer.CounterDownTimer(2f, false, false);
+                        workerMachine.Worker.Status = Status.Relaxing;
                     }
                 })    
             );
@@ -38,39 +39,42 @@ namespace ProjectOC.WorkerNS
                 {
                     if (machine is WorkerStateMachine workerMachine && workerMachine.Worker != null)
                     {
-                        //var worker = workerMachine.Worker;
+                        var worker = workerMachine.Worker;
 
-                        //if (worker.APCurrent < worker.APRelaxThreshold && ! worker.HaveRestaurant)
-                        //{
-                        //    ManagerNS.LocalGameManager.Instance.RestaurantManager.AddWorker(worker);
-                        //}
-                        //else
-                        //{
-                        //    ManagerNS.LocalGameManager.Instance.RestaurantManager.RemoveWorker(worker);
-                        //}
+                        if (worker.APCurrent < worker.APRelaxThreshold && !worker.HaveRestaurantSeat)
+                        {
+                            ManagerNS.LocalGameManager.Instance.RestaurantManager.AddWorker(worker);
+                        }
+                        else
+                        {
+                            ManagerNS.LocalGameManager.Instance.RestaurantManager.RemoveWorker(worker);
+                        }
 
-                        //if (!worker.HaveDestination && !worker.HaveRestaurant)
-                        //{
-                        //    if (worker.HaveHome && !worker.Home.IsArrive)
-                        //    {
-                        //        worker.SetDestination(worker.Home.transform.position, OnArriveHomeEvent);
-                        //    }
-                        //    else if (!worker.HaveHome && (TimerForRandomWalk == null || TimerForRandomWalk.IsStoped))
-                        //    {
-                        //        // 随机游走
-                        //        List<UnityEngine.Vector3> positions = new List<UnityEngine.Vector3>();
-                        //        foreach (var core in ManagerNS.LocalGameManager.Instance.BuildPowerIslandManager.powerCores)
-                        //        {
-                        //            if (core.GetType() == typeof(LandMassExpand.BuildPowerCore))
-                        //            {
-                        //                positions.Add(core.transform.position);
-                        //            }
-                        //        }
-                        //        System.Random random = new System.Random();
-                        //        worker.SetDestination(positions[random.Next(0, positions.Count)]);
-                        //        TimerForRandomWalk.Reset(2f);
-                        //    }
-                        //}
+                        if (!worker.HaveDestination && !worker.HaveRestaurantSeat)
+                        {
+                            if (worker.HaveHome && !worker.GetContainer(WorkerContainerType.Home).IsArrive)
+                            {
+                                worker.SetDestination(worker.GetContainer(WorkerContainerType.Home).GetTransform().position, worker.GetContainer(WorkerContainerType.Home).OnArriveEvent, WorkerContainerType.Home);
+                            }
+                            else if (!worker.HaveHome && (timer == null || timer.IsStoped))
+                            {
+                                // 随机游走
+                                List<UnityEngine.Vector3> positions = new List<UnityEngine.Vector3>();
+                                foreach (var core in ManagerNS.LocalGameManager.Instance.BuildPowerIslandManager.powerCores)
+                                {
+                                    if (core.GetType() == typeof(LandMassExpand.BuildPowerCore))
+                                    {
+                                        positions.Add(core.transform.position);
+                                    }
+                                }
+                                System.Random random = new System.Random();
+                                if (positions.Count > 0)
+                                {
+                                    worker.SetDestination(positions[random.Next(0, positions.Count)]);
+                                }
+                                TimerForRandomWalk.Reset(2f);
+                            }
+                        }
                     }
                 })
             );
@@ -81,33 +85,16 @@ namespace ProjectOC.WorkerNS
                 {
                     if (machine is WorkerStateMachine workerMachine && workerMachine.Worker != null)
                     {
-                        //var worker = workerMachine.Worker;
-                        //ManagerNS.LocalGameManager.Instance.RestaurantManager.RemoveWorker(worker);
-                        //worker.ClearDestination();
-                        //if (worker.HaveRestaurant)
-                        //{
-                        //    worker.RelaxPlace.RemoveWorker();
-                        //}
-                        //if (worker.HaveHome && worker.Home.IsArrive)
-                        //{
-                        //    worker.RecoverLastPosition();
-                        //    worker.Home.IsArrive = false;
-                        //}
-                        //if (worker.HaveProNode)
-                        //{
-                        //    worker.SetDestination(worker.ProNode.GetTransform().position, worker.ProNode.ArriveProNodeAction);
-                        //}
+                        var worker = workerMachine.Worker;
+                        ManagerNS.LocalGameManager.Instance.RestaurantManager.RemoveWorker(worker);
+                        worker.ClearDestination();
+                        if (worker.HaveProNode)
+                        {
+                            worker.SetDestination(worker.GetContainer(WorkerContainerType.Work).GetTransform().position, worker.GetContainer(WorkerContainerType.Work).OnArriveEvent, WorkerContainerType.Work);
+                        }
                     }
                 })
             ); 
         }
-
-        //private void OnArriveHomeEvent(Worker worker)
-        //{
-        //    worker.Agent.enabled = false;
-        //    worker.LastPosition = worker.transform.position;
-        //    worker.transform.position = worker.Home.transform.position + new UnityEngine.Vector3(0, 2f, 0);
-        //    worker.Home.IsArrive = true;
-        //}
     }
 }

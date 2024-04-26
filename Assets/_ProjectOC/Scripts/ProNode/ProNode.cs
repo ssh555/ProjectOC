@@ -1,19 +1,15 @@
-using ML.Engine.Timer;
-using ML.Engine.InventorySystem;
-using ProjectOC.MissionNS;
 using ProjectOC.WorkerNS;
+using ML.Engine.InventorySystem;
+using ML.Engine.InventorySystem.CompositeSystem;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-using ML.Engine.InventorySystem.CompositeSystem;
 using Sirenix.OdinInspector;
-using ML.Engine.Manager;
-using ProjectOC.Player;
 
 namespace ProjectOC.ProNodeNS
 {
     [LabelText("生产节点"), Serializable]
-    public class ProNode: IMissionObj, IInventory, IWorkerContainer
+    public class ProNode: MissionNS.IMissionObj, IInventory, IWorkerContainer
     {
         #region WorldProNode
         [LabelText("对应的全局生产节点"), ReadOnly]
@@ -28,11 +24,11 @@ namespace ProjectOC.ProNodeNS
         [LabelText("等级"), ReadOnly]
         public int Level = 0;
         [LabelText("搬运优先级"), ReadOnly]
-        public TransportPriority TransportPriority = TransportPriority.Normal;
+        public MissionNS.TransportPriority TransportPriority = MissionNS.TransportPriority.Normal;
         [LabelText("正在生产的配方"), ReadOnly]
         public Recipe Recipe;
         [LabelText("已经分配的搬运任务"), ReadOnly]
-        public List<MissionTransport> MissionTransports = new List<MissionTransport>();
+        public List<MissionNS.MissionTransport> MissionTransports = new List<MissionNS.MissionTransport>();
         [LabelText("没有分配任务的堆积值"), ShowInInspector, ReadOnly]
         public int Stack { get; protected set; }
         [LabelText("已分配给任务但尚未被搬运的堆积值"), ShowInInspector, ReadOnly]
@@ -45,17 +41,17 @@ namespace ProjectOC.ProNodeNS
         /// <summary>
         /// 生产计时器，时间为配方生产一次所需的时间
         /// </summary>
-        protected CounterDownTimer timerForProduce;
+        protected ML.Engine.Timer.CounterDownTimer timerForProduce;
         /// <summary>
         /// 生产计时器，时间为配方生产一次所需的时间
         /// </summary>
-        protected CounterDownTimer TimerForProduce
+        protected ML.Engine.Timer.CounterDownTimer TimerForProduce
         {
             get
             {
                 if (timerForProduce == null)
                 {
-                    timerForProduce = new CounterDownTimer(TimeCost, false, false);
+                    timerForProduce = new ML.Engine.Timer.CounterDownTimer(TimeCost, false, false);
                     timerForProduce.OnEndEvent += EndActionForProduce;
                     timerForProduce.OnUpdateEvent += UpdateActionForProduce;
                 }
@@ -66,17 +62,17 @@ namespace ProjectOC.ProNodeNS
         /// <summary>
         /// 任务计时器
         /// </summary>
-        protected CounterDownTimer timerForMission;
+        protected ML.Engine.Timer.CounterDownTimer timerForMission;
         /// <summary>
         /// 任务计时器
         /// </summary>
-        protected CounterDownTimer TimerForMission
+        protected ML.Engine.Timer.CounterDownTimer TimerForMission
         {
             get
             {
                 if (timerForMission == null)
                 {
-                    timerForMission = new CounterDownTimer(1f, true, false);
+                    timerForMission = new ML.Engine.Timer.CounterDownTimer(1f, true, false);
                     timerForMission.OnEndEvent += EndActionForMission;
                 }
                 return timerForMission;
@@ -86,7 +82,7 @@ namespace ProjectOC.ProNodeNS
 
         #region Property
         [LabelText("是否有生产配方"), ShowInInspector, ReadOnly]
-        public bool HasRecipe => Recipe != null && !string.IsNullOrEmpty(Recipe.ID);
+        public bool HasRecipe => !string.IsNullOrEmpty(Recipe.ID);
         [LabelText("总堆积数量"), ShowInInspector, ReadOnly]
         public int StackAll => StackReserve + Stack;
         [LabelText("总堆积份数"), ShowInInspector, ReadOnly]
@@ -94,9 +90,9 @@ namespace ProjectOC.ProNodeNS
         [LabelText("没有分配任务的堆积份数"), ShowInInspector, ReadOnly]
         public int StackNum => (ProductNum != 0) ? (Stack / ProductNum) : Stack;
         [LabelText("生产物ID"), ShowInInspector, ReadOnly]
-        public string ProductItem => Recipe?.ProductID ?? "";
+        public string ProductItem => Recipe.ProductID;
         [LabelText("一次生产的生产物数量"), ShowInInspector, ReadOnly]
-        public int ProductNum => Recipe?.ProductNum ?? 0;
+        public int ProductNum => Recipe.ProductNum;
         [LabelText("是否正在运行"), ShowInInspector, ReadOnly]
         public bool IsOnRunning => timerForMission != null && !timerForMission.IsStoped;
         [LabelText("是否正在制作物品"), ShowInInspector, ReadOnly]
@@ -139,29 +135,12 @@ namespace ProjectOC.ProNodeNS
         public bool RequirePower => ManagerNS.LocalGameManager.Instance != null ? ManagerNS.LocalGameManager.Instance.ProNodeManager.GetCanCharge(ID) : false;
         #endregion
 
-        #region Event
-        public event Action OnDataChangeEvent;
-        public event Action<double> OnProduceUpdateEvent;
-        public event Action OnProduceEndEvent;
-        #endregion
-
         #region Mono
         public void Destroy()
         {
             StopRun();
             RemoveRecipe();
             (this as IWorkerContainer).RemoveWorker();
-        }
-        #endregion
-
-        #region BuildPart
-        public void OnPositionChange(Vector3 differ)
-        {
-            (this as IWorkerContainer).OnPositionChange(differ);
-            foreach (var mission in MissionTransports)
-            {
-                mission?.UpdateTransportDestionation();
-            }
         }
         #endregion
 
@@ -220,7 +199,7 @@ namespace ProjectOC.ProNodeNS
                 if (!string.IsNullOrEmpty(recipeID))
                 {
                     Recipe recipe = ManagerNS.LocalGameManager.Instance.RecipeManager.SpawnRecipe(recipeID);
-                    if (recipe != null)
+                    if (recipe.IsValidRecipe)
                     {
                         Recipe = recipe;
                         foreach (Formula raw in Recipe.Raw)
@@ -233,7 +212,7 @@ namespace ProjectOC.ProNodeNS
                 }
                 else
                 {
-                    Recipe = null;
+                    Recipe.ClearData();
                     return true;
                 }
                 return false;
@@ -259,9 +238,9 @@ namespace ProjectOC.ProNodeNS
                     items.AddRange(ItemManager.Instance.SpawnItems(raw.Key, raw.Value));
                 }
             }
-            (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory.AddItem(items);
+            (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory.AddItem(items);
 
-            foreach (MissionTransport mission in MissionTransports.ToArray())
+            foreach (MissionNS.MissionTransport mission in MissionTransports.ToArray())
             {
                 mission.End();
             }
@@ -269,7 +248,7 @@ namespace ProjectOC.ProNodeNS
             Stack = 0;
             StackReserve = 0;
             RawItems.Clear();
-            Recipe = null;
+            Recipe.ClearData();
         }
 
         /// <summary>
@@ -355,7 +334,10 @@ namespace ProjectOC.ProNodeNS
         }
         #endregion
 
-        #region Action方法
+        #region Event
+        public event Action OnDataChangeEvent;
+        public event Action<double> OnProduceUpdateEvent;
+        public event Action OnProduceEndEvent;
         /// <summary>
         /// 搬运任务的管理
         /// </summary>
@@ -368,13 +350,13 @@ namespace ProjectOC.ProNodeNS
                 if (missionNum > 0)
                 {
                     missionNum += kv.num * (StackMaxNum - RawThresholdNum);
-                    ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionTransportType.Store_ProNode, kv.id, missionNum, this);
+                    ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionNS.MissionTransportType.Store_ProNode, kv.id, missionNum, this);
                 }
             }
             missionNum = StackReserve - GetAssignNum(ProductItem, false);
             if (missionNum > 0)
             {
-                var missionType = ItemManager.Instance.GetItemType(ProductItem) == ItemType.Feed ? MissionTransportType.ProNode_Restaurant : MissionTransportType.ProNode_Store;
+                var missionType = ItemManager.Instance.GetItemType(ProductItem) == ItemType.Feed ? MissionNS.MissionTransportType.ProNode_Restaurant : MissionNS.MissionTransportType.ProNode_Store;
                 ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(missionType, ProductItem, missionNum, this);
             }
         }
@@ -433,12 +415,12 @@ namespace ProjectOC.ProNodeNS
             int result = 0;
             if (!string.IsNullOrEmpty(itemID))
             {
-                foreach (MissionTransport mission in MissionTransports)
+                foreach (MissionNS.MissionTransport mission in MissionTransports)
                 {
                     if (mission != null && mission.ItemID == itemID)
                     {
-                        if ((isIn && mission.Type == MissionTransportType.Store_ProNode) ||
-                            (!isIn && mission.Type == MissionTransportType.ProNode_Store))
+                        if ((isIn && mission.Type == MissionNS.MissionTransportType.Store_ProNode) ||
+                            (!isIn && (mission.Type == MissionNS.MissionTransportType.ProNode_Store || mission.Type == MissionNS.MissionTransportType.ProNode_Restaurant)))
                         {
                             result += mission.MissionNum;
                         }
@@ -539,7 +521,7 @@ namespace ProjectOC.ProNodeNS
                 if (amount > 0 && Stack >= amount)
                 {
                     List<Item> items = ItemManager.Instance.SpawnItems(ProductItem, amount);
-                    var inventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
+                    var inventory = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory;
                     foreach (Item item in items)
                     {
                         int itemAmount = item.Amount;
@@ -561,7 +543,7 @@ namespace ProjectOC.ProNodeNS
             lock (this)
             {
                 Dictionary<string, int> tempRawItems = new Dictionary<string, int>(RawItems);
-                var inventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
+                var inventory = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory;
                 bool flag = false;
                 foreach (var kv in tempRawItems)
                 {
@@ -591,33 +573,41 @@ namespace ProjectOC.ProNodeNS
         public bool HaveWorker => ProNodeType == ProNodeType.Mannul && Worker != null && !string.IsNullOrEmpty(Worker.InstanceID);
 
         public WorkerContainerType GetContainerType() { return WorkerContainerType.Work; }
+
         public void OnArriveEvent(Worker worker)
         {
-
-        }
-        /// <summary>
-        /// 刁民到达生产节点
-        /// </summary>
-        public void ArriveProNodeAction(Worker worker)
-        {
-            worker.Agent.enabled = false;
-            worker.LastPosition = worker.transform.position;
-            worker.transform.position = WorldProNode.transform.position + new Vector3(0, 2f, 0);
-            IsArrive = true;
+            (this as IWorkerContainer).OnArriveSetPosition(worker, WorldProNode.transform.position + new Vector3(0, 2f, 0));
             worker.ProNode.StartProduce();
         }
-        public bool SetWorker(Worker worker)
+
+        public void OnPositionChange(Vector3 differ)
         {
-            if (ProNodeType == ProNodeType.Mannul && worker != null)
+            if (HaveWorker)
             {
-                worker.SetTimeStatusAll(TimeStatus.Work_OnDuty);
-                worker.SetDestination(WorldProNode.transform.position, ArriveProNodeAction);
-                Worker = worker;
-                worker.OnStatusChangeEvent += OnWorkerStatusChangeEvent;
-                worker.OnAPChangeEvent += OnWorkerAPChangeEvent;
-                return true;
+                if (IsArrive)
+                {
+                    Worker.transform.position += differ;
+                }
+                else
+                {
+                    Worker.SetDestination(GetTransform().position, OnArriveEvent, GetContainerType());
+                }
             }
-            return false;
+            foreach (var mission in MissionTransports)
+            {
+                mission?.UpdateTransportDestionation();
+            }
+        }
+
+        public void SetWorkerRelateData()
+        {
+            if (ProNodeType == ProNodeType.Mannul && Worker != null)
+            {
+                Worker.SetTimeStatusAll(TimeStatus.Work_OnDuty);
+                Worker.SetDestination(WorldProNode.transform.position, OnArriveEvent, GetContainerType());
+                Worker.OnStatusChangeEvent += OnWorkerStatusChangeEvent;
+                Worker.OnAPChangeEvent += OnWorkerAPChangeEvent;
+            }
         }
 
         public void RemoveWorkerRelateData() 
@@ -632,21 +622,28 @@ namespace ProjectOC.ProNodeNS
                 }
             }
         }
-        public void TempRemoveWorker()
+
+        public bool TempRemoveWorker()
         {
-            //RemoveWorker();
+            if (Worker != null && !IsOnProduce && IsArrive)
+            {
+                Worker.RecoverLastPosition();
+                IsArrive = false;
+                return true;
+            }
+            return false;
         }
         #endregion
 
         #region IMission
         public Transform GetTransform() { return WorldProNode?.transform; }
-        public TransportPriority GetTransportPriority() { return TransportPriority; }
+        public MissionNS.TransportPriority GetTransportPriority() { return TransportPriority; }
         public string GetUID() { return UID; }
-        public void AddMissionTranport(MissionTransport mission) { MissionTransports.Add(mission); }
-        public void RemoveMissionTranport(MissionTransport mission) { MissionTransports.Remove(mission); }
+        public void AddMissionTranport(MissionNS.MissionTransport mission) { MissionTransports.Add(mission); }
+        public void RemoveMissionTranport(MissionNS.MissionTransport mission) { MissionTransports.Remove(mission); }
         public bool PutIn(string itemID, int amount)
         {
-            return Add(itemID, amount, true) >= amount;
+            return Add(itemID, amount, true) == amount;
         }
         public int PutOut(string itemID, int amount)
         {
@@ -659,7 +656,7 @@ namespace ProjectOC.ProNodeNS
         {
             if (item != null)
             {
-                return Add(item.ID, item.Amount) >= item.Amount;
+                return Add(item.ID, item.Amount) == item.Amount;
             }
             return false;
         }
@@ -667,7 +664,7 @@ namespace ProjectOC.ProNodeNS
         {
             if (item != null)
             {
-                return Remove(item.ID, item.Amount) >= item.Amount;
+                return Remove(item.ID, item.Amount) == item.Amount;
             }
             return false;
         }
@@ -683,7 +680,7 @@ namespace ProjectOC.ProNodeNS
         }
         public bool RemoveItem(string itemID, int amount)
         {
-            return Remove(itemID, amount) >= amount;
+            return Remove(itemID, amount) == amount;
         }
         public int GetItemAllNum(string id)
         {

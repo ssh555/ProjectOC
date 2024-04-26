@@ -17,19 +17,14 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 161a78b8e18f47d429e6cd903568d02a
   m_SerializeEntries:
-  - m_GUID: 1f7278ac8ca0bd949afecf030e60b49f
-    m_Address: OC/Prefabs_ResonanceWheel_UI
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c14098454720c4e4eaf2737ca2b9304c
     m_Address: GameScene
     m_ReadOnly: 0
     m_SerializedLabels:
     - Scene
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 08f09a321d9c32244bcfd251fa6ad966
-    m_Address: ML/Mat/Transparent
+  - m_GUID: 2e7ca991619d5bb49ab4694fedc93a24
+    m_Address: Materials
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -87,6 +82,8 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9f71828b99d5fc3498ddd337614ab83b
     m_Address: Assets/_ProjectOC/OCResources/UI/Building/Furniture
+  - m_GUID: e66bc366ff86aed4bb8d04b0f1f6f736
+    m_Address: Assets/_ML/MLResources/BaseUIPrefab/UICameraImage/RT.renderTexture
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

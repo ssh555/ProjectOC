@@ -1,13 +1,8 @@
 using ML.Engine.TextContent;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static ProjectOC.ClanNS.UI.UIClanBed;
-using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
-using ML.Engine.Manager;
-using ML.Engine.UI;
 
 
 namespace ProjectOC.ClanNS.UI
@@ -35,7 +30,7 @@ namespace ProjectOC.ClanNS.UI
         #region Override
         protected override void Enter()
         {
-            SortClans();
+            SortClans(true);
             base.Enter();
         }
         protected override void Exit()
@@ -103,10 +98,13 @@ namespace ProjectOC.ClanNS.UI
         }
         #endregion
 
-        public void SortClans()
+        public void SortClans(bool needClear = false)
         {
-            this.Clans.Clear();
-            this.Clans.AddRange(LocalGameManager.Instance.ClanManager.Clans);
+            if (needClear)
+            {
+                this.Clans.Clear();
+                this.Clans.AddRange(ManagerNS.LocalGameManager.Instance.ClanManager.Clans);
+            }
             this.Clans.Sort(new Clan.Sort());
             if (this.Bed.HaveClan)
             {
@@ -167,7 +165,7 @@ namespace ProjectOC.ClanNS.UI
             {
                 this.CurMode = Mode.ChangeClan;
                 index = 0;
-                SortClans();
+                SortClans(true);
             }
             else if (CurMode == Mode.ChangeClan)
             {
@@ -176,11 +174,12 @@ namespace ProjectOC.ClanNS.UI
                     if (CurClan.HasBed)
                     {
                         string text = PanelTextContent.textConfirmPrefix + CurClan.Name + PanelTextContent.textConfirmSuffix;
-                        GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData(text, null, null, () => { Bed.SetClan(this.CurClan); SortClans(); }));
+                        ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance(ML.Engine.UI.UIManager.NoticeUIType.PopUpUI, new ML.Engine.UI.UIManager.PopUpUIData(text, null, null, () => { Bed.SetClan(this.CurClan);}));
                     }
                     else
                     {
                         Bed.SetClan(this.CurClan);
+                        SortClans(false);
                     }
                 }
             }
@@ -205,7 +204,6 @@ namespace ProjectOC.ClanNS.UI
         #region UI
         #region Temp
         private Dictionary<string, Sprite> tempSprite = new Dictionary<string, Sprite>();
-
         private void ClearTemp()
         {
             foreach (var s in tempSprite)

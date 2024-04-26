@@ -1,17 +1,16 @@
 ﻿using ML.Engine.TextContent;
 using ProjectOC.ManagerNS;
-using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using ML.Engine.Extension;
 using ML.Engine.Manager;
-using static ProjectOC.ClanNS.UI.UIWorkerHome;
+using static ProjectOC.WorkerNS.UI.UIWorkerHome;
 using System.Linq;
 
 
-namespace ProjectOC.ClanNS.UI
+namespace ProjectOC.WorkerNS.UI
 {
     public class UIWorkerHome : ML.Engine.UI.UIBasePanel<WorkerHomePanel>
     {
@@ -110,7 +109,7 @@ namespace ProjectOC.ClanNS.UI
         }
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/Building";
+            this.abpath = "OCTextContent/Building";
             this.abname = "WorkerHomePanel";
             this.description = "WorkerHomePanel数据加载完成";
         }
@@ -137,10 +136,10 @@ namespace ProjectOC.ClanNS.UI
         #region Override Internal
         protected override void Enter()
         {
-            tempSprite["HasHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("HasHome");
-            tempSprite["NoHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("NoHome");
-            tempSprite["Worker"] = LocalGameManager.Instance.WorkerManager.GetSprite("Worker");
-            tempSprite["WorkerHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("WorkerHome");
+            tempSprite["HasHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_HasHome");
+            tempSprite["NoHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_NoHome");
+            tempSprite["Worker"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_Worker");
+            tempSprite["WorkerHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_WorkerHome");
             LocalGameManager.Instance.WorkerManager.OnDeleteWokerEvent += OnDeleteWokerEvent;
             base.Enter();
         }

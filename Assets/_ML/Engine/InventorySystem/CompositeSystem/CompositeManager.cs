@@ -291,24 +291,6 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             return this.CompositeData[id].tag;
         }
 
-        public Texture2D GetCompositonTexture2D(string id)
-        {
-            if (!this.CompositeData.ContainsKey(id))
-            {
-                return null;
-            }
-            return InventorySystem.ItemManager.Instance.GetItemTexture2D(this.CompositeData[id].texture2d);
-        }
-
-        public Sprite GetCompositonSprite(string id)
-        {
-            if (!this.CompositeData.ContainsKey(id))
-            {
-                return null;
-            }
-            return InventorySystem.ItemManager.Instance.GetItemSprite(this.CompositeData[id].texture2d);
-        }
-
         public string GetCompositonName(string id)
         {
             if (!this.CompositeData.ContainsKey(id))
