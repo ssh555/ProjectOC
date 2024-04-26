@@ -78,6 +78,13 @@ namespace ProjectOC.WorkerNS
         #region Mono
         protected override void Start()
         {
+            if (!HaveWorker)
+            {
+                if (ManagerNS.LocalGameManager.Instance != null)
+                {
+                    ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent += OnManagerAddWorkerEvent;
+                }
+            }
             OnSetWorkerEvent += (worker) =>
             {
                 if (worker != null)
@@ -85,9 +92,9 @@ namespace ProjectOC.WorkerNS
                     ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent -= OnManagerAddWorkerEvent;
                 }
             };
-            OnRemoveWorkerEvent += () => 
+            OnRemoveWorkerEvent += (isReset) => 
             {
-                if (ManagerNS.LocalGameManager.Instance != null)
+                if (ManagerNS.LocalGameManager.Instance != null && !isReset && !BindWorkerDefault())
                 {
                     ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent += OnManagerAddWorkerEvent;
                 }
@@ -97,6 +104,8 @@ namespace ProjectOC.WorkerNS
 
         public void OnDestroy()
         {
+            OnSetWorkerEvent = null;
+            OnRemoveWorkerEvent = null;
             (this as IWorkerContainer).RemoveWorker();
         }
 
@@ -118,7 +127,7 @@ namespace ProjectOC.WorkerNS
             }
         }
 
-        public void BindWorkerDefault()
+        public bool BindWorkerDefault()
         {
             List<Worker> workers = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkers();
             workers.RemoveAll(x => x == null);
@@ -127,8 +136,10 @@ namespace ProjectOC.WorkerNS
                 if (!worker.HaveHome)
                 {
                     (this as IWorkerContainer).SetWorker(worker);
+                    return true;
                 }
             }
+            return false;
         }
         #endregion
 
@@ -148,7 +159,7 @@ namespace ProjectOC.WorkerNS
         }
         public bool HaveWorker => Worker != null && !string.IsNullOrEmpty(Worker.InstanceID);
         public Action<Worker> OnSetWorkerEvent { get; set; }
-        public Action OnRemoveWorkerEvent { get; set; }
+        public Action<bool> OnRemoveWorkerEvent { get; set; }
 
         public string GetUID() { return InstanceID; }
         public Transform GetTransform() { return transform; }

@@ -102,7 +102,10 @@ namespace ProjectOC.WorkerNS
             {
                 timerForNoHome?.End();
             }
-            ContainerDict[container.GetContainerType()] = container;
+            if (!container.HaveWorker || container.Worker.InstanceID == InstanceID)
+            {
+                ContainerDict[container.GetContainerType()] = container;
+            }
         }
 
         public void RemoveContainer(WorkerContainerType type)
@@ -122,12 +125,6 @@ namespace ProjectOC.WorkerNS
         #endregion
 
         #region Mono
-        private void Start()
-        {
-            Init();
-            enabled = false;
-        }
-
         public void Init()
         {
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
@@ -147,7 +144,7 @@ namespace ProjectOC.WorkerNS
                 { WorkerContainerType.Home, null }
             };
 
-            if (HasContainer(WorkerContainerType.Home))
+            if (!HasContainer(WorkerContainerType.Home))
             {
                 TimerForNoHome.Start();
             }
@@ -171,7 +168,7 @@ namespace ProjectOC.WorkerNS
         {
             (this as ML.Engine.Timer.ITickComponent).DisposeTick();
             Transport?.End();
-            foreach (IWorkerContainer container in ContainerDict.Values)
+            foreach (IWorkerContainer container in ContainerDict.Values.ToArray())
             {
                 container?.RemoveWorker();
             }

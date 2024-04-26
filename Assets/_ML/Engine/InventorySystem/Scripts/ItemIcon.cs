@@ -17,10 +17,14 @@ namespace ML.Engine.InventorySystem
         public int lateTickPriority { get; set; }
         #endregion
 
-        private void Start()
+        public void Awake()
         {
             Renderer = GetComponent<SpriteRenderer>();
             Image = GetComponentInChildren<UnityEngine.UI.Image>();
+        }
+
+        private void Start()
+        {
             Image.transform.SetParent(Manager.GameManager.Instance.UIManager.GetCanvas.transform);
             Image.enabled = false;
             Manager.GameManager.Instance.TickManager.RegisterLateTick(0, this);
