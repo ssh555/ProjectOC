@@ -10,27 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: MainInteract
+  m_Name: BaseUIPrefab
   m_EditorClassIdentifier: 
-  m_GroupName: MainInteract
+  m_GroupName: Packed Assets
   m_Data:
     m_SerializedData: []
-  m_GUID: ecf4f346c129e12449048c9be3a61d26
+  m_GUID: 0c65870cdc06ebe41a258aa28a67cffb
   m_SerializeEntries:
-  - m_GUID: b3c92bc95bc74e2499782984a90341e7
-    m_Address: Prefab_MainInteract_UIPanel
+  - m_GUID: e3199adc69e328a45b3f37d046a83b59
+    m_Address: Prefab_BaseUIPrefab_GraphCursorNavigation
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 50dc540eb51005b4fbf910c347ed5ed2
-    m_Address: Prefab_MainInteract_NoticeUI_UIPanel
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - NoticeUI
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 72d1a89784032c94ea3b026b42e20dcf, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: bf13d0fab7011c24aaa8662a2f2241bc, type: 2}
-    - {fileID: 11400000, guid: e806ee2eb6601824b985190b35f33613, type: 2}
+    - {fileID: 11400000, guid: 09d0b5b8881a5ce489cf2651b0d8a31d, type: 2}
+    - {fileID: 11400000, guid: b12a91b2bd3661742af4c1a616a7736c, type: 2}

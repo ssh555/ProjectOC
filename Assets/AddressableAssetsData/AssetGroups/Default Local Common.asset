@@ -46,52 +46,13 @@ MonoBehaviour:
     m_SerializedLabels:
     - InputActionAssets
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: dd360a45dbd59144da89a30283c7064c
-    m_Address: ML/BaseUIPanel
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - NoticeUI
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 50dc540eb51005b4fbf910c347ed5ed2
-    m_Address: ML/BaseUIPanel/Commom
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - NoticeUI
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 888b947bf9b89904b920daf00eacd9a9
-    m_Address: ML/BaseUIPrefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a0168daf31d559146b7ff0f2d0ddec3f
-    m_Address: ML/BaseUIPanel/GridNavagation
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - NoticeUI
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 05067739c558b5a428057adad68ca4e0
-    m_Address: ML/BaseUIPanel/PanelNavagation
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - NoticeUI
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6f29b2f5036810343988c70ef0c65644
     m_Address: OC/Prefabs_OrderBoard_UI
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9f71828b99d5fc3498ddd337614ab83b
-    m_Address: Assets/_ProjectOC/OCResources/UI/Building/Furniture
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e66bc366ff86aed4bb8d04b0f1f6f736
-    m_Address: Assets/_ML/MLResources/BaseUIPrefab/UICameraImage/RT.renderTexture
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 50e0acc1e9d47504a9b294e3ed0b5f2a
-    m_Address: Prefab_BuildingSystem
+    m_Address: RenderTex2D_UICameraImage_RT
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

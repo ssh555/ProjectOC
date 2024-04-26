@@ -402,7 +402,6 @@ namespace ML.Engine.BuildingSystem.UI
             }
             else
             {
-                
                 this.FurnitureDisplayBtnList.OnSelectExit();
                 this.FurnitureDisplayBtnList.DeleteAllButton(() => { this.FurniturePanel.gameObject.SetActive(false); });
        
@@ -414,11 +413,8 @@ namespace ML.Engine.BuildingSystem.UI
                 {
                     this.FurnitureThemeBtnList.EnableBtnList();
                 }
-                    
             }
-            
         }
-
         private void Placer_ComfirmSelection(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (this.SelectedCategory1 == BuildingCategory1.Furniture) 
@@ -451,7 +447,6 @@ namespace ML.Engine.BuildingSystem.UI
                             string BuildingName = BuildingManager.Instance.GetName(item.Item2.Classification.ToString());
                             this.FurnitureDisplayBtnList.AddBtn("Prefab_BuildingSystem/Prefab_BS_FurnitureBtn.prefab", BtnAction: () =>
                             {
-                                Debug.Log("放置家具 " + item.Item2.Classification.ToString());
                                 this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(item.Item2.Classification);
                                 monoBM.PopAndPushPanel<BSPlaceModePanel>();
                             },BtnSettingAction:
@@ -478,7 +473,6 @@ namespace ML.Engine.BuildingSystem.UI
                             string BuildingName = BuildingManager.Instance.GetName(classification);
                             this.FurnitureDisplayBtnList.AddBtn("Prefab_BuildingSystem/Prefab_BS_FurnitureBtn.prefab", BtnAction: () =>
                             {
-                                Debug.Log("放置家具 " + classification);
                                 this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(classification);
                                 monoBM.PopAndPushPanel<BSPlaceModePanel>();
                             }, BtnSettingAction:
@@ -499,8 +493,6 @@ namespace ML.Engine.BuildingSystem.UI
                 {
                     //this.FurnitureDisplayBtnList.GetCurSelected()?.Interact();
                 }
-                
-
             }
             else
             {
@@ -514,7 +506,6 @@ namespace ML.Engine.BuildingSystem.UI
         private bool isFirstAddThemeBtn = true;
         private void ChangeFurnitureSortWay(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            Debug.Log("ChangeFurnitureSortWay");
             if (this.SelectedCategory1 != BuildingCategory1.Furniture)
             {
                 return;
