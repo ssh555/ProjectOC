@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 161a78b8e18f47d429e6cd903568d02a
   m_currentHash:
     serializedVersion: 2
-    Hash: 15edb772afdff681176bef5facf4413b
+    Hash: edfc89f1d830f0d900c370f5e0cbf74a
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -46,8 +46,26 @@ MonoBehaviour:
   m_GroupAssets:
   - {fileID: 11400000, guid: 75be3b966c5d11f43ba90df578724c2a, type: 2}
   - {fileID: 11400000, guid: cb629cc88a1ddbc47b47f480be316ddd, type: 2}
-  - {fileID: 11400000, guid: 74e24683b01e0994daf804b76755d6c8, type: 2}
-  - {fileID: 11400000, guid: 32eb8b8db48d41c41a374fda0b67f48f, type: 2}
+  - {fileID: 11400000, guid: c166792f37ff6454c99a686828574ee9, type: 2}
+  - {fileID: 11400000, guid: bdc2471204b090142a6238009b6fb407, type: 2}
+  - {fileID: 11400000, guid: 60a4586c64ba06e49991f99d5d2423e4, type: 2}
+  - {fileID: 11400000, guid: 672b3247246619c43b077151b3971d8a, type: 2}
+  - {fileID: 11400000, guid: df38d44b4dbfdd849958749aac31f887, type: 2}
+  - {fileID: 11400000, guid: c0b22a2139702f6498e59877a21795c5, type: 2}
+  - {fileID: 11400000, guid: 36255efd1366dac46b6d2cd8cf416017, type: 2}
+  - {fileID: 11400000, guid: 75c73cd5bf2abae47b0685f9f545ddcb, type: 2}
+  - {fileID: 11400000, guid: 3b3450711fdf3714b973ac7e31f8ad9f, type: 2}
+  - {fileID: 11400000, guid: 5ba84d3d89c523c4cb28157ca6c939d1, type: 2}
+  - {fileID: 11400000, guid: ff5a93fce5545b14dad24a7ca2342594, type: 2}
+  - {fileID: 11400000, guid: 5b22a36cbb890d4418f5d6452cf7a5e4, type: 2}
+  - {fileID: 11400000, guid: bac0a2d56b2614543984c80ca626107a, type: 2}
+  - {fileID: 11400000, guid: 5a4fa00cd2db5a94c8d13ff5f8d6c5fa, type: 2}
+  - {fileID: 11400000, guid: fbb10f0c4a9226747aa3e2ca2d599c4a, type: 2}
+  - {fileID: 11400000, guid: 9a6d3876272447d49b3125887917897c, type: 2}
+  - {fileID: 11400000, guid: 1b1149f4ea156f44ea58058d37978da7, type: 2}
+  - {fileID: 11400000, guid: 552aba8d7eea54c45a90b9e363628b43, type: 2}
+  - {fileID: 11400000, guid: c712f9dad6d5e5c4897c6e5da11c1294, type: 2}
+  - {fileID: 11400000, guid: bd7e655da5220144d8b6c2cacd013a2a, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -88,18 +106,14 @@ MonoBehaviour:
     m_ProfileVersion: 1
   m_LabelTable:
     m_LabelNames:
-    - ItemTexture2D
-    - ItemWorldPrefabs
-    - Json/TableData
-    - Json/TextContent
     - Scene
     - _TestScene
     - InputActionAssets
-    - BuildingPart
-    - BPartMatPackage
+    - BS_Prefab_BuildingPart
+    - BS_MatAsset_MatPackage
     - NoticeUI
-    - PinchFaceType
-    - PinchFacePart
+    - PinchFace_TypePackage
+    - BS_SA_UI_Category
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: c4fe07db2f63a424e946087755813f1e, type: 2}

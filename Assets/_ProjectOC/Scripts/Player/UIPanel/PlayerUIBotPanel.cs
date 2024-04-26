@@ -4,6 +4,7 @@ using ML.Engine.TextContent;
 using ML.Engine.Timer;
 using ML.Engine.UI;
 using ProjectOC.InventorySystem.UI;
+using ProjectOC.MainInteract.UI;
 using ProjectOC.ManagerNS;
 using ProjectOC.Player;
 using ProjectOC.ResonanceWheelSystem.UI;
@@ -94,7 +95,7 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("背包",
             () =>
             {
-                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIInfiniteInventoryPanel.prefab", this.transform.parent, true).Completed += (handle) =>
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefabs_UIInfiniteInventoryPanel", this.transform.parent, true).Completed += (handle) =>
                 {
                     var panel = handle.Result.GetComponent<UIInfiniteInventory>();
                     panel.transform.localScale = Vector3.one;
@@ -123,7 +124,7 @@ namespace ProjectOC.Player.UI
             {
                 // GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("友人"));
                 // 临时用作捏脸
-                LocalGameManager.Instance.PinchFaceManager.GeneratePinchRaceUI();
+                LocalGameManager.Instance.PinchFaceManager.GeneratePinchFaceUI();
             }
             );
             this.UIBtnList.SetBtnAction("我的氏族",
@@ -135,7 +136,7 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("订单管理",
             () =>
             {
-                GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/OrderBoardPanel.prefab").Completed += (handle) =>
+                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Order_UIPanel/Prefab_OrderSystem_UI_OrderBoardPanel.prefab").Completed += (handle) =>
                 {
                     OrderBoardPanel orderBoardPanel = handle.Result.GetComponent<OrderBoardPanel>();
 
@@ -153,7 +154,7 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("科技树",
             () =>
             {
-                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/TechPointPanel.prefab", this.transform.parent, true).Completed += (handle) =>
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefabs_TechTree_UI/TechPointPanel.prefab", this.transform.parent, true).Completed += (handle) =>
                 {
                     var panel = handle.Result.GetComponent<UITechPointPanel>();
                     panel.transform.localScale = Vector3.one;
@@ -245,7 +246,7 @@ namespace ProjectOC.Player.UI
 
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/PlayerUIBotPanel";
+            this.abpath = "OCTextContent/PlayerUIBotPanel";
             this.abname = "PlayerUIBotPanel";
             this.description = "PlayerUIBotPanel数据加载完成";
         }

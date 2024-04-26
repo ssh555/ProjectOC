@@ -1,7 +1,7 @@
 using Sirenix.OdinInspector;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D;
 
 namespace ProjectOC.ClanNS
 {
@@ -17,6 +17,24 @@ namespace ProjectOC.ClanNS
             Clans.Add(new Clan("3", "ÊÏ×å3"));
             Clans.Add(new Clan("4", "ÊÏ×å4"));
             Clans.Add(new Clan("5", "ÊÏ×å5"));
+            LoadItemAtlas();
         }
+
+        #region SpriteAtlas
+        public const string IconLabel = "SA_Clan_UI";
+
+        private SpriteAtlas iconAtlas;
+        public void LoadItemAtlas()
+        {
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>(IconLabel).Completed += (handle) =>
+            {
+                iconAtlas = handle.Result;
+            };
+        }
+        public Sprite GetItemSprite(string id)
+        {
+            return iconAtlas.GetSprite(id);
+        }
+        #endregion
     }
 }

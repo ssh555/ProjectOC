@@ -30,12 +30,17 @@ namespace ProjectOC.PinchFace
             return toMin + (value - fromMin) / (fromMax - fromMin) * (toMax - toMin);
         }
 
+        
         public void SortUIAfterGenerate(Transform _transf,Transform _parent,UIPinchFacePanel _pinchFacePanel)
         {
-            Transform[] childTransforms = _parent.GetComponentsInChildren<Transform>();
+            Transform[] childTransforms = new Transform[_parent.childCount];
+            for (int i = 0; i < _parent.childCount; i++)
+            {
+                childTransforms[i] = _parent.GetChild(i);
+            }
+            
             System.Array.Sort(childTransforms,(x,y)=>string.Compare(x.name,y.name));
-            int newIndex = System.Array.IndexOf(childTransforms, _transf.transform);
-            //_transf.transform.SetSiblingIndex(newIndex);
+
 
             List<UIBtnListInitor> btnListInitors = new List<UIBtnListInitor>();
             for (int i = 0; i < childTransforms.Length; i++)
@@ -44,12 +49,11 @@ namespace ProjectOC.PinchFace
                 UIBtnListInitor[] btnLists = childTransforms[i].transform.GetComponentsInChildren<UIBtnListInitor>();
                 btnListInitors.AddRange(btnLists);
             }
- 
-
-            _pinchFacePanel.ReGenerateBtnListContainer(btnListInitors);
             
+            _pinchFacePanel.ReGenerateBtnListContainer(btnListInitors);
             Transform _pinchFacePanelTransf = _parent.GetComponentInParent<UIPinchFacePanel>().transform;
             RefreshPanelLayout(_pinchFacePanelTransf);
+            _pinchFacePanel.ReturnBtnList(4);
         }
         
         //5_Common_PinchType1/20_FaceDress_PinchType2/45_FD_FaceDress_PinchType3
@@ -66,8 +70,9 @@ namespace ProjectOC.PinchFace
             return _path;
         }
 
-        public string GetType3PrefabPath(PinchPartType2 _type2,PinchPartType3 _type3)
+        public string GetType3PrefabPath(PinchPartType3 _type3)
         {
+            PinchPartType2 _type2 = pinchFaceManager.pinchPartType3Dic[_type3];
             string _type2Path = GetType2Path(_type2);
             string _type3Path = $"{(int)_type3-1}_{_type3.ToString()}_PinchType3";
             return $"{_type2Path}/{_type3Path}";

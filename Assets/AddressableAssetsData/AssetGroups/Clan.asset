@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Clan
+  m_EditorClassIdentifier: 
+  m_GroupName: Clan
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 2842acc3f020b1748997f191884c256b
+  m_SerializeEntries:
+  - m_GUID: f2730e1b5bef57e4495016e9b5291103
+    m_Address: SA_Clan_UI
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ab624af04e4ca1b4d8577743b6242bb2
+    m_Address: Prefab_Clan_UI
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 72d1a89784032c94ea3b026b42e20dcf, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 284bbcb6dfe6b024da190254af9513dc, type: 2}
+    - {fileID: 11400000, guid: a16835acf7fe93a46bd9091064a48cb6, type: 2}

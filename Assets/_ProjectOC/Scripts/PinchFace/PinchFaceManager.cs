@@ -7,8 +7,7 @@ using ProjectOC.Player;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.Serialization;
-using ProjectOC.Player;
+
 
 namespace ProjectOC.PinchFace
 {
@@ -18,15 +17,15 @@ namespace ProjectOC.PinchFace
         //引用
         public PinchFaceHelper pinchFaceHelper;
         public CharacterModelPinch ModelPinch;
-        [ShowInInspector]
-        //public Dictionary<PinchPartType3, PinchPartType> pinchPartType3Dic;
-        public Dictionary<PinchPartType2, PinchPartType> pinchPartType2Dic;
+
+        public Dictionary<PinchPartType3, PinchPartType2> pinchPartType3Dic = new Dictionary<PinchPartType3, PinchPartType2>();
+        public Dictionary<PinchPartType2, PinchPartType> pinchPartType2Dic = new Dictionary<PinchPartType2, PinchPartType>();
         //存储每一个的Type1下的每一个Type2
         [SerializeField]
         public List<List<PinchPartType2>> pinchPartType1Inclusion;  //
 
         // public List<PinchType1Struct> PinchType1Structs;
-        private const string PinchPartTypePath = "PinchFaceType";
+        private const string PinchPartTypePath = "PinchFace_TypePackage";
         private const string PinchPartPath = "PinchFacePart";
         private AsyncOperationHandle PinchPartHandle;
         private AsyncOperationHandle PinchPartTypeHandle;
@@ -35,6 +34,9 @@ namespace ProjectOC.PinchFace
         {
             ModelPinch = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController)
                 .currentCharacter.GetComponentInChildren<CharacterModelPinch>();
+            //Debug.LogWarning($"ModelPinch:{ModelPinch != null}");
+            // ModelPinch.InitAfterPinchFaceManager(this);
+            
             DataStructInit();
             RegisterPinchPartType();
             pinchFaceHelper = new PinchFaceHelper(this);
@@ -42,7 +44,7 @@ namespace ProjectOC.PinchFace
             
             // GeneratePinchRaceUI();
             // GenerateCustomRaceUI();
-            //GeneratePinchFaceUI(RacePinchDatas[0]);
+            //GeneratePinchFaceUI(); 
         }
 
         public void UnRegister()
@@ -64,19 +66,21 @@ namespace ProjectOC.PinchFace
         /// </summary>
         public void RegisterPinchPartType()
         {
-            // pinchPartType3Dic = new Dictionary<PinchPartType3, PinchPartType>();
-            pinchPartType2Dic = new Dictionary<PinchPartType2, PinchPartType>();
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetsAsync<PinchPartType>(PinchPartTypePath, (ppt) =>
             {
-                lock (pinchPartType2Dic)
+                lock (pinchPartType3Dic)
                 {
-                    //有效的Capacity
-                    if (ppt.pinchPartType3s.Capacity != 0)
+                    lock (pinchPartType2Dic)
                     {
                         pinchPartType2Dic.Add(ppt.pinchPartType2,ppt);
                         pinchPartType1Inclusion[(int)ppt.pinchPartType1 -1].Add(ppt.pinchPartType2);
-                    }
+                        foreach (var _ppt3 in ppt.pinchPartType3s)
+                        {
+                            pinchPartType3Dic.Add(_ppt3,ppt.pinchPartType2);
+                        }
+                    } 
                 }
+                
             }).Completed+= (handle) =>
             {
                 PinchPartTypeHandle = handle;
@@ -86,9 +90,9 @@ namespace ProjectOC.PinchFace
 
         #region Temp
 
-        private const string PinchRaceUIPath = "OC/UIPanel/FacePinch_RacePanel.prefab";
-        private const string CustomRacePath = "OC/UIPanel/FacePinch_RacePartPanel.prefab";
-        private const string PinchFacePath = "OC/UIPanel/FacePinch_FacePanel.prefab";
+        private const string PinchRaceUIPath = "Prefabs_PinchPart/UIPanel/Panel/Prefab_FacePinch_RacePanel.prefab";
+        private const string CustomRacePath = "Prefabs_PinchPart/UIPanel/Panel/Prefab_FacePinch_RacePartPanel.prefab";
+        private const string PinchFacePath = "Prefabs_PinchPart/UIPanel/Panel/Prefab_FacePinch_FacePanel.prefab";
         
         [SerializeField]
         public List<RacePinchData> RacePinchDatas;
@@ -101,7 +105,6 @@ namespace ProjectOC.PinchFace
                 var panel = handle.Result.GetComponent<UIPinchRacePanel>();
                 panel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(panel);
-                
             };
         }
         public void GenerateCustomRaceUI()
@@ -116,6 +119,10 @@ namespace ProjectOC.PinchFace
             };
         }
 
+        public void GeneratePinchFaceUI()
+        {
+            GeneratePinchFaceUI(RacePinchDatas[0]); 
+        }
         public void GeneratePinchFaceUI(RacePinchData _raceData)
         {
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(PinchFacePath)

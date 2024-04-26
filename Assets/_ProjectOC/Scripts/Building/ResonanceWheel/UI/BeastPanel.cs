@@ -413,7 +413,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/ResonanceWheel";
+            this.abpath = "OCTextContent/ResonanceWheel";
             this.abname = "BeastPanel";
             this.description = "BeastPanel数据加载完成";
         }
@@ -422,15 +422,15 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         protected override void InitObjectPool()
         {
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
-            "OC/UI/ResonanceWheel/Texture/SA_ResonanceWheel_UI.spriteatlasv2", (handle) =>
+            "SA_ResonanceWheel_UI_UIPanel", (handle) =>
             {
                 SpriteAtlas resonanceWheelAtlas = handle.Result as SpriteAtlas;
                 icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite("icon_genderfemale");
                 icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite("icon_gendermale");
             }
             );
-            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "BeastBioPool", LocalGameManager.Instance.WorkerManager.GetWorkers().Count, "OC/UI/ResonanceWheel/Prefabs/BeastBio.prefab");
-            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "DescriptionPool", 5, "OC/UI/ResonanceWheel/Prefabs/Description.prefab");
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "BeastBioPool", LocalGameManager.Instance.WorkerManager.GetWorkers().Count, "OC/Prefabs_ResonanceWheel_UI/Prefab_Resonance_UI_BeastBio.prefab");
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "DescriptionPool", 5, "OC/Prefabs_ResonanceWheel_UI/Prefab_Resonance_UI_Description.prefab");
             base.InitObjectPool();
         }
 

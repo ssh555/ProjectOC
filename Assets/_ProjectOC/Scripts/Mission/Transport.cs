@@ -1,5 +1,3 @@
-using ML.Engine.InventorySystem;
-using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 
@@ -17,7 +15,7 @@ namespace ProjectOC.MissionNS
         [LabelText("送货地"), ReadOnly]
         public IMissionObj Target;
         [LabelText("负责该搬运的刁民"), ReadOnly]
-        public Worker Worker;
+        public WorkerNS.Worker Worker;
         [LabelText("需要搬运的数量"), ReadOnly]
         public int MissionNum;
 
@@ -34,8 +32,7 @@ namespace ProjectOC.MissionNS
         [LabelText("是否到达目的地"), ReadOnly]
         public bool ArriveTarget;
 
-
-        public Transport(MissionTransport mission, string itemID, int missionNum, IMissionObj source, IMissionObj destination, Worker worker)
+        public Transport(MissionTransport mission, string itemID, int missionNum, IMissionObj source, IMissionObj destination, WorkerNS.Worker worker)
         {
             this.ItemID = itemID;
             this.Mission = mission;
@@ -72,14 +69,14 @@ namespace ProjectOC.MissionNS
             }
         }
 
-        private void Transport_Source_Action(Worker worker)
+        private void Transport_Source_Action(WorkerNS.Worker worker)
         {
             worker.Transport.ArriveSource = true;
             worker.Transport.PutOutSource();
             worker.SetDestination(worker.Transport.Target.GetTransform().position, Transport_Target_Action);
         }
 
-        private void Transport_Target_Action(Worker worker)
+        private void Transport_Target_Action(WorkerNS.Worker worker)
         {
             worker.Transport.ArriveTarget = true;
             worker.Transport.PutInTarget();
@@ -92,12 +89,13 @@ namespace ProjectOC.MissionNS
         {
             bool flagBurden = false;
             bool flagSource = false;
-            List<Item> items = ItemManager.Instance.SpawnItems(ItemID, this.MissionNum);
-            foreach (Item item in items)
+            List<ML.Engine.InventorySystem.Item> items = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(ItemID, MissionNum);
+            foreach (var item in items)
             {
-                if (item.Weight + Worker.BURCurrent >= Worker.BURMax)
+                if (item.Weight + Worker.WeightCurrent >= Worker.WeightMax)
                 {
-                    int num = (Worker.BURMax - Worker.BURCurrent) / ItemManager.Instance.GetWeight(item.ID);
+                    int weight = ML.Engine.InventorySystem.ItemManager.Instance.GetWeight(item.ID);
+                    int num = weight != 0 ? (Worker.WeightMax - Worker.WeightCurrent) / weight : 0;
                     item.Amount = num;
                     flagBurden = true;
                 }
@@ -126,7 +124,7 @@ namespace ProjectOC.MissionNS
         /// </summary>
         public void PutInTarget()
         {
-            foreach (Item item in Worker.TransportItems)
+            foreach (var item in Worker.TransportItems)
             {
                 if (item.ID == ItemID)
                 {
@@ -157,14 +155,17 @@ namespace ProjectOC.MissionNS
         /// </summary>
         public void End(bool removeMission=true)
         {
-            List<Item> items = ItemManager.Instance.SpawnItems(ItemID, CurNum);
-            foreach (Item item in items)
+            if (ML.Engine.InventorySystem.ItemManager.Instance != null)
             {
-                #pragma warning disable CS4014
-                ItemManager.Instance.SpawnWorldItem(item, Worker.transform.position, Worker.transform.rotation);
-                #pragma warning restore CS4014
+                List<ML.Engine.InventorySystem.Item> items = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(ItemID, CurNum);
+                foreach (var item in items)
+                {
+#pragma warning disable CS4014
+                    ML.Engine.InventorySystem.ItemManager.Instance.SpawnWorldItem(item, Worker.transform.position, Worker.transform.rotation);
+#pragma warning restore CS4014
+                }
             }
-            foreach (Item item in Worker.TransportItems)
+            foreach (var item in Worker.TransportItems)
             {
                 if (item.ID == ItemID)
                 {

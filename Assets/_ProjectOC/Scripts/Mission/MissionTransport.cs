@@ -1,4 +1,3 @@
-using ML.Engine.Manager;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 
@@ -88,14 +87,14 @@ namespace ProjectOC.MissionNS
 
         public void End(bool removeManager = true)
         {
-            foreach (Transport transport in this.Transports)
+            foreach (Transport transport in this.Transports.ToArray())
             {
                 transport?.End(false);
             }
             this.Initiator.RemoveMissionTranport(this);
             if (removeManager)
             {
-                GameManager.Instance.GetLocalManager<MissionManager>().RemoveMissionTransport(this);
+                ML.Engine.Manager.GameManager.Instance.GetLocalManager<MissionManager>().RemoveMissionTransport(this);
             }
         }
 
@@ -103,20 +102,9 @@ namespace ProjectOC.MissionNS
         {
             public int Compare(MissionTransport x, MissionTransport y)
             {
-                if (x == null)
-                {
-                    if (y == null)
-                    {
-                        return 0;
-                    }
-                    else
-                    {
-                        return 1;
-                    }
-                }
-                if (y == null)
-                {
-                    return -1;
+                if (x == null || y == null)
+                { 
+                    return (x == null).CompareTo((y == null));
                 }
                 if (x.Type != y.Type)
                 {

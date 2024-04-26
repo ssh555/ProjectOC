@@ -3,12 +3,9 @@ using Sirenix.OdinInspector;
 namespace ProjectOC.MissionNS
 {
     /// <summary>
-    /// 搬运类型，表明了搬运的起点和终点
-    /// 搬运优先级从高到低
-    /// 1从生产节点至仓库
-    /// 2从仓库至生产节点
-    /// 3从外部至仓库
+    /// 表明了搬运的起点和终点，搬运优先级从高到低
     /// </summary>
+    [LabelText("搬运类型")]
     public enum MissionTransportType
     {
         [LabelText("None")]
