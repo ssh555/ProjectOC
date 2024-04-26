@@ -360,6 +360,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             return new Ray(GetCameraRay().GetPoint(this.checkRadius), Vector3.down);
         }
 
+
         /// <summary>
         /// 获取BPart当前落点的位置和旋转
         /// 位置 => SelectedPartInstance.Pos = pos
@@ -392,23 +393,15 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 // 命中 || 未命中 => 在终点处向下检测
                 if (hits != null && hits.Length > 0)
                 {
-                    //string str = $"";
-                    //foreach (var h in hits)
-                    //{
-                    //    str += $" {h.collider.gameObject.name}";
-                    //}
-                    //Debug.Log(str);
                     bool bisHit = false;
                     bool bSocket = false;
                     RaycastHit hitInfo = hits[0];
-                    int i;
                     int tmp = 0;
                     // 找到第一个可以匹配的，Socket优先级更高
-                    for(i = 0; i < hits.Length; ++i)
+                    for(int i = 0; i < hits.Length; ++i)
                     {
                         hitInfo = hits[i];
                         var socket = hitInfo.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
-
                         if (socket != null && this.SelectedPartInstance.ActiveSocket.CheckMatch(socket))
                         {
                             bisHit = true;
@@ -416,43 +409,52 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                             tmp = i;
                             break;
                         }
-                        var area = hitInfo.collider.GetComponentInParent<BuildingArea.BuildingArea>();
-                        if (area != null && area.CheckAreaTypeMatch(this.SelectedPartInstance))
+                        if(!bisHit)
                         {
-                            if(!bisHit)
+                            var area = hitInfo.collider.GetComponentInParent<BuildingArea.BuildingArea>();
+                            if (area != null && area.CheckAreaTypeMatch(this.SelectedPartInstance))
                             {
-                                tmp = i;
+                                if (!bisHit)
+                                {
+                                    tmp = i;
+                                }
+                                bisHit = true;
                             }
-                            bisHit = true;
                         }
                     }
-                    for (i = tmp + 1; i < hits.Length; ++i) 
+                    
+                    hitInfo = hits[tmp];
+
+                    if (bisHit)
                     {
-                        var h = hits[i];
-                        var socket = h.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
-                        if (socket != null && this.SelectedPartInstance.ActiveSocket.CheckMatch(socket))
+                        for (int i = tmp + 1; i < hits.Length; ++i)
                         {
-                            if (h.distance < hitInfo.distance || (h.distance == hitInfo.distance && Vector3.Distance(h.collider.transform.position, this.transform.position) <= Vector3.Distance(hitInfo.collider.transform.position, this.transform.position)))
-                            {
-                                bisHit = true;
-                                bSocket = true;
-                                hitInfo = h;
-                            }
-                        }
-                        else if(bSocket == false)
-                        {
-                            var area = h.collider.GetComponentInParent<BuildingArea.BuildingArea>();
-                            // 类型匹配 & 位于正面
-                            if (area != null && area.CheckAreaTypeMatch(this.SelectedPartInstance) && (Vector3.Dot(ray.direction, area.transform.up) < 0)) 
+                            var h = hits[i];
+                            var socket = h.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
+                            if (socket != null && this.SelectedPartInstance.ActiveSocket.CheckMatch(socket))
                             {
                                 if (h.distance < hitInfo.distance || (h.distance == hitInfo.distance && Vector3.Distance(h.collider.transform.position, this.transform.position) <= Vector3.Distance(hitInfo.collider.transform.position, this.transform.position)))
                                 {
+                                    bSocket = true;
                                     hitInfo = h;
-                                    bisHit = true;
+                                }
+                            }
+                            else if (bSocket == false)
+                            {
+                                var area = h.collider.GetComponentInParent<BuildingArea.BuildingArea>();
+                                // 类型匹配 & 位于正面
+                                if (area != null && area.CheckAreaTypeMatch(this.SelectedPartInstance) && (Vector3.Dot(ray.direction, area.transform.up) < 0))
+                                {
+                                    if (h.distance < hitInfo.distance || (h.distance == hitInfo.distance && Vector3.Distance(h.collider.transform.position, this.transform.position) <= Vector3.Distance(hitInfo.collider.transform.position, this.transform.position)))
+                                    {
+                                        hitInfo = h;
+                                    }
                                 }
                             }
                         }
                     }
+
+
 
 
                     if(!bisHit)
