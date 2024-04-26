@@ -72,8 +72,6 @@ MonoBehaviour:
   IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0.2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  Gizmos_Active: 0
-  Gizmos_Attached: 0
 --- !u!1 &6852242087386922355
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,7 +264,5 @@ MonoBehaviour:
     TransportPriority: 0
     Recipe:
       ID: 
-    Worker: {fileID: 0}
-    IsWorkerArrive: 0
     MissionTransports: []
     LevelUpgradeEff: 

@@ -72,8 +72,6 @@ MonoBehaviour:
   IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  Gizmos_Active: 0
-  Gizmos_Attached: 0
 --- !u!1 &5756722887124536023
 GameObject:
   m_ObjectHideFlags: 0

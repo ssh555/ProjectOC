@@ -72,8 +72,6 @@ MonoBehaviour:
   IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  Gizmos_Active: 0
-  Gizmos_Attached: 0
 --- !u!1 &5756722887124536023
 GameObject:
   m_ObjectHideFlags: 0
@@ -88,7 +86,7 @@ GameObject:
   - component: {fileID: 1538513640434445091}
   - component: {fileID: 2586572988589159160}
   m_Layer: 7
-  m_Name: Interact_FeatureModifier_Base1_1
+  m_Name: Interact_FeatureModifier_Base1_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -198,7 +196,7 @@ MonoBehaviour:
     Category1: 1
     Category2: 108
     Category3: 100
-    Category4: 1
+    Category4: 3
   instanceID: 
   canPlaceInPlaceMode: 1
   mode: 0

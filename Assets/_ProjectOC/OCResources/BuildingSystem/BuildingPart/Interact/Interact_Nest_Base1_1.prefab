@@ -72,8 +72,6 @@ MonoBehaviour:
   IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  Gizmos_Active: 0
-  Gizmos_Attached: 0
 --- !u!1 &8034424630954855357
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,9 +203,6 @@ MonoBehaviour:
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   activeSocketIndex: 0
-  Time: 1
-  Mood: 5
-  Worker: {fileID: 0}
 --- !u!1 &8794419456241767524
 GameObject:
   m_ObjectHideFlags: 0

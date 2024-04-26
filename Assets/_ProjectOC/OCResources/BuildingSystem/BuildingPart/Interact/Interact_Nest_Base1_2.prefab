@@ -72,8 +72,6 @@ MonoBehaviour:
   IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  Gizmos_Active: 0
-  Gizmos_Attached: 0
 --- !u!1 &8034424630954855357
 GameObject:
   m_ObjectHideFlags: 0
@@ -88,7 +86,7 @@ GameObject:
   - component: {fileID: 9060190368047450666}
   - component: {fileID: 8363813574793304021}
   m_Layer: 7
-  m_Name: Interact_Nest_Base1_1
+  m_Name: Interact_Nest_Base1_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -198,16 +196,13 @@ MonoBehaviour:
     Category1: 1
     Category2: 107
     Category3: 100
-    Category4: 1
+    Category4: 2
   instanceID: 
   canPlaceInPlaceMode: 1
   mode: 0
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   activeSocketIndex: 0
-  Time: 1
-  Mood: 5
-  Worker: {fileID: 0}
 --- !u!1 &8794419456241767524
 GameObject:
   m_ObjectHideFlags: 0
