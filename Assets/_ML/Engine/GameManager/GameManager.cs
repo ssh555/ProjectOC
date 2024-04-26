@@ -54,6 +54,9 @@ namespace ML.Engine.Manager
         [ShowInInspector, ReadOnly]
         public SaveSystem.SaveManager SaveManager { get; private set; }
 
+        [ShowInInspector, ReadOnly]
+        public EventManager.EventManager EventManager { get; private set; }
+
         public EnterPoint EnterPoint { get; private set; }
 
         [SerializeField]
@@ -97,6 +100,7 @@ namespace ML.Engine.Manager
             this.InputManager = this.RegisterGlobalManager<Input.InputManager>();
 
             this.SaveManager = this.RegisterGlobalManager<SaveSystem.SaveManager>();
+            this.EventManager = this.RegisterGlobalManager<EventManager.EventManager>();
             this.RegisterGlobalManager(this.CharacterManager);
         }
         
