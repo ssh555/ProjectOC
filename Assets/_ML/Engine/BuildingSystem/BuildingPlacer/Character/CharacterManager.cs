@@ -20,7 +20,7 @@ namespace ML.PlayerCharacterNS
         int LocalPlayerControllerIndex = -1;
         int LocalAIControllerIndex = -1;
         
-        [TypeFilter("GetAllPlayerControllerClass")]
+        [TypeFilter("GetAllPlayerControllerClass"), SerializeReference]
         public PlayerController playerController;
         public IEnumerable<Type> GetAllPlayerControllerClass()
         {
