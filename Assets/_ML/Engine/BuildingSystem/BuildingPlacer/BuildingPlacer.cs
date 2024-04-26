@@ -422,11 +422,10 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                             }
                         }
                     }
-                    
-                    hitInfo = hits[tmp];
 
                     if (bisHit)
                     {
+                        hitInfo = hits[tmp];
                         for (int i = tmp + 1; i < hits.Length; ++i)
                         {
                             var h = hits[i];
