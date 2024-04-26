@@ -46,6 +46,21 @@ MonoBehaviour:
     m_SerializedLabels:
     - InputActionAssets
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e3199adc69e328a45b3f37d046a83b59
+    m_Address: Prefab_BaseUIPrefab_GraphCursorNavigation
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 05067739c558b5a428057adad68ca4e0
+    m_Address: Prefab_BaseUIPrefab_PanelNavagation
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 346c948e0ffbdf242b7f81d61082bffa
+    m_Address: Prefab_BaseUIPrefab_UICameraImage
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 72d1a89784032c94ea3b026b42e20dcf, type: 2}
   m_SchemaSet:

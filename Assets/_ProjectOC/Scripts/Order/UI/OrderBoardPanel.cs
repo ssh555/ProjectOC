@@ -594,7 +594,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     }
     protected override void InitTextContentPathData()
     {
-        this.abpath = "OC/Json/TextContent/Order";
+        this.abpath = "OCTextContent/Order";
         this.abname = "OrderBoardPanel";
         this.description = "OrderBoardPanel数据加载完成";
     }
