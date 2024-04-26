@@ -171,7 +171,7 @@ namespace ProjectOC.WorkerNS
         {
             (this as ML.Engine.Timer.ITickComponent).DisposeTick();
             Transport?.End();
-            foreach (IWorkerContainer container in ContainerDict.Values)
+            foreach (IWorkerContainer container in ContainerDict.Values.ToArray())
             {
                 container?.RemoveWorker();
             }
