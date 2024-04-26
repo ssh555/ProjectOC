@@ -602,7 +602,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 
     protected override void InitObjectPool()
     {
-        this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SlotPool", 10, "Assets/_ProjectOC/OCResources/UI/OrderBoard/Prefabs/Slot.prefab");
+        this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SlotPool", 10, "Prefab_Order_UIPrefab/Prefab_Order_UI_Slot.prefab");
         base.InitObjectPool();
     }
     [ShowInInspector]
