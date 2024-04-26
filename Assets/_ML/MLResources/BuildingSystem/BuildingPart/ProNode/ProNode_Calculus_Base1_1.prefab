@@ -182,7 +182,7 @@ MonoBehaviour:
   canPlaceInPlaceMode: 1
   mode: 0
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
-  rotOffset: {x: 0, y: 0, z: 0, w: 0}
+  rotOffset: {x: 0, y: 0, z: 0, w: 1}
   activeSocketIndex: 0
   powerSupportRange: 1.42
   ProNode:
@@ -268,3 +268,5 @@ MonoBehaviour:
   IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0.2, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
+  Gizmos_Active: 0
+  Gizmos_Attached: 0
