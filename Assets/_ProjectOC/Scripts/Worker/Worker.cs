@@ -144,7 +144,7 @@ namespace ProjectOC.WorkerNS
                 { WorkerContainerType.Home, null }
             };
 
-            if (HasContainer(WorkerContainerType.Home))
+            if (!HasContainer(WorkerContainerType.Home))
             {
                 TimerForNoHome.Start();
             }
