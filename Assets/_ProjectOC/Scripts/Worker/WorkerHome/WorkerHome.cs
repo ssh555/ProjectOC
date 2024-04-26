@@ -92,9 +92,9 @@ namespace ProjectOC.WorkerNS
                     ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent -= OnManagerAddWorkerEvent;
                 }
             };
-            OnRemoveWorkerEvent += () => 
+            OnRemoveWorkerEvent += (isReset) => 
             {
-                if (ManagerNS.LocalGameManager.Instance != null && !BindWorkerDefault())
+                if (ManagerNS.LocalGameManager.Instance != null && !isReset && !BindWorkerDefault())
                 {
                     ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent += OnManagerAddWorkerEvent;
                 }
@@ -159,7 +159,7 @@ namespace ProjectOC.WorkerNS
         }
         public bool HaveWorker => Worker != null && !string.IsNullOrEmpty(Worker.InstanceID);
         public Action<Worker> OnSetWorkerEvent { get; set; }
-        public Action OnRemoveWorkerEvent { get; set; }
+        public Action<bool> OnRemoveWorkerEvent { get; set; }
 
         public string GetUID() { return InstanceID; }
         public Transform GetTransform() { return transform; }

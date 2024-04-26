@@ -567,7 +567,7 @@ namespace ProjectOC.ProNodeNS
 
         #region IWorkerContainer
         public Action<Worker> OnSetWorkerEvent { get; set; }
-        public Action OnRemoveWorkerEvent { get; set; }
+        public Action<bool> OnRemoveWorkerEvent { get; set; }
         public Worker Worker { get; set; }
         public bool IsArrive { get; set; }
         public bool HaveWorker => ProNodeType == ProNodeType.Mannul && Worker != null && !string.IsNullOrEmpty(Worker.InstanceID);
