@@ -28,9 +28,6 @@ namespace ProjectOC.TechTree.UI
         public float gapDistance = 100;
         private int sliceNum = 16;
         private Vector3 BasePos;
-
-
-
         private void SetBtnPos(RectTransform rectTransform,int[] cor)
         {
             if (cor.Length != 2) return;
@@ -724,8 +721,6 @@ namespace ProjectOC.TechTree.UI
                 }
             }
         }
-
-
         protected override void OnLoadJsonAssetComplete(TPPanel datas)
         {
             base.OnLoadJsonAssetComplete(datas);

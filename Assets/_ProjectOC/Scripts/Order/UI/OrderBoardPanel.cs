@@ -38,6 +38,13 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 
         this.AcceptedOrderOrderInfo = this.AcceptedOrder.Find("OrderInfo");
         this.OrderDelegationOrderInfo = this.OrderDelegation.Find("OrderDelegation").Find("Panel1").Find("OrderInfo");
+
+        this.KeyTips = this.transform.Find("BotKeyTips").Find("KeyTips");
+        this.KT_CommitAllOrder = this.KeyTips.Find("KT_CommitAllOrder");
+        this.KT_ViewMoreInformation = this.KeyTips.Find("KT_ViewMoreInformation");
+        this.KT_CancelMoreInformation = this.KeyTips.Find("KT_CancelMoreInformation");
+        this.KT_Back = this.KeyTips.Find("KT_Back");
+
     }
 
     #endregion
@@ -135,6 +142,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             if (OrderDelegationIndex == 0)
             {
                 ClanSelectIndex = ClanSelectIndex == 0 ? 1 : 0;
+                this.Refresh();
             }
             else if(OrderDelegationIndex == 1)
             {
@@ -240,6 +248,13 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     private Transform AcceptedOrderOrderInfo;
     private Transform OrderDelegationOrderInfo;
 
+    private Transform KeyTips;
+    private Transform KT_CommitAllOrder;
+    private Transform KT_ViewMoreInformation;
+    private Transform KT_CancelMoreInformation;
+    private Transform KT_Back;
+
+
 
     [ShowInInspector]
     private string curSelectedOrderInstanceIDInOrderDelegation 
@@ -334,7 +349,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                         OrderUrgent orderUrgent = (OrderUrgent)order;
                         OrderTableData orderTableData = OrderManager.Instance.GetOrderTableData(order);
 
-                        this.OrderDelegationUIBtnListContainer.UIBtnLists[0].AddBtn("Assets/_ProjectOC/OCResources/UI/OrderBoard/Prefabs/UrgentDelegationBtn.prefab", BtnSettingAction: (btn) =>
+                        this.OrderDelegationUIBtnListContainer.UIBtnLists[0].AddBtn("Prefab_Order_UIPrefab/Prefab_Order_UI_UrgentDelegationBtn.prefab", BtnSettingAction: (btn) =>
                         {
                             if (order != null)
                             {
@@ -343,11 +358,11 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                                 TextMeshProUGUI RemainTimeText = btn.transform.Find("ReceiveTime").Find("RemainTime").GetComponent<TextMeshProUGUI>();
                                 Slider slider = btn.transform.Find("ReceiveTime").Find("Slider").GetComponent<Slider>();
                                 CounterDownTimer timer = orderUrgent.ReceiveDDLTimer;
+                                timer.OnUpdateEvent = null;
                                 timer.OnUpdateEvent += (time) => {
                                     RemainTimeText.text = timer.ConvertToMin() + " MIN";
                                     slider.value = (float)(timer.CurrentTime / timer.Duration);
                                 };
-                                //timer.OnEndEvent += () => { this.isNeedRefreshOrderDelegation = true; this.Refresh(); };
                                 btn.name = order.OrderInstanceID;
                             }
                             else
@@ -386,7 +401,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                     {
                         OrderTableData orderTableData = OrderManager.Instance.GetOrderTableData(order);
 
-                        this.OrderDelegationUIBtnListContainer.UIBtnLists[1].AddBtn("Assets/_ProjectOC/OCResources/UI/OrderBoard/Prefabs/NormalDelegationBtn.prefab", BtnSettingAction: (btn) =>
+                        this.OrderDelegationUIBtnListContainer.UIBtnLists[1].AddBtn("Prefab_Order_UIPrefab/Prefab_Order_UI_NormalDelegationBtn.prefab", BtnSettingAction: (btn) =>
                         {
                             //更新信息
                             btn.transform.Find("Image").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.OrderName;
@@ -509,7 +524,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                     foreach (var acceptedOrder in OrderManager.Instance.AcceptedOrders)
                     {
                         OrderTableData orderTableData = OrderManager.Instance.GetOrderTableData(acceptedOrder);
-                        this.AcceptedOrderBtnList.AddBtn("Assets/_ProjectOC/OCResources/UI/OrderBoard/Prefabs/AcceptedOrderListBtn.prefab", BtnSettingAction: (btn) =>
+                        this.AcceptedOrderBtnList.AddBtn("Prefab_Order_UIPrefab/Prefab_Order_UI_AcceptedOrderListBtn.prefab", BtnSettingAction: (btn) =>
                         {
                             btn.transform.Find("Image").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.OrderName;
 
@@ -566,9 +581,25 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                 int remainDays = orderUrgent.GetDeliverDDLTimerRemainGameDays();
                 LimitToday.gameObject.SetActive(remainDays <= 1);
                 LimitFuture.gameObject.SetActive(remainDays > 1);
-                LimitToday.Find("Text3").GetComponent<TextMeshProUGUI>().text = orderUrgent.GetDeliverDDLTimerRemainGameHourAndMin();
-                LimitFuture.Find("Text2").GetComponent<TextMeshProUGUI>().text = remainDays.ToString();
-                
+                if(remainDays <= 1)
+                {
+                    var textmesh = LimitToday.Find("Text3").GetComponent<TextMeshProUGUI>();
+                    orderUrgent.DeliverDDLTimer.OnUpdateEvent = null;
+                    orderUrgent.DeliverDDLTimer.OnUpdateEvent += (curTime) =>
+                    {
+                        textmesh.text = orderUrgent.GetDeliverDDLTimerRemainGameHourAndMin();
+                    };
+
+                }
+                else
+                {
+                    var textmesh = LimitFuture.Find("Text2").GetComponent<TextMeshProUGUI>();
+                    orderUrgent.DeliverDDLTimer.OnUpdateEvent = null;
+                    orderUrgent.DeliverDDLTimer.OnUpdateEvent += (curTime) =>
+                    {
+                        textmesh.text = remainDays.ToString();
+                    };
+                }
             }
             else
             {
@@ -625,8 +656,14 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             //右侧订单信息为空
             this.AcceptedOrderOrderInfo.gameObject.SetActive(false);
         }
-
         #endregion
+        #endregion
+
+        #region BotKeyTips
+        this.KT_ViewMoreInformation.gameObject.SetActive(FunctionIndex == 1 && OrderDelegationIndex == 0 && ClanSelectIndex == 0);
+        this.KT_CancelMoreInformation.gameObject.SetActive(FunctionIndex == 1 && OrderDelegationIndex == 0 && ClanSelectIndex == 1);
+        this.KT_CommitAllOrder.gameObject.SetActive(FunctionIndex == 0);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(this.KeyTips.GetComponent<RectTransform>());
         #endregion
     }
     #endregion
@@ -649,7 +686,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     }
     protected override void InitTextContentPathData()
     {
-        this.abpath = "OC/Json/TextContent/Order";
+        this.abpath = "OCTextContent/Order";
         this.abname = "OrderBoardPanel";
         this.description = "OrderBoardPanel数据加载完成";
     }
@@ -657,7 +694,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 
     protected override void InitObjectPool()
     {
-        this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SlotPool", 10, "Assets/_ProjectOC/OCResources/UI/OrderBoard/Prefabs/Slot.prefab");
+        this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SlotPool", 10, "Prefab_Order_UIPrefab/Prefab_Order_UI_Slot.prefab");
         base.InitObjectPool();
     }
     [ShowInInspector]
@@ -689,7 +726,6 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         UIBtnListInitor AcceptedOrderBtnListInitor = this.AcceptedOrder.Find("AcceptedOrderList").GetComponentInChildren<UIBtnListInitor>(true);
         this.AcceptedOrderBtnList = new UIBtnList(AcceptedOrderBtnListInitor);
         this.AcceptedOrderBtnList.OnSelectButtonChanged += () => { this.Refresh(); };
-
     }
 
     #endregion

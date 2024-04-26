@@ -36,18 +36,18 @@ namespace ProjectOC.Order
             this.receiveDDLTimer.OnEndEvent += () =>
             {
                 //重置计时器
-                this.receiveDDLTimer.Reset(ReceiveDDL * 60, isStoped: true);
+                this.receiveDDLTimer.Reset(ReceiveDDL * 60, isStoped: true, needResetOnUpdateEvent: true);
                 //调用拒绝订单函数
                 LocalGameManager.Instance.OrderManager.RefuseOrder(this.OrderInstanceID);
             };
 
-            //this.deliverDDLTimer = new CounterDownTimer(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DeliverDDL, autocycle: false, autoStart: false);
-            this.deliverDDLTimer = new CounterDownTimer(10 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DeliverDDL, autocycle: false, autoStart: false);
+            this.deliverDDLTimer = new CounterDownTimer(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DeliverDDL, autocycle: false, autoStart: false);
+            //this.deliverDDLTimer = new CounterDownTimer(10 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DeliverDDL, autocycle: false, autoStart: false);
             this.deliverDDLTimer.OnEndEvent += () =>
             {
                 //重置计时器
-                //this.deliverDDLTimer.Reset(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DeliverDDL, isStoped: true);
-                this.deliverDDLTimer.Reset(10 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DeliverDDL, isStoped: true);
+                this.deliverDDLTimer.Reset(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DeliverDDL, isStoped: true, needResetOnUpdateEvent: true);
+                //this.deliverDDLTimer.Reset(10 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DeliverDDL, isStoped: true);
                 //调用取消订单函数
                 LocalGameManager.Instance.OrderManager.CancleOrder(this.OrderInstanceID);
             };
@@ -66,8 +66,8 @@ namespace ProjectOC.Order
 
         public void Reset()
         {
-            this.receiveDDLTimer.Reset(this.receiveDDLTimer.Duration, isStoped: true);
-            this.deliverDDLTimer.Reset(this.deliverDDLTimer.Duration, isStoped: true);
+            this.receiveDDLTimer.Reset(ReceiveDDL * 60, isStoped: true, needResetOnUpdateEvent: true);
+            this.deliverDDLTimer.Reset(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DeliverDDL, isStoped: true, needResetOnUpdateEvent: true);
         }
 
         //获取当前交付时限还差多少天
@@ -83,6 +83,7 @@ namespace ProjectOC.Order
             int min = (int)((this.deliverDDLTimer.CurrentTime - hour * 60 * LocalGameManager.Instance.DispatchTimeManager.TimeScale) / LocalGameManager.Instance.DispatchTimeManager.TimeScale);
             return hour.ToString()+":"+ min.ToString();
         }
+
     }
 
 

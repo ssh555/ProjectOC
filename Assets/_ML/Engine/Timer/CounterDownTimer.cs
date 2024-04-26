@@ -19,13 +19,14 @@ namespace ML.Engine.Timer
         /// </summary>
         /// <param name="duration">起始时间</param>
         /// <param name="autocycle">是否自动循环</param>
-        public CounterDownTimer(float duration, bool autocycle = false, bool autoStart = true, double speed = 1f, int tType = 0)
+        public CounterDownTimer(float duration, bool autocycle = false, bool autoStart = true, double speed = 1f, int tType = 0,bool needResetOnUpdateEvent = false)
         {
             this._isStoped = true;
             Duration = Mathf.Max(0f, duration);
             TimerType = tType;
             IsAutoCycle = autocycle;
             Speed = speed;
+            this.needResetOnUpdateEvent = needResetOnUpdateEvent;
             Reset(duration, !autoStart);
         }
 
@@ -40,6 +41,8 @@ namespace ML.Engine.Timer
         /// 是否自动循环（小于等于0后重置）
         /// </summary>
         public bool IsAutoCycle { get; private set; }
+
+        private bool needResetOnUpdateEvent;
 
         private bool _isStoped = false;
         /// <summary>
@@ -129,7 +132,7 @@ namespace ML.Engine.Timer
                 IsEnd = true;
                 if (IsAutoCycle)
                 {
-                    Reset(Duration, false);
+                    Reset(Duration, false, this.needResetOnUpdateEvent);
                     this.OnUpdateEvent?.Invoke(currentTime);
                 }
                 else
@@ -171,12 +174,18 @@ namespace ML.Engine.Timer
         /// </summary>
         /// <param name="duration">持续时间</param>
         /// <param name="isStoped">是否暂停</param>
-        public void Reset(double duration, bool isStoped = false)
+        public void Reset(double duration, bool isStoped = false,bool needResetOnUpdateEvent = false)
         {
             IsEnd = false;
             Duration = Math.Max(0f, duration);
             currentTime = Duration;
             IsStoped = isStoped;
+
+            if(needResetOnUpdateEvent)
+            {
+                this.OnUpdateEvent = null;
+                this.OnEndEvent = null;
+            }
 
         }
 

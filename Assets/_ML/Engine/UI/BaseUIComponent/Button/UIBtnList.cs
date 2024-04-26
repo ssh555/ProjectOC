@@ -99,7 +99,8 @@ namespace ML.Engine.UI
         public event Action OnSelectButtonChanged;
 
         private bool isBtnListContainerDeleteAll = false;
-
+        [ShowInInspector]
+        private UIBtnListSlideWindow UIBtnListSlideWindow = null;
         /// <summary>
         /// parent: 按钮父物体 limitNum：一行多少个按钮 hasInitSelect:是否有初始选中 isLoop:是否为循环按钮 isWheel：是否为轮转按钮 OnSelectedEnter：选中回调 OnSelectedExit：选出回调
         /// </summary>
@@ -133,9 +134,14 @@ namespace ML.Engine.UI
             this.isWheel = btnListInitData.isWheel;
             this.readUnActive = btnListInitData.readUnActiveButton;
 
+            if (btnListInitData.scrollRect != null)
+            {
+                UIBtnListSlideWindow = new UIBtnListSlideWindow(btnListInitData.scrollRect,this);
+            }
+
             if (parent != null)
             {
-                InitBtnInfo(parent, limitNum, hasInitSelect, isLoop, isWheel, this.readUnActive, null, null);
+                InitBtnInfo(parent, limitNum, hasInitSelect, isLoop, isWheel, this.readUnActive);
                 try
                 {
                     this.Selected = parent.Find("Selected");
@@ -145,6 +151,7 @@ namespace ML.Engine.UI
             }
         }
 
+        #region Internal
         public void InitBtnInfo()
         {
             this.SBDic.Clear();
@@ -257,7 +264,7 @@ namespace ML.Engine.UI
             }
         }
 
-        public void InitBtnInfo(Transform parent, int limitNum = 1, bool hasInitSelect = true, bool isLoop = false, bool isWheel = false, Action OnSelectedEnter = null, Action OnSelectedExit = null)
+        public void InitBtnInfo(Transform parent, int limitNum = 1, bool hasInitSelect = true, bool isLoop = false, bool isWheel = false, bool _readUnActive = true, Action OnSelectedEnter = null, Action OnSelectedExit = null)
         {
             this.SBDic.Clear();
             this.SBDicIndex.Clear();
@@ -441,14 +448,14 @@ namespace ML.Engine.UI
                 if (this.uiBtnListContainer == null)
                 {
                     if(NeedRefreshBtnInfo)
-                        InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+                        InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
                     OnFinishAdd?.Invoke();
                     return;
                 }
 
                 bool needMoveToBtnList = this.uiBtnListContainer.IsEmpty;
                 if (NeedRefreshBtnInfo)
-                    InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel, null, null);
+                    InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
                 if(needMoveToBtnList)
                 {
                     this.UIBtnListContainer?.FindEnterableUIBtnList();
@@ -735,8 +742,6 @@ namespace ML.Engine.UI
             int j = index % TwoDimW;
             return GetBtn(i, j);
         }
-
-
 
         /// <summary>
         /// 获取当前选中按钮
@@ -1047,8 +1052,6 @@ namespace ML.Engine.UI
 
         }
 
-
-
         /// <summary>
         /// 该函数功能为绑定按钮 对应哪个InputAction触发
         /// </summary>
@@ -1079,8 +1082,6 @@ namespace ML.Engine.UI
 
             }
             catch { }
-
-
         }
 
         /// <summary>
@@ -1202,6 +1203,50 @@ namespace ML.Engine.UI
             this.isEnable = false;
         }
 
+
+        public void ResetCurselected()
+        {
+            if (OneDimCnt > 0)
+            {
+                MoveIndexIUISelected(0, 0);
+            }
+        }
+
+        /// <summary>
+        /// 获取当前选中按钮的二维坐标 若没有选中则返回（-1，-1）
+        /// </summary>
+        public Vector2Int GetCurSelectedPos2()
+        {
+            if (this.CurSelected != null)
+            {
+                return new Vector2Int(TwoDimI, TwoDimJ);
+            }
+            return -Vector2Int.one;
+        }
+        /// <summary>
+        /// 获取当前选中按钮的一维坐标 若没有选中则返回（-1，-1）
+        /// </summary>
+        public int GetCurSelectedPos1()
+        {
+            if (this.CurSelected != null)
+            {
+                return TwoDimI * TwoDimW + TwoDimJ;
+            }
+            return -1;
+        }
+
+        public void InitSelectBtn()
+        {
+            this.TwoDimI = 0;
+            this.TwoDimJ = 0;
+            this.CurSelected = TwoDimSelectedButtons[TwoDimI][TwoDimJ];
+            this.CurSelected.OnSelect(null);
+            this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
+            this.OnSelectButtonChanged?.Invoke();
+        }
+        #endregion
+
+        #region UIBtnList Switch
         public void OnSelectEnter()
         {
 
@@ -1322,47 +1367,8 @@ namespace ML.Engine.UI
                 }
             }
         }
+        #endregion
 
-        public void ResetCurselected()
-        {
-            if (OneDimCnt > 0)
-            {
-                MoveIndexIUISelected(0, 0);
-            }
-        }
-
-        /// <summary>
-        /// 获取当前选中按钮的二维坐标 若没有选中则返回（-1，-1）
-        /// </summary>
-        public Vector2Int GetCurSelectedPos2()
-        {
-            if (this.CurSelected != null)
-            {
-                return new Vector2Int(TwoDimI, TwoDimJ);
-            }
-            return -Vector2Int.one;
-        }
-        /// <summary>
-        /// 获取当前选中按钮的一维坐标 若没有选中则返回（-1，-1）
-        /// </summary>
-        public int GetCurSelectedPos1()
-        {
-            if (this.CurSelected != null)
-            {
-                return TwoDimI * TwoDimW + TwoDimJ;
-            }
-            return -1;
-        }
-
-        public void InitSelectBtn()
-        {
-            this.TwoDimI = 0;
-            this.TwoDimJ = 0;
-            this.CurSelected = TwoDimSelectedButtons[TwoDimI][TwoDimJ];
-            this.CurSelected.OnSelect(null);
-            this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
-            this.OnSelectButtonChanged?.Invoke();
-        }
     }
 
 }

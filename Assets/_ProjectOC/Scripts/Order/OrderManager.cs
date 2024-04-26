@@ -249,6 +249,8 @@ namespace ProjectOC.Order
         /// </summary>
         public void RefreshAcceptedList()
         {
+            AcceptedOrderList.Sort();
+
             for (int i = 0; i < AcceptedOrderList.Count; i++) 
             {
                 
@@ -275,7 +277,7 @@ namespace ProjectOC.Order
                 }
             }
             //
-            AcceptedOrderList.Sort();
+            
         }
 
         /// <summary>
@@ -393,7 +395,6 @@ namespace ProjectOC.Order
             if (OrderInstanceID == null || !OrderDelegationListDic.ContainsKey(OrderInstanceID)) return;
             Order order = OrderDelegationListDic[OrderInstanceID];
 
-
             string ClanID = OrderIDToClanIDDic[order.OrderID];
             List<Order> olist = new List<Order>();
             if (order.orderType == OrderType.Urgent)
@@ -409,7 +410,6 @@ namespace ProjectOC.Order
                 olist = OrderSpecialDelegationMap[ClanID];
             }
 
-            
             for (int i = 0; i < olist.Count; i++)
             {
                 if (olist[i] != null && olist[i].OrderInstanceID == order.OrderInstanceID) 
@@ -421,8 +421,7 @@ namespace ProjectOC.Order
                         OrderUrgent orderUrgent = (OrderUrgent)olist[i];
                         orderUrgent.StartDeliverDDLTimer();
                         acceptedOrder = orderUrgent;
-                        //重置紧急订单状态
-                        orderUrgent.Reset();
+
                         //紧急留空槽
                         olist[i] = null;
                     }
@@ -445,7 +444,7 @@ namespace ProjectOC.Order
                     AcceptedOrderList.Add(acceptedOrder);
                     AcceptedOrderListDic.Add(acceptedOrder.OrderInstanceID, acceptedOrder);
                     //加入已承接列表后立即执行一次RefreshAcceptedList函数
-
+                    this.RefreshAcceptedList();
                     break;
                 }
             }
@@ -480,6 +479,12 @@ namespace ProjectOC.Order
                 //常规订单刷新
                 OrderNormal orderNormal = (OrderNormal)acceptedOrder;
                 orderNormal.StartRefreshTimer();
+            }
+            else if(acceptedOrder is OrderUrgent)
+            {
+                //重置紧急订单状态
+                OrderUrgent orderUrgent = (OrderUrgent)acceptedOrder;
+                orderUrgent.Reset();
             }
 
             //移除唯一命名
@@ -525,6 +530,12 @@ namespace ProjectOC.Order
                 OrderNormal orderNormal = (OrderNormal)acceptedOrder;
                 orderNormal.StartRefreshTimer();
                 this.WaitingForRefreshNormalOrders.Add(orderNormal);
+            }
+            else if (acceptedOrder is OrderUrgent)
+            {
+                //重置紧急订单状态
+                OrderUrgent orderUrgent = (OrderUrgent)acceptedOrder;
+                orderUrgent.Reset();
             }
             Debug.Log("1提交订单 " + acceptedOrder.OrderInstanceID);
 
@@ -702,7 +713,7 @@ namespace ProjectOC.Order
         #region Load
         private void LoadTableData()
         {
-            ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]> ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]>("OC/Json/TableData", "Order", (datas) =>
+            ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]> ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]>("OCTableData", "Order", (datas) =>
             {
                 //TODO 之后从氏族模块获取
                 OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_1", "Clan1");

@@ -376,8 +376,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                             normalizedPosition += new Vector2(offset.x / (contentRect.rect.width - (contentRect.parent as RectTransform).rect.width), offset.y / (contentRect.rect.height - (contentRect.parent as RectTransform).rect.height));
                             scrollRect.normalizedPosition = normalizedPosition;
                         }
-
-
                     }
                 }
 
