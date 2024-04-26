@@ -102,7 +102,10 @@ namespace ProjectOC.WorkerNS
             {
                 timerForNoHome?.End();
             }
-            ContainerDict[container.GetContainerType()] = container;
+            if (!container.HaveWorker || container.Worker.InstanceID == InstanceID)
+            {
+                ContainerDict[container.GetContainerType()] = container;
+            }
         }
 
         public void RemoveContainer(WorkerContainerType type)

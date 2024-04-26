@@ -94,7 +94,7 @@ namespace ProjectOC.WorkerNS
             };
             OnRemoveWorkerEvent += () => 
             {
-                if (ManagerNS.LocalGameManager.Instance != null)
+                if (ManagerNS.LocalGameManager.Instance != null && !BindWorkerDefault())
                 {
                     ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent += OnManagerAddWorkerEvent;
                 }
@@ -104,6 +104,8 @@ namespace ProjectOC.WorkerNS
 
         public void OnDestroy()
         {
+            OnSetWorkerEvent = null;
+            OnRemoveWorkerEvent = null;
             (this as IWorkerContainer).RemoveWorker();
         }
 
@@ -125,7 +127,7 @@ namespace ProjectOC.WorkerNS
             }
         }
 
-        public void BindWorkerDefault()
+        public bool BindWorkerDefault()
         {
             List<Worker> workers = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkers();
             workers.RemoveAll(x => x == null);
@@ -134,8 +136,10 @@ namespace ProjectOC.WorkerNS
                 if (!worker.HaveHome)
                 {
                     (this as IWorkerContainer).SetWorker(worker);
+                    return true;
                 }
             }
+            return false;
         }
         #endregion
 

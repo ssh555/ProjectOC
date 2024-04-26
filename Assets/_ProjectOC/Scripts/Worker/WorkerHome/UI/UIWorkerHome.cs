@@ -188,7 +188,7 @@ namespace ProjectOC.WorkerNS.UI
 
         private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurrentWorker != null)
+            if (CurrentWorker != null && CurrentWorker != Home.Worker)
             {
                 string text = PanelTextContent.textConfirmPre + "<color=yellow>" + CurrentWorker.Name + "</color>" + PanelTextContent.textConfirmPost;
                 Worker worker = CurrentWorker;
@@ -231,7 +231,7 @@ namespace ProjectOC.WorkerNS.UI
                 IsInitWorkers = true;
             }
 
-            this.KeyTips.Find("KT_Confirm").gameObject.SetActive(CurrentWorker != null);
+            this.KeyTips.Find("KT_Confirm").gameObject.SetActive(CurrentWorker != null && CurrentWorker != Home.Worker);
 
             #region Select
             int delta = tempUIItems.Count - Workers.Count;

@@ -29,7 +29,7 @@ namespace ProjectOC.WorkerNS
 
         public void SetWorker(Worker worker)
         {
-            IWorkerContainer container = Worker?.GetContainer(GetContainerType());
+            IWorkerContainer container = worker?.GetContainer(GetContainerType());
             container?.RemoveWorker();
             RemoveWorker();
             Worker = worker;
