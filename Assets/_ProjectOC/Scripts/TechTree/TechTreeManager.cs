@@ -60,7 +60,7 @@ namespace ProjectOC.TechTree
         #endregion
 
         #region TechPoint
-        public const string TPIconSpriteAtlasPath = "OC/UI/TechPoint/Texture/SA_TechPoint_UI.spriteatlasv2";
+        public const string TPIconSpriteAtlasPath = "SA_TechTree_UI";
 
         /// <summary>
         /// 载入的科技点表格数据
@@ -128,6 +128,18 @@ namespace ProjectOC.TechTree
             var retVal = this.registerTechPoints[ID].UnLockRecipe.ToList();
             retVal.AddRange(this.registerTechPoints[ID].UnLockBuild);
             return this.registerTechPoints.ContainsKey(ID) ? retVal.ToArray() : null;
+        }
+
+        public string[] GetTPCanUnlockedBuildID(string ID)
+        {
+            if (string.IsNullOrEmpty(ID)) return null;
+            return this.registerTechPoints.ContainsKey(ID) ? this.registerTechPoints[ID].UnLockBuild : null;
+        }
+
+        public string[] GetTPCanUnlockedRecipeID(string ID)
+        {
+            if (string.IsNullOrEmpty(ID)) return null;
+            return this.registerTechPoints.ContainsKey(ID) ? this.registerTechPoints[ID].UnLockRecipe : null;
         }
 
         public string[] GetPreTechPoints(string ID)
@@ -294,7 +306,7 @@ namespace ProjectOC.TechTree
         private void LoadTableData()
         {
             #region Load TPJsonData
-            ML.Engine.ABResources.ABJsonAssetProcessor<TechPoint[]> ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TechPoint[]>("OC/Json/TableData", "TechPoint", (datas) =>
+            ML.Engine.ABResources.ABJsonAssetProcessor<TechPoint[]> ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TechPoint[]>("OCTableData", "TechPoint", (datas) =>
             {
                 foreach (var data in datas)
                 {

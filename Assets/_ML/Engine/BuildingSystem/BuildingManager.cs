@@ -6,7 +6,7 @@ using ML.Engine.BuildingSystem.BuildingPart;
 using System.Linq;
 using System;
 using ML.Engine.InventorySystem.CompositeSystem;
-
+using UnityEngine.U2D;
 
 namespace ML.Engine.BuildingSystem
 {
@@ -211,20 +211,24 @@ namespace ML.Engine.BuildingSystem
         {
             instance = this;
             LoadTableData();
+            LoadItemAtlas();
             Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<Material>(_ABMatName).Completed += (handle) =>
             {
                 _buildingMaterial = handle.Result;
             };
         }
 
-        ~BuildingManager()
+
+        public void OnUnregister()
         {
-            if(instance == this)
+            if (instance == this)
             {
                 instance = null;
                 Manager.GameManager.Instance.ABResourceManager.Release(_buildingMaterial);
             }
+            Manager.GameManager.Instance.ABResourceManager.Release(buildIconAtlas);
         }
+
 
         [HideInInspector, SerializeField]
         private BuildingMode mode = BuildingMode.None;
@@ -803,7 +807,7 @@ namespace ML.Engine.BuildingSystem
         #region Material
         // to-do :to-change
         [SerializeField]
-        private const string _ABMatName = "ML/Mat/Transparent";
+        private const string _ABMatName = "Materials/Other/Mat_Common_Transparent.mat";
 
         /// <summary>
         /// 建造模式下所用的Material (Place, Edit, Destroy, Interact)
@@ -944,6 +948,32 @@ namespace ML.Engine.BuildingSystem
         }
         #endregion
 
+        #region BuildIcon
+        private SpriteAtlas buildIconAtlas;
+        private void LoadItemAtlas()
+        {
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>("SA_UI_BuildIcon").Completed += (handle) =>
+            {
+                buildIconAtlas = handle.Result;
+            };
+        }
+
+
+        public Sprite GetBuildIcon(string id)
+        {
+            if (this.BPartTableDictOnID.ContainsKey(id))
+            {
+                return this.buildIconAtlas.GetSprite(BPartTableDictOnID[id].icon);
+            }
+            if (this.BPartTableDictOnClass.ContainsKey(id))
+            {
+                return this.buildIconAtlas.GetSprite(BPartTableDictOnClass[id].icon);
+            }
+            return this.buildIconAtlas.GetSprite(id);
+        }
+
+        #endregion
+
         #region 读表
         public const string Tex2DABPath = "UI/BuildingSystem/Texture2D/type";
         // Materials/Character/Player
@@ -963,7 +993,7 @@ namespace ML.Engine.BuildingSystem
 
         public void LoadTableData()
         {
-            ABJAProcessorBuildingTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]>("OC/Json/TableData", "Building", (datas) =>
+            ABJAProcessorBuildingTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<BuildingTableData[]>("OCTableData", "Building", (datas) =>
             {
                 foreach (var data in datas)
                 {
@@ -973,7 +1003,7 @@ namespace ML.Engine.BuildingSystem
             }, "建筑表数据");
             ABJAProcessorBuildingTableData.StartLoadJsonAssetData();
 
-            ABJAProcessorFurnitureThemeTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<FurnitureThemeTableData[]>("OC/Json/TableData", "FurnitureTheme", (datas) =>
+            ABJAProcessorFurnitureThemeTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<FurnitureThemeTableData[]>("OCTableData", "FurnitureTheme", (datas) =>
             {
                 foreach (var data in datas)
                 {
@@ -981,6 +1011,8 @@ namespace ML.Engine.BuildingSystem
                 }
             }, "家具主题表数据");
             ABJAProcessorFurnitureThemeTableData.StartLoadJsonAssetData();
+
+            // BuildIcon
 
         }
 
@@ -1013,6 +1045,10 @@ namespace ML.Engine.BuildingSystem
             {
                 return BPartTableDictOnClass[CID].name;
             }
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnID.ContainsKey(CID))
+            {
+                return BPartTableDictOnID[CID].name;
+            }
             return null;
         }
 
@@ -1021,6 +1057,10 @@ namespace ML.Engine.BuildingSystem
             if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
             {
                 return BPartTableDictOnClass[CID].raw;
+            }
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnID.ContainsKey(CID))
+            {
+                return BPartTableDictOnID[CID].raw;
             }
             return null;
         }
@@ -1031,6 +1071,10 @@ namespace ML.Engine.BuildingSystem
             {
                 return BPartTableDictOnClass[CID].upgradeID;
             }
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnID.ContainsKey(CID))
+            {
+                return BPartTableDictOnID[CID].upgradeID;
+            }
             return null;
         }
 
@@ -1039,6 +1083,10 @@ namespace ML.Engine.BuildingSystem
             if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
             {
                 return BPartTableDictOnClass[CID].sort;
+            }
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnID.ContainsKey(CID))
+            {
+                return BPartTableDictOnID[CID].sort;
             }
             return -1;
         }
@@ -1091,9 +1139,9 @@ namespace ML.Engine.BuildingSystem
         }
 
         //仅获取家具建筑的icon
-        public string GetBuildingIcon(string classification)
+        public string GetFurtureBuildingIcon(string classification)
         {
-            if(this.BPartTableDictOnClass.ContainsKey(classification))
+            if (this.BPartTableDictOnClass.ContainsKey(classification))
             {
                 return this.BPartTableDictOnClass[classification].icon;
             }
@@ -1101,6 +1149,7 @@ namespace ML.Engine.BuildingSystem
         }
         
         #endregion
+
 
 
         #region Gizmos

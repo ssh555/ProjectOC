@@ -1,9 +1,5 @@
 using System.Collections.Generic;
-using UnityEngine;
-using System.Collections;
-using System;
 using System.Linq;
-using ML.Engine.InventorySystem.CompositeSystem;
 
 namespace ML.Engine.InventorySystem
 {
@@ -14,8 +10,8 @@ namespace ML.Engine.InventorySystem
         public int Sort;
         public RecipeCategory Category;
         public TextContent.TextContent Name;
-        public List<Formula> Raw;
-        public Formula Product;
+        public List<CompositeSystem.Formula> Raw;
+        public CompositeSystem.Formula Product;
         public int TimeCost;
         public int ExpRecipe;
     }
@@ -29,22 +25,12 @@ namespace ML.Engine.InventorySystem
         }
 
         #region Load And Data
-        /// <summary>
-        /// 是否已加载完数据
-        /// </summary>
-        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
-
         public Dictionary<RecipeCategory, List<string>> RecipeCategorys = new Dictionary<RecipeCategory, List<string>>();
-        /// <summary>
-        /// Recipe 数据表
-        /// </summary>
         private Dictionary<string, RecipeTableData> RecipeTableDict = new Dictionary<string, RecipeTableData>();
-
         public ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]> ABJAProcessor;
-
         public void LoadTableData()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]>("OC/Json/TableData", "Recipe", (datas) =>
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]>("OCTableData", "Recipe", (datas) =>
             {
                 foreach (var data in datas)
                 {
@@ -68,11 +54,29 @@ namespace ML.Engine.InventorySystem
             {
                 return new Recipe(RecipeTableDict[id]);
             }
-            return null;
+            return default(Recipe);
         }
         #endregion
 
         #region Getter
+        public bool IsValidID(string id)
+        {
+            if (!string.IsNullOrEmpty(id))
+            {
+                return RecipeTableDict.ContainsKey(id);
+            }
+            return false;
+        }
+
+        public UnityEngine.Sprite GetRecipeIcon(string id)
+        {
+            if(IsValidID(id))
+            {
+                return ItemManager.Instance.GetItemSprite(RecipeTableDict[id].Product.id);
+            }
+            return null;
+        }
+
         public List<string> GetRecipeIDsByCategory(RecipeCategory category)
         {
             List<string> result = new List<string>();
@@ -88,10 +92,10 @@ namespace ML.Engine.InventorySystem
             List<string> resultes = new List<string>();
             if (recipeIDs != null)
             {
-                List<Tuple<string, int>> temps = new List<Tuple<string, int>>();
+                List<System.Tuple<string, int>> temps = new List<System.Tuple<string, int>>();
                 foreach (string id in recipeIDs)
                 {
-                    temps.Add(new Tuple<string, int>(id, GetSort(id)));
+                    temps.Add(new System.Tuple<string, int>(id, GetSort(id)));
                 }
                 temps.Sort((t1, t2) => { return t1.Item2 != t2.Item2 ? t1.Item2.CompareTo(t2.Item2) : t1.Item1.CompareTo(t2.Item1); });
                 foreach (var tuple in temps)
@@ -107,13 +111,13 @@ namespace ML.Engine.InventorySystem
             return RecipeTableDict.Keys.ToArray();
         }
 
-        public bool IsValidID(string id)
+        public string GetRecipeName(string id)
         {
-            if (!string.IsNullOrEmpty(id))
+            if (IsValidID(id))
             {
-                return RecipeTableDict.ContainsKey(id);
+                return RecipeTableDict[id].Name;
             }
-            return false;
+            return null;
         }
 
         public int GetSort(string id)
@@ -134,9 +138,9 @@ namespace ML.Engine.InventorySystem
             return RecipeCategory.None;
         }
 
-        public List<Formula> GetRaw(string id)
+        public List<CompositeSystem.Formula> GetRaw(string id)
         {
-            List<Formula> result = new List<Formula>();
+            List<CompositeSystem.Formula> result = new List<CompositeSystem.Formula>();
             if (IsValidID(id))
             {
                 result.AddRange(RecipeTableDict[id].Raw);
@@ -144,13 +148,13 @@ namespace ML.Engine.InventorySystem
             return result;
         }
 
-        public Formula GetProduct(string id)
+        public CompositeSystem.Formula GetProduct(string id)
         {
             if (IsValidID(id))
             {
                 return RecipeTableDict[id].Product;
             }
-            return new Formula() { id = "", num = 0 };
+            return new CompositeSystem.Formula() { id = "", num = 0 };
         }
 
         public int GetTimeCost(string id)

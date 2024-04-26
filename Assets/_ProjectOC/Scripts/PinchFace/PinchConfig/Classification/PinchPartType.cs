@@ -11,7 +11,6 @@ namespace ProjectOC.PinchFace
     {
         public PinchPartType1 pinchPartType1;
         public PinchPartType2 pinchPartType2;
-        public PinchPartType3 pinchPartType3;
         public List<PinchPartType3> pinchPartType3s;
         public bool couldNaked;//是否可以裸漏，影响是否生成 空部件按钮
 
@@ -20,7 +19,6 @@ namespace ProjectOC.PinchFace
             string[] classification = id.Split('-');
             pinchPartType1 = (PinchPartType1)Enum.Parse(typeof(PinchPartType1), classification[0]);
             pinchPartType2 = (PinchPartType2)Enum.Parse(typeof(PinchPartType2), classification[1]);
-            pinchPartType3 = (PinchPartType3)Enum.Parse(typeof(PinchPartType3), classification[2]);
             if (classification[3] == "0")
             {
                 couldNaked = false;

@@ -310,7 +310,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                     OrderUrgent orderUrgent = (OrderUrgent)order;
                     OrderTableData orderTableData = OrderManager.Instance.GetOrderTableData(order);
 
-                    this.OrderDelegationUIBtnListContainer.UIBtnLists[0].AddBtn("Assets/_ProjectOC/OCResources/UI/OrderBoard/Prefabs/UrgentDelegationBtn.prefab", BtnSettingAction: (btn) =>
+                    this.OrderDelegationUIBtnListContainer.UIBtnLists[0].AddBtn("OC/Prefabs_OrderBoard_UI/Prefab_Order_UI_UrgentDelegationBtn.prefab", BtnSettingAction: (btn) =>
                     {
                         if (order != null)
                         {
@@ -346,7 +346,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                 {
                     OrderTableData orderTableData = OrderManager.Instance.GetOrderTableData(order);
 
-                    this.OrderDelegationUIBtnListContainer.UIBtnLists[1].AddBtn("Assets/_ProjectOC/OCResources/UI/OrderBoard/Prefabs/NormalDelegationBtn.prefab", BtnSettingAction: (btn) =>
+                    this.OrderDelegationUIBtnListContainer.UIBtnLists[1].AddBtn("OC/Prefabs_OrderBoard_UI/Prefab_Order_UI_NormalDelegationBtn.prefab", BtnSettingAction: (btn) =>
                     {
                         //更新信息
                         btn.transform.Find("Image").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.OrderName;
@@ -462,7 +462,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                     foreach (var acceptedOrder in OrderManager.Instance.AcceptedOrders)
                     {
                         OrderTableData orderTableData = OrderManager.Instance.GetOrderTableData(acceptedOrder.order);
-                        this.AcceptedOrderBtnList.AddBtn("Assets/_ProjectOC/OCResources/UI/OrderBoard/Prefabs/AcceptedOrderListBtn.prefab", BtnSettingAction: (btn) =>
+                        this.AcceptedOrderBtnList.AddBtn("OC/Prefabs_OrderBoard_UI/Prefab_Order_UI_AcceptedOrderListBtn.prefab", BtnSettingAction: (btn) =>
                         {
                             btn.transform.Find("Image").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.OrderName;
 
@@ -594,7 +594,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     }
     protected override void InitTextContentPathData()
     {
-        this.abpath = "OC/Json/TextContent/Order";
+        this.abpath = "OCTextContent/Order";
         this.abname = "OrderBoardPanel";
         this.description = "OrderBoardPanel数据加载完成";
     }
@@ -602,7 +602,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 
     protected override void InitObjectPool()
     {
-        this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SlotPool", 10, "Assets/_ProjectOC/OCResources/UI/OrderBoard/Prefabs/Slot.prefab");
+        this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SlotPool", 10, "Prefab_Order_UIPrefab/Prefab_Order_UI_Slot.prefab");
         base.InitObjectPool();
     }
     [ShowInInspector]
