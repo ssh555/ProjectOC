@@ -39,7 +39,7 @@ namespace ProjectOC.PinchFace
             
             // GeneratePinchRaceUI();
             // GenerateCustomRaceUI();
-            GeneratePinchFaceUI(); 
+            //GeneratePinchFaceUI(); 
         }
 
         public void UnRegister()
