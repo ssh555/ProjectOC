@@ -199,6 +199,25 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
             BuildingManager.Instance.BuildingSocketList.Remove(this);
         }
 
+#if UNITY_EDITOR
+        [ShowInInspector]
+        private bool IsShowSocket = false;
+#endif
+
+        public void OnDrawGizmos()
+        {
+            if (BuildingManager.Instance == null || !IsShowSocket)
+            {
+                return;
+            }
+
+            var cols = this.GetComponentsInChildren<Collider>();
+            foreach (Collider col in cols)
+            {
+                Extension.GizmosExtension.DrawMeshCollider(col, BuildingManager.Instance.DrawAreaBaseGrid.color);
+            }
+        }
+
         private void _OnDrawGizmos()
         {
             if (BuildingManager.Instance == null)
@@ -221,6 +240,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
                     Extension.GizmosExtension.DrawMeshCollider(col, BuildingManager.Instance.DrawSocket.color);
                 }
             }
+
         }
 
         private void OnDrawGizmosSelected()
