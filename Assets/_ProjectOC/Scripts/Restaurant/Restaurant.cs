@@ -98,6 +98,10 @@ namespace ProjectOC.RestaurantNS
                 }
             }
             (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory.AddItem(items);
+            if (ManagerNS.LocalGameManager.Instance != null)
+            {
+                ManagerNS.LocalGameManager.Instance.RestaurantManager.WorldRestaurants.Remove(UID);
+            }
         }
 
         public void OnPositionChange(Vector3 differ)
