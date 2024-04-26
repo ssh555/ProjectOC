@@ -20,5 +20,569 @@ MonoBehaviour:
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
-    SerializationNodes: []
-  typesData: 04000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000001000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+    SerializationNodes:
+    - Name: typesDatas
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 46
+    - Name: 
+      Entry: 7
+      Data: 1|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 1
+    - Name: typeCount
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 2|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 2
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 3|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 3
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 4|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 4
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 5|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 5
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 6|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 6
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 7|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 7
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 8|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 8
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 9|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 9
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 10|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 10
+    - Name: typeCount
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 11|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 11
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 12|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 12
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 13|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 13
+    - Name: typeCount
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 14|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 14
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 15|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 15
+    - Name: typeCount
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 16|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 16
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 17|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 17
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 18|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 18
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 19|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 19
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 20|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 20
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 21|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 21
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 22|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 22
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 23|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 23
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 24|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 24
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 25|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 25
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 26|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 26
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 27|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 27
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 28|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 28
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 29|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 29
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 30|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 30
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 31|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 31
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 32|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 32
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 33|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 33
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 34|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 34
+    - Name: typeCount
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 35|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 35
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 36|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 36
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 37|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 37
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 38|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 38
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 39|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 39
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 40|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 40
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 41|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 41
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 42|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 42
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 43|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 43
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 44|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 44
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 45|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 45
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 46|ProjectOC.PinchFace.Config.PinchDataConfig+Type3Data, Assembly-CSharp
+    - Name: _type3
+      Entry: 3
+      Data: 46
+    - Name: typeCount
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
