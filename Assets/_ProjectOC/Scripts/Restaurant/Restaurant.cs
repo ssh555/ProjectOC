@@ -106,7 +106,7 @@ namespace ProjectOC.RestaurantNS
 
         public void OnPositionChange(Vector3 differ)
         {
-            foreach (var transport in Transports)
+            foreach (var transport in Transports.ToArray())
             {
                 transport?.UpdateDestination();
             }
@@ -242,7 +242,7 @@ namespace ProjectOC.RestaurantNS
                     Datas[index].Amount = 0;
                     bool haveSetFood = HaveSetFood(Datas[index].ID);
 
-                    foreach (MissionNS.Transport transport in Transports)
+                    foreach (MissionNS.Transport transport in Transports.ToArray())
                     {
                         if (transport != null && transport.ItemID == itemID && !haveSetFood)
                         {
@@ -436,7 +436,12 @@ namespace ProjectOC.RestaurantNS
         public void RemoveTranport(MissionNS.Transport transport) { Transports.Remove(transport); }
         public bool PutIn(string itemID, int amount)
         {
-            return Change(itemID, amount, true) == amount;
+            if (!string.IsNullOrEmpty(itemID) && amount > 0)
+            {
+                string foodID = ManagerNS.LocalGameManager.Instance.RestaurantManager.ItemIDToFoodID(itemID);
+                return Change(foodID, amount, true) == amount;
+            }
+            return false;
         }
         public int PutOut(string itemID, int amount)
         {

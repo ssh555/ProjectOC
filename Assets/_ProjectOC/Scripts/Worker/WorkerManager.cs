@@ -41,7 +41,7 @@ namespace ProjectOC.WorkerNS
         }
         public void DeleteAllWorker()
         {
-            foreach (Worker worker in Workers)
+            foreach (Worker worker in Workers.ToArray())
             {
                 if (worker != null)
                 {
@@ -84,7 +84,7 @@ namespace ProjectOC.WorkerNS
         public Worker GetCanTransportWorker()
         {
             Worker result = null;
-            foreach (Worker worker in Workers)
+            foreach (Worker worker in Workers.ToArray())
             {
                 if (worker != null && worker.Status == Status.Fishing && !worker.HaveProNode && !worker.HaveTransport)
                 {

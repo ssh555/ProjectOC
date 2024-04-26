@@ -415,7 +415,7 @@ namespace ProjectOC.ProNodeNS
             int result = 0;
             if (!string.IsNullOrEmpty(itemID))
             {
-                foreach (MissionNS.MissionTransport mission in MissionTransports)
+                foreach (MissionNS.MissionTransport mission in MissionTransports.ToArray())
                 {
                     if (mission != null && mission.ItemID == itemID)
                     {
@@ -593,7 +593,7 @@ namespace ProjectOC.ProNodeNS
                     Worker.SetDestination(GetTransform().position, OnArriveEvent, GetContainerType());
                 }
             }
-            foreach (var mission in MissionTransports)
+            foreach (var mission in MissionTransports.ToArray())
             {
                 mission?.UpdateTransportDestionation();
             }

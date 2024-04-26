@@ -79,7 +79,7 @@ namespace ProjectOC.MissionNS
 
         public void UpdateTransportDestionation()
         {
-            foreach (Transport transport in this.Transports)
+            foreach (Transport transport in this.Transports.ToArray())
             {
                 transport?.UpdateDestination();
             }
