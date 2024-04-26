@@ -25,7 +25,9 @@ namespace ProjectOC.PinchFace
             {
                 characterModel = handle.Result;
                 //uICameraImage.LookAtGameObject(characterModel); //自动移动位置
-                pinchFaceManager.ModelPinch = characterModel.GetComponentInChildren<CharacterModelPinch>();
+                CharacterModelPinch _modelPinch = characterModel.GetComponentInChildren<CharacterModelPinch>();
+                // Debug.Log($"{_modelPinch != null}  {characterModel.GetComponent<CharacterModelPinch>() != null}");
+                pinchFaceManager.ModelPinch = _modelPinch;
             };
             
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<PinchDataConfig>("PinchAsset_PinchFaceSetting/PinchDataConfig.asset").Completed+=(handle) =>
@@ -44,7 +46,11 @@ namespace ProjectOC.PinchFace
             base.OnExit();
             uICameraImage.DisableUICameraImage();
         }
-
+        //
+        // IEnumerator Dis()
+        // {
+        //     // while()
+        // }
         #endregion
 
         #region Internal

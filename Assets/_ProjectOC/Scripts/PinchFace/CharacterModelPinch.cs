@@ -20,13 +20,12 @@ namespace ProjectOC.PinchFace
 
         public AsyncOperationHandle<GameObject> GeneratePinchTypePrefab(PinchPartType3 _type3,int typeIndex)
         {
-            //OC/Character/PinchFace/Prefabs/
-            //0_HeadPart_PinchType1/0_HeadTop_PinchType2/0_HT_Ring_PinchType3/
-            //HT_Ring_3.prefab
-            //string prePath = "OC/Character/PinchFace/Prefabs";
+            //Prefabs_PinchPart/PinchPart/
+            //0_HeadPart_PinchType1/0_HeadTop_PinchType2/0_HT_Ring_PinchType3/HT_Ring_0.prefab
+            string prePath = "Prefabs_PinchPart/PinchPart";
             string typePath = pinchFaceManager.pinchFaceHelper.GetType3PrefabPath(_type3);
             string prefabPath = $"{_type3.ToString()}_{typeIndex}.prefab";
-            string totalPath = $"{typePath}/{prefabPath}/{prefabPath}";
+            string totalPath = $"{prePath}/{typePath}/{prefabPath}";
             AsyncOperationHandle<GameObject>  handle = ML.Engine.Manager.GameManager.Instance.
                 ABResourceManager.InstantiateAsync(totalPath);
             return handle;
@@ -34,6 +33,7 @@ namespace ProjectOC.PinchFace
         
         public void ChangeType(PinchPartType3 _type3, int typeIndex)
         {
+            Debug.Log($"Type3: {_type3.ToString()}");
             PinchPartType2 _type2 = pinchFaceManager.pinchPartType3Dic[_type3];
             if (replaceGo[(int)_type2] != null)
             {
@@ -70,8 +70,6 @@ namespace ProjectOC.PinchFace
         }
         public void EquipItem(PinchPartType2 boneType2, GameObject _PinchGo)
         {
-            _PinchGo = GameObject.Instantiate(_PinchGo);
-            
             // sourceClothing衣服 targetAvatar 角色
             replaceGo[(int)boneType2] = Stitch(_PinchGo, avatar.gameObject);
             
@@ -178,7 +176,7 @@ namespace ProjectOC.PinchFace
                 if (transf != null)
                 {
                     targets[index] = transf;
-                    Debug.Log(sources[index].name);
+                    //Debug.Log(sources[index].name);
                 }
                 else
                 {
@@ -256,9 +254,23 @@ namespace ProjectOC.PinchFace
         public void ChangeColor(PinchPartType2 boneType2, Color _color)
         {
             //从boneType找到对应的两个 Mat，更改Mat的_Color 属性
+            List<Material> mats = new List<Material>();
+            
+            SkinnedMeshRenderer smr = replaceGo[(int)boneType2].GetComponent<SkinnedMeshRenderer>();
+            mats.AddRange(smr.materials);
+            if (mats.Count == 0)
+            {
+                MeshRenderer meshRender =  replaceGo[(int)boneType2].GetComponent<MeshRenderer>();
+                mats.AddRange(meshRender.materials);
+            }
+            
+            // mats.Find(_mat =>()
+            // {
+            //     
+            // })
+            
         }
-        public 
-                
+
 
         #endregion
         
@@ -298,6 +310,7 @@ namespace ProjectOC.PinchFace
             
             void Awake()
             {
+                pinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
                 Array enumValues = Enum.GetValues(typeof(PinchPartType2));
                 for(int i = 0;i<enumValues.Length;i++)
                     replaceGo.Add(null);
@@ -332,7 +345,7 @@ namespace ProjectOC.PinchFace
                     }
                     else
                     {
-                        Debug.LogWarning($"无法匹配PinchType2 Enum ： {tempName}");
+                        //Debug.LogWarning($"无法匹配PinchType2 Enum ： {tempName}");
                     }
                 }
                 else if(transform.name.StartsWith(WeightStr))
@@ -407,28 +420,13 @@ namespace ProjectOC.PinchFace
                 // 如果没找到符合条件的Transform，返回null
                 return null;
             }
-
-            public void InitAfterPinchFaceManager(PinchFaceManager _pinchFaceManager)
-            {
-                pinchFaceManager = _pinchFaceManager;
-            }
+            
         #endregion
 
         #region CharacterModelPinch
 
         private PinchFaceManager pinchFaceManager;
 
-        // public PinchFaceManager PinchFaceManager
-        // {
-        //     get
-        //     {
-        //         if (pinchFaceManager == null)
-        //         {
-        //             pinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
-        //         }
-        //         return pinchFaceManager;
-        //     }
-        // }
         
         #endregion
     }

@@ -160,22 +160,17 @@ namespace  ProjectOC.PinchFace
                 //查询对应目录下所有的Texture，加载
                  SelectedButton btnTemplate = _trans.GetComponentInChildren<SelectedButton>();
                  int prefabCount = Config.typesDatas[(int)PinchPartType3 - 1].typeCount;
-                 Debug.LogWarning($"{PinchPartType3.ToString()}:{prefabCount}");
                  for (int i = 0; i <prefabCount; i++)
                  {
+                     int _index = i;
                      var btn = GameObject.Instantiate(btnTemplate.gameObject, btnTemplate.transform.parent).GetComponent<SelectedButton>();
-                     btn.name = $"TypeBtn{i}";
+                     btn.name = $"TypeBtn{_index}";
                      
-                     string spriteName = $"{PinchPartType3.ToString()}_{i}"; 
+                     string spriteName = $"{PinchPartType3.ToString()}_{_index}"; 
                      btn.transform.Find("Image").GetComponent<Image>().sprite = SA_PinchPart.GetSprite(spriteName);
                      btn.onClick.AddListener(() =>
                      {
-                        ModelPinch.ChangeType(PinchPartType3,i);
-                        if (PinchPartType2 == PinchPartType2.Tail)
-                        {
-                            //todo 更新尾巴骨骼字典
-                        }
-                        
+                        ModelPinch.ChangeType(PinchPartType3,_index);
                      });
                  }
                  btnTemplate.gameObject.SetActive(false);

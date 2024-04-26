@@ -33,7 +33,7 @@ namespace ML.Engine.UI
 
         public void Init()
         {
-            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<RenderTexture>("Assets/_ML/MLResources/BaseUIPrefab/UICameraImage/RT.renderTexture").Completed += (handle) =>
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<RenderTexture>("ML/BaseUIPrefab/UICameraImage/RT.renderTexture").Completed += (handle) =>
             {
                 this.texture = handle.Result;
 
