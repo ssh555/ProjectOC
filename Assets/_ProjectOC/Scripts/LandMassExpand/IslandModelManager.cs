@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 namespace ProjectOC.LandMassExpand
@@ -14,7 +15,8 @@ namespace ProjectOC.LandMassExpand
         
         public int mapGridSize;
         public Vector2Int maxSize;
-        private List<IslandMain> islandMains;
+        public IslandMain islandMain;
+        public List<IslandSub> islandSubs = new List<IslandSub>();
         [ShowInInspector]
         public IslandBase[,] islandGrids;
 
@@ -23,12 +25,13 @@ namespace ProjectOC.LandMassExpand
             mapGridSize = 100;
             maxSize = new Vector2Int(15, 15);
             islandGrids = new IslandBase[maxSize.x,maxSize.y];
-            IslandBase mainIsland = GameObject.Find("IslandMainPrefab").GetComponent<IslandBase>();
-            currentIsland = mainIsland;
-            islandMains = new List<IslandMain>();
-            islandMains.Add(mainIsland as IslandMain);
         }
 
+        public void SetCurIsland(IslandBase _island)
+        {
+            currentIsland = _island;
+        }
+        
         bool UnlockIsland(int island_Index)
         {
             return true;
@@ -43,10 +46,10 @@ namespace ProjectOC.LandMassExpand
 
         public void AllIslandMove()
         {
-            foreach (var islandMain in islandMains)
-            {
-                islandMain.IslandMove();
-            }
+            // foreach (var islandMain in islandMains)
+            // {
+            //     islandMain.IslandMove();
+            // }
         }
 
 

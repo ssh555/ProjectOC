@@ -208,6 +208,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         public BuildingCopiedMaterial GetCopiedMaterial()
         {
             BuildingCopiedMaterial mat = new BuildingCopiedMaterial();
+            mat.ChildrenMat = new Dictionary<int, Material[]>();
             var p = this.GetComponent<Renderer>();
             if(p)
             {
@@ -251,6 +252,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         /// <summary>
         /// Ô­Éú²ÄÖÊ
         /// </summary>
+        [ShowInInspector]
         private Dictionary<Renderer, Material[]> rowMat;
 
 
