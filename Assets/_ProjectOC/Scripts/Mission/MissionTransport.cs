@@ -1,14 +1,9 @@
-using ML.Engine.Manager;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace ProjectOC.MissionNS
 {
-    /// <summary>
-    /// 搬运任务
-    /// </summary>
-    [System.Serializable]
+    [LabelText("搬运任务"), System.Serializable]
     public class MissionTransport
     {
         [LabelText("搬运类型"), ReadOnly]
@@ -30,7 +25,7 @@ namespace ProjectOC.MissionNS
                 finishNum = value;
                 if (finishNum >= MissionNum)
                 {
-                    this.End();
+                    End();
                 }
             }
         }
@@ -77,9 +72,6 @@ namespace ProjectOC.MissionNS
             return false;
         }
 
-        /// <summary>
-        /// 获取UID
-        /// </summary>
         public string GetUID()
         {
             return this.Initiator?.GetUID() ?? "";
@@ -93,43 +85,26 @@ namespace ProjectOC.MissionNS
             }
         }
 
-        /// <summary>
-        /// 终止任务
-        /// </summary>
         public void End(bool removeManager = true)
         {
-            foreach (Transport transport in this.Transports)
+            foreach (Transport transport in this.Transports.ToArray())
             {
                 transport?.End(false);
             }
             this.Initiator.RemoveMissionTranport(this);
             if (removeManager)
             {
-                GameManager.Instance.GetLocalManager<MissionManager>().RemoveMissionTransport(this);
+                ML.Engine.Manager.GameManager.Instance.GetLocalManager<MissionManager>().RemoveMissionTransport(this);
             }
         }
 
-        /// <summary>
-        /// 排序
-        /// </summary>
         public class Sort : IComparer<MissionTransport>
         {
             public int Compare(MissionTransport x, MissionTransport y)
             {
-                if (x == null)
-                {
-                    if (y == null)
-                    {
-                        return 0;
-                    }
-                    else
-                    {
-                        return 1;
-                    }
-                }
-                if (y == null)
-                {
-                    return -1;
+                if (x == null || y == null)
+                { 
+                    return (x == null).CompareTo((y == null));
                 }
                 if (x.Type != y.Type)
                 {

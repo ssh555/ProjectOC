@@ -1,0 +1,194 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d50d1666a0ff9ed4d983ecd4a487b5ca, type: 3}
+  m_Name: Config_BS_Match_Socket2Socket
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  configs:
+  - ID: 1
+    ToSocket:
+    - ID: 1
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 6
+    ToSocket:
+    - ID: 7
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 1}
+  - ID: 46
+    ToSocket:
+    - ID: 16
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+    - ID: 7
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 47
+    ToSocket:
+    - ID: 17
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+    - ID: 7
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 8
+    ToSocket:
+    - ID: 9
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 12
+    ToSocket:
+    - ID: 29
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 14
+    ToSocket:
+    - ID: 18
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 20
+    ToSocket:
+    - ID: 22
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+    - ID: 28
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 24
+    ToSocket:
+    - ID: 23
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+    - ID: 26
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 25
+    ToSocket:
+    - ID: 27
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+    - ID: 23
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 33
+    ToSocket:
+    - ID: 34
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+    - ID: 9
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 56
+    ToSocket:
+    - ID: 57
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+    - ID: 9
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 36
+    ToSocket:
+    - ID: 38
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 40
+    ToSocket:
+    - ID: 41
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 43
+    ToSocket:
+    - ID: 42
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 44
+    ToSocket:
+    - ID: 45
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 54
+    ToSocket:
+    - ID: 9
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+    - ID: 55
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 31
+    ToSocket:
+    - ID: 32
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+    - ID: 9
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 48
+    ToSocket:
+    - ID: 49
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+    - ID: 23
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 50
+    ToSocket:
+    - ID: 23
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+    - ID: 51
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 52
+    ToSocket:
+    - ID: 53
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+    - ID: 23
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 1}
+  - ID: 60
+    ToSocket:
+    - ID: 61
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+    - ID: 23
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 58
+    ToSocket:
+    - ID: 59
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+    - ID: 23
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 62
+    ToSocket:
+    - ID: 63
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+    - ID: 23
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 37
+    ToSocket:
+    - ID: 39
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}

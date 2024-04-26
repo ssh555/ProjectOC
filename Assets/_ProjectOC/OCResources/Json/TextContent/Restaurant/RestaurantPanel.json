@@ -78,7 +78,7 @@
             "ActionName": "Confirm"
           },
         "description" : {
-            "Chinese" : "确认",
+            "Chinese" : "选择",
             "English" : "Confirm"
         }
     },

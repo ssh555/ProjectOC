@@ -1,8 +1,5 @@
 using Sirenix.OdinInspector;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace ProjectOC.StoreNS
 {
@@ -22,47 +19,27 @@ namespace ProjectOC.StoreNS
         }
 
         #region Load And Data
-        /// <summary>
-        /// 是否已加载完数据
-        /// </summary>
-        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
-
         private Dictionary<string, StoreIconTableData> StoreIconTableDict = new Dictionary<string, StoreIconTableData>();
-
         public ML.Engine.ABResources.ABJsonAssetProcessor<StoreIconTableData[]> ABJAProcessor;
-
         public void LoadTableData()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StoreIconTableData[]>("OC/Json/TableData", "StoreIcon", (datas) =>
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StoreIconTableData[]>("OCTableData", "StoreIcon", (datas) =>
             {
                 foreach (var data in datas)
                 {
-                    this.StoreIconTableDict.Add(data.ID, data);
+                    StoreIconTableDict.Add(data.ID, data);
                 }
             }, "仓库图标表数据");
             ABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
 
-        /// <summary>
-        /// 实例化生成的仓库，键为UID
-        /// </summary>
         private Dictionary<string, WorldStore> WorldStoreDict = new Dictionary<string, WorldStore>();
-
-        public bool IsValidUID(string uid)
-        {
-            if (!string.IsNullOrEmpty(uid))
-            {
-                return WorldStoreDict.ContainsKey(uid);
-            }
-            return false;
-        }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="priorityType">是否按照优先级获取 0表示不需要，1表示优先级从高到低，-1表示优先级从低到高</param>
-        /// <returns></returns>
         public List<Store> GetStores(int priorityType = 0)
         {
             List<Store> stores = new List<Store>();
@@ -163,40 +140,21 @@ namespace ProjectOC.StoreNS
             {
                 result.Add(data.ID);
             }
-            return result;
+            return ManagerNS.LocalGameManager.Instance.ItemManager.SortItemIDs(result);
         }
 
-        /// <summary>
-        /// 创建新的仓库
-        /// </summary>
         public Store SpawnStore(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType)
         {
             Store store = new Store(storeType);
             return store;
         }
+
         public void WorldStoreSetData(WorldStore worldStore, ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType, int level)
         {
             if (worldStore != null && level >= 0)
             {
-                if (!WorldStoreDict.ContainsKey(worldStore.InstanceID))
-                {
-                    WorldStoreDict.Add(worldStore.InstanceID, worldStore);
-                }
-                else
-                {
-                    WorldStoreDict[worldStore.InstanceID] = worldStore;
-                }
                 Store store = SpawnStore(storeType);
-                if (store != null)
-                {
-                    if (worldStore.Store != null)
-                    {
-                        worldStore.Store.WorldStore = null;
-                    }
-                    worldStore.Store = store;
-                    store.WorldStore = worldStore;
-                    store.SetLevel(level);
-                }
+                WorldStoreSetData(worldStore, store);
             }
         }
 

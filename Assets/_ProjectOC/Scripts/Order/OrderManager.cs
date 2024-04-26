@@ -4,7 +4,6 @@ using ML.Engine.Manager;
 using ML.Engine.SaveSystem;
 using ML.Engine.Timer;
 using ML.Engine.UI;
-using ML.Example.InventorySystem;
 using ProjectOC.ManagerNS;
 using ProjectOC.Player;
 using ProjectOC.TechTree;
@@ -352,7 +351,7 @@ namespace ProjectOC.Order
                 OrderUrgent orderUrgent = new OrderUrgent(orderTableData.ID, orderTableData.RequireList, orderTableData.ReceiveDDL, orderTableData.DeliverDDL);
                 orderUrgent.StartReceiveDDLTimer();
                 
-                List<Order> orders = new List<Order>(this.OrderUrgentDelegationMap[ClanID].ToArray());
+                List<Order> orders = this.OrderUrgentDelegationMap[ClanID];
                 for (int i = 0; i < orders.Count; i++)
                 {
                     if (orders[i] == null)

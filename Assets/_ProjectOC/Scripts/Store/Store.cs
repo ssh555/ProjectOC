@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using ML.Engine.InventorySystem;
-using ML.Engine.Manager;
-using ProjectOC.MissionNS;
-using ProjectOC.Player;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -11,7 +8,7 @@ using UnityEngine;
 namespace ProjectOC.StoreNS
 {
     [LabelText("仓库"), Serializable]
-    public class Store: IMissionObj, IInventory
+    public class Store: MissionNS.IMissionObj, IInventory
     {
         #region 当前数据
         [LabelText("世界仓库"), ReadOnly]
@@ -23,13 +20,13 @@ namespace ProjectOC.StoreNS
         [LabelText("仓库类型"), ReadOnly]
         public ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 StoreType;
         [LabelText("仓库存储数据"), ReadOnly]
-        public List<StoreData> StoreDatas = new List<StoreData>();
+        public StoreData[] StoreDatas;
         [LabelText("仓库对应的搬运"), ReadOnly]
-        public List<Transport> Transports = new List<Transport>();
+        public List<MissionNS.Transport> Transports = new List<MissionNS.Transport>();
         [LabelText("仓库等级"), ReadOnly]
         public int Level;
         [LabelText("搬运优先级"), ReadOnly]
-        public TransportPriority TransportPriority = TransportPriority.Normal;
+        public MissionNS.TransportPriority TransportPriority = MissionNS.TransportPriority.Normal;
         [LabelText("玩家是否正在与此仓库交互"), ReadOnly]
         public bool IsInteracting;
         [LabelText("场景Icon对应的Item"), ReadOnly]
@@ -47,35 +44,35 @@ namespace ProjectOC.StoreNS
 
         #region Property
         [LabelText("仓库容量"), ShowInInspector, ReadOnly]
-        public int StoreCapacity { get { return Level < LevelStoreCapacity .Count ? LevelStoreCapacity[Level] : 0; } }
+        public int StoreCapacity => Level < LevelStoreCapacity.Count ? LevelStoreCapacity[Level] : 0;
         [LabelText("仓库数据的容量"), ShowInInspector, ReadOnly]
-        public int StoreDataCapacity { get { return Level < LevelStoreDataCapacity.Count ? LevelStoreDataCapacity[Level] : 0; } }
+        public int StoreDataCapacity => Level<LevelStoreDataCapacity.Count? LevelStoreDataCapacity[Level] : 0;
         #endregion
 
-        public event Action OnStoreDataChangeAction;
+        public event Action OnDataChangeEvent;
 
         public Store(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType)
         {
-            for (int i = 0; i < this.StoreCapacity; i++)
+            int capacity = StoreCapacity;
+            int dataCapacity = StoreDataCapacity;
+            StoreDatas = new StoreData[capacity];
+            for (int i = 0; i < capacity; i++)
             {
-                this.StoreDatas.Add(new StoreData("", this.StoreDataCapacity));
+                StoreDatas[i] = new StoreData("", dataCapacity);
             }
-            this.StoreType = storeType;
-            this.Name = storeType.ToString();
+            StoreType = storeType;
+            Name = storeType.ToString();
         }
 
         public void Destroy()
         {
-            List<Transport> transports = new List<Transport>();
-            transports.AddRange(Transports);
-            foreach (Transport transport in transports)
+            foreach (MissionNS.Transport transport in Transports.ToArray())
             {
                 if (transport.Target == this || !transport.ArriveSource)
                 {
                     transport?.End();
                 }
             }
-            this.Transports.Clear();
             // 将堆放的成品，素材，全部返还至玩家背包
             List<Item> items = new List<Item>();
             foreach (StoreData data in StoreDatas)
@@ -85,13 +82,7 @@ namespace ProjectOC.StoreNS
                     items.AddRange(ItemManager.Instance.SpawnItems(data.ItemID, data.StorageAll));
                 }
             }
-            items = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory.AddItem(items);
-            foreach (Item item in items)
-            {
-                #pragma warning disable CS4014
-                ItemManager.Instance.SpawnWorldItem(item, WorldStore.transform.position, WorldStore.transform.rotation);
-                #pragma warning restore CS4014
-            }
+            (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory.AddItem(items);
         }
 
         public void OnPositionChange()
@@ -109,15 +100,17 @@ namespace ProjectOC.StoreNS
         {
             if (WorldStore.transform != null && newLevel > this.Level && newLevel <= LevelMax)
             {
-                int newStoreCapacity = LevelStoreCapacity[newLevel];
-                int newStoreDataCapacity = LevelStoreDataCapacity[newLevel];
-                for (int i = 0; i < newStoreCapacity - StoreCapacity; i++)
+                int newCapacity = LevelStoreCapacity[newLevel];
+                int newDataCapacity = LevelStoreDataCapacity[newLevel];
+                StoreData[] newStoreDatas = new StoreData[newCapacity];
+                for (int i = 0; i < StoreDatas.Length; i++)
                 {
-                    this.StoreDatas.Add(new StoreData("", newStoreDataCapacity));
+                    newStoreDatas[i] = StoreDatas[i];
                 }
-                foreach (StoreData storeData in StoreDatas)
+                StoreDatas = newStoreDatas;
+                for (int i = 0; i < StoreDatas.Length; i++)
                 {
-                    storeData.MaxCapacity = newStoreDataCapacity;
+                    StoreDatas[i].MaxCapacity = newDataCapacity;
                 }
                 Level = newLevel;
                 return true;
@@ -132,59 +125,46 @@ namespace ProjectOC.StoreNS
         /// <param name="itemID">新的物品ID</param>
         public bool ChangeStoreData(int index, string itemID)
         {
-            if (itemID == null)
+            itemID = itemID ?? "";
+            if (0 <= index && index < StoreCapacity)
             {
-                itemID = "";
-            }
-            if (0 <= index && index < this.StoreCapacity)
-            {
-                StoreData data = this.StoreDatas[index];
-
-                int storageReserve = GetDataNum(data.ItemID, DataType.StorageReserve) - data.StorageReserve;
-                int emptyReserve = GetDataNum(data.ItemID, DataType.EmptyReserve) - data.EmptyReserve;
-                foreach (Transport transport in Transports)
+                if (StoreDatas[index].HaveItem())
                 {
-                    if (transport != null && transport.ItemID == data.ItemID)
+                    int storageReserve = GetDataNum(StoreDatas[index].ItemID, DataType.StorageReserve) - StoreDatas[index].StorageReserve;
+                    int emptyReserve = GetDataNum(StoreDatas[index].ItemID, DataType.EmptyReserve) - StoreDatas[index].EmptyReserve;
+                    foreach (MissionNS.Transport transport in Transports)
                     {
-                        if (transport.Source == this && !transport.ArriveSource)
+                        if (transport != null && transport.ItemID == StoreDatas[index].ItemID)
                         {
-                            if (storageReserve <= 0)
+                            if (transport.Source == this && !transport.ArriveSource)
+                            {
+                                if (storageReserve <= 0)
+                                {
+                                    transport.End();
+                                }
+                                else
+                                {
+                                    storageReserve -= transport.SoureceReserveNum;
+                                }
+                            }
+                            else if (transport.Target == this && emptyReserve == 0)
                             {
                                 transport.End();
                             }
-                            else
-                            {
-                                storageReserve -= transport.SoureceReserveNum;
-                            }
-                        }
-                        else if (transport.Target == this && emptyReserve == 0)
-                        {
-                            transport.End();
                         }
                     }
-                }
-
-                // 将堆放的物品，全部返还至玩家背包
-                List<Item> items = new List<Item>();
-                if (ItemManager.Instance.IsValidItemID(data.ItemID) && data.Storage > 0)
-                {
-                    items.AddRange(ItemManager.Instance.SpawnItems(data.ItemID, data.Storage));
-                }
-                items = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory.AddItem(items);
-                if (items != null)
-                {
-                    foreach (Item item in items)
+                    // 将堆放的物品，全部返还至玩家背包
+                    List<Item> items = new List<Item>();
+                    if (StoreDatas[index].Storage > 0)
                     {
-#pragma warning disable CS4014
-                        ItemManager.Instance.SpawnWorldItem(item, WorldStore.transform.position, WorldStore.transform.rotation);
-#pragma warning restore CS4014
+                        items.AddRange(ItemManager.Instance.SpawnItems(StoreDatas[index].ItemID, StoreDatas[index].Storage));
                     }
+                    (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory.AddItem(items);
                 }
 
-                data.Clear();
-                data.ItemID = itemID;
-
-                OnStoreDataChangeAction?.Invoke();
+                StoreDatas[index].ClearData();
+                StoreDatas[index].ItemID = itemID;
+                OnDataChangeEvent?.Invoke();
                 return true;
             }
             return false;
@@ -232,7 +212,7 @@ namespace ProjectOC.StoreNS
         }
         public bool CheckCanChangeData(DataType addType, DataType removeType, bool exceed=false)
         {
-            if (exceed && (removeType != DataType.Empty || removeType != DataType.EmptyReserve))
+            if (exceed && removeType != DataType.Empty && removeType != DataType.EmptyReserve)
             {
                 return false;
             }
@@ -265,19 +245,19 @@ namespace ProjectOC.StoreNS
                         return 0;
                     }
                     int num = amount;
-                    StoreData temp = null;
-                    foreach (StoreData data in this.StoreDatas)
+                    int temp = -1;
+                    for(int i = 0; i < StoreDatas.Length; i++)
                     {
-                        if (data.ItemID == itemID && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
+                        if (StoreDatas[i].ItemID == itemID && (!needCanIn || StoreDatas[i].CanIn) && (!needCanOut || StoreDatas[i].CanOut))
                         {
-                            if (temp == null)
+                            if (temp >= 0)
                             {
-                                temp = data;
+                                temp = i;
                             }
-                            int cur = data.GetNum(removeType);
+                            int cur = StoreDatas[i].GetNum(removeType);
                             cur = cur <= num ? cur : num;
-                            data.ChangeData(addType, cur);
-                            data.ChangeData(removeType, -cur);
+                            StoreDatas[i].ChangeData(addType, cur);
+                            StoreDatas[i].ChangeData(removeType, -cur);
                             num -= cur;
                             if (num <= 0)
                             {
@@ -285,13 +265,13 @@ namespace ProjectOC.StoreNS
                             }
                         }
                     }
-                    if (exceed && num > 0 && temp != null)
+                    if (exceed && num > 0 && temp >= 0)
                     {
-                        temp.ChangeData(addType, num);
-                        temp.ChangeData(removeType, -num);
+                        StoreDatas[temp].ChangeData(addType, num);
+                        StoreDatas[temp].ChangeData(removeType, -num);
                         num = 0;
                     }
-                    OnStoreDataChangeAction?.Invoke();
+                    OnDataChangeEvent?.Invoke();
                     return amount - num;
                 }
                 return 0;
@@ -303,20 +283,9 @@ namespace ProjectOC.StoreNS
         {
             public int Compare(Store x, Store y)
             {
-                if (x == null)
+                if (x == null || y == null)
                 {
-                    if (y == null)
-                    {
-                        return 0;
-                    }
-                    else
-                    {
-                        return 1;
-                    }
-                }
-                if (y == null)
-                {
-                    return -1;
+                    return (x == null).CompareTo((y==null));
                 }
                 int priorityX = (int)x.TransportPriority;
                 int priorityY = (int)y.TransportPriority;
@@ -329,47 +298,30 @@ namespace ProjectOC.StoreNS
         }
 
         #region UI接口
-        public void UIRemove(StoreData storeData, int amount)
+        public void UIRemove(int index, int amount)
         {
             lock (this)
             {
-                if (storeData != null && amount > 0)
+                if (0 <= index && index < StoreDatas.Length && StoreDatas[index].HaveItem() && amount > 0 && StoreDatas[index].Storage >= amount)
                 {
-                    if (ItemManager.Instance.IsValidItemID(storeData.ItemID) && storeData.Storage >= amount)
-                    {
-                        List<Item> items = ItemManager.Instance.SpawnItems(storeData.ItemID, amount);
-                        var inventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
-                        foreach (Item item in items)
-                        {
-                            int itemAmount = item.Amount;
-                            if (inventory.AddItem(item))
-                            {
-                                storeData.ChangeData(DataType.Storage, -itemAmount);
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
-                    }
+                    List<Item> items = ItemManager.Instance.SpawnItems(StoreDatas[index].ItemID, amount);
+                    (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory.AddItem(items);
+                    StoreDatas[index].ChangeData(DataType.Storage, -amount);
                 }
             }
         }
-        public void UIFastAdd(StoreData storeData)
+        public void UIFastAdd(int index)
         {
             lock (this)
             {
-                if (storeData != null)
+                if (0 <= index && index < StoreDatas.Length && StoreDatas[index].HaveItem())
                 {
-                    if (ItemManager.Instance.IsValidItemID(storeData.ItemID))
+                    var inventory = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory;
+                    int amount = inventory.GetItemAllNum(StoreDatas[index].ItemID);
+                    amount = amount <= StoreDatas[index].Empty ? amount : StoreDatas[index].Empty;
+                    if (inventory.RemoveItem(StoreDatas[index].ItemID, amount))
                     {
-                        var inventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
-                        int amount = inventory.GetItemAllNum(storeData.ItemID);
-                        amount = amount >= storeData.Empty ? storeData.Empty : amount;
-                        if (inventory.RemoveItem(storeData.ItemID, amount))
-                        {
-                            storeData.ChangeData(DataType.Storage, amount);
-                        }
+                        StoreDatas[index].ChangeData(DataType.Storage, amount);
                     }
                 }
             }
@@ -382,24 +334,24 @@ namespace ProjectOC.StoreNS
 
         #region IMission接口
         public Transform GetTransform() { return WorldStore?.transform; }
-        public TransportPriority GetTransportPriority() { return TransportPriority; }
+        public MissionNS.TransportPriority GetTransportPriority() { return TransportPriority; }
         public string GetUID() { return UID; }
-        public void AddTransport(Transport transport) { Transports.Add(transport); }
-        public void RemoveTranport(Transport transport) { Transports.Remove(transport); }
+        public void AddTransport(MissionNS.Transport transport) { Transports.Add(transport); }
+        public void RemoveTranport(MissionNS.Transport transport) { Transports.Remove(transport); }
         public bool PutIn(string itemID, int amount)
         {
-            return ChangeData(itemID, amount, DataType.Storage, DataType.EmptyReserve, exceed:true) >= amount;
+            return ChangeData(itemID, amount, DataType.Storage, DataType.EmptyReserve, exceed:true) == amount;
         }
         public int PutOut(string itemID, int amount)
         {
             return ChangeData(itemID, amount, DataType.Empty, DataType.StorageReserve, complete:false);
         }
-        public int ReservePutIn(string itemID, int amount, Transport transport)
+        public int ReservePutIn(string itemID, int amount, MissionNS.Transport transport)
         {
             transport.TargetReserveNum = ChangeData(itemID, amount, DataType.EmptyReserve, DataType.Empty, exceed:true, needCanIn:true);
             return transport.TargetReserveNum;
         }
-        public int ReservePutOut(string itemID, int amount, Transport transport)
+        public int ReservePutOut(string itemID, int amount, MissionNS.Transport transport)
         {
             transport.SoureceReserveNum = ChangeData(itemID, amount, DataType.StorageReserve, DataType.Storage, complete:false, needCanOut: true);
             return transport.SoureceReserveNum;

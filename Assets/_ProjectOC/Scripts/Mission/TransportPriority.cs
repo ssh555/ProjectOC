@@ -2,9 +2,7 @@ using Sirenix.OdinInspector;
 
 namespace ProjectOC.MissionNS
 {
-    /// <summary>
-    /// 搬运优先级
-    /// </summary>
+    [LabelText("搬运优先级")]
     public enum TransportPriority
     {
         [LabelText("紧急")]

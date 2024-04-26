@@ -9,5 +9,8 @@ namespace ProjectOC.LandMassExpand
     {
         int PowerCount { get; set; }
         public void RemoveFromAllPowerCores();
+
+        // PowerStateChange
+        public void PowerStateChange();
     }   
 }

@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using UnityEngine;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
@@ -8,121 +6,39 @@ using Sirenix.OdinInspector;
 namespace ML.Engine.InventorySystem
 {
     [LabelText("配方"), System.Serializable]
-    public class Recipe
+    public struct Recipe
     {
         [LabelText("ID"), ReadOnly]
-        public string ID = "";
+        public string ID;
 
+        public bool IsValidRecipe => !string.IsNullOrEmpty(ID) && (LocalGameManager.Instance == null || LocalGameManager.Instance.RecipeManager.IsValidID(ID));
         #region 读表数据
         [LabelText("排序"), ShowInInspector, ReadOnly]
-        public int Sort
-        { 
-            get
-            {
-                if(LocalGameManager.Instance)
-                {
-                    return LocalGameManager.Instance.RecipeManager.GetSort(ID);
-
-                }
-                return -1;
-            }
-        }
+        public int Sort => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetSort(ID) : 999;
         [LabelText("类目"), ShowInInspector, ReadOnly]
-        public RecipeCategory Category
-        {
-            get
-            {
-                if (LocalGameManager.Instance)
-                {
-                    return LocalGameManager.Instance.RecipeManager.GetCategory(ID);
-
-                }
-                return 0;
-            }
-        }
+        public RecipeCategory Category => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetCategory(ID) : RecipeCategory.None;
         [LabelText("原料"), ShowInInspector, ReadOnly]
-        public List<Formula> Raw
-        {
-            get
-            {
-                if (LocalGameManager.Instance)
-                {
-                    return LocalGameManager.Instance.RecipeManager.GetRaw(ID);
-
-                }
-                return null;
-            }
-        }
+        public List<Formula> Raw => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetRaw(ID) : new List<Formula>();
         [LabelText("成品"), ShowInInspector, ReadOnly]
-        public Formula Product
-        {
-            get
-            {
-                if (LocalGameManager.Instance)
-                {
-                    return LocalGameManager.Instance.RecipeManager.GetProduct(ID);
-
-                }
-                return default(Formula);
-            }
-        }
+        public Formula Product => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetProduct(ID) : default(Formula);
         [LabelText("成品ID"), ShowInInspector, ReadOnly]
-        public string ProductID
-        {
-            get
-            {
-                if (LocalGameManager.Instance)
-                {
-                    return LocalGameManager.Instance.RecipeManager.GetProduct(ID).id;
-
-                }
-                return null;
-            }
-        }
+        public string ProductID => Product.id;
         [LabelText("成品数量"), ShowInInspector, ReadOnly]
-        public int ProductNum
-        {
-            get
-            {
-                if (LocalGameManager.Instance)
-                {
-                    return LocalGameManager.Instance.RecipeManager.GetProduct(ID).num;
-
-                }
-                return 0;
-            }
-        }
+        public int ProductNum => Product.num;
         [LabelText("时间消耗，进行1次生产需要多少秒"), ShowInInspector, ReadOnly]
-        public int TimeCost
-        {
-            get
-            {
-                if (LocalGameManager.Instance)
-                {
-                    return LocalGameManager.Instance.RecipeManager.GetTimeCost(ID);
-
-                }
-                return 0;
-            }
-        }
+        public int TimeCost => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetTimeCost(ID) : 0;
         [LabelText("配方经验"), ShowInInspector, ReadOnly]
-        public int ExpRecipe
-        {
-            get
-            {
-                if (LocalGameManager.Instance)
-                {
-                    return LocalGameManager.Instance.RecipeManager.GetExpRecipe(ID);
-
-                }
-                return 0;
-            }
-        }
+        public int ExpRecipe => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetExpRecipe(ID) : 0;
         #endregion
 
         public Recipe(RecipeTableData config)
         {
             this.ID = config.ID;
+        }
+
+        public void ClearData()
+        {
+            this.ID = "";
         }
 
         public int GetRawNum(string itemID)

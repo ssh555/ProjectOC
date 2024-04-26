@@ -2,9 +2,7 @@ using Sirenix.OdinInspector;
 
 namespace ProjectOC.MissionNS 
 {
-    /// <summary>
-    /// 刁民搬运状态
-    /// </summary>
+    [LabelText("刁民搬运状态")]
     public enum TransportState
     {
         [LabelText("空手行进")]

@@ -54,17 +54,8 @@ namespace ML.Engine.InventorySystem
     public sealed class ItemManager : ILocalManager
     {
         #region Instance
-        public ItemManager() 
-        {
-        }
 
-        ~ItemManager()
-        {
-            foreach(var sa in this.itemAtlasList)
-            {
-                Manager.GameManager.Instance.ABResourceManager.Release(sa);
-            }
-        }
+
 
         public static ItemManager Instance { get { return instance; } }
 
@@ -94,6 +85,7 @@ namespace ML.Engine.InventorySystem
             {
                 instance = null;
             }
+            Manager.GameManager.Instance.ABResourceManager.Release(itemAtlas);
         }
 
         #endregion
@@ -120,8 +112,8 @@ namespace ML.Engine.InventorySystem
 
         #region to-do : 需读表导入所有所需的 Item 数据
         public const string TypePath = "ML.Engine.InventorySystem.";
-        public const string ItemIconLabel = "ItemTexture2D";
-        public const string WorldObjLabel = "ML/InventorySystem/WorldItemPrefabs";
+        public const string ItemIconLabel = "SA_Item_UI_ItemIcon";
+        public const string WorldObjLabel = "Prefab_WorldItem";
 
 
 
@@ -130,7 +122,7 @@ namespace ML.Engine.InventorySystem
 
         public void LoadTableData()
         {
-            ABJAProcessorItemTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableData[]>("OC/Json/TableData", "Item", (datas) =>
+            ABJAProcessorItemTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemTableData[]>("OCTableData", "Item", (datas) =>
             {
                 foreach (var data in datas)
                 {
@@ -139,7 +131,7 @@ namespace ML.Engine.InventorySystem
             }, "背包系统物品Item表数据");
             ABJAProcessorItemTableData.StartLoadJsonAssetData();
 
-            ABJAProcessorItemCategoryTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemCategoryTableData[]>("OC/Json/TableData", "ItemCategory", (datas) =>
+            ABJAProcessorItemCategoryTableData = new ML.Engine.ABResources.ABJsonAssetProcessor<ItemCategoryTableData[]>("OCTableData", "ItemCategory", (datas) =>
             {
                 foreach (var data in datas)
                 {
@@ -265,17 +257,13 @@ namespace ML.Engine.InventorySystem
 
         #region SpriteAtlas
 
-        private List<SpriteAtlas> itemAtlasList;
+        private SpriteAtlas itemAtlas;
         public void LoadItemAtlas()
         {
-            itemAtlasList = new List<SpriteAtlas>();
-            Manager.GameManager.Instance.ABResourceManager.LoadAssetsAsync<SpriteAtlas>(ItemIconLabel, (asList) =>
+            Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>(ItemIconLabel).Completed += (handle) =>
             {
-                lock(itemAtlasList)
-                {
-                    itemAtlasList.Add(asList);
-                }
-            });
+                itemAtlas = handle.Result;
+            };
         }
         
 
@@ -287,6 +275,25 @@ namespace ML.Engine.InventorySystem
             return ItemTypeStrDict.Keys.ToArray();
         }
 
+        public List<string> SortItemIDs(List<string> itemIDs)
+        {
+            List<string> resultes = new List<string>();
+            if (itemIDs != null)
+            {
+                List<Tuple<string, int>> temps = new List<Tuple<string, int>>();
+                foreach (string id in itemIDs)
+                {
+                    temps.Add(new Tuple<string, int>(id, GetSortNum(id)));
+                }
+                temps.Sort((t1, t2) => { return t1.Item2 != t2.Item2 ? t1.Item2.CompareTo(t2.Item2) : t1.Item1.CompareTo(t2.Item1); });
+                foreach (var tuple in temps)
+                {
+                    resultes.Add(tuple.Item1);
+                }
+            }
+            return resultes;
+        }
+
         public bool IsValidItemID(string id)
         {
             return this.ItemTypeStrDict.ContainsKey(id);
@@ -294,17 +301,10 @@ namespace ML.Engine.InventorySystem
 
         public Texture2D GetItemTexture2D(string id)
         {
-            if (!this.ItemTypeStrDict.ContainsKey(id))
+            var s = GetItemSprite(id);
+            if(s)
             {
-                return null;
-            }
-            foreach(var sa in this.itemAtlasList)
-            {
-                var s = sa.GetSprite(this.ItemTypeStrDict[id].icon);
-                if(s != null)
-                {
-                    return s.texture;
-                }
+                return s.texture;
             }
             return null;
         }
@@ -313,27 +313,10 @@ namespace ML.Engine.InventorySystem
         {
             if (!this.ItemTypeStrDict.ContainsKey(id))
             {
-                foreach (var sa in this.itemAtlasList)
-                {
-                    var s = sa.GetSprite(id);
-                    if (s != null)
-                    {
-                        return s;
-                    }
-                }
-                return null;
+                return this.itemAtlas.GetSprite(id);
             }
 
-        
-            foreach (var sa in this.itemAtlasList)
-            {
-                var s = sa.GetSprite(this.ItemTypeStrDict[id].icon);
-                if (s != null)
-                {
-                    return s;
-                }
-            }
-            return null;
+            return this.itemAtlas.GetSprite(this.ItemTypeStrDict[id].icon);
         }
 
         public async void AddItemIconObject(string itemID, Transform parent, Vector3 pos, Quaternion rot, Vector3 scale, Transform target=null, bool isLocal = true)
@@ -342,8 +325,8 @@ namespace ML.Engine.InventorySystem
             if (itemIcon == null)
             {
                 // 异步加载资源
-                var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjLabel + "/ItemIcon.prefab", parent);
-
+                var handle = Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjLabel + "/Prefab_Item_ItemIcon.prefab", parent);
+                
                 // 等待加载完成
                 await handle.Task;
 

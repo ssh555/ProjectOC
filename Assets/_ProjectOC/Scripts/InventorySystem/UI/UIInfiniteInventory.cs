@@ -285,9 +285,37 @@ namespace ProjectOC.InventorySystem.UI
         private void AlterItem_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             var f_offset = obj.ReadValue<Vector2>();
-            var offset = new Vector2Int(Mathf.RoundToInt(f_offset.x), Mathf.RoundToInt(f_offset.y));
+
+
+            var vector2 = obj.ReadValue<UnityEngine.Vector2>();
+            float angle = Mathf.Atan2(vector2.x, vector2.y);
+
+            angle = angle * 180 / Mathf.PI;
+            if (angle < 0)
+            {
+                angle = angle + 360;
+            }
+
+
+            if (angle < 45 || angle > 315)
+            {
+                f_offset = new Vector2(0, 1);
+            }
+            else if (angle > 45 && angle < 135)
+            {
+                f_offset = new Vector2(1, 0);
+            }
+            else if (angle > 135 && angle < 225)
+            {
+                f_offset = new Vector2(0, -1);
+            }
+            else if (angle > 225 && angle < 315)
+            {
+                f_offset = new Vector2(-1, 0);
+            }
+
             var grid = Inventory_GridLayout.GetGridSize(SelectedItems.Count);
-            this.CurrentItemIndex += -offset.y * grid.y + offset.x;
+            this.CurrentItemIndex += -(int)f_offset.y * grid.y + (int)f_offset.x;
         }
 
         private void LastTerm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -598,7 +626,7 @@ namespace ProjectOC.InventorySystem.UI
 
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/Inventory";
+            this.abpath = "OCTextContent/Inventory";
             this.abname = "InventoryPanel";
             this.description = "InventoryPanel数据加载完成";
         }
@@ -606,7 +634,7 @@ namespace ProjectOC.InventorySystem.UI
         protected override void InitObjectPool()
         {
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
-            "OC/UI/Inventory/Texture/SA_Inventory_UI.spriteatlasv2", (handle) =>
+            "SA_Inventory_UI_UIPanel", (handle) =>
             {
                 inventoryAtlas = handle.Result as SpriteAtlas;
             }

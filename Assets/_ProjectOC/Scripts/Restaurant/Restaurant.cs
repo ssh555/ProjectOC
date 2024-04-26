@@ -1,44 +1,34 @@
-using ML.Engine.InventorySystem;
 using Sirenix.OdinInspector;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using ProjectOC.MissionNS;
-using ProjectOC.ManagerNS;
-using ProjectOC.WorkerNS;
 using System.Linq;
-
 
 namespace ProjectOC.RestaurantNS
 {
     [LabelText("餐厅"), Serializable]
-    public class Restaurant : IInventory, IMissionObj
+    public class Restaurant : ML.Engine.InventorySystem.IInventory, MissionNS.IMissionObj
     {
         #region WorldRestaurant
-        [LabelText("世界餐厅"), ReadOnly]
+        [LabelText("世界餐厅"), ReadOnly, NonSerialized]
         public WorldRestaurant WorldRestaurant;
         [ShowInInspector, ReadOnly]
         public string UID { get { return WorldRestaurant?.InstanceID ?? ""; } }
         #endregion
 
-        #region 当前数据
+        #region Data
         [LabelText("座位"), ShowInInspector, ReadOnly]
         private RestaurantSeat[] Seats;
         [LabelText("存储数据"), ShowInInspector, ReadOnly]
         private RestaurantData[] Datas;
-
-        [LabelText("名字"), ReadOnly]
-        public string Name = "";
-        [LabelText("搬运优先级"), ReadOnly]
-        public TransportPriority TransportPriority = TransportPriority.Normal;
         [LabelText("对应的搬运"), ReadOnly]
-        public List<Transport> Transports = new List<Transport>();
+        public List<MissionNS.Transport> Transports = new List<MissionNS.Transport>();
+        public event Action OnDataChangeEvent;
         #endregion
 
-        #region 属性
+        #region Property
         [LabelText("是否有座位"), ShowInInspector, ReadOnly]
-        public bool HasSeat
+        public bool HaveSeat
         {
             get
             {
@@ -46,7 +36,7 @@ namespace ProjectOC.RestaurantNS
                 {
                     foreach (RestaurantSeat seat in Seats)
                     {
-                        if (!seat.HasWorker)
+                        if (!seat.HaveWorker)
                         {
                             return true;
                         }
@@ -56,7 +46,7 @@ namespace ProjectOC.RestaurantNS
             }
         }
         [LabelText("是否有食物"), ShowInInspector, ReadOnly]
-        public bool HasFood
+        public bool HaveFood
         {
             get
             {
@@ -64,7 +54,7 @@ namespace ProjectOC.RestaurantNS
                 {
                     foreach (RestaurantData data in Datas)
                     {
-                        if (LocalGameManager.Instance.RestaurantManager.WorkerFood_IsValidID(data.ID))
+                        if (data.HaveFood)
                         {
                             return true;
                         }
@@ -77,63 +67,48 @@ namespace ProjectOC.RestaurantNS
 
         public void Init()
         {
-            Seats = new RestaurantSeat[LocalGameManager.Instance.RestaurantManager.SeatNum];
+            Seats = new RestaurantSeat[ManagerNS.LocalGameManager.Instance.RestaurantManager.SeatNum];
             for (int i = 0; i < Seats.Length; i++)
             {
-                Seats[i].Restaurant = this;
-                Seats[i].Socket = WorldRestaurant.transform.Find($"seat{i+1}");
+                Seats[i] = new RestaurantSeat(this, WorldRestaurant.transform.Find($"seat{i + 1}"));
             }
-            Datas = new RestaurantData[LocalGameManager.Instance.RestaurantManager.DataNum];
-            if (Datas.Length >= 1)
-            {
-                Datas[0].Priority = FoodPriority.No1;
-            }
-            if (Datas.Length >= 2)
-            {
-                Datas[1].Priority = FoodPriority.No2;
-            }
+            Datas = new RestaurantData[ManagerNS.LocalGameManager.Instance.RestaurantManager.DataNum];
+            Datas[0].Priority = FoodPriority.No1;
+            Datas[1].Priority = FoodPriority.No2;
         }
 
         public void Destroy()
         {
             foreach (var seat in Seats)
             {
-                seat.ClearData();
+                (seat as WorkerNS.IWorkerContainer).RemoveWorker();
             }
-
-            List<Transport> transports = new List<Transport>();
-            transports.AddRange(Transports);
-            foreach (Transport transport in transports)
+            foreach (MissionNS.Transport transport in Transports.ToArray())
             {
-                if (transport.Target == this || !transport.ArriveSource)
-                {
-                    transport?.End();
-                }
+                transport?.End();
             }
             Transports.Clear();
 
-            List<Item> items = new List<Item>();
+            List<ML.Engine.InventorySystem.Item> items = new List<ML.Engine.InventorySystem.Item>();
             foreach (var data in Datas)
             {
-                if (ItemManager.Instance.IsValidItemID(data.ItemID) && data.Amount > 0)
+                if (data.HaveFood)
                 {
-                    items.AddRange(ItemManager.Instance.SpawnItems(data.ItemID, data.Amount));
+                    items.AddRange(ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(data.ItemID, data.Amount));
                 }
             }
-            items = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory.AddItem(items);
-            foreach (Item item in items)
-            {
-#pragma warning disable CS4014
-                ItemManager.Instance.SpawnWorldItem(item, WorldRestaurant.transform.position, WorldRestaurant.transform.rotation);
-#pragma warning restore CS4014
-            }
+            (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory.AddItem(items);
         }
 
-        public void OnPositionChange()
+        public void OnPositionChange(Vector3 differ)
         {
             foreach (var transport in Transports)
             {
                 transport?.UpdateDestination();
+            }
+            foreach (var seat in Seats)
+            {
+                (seat as WorkerNS.IWorkerContainer).OnPositionChange(differ);
             }
         }
 
@@ -141,30 +116,32 @@ namespace ProjectOC.RestaurantNS
         /// <summary>
         /// 先查找空座位，找不到空座位返回false，更新该座位的信息，让刁民寻路到该座位。
         /// </summary>
-        public bool AddWorker(Worker worker)
+        public bool AddWorker(WorkerNS.Worker worker)
         {
             if (worker != null)
             {
                 for (int i = 0; i < Seats.Length; i++)
                 {
-                    if (!Seats[i].HasWorker)
+                    if (!Seats[i].HaveWorker)
                     {
-                        Seats[i].SetWorker(worker);
-                        worker.SetDestination(Seats[i].Socket.position, OnArriveEvent);
-                        LocalGameManager.Instance.RestaurantManager.RemoveWorker(worker);
+                        (Seats[i] as WorkerNS.IWorkerContainer).SetWorker(worker);
+                        worker.SetDestination(Seats[i].Socket.position, Seats[i].OnArriveEvent, Seats[i].GetContainerType());
+                        ManagerNS.LocalGameManager.Instance.RestaurantManager.RemoveWorker(worker);
                         return true;
                     }
                 }
             }
             return false;
         }
+
         /// <summary>
         /// 给玩家分配食物
         /// 将Datas转为列表并排序，遍历该列表，如果有No1和No2的食物，则返回No1或No2，
         /// 否则继续遍历该列表，返回第一个能让刁民体力值溢出的食物，找不到的话就返回体力值最大的食物。
         /// </summary>
-        public int FindFood(Worker worker)
+        public int FindFood(WorkerNS.Worker worker)
         {
+            int result = -1;
             if (worker != null)
             {
                 List<Tuple<RestaurantData, int>> tuples = Datas.Select((data, index) => Tuple.Create(data, index)).ToList();
@@ -172,19 +149,24 @@ namespace ProjectOC.RestaurantNS
                 foreach (var tuple in tuples)
                 {
                     RestaurantData data = tuple.Item1;
-                    if (data.HaveFood && (data.Priority != FoodPriority.None || worker.APCurrent + data.AlterAP >= worker.APMax))
+                    if (data.HaveFood)
                     {
-                        return tuple.Item2;
+                        result = tuple.Item2;
+                        if (data.Priority != FoodPriority.None || worker.APCurrent + data.AlterAP >= worker.APMax)
+                        {
+                            break;
+                        }
                     }
                 }
-                return tuples.Count > 0 ? tuples.Count - 1 : -1;
             }
-            return -1;
+            return result;
         }
-        public string EatFood(Worker worker)
+
+        public string EatFood(WorkerNS.Worker worker)
         {
             int index = FindFood(worker);
-            if (0 <= index && index < Datas.Length && Change(index, -1) == 1)
+            int flag = Change(index, -1);
+            if (0 <= index && index < Datas.Length && flag == 1)
             {
                 return Datas[index].ID;
             }
@@ -192,61 +174,18 @@ namespace ProjectOC.RestaurantNS
         }
         #endregion
 
-        #region Action + Event
-        public event Action OnDataChangeEvent;
-
-        /// <summary>
-        /// 刁民到达座位后调用，如果餐厅的HasFood为false，则清空刁民的座位数据，将刁民加入Manager的队列中；
-        /// 反之调用FindFood给刁民分配食物，更新座位的食物ID，然后调用EatFood。
-        /// </summary>
-        private void OnArriveEvent(Worker worker)
-        {
-            int seatIndex = GetWorkerSeatIndex(worker);
-            if (worker != null && seatIndex > 0)
-            {
-                Seats[seatIndex].HasArrive = true;
-                if (HasFood)
-                {
-                    int index = FindFood(worker);
-                    if (Change(index, -1) == 1)
-                    {
-                        worker.Agent.enabled = false;
-                        worker.LastPosition = worker.transform.position;
-                        worker.transform.position = Seats[seatIndex].Socket.position;
-                        Seats[seatIndex].SetFood(Datas[index].ID);
-                        return;
-                    }
-                }
-                Seats[seatIndex].ClearData();
-            }
-            LocalGameManager.Instance.RestaurantManager.AddWorker(worker);
-        }
-        #endregion
-
         #region Getter
-        public int GetWorkerSeatIndex(Worker worker)
+        public bool IsValidDataIndex(int index)
         {
-            int seatIndex = -1;
-            if (worker != null)
-            {
-                for (int i = 0; i < Seats.Length; i++)
-                {
-                    if (Seats[i].Worker == worker)
-                    {
-                        seatIndex = i;
-                        break;
-                    }
-                }
-            }
-            return seatIndex;
+            return 0 <= index && index < Datas.Length;
         }
-        public bool HaveSetFood(string id, bool isFoodID = true)
+        public bool HaveSetFood(string id)
         {
             if (!string.IsNullOrEmpty(id))
             {
                 foreach (var data in Datas)
                 {
-                    if (data.HaveSetFood && id == (isFoodID ? data.ID : data.ItemID))
+                    if (data.HaveSetFood && id == data.ID)
                     {
                         return true;
                     }
@@ -260,16 +199,17 @@ namespace ProjectOC.RestaurantNS
         /// <param name="id">食物id或者物品id</param>
         /// <param name="isFoodID">true表示食物id，false表示物品id</param>
         /// <param name="isOut">true表示能取出的数量，false表示能存入的数量</param>
-        public int GetAmount(string id, bool isFoodID=true, bool isOut=true)
+        public int GetAmount(string id, bool isOut=true)
         {
             int result = 0;
             if (!string.IsNullOrEmpty(id))
             {
+                int maxCapacity = ManagerNS.LocalGameManager.Instance.RestaurantManager.MaxCapacity;
                 foreach (var data in Datas)
                 {
-                    if (data.HaveSetFood && id == (isFoodID ? data.ID : data.ItemID))
+                    if (data.HaveSetFood && id == data.ID)
                     {
-                        result += isOut ? data.Amount : data.MaxCapacity - data.Amount;
+                        result += isOut ? data.Amount : maxCapacity - data.Amount;
                     }
                 }
             }
@@ -288,71 +228,64 @@ namespace ProjectOC.RestaurantNS
         #region 数据方法
         private bool ChangeFood(int index, string id)
         {
-            if (0 <= index && index < Datas.Length)
+            lock (this)
             {
-                string itemID = Datas[index].ItemID;
-                int amount = Datas[index].Amount;
-                Datas[index].ID = "";
-                Datas[index].Amount = 0;
+                if (0 <= index && index < Datas.Length)
+                {
+                    string itemID = Datas[index].ItemID;
+                    int amount = Datas[index].Amount;
+                    Datas[index].ID = "";
+                    Datas[index].Amount = 0;
+                    bool haveSetFood = HaveSetFood(Datas[index].ID);
 
-                foreach (Transport transport in Transports)
-                {
-                    if (transport != null && transport.ItemID == itemID 
-                        && transport.Target == this && !HaveSetFood(itemID, false))
+                    foreach (MissionNS.Transport transport in Transports)
                     {
-                        transport.End();
+                        if (transport != null && transport.ItemID == itemID && !haveSetFood)
+                        {
+                            transport.End();
+                        }
                     }
-                }
 
-                List<Item> items = new List<Item>();
-                if (ItemManager.Instance.IsValidItemID(itemID) && amount > 0)
-                {
-                    items.AddRange(ItemManager.Instance.SpawnItems(itemID, amount));
-                }
-                items = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory.AddItem(items);
-                if (items != null)
-                {
-                    foreach (Item item in items)
+                    if (amount > 0)
                     {
-#pragma warning disable CS4014
-                        ItemManager.Instance.SpawnWorldItem(item, WorldRestaurant.transform.position, WorldRestaurant.transform.rotation);
-#pragma warning restore CS4014
+                        (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory.AddItem(ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(itemID, amount));
                     }
+
+                    Datas[index].ID = id ?? "";
+                    OnDataChangeEvent?.Invoke();
+                    return true;
                 }
-                Datas[index].ID = id ?? "";
-                OnDataChangeEvent?.Invoke();
-                return true;
+                return false;
             }
-            return false;
         }
 
         private int Change(int index, int amount, bool exceed = false, bool complete = true)
         {
             lock (this)
             {
-                if (0 <= index && index < Datas.Length && Datas[index].HaveSetFood && amount != 0)
+                if (IsValidDataIndex(index) && Datas[index].HaveSetFood && amount != 0)
                 {
                     if ((!exceed && amount > 0 && Datas[index].Amount >= Datas[index].MaxCapacity) || (complete && amount + Datas[index].Amount < 0))
                     {
                         return 0;
                     }
-                    amount = !complete && amount + Datas[index].Amount < 0 ? Datas[index].Amount : amount;
+                    amount = !complete && amount + Datas[index].Amount < 0 ? -1 * Datas[index].Amount : amount;
                     Datas[index].Amount += amount;
                     OnDataChangeEvent?.Invoke();
-                    return amount;
+                    return amount < 0 ? -1 * amount : amount;
                 }
                 return 0;
             }
         }
 
-        private int Change(string id, int amount, bool isFoodID = true, bool exceed = false, bool complete = true)
+        private int Change(string id, int amount, bool exceed = false, bool complete = true)
         {
             lock (this)
             {
                 if (!string.IsNullOrEmpty(id) && amount != 0)
                 {
                     bool isOut = amount < 0;
-                    int amountAll = GetAmount(id, isFoodID, isOut);
+                    int amountAll = GetAmount(id, isOut);
                     if ((!exceed && amount >= amountAll) || (complete && amount + amountAll < 0))
                     {
                         return 0;
@@ -360,17 +293,18 @@ namespace ProjectOC.RestaurantNS
                     amount = amount < 0 ? -amount : amount;
                     int total = amount;
                     int firstIndex = -1;
+                    int maxCapacity = ManagerNS.LocalGameManager.Instance.RestaurantManager.MaxCapacity;
 
                     for(int i = 0; i < Datas.Length; i++)
                     {
-                        if (Datas[i].HaveSetFood && id == (isFoodID ? Datas[i].ID : Datas[i].ItemID))
+                        if (Datas[i].HaveSetFood && id == Datas[i].ID)
                         {
                             firstIndex = firstIndex == -1 ? i : firstIndex;
-                            int num = isOut ? Datas[i].Amount : Datas[i].MaxCapacity - Datas[i].Amount;
+                            int num = isOut ? Datas[i].Amount : maxCapacity - Datas[i].Amount;
                             if (amount > num)
                             {
                                 amount -= num;
-                                Datas[i].Amount = isOut ? 0 : Datas[i].MaxCapacity;
+                                Datas[i].Amount = isOut ? 0 : maxCapacity;
                             }
                             else
                             {
@@ -399,25 +333,13 @@ namespace ProjectOC.RestaurantNS
         {
             lock (this)
             {
-                if (0 <= index && index < Datas.Length && amount > 0)
+                if (IsValidDataIndex(index) && amount > 0)
                 {
                     string itemID = Datas[index].ItemID;
-                    if (ItemManager.Instance.IsValidItemID(itemID) && Datas[index].Amount >= amount)
+                    if (Datas[index].Amount >= amount)
                     {
-                        List<Item> items = ItemManager.Instance.SpawnItems(itemID, amount);
-                        var inventory = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory;
-                        foreach (Item item in items)
-                        {
-                            int itemAmount = item.Amount;
-                            if (inventory.AddItem(item))
-                            {
-                                Change(index, -itemAmount);
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
+                        Change(index, -amount);
+                        (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory.AddItem(ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(itemID, amount));
                     }
                 }
             }
@@ -426,10 +348,10 @@ namespace ProjectOC.RestaurantNS
         {
             lock (this)
             {
-                if (0 <= index && index < Datas.Length)
+                if (IsValidDataIndex(index))
                 {
                     string itemID = Datas[index].ItemID;
-                    if (ItemManager.Instance.IsValidItemID(itemID))
+                    if (ML.Engine.InventorySystem.ItemManager.Instance.IsValidItemID(itemID))
                     {
                         var inventory = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory;
                         int amount = inventory.GetItemAllNum(itemID);
@@ -445,50 +367,58 @@ namespace ProjectOC.RestaurantNS
         }
         public bool UIChangeFood(int index, string itemID)
         {
-            return ChangeFood(index, LocalGameManager.Instance.RestaurantManager.ItemIDToFoodID(itemID));
+            return ChangeFood(index, ManagerNS.LocalGameManager.Instance.RestaurantManager.ItemIDToFoodID(itemID));
         }
         #endregion
 
         #region IInventory
-        public bool AddItem(Item item)
+        public bool AddItem(ML.Engine.InventorySystem.Item item)
         {
-            if (item != null && !string.IsNullOrEmpty(item.ID))
+            if (item != null && !string.IsNullOrEmpty(item.ID) && item.Amount > 0)
             {
-                return Change(item.ID, item.Amount, false) >= item.Amount;
+                string foodID = ManagerNS.LocalGameManager.Instance.RestaurantManager.ItemIDToFoodID(item.ID);
+                return Change(foodID, item.Amount) == item.Amount;
             }
             return false;
         }
-        public bool RemoveItem(Item item)
+        public bool RemoveItem(ML.Engine.InventorySystem.Item item)
         {
-            if (item != null && !string.IsNullOrEmpty(item.ID))
+            if (item != null && !string.IsNullOrEmpty(item.ID) && item.Amount > 0)
             {
-                return Change(item.ID, -item.Amount, false) >= item.Amount;
+                string foodID = ManagerNS.LocalGameManager.Instance.RestaurantManager.ItemIDToFoodID(item.ID);
+                return Change(foodID, -item.Amount) == item.Amount;
             }
             return false;
         }
-        public Item RemoveItem(Item item, int amount)
+        public ML.Engine.InventorySystem.Item RemoveItem(ML.Engine.InventorySystem.Item item, int amount)
         {
-            if (item != null && !string.IsNullOrEmpty(item.ID))
+            if (item != null && !string.IsNullOrEmpty(item.ID) && item.Amount > 0)
             {
-                Item result = ItemManager.Instance.SpawnItem(item.ID);
-                result.Amount = Change(item.ID, -item.Amount, false, false, false);
+                ML.Engine.InventorySystem.Item result = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItem(item.ID);
+                string foodID = ManagerNS.LocalGameManager.Instance.RestaurantManager.ItemIDToFoodID(item.ID);
+                result.Amount = Change(foodID, -item.Amount, false, false);
                 return result;
             }
             return null;
         }
         public bool RemoveItem(string itemID, int amount)
         {
-            if (!string.IsNullOrEmpty(itemID))
+            if (!string.IsNullOrEmpty(itemID) && amount > 0)
             {
-                return Change(itemID, -amount, false) >= amount;
+                string foodID = ManagerNS.LocalGameManager.Instance.RestaurantManager.ItemIDToFoodID(itemID);
+                return Change(foodID, -amount) == amount;
             }
             return false;
         }
         public int GetItemAllNum(string id)
         {
-            return GetAmount(id, false);
+            if (!string.IsNullOrEmpty(id))
+            {
+                return GetAmount(ManagerNS.LocalGameManager.Instance.RestaurantManager.ItemIDToFoodID(id));
+            }
+            return 0;
         }
-        public Item[] GetItemList()
+        public ML.Engine.InventorySystem.Item[] GetItemList()
         {
             throw new System.NotImplementedException();
         }
@@ -496,13 +426,13 @@ namespace ProjectOC.RestaurantNS
 
         #region IMissionObj
         public Transform GetTransform() {  return WorldRestaurant.transform; }
-        public TransportPriority GetTransportPriority() { return TransportPriority; }
+        public MissionNS.TransportPriority GetTransportPriority() { return MissionNS.TransportPriority.Normal; }
         public string GetUID() { return UID; }
-        public void AddTransport(Transport transport) { Transports.Add(transport); }
-        public void RemoveTranport(Transport transport) { Transports.Remove(transport); }
+        public void AddTransport(MissionNS.Transport transport) { Transports.Add(transport); }
+        public void RemoveTranport(MissionNS.Transport transport) { Transports.Remove(transport); }
         public bool PutIn(string itemID, int amount)
         {
-            return Change(itemID, amount) >= amount;
+            return Change(itemID, amount, true) == amount;
         }
         public int PutOut(string itemID, int amount)
         {

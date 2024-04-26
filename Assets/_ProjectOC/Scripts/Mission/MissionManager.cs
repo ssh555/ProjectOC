@@ -1,35 +1,22 @@
-using ML.Engine.InventorySystem;
-using ML.Engine.Manager.LocalManager;
-using ML.Engine.Timer;
-using ProjectOC.RestaurantNS;
-using ProjectOC.StoreNS;
-using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
-
 
 namespace ProjectOC.MissionNS
 {
     [LabelText("任务调度管理器"), System.Serializable]
-    public sealed class MissionManager : ILocalManager
+    public sealed class MissionManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         [LabelText("搬运任务列表"), ShowInInspector, ReadOnly]
         private HashSet<MissionTransport> MissionTransports = new HashSet<MissionTransport>();
-        private CounterDownTimer timer;
-        /// <summary>
-        /// 代替Tick的更新任务的计时器
-        /// </summary>
-        public CounterDownTimer Timer
+        private ML.Engine.Timer.CounterDownTimer timer;
+        public ML.Engine.Timer.CounterDownTimer Timer
         {
             get 
             {
                 if (this.timer == null)
                 {
-                    this.timer = new CounterDownTimer(1f, true, false);
+                    this.timer = new ML.Engine.Timer.CounterDownTimer(1f, true, false);
                     this.timer.OnEndEvent += Timer_OnEndEvent;
                 }
                 return this.timer;
@@ -43,11 +30,8 @@ namespace ProjectOC.MissionNS
 
         public void OnUnregister()
         {
-            if (timer != null)
-            {
-                timer.End();
-            }
-            foreach (MissionTransport mission in MissionTransports)
+            timer?.End();
+            foreach (MissionTransport mission in MissionTransports.ToArray())
             {
                 mission?.End(false);
             }
@@ -62,7 +46,7 @@ namespace ProjectOC.MissionNS
             if (!string.IsNullOrEmpty(itemID) && missionNum > 0 && initiator != null)
             {
                 MissionTransport mission = new MissionTransport(transportType, itemID, missionNum, initiator);
-                this.MissionTransports.Add(mission);
+                MissionTransports.Add(mission);
                 return mission;
             }
             else
@@ -81,23 +65,33 @@ namespace ProjectOC.MissionNS
         }
 
         /// <summary>
-        /// 发起者到仓库，存入仓库
+        /// 发起者到目标，存入目标
         /// </summary>
-        private int InitiatorToStore(MissionTransport mission)
+        private int InitiatorToTarget(MissionObjType targetType, MissionTransport mission)
         {
             int missionNum = mission.NeedAssignNum;
             if (missionNum > 0)
             {
-                Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
+                WorkerNS.Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
                 if (worker != null)
                 {
-                    int maxBurNum = (int)(worker.BURMax / ItemManager.Instance.GetWeight(mission.ItemID));
+                    int weight = ML.Engine.InventorySystem.ItemManager.Instance.GetWeight(mission.ItemID);
+                    int maxBurNum = weight != 0 ? worker.WeightMax / weight : 0;
                     missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
                 }
-                Store store = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutInStore(mission.ItemID, missionNum, 1, true, true);
-                if (worker != null && store != null && missionNum > 0)
+                IMissionObj target = null;
+                switch (targetType)
                 {
-                    Transport transport = new Transport(mission, mission.ItemID, missionNum, mission.Initiator, store, worker);
+                    case MissionObjType.Store:
+                        target = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutInStore(mission.ItemID, missionNum, 1, true, true);
+                        break;
+                    case MissionObjType.Restaurant:
+                        target = ManagerNS.LocalGameManager.Instance.RestaurantManager.GetPutInRestaurant(mission.ItemID, missionNum);
+                        break;
+                }
+                if (worker != null && target != null && missionNum > 0)
+                {
+                    Transport transport = new Transport(mission, mission.ItemID, missionNum, mission.Initiator, target, worker);
                 }
                 else
                 {
@@ -114,15 +108,16 @@ namespace ProjectOC.MissionNS
         {
             if (mission.NeedAssignNum > 0)
             {
-                Dictionary<Store, int> result = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutOutStore(mission.ItemID, mission.NeedAssignNum, 1, true, true);
+                Dictionary<StoreNS.Store, int> result = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutOutStore(mission.ItemID, mission.NeedAssignNum, 1, true, true);
                 foreach (var kv in result)
                 {
-                    Store store = kv.Key;
+                    StoreNS.Store store = kv.Key;
                     int missionNum = kv.Value;
-                    Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
+                    WorkerNS.Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
                     if (worker != null)
                     {
-                        int maxBurNum = (int)(worker.BURMax / ItemManager.Instance.GetWeight(mission.ItemID));
+                        int weight = ML.Engine.InventorySystem.ItemManager.Instance.GetWeight(mission.ItemID);
+                        int maxBurNum = weight != 0 ? worker.WeightMax / weight : 0;
                         missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
                     }
                     if (worker != null && store != null && missionNum > 0)
@@ -139,58 +134,31 @@ namespace ProjectOC.MissionNS
         }
 
         /// <summary>
-        /// 发起者到餐厅，存入餐厅
-        /// </summary>
-        private int InitiatorToRestaurant(MissionTransport mission)
-        {
-            int missionNum = mission.NeedAssignNum;
-            if (missionNum > 0)
-            {
-                Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
-                if (worker != null)
-                {
-                    int maxBurNum = (int)(worker.BURMax / ItemManager.Instance.GetWeight(mission.ItemID));
-                    missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
-                }
-                Restaurant restaurant = ManagerNS.LocalGameManager.Instance.RestaurantManager.GetPutInRestaurant(mission.ItemID, missionNum);
-                if (worker != null && restaurant != null && missionNum > 0)
-                {
-                    Transport transport = new Transport(mission, mission.ItemID, missionNum, mission.Initiator, restaurant, worker);
-                }
-                else
-                {
-                    return worker == null ? -1 : -2;
-                }
-            }
-            return 1;
-        }
-
-        /// <summary>
         /// 计时器结束时执行一次分配任务
         /// </summary>
         public void Timer_OnEndEvent()
         {
-            List<MissionTransport> missionList = this.MissionTransports.ToList();
+            List<MissionTransport> missionList = MissionTransports.ToList();
             missionList.Sort(new MissionTransport.Sort());
             foreach (MissionTransport mission in missionList)
             {
                 if (mission.Type == MissionTransportType.ProNode_Store || mission.Type == MissionTransportType.Outside_Store)
                 {
-                    if (InitiatorToStore(mission) == -1)
-                    {
-                        return;
-                    }
-                }
-                else if(mission.Type == MissionTransportType.Store_ProNode)
-                {
-                    if (StoreToInitiator(mission) == -1)
+                    if (InitiatorToTarget(MissionObjType.Store, mission) == -1)
                     {
                         return;
                     }
                 }
                 else if (mission.Type == MissionTransportType.ProNode_Restaurant)
                 {
-                    if (InitiatorToRestaurant(mission) == -1)
+                    if (InitiatorToTarget(MissionObjType.Restaurant, mission) == -1)
+                    {
+                        return;
+                    }
+                }
+                else if (mission.Type == MissionTransportType.Store_ProNode)
+                {
+                    if (StoreToInitiator(mission) == -1)
                     {
                         return;
                     }

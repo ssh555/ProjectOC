@@ -53,7 +53,7 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region 载入资产
-        public const string TStyleSpriteAtlasPath = "ML/BuildingSystem/Style/SA_Build_Style.spriteatlasv2";
+        public const string TStyleSpriteAtlasPath = "SA_UI_Category3";
         private SpriteAtlas styleAtlas = null;
         private AsyncOperationHandle SAHandle;
         /// <summary>
@@ -390,7 +390,7 @@ namespace ML.Engine.BuildingSystem.UI
 
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/BuildingSystem/UI";
+            this.abpath = "OCTextContent/BuildingSystem/UI";
             this.abname = "BSPlaceModePanel";
             this.description = "BSPlaceModePanel数据加载完成";
         }

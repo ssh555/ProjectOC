@@ -1,0 +1,49 @@
+{
+    "textEmpty" : {
+        "Chinese" : "空",
+        "English" : "Empty"
+    },
+    "textHome" : {
+      "Chinese" : "窝",
+      "English" : "Worker Home"
+    },
+    "textHomePost" : {
+      "Chinese" : "的小窝",
+      "English" : " Home"
+    },
+    "textConfirmPre" : {
+      "Chinese" : "这是",
+      "English" : "This is "
+    },
+    "textConfirmPost" : {
+      "Chinese" : "的小窝，要替换掉吗?",
+      "English" : " Home, need to replace?"
+    },
+    "textMood" : {
+      "Chinese" : "心情",
+      "English" : "Mood"
+    },
+    "Confirm": {
+        "keyname": "KT_Confirm",
+        "keymap": {
+          "ActionMapName": "Common",
+          "ActionName": "Confirm"
+        },
+        "description": {
+          "Chinese": "指定",
+          "English": "Confirm"
+        }
+      },
+    "Back" : {
+        "keyname" : "KT_Back",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
+        "description" : {
+            "Chinese" : "返回",
+            "English" : "Back"
+        }
+    }
+}
+

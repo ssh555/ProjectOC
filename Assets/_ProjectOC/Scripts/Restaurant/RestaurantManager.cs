@@ -3,9 +3,6 @@ using UnityEngine;
 using System;
 using Sirenix.OdinInspector;
 using ProjectOC.WorkerNS;
-using ML.Engine.Timer;
-using ProjectOC.LandMassExpand;
-using ProjectOC.ManagerNS;
 using System.Linq;
 
 
@@ -27,26 +24,43 @@ namespace ProjectOC.RestaurantNS
         public void OnRegister()
         {
             LoadTableData();
-            Timer = new CounterDownTimer(BroadcastTime, true, true);
+            Timer = new ML.Engine.Timer.CounterDownTimer(BroadcastTime, true, true);
             Timer.OnEndEvent += EndActionForTimer;
         }
+
+        public void OnUnRegister()
+        {
+            Timer?.End();
+        }
+
+        #region 配置数据
+        [LabelText("分配一次的时间"), FoldoutGroup("配置")]
+        public int BroadcastTime { get; private set; } = 5;
+        [LabelText("位置数量"), FoldoutGroup("配置")]
+        public int SeatNum { get; private set; } = 4;
+        [LabelText("数据数量"), FoldoutGroup("配置")]
+        public int DataNum { get; private set; } = 5;
+        [LabelText("存储上限"), FoldoutGroup("配置")]
+        public int MaxCapacity { get; private set; } = 100;
+        #endregion
 
         #region 当前数据
         private HashSet<Worker> WorkerSets = new HashSet<Worker>();
         [LabelText("等待去餐厅的刁民队列"), ReadOnly]
         public List<Worker> Workers = new List<Worker>();
-        [LabelText("实例化的餐厅"), ReadOnly]
+        [LabelText("实例化的餐厅"), ReadOnly, ShowInInspector]
         public Dictionary<string, WorldRestaurant> WorldRestaurants = new Dictionary<string, WorldRestaurant>();
-
         [LabelText("分配计时器"), ReadOnly]
-        public CounterDownTimer Timer;
+        public ML.Engine.Timer.CounterDownTimer Timer;
         #endregion
 
         #region 方法
         public void AddWorker(Worker worker)
         {
-            if (worker != null && !WorkerSets.Contains(worker))
+            if (worker != null && !ContainWorker(worker))
             {
+                Workers.RemoveAll(worker => worker == null);
+                WorkerSets.RemoveWhere(worker => worker == null);
                 Workers.Add(worker);
                 WorkerSets.Add(worker);
             }
@@ -54,17 +68,24 @@ namespace ProjectOC.RestaurantNS
 
         public void RemoveWorker(Worker worker)
         {
-            if (worker != null && WorkerSets.Contains(worker))
+            if (ContainWorker(worker))
             {
+                Workers.RemoveAll(worker => worker == null);
+                WorkerSets.RemoveWhere(worker => worker == null);
                 Workers.Remove(worker);
                 WorkerSets.Remove(worker);
             }
         }
 
+        public bool ContainWorker(Worker worker)
+        {
+            return worker != null && WorkerSets.Contains(worker);
+        }
+
         public List<Restaurant> GetRestaurants()
         {
             List<Restaurant> restaurants = new List<Restaurant>();
-            foreach (WorldRestaurant world in this.WorldRestaurants.Values)
+            foreach (WorldRestaurant world in WorldRestaurants.Values)
             {
                 if (world != null)
                 {
@@ -76,21 +97,25 @@ namespace ProjectOC.RestaurantNS
 
         public Restaurant GetPutInRestaurant(string itemID, int amount)
         {
-            List<Restaurant> restaurants = GetRestaurants();
             Restaurant result = null;
-            foreach (var restaurant in restaurants)
+            string foodID = ItemIDToFoodID(itemID);
+            if (!string.IsNullOrEmpty(foodID) && amount > 0)
             {
-                if (restaurant.HaveSetFood(itemID, false))
+                List<Restaurant> restaurants = GetRestaurants();
+                foreach (var restaurant in restaurants)
                 {
-                    int empty = restaurant.GetAmount(itemID, false, false);
-                    if (result == null && empty > 0)
+                    if (restaurant.HaveSetFood(foodID))
                     {
-                        result = restaurant;
-                    }
-                    if (empty >= amount)
-                    {
-                        result = restaurant;
-                        break;
+                        int empty = restaurant.GetAmount(foodID, false);
+                        if (result == null && empty > 0)
+                        {
+                            result = restaurant;
+                        }
+                        if (empty >= amount)
+                        {
+                            result = restaurant;
+                            break;
+                        }
                     }
                 }
             }
@@ -111,6 +136,7 @@ namespace ProjectOC.RestaurantNS
                 {
                     WorldRestaurants[worldRestaurant.InstanceID] = worldRestaurant;
                 }
+
                 Restaurant restaurant = new Restaurant();
                 if (restaurant != null)
                 {
@@ -126,32 +152,22 @@ namespace ProjectOC.RestaurantNS
         }
         #endregion
 
-        #region 配置数据
-        [LabelText("分配一次的时间"), FoldoutGroup("配置")]
-        public int BroadcastTime { get; private set; } = 5;
-        [LabelText("位置数量"), FoldoutGroup("配置")]
-        public int SeatNum { get; private set; } = 4;
-        [LabelText("数据数量"), FoldoutGroup("配置")]
-        public int DataNum { get; private set; } = 5;
-        [LabelText("存储上限"), FoldoutGroup("配置")]
-        public int MaxCapacity { get; private set; } = 100;
-        #endregion
-
-        #region 分配方法
+        #region 分配
         private void EndActionForTimer()
         {
             Workers.RemoveAll(x => x == null);
-            List<WorldRestaurant> worldRestaurants = WorldRestaurants.Values.Where(worldRestaurant => worldRestaurant.Restaurant.HasFood && worldRestaurant.Restaurant.HasSeat).ToList();
-            
+            WorkerSets.RemoveWhere(x => x == null);
+            List<WorldRestaurant> worldRestaurants = WorldRestaurants.Values.Where(worldRestaurant => worldRestaurant.Restaurant.HaveFood && worldRestaurant.Restaurant.HaveSeat).ToList();
+
             if (Workers.Count > 0 && worldRestaurants.Count > 0)
             {
                 List<Worker> workers = new List<Worker>();
                 workers.AddRange(Workers);
 
                 List<Vector3> positions = new List<Vector3>();
-                foreach (var core in LocalGameManager.Instance.BuildPowerIslandManager.powerCores)
+                foreach (var core in ManagerNS.LocalGameManager.Instance.BuildPowerIslandManager.powerCores)
                 {
-                    if (core.GetType() == typeof(BuildPowerCore))
+                    if (core.GetType() == typeof(LandMassExpand.BuildPowerCore))
                     {
                         positions.Add(core.transform.position);
                     }
@@ -195,7 +211,7 @@ namespace ProjectOC.RestaurantNS
                             List<Restaurant> removes = new List<Restaurant>();
                             foreach (var restaurant in dict[index])
                             {
-                                if (restaurant != null && restaurant.HasFood && restaurant.HasSeat && restaurant.AddWorker(worker))
+                                if (restaurant != null && restaurant.HaveFood && restaurant.HaveSeat && restaurant.AddWorker(worker))
                                 {
                                     flag = true;
                                     break;
@@ -222,8 +238,6 @@ namespace ProjectOC.RestaurantNS
         #endregion
 
         #region Load And Data
-        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
-
         private Dictionary<string, WorkerFoodTableData> WorkerFoodTableDict = new Dictionary<string, WorkerFoodTableData>();
         private Dictionary<string, string> ItemToFoodDict = new Dictionary<string, string>();
 
@@ -231,7 +245,7 @@ namespace ProjectOC.RestaurantNS
 
         public void LoadTableData()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<WorkerFoodTableData[]>("OC/Json/TableData", "WorkerFood", (datas) =>
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<WorkerFoodTableData[]>("OCTableData", "WorkerFood", (datas) =>
             {
                 foreach (var data in datas)
                 {

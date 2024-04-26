@@ -2,9 +2,7 @@ using Sirenix.OdinInspector;
 
 namespace ProjectOC.ProNodeNS
 {
-    /// <summary>
-    /// 生产节点类型
-    /// </summary>
+    [LabelText("生产节点类型")]
     public enum ProNodeType
     {
         [LabelText("None")]

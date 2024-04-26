@@ -198,10 +198,6 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
             BuildingManager.Instance.BuildingSocketList.Remove(this);
         }
 
-#if UNITY_EDITOR
-        public bool Gizmos_Active = false;
-        public bool Gizmos_Attached = false;
-#endif
         public void OnDrawGizmos()
         {
             if (BuildingManager.Instance == null)
@@ -217,27 +213,6 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
                 }
             }
             else if (BuildingManager.Instance.DrawSocket.IsDraw)
-            {
-                var cols = this.GetComponentsInChildren<Collider>();
-                foreach (Collider col in cols)
-                {
-                    Extension.GizmosExtension.DrawMeshCollider(col, BuildingManager.Instance.DrawSocket.color);
-                }
-            }
-
-            //if(Gizmos_Active)
-            //{
-            //    var cols = this.GetComponentsInChildren<Collider>();
-            //    foreach (Collider col in cols)
-            //    {
-            //        var gcolor = Gizmos.color;
-            //        Gizmos.color = BuildingManager.Instance.DrawActiveSocket.color;
-            //        Gizmos.DrawSphere(this.transform.position, 0.3f); ;
-            //        //Extension.GizmosExtension.DrawMeshCollider(col, BuildingManager.Instance.DrawActiveSocket.color);
-            //        Gizmos.color = gcolor;
-            //    }
-            //}
-            if(Gizmos_Attached)
             {
                 var cols = this.GetComponentsInChildren<Collider>();
                 foreach (Collider col in cols)

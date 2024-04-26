@@ -8,42 +8,66 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using ML.MathExtension;
+using ML.PlayerCharacterNS;
+using ProjectOC.ManagerNS;
+using UnityEngine.ResourceManagement.AsyncOperations;
+
 namespace ProjectOC.PinchFace
 {
     public class CharacterModelPinch : MonoBehaviour
     {
         #region 捏脸函数
-        public void ChangeType(PinchPartType2 boneType2, int typeIndex)
+
+        public AsyncOperationHandle<GameObject> GeneratePinchTypePrefab(PinchPartType3 _type3,int typeIndex)
         {
-            if (replaceGo[(int)boneType2] != null)
+            //OC/Character/PinchFace/Prefabs/
+            //0_HeadPart_PinchType1/0_HeadTop_PinchType2/0_HT_Ring_PinchType3/
+            //HT_Ring_3.prefab
+            string prePath = "OC/Character/PinchFace/Prefabs";
+            string typePath = pinchFaceManager.pinchFaceHelper.GetType3PrefabPath(_type3);
+            string prefabPath = $"{_type3.ToString()}_{typeIndex}.prefab";
+            string totalPath = $"{typePath}/{prefabPath}/{prefabPath}";
+            AsyncOperationHandle<GameObject>  handle = ML.Engine.Manager.GameManager.Instance.
+                ABResourceManager.InstantiateAsync(totalPath);
+            return handle;
+        }
+        
+        public void ChangeType(PinchPartType3 _type3, int typeIndex)
+        {
+            PinchPartType2 _type2 = pinchFaceManager.pinchPartType3Dic[_type3];
+            if (replaceGo[(int)_type2] != null)
             {
-                UnEquipItem(boneType2,replaceGo[(int)boneType2]);
+                UnEquipItem(_type2,replaceGo[(int)_type2]);
             }
-            EquipItem(boneType2,tempTail[typeIndex]);
+
+            GeneratePinchTypePrefab(_type3, typeIndex).Completed += (handle)=>
+            {
+                EquipItem(_type2,handle.Result);
+            };
         }
 
         public Slider _slider;
         public void TempChangeType(int index)
         {
-            ChangeType(PinchPartType2.HeadTop,index);
-            return;
-            
-            if (index < 2)
-            {
-                ChangeType(PinchPartType2.Tail, index);
-            }
-            else if (index == 2)
-            {
-                ChangeType(PinchPartType2.TopHorn, index);
-            }
-            else if (index == 3)
-            {
-                ChangeTransform(PinchPartType2.EarTop,index,Vector2.right * _slider.value);
-            }
-            else
-            {
-                topEar.Release();
-            }
+            // ChangeType(PinchPartType2.HeadTop,index);
+            // return;
+            //
+            // if (index < 2)
+            // {
+            //     ChangeType(PinchPartType2.Tail, index);
+            // }
+            // else if (index == 2)
+            // {
+            //     ChangeType(PinchPartType2.TopHorn, index);
+            // }
+            // else if (index == 3)
+            // {
+            //     ChangeTransform(PinchPartType2.EarTop,index,Vector2.right * _slider.value);
+            // }
+            // else
+            // {
+            //     topEar.Release();
+            // }
         }
         public void EquipItem(PinchPartType2 boneType2, GameObject _PinchGo)
         {
@@ -342,7 +366,29 @@ namespace ProjectOC.PinchFace
                 // 如果没找到符合条件的Transform，返回null
                 return null;
             }
-            #endregion
-            
+
+            public void InitAfterPinchFaceManager(PinchFaceManager _pinchFaceManager)
+            {
+                pinchFaceManager = _pinchFaceManager;
+            }
+        #endregion
+
+        #region CharacterModelPinch
+
+        private PinchFaceManager pinchFaceManager;
+
+        // public PinchFaceManager PinchFaceManager
+        // {
+        //     get
+        //     {
+        //         if (pinchFaceManager == null)
+        //         {
+        //             pinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
+        //         }
+        //         return pinchFaceManager;
+        //     }
+        // }
+        
+        #endregion
     }
 }
