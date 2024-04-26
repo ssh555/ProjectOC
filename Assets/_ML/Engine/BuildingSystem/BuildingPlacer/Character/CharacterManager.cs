@@ -36,8 +36,8 @@ namespace ML.PlayerCharacterNS
         public void OnRegister()
         {
             LocalPlayerControllerIndex = 0;
-            //AddPlayerController(playerController);
-            AddPlayerController(new OCPlayerController());
+            AddPlayerController(playerController);
+            //AddPlayerController(new OCPlayerController());
         }
 
         public PlayerController GetLocalController()
