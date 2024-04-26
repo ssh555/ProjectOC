@@ -78,6 +78,13 @@ namespace ProjectOC.WorkerNS
         #region Mono
         protected override void Start()
         {
+            if (!HaveWorker)
+            {
+                if (ManagerNS.LocalGameManager.Instance != null)
+                {
+                    ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent += OnManagerAddWorkerEvent;
+                }
+            }
             OnSetWorkerEvent += (worker) =>
             {
                 if (worker != null)

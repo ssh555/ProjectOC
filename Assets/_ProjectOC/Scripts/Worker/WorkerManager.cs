@@ -115,6 +115,7 @@ namespace ProjectOC.WorkerNS
                         worker = obj.AddComponent<Worker>();
                     }
                     worker.InstanceID = GetOneNewWorkerInstanceID();
+                    worker.Init();
                     if (isAdd)
                     {
                         Workers.Add(worker);

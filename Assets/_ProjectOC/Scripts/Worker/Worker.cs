@@ -122,12 +122,6 @@ namespace ProjectOC.WorkerNS
         #endregion
 
         #region Mono
-        private void Start()
-        {
-            Init();
-            enabled = false;
-        }
-
         public void Init()
         {
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
