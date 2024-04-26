@@ -24,8 +24,13 @@ namespace ProjectOC.RestaurantNS
         public void OnRegister()
         {
             LoadTableData();
-            Timer = new ML.Engine.Timer.CounterDownTimer(BroadcastTime, true, false);
+            Timer = new ML.Engine.Timer.CounterDownTimer(BroadcastTime, true, true);
             Timer.OnEndEvent += EndActionForTimer;
+        }
+
+        public void OnUnRegister()
+        {
+            Timer?.End();
         }
 
         #region 配置数据
@@ -43,7 +48,7 @@ namespace ProjectOC.RestaurantNS
         private HashSet<Worker> WorkerSets = new HashSet<Worker>();
         [LabelText("等待去餐厅的刁民队列"), ReadOnly]
         public List<Worker> Workers = new List<Worker>();
-        [LabelText("实例化的餐厅"), ReadOnly]
+        [LabelText("实例化的餐厅"), ReadOnly, ShowInInspector]
         public Dictionary<string, WorldRestaurant> WorldRestaurants = new Dictionary<string, WorldRestaurant>();
         [LabelText("分配计时器"), ReadOnly]
         public ML.Engine.Timer.CounterDownTimer Timer;
@@ -58,10 +63,6 @@ namespace ProjectOC.RestaurantNS
                 WorkerSets.RemoveWhere(worker => worker == null);
                 Workers.Add(worker);
                 WorkerSets.Add(worker);
-                if (Timer.IsStoped && WorldRestaurants.Values.Count > 0)
-                {
-                    Timer.Start();
-                }
             }
         }
 
@@ -73,10 +74,6 @@ namespace ProjectOC.RestaurantNS
                 WorkerSets.RemoveWhere(worker => worker == null);
                 Workers.Remove(worker);
                 WorkerSets.Remove(worker);
-                if (Workers.Count == 0)
-                {
-                    Timer.End();
-                }
             }
         }
 
@@ -140,11 +137,6 @@ namespace ProjectOC.RestaurantNS
                     WorldRestaurants[worldRestaurant.InstanceID] = worldRestaurant;
                 }
 
-                if (Timer.IsStoped && Workers.Count > 0)
-                {
-                    Timer.Start();
-                }
-
                 Restaurant restaurant = new Restaurant();
                 if (restaurant != null)
                 {
@@ -166,7 +158,7 @@ namespace ProjectOC.RestaurantNS
             Workers.RemoveAll(x => x == null);
             WorkerSets.RemoveWhere(x => x == null);
             List<WorldRestaurant> worldRestaurants = WorldRestaurants.Values.Where(worldRestaurant => worldRestaurant.Restaurant.HaveFood && worldRestaurant.Restaurant.HaveSeat).ToList();
-            
+
             if (Workers.Count > 0 && worldRestaurants.Count > 0)
             {
                 List<Worker> workers = new List<Worker>();
@@ -241,10 +233,6 @@ namespace ProjectOC.RestaurantNS
                         break;
                     }
                 }
-            }
-            else
-            {
-                Timer.End();
             }
         }
         #endregion

@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ProjectOC.RestaurantNS
 {
     [LabelText("餐厅座位"), Serializable]
-    public struct RestaurantSeat : IWorkerContainer
+    public class RestaurantSeat : IWorkerContainer
     {
         [LabelText("对应的餐厅"), ReadOnly, NonSerialized]
         public Restaurant Restaurant;
@@ -32,7 +32,7 @@ namespace ProjectOC.RestaurantNS
             }
         }
 
-        public void Init(Restaurant restaurant, Transform socket)
+        public RestaurantSeat(Restaurant restaurant, Transform socket)
         {
             Restaurant = restaurant;
             Socket = socket;

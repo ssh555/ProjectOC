@@ -33,11 +33,11 @@ namespace ProjectOC.ProNodeNS
         {
             if (InPower)
             {
-                ProNode.StopProduce();
+                ProNode.StartProduce();
             }
             else
             {
-                ProNode.StartProduce();
+                ProNode.StopProduce();
             }
         }
 
@@ -78,8 +78,9 @@ namespace ProjectOC.ProNodeNS
             if (lastLevelBuild is WorldProNode worldProNode)
             {
                 ManagerNS.LocalGameManager.Instance.ProNodeManager.WorldNodeSetData(this, worldProNode.ProNode);
+                ProNode.SetLevel(Classification.Category4 - 1);
+                PowerCount = worldProNode.PowerCount;
             }
-            ProNode.SetLevel(Classification.Category4 - 1);
             ML.Engine.Manager.GameManager.DestroyObj(lastLevelBuild.gameObject);
         }
     }

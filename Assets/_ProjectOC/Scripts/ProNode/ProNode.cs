@@ -144,17 +144,6 @@ namespace ProjectOC.ProNodeNS
         }
         #endregion
 
-        #region BuildPart
-        public void OnPositionChange(Vector3 differ)
-        {
-            (this as IWorkerContainer).OnPositionChange(differ);
-            foreach (var mission in MissionTransports)
-            {
-                mission?.UpdateTransportDestionation();
-            }
-        }
-        #endregion
-
         #region Upgrade
         public bool SetLevel(int level)
         {
@@ -591,12 +580,31 @@ namespace ProjectOC.ProNodeNS
             worker.ProNode.StartProduce();
         }
 
+        public void OnPositionChange(Vector3 differ)
+        {
+            if (HaveWorker)
+            {
+                if (IsArrive)
+                {
+                    Worker.transform.position += differ;
+                }
+                else
+                {
+                    Worker.SetDestination(GetTransform().position, OnArriveEvent, GetContainerType());
+                }
+            }
+            foreach (var mission in MissionTransports)
+            {
+                mission?.UpdateTransportDestionation();
+            }
+        }
+
         public void SetWorkerRelateData()
         {
             if (ProNodeType == ProNodeType.Mannul && Worker != null)
             {
                 Worker.SetTimeStatusAll(TimeStatus.Work_OnDuty);
-                Worker.SetDestination(WorldProNode.transform.position, OnArriveEvent);
+                Worker.SetDestination(WorldProNode.transform.position, OnArriveEvent, GetContainerType());
                 Worker.OnStatusChangeEvent += OnWorkerStatusChangeEvent;
                 Worker.OnAPChangeEvent += OnWorkerAPChangeEvent;
             }
@@ -617,17 +625,10 @@ namespace ProjectOC.ProNodeNS
 
         public bool TempRemoveWorker()
         {
-            if (Worker != null && !IsOnProduce)
+            if (Worker != null && !IsOnProduce && IsArrive)
             {
-                if (IsArrive)
-                {
-                    Worker.RecoverLastPosition();
-                    IsArrive = false;
-                }
-                else
-                {
-                    Worker.ClearDestination();
-                }
+                Worker.RecoverLastPosition();
+                IsArrive = false;
                 return true;
             }
             return false;
