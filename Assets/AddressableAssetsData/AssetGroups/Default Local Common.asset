@@ -82,8 +82,16 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9f71828b99d5fc3498ddd337614ab83b
     m_Address: Assets/_ProjectOC/OCResources/UI/Building/Furniture
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e66bc366ff86aed4bb8d04b0f1f6f736
     m_Address: Assets/_ML/MLResources/BaseUIPrefab/UICameraImage/RT.renderTexture
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: abc00000000015721550157616362849
+    m_Address: Assets/_ProjectOC/OCResources/Island/IslandAssets/StaticMeshAssets/Textures/Materials/Stones/Cliffs/M_CliffStone_03.mat
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
