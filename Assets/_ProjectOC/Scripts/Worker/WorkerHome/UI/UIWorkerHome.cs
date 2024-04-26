@@ -141,6 +141,7 @@ namespace ProjectOC.WorkerNS.UI
             tempSprite["Worker"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_Worker");
             tempSprite["WorkerHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_WorkerHome");
             LocalGameManager.Instance.WorkerManager.OnDeleteWokerEvent += OnDeleteWokerEvent;
+            IsInitWorkers = false;
             base.Enter();
         }
         public void OnDeleteWokerEvent(Worker worker)
@@ -188,14 +189,13 @@ namespace ProjectOC.WorkerNS.UI
 
         private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurrentWorker != null)
+            if (CurrentWorker != null && CurrentWorker != Home.Worker)
             {
                 string text = PanelTextContent.textConfirmPre + "<color=yellow>" + CurrentWorker.Name + "</color>" + PanelTextContent.textConfirmPost;
-                Worker worker = CurrentWorker;
                 GameManager.Instance.UIManager.PushNoticeUIInstance(ML.Engine.UI.UIManager.NoticeUIType.PopUpUI, new ML.Engine.UI.UIManager.PopUpUIData(text, null, null, 
                     () => 
                     {
-                        (Home as IWorkerContainer).SetWorker(worker);
+                        (Home as IWorkerContainer).SetWorker(CurrentWorker);
                     }
                 ));
             }
@@ -231,7 +231,7 @@ namespace ProjectOC.WorkerNS.UI
                 IsInitWorkers = true;
             }
 
-            this.KeyTips.Find("KT_Confirm").gameObject.SetActive(CurrentWorker != null);
+            this.KeyTips.Find("KT_Confirm").gameObject.SetActive(CurrentWorker != null && CurrentWorker != Home.Worker);
 
             #region Select
             int delta = tempUIItems.Count - Workers.Count;

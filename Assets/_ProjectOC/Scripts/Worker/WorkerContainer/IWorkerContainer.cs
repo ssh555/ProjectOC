@@ -8,7 +8,7 @@ namespace ProjectOC.WorkerNS
     {
         #region Data
         public Action<Worker> OnSetWorkerEvent { get; set; }
-        public Action OnRemoveWorkerEvent { get; set; }
+        public Action<bool> OnRemoveWorkerEvent { get; set; }
         public Worker Worker { get; set; }
         public bool IsArrive { get; set; }
         public bool HaveWorker => Worker != null && !string.IsNullOrEmpty(Worker.InstanceID);
@@ -29,16 +29,16 @@ namespace ProjectOC.WorkerNS
 
         public void SetWorker(Worker worker)
         {
-            IWorkerContainer container = Worker?.GetContainer(GetContainerType());
+            IWorkerContainer container = worker?.GetContainer(GetContainerType());
             container?.RemoveWorker();
-            RemoveWorker();
+            RemoveWorker(true);
             Worker = worker;
             Worker?.SetContainer(this);
             SetWorkerRelateData();
             OnSetWorkerEvent?.Invoke(worker);
         }
 
-        public void RemoveWorker()
+        public void RemoveWorker(bool isReset=false)
         {
             RemoveWorkerRelateData();
             if (HaveWorker)
@@ -50,7 +50,7 @@ namespace ProjectOC.WorkerNS
                     Worker.RecoverLastPosition();
                 }
                 Worker = null;
-                OnRemoveWorkerEvent?.Invoke();
+                OnRemoveWorkerEvent?.Invoke(isReset);
             }
             IsArrive = false;
         }
