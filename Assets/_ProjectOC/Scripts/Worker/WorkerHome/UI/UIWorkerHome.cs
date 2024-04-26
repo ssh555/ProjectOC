@@ -136,10 +136,10 @@ namespace ProjectOC.WorkerNS.UI
         #region Override Internal
         protected override void Enter()
         {
-            tempSprite["HasHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("HasHome");
-            tempSprite["NoHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("NoHome");
-            tempSprite["Worker"] = LocalGameManager.Instance.WorkerManager.GetSprite("Worker");
-            tempSprite["WorkerHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("WorkerHome");
+            tempSprite["HasHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_HasHome");
+            tempSprite["NoHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_NoHome");
+            tempSprite["Worker"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_Worker");
+            tempSprite["WorkerHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_WorkerHome");
             LocalGameManager.Instance.WorkerManager.OnDeleteWokerEvent += OnDeleteWokerEvent;
             base.Enter();
         }

@@ -212,7 +212,7 @@ namespace ProjectOC.StoreNS
         }
         public bool CheckCanChangeData(DataType addType, DataType removeType, bool exceed=false)
         {
-            if (exceed && (removeType != DataType.Empty || removeType != DataType.EmptyReserve))
+            if (exceed && removeType != DataType.Empty && removeType != DataType.EmptyReserve)
             {
                 return false;
             }
@@ -245,19 +245,19 @@ namespace ProjectOC.StoreNS
                         return 0;
                     }
                     int num = amount;
-                    StoreData temp = default(StoreData);
-                    foreach (StoreData data in this.StoreDatas)
+                    int temp = -1;
+                    for(int i = 0; i < StoreDatas.Length; i++)
                     {
-                        if (data.ItemID == itemID && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
+                        if (StoreDatas[i].ItemID == itemID && (!needCanIn || StoreDatas[i].CanIn) && (!needCanOut || StoreDatas[i].CanOut))
                         {
-                            if (!temp.HaveItem())
+                            if (temp >= 0)
                             {
-                                temp = data;
+                                temp = i;
                             }
-                            int cur = data.GetNum(removeType);
+                            int cur = StoreDatas[i].GetNum(removeType);
                             cur = cur <= num ? cur : num;
-                            data.ChangeData(addType, cur);
-                            data.ChangeData(removeType, -cur);
+                            StoreDatas[i].ChangeData(addType, cur);
+                            StoreDatas[i].ChangeData(removeType, -cur);
                             num -= cur;
                             if (num <= 0)
                             {
@@ -265,10 +265,10 @@ namespace ProjectOC.StoreNS
                             }
                         }
                     }
-                    if (exceed && num > 0 && temp.HaveItem())
+                    if (exceed && num > 0 && temp >= 0)
                     {
-                        temp.ChangeData(addType, num);
-                        temp.ChangeData(removeType, -num);
+                        StoreDatas[temp].ChangeData(addType, num);
+                        StoreDatas[temp].ChangeData(removeType, -num);
                         num = 0;
                     }
                     OnDataChangeEvent?.Invoke();
@@ -340,7 +340,7 @@ namespace ProjectOC.StoreNS
         public void RemoveTranport(MissionNS.Transport transport) { Transports.Remove(transport); }
         public bool PutIn(string itemID, int amount)
         {
-            return ChangeData(itemID, amount, DataType.Storage, DataType.EmptyReserve, exceed:true) >= amount;
+            return ChangeData(itemID, amount, DataType.Storage, DataType.EmptyReserve, exceed:true) == amount;
         }
         public int PutOut(string itemID, int amount)
         {

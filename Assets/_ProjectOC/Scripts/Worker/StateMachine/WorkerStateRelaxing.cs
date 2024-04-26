@@ -7,7 +7,18 @@ namespace ProjectOC.WorkerNS
     public class WorkerStateRelaxing : State
     {
         public WorkerStateRelaxing(string name) : base(name) { }
-        private ML.Engine.Timer.CounterDownTimer TimerForRandomWalk;
+        private ML.Engine.Timer.CounterDownTimer timer;
+        private ML.Engine.Timer.CounterDownTimer TimerForRandomWalk
+        {
+            get
+            {
+                if (timer == null)
+                {
+                    timer = new ML.Engine.Timer.CounterDownTimer(2f, false, false);
+                }
+                return timer;
+            }
+        }
 
         public override void ConfigState()
         {
@@ -18,7 +29,6 @@ namespace ProjectOC.WorkerNS
                     if (machine is WorkerStateMachine workerMachine && workerMachine.Worker != null)
                     {
                         workerMachine.Worker.Status = Status.Relaxing;
-                        TimerForRandomWalk = new ML.Engine.Timer.CounterDownTimer(2f, false, false);
                     }
                 })    
             );
@@ -42,11 +52,11 @@ namespace ProjectOC.WorkerNS
 
                         if (!worker.HaveDestination && !worker.HaveRestaurantSeat)
                         {
-                            if (worker.HaveHome && !worker.HomePlace.IsArrive)
+                            if (worker.HaveHome && !worker.GetContainer(WorkerContainerType.Home).IsArrive)
                             {
-                                worker.SetDestination(worker.HomePlace.GetTransform().position, worker.HomePlace.OnArriveEvent);
+                                worker.SetDestination(worker.GetContainer(WorkerContainerType.Home).GetTransform().position, worker.GetContainer(WorkerContainerType.Home).OnArriveEvent, WorkerContainerType.Home);
                             }
-                            else if (!worker.HaveHome && (TimerForRandomWalk == null || TimerForRandomWalk.IsStoped))
+                            else if (!worker.HaveHome && (timer == null || timer.IsStoped))
                             {
                                 // Ëæ»úÓÎ×ß
                                 List<UnityEngine.Vector3> positions = new List<UnityEngine.Vector3>();
@@ -58,7 +68,10 @@ namespace ProjectOC.WorkerNS
                                     }
                                 }
                                 System.Random random = new System.Random();
-                                worker.SetDestination(positions[random.Next(0, positions.Count)]);
+                                if (positions.Count > 0)
+                                {
+                                    worker.SetDestination(positions[random.Next(0, positions.Count)]);
+                                }
                                 TimerForRandomWalk.Reset(2f);
                             }
                         }
@@ -77,7 +90,7 @@ namespace ProjectOC.WorkerNS
                         worker.ClearDestination();
                         if (worker.HaveProNode)
                         {
-                            worker.SetDestination(worker.WorkPlace.GetTransform().position, worker.WorkPlace.OnArriveEvent);
+                            worker.SetDestination(worker.GetContainer(WorkerContainerType.Work).GetTransform().position, worker.GetContainer(WorkerContainerType.Work).OnArriveEvent, WorkerContainerType.Work);
                         }
                     }
                 })

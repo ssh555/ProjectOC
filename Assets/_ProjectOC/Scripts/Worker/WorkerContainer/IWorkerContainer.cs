@@ -84,7 +84,7 @@ namespace ProjectOC.WorkerNS
                 }
                 else
                 {
-                    Worker.SetDestination(GetTransform().position, OnArriveEvent);
+                    Worker.SetDestination(GetTransform().position, OnArriveEvent, GetContainerType());
                 }
             }
         }
@@ -92,6 +92,7 @@ namespace ProjectOC.WorkerNS
 
     public enum WorkerContainerType
     {
+        None,
         Work,
         Relax,
         Home

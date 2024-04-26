@@ -70,7 +70,7 @@ namespace ProjectOC.RestaurantNS
             Seats = new RestaurantSeat[ManagerNS.LocalGameManager.Instance.RestaurantManager.SeatNum];
             for (int i = 0; i < Seats.Length; i++)
             {
-                Seats[i].Init(this, WorldRestaurant.transform.Find($"seat{i + 1}"));
+                Seats[i] = new RestaurantSeat(this, WorldRestaurant.transform.Find($"seat{i + 1}"));
             }
             Datas = new RestaurantData[ManagerNS.LocalGameManager.Instance.RestaurantManager.DataNum];
             Datas[0].Priority = FoodPriority.No1;
@@ -125,7 +125,7 @@ namespace ProjectOC.RestaurantNS
                     if (!Seats[i].HaveWorker)
                     {
                         (Seats[i] as WorkerNS.IWorkerContainer).SetWorker(worker);
-                        worker.SetDestination(Seats[i].Socket.position, Seats[i].OnArriveEvent);
+                        worker.SetDestination(Seats[i].Socket.position, Seats[i].OnArriveEvent, Seats[i].GetContainerType());
                         ManagerNS.LocalGameManager.Instance.RestaurantManager.RemoveWorker(worker);
                         return true;
                     }
@@ -165,7 +165,8 @@ namespace ProjectOC.RestaurantNS
         public string EatFood(WorkerNS.Worker worker)
         {
             int index = FindFood(worker);
-            if (0 <= index && index < Datas.Length && Change(index, -1) == 1)
+            int flag = Change(index, -1);
+            if (0 <= index && index < Datas.Length && flag == 1)
             {
                 return Datas[index].ID;
             }
@@ -262,7 +263,7 @@ namespace ProjectOC.RestaurantNS
         {
             lock (this)
             {
-                if (0 <= index && index < Datas.Length && Datas[index].HaveSetFood && amount != 0)
+                if (IsValidDataIndex(index) && Datas[index].HaveSetFood && amount != 0)
                 {
                     if ((!exceed && amount > 0 && Datas[index].Amount >= Datas[index].MaxCapacity) || (complete && amount + Datas[index].Amount < 0))
                     {

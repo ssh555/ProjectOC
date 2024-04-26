@@ -85,7 +85,13 @@ namespace ProjectOC.WorkerNS
                     ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent -= OnManagerAddWorkerEvent;
                 }
             };
-            OnRemoveWorkerEvent += () => { ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent += OnManagerAddWorkerEvent; };
+            OnRemoveWorkerEvent += () => 
+            {
+                if (ManagerNS.LocalGameManager.Instance != null)
+                {
+                    ManagerNS.LocalGameManager.Instance.WorkerManager.OnAddWokerEvent += OnManagerAddWorkerEvent;
+                }
+            };
             this.enabled = false;
         }
 
@@ -155,17 +161,10 @@ namespace ProjectOC.WorkerNS
 
         public bool TempRemoveWorker()
         {
-            if (Worker != null)
+            if (Worker != null && IsArrive)
             {
-                if (IsArrive)
-                {
-                    Worker.RecoverLastPosition();
-                    IsArrive = false;
-                }
-                else
-                {
-                    Worker.ClearDestination();
-                }
+                Worker.RecoverLastPosition();
+                IsArrive = false;
                 return true;
             }
             return false;

@@ -30,18 +30,8 @@ namespace ProjectOC.ClanNS.UI
         #region Override
         protected override void Enter()
         {
-            SortClans();
+            SortClans(true);
             base.Enter();
-        }
-        public override void OnRecovery()
-        {
-            SortClans();
-            base.Enter();
-        }
-        public override void OnPause()
-        {
-            ClearTemp();
-            base.Exit();
         }
         protected override void Exit()
         {
@@ -108,10 +98,13 @@ namespace ProjectOC.ClanNS.UI
         }
         #endregion
 
-        public void SortClans()
+        public void SortClans(bool needClear = false)
         {
-            this.Clans.Clear();
-            this.Clans.AddRange(ManagerNS.LocalGameManager.Instance.ClanManager.Clans);
+            if (needClear)
+            {
+                this.Clans.Clear();
+                this.Clans.AddRange(ManagerNS.LocalGameManager.Instance.ClanManager.Clans);
+            }
             this.Clans.Sort(new Clan.Sort());
             if (this.Bed.HaveClan)
             {
@@ -172,7 +165,7 @@ namespace ProjectOC.ClanNS.UI
             {
                 this.CurMode = Mode.ChangeClan;
                 index = 0;
-                SortClans();
+                SortClans(true);
             }
             else if (CurMode == Mode.ChangeClan)
             {
@@ -186,6 +179,7 @@ namespace ProjectOC.ClanNS.UI
                     else
                     {
                         Bed.SetClan(this.CurClan);
+                        SortClans(false);
                     }
                 }
             }
