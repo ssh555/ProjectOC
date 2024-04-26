@@ -46,16 +46,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - InputActionAssets
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6f29b2f5036810343988c70ef0c65644
-    m_Address: OC/Prefabs_OrderBoard_UI
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e66bc366ff86aed4bb8d04b0f1f6f736
-    m_Address: RenderTex2D_UICameraImage_RT
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 72d1a89784032c94ea3b026b42e20dcf, type: 2}
   m_SchemaSet:
