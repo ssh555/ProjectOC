@@ -56,7 +56,7 @@ namespace ML.Engine.InventorySystem
             this.bcanuse = false;
             this.type = "ResourceItem";
             this.maxamount = int.MaxValue;
-            this.worldobject = "Item";
+            this.worldobject = "Prefab_Item_Item";
             return true;
         }
     }
