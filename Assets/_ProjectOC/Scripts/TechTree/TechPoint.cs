@@ -22,5 +22,6 @@ namespace ProjectOC.TechTree
         public string[] PrePoint;
         public ML.Engine.InventorySystem.CompositeSystem.Formula[] ItemCost;
         public int TimeCost;
+        public List<string> EventStrings;
     }
 }

@@ -275,12 +275,12 @@ namespace ExcelToJson
             return defaultValue;
         }
 
-        public static List<string> ParseStringList(string data)
+        public static List<string> ParseStringList(string data, char separator=',')
         {
             List<string> result = new List<string>();
             if (!string.IsNullOrEmpty(data))
             {
-                foreach (var s in data.Trim().Split(',', '，'))
+                foreach (var s in data.Trim().Split(separator))
                 {
                     if (!string.IsNullOrEmpty(s) && !string.IsNullOrEmpty(s.Trim()))
                     {
