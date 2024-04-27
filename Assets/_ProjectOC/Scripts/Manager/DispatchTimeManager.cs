@@ -19,11 +19,11 @@ namespace ProjectOC.ManagerNS
                 }
             }
         }
-        [LabelText("当前分钟 [0, 59]"), ReadOnly, ShowInInspector]
+        [LabelText("当前分钟 [0, 59]"), ShowInInspector]
         public int CurrentMinute = 0;
-        [LabelText("当前时段 [0, 23]"), ReadOnly, ShowInInspector]
+        [LabelText("当前时段 [0, 23]"),  ShowInInspector]
         public int CurrentHour = 0;
-        [LabelText("当前日期 [0,]"), ReadOnly, ShowInInspector]
+        [LabelText("当前日期 [0,]"), ShowInInspector]
         public int CurrentDay = 0;
         /// <summary>
         /// 计时器，时间为TimeScale秒，循环计时。每次计时结束后更新时段，并调用时段更新事件

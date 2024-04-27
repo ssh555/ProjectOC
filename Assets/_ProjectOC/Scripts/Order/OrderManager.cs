@@ -1,3 +1,4 @@
+using AmazingAssets.TerrainToMesh;
 using ML.Engine.InventorySystem;
 using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.Manager;
@@ -34,7 +35,8 @@ namespace ProjectOC.Order
         {
             Urgent = 0,
             Special,
-            Normal
+            Normal,
+            None,
         }
 
         /// <summary>
@@ -66,55 +68,25 @@ namespace ProjectOC.Order
         [ShowInInspector]
         private List<OrderNormal> WaitingForRefreshNormalOrders = new List<OrderNormal>();
 
-        /// <summary>
-        /// 已承接订单结构体
-        /// </summary>
-        [Serializable]
-        public class AcceptedOrder : IComparable<AcceptedOrder>
-        {
-            public Order order;
-            public OrderType orderType;
-            public bool canBeCommit;
-            public int acceptOrder;
-
-            public AcceptedOrder(Order order, OrderType orderType)
-            {
-                this.order = order;
-                this.orderType = orderType;
-                this.canBeCommit = false;
-                this.acceptOrder = curAcceptOrder++;
-            }
-
-            // 实现 IComparable 接口中的 CompareTo 方法
-            public int CompareTo(AcceptedOrder other)
-            {
-                // 首先按照 orderType 升序
-                int result = orderType.CompareTo(other.orderType);
-                if (result != 0)
-                {
-                    return result;
-                }
-
-                // 如果 orderType 相同，按照 canBeCommit 升序
-                result = canBeCommit.CompareTo(other.canBeCommit);
-                if (result != 0)
-                {
-                    return result;
-                }
-
-                // 如果 canBeCommit 也相同，按照 acceptOrder 升序
-                return acceptOrder.CompareTo(other.acceptOrder);
-            }
-        }
 
         /// <summary>
-        /// 已承接列表的订单 (string 氏族ID,OrderType type)，List<Order>
+        /// 已承接列表的订单 
         /// </summary>
         [ShowInInspector]
-        private List<AcceptedOrder> acceptedList = new List<AcceptedOrder>();
-        private Dictionary<string, AcceptedOrder> acceptedListDic = new Dictionary<string, AcceptedOrder>();
+        private List<Order> AcceptedOrderList = new List<Order>();
+        /// <summary>
+        /// OrderInstanceID,AcceptedOrder
+        /// </summary>
+        [ShowInInspector]
+        private Dictionary<string, Order> AcceptedOrderListDic = new Dictionary<string, Order>();
 
-        public List<AcceptedOrder> AcceptedOrders { get { return acceptedList; } }
+        /// <summary>
+        /// OrderInstanceID,AcceptedOrder
+        /// </summary>
+        [ShowInInspector]
+        private Dictionary<string, Order> OrderDelegationListDic = new Dictionary<string, Order>();
+
+        public List<Order> AcceptedOrders { get { return AcceptedOrderList; } }
         private static int curAcceptOrder = 0;
 
         /// <summary>
@@ -127,7 +99,8 @@ namespace ProjectOC.Order
         /// </summary>
         private CounterDownTimer CanBeCommitRefreshTimer;
 
-        public event Action OnCanBeCommitRefresh;
+        public event Action OrderPanelRefreshOrderUrgentDelegation;
+        public event Action OrderPanelRefreshAcceptedOrder;
 
         private IInventory PlayerInventory;
 
@@ -180,7 +153,7 @@ namespace ProjectOC.Order
             };
             this.CanBeCommitRefreshTimer.OnEndEvent += () =>
             {
-                this.RefreshAcceptedList();
+                //this.RefreshAcceptedList();
             };
 
             //初始化背包
@@ -240,6 +213,8 @@ namespace ProjectOC.Order
 
             (string clanId,Order order) = emptyList[rand.Next(0, emptyList.Count)];
 
+
+
             //抽选对应氏族紧急订单
             string extractOrderId = null;
 
@@ -272,16 +247,18 @@ namespace ProjectOC.Order
         /// <summary>
         /// 刷新已承接列表函数
         /// </summary>
-        private void RefreshAcceptedList()
+        public void RefreshAcceptedList()
         {
-            for (int i = 0; i < acceptedList.Count; i++) 
+            AcceptedOrderList.Sort();
+
+            for (int i = 0; i < AcceptedOrderList.Count; i++) 
             {
                 
-                Order order = acceptedList[i].order;
+                Order order = AcceptedOrderList[i];
                 OrderTableData orderTableData = OrderTableDataDic[order.OrderID];
                 List<Formula> formulaList = new List<Formula>();
                 List<Formula> AddedItems = new List<Formula>();
-                foreach (var requireItem in acceptedList[i].order.RemainRequireItemDic)
+                foreach (var requireItem in AcceptedOrderList[i].RemainRequireItemDic)
                 {
                     formulaList.Add(new Formula() { id = requireItem.Key,num = requireItem.Value});
                 }
@@ -295,13 +272,12 @@ namespace ProjectOC.Order
                     if(isFinish)
                     {
                         Debug.Log("isFinish");
-                        acceptedList[i].canBeCommit = true;
+                        AcceptedOrderList[i].canBeCommit = true;
                     }
                 }
             }
             //
-            acceptedList.Sort();
-            OnCanBeCommitRefresh?.Invoke();
+            
         }
 
         /// <summary>
@@ -315,8 +291,6 @@ namespace ProjectOC.Order
             OrderTableData orderTableData = OrderTableDataDic[OrderId];
             string ClanID = OrderIDToClanIDDic[orderTableData.ID];
             UnlockedOrderMap[orderTableData.OrderType].Add(OrderId);
-            
-
 
             if(orderTableData.OrderType == OrderType.Normal)
             {
@@ -334,6 +308,10 @@ namespace ProjectOC.Order
                 }
                 
             }
+            else if(orderTableData.OrderType == OrderType.Special)
+            {
+                AddOrderToOrderDelegationMap(OrderId);
+            }
         }
 
         /// <summary>
@@ -346,11 +324,11 @@ namespace ProjectOC.Order
             //Debug.Log("接取订单 " + OrderId + " " + LocalGameManager.Instance.DispatchTimeManager.CurrentHour.ToString() + " : " + LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString());
             OrderTableData orderTableData = OrderTableDataDic[OrderId];
             string ClanID = OrderIDToClanIDDic[orderTableData.ID];
+
             if (orderTableData.OrderType == OrderType.Urgent)
             {
-                OrderUrgent orderUrgent = new OrderUrgent(orderTableData.ID, orderTableData.RequireList, orderTableData.ReceiveDDL, orderTableData.DeliverDDL);
+                OrderUrgent orderUrgent = new OrderUrgent(orderTableData);
                 orderUrgent.StartReceiveDDLTimer();
-                
                 List<Order> orders = this.OrderUrgentDelegationMap[ClanID];
                 for (int i = 0; i < orders.Count; i++)
                 {
@@ -362,191 +340,253 @@ namespace ProjectOC.Order
                         break; 
                     }
                 }
-/*                this.OrderUrgentDelegationMap[ClanID].Clear();*/
-                /*                foreach (var order in orders)
-                                {
-                                    this.OrderUrgentDelegationMap[ClanID].Add(order);
-                                }*/
+                OrderDelegationListDic.Add(orderUrgent.OrderInstanceID, orderUrgent);
+                //紧急订单需要刷新UI
+                OrderPanelRefreshOrderUrgentDelegation?.Invoke();
             }
             else if(orderTableData.OrderType == OrderType.Normal)
             {
-                OrderNormalDelegationMap[ClanID].Add(new OrderNormal(orderTableData.ID, orderTableData.RequireList, orderTableData.CD));
+                Debug.Log("常规订单有刷新！" + orderTableData.ID);
+                OrderNormal orderNormal = new OrderNormal(orderTableData);
+                OrderNormalDelegationMap[ClanID].Add(orderNormal);
+                OrderDelegationListDic.Add(orderNormal.OrderInstanceID, orderNormal);
             }
             else if(orderTableData.OrderType == OrderType.Special)
             {
-                OrderSpecialDelegationMap[ClanID].Add(new OrderSpecial(orderTableData.ID, orderTableData.RequireList));
+                OrderSpecial orderSpecial = new OrderSpecial(orderTableData);
+                OrderSpecialDelegationMap[ClanID].Add(new OrderSpecial(orderTableData));
+                OrderDelegationListDic.Add(orderSpecial.OrderInstanceID, orderSpecial);
+                //特殊订单直接进入已承接列表
+                this.ReceiveOrder(orderSpecial.OrderInstanceID);
             }
-            
         }
-
-
 
         /// <summary>
         /// 拒绝订单函数 仅限于拒绝紧急订单  对应订单委托拒绝订单按钮
         /// </summary>
-        public void RefuseOrder(string OrderId)
+        public void RefuseOrder(string OrderInstanceID)
         {
-            if (OrderId == null) return;
-            if (!OrderTableDataDic.ContainsKey(OrderId)) return;
-            OrderTableData orderTableData = OrderTableDataDic[OrderId];
-            if (orderTableData.OrderType != OrderType.Urgent) return;
-            string ClanID = OrderIDToClanIDDic[orderTableData.ID];
+            Debug.Log("OrderInstanceID " + OrderInstanceID + " " + OrderDelegationListDic.ContainsKey(OrderInstanceID));
+            if (OrderInstanceID == null || !OrderDelegationListDic.ContainsKey(OrderInstanceID)) return;
+            Order order = OrderDelegationListDic[OrderInstanceID];
+
+            if (order.orderType != OrderType.Urgent) return;
+            string ClanID = OrderIDToClanIDDic[order.OrderID];
             var olist = OrderUrgentDelegationMap[ClanID];
             for(int i = 0; i < olist.Count; i++)
             {
-                if (olist[i]?.OrderID == OrderId)
+                if (olist[i]?.OrderInstanceID == order.OrderInstanceID)
                 {
                     Debug.Log("订单超时 " + olist[i].OrderID+" "+ LocalGameManager.Instance.DispatchTimeManager.CurrentHour.ToString() + " : " + LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString());
+                    OrderDelegationListDic.Remove(olist[i].OrderInstanceID);
                     olist[i] = null;
                     break;
                 }
             }
+            //紧急订单需要刷新UI
+            OrderPanelRefreshOrderUrgentDelegation?.Invoke();
         }
 
         /// <summary>
         /// 接取订单函数
         /// </summary>
-        public void ReceiveOrder(string OrderId)
+        public void ReceiveOrder(string OrderInstanceID)
         {
-            if(OrderId == null) return;
-            if (!OrderTableDataDic.ContainsKey(OrderId)) return;
-            OrderTableData orderTableData = OrderTableDataDic[OrderId];
-            string ClanID = OrderIDToClanIDDic[orderTableData.ID];
+            if (OrderInstanceID == null || !OrderDelegationListDic.ContainsKey(OrderInstanceID)) return;
+            Order order = OrderDelegationListDic[OrderInstanceID];
+
+            string ClanID = OrderIDToClanIDDic[order.OrderID];
             List<Order> olist = new List<Order>();
-            if (orderTableData.OrderType == OrderType.Urgent)
+            if (order.orderType == OrderType.Urgent)
             {
                 olist = OrderUrgentDelegationMap[ClanID];
             }
-            else if(orderTableData.OrderType == OrderType.Normal)
+            else if(order.orderType == OrderType.Normal)
             {
                 olist = OrderNormalDelegationMap[ClanID];
             }
-            else if(orderTableData.OrderType == OrderType.Special)
+            else if(order.orderType == OrderType.Special)
             {
                 olist = OrderSpecialDelegationMap[ClanID];
             }
 
-            
             for (int i = 0; i < olist.Count; i++)
             {
-                if (olist[i] != null && olist[i].OrderID == OrderId) 
+                if (olist[i] != null && olist[i].OrderInstanceID == order.OrderInstanceID) 
                 {
                     //加入已承接列表
-                    AcceptedOrder acceptedOrder = null;
+                    Order acceptedOrder = null;
                     if(olist[i] is OrderUrgent)
                     {
                         OrderUrgent orderUrgent = (OrderUrgent)olist[i];
                         orderUrgent.StartDeliverDDLTimer();
-                        acceptedOrder = new AcceptedOrder(orderUrgent, orderTableData.OrderType);
-                        //重置紧急订单状态
-                        orderUrgent.Reset();
+                        acceptedOrder = orderUrgent;
+
                         //紧急留空槽
                         olist[i] = null;
                     }
                     else if(olist[i] is OrderSpecial)
                     {
-                        acceptedOrder = new AcceptedOrder((OrderSpecial)olist[i], orderTableData.OrderType);
+                        OrderSpecial orderSpecial = (OrderSpecial)olist[i];
+                        acceptedOrder = orderSpecial;
+
+                        olist.Remove(olist[i]);
                     }
                     else if (olist[i] is OrderNormal)
                     {
-                        acceptedOrder = new AcceptedOrder((OrderNormal)olist[i], orderTableData.OrderType);
+                        OrderNormal orderNormal = (OrderNormal)olist[i];
+                        acceptedOrder = orderNormal;
                         
                         //常规直接删
                         olist.Remove(olist[i]);
                     }
-                    acceptedList.Add(acceptedOrder);
-                    acceptedListDic.Add(orderTableData.ID, acceptedOrder);
+                    acceptedOrder.acceptOrder = curAcceptOrder;
+                    curAcceptOrder = (curAcceptOrder + 1) % int.MaxValue;
+                    OrderDelegationListDic.Remove(order.OrderInstanceID);
+                    AcceptedOrderList.Add(acceptedOrder);
+                    AcceptedOrderListDic.Add(acceptedOrder.OrderInstanceID, acceptedOrder);
                     //加入已承接列表后立即执行一次RefreshAcceptedList函数
-
+                    this.RefreshAcceptedList();
                     break;
                 }
             }
+
         }
 
         /// <summary>
         /// 取消订单函数
         /// </summary>
-        public void CancleOrder(string OrderId)
+        public bool CancleOrder(string OrderInstanceID)
         {
-            if (OrderId == null) return;
-            for (int i = 0; i < acceptedList.Count; i++)
+            if (OrderInstanceID == null || !AcceptedOrderListDic.ContainsKey(OrderInstanceID)) return false;
+            Order acceptedOrder = AcceptedOrderListDic[OrderInstanceID];
+            if (acceptedOrder.canBeCancled == false) return false;
+
+            //TODO 已扣除返还玩家背包 暂时考虑背包无限
+
+            foreach (var addedItem in acceptedOrder.AddedItemDic)
             {
-                if (acceptedList[i].order.OrderID == OrderId)
+                foreach (var item in ItemManager.Instance.SpawnItems(addedItem.Key, addedItem.Value))
                 {
-                    //TODO 已扣除返还玩家背包 暂时考虑背包无限
-
-                    OrderTableData orderTableData = OrderTableDataDic[acceptedList[i].order.OrderID];
-                    foreach (var addedItem in acceptedList[i].order.AddedItemDic)
-                    {
-                        foreach (var item in ItemManager.Instance.SpawnItems(addedItem.Key, addedItem.Value))
-                        {
-                            PlayerInventory.AddItem(item);
-                        }
-                        
-                    }
-
-                    //TODO 受到惩罚
-                    Debug.Log("受到惩罚");
-                    acceptedListDic.Remove(acceptedList[i].order.OrderID);
-                    acceptedList.Remove(acceptedList[i]);
-                    
-                    this.RefreshAcceptedList();
-                    break;
+                    PlayerInventory.AddItem(item);
                 }
+                        
+            }
+            //TODO 受到惩罚
+            Debug.Log("受到惩罚");
+
+
+            if(acceptedOrder is OrderNormal)
+            {
+                //常规订单刷新
+                OrderNormal orderNormal = (OrderNormal)acceptedOrder;
+                orderNormal.StartRefreshTimer();
+            }
+            else if(acceptedOrder is OrderUrgent)
+            {
+                //重置紧急订单状态
+                OrderUrgent orderUrgent = (OrderUrgent)acceptedOrder;
+                orderUrgent.Reset();
             }
 
+            //移除唯一命名
+            AcceptedOrderListDic.Remove(acceptedOrder.OrderInstanceID);
 
+            AcceptedOrderList.Remove(acceptedOrder);
+                    
+            this.RefreshAcceptedList();
+            return true;
         }
 
         /// <summary>
         /// 提交订单函数
         /// </summary>
-        public void CommitOrder(string OrderId)
+        public bool CommitOrder(string OrderInstanceID,bool needRefresh = true)
         {
-            Debug.Log("提交订单 " + OrderId);
-            if (OrderId == null) return;
-            if (!OrderTableDataDic.ContainsKey(OrderId)) return;
-            OrderTableData orderTableData = OrderTableDataDic[OrderId];
+            Debug.Log("提交订单 " + OrderInstanceID);
+            if (OrderInstanceID == null || !AcceptedOrderListDic.ContainsKey(OrderInstanceID)) return false;
+            Order acceptedOrder = AcceptedOrderListDic[OrderInstanceID];
+            if (acceptedOrder.canBeCommit == false) return false;
 
-            for (int i = 0; i < acceptedList.Count; i++)
+            OrderTableData orderTableData = OrderTableDataDic[acceptedOrder.OrderID];
+
+            //获得Item奖励
+
+            foreach (var ordermap in orderTableData.ItemReward)
             {
-                if (acceptedList[i].order.OrderID == OrderId)
+                foreach (var item in ItemManager.Instance.SpawnItems(ordermap.id, ordermap.num))
                 {
-                    //获得Item奖励
-
-                    foreach (var ordermap in orderTableData.ItemReward)
-                    {
-                        foreach (var item in ItemManager.Instance.SpawnItems(ordermap.id, ordermap.num))
-                        {
-                            PlayerInventory.AddItem(item);
-                        }
-                    }
-
-                    //TODO 获得氏族信赖奖励
-
-                    //TODO 获得角色信赖奖励
-
-                    //加入等待重新进入的常规订单列表
-
-                    if (acceptedList[i].order is OrderNormal)
-                    {
-                        OrderNormal orderNormal = (OrderNormal)acceptedList[i].order;
-                        orderNormal.StartRefreshTimer();
-                        this.WaitingForRefreshNormalOrders.Add(orderNormal);
-                    }
-                    Debug.Log("1提交订单 " + acceptedList[i].order.OrderID);
-                    acceptedListDic.Remove(acceptedList[i].order.OrderID);
-                    acceptedList.Remove(acceptedList[i]);
-                    
-                    this.RefreshAcceptedList();
+                    PlayerInventory.AddItem(item);
                 }
             }
+
+            //TODO 获得氏族信赖奖励
+
+            //TODO 获得角色信赖奖励
+
+            //加入等待重新进入的常规订单列表
+
+            if (acceptedOrder is OrderNormal)
+            {
+                //常规订单刷新
+                OrderNormal orderNormal = (OrderNormal)acceptedOrder;
+                orderNormal.StartRefreshTimer();
+                this.WaitingForRefreshNormalOrders.Add(orderNormal);
+            }
+            else if (acceptedOrder is OrderUrgent)
+            {
+                //重置紧急订单状态
+                OrderUrgent orderUrgent = (OrderUrgent)acceptedOrder;
+                orderUrgent.Reset();
+            }
+            Debug.Log("1提交订单 " + acceptedOrder.OrderInstanceID);
+
+            
+                
+            if(needRefresh)
+            {
+                //移除唯一命名
+                AcceptedOrderListDic.Remove(acceptedOrder.OrderInstanceID);
+                AcceptedOrderList.Remove(acceptedOrder);
+                this.RefreshAcceptedList();
+            }
+                
+            return true;
         }
 
         /// <summary>
-        /// 销毁订单实例
+        /// 快捷提交订单函数
         /// </summary>
-        //public void int
+        public void CommitAllOrder()
+        {
+            List<Order> WaitToDelete = new List<Order>();
+            foreach (var acceptOrder in AcceptedOrderList)
+            {
+                if (acceptOrder.canBeCommit)
+                {
+                    if(CommitOrder(acceptOrder.OrderInstanceID, false))
+                    {
+                        WaitToDelete.Add(acceptOrder);
+                    }
+                }
+            }
+            foreach (var acceptOrder in WaitToDelete)
+            {
+                //移除唯一命名
+                AcceptedOrderListDic.Remove(acceptOrder.OrderInstanceID);
+                AcceptedOrderList.Remove(acceptOrder);
+            }
+            this.RefreshAcceptedList();
+        }
+
+        /// <summary>
+        /// 生成唯一的实例ID
+        /// </summary>
+        public string GenerateOrderInstanceID(string orderID)
+        {
+            return orderID+"|"+ML.Engine.Utility.OSTime.OSCurMilliSeconedTime.ToString();
+        }
+        
 
         #endregion
 
@@ -592,13 +632,21 @@ namespace ProjectOC.Order
 
             return new List<Order>();
         }
-        public OrderTableData GetOrderTableData(string orderId)
+        public OrderTableData GetOrderTableData(string OrderInstanceID)
         {
-            if(this.OrderTableDataDic.ContainsKey((orderId)))
+            string id = GetOrderID(OrderInstanceID);
+            if (id != null) 
             {
-                return this.OrderTableDataDic[orderId];
+                return this.OrderTableDataDic[id];
             }
             return OrderTableData.None;
+        }
+
+        public string GetOrderID(string OrderInstanceID)
+        {
+            if (OrderInstanceID != null && AcceptedOrderListDic.ContainsKey(OrderInstanceID)) return AcceptedOrderListDic[OrderInstanceID].OrderID;
+            if (OrderInstanceID != null && OrderDelegationListDic.ContainsKey(OrderInstanceID)) return OrderDelegationListDic[OrderInstanceID].OrderID;
+            return null;
         }
         public OrderTableData GetOrderTableData(Order order)
         {
@@ -610,18 +658,29 @@ namespace ProjectOC.Order
             return OrderTableData.None;
         }
 
-        public bool IsValidOrderID(string orderID)
+        public OrderType GetOrderTypeInOrderDelegation(string OrderInstanceID)
         {
-            if (orderID == null) return false;
-            if (this.OrderTableDataDic.ContainsKey(orderID)) return true;
-            return false;
+            if (OrderInstanceID == null || !OrderDelegationListDic.ContainsKey(OrderInstanceID)) return OrderType.None;
+            return OrderDelegationListDic[OrderInstanceID].orderType;
         }
 
-        public AcceptedOrder GetAcceptedOrder(string orderID)
+        public bool IsValidOrderIDInOrderDelegation(string OrderInstanceID)
         {
-            if(this.acceptedListDic.ContainsKey(orderID))
+            if (OrderInstanceID == null || !OrderDelegationListDic.ContainsKey(OrderInstanceID)) return false;
+            return true;
+        }
+
+        public bool IsValidOrderIDInAcceptedOrder(string OrderInstanceID)
+        {
+            if (OrderInstanceID == null || !AcceptedOrderListDic.ContainsKey(OrderInstanceID)) return false;
+            return true;
+        }
+
+        public Order GetAcceptedOrder(string OrderInstanceID)
+        {
+            if(this.AcceptedOrderListDic.ContainsKey(OrderInstanceID))
             {
-                return this.acceptedListDic[orderID];
+                return this.AcceptedOrderListDic[OrderInstanceID];
             }
             return null;
         }
@@ -685,7 +744,7 @@ namespace ProjectOC.Order
         #region Load
         private void LoadTableData()
         {
-            ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]> ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]>("OC/Json/TableData", "Order", (datas) =>
+            ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]> ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]>("OCTableData", "Order", (datas) =>
             {
                 //TODO 之后从氏族模块获取
                 OrderIDToClanIDDic.Add("Order_Urgent_LiYuan_1", "Clan1");

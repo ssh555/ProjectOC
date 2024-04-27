@@ -376,8 +376,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                             normalizedPosition += new Vector2(offset.x / (contentRect.rect.width - (contentRect.parent as RectTransform).rect.width), offset.y / (contentRect.rect.height - (contentRect.parent as RectTransform).rect.height));
                             scrollRect.normalizedPosition = normalizedPosition;
                         }
-
-
                     }
                 }
 
@@ -422,15 +420,16 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         protected override void InitObjectPool()
         {
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
-            "SA_ResonanceWheel_UI_UIPanel", (handle) =>
+            "SA_ResonanceWheel_UI", (handle) =>
             {
+                string Pre = "Tex2D_Resonance_UI_";
                 SpriteAtlas resonanceWheelAtlas = handle.Result as SpriteAtlas;
-                icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite("icon_genderfemale");
-                icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite("icon_gendermale");
+                icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite(Pre + "icon_genderfemale");
+                icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite(Pre + "icon_gendermale");
             }
             );
-            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "BeastBioPool", LocalGameManager.Instance.WorkerManager.GetWorkers().Count, "OC/Prefabs_ResonanceWheel_UI/Prefab_Resonance_UI_BeastBio.prefab");
-            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "DescriptionPool", 5, "OC/Prefabs_ResonanceWheel_UI/Prefab_Resonance_UI_Description.prefab");
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "BeastBioPool", LocalGameManager.Instance.WorkerManager.GetWorkers().Count, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_BeastBio.prefab");
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "DescriptionPool", 5, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_Description.prefab");
             base.InitObjectPool();
         }
 
