@@ -11,17 +11,18 @@ namespace ProjectOC.DataNS
         #region Data
         [LabelText("存储数据"), ReadOnly]
         private Data[] Datas;
+        [NonSerialized]
         private Dictionary<string, HashSet<int>> DataIndexDict;
         /// <summary>
         /// 能存多少个存储数据
         /// </summary>
-        [LabelText("容量"), ShowInInspector, ReadOnly]
-        public int Capacity { get; private set; }
+        [LabelText("容量"), ReadOnly]
+        public int Capacity;
         /// <summary>
         /// 存储数据里能存多少个数据
         /// </summary>
-        [LabelText("存储数据的容量"), ShowInInspector, ReadOnly]
-        public int DataCapacity { get; private set; }
+        [LabelText("存储数据的容量"), ReadOnly]
+        public int DataCapacity;
         /// <summary>
         /// 数据变化事件
         /// </summary>
