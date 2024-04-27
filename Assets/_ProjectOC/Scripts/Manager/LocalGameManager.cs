@@ -2,7 +2,6 @@ using System.Collections;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-
 namespace ProjectOC.ManagerNS
 {
     [System.Serializable]
@@ -32,6 +31,8 @@ namespace ProjectOC.ManagerNS
         public IslandAreaManager IslandAreaManager;
         public Order.OrderManager OrderManager;
         public PinchFace.PinchFaceManager PinchFaceManager;
+        public Player.OCPlayerController Player => (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController);
+
         /// <summary>
         /// µ¥Àı¹ÜÀí
         /// </summary>

@@ -40,7 +40,7 @@ namespace ProjectOC.StoreNS
             if ((this as ML.Engine.BuildingSystem.IBuildingUpgrade).HasUpgrade())
             {
                 var formulas = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(Classification.ToString());
-                return (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).InventoryHasItems(formulas);
+                return (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).InventoryHaveItems(formulas);
             }
             return false;
         }

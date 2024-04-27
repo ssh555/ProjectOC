@@ -57,7 +57,7 @@ namespace ProjectOC.ProNodeNS
             if ((this as IBuildingUpgrade).HasUpgrade())
             {
                 var formulas = BuildingManager.Instance.GetUpgradeRaw(Classification.ToString());
-                return (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).InventoryHasItems(formulas);
+                return (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).InventoryHaveItems(formulas);
             }
             return false;
         }

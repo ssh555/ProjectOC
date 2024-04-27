@@ -6,38 +6,38 @@ namespace ProjectOC.DataNS
     [LabelText("存储数据"), System.Serializable]
     public struct Data
     {
-        #region Data
+        #region Private
+        [LabelText("最大容量"), ShowInInspector, ReadOnly]
+        private int MaxCapacity;
+        [LabelText("实际存放量"), ShowInInspector, ReadOnly]
+        private int Storage;
+        [LabelText("实际空余量"), ShowInInspector, ReadOnly]
+        private int Empty;
+        [LabelText("预留存放量"), ShowInInspector, ReadOnly]
+        private int StorageReserve;
+        [LabelText("预留空余量"), ShowInInspector, ReadOnly]
+        private int EmptyReserve;
+        #endregion
+
+        #region Public
         [LabelText("数据ID"), ReadOnly]
         public string ID;
-        [LabelText("最大容量"), ReadOnly]
-        public int MaxCapacity;
-        [LabelText("实际存放量"), ReadOnly]
-        public int Storage;
-        [LabelText("实际空余量"), ReadOnly]
-        public int Empty;
-        [LabelText("预留存放量"), ReadOnly]
-        public int StorageReserve;
-        [LabelText("预留空余量"), ReadOnly]
-        public int EmptyReserve;
         [LabelText("能否存入"), ReadOnly]
         public bool CanIn;
         [LabelText("能否取出"), ReadOnly]
         public bool CanOut;
-        #endregion
-
-        #region Property
         [LabelText("总存放量"), ShowInInspector, ReadOnly]
         public int StorageAll { get { return Storage + StorageReserve; } }
         [LabelText("总存放量"), ShowInInspector, ReadOnly]
         public bool HaveSetData { get { return !string.IsNullOrEmpty(ID); } }
         #endregion
 
-        public Data(string itemID, int maxCapacity)
+        public Data(string id, int maxCapacity)
         {
-            ID = itemID;
+            ID = id;
             MaxCapacity = maxCapacity;
             Storage = 0;
-            Empty = 0;
+            Empty = maxCapacity;
             StorageReserve = 0;
             EmptyReserve = 0;
             CanIn = true;
@@ -47,10 +47,25 @@ namespace ProjectOC.DataNS
         public void Clear()
         {
             ID = "";
+            Empty += Storage + StorageReserve + EmptyReserve;
             Storage = 0;
-            Empty = 0;
             StorageReserve = 0;
             EmptyReserve = 0;
+        }
+
+        public int GetMaxCapacity()
+        {
+            return MaxCapacity;
+        }
+
+        public void SetMaxCapacity(int maxCapacity)
+        {
+            if (maxCapacity >= 0)
+            {
+                Empty += (maxCapacity - MaxCapacity);
+                Empty = Empty < 0 ? 0 : Empty;
+                MaxCapacity = maxCapacity;
+            }
         }
 
         public int GetAmount(DataOpType type)

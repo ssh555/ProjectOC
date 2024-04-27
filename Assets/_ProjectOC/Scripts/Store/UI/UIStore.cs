@@ -73,14 +73,14 @@ namespace ProjectOC.StoreNS.UI
         #region Override
         protected override void Enter()
         {
-            Store.OnDataChangeEvent += Refresh;
+            Store.StoreDatas.OnDataChangeEvent += Refresh;
             Store.IsInteracting = true;
             base.Enter();
         }
 
         protected override void Exit()
         {
-            Store.OnDataChangeEvent -= Refresh;
+            Store.StoreDatas.OnDataChangeEvent -= Refresh;
             Store.IsInteracting = false;
             ClearTemp();
             base.Exit();
@@ -477,7 +477,7 @@ namespace ProjectOC.StoreNS.UI
             }
             else if (CurMode == Mode.ChangeItem)
             {
-                Store.UIChangeStoreData(CurrentDataIndex, CurrentItemData);
+                Store.ChangeStoreData(CurrentDataIndex, CurrentItemData);
                 this.CurMode = Mode.Store;
                 this.ItemDatas.Clear();
                 this.lastItemIndex = 0;
@@ -1062,8 +1062,8 @@ namespace ProjectOC.StoreNS.UI
 
                 #region Level
                 Upgrade_LvOld.Find("Lv").GetComponent<TMPro.TextMeshProUGUI>().text = "Lv: " + Store.Level.ToString();
-                Upgrade_LvOld.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc1 + Store.StoreCapacity;
-                Upgrade_LvOld.Find("Desc1").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc2 + Store.StoreDataCapacity;
+                Upgrade_LvOld.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc1 + Store.LevelCapacity[Store.Level];
+                Upgrade_LvOld.Find("Desc1").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc2 + Store.LevelDataCapacity[Store.Level];
 
                 if (this.Store.Level + 1 <= this.Store.LevelMax)
                 {
@@ -1072,8 +1072,8 @@ namespace ProjectOC.StoreNS.UI
 
                     Upgrade_Build.Find("Image").gameObject.SetActive(true);
                     Upgrade_LvNew.Find("Lv").GetComponent<TMPro.TextMeshProUGUI>().text = "Lv: " + (Store.Level + 1).ToString();
-                    Upgrade_LvNew.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc1 + Store.LevelStoreCapacity[Store.Level + 1];
-                    Upgrade_LvNew.Find("Desc1").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc2 + Store.LevelStoreDataCapacity[Store.Level + 1];
+                    Upgrade_LvNew.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc1 + Store.LevelCapacity[Store.Level + 1];
+                    Upgrade_LvNew.Find("Desc1").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc2 + Store.LevelDataCapacity[Store.Level + 1];
                 }
                 else
                 {

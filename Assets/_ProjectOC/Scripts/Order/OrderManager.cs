@@ -251,20 +251,12 @@ namespace ProjectOC.Order
             {
                 
                 Order order = AcceptedOrderList[i];
-                OrderTableData orderTableData = OrderTableDataDic[order.OrderID];
-                List<Formula> formulaList = new List<Formula>();
-                List<Formula> AddedItems = new List<Formula>();
-                foreach (var requireItem in AcceptedOrderList[i].RemainRequireItemDic)
-                {
-                    formulaList.Add(new Formula() { id = requireItem.Key,num = requireItem.Value});
-                }
-
                 //¿Û³ý
-                AddedItems = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).InventoryCostItems(formulaList, priority:-1);
+                var AddedItems = ManagerNS.LocalGameManager.Instance.Player.InventoryCostItems(AcceptedOrderList[i].RemainRequireItemDic, priority:-1);
 
-                foreach (var AddedItem in AddedItems)
+                foreach (var kv in AddedItems)
                 {
-                    bool isFinish = order.ChangeRequireItemDic(AddedItem.id, AddedItem.num);
+                    bool isFinish = order.ChangeRequireItemDic(kv.Key, kv.Value);
                     if(isFinish)
                     {
                         Debug.Log("isFinish");
