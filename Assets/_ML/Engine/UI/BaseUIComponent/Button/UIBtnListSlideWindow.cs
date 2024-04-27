@@ -10,6 +10,7 @@ namespace ML.Engine.UI
     {
         private ScrollRect scrollRect;
         private UIBtnList uIBtnList;
+        private UIBtnListContainer uIBtnListContainer;
         private Transform lastSelect;
         private Transform curSelect;
         public UIBtnListSlideWindow(ScrollRect scrollRect,UIBtnList uIBtnList)
@@ -25,6 +26,21 @@ namespace ML.Engine.UI
                 SlideWindow();
             };
         }
+
+        public UIBtnListSlideWindow(ScrollRect scrollRect, UIBtnListContainer uIBtnListContainer)
+        {
+            this.scrollRect = scrollRect;
+            this.uIBtnListContainer = uIBtnListContainer;
+            this.lastSelect = null;
+            this.curSelect = this.uIBtnListContainer.CurSelectUIBtnList?.Parent;
+            this.uIBtnList.OnSelectButtonChanged += () =>
+            {
+                this.lastSelect = this.curSelect;
+                this.curSelect = this.uIBtnListContainer.CurSelectUIBtnList?.Parent;
+                SlideWindow();
+            };
+        }
+
         private void SlideWindow()
         {
             if (this.scrollRect == null || this.uIBtnList == null) return;

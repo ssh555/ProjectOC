@@ -102,6 +102,9 @@ namespace ML.Engine.UI
         private event Action OnSelectButtonChanged = null;
         private event Action OnSelectButtonListChanged = null;
 
+        [ShowInInspector]
+        private UIBtnListSlideWindow UIBtnListSlideWindow = null;
+
         public void AddOnSelectButtonChangedAction(Action action)
         {
             if (action != null)
@@ -127,6 +130,10 @@ namespace ML.Engine.UI
         {
             this.parent = uIBtnListContainerInitor.transform;
             BtnListContainerInitData btnListContainerInitData = uIBtnListContainerInitor.btnListContainerInitData;
+            if (btnListContainerInitData.scrollRect != null)
+            {
+                UIBtnListSlideWindow = new UIBtnListSlideWindow(btnListContainerInitData.scrollRect, this);
+            }
             this.gridNavagationType = btnListContainerInitData.containerType;
             this.btnListContainerInitData = btnListContainerInitData;
             this.InitBtnlistInfo();

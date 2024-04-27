@@ -61,15 +61,15 @@ namespace ProjectOC.RestaurantNS.UI
         private UIBtnList DataBtnList;
         List<string> FoodItemIDs = new List<string>() { "" };
         private UIBtnList FoodBtnList;
-        public bool IsBtnAllInit1 = true;
-        public bool IsBtnAllInit2 = true;
 
+        private bool isInitBtnList = false;
         protected override void InitBtnInfo()
         {
+            UIBtnList.Synchronizer synchronizer = new UIBtnList.Synchronizer(2, () => { isInitBtnList = true; this.Refresh(); });
             DataBtnList = new UIBtnList(transform.Find("Restaurant").Find("Food").Find("Viewport").Find("UIBtnList").GetComponentInChildren<UIBtnListInitor>());
             DataBtnList.OnSelectButtonChanged += () => { Refresh(); };
-            IsBtnAllInit1 = false;
-            DataBtnList.ChangBtnNum(ManagerNS.LocalGameManager.Instance.RestaurantManager.DataNum, "Prefab_Restaurant_UI/Prefab_Restaurant_UI_DataTemplate.prefab", () => { IsBtnAllInit1 = true;  Refresh(); });
+
+            DataBtnList.ChangBtnNum(ManagerNS.LocalGameManager.Instance.RestaurantManager.DataNum, "Prefab_Restaurant_UI/Prefab_Restaurant_UI_DataTemplate.prefab", () => { synchronizer.Check(); });
 
             FoodBtnList = new UIBtnList(transform.Find("ChangeFood").Find("Select").Find("Viewport").Find("UIBtnList").GetComponentInChildren<UIBtnListInitor>());
             FoodBtnList.OnSelectButtonChanged += () => { Refresh(); };
@@ -82,8 +82,8 @@ namespace ProjectOC.RestaurantNS.UI
                 }
             }
             itemIDs = ItemManager.Instance.SortItemIDs(itemIDs);
-            IsBtnAllInit2 = false;
-            FoodBtnList.ChangBtnNum(FoodItemIDs.Count, "Prefab_Restaurant_UI/Prefab_Restaurant_UI_FoodTemplate.prefab", () => { IsBtnAllInit2 = true; Refresh(); });
+
+            FoodBtnList.ChangBtnNum(FoodItemIDs.Count, "Prefab_Restaurant_UI/Prefab_Restaurant_UI_FoodTemplate.prefab", () => { synchronizer.Check(); });
         }
 
         [System.Serializable]
@@ -180,7 +180,7 @@ namespace ProjectOC.RestaurantNS.UI
                     var data = Restaurant.GetRestaurantData(index);
                     for (int i = 0; i < FoodItemIDs.Count; i++)
                     {
-                        if (data.ItemID == FoodItemIDs[i] && i < FoodBtnList.BtnCnt && IsBtnAllInit2)
+                        if (data.ItemID == FoodItemIDs[i])
                         {
                             FoodBtnList.MoveIndexIUISelected(i);
                             break;
@@ -194,7 +194,7 @@ namespace ProjectOC.RestaurantNS.UI
             {
                 CurMode = Mode.Restaurant;
                 int index = FoodBtnList.GetCurSelectedPos1();
-                if (0 <= index && index < FoodItemIDs.Count && IsBtnAllInit1)
+                if (0 <= index && index < FoodItemIDs.Count )
                 {
                     Restaurant.UIChangeFood(DataBtnList.GetCurSelectedPos1(), FoodItemIDs[FoodBtnList.GetCurSelectedPos1()]);
                 }
@@ -262,7 +262,7 @@ namespace ProjectOC.RestaurantNS.UI
         #region UI
         public override void Refresh()
         {
-            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit) { return; }
+            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit || !isInitBtnList) { return; }
             
             Text_Title.text = CurMode == Mode.Restaurant ? PanelTextContent.textTitleRestaurant : PanelTextContent.textTitleChangeFood;
             SetBotKeyTips();
@@ -276,8 +276,9 @@ namespace ProjectOC.RestaurantNS.UI
                 
                 for (int i = 0; i < dataNum; i++)
                 {
-                    if (i < DataBtnList.BtnCnt && IsBtnAllInit1)
-                    {
+                    //if (i < DataBtnList.BtnCnt && IsBtnAllInit1)
+                    //{
+
                         var uidata = DataBtnList.GetBtn(i).transform;
                         var data = Restaurant.GetRestaurantData(i);
 
@@ -299,15 +300,15 @@ namespace ProjectOC.RestaurantNS.UI
                         uidata.Find("Priority1").gameObject.SetActive(data.Priority == FoodPriority.No1);
                         uidata.Find("Priority1").Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textNo1;
                         uidata.Find("Priority2").gameObject.SetActive(data.Priority == FoodPriority.No2);
-                    }
+                    //}
                 }
             }
             else if (CurMode == Mode.ChangeFood)
             {
                 for (int i = 0; i < FoodItemIDs.Count; i++)
                 {
-                    if (i < FoodBtnList.BtnCnt && IsBtnAllInit2)
-                    {
+                    //if (i < FoodBtnList.BtnCnt && IsBtnAllInit2)
+                    //{
                         string itemID = FoodItemIDs[i];
                         var uidata = FoodBtnList.GetBtn(i).transform;
                         if (!tempSprite.ContainsKey(itemID))
@@ -316,11 +317,11 @@ namespace ProjectOC.RestaurantNS.UI
                             tempSprite[itemID] = sprite ?? EmptySprite;
                         }
                         uidata.Find("Icon").GetComponent<Image>().sprite = tempSprite[itemID];
-                    }
+                   // }
                 }
                 int index = FoodBtnList.GetCurSelectedPos1();
-                if (0 <= index && index < FoodBtnList.BtnCnt && IsBtnAllInit2)
-                {
+                //if (0 <= index && index < FoodBtnList.BtnCnt && IsBtnAllInit2)
+                //{
                     string curItemID = FoodItemIDs[index];
                     Food_Desc.Find("Icon").GetComponent<Image>().sprite = FoodBtnList.GetBtn(index).transform.Find("Icon").GetComponent<Image>().sprite;
                     Food_Desc.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(curItemID);
@@ -329,7 +330,7 @@ namespace ProjectOC.RestaurantNS.UI
                     int weight = ItemManager.Instance.GetWeight(curItemID);
                     weight = weight > 0 ? weight : 0;
                     Food_Desc.Find("Weight").GetComponent<TMPro.TextMeshProUGUI>().text = weight.ToString();
-                }
+                //}
             }
         }
         #endregion
