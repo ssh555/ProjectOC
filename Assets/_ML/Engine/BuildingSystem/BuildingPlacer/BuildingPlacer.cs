@@ -414,15 +414,11 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                             var area = hitInfo.collider.GetComponentInParent<BuildingArea.BuildingArea>();
                             if (area != null && area.CheckAreaTypeMatch(this.SelectedPartInstance))
                             {
-                                if (!bisHit)
-                                {
-                                    tmp = i;
-                                }
                                 bisHit = true;
+                                tmp = i;
                             }
                         }
                     }
-
                     if (bisHit)
                     {
                         hitInfo = hits[tmp];
@@ -451,22 +447,11 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                                 }
                             }
                         }
-                    }
 
-
-
-
-                    if(!bisHit)
-                    {
-                        this.SelectedPartInstance.AttachedSocket = null;
-                        this.SelectedPartInstance.AttachedArea = null;
-                    }
-                    else
-                    {
                         pos = hitInfo.point;
                         this.SelectedPartInstance.AttachedSocket = hitInfo.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
                         this.SelectedPartInstance.AttachedArea = hitInfo.collider.GetComponentInParent<BuildingArea.BuildingArea>();
-  
+
                         if (this.SelectedPartInstance.AttachedSocket && !this.SelectedPartInstance.ActiveSocket.CheckMatch(this.SelectedPartInstance.AttachedSocket))
                         {
                             this.SelectedPartInstance.AttachedSocket = null;
@@ -475,6 +460,12 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                         {
                             this.SelectedPartInstance.AttachedArea = null;
                         }
+                    }
+
+                    else
+                    {
+                        this.SelectedPartInstance.AttachedSocket = null;
+                        this.SelectedPartInstance.AttachedArea = null;
                     }
                 }
                 else
@@ -494,7 +485,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     if (this.SelectedPartInstance.ActiveSocket.GetMatchTransformOnArea(pos, out tmpP, out tmpR))
                     {
                         pos = tmpP - (this.SelectedPartInstance.ActiveSocket.transform.position - this.SelectedPartInstance.transform.position);
-                        //pos = tmpP - Vector3.Scale(this.SelectedPartInstance.ActiveSocket.transform.localPosition, this.SelectedPartInstance.transform.localScale);
                         rot = tmpR;
                         return true;
                     }
