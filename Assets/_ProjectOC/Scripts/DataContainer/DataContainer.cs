@@ -1,4 +1,3 @@
-using ML.Engine.InventorySystem.CompositeSystem;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -12,6 +11,7 @@ namespace ProjectOC.DataNS
         #region Data
         [LabelText("存储数据"), ReadOnly]
         private Data[] Datas;
+        private Dictionary<string, HashSet<int>> DataIndexDict;
         /// <summary>
         /// 能存多少个存储数据
         /// </summary>
@@ -36,8 +36,27 @@ namespace ProjectOC.DataNS
             {
                 Datas[i] = new Data("", dataCapacity);
             }
+            DataIndexDict = new Dictionary<string, HashSet<int>>();
         }
-        public List<Formula> ChangeCapacity(int capacity, int dataCapacity)
+
+        private void UpdateIndexDict()
+        {
+            DataIndexDict.Clear();
+            for (int i = 0; i < Datas.Length; i++)
+            {
+                Data data = Datas[i];
+                if (data.HaveSetData)
+                {
+                    if (!DataIndexDict.ContainsKey(data.ID))
+                    {
+                        DataIndexDict[data.ID] = new HashSet<int>();
+                    }
+                    DataIndexDict[data.ID].Add(i);
+                }
+            }
+        }
+
+        public Dictionary<string, int> ChangeCapacity(int capacity, int dataCapacity)
         {
             lock (this)
             {
@@ -90,15 +109,36 @@ namespace ProjectOC.DataNS
                         newDatas[i].MaxCapacity = dataCapacity;
                     }
                     Datas = newDatas;
+                    UpdateIndexDict();
                     OnDataChangeEvent?.Invoke();
                 }
-                List<Formula> result = new List<Formula>();
-                foreach (var kv in dict)
-                {
-                    result.Add(new Formula() { id = kv.Key, num = kv.Value});
-                }
-                return result;
+                return dict;
             }
+        }
+
+        /// <summary>
+        /// 修改存储的数据
+        /// </summary>
+        /// <param name="index">第几个存储数据</param>
+        /// <param name="id">新的数据ID</param>
+        public Tuple<string, int> ChangeData(int index, string id)
+        {
+            id = id ?? "";
+            Tuple<string, int> result = new Tuple<string, int>("", 0);
+            if (IsValidIndex(index) && Datas[index].HaveSetData)
+            {
+                result = new Tuple<string, int>(Datas[index].ID, Datas[index].StorageAll);
+                DataIndexDict[Datas[index].ID].Remove(index);
+                Datas[index].Clear();
+                Datas[index].ID = id;
+                if (!DataIndexDict.ContainsKey(id))
+                {
+                    DataIndexDict[id] = new HashSet<int>();
+                }
+                DataIndexDict[id].Add(index);
+                OnDataChangeEvent?.Invoke();
+            }
+            return result;
         }
         #endregion
 
@@ -107,15 +147,18 @@ namespace ProjectOC.DataNS
         {
             return 0 <= index && index < Datas.Length;
         }
+
         public Data GetData(int index)
         {
             return IsValidIndex(index) ? Datas[index] : default(Data);
         }
+
         public List<Data> GetAllDatas()
         {
             return Datas.ToList();
         }
-        public List<Formula> GetAllDatasStorage()
+
+        public Dictionary<string, int> GetAllDatasStorage()
         {
             Dictionary<string, int> dict = new Dictionary<string, int>();
             foreach (Data data in Datas)
@@ -129,47 +172,39 @@ namespace ProjectOC.DataNS
                     dict[data.ID] += data.StorageAll;
                 }
             }
-            List<Formula> result = new List<Formula>();
-            foreach (var kv in dict)
+            return dict;
+        }
+
+        public int GetDataAmount(string id, DataOpType type, bool needCanIn = false, bool needCanOut = false)
+        {
+            int result = 0;
+            if (!string.IsNullOrEmpty(id) && DataIndexDict.ContainsKey(id))
             {
-                result.Add(new Formula() { id = kv.Key, num = kv.Value });
+                foreach (int index in DataIndexDict[id])
+                {
+                    Data data = Datas[index];
+                    if (data.ID == id && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
+                    {
+                        result += data.GetAmount(type);
+                    }
+                }
             }
             return result;
+        }
+
+        private List<int> GetIndexs(string id)
+        {
+            if (!string.IsNullOrEmpty(id) && DataIndexDict.ContainsKey(id))
+            {
+                List<int> indexs = DataIndexDict[id].ToList();
+                indexs.Sort((x, y) => x.CompareTo(y));
+                return indexs;
+            }
+            return new List<int>();
         }
         #endregion
 
         #region Set
-        /// <summary>
-        /// 修改存储的数据
-        /// </summary>
-        /// <param name="index">第几个存储数据</param>
-        /// <param name="id">新的数据ID</param>
-        public bool ChangeData(int index, string id)
-        {
-            id = id ?? "";
-            if (IsValidIndex(index))
-            {
-                if (Datas[index].HaveSetData)
-                {
-                    int storageReserve = GetDataNum(Datas[index].ID, DataOpType.StorageReserve) - Datas[index].StorageReserve;
-                    int emptyReserve = GetDataNum(Datas[index].ID, DataOpType.EmptyReserve) - Datas[index].EmptyReserve;
-                    //// 将堆放的物品，全部返还至玩家背包
-                    //List<Item> items = new List<Item>();
-                    //if (Datas[index].Storage > 0)
-                    //{
-                    //    items.AddRange(ItemManager.Instance.SpawnItems(Datas[index].ID, Datas[index].Storage));
-                    //}
-                    //(ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory.AddItem(items);
-                }
-
-                Datas[index].Clear();
-                Datas[index].ID = id;
-                OnDataChangeEvent?.Invoke();
-                return true;
-            }
-            return false;
-        }
-
         /// <summary>
         /// 是否有该物品
         /// </summary>
@@ -188,21 +223,7 @@ namespace ProjectOC.DataNS
             return false;
         }
        
-        public int GetDataNum(string itemID, DataOpType dataType, bool needCanIn = false, bool needCanOut = false)
-        {
-            int result = 0;
-            if (!string.IsNullOrEmpty(itemID))
-            {
-                foreach (Data data in Datas)
-                {
-                    if (data.ID == itemID && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
-                    {
-                        result += data.GetAmount(dataType);
-                    }
-                }
-            }
-            return result;
-        }
+        
         public bool CheckCanChangeData(DataOpType addType, DataOpType removeType, bool exceed = false)
         {
             if (exceed && removeType != DataOpType.Empty && removeType != DataOpType.EmptyReserve)
@@ -232,7 +253,7 @@ namespace ProjectOC.DataNS
             {
                 if (!string.IsNullOrEmpty(itemID) && amount > 0 && CheckCanChangeData(addType, removeType, exceed))
                 {
-                    int removeNum = GetDataNum(itemID, removeType, needCanIn, needCanOut);
+                    int removeNum = GetDataAmount(itemID, removeType, needCanIn, needCanOut);
                     if (!exceed && removeNum == 0 && (!complete || removeNum < amount))
                     {
                         return 0;
