@@ -107,6 +107,10 @@ namespace ProjectOC.StoreNS
                 {
                     newStoreDatas[i] = StoreDatas[i];
                 }
+                for (int i = StoreDatas.Length; i < newCapacity; i++)
+                {
+                    newStoreDatas[i] = new StoreData("", newDataCapacity);
+                }
                 StoreDatas = newStoreDatas;
                 for (int i = 0; i < StoreDatas.Length; i++)
                 {
