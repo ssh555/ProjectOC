@@ -179,8 +179,6 @@ namespace ProjectOC.Order
                 instance = null;
             }
         }
-
-
         #endregion
 
         #region Internal
@@ -212,8 +210,6 @@ namespace ProjectOC.Order
             System.Random rand = new System.Random();
 
             (string clanId,Order order) = emptyList[rand.Next(0, emptyList.Count)];
-
-
 
             //抽选对应氏族紧急订单
             string extractOrderId = null;
@@ -276,8 +272,6 @@ namespace ProjectOC.Order
                     }
                 }
             }
-            //
-            
         }
 
         /// <summary>
