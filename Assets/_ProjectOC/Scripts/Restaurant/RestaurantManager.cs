@@ -15,7 +15,8 @@ namespace ProjectOC.RestaurantNS
         public string ItemID;
         public int EatTime;
         public int AlterAP;
-        public Tuple<float, int> AlterMoodOdds;
+        public float AlterMoodOddsProb;
+        public int AlterMoodOddsValue;
     }
 
     [LabelText("²ÍÌü¹ÜÀíÆ÷"), Serializable]
@@ -303,7 +304,7 @@ namespace ProjectOC.RestaurantNS
         {
             if (WorkerFood_IsValidID(id))
             {
-                return WorkerFoodTableDict[id].AlterMoodOdds;
+                return new Tuple<float, int>(WorkerFoodTableDict[id].AlterMoodOddsProb, WorkerFoodTableDict[id].AlterMoodOddsValue);
             }
             return new Tuple<float, int>(0, 0);
         }

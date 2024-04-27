@@ -3,14 +3,12 @@ using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.TextContent;
 using ML.Engine.Extension;
 using ML.Engine.BuildingSystem;
-using ML.Engine.Utility;
 using ProjectOC.WorkerNS;
 using static ProjectOC.ProNodeNS.UI.UIProNode;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.U2D;
 using System.Linq;
 
 namespace ProjectOC.ProNodeNS.UI
@@ -537,7 +535,10 @@ namespace ProjectOC.ProNodeNS.UI
         {
             foreach (var s in tempSprite.Values.ToArray())
             {
-                ML.Engine.Manager.GameManager.DestroyObj(s);
+                if (s != EmptySprite)
+                {
+                    ML.Engine.Manager.GameManager.DestroyObj(s);
+                }
             }
             foreach (var s in tempUIItems)
             {
