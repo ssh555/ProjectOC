@@ -102,6 +102,8 @@ namespace ExcelToJson
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 15, BinaryFilePath = rootPath + "Order.json", type = typeof(ProjectOC.Order.OrderTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 16, BinaryFilePath = rootPath + "Item.json", type = typeof(ML.Engine.InventorySystem.ItemTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 17, BinaryFilePath = rootPath + "ItemCategory.json", type = typeof(ML.Engine.InventorySystem.ItemCategoryTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 20, BinaryFilePath = rootPath + "Event.json", type = typeof(ML.Engine.Event.EventTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 21, BinaryFilePath = rootPath + "Condition.json", type = typeof(ML.Engine.Event.ConditionTableData) });
 
             //configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 9, BinaryFilePath = rootPath + "Feature.json", type = typeof(ProjectOC.WorkerNS.FeatureTableData) });
             //configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 17, BinaryFilePath = rootPath + "Effect.json", type = typeof(ProjectOC.WorkerNS.EffectTableData) });
@@ -299,6 +301,34 @@ namespace ExcelToJson
                 if (!string.IsNullOrEmpty(result.id))
                 {
                     results.Add(result);
+                }
+            }
+            return results;
+        }
+
+        public static List<int> ParseIntList(string data)
+        {
+            List<string> strings = ParseStringList(data);
+            List<int> results = new List<int>();
+            foreach (string s in strings)
+            {
+                if (!string.IsNullOrEmpty(s))
+                {
+                    results.Add(ParseInt(s));
+                }
+            }
+            return results;
+        }
+
+        public static List<float> ParseFloatList(string data)
+        {
+            List<string> strings = ParseStringList(data);
+            List<float> results = new List<float>();
+            foreach (string s in strings)
+            {
+                if (!string.IsNullOrEmpty(s))
+                {
+                    results.Add(ParseFloat(s));
                 }
             }
             return results;
