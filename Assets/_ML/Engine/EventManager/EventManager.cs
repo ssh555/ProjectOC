@@ -6,9 +6,9 @@ using ML.Engine.UI;
 using Sirenix.OdinInspector;
 using ProjectOC.Player;
 
-namespace ML.Engine.EventManager
+namespace ML.Engine.Event
 {
-    public sealed class EventManager : ML.Engine.Manager.GlobalManager.IGlobalManager
+    public sealed partial class EventManager : ML.Engine.Manager.GlobalManager.IGlobalManager
     {
         [ShowInInspector]
         private Dictionary<string, string> functionParameters;
@@ -58,25 +58,7 @@ namespace ML.Engine.EventManager
             method.Invoke(this, parameters);
         }
 
-        // 示例函数
-        public void InteractUpgrade(string param1, int param2)
-        {
-            Debug.Log("InteractUpgrade function called.");
-            Debug.Log("Param1: " + param1);
-            Debug.Log("Param2: " + param2);
-        }
-
-        public void Attack(bool param)
-        {
-            Debug.Log("Attack function called.");
-            Debug.Log("Param: " + param);
-        }
-
-        public void UseItem(int param)
-        {
-            Debug.Log("UseItem function called.");
-            Debug.Log("Param: " + param);
-        }
+        
 
         // 辅助方法：将参数字符串转换为实际参数
         private object[] ConvertParameters(string parametersString, ParameterInfo[] parameterInfos)
