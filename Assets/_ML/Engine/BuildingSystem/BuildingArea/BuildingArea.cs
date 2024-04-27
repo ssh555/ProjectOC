@@ -46,9 +46,10 @@ namespace ML.Engine.BuildingSystem.BuildingArea
         {
             // Î»ÓÚ Bound ÄÚ
             Bounds bs = new Bounds(this.collider.bounds.center, this.collider.bounds.size);
-            if (bs.extents.y == 0)
+            if (bs.extents.y < 0.01f)
             {
-                bs.extents = new Vector3(bs.extents.x, 0.001f, bs.extents.z);
+                bs.extents = new Vector3(bs.extents.x, 0.01f, bs.extents.z);
+                bs.size = new Vector3(bs.size.x, 0.02f, bs.size.z);
             }
             if(bs.Contains(point))
             {
