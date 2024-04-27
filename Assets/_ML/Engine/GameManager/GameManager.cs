@@ -54,8 +54,8 @@ namespace ML.Engine.Manager
         [ShowInInspector, ReadOnly]
         public SaveSystem.SaveManager SaveManager { get; private set; }
 
-        [ShowInInspector, ReadOnly]
-        public Event.EventManager EventManager { get; private set; }
+        [SerializeField]
+        public Event.EventManager EventManager;
 
         public EnterPoint EnterPoint { get; private set; }
 

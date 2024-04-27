@@ -5,14 +5,16 @@ using System.Reflection;
 using ML.Engine.UI;
 using Sirenix.OdinInspector;
 using ProjectOC.Player;
+using static ProjectOC.Order.OrderManager;
 
 namespace ML.Engine.Event
 {
+    [System.Serializable]
     public sealed partial class EventManager : ML.Engine.Manager.GlobalManager.IGlobalManager
     {
-        [ShowInInspector]
+
         private Dictionary<string, string> functionParameters;
-        [ShowInInspector]
+
         private Dictionary<string, MethodInfo> functions;
 
         public void OnRegister()
@@ -83,6 +85,10 @@ namespace ML.Engine.Event
                 {
                     convertedParameters[i] = bool.Parse(parameter);
                 }
+                else if (parameterType.IsEnum) // 检查是否为枚举类型
+                {
+                    convertedParameters[i] = Enum.Parse(parameterType, parameter);
+                }
                 else
                 {
                     throw new ArgumentException("Unknown parameter type: " + parameterType);
@@ -91,6 +97,49 @@ namespace ML.Engine.Event
 
             return convertedParameters;
         }
+
+        #region TableData
+        [System.Serializable]
+        public struct EventTableData
+        {
+            public string ID;
+            public string Parameter;
+        }
+
+        [System.Serializable]
+
+        public enum CheckType
+        {
+            CheckBagItem = 0,
+            CheckBuild,
+            CheckWorkerEMCurrent
+        }
+
+        [System.Serializable]
+        public struct ConditionTableData
+        {
+            public string ID;
+            public string Name;
+            public string Description;
+            public List<string> Param1;
+            public List<int> Param2;
+            public List<float> Param3;
+        }
+        #endregion
+
+        #region Load
+        private void LoadTableData()
+        {
+            ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]> ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]>("OCTableData", "Order", (datas) =>
+            {
+
+
+
+            }, "Event数据");
+            ABJAProcessor.StartLoadJsonAssetData();
+
+        }
+        #endregion
     }
 }
 
