@@ -53,7 +53,7 @@ namespace ProjectOC.TechTree
             // 11 -> TimeCost
             this.TimeCost = Program.ParseInt(row[11]);
             // 12 -> Event
-            this.EventStrings = Program.ParseStringList(row[12]);
+            this.EventStrings = Program.ParseStringList(row[12], ';');
             return true;
         }
     }
