@@ -13,15 +13,15 @@ namespace ML.Engine.Event
     public sealed partial class FunctionLiabrary : ML.Engine.Manager.GlobalManager.IGlobalManager
     {
 
-        private Dictionary<string, string> EventTableDataDic;
-        private Dictionary<string, ConditionTableData> ConditionTableDataDic;
+        private Dictionary<string, string> EventTableDataDic = new Dictionary<string, string>();
+        private Dictionary<string, ConditionTableData> ConditionTableDataDic = new Dictionary<string, ConditionTableData>();
 
         private Dictionary<string, MethodInfo> functions;
 
         public void OnRegister()
         {
 
-            //LoadTableData();
+            LoadTableData();
 
             // 初始化字典，存储函数名和对应的MethodInfo
             functions = new Dictionary<string, MethodInfo>();
@@ -144,7 +144,7 @@ namespace ML.Engine.Event
         #region Load
         private void LoadTableData()
         {
-            ML.Engine.ABResources.ABJsonAssetProcessor<EventTableData[]> EventTableDataABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<EventTableData[]>("OCTableData", "Order", (datas) =>
+            ML.Engine.ABResources.ABJsonAssetProcessor<EventTableData[]> EventTableDataABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<EventTableData[]>("OCTableData", "Event", (datas) =>
             {
                 foreach (var data in datas)
                 {
@@ -153,7 +153,7 @@ namespace ML.Engine.Event
             }, "Event数据");
             EventTableDataABJAProcessor.StartLoadJsonAssetData();
 
-            ML.Engine.ABResources.ABJsonAssetProcessor<ConditionTableData[]> ConditionTableDataABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ConditionTableData[]>("OCTableData", "Order", (datas) =>
+            ML.Engine.ABResources.ABJsonAssetProcessor<ConditionTableData[]> ConditionTableDataABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ConditionTableData[]>("OCTableData", "Condition", (datas) =>
             {
                 foreach (var data in datas)
                 {
