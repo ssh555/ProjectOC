@@ -54,7 +54,10 @@ namespace ML.Engine.BuildingSystem.BuildingArea
             if(bs.Contains(point))
             {
                 Vector3 scale = this.transform.localScale;
+                var parent = this.transform.parent;
+                this.transform.SetParent(null);
                 this.transform.localScale = Vector3.one;
+
                 // point 在 Area 坐标系下的表示
                 Vector3 localPoint = this.transform.InverseTransformPoint(point);
 
@@ -66,6 +69,8 @@ namespace ML.Engine.BuildingSystem.BuildingArea
                 pos =(!BuildingManager.Instance.Placer.IsEnableGridSupport && Vector3.Distance(localPoint, localNearestGP) > radius) ? point : this.transform.TransformPoint(localNearestGP);
                 // 使用Area.Rotation;
                 rot = this.transform.rotation;
+
+                this.transform.SetParent(parent);
                 this.transform.localScale = scale;
                 return true;
             }
