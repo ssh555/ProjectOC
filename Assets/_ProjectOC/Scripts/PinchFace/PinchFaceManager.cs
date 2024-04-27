@@ -17,7 +17,8 @@ namespace ProjectOC.PinchFace
         //引用
         public PinchFaceHelper pinchFaceHelper;
         public CharacterModelPinch ModelPinch;
-
+        
+        [ShowInInspector]
         public Dictionary<PinchPartType3, PinchPartType2> pinchPartType3Dic = new Dictionary<PinchPartType3, PinchPartType2>();
         public Dictionary<PinchPartType2, PinchPartType> pinchPartType2Dic = new Dictionary<PinchPartType2, PinchPartType>();
         //存储每一个的Type1下的每一个Type2
@@ -32,15 +33,9 @@ namespace ProjectOC.PinchFace
 
         public void OnRegister()
         {
-            ModelPinch = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController)
-                .currentCharacter.GetComponentInChildren<CharacterModelPinch>();
-            //Debug.LogWarning($"ModelPinch:{ModelPinch != null}");
-            // ModelPinch.InitAfterPinchFaceManager(this);
-            
             DataStructInit();
             RegisterPinchPartType();
             pinchFaceHelper = new PinchFaceHelper(this);
-            
             
             // GeneratePinchRaceUI();
             // GenerateCustomRaceUI();
