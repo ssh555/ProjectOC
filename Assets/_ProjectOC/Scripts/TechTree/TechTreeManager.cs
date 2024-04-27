@@ -525,13 +525,9 @@ namespace ProjectOC.TechTree
             List<string> strings = this.registerTechPoints[ID].EventStrings;
             foreach (var ExecuteString in strings)
             {
-                Debug.Log(ID + " " + ExecuteString);
-                /*GameManager.Instance.EventManager.ExecuteEvent("InteractUpgrade(Build_Interact_LifeDiversion_2,1)");
-                GameManager.Instance.EventManager.ExecuteEvent("ProNodeUpgrade(Build_ProNode_Refine_1,1)");*/
+                GameManager.Instance.EventManager.ExecuteEvent(ExecuteString);
             }
-            
-            
-
+            //Debug.Log(GameManager.Instance.EventManager.ExecuteCondition("Condition_CheckBagItem_Water_1"));
         }
         #endregion
 

@@ -7,7 +7,7 @@ namespace ML.Engine.Event
 {
     public sealed partial class FunctionLiabrary : ML.Engine.Manager.GlobalManager.IGlobalManager
     {
-        public void Condition_CheckBagItem_Water_1(List<string> p1, List<int> p2, List<float> p3)
+        public bool Condition_CheckBagItem_Water_1(List<string> p1, List<int> p2, List<float> p3)
         {
             Debug.Log("CureRecover ");
             Debug.Log("p1 ");
@@ -25,9 +25,10 @@ namespace ML.Engine.Event
             {
                 Debug.Log($"{item} ");
             }
+            return true;
         }
 
-        public void Condition_CheckBagItem_Bed_1(List<string> p1, List<int> p2, List<float> p3)
+        public bool Condition_CheckBagItem_Bed_1(List<string> p1, List<int> p2, List<float> p3)
         {
             Debug.Log("CureRecover ");
             Debug.Log("p1 ");
@@ -45,9 +46,10 @@ namespace ML.Engine.Event
             {
                 Debug.Log($"{item} ");
             }
+            return true;
         }
 
-        public void Condition_CheckWorkerEMCurrent_1(List<string> p1, List<int> p2, List<float> p3)
+        public bool Condition_CheckWorkerEMCurrent_1(List<string> p1, List<int> p2, List<float> p3)
         {
             Debug.Log("CureRecover ");
             Debug.Log("p1 ");
@@ -65,6 +67,7 @@ namespace ML.Engine.Event
             {
                 Debug.Log($"{item} ");
             }
+            return true;
         }
     }
 }
