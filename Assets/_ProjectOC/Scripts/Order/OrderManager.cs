@@ -440,6 +440,8 @@ namespace ProjectOC.Order
                         //常规直接删
                         olist.Remove(olist[i]);
                     }
+                    acceptedOrder.acceptOrder = curAcceptOrder;
+                    curAcceptOrder = (curAcceptOrder + 1) % int.MaxValue;
                     OrderDelegationListDic.Remove(order.OrderInstanceID);
                     AcceptedOrderList.Add(acceptedOrder);
                     AcceptedOrderListDic.Add(acceptedOrder.OrderInstanceID, acceptedOrder);
@@ -499,7 +501,7 @@ namespace ProjectOC.Order
         /// <summary>
         /// 提交订单函数
         /// </summary>
-        public bool CommitOrder(string OrderInstanceID)
+        public bool CommitOrder(string OrderInstanceID,bool needRefresh = true)
         {
             Debug.Log("提交订单 " + OrderInstanceID);
             if (OrderInstanceID == null || !AcceptedOrderListDic.ContainsKey(OrderInstanceID)) return false;
@@ -539,13 +541,42 @@ namespace ProjectOC.Order
             }
             Debug.Log("1提交订单 " + acceptedOrder.OrderInstanceID);
 
-            //移除唯一命名
-            AcceptedOrderListDic.Remove(acceptedOrder.OrderInstanceID);
-
-            AcceptedOrderList.Remove(acceptedOrder);
-                    
-            this.RefreshAcceptedList();
+            
+                
+            if(needRefresh)
+            {
+                //移除唯一命名
+                AcceptedOrderListDic.Remove(acceptedOrder.OrderInstanceID);
+                AcceptedOrderList.Remove(acceptedOrder);
+                this.RefreshAcceptedList();
+            }
+                
             return true;
+        }
+
+        /// <summary>
+        /// 快捷提交订单函数
+        /// </summary>
+        public void CommitAllOrder()
+        {
+            List<Order> WaitToDelete = new List<Order>();
+            foreach (var acceptOrder in AcceptedOrderList)
+            {
+                if (acceptOrder.canBeCommit)
+                {
+                    if(CommitOrder(acceptOrder.OrderInstanceID, false))
+                    {
+                        WaitToDelete.Add(acceptOrder);
+                    }
+                }
+            }
+            foreach (var acceptOrder in WaitToDelete)
+            {
+                //移除唯一命名
+                AcceptedOrderListDic.Remove(acceptOrder.OrderInstanceID);
+                AcceptedOrderList.Remove(acceptOrder);
+            }
+            this.RefreshAcceptedList();
         }
 
         /// <summary>

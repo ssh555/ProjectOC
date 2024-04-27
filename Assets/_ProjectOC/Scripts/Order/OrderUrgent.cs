@@ -66,6 +66,7 @@ namespace ProjectOC.Order
 
         public void Reset()
         {
+            Debug.Log("Reset");
             this.receiveDDLTimer.Reset(ReceiveDDL * 60, isStoped: true, needResetOnUpdateEvent: true);
             this.deliverDDLTimer.Reset(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DeliverDDL, isStoped: true, needResetOnUpdateEvent: true);
         }

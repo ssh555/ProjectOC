@@ -57,6 +57,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
     }
     private void OrderPanelRefreshAcceptedOrderAction()
     {
+        OrderUrgentInAcceptedOrderTimer = null;
         isNeedRefreshAcceptedOrder = true; Refresh();
     }
     public override void OnEnter()
@@ -87,6 +88,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm.performed -= NextTerm_performed;
 
         ML.Engine.Input.InputManager.Instance.Common.Common.MainInteract.performed -= MainInteract_performed;
+        ML.Engine.Input.InputManager.Instance.Common.Common.MainInteractHold.performed -= MainInteractHold_performed;
         ML.Engine.Input.InputManager.Instance.Common.Common.SubInteract.performed -= SubInteract_performed;
 
         this.ClanBtnList.RemoveAllListener();
@@ -108,6 +110,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm.performed += NextTerm_performed;
 
         ML.Engine.Input.InputManager.Instance.Common.Common.MainInteract.performed += MainInteract_performed;
+        ML.Engine.Input.InputManager.Instance.Common.Common.MainInteractHold.performed += MainInteractHold_performed;
         ML.Engine.Input.InputManager.Instance.Common.Common.SubInteract.performed += SubInteract_performed;
 
         this.ClanBtnList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
@@ -171,7 +174,18 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             {
                 this.AcceptedOrderBtnList.DeleteButton(curSelectedOrderInstanceIDInAcceptedOrder);
             }
-            //TODO 长按快捷提交订单
+        }
+    }
+
+    private void MainInteractHold_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        if (FunctionIndex == 0)
+        {
+            //长按快捷提交订单
+            OrderManager.Instance.CommitAllOrder();
+            
+            //手动取消订单以后手动刷新面板
+            OrderPanelRefreshAcceptedOrderAction();
         }
     }
 
@@ -199,6 +213,8 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                     {
                         this.AcceptedOrderBtnList.DeleteButton(curSelectedOrderInstanceIDInAcceptedOrder);
                     }
+                    //手动取消订单以后手动刷新面板
+                    OrderPanelRefreshAcceptedOrderAction();
                 }));
             }
         }
@@ -213,7 +229,8 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 
     #region UI
     #region temp
-    /*    private Sprite icon_genderfemaleSprite, icon_gendermaleSprite;*/
+
+    private CounterDownTimer OrderUrgentInAcceptedOrderTimer = null;
 
     private void ClearTemp()
     {
@@ -359,6 +376,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                                 TextMeshProUGUI RemainTimeText = btn.transform.Find("ReceiveTime").Find("RemainTime").GetComponent<TextMeshProUGUI>();
                                 Slider slider = btn.transform.Find("ReceiveTime").Find("Slider").GetComponent<Slider>();
                                 CounterDownTimer timer = orderUrgent.ReceiveDDLTimer;
+
                                 timer.OnUpdateEvent = null;
                                 timer.OnUpdateEvent += (time) => {
                                     RemainTimeText.text = timer.ConvertToMin() + " MIN";
@@ -559,6 +577,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
         else
         {
             this.AcceptedOrderBtnList.DisableBtnList();
+            OrderUrgentInAcceptedOrderTimer = null;
             isNeedRefreshAcceptedOrder = true;
         }
 
@@ -585,21 +604,37 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                 if(remainDays <= 1)
                 {
                     var textmesh = LimitToday.Find("Text3").GetComponent<TextMeshProUGUI>();
-                    orderUrgent.DeliverDDLTimer.OnUpdateEvent = null;
-                    orderUrgent.DeliverDDLTimer.OnUpdateEvent += (curTime) =>
-                    {
-                        textmesh.text = orderUrgent.GetDeliverDDLTimerRemainGameHourAndMin();
-                    };
 
+                    if(OrderUrgentInAcceptedOrderTimer != orderUrgent.DeliverDDLTimer)
+                    {
+                        if (OrderUrgentInAcceptedOrderTimer != null)
+                        {
+                            OrderUrgentInAcceptedOrderTimer.OnUpdateEvent = null;
+                        }
+                        orderUrgent.DeliverDDLTimer.OnUpdateEvent = null;
+                        orderUrgent.DeliverDDLTimer.OnUpdateEvent += (curTime) =>
+                        {
+                            textmesh.text = orderUrgent.GetDeliverDDLTimerRemainGameHourAndMin();
+                        };
+                        OrderUrgentInAcceptedOrderTimer = orderUrgent.DeliverDDLTimer;
+                    }
                 }
                 else
                 {
                     var textmesh = LimitFuture.Find("Text2").GetComponent<TextMeshProUGUI>();
-                    orderUrgent.DeliverDDLTimer.OnUpdateEvent = null;
-                    orderUrgent.DeliverDDLTimer.OnUpdateEvent += (curTime) =>
+                    if (OrderUrgentInAcceptedOrderTimer != orderUrgent.DeliverDDLTimer) 
                     {
-                        textmesh.text = remainDays.ToString();
-                    };
+                        if (OrderUrgentInAcceptedOrderTimer != null)
+                        {
+                            OrderUrgentInAcceptedOrderTimer.OnUpdateEvent = null;
+                        }
+                        orderUrgent.DeliverDDLTimer.OnUpdateEvent = null;
+                        orderUrgent.DeliverDDLTimer.OnUpdateEvent += (curTime) =>
+                        {
+                            textmesh.text = remainDays.ToString();
+                        };
+                        OrderUrgentInAcceptedOrderTimer = orderUrgent.DeliverDDLTimer;
+                    }
                 }
             }
             else

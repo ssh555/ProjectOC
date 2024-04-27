@@ -28,7 +28,7 @@ namespace ProjectOC.TechTree.UI
         public float gapDistance = 100;
         private int sliceNum = 16;
         private Vector3 BasePos;
-        private void SetBtnPos(RectTransform rectTransform,int[] cor)
+        private void SetBtnPos(Transform Transform,int[] cor)
         {
             if (cor.Length != 2) return;
             float angle = 270 - cor[0] * ((float)360.0 / sliceNum);
@@ -36,7 +36,7 @@ namespace ProjectOC.TechTree.UI
 
             Vector3 dir = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
 
-            rectTransform.anchoredPosition = BasePos + dir * cor[1] * gapDistance;
+            Transform.position = BasePos + dir * cor[1] * gapDistance;
         }
 
         private void LinkEdge(Transform edge, Transform obj)
@@ -66,7 +66,7 @@ namespace ProjectOC.TechTree.UI
         private Dictionary<string, Transform> btn_IdDic = new Dictionary<string, Transform>();
         private void InitData()
         {
-            this.BasePos = this.cursorNavigation.Content.Find("UIBtnList").Find("Container").transform.position;
+            this.BasePos = this.cursorNavigation.transform.Find("Center").position;
             this.EdgeParent = this.cursorNavigation.Content.Find("UIBtnList").Find("Container").Find("Edges");
             var AllID = TechTreeManager.Instance.GetAllTPID();
             for (int i = 0; i < AllID.Length; i++) 
@@ -123,7 +123,7 @@ namespace ProjectOC.TechTree.UI
 
                             btn_IdDic.Add(id, btn.transform);
 
-                            SetBtnPos(rec, TechTreeManager.Instance.GetTPGrid(id));
+                            SetBtnPos(btn.transform, TechTreeManager.Instance.GetTPGrid(id));
 
 
 

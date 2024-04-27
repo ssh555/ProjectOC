@@ -35,8 +35,8 @@ namespace ProjectOC.Order
                 return result;
             }
 
-            // 如果 orderType 相同，按照 canBeCommit 升序
-            result = canBeCommit.CompareTo(other.canBeCommit);
+            // 如果 orderType 相同，按照 canBeCommit 降序
+            result = -canBeCommit.CompareTo(other.canBeCommit);
             if (result != 0)
             {
                 return result;

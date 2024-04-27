@@ -480,7 +480,7 @@ namespace ML.Engine.UI
             private bool isTrigger;
             public Synchronizer(int checkNum, Action OnAllFinish)
             {
-                Debug.Log("checkNum " + checkNum);
+                //Debug.Log("checkNum " + checkNum);
                 this.curCheckNum = 0;
                 this.CheckNum = checkNum;
                 this.OnAllFinish = OnAllFinish;
@@ -491,7 +491,7 @@ namespace ML.Engine.UI
                 lock(lockObject)
                 {
                     ++curCheckNum;
-                    Debug.Log("Check " + curCheckNum);
+                    //Debug.Log("Check " + curCheckNum);
                     if (isTrigger == false && curCheckNum == CheckNum)
                     {
                         OnAllFinish?.Invoke();
