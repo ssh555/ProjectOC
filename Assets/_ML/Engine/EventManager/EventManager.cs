@@ -10,20 +10,18 @@ using static ProjectOC.Order.OrderManager;
 namespace ML.Engine.Event
 {
     [System.Serializable]
-    public sealed partial class EventManager : ML.Engine.Manager.GlobalManager.IGlobalManager
+    public sealed partial class FunctionLiabrary : ML.Engine.Manager.GlobalManager.IGlobalManager
     {
 
-        private Dictionary<string, string> functionParameters;
+        private Dictionary<string, string> EventTableDataDic;
+        private Dictionary<string, ConditionTableData> ConditionTableDataDic;
 
         private Dictionary<string, MethodInfo> functions;
 
         public void OnRegister()
         {
-            // 模拟从表格读入的数据
-            functionParameters = new Dictionary<string, string>();
-            functionParameters["InteractUpgrade"] = "string,int";
-            functionParameters["Attack"] = "bool";
-            functionParameters["UseItem"] = "int";
+
+            //LoadTableData();
 
             // 初始化字典，存储函数名和对应的MethodInfo
             functions = new Dictionary<string, MethodInfo>();
@@ -34,14 +32,14 @@ namespace ML.Engine.Event
             // 遍历所有函数，存储到字典中
             foreach (MethodInfo method in methods)
             {
-                if (method.DeclaringType == typeof(EventManager))
+                if (method.DeclaringType == typeof(FunctionLiabrary))
                 {
                     functions[method.Name] = method;
                 }
             }
         }
 
-        public void ExecuteFunction(string executeString)
+        public void ExecuteEvent(string executeString)
         {
             string[] split = executeString.Split('(');
             string functionName = split[0];
@@ -60,9 +58,26 @@ namespace ML.Engine.Event
             method.Invoke(this, parameters);
         }
 
-        
+        public bool ExecuteCondition(string ConditionID)
+        {
+            if (!functions.ContainsKey(ConditionID) || !ConditionTableDataDic.ContainsKey(ConditionID))
+            {
+                Debug.LogError("Function '" + ConditionID + "' does not exist.");
+                return false;
+            }
 
-        // 辅助方法：将参数字符串转换为实际参数
+            ConditionTableData conditionTableData = ConditionTableDataDic[ConditionID];
+            MethodInfo method = functions[ConditionID];
+
+            object[] parameters = new object[3];
+            parameters[0] = conditionTableData.Param1;
+            parameters[1] = conditionTableData.Param2;
+            parameters[2] = conditionTableData.Param3;
+
+            return (bool)method.Invoke(this, parameters);
+        }
+
+        //将参数字符串转换为实际参数
         private object[] ConvertParameters(string parametersString, ParameterInfo[] parameterInfos)
         {
             string[] parameters = parametersString.Split(',');
@@ -94,7 +109,6 @@ namespace ML.Engine.Event
                     throw new ArgumentException("Unknown parameter type: " + parameterType);
                 }
             }
-
             return convertedParameters;
         }
 
@@ -119,8 +133,8 @@ namespace ML.Engine.Event
         public struct ConditionTableData
         {
             public string ID;
-            public string Name;
-            public string Description;
+            public TextContent.TextContent Name;
+            public CheckType CheckType;
             public List<string> Param1;
             public List<int> Param2;
             public List<float> Param3;
@@ -130,14 +144,23 @@ namespace ML.Engine.Event
         #region Load
         private void LoadTableData()
         {
-            ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]> ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<OrderTableData[]>("OCTableData", "Order", (datas) =>
+            ML.Engine.ABResources.ABJsonAssetProcessor<EventTableData[]> EventTableDataABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<EventTableData[]>("OCTableData", "Order", (datas) =>
             {
-
-
-
+                foreach (var data in datas)
+                {
+                    this.EventTableDataDic.Add(data.ID, data.Parameter);
+                }
             }, "Event数据");
-            ABJAProcessor.StartLoadJsonAssetData();
+            EventTableDataABJAProcessor.StartLoadJsonAssetData();
 
+            ML.Engine.ABResources.ABJsonAssetProcessor<ConditionTableData[]> ConditionTableDataABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ConditionTableData[]>("OCTableData", "Order", (datas) =>
+            {
+                foreach (var data in datas)
+                {
+                    this.ConditionTableDataDic.Add(data.ID, data);
+                }
+            }, "Condition数据");
+            ConditionTableDataABJAProcessor.StartLoadJsonAssetData();
         }
         #endregion
     }

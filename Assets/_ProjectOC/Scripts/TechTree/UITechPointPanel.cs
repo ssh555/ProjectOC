@@ -233,10 +233,10 @@ namespace ProjectOC.TechTree.UI
         /// </summary>
         private Transform TPKT_Decipher;
 
-        /// <summary>
+/*        /// <summary>
         /// 破译的时间消耗
         /// </summary>
-        private TextMeshProUGUI TPTimeCost;
+        private TextMeshProUGUI TPTimeCost;*/
 
         /// <summary>
         /// 破译消耗Item的UI模板
@@ -294,9 +294,9 @@ namespace ProjectOC.TechTree.UI
             this.TPUnlockTemplate.gameObject.SetActive(false);
 
             this.TPLockedState = ContentPanel.Find("InformationInspector").Find("Locked");
-            this.TPKT_Decipher = this.TPLockedState.Find("Viewport").Find("Content").Find("KT_Decipher");
+            this.TPKT_Decipher = this.TPLockedState.Find("Viewport").Find("Content").Find("KT_Decipher").Find("KT_Decipher");
 
-            this.TPTimeCost = this.TPLockedState.Find("Viewport").Find("Content").Find("TimeCost").GetComponent<TextMeshProUGUI>();
+            
             this.TPItemCostTemplate = this.TPLockedState.Find("Viewport").Find("Content").Find("ItemCostTemplate");
             this.TPItemCostTemplate.gameObject.SetActive(false);
 
@@ -613,8 +613,8 @@ namespace ProjectOC.TechTree.UI
                     this.TPKT_Decipher.Find("CanDecipherImg").GetComponent<Image>().color = canDecipher ? new Color32(77, 233, 16, 255) : Color.gray;
                     this.TPKT_Decipher.Find("Mask").GetComponent<Image>().gameObject.SetActive(!canDecipher);
 
-                    // 时间消耗
-                    this.TPTimeCost.text = PanelTextContent.timecosttip + TM.GetTPTimeCost(CurrentID).ToString() + "s";
+                    /*// 时间消耗
+                    this.TPTimeCost.text = PanelTextContent.timecosttip + TM.GetTPTimeCost(CurrentID).ToString() + "s";*/
 
                     // Item 消耗
                     foreach (var f in TM.GetTPItemCost(CurrentID))

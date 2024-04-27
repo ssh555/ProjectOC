@@ -351,6 +351,7 @@ namespace ML.Engine.InventorySystem
 
         public string GetItemName(string id)
         {
+            Debug.Log(id + " " + this.ItemTypeStrDict.ContainsKey(id));
             if (!this.ItemTypeStrDict.ContainsKey(id))
             {
                 return "";

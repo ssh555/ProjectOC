@@ -3606,7 +3606,7 @@ GameObject:
   - component: {fileID: 1047093728779744075}
   - component: {fileID: 257790905731768433}
   m_Layer: 0
-  m_Name: BeastDuty
+  m_Name: Prefab_Worker_UI_BeastDuty
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

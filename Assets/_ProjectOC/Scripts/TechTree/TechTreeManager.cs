@@ -521,7 +521,9 @@ namespace ProjectOC.TechTree
                 
                 MonoBuildingManager monoBM = ML.Engine.Manager.GameManager.Instance.GetLocalManager<MonoBuildingManager>();
                 monoBM.BM.RegisterBPartPrefab(monoBM.LoadedBPart[new ML.Engine.BuildingSystem.BuildingPart.BuildingPartClassification(str)]);
-            }    
+            }
+            GameManager.Instance.EventManager.ExecuteEvent("InteractUpgrade(Build_Interact_LifeDiversion_2,1)");
+            GameManager.Instance.EventManager.ExecuteEvent("ProNodeUpgrade(Build_ProNode_Refine_1,1)");
 
         }
         #endregion
@@ -541,6 +543,7 @@ namespace ProjectOC.TechTree
             public TextContent timecosttip;
             public KeyTip Decipher;
             public KeyTip Back;
+
         }
 
         #endregion

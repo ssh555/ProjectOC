@@ -86,15 +86,15 @@ namespace ProjectOC.MainInteract.UI
 
             this.UIBtnListContainer.UIBtnLists[0].SetAllBtnAction(() => { 
                 GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("切换开关！"));
-                GameManager.Instance.EventManager.ExecuteFunction("InteractUpgrade(asd,5)");
+                GameManager.Instance.EventManager.ExecuteEvent("InteractUpgrade(asd,5)");
             });
             this.UIBtnListContainer.UIBtnLists[1].SetAllBtnAction(() => { 
                 GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("确认改键！"));
-                GameManager.Instance.EventManager.ExecuteFunction("Attack(true)");
+                GameManager.Instance.EventManager.ExecuteEvent("Attack(true)");
             });
             this.UIBtnListContainer.UIBtnLists[2].SetAllBtnAction(() => { 
                 GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("确认改键！"));
-                GameManager.Instance.EventManager.ExecuteFunction("UseItem(8)");
+                GameManager.Instance.EventManager.ExecuteEvent("UseItem(8)");
             });
 
         }

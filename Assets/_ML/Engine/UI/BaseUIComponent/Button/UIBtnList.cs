@@ -38,16 +38,16 @@ namespace ML.Engine.UI
         private List<List<SelectedButton>> TwoDimSelectedButtons = new List<List<SelectedButton>>();//¶þÎ¬ÁÐ±í
 
         public List<List<SelectedButton>> GetTwoDimSelectedButtons { get { return TwoDimSelectedButtons; } }
-        private int OneDimCnt = 0;
+        protected int OneDimCnt = 0;
         public int BtnCnt { get { return OneDimCnt; } }
-        private int TwoDimH = 0;
-        private int TwoDimW = 0;
+        protected int TwoDimH = 0;
+        protected int TwoDimW = 0;
         [ShowInInspector]
         private SelectedButton CurSelected;
 
         //Index
-        private int TwoDimI = 0;
-        private int TwoDimJ = 0;
+        protected int TwoDimI = 0;
+        protected int TwoDimJ = 0;
 
         private InputAction NavigationInputAction = null;
         private Action NavigationPreAction = null;
@@ -653,7 +653,7 @@ namespace ML.Engine.UI
             action?.Invoke();
         }
 
-        public void ChangBtnNum(int newNum, string prefabpath, Action OnAllBtnChanged = null)
+        public virtual void ChangBtnNum(int newNum, string prefabpath, Action OnAllBtnChanged = null)
         {
             if (newNum > this.OneDimCnt)
             {

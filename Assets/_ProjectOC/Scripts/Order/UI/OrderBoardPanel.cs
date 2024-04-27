@@ -7,6 +7,7 @@ using ML.Engine.Utility;
 using ProjectOC.ManagerNS;
 using ProjectOC.MissionNS;
 using ProjectOC.Order;
+using ProjectOC.Player;
 using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System.Collections;
@@ -465,16 +466,16 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                 slot.transform.Find("ItemNumber").Find("Background").GetComponent<Image>().color = UnityEngine.Color.black;
 
                 int needNum = orderTableData.RequireList[i].num;
-                int haveNum = OrderManager.Instance.GetInventory().GetItemAllNum(orderTableData.RequireList[i].id);
+                int haveNum = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).InventoryItemAmount(orderTableData.RequireList[i].id);
                 
                 if (needNum > haveNum)
                 {
                     slot.transform.Find("ItemNumber").Find("Background").GetComponent<Image>().color = UnityEngine.Color.red;
-                    slot.transform.Find("ItemNumber").Find("Text").GetComponent<TextMeshProUGUI>().text = needNum.ToString() + "/" + haveNum.ToString();
+                    slot.transform.Find("ItemNumber").Find("Text").GetComponent<TextMeshProUGUI>().text = haveNum.ToString() + "/" + needNum.ToString();
                 }
                 else
                 {
-                    slot.transform.Find("ItemNumber").Find("Text").GetComponent<TextMeshProUGUI>().text = orderTableData.RequireList[i].num.ToString();
+                    slot.transform.Find("ItemNumber").Find("Text").GetComponent<TextMeshProUGUI>().text = needNum.ToString();
                 }
                 slot.transform.Find("ItemName").GetComponent<TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(orderTableData.RequireList[i].id);
 
