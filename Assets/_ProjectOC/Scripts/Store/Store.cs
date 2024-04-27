@@ -87,7 +87,7 @@ namespace ProjectOC.StoreNS
 
         public void OnPositionChange()
         {
-            foreach (var transport in Transports)
+            foreach (var transport in Transports.ToArray())
             {
                 transport?.UpdateDestination();
             }
@@ -132,7 +132,7 @@ namespace ProjectOC.StoreNS
                 {
                     int storageReserve = GetDataNum(StoreDatas[index].ItemID, DataType.StorageReserve) - StoreDatas[index].StorageReserve;
                     int emptyReserve = GetDataNum(StoreDatas[index].ItemID, DataType.EmptyReserve) - StoreDatas[index].EmptyReserve;
-                    foreach (MissionNS.Transport transport in Transports)
+                    foreach (MissionNS.Transport transport in Transports.ToArray())
                     {
                         if (transport != null && transport.ItemID == StoreDatas[index].ItemID)
                         {

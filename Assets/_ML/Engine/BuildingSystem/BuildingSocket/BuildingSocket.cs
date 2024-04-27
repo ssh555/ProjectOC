@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace ML.Engine.BuildingSystem.BuildingSocket
@@ -198,7 +199,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
             BuildingManager.Instance.BuildingSocketList.Remove(this);
         }
 
-        public void OnDrawGizmos()
+        private void _OnDrawGizmos()
         {
             if (BuildingManager.Instance == null)
             {
@@ -224,6 +225,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 
         private void OnDrawGizmosSelected()
         {
+            _OnDrawGizmos();
             //float arrowLength = 2f;
             //float circleRadius = 0.3f;
             //Color arrowColor = Color.red;

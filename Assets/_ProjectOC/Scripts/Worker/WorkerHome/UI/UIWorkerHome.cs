@@ -141,6 +141,7 @@ namespace ProjectOC.WorkerNS.UI
             tempSprite["Worker"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_Worker");
             tempSprite["WorkerHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_WorkerHome");
             LocalGameManager.Instance.WorkerManager.OnDeleteWokerEvent += OnDeleteWokerEvent;
+            IsInitWorkers = false;
             base.Enter();
         }
         public void OnDeleteWokerEvent(Worker worker)
@@ -164,6 +165,7 @@ namespace ProjectOC.WorkerNS.UI
 
         protected override void UnregisterInput()
         {
+            Home.OnWorkerMoodChangeEvent -= RefreshMood;
             ProjectOC.Input.InputManager.PlayerInput.UIWorkerHome.Disable();
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
@@ -172,6 +174,7 @@ namespace ProjectOC.WorkerNS.UI
 
         protected override void RegisterInput()
         {
+            Home.OnWorkerMoodChangeEvent += RefreshMood;
             ProjectOC.Input.InputManager.PlayerInput.UIWorkerHome.Enable();
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
@@ -188,16 +191,24 @@ namespace ProjectOC.WorkerNS.UI
 
         private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurrentWorker != null)
+            if (CurrentWorker != null && CurrentWorker != Home.Worker)
             {
-                string text = PanelTextContent.textConfirmPre + "<color=yellow>" + CurrentWorker.Name + "</color>" + PanelTextContent.textConfirmPost;
-                Worker worker = CurrentWorker;
-                GameManager.Instance.UIManager.PushNoticeUIInstance(ML.Engine.UI.UIManager.NoticeUIType.PopUpUI, new ML.Engine.UI.UIManager.PopUpUIData(text, null, null, 
-                    () => 
-                    {
-                        (Home as IWorkerContainer).SetWorker(worker);
-                    }
-                ));
+                if (Home.HaveWorker)
+                {
+                    string text = PanelTextContent.textConfirmPre + "<color=yellow>" + CurrentWorker.Name + "</color>" + PanelTextContent.textConfirmPost;
+                    GameManager.Instance.UIManager.PushNoticeUIInstance(ML.Engine.UI.UIManager.NoticeUIType.PopUpUI, new ML.Engine.UI.UIManager.PopUpUIData(text, null, null,
+                        () =>
+                        {
+                            (Home as IWorkerContainer).SetWorker(CurrentWorker);
+                        }
+                    ));
+                }
+                else
+                {
+                    (Home as IWorkerContainer).SetWorker(CurrentWorker);
+                    IsInitWorkers = false;
+                    Refresh();
+                }
             }
         }
 
@@ -231,7 +242,7 @@ namespace ProjectOC.WorkerNS.UI
                 IsInitWorkers = true;
             }
 
-            this.KeyTips.Find("KT_Confirm").gameObject.SetActive(CurrentWorker != null);
+            this.KeyTips.Find("KT_Confirm").gameObject.SetActive(CurrentWorker != null && CurrentWorker != Home.Worker);
 
             #region Select
             int delta = tempUIItems.Count - Workers.Count;
@@ -327,6 +338,29 @@ namespace ProjectOC.WorkerNS.UI
             HomeMain.Find("Mood").gameObject.SetActive(hasHome);
             HomeMain.Find("Value").gameObject.SetActive(hasHome);
             if (hasHome)
+            {
+                var bar = HomeMain.Find("Bar").Find("Cur").GetComponent<RectTransform>();
+                float sizeDeltaX = HomeMain.Find("Bar").GetComponent<RectTransform>().sizeDelta.x * Worker.Mood / Worker.MoodMax;
+                bar.sizeDelta = new Vector2(sizeDeltaX, bar.sizeDelta.y);
+                HomeMain.Find("Mood").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textMood;
+                HomeMain.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = Worker.Mood.ToString();
+            }
+        }
+
+        public void RefreshMood(int mood)
+        {
+            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
+            {
+                return;
+            }
+            bool hasWorker = Worker != null && Worker.HaveHome;
+
+            HomeMain.Find("Icon").GetComponent<Image>().sprite = hasWorker ? tempSprite["Worker"] : tempSprite["WorkerHome"];
+
+            HomeMain.Find("Bar").gameObject.SetActive(hasWorker);
+            HomeMain.Find("Mood").gameObject.SetActive(hasWorker);
+            HomeMain.Find("Value").gameObject.SetActive(hasWorker);
+            if (hasWorker)
             {
                 var bar = HomeMain.Find("Bar").Find("Cur").GetComponent<RectTransform>();
                 float sizeDeltaX = HomeMain.Find("Bar").GetComponent<RectTransform>().sizeDelta.x * Worker.Mood / Worker.MoodMax;

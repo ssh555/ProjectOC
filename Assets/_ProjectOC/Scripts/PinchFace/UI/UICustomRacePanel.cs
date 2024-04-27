@@ -187,7 +187,7 @@ namespace ProjectOC.PinchFace
 
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/PlayerUIPanel";
+            this.abpath = "OCTextContent/PlayerUIPanel";
             this.abname = "PlayerUIPanel";
             this.description = "PinchRace";
         }
