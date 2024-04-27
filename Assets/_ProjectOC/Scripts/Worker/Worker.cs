@@ -177,7 +177,7 @@ namespace ProjectOC.WorkerNS
 
         #region NavMesh
         public NavMeshAgent Agent = null;
-        public float Threshold = 2f;
+        public float Threshold = 3f;
         [LabelText("寻路目的地"), ShowInInspector, ReadOnly]
         public Vector3 Target { get; private set; }
         [LabelText("是否在寻路"), ShowInInspector, ReadOnly]
