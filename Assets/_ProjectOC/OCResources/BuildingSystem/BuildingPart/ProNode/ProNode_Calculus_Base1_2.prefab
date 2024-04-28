@@ -182,7 +182,7 @@ MonoBehaviour:
   canPlaceInPlaceMode: 1
   mode: 0
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
-  rotOffset: {x: 0, y: 0, z: 0, w: 0}
+  rotOffset: {x: 0, y: 0, z: 0, w: 1}
   activeSocketIndex: 0
   powerSupportRange: 1.42
   ProNode:
@@ -192,8 +192,6 @@ MonoBehaviour:
     TransportPriority: 0
     Recipe:
       ID: 
-    Worker: {fileID: 0}
-    IsWorkerArrive: 0
     MissionTransports: []
     LevelUpgradeEff: 
 --- !u!1 &6946895189814597782

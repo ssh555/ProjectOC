@@ -414,15 +414,11 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                             var area = hitInfo.collider.GetComponentInParent<BuildingArea.BuildingArea>();
                             if (area != null && area.CheckAreaTypeMatch(this.SelectedPartInstance))
                             {
-                                if (!bisHit)
-                                {
-                                    tmp = i;
-                                }
                                 bisHit = true;
+                                tmp = i;
                             }
                         }
                     }
-
                     if (bisHit)
                     {
                         hitInfo = hits[tmp];
@@ -451,22 +447,11 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                                 }
                             }
                         }
-                    }
 
-
-
-
-                    if(!bisHit)
-                    {
-                        this.SelectedPartInstance.AttachedSocket = null;
-                        this.SelectedPartInstance.AttachedArea = null;
-                    }
-                    else
-                    {
                         pos = hitInfo.point;
                         this.SelectedPartInstance.AttachedSocket = hitInfo.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
                         this.SelectedPartInstance.AttachedArea = hitInfo.collider.GetComponentInParent<BuildingArea.BuildingArea>();
-  
+
                         if (this.SelectedPartInstance.AttachedSocket && !this.SelectedPartInstance.ActiveSocket.CheckMatch(this.SelectedPartInstance.AttachedSocket))
                         {
                             this.SelectedPartInstance.AttachedSocket = null;
@@ -475,6 +460,12 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                         {
                             this.SelectedPartInstance.AttachedArea = null;
                         }
+                    }
+
+                    else
+                    {
+                        this.SelectedPartInstance.AttachedSocket = null;
+                        this.SelectedPartInstance.AttachedArea = null;
                     }
                 }
                 else
@@ -494,7 +485,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     if (this.SelectedPartInstance.ActiveSocket.GetMatchTransformOnArea(pos, out tmpP, out tmpR))
                     {
                         pos = tmpP - (this.SelectedPartInstance.ActiveSocket.transform.position - this.SelectedPartInstance.transform.position);
-                        //pos = tmpP - Vector3.Scale(this.SelectedPartInstance.ActiveSocket.transform.localPosition, this.SelectedPartInstance.transform.localScale);
                         rot = tmpR;
                         return true;
                     }
@@ -524,7 +514,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             return false;
         }
 
-        // private Vector3 _pos;
         [SerializeField]Vector3 posOffset;
         /// <summary>p
         /// 应用位置和旋转于SelectedPartInstance
@@ -550,18 +539,36 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, this.SelectedPartInstance.transform.right, euler.x);
                 // Forward-Z
                 this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, this.SelectedPartInstance.transform.forward, euler.z);
-                
+
+                if (this.SelectedPartInstance.AttachedSocket != null && this.SelectedPartInstance.AttachedSocket.CanRotateMatchSocket)
+                {
+
+                    this.SelectedPartInstance.transform.rotation = this.SelectedPartInstance.transform.rotation * this.SelectedPartInstance.ActiveSocket.AsMatchRotOffset;
+                }
+
                 if (this.SelectedPartInstance.AttachedArea == null && this.SelectedPartInstance.AttachedSocket == null)
                 {
                     this.SelectedPartInstance.transform.position = pos + this.Camera.transform.rotation * posOffset;
                 }
             }
-            // else if((_pos - pos).sqrMagnitude >0.001f)
             else
             {
-                // _pos = pos;
-                
-                this.SelectedPartInstance.transform.position = pos + posOffset;
+                Vector3 euler = (this.SelectedPartInstance.BaseRotation * this.SelectedPartInstance.RotOffset).eulerAngles;
+
+                this.SelectedPartInstance.transform.rotation = Quaternion.identity;
+
+                Vector3 rotAroundPoint = this.SelectedPartInstance.ActiveSocket.transform.position;
+                // Up-Y
+                this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, Vector3.up, euler.y);
+                // Right-X
+                this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, this.SelectedPartInstance.transform.right, euler.x);
+                // Forward-Z
+                this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, this.SelectedPartInstance.transform.forward, euler.z);
+
+                if (this.SelectedPartInstance.AttachedArea == null && this.SelectedPartInstance.AttachedSocket == null)
+                {
+                    this.SelectedPartInstance.transform.position = pos + this.Camera.transform.rotation * posOffset;
+                }
             }
         }
 

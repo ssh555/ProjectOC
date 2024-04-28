@@ -1,4 +1,5 @@
 using ExcelToJson;
+using System.Collections.Generic;
 
 namespace ProjectOC.TechTree
 {
@@ -17,6 +18,8 @@ namespace ProjectOC.TechTree
         public string[] PrePoint;
         public ML.Engine.InventorySystem.CompositeSystem.Formula[] ItemCost;
         public int TimeCost;
+        public List<string> EventStrings;
+
 
         public bool GenData(string[] row)
         {
@@ -49,6 +52,8 @@ namespace ProjectOC.TechTree
             this.ItemCost = Program.ParseFormulaList(row[10]).ToArray();
             // 11 -> TimeCost
             this.TimeCost = Program.ParseInt(row[11]);
+            // 12 -> Event
+            this.EventStrings = Program.ParseStringList(row[12], ';');
             return true;
         }
     }

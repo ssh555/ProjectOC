@@ -11,7 +11,8 @@ namespace ProjectOC.RestaurantNS
         public string ItemID;
         public int EatTime;
         public int AlterAP;
-        public Tuple<float, int> AlterMoodOdds;
+        public float AlterMoodOddsProb;
+        public int AlterMoodOddsValue;
 
         public bool GenData(string[] row)
         {
@@ -28,7 +29,12 @@ namespace ProjectOC.RestaurantNS
             // 3 -> AlterAP
             this.AlterAP = Program.ParseInt(row[3]);
             // 4 5 -> AlterMoodOdds
-            this.AlterMoodOdds = Tuple.Create(Program.ParseFloat(row[4]), Program.ParseInt(row[5]));
+            var alterMoodOdds = Program.ParseStringList(row[4]);
+            if (alterMoodOdds.Count == 2)
+            {
+                this.AlterMoodOddsProb = Program.ParseFloat(alterMoodOdds[0]);
+                this.AlterMoodOddsValue = Program.ParseInt(alterMoodOdds[1]);
+            }
             return true;
         }
     }

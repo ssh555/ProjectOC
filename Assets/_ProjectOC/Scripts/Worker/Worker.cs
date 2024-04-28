@@ -102,7 +102,10 @@ namespace ProjectOC.WorkerNS
             {
                 timerForNoHome?.End();
             }
-            ContainerDict[container.GetContainerType()] = container;
+            if (!container.HaveWorker || container.Worker.InstanceID == InstanceID)
+            {
+                ContainerDict[container.GetContainerType()] = container;
+            }
         }
 
         public void RemoveContainer(WorkerContainerType type)
@@ -122,12 +125,6 @@ namespace ProjectOC.WorkerNS
         #endregion
 
         #region Mono
-        private void Start()
-        {
-            Init();
-            enabled = false;
-        }
-
         public void Init()
         {
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
@@ -147,7 +144,7 @@ namespace ProjectOC.WorkerNS
                 { WorkerContainerType.Home, null }
             };
 
-            if (HasContainer(WorkerContainerType.Home))
+            if (!HasContainer(WorkerContainerType.Home))
             {
                 TimerForNoHome.Start();
             }
@@ -171,7 +168,7 @@ namespace ProjectOC.WorkerNS
         {
             (this as ML.Engine.Timer.ITickComponent).DisposeTick();
             Transport?.End();
-            foreach (IWorkerContainer container in ContainerDict.Values)
+            foreach (IWorkerContainer container in ContainerDict.Values.ToArray())
             {
                 container?.RemoveWorker();
             }
@@ -180,7 +177,7 @@ namespace ProjectOC.WorkerNS
 
         #region NavMesh
         public NavMeshAgent Agent = null;
-        public float Threshold = 2f;
+        public float Threshold = 3f;
         [LabelText("寻路目的地"), ShowInInspector, ReadOnly]
         public Vector3 Target { get; private set; }
         [LabelText("是否在寻路"), ShowInInspector, ReadOnly]
@@ -304,6 +301,7 @@ namespace ProjectOC.WorkerNS
         public Action<int> OnAPChangeEvent;
         [LabelText("当前心情"), ReadOnly]
         public int Mood = 100;
+        public Action<int> OnMoodChangeEvent;
         [LabelText("技能"), ShowInInspector, ReadOnly]
         public Dictionary<WorkType, Skill> Skill = new Dictionary<WorkType, Skill>();
         [LabelText("技能经验获取速度"), ShowInInspector, ReadOnly]
@@ -321,6 +319,7 @@ namespace ProjectOC.WorkerNS
             Mood += value;
             Mood = Mood < 0 ? 0 : Mood;
             Mood = Mood > MoodMax ? MoodMax : Mood;
+            OnMoodChangeEvent?.Invoke(Mood);
         }
         public void AlterExp(WorkType workType, int value)
         {

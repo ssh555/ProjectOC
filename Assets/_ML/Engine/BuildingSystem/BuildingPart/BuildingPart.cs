@@ -155,16 +155,23 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             {
                 if(value == null)
                 {
+                    this.ActiveSocket.AsMatchRotOffset = Quaternion.identity;
                     this.attachedSocket = null;
                 }
                 else if(value != null)
                 {
                     if (this.ActiveSocket.CheckMatch(value))
                     {
+                        if(this.attachedSocket != value)
+                        {
+                            this.ActiveSocket.AsMatchRotOffset = Quaternion.identity;
+                        }
                         this.attachedSocket = value;
                     }
                     else
                     {
+
+                        this.ActiveSocket.AsMatchRotOffset = Quaternion.identity;
                         this.attachedSocket = null;
                     }
                 }

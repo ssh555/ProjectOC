@@ -80,7 +80,7 @@ namespace ProjectOC.RestaurantNS
         public bool IsArrive { get; set; }
         public bool HaveWorker => Worker != null && !string.IsNullOrEmpty(Worker.InstanceID);
         public Action<Worker> OnSetWorkerEvent { get; set; }
-        public Action OnRemoveWorkerEvent { get; set; }
+        public Action<bool, Worker> OnRemoveWorkerEvent { get; set; }
 
         public string GetUID() { return Restaurant.UID; }
         public WorkerContainerType GetContainerType() { return WorkerContainerType.Relax; }

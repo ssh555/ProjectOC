@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 namespace ML.Engine.UI
 {
@@ -31,7 +33,9 @@ namespace ML.Engine.UI
             public bool hasBtnListContainer;
             [LabelText("是否读取UnActive Button")] 
             public bool readUnActiveButton;
-            
+            [LabelText("滑动窗口")]
+            public ScrollRect scrollRect;
+
             public static BtnListInitData defaultTemplate = new BtnListInitData()
             {
                 limitNum = 1,
@@ -39,7 +43,8 @@ namespace ML.Engine.UI
                 isLoop = false,
                 isWheel = false,
                 hasBtnListContainer = false,
-                readUnActiveButton = true
+                readUnActiveButton = true,
+                scrollRect = null
             };
         }
 
