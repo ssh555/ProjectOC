@@ -14,29 +14,23 @@ namespace ProjectOC.MissionNS
         public List<MissionTransport> Missions { get; set; }
         public Transform GetTransform();
         public string GetUID();
+        public bool PutIn(string itemID, int amount);
+        public int PutOut(string itemID, int amount);
+
+        public virtual int ReservePutIn(string itemID, int amount) { return 0; }
+        public virtual int ReservePutOut(string itemID, int amount) { return 0; }
+        public virtual int RemoveReservePutIn(string itemID, int amount) { return 0; }
+        public virtual int RemoveReservePutOut(string itemID, int amount) { return 0; }
+        public virtual int GetReservePutIn(string itemID) { return 0; }
+        public virtual int GetReservePutOut(string itemID) { return 0; }
+        public virtual Dictionary<string, int> GetReservePutIn() { return new Dictionary<string, int>(); }
+        public virtual Dictionary<string, int> GetReservePutOut() { return new Dictionary<string, int>(); }
+
         public TransportPriority GetTransportPriority() { return TransportPriority; }
         public void AddTransport(Transport transport) { Transports.Add(transport); }
         public void RemoveTranport(Transport transport) { Transports.Remove(transport); }
         public void AddMissionTranport(MissionTransport mission) { Missions.Add(mission); }
         public void RemoveMissionTranport(MissionTransport mission) { Missions.Remove(mission); }
-        /// <summary>
-        /// 存入
-        /// </summary>
-        public bool PutIn(string itemID, int amount);
-        /// <summary>
-        /// 取出
-        /// </summary>
-        public int PutOut(string itemID, int amount);
-        public virtual int ReservePutIn(string itemID, int amount) { return 0; }
-        public virtual int ReservePutOut(string itemID, int amount) { return 0; }
-        /// <summary>
-        /// 移除预留存入量
-        /// </summary>
-        public virtual int RemoveReservePutIn(string itemID, int amount) { return 0; }
-        /// <summary>
-        /// 移除预留取出量
-        /// </summary>
-        public virtual int RemoveReservePutOut(string itemID, int amount) { return 0; }
 
         public void OnPositionChangeTransport()
         {
@@ -50,10 +44,6 @@ namespace ProjectOC.MissionNS
             }
         }
 
-        public int GetReservePutIn(string itemID);
-        public int GetReservePutOut(string itemID);
-        public Dictionary<string, int> GetReservePutIn();
-        public Dictionary<string, int> GetReservePutOut();
         public void UpdateTransport(string itemID)
         {
             if (!string.IsNullOrEmpty(itemID))
@@ -80,13 +70,10 @@ namespace ProjectOC.MissionNS
                             transport.End();
                         }
                     }
-                    else
-                    {
-                        transport?.End();
-                    }
                 }
             }
         }
+
         public void UpdateTransport()
         {
             Dictionary<string, int> storageReserve = GetReservePutOut();
@@ -117,6 +104,7 @@ namespace ProjectOC.MissionNS
                 }
             }
         }
+
         public void Clear()
         {
             if (Transports != null)
