@@ -514,7 +514,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             return false;
         }
 
-        // private Vector3 _pos;
         [SerializeField]Vector3 posOffset;
         /// <summary>p
         /// 应用位置和旋转于SelectedPartInstance
@@ -540,18 +539,36 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, this.SelectedPartInstance.transform.right, euler.x);
                 // Forward-Z
                 this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, this.SelectedPartInstance.transform.forward, euler.z);
-                
+
+                if (this.SelectedPartInstance.AttachedSocket != null && this.SelectedPartInstance.AttachedSocket.CanRotateMatchSocket)
+                {
+
+                    this.SelectedPartInstance.transform.rotation = this.SelectedPartInstance.transform.rotation * this.SelectedPartInstance.ActiveSocket.AsMatchRotOffset;
+                }
+
                 if (this.SelectedPartInstance.AttachedArea == null && this.SelectedPartInstance.AttachedSocket == null)
                 {
                     this.SelectedPartInstance.transform.position = pos + this.Camera.transform.rotation * posOffset;
                 }
             }
-            // else if((_pos - pos).sqrMagnitude >0.001f)
             else
             {
-                // _pos = pos;
-                
-                this.SelectedPartInstance.transform.position = pos + posOffset;
+                Vector3 euler = (this.SelectedPartInstance.BaseRotation * this.SelectedPartInstance.RotOffset).eulerAngles;
+
+                this.SelectedPartInstance.transform.rotation = Quaternion.identity;
+
+                Vector3 rotAroundPoint = this.SelectedPartInstance.ActiveSocket.transform.position;
+                // Up-Y
+                this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, Vector3.up, euler.y);
+                // Right-X
+                this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, this.SelectedPartInstance.transform.right, euler.x);
+                // Forward-Z
+                this.SelectedPartInstance.transform.RotateAround(rotAroundPoint, this.SelectedPartInstance.transform.forward, euler.z);
+
+                if (this.SelectedPartInstance.AttachedArea == null && this.SelectedPartInstance.AttachedSocket == null)
+                {
+                    this.SelectedPartInstance.transform.position = pos + this.Camera.transform.rotation * posOffset;
+                }
             }
         }
 

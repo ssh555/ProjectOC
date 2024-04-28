@@ -43,9 +43,9 @@ namespace  ProjectOC.PinchFace
         private int isInit = 0;
         private PinchPartType2 PinchPartType2;
         private PinchPartType3 PinchPartType3;
+        Dictionary<BoneWeightType, string> boneWeightDic = new Dictionary<BoneWeightType, string>();
         
         private int sortCount = 0;
-        private int BtnListCount = 0;
         #endregion
         //外部引用
 
@@ -59,7 +59,16 @@ namespace  ProjectOC.PinchFace
             uiPrefabPaths.Add("Prefabs_PinchPart/UIPanel/Setting/Prefab_Pinch_ColorTypeSetting.prefab");
             uiPrefabPaths.Add("Prefabs_PinchPart/UIPanel/Setting/Prefab_Pinch_TextureSettingPanel.prefab");
             uiPrefabPaths.Add("Prefabs_PinchPart/UIPanel/Setting/Prefab_Pinch_TransformSettingPanel.prefab");
-
+            
+            boneWeightDic.Add(BoneWeightType.Head,"头部");
+            boneWeightDic.Add(BoneWeightType.Chest,"胸部");
+            boneWeightDic.Add(BoneWeightType.Waist,"腰部");
+            boneWeightDic.Add(BoneWeightType.Arm,"上肢");
+            boneWeightDic.Add(BoneWeightType.Leg,"下肢");
+            boneWeightDic.Add(BoneWeightType.HeadTop,"头顶");
+            boneWeightDic.Add(BoneWeightType.Tail,"尾巴");
+            boneWeightDic.Add(BoneWeightType.Root,"整体");
+            
             PinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
             
         }
@@ -193,18 +202,8 @@ namespace  ProjectOC.PinchFace
             GenerateUIPre();
             
             //临时BoneWeightType Text字典
-            Dictionary<BoneWeightType, string> boneWeightDic = new Dictionary<BoneWeightType, string>();
-            boneWeightDic.Add(BoneWeightType.Head,"头部");
-            boneWeightDic.Add(BoneWeightType.Chest,"胸部");
-            boneWeightDic.Add(BoneWeightType.Waist,"腰部");
-            boneWeightDic.Add(BoneWeightType.Arm,"上肢");
-            boneWeightDic.Add(BoneWeightType.Leg,"下肢");
-            boneWeightDic.Add(BoneWeightType.HeadTop,"头顶");
-            boneWeightDic.Add(BoneWeightType.Tail,"尾巴");
-            boneWeightDic.Add(BoneWeightType.Root,"整体");
 
-            List<ChangeBoneWeightPinchSetting.BoneWeightData> boneWeightDatas = new List<ChangeBoneWeightPinchSetting.BoneWeightData>();
-                
+            
             //没有定义骨骼Type，就生成 缩放型
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(uiPrefabPaths[2])
                 .Completed += (handle) =>
@@ -212,18 +211,20 @@ namespace  ProjectOC.PinchFace
                 //加入 生成的Slider
                 Transform _trans = handle.Result.transform;
                 SelectedButton sliderTemplate = _trans.GetComponentInChildren<SelectedButton>();
-                for (int i = 0; i < boneWeightDatas.Count; i++)
+                for (int i = 0; i < _boneWeightPinchSetting.BoneWeightDatas.Count; i++)
                 {
-                    var btn = GameObject.Instantiate(sliderTemplate.gameObject, sliderTemplate.transform.parent)
+                    var btn = GameObject.Instantiate(sliderTemplate.transform.parent.gameObject, sliderTemplate.transform.parent)
                         .GetComponent<SelectedButton>();
                     
                     CustomSelectedSlider _slider = btn.GetComponentInChildren<CustomSelectedSlider>();
                     
-                    BoneWeightType _boneWeightType = boneWeightDatas[i].boneWeightType;
+                    ChangeBoneWeightPinchSetting.BoneWeightData _boneWeightData = _boneWeightPinchSetting.BoneWeightDatas[i];
+                    BoneWeightType _boneWeightType = _boneWeightData.boneWeightType;
+                    Debug.Log($" slider:{_slider != null}   boneType:{_boneWeightType}");
                     _slider.ChangeText(boneWeightDic[_boneWeightType]);
                     
                     //设置初始值
-                    //尾巴的骨骼在新增骨骼上，特殊处理
+                    //尾巴的骨骼在新增骨骼上，恢复默认值
                     if (_boneWeightType == BoneWeightType.Tail)
                     {
                         //
@@ -238,9 +239,10 @@ namespace  ProjectOC.PinchFace
                     {
                         //_value Remap
                         float _realValue = PinchFaceManager.pinchFaceHelper.RemapValue(_value, new Vector2(1, 100),
-                            boneWeightDatas[i].scaleValueRange);
+                            _boneWeightData.scaleValueRange);
                         Vector3 _boneWeight = _realValue*Vector3.one;
-                        ModelPinch.ChangeBoneScale(boneWeightDatas[i].boneWeightType,_boneWeight);
+                        
+                        ModelPinch.ChangeBoneScale(_boneWeightData.boneWeightType,_boneWeight);
                     });
                     
                     //处理移动型
