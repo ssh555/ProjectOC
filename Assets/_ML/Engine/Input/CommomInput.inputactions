@@ -15,6 +15,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "ConfirmHold",
+                    "type": "Button",
+                    "id": "943f1d23-9cf7-4f06-9a2e-13064a30fde5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "SwichBtn",
                     "type": "Value",
                     "id": "a86454bc-c2e4-484f-8224-919690d1e274",
@@ -371,6 +380,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "SubInteractHold",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ab5b778b-20a8-4c4e-b254-5b58269d3858",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ConfirmHold",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f85ca303-9314-4d36-8d79-fd22cf0bf766",
+                    "path": "<XInputController>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ConfirmHold",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

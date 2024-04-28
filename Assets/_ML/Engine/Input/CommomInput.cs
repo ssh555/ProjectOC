@@ -39,6 +39,15 @@ namespace ML.Engine.Input
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""ConfirmHold"",
+                    ""type"": ""Button"",
+                    ""id"": ""943f1d23-9cf7-4f06-9a2e-13064a30fde5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""SwichBtn"",
                     ""type"": ""Value"",
                     ""id"": ""a86454bc-c2e4-484f-8224-919690d1e274"",
@@ -397,6 +406,28 @@ namespace ML.Engine.Input
                     ""action"": ""SubInteractHold"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ab5b778b-20a8-4c4e-b254-5b58269d3858"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ConfirmHold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f85ca303-9314-4d36-8d79-fd22cf0bf766"",
+                    ""path"": ""<XInputController>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ConfirmHold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -660,6 +691,7 @@ namespace ML.Engine.Input
             // Common
             m_Common = asset.FindActionMap("Common", throwIfNotFound: true);
             m_Common_Confirm = m_Common.FindAction("Confirm", throwIfNotFound: true);
+            m_Common_ConfirmHold = m_Common.FindAction("ConfirmHold", throwIfNotFound: true);
             m_Common_SwichBtn = m_Common.FindAction("SwichBtn", throwIfNotFound: true);
             m_Common_Back = m_Common.FindAction("Back", throwIfNotFound: true);
             m_Common_NextTerm = m_Common.FindAction("NextTerm", throwIfNotFound: true);
@@ -736,6 +768,7 @@ namespace ML.Engine.Input
         private readonly InputActionMap m_Common;
         private List<ICommonActions> m_CommonActionsCallbackInterfaces = new List<ICommonActions>();
         private readonly InputAction m_Common_Confirm;
+        private readonly InputAction m_Common_ConfirmHold;
         private readonly InputAction m_Common_SwichBtn;
         private readonly InputAction m_Common_Back;
         private readonly InputAction m_Common_NextTerm;
@@ -749,6 +782,7 @@ namespace ML.Engine.Input
             private @CommomInput m_Wrapper;
             public CommonActions(@CommomInput wrapper) { m_Wrapper = wrapper; }
             public InputAction @Confirm => m_Wrapper.m_Common_Confirm;
+            public InputAction @ConfirmHold => m_Wrapper.m_Common_ConfirmHold;
             public InputAction @SwichBtn => m_Wrapper.m_Common_SwichBtn;
             public InputAction @Back => m_Wrapper.m_Common_Back;
             public InputAction @NextTerm => m_Wrapper.m_Common_NextTerm;
@@ -769,6 +803,9 @@ namespace ML.Engine.Input
                 @Confirm.started += instance.OnConfirm;
                 @Confirm.performed += instance.OnConfirm;
                 @Confirm.canceled += instance.OnConfirm;
+                @ConfirmHold.started += instance.OnConfirmHold;
+                @ConfirmHold.performed += instance.OnConfirmHold;
+                @ConfirmHold.canceled += instance.OnConfirmHold;
                 @SwichBtn.started += instance.OnSwichBtn;
                 @SwichBtn.performed += instance.OnSwichBtn;
                 @SwichBtn.canceled += instance.OnSwichBtn;
@@ -800,6 +837,9 @@ namespace ML.Engine.Input
                 @Confirm.started -= instance.OnConfirm;
                 @Confirm.performed -= instance.OnConfirm;
                 @Confirm.canceled -= instance.OnConfirm;
+                @ConfirmHold.started -= instance.OnConfirmHold;
+                @ConfirmHold.performed -= instance.OnConfirmHold;
+                @ConfirmHold.canceled -= instance.OnConfirmHold;
                 @SwichBtn.started -= instance.OnSwichBtn;
                 @SwichBtn.performed -= instance.OnSwichBtn;
                 @SwichBtn.canceled -= instance.OnSwichBtn;
@@ -936,6 +976,7 @@ namespace ML.Engine.Input
         public interface ICommonActions
         {
             void OnConfirm(InputAction.CallbackContext context);
+            void OnConfirmHold(InputAction.CallbackContext context);
             void OnSwichBtn(InputAction.CallbackContext context);
             void OnBack(InputAction.CallbackContext context);
             void OnNextTerm(InputAction.CallbackContext context);

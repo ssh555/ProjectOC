@@ -31,49 +31,72 @@ namespace ML.Engine.UI
         [ShowInInspector]
         private bool isInit = false;
 
+        private string LayerName = "UICamera";
+        //public LayerMask layerMask; 
+
         public void Init()
         {
             Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<RenderTexture>("BaseUIPrefab/UICameraImage/RenderTex2D_UICameraImage_RT.renderTexture").Completed += (handle) =>
             {
-                this.texture = handle.Result;
-
-                cameraParent = new GameObject("UICameraImageRoot");
-                cameraParent.transform.position = cameraSpawnPoint;
-
-                GameObject cameraObject = new GameObject("UICamera");
-                cameraObject.transform.SetParent(cameraParent.transform);
-                cameraObject.transform.localPosition = Vector3.zero;
-                cameraObject.transform.localRotation = Quaternion.identity;
-
-                uiCamera = cameraObject.AddComponent<Camera>();
-                uiCamera.clearFlags = CameraClearFlags.Color;
-                uiCamera.backgroundColor = Color.black;
-                uiCamera.targetTexture = texture;
-                uiCamera.orthographic = false;
-
-                RawImage rawImage = transform.GetComponentInChildren<RawImage>();
-                rawImage.texture = uiCamera.targetTexture;
-                this.isInit = true;
+                Init(handle.Result);
             };
         }
 
-        public void LookAtGameObject(GameObject go)
+        public void Init(RenderTexture _rt)
         {
-            if (go == null) return;
-            if (currentObjectBeingObserved != null)
-            {
-                GameManager.DestroyObj(currentObjectBeingObserved);
-            }
+            this.texture = _rt;
+            cameraParent = new GameObject("UICameraImageRoot");
+            cameraParent.transform.position = cameraSpawnPoint;
 
-            currentObjectBeingObserved = go;
+            GameObject cameraObject = new GameObject("UICamera");
+            cameraObject.transform.SetParent(cameraParent.transform);
+            cameraObject.transform.localPosition = Vector3.zero;
+            cameraObject.transform.localRotation = Quaternion.identity;
+
+            uiCamera = cameraObject.AddComponent<Camera>();
+            uiCamera.cullingMask = 1 << (LayerMask.NameToLayer(LayerName));
+            uiCamera.clearFlags = CameraClearFlags.Color;
+            uiCamera.backgroundColor = Color.black;
+            uiCamera.targetTexture = texture;
+            uiCamera.orthographic = false;
+
+            RawImage rawImage = transform.GetComponentInChildren<RawImage>();
+            rawImage.texture = uiCamera.targetTexture;
+            
+            currentObjectBeingObserved = new GameObject("FouceObject");
             currentObjectBeingObserved.transform.SetParent(cameraParent.transform);
             currentObjectBeingObserved.transform.localPosition = Vector3.zero;
             currentObjectBeingObserved.transform.localRotation = Quaternion.identity;
+            
+            this.isInit = true;
+        }
+        
+        public void LookAtGameObject(GameObject go,bool modeLayer = true)
+        {
+            if (go == null) return;
+            
+            if (modeLayer)
+            {
+                ModeLayer(go.transform,LayerName);
+            }
 
+            currentObjectBeingObserved.transform.localPosition = Vector3.zero;
+            currentObjectBeingObserved.transform.localRotation = Quaternion.identity;
+            cameraParent.transform.position = go.transform.position;
+            
             Vector3 direction = currentObjectBeingObserved.transform.position - uiCamera.transform.position;
             uiCamera.transform.rotation = Quaternion.LookRotation(-direction, Vector3.up);
 
             uiCamera.transform.position = currentObjectBeingObserved.transform.position - uiCamera.transform.forward * distanceFromObject;
+
+            void ModeLayer(Transform _transform, string _layerValue)
+            {
+                _transform.gameObject.layer = LayerMask.NameToLayer(_layerValue);
+                foreach (Transform _transf in _transform)
+                {
+                    ModeLayer(_transf, _layerValue);
+                }
+            }
         }
 
         public void OnDrag(PointerEventData eventData)
