@@ -56002,7 +56002,7 @@ MonoBehaviour:
     SerializationNodes: []
   DispatchTimeManager:
     CurrentMinute: 0
-    CurrentHour: 0
+    CurrentHour: 23
     CurrentDay: 0
   ClanManager:
     Clans: []

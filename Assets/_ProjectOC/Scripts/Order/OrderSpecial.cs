@@ -11,7 +11,7 @@ namespace ProjectOC.Order
     [Serializable]
     public class OrderSpecial : Order
     {
-        public OrderSpecial(string orderId, List<OrderMap> RequireItemList) : base(orderId, RequireItemList)
+        public OrderSpecial(OrderTableData orderTableData) : base(orderTableData)
         {
         }
     }

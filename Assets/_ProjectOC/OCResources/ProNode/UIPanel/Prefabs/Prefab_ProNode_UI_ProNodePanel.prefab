@@ -1681,7 +1681,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b8b154c923969f841814848865e28baa, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 22c898d5914034b45a189ddf355f2c66, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8207,11 +8207,8 @@ MonoBehaviour:
     TransportPriority: 0
     Recipe:
       ID: 
-    Worker: {fileID: 0}
-    IsWorkerArrive: 0
     MissionTransports: []
     LevelUpgradeEff: 
-    RequirePower: 0
   HasUpgrade: 0
   IsInitCurRecipe: 0
 --- !u!1 &5457862945907185300

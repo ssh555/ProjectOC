@@ -16,14 +16,18 @@ namespace ProjectOC.Order
         /// </summary>
         private CounterDownTimer RefreshTimer;
 
-        public OrderNormal(string orderId, List<OrderMap> RequireItemList, int DemandCycle) : base(orderId, RequireItemList)
+        private int DemandCycle;
+
+        public OrderNormal(OrderTableData orderTableData) :base(orderTableData)
         {
-            
-            this.RefreshTimer = new CounterDownTimer(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DemandCycle, autocycle: false, autoStart: false);
+            this.DemandCycle = orderTableData.CD;
+            //this.RefreshTimer = new CounterDownTimer(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DemandCycle, autocycle: false, autoStart: false);
+            this.RefreshTimer = new CounterDownTimer(1 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DemandCycle, autocycle: false, autoStart: false);
             this.RefreshTimer.OnEndEvent += () =>
             {
                 //重置计时器
-                this.RefreshTimer.Reset(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DemandCycle, isStoped: true);
+                //this.RefreshTimer.Reset(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DemandCycle, isStoped: true);
+                this.RefreshTimer.Reset(1 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DemandCycle, isStoped: true);
 
                 //TODO 记录当前游戏日，于当日00：00加入常规列表中 AddOrderToOrderDelegationMap
 
@@ -33,6 +37,9 @@ namespace ProjectOC.Order
         }
         private void OnDayChangedAction(int day)
         {
+            Debug.Log("OnDayChangedAction");
+            //刷新常规订单 并生成新的实例化ID
+            this.orderInstanceID = OrderManager.Instance.GenerateOrderInstanceID(this.OrderID);
             LocalGameManager.Instance.OrderManager.AddOrderToOrderDelegationMap(this.OrderID);
             LocalGameManager.Instance.DispatchTimeManager.OnDayChangedAction -= OnDayChangedAction;
         }
