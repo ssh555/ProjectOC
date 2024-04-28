@@ -18,7 +18,7 @@ namespace ProjectOC.Player
             moveAbility.EnablePreJump = true;
         }
 
-        private Animator modelAnimator;
+        public Animator modelAnimator { get; private set; }
         private Animator moveAnimator;
         private PlayerCharacter playerCharacter;
 

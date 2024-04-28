@@ -2223,6 +2223,11 @@ MonoBehaviour:
   rightBtnLists: []
   Config: {fileID: 0}
   SA_PinchPart: {fileID: 0}
+  rtRefrence:
+    m_AssetGUID: 
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
   uICameraImage: {fileID: 0}
 --- !u!114 &8454679078138748675
 MonoBehaviour:
@@ -4283,7 +4288,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5739676053355239206, guid: d6f64c38325c17949a54321ab02efaf0, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5739676053355239206, guid: d6f64c38325c17949a54321ab02efaf0, type: 3}
       propertyPath: m_AnchorMin.x
@@ -4291,7 +4296,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5739676053355239206, guid: d6f64c38325c17949a54321ab02efaf0, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5739676053355239206, guid: d6f64c38325c17949a54321ab02efaf0, type: 3}
       propertyPath: m_SizeDelta.x
@@ -4367,11 +4372,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6883795424340183274, guid: d6f64c38325c17949a54321ab02efaf0, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6883795424340183274, guid: d6f64c38325c17949a54321ab02efaf0, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6883795424340183274, guid: d6f64c38325c17949a54321ab02efaf0, type: 3}
       propertyPath: m_SizeDelta.y
@@ -4837,11 +4842,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8148029933962908519, guid: 4437fd398fa8cdf4f812d88f81e36b8a, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 465.2114
+      value: 460
       objectReference: {fileID: 0}
     - target: {fileID: 8148029933962908519, guid: 4437fd398fa8cdf4f812d88f81e36b8a, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 644.45
+      value: 640
       objectReference: {fileID: 0}
     - target: {fileID: 8148029933962908519, guid: 4437fd398fa8cdf4f812d88f81e36b8a, type: 3}
       propertyPath: m_LocalPosition.x
