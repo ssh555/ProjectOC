@@ -7,23 +7,23 @@ namespace ProjectOC.DataNS
     public abstract class ItemContainerOwner : MissionNS.IMissionObj, ML.Engine.InventorySystem.IInventory
     {
         [LabelText("´æ´¢Êý¾Ý"), ReadOnly]
-        public DataContainer ItemDatas;
+        public DataContainer DataContainer;
 
         #region Init Clear
         public void InitData(int capacity, int dataCapacity)
         {
-            ItemDatas = new DataContainer(capacity, dataCapacity);
+            DataContainer = new DataContainer(capacity, dataCapacity);
         }
         public void InitData(List<string> ids, List<int> dataCapacitys)
         {
-            ItemDatas = new DataContainer(ids, dataCapacitys);
+            DataContainer = new DataContainer(ids, dataCapacitys);
         }
         public void ClearData()
         {
             (this as MissionNS.IMissionObj).Clear();
-            if (ItemDatas != null)
+            if (DataContainer != null)
             {
-                ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(ItemDatas.GetStorageAll());
+                ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(DataContainer.GetAmount(DataOpType.StorageAll));
             }
         }
         public void ResetData(List<string> ids, List<int> dataCapacity)
@@ -33,65 +33,46 @@ namespace ProjectOC.DataNS
         }
         #endregion
 
-        #region Get
-        public int GetCapacity()
-        {
-            return ItemDatas?.GetCapacity() ?? 0;
-        }
-        public bool HaveSetItem(string itemID, bool needCanIn = false, bool needCanOut = false)
-        {
-            return ItemDatas.HaveSetData(itemID, needCanIn, needCanOut);
-        }
-        public int GetAmount(string itemID, DataOpType type, bool needCanIn = false, bool needCanOut = false)
-        {
-            return ItemDatas.GetAmount(itemID, type, needCanIn, needCanOut);
-        }
-        public int GetAmount(int index, DataOpType type)
-        {
-            return ItemDatas.GetAmount(index, type);
-        }
-        #endregion
-
         #region Set
         public void ChangeCapacity(int capacity, int dataCapacity)
         {
-            var dict = ItemDatas.ChangeCapacity(capacity, dataCapacity);
+            var dict = DataContainer.ChangeCapacity(capacity, dataCapacity);
             ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(dict);
             (this as MissionNS.IMissionObj).UpdateTransport();
         }
 
         public void ChangeCapacity(int capacity, List<int> dataCapacitys)
         {
-            var dict = ItemDatas.ChangeCapacity(capacity, dataCapacitys);
+            var dict = DataContainer.ChangeCapacity(capacity, dataCapacitys);
             ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(dict);
             (this as MissionNS.IMissionObj).UpdateTransport();
         }
 
         public void ChangeData(int index, string itemID)
         {
-            string oldID = ItemDatas.GetID(index);
-            var t = ItemDatas.ChangeData(index, itemID);
+            string oldID = DataContainer.GetID(index);
+            var t = DataContainer.ChangeData(index, itemID);
             ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(t.Item1, t.Item2);
             (this as MissionNS.IMissionObj).UpdateTransport(oldID);
         }
 
         public void Remove(int index, int amount)
         {
-            if (amount > 0 && ItemDatas.GetAmount(index, DataOpType.Storage) >= amount)
+            if (amount > 0 && DataContainer.GetAmount(index, DataOpType.Storage) >= amount)
             {
-                ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(ItemDatas.GetID(index), amount);
-                ItemDatas.ChangeAmount(index, amount, DataOpType.Empty, DataOpType.Storage);
+                ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(DataContainer.GetID(index), amount);
+                DataContainer.ChangeAmount(index, amount, DataOpType.Empty, DataOpType.Storage);
             }
         }
 
         public void FastAdd(int index)
         {
-            if (ItemDatas.HaveSetData(index))
+            if (DataContainer.HaveSetData(index))
             {
-                string itemID = ItemDatas.GetID(index);
-                int empty = ItemDatas.GetAmount(index, DataOpType.Empty);
+                string itemID = DataContainer.GetID(index);
+                int empty = DataContainer.GetAmount(index, DataOpType.Empty);
                 int amount = ManagerNS.LocalGameManager.Instance.Player.InventoryCostItems(itemID, empty, false);
-                ItemDatas.ChangeAmount(index, amount, DataOpType.Storage, DataOpType.Empty);
+                DataContainer.ChangeAmount(index, amount, DataOpType.Storage, DataOpType.Empty);
             }
         }
         #endregion
@@ -105,11 +86,15 @@ namespace ProjectOC.DataNS
 
         public int ChangeAmount(string id, int amount, DataOpType addType, DataOpType removeType, bool exceed = false, bool complete = true, bool needCanIn = false, bool needCanOut = false)
         {
-            return ItemDatas.ChangeAmount(id, amount, addType, removeType, exceed, complete, needCanIn, needCanOut);
+            return DataContainer.ChangeAmount(id, amount, addType, removeType, exceed, complete, needCanIn, needCanOut);
+        }
+        public int GetAmount(string itemID, DataOpType type, bool needCanIn = false, bool needCanOut = false)
+        {
+            return DataContainer.GetAmount(itemID, type, needCanIn, needCanOut);
         }
         public Dictionary<string, int> GetAmount(DataOpType type, bool needCanIn = false, bool needCanOut = false)
         {
-            return ItemDatas.GetAmount(type, needCanIn, needCanOut);
+            return DataContainer.GetAmount(type, needCanIn, needCanOut);
         }
         #endregion
 
@@ -118,7 +103,7 @@ namespace ProjectOC.DataNS
         {
             if (item != null && !string.IsNullOrEmpty(item.ID) && item.Amount > 0)
             {
-                return ItemDatas.ChangeAmount(item.ID, item.Amount, DataOpType.Storage, DataOpType.Empty) == item.Amount;
+                return DataContainer.ChangeAmount(item.ID, item.Amount, DataOpType.Storage, DataOpType.Empty) == item.Amount;
             }
             return false;
         }
@@ -127,7 +112,7 @@ namespace ProjectOC.DataNS
         {
             if (item != null && !string.IsNullOrEmpty(item.ID) && item.Amount > 0)
             {
-                return ItemDatas.ChangeAmount(item.ID, item.Amount, DataOpType.Empty, DataOpType.Storage) == item.Amount;
+                return DataContainer.ChangeAmount(item.ID, item.Amount, DataOpType.Empty, DataOpType.Storage) == item.Amount;
             }
             return false;
         }
@@ -137,7 +122,7 @@ namespace ProjectOC.DataNS
             if (item != null && !string.IsNullOrEmpty(item.ID) && amount > 0)
             {
                 ML.Engine.InventorySystem.Item result = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItem(item.ID);
-                result.Amount = ItemDatas.ChangeAmount(item.ID, item.Amount, DataOpType.Empty, DataOpType.Storage, complete: false);
+                result.Amount = DataContainer.ChangeAmount(item.ID, item.Amount, DataOpType.Empty, DataOpType.Storage, complete: false);
                 return result;
             }
             return null;
@@ -147,20 +132,20 @@ namespace ProjectOC.DataNS
         {
             if (!string.IsNullOrEmpty(itemID) && amount > 0)
             {
-                return ItemDatas.ChangeAmount(itemID, amount, DataOpType.Empty, DataOpType.Storage) == amount;
+                return DataContainer.ChangeAmount(itemID, amount, DataOpType.Empty, DataOpType.Storage) == amount;
             }
             return false;
         }
 
         public int GetItemAllNum(string id)
         {
-            return GetAmount(id, DataOpType.Storage);
+            return DataContainer.GetAmount(id, DataOpType.Storage);
         }
 
         public ML.Engine.InventorySystem.Item[] GetItemList()
         {
             var result = new List<ML.Engine.InventorySystem.Item>();
-            foreach (var kv in ItemDatas.GetStorageAll())
+            foreach (var kv in DataContainer.GetAmount(DataOpType.StorageAll))
             {
                 result.AddRange(ManagerNS.LocalGameManager.Instance.ItemManager.SpawnItems(kv.Key, kv.Value));
             }

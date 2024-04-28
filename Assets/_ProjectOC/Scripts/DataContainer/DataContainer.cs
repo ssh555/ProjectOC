@@ -87,23 +87,6 @@ namespace ProjectOC.DataNS
             return Datas.ToList();
         }
 
-        public Dictionary<string, int> GetStorageAll()
-        {
-            Dictionary<string, int> dict = new Dictionary<string, int>();
-            foreach (Data data in Datas)
-            {
-                if (data.StorageAll > 0)
-                {
-                    if (!dict.ContainsKey(data.ID))
-                    {
-                        dict[data.ID] = 0;
-                    }
-                    dict[data.ID] += data.StorageAll;
-                }
-            }
-            return dict;
-        }
-
         public bool HaveSetData(string id, bool needCanIn = false, bool needCanOut = false)
         {
             if (!string.IsNullOrEmpty(id))
@@ -114,6 +97,30 @@ namespace ProjectOC.DataNS
                     {
                         return true;
                     }
+                }
+            }
+            return false;
+        }
+
+        public bool HaveData(string id, DataOpType type, bool needCanIn = false, bool needCanOut = false)
+        {
+            foreach (Data data in Datas)
+            {
+                if (data.ID == id && data.GetAmount(type) > 0 && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool HaveAnyData(DataOpType type, bool needCanIn = false, bool needCanOut = false)
+        {
+            foreach (Data data in Datas)
+            {
+                if (data.HaveSetData && data.GetAmount(type) > 0 && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
+                {
+                    return true;
                 }
             }
             return false;

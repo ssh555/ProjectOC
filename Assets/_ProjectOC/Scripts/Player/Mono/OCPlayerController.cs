@@ -71,7 +71,7 @@ namespace ProjectOC.Player
                     List<StoreNS.Store> stores = ManagerNS.LocalGameManager.Instance.StoreManager.GetStores();
                     foreach (StoreNS.Store store in stores)
                     {
-                        num += store.GetAmount(itemID, DataNS.DataOpType.Storage);
+                        num += store.DataContainer.GetAmount(itemID, DataNS.DataOpType.Storage);
                         if (num >= amount)
                         {
                             return true;
@@ -120,7 +120,7 @@ namespace ProjectOC.Player
                 {
                     foreach (string id in reamin.ToArray())
                     {
-                        curs[id] += store.GetAmount(id, DataNS.DataOpType.Storage);
+                        curs[id] += store.DataContainer.GetAmount(id, DataNS.DataOpType.Storage);
                         if (curs[id] >= needs[id])
                         {
                             reamin.Remove(id);
@@ -145,7 +145,7 @@ namespace ProjectOC.Player
             {
                 foreach (var store in ManagerNS.LocalGameManager.Instance.StoreManager.GetStores())
                 {
-                    current += store.GetAmount(itemID, DataNS.DataOpType.Storage);
+                    current += store.DataContainer.GetAmount(itemID, DataNS.DataOpType.Storage);
                 }
             }
             return current;

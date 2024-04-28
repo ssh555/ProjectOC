@@ -66,9 +66,9 @@ namespace ProjectOC.ProNodeNS
         [LabelText("是否有生产配方"), ShowInInspector, ReadOnly]
         public bool HasRecipe => Recipe.IsValidRecipe;
         [LabelText("堆积数量"), ShowInInspector, ReadOnly]
-        public int Stack => GetAmount(Recipe.ProductID, DataNS.DataOpType.Storage);
+        public int Stack => DataContainer.GetAmount(Recipe.ProductID, DataNS.DataOpType.Storage);
         [LabelText("总堆积数量"), ShowInInspector, ReadOnly]
-        public int StackAll => GetAmount(Recipe.ProductID, DataNS.DataOpType.StorageAll);
+        public int StackAll => DataContainer.GetAmount(Recipe.ProductID, DataNS.DataOpType.StorageAll);
         [LabelText("生产物ID"), ShowInInspector, ReadOnly]
         public string ProductID => Recipe.ProductID;
         [LabelText("一次生产的生产物数量"), ShowInInspector, ReadOnly]
@@ -271,10 +271,10 @@ namespace ProjectOC.ProNodeNS
             {
                 foreach (var kv in Recipe.Raw)
                 {
-                    if (GetAmount(kv.id, DataNS.DataOpType.Storage) < kv.num) { return false; }
+                    if (DataContainer.GetAmount(kv.id, DataNS.DataOpType.Storage) < kv.num) { return false; }
                 }
                 if (ProNodeType == ProNodeType.Mannul && !(HaveWorker && Worker.IsOnProNodeDuty)) { return false; }
-                if (GetAmount(ProductID, DataNS.DataOpType.StorageAll) >= StackMax * ProductNum) { return false; }
+                if (DataContainer.GetAmount(ProductID, DataNS.DataOpType.StorageAll) >= StackMax * ProductNum) { return false; }
                 if (RequirePower && WorldProNode.PowerCount <= 0) { return false; }
                 return true;
             }
@@ -295,7 +295,7 @@ namespace ProjectOC.ProNodeNS
             int missionNum;
             foreach (var kv in Recipe.Raw)
             {
-                missionNum = kv.num * RawThreshold - GetAmount(kv.id, DataNS.DataOpType.Storage) - GetAssignNum(kv.id, true);
+                missionNum = kv.num * RawThreshold - DataContainer.GetAmount(kv.id, DataNS.DataOpType.Storage) - GetAssignNum(kv.id, true);
                 if (missionNum > 0)
                 {
                     missionNum += kv.num * (StackMax - RawThreshold);
@@ -353,7 +353,7 @@ namespace ProjectOC.ProNodeNS
         public override string GetUID() { return WorldProNode.InstanceID; }
         public void FastAdd()
         {
-            for (int i = 0; i < ItemDatas.GetCapacity() - 1; i++) { FastAdd(i); }
+            for (int i = 0; i < DataContainer.GetCapacity() - 1; i++) { FastAdd(i); }
         }
         #endregion
 

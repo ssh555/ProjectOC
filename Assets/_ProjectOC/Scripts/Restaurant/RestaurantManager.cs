@@ -99,15 +99,14 @@ namespace ProjectOC.RestaurantNS
         public Restaurant GetPutInRestaurant(string itemID, int amount)
         {
             Restaurant result = null;
-            string foodID = ItemIDToFoodID(itemID);
             if (!string.IsNullOrEmpty(foodID) && amount > 0)
             {
                 List<Restaurant> restaurants = GetRestaurants();
                 foreach (var restaurant in restaurants)
                 {
-                    if (restaurant.HaveSetFood(foodID))
+                    if (restaurant.DataContainer.HaveSetData(itemID))
                     {
-                        int empty = restaurant.GetAmount(foodID, false);
+                        int empty = restaurant.DataContainer.GetAmount(itemID, DataNS.DataOpType.Empty);
                         if (result == null && empty > 0)
                         {
                             result = restaurant;
