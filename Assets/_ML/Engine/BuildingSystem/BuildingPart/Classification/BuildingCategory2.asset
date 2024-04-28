@@ -89,10 +89,10 @@ MonoBehaviour:
     value: 106
   - name: Floor
     displayName: "\u5730\u677F"
-    value: 202
+    value: 201
   - name: Edge
     displayName: "\u5730\u57FA\u5916\u6CBF"
-    value: 201
+    value: 202
   - name: Wall
     displayName: "\u5899"
     value: 203
