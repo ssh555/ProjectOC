@@ -29,8 +29,8 @@ namespace ProjectOC.StoreNS
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Store_UI/Prefab_Store_UI_StorePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
             {
                 UI.UIStore uiPanel = (handle.Result).GetComponent<UI.UIStore>();
-                uiPanel.Store = Store;
-                uiPanel.HasUpgrade = (this as ML.Engine.BuildingSystem.IBuildingUpgrade).HasUpgrade() || Store.Level > 0;
+                //uiPanel.Store = Store;
+                //uiPanel.HasUpgrade = (this as ML.Engine.BuildingSystem.IBuildingUpgrade).HasUpgrade() || Store.Level > 0;
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uiPanel);
             };
         }

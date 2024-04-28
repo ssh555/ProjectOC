@@ -114,6 +114,10 @@ namespace ProjectOC.StoreNS
         {
             return StoreDatas.GetDataAmount(itemID, type, needCanIn, needCanOut);
         }
+        public int GetAmount(int index, DataNS.DataOpType type)
+        {
+            return StoreDatas.GetDataAmount(index, type);
+        }
         public void ChangeStoreData(int index, string itemID)
         {
             var t = StoreDatas.ChangeData(index, itemID);

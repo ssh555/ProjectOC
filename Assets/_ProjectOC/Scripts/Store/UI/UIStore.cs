@@ -3,71 +3,125 @@ using ML.Engine.TextContent;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using ML.Engine.Extension;
 using static ProjectOC.StoreNS.UI.UIStore;
-
+using ML.Engine.UI;
+using System.Linq;
 
 namespace ProjectOC.StoreNS.UI
 {
     public class UIStore : ML.Engine.UI.UIBasePanel<StorePanel>
     {
+        #region Data
+        public enum Mode
+        {
+            Store = 0,
+            ChangeItem = 1,
+            ChangeIcon = 2,
+            Upgrade = 3
+        }
+        public Mode CurMode = Mode.Store;
+        public enum StoreMode
+        {
+            ChangeItem = 0,
+            ChangeIn = 1,
+            ChangeOut = 2
+        }
+        public StoreMode CurStoreMode = StoreMode.ChangeItem;
+        public Store Store;
+        private MissionNS.TransportPriority CurPriority
+        {
+            get => Store.TransportPriority;
+            set
+            {
+                if (Priority != null)
+                {
+                    Priority.Find("Selected").gameObject.SetActive(false);
+                }
+                Store.TransportPriority = value;
+                Text_Priority.text = PanelTextContent.TransportPriority[(int)Store.TransportPriority];
+                Priority = transform.Find("TopTitle").Find("Priority").GetChild((int)Store.TransportPriority);
+                Priority.Find("Selected").gameObject.SetActive(true);
+            }
+        }
+
+        public bool HasUpgrade;
+
+        private bool ItemIsDestroyed = false;
+
         #region Unity
         public bool IsInit = false;
+        private TMPro.TextMeshProUGUI Text_Title;
+        private TMPro.TextMeshProUGUI Text_Priority;
+        private Image StoreIcon;
+        private Sprite EmptySprite;
+        private Transform Priority;
+        private Transform StoreTransform;
+        private Transform ChangeItem;
+        private Transform Upgrade;
+        private Transform Upgrade_Build;
+        private Transform Upgrade_LvOld;
+        private Transform Upgrade_LvNew;
+        private Transform BotKeyTips_KeyTips;
+        private Transform BotKeyTips_ChangeItem;
+        private Transform BotKeyTips_Upgrade;
         protected override void Start()
         {
             base.Start();
 
-            #region TopTitle
             Text_Title = transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             StoreIcon = transform.Find("TopTitle").Find("Icon").GetComponent<Image>();
             EmptySprite = StoreIcon.sprite;
-
-            Transform priority = transform.Find("TopTitle").Find("Priority");
-            Text_Priority = priority.Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
-            PriorityUrgency = priority.Find("Urgency");
-            PriorityNormal = priority.Find("Normal");
-            PriorityAlternative = priority.Find("Alternative");
-            #endregion
-
-            #region Store
+            Text_Priority = transform.Find("TopTitle").Find("Priority").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             StoreTransform = transform.Find("Store");
-            Transform content = StoreTransform.Find("Viewport").Find("Content");
-            GridLayout = content.GetComponent<GridLayoutGroup>();
-            UIItemTemplate = content.Find("UIItemTemplate");
-            UIItemTemplate.gameObject.SetActive(false);
-            #endregion
-
-            #region ChangeItem
             ChangeItem = transform.Find("ChangeItem");
-            Transform contentChangeItem = transform.Find("ChangeItem").Find("Select").Find("Viewport").Find("Content");
-            ChangeItem_GridLayout = contentChangeItem.GetComponent<GridLayoutGroup>();
-            ChangeItem_UIItemTemplate = contentChangeItem.Find("UIItemTemplate");
-            ChangeItem_UIItemTemplate.gameObject.SetActive(false);
-            ChangeItem.gameObject.SetActive(false);
-            #endregion
 
-            #region Upgrade
             Upgrade = transform.Find("Upgrade");
             Upgrade_Build = Upgrade.Find("Build");
-            Transform contentUpgrade = transform.Find("Upgrade").Find("Raw").Find("Viewport").Find("Content");
-            Upgrade_GridLayout = contentUpgrade.GetComponent<GridLayoutGroup>();
-            Upgrade_UIItemTemplate = contentUpgrade.Find("UIItemTemplate");
-            Upgrade_UIItemTemplate.gameObject.SetActive(false);
             Upgrade_LvOld = Upgrade.Find("Level").Find("LvOld");
             Upgrade_LvNew = Upgrade.Find("Level").Find("LvNew");
-            Upgrade.gameObject.SetActive(false);
-            #endregion
 
-            #region BotKeyTips
-            BotKeyTips_KeyTips = this.transform.Find("BotKeyTips").Find("KeyTips");
-            BotKeyTips_ChangeItem = this.transform.Find("BotKeyTips").Find("ChangeItem");
-            BotKeyTips_Upgrade = this.transform.Find("BotKeyTips").Find("Upgrade");
+            BotKeyTips_KeyTips = transform.Find("BotKeyTips").Find("KeyTips");
+            BotKeyTips_ChangeItem = transform.Find("BotKeyTips").Find("ChangeItem");
+            BotKeyTips_Upgrade = transform.Find("BotKeyTips").Find("Upgrade");
             BotKeyTips_ChangeItem.gameObject.SetActive(false);
-            #endregion
 
             IsInit = true;
             Refresh();
         }
+        #endregion
+
+        #region TextContent
+        [System.Serializable]
+        public struct StorePanel
+        {
+            public TextContent text_Title;
+            public TextContent text_Empty;
+            public TextContent[] TransportPriority;
+            public TextContent text_Add;
+            public TextContent text_Remove;
+            public TextContent text_LvDesc1;
+            public TextContent text_LvDesc2;
+
+            public KeyTip Upgrade;
+            public KeyTip NextPriority;
+            public KeyTip ChangeIcon;
+            public KeyTip UpgradeConfirm;
+            public KeyTip ChangeItem;
+            public KeyTip Remove1;
+            public KeyTip Remove10;
+            public KeyTip Switch;
+            public KeyTip FastAdd;
+            public KeyTip Confirm;
+            public KeyTip Back;
+            public KeyTip UpgradeBack;
+        }
+        protected override void InitTextContentPathData()
+        {
+            this.abpath = "OCTextContent/Store";
+            this.abname = "StorePanel";
+            this.description = "StorePanel数据加载完成";
+        }
+        #endregion
         #endregion
 
         #region Override
@@ -85,234 +139,60 @@ namespace ProjectOC.StoreNS.UI
             ClearTemp();
             base.Exit();
         }
+
+        private UIBtnList DataBtnList;
+        private UIBtnList ItemBtnList;
+        private UIBtnList UPRawBtnList;
+        private UIBtnList.Synchronizer synchronizer;
+        private bool IsInitBtnList = false;
+
+        protected override void InitBtnInfo()
+        {
+            synchronizer = new UIBtnList.Synchronizer(3, () => { IsInitBtnList = true; Refresh(); });
+            DataBtnList = new UIBtnList(transform.Find("Store").Find("Viewport").GetComponentInChildren<UIBtnListInitor>());
+            DataBtnList.OnSelectButtonChanged += () => { Refresh(); };
+            DataBtnList.ChangBtnNum(1, "Prefab_Store_UI/Prefab_Store_UI_DataTemplate.prefab", ()=> { synchronizer.Check(); });
+
+            ItemBtnList = new UIBtnList(transform.Find("ChangeItem").Find("Select").Find("Viewport").GetComponentInChildren<UIBtnListInitor>());
+            ItemBtnList.OnSelectButtonChanged += () => { Refresh(); };
+            ItemBtnList.ChangBtnNum(1, "Prefab_Store_UI/Prefab_Store_UI_ItemTemplate.prefab", () => { synchronizer.Check(); });
+
+            UPRawBtnList = new UIBtnList(transform.Find("Upgrade").Find("Raw").Find("Viewport").GetComponentInChildren<UIBtnListInitor>());
+            UPRawBtnList.OnSelectButtonChanged += () => { Refresh(); };
+            UPRawBtnList.ChangBtnNum(1, "Prefab_Store_UI/Prefab_Store_UI_UpgradeRawTemplate.prefab", () => { synchronizer.Check(); });
+        }
         #endregion
 
         #region Internal
-        public enum Mode
-        {
-            Store = 0,
-            ChangeItem = 1,
-            ChangeIcon = 2,
-            Upgrade = 3
-        }
-        public Mode CurMode = Mode.Store;
-        public enum StoreMode
-        {
-            ChangeItem = 0,
-            ChangeIn = 1,
-            ChangeOut = 2
-        }
-        public StoreMode CurStoreMode = StoreMode.ChangeItem;
-        /// <summary>
-        /// 对应的逻辑仓库
-        /// </summary>
-        public Store Store;
-        /// <summary>
-        /// 当前的Priority
-        /// </summary>
-        private MissionNS.TransportPriority curPriority;
-        /// <summary>
-        /// 封装的Priority，便于在更新值时一并更新其他数据并Refresh
-        /// </summary>
-        private MissionNS.TransportPriority CurPriority
-        {
-            get => curPriority;
-            set
-            {
-                if (Priority != null)
-                {
-                    Priority.Find("Selected").gameObject.SetActive(false);
-                }
-                curPriority = value;
-                switch (curPriority)
-                {
-                    case MissionNS.TransportPriority.Urgency:
-                        Priority = PriorityUrgency;
-                        Text_Priority.text = PanelTextContent.text_PriorityUrgency.GetText();
-                        break;
-                    case MissionNS.TransportPriority.Normal:
-                        Priority = PriorityNormal;
-                        Text_Priority.text = PanelTextContent.text_PriorityNormal.GetText();
-                        break;
-                    case MissionNS.TransportPriority.Alternative:
-                        Priority = PriorityAlternative;
-                        Text_Priority.text = PanelTextContent.text_PriorityAlternative.GetText();
-                        break;
-                }
-                Priority.Find("Selected").gameObject.SetActive(true);
-            }
-        }
-        /// <summary>
-        /// 是否有升级功能
-        /// </summary>
-        public bool HasUpgrade;
-
-        /// <summary>
-        /// 上一次选中的DataIndex，用于移动滑动窗口
-        /// </summary>
-        private int lastDataIndex = 0;
-        /// <summary>
-        /// 当前选中的DataIndex
-        /// </summary>
-        private int currentDataIndex = 0;
-        /// <summary>
-        /// 封装，方便更新数据和Refresh
-        /// </summary>
-        private int CurrentDataIndex
-        {
-            get => currentDataIndex;
-            set
-            {
-                int last = currentDataIndex;
-                if(Store.StoreDatas.Length > 0)
-                {
-                    currentDataIndex = value;
-                    if(currentDataIndex == -1)
-                    {
-                        currentDataIndex = Store.StoreDatas.Length - 1;
-                    }
-                    else if(currentDataIndex == Store.StoreDatas.Length)
-                    {
-                        currentDataIndex = 0;
-                    }
-                    else
-                    {
-                        var grid = GridLayout.GetGridSize();
-                        if (currentDataIndex < 0)
-                        {
-                            currentDataIndex += (grid.x * grid.y);
-                        }
-                        else if (currentDataIndex >= Store.StoreDatas.Length)
-                        {
-                            currentDataIndex -= (grid.x * grid.y);
-                            if (currentDataIndex < 0)
-                            {
-                                currentDataIndex += grid.y;
-                            }
-                        }
-                        // 不计算隐藏的模板
-                        while (this.currentDataIndex >= Store.StoreDatas.Length)
-                        {
-                            this.currentDataIndex -= grid.y;
-                        }
-                    }
-                }
-                else
-                {
-                    currentDataIndex = 0;
-                }
-                if(last != currentDataIndex)
-                {
-                    lastDataIndex = last;
-                }
-                this.Refresh();
-            }
-        }
-
-        private List<string> ItemDatas = new List<string>();
-        private bool IsInitCurItemIndex;
-        private int lastItemIndex = 0;
-        private int currentItemIndex = 0;
-        private int CurrentItemIndex
-        {
-            get => currentItemIndex;
-            set
-            {
-                int last = currentItemIndex;
-                if (ItemDatas.Count > 0)
-                {
-                    currentItemIndex = value;
-                    if (currentItemIndex == -1)
-                    {
-                        currentItemIndex = ItemDatas.Count - 1;
-                    }
-                    else if (currentItemIndex == ItemDatas.Count)
-                    {
-                        currentItemIndex = 0;
-                    }
-                    else
-                    {
-                        var grid = ChangeItem_GridLayout.GetGridSize();
-                        if (currentItemIndex < 0)
-                        {
-                            currentItemIndex += (grid.x * grid.y);
-                        }
-                        else if (currentItemIndex >= ItemDatas.Count)
-                        {
-                            currentItemIndex -= (grid.x * grid.y);
-                            if (currentItemIndex < 0)
-                            {
-                                currentItemIndex += grid.y;
-                            }
-                        }
-                        // 不计算隐藏的模板
-                        while (this.currentItemIndex >= ItemDatas.Count)
-                        {
-                            this.currentItemIndex -= grid.y;
-                        }
-                    }
-                }
-                else
-                {
-                    currentItemIndex = 0;
-                }
-                if (last != currentItemIndex)
-                {
-                    lastItemIndex = last;
-                }
-                this.Refresh();
-            }
-        }
-        private string CurrentItemData
-        {
-            get
-            {
-                if (CurrentItemIndex < ItemDatas.Count)
-                {
-                    return ItemDatas[CurrentItemIndex];
-                }
-                return null;
-            }
-        }
-
-        private bool ItemIsDestroyed = false;
-
         protected override void UnregisterInput()
         {
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Disable();
-            // 切换Priority
             ProjectOC.Input.InputManager.PlayerInput.UIStore.NextPriority.performed -= NextPriority_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeIcon.performed -= ChangeIcon_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Upgrade.performed -= Upgrade_performed;
-            // 上下切换StoreData
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeItem.started -= ChangeItem_started;
-            // 快捷放入
             ProjectOC.Input.InputManager.PlayerInput.UIStore.FastAdd.performed -= FastAdd_performed;
-            // 取出1个
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove.canceled -= Remove_cancled;
-            // 取出10个
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove.performed -= Remove_performed;
-            // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed -= Confirm_performed;
         }
 
         protected override void RegisterInput()
         {
+            DataBtnList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
+            DataBtnList.EnableBtnList();
+            ItemBtnList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
+            UPRawBtnList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
+
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Enable();
-            // 切换Priority
             ProjectOC.Input.InputManager.PlayerInput.UIStore.NextPriority.performed += NextPriority_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeIcon.performed += ChangeIcon_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Upgrade.performed += Upgrade_performed;
-            // 上下切换StoreData
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeItem.started += ChangeItem_started;
-            // 快捷放入
             ProjectOC.Input.InputManager.PlayerInput.UIStore.FastAdd.performed += FastAdd_performed;
-            // 取出1个
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove.canceled += Remove_cancled;
-            // 取出10个
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Remove.performed += Remove_performed;
-            // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
         }
@@ -321,10 +201,8 @@ namespace ProjectOC.StoreNS.UI
             if (CurMode != Mode.ChangeIcon)
             {
                 CurMode = Mode.ChangeIcon;
-                this.IsInitCurItemIndex = false;
-                this.ItemDatas.Clear();
-                this.lastItemIndex = 0;
-                this.currentItemIndex = 0;
+                //this.IsInitCurItemIndex = false;
+                //this.ItemDatas.Clear();
             }
             else
             {
@@ -346,22 +224,8 @@ namespace ProjectOC.StoreNS.UI
         }
         private void NextPriority_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            MissionNS.TransportPriority priority = Store.TransportPriority;
-            switch (priority)
-            {
-                case MissionNS.TransportPriority.Urgency:
-                    Store.TransportPriority = MissionNS.TransportPriority.Normal;
-                    break;
-                case MissionNS.TransportPriority.Normal:
-                    Store.TransportPriority = MissionNS.TransportPriority.Alternative;
-                    break;
-                case MissionNS.TransportPriority.Alternative:
-                    Store.TransportPriority = MissionNS.TransportPriority.Urgency;
-                    break;
-            }
-            CurPriority = Store.TransportPriority;
+            CurPriority = (MissionNS.TransportPriority)(((int)Store.TransportPriority + 1) % System.Enum.GetValues(typeof(MissionNS.TransportPriority)).Length);
         }
-        // Store
         private void ChangeItem_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (CurMode == Mode.Store)
@@ -384,26 +248,13 @@ namespace ProjectOC.StoreNS.UI
                         Refresh();
                     }
                 }
-
-                if (offset.y != 0)
-                {
-                    var grid = GridLayout.GetGridSize();
-                    this.CurrentDataIndex += -offset.y * grid.y + offset.x;
-                }
-            }
-            else if (CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon)
-            {
-                var f_offset = obj.ReadValue<Vector2>();
-                var offset = new Vector2Int(Mathf.RoundToInt(f_offset.x), Mathf.RoundToInt(f_offset.y));
-                var grid = ChangeItem_GridLayout.GetGridSize();
-                this.CurrentItemIndex += -offset.y * grid.y + offset.x;
             }
         }
         private void FastAdd_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (CurMode == Mode.Store && CurStoreMode == StoreMode.ChangeItem)
             {
-                Store.UIFastAdd(CurrentDataIndex);
+                Store.UIFastAdd(DataBtnList.GetCurSelectedPos1());
                 Refresh();
             }
         }
@@ -411,13 +262,13 @@ namespace ProjectOC.StoreNS.UI
         {
             if (CurMode == Mode.Store && CurStoreMode == StoreMode.ChangeItem)
             {
-                if (this.ItemIsDestroyed)
+                if (ItemIsDestroyed)
                 {
-                    this.ItemIsDestroyed = false;
+                    ItemIsDestroyed = false;
                 }
                 else
                 {
-                    Store.UIRemove(CurrentDataIndex, 1);
+                    Store.UIRemove(DataBtnList.GetCurSelectedPos1(), 1);
                     Refresh();
                 }
             }
@@ -426,15 +277,10 @@ namespace ProjectOC.StoreNS.UI
         {
             if (CurMode == Mode.Store && CurStoreMode == StoreMode.ChangeItem)
             {
-                this.ItemIsDestroyed = true;
-                if (Store.StoreDatas[CurrentDataIndex].Storage < 10)
-                {
-                    Store.UIRemove(CurrentDataIndex, Store.StoreDatas[CurrentDataIndex].Storage);
-                }
-                else
-                {
-                    Store.UIRemove(CurrentDataIndex, 10);
-                }
+                ItemIsDestroyed = true;
+                int num = Store.GetAmount(DataBtnList.GetCurSelectedPos1(), DataNS.DataOpType.Storage);
+                num = num < 10 ? num : 10;
+                Store.UIRemove(DataBtnList.GetCurSelectedPos1(), num);
                 Refresh();
             }
         }
@@ -451,9 +297,6 @@ namespace ProjectOC.StoreNS.UI
             else if (CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon || CurMode == Mode.Upgrade)
             {
                 this.CurMode = Mode.Store;
-                this.ItemDatas.Clear();
-                this.lastItemIndex = 0;
-                this.currentItemIndex = 0;
                 Refresh();
             }
         }
@@ -464,7 +307,6 @@ namespace ProjectOC.StoreNS.UI
                 if (CurStoreMode == StoreMode.ChangeItem)
                 {
                     CurMode = Mode.ChangeItem;
-                    this.IsInitCurItemIndex = false;
                 }
                 else if (CurStoreMode == StoreMode.ChangeIn)
                 {
@@ -479,9 +321,6 @@ namespace ProjectOC.StoreNS.UI
             {
                 Store.ChangeStoreData(CurrentDataIndex, CurrentItemData);
                 this.CurMode = Mode.Store;
-                this.ItemDatas.Clear();
-                this.lastItemIndex = 0;
-                this.currentItemIndex = 0;
             }
             else if (CurMode == Mode.ChangeIcon)
             {
@@ -505,7 +344,7 @@ namespace ProjectOC.StoreNS.UI
 
         private void ClearTemp()
         {
-            foreach(var s in tempSprite)
+            foreach (var s in tempSprite)
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s.Value);
             }
@@ -523,45 +362,10 @@ namespace ProjectOC.StoreNS.UI
             }
         }
         #endregion
-
-        #region UI对象引用
-        private TMPro.TextMeshProUGUI Text_Title;
-        private TMPro.TextMeshProUGUI Text_Priority;
-        private Image StoreIcon;
-        private Sprite EmptySprite;
-        private Transform Priority;
-        private Transform PriorityUrgency;
-        private Transform PriorityNormal;
-        private Transform PriorityAlternative;
-
-        private Transform StoreTransform;
-        private Transform UIItemTemplate;
-        private GridLayoutGroup GridLayout;
-
-        private Transform ChangeItem;
-        private Transform ChangeItem_UIItemTemplate;
-        private GridLayoutGroup ChangeItem_GridLayout;
-
-        private Transform Upgrade;
-        private Transform Upgrade_Build;
-        private Transform Upgrade_UIItemTemplate;
-        private GridLayoutGroup Upgrade_GridLayout;
-        private Transform Upgrade_LvOld;
-        private Transform Upgrade_LvNew;
-
-        private Transform BotKeyTips_KeyTips;
-        private Transform BotKeyTips_ChangeItem;
-        private Transform BotKeyTips_Upgrade;
-        #endregion
-
         public override void Refresh()
         {
             // 加载完成JSON数据 & 查找完所有引用
-            if(ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
-            {
-                return;
-            }
-            CurPriority = Store.TransportPriority;
+            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit || !IsInitBtnList) { return; }
 
             // StoreIcon
             if (!string.IsNullOrEmpty(Store.WorldIconItemID))
@@ -587,24 +391,17 @@ namespace ProjectOC.StoreNS.UI
 
             if (this.CurMode == Mode.Store)
             {
-                
+
                 #region TopTitle
                 Text_Title.text = PanelTextContent.text_Title.GetText();
                 #endregion
 
                 #region Store
-                for (int i = 0; i < Store.StoreDatas.Length; i++)
-                {
-                    var uiitem = Instantiate(UIItemTemplate, GridLayout.transform, false);
-                    uiStoreDatas.Add(uiitem.gameObject);
-                }
-
-                // 用于更新滑动窗口
-                // 当前选中的UIStoreData
-                GameObject cur = null;
-                // 上一个UIStoreData
-                GameObject last = null;
-
+                //for (int i = 0; i < Store.StoreDatas.Length; i++)
+                //{
+                //    var uiitem = Instantiate(UIItemTemplate, GridLayout.transform, false);
+                //    uiStoreDatas.Add(uiitem.gameObject);
+                //}
                 // 遍历筛选的StoreDataList
                 for (int i = 0; i < Store.StoreDatas.Length; ++i)
                 {
@@ -739,7 +536,6 @@ namespace ProjectOC.StoreNS.UI
                         selectIcon.gameObject.SetActive(CurStoreMode == StoreMode.ChangeItem);
                         selectAdd.gameObject.SetActive(CurStoreMode == StoreMode.ChangeIn);
                         selectARemove.gameObject.SetActive(CurStoreMode == StoreMode.ChangeOut);
-                        cur = uiStoreData;
                     }
                     else
                     {
@@ -748,67 +544,7 @@ namespace ProjectOC.StoreNS.UI
                         selectAdd.gameObject.SetActive(false);
                         selectARemove.gameObject.SetActive(false);
                     }
-                    if (i == lastDataIndex)
-                    {
-                        last = uiStoreData;
-                    }
                 }
-
-                #region 更新滑动窗口
-                if (cur != null && last != null)
-                {
-                    // 当前激活的TP四个边点有一个不位于窗口内 -> 更新窗口滑动
-                    RectTransform uiRectTransform = cur.GetComponent<RectTransform>();
-                    RectTransform scrollRectTransform = cur.transform.parent.parent.parent.GetComponent<RectTransform>();
-                    // 获取 ScrollRect 组件
-                    ScrollRect scrollRect = scrollRectTransform.GetComponent<ScrollRect>();
-                    // 获取 Content 的 RectTransform 组件
-                    RectTransform contentRect = scrollRect.content;
-
-                    // 获取 UI 元素的四个角点
-                    Vector3[] corners = new Vector3[4];
-                    uiRectTransform.GetWorldCorners(corners);
-                    bool allCornersVisible = true;
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        // 将世界空间的点转换为屏幕空间的点
-                        Vector3 screenPoint = RectTransformUtility.WorldToScreenPoint(null, corners[i]);
-                        // 判断 ScrollRect 是否包含这个点
-                        if (!RectTransformUtility.RectangleContainsScreenPoint(scrollRectTransform, screenPoint, null))
-                        {
-                            allCornersVisible = false;
-                            break;
-                        }
-                    }
-
-                    // 当前激活的TP四个边点有一个不位于窗口内 -> 更新窗口滑动
-                    if (!allCornersVisible)
-                    {
-                        // 将当前选中的这个放置于上一个激活TP的位置
-
-                        // 设置滑动位置
-
-                        // 获取点 A 和点 B 在 Content 中的位置
-                        Vector2 positionA = (last.transform as RectTransform).anchoredPosition;
-                        Vector2 positionB = (cur.transform as RectTransform).anchoredPosition;
-
-                        // 计算点 B 相对于点 A 的偏移量
-                        Vector2 offset = positionB - positionA;
-
-                        // 根据偏移量更新 ScrollRect 的滑动位置
-                        Vector2 normalizedPosition = scrollRect.normalizedPosition;
-                        normalizedPosition += new Vector2(offset.x / (contentRect.rect.width - (contentRect.parent as RectTransform).rect.width), offset.y / (contentRect.rect.height - (contentRect.parent as RectTransform).rect.height));
-                        scrollRect.normalizedPosition = normalizedPosition;
-                    }
-                }
-                else
-                {
-                    GridLayout.transform.parent.parent.GetComponent<ScrollRect>().normalizedPosition = new Vector2(0, 1);
-                }
-                #endregion
-
-                // 强制立即更新 VerticalLayoutGroup 的布局
-                LayoutRebuilder.ForceRebuildLayoutImmediate(GridLayout.GetComponent<RectTransform>());
                 #endregion
 
                 #region BotKeyTips
@@ -830,38 +566,12 @@ namespace ProjectOC.StoreNS.UI
                 }
                 #endregion
             }
-            else if(this.CurMode == Mode.ChangeItem || this.CurMode == Mode.ChangeIcon)
+            else if (this.CurMode == Mode.ChangeItem || this.CurMode == Mode.ChangeIcon)
             {
                 ItemDatas = new List<string>() { "" };
                 ItemDatas.AddRange(ManagerNS.LocalGameManager.Instance.StoreManager.GetStoreIconItems());
                 #region Item
                 // 临时内存生成的UIItemData数量(只增不减，多的隐藏掉即可) - 当前筛选出来的UIItemData数量
-                int delta = tempUIItemDatas.Count - ItemDatas.Count;
-                // > 0 => 有多余，隐藏
-                if (delta > 0)
-                {
-                    for (int i = 0; i < delta; ++i)
-                    {
-                        tempUIItemDatas[tempUIItemDatas.Count - 1 - i].SetActive(false);
-                    }
-                }
-                // < 0 => 不够， 增加
-                else if (delta < 0)
-                {
-                    delta = -delta;
-                    for (int i = 0; i < delta; ++i)
-                    {
-                        var uiitem = Instantiate(ChangeItem_UIItemTemplate, ChangeItem_GridLayout.transform, false);
-                        tempUIItemDatas.Add(uiitem.gameObject);
-                    }
-                }
-
-                // 用于更新滑动窗口
-                // 当前选中的UIItemData
-                GameObject cur = null;
-                // 上一个UIItemData
-                GameObject last = null;
-
                 if (!IsInitCurItemIndex)
                 {
                     for (int i = 0; i < ItemDatas.Count; ++i)
@@ -878,7 +588,7 @@ namespace ProjectOC.StoreNS.UI
                         }
                     }
                 }
-                
+
                 // 遍历筛选的ItemDataList
                 for (int i = 0; i < ItemDatas.Count; ++i)
                 {
@@ -902,71 +612,7 @@ namespace ProjectOC.StoreNS.UI
                     // Selected
                     var isSelected = CurrentItemData == itemID;
                     uiItemData.transform.Find("Selected").gameObject.SetActive(isSelected);
-                    if (isSelected)
-                    {
-                        cur = uiItemData;
-                    }
-                    if (i == lastItemIndex)
-                    {
-                        last = uiItemData;
-                    }
                 }
-
-                #region 更新滑动窗口
-                if (cur != null && last != null)
-                {
-                    // 当前激活的TP四个边点有一个不位于窗口内 -> 更新窗口滑动
-                    RectTransform uiRectTransform = cur.GetComponent<RectTransform>();
-                    RectTransform scrollRectTransform = cur.transform.parent.parent.parent.GetComponent<RectTransform>();
-                    // 获取 ScrollRect 组件
-                    ScrollRect scrollRect = scrollRectTransform.GetComponent<ScrollRect>();
-                    // 获取 Content 的 RectTransform 组件
-                    RectTransform contentRect = scrollRect.content;
-
-                    // 获取 UI 元素的四个角点
-                    Vector3[] corners = new Vector3[4];
-                    uiRectTransform.GetWorldCorners(corners);
-                    bool allCornersVisible = true;
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        // 将世界空间的点转换为屏幕空间的点
-                        Vector3 screenPoint = RectTransformUtility.WorldToScreenPoint(null, corners[i]);
-                        // 判断 ScrollRect 是否包含这个点
-                        if (!RectTransformUtility.RectangleContainsScreenPoint(scrollRectTransform, screenPoint, null))
-                        {
-                            allCornersVisible = false;
-                            break;
-                        }
-                    }
-
-                    // 当前激活的TP四个边点有一个不位于窗口内 -> 更新窗口滑动
-                    if (!allCornersVisible)
-                    {
-                        // 将当前选中的这个放置于上一个激活TP的位置
-
-                        // 设置滑动位置
-
-                        // 获取点 A 和点 B 在 Content 中的位置
-                        Vector2 positionA = (last.transform as RectTransform).anchoredPosition;
-                        Vector2 positionB = (cur.transform as RectTransform).anchoredPosition;
-
-                        // 计算点 B 相对于点 A 的偏移量
-                        Vector2 offset = positionB - positionA;
-
-                        // 根据偏移量更新 ScrollRect 的滑动位置
-                        Vector2 normalizedPosition = scrollRect.normalizedPosition;
-                        normalizedPosition += new Vector2(offset.x / (contentRect.rect.width - (contentRect.parent as RectTransform).rect.width), offset.y / (contentRect.rect.height - (contentRect.parent as RectTransform).rect.height));
-                        scrollRect.normalizedPosition = normalizedPosition;
-                    }
-                }
-                else
-                {
-                    ChangeItem_GridLayout.transform.parent.parent.GetComponent<ScrollRect>().normalizedPosition = new Vector2(0, 1);
-                }
-                #endregion
-
-                // 强制立即更新 VerticalLayoutGroup 的布局
-                LayoutRebuilder.ForceRebuildLayoutImmediate(ChangeItem_GridLayout.GetComponent<RectTransform>());
                 #endregion
             }
             else if (this.CurMode == Mode.Upgrade)
@@ -987,23 +633,7 @@ namespace ProjectOC.StoreNS.UI
                 #region Raw
                 bool flagUpgradeBtn = true;
                 var raw = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(buildCID);
-                int delta = tempUIItemDatasUpgrade.Count - raw.Count;
-                if (delta > 0)
-                {
-                    for (int i = 0; i < delta; ++i)
-                    {
-                        tempUIItemDatasUpgrade[tempUIItemDatasUpgrade.Count - 1 - i].SetActive(false);
-                    }
-                }
-                else if (delta < 0)
-                {
-                    delta = -delta;
-                    for (int i = 0; i < delta; ++i)
-                    {
-                        var uiitem = Instantiate(Upgrade_UIItemTemplate, Upgrade_GridLayout.transform, false);
-                        tempUIItemDatasUpgrade.Add(uiitem.gameObject);
-                    }
-                }
+                //int delta = tempUIItemDatasUpgrade.Count - raw.Count;
                 for (int i = 0; i < raw.Count; ++i)
                 {
                     var uiItemData = tempUIItemDatasUpgrade[i];
@@ -1087,41 +717,6 @@ namespace ProjectOC.StoreNS.UI
                 }
                 #endregion
             }
-        }
-        #endregion
-
-        #region TextContent
-        [System.Serializable]
-        public struct StorePanel
-        {
-            public TextContent text_Title;
-            public TextContent text_Empty;
-            public TextContent text_PriorityUrgency;
-            public TextContent text_PriorityNormal;
-            public TextContent text_PriorityAlternative;
-            public TextContent text_Add;
-            public TextContent text_Remove;
-            public TextContent text_LvDesc1;
-            public TextContent text_LvDesc2;
-
-            public KeyTip Upgrade;
-            public KeyTip NextPriority;
-            public KeyTip ChangeIcon;
-            public KeyTip UpgradeConfirm;
-            public KeyTip ChangeItem;
-            public KeyTip Remove1;
-            public KeyTip Remove10;
-            public KeyTip Switch;
-            public KeyTip FastAdd;
-            public KeyTip Confirm;
-            public KeyTip Back;
-            public KeyTip UpgradeBack;
-        }
-        protected override void InitTextContentPathData()
-        {
-            this.abpath = "OCTextContent/Store";
-            this.abname = "StorePanel";
-            this.description = "StorePanel数据加载完成";
         }
         #endregion
     }
