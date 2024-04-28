@@ -334,7 +334,7 @@ namespace ML.Engine.BuildingSystem.UI
                     }
                     else
                     {
-                        this.Placer.SelectedPartInstance.ActiveSocket.AsMatchRotOffset *= this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta;
+                        this.Placer.SelectedPartInstance.ActiveSocket.AsMatchRotOffset *= offset > 0 ? this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta : Quaternion.Inverse(this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta);
                     }
                 }
             }
@@ -342,7 +342,10 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 if (this.Placer.SelectedPartInstance.AttachedSocket != null)
                 {
-                    this.Placer.SelectedPartInstance.ActiveSocket.AsMatchRotOffset *= this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta;
+                    if (obj.started)
+                    {
+                        this.Placer.SelectedPartInstance.ActiveSocket.AsMatchRotOffset *= offset > 0 ? this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta : Quaternion.Inverse(this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta);
+                    }
                 }
                 else
                 {
