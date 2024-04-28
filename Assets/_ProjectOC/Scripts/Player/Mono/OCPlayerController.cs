@@ -170,16 +170,6 @@ namespace ProjectOC.Player
                 OCState.Inventory.AddItem(items);
             }
         }
-        public void InventoryRemoveItems(Dictionary<string, int> itemDict)
-        {
-            if (itemDict != null)
-            {
-                foreach (var kv in itemDict)
-                {
-                    OCState.Inventory.RemoveItem(kv.Key, kv.Value);
-                }
-            }
-        }
 
         /// <summary>
         /// 从背包和仓库中消耗对应数量的物品，返回消耗的数量

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -73,24 +72,6 @@ namespace ML.Engine.InventorySystem.CompositeSystem
                     }
                     this.CompositeData.Add(data.id, data);
                 }
-
-                // to-do : 暂时取消Usage功能
-                //// 加入 Usage
-                //foreach (var data in this.CompositeData.Values)
-                //{
-                //    if (data.formula != null)
-                //    {
-                //        foreach (var usage in data.formula)
-                //        {
-                //            if (this.CompositeData[usage.id].usage == null)
-                //            {
-                //                this.CompositeData[usage.id].usage = new List<string>();
-                //            }
-                //            this.CompositeData[usage.id].usage.Add(data.id);
-                //        }
-
-                //    }
-                //}
             }, "合成系统表数据");
             ABJAProcessor.StartLoadJsonAssetData();
         }
@@ -156,9 +137,6 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <summary>
         /// 合成物品
         /// </summary>
-        /// <param name="resource"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
         public CompositionObjectType Composite(IInventory resource, string id, out IComposition composition)
         {
             composition = null;
@@ -197,9 +175,6 @@ namespace ML.Engine.InventorySystem.CompositeSystem
         /// <summary>
         /// 消耗Item 但不生成合成物
         /// </summary>
-        /// <param name="resource"></param>
-        /// <param name="id"></param>
-        /// <returns></returns>
         public bool OnlyCostResource(IInventory resource, string id)
         {
             // 移除消耗的资源
@@ -271,33 +246,6 @@ namespace ML.Engine.InventorySystem.CompositeSystem
             }
             return true;
         }
-
-        /// <summary>
-        /// 获取指定 id 可合成物品的 IDList
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public string[] GetCompositionUsage(string id)
-        {
-            if (!this.CompositeData.ContainsKey(id))
-                return null;
-            return this.CompositeData[id].usage.ToArray();
-        }
-
-        public string[] GetCompositonTag(string id)
-        {
-            if (!this.CompositeData.ContainsKey(id))
-                return null;
-            return this.CompositeData[id].tag;
-        }
-
-        public string GetCompositonName(string id)
-        {
-            if (!this.CompositeData.ContainsKey(id))
-                return null;
-            return this.CompositeData[id].name;
-        }
-
         public Formula[] GetCompositonFomula(string id)
         {
             if (!this.CompositeData.ContainsKey(id) || this.CompositeData[id].formula == null)

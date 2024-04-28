@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using ML.Engine.InventorySystem.CompositeSystem;
 using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
 
@@ -18,9 +17,9 @@ namespace ML.Engine.InventorySystem
         [LabelText("类目"), ShowInInspector, ReadOnly]
         public RecipeCategory Category => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetCategory(ID) : RecipeCategory.None;
         [LabelText("原料"), ShowInInspector, ReadOnly]
-        public List<Formula> Raw => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetRaw(ID) : new List<Formula>();
+        public List<CompositeSystem.Formula> Raw => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetRaw(ID) : new List<CompositeSystem.Formula>();
         [LabelText("成品"), ShowInInspector, ReadOnly]
-        public Formula Product => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetProduct(ID) : default(Formula);
+        public CompositeSystem.Formula Product => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetProduct(ID) : default(CompositeSystem.Formula);
         [LabelText("成品ID"), ShowInInspector, ReadOnly]
         public string ProductID => Product.id;
         [LabelText("成品数量"), ShowInInspector, ReadOnly]
@@ -45,7 +44,7 @@ namespace ML.Engine.InventorySystem
         {
             if (!string.IsNullOrEmpty(itemID))
             {
-                foreach (Formula raw in Raw)
+                foreach (var raw in Raw)
                 {
                     if (raw.id == itemID)
                     {
@@ -58,16 +57,25 @@ namespace ML.Engine.InventorySystem
 
         public Item Composite(IInventory inventory)
         {
-            CompositeManager.CompositionObjectType compObjType = CompositeManager.Instance.Composite(inventory, ID, out var composition);
-            switch (compObjType)
+            List<CompositeSystem.Formula> adds = new List<CompositeSystem.Formula>();
+            foreach (var formula in Raw)
             {
-                case CompositeManager.CompositionObjectType.Item:
-                    Item item = composition as Item;
-                    return item;
-                default:
-                    break;
+                if(inventory.RemoveItem(formula.id, formula.num))
+                {
+                    adds.Add(formula);
+                }
+                else
+                {
+                    foreach (var add in adds)
+                    {
+                        inventory.AddItem(ItemManager.Instance.SpawnItems(add.id, add.num));
+                    }
+                    return null;
+                }
             }
-            return null;
+            Item item = ItemManager.Instance.SpawnItem(ProductID);
+            item.Amount = ProductNum;
+            return item;
         }
     }
 }

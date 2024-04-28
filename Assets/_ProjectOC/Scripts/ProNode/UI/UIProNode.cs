@@ -515,7 +515,7 @@ namespace ProjectOC.ProNodeNS.UI
                 }
                 else
                 {
-                    ProNode.UIFastAdd();
+                    ProNode.FastAdd();
                 }
             }
             Refresh();

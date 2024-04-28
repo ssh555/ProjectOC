@@ -18,6 +18,15 @@ namespace ProjectOC.StoreNS
             LoadTableData();
         }
 
+        #region 配置
+        [LabelText("仓库最大等级"), FoldoutGroup("配置")]
+        public int LevelMax = 2;
+        [LabelText("每个级别的仓库容量"), FoldoutGroup("配置")]
+        public List<int> LevelCapacity = new List<int>() { 2, 4, 8 };
+        [LabelText("每个级别的仓库数据容量"), FoldoutGroup("配置")]
+        public List<int> LevelDataCapacity = new List<int>() { 50, 100, 200 };
+        #endregion
+
         #region Load And Data
         private Dictionary<string, StoreIconTableData> StoreIconTableDict = new Dictionary<string, StoreIconTableData>();
         public ML.Engine.ABResources.ABJsonAssetProcessor<StoreIconTableData[]> ABJAProcessor;
@@ -36,9 +45,6 @@ namespace ProjectOC.StoreNS
 
         private Dictionary<string, WorldStore> WorldStoreDict = new Dictionary<string, WorldStore>();
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="priorityType">是否按照优先级获取 0表示不需要，1表示优先级从高到低，-1表示优先级从低到高</param>
         public List<Store> GetStores(int priorityType = 0)
         {
@@ -78,7 +84,7 @@ namespace ProjectOC.StoreNS
                 List<Store> stores = GetStores(priorityType);
                 foreach (Store store in stores)
                 {
-                    if ((!judgeInteracting || !store.IsInteracting) && (!judgeCanOut || store.HaveItem(itemID, false, judgeCanOut)))
+                    if ((!judgeInteracting || !store.IsInteracting) && (!judgeCanOut || store.HaveSetItem(itemID, false, judgeCanOut)))
                     {
                         int storeAmount = store.GetAmount(itemID, DataNS.DataOpType.Storage, false, judgeCanOut);
                         if (storeAmount > 0)
@@ -114,7 +120,7 @@ namespace ProjectOC.StoreNS
             Store result = null;
             foreach (Store store in stores)
             {
-                if ((!judgeInteracting || !store.IsInteracting) && (!judgeCanIn || store.HaveItem(itemID, judgeCanIn)))
+                if ((!judgeInteracting || !store.IsInteracting) && (!judgeCanIn || store.HaveSetItem(itemID, judgeCanIn)))
                 {
                     // 优先寻找第一个可以一次性存完的仓库
                     // 若没有，则寻找第一个可以存入的，可溢出存入

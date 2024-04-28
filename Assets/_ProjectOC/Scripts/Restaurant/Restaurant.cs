@@ -7,7 +7,7 @@ using System.Linq;
 namespace ProjectOC.RestaurantNS
 {
     [LabelText("餐厅"), Serializable]
-    public class Restaurant : ML.Engine.InventorySystem.IInventory, MissionNS.IMissionObj
+    public class Restaurant : DataNS.ItemContainerOwner
     {
         #region WorldRestaurant
         [LabelText("世界餐厅"), ReadOnly, NonSerialized]
@@ -21,8 +21,6 @@ namespace ProjectOC.RestaurantNS
         private RestaurantSeat[] Seats;
         [LabelText("存储数据"), ShowInInspector, ReadOnly]
         private RestaurantData[] Datas;
-        [LabelText("对应的搬运"), ReadOnly]
-        public List<MissionNS.Transport> Transports = new List<MissionNS.Transport>();
         public event Action OnDataChangeEvent;
         #endregion
 
@@ -244,7 +242,7 @@ namespace ProjectOC.RestaurantNS
 
                     foreach (MissionNS.Transport transport in Transports.ToArray())
                     {
-                        if (transport != null && transport.ItemID == itemID && !haveSetFood)
+                        if (transport != null && transport.ID == itemID && !haveSetFood)
                         {
                             transport.End();
                         }
@@ -429,24 +427,8 @@ namespace ProjectOC.RestaurantNS
         #endregion
 
         #region IMissionObj
-        public Transform GetTransform() {  return WorldRestaurant.transform; }
-        public MissionNS.TransportPriority GetTransportPriority() { return MissionNS.TransportPriority.Normal; }
-        public string GetUID() { return UID; }
-        public void AddTransport(MissionNS.Transport transport) { Transports.Add(transport); }
-        public void RemoveTranport(MissionNS.Transport transport) { Transports.Remove(transport); }
-        public bool PutIn(string itemID, int amount)
-        {
-            if (!string.IsNullOrEmpty(itemID) && amount > 0)
-            {
-                string foodID = ManagerNS.LocalGameManager.Instance.RestaurantManager.ItemIDToFoodID(itemID);
-                return Change(foodID, amount, true) == amount;
-            }
-            return false;
-        }
-        public int PutOut(string itemID, int amount)
-        {
-            throw new System.NotImplementedException();
-        }
+        public override Transform GetTransform() { return WorldRestaurant.transform; }
+        public override string GetUID() { return UID; }
         #endregion
     }
 }

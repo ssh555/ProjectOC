@@ -254,7 +254,7 @@ namespace ProjectOC.StoreNS.UI
         {
             if (CurMode == Mode.Store && CurStoreMode == StoreMode.ChangeItem)
             {
-                Store.UIFastAdd(DataBtnList.GetCurSelectedPos1());
+                Store.FastAdd(DataBtnList.GetCurSelectedPos1());
                 Refresh();
             }
         }
@@ -268,7 +268,7 @@ namespace ProjectOC.StoreNS.UI
                 }
                 else
                 {
-                    Store.UIRemove(DataBtnList.GetCurSelectedPos1(), 1);
+                    Store.Remove(DataBtnList.GetCurSelectedPos1(), 1);
                     Refresh();
                 }
             }
@@ -280,7 +280,7 @@ namespace ProjectOC.StoreNS.UI
                 ItemIsDestroyed = true;
                 int num = Store.GetAmount(DataBtnList.GetCurSelectedPos1(), DataNS.DataOpType.Storage);
                 num = num < 10 ? num : 10;
-                Store.UIRemove(DataBtnList.GetCurSelectedPos1(), num);
+                Store.Remove(DataBtnList.GetCurSelectedPos1(), num);
                 Refresh();
             }
         }
