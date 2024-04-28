@@ -48,6 +48,15 @@ namespace ProjectOC.MissionNS
             Initiator.AddMissionTranport(this);
         }
 
+        public void ChangeMissionNum(int num)
+        {
+            MissionNum += num;
+            if (MissionNum <= 0 || FinishNum >= MissionNum)
+            {
+                End();
+            }
+        }
+
         public bool AddTransport(Transport transport)
         {
             if (transport != null)

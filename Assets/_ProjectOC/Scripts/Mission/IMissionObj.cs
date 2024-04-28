@@ -12,21 +12,48 @@ namespace ProjectOC.MissionNS
         public List<Transport> Transports { get; set; }
         [LabelText("对应的搬运任务"), ShowInInspector, ReadOnly]
         public List<MissionTransport> Missions { get; set; }
+
+        #region Get
         public Transform GetTransform();
         public string GetUID();
-        public bool PutIn(string itemID, int amount);
-        public int PutOut(string itemID, int amount);
-
-        public virtual int ReservePutIn(string itemID, int amount) { return 0; }
-        public virtual int ReservePutOut(string itemID, int amount) { return 0; }
-        public virtual int RemoveReservePutIn(string itemID, int amount) { return 0; }
-        public virtual int RemoveReservePutOut(string itemID, int amount) { return 0; }
-        public virtual int GetReservePutIn(string itemID) { return 0; }
-        public virtual int GetReservePutOut(string itemID) { return 0; }
-        public virtual Dictionary<string, int> GetReservePutIn() { return new Dictionary<string, int>(); }
-        public virtual Dictionary<string, int> GetReservePutOut() { return new Dictionary<string, int>(); }
-
+        public int GetAmount(string id, DataNS.DataOpType type, bool needCanIn = false, bool needCanOut = false);
+        public Dictionary<string, int> GetAmount(DataNS.DataOpType type, bool needCanIn = false, bool needCanOut = false);
+        public int GetReservePutIn(string itemID) { return GetAmount(itemID, DataNS.DataOpType.EmptyReserve); }
+        public int GetReservePutOut(string itemID) { return GetAmount(itemID, DataNS.DataOpType.StorageReserve); }
+        public Dictionary<string, int> GetReservePutIn() { return GetAmount(DataNS.DataOpType.EmptyReserve); }
+        public Dictionary<string, int> GetReservePutOut() { return GetAmount(DataNS.DataOpType.StorageReserve); }
         public TransportPriority GetTransportPriority() { return TransportPriority; }
+        #endregion
+
+        #region Set
+        public int ChangeAmount(string id, int amount, DataNS.DataOpType addType, DataNS.DataOpType removeType, bool exceed = false, bool complete = true, bool needCanIn = false, bool needCanOut = false);
+        public bool PutIn(string itemID, int amount)
+        {
+            return ChangeAmount(itemID, amount, DataNS.DataOpType.Storage, DataNS.DataOpType.EmptyReserve, exceed: true) == amount;
+        }
+        public int PutOut(string itemID, int amount)
+        {
+            return ChangeAmount(itemID, amount, DataNS.DataOpType.Empty, DataNS.DataOpType.StorageReserve, complete: false);
+        }
+        public int ReservePutIn(string itemID, int amount)
+        {
+            return ChangeAmount(itemID, amount, DataNS.DataOpType.EmptyReserve, DataNS.DataOpType.Empty, exceed: true, needCanIn: true);
+        }
+        public int ReservePutOut(string itemID, int amount)
+        {
+            return ChangeAmount(itemID, amount, DataNS.DataOpType.StorageReserve, DataNS.DataOpType.Storage, complete: false, needCanOut: true);
+        }
+        public int RemoveReservePutIn(string itemID, int amount)
+        {
+            return ChangeAmount(itemID, amount, DataNS.DataOpType.Empty, DataNS.DataOpType.EmptyReserve);
+        }
+        public int RemoveReservePutOut(string itemID, int amount)
+        {
+            return ChangeAmount(itemID, amount, DataNS.DataOpType.Storage, DataNS.DataOpType.StorageReserve);
+        }
+        #endregion
+
+        #region Transports Missions
         public void AddTransport(Transport transport) { Transports.Add(transport); }
         public void RemoveTranport(Transport transport) { Transports.Remove(transport); }
         public void AddMissionTranport(MissionTransport mission) { Missions.Add(mission); }
@@ -125,5 +152,6 @@ namespace ProjectOC.MissionNS
                 }
             }
         }
+        #endregion
     }
 }

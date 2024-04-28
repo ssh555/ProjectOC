@@ -103,34 +103,14 @@ namespace ProjectOC.DataNS
         public List<MissionNS.MissionTransport> Missions { get; set; } = new List<MissionNS.MissionTransport>();
         public MissionNS.TransportPriority TransportPriority { get; set; } = MissionNS.TransportPriority.Normal;
 
-        public bool PutIn(string itemID, int amount)
+        public int ChangeAmount(string id, int amount, DataOpType addType, DataOpType removeType, bool exceed = false, bool complete = true, bool needCanIn = false, bool needCanOut = false)
         {
-            return ItemDatas.ChangeAmount(itemID, amount, DataOpType.Storage, DataOpType.EmptyReserve, exceed: true) == amount;
+            return ItemDatas.ChangeAmount(id, amount, addType, removeType, exceed, complete, needCanIn, needCanOut);
         }
-        public int PutOut(string itemID, int amount)
+        public Dictionary<string, int> GetAmount(DataOpType type, bool needCanIn = false, bool needCanOut = false)
         {
-            return ItemDatas.ChangeAmount(itemID, amount, DataOpType.Empty, DataOpType.StorageReserve, complete: false);
+            return ItemDatas.GetAmount(type, needCanIn, needCanOut);
         }
-        public int ReservePutIn(string itemID, int amount)
-        {
-            return ItemDatas.ChangeAmount(itemID, amount, DataOpType.EmptyReserve, DataOpType.Empty, exceed: true, needCanIn: true);
-        }
-        public int ReservePutOut(string itemID, int amount)
-        {
-            return ItemDatas.ChangeAmount(itemID, amount, DataOpType.StorageReserve, DataOpType.Storage, complete: false, needCanOut: true);
-        }
-        public int RemoveReservePutIn(string itemID, int amount)
-        {
-            return ItemDatas.ChangeAmount(itemID, amount, DataOpType.Empty, DataOpType.EmptyReserve);
-        }
-        public int RemoveReservePutOut(string itemID, int amount)
-        {
-            return ItemDatas.ChangeAmount(itemID, amount, DataOpType.Storage, DataOpType.StorageReserve);
-        }
-        public int GetReservePutIn(string itemID) { return ItemDatas.GetAmount(itemID, DataOpType.EmptyReserve); }
-        public int GetReservePutOut(string itemID) { return ItemDatas.GetAmount(itemID, DataOpType.StorageReserve); }
-        public Dictionary<string, int> GetReservePutIn() { return ItemDatas.GetAmount(DataOpType.EmptyReserve); }
-        public Dictionary<string, int> GetReservePutOut() { return ItemDatas.GetAmount(DataOpType.StorageReserve); }
         #endregion
 
         #region IInventory
