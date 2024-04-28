@@ -71,7 +71,7 @@ MonoBehaviour:
   IsCanRotate: 1
   m_AsTargetRotDelta: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
-  IsRotateOnArea: 1
+  IsRotateOnArea: 0
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &551364050644153582
@@ -143,9 +143,9 @@ MonoBehaviour:
   ID: 13
   IsActiveSocket: 0
   IsCanRotate: 1
-  m_AsTargetRotDelta: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  m_AsTargetRotDelta: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
-  IsRotateOnArea: 1
+  IsRotateOnArea: 0
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &1021654688875616116
@@ -293,7 +293,7 @@ MonoBehaviour:
   IsCanRotate: 1
   m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
-  IsRotateOnArea: 1
+  IsRotateOnArea: 0
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &1195540229791961019
@@ -367,7 +367,7 @@ MonoBehaviour:
   IsCanRotate: 1
   m_AsTargetRotDelta: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
-  IsRotateOnArea: 1
+  IsRotateOnArea: 0
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &1918096031461325768
@@ -512,10 +512,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 32
   IsActiveSocket: 0
-  IsCanRotate: 1
+  IsCanRotate: 0
   m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
-  IsRotateOnArea: 1
+  IsRotateOnArea: 0
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &2658761009936273945
@@ -589,7 +589,7 @@ MonoBehaviour:
   IsCanRotate: 1
   m_AsTargetRotDelta: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
-  IsRotateOnArea: 1
+  IsRotateOnArea: 0
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &3337965763581982955
@@ -660,10 +660,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 32
   IsActiveSocket: 0
-  IsCanRotate: 1
+  IsCanRotate: 0
   m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
-  IsRotateOnArea: 1
+  IsRotateOnArea: 0
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &3629120571717367266
@@ -733,7 +733,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   classification:
     Category1: 2
-    Category2: 202
+    Category2: 201
     Category3: 100
     Category4: 1
   instanceID: 
@@ -832,9 +832,9 @@ MonoBehaviour:
   ID: 13
   IsActiveSocket: 0
   IsCanRotate: 1
-  m_AsTargetRotDelta: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  m_AsTargetRotDelta: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
-  IsRotateOnArea: 1
+  IsRotateOnArea: 0
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &4617652062688117244
@@ -906,9 +906,9 @@ MonoBehaviour:
   ID: 13
   IsActiveSocket: 0
   IsCanRotate: 1
-  m_AsTargetRotDelta: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  m_AsTargetRotDelta: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
-  IsRotateOnArea: 1
+  IsRotateOnArea: 0
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &4898470774816412406
@@ -923,7 +923,7 @@ GameObject:
   - component: {fileID: 6693108174008519716}
   - component: {fileID: 197787302412250904}
   m_Layer: 8
-  m_Name: RootSoc_floorP (1)
+  m_Name: ActSocP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -982,7 +982,7 @@ MonoBehaviour:
   IsCanRotate: 1
   m_AsTargetRotDelta: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
-  IsRotateOnArea: 1
+  IsRotateOnArea: 0
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &6228515523595588617
@@ -1339,10 +1339,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 32
   IsActiveSocket: 0
-  IsCanRotate: 1
+  IsCanRotate: 0
   m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
-  IsRotateOnArea: 1
+  IsRotateOnArea: 0
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &8061604748144393860
@@ -1413,10 +1413,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 32
   IsActiveSocket: 0
-  IsCanRotate: 1
+  IsCanRotate: 0
   m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
-  IsRotateOnArea: 1
+  IsRotateOnArea: 0
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &8387382964364549822
@@ -1593,8 +1593,8 @@ MonoBehaviour:
   ID: 13
   IsActiveSocket: 0
   IsCanRotate: 1
-  m_AsTargetRotDelta: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+  m_AsTargetRotDelta: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
-  IsRotateOnArea: 1
+  IsRotateOnArea: 0
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}

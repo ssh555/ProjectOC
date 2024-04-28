@@ -104,9 +104,6 @@ MonoBehaviour:
     - ID: 16
       offsetPosition: {x: 0, y: 0, z: 0}
       offsetRotation: {x: 0, y: 0, z: 0, w: 0}
-    - ID: 10
-      offsetPosition: {x: 0, y: 0, z: 0}
-      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
   - ID: 17
     ToSocket:
     - ID: 17
@@ -147,6 +144,9 @@ MonoBehaviour:
     - ID: 20
       offsetPosition: {x: 0, y: 0, z: 0}
       offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+    - ID: 31
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0.38268346, z: 0, w: 0.9238795}
   - ID: 27
     ToSocket:
     - ID: 27
@@ -185,9 +185,6 @@ MonoBehaviour:
     - ID: 16
       offsetPosition: {x: 0, y: 0, z: 0}
       offsetRotation: {x: 0, y: 0, z: 0, w: 0}
-    - ID: 10
-      offsetPosition: {x: 0, y: 0, z: 0}
-      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
   - ID: 30
     ToSocket:
     - ID: 30
@@ -199,6 +196,9 @@ MonoBehaviour:
       offsetPosition: {x: 0, y: 0, z: 0}
       offsetRotation: {x: 0, y: 0, z: 0, w: 0}
     - ID: 20
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0.38268346, z: 0, w: 0.9238795}
+    - ID: 22
       offsetPosition: {x: 0, y: 0, z: 0}
       offsetRotation: {x: 0, y: 0.38268346, z: 0, w: 0.9238795}
   - ID: 34

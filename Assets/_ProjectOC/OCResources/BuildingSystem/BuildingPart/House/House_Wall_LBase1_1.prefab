@@ -157,7 +157,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsCanRotate: 1
   Type: 4
-  Gizmos_Attached: 0
 --- !u!1 &939643561728869916
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,11 +226,11 @@ MonoBehaviour:
   ID: 18
   IsActiveSocket: 1
   IsCanRotate: 1
+  m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
+  m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  Gizmos_Active: 0
-  Gizmos_Attached: 0
 --- !u!1 &2491292835781863645
 GameObject:
   m_ObjectHideFlags: 0
@@ -279,12 +278,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 15
   IsActiveSocket: 0
-  IsCanRotate: 1
+  IsCanRotate: 0
+  m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
+  m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  Gizmos_Active: 0
-  Gizmos_Attached: 0
 --- !u!135 &5877272699428489798
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -480,7 +479,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsCanRotate: 1
   Type: 4
-  Gizmos_Attached: 0
 --- !u!1 &4713171925371689648
 GameObject:
   m_ObjectHideFlags: 0
@@ -528,12 +526,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 9
   IsActiveSocket: 0
-  IsCanRotate: 1
+  IsCanRotate: 0
+  m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
+  m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  Gizmos_Active: 0
-  Gizmos_Attached: 0
 --- !u!135 &1100174528161580579
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -602,12 +600,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 9
   IsActiveSocket: 0
-  IsCanRotate: 1
+  IsCanRotate: 0
+  m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
+  m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  Gizmos_Active: 0
-  Gizmos_Attached: 0
 --- !u!135 &7006352065843109570
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -698,11 +696,11 @@ MonoBehaviour:
   ID: 18
   IsActiveSocket: 1
   IsCanRotate: 1
+  m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
+  m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  Gizmos_Active: 0
-  Gizmos_Attached: 0
 --- !u!1 &7740726712498317899
 GameObject:
   m_ObjectHideFlags: 0
@@ -750,12 +748,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 26
   IsActiveSocket: 0
-  IsCanRotate: 1
+  IsCanRotate: 0
+  m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
+  m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  Gizmos_Active: 0
-  Gizmos_Attached: 0
 --- !u!135 &1441940592353536490
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -845,12 +843,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 30
   IsActiveSocket: 0
-  IsCanRotate: 1
+  IsCanRotate: 0
+  m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
+  m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  Gizmos_Active: 0
-  Gizmos_Attached: 0
 --- !u!1 &8648084619111961634
 GameObject:
   m_ObjectHideFlags: 0
@@ -920,8 +918,8 @@ MonoBehaviour:
   ID: 15
   IsActiveSocket: 1
   IsCanRotate: 1
+  m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
+  m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  Gizmos_Active: 0
-  Gizmos_Attached: 0
