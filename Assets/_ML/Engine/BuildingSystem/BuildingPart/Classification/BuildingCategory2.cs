@@ -48,9 +48,9 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		[LabelText("生态投影装置")]
 		Projector = 106,
 		[LabelText("地板")]
-		Floor = 202,
+		Floor = 201,
 		[LabelText("地基外沿")]
-		Edge = 201,
+		Edge = 202,
 		[LabelText("墙")]
 		Wall = 203,
 		[LabelText("柱")]

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3358854251433415291}
   - component: {fileID: 7027875184356534722}
   m_Layer: 7
-  m_Name: House_Roof_Triangle1_2
+  m_Name: House_Roof_Triangle1_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7254825157441548517}
@@ -78,7 +78,7 @@ MonoBehaviour:
     Category1: 2
     Category2: 206
     Category3: 101
-    Category4: 2
+    Category4: 3
   instanceID: 
   canPlaceInPlaceMode: 1
   mode: 0
