@@ -95,7 +95,7 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("EnterTechTree",
             () =>
             {
-                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefabs_TechTree_UI/TechPointPanel.prefab", this.transform.parent, true).Completed += (handle) =>
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefabs_TechTree_UI/Prefab_TechTree_UI_TechPointPanel.prefab", this.transform.parent, true).Completed += (handle) =>
                 {
                     var panel = handle.Result.GetComponent<UITechPointPanel>();
                     panel.transform.localScale = Vector3.one;
@@ -123,7 +123,7 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("EnterBeastPanel",
             () =>
             {
-                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_WorkerPanel/Prefabs/BeastPanel.prefab", this.transform.parent, true).Completed += (handle) =>
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Worker_UI/Prefab_Worker_UI_BeastPanel.prefab", this.transform.parent, true).Completed += (handle) =>
                 {
                     var panel = handle.Result.GetComponent<BeastPanel>();
                     panel.transform.localScale = Vector3.one;

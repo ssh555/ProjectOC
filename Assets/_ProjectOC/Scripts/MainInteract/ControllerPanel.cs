@@ -84,9 +84,18 @@ namespace ProjectOC.MainInteract.UI
             this.UIBtnListContainer.AddOnSelectButtonChangedAction(() => { Debug.Log("SelectButtonChanged!"); });
             this.UIBtnListContainer.AddOnSelectButtonListChangedAction(() => { Debug.Log("SelectButtonListChanged!"); });
 
-            this.UIBtnListContainer.UIBtnLists[0].SetAllBtnAction(() => { GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("切换开关！")); });
-            this.UIBtnListContainer.UIBtnLists[1].SetAllBtnAction(() => { GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("确认改键！")); });
-            this.UIBtnListContainer.UIBtnLists[2].SetAllBtnAction(() => { GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("确认改键！")); });
+            this.UIBtnListContainer.UIBtnLists[0].SetAllBtnAction(() => { 
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("切换开关！"));
+                GameManager.Instance.EventManager.ExecuteEvent("InteractUpgrade(asd,5)");
+            });
+            this.UIBtnListContainer.UIBtnLists[1].SetAllBtnAction(() => { 
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("确认改键！"));
+                GameManager.Instance.EventManager.ExecuteEvent("Attack(true)");
+            });
+            this.UIBtnListContainer.UIBtnLists[2].SetAllBtnAction(() => { 
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("确认改键！"));
+                GameManager.Instance.EventManager.ExecuteEvent("UseItem(8)");
+            });
 
         }
     }

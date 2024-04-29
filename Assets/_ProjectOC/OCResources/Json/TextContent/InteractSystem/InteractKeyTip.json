@@ -20,5 +20,16 @@
             "Chinese": "交互",
             "English": "Interact"
         }
+    },
+    {
+        "keyname": "Collective",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+        },
+        "description": {
+            "Chinese": "采集",
+            "English": "Collect"
+        }
     }
 ]

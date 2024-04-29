@@ -175,14 +175,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private Image GenderImage;
 
-
         private TMPro.TextMeshProUGUI Cook;
         private TMPro.TextMeshProUGUI HandCraft;
         private TMPro.TextMeshProUGUI Industry;
         private TMPro.TextMeshProUGUI Magic;
         private TMPro.TextMeshProUGUI Transport;
         private TMPro.TextMeshProUGUI Collect;
-
 
         //需要调接口显示的隐兽信息
         private TMPro.TextMeshProUGUI BeastName;
@@ -206,9 +204,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
             this.objectPool.ResetAllObject();
-            
-
-            //Debug.Log("Workers " + Workers.Count);
 
             for (int i = 0; i < Workers.Count; i++)
             {
@@ -316,73 +311,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     }
 
                 }
-
-                #region 更新滑动窗口
-
-                if (lastIndex != -1 && curIndex != -1)
-                {
-                    Transform cur = null;
-                    Transform last = null;
-                    try
-                    {
-                        cur = Content.GetChild(curIndex);
-                        last = Content.GetChild(lastIndex);
-                    }
-                    catch { }
-                    
-
-                    if (cur != null && last != null)
-                    {
-                        // 当前激活的TP四个边点有一个不位于窗口内 -> 更新窗口滑动
-                        RectTransform uiRectTransform = cur.GetComponent<RectTransform>();
-                        RectTransform scrollRectTransform = cur.transform.parent.parent.parent.GetComponent<RectTransform>();
-                        // 获取 ScrollRect 组件
-                        ScrollRect scrollRect = scrollRectTransform.GetComponent<ScrollRect>();
-                        // 获取 Content 的 RectTransform 组件
-                        RectTransform contentRect = scrollRect.content;
-
-                        // 获取 UI 元素的四个角点
-                        Vector3[] corners = new Vector3[4];
-                        uiRectTransform.GetWorldCorners(corners);
-                        bool allCornersVisible = true;
-                        for (int i = 0; i < 4; ++i)
-                        {
-                            // 将世界空间的点转换为屏幕空间的点
-                            Vector3 screenPoint = RectTransformUtility.WorldToScreenPoint(null, corners[i]);
-                            // 判断 ScrollRect 是否包含这个点
-                            if (!RectTransformUtility.RectangleContainsScreenPoint(scrollRectTransform, screenPoint, null))
-                            {
-                                allCornersVisible = false;
-                                break;
-                            }
-                        }
-
-                        // 当前激活的TP四个边点有一个不位于窗口内 -> 更新窗口滑动
-                        if (!allCornersVisible)
-                        {
-                            // 将当前选中的这个放置于上一个激活TP的位置
-
-                            // 设置滑动位置
-
-                            // 获取点 A 和点 B 在 Content 中的位置
-                            Vector2 positionA = (last.transform as RectTransform).anchoredPosition;
-                            Vector2 positionB = (cur.transform as RectTransform).anchoredPosition;
-
-                            // 计算点 B 相对于点 A 的偏移量
-                            Vector2 offset = positionB - positionA;
-
-                            // 根据偏移量更新 ScrollRect 的滑动位置
-                            Vector2 normalizedPosition = scrollRect.normalizedPosition;
-                            normalizedPosition += new Vector2(offset.x / (contentRect.rect.width - (contentRect.parent as RectTransform).rect.width), offset.y / (contentRect.rect.height - (contentRect.parent as RectTransform).rect.height));
-                            scrollRect.normalizedPosition = normalizedPosition;
-                        }
-
-
-                    }
-                }
-
-                
-                #endregion
             }
             else
             {
@@ -422,16 +350,22 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         protected override void InitObjectPool()
         {
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
-            "SA_ResonanceWheel_UI_UIPanel", (handle) =>
+            "SA_ResonanceWheel_UI", (handle) =>
             {
+                string Pre = "Tex2D_Resonance_UI_";
                 SpriteAtlas resonanceWheelAtlas = handle.Result as SpriteAtlas;
-                icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite("icon_genderfemale");
-                icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite("icon_gendermale");
+                icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite(Pre + "icon_genderfemale");
+                icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite(Pre + "icon_gendermale");
             }
             );
-            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "BeastBioPool", LocalGameManager.Instance.WorkerManager.GetWorkers().Count, "OC/Prefabs_ResonanceWheel_UI/Prefab_Resonance_UI_BeastBio.prefab");
-            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "DescriptionPool", 5, "OC/Prefabs_ResonanceWheel_UI/Prefab_Resonance_UI_Description.prefab");
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "BeastBioPool", LocalGameManager.Instance.WorkerManager.GetWorkers().Count, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_BeastBio.prefab");
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "DescriptionPool", 5, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_Description.prefab");
             base.InitObjectPool();
+        }
+        private UIBtnList BeastList;
+        protected override void InitBtnInfo()
+        {
+            BeastList = new UIBtnList(this.transform.Find("HiddenBeastInfo1").Find("Info").Find("Scroll View").GetComponentInChildren<UIBtnListInitor>());
         }
 
         #endregion

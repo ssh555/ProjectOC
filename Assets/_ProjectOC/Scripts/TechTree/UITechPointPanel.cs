@@ -28,10 +28,7 @@ namespace ProjectOC.TechTree.UI
         public float gapDistance = 100;
         private int sliceNum = 16;
         private Vector3 BasePos;
-
-
-
-        private void SetBtnPos(RectTransform rectTransform,int[] cor)
+        private void SetBtnPos(Transform Transform,int[] cor)
         {
             if (cor.Length != 2) return;
             float angle = 270 - cor[0] * ((float)360.0 / sliceNum);
@@ -39,7 +36,7 @@ namespace ProjectOC.TechTree.UI
 
             Vector3 dir = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
 
-            rectTransform.anchoredPosition = BasePos + dir * cor[1] * gapDistance;
+            Transform.position = BasePos + dir * cor[1] * gapDistance;
         }
 
         private void LinkEdge(Transform edge, Transform obj)
@@ -69,7 +66,7 @@ namespace ProjectOC.TechTree.UI
         private Dictionary<string, Transform> btn_IdDic = new Dictionary<string, Transform>();
         private void InitData()
         {
-            this.BasePos = this.cursorNavigation.Content.Find("UIBtnList").Find("Container").transform.position;
+            this.BasePos = this.cursorNavigation.transform.Find("Center").position;
             this.EdgeParent = this.cursorNavigation.Content.Find("UIBtnList").Find("Container").Find("Edges");
             var AllID = TechTreeManager.Instance.GetAllTPID();
             for (int i = 0; i < AllID.Length; i++) 
@@ -126,7 +123,7 @@ namespace ProjectOC.TechTree.UI
 
                             btn_IdDic.Add(id, btn.transform);
 
-                            SetBtnPos(rec, TechTreeManager.Instance.GetTPGrid(id));
+                            SetBtnPos(btn.transform, TechTreeManager.Instance.GetTPGrid(id));
 
 
 
@@ -236,10 +233,10 @@ namespace ProjectOC.TechTree.UI
         /// </summary>
         private Transform TPKT_Decipher;
 
-        /// <summary>
+/*        /// <summary>
         /// 破译的时间消耗
         /// </summary>
-        private TextMeshProUGUI TPTimeCost;
+        private TextMeshProUGUI TPTimeCost;*/
 
         /// <summary>
         /// 破译消耗Item的UI模板
@@ -297,9 +294,9 @@ namespace ProjectOC.TechTree.UI
             this.TPUnlockTemplate.gameObject.SetActive(false);
 
             this.TPLockedState = ContentPanel.Find("InformationInspector").Find("Locked");
-            this.TPKT_Decipher = this.TPLockedState.Find("Viewport").Find("Content").Find("KT_Decipher");
+            this.TPKT_Decipher = this.TPLockedState.Find("Viewport").Find("Content").Find("KT_Decipher").Find("KT_Decipher");
 
-            this.TPTimeCost = this.TPLockedState.Find("Viewport").Find("Content").Find("TimeCost").GetComponent<TextMeshProUGUI>();
+            
             this.TPItemCostTemplate = this.TPLockedState.Find("Viewport").Find("Content").Find("ItemCostTemplate");
             this.TPItemCostTemplate.gameObject.SetActive(false);
 
@@ -616,8 +613,8 @@ namespace ProjectOC.TechTree.UI
                     this.TPKT_Decipher.Find("CanDecipherImg").GetComponent<Image>().color = canDecipher ? new Color32(77, 233, 16, 255) : Color.gray;
                     this.TPKT_Decipher.Find("Mask").GetComponent<Image>().gameObject.SetActive(!canDecipher);
 
-                    // 时间消耗
-                    this.TPTimeCost.text = PanelTextContent.timecosttip + TM.GetTPTimeCost(CurrentID).ToString() + "s";
+                    /*// 时间消耗
+                    this.TPTimeCost.text = PanelTextContent.timecosttip + TM.GetTPTimeCost(CurrentID).ToString() + "s";*/
 
                     // Item 消耗
                     foreach (var f in TM.GetTPItemCost(CurrentID))
@@ -724,8 +721,6 @@ namespace ProjectOC.TechTree.UI
                 }
             }
         }
-
-
         protected override void OnLoadJsonAssetComplete(TPPanel datas)
         {
             base.OnLoadJsonAssetComplete(datas);

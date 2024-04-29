@@ -23,25 +23,33 @@ namespace ProjectOC.Order
         /// <summary>
         /// 交付时限计时器 单位为游戏内的日
         /// </summary>
-        private CounterDownTimer DeliverDDLTimer;
-        public OrderUrgent(string orderId, List<OrderMap> RequireItemList, int ReceiveDDL, int DeliverDDL) : base(orderId, RequireItemList)
+        private CounterDownTimer deliverDDLTimer;
+        public CounterDownTimer DeliverDDLTimer { get { return deliverDDLTimer; } }
+
+        public int ReceiveDDL, DeliverDDL;
+
+        public OrderUrgent(OrderTableData orderTableData) : base(orderTableData)
         {
+            this.ReceiveDDL = orderTableData.ReceiveDDL;
+            this.DeliverDDL = orderTableData.DeliverDDL;
             this.receiveDDLTimer = new CounterDownTimer(ReceiveDDL * 60, autocycle: false, autoStart: false);
             this.receiveDDLTimer.OnEndEvent += () =>
             {
                 //重置计时器
-                this.receiveDDLTimer.Reset(ReceiveDDL * 60, isStoped: true);
+                this.receiveDDLTimer.Reset(ReceiveDDL * 60, isStoped: true, needResetOnUpdateEvent: true);
                 //调用拒绝订单函数
-                LocalGameManager.Instance.OrderManager.RefuseOrder(orderId);
+                LocalGameManager.Instance.OrderManager.RefuseOrder(this.OrderInstanceID);
             };
 
-            this.DeliverDDLTimer = new CounterDownTimer(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DeliverDDL, autocycle: false, autoStart: false);
-            this.DeliverDDLTimer.OnEndEvent += () =>
+            this.deliverDDLTimer = new CounterDownTimer(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DeliverDDL, autocycle: false, autoStart: false);
+            //this.deliverDDLTimer = new CounterDownTimer(10 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DeliverDDL, autocycle: false, autoStart: false);
+            this.deliverDDLTimer.OnEndEvent += () =>
             {
                 //重置计时器
-                this.DeliverDDLTimer.Reset(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DeliverDDL, isStoped: true);
+                this.deliverDDLTimer.Reset(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DeliverDDL, isStoped: true, needResetOnUpdateEvent: true);
+                //this.deliverDDLTimer.Reset(10 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DeliverDDL, isStoped: true);
                 //调用取消订单函数
-                LocalGameManager.Instance.OrderManager.CancleOrder(orderId);
+                LocalGameManager.Instance.OrderManager.CancleOrder(this.OrderInstanceID);
             };
 
         }
@@ -53,14 +61,30 @@ namespace ProjectOC.Order
 
         public void StartDeliverDDLTimer()
         {
-            this.DeliverDDLTimer.Start();
+            this.deliverDDLTimer.Start();
         }
 
         public void Reset()
         {
-            this.receiveDDLTimer.Reset(this.receiveDDLTimer.Duration, isStoped: true);
-            this.DeliverDDLTimer.Reset(this.DeliverDDLTimer.Duration, isStoped: true);
+            Debug.Log("Reset");
+            this.receiveDDLTimer.Reset(ReceiveDDL * 60, isStoped: true, needResetOnUpdateEvent: true);
+            this.deliverDDLTimer.Reset(1440 * LocalGameManager.Instance.DispatchTimeManager.TimeScale * DeliverDDL, isStoped: true, needResetOnUpdateEvent: true);
         }
+
+        //获取当前交付时限还差多少天
+        public int GetDeliverDDLTimerRemainGameDays()
+        {
+            return Mathf.CeilToInt((float)this.deliverDDLTimer.CurrentTime / LocalGameManager.Instance.DispatchTimeManager.TimeScale / 1440);
+        }
+
+        //获取当前交付时限还差多少小时多少分
+        public string GetDeliverDDLTimerRemainGameHourAndMin()
+        {
+            int hour = (int)((this.deliverDDLTimer.CurrentTime / LocalGameManager.Instance.DispatchTimeManager.TimeScale) / 60);
+            int min = (int)((this.deliverDDLTimer.CurrentTime - hour * 60 * LocalGameManager.Instance.DispatchTimeManager.TimeScale) / LocalGameManager.Instance.DispatchTimeManager.TimeScale);
+            return hour.ToString()+":"+ min.ToString();
+        }
+
     }
 
 

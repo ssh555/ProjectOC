@@ -15,7 +15,8 @@ namespace ProjectOC.RestaurantNS
         public string ItemID;
         public int EatTime;
         public int AlterAP;
-        public Tuple<float, int> AlterMoodOdds;
+        public float AlterMoodOddsProb;
+        public int AlterMoodOddsValue;
     }
 
     [LabelText("²ÍÌü¹ÜÀíÆ÷"), Serializable]
@@ -157,8 +158,7 @@ namespace ProjectOC.RestaurantNS
         {
             Workers.RemoveAll(x => x == null);
             WorkerSets.RemoveWhere(x => x == null);
-            List<WorldRestaurant> worldRestaurants = WorldRestaurants.Values.Where(worldRestaurant => worldRestaurant.Restaurant.HaveFood && worldRestaurant.Restaurant.HaveSeat).ToList();
-
+            List<WorldRestaurant> worldRestaurants = WorldRestaurants.Values.Where(worldRestaurant => worldRestaurant != null && worldRestaurant.Restaurant.HaveFood && worldRestaurant.Restaurant.HaveSeat).ToList();
             if (Workers.Count > 0 && worldRestaurants.Count > 0)
             {
                 List<Worker> workers = new List<Worker>();
@@ -177,60 +177,66 @@ namespace ProjectOC.RestaurantNS
 
                 foreach (WorldRestaurant world in worldRestaurants)
                 {
-                    float minDist = float.MaxValue;
-                    int index = 0;
-                    for (int i = 0; i < positions.Count; i++)
+                    if (world != null)
                     {
-                        float dist = Vector3.Distance(world.transform.position, positions[i]);
-                        if (dist < minDist)
+                        float minDist = float.MaxValue;
+                        int index = 0;
+                        for (int i = 0; i < positions.Count; i++)
                         {
-                            minDist = dist;
-                            index = i;
+                            float dist = Vector3.Distance(world.transform.position, positions[i]);
+                            if (dist < minDist)
+                            {
+                                minDist = dist;
+                                index = i;
+                            }
                         }
+                        if (!dict.ContainsKey(index))
+                        {
+                            dict[index] = new HashSet<Restaurant>();
+                        }
+                        dict[index].Add(world.Restaurant);
                     }
-                    if (!dict.ContainsKey(index))
-                    {
-                        dict[index] = new HashSet<Restaurant>();
-                    }
-                    dict[index].Add(world.Restaurant);
                 }
                 
                 foreach (Worker worker in workers)
                 {
-                    List<Tuple<float, int>> dists = positions.Select((position, index) => Tuple.Create(Vector3.Distance(worker.transform.position, position), index)).ToList();
-                    List<int> indexs = dists.OrderBy(tuple => tuple.Item1).Select(tuple => tuple.Item2).ToList();
-                    bool flag = false;
-                    foreach (int index in indexs)
+                    if (worker != null)
                     {
-                        if (flag)
+                        List<Tuple<float, int>> dists = positions.Select((position, index) => Tuple.Create(Vector3.Distance(worker.transform.position, position), index)).ToList();
+                        List<int> indexs = dists.OrderBy(tuple => tuple.Item1).Select(tuple => tuple.Item2).ToList();
+                        bool flag = false;
+                        foreach (int index in indexs)
+                        {
+                            if (flag)
+                            {
+                                break;
+                            }
+                            if (dict.ContainsKey(index))
+                            {
+                                List<Restaurant> removes = new List<Restaurant>();
+                                foreach (var restaurant in dict[index])
+                                {
+                                    if (restaurant != null && restaurant.HaveFood && restaurant.HaveSeat && restaurant.AddWorker(worker))
+                                    {
+                                        flag = true;
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        removes.Add(restaurant);
+                                    }
+                                }
+                                foreach (var remove in removes)
+                                {
+                                    dict[index].Remove(remove);
+                                }
+                            }
+                        }
+
+                        if (!flag)
                         {
                             break;
                         }
-                        if (dict.ContainsKey(index))
-                        {
-                            List<Restaurant> removes = new List<Restaurant>();
-                            foreach (var restaurant in dict[index])
-                            {
-                                if (restaurant != null && restaurant.HaveFood && restaurant.HaveSeat && restaurant.AddWorker(worker))
-                                {
-                                    flag = true;
-                                    break;
-                                }
-                                else
-                                {
-                                    removes.Add(restaurant);
-                                }
-                            }
-                            foreach (var remove in removes)
-                            {
-                                dict[index].Remove(remove);
-                            }
-                        }
-                    }
-
-                    if (!flag)
-                    {
-                        break;
                     }
                 }
             }
@@ -298,7 +304,7 @@ namespace ProjectOC.RestaurantNS
         {
             if (WorkerFood_IsValidID(id))
             {
-                return WorkerFoodTableDict[id].AlterMoodOdds;
+                return new Tuple<float, int>(WorkerFoodTableDict[id].AlterMoodOddsProb, WorkerFoodTableDict[id].AlterMoodOddsValue);
             }
             return new Tuple<float, int>(0, 0);
         }

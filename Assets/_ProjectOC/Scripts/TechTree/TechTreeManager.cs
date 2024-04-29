@@ -521,8 +521,13 @@ namespace ProjectOC.TechTree
                 
                 MonoBuildingManager monoBM = ML.Engine.Manager.GameManager.Instance.GetLocalManager<MonoBuildingManager>();
                 monoBM.BM.RegisterBPartPrefab(monoBM.LoadedBPart[new ML.Engine.BuildingSystem.BuildingPart.BuildingPartClassification(str)]);
-            }    
-
+            }
+            List<string> strings = this.registerTechPoints[ID].EventStrings;
+            foreach (var ExecuteString in strings)
+            {
+                GameManager.Instance.EventManager.ExecuteEvent(ExecuteString);
+            }
+            //Debug.Log(GameManager.Instance.EventManager.ExecuteCondition("Condition_CheckBagItem_Water_1"));
         }
         #endregion
 
@@ -541,6 +546,7 @@ namespace ProjectOC.TechTree
             public TextContent timecosttip;
             public KeyTip Decipher;
             public KeyTip Back;
+
         }
 
         #endregion

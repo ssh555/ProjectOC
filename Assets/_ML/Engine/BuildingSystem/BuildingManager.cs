@@ -92,18 +92,12 @@ namespace ML.Engine.BuildingSystem
             {
                 foreach(var ap in A.ParentMat)
                 {
-                    bool f = false;
                     foreach (var bp in B.ParentMat)
                     {
-                        if(ap.name == bp.name)
+                        if(ap.name != bp.name)
                         {
-                            f = true;
-                            break;
+                            return false;
                         }
-                    }
-                    if(f == false)
-                    {
-                        return false;
                     }
                 }
                 if (A.ChildrenMat != null && B.ChildrenMat != null)
@@ -114,18 +108,12 @@ namespace ML.Engine.BuildingSystem
                         {
                             foreach(var t in ap.Value)
                             {
-                                bool f = false;
-                                foreach (var bp in B.ParentMat)
+                                foreach (var bp in B.ChildrenMat[ap.Key])
                                 {
-                                    if (t.name == bp.name)
+                                    if (t.name != bp.name)
                                     {
-                                        f = true;
-                                        break;
+                                        return false;
                                     }
-                                }
-                                if (f == false)
-                                {
-                                    return false;
                                 }
                             }
                         }
@@ -134,6 +122,7 @@ namespace ML.Engine.BuildingSystem
                             return false;
                         }
                     }
+                    return true;
                 }
                 else if(A.ChildrenMat == null && B.ChildrenMat== null)
                 {
@@ -150,18 +139,12 @@ namespace ML.Engine.BuildingSystem
                         {
                             foreach (var t in ap.Value)
                             {
-                                bool f = false;
-                                foreach (var bp in B.ParentMat)
+                                foreach (var bp in B.ChildrenMat[ap.Key])
                                 {
-                                    if (t.name == bp.name)
+                                    if (t.name != bp.name)
                                     {
-                                        f = true;
-                                        break;
+                                        return false;
                                     }
-                                }
-                                if (f == false)
-                                {
-                                    return false;
                                 }
                             }
                         }
@@ -170,6 +153,7 @@ namespace ML.Engine.BuildingSystem
                             return false;
                         }
                     }
+                    return true;
                 }
                 else if (A.ChildrenMat == null && B.ChildrenMat == null)
                 {
@@ -807,7 +791,7 @@ namespace ML.Engine.BuildingSystem
         #region Material
         // to-do :to-change
         [SerializeField]
-        private const string _ABMatName = "ML/Mat/Transparent";
+        private const string _ABMatName = "Materials/Other/Mat_Common_Transparent.mat";
 
         /// <summary>
         /// 建造模式下所用的Material (Place, Edit, Destroy, Interact)

@@ -187,7 +187,7 @@ namespace ProjectOC.PinchFace
 
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/PlayerUIPanel";
+            this.abpath = "OCTextContent/PlayerUIPanel";
             this.abname = "PlayerUIPanel";
             this.description = "PinchRace";
         }
@@ -205,7 +205,6 @@ namespace ProjectOC.PinchFace
         private PinchFaceManager pinchFaceManager;
         private UIBtnListContainer UIBtnListContainer;
         private const int OneRowCount = 5;
-        private int curbtnListIndex = -1;
         private PinchPartType2 curType2 = PinchPartType2.None;
         private Dictionary<PinchPartType2, SelectedButton> leftButtonDic = new Dictionary<PinchPartType2, SelectedButton>();
         private RacePinchData raceData = new RacePinchData();

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7085922709440061500}
-  - component: {fileID: 6701810045096502506}
+  - component: {fileID: 941177828869125519}
   - component: {fileID: 5149175071535902403}
   m_Layer: 0
   m_Name: 15_HairFront_PinchType2Template
@@ -33,7 +33,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6701810045096502506
+--- !u!114 &941177828869125519
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,9 +42,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4280774634301395310}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e48dd5fedc41bd4468042466b0676715, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d4266ab2b90dc147a5340641698dd7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  distributionMode: 0
 --- !u!114 &5149175071535902403
 MonoBehaviour:
   m_ObjectHideFlags: 0

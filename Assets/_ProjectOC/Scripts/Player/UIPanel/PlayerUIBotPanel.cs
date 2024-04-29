@@ -136,7 +136,7 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("订单管理",
             () =>
             {
-                GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/OrderBoardPanel.prefab").Completed += (handle) =>
+                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Order_UIPanel/Prefab_OrderSystem_UI_OrderBoardPanel.prefab").Completed += (handle) =>
                 {
                     OrderBoardPanel orderBoardPanel = handle.Result.GetComponent<OrderBoardPanel>();
 
@@ -154,7 +154,7 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("科技树",
             () =>
             {
-                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefabs_TechTree_UI/TechPointPanel.prefab", this.transform.parent, true).Completed += (handle) =>
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefabs_TechTree_UI/Prefab_TechTree_UI_TechPointPanel.prefab", this.transform.parent, true).Completed += (handle) =>
                 {
                     var panel = handle.Result.GetComponent<UITechPointPanel>();
                     panel.transform.localScale = Vector3.one;

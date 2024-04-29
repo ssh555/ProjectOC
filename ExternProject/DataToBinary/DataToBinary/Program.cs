@@ -67,8 +67,8 @@ namespace ExcelToJson
             // 1. 读入需要的EXCEL表
             List<ProjectOC.WorkerEchoNS.WorkerEchoTableData> workerEchoTableDatas = DBMgr.ReadExcel<ProjectOC.WorkerEchoNS.WorkerEchoTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 7);
             List<ML.Engine.BuildingSystem.BuildingTableData> buildingTableDatas = DBMgr.ReadExcel<ML.Engine.BuildingSystem.BuildingTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 10);
-            List<ML.Engine.InventorySystem.ItemTableData> itemTableDatas = DBMgr.ReadExcel<ML.Engine.InventorySystem.ItemTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 16);
-            List<ML.Engine.InventorySystem.RecipeTableData> recipeTableDatas = DBMgr.ReadExcel<ML.Engine.InventorySystem.RecipeTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 18);
+            List<ML.Engine.InventorySystem.ItemTableData> itemTableDatas = DBMgr.ReadExcel<ML.Engine.InventorySystem.ItemTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 17);
+            List<ML.Engine.InventorySystem.RecipeTableData> recipeTableDatas = DBMgr.ReadExcel<ML.Engine.InventorySystem.RecipeTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 19);
             Dictionary<string, ML.Engine.BuildingSystem.BuildingTableData> buildDict = new Dictionary<string, ML.Engine.BuildingSystem.BuildingTableData>();
             // 2. 分别解析表格并将数据暂存在内存中
             foreach (var data in buildingTableDatas)
@@ -100,8 +100,14 @@ namespace ExcelToJson
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 11, BinaryFilePath = rootPath + "FurnitureTheme.json", type = typeof(ML.Engine.BuildingSystem.FurnitureThemeTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 12, BinaryFilePath = rootPath + "TechPoint.json", type = typeof(ProjectOC.TechTree.TechPoint) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 15, BinaryFilePath = rootPath + "Order.json", type = typeof(ProjectOC.Order.OrderTableData) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 16, BinaryFilePath = rootPath + "Item.json", type = typeof(ML.Engine.InventorySystem.ItemTableData) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 17, BinaryFilePath = rootPath + "ItemCategory.json", type = typeof(ML.Engine.InventorySystem.ItemCategoryTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 16, BinaryFilePath = rootPath + "MainlandLevel.json", type = typeof(ProjectOC.LandMassExpand.MainlandLevelTableData) });
+
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 17, BinaryFilePath = rootPath + "Item.json", type = typeof(ML.Engine.InventorySystem.ItemTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 18, BinaryFilePath = rootPath + "ItemCategory.json", type = typeof(ML.Engine.InventorySystem.ItemCategoryTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 21, BinaryFilePath = rootPath + "Event.json", type = typeof(ML.Engine.Event.EventTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 22, BinaryFilePath = rootPath + "Condition.json", type = typeof(ML.Engine.Event.ConditionTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 24, BinaryFilePath = rootPath + "Dialog.json", type = typeof(ProjectOC.Dialog.DialogTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 25, BinaryFilePath = rootPath + "Option.json", type = typeof(ProjectOC.Dialog.OptionTableData) });
 
             //configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 9, BinaryFilePath = rootPath + "Feature.json", type = typeof(ProjectOC.WorkerNS.FeatureTableData) });
             //configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 17, BinaryFilePath = rootPath + "Effect.json", type = typeof(ProjectOC.WorkerNS.EffectTableData) });
@@ -273,12 +279,12 @@ namespace ExcelToJson
             return defaultValue;
         }
 
-        public static List<string> ParseStringList(string data)
+        public static List<string> ParseStringList(string data, char separator=',')
         {
             List<string> result = new List<string>();
             if (!string.IsNullOrEmpty(data))
             {
-                foreach (var s in data.Trim().Split(',', '，'))
+                foreach (var s in data.Trim().Split(separator))
                 {
                     if (!string.IsNullOrEmpty(s) && !string.IsNullOrEmpty(s.Trim()))
                     {
@@ -287,6 +293,20 @@ namespace ExcelToJson
                 }
             }
             return result;
+        }
+
+        public static List<TextContent> ParseTextContentList(string data)
+        {
+            List<string> strings = ParseStringList(data);
+            List<TextContent> results = new List<TextContent>();
+            foreach (string s in strings)
+            {
+                if (!string.IsNullOrEmpty(s))
+                {
+                    results.Add(ParseTextContent(s));
+                }
+            }
+            return results;
         }
 
         public static List<Formula> ParseFormulaList(string data)
@@ -299,6 +319,34 @@ namespace ExcelToJson
                 if (!string.IsNullOrEmpty(result.id))
                 {
                     results.Add(result);
+                }
+            }
+            return results;
+        }
+
+        public static List<int> ParseIntList(string data)
+        {
+            List<string> strings = ParseStringList(data);
+            List<int> results = new List<int>();
+            foreach (string s in strings)
+            {
+                if (!string.IsNullOrEmpty(s))
+                {
+                    results.Add(ParseInt(s));
+                }
+            }
+            return results;
+        }
+
+        public static List<float> ParseFloatList(string data)
+        {
+            List<string> strings = ParseStringList(data);
+            List<float> results = new List<float>();
+            foreach (string s in strings)
+            {
+                if (!string.IsNullOrEmpty(s))
+                {
+                    results.Add(ParseFloat(s));
                 }
             }
             return results;

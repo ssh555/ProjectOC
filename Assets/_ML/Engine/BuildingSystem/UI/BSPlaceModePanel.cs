@@ -328,13 +328,30 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 if (obj.started)
                 {
-                    this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, Vector3.up);
+                    if(this.Placer.SelectedPartInstance.AttachedSocket == null)
+                    {
+                        this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, Vector3.up);
+                    }
+                    else
+                    {
+                        this.Placer.SelectedPartInstance.ActiveSocket.AsMatchRotOffset *= offset > 0 ? this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta : Quaternion.Inverse(this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta);
+                    }
                 }
             }
             else
             {
-                IsRotate = !IsRotate;
-                rotOffset = offset;
+                if (this.Placer.SelectedPartInstance.AttachedSocket != null)
+                {
+                    if (obj.started)
+                    {
+                        this.Placer.SelectedPartInstance.ActiveSocket.AsMatchRotOffset *= offset > 0 ? this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta : Quaternion.Inverse(this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta);
+                    }
+                }
+                else
+                {
+                    IsRotate = !IsRotate;
+                    rotOffset = offset;
+                }
                 //this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.DisableGridRotRate * Time.deltaTime * offset, this.Placer.SelectedPartInstance.transform.up);
             }
         }
