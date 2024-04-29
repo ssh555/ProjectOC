@@ -64,8 +64,12 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
         public virtual void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
-            if(isFirstBuild)
+            if (isFirstBuild)
+            {
                 isFirstBuild = false;
+                BuildingManager.Instance.AddBuildingInstance(this);
+            }
+                
         }
 
         public bool CanEnterEditMode()
@@ -379,7 +383,11 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
         public virtual void OnBPartDestroy()
         {
-
+            //排除建造模式时手上拿的那一个
+            if (!isFirstBuild)
+            {
+                BuildingManager.Instance.RemoveBuildingInstance(this);
+            }
         }
 
         public virtual void OnEnterEdit()

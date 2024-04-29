@@ -15,7 +15,7 @@ namespace ProjectOC.LandMassExpand
         public List<ISupportPowerBPart> powerCores = new List<ISupportPowerBPart>();
         public List<BuildPowerSub> powerSubs = new List<BuildPowerSub>();
         public List<INeedPowerBpart> electAppliances = new List<INeedPowerBpart>();
-        
+        public int PowerCoreMaxCount = 1;
 
         public bool CoverEachOther(IPowerBPart powerBPart1, IPowerBPart powerBPart2)
         {
@@ -39,6 +39,16 @@ namespace ProjectOC.LandMassExpand
             return radiusSunSquared >= distanceSquared;
         }
 
-
+        public struct MainlandLevel
+        {
+            public string ID;
+            public int Level;
+            public ML.Engine.TextContent.TextContent LevelText;
+            public bool IsMax;
+            public string[] Conditions;
+            public ML.Engine.TextContent.TextContent[] ConditionTexts;
+            public string[] Events;
+            public ML.Engine.TextContent.TextContent[] EventTexts;
+        }
     }
 }

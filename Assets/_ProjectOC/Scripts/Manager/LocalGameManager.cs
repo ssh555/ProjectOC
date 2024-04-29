@@ -1,4 +1,5 @@
 using System.Collections;
+using ProjectOC.Dialog;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
@@ -32,6 +33,7 @@ namespace ProjectOC.ManagerNS
         public IslandAreaManager IslandAreaManager;
         public Order.OrderManager OrderManager;
         public PinchFace.PinchFaceManager PinchFaceManager;
+        public Dialog.DialogManager DialogManager;
         /// <summary>
         /// 单例管理
         /// </summary>
@@ -64,6 +66,7 @@ namespace ProjectOC.ManagerNS
             GM.RegisterLocalManager(IslandManager);
             GM.RegisterLocalManager(BuildPowerIslandManager);
             GM.RegisterLocalManager(RestaurantManager);
+            GM.RegisterLocalManager(DialogManager);
             //生成Character
             ML.Engine.Manager.GameManager.Instance.CharacterManager.SceneInit();
             StartCoroutine(AfterPlayerCharacter());
@@ -106,6 +109,7 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<Order.OrderManager>();
                 //可能会提前注销，关闭捏脸面板的时候
                 GM?.UnregisterLocalManager<PinchFace.PinchFaceManager>();
+                GM?.UnregisterLocalManager<Dialog.DialogManager>();
                 Instance = null;
             }
         }
