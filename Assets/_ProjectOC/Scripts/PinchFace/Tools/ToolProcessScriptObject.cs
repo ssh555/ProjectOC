@@ -8,7 +8,7 @@ namespace  ProjectOC.PinchFace
     {
     public class ToolProcessScriptObject : EditorWindow
     {
-        [MenuItem("Tools/Process ScriptObjects")]
+        [MenuItem("Tools/Asset Process/Process ScriptObjects")]
          
         public static void ShowWindow()
         {
@@ -56,36 +56,38 @@ namespace  ProjectOC.PinchFace
 
         void ProcessScriptObject(PinchPartType scriptObject, string assetPath)
         {
-            int type1Index = (int)scriptObject.pinchPartType1 - 1;
-            int type2Index = (int)scriptObject.pinchPartType2 - 1;
-            int type3Index = (int)scriptObject.pinchPartType3 - 1;
-            // string folderPath = "Assets/_ProjectOC/OCResources/Prefabs/Character/PinchFace";
-            string folderPath = "Assets/_ProjectOC/OCResources/UI/PinchFace";
-            string Type1Name =  $"{type1Index}_{scriptObject.pinchPartType1.ToString()}_PinchType1";
-            string Type2Name =  $"{type2Index}_{scriptObject.pinchPartType2.ToString()}_PinchType2";
-            string Type3Name =  $"{type3Index}_{scriptObject.pinchPartType3.ToString()}_PinchType3";
+            foreach (var _type3 in scriptObject.pinchPartType3s)
+            {
+                int type1Index = (int)scriptObject.pinchPartType1 - 1;
+                int type2Index = (int)scriptObject.pinchPartType2 - 1;
+                int type3Index = (int)_type3 - 1;
+                // string folderPath = "Assets/_ProjectOC/OCResources/Prefabs/Character/PinchFace";
+                string folderPath = "Assets/_ProjectOC/OCResources/UI/PinchFace";
+                string Type1Name =  $"{type1Index}_{scriptObject.pinchPartType1.ToString()}_PinchType1";
+                string Type2Name =  $"{type2Index}_{scriptObject.pinchPartType2.ToString()}_PinchType2";
+                string Type3Name =  $"{type3Index}_{_type3.ToString()}_PinchType3";
             
             
-            //Common不用手动创建
-            string Type1FolderPath = Path.Combine(folderPath, Type1Name);
-            string Type2FolderPath = Path.Combine(Type1FolderPath, Type2Name);
-            string Type3FolderPath = Path.Combine(Type2FolderPath, Type3Name);
+                //Common不用手动创建
+                string Type1FolderPath = Path.Combine(folderPath, Type1Name);
+                string Type2FolderPath = Path.Combine(Type1FolderPath, Type2Name);
+                string Type3FolderPath = Path.Combine(Type2FolderPath, Type3Name);
                 Debug.Log($"{Type1FolderPath}");
                 if (!Directory.Exists(Type1FolderPath))
                 {
                     Directory.CreateDirectory(Type1FolderPath);
                 }
-                
+            
                 if (!Directory.Exists(Type2FolderPath))
                 {
                     Directory.CreateDirectory(Type2FolderPath);
                 }
-                
+            
                 if (!Directory.Exists(Type3FolderPath))
                 {
                     Directory.CreateDirectory(Type3FolderPath);
                 }
-            
+            }
         }
     }
 }

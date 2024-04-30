@@ -47,7 +47,7 @@ namespace ML.Engine.BuildingSystem
             for(int i = 0; i < MatPackages.Count; ++i)
             {
                 BuildingCopiedMaterial mat = new BuildingCopiedMaterial();
-
+                mat.ChildrenMat = new Dictionary<int, Material[]>();
                 for(int j = 0; j < MatStruct.Length; ++j)
                 {
                     if (MatStruct[j] != -1)

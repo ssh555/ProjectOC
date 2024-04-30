@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace ML.Engine.BuildingSystem.BuildingSocket
@@ -63,6 +64,40 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         [LabelText("启用BPart旋转偏移"), PropertyTooltip("放置BPart时是否允许有旋转偏移"), FoldoutGroup("Transform"), SerializeField]
         protected bool IsCanRotate = true;
 
+        [LabelText("被吸附时吸附点旋转的变化值"), FoldoutGroup("Transform"), SerializeField]
+        protected Quaternion m_AsTargetRotDelta = Quaternion.identity;
+        public Quaternion AsTargetRotDelta
+        {
+            get
+            {
+                if(m_AsTargetRotDelta.x == 0 && m_AsTargetRotDelta.y == 0 && m_AsTargetRotDelta.z == 0 && m_AsTargetRotDelta.w == 0)
+                {
+                    m_AsTargetRotDelta = Quaternion.identity;
+                }
+                return m_AsTargetRotDelta;
+            }
+        }
+        [LabelText("吸附时按键旋转偏移值"), ReadOnly, FoldoutGroup("Transform"), SerializeField]
+
+        protected Quaternion m_AsMatchRotOffset = Quaternion.identity;
+        public Quaternion AsMatchRotOffset
+        {
+            get
+            {
+                if(m_AsMatchRotOffset.x == 0 && m_AsMatchRotOffset.y == 0 && m_AsMatchRotOffset.z == 0 && m_AsMatchRotOffset.w == 0)
+                {
+                    m_AsMatchRotOffset = Quaternion.identity;
+                }
+                return m_AsMatchRotOffset;
+            }
+            set
+            {
+                m_AsMatchRotOffset = value;
+            }
+        }
+
+        public bool CanRotateMatchSocket => IsCanRotate;
+
         [LabelText("吸附Area时旋转"), FoldoutGroup("Transform"), SerializeField]
         protected bool IsRotateOnArea = true;
 
@@ -71,6 +106,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 
         [LabelText("BPart旋转偏移量"), FoldoutGroup("Transform"), SerializeField, ReadOnly]
         protected Quaternion RotationOffset = Quaternion.identity;
+
 
         /// <summary>
         /// 获取匹配点的坐标
@@ -83,7 +119,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
             if (this.ParentBPart.AttachedSocket != null && CheckMatch(this.ParentBPart.AttachedSocket))
             {
                 pos = this.ParentBPart.AttachedSocket.transform.position - (this.transform.position - this.ParentBPart.transform.position) + (this.ParentBPart.AttachedSocket.transform.rotation * this.RotationOffset * this.PositionOffset);
-                rot = ParentBPart.BaseRotation * this.ParentBPart.AttachedSocket.transform.rotation * this.RotationOffset * (this.ParentBPart.AttachedSocket.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
+                rot = ParentBPart.BaseRotation * this.ParentBPart.AttachedSocket.transform.rotation * this.RotationOffset;// * (this.ParentBPart.AttachedSocket.IsCanRotate ? ParentBPart.RotOffset : Quaternion.identity);
                 return true;
             }
 
@@ -199,10 +235,25 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         }
 
 #if UNITY_EDITOR
-        public bool Gizmos_Active = false;
-        public bool Gizmos_Attached = false;
+        [ShowInInspector]
+        private bool IsShowSocket = false;
 #endif
+
         public void OnDrawGizmos()
+        {
+            if (BuildingManager.Instance == null || !IsShowSocket)
+            {
+                return;
+            }
+
+            var cols = this.GetComponentsInChildren<Collider>();
+            foreach (Collider col in cols)
+            {
+                Extension.GizmosExtension.DrawMeshCollider(col, BuildingManager.Instance.DrawAreaBaseGrid.color);
+            }
+        }
+
+        private void _OnDrawGizmos()
         {
             if (BuildingManager.Instance == null)
             {
@@ -225,30 +276,11 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
                 }
             }
 
-            //if(Gizmos_Active)
-            //{
-            //    var cols = this.GetComponentsInChildren<Collider>();
-            //    foreach (Collider col in cols)
-            //    {
-            //        var gcolor = Gizmos.color;
-            //        Gizmos.color = BuildingManager.Instance.DrawActiveSocket.color;
-            //        Gizmos.DrawSphere(this.transform.position, 0.3f); ;
-            //        //Extension.GizmosExtension.DrawMeshCollider(col, BuildingManager.Instance.DrawActiveSocket.color);
-            //        Gizmos.color = gcolor;
-            //    }
-            //}
-            if(Gizmos_Attached)
-            {
-                var cols = this.GetComponentsInChildren<Collider>();
-                foreach (Collider col in cols)
-                {
-                    Extension.GizmosExtension.DrawMeshCollider(col, BuildingManager.Instance.DrawSocket.color);
-                }
-            }
         }
 
         private void OnDrawGizmosSelected()
         {
+            _OnDrawGizmos();
             //float arrowLength = 2f;
             //float circleRadius = 0.3f;
             //Color arrowColor = Color.red;

@@ -19,7 +19,8 @@ namespace ML.Engine.UI
         #region CustomPart
 
         private TextMeshProUGUI headText, numText;
-        private Slider slider;
+        public Slider slider;
+        public float value => slider.value;
         private Action<float> OnSliderValueChange;
         public void InitData(string _str,int _value)
         {
@@ -34,13 +35,25 @@ namespace ML.Engine.UI
             headText = transform.parent.Find("Text").GetComponentInChildren<TextMeshProUGUI>();
             numText = transform.parent.Find("Num").GetComponentInChildren<TextMeshProUGUI>();
             slider.onValueChanged.AddListener(HandleSliderValueChange);
+
+            this.enabled = false;
         }
 
         private void HandleSliderValueChange(float _value)
         {
             numText.text = _value.ToString();
         }
-  
+
+        public void ChangeText(string _str)
+        {
+            headText.text = _str;
+        }
+
+        public void SetValueWithoutNotify(float _value)
+        {
+            slider.SetValueWithoutNotify(_value);
+            HandleSliderValueChange(value);
+        }
         #endregion
 
         

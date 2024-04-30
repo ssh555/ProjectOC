@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: BuildingSystem
+  m_EditorClassIdentifier: 
+  m_GroupName: BuildingSystem
+  m_Data:
+    m_SerializedData: []
+  m_GUID: f864df9a2e6b3d84ab904b018cafa770
+  m_SerializeEntries:
+  - m_GUID: c0b2280865f42b844808df6da818ab76
+    m_Address: Config
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d4b3af60db9e5324ea3c4caa5627d5f6
+    m_Address: Prefab_BuildingPart
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BS_Prefab_BuildingPart
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 607bb880f443a8641b41f67c05a733fe
+    m_Address: MatAsset_MatPackage
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BS_MatAsset_MatPackage
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7b57f341259c20a47aa63b93ed32b7e1
+    m_Address: SA_UI_BuildIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5ce4161bb772475468a450ef277d08c7
+    m_Address: SA_UI_Category3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BS_SA_UI_Category
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1ec8c7e6d04c0bf4097c71291f43d6b6
+    m_Address: SA_UI_Category1
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BS_SA_UI_Category
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ec92c2c9848afe14cb4c24969d8e04b7
+    m_Address: SA_UI_Category2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BS_SA_UI_Category
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e4ba93e02f31bee408431bee6f0069fb
+    m_Address: Prefab_UIPanel
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a88aba1732bd5a84b99547231f28d56e
+    m_Address: SA_UI_FurnitureTheme
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b3a77725678382b4884f70d624b900ee
+    m_Address: SA_BS_UITexture
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 67601ef043eef664c9becb2f69834323
+    m_Address: SA_BS_MatPackageIcon
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 50e0acc1e9d47504a9b294e3ed0b5f2a
+    m_Address: Prefab_BuildingSystem
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 72d1a89784032c94ea3b026b42e20dcf, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: ea0dff0ad39972a49a2c961a3110e435, type: 2}
+    - {fileID: 11400000, guid: 181d06f01d7bca448b8a7ac002986e1e, type: 2}

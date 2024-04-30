@@ -34,7 +34,6 @@ namespace ProjectOC.LandMassExpand
         {
             islandManager = GameManager.Instance.GetLocalManager<IslandModelManager>();
             ChangeIslandGrids(islandMapRanges, true);
-            this.enabled = false;
         }
 
         public virtual void OnUnlock()
@@ -57,11 +56,11 @@ namespace ProjectOC.LandMassExpand
             ChangeIslandGrids(islandMapRanges,false);
             if(typeof(IslandMain) == this.GetType())
             {
-                IslandMain _island = this as IslandMain;
-                foreach (var _sub in _island.affiliatedIslands)
-                {
-                    _sub.ChangeIslandGrids(_sub.islandMapRanges,false);
-                }
+                // IslandMain _island = this as IslandMain;
+                // foreach (var _sub in _island.affiliatedIslands)
+                // {
+                //     _sub.ChangeIslandGrids(_sub.islandMapRanges,false);
+                // }
             }
             
             Vector2Int centerData = islandMapPos;
@@ -92,10 +91,10 @@ namespace ProjectOC.LandMassExpand
             #endregion
             //“∆∂Øµ∫”Ï∏∏ŒÔÃÂ
             Vector2Int realCenterPos = islandMapPos;
-            if(typeof(IslandSub) == this.GetType())
-            {
-                realCenterPos += (this as IslandSub).islandMain.islandMapPos;
-            }
+            // if(typeof(IslandSub) == this.GetType())
+            // {
+            //     realCenterPos += (this as IslandSub).islandMain.islandMapPos;
+            // }
             
             transform.position= new Vector3(realCenterPos.x,transform.position.y,realCenterPos.y)*mapSize;
             ChangeIslandGrids(islandMapRanges,true);
@@ -191,7 +190,7 @@ namespace ProjectOC.LandMassExpand
             Vector2Int realCenterPos = islandMapPos;
             if(typeof(IslandSub) == this.GetType())
             {
-                realCenterPos += (this as IslandSub).islandMain.islandMapPos;
+                //realCenterPos += (this as IslandSub).islandMain.islandMapPos;
             }
             Vector2Int realBigMapPos = realCenterPos + localMapPos + halfMapSize;
             return realBigMapPos;

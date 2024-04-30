@@ -1,22 +1,10 @@
-using ML.Engine.Timer;
 using Sirenix.OdinInspector;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 
 namespace ProjectOC.ManagerNS
 {
-    /// <summary>
-    /// 时间管理器
-    /// </summary>
-    [System.Serializable]
+    [LabelText("时间管理器"), System.Serializable]
     public sealed class DispatchTimeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
-        /// <summary>
-        /// 时间流速比例
-        /// </summary>
         private float timeScale = 1f;
         [LabelText("现实多少秒等于游戏内1分钟"), FoldoutGroup("配置"), ShowInInspector]
         public float TimeScale
@@ -27,35 +15,36 @@ namespace ProjectOC.ManagerNS
                 if (value > 0)
                 {
                     this.timeScale = value;
-                    this.Timer.Reset(timeScale);
+                    this.Timer?.Reset(timeScale);
                 }
             }
         }
-        [LabelText("当前分钟 [0, 59]"), ReadOnly, ShowInInspector]
+        [LabelText("当前分钟 [0, 59]"), ShowInInspector]
         public int CurrentMinute = 0;
-        [LabelText("当前时段 [0, 23]"), ReadOnly, ShowInInspector]
+        [LabelText("当前时段 [0, 23]"),  ShowInInspector]
         public int CurrentHour = 0;
-        [LabelText("当前日期 [0,]"), ReadOnly, ShowInInspector]
+        [LabelText("当前日期 [0,]"), ShowInInspector]
         public int CurrentDay = 0;
         /// <summary>
         /// 计时器，时间为TimeScale秒，循环计时。每次计时结束后更新时段，并调用时段更新事件
         /// </summary>
-        private CounterDownTimer Timer;
+        private ML.Engine.Timer.CounterDownTimer Timer;
         /// <summary>
         /// 时段更新事件，时段切换时调用，参数为当前新的时段
         /// </summary>
-        public event Action<int> OnHourChangedAction;
+        public event System.Action<int> OnHourChangedAction;
         /// <summary>
         /// 日期更新事件，日期切换时调用，参数为当前新的日期
         /// </summary>
-        public event Action<int> OnDayChangedAction;
+        public event System.Action<int> OnDayChangedAction;
 
         public void OnRegister()
         {
-            this.Timer = new CounterDownTimer(TimeScale, true, false);
+            this.Timer = new ML.Engine.Timer.CounterDownTimer(TimeScale, true, false);
             this.Timer.OnEndEvent += EndActionForTimer;
             this.Timer.Start();
         }
+
         public void OnUnregister()
         {
             this.Timer?.End();

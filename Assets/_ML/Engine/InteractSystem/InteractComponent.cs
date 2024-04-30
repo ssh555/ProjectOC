@@ -170,7 +170,7 @@ namespace ML.Engine.InteractSystem
 
         public void InitUITextContents()
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextContent.KeyTip[]>("OC/Json/TextContent/InteractSystem", "InteractKeyTip", (datas) =>
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<TextContent.KeyTip[]>("OCTextContent/InteractSystem", "InteractKeyTip", (datas) =>
             {
                 foreach (var tip in datas)
                 {
@@ -185,7 +185,7 @@ namespace ML.Engine.InteractSystem
 
         private void OnLoadOver()
         {
-            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("ML/InteractSystem/UI/InteractKeyTip.prefab").Completed += (handle) =>
+            Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Interact_UIKeyTip").Completed += (handle) =>
              {
                  this.ktHandle = handle;
                  var keyTipInstance = handle.Result;

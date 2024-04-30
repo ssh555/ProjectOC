@@ -1,31 +1,22 @@
-using ML.Engine.InventorySystem;
-using ML.Engine.Manager.LocalManager;
-using ML.Engine.Timer;
-using ProjectOC.StoreNS;
-using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Linq;
 
-
 namespace ProjectOC.MissionNS
 {
     [LabelText("任务调度管理器"), System.Serializable]
-    public sealed class MissionManager : ILocalManager
+    public sealed class MissionManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         [LabelText("搬运任务列表"), ShowInInspector, ReadOnly]
         private HashSet<MissionTransport> MissionTransports = new HashSet<MissionTransport>();
-        private CounterDownTimer timer;
-        /// <summary>
-        /// 代替Tick的更新任务的计时器
-        /// </summary>
-        public CounterDownTimer Timer
+        private ML.Engine.Timer.CounterDownTimer timer;
+        public ML.Engine.Timer.CounterDownTimer Timer
         {
             get 
             {
                 if (this.timer == null)
                 {
-                    this.timer = new CounterDownTimer(1f, true, false);
+                    this.timer = new ML.Engine.Timer.CounterDownTimer(1f, true, false);
                     this.timer.OnEndEvent += Timer_OnEndEvent;
                 }
                 return this.timer;
@@ -40,7 +31,7 @@ namespace ProjectOC.MissionNS
         public void OnUnregister()
         {
             timer?.End();
-            foreach (MissionTransport mission in MissionTransports)
+            foreach (MissionTransport mission in MissionTransports.ToArray())
             {
                 mission?.End(false);
             }
@@ -55,7 +46,7 @@ namespace ProjectOC.MissionNS
             if (!string.IsNullOrEmpty(itemID) && missionNum > 0 && initiator != null)
             {
                 MissionTransport mission = new MissionTransport(transportType, itemID, missionNum, initiator);
-                this.MissionTransports.Add(mission);
+                MissionTransports.Add(mission);
                 return mission;
             }
             else
@@ -81,10 +72,11 @@ namespace ProjectOC.MissionNS
             int missionNum = mission.NeedAssignNum;
             if (missionNum > 0)
             {
-                Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
+                WorkerNS.Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
                 if (worker != null)
                 {
-                    int maxBurNum = (int)(worker.BURMax / ItemManager.Instance.GetWeight(mission.ItemID));
+                    int weight = ML.Engine.InventorySystem.ItemManager.Instance.GetWeight(mission.ItemID);
+                    int maxBurNum = weight != 0 ? worker.WeightMax / weight : 0;
                     missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
                 }
                 IMissionObj target = null;
@@ -116,15 +108,16 @@ namespace ProjectOC.MissionNS
         {
             if (mission.NeedAssignNum > 0)
             {
-                Dictionary<Store, int> result = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutOutStore(mission.ItemID, mission.NeedAssignNum, 1, true, true);
+                Dictionary<StoreNS.Store, int> result = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutOutStore(mission.ItemID, mission.NeedAssignNum, 1, true, true);
                 foreach (var kv in result)
                 {
-                    Store store = kv.Key;
+                    StoreNS.Store store = kv.Key;
                     int missionNum = kv.Value;
-                    Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
+                    WorkerNS.Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
                     if (worker != null)
                     {
-                        int maxBurNum = (int)(worker.BURMax / ItemManager.Instance.GetWeight(mission.ItemID));
+                        int weight = ML.Engine.InventorySystem.ItemManager.Instance.GetWeight(mission.ItemID);
+                        int maxBurNum = weight != 0 ? worker.WeightMax / weight : 0;
                         missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
                     }
                     if (worker != null && store != null && missionNum > 0)
@@ -145,7 +138,7 @@ namespace ProjectOC.MissionNS
         /// </summary>
         public void Timer_OnEndEvent()
         {
-            List<MissionTransport> missionList = this.MissionTransports.ToList();
+            List<MissionTransport> missionList = MissionTransports.ToList();
             missionList.Sort(new MissionTransport.Sort());
             foreach (MissionTransport mission in missionList)
             {

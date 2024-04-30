@@ -1,11 +1,10 @@
-using ML.Engine.InteractSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 
 namespace ProjectOC.RestaurantNS
 {
-    public class WorldRestaurant : ML.Engine.BuildingSystem.BuildingPart.BuildingPart, IInteraction
+    public class WorldRestaurant : ML.Engine.BuildingSystem.BuildingPart.BuildingPart, ML.Engine.InteractSystem.IInteraction
     {
         [LabelText("²ÍÌü"), ShowInInspector, ReadOnly, SerializeField]
         public Restaurant Restaurant;
@@ -20,16 +19,16 @@ namespace ProjectOC.RestaurantNS
             }
             if (oldPos != newPos)
             {
-                Restaurant.OnPositionChange();
+                Restaurant.OnPositionChange(newPos - oldPos);
             }
             base.OnChangePlaceEvent(oldPos, newPos);
         }
 
-        public void Interact(InteractComponent component)
+        public void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIRestaurantPanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Restaurant_UI/Prefab_Restaurant_UI_RestaurantPanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
             {
-                InventorySystem.UI.UIRestaurant uiPanel = handle.Result.GetComponent<InventorySystem.UI.UIRestaurant>();
+                UI.UIRestaurant uiPanel = handle.Result.GetComponent<UI.UIRestaurant>();
                 uiPanel.Restaurant = Restaurant;
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uiPanel);
             };

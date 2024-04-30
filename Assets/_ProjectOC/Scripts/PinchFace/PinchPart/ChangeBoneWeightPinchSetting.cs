@@ -8,7 +8,7 @@ namespace ProjectOC.PinchFace
     public class ChangeBoneWeightPinchSetting :MonoBehaviour, IPinchSettingComp
     {
         public int Index { get; }
-
+        public List<BoneWeightData> BoneWeightDatas;
         [System.Flags]
         public enum BoneWeightChangeType
         {
@@ -21,13 +21,29 @@ namespace ProjectOC.PinchFace
             [LabelText("Æ«ÒÆ")]
             Offset = 1 << 1
         }
-        public BoneWeightChangeType boneWeightChangeType;
-        public BoneWeightType boneWeightType;
-        public Vector2 scaleValueRange;
-        public float currentScaleValue;
-        [Space(20)]
-        public Vector2 offsetValueRange;
-        public float currentOffsetValue;
+
+        [System.Serializable]
+        public class BoneWeightData
+        {
+            public BoneWeightChangeType boneWeightChangeType;
+            public BoneWeightType boneWeightType;
+            public Vector2 scaleValueRange;
+            public float currentScaleValue;
+            [Space(20)]
+            public Vector2 offsetValueRange;
+            public float currentOffsetValue;
+
+            public BoneWeightData()
+            {
+                boneWeightChangeType = BoneWeightChangeType.Scale;
+                scaleValueRange = new Vector2(0.5f, 1.5f);
+                currentScaleValue = 1f;
+
+                offsetValueRange = new Vector2(0.5f, 1.5f);
+                currentOffsetValue = 1f;
+            }
+        }
+        
         public void LoadData()
         {
             throw new System.NotImplementedException();

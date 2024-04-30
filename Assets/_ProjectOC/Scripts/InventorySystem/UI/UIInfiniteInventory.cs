@@ -626,7 +626,7 @@ namespace ProjectOC.InventorySystem.UI
 
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/Inventory";
+            this.abpath = "OCTextContent/Inventory";
             this.abname = "InventoryPanel";
             this.description = "InventoryPanel数据加载完成";
         }
@@ -634,7 +634,7 @@ namespace ProjectOC.InventorySystem.UI
         protected override void InitObjectPool()
         {
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
-            "OC/UI/Inventory/Texture/SA_Inventory_UI.spriteatlasv2", (handle) =>
+            "SA_Inventory_UI_UIPanel", (handle) =>
             {
                 inventoryAtlas = handle.Result as SpriteAtlas;
             }

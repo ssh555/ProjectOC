@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: TechTree
+  m_EditorClassIdentifier: 
+  m_GroupName: TechTree
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 3669f0ff03794c54e979ca8b79a45e91
+  m_SerializeEntries:
+  - m_GUID: a46c21762a65265468426428ad37cc7e
+    m_Address: SA_TechTree_UI
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c3425feca3a68174f8d820773865e25c
+    m_Address: Prefabs_TechTree_UI
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 72d1a89784032c94ea3b026b42e20dcf, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 6c16913d9bcd6f143b6f8e513c2a9bef, type: 2}
+    - {fileID: 11400000, guid: 781c649df0a34c2408b68596e09e4010, type: 2}

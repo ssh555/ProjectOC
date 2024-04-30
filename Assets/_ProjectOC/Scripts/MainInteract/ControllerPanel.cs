@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using ML.Engine.Manager;
 using ML.Engine.SaveSystem;
 using ML.Engine.TextContent;
+using ML.Engine.UI;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -9,10 +10,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static ML.Engine.UI.OptionPanel;
 using static ML.Engine.UI.UIBtnListContainer;
 
-namespace ML.Engine.UI
+namespace ProjectOC.MainInteract.UI
 {
     public class ControllerPanel : ML.Engine.UI.UIBasePanel
     {
@@ -74,6 +74,7 @@ namespace ML.Engine.UI
         #endregion
         [ShowInInspector]
         private UIBtnListContainer UIBtnListContainer;
+
         private Transform ButtonList;
         protected override void InitBtnInfo()
         {
@@ -83,9 +84,18 @@ namespace ML.Engine.UI
             this.UIBtnListContainer.AddOnSelectButtonChangedAction(() => { Debug.Log("SelectButtonChanged!"); });
             this.UIBtnListContainer.AddOnSelectButtonListChangedAction(() => { Debug.Log("SelectButtonListChanged!"); });
 
-            this.UIBtnListContainer.UIBtnLists[0].SetAllBtnAction(() => { GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("切换开关！")); });
-            this.UIBtnListContainer.UIBtnLists[1].SetAllBtnAction(() => { GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("确认改键！")); });
-            this.UIBtnListContainer.UIBtnLists[2].SetAllBtnAction(() => { GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("确认改键！")); });
+            this.UIBtnListContainer.UIBtnLists[0].SetAllBtnAction(() => { 
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("切换开关！"));
+                GameManager.Instance.EventManager.ExecuteEvent("InteractUpgrade(asd,5)");
+            });
+            this.UIBtnListContainer.UIBtnLists[1].SetAllBtnAction(() => { 
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("确认改键！"));
+                GameManager.Instance.EventManager.ExecuteEvent("Attack(true)");
+            });
+            this.UIBtnListContainer.UIBtnLists[2].SetAllBtnAction(() => { 
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("确认改键！"));
+                GameManager.Instance.EventManager.ExecuteEvent("UseItem(8)");
+            });
 
         }
     }

@@ -67,7 +67,7 @@ namespace ProjectOC.Player.UI
 
             this.UIBtnList.DeBindInputAction();
 
-            // 杩斿洖
+            // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
         }
 
@@ -86,7 +86,7 @@ namespace ProjectOC.Player.UI
                     }
                     else
                     {
-                        Debug.LogWarning("褰撳墠寤虹瓚鐗╂暟閲忎负0锛屾棤娉曡繘鍏ュ缓閫犳ā寮?!");
+                        Debug.LogWarning("当前建筑物数量为0，无法进入建造模??!");
                     }
                 }
             }
@@ -95,7 +95,7 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("EnterTechTree",
             () =>
             {
-                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/TechPointPanel.prefab", this.transform.parent, true).Completed += (handle) =>
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefabs_TechTree_UI/Prefab_TechTree_UI_TechPointPanel.prefab", this.transform.parent, true).Completed += (handle) =>
                 {
                     var panel = handle.Result.GetComponent<UITechPointPanel>();
                     panel.transform.localScale = Vector3.one;
@@ -109,7 +109,7 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("EnterInventory",
             () =>
             {
-                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/UIInfiniteInventoryPanel.prefab", this.transform.parent, true).Completed += (handle) =>
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefabs_UIInfiniteInventoryPanel", this.transform.parent, true).Completed += (handle) =>
                 {
                     var panel = handle.Result.GetComponent<UIInfiniteInventory>();
                     panel.transform.localScale = Vector3.one;
@@ -123,7 +123,7 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("EnterBeastPanel",
             () =>
             {
-                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("OC/UIPanel/BeastPanel.prefab", this.transform.parent, true).Completed += (handle) =>
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Worker_UI/Prefab_Worker_UI_BeastPanel.prefab", this.transform.parent, true).Completed += (handle) =>
                 {
                     var panel = handle.Result.GetComponent<BeastPanel>();
                     panel.transform.localScale = Vector3.one;
@@ -146,7 +146,7 @@ namespace ProjectOC.Player.UI
             {
                 foreach (var id in ML.Engine.InventorySystem.ItemManager.Instance.GetAllItemID())//ML.Engine.InventorySystem.ItemManager.Instance.GetCanStack(id) ? UnityEngine.Random.Range(1, 999) : 1
                 {
-                    ItemManager.Instance.SpawnItems(id, 500).ForEach(item => GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().Inventory.AddItem(item));
+                    ItemManager.Instance.SpawnItems(id, 500).ForEach(item => (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory.AddItem(item));
                 }
             }
             );
@@ -157,7 +157,7 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.BindNavigationInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUI.AlterSelected, UIBtnListContainer.BindType.started);
             this.UIBtnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm, UIBtnListContainer.BindType.started);
 
-            // 杩斿洖
+            // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
 
         }
@@ -168,7 +168,7 @@ namespace ProjectOC.Player.UI
         }
         #endregion
 
-        #region UI瀵硅薄寮曠敤
+        #region UI对象引用
         public PlayerCharacter player;
         private BuildingManager BM => BuildingManager.Instance;
         #endregion
@@ -187,9 +187,9 @@ namespace ProjectOC.Player.UI
 
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/PlayerUIPanel";
+            this.abpath = "OCTextContent/PlayerUIPanel";
             this.abname = "PlayerUIPanel";
-            this.description = "PlayerUIPanel鏁版嵁鍔犺浇瀹屾垚";
+            this.description = "PlayerUIPanel数据加载完成";
         }
 
         private UIBtnList UIBtnList;

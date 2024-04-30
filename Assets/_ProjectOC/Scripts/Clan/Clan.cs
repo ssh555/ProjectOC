@@ -1,9 +1,5 @@
-using ProjectOC.Building;
 using Sirenix.OdinInspector;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-
 
 namespace ProjectOC.ClanNS
 {
@@ -14,7 +10,7 @@ namespace ProjectOC.ClanNS
         public string ID = "";
         [LabelText("名称"), ReadOnly]
         public string Name = "";
-        [LabelText("拥有的床"), ReadOnly]
+        [LabelText("拥有的床"), ReadOnly, System.NonSerialized]
         public ClanBed Bed;
         [LabelText("是否拥有床"), ShowInInspector, ReadOnly]
         public bool HasBed { get { return Bed != null && !string.IsNullOrEmpty(Bed.InstanceID); } }
@@ -22,28 +18,17 @@ namespace ProjectOC.ClanNS
         public Clan() { }
         public Clan(string id, string name)
         {
-            this.ID = id;
-            this.Name = name;
+            ID = id;
+            Name = name;
         }
 
         public class Sort : IComparer<Clan>
         {
             public int Compare(Clan x, Clan y)
             {
-                if (x == null)
+                if (x == null || y == null)
                 {
-                    if (y == null)
-                    {
-                        return 0;
-                    }
-                    else
-                    {
-                        return 1;
-                    }
-                }
-                if (y == null)
-                {
-                    return -1;
+                    return (x == null).CompareTo((y == null));
                 }
                 bool hasBedX = x.HasBed;
                 bool hasBedY = y.HasBed;

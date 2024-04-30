@@ -40,7 +40,7 @@ namespace ProjectOC.PinchFace
             for(int i = 0;i<RacePinchDatas.Count;i++)
             {
                 int tmpI = i;
-                this.UIBtnListContainer.AddBtn(0, "OC/UI/PinchFace/PinchRaceButtonTemplate.prefab"
+                this.UIBtnListContainer.AddBtn(0, "Prefabs_PinchPart/UIPanel/Prefab_PinchRaceButtonTemplate.prefab"
                     , () =>
                     {
                         //创建种族
@@ -88,7 +88,7 @@ namespace ProjectOC.PinchFace
 
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/PlayerUIPanel";
+            this.abpath = "OCTextContent/PlayerUIPanel";
             this.abname = "PlayerUIPanel";
             this.description = "PinchRace";
         }

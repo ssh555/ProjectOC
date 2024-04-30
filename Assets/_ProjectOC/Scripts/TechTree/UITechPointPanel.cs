@@ -17,6 +17,7 @@ using UnityEngine.InputSystem;
 using static ProjectOC.TechTree.TechTreeManager;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Sirenix.OdinInspector;
+using ProjectOC.ManagerNS;
 
 namespace ProjectOC.TechTree.UI
 {
@@ -27,10 +28,7 @@ namespace ProjectOC.TechTree.UI
         public float gapDistance = 100;
         private int sliceNum = 16;
         private Vector3 BasePos;
-
-
-
-        private void SetBtnPos(RectTransform rectTransform,int[] cor)
+        private void SetBtnPos(Transform Transform,int[] cor)
         {
             if (cor.Length != 2) return;
             float angle = 270 - cor[0] * ((float)360.0 / sliceNum);
@@ -38,7 +36,7 @@ namespace ProjectOC.TechTree.UI
 
             Vector3 dir = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
 
-            rectTransform.anchoredPosition = BasePos + dir * cor[1] * gapDistance;
+            Transform.position = BasePos + dir * cor[1] * gapDistance;
         }
 
         private void LinkEdge(Transform edge, Transform obj)
@@ -68,7 +66,7 @@ namespace ProjectOC.TechTree.UI
         private Dictionary<string, Transform> btn_IdDic = new Dictionary<string, Transform>();
         private void InitData()
         {
-            this.BasePos = this.cursorNavigation.Content.Find("UIBtnList").Find("Container").transform.position;
+            this.BasePos = this.cursorNavigation.transform.Find("Center").position;
             this.EdgeParent = this.cursorNavigation.Content.Find("UIBtnList").Find("Container").Find("Edges");
             var AllID = TechTreeManager.Instance.GetAllTPID();
             for (int i = 0; i < AllID.Length; i++) 
@@ -76,7 +74,7 @@ namespace ProjectOC.TechTree.UI
                 string id = AllID[i];
                 if (!this.TTTPGO.TryGetValue(id, out var obj))
                 {
-                    this.cursorNavigation.UIBtnList.AddBtn("Assets/_ProjectOC/OCResources/UI/TechPoint/TechPointTemplate.prefab",
+                    this.cursorNavigation.UIBtnList.AddBtn("Prefabs_TechTree_UI/Prefab_TechTree_UI_TechPointTemplate.prefab",
                         OnSelectEnter: () =>
                         {
                             CurrentID = id;
@@ -125,7 +123,7 @@ namespace ProjectOC.TechTree.UI
 
                             btn_IdDic.Add(id, btn.transform);
 
-                            SetBtnPos(rec, TechTreeManager.Instance.GetTPGrid(id));
+                            SetBtnPos(btn.transform, TechTreeManager.Instance.GetTPGrid(id));
 
 
 
@@ -235,10 +233,10 @@ namespace ProjectOC.TechTree.UI
         /// </summary>
         private Transform TPKT_Decipher;
 
-        /// <summary>
+/*        /// <summary>
         /// 破译的时间消耗
         /// </summary>
-        private TextMeshProUGUI TPTimeCost;
+        private TextMeshProUGUI TPTimeCost;*/
 
         /// <summary>
         /// 破译消耗Item的UI模板
@@ -296,9 +294,9 @@ namespace ProjectOC.TechTree.UI
             this.TPUnlockTemplate.gameObject.SetActive(false);
 
             this.TPLockedState = ContentPanel.Find("InformationInspector").Find("Locked");
-            this.TPKT_Decipher = this.TPLockedState.Find("Viewport").Find("Content").Find("KT_Decipher");
+            this.TPKT_Decipher = this.TPLockedState.Find("Viewport").Find("Content").Find("KT_Decipher").Find("KT_Decipher");
 
-            this.TPTimeCost = this.TPLockedState.Find("Viewport").Find("Content").Find("TimeCost").GetComponent<TextMeshProUGUI>();
+            
             this.TPItemCostTemplate = this.TPLockedState.Find("Viewport").Find("Content").Find("ItemCostTemplate");
             this.TPItemCostTemplate.gameObject.SetActive(false);
 
@@ -550,8 +548,8 @@ namespace ProjectOC.TechTree.UI
                 this.TPDecipherTip.text = tpStatus == 1 ? PanelTextContent.unlockedtitletip.GetText() : PanelTextContent.lockedtitletip.GetText();
 
 
-                // 可解锁项
-                foreach (var id in TM.GetTPCanUnlockedID(CurrentID))
+                // 可解锁项: 建筑物
+                foreach (var id in TM.GetTPCanUnlockedBuildID(CurrentID))
                 {
                     if (!TPUnlockGO.TryGetValue(id, out var unlock))
                     {
@@ -568,12 +566,37 @@ namespace ProjectOC.TechTree.UI
                     }
                     else
                     {
-                        var s = CompositeManager.Instance.GetCompositonSprite(GetTPIconItemID(id));
+                        var s = BuildingManager.Instance.GetBuildIcon(id);
                         tempSprite.Add(id, s);
                         unlock.GetComponentInChildren<Image>().sprite = s;
                     }
                     // Text
-                    unlock.GetComponentInChildren<TextMeshProUGUI>().text = CompositeManager.Instance.GetCompositonName(GetTPIconItemID(id));
+                    unlock.GetComponentInChildren<TextMeshProUGUI>().text = BuildingManager.Instance.GetName(id);
+                }
+                // 可解锁项: 配方
+                foreach (var id in TM.GetTPCanUnlockedRecipeID(CurrentID))
+                {
+                    if (!TPUnlockGO.TryGetValue(id, out var unlock))
+                    {
+                        unlock = Instantiate(TPUnlockTemplate.gameObject, TPUnlockTemplate.parent, false);
+                        unlock.SetActive(true);
+                        this.TPUnlockGO.Add(id, unlock);
+                    }
+
+                    // Image
+                    if (tempSprite.ContainsKey(id))
+                    {
+                        var s = tempSprite[id];
+                        unlock.GetComponentInChildren<Image>().sprite = s;
+                    }
+                    else
+                    {
+                        var s = LocalGameManager.Instance.RecipeManager.GetRecipeIcon(id);
+                        tempSprite.Add(id, s);
+                        unlock.GetComponentInChildren<Image>().sprite = s;
+                    }
+                    // Text
+                    unlock.GetComponentInChildren<TextMeshProUGUI>().text = LocalGameManager.Instance.RecipeManager.GetRecipeName(id);
                 }
 
                 // 面板状态
@@ -590,8 +613,8 @@ namespace ProjectOC.TechTree.UI
                     this.TPKT_Decipher.Find("CanDecipherImg").GetComponent<Image>().color = canDecipher ? new Color32(77, 233, 16, 255) : Color.gray;
                     this.TPKT_Decipher.Find("Mask").GetComponent<Image>().gameObject.SetActive(!canDecipher);
 
-                    // 时间消耗
-                    this.TPTimeCost.text = PanelTextContent.timecosttip + TM.GetTPTimeCost(CurrentID).ToString() + "s";
+                    /*// 时间消耗
+                    this.TPTimeCost.text = PanelTextContent.timecosttip + TM.GetTPTimeCost(CurrentID).ToString() + "s";*/
 
                     // Item 消耗
                     foreach (var f in TM.GetTPItemCost(CurrentID))
@@ -698,27 +721,13 @@ namespace ProjectOC.TechTree.UI
                 }
             }
         }
-
-        private string GetTPIconItemID(string id)
-        {
-            if(BuildingManager.Instance.BPartTableDictOnID.ContainsKey(id))
-            {
-                return id;
-            }
-            else if(ManagerNS.LocalGameManager.Instance.RecipeManager.IsValidID(id))
-            {
-                return id;
-            }
-            throw new Exception($"科技树配置中的可解锁项ID\"{id}\"既不是RecipeID，也不是BuildID");
-        }
-
         protected override void OnLoadJsonAssetComplete(TPPanel datas)
         {
             base.OnLoadJsonAssetComplete(datas);
         }
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/TechTree";
+            this.abpath = "OCTextContent/TechTree";
             this.abname = "TechPointPanel";
             this.description = "TechPointPanel数据加载完成";
         }

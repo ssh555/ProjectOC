@@ -90,14 +90,12 @@ namespace ML.Engine.UI
             }
         }
 
-        public void Init(System.Action OnSelectedEnter, System.Action OnSelectedExit)
+        public void Init()
         {
             image = this.GetComponentInChildren<UnityEngine.UI.Image>();
             Selected = this.transform.Find("Selected");
             if(Selected != null) { Selected.gameObject.SetActive(false); }
             this.targetGraphic = image;
-/*            this.OnSelectedEnter = OnSelectedEnter;
-            this.OnSelectedExit = OnSelectedExit; */  
         }
 
         public void Interact()

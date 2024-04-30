@@ -163,7 +163,7 @@ namespace ML.Engine.BuildingSystem.UI
 
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/BuildingSystem/UI";
+            this.abpath = "OCTextContent/BuildingSystem/UI";
             this.abname = "BSEditModePanel";
             this.description = "BSEditModePanel数据加载完成";
         }

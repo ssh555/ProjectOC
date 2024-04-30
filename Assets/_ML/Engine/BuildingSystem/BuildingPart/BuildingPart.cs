@@ -155,16 +155,23 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             {
                 if(value == null)
                 {
+                    this.ActiveSocket.AsMatchRotOffset = Quaternion.identity;
                     this.attachedSocket = null;
                 }
                 else if(value != null)
                 {
                     if (this.ActiveSocket.CheckMatch(value))
                     {
+                        if(this.attachedSocket != value)
+                        {
+                            this.ActiveSocket.AsMatchRotOffset = Quaternion.identity;
+                        }
                         this.attachedSocket = value;
                     }
                     else
                     {
+
+                        this.ActiveSocket.AsMatchRotOffset = Quaternion.identity;
                         this.attachedSocket = null;
                     }
                 }
@@ -208,6 +215,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         public BuildingCopiedMaterial GetCopiedMaterial()
         {
             BuildingCopiedMaterial mat = new BuildingCopiedMaterial();
+            mat.ChildrenMat = new Dictionary<int, Material[]>();
             var p = this.GetComponent<Renderer>();
             if(p)
             {
@@ -251,6 +259,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         /// <summary>
         /// Ô­Éú²ÄÖÊ
         /// </summary>
+        [ShowInInspector]
         private Dictionary<Renderer, Material[]> rowMat;
 
 

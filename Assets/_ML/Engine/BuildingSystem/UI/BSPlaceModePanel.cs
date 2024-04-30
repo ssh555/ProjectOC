@@ -53,7 +53,7 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region 载入资产
-        public const string TStyleSpriteAtlasPath = "ML/BuildingSystem/Style/SA_Build_Style.spriteatlasv2";
+        public const string TStyleSpriteAtlasPath = "SA_UI_Category3";
         private SpriteAtlas styleAtlas = null;
         private AsyncOperationHandle SAHandle;
         /// <summary>
@@ -328,13 +328,27 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 if (obj.started)
                 {
-                    this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, Vector3.up);
+                    if(this.Placer.SelectedPartInstance.AttachedSocket == null)
+                    {
+                        this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, Vector3.up);
+                    }
+                    else
+                    {
+                        this.Placer.SelectedPartInstance.ActiveSocket.AsMatchRotOffset *= this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta;
+                    }
                 }
             }
             else
             {
-                IsRotate = !IsRotate;
-                rotOffset = offset;
+                if (this.Placer.SelectedPartInstance.AttachedSocket != null)
+                {
+                    this.Placer.SelectedPartInstance.ActiveSocket.AsMatchRotOffset *= this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta;
+                }
+                else
+                {
+                    IsRotate = !IsRotate;
+                    rotOffset = offset;
+                }
                 //this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.DisableGridRotRate * Time.deltaTime * offset, this.Placer.SelectedPartInstance.transform.up);
             }
         }
@@ -390,7 +404,7 @@ namespace ML.Engine.BuildingSystem.UI
 
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OC/Json/TextContent/BuildingSystem/UI";
+            this.abpath = "OCTextContent/BuildingSystem/UI";
             this.abname = "BSPlaceModePanel";
             this.description = "BSPlaceModePanel数据加载完成";
         }
