@@ -80,6 +80,8 @@ namespace ProjectOC.DataNS
         #region IMission
         public abstract Transform GetTransform();
         public abstract string GetUID();
+        public abstract MissionNS.MissionObjType GetMissionObjType();
+        public MissionNS.MissionObjType MissionObjType { get; set; }
         public List<MissionNS.Transport> Transports { get; set; } = new List<MissionNS.Transport>();
         public List<MissionNS.MissionTransport> Missions { get; set; } = new List<MissionNS.MissionTransport>();
         public MissionNS.TransportPriority TransportPriority { get; set; } = MissionNS.TransportPriority.Normal;

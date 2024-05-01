@@ -16,6 +16,7 @@ namespace ProjectOC.MissionNS
         #region Get
         public Transform GetTransform();
         public string GetUID();
+        public MissionObjType GetMissionObjType();
         public int GetAmount(string id, DataNS.DataOpType type, bool needCanIn = false, bool needCanOut = false);
         public Dictionary<string, int> GetAmount(DataNS.DataOpType type, bool needCanIn = false, bool needCanOut = false);
         public int GetReservePutIn(string itemID) { return GetAmount(itemID, DataNS.DataOpType.EmptyReserve); }
@@ -92,7 +93,7 @@ namespace ProjectOC.MissionNS
                                 storageReserve -= transport.SoureceReserveNum;
                             }
                         }
-                        else if (transport.Target == this && emptyReserve == 0)
+                        else if (transport.Target == this && emptyReserve <= 0)
                         {
                             transport.End();
                         }
@@ -120,7 +121,7 @@ namespace ProjectOC.MissionNS
                             storageReserve[transport.ID] -= transport.SoureceReserveNum;
                         }
                     }
-                    else if (transport.Target == this && emptyReserve[transport.ID] == 0)
+                    else if (transport.Target == this && emptyReserve[transport.ID] <= 0)
                     {
                         transport.End();
                     }
@@ -148,7 +149,7 @@ namespace ProjectOC.MissionNS
             {
                 foreach (MissionTransport mission in Missions.ToArray())
                 {
-                    mission?.End();
+                    mission?.End(true, true);
                 }
             }
         }

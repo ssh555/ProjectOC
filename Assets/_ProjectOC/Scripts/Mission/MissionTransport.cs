@@ -8,6 +8,8 @@ namespace ProjectOC.MissionNS
     {
         [LabelText("搬运类型"), ReadOnly]
         public MissionTransportType Type;
+        [LabelText("搬运发起者类型"), ReadOnly]
+        public MissionInitiatorType MissionInitiatorType;
         [LabelText("搬运东西的ID"), ReadOnly]
         public string ID = "";
         [LabelText("已经分配的数量"), ShowInInspector, ReadOnly]
@@ -39,12 +41,13 @@ namespace ProjectOC.MissionNS
         [LabelText("分配的搬运"), ShowInInspector, ReadOnly, System.NonSerialized]
         private List<Transport> Transports = new List<Transport>();
 
-        public MissionTransport(MissionTransportType type, string itemID, int missionNum, IMissionObj imission)
+        public MissionTransport(MissionTransportType type, string itemID, int missionNum, IMissionObj imission, MissionInitiatorType initiatorType)
         {
             Type = type;
             ID = itemID;
             MissionNum = missionNum;
             Initiator = imission;
+            MissionInitiatorType = initiatorType;
             Initiator.AddMissionTranport(this);
         }
 
@@ -89,11 +92,14 @@ namespace ProjectOC.MissionNS
             }
         }
 
-        public void End(bool removeManager = true)
+        public void End(bool removeManager = true, bool needJudge = false)
         {
             foreach (Transport transport in Transports.ToArray())
             {
-                transport?.End(false);
+                if (!needJudge || MissionInitiatorType == MissionInitiatorType.PutIn_Initiator || (MissionInitiatorType == MissionInitiatorType.PutOut_Initiator && !transport.ArriveSource))
+                {
+                    transport?.End();
+                }
             }
             Initiator.RemoveMissionTranport(this);
             if (removeManager)

@@ -20,4 +20,3 @@ namespace ProjectOC.MissionNS
         Outside_Store,
     }
 }
-

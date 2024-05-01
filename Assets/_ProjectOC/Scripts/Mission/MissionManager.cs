@@ -14,18 +14,18 @@ namespace ProjectOC.MissionNS
         {
             get 
             {
-                if (this.timer == null)
+                if (timer == null)
                 {
-                    this.timer = new ML.Engine.Timer.CounterDownTimer(1f, true, false);
-                    this.timer.OnEndEvent += Timer_OnEndEvent;
+                    timer = new ML.Engine.Timer.CounterDownTimer(1f, true, false);
+                    timer.OnEndEvent += Timer_OnEndEvent;
                 }
-                return this.timer;
+                return timer;
             }
         }
 
         public void OnRegister()
         {
-            this.Timer.Start();
+            Timer.Start();
         }
 
         public void OnUnregister()
@@ -41,11 +41,11 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// 创建搬运任务
         /// </summary>
-        public MissionTransport CreateTransportMission(MissionTransportType transportType, string itemID, int missionNum, IMissionObj initiator)
+        public MissionTransport CreateTransportMission(MissionTransportType transportType, string itemID, int missionNum, IMissionObj initiator, MissionInitiatorType initiatorType)
         {
             if (!string.IsNullOrEmpty(itemID) && missionNum > 0 && initiator != null)
             {
-                MissionTransport mission = new MissionTransport(transportType, itemID, missionNum, initiator);
+                MissionTransport mission = new MissionTransport(transportType, itemID, missionNum, initiator, initiatorType);
                 MissionTransports.Add(mission);
                 return mission;
             }

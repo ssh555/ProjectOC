@@ -37,13 +37,13 @@ namespace ProjectOC.DataNS
         public Data(string id, int maxCapacity)
         {
             this.id = id;
+            canIn = true;
+            canOut = true;
             MaxCapacity = maxCapacity;
             Storage = 0;
             Empty = maxCapacity;
             StorageReserve = 0;
             EmptyReserve = 0;
-            canIn = true;
-            canOut = true;
         }
 
         #region Get
@@ -72,8 +72,8 @@ namespace ProjectOC.DataNS
         public void Clear()
         {
             id = "";
-            Empty = MaxCapacity;
             Storage = 0;
+            Empty = MaxCapacity;
             StorageReserve = 0;
             EmptyReserve = 0;
         }

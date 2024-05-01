@@ -299,14 +299,14 @@ namespace ProjectOC.ProNodeNS
                 if (missionNum > 0)
                 {
                     missionNum += kv.num * (StackMax - RawThreshold);
-                    LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionNS.MissionTransportType.Store_ProNode, kv.id, missionNum, this);
+                    LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionNS.MissionTransportType.Store_ProNode, kv.id, missionNum, this, MissionNS.MissionInitiatorType.PutIn_Initiator);
                 }
             }
             missionNum = Stack - GetAssignNum(ProductID, false);
             if (missionNum >= StackThreshold * ProductNum)
             {
                 var missionType = ItemManager.Instance.GetItemType(ProductID) == ItemType.Feed ? MissionNS.MissionTransportType.ProNode_Restaurant : MissionNS.MissionTransportType.ProNode_Store;
-                LocalGameManager.Instance.MissionManager.CreateTransportMission(missionType, ProductID, missionNum, this);
+                LocalGameManager.Instance.MissionManager.CreateTransportMission(missionType, ProductID, missionNum, this, MissionNS.MissionInitiatorType.PutOut_Initiator);
             }
         }
 
@@ -351,10 +351,8 @@ namespace ProjectOC.ProNodeNS
         #region ItemContainerOwner
         public override Transform GetTransform() { return WorldProNode.transform; }
         public override string GetUID() { return WorldProNode.InstanceID; }
-        public void FastAdd()
-        {
-            for (int i = 0; i < DataContainer.GetCapacity() - 1; i++) { FastAdd(i); }
-        }
+        public override MissionNS.MissionObjType GetMissionObjType() { return MissionNS.MissionObjType.ProNode; }
+        public void FastAdd() { for (int i = 1; i < DataContainer.GetCapacity(); i++) { FastAdd(i); } }
         #endregion
 
         #region IWorkerContainer

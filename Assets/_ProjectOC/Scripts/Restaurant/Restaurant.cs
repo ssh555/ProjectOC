@@ -139,6 +139,11 @@ namespace ProjectOC.RestaurantNS
         #region IMissionObj
         public override Transform GetTransform() { return WorldRestaurant.transform; }
         public override string GetUID() { return UID; }
+
+        public override MissionNS.MissionObjType GetMissionObjType()
+        {
+            return MissionNS.MissionObjType.Restaurant;
+        }
         #endregion
     }
 }

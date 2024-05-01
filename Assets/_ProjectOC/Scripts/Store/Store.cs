@@ -60,6 +60,11 @@ namespace ProjectOC.StoreNS
         public override Transform GetTransform() { return WorldStore?.transform; }
         public override string GetUID() { return UID; }
 
+        public override MissionNS.MissionObjType GetMissionObjType()
+        {
+            return MissionNS.MissionObjType.Store;
+        }
+
         public class Sort : IComparer<Store>
         {
             public int Compare(Store x, Store y)

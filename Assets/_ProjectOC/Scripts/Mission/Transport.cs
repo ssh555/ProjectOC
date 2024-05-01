@@ -138,7 +138,7 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// Ω· ¯∞·‘À
         /// </summary>
-        public void End(bool removeMission=true)
+        public void End()
         {
             if (Worker.TransportDict.ContainsKey(ID) &&  CurNum > 0)
             {
@@ -169,10 +169,7 @@ namespace ProjectOC.MissionNS
             {
                 Target?.RemoveReservePutIn(ID, TargetReserveNum);
             }
-            if (removeMission)
-            {
-                Mission.RemoveTransport(this);
-            }
+            Mission?.RemoveTransport(this);
             Source?.RemoveTranport(this);
             Target?.RemoveTranport(this);
         }
