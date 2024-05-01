@@ -30,8 +30,11 @@ namespace ProjectOC.StoreNS
         {
             StoreType = storeType;
             Name = storeType.ToString();
-            InitData(ManagerNS.LocalGameManager.Instance.StoreManager.LevelCapacity[Level], 
+            if (0 <= Level && Level <= ManagerNS.LocalGameManager.Instance.StoreManager.LevelMax)
+            {
+                InitData(ManagerNS.LocalGameManager.Instance.StoreManager.LevelCapacity[Level],
                 ManagerNS.LocalGameManager.Instance.StoreManager.LevelDataCapacity[Level]);
+            }
         }
 
         public void Destroy()
@@ -60,10 +63,7 @@ namespace ProjectOC.StoreNS
         public override Transform GetTransform() { return WorldStore?.transform; }
         public override string GetUID() { return UID; }
 
-        public override MissionNS.MissionObjType GetMissionObjType()
-        {
-            return MissionNS.MissionObjType.Store;
-        }
+        public override MissionNS.MissionObjType GetMissionObjType() { return MissionNS.MissionObjType.Store; }
 
         public class Sort : IComparer<Store>
         {

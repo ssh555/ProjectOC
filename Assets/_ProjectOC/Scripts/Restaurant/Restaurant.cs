@@ -15,7 +15,6 @@ namespace ProjectOC.RestaurantNS
         public string UID => WorldRestaurant?.InstanceID ?? "";
         [LabelText("×ùÎ»"), ShowInInspector, ReadOnly]
         private RestaurantSeat[] Seats;
-        public event Action OnDataChangeEvent;
         #endregion
 
         #region Property

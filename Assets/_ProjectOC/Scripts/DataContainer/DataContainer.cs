@@ -13,7 +13,7 @@ namespace ProjectOC.DataNS
         private Data[] Datas;
         [NonSerialized]
         private Dictionary<string, HashSet<int>> IndexDict;
-        public event Action OnDataChangeEvent;
+        public Action OnDataChangeEvent;
         public DataContainer(int capacity, int dataCapacity)
         {
             if(capacity < 0  || dataCapacity < 0) { return; }

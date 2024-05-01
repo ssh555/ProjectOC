@@ -24,6 +24,26 @@ namespace ProjectOC.MissionNS
         public Dictionary<string, int> GetReservePutIn() { return GetAmount(DataNS.DataOpType.EmptyReserve); }
         public Dictionary<string, int> GetReservePutOut() { return GetAmount(DataNS.DataOpType.StorageReserve); }
         public TransportPriority GetTransportPriority() { return TransportPriority; }
+        public int GetMissionAssignNum(string itemID, bool isPutIn = true)
+        {
+            int result = 0;
+            if (!string.IsNullOrEmpty(itemID))
+            {
+                foreach (MissionTransport mission in Missions.ToArray())
+                {
+                    if (mission != null && mission.ID == itemID)
+                    {
+                        bool flag = isPutIn ? mission.MissionInitiatorType == MissionInitiatorType.PutIn_Initiator 
+                            : mission.MissionInitiatorType == MissionInitiatorType.PutOut_Initiator;
+                        if (flag)
+                        {
+                            result += mission.MissionNum;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
         #endregion
 
         #region Set

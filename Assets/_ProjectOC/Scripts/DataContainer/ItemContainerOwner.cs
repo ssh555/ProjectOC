@@ -60,8 +60,8 @@ namespace ProjectOC.DataNS
         {
             if (amount > 0 && DataContainer.GetAmount(index, DataOpType.Storage) >= amount)
             {
+                amount = DataContainer.ChangeAmount(index, amount, DataOpType.Empty, DataOpType.Storage);
                 ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(DataContainer.GetID(index), amount);
-                DataContainer.ChangeAmount(index, amount, DataOpType.Empty, DataOpType.Storage);
             }
         }
 
@@ -147,7 +147,7 @@ namespace ProjectOC.DataNS
         public ML.Engine.InventorySystem.Item[] GetItemList()
         {
             var result = new List<ML.Engine.InventorySystem.Item>();
-            foreach (var kv in DataContainer.GetAmount(DataOpType.StorageAll))
+            foreach (var kv in DataContainer.GetAmount(DataOpType.Storage))
             {
                 result.AddRange(ManagerNS.LocalGameManager.Instance.ItemManager.SpawnItems(kv.Key, kv.Value));
             }

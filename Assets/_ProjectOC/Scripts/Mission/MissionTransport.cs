@@ -53,7 +53,7 @@ namespace ProjectOC.MissionNS
 
         public void ChangeMissionNum(int num)
         {
-            MissionNum += num;
+            MissionNum = num;
             if (MissionNum <= 0 || FinishNum >= MissionNum)
             {
                 End();
@@ -96,7 +96,8 @@ namespace ProjectOC.MissionNS
         {
             foreach (Transport transport in Transports.ToArray())
             {
-                if (!needJudge || MissionInitiatorType == MissionInitiatorType.PutIn_Initiator || (MissionInitiatorType == MissionInitiatorType.PutOut_Initiator && !transport.ArriveSource))
+                if (!needJudge || MissionInitiatorType == MissionInitiatorType.PutIn_Initiator 
+                    || (MissionInitiatorType == MissionInitiatorType.PutOut_Initiator && !transport.ArriveSource))
                 {
                     transport?.End();
                 }

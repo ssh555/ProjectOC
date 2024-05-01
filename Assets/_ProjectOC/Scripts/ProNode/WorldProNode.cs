@@ -16,7 +16,7 @@ namespace ProjectOC.ProNodeNS
         {
             if (isFirstBuild)
             {
-                string actorID = BuildingManager.Instance.GetActorID(this.Classification.ToString());
+                string actorID = BuildingManager.Instance.GetActorID(Classification.ToString());
                 if (!string.IsNullOrEmpty(actorID))
                 {
                     ManagerNS.LocalGameManager.Instance.ProNodeManager.WorldNodeSetData(this, actorID);
@@ -43,11 +43,12 @@ namespace ProjectOC.ProNodeNS
 
         public void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_ProNode_UI/Prefab_ProNode_UI_ProNodePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_ProNode_UI/Prefab_ProNode_UI_ProNodePanel.prefab", 
+                ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
             {
                 UI.UIProNode uiPanel = handle.Result.GetComponent<UI.UIProNode>();
                 uiPanel.ProNode = ProNode;
-                uiPanel.HasUpgrade = (this as IBuildingUpgrade).HasUpgrade() || this.ProNode.Level > 0;
+                uiPanel.HasUpgrade = (this as IBuildingUpgrade).HasUpgrade() || ProNode.Level > 0;
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uiPanel);
             };
         }

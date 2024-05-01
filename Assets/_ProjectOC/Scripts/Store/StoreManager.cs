@@ -84,7 +84,7 @@ namespace ProjectOC.StoreNS
                 List<Store> stores = GetStores(priorityType);
                 foreach (Store store in stores)
                 {
-                    if ((!judgeInteracting || !store.IsInteracting) && (!judgeCanOut || store.DataContainer.HaveSetData(itemID, false, judgeCanOut)))
+                    if (!judgeInteracting || !store.IsInteracting)
                     {
                         int storeAmount = store.DataContainer.GetAmount(itemID, DataNS.DataOpType.Storage, false, judgeCanOut);
                         if (storeAmount > 0)
@@ -116,23 +116,26 @@ namespace ProjectOC.StoreNS
         /// <returns></returns>
         public Store GetPutInStore(string itemID, int amount, int priorityType = 0, bool judgeInteracting = false, bool judgeCanIn = false)
         {
-            List<Store> stores = GetStores(priorityType);
             Store result = null;
-            foreach (Store store in stores)
+            if (!string.IsNullOrEmpty(itemID) && amount > 0)
             {
-                if ((!judgeInteracting || !store.IsInteracting) && (!judgeCanIn || store.DataContainer.HaveSetData(itemID, judgeCanIn)))
+                List<Store> stores = GetStores(priorityType);
+                foreach (Store store in stores)
                 {
-                    // 优先寻找第一个可以一次性存完的仓库
-                    // 若没有，则寻找第一个可以存入的，可溢出存入
-                    int empty = store.DataContainer.GetAmount(itemID, DataNS.DataOpType.Empty, judgeCanIn);
-                    if (result == null && empty > 0)
+                    if (!judgeInteracting || !store.IsInteracting)
                     {
-                        result = store;
-                    }
-                    if (empty >= amount)
-                    {
-                        result = store;
-                        break;
+                        // 优先寻找第一个可以一次性存完的仓库
+                        // 若没有，则寻找第一个可以存入的，可溢出存入
+                        int empty = store.DataContainer.GetAmount(itemID, DataNS.DataOpType.Empty, judgeCanIn);
+                        if (result == null && empty > 0)
+                        {
+                            result = store;
+                        }
+                        if (empty >= amount)
+                        {
+                            result = store;
+                            break;
+                        }
                     }
                 }
             }
@@ -149,11 +152,7 @@ namespace ProjectOC.StoreNS
             return ManagerNS.LocalGameManager.Instance.ItemManager.SortItemIDs(result);
         }
 
-        public Store SpawnStore(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType)
-        {
-            Store store = new Store(storeType);
-            return store;
-        }
+        public Store SpawnStore(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType) { return new Store(storeType); }
 
         public void WorldStoreSetData(WorldStore worldStore, ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType, int level)
         {

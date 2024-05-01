@@ -131,13 +131,13 @@ namespace ProjectOC.RestaurantNS.UI
         #region Override
         protected override void Enter()
         {
-            Restaurant.OnDataChangeEvent += Refresh;
+            Restaurant.DataContainer.OnDataChangeEvent += Refresh;
             base.Enter();
         }
 
         protected override void Exit()
         {
-            Restaurant.OnDataChangeEvent -= Refresh;
+            Restaurant.DataContainer.OnDataChangeEvent -= Refresh;
             ClearTemp();
             base.Exit();
         }
