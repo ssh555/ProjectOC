@@ -487,7 +487,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7763894922723698341}
   m_Layer: 0
-  m_Name: ChangeItem
+  m_Name: KeyTips1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -696,7 +696,7 @@ GameObject:
   m_Component:
   - component: {fileID: 577437044366102403}
   m_Layer: 0
-  m_Name: Upgrade
+  m_Name: KeyTips2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -734,7 +734,7 @@ GameObject:
   - component: {fileID: 283685532853349186}
   - component: {fileID: 8212214251046743210}
   - component: {fileID: 1786730876653107236}
-  - component: {fileID: 8063784538740788652}
+  - component: {fileID: 8751675624129420544}
   m_Layer: 0
   m_Name: Viewport
   m_TagString: Untagged
@@ -813,7 +813,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 0
---- !u!114 &8063784538740788652
+--- !u!114 &8751675624129420544
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -832,7 +832,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 0
     readUnActiveButton: 1
-    scrollRect: {fileID: 1826225640320376464}
+    scrollRect: {fileID: 0}
 --- !u!1 &1611216790826854916
 GameObject:
   m_ObjectHideFlags: 0
@@ -2487,6 +2487,17 @@ MonoBehaviour:
   abpath: 
   abname: 
   description: 
+  CurStoreMode: 0
+  Store:
+    WorldStore: {fileID: 0}
+    Name: 
+    StoreType: 0
+    Level: 0
+    IsInteracting: 0
+    WorldIconItemID: 
+  HasUpgrade: 0
+  ItemDatas: []
+  IsInit: 0
 --- !u!222 &257790905731768433
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5338,7 +5349,7 @@ PrefabInstance:
     - target: {fileID: 6073464207475447990, guid: 36b6ff7c34f77d9459812b2b4c17397a, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 2831722417322391702, guid: d44758f85b12ec641a02e5954ca54924, type: 2}
+      objectReference: {fileID: 1958496136511095935, guid: d13a2a5ff0d170d45a80f5d9f8a31edf, type: 2}
     - target: {fileID: 6073464207475447990, guid: 36b6ff7c34f77d9459812b2b4c17397a, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 1
@@ -5362,7 +5373,7 @@ PrefabInstance:
     - target: {fileID: 6191890578587175537, guid: 36b6ff7c34f77d9459812b2b4c17397a, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 2831722417322391702, guid: d44758f85b12ec641a02e5954ca54924, type: 2}
+      objectReference: {fileID: 1958496136511095935, guid: d13a2a5ff0d170d45a80f5d9f8a31edf, type: 2}
     - target: {fileID: 6191890578587175537, guid: 36b6ff7c34f77d9459812b2b4c17397a, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 1
@@ -6562,7 +6573,7 @@ PrefabInstance:
     - target: {fileID: 6073464207475447990, guid: 36b6ff7c34f77d9459812b2b4c17397a, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 2831722417322391702, guid: d44758f85b12ec641a02e5954ca54924, type: 2}
+      objectReference: {fileID: 1958496136511095935, guid: d13a2a5ff0d170d45a80f5d9f8a31edf, type: 2}
     - target: {fileID: 6073464207475447990, guid: 36b6ff7c34f77d9459812b2b4c17397a, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 1
@@ -6586,7 +6597,7 @@ PrefabInstance:
     - target: {fileID: 6191890578587175537, guid: 36b6ff7c34f77d9459812b2b4c17397a, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 2831722417322391702, guid: d44758f85b12ec641a02e5954ca54924, type: 2}
+      objectReference: {fileID: 1958496136511095935, guid: d13a2a5ff0d170d45a80f5d9f8a31edf, type: 2}
     - target: {fileID: 6191890578587175537, guid: 36b6ff7c34f77d9459812b2b4c17397a, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 1

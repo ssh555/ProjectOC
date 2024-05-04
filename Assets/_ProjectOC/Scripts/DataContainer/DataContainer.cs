@@ -10,7 +10,7 @@ namespace ProjectOC.DataNS
     {
         #region Data
         [LabelText("´æ´¢Êý¾Ý"), ReadOnly]
-        private Data[] Datas;
+        private Data[] Datas = new Data[0];
         [NonSerialized]
         private Dictionary<string, HashSet<int>> IndexDict;
         public Action OnDataChangeEvent;
@@ -119,7 +119,7 @@ namespace ProjectOC.DataNS
 
         public bool HaveData(string id, DataOpType type, bool needCanIn = false, bool needCanOut = false)
         {
-            foreach (Data data in Datas)
+            foreach (Data data in Datas.ToArray())
             {
                 if (data.ID == id && data.GetAmount(type) > 0 && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
                 {
@@ -131,7 +131,7 @@ namespace ProjectOC.DataNS
 
         public bool HaveAnyData(DataOpType type, bool needCanIn = false, bool needCanOut = false)
         {
-            foreach (Data data in Datas)
+            foreach (Data data in Datas.ToArray())
             {
                 if (data.HaveSetData && data.GetAmount(type) > 0 && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
                 {
@@ -157,7 +157,7 @@ namespace ProjectOC.DataNS
         public Dictionary<string, int> GetAmount(DataOpType type, bool needCanIn = false, bool needCanOut = false)
         {
             Dictionary<string, int> result = new Dictionary<string, int>();
-            foreach (Data data in Datas)
+            foreach (Data data in Datas.ToArray())
             {
                 if (data.HaveSetData && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
                 {

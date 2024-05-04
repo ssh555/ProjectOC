@@ -99,7 +99,7 @@ namespace ProjectOC.RestaurantNS
         public Restaurant GetPutInRestaurant(string itemID, int amount)
         {
             Restaurant result = null;
-            if (!string.IsNullOrEmpty(foodID) && amount > 0)
+            if (!string.IsNullOrEmpty(itemID) && amount > 0)
             {
                 List<Restaurant> restaurants = GetRestaurants();
                 foreach (var restaurant in restaurants)
