@@ -82,7 +82,7 @@ namespace ProjectOC.StoreNS.UI
         {
             DataBtnList = new UIBtnList(transform.Find("Store").Find("Viewport").GetComponentInChildren<UIBtnListInitor>());
             DataBtnList.OnSelectButtonChanged += () => { Refresh(); };
-            DataBtnList.ChangBtnNum(Store.DataContainer.GetCapacity(), 
+            DataBtnList.ChangBtnNum(Store.DataContainer.GetCapacity(),
                 "Prefab_Store_UI/Prefab_Store_UI_DataTemplate.prefab", () => { IsInitDataBtn = true; Refresh(); });
 
             ItemDatas = new List<string>() { "" };
@@ -91,10 +91,13 @@ namespace ProjectOC.StoreNS.UI
             ItemBtnList.OnSelectButtonChanged += () => { Refresh(); };
             ItemBtnList.ChangBtnNum(ItemDatas.Count, "Prefab_Store_UI/Prefab_Store_UI_ItemTemplate.prefab", () => { IsInitItemBtn = true; Refresh(); });
 
-            var raw = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(Store.WorldStore.Classification.ToString());
-            RawBtnList = new UIBtnList(transform.Find("Upgrade").Find("Raw").Find("Viewport").GetComponentInChildren<UIBtnListInitor>());
-            RawBtnList.OnSelectButtonChanged += () => { Refresh(); };
-            RawBtnList.ChangBtnNum(raw.Count, "Prefab_Store_UI/Prefab_Store_UI_UpgradeRawTemplate.prefab", () => { IsInitRawBtn = true; Refresh(); });
+            if (HasUpgrade)
+            {
+                var raw = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(Store.WorldStore.Classification.ToString());
+                RawBtnList = new UIBtnList(transform.Find("Upgrade").Find("Raw").Find("Viewport").GetComponentInChildren<UIBtnListInitor>());
+                RawBtnList.OnSelectButtonChanged += () => { Refresh(); };
+                RawBtnList.ChangBtnNum(raw.Count, "Prefab_Store_UI/Prefab_Store_UI_UpgradeRawTemplate.prefab", () => { IsInitRawBtn = true; Refresh(); });
+            }
         }
         protected void UpdateBtnInfo()
         {
@@ -110,12 +113,15 @@ namespace ProjectOC.StoreNS.UI
                 ItemBtnList.ChangBtnNum(ItemDatas.Count, "Prefab_Store_UI/Prefab_Store_UI_ItemTemplate.prefab", 
                     () => { IsInitItemBtn = true; Refresh(); });
             }
-            var raw = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(Store.WorldStore.Classification.ToString());
-            if (RawBtnList.BtnCnt < raw.Count)
+            if (HasUpgrade)
             {
-                IsInitRawBtn = false;
-                RawBtnList.ChangBtnNum(raw.Count, "Prefab_Store_UI/Prefab_Store_UI_UpgradeRawTemplate.prefab", 
-                    () => { IsInitRawBtn = true; Refresh(); });
+                var raw = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(Store.WorldStore.Classification.ToString());
+                if (RawBtnList.BtnCnt < raw.Count)
+                {
+                    IsInitRawBtn = false;
+                    RawBtnList.ChangBtnNum(raw.Count, "Prefab_Store_UI/Prefab_Store_UI_UpgradeRawTemplate.prefab",
+                        () => { IsInitRawBtn = true; Refresh(); });
+                }
             }
         }
         #endregion
