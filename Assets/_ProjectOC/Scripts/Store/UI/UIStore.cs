@@ -1,10 +1,8 @@
-using ML.Engine.InventorySystem;
 using ML.Engine.TextContent;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static ProjectOC.StoreNS.UI.UIStore;
-using ML.Engine.UI;
 
 namespace ProjectOC.StoreNS.UI
 {
@@ -19,37 +17,31 @@ namespace ProjectOC.StoreNS.UI
             ChangeIcon,
             Upgrade
         }
-        private Mode curMode = Mode.Store;
+        private Mode curMode;
         public Mode CurMode
         {
             get => curMode;
             set
             {
+                DataBtnList.DisableBtnList();
+                ItemBtnList.DisableBtnList();
                 curMode = value;
                 if (curMode == Mode.Store)
                 {
                     DataBtnList.EnableBtnList();
-                    ItemBtnList.DisableBtnList();
                 }
                 else if (curMode == Mode.ChangeItem || curMode == Mode.ChangeIcon)
                 {
-                    DataBtnList.DisableBtnList();
                     ItemBtnList.EnableBtnList();
                     for (int i = 0; i < ItemBtnList.BtnCnt; ++i)
                     {
                         string curItemID = curMode == Mode.ChangeItem ? Store.DataContainer.GetID(DataIndex) : Store.WorldIconItemID;
-                        curItemID = curItemID ?? "";
                         if (curItemID == ItemDatas[i])
                         {
                             ItemBtnList.MoveIndexIUISelected(i);
                             break;
                         }
                     }
-                }
-                else
-                {
-                    DataBtnList.DisableBtnList();
-                    ItemBtnList.DisableBtnList();
                 }
             }
         }
@@ -59,7 +51,7 @@ namespace ProjectOC.StoreNS.UI
             ChangeIn,
             ChangeOut
         }
-        public StoreMode CurStoreMode = StoreMode.ChangeItem;
+        public StoreMode CurStoreMode;
         #endregion
 
         public Store Store;
@@ -69,65 +61,62 @@ namespace ProjectOC.StoreNS.UI
         private Dictionary<string, Sprite> tempSprite = new Dictionary<string, Sprite>();
 
         #region BtnList
-        private UIBtnList DataBtnList;
+        private ML.Engine.UI.UIBtnList DataBtnList;
         private int DataIndex => DataBtnList?.GetCurSelectedPos1() ?? 0;
-        private UIBtnList ItemBtnList;
+        private ML.Engine.UI.UIBtnList ItemBtnList;
         private int ItemIndex => ItemBtnList?.GetCurSelectedPos1() ?? 0;
-        private UIBtnList RawBtnList;
-        private bool IsInitBtnList => IsInitDataBtn && IsInitItemBtn && IsInitRawBtn;
-        private bool IsInitDataBtn = false;
-        private bool IsInitItemBtn = false;
-        private bool IsInitRawBtn = false;
+        private ML.Engine.UI.UIBtnList RawBtnList;
+        private bool IsInitBtnList;
         protected override void InitBtnInfo()
         {
-            DataBtnList = new UIBtnList(transform.Find("Store").Find("Viewport").GetComponentInChildren<UIBtnListInitor>());
+            ML.Engine.UI.UIBtnList.Synchronizer synchronizer = new ML.Engine.UI.UIBtnList.Synchronizer(3, () => { IsInitBtnList = true; Refresh(); });
+            DataBtnList = new ML.Engine.UI.UIBtnList(transform.Find("Store").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             DataBtnList.OnSelectButtonChanged += () => { Refresh(); };
-            DataBtnList.ChangBtnNum(Store.DataContainer.GetCapacity(),
-                "Prefab_Store_UI/Prefab_Store_UI_DataTemplate.prefab", () => { IsInitDataBtn = true; Refresh(); });
+            DataBtnList.ChangBtnNum(Store.DataContainer.GetCapacity(), "Prefab_Store_UI/Prefab_Store_UI_DataTemplate.prefab", () => { synchronizer.Check(); });
 
             ItemDatas = new List<string>() { "" };
             ItemDatas.AddRange(ManagerNS.LocalGameManager.Instance.StoreManager.GetStoreIconItems());
-            ItemBtnList = new UIBtnList(transform.Find("ChangeItem").Find("Select").Find("Viewport").GetComponentInChildren<UIBtnListInitor>());
+            ItemBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ChangeItem").Find("Select").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             ItemBtnList.OnSelectButtonChanged += () => { Refresh(); };
-            ItemBtnList.ChangBtnNum(ItemDatas.Count, "Prefab_Store_UI/Prefab_Store_UI_ItemTemplate.prefab", () => { IsInitItemBtn = true; Refresh(); });
+            ItemBtnList.ChangBtnNum(ItemDatas.Count, "Prefab_Store_UI/Prefab_Store_UI_ItemTemplate.prefab", () => { synchronizer.Check(); });
 
             if (HasUpgrade)
             {
                 var raw = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(Store.WorldStore.Classification.ToString());
-                RawBtnList = new UIBtnList(transform.Find("Upgrade").Find("Raw").Find("Viewport").GetComponentInChildren<UIBtnListInitor>());
+                RawBtnList = new ML.Engine.UI.UIBtnList(transform.Find("Upgrade").Find("Raw").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
                 RawBtnList.OnSelectButtonChanged += () => { Refresh(); };
-                RawBtnList.ChangBtnNum(raw.Count, "Prefab_Store_UI/Prefab_Store_UI_UpgradeRawTemplate.prefab", () => { IsInitRawBtn = true; Refresh(); });
+                RawBtnList.ChangBtnNum(raw.Count, "Prefab_Store_UI/Prefab_Store_UI_UpgradeRawTemplate.prefab", () => { synchronizer.Check(); });
+            }
+            else
+            {
+                synchronizer.Check();
             }
         }
         protected void UpdateBtnInfo()
         {
-            if (DataBtnList.BtnCnt < Store.DataContainer.GetCapacity())
+            IsInitBtnList = false;
+            ML.Engine.UI.UIBtnList.Synchronizer synchronizer = new ML.Engine.UI.UIBtnList.Synchronizer(2, () => { IsInitBtnList = true; Refresh(); });
+            if (DataBtnList.BtnCnt != Store.DataContainer.GetCapacity())
             {
-                IsInitDataBtn = false;
-                DataBtnList.ChangBtnNum(Store.DataContainer.GetCapacity(), "Prefab_Store_UI/Prefab_Store_UI_DataTemplate.prefab", 
-                    () => { IsInitDataBtn = true; Refresh(); });
+                DataBtnList.ChangBtnNum(Store.DataContainer.GetCapacity(), "Prefab_Store_UI/Prefab_Store_UI_DataTemplate.prefab", () => { synchronizer.Check(); });
             }
-            if (ItemBtnList.BtnCnt < ItemDatas.Count)
+            else
             {
-                IsInitItemBtn = false;
-                ItemBtnList.ChangBtnNum(ItemDatas.Count, "Prefab_Store_UI/Prefab_Store_UI_ItemTemplate.prefab", 
-                    () => { IsInitItemBtn = true; Refresh(); });
+                synchronizer.Check();
             }
-            if (HasUpgrade)
+            var raw = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(Store.WorldStore.Classification.ToString());
+            if (HasUpgrade && RawBtnList.BtnCnt != raw.Count)
             {
-                var raw = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(Store.WorldStore.Classification.ToString());
-                if (RawBtnList.BtnCnt < raw.Count)
-                {
-                    IsInitRawBtn = false;
-                    RawBtnList.ChangBtnNum(raw.Count, "Prefab_Store_UI/Prefab_Store_UI_UpgradeRawTemplate.prefab",
-                        () => { IsInitRawBtn = true; Refresh(); });
-                }
+                RawBtnList.ChangBtnNum(raw.Count, "Prefab_Store_UI/Prefab_Store_UI_UpgradeRawTemplate.prefab", () => { synchronizer.Check(); });
+            }
+            else
+            {
+                synchronizer.Check();
             }
         }
         #endregion
 
         #region UI
-        public bool IsInit = false;
         private MissionNS.TransportPriority CurPriority
         {
             get => Store.TransportPriority;
@@ -146,20 +135,19 @@ namespace ProjectOC.StoreNS.UI
         private TMPro.TextMeshProUGUI Text_Title;
         private TMPro.TextMeshProUGUI Text_Priority;
         private Image StoreIcon;
-        private Sprite EmptySprite;
         private Transform Priority;
         private Transform Upgrade;
         private Transform Upgrade_Build;
         private Transform Upgrade_LvOld;
         private Transform Upgrade_LvNew;
         private Transform KeyTips;
+        public bool IsInit = false;
         protected override void Start()
         {
             base.Start();
             InitTextContentPathData();
             Text_Title = transform.Find("TopTitle").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             StoreIcon = transform.Find("TopTitle").Find("Icon").GetComponent<Image>();
-            EmptySprite = StoreIcon.sprite;
             Text_Priority = transform.Find("TopTitle").Find("Priority").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
 
             Upgrade = transform.Find("Upgrade");
@@ -211,9 +199,9 @@ namespace ProjectOC.StoreNS.UI
         {
             Store.DataContainer.OnDataChangeEvent += Refresh;
             Store.IsInteracting = true;
+            tempSprite.Add("", transform.Find("TopTitle").Find("Icon").GetComponent<Image>().sprite);
             base.Enter();
         }
-
         protected override void Exit()
         {
             Store.DataContainer.OnDataChangeEvent -= Refresh;
@@ -230,8 +218,6 @@ namespace ProjectOC.StoreNS.UI
         #region Internal
         protected override void UnregisterInput()
         {
-            DataBtnList.DisableBtnList();
-            ItemBtnList.DisableBtnList();
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Disable();
             ProjectOC.Input.InputManager.PlayerInput.UIStore.NextPriority.performed -= NextPriority_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeIcon.performed -= ChangeIcon_performed;
@@ -245,9 +231,9 @@ namespace ProjectOC.StoreNS.UI
         }
         protected override void RegisterInput()
         {
-            DataBtnList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
+            DataBtnList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, ML.Engine.UI.UIBtnListContainer.BindType.started);
             DataBtnList.EnableBtnList();
-            ItemBtnList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
+            ItemBtnList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, ML.Engine.UI.UIBtnListContainer.BindType.started);
             ProjectOC.Input.InputManager.PlayerInput.UIStore.Enable();
             ProjectOC.Input.InputManager.PlayerInput.UIStore.NextPriority.performed += NextPriority_performed;
             ProjectOC.Input.InputManager.PlayerInput.UIStore.ChangeIcon.performed += ChangeIcon_performed;
@@ -346,10 +332,10 @@ namespace ProjectOC.StoreNS.UI
         {
             if (CurMode == Mode.Store)
             {
-                ItemManager.Instance.AddItemIconObject(Store.WorldIconItemID, Store.WorldStore.transform,
-                                                        new Vector3(0, Store.WorldStore.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),
-                                                        Quaternion.Euler(Vector3.zero), Vector3.one,
-                                                        (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).currentCharacter.transform);
+                ML.Engine.InventorySystem.ItemManager.Instance.AddItemIconObject(Store.WorldIconItemID, Store.WorldStore.transform,
+                        new Vector3(0, Store.WorldStore.transform.GetComponent<BoxCollider>().size.y * 1.5f, 0),
+                        Quaternion.Euler(Vector3.zero), Vector3.one,
+                        (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).currentCharacter.transform);
                 UIMgr.PopPanel();
             }
             else if (CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon || CurMode == Mode.Upgrade)
@@ -397,28 +383,29 @@ namespace ProjectOC.StoreNS.UI
         protected void SetUIActive()
         {
             transform.Find("Store").gameObject.SetActive(CurMode == Mode.Store);
-            KeyTips.gameObject.SetActive(CurMode == Mode.Store);
             transform.Find("ChangeItem").gameObject.SetActive(CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon);
-            transform.Find("BotKeyTips").Find("KeyTips1").gameObject.SetActive(CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon);
             Upgrade.gameObject.SetActive(CurMode == Mode.Upgrade);
+            KeyTips.gameObject.SetActive(CurMode == Mode.Store);
+            transform.Find("BotKeyTips").Find("KeyTips1").gameObject.SetActive(CurMode == Mode.ChangeItem || CurMode == Mode.ChangeIcon);
             transform.Find("BotKeyTips").Find("KeyTips2").gameObject.SetActive(CurMode == Mode.Upgrade);
+
             bool IsStoreModeChangeItem = CurStoreMode == StoreMode.ChangeItem;
             KeyTips.Find("KT_ChangeItem").gameObject.SetActive(IsStoreModeChangeItem);
             KeyTips.Find("KT_Remove1").gameObject.SetActive(IsStoreModeChangeItem);
             KeyTips.Find("KT_Remove10").gameObject.SetActive(IsStoreModeChangeItem);
-            KeyTips.Find("KT_Switch").gameObject.SetActive(IsStoreModeChangeItem);
             KeyTips.Find("KT_FastAdd").gameObject.SetActive(IsStoreModeChangeItem);
+            KeyTips.Find("KT_Switch").gameObject.SetActive(!IsStoreModeChangeItem);
             transform.Find("TopTitle").Find("KT_Upgrade").gameObject.SetActive(HasUpgrade);
         }
 
         public override void Refresh()
         {
             if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit || !IsInitBtnList) { return; }
-
+            CurPriority = Store.TransportPriority;
             Store.WorldIconItemID = Store.WorldIconItemID ?? "";
             if (!tempSprite.ContainsKey(Store.WorldIconItemID))
             {
-                tempSprite[Store.WorldIconItemID] = ItemManager.Instance.GetItemSprite(Store.WorldIconItemID) ?? EmptySprite;
+                tempSprite[Store.WorldIconItemID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(Store.WorldIconItemID);
             }
             StoreIcon.sprite = tempSprite[Store.WorldIconItemID];
             SetUIActive();
@@ -428,24 +415,17 @@ namespace ProjectOC.StoreNS.UI
                 for (int i = 0; i < DataBtnList.BtnCnt; ++i)
                 {
                     var uiStoreData = DataBtnList.GetBtn(i);
-                    string itemID = Store.DataContainer.GetID(i) ?? "";
+                    string itemID = Store.DataContainer.GetID(i);
                     int maxCapacity = Store.DataContainer.GetAmount(i, DataNS.DataOpType.MaxCapacity);
                     var img = uiStoreData.transform.Find("Icon").GetComponent<Image>();
                     if (!tempSprite.ContainsKey(itemID))
                     {
-                        tempSprite[itemID] = ItemManager.Instance.GetItemSprite(itemID) ?? EmptySprite;
+                        tempSprite[itemID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(itemID);
                     }
                     img.sprite = tempSprite[itemID];
                     uiStoreData.transform.Find("Select").gameObject.SetActive(CurStoreMode == StoreMode.ChangeItem);
                     var nametext = uiStoreData.transform.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
-                    if (itemID != "")
-                    {
-                        nametext.text = ItemManager.Instance.GetItemName(itemID);
-                    }
-                    else
-                    {
-                        nametext.text = PanelTextContent.text_Empty;
-                    }
+                    nametext.text = itemID != "" ? ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(itemID) : PanelTextContent.text_Empty;
                     // Amount
                     int amount = Store.DataContainer.GetAmount(i, DataNS.DataOpType.Storage);
                     int amountMax = maxCapacity;
@@ -544,11 +524,11 @@ namespace ProjectOC.StoreNS.UI
                 for (int i = 0; i < ItemBtnList.BtnCnt; ++i)
                 {
                     var uiItemData = ItemBtnList.GetBtn(i);
-                    string itemID = ItemDatas[i] ?? "";
+                    string itemID = ItemDatas[i];
                     var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
                     if (!tempSprite.ContainsKey(itemID))
                     {
-                        tempSprite[itemID] = ItemManager.Instance.GetItemSprite(itemID) ?? EmptySprite;
+                        tempSprite[itemID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(itemID);
                     }
                     img.sprite = tempSprite[itemID];
                 }
@@ -572,13 +552,13 @@ namespace ProjectOC.StoreNS.UI
                 for (int i = 0; i < RawBtnList.BtnCnt; ++i)
                 {
                     var uiItemData = RawBtnList.GetBtn(i);
-                    string itemID = raw[i].id ?? "";
+                    string itemID = raw[i].id;
                     int need = raw[i].num;
                     int current = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).InventoryItemAmount(itemID);
                     var img = uiItemData.transform.Find("Icon").GetComponent<Image>();
                     if (!tempSprite.ContainsKey(itemID))
                     {
-                        tempSprite[itemID] = ItemManager.Instance.GetItemSprite(itemID) ?? EmptySprite;
+                        tempSprite[itemID] = ML.Engine.InventorySystem.ItemManager.Instance.GetItemSprite(itemID);
                     }
                     img.sprite = tempSprite[itemID];
 
@@ -588,13 +568,10 @@ namespace ProjectOC.StoreNS.UI
                     var amounttext = uiItemData.transform.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
                     var needtext = uiItemData.transform.Find("NeedAmount").GetComponent<TMPro.TextMeshProUGUI>();
                     uiItemData.transform.Find("Background3").gameObject.SetActive(current < need);
-                    if (current < need)
-                    {
-                        flagUpgradeBtn = false;
-                    }
+                    flagUpgradeBtn = current >= need;
                     if (itemID != "")
                     {
-                        nametext.text = ItemManager.Instance.GetItemName(itemID);
+                        nametext.text = ML.Engine.InventorySystem.ItemManager.Instance.GetItemName(itemID);
                         amounttext.text = current.ToString();
                         needtext.text = need.ToString();
                     }
