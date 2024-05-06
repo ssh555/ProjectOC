@@ -1151,7 +1151,43 @@ namespace ML.Engine.BuildingSystem
         
         #endregion
 
+        #region 已建造建筑存储
 
+        [ShowInInspector]
+        private Dictionary<BuildingCategory2, List<IBuildingPart>> buildingInstanceDic = new Dictionary<BuildingCategory2, List<IBuildingPart>>();
+
+        public void AddBuildingInstance(ML.Engine.BuildingSystem.BuildingPart.BuildingPart buildingInstance)
+        {
+            BuildingCategory2 buildingType = buildingInstance.Classification.Category2;
+            if (!buildingInstanceDic.ContainsKey(buildingType))
+            {
+                buildingInstanceDic.Add(buildingType,new List<IBuildingPart>());
+            }
+            buildingInstanceDic[buildingType].Add(buildingInstance);
+        }
+
+        public void RemoveBuildingInstance(ML.Engine.BuildingSystem.BuildingPart.BuildingPart buildingInstance)
+        {
+            BuildingCategory2 buildingType = buildingInstance.Classification.Category2;
+            buildingInstanceDic[buildingType].Remove(buildingInstance);
+            if (buildingInstanceDic[buildingType].Count == 0)
+            {
+                buildingInstanceDic.Remove(buildingType);
+            }
+        }
+
+        public int GetBuildingCount(BuildingCategory2 _buildingType)
+        {
+            if (!buildingInstanceDic.ContainsKey(_buildingType))
+            {
+                return 0;
+            }
+            else
+            {
+                return buildingInstanceDic[_buildingType].Count;
+            }
+        }
+        #endregion
 
         #region Gizmos
         [System.Serializable]
