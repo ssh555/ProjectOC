@@ -3,7 +3,6 @@ using ProjectOC.Dialog;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
-
 namespace ProjectOC.ManagerNS
 {
     [System.Serializable]
@@ -25,7 +24,6 @@ namespace ProjectOC.ManagerNS
         public ML.Engine.BuildingSystem.MonoBuildingManager MonoBuildingManager;
         public TechTree.TechTreeManager TechTreeManager;
         public ML.Engine.InventorySystem.ItemManager ItemManager;
-        public ML.Engine.InventorySystem.CompositeSystem.CompositeManager CompositeManager;
         public LandMassExpand.IslandModelManager IslandManager;
         public LandMassExpand.BuildPowerIslandManager BuildPowerIslandManager;
         public RestaurantNS.RestaurantManager RestaurantManager;
@@ -34,8 +32,10 @@ namespace ProjectOC.ManagerNS
         public Order.OrderManager OrderManager;
         public PinchFace.PinchFaceManager PinchFaceManager;
         public Dialog.DialogManager DialogManager;
+        public Player.OCPlayerController Player => (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController);
+
         /// <summary>
-        /// µ¥Àý¹ÜÀí
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         private void Awake()
         {
@@ -45,7 +45,7 @@ namespace ProjectOC.ManagerNS
                 return;
             }
             Instance = this;
-            //// TODO : ÍË³öLocalGameManagerµÄÊ¹ÓÃ³¡¾°Ö®ºó£¬ÒªÊÖ¶¯Ïú»Ùµô
+            //// TODO : ï¿½Ë³ï¿½LocalGameManagerï¿½ï¿½Ê¹ï¿½Ã³ï¿½ï¿½ï¿½Ö®ï¿½ï¿½Òªï¿½Ö¶ï¿½ï¿½ï¿½ï¿½Ùµï¿½
             //DontDestroyOnLoad(this);
             GM.RegisterLocalManager(this);
             GM.RegisterLocalManager(DispatchTimeManager);
@@ -62,12 +62,11 @@ namespace ProjectOC.ManagerNS
             GM.RegisterLocalManager(MonoBuildingManager);
             GM.RegisterLocalManager(TechTreeManager);
             GM.RegisterLocalManager(ItemManager);
-            GM.RegisterLocalManager(CompositeManager);
             GM.RegisterLocalManager(IslandManager);
             GM.RegisterLocalManager(BuildPowerIslandManager);
             GM.RegisterLocalManager(RestaurantManager);
             GM.RegisterLocalManager(DialogManager);
-            //Éú³ÉCharacter
+            //ï¿½ï¿½ï¿½ï¿½Character
             ML.Engine.Manager.GameManager.Instance.CharacterManager.SceneInit();
             StartCoroutine(AfterPlayerCharacter());
         }
@@ -75,7 +74,7 @@ namespace ProjectOC.ManagerNS
         private void Start()
         {
 
-            //ÎªÁËEditoräÖÈ¾Gizoms
+            //Îªï¿½ï¿½Editorï¿½ï¿½È¾Gizoms
 #if !UNITY_EDITOR
             this.enabled = false;
 #endif
@@ -99,7 +98,6 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<ML.Engine.BuildingSystem.MonoBuildingManager>();
                 GM?.UnregisterLocalManager<TechTree.TechTreeManager>();
                 GM?.UnregisterLocalManager<ML.Engine.InventorySystem.ItemManager>();
-                GM?.UnregisterLocalManager<ML.Engine.InventorySystem.CompositeSystem.CompositeManager>();
                 GM?.UnregisterLocalManager<LandMassExpand.IslandModelManager>();
                 GM?.UnregisterLocalManager<LandMassExpand.BuildPowerIslandManager>();
                 GM?.UnregisterLocalManager<RestaurantNS.RestaurantManager>();
@@ -107,14 +105,14 @@ namespace ProjectOC.ManagerNS
 
                 GM?.UnregisterLocalManager<IslandAreaManager>();
                 GM?.UnregisterLocalManager<Order.OrderManager>();
-                //¿ÉÄÜ»áÌáÇ°×¢Ïú£¬¹Ø±ÕÄóÁ³Ãæ°åµÄÊ±ºò
+                //ï¿½ï¿½ï¿½Ü»ï¿½ï¿½ï¿½Ç°×¢ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
                 GM?.UnregisterLocalManager<PinchFace.PinchFaceManager>();
                 GM?.UnregisterLocalManager<Dialog.DialogManager>();
                 Instance = null;
             }
         }
         
-        //ÔÚPlayerCharacterÉú³ÉÖ®ºóµ÷ÓÃ
+        //ï¿½ï¿½PlayerCharacterï¿½ï¿½ï¿½ï¿½Ö®ï¿½ï¿½ï¿½ï¿½ï¿½
         IEnumerator AfterPlayerCharacter()
         {
             // Debug.Log(GameManager.Instance.CharacterManager.GetLocalController().GetType() );
@@ -125,13 +123,13 @@ namespace ProjectOC.ManagerNS
                 yield return null;
             }
 
-            //Òª»ñÈ¡Íæ¼ÒÄ£ÐÍ£¬·ÅÔÚºóÃæ
+            //Òªï¿½ï¿½È¡ï¿½ï¿½ï¿½Ä£ï¿½Í£ï¿½ï¿½ï¿½ï¿½Úºï¿½ï¿½ï¿½
             GM.RegisterLocalManager(IslandAreaManager);
             GM.RegisterLocalManager(PinchFaceManager);
             GM.RegisterLocalManager(OrderManager);
         }
     
-        #region Gizmos¹ÜÀí
+        #region Gizmosï¿½ï¿½ï¿½ï¿½
 #if UNITY_EDITOR
         [System.Flags]
         public enum GizmosEnableControl
@@ -140,7 +138,7 @@ namespace ProjectOC.ManagerNS
             All = int.MaxValue,
             [LabelText("None")]
             None = 0,
-            [LabelText("µºÓì·¶Î§")]
+            [LabelText("ï¿½ï¿½ï¿½ì·¶Î§")]
             IslandManager = 1 << 0,
             [LabelText("Test2")]
             Test2 = 1 << 1

@@ -1,15 +1,11 @@
-using ML.Engine.InventorySystem.CompositeSystem;
-using ProjectOC.Order;
 using Sirenix.OdinInspector;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace ML.Engine.BuildingSystem.BuildingPart
 {
-    public class BuildingPart : MonoBehaviour, IBuildingPart, IComposition
+    public class BuildingPart : MonoBehaviour, IBuildingPart
     {
         #region IBuildingPart
         public string ID { get => BuildingManager.Instance.BPartTableDictOnClass[this.classification.ToString()].id; set => throw new Exception("不允许设置建筑物的ID"); }

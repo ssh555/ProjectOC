@@ -95,10 +95,39 @@ namespace ProjectOC.WorkerNS
             return result;
         }
 
+        public bool CanComposite(ML.Engine.InventorySystem.IInventory inventory, string workerID)
+        {
+            if (!string.IsNullOrEmpty(workerID))
+            {
+                var raw = ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRaw(workerID);
+                if (raw != null)
+                {
+                    foreach (var formula in raw)
+                    {
+                        if (inventory.GetItemAllNum(formula.id) < formula.num)
+                        {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public bool OnlyCostResource(ML.Engine.InventorySystem.IInventory inventory, string workerID)
         {
-            return ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.OnlyCostResource(inventory, workerID);
+            if (!CanComposite(inventory, workerID))
+            {
+                return false;
+            }
+            foreach (var formula in ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRaw(workerID))
+            {
+                inventory.RemoveItem(formula.id, formula.num);
+            }
+            return true;
         }
+
         public AsyncOperationHandle<GameObject> SpawnWorker(Vector3 pos, Quaternion rot, string name = "Prefab_Worker_Worker", bool isAdd=true)
         {
             //TODO 
@@ -142,7 +171,7 @@ namespace ProjectOC.WorkerNS
 
         public AsyncOperationHandle<GameObject> SpawnWorker(Vector3 pos, Quaternion rot, ML.Engine.InventorySystem.IInventory inventory, string workerID, string name = "Worker")
         {
-            if (ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.OnlyCostResource(inventory, workerID))
+            if (OnlyCostResource(inventory, workerID))
             {
                 return SpawnWorker(pos, rot, name);
             }

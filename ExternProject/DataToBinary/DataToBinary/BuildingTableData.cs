@@ -1,5 +1,4 @@
 ﻿using ExcelToJson;
-using System;
 using System.Collections.Generic;
 
 namespace ML.Engine.BuildingSystem
@@ -16,7 +15,7 @@ namespace ML.Engine.BuildingSystem
         public string category3;
         public string category4;
         public string actorID;
-        public List<InventorySystem.CompositeSystem.Formula> raw;
+        public List<InventorySystem.Formula> raw;
         public string upgradeID;
 
         public string GetClassificationString()

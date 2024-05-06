@@ -1,5 +1,4 @@
 using Sirenix.OdinInspector;
-using UnityEngine;
 
 namespace ProjectOC.DataNS
 {
@@ -7,52 +6,47 @@ namespace ProjectOC.DataNS
     public struct Data
     {
         #region Data
-        [LabelText("数据ID"), ReadOnly]
-        public string ID;
-        [LabelText("最大容量"), ReadOnly]
-        public int MaxCapacity;
-        [LabelText("实际存放量"), ReadOnly]
-        public int Storage;
-        [LabelText("实际空余量"), ReadOnly]
-        public int Empty;
-        [LabelText("预留存放量"), ReadOnly]
-        public int StorageReserve;
-        [LabelText("预留空余量"), ReadOnly]
-        public int EmptyReserve;
-        [LabelText("能否存入"), ReadOnly]
-        public bool CanIn;
-        [LabelText("能否取出"), ReadOnly]
-        public bool CanOut;
+        [LabelText("数据ID"), ShowInInspector, ReadOnly]
+        private string id;
+        [LabelText("能否存入"), ShowInInspector, ReadOnly]
+        private bool canIn;
+        [LabelText("能否取出"), ShowInInspector, ReadOnly]
+        private bool canOut;
+        [LabelText("最大容量"), ShowInInspector, ReadOnly]
+        private int MaxCapacity;
+        [LabelText("实际存放量"), ShowInInspector, ReadOnly]
+        private int Storage;
+        [LabelText("实际空余量"), ShowInInspector, ReadOnly]
+        private int Empty;
+        [LabelText("预留存放量"), ShowInInspector, ReadOnly]
+        private int StorageReserve;
+        [LabelText("预留空余量"), ShowInInspector, ReadOnly]
+        private int EmptyReserve;
         #endregion
 
         #region Property
+        public string ID => id;
+        public bool CanIn => canIn;
+        public bool CanOut => canOut;
         [LabelText("总存放量"), ShowInInspector, ReadOnly]
-        public int StorageAll { get { return Storage + StorageReserve; } }
+        public int StorageAll => Storage + StorageReserve;
         [LabelText("总存放量"), ShowInInspector, ReadOnly]
-        public bool HaveSetData { get { return !string.IsNullOrEmpty(ID); } }
+        public bool HaveSetData => !string.IsNullOrEmpty(id);
         #endregion
 
-        public Data(string itemID, int maxCapacity)
+        public Data(string id, int maxCapacity)
         {
-            ID = itemID;
+            this.id = id;
+            canIn = true;
+            canOut = true;
             MaxCapacity = maxCapacity;
             Storage = 0;
-            Empty = 0;
-            StorageReserve = 0;
-            EmptyReserve = 0;
-            CanIn = true;
-            CanOut = true;
-        }
-
-        public void Clear()
-        {
-            ID = "";
-            Storage = 0;
-            Empty = 0;
+            Empty = maxCapacity;
             StorageReserve = 0;
             EmptyReserve = 0;
         }
 
+        #region Get
         public int GetAmount(DataOpType type)
         {
             switch (type)
@@ -65,9 +59,34 @@ namespace ProjectOC.DataNS
                     return StorageReserve;
                 case DataOpType.EmptyReserve:
                     return EmptyReserve;
+                case DataOpType.MaxCapacity:
+                    return MaxCapacity;
+                case DataOpType.StorageAll:
+                    return Storage + StorageReserve;
             }
             return 0;
         }
+        #endregion
+
+        #region Set
+        public void Clear()
+        {
+            id = "";
+            Storage = 0;
+            Empty = MaxCapacity;
+            StorageReserve = 0;
+            EmptyReserve = 0;
+        }
+
+        public void ChangeID(string id)
+        {
+            Clear();
+            this.id = id ?? "";
+        }
+
+        public void ChangeCanIn(bool canIn) { this.canIn = canIn; }
+
+        public void ChangeCanOut(bool canOut) { this.canOut = canOut; }
 
         public void ChangeAmount(DataOpType type, int amount)
         {
@@ -75,17 +94,9 @@ namespace ProjectOC.DataNS
             {
                 case DataOpType.Storage:
                     Storage += amount;
-                    if (Storage < 0)
-                    {
-                        Debug.LogError($"Storage {Storage} < 0");
-                    }
                     break;
                 case DataOpType.StorageReserve:
                     StorageReserve += amount;
-                    if (StorageReserve < 0)
-                    {
-                        Debug.LogError($"StorageReserve {StorageReserve} < 0");
-                    }
                     break;
                 case DataOpType.EmptyReserve:
                     EmptyReserve += amount;
@@ -95,7 +106,16 @@ namespace ProjectOC.DataNS
                     Empty += amount;
                     Empty = Empty >= 0 ? Empty : 0;
                     break;
+                case DataOpType.MaxCapacity:
+                    if (amount > 0)
+                    {
+                        Empty = (amount - Storage - StorageReserve - EmptyReserve);
+                        Empty = Empty >= 0 ? Empty : 0;
+                        MaxCapacity = amount;
+                    }
+                    break;
             }
         }
+        #endregion
     }
 }
