@@ -106,7 +106,7 @@ namespace ProjectOC.RestaurantNS
                 {
                     datas.Add(new RestaurantData(items[i].ID, i, items[i].GetAmount(DataNS.DataOpType.Storage)));
                 }
-                datas.Sort();
+                datas.Sort(new RestaurantData());
                 foreach (RestaurantData data in datas)
                 {
                     if (data.HaveFood)
