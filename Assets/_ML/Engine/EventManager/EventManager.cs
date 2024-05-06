@@ -60,14 +60,19 @@ namespace ML.Engine.Event
 
         public bool ExecuteCondition(string ConditionID)
         {
-            if (!functions.ContainsKey(ConditionID) || !ConditionTableDataDic.ContainsKey(ConditionID))
+            if (!ConditionTableDataDic.ContainsKey(ConditionID))
             {
-                Debug.LogError("Function '" + ConditionID + "' does not exist.");
+                Debug.LogError("ConditionID '" + ConditionID + "' does not exist.");
                 return false;
             }
 
             ConditionTableData conditionTableData = ConditionTableDataDic[ConditionID];
-            MethodInfo method = functions[ConditionID];
+            if(!functions.ContainsKey(conditionTableData.CheckType.ToString()))
+            {
+                Debug.LogError("Function '" + conditionTableData.CheckType.ToString() + "' does not exist.");
+                return false;
+            }
+            MethodInfo method = functions[conditionTableData.CheckType.ToString()];
 
             object[] parameters = new object[3];
             parameters[0] = conditionTableData.Param1;

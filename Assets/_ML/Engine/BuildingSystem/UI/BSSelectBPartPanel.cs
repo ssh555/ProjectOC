@@ -445,6 +445,7 @@ namespace ML.Engine.BuildingSystem.UI
                         foreach (var item in furnitureList)
                         {
                             string BuildingName = BuildingManager.Instance.GetName(item.Item2.Classification.ToString());
+                            Debug.Log(this.FurnitureDisplayBtnList);
                             this.FurnitureDisplayBtnList.AddBtn("Prefab_BuildingSystem/Prefab_BS_FurnitureBtn.prefab", BtnAction: () =>
                             {
                                 this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(item.Item2.Classification);
@@ -452,6 +453,9 @@ namespace ML.Engine.BuildingSystem.UI
                             },BtnSettingAction:
                             (btn) =>
                             {
+                                Debug.Log(btn);
+                                Debug.Log(btn.transform.Find("Image2"));
+                                Debug.Log(btn.transform.Find("Image2").GetComponent<Image>());
                                 btn.transform.Find("Image2").GetComponent<Image>().sprite = FurnitureSpriteAtlas.GetSprite(BuildingManager.Instance.GetFurtureBuildingIcon(item.Item2.Classification.ToString()));
                                 btn.name = item.Item2.Classification.ToString();
                             }
