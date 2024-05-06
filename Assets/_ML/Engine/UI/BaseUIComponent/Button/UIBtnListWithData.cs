@@ -1,10 +1,8 @@
 using ML.Engine.UI;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class UIBtnListWithData<T> : UIBtnList
+public class UIBtnListWithData<T> : UIBtnList where T : class
 {
     private List<T> BtnDatas;
     private string prefabpath;
@@ -14,13 +12,13 @@ public class UIBtnListWithData<T> : UIBtnList
         this.prefabpath = prefabpath;
     }
 
-    public T GetData1(int index)
+    public T GetData(int index)
     {
         if (GetBtn(index) == null) return default(T);
         return BtnDatas[index];
     }
 
-    public T GetData1(int index1,int index2)
+    public T GetData(int index1, int index2)
     {
         if (GetBtn(index1, index2) == null) return default(T);
         return BtnDatas[index1 * TwoDimW + index2];

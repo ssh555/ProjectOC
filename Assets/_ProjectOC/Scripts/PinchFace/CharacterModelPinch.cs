@@ -33,7 +33,6 @@ namespace ProjectOC.PinchFace
         
         public void ChangeType(PinchPartType3 _type3, int typeIndex)
         {
-            Debug.Log($"Type3: {_type3.ToString()}");
             PinchPartType2 _type2 = pinchFaceManager.pinchPartType3Dic[_type3];
             if (replaceGo[(int)_type2] != null)
             {
@@ -106,6 +105,7 @@ namespace ProjectOC.PinchFace
         {
             GameObject targetClothingBone = null;
             targetClothingBone = new GameObject(sourceClothing.name);
+            targetClothingBone.layer = LayerMask.NameToLayer("UICamera");;
             targetClothingBone.transform.SetParent(targetCharacter.transform);
             //if() ÐèÒªÌí¼Ó¹Ç÷À
             //×·¼Ó¹Ç÷À£¬´æÈë×Öµä  ,S¡¢T À´Çø·Ösource¡¢target
@@ -138,7 +138,6 @@ namespace ProjectOC.PinchFace
             SkinnedMeshRenderer[] smrs = sourceClothing.GetComponentsInChildren<SkinnedMeshRenderer>();
             foreach (var smr in smrs)
             {
-                Debug.LogWarning(smr.bones.Length);
                 SkinnedMeshRenderer targetRenderer = AddSkinnedMeshRenderer(smr,targetClothingBone);
                 targetRenderer.bones = TranslateTransforms (smr.bones, boneDic);
             }
@@ -278,16 +277,16 @@ namespace ProjectOC.PinchFace
             string AddStr = "Add_";
             string WeightStr = "Weight_";
             private Transform avatar;
-            [SerializeField] 
+            [SerializeField, ReadOnly, FoldoutGroup("¹Ç÷À×Öµä")]
             List<GameObject> replaceGo = new List<GameObject>();
             
-            public 
+            [SerializeField, ReadOnly, FoldoutGroup("¹Ç÷À×Öµä")]
                 List<GameObject> tempTail = new List<GameObject>();
-            [ShowInInspector]
+            [ShowInInspector, ReadOnly, FoldoutGroup("¹Ç÷À×Öµä")]
             private Dictionary<string, Transform> boneDic = new Dictionary<string, Transform>();
-            [ShowInInspector]
+            [ShowInInspector, ReadOnly, FoldoutGroup("¹Ç÷À×Öµä")]
             Dictionary<PinchPartType2, Transform> boneTransfsDictionary = new Dictionary<PinchPartType2, Transform>();
-            public
+            [ShowInInspector, ReadOnly, FoldoutGroup("¹Ç÷À×Öµä")]
             Dictionary<BoneWeightType, BoneData> boneWeightDictionary = new Dictionary<BoneWeightType, BoneData>();
             
             public class BoneData
@@ -311,6 +310,8 @@ namespace ProjectOC.PinchFace
             void Awake()
             {
                 pinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
+                CameraView.Init(pinchFaceManager);
+                
                 Array enumValues = Enum.GetValues(typeof(PinchPartType2));
                 for(int i = 0;i<enumValues.Length;i++)
                     replaceGo.Add(null);
@@ -426,8 +427,10 @@ namespace ProjectOC.PinchFace
         #region CharacterModelPinch
 
         private PinchFaceManager pinchFaceManager;
-
         
+        [LabelText("Ïà»úÅäÖÃ"), SerializeField,  FoldoutGroup("ÎïÌå|½Å±¾ÒýÓÃ")]
+        public PinchCharacterCameraView CameraView;
+
         #endregion
     }
 }

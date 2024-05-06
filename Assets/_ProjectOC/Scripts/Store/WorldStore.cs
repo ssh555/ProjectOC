@@ -26,7 +26,8 @@ namespace ProjectOC.StoreNS
 
         public void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Store_UI/Prefab_Store_UI_StorePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Store_UI/Prefab_Store_UI_StorePanel.prefab", 
+                ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
             {
                 UI.UIStore uiPanel = (handle.Result).GetComponent<UI.UIStore>();
                 uiPanel.Store = Store;
@@ -40,19 +41,14 @@ namespace ProjectOC.StoreNS
             if ((this as ML.Engine.BuildingSystem.IBuildingUpgrade).HasUpgrade())
             {
                 var formulas = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(Classification.ToString());
-                return (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).InventoryHasItems(formulas);
+                return (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).InventoryHaveItems(formulas);
             }
             return false;
         }
 
         public void OnUpgrade(ML.Engine.BuildingSystem.IBuildingUpgrade lastLevelBuild)
         {
-            string lastLevelID = ML.Engine.BuildingSystem.BuildingManager.Instance.GetID(lastLevelBuild.Classification.ToString());
-            string upgradeID = ML.Engine.BuildingSystem.BuildingManager.Instance.GetID(Classification.ToString());
-            List<ML.Engine.InventorySystem.IInventory> inventorys = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).GetInventorys(true, -1);
-            ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.OnlyCostResource(inventorys, upgradeID);
-            ML.Engine.InventorySystem.IInventory inventory = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory;
-            ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.OnlyReturnResource(inventory, lastLevelID);
+            ManagerNS.LocalGameManager.Instance.Player.InventoryCostItems(ML.Engine.BuildingSystem.BuildingManager.Instance.GetRaw(Classification.ToString()), needJudgeNum: true, priority: -1);
             transform.SetParent(lastLevelBuild.transform.parent);
             InstanceID = lastLevelBuild.InstanceID;
             transform.position = lastLevelBuild.transform.position;
@@ -67,4 +63,3 @@ namespace ProjectOC.StoreNS
         }
     }
 }
-

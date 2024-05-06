@@ -1,12 +1,10 @@
 using UnityEngine;
 using Sirenix.OdinInspector;
-using ML.Engine.BuildingSystem.BuildingPart;
-
 
 namespace ProjectOC.ClanNS
 {
     [LabelText("床")]
-    public class ClanBed : BuildingPart, ML.Engine.InteractSystem.IInteraction
+    public class ClanBed : ML.Engine.BuildingSystem.BuildingPart.BuildingPart, ML.Engine.InteractSystem.IInteraction
     {
         #region Config
         [LabelText("向上检测参数"), FoldoutGroup("配置"), ShowInInspector]
@@ -19,12 +17,9 @@ namespace ProjectOC.ClanNS
         [LabelText("关联氏族"), ShowInInspector, ReadOnly]
         public Clan Clan;
         [LabelText("是否有关联氏族"), ShowInInspector, ReadOnly]
-        public bool HaveClan { get { return Clan != null && !string.IsNullOrEmpty(Clan.ID); } }
+        public bool HaveClan => Clan != null && !string.IsNullOrEmpty(Clan.ID);
         [LabelText("是否能放置"), ShowInInspector, ReadOnly]
         public bool CanSetClan { get; private set; }
-
-        public ML.Engine.InventorySystem.ItemIcon WorldIcon { get => GetComponentInChildren<ML.Engine.InventorySystem.ItemIcon>(); }
-
         public string InteractType { get; set; } = "Bed";
         public Vector3 PosOffset { get; set; } = Vector3.zero;
         #endregion
@@ -71,8 +66,9 @@ namespace ProjectOC.ClanNS
             bool flagUp = false;
             foreach (RaycastHit hit in Physics.BoxCastAll(posUp, sizeUp, transform.up, rotUp))
             {
-                BuildingPart bp = hit.collider.GetComponent<BuildingPart>();
-                if (bp != null && (bp.Classification.Category2 == BuildingCategory2.Roof || bp.Classification.Category2 == BuildingCategory2.Floor))
+                ML.Engine.BuildingSystem.BuildingPart.BuildingPart bp = hit.collider.GetComponent<ML.Engine.BuildingSystem.BuildingPart.BuildingPart>();
+                if (bp != null && (bp.Classification.Category2 == ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2.Roof || 
+                    bp.Classification.Category2 == ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2.Floor))
                 {
                     flagUp = true;
                     break;
@@ -87,8 +83,8 @@ namespace ProjectOC.ClanNS
             bool flagDown = false;
             foreach (RaycastHit hit in Physics.BoxCastAll(posDown, sizeDown, -transform.up, rotDown))
             {
-                BuildingPart bp = hit.collider.GetComponent<BuildingPart>();
-                if (bp != null && bp.Classification.Category2 == BuildingCategory2.Floor)
+                ML.Engine.BuildingSystem.BuildingPart.BuildingPart bp = hit.collider.GetComponent<ML.Engine.BuildingSystem.BuildingPart.BuildingPart>();
+                if (bp != null && bp.Classification.Category2 == ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2.Floor)
                 {
                     flagDown = true;
                     break;
@@ -96,7 +92,7 @@ namespace ProjectOC.ClanNS
             }
             CanSetClan = flagUp && flagDown;
             string icon = CanSetClan ? "Tex2D_Clan_UI_BedEnable" : "Tex2D_Clan_UI_BedDisable";
-            WorldIcon?.SetSprite(ManagerNS.LocalGameManager.Instance.ClanManager.GetItemSprite(icon));
+            GetComponentInChildren<ML.Engine.InventorySystem.ItemIcon>()?.SetSprite(ManagerNS.LocalGameManager.Instance.ClanManager.GetItemSprite(icon));
             return CanSetClan;
         }
 

@@ -1,16 +1,12 @@
 using ML.Engine.BuildingSystem.BuildingPart;
-using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.TextContent;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using static ML.Engine.BuildingSystem.UI.BSPlaceModePanel;
-using ML.Engine.Manager;
-using ML.Engine.InventorySystem;
 
 namespace ML.Engine.BuildingSystem.UI
 {
@@ -328,13 +324,30 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 if (obj.started)
                 {
-                    this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, Vector3.up);
+                    if(this.Placer.SelectedPartInstance.AttachedSocket == null)
+                    {
+                        this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, Vector3.up);
+                    }
+                    else
+                    {
+                        this.Placer.SelectedPartInstance.ActiveSocket.AsMatchRotOffset *= offset > 0 ? this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta : Quaternion.Inverse(this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta);
+                    }
                 }
             }
             else
             {
-                IsRotate = !IsRotate;
-                rotOffset = offset;
+                if (this.Placer.SelectedPartInstance.AttachedSocket != null)
+                {
+                    if (obj.started)
+                    {
+                        this.Placer.SelectedPartInstance.ActiveSocket.AsMatchRotOffset *= offset > 0 ? this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta : Quaternion.Inverse(this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta);
+                    }
+                }
+                else
+                {
+                    IsRotate = !IsRotate;
+                    rotOffset = offset;
+                }
                 //this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.DisableGridRotRate * Time.deltaTime * offset, this.Placer.SelectedPartInstance.transform.up);
             }
         }
@@ -357,21 +370,12 @@ namespace ML.Engine.BuildingSystem.UI
         #region Event
         private bool CheckCostResources(IBuildingPart bpart)
         {
-            List<IInventory> inventorys = (GameManager.Instance.CharacterManager.GetLocalController() as ProjectOC.Player.OCPlayerController).GetInventorys();
-            if (CompositeManager.Instance.CanComposite(inventorys, BuildingManager.Instance.GetID(bpart.Classification.ToString())))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return ProjectOC.ManagerNS.LocalGameManager.Instance.Player.InventoryHaveItems(BuildingManager.Instance.GetRawAll(bpart.Classification.ToString()));
         }
 
         private void OnPlaceModeSuccess(IBuildingPart bpart)
         {
-            List<IInventory> inventorys = (GameManager.Instance.CharacterManager.GetLocalController() as ProjectOC.Player.OCPlayerController).GetInventorys(true, -1);
-            CompositeManager.Instance.OnlyCostResource(inventorys, BuildingManager.Instance.GetID(bpart.Classification.ToString()));
+            ProjectOC.ManagerNS.LocalGameManager.Instance.Player.InventoryCostItems(BuildingManager.Instance.GetRawAll(bpart.Classification.ToString()), needJudgeNum:true, priority:-1);
             BM.Placer.SelectedPartInstance.CheckCanInPlaceMode -= CheckCostResources;
         }
 

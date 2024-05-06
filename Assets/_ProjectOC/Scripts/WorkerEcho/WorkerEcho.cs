@@ -1,19 +1,11 @@
-using JetBrains.Annotations;
-using ML.Engine.ABResources;
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.InventorySystem;
-using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.Manager;
 using ML.Engine.Timer;
-using ML.Engine.UI;
 using ProjectOC.ManagerNS;
-using ProjectOC.Player;
-using ProjectOC.ResonanceWheelSystem.UI;
 using ProjectOC.WorkerNS;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace ProjectOC.WorkerEchoNS
@@ -121,7 +113,7 @@ namespace ProjectOC.WorkerEchoNS
 
         public void StopEcho(string id,int index,IInventory inventory)
         {
-            List<ML.Engine.InventorySystem.CompositeSystem.Formula> dict = GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRaw(id);
+            List<ML.Engine.InventorySystem.Formula> dict = GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRaw(id);
             foreach(var pair in dict)
             {
                 foreach (Item item in ItemManager.Instance.SpawnItems(pair.id, pair.num))

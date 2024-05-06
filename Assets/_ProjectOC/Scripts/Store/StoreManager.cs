@@ -18,6 +18,15 @@ namespace ProjectOC.StoreNS
             LoadTableData();
         }
 
+        #region 配置
+        [LabelText("仓库最大等级"), FoldoutGroup("配置")]
+        public int LevelMax = 2;
+        [LabelText("每个级别的仓库容量"), FoldoutGroup("配置")]
+        public List<int> LevelCapacity = new List<int>() { 2, 4, 8 };
+        [LabelText("每个级别的仓库数据容量"), FoldoutGroup("配置")]
+        public List<int> LevelDataCapacity = new List<int>() { 50, 100, 200 };
+        #endregion
+
         #region Load And Data
         private Dictionary<string, StoreIconTableData> StoreIconTableDict = new Dictionary<string, StoreIconTableData>();
         public ML.Engine.ABResources.ABJsonAssetProcessor<StoreIconTableData[]> ABJAProcessor;
@@ -36,9 +45,6 @@ namespace ProjectOC.StoreNS
 
         private Dictionary<string, WorldStore> WorldStoreDict = new Dictionary<string, WorldStore>();
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="priorityType">是否按照优先级获取 0表示不需要，1表示优先级从高到低，-1表示优先级从低到高</param>
         public List<Store> GetStores(int priorityType = 0)
         {
@@ -78,9 +84,9 @@ namespace ProjectOC.StoreNS
                 List<Store> stores = GetStores(priorityType);
                 foreach (Store store in stores)
                 {
-                    if ((!judgeInteracting || !store.IsInteracting) && (!judgeCanOut || store.IsStoreHaveItem(itemID, false, judgeCanOut)))
+                    if (!judgeInteracting || !store.IsInteracting)
                     {
-                        int storeAmount = store.GetDataNum(itemID, Store.DataType.Storage, false, judgeCanOut);
+                        int storeAmount = store.DataContainer.GetAmount(itemID, DataNS.DataOpType.Storage, false, judgeCanOut);
                         if (storeAmount > 0)
                         {
                             if (resultAmount + storeAmount >= amount)
@@ -110,23 +116,26 @@ namespace ProjectOC.StoreNS
         /// <returns></returns>
         public Store GetPutInStore(string itemID, int amount, int priorityType = 0, bool judgeInteracting = false, bool judgeCanIn = false)
         {
-            List<Store> stores = GetStores(priorityType);
             Store result = null;
-            foreach (Store store in stores)
+            if (!string.IsNullOrEmpty(itemID) && amount > 0)
             {
-                if ((!judgeInteracting || !store.IsInteracting) && (!judgeCanIn || store.IsStoreHaveItem(itemID, judgeCanIn)))
+                List<Store> stores = GetStores(priorityType);
+                foreach (Store store in stores)
                 {
-                    // 优先寻找第一个可以一次性存完的仓库
-                    // 若没有，则寻找第一个可以存入的，可溢出存入
-                    int empty = store.GetDataNum(itemID, Store.DataType.Empty, judgeCanIn);
-                    if (result == null && empty > 0)
+                    if (!judgeInteracting || !store.IsInteracting)
                     {
-                        result = store;
-                    }
-                    if (empty >= amount)
-                    {
-                        result = store;
-                        break;
+                        // 优先寻找第一个可以一次性存完的仓库
+                        // 若没有，则寻找第一个可以存入的，可溢出存入
+                        int empty = store.DataContainer.GetAmount(itemID, DataNS.DataOpType.Empty, judgeCanIn);
+                        if (result == null && empty > 0)
+                        {
+                            result = store;
+                        }
+                        if (empty >= amount)
+                        {
+                            result = store;
+                            break;
+                        }
                     }
                 }
             }
@@ -143,11 +152,7 @@ namespace ProjectOC.StoreNS
             return ManagerNS.LocalGameManager.Instance.ItemManager.SortItemIDs(result);
         }
 
-        public Store SpawnStore(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType)
-        {
-            Store store = new Store(storeType);
-            return store;
-        }
+        public Store SpawnStore(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType) { return new Store(storeType); }
 
         public void WorldStoreSetData(WorldStore worldStore, ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType, int level)
         {

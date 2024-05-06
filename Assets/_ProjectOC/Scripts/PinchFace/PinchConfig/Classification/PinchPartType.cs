@@ -13,7 +13,8 @@ namespace ProjectOC.PinchFace
         public PinchPartType2 pinchPartType2;
         public List<PinchPartType3> pinchPartType3s;
         public bool couldNaked;//是否可以裸漏，影响是否生成 空部件按钮
-
+        public PinchCharacterCameraView.ViewPointEnum ViewPointEnum;
+        
         private void InitType(string id)
         {
             string[] classification = id.Split('-');

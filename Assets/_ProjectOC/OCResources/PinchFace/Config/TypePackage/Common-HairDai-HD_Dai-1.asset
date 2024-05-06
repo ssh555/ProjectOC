@@ -16,3 +16,4 @@ MonoBehaviour:
   pinchPartType2: 18
   pinchPartType3s: 2b000000
   couldNaked: 1
+  ViewPointEnum: 1

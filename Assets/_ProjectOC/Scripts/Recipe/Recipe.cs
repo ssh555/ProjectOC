@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using ML.Engine.InventorySystem.CompositeSystem;
 using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
 
@@ -45,7 +44,7 @@ namespace ML.Engine.InventorySystem
         {
             if (!string.IsNullOrEmpty(itemID))
             {
-                foreach (Formula raw in Raw)
+                foreach (var raw in Raw)
                 {
                     if (raw.id == itemID)
                     {
@@ -58,16 +57,25 @@ namespace ML.Engine.InventorySystem
 
         public Item Composite(IInventory inventory)
         {
-            CompositeManager.CompositionObjectType compObjType = CompositeManager.Instance.Composite(inventory, ID, out var composition);
-            switch (compObjType)
+            List<Formula> adds = new List<Formula>();
+            foreach (var formula in Raw)
             {
-                case CompositeManager.CompositionObjectType.Item:
-                    Item item = composition as Item;
-                    return item;
-                default:
-                    break;
+                if(inventory.RemoveItem(formula.id, formula.num))
+                {
+                    adds.Add(formula);
+                }
+                else
+                {
+                    foreach (var add in adds)
+                    {
+                        inventory.AddItem(ItemManager.Instance.SpawnItems(add.id, add.num));
+                    }
+                    return null;
+                }
             }
-            return null;
+            Item item = ItemManager.Instance.SpawnItem(ProductID);
+            item.Amount = ProductNum;
+            return item;
         }
     }
 }
