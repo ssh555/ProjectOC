@@ -138,7 +138,7 @@ namespace ProjectOC.ProNodeNS.UI
 
             RawBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ProNode").Find("Recipe").Find("Raw").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             int num = ProNode.HasRecipe ? ProNode.Recipe.Raw.Count : 0;
-            RawBtnList.ChangBtnNum(num, "Prefab_ProNode_UI/Prefab_ProNode_UI_RawTemplate.prefab", () => { Debug.Log("1"); synchronizer.Check(); });
+            RawBtnList.ChangBtnNum(num, "Prefab_ProNode_UI/Prefab_ProNode_UI_RawTemplate.prefab", () => { synchronizer.Check(); });
 
             Recipes = new List<string>() { "" };
             Recipes.AddRange(ProNode.GetCanProduceRecipe());
