@@ -24,7 +24,7 @@ namespace ProjectOC.MissionNS
         public Dictionary<string, int> GetReservePutIn() { return GetAmount(DataNS.DataOpType.EmptyReserve); }
         public Dictionary<string, int> GetReservePutOut() { return GetAmount(DataNS.DataOpType.StorageReserve); }
         public TransportPriority GetTransportPriority() { return TransportPriority; }
-        public int GetMissionAssignNum(string itemID, bool isPutIn = true)
+        public int GetMissionNum(string itemID, bool isPutIn = true)
         {
             int result = 0;
             if (!string.IsNullOrEmpty(itemID))
@@ -38,6 +38,46 @@ namespace ProjectOC.MissionNS
                         if (flag)
                         {
                             result += mission.MissionNum;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+        public int GetNeedAssignNum(string itemID, bool isPutIn = true)
+        {
+            int result = 0;
+            if (!string.IsNullOrEmpty(itemID))
+            {
+                foreach (MissionTransport mission in Missions.ToArray())
+                {
+                    if (mission != null && mission.ID == itemID)
+                    {
+                        bool flag = isPutIn ? mission.MissionInitiatorType == MissionInitiatorType.PutIn_Initiator
+                            : mission.MissionInitiatorType == MissionInitiatorType.PutOut_Initiator;
+                        if (flag)
+                        {
+                            result += mission.NeedAssignNum;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+        public List<MissionTransport> GetMissions(string itemID, bool isPutIn = true)
+        {
+            List<MissionTransport> result = new List<MissionTransport>();
+            if (!string.IsNullOrEmpty(itemID))
+            {
+                foreach (MissionTransport mission in Missions.ToArray())
+                {
+                    if (mission != null && mission.ID == itemID)
+                    {
+                        bool flag = isPutIn ? mission.MissionInitiatorType == MissionInitiatorType.PutIn_Initiator
+                            : mission.MissionInitiatorType == MissionInitiatorType.PutOut_Initiator;
+                        if (flag)
+                        {
+                            result.Add(mission);
                         }
                     }
                 }

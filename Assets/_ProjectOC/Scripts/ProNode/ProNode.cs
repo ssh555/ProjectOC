@@ -273,19 +273,19 @@ namespace ProjectOC.ProNodeNS
             int missionNum;
             foreach (var kv in Recipe.Raw)
             {
-                missionNum = kv.num * RawThreshold - DataContainer.GetAmount(kv.id, DataNS.DataOpType.Storage) - (this as MissionNS.IMissionObj).GetMissionAssignNum(kv.id, true);
+                missionNum = kv.num * RawThreshold - DataContainer.GetAmount(kv.id, DataNS.DataOpType.Storage) - (this as MissionNS.IMissionObj).GetMissionNum(kv.id, true);
                 if (missionNum > 0)
                 {
                     missionNum += kv.num * (StackMax - RawThreshold);
                     LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionNS.MissionTransportType.Store_ProNode, kv.id, missionNum, this, MissionNS.MissionInitiatorType.PutIn_Initiator);
                 }
             }
-            missionNum = StackReserve - (this as MissionNS.IMissionObj).GetMissionAssignNum(ProductID, false);
-            if (missionNum > 0)
+            if (StackReserve > 0)
             {
                 var missionType = ML.Engine.InventorySystem.ItemManager.Instance.GetItemType(ProductID) == ML.Engine.InventorySystem.ItemType.Feed ? 
                     MissionNS.MissionTransportType.ProNode_Restaurant : MissionNS.MissionTransportType.ProNode_Store;
-                LocalGameManager.Instance.MissionManager.CreateTransportMission(missionType, ProductID, missionNum, this, MissionNS.MissionInitiatorType.PutOut_Initiator);
+                LocalGameManager.Instance.MissionManager.CreateTransportMission(missionType, ProductID, StackReserve, this, MissionNS.MissionInitiatorType.PutOut_Initiator);
+                StackReserve = 0;
             }
         }
 
@@ -295,9 +295,10 @@ namespace ProjectOC.ProNodeNS
         {
             ML.Engine.InventorySystem.Item item = Recipe.Composite(this);
             AddItem(item);
-            if (Stack >= StackReserve + StackThreshold * ProductNum)
+            int needAssignNum = (this as MissionNS.IMissionObj).GetNeedAssignNum(ProductID, false);
+            if (Stack >= StackReserve + needAssignNum + StackThreshold * ProductNum)
             {
-                StackReserve = Stack;
+                StackReserve = Stack - needAssignNum;
             }
             if (ProNodeType == ProNodeType.Mannul)
             {
@@ -328,24 +329,31 @@ namespace ProjectOC.ProNodeNS
 
         protected void OnWorkerAPChangeEvent(int ap) { OnDataChangeEvent?.Invoke(); }
 
-        protected void OnContainerDataChangeEvent() 
+        protected void OnContainerDataChangeEvent()
         {
-            if (StackReserve > StackAll)
+            int cur = StackReserve + (this as MissionNS.IMissionObj).GetNeedAssignNum(ProductID, false) - Stack;
+            if (cur > 0)
             {
-                StackReserve = StackAll;
-                int cur = StackReserve;
-                foreach (var mission in Missions.ToArray())
+                foreach (var mission in (this as MissionNS.IMissionObj).GetMissions(ProductID, false))
                 {
-                    if (cur > mission.MissionNum)
+                    int needAssignNum = mission.NeedAssignNum;
+                    int missionNum = mission.MissionNum;
+                    if (cur > needAssignNum)
                     {
-                        cur -= mission.MissionNum;
+                        mission.ChangeMissionNum(missionNum - needAssignNum);
+                        cur -= needAssignNum;
                     }
                     else
                     {
-                        mission.ChangeMissionNum(cur);
+                        mission.ChangeMissionNum(missionNum - cur);
                         cur = 0;
+                        break;
                     }
                 }
+            }
+            if (cur > 0)
+            {
+                StackReserve -= cur;
             }
             StartProduce();
             OnDataChangeEvent?.Invoke(); 
