@@ -114,7 +114,7 @@ namespace ML.Engine.InventorySystem
         { 
             return IsValidID(id) ? RecipeTableDict[id].Product : new CompositeSystem.Formula() { id = "", num = 0 }; 
         }
-        public int GetTimeCost(string id) { return IsValidID(id) ? RecipeTableDict[id].TimeCost : 1; }
+        public int GetTimeCost(string id) { return IsValidID(id) ? RecipeTableDict[id].TimeCost : 0; }
         public int GetExpRecipe(string id) { return IsValidID(id) ? RecipeTableDict[id].ExpRecipe : 0; }
         #endregion
     }

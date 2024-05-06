@@ -37,7 +37,7 @@ namespace ProjectOC.RestaurantNS
             }
         }
         [LabelText("是否有食物"), ShowInInspector, ReadOnly]
-        public bool HaveFood => DataContainer.HaveAnyData(DataNS.DataOpType.Storage);
+        public bool HaveFood => DataContainer?.HaveAnyData(DataNS.DataOpType.Storage) ?? false;
         #endregion
 
         public void Init()

@@ -1631,7 +1631,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btnListInitData:
-    limitNum: 1
+    limitNum: 14
     hasInitSelect: 1
     isLoop: 0
     isWheel: 0
@@ -2197,7 +2197,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   btnListInitData:
-    limitNum: 1
+    limitNum: 5
     hasInitSelect: 1
     isLoop: 0
     isWheel: 0
@@ -5872,7 +5872,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5541990485395833675, guid: 7752e6b92f9575f4d9a51414be1c5790, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5541990485395833675, guid: 7752e6b92f9575f4d9a51414be1c5790, type: 3}
       propertyPath: m_AnchorMin.x
@@ -5880,15 +5880,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5541990485395833675, guid: 7752e6b92f9575f4d9a51414be1c5790, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5541990485395833675, guid: 7752e6b92f9575f4d9a51414be1c5790, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1900
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5541990485395833675, guid: 7752e6b92f9575f4d9a51414be1c5790, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 240
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5541990485395833675, guid: 7752e6b92f9575f4d9a51414be1c5790, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5920,11 +5920,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5541990485395833675, guid: 7752e6b92f9575f4d9a51414be1c5790, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 960
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5541990485395833675, guid: 7752e6b92f9575f4d9a51414be1c5790, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -120
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5541990485395833675, guid: 7752e6b92f9575f4d9a51414be1c5790, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

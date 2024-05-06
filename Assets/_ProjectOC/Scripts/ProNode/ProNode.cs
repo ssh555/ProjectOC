@@ -109,6 +109,7 @@ namespace ProjectOC.ProNodeNS
         {
             ID = config.ID ?? "";
             EffBase = LocalGameManager.Instance.ProNodeManager.EffBase;
+            InitData(0 , 0);
             DataContainer.OnDataChangeEvent += OnContainerDataChangeEvent;
         }
 
