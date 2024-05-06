@@ -64,7 +64,7 @@ namespace ProjectOC.ProNodeNS
 
         public void OnUpgrade(ML.Engine.BuildingSystem.IBuildingUpgrade lastLevelBuild)
         {
-            ManagerNS.LocalGameManager.Instance.Player.InventoryCostItems(ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(Classification.ToString()), needJudgeNum:true, priority:-1);
+            ManagerNS.LocalGameManager.Instance.Player.InventoryCostItems(ML.Engine.BuildingSystem.BuildingManager.Instance.GetRaw(Classification.ToString()), needJudgeNum:true, priority:-1);
             transform.SetParent(lastLevelBuild.transform.parent);
             InstanceID = lastLevelBuild.InstanceID;
             transform.position = lastLevelBuild.transform.position;
