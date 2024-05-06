@@ -74,6 +74,7 @@ namespace ProjectOC.ProNodeNS
             {
                 ManagerNS.LocalGameManager.Instance.ProNodeManager.WorldNodeSetData(this, worldProNode.ProNode);
                 ProNode.SetLevel(Classification.Category4 - 1);
+                ManagerNS.LocalGameManager.Instance.BuildPowerIslandManager.electAppliances.Add(this);
                 PowerCount = worldProNode.PowerCount;
             }
             ML.Engine.Manager.GameManager.DestroyObj(lastLevelBuild.gameObject);
