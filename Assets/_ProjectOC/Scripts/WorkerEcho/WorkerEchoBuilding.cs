@@ -73,6 +73,7 @@ namespace ProjectOC.WorkerEchoNS
 
         public override void OnBPartDestroy()
         {
+            base.OnBPartDestroy();
             this.CheckCanDestory -= CheckCanDestroyOrEdit();
             this.CheckCanEdit -= CheckCanDestroyOrEdit();
         }

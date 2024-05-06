@@ -69,6 +69,19 @@ namespace ML.Engine.Event
             }
             return true;
         }
+
+        public bool Condition_CheckBuild_Bed_1()
+        {
+            return true;
+        }
+        public bool Condition_CheckBuild_SeedPlot_1()
+        {
+            return true;
+        }
+        public bool Condition_CheckBuild_LifeDiversion_1()
+        {
+            return true;
+        }
     }
 }
 
