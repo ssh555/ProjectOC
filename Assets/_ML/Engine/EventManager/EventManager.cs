@@ -89,6 +89,7 @@ namespace ML.Engine.Event
                 Debug.LogError("ConditionID '" + ConditionID + "' does not exist.");
                 return null;
             }
+            return null;
         }
 
 
