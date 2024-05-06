@@ -153,6 +153,7 @@ namespace ML.Engine.Event
             public List<string> Param1;
             public List<int> Param2;
             public List<float> Param3;
+            public TextContent.TextContent ConditionText;
         }
         #endregion
 
