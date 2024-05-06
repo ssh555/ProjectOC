@@ -60,14 +60,19 @@ namespace ML.Engine.Event
 
         public bool ExecuteCondition(string ConditionID)
         {
-            if (!functions.ContainsKey(ConditionID) || !ConditionTableDataDic.ContainsKey(ConditionID))
+            if (!ConditionTableDataDic.ContainsKey(ConditionID))
             {
-                Debug.LogError("Function '" + ConditionID + "' does not exist.");
+                Debug.LogError("ConditionID '" + ConditionID + "' does not exist.");
                 return false;
             }
 
             ConditionTableData conditionTableData = ConditionTableDataDic[ConditionID];
-            MethodInfo method = functions[ConditionID];
+            if(!functions.ContainsKey(conditionTableData.CheckType.ToString()))
+            {
+                Debug.LogError("Function '" + conditionTableData.CheckType.ToString() + "' does not exist.");
+                return false;
+            }
+            MethodInfo method = functions[conditionTableData.CheckType.ToString()];
 
             object[] parameters = new object[3];
             parameters[0] = conditionTableData.Param1;
@@ -76,6 +81,17 @@ namespace ML.Engine.Event
 
             return (bool)method.Invoke(this, parameters);
         }
+
+        public string GetConditionText(string ConditionID)
+        {
+            if (!ConditionTableDataDic.ContainsKey(ConditionID))
+            {
+                Debug.LogError("ConditionID '" + ConditionID + "' does not exist.");
+                return null;
+            }
+            return null;
+        }
+
 
         //将参数字符串转换为实际参数
         private object[] ConvertParameters(string parametersString, ParameterInfo[] parameterInfos)
@@ -138,6 +154,7 @@ namespace ML.Engine.Event
             public List<string> Param1;
             public List<int> Param2;
             public List<float> Param3;
+            public TextContent.TextContent ConditionText;
         }
         #endregion
 

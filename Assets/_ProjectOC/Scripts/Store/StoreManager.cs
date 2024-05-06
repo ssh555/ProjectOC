@@ -175,12 +175,20 @@ namespace ProjectOC.StoreNS
                 {
                     WorldStoreDict[worldStore.InstanceID] = worldStore;
                 }
-                if (worldStore.Store != null)
+                if (worldStore.Store != store)
                 {
-                    worldStore.Store.WorldStore = null;
+                    if (worldStore.Store != null)
+                    {
+                        worldStore.Store.Destroy();
+                        worldStore.Store.WorldStore = null;
+                    }
+                    if (store.WorldStore != null)
+                    {
+                        store.WorldStore.Store = null;
+                    }
+                    worldStore.Store = store;
+                    store.WorldStore = worldStore;
                 }
-                worldStore.Store = store;
-                store.WorldStore = worldStore;
             }
         }
     }

@@ -74,10 +74,17 @@ namespace ML.Engine.UI
         public void LookAtGameObject(GameObject go,bool modeLayer = true)
         {
             if (go == null) return;
-            
+
+            if(currentObjectBeingObserved != null)
+            {
+                GameManager.DestroyObj(currentObjectBeingObserved);
+            }
+
+            currentObjectBeingObserved = go;
+            currentObjectBeingObserved.transform.SetParent(cameraParent.transform);
             if (modeLayer)
             {
-                ModeLayer(go.transform,LayerName);
+                ModeLayer(currentObjectBeingObserved.transform,LayerName);
             }
 
             currentObjectBeingObserved.transform.localPosition = Vector3.zero;

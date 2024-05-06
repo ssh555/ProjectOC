@@ -14,6 +14,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.U2D;
@@ -222,7 +223,16 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 
     private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        UIMgr.PopPanel();
+        if (FunctionIndex == 1 && OrderDelegationIndex == 1)
+        {
+            OrderDelegationIndex = 0;
+            this.Refresh();
+        }
+        else
+        {
+            UIMgr.PopPanel();
+        }
+        
     }
     #endregion
 
