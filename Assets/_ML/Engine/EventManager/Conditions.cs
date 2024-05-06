@@ -28,6 +28,12 @@ namespace ML.Engine.Event
             return true;
         }
 
+        private string CheckBagItemGetText(string s)
+        {
+            Debug.Log("CheckBagItemGetText " + s);
+            return s;
+        }
+
         public bool CheckBuild(List<string> p1, List<int> p2, List<float> p3)
         {
             Debug.Log("CheckBuild ");
@@ -49,6 +55,11 @@ namespace ML.Engine.Event
             return true;
         }
 
+        private string CheckBuildGetText(string s)
+        {
+            Debug.Log("CheckBuildGetText " + s);
+            return s;
+        }
         public bool CheckWorkerEMCurrent(List<string> p1, List<int> p2, List<float> p3)
         {
             Debug.Log("CheckWorkerEMCurrent ");
@@ -68,6 +79,12 @@ namespace ML.Engine.Event
                 Debug.Log($"{item} ");
             }
             return true;
+        }
+
+        private string CheckWorkerEMCurrentGetText(string s)
+        {
+            Debug.Log("CheckWorkerEMCurrentGetText " + s);
+            return s;
         }
 
         public bool Condition_CheckBuild_Bed_1()

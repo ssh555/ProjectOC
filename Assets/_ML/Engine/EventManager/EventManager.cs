@@ -16,7 +16,8 @@ namespace ML.Engine.Event
         private Dictionary<string, string> EventTableDataDic = new Dictionary<string, string>();
         private Dictionary<string, ConditionTableData> ConditionTableDataDic = new Dictionary<string, ConditionTableData>();
 
-        private Dictionary<string, MethodInfo> functions;
+        private Dictionary<string, MethodInfo> PublicFunctions;
+        private Dictionary<string, MethodInfo> PrivateFunctions;
 
         public void OnRegister()
         {
@@ -24,17 +25,38 @@ namespace ML.Engine.Event
             LoadTableData();
 
             // 初始化字典，存储函数名和对应的MethodInfo
-            functions = new Dictionary<string, MethodInfo>();
+            PublicFunctions = new Dictionary<string, MethodInfo>();
 
-            // 获取所有的函数信息
-            MethodInfo[] methods = GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public);
+            // 初始化字典，存储函数名和对应的MethodInfo
+            PrivateFunctions = new Dictionary<string, MethodInfo>();
 
-            // 遍历所有函数，存储到字典中
-            foreach (MethodInfo method in methods)
+            // 获取所有的Public函数信息
+            MethodInfo[] PublicMethods = GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public);
+
+            // 获取所有的Private函数信息
+            MethodInfo[] PrivateMethods = GetType().GetMethods(BindingFlags.Instance | BindingFlags.NonPublic);
+
+            // 遍历所有Public函数，存储到字典中
+            foreach (MethodInfo method in PublicMethods)
             {
                 if (method.DeclaringType == typeof(FunctionLiabrary))
                 {
-                    functions[method.Name] = method;
+                    PublicFunctions[method.Name] = method;
+                }
+            }
+
+            // 遍历所有Public函数，存储到字典中
+            foreach (MethodInfo method in PrivateMethods)
+            {
+                if (method.DeclaringType == typeof(FunctionLiabrary))
+                {
+                    string MethodName = method.Name;
+                    // 去掉"GetText"
+                    if (MethodName.EndsWith("GetText"))
+                    {
+                        MethodName = MethodName.Substring(0, MethodName.Length - "GetText".Length);
+                    }
+                    PrivateFunctions[MethodName] = method;
                 }
             }
         }
@@ -45,13 +67,13 @@ namespace ML.Engine.Event
             string functionName = split[0];
             string parametersString = split[1].Substring(0, split[1].Length - 1); // 去除最后的括号
 
-            if (!functions.ContainsKey(functionName))
+            if (!PublicFunctions.ContainsKey(functionName))
             {
                 Debug.LogError("Function '" + functionName + "' does not exist.");
                 return;
             }
 
-            MethodInfo method = functions[functionName];
+            MethodInfo method = PublicFunctions[functionName];
             ParameterInfo[] parameterInfos = method.GetParameters();
             object[] parameters = ConvertParameters(parametersString, parameterInfos);
 
@@ -67,12 +89,12 @@ namespace ML.Engine.Event
             }
 
             ConditionTableData conditionTableData = ConditionTableDataDic[ConditionID];
-            if(!functions.ContainsKey(conditionTableData.CheckType.ToString()))
+            if(!PublicFunctions.ContainsKey(conditionTableData.CheckType.ToString()))
             {
                 Debug.LogError("Function '" + conditionTableData.CheckType.ToString() + "' does not exist.");
                 return false;
             }
-            MethodInfo method = functions[conditionTableData.CheckType.ToString()];
+            MethodInfo method = PublicFunctions[conditionTableData.CheckType.ToString()];
 
             object[] parameters = new object[3];
             parameters[0] = conditionTableData.Param1;
@@ -89,7 +111,42 @@ namespace ML.Engine.Event
                 Debug.LogError("ConditionID '" + ConditionID + "' does not exist.");
                 return null;
             }
-            return null;
+            ConditionTableData conditionTableData = ConditionTableDataDic[ConditionID];
+            string ConditionText = conditionTableData.ConditionText.ToString();
+            // 找到左中括号和右中括号的位置
+            int leftBracketIndex = ConditionText.IndexOf('[');
+            int rightBracketIndex = ConditionText.IndexOf(']');
+
+            // 提取中括号中的内容
+            string content = ConditionText.Substring(leftBracketIndex + 1, rightBracketIndex - leftBracketIndex - 1);
+            string[] splits1 = content.Split('/');
+            string target = splits1[1].Trim();
+            string[] splits2 = target.Substring(1).Split('|');
+
+            //此时 splits[0] 应为P2 splits[1]应为1
+            int tp = splits2[0][1] - '0';
+            int index = int.Parse(splits2[1]) - 1;
+
+            string replaceStr = null;
+            if(tp == 1)
+            {
+                replaceStr = conditionTableData.Param1[index];
+            }
+            else if(tp == 2)
+            {
+                replaceStr = conditionTableData.Param2[index].ToString();
+            }
+            else if(tp == 3)
+            {
+                replaceStr = conditionTableData.Param3[index].ToString();
+            }
+            ConditionText = ConditionText.Replace(target, replaceStr);
+
+            MethodInfo method = PrivateFunctions[conditionTableData.CheckType.ToString()];
+
+            object[] parameters = new object[1];
+            parameters[0] = ConditionText;
+            return (string)method.Invoke(this, parameters);
         }
 
 
