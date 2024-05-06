@@ -190,11 +190,11 @@ namespace ProjectOC.WorkerNS
         public bool SetDestination(Vector3 target, Action<Worker> action = null, WorkerContainerType arriveType = WorkerContainerType.None)
         {
             ClearDestination();
-            foreach (var kv in ContainerDict)
+            foreach (var key in ContainerDict.Keys.ToArray())
             {
-                if (kv.Key != arriveType)
+                if (key != arriveType)
                 {
-                    kv.Value?.TempRemoveWorker();
+                    ContainerDict[key]?.TempRemoveWorker();
                 }
             }
             Agent.isStopped = false;
