@@ -143,7 +143,7 @@ namespace ProjectOC.ProNodeNS.UI
             Recipes = new List<string>() { "" };
             Recipes.AddRange(ProNode.GetCanProduceRecipe());
             RecipeBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ChangeRecipe").Find("Select").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
-            RecipeBtnList.ChangBtnNum(Recipes.Count, "Prefab_ProNode_UI/Prefab_ProNode_UI_RecipeTemplate.prefab", () => { synchronizer.Check(); });
+            RecipeBtnList.ChangBtnNum(Recipes.Count, "Prefab_ProNode_UI/Prefab_ProNode_UI_RecipeTemplate.prefab", () => {synchronizer.Check(); });
 
             RecipeRawBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ChangeRecipe").Find("Recipe").Find("Raw").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             RecipeRawBtnList.ChangBtnNum(0, "Prefab_ProNode_UI/Prefab_ProNode_UI_RecipeRawTemplate.prefab",
@@ -151,11 +151,11 @@ namespace ProjectOC.ProNodeNS.UI
 
             WorkerBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ChangeWorker").Find("Select").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             WorkerBtnList.OnSelectButtonChanged += () => { Refresh(); };
-            WorkerBtnList.ChangBtnNum(0, "Prefab_ProNode_UI/Prefab_ProNode_UI_WorkerTemplate.prefab", () => { synchronizer.Check(); });
+            WorkerBtnList.ChangBtnNum(0, "Prefab_ProNode_UI/Prefab_ProNode_UI_WorkerTemplate.prefab", () => {synchronizer.Check(); });
 
             num = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(ProNode.WorldProNode.Classification.ToString()).Count;
             UpgradeBtnList = new ML.Engine.UI.UIBtnList(transform.Find("Upgrade").Find("Raw").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
-            UpgradeBtnList.ChangBtnNum(num, "Prefab_ProNode_UI/Prefab_ProNode_UI_UpgradeRawTemplate.prefab", () => { synchronizer.Check(); });
+            UpgradeBtnList.ChangBtnNum(num, "Prefab_ProNode_UI/Prefab_ProNode_UI_UpgradeRawTemplate.prefab", () => {synchronizer.Check(); });
 
         }
         protected void UpdateBtnInfo()

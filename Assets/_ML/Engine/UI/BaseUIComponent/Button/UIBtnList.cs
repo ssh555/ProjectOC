@@ -353,7 +353,7 @@ namespace ML.Engine.UI
         /// <summary>
         /// 加入按钮 异步
         /// </summary>
-        public void AddBtn(string prefabpath = null, UnityAction BtnAction = null,Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null,Action OnFinishAdd = null, string BtnText = null,bool NeedRefreshBtnInfo = true)
+        public void AddBtn(string VarPrefabpath = null, UnityAction BtnAction = null,Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null,Action OnFinishAdd = null, string BtnText = null,bool NeedRefreshBtnInfo = true)
         {
             /*if (selectedButton == null) return;
             int i = OneDimCnt / limitNum;
@@ -387,8 +387,8 @@ namespace ML.Engine.UI
             TwoDimSelectedButtons[i][j].navigation = navigation;
             ++OneDimCnt;
             this.UIBtnListContainer?.RefreshEdge();*/
-            var tprefabpath = prefabpath == null ? this.prefabPath : prefabPath;
-
+            var tprefabpath = VarPrefabpath == null ? this.prefabPath : VarPrefabpath;
+            Debug.Log(tprefabpath);
             Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(tprefabpath).Completed += (handle) =>
             {
                 // 实例化
@@ -583,20 +583,21 @@ namespace ML.Engine.UI
                     if (this.uiBtnListContainer == null)
                     {
                         InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
-                        Checker.Check();
-                        return;
-                    }
-
-                    bool needMoveToBtnList = this.uiBtnListContainer.IsEmpty;
-                    InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
-                    if (needMoveToBtnList)
-                    {
-                        this.UIBtnListContainer?.FindEnterableUIBtnList();
                     }
                     else
                     {
-                        this.UIBtnListContainer?.RefreshEdge();
+                        bool needMoveToBtnList = this.uiBtnListContainer.IsEmpty;
+                        InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
+                        if (needMoveToBtnList)
+                        {
+                            this.UIBtnListContainer?.FindEnterableUIBtnList();
+                        }
+                        else
+                        {
+                            this.UIBtnListContainer?.RefreshEdge();
+                        }
                     }
+                    
                     Checker.Check();
                 };
             }
@@ -692,14 +693,14 @@ namespace ML.Engine.UI
             action?.Invoke();
         }
 
-        public virtual void ChangBtnNum(int newNum, string prefabpath = null, Action OnAllBtnChanged = null)
+        public virtual void ChangBtnNum(int newNum, string VarPrefabpath = null, Action OnAllBtnChanged = null)
         {
-            var tprefabpath = prefabpath == null ? this.prefabPath : prefabPath;
+            var tprefabpath = VarPrefabpath == null ? this.prefabPath : VarPrefabpath;
             if (newNum > this.OneDimCnt)
             {
                 this.AddBtns(newNum - this.OneDimCnt, tprefabpath, OnAllBtnAdded: OnAllBtnChanged);
             }
-            else if (newNum < this.OneDimCnt)
+            else if (newNum <= this.OneDimCnt)
             {
                 this.DeleteButtons(this.OneDimCnt - newNum, OnAllBtnDeleted: OnAllBtnChanged);
             }

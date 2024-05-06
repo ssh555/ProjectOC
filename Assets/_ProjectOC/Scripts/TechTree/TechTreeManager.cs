@@ -527,7 +527,7 @@ namespace ProjectOC.TechTree
             {
                 GameManager.Instance.EventManager.ExecuteEvent(ExecuteString);
             }
-            //Debug.Log(GameManager.Instance.EventManager.ExecuteCondition("Condition_CheckBagItem_Water_1"));
+            //Debug.Log(GameManager.Instance.EventManager.ExecuteCondition("Condition_CheckBuild_Bed_2"));
         }
         #endregion
 
