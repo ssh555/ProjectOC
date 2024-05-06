@@ -54,62 +54,33 @@ namespace ProjectOC.ClanNS.UI
         #region Clans
         [ShowInInspector]
         private List<Clan> Clans = new List<Clan>();
-        /// <summary>
-        /// 当前选中的Index
-        /// </summary>
         private int index = 0;
         private int Index
         {
             get => index;
             set
             {
-                if (Clans != null && Clans.Count > 0)
-                {
-                    index = value;
-                    if (index == -1)
-                    {
-                        index = Clans.Count - 1;
-                    }
-                    else if (index == Clans.Count)
-                    {
-                        index = 0;
-                    }
-                }
-                else
-                {
-                    index = 0;
-                }
-                this.Refresh();
+                index = value;
+                index = index >= Clans.Count ? Clans.Count - 1 : index;
+                index = index < 0 ? 0 : index;
+                Refresh();
             }
         }
-        /// <summary>
-        /// 当前选中的Clan
-        /// </summary>
-        private Clan CurClan
-        {
-            get
-            {
-                if (Clans != null && Index < Clans.Count)
-                {
-                    return Clans[Index];
-                }
-                return null;
-            }
-        }
+        private Clan CurClan => Clans != null && Index < Clans.Count ? Clans[Index] : null;
         #endregion
 
         public void SortClans(bool needClear = false)
         {
             if (needClear)
             {
-                this.Clans.Clear();
-                this.Clans.AddRange(ManagerNS.LocalGameManager.Instance.ClanManager.Clans);
+                Clans.Clear();
+                Clans.AddRange(ManagerNS.LocalGameManager.Instance.ClanManager.Clans);
             }
-            this.Clans.Sort(new Clan.Sort());
-            if (this.Bed.HaveClan)
+            Clans.Sort(new Clan.SortForBed());
+            if (Bed.HaveClan)
             {
-                this.Clans.Remove(this.Clan);
-                this.Clans.Insert(0, this.Clan);
+                Clans.Remove(Clan);
+                Clans.Insert(0, Clan);
             }
             index = 0;
         }
@@ -138,47 +109,41 @@ namespace ProjectOC.ClanNS.UI
 
         private void SetEmpty_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurMode == Mode.Bed && this.Bed.HaveClan)
+            if (CurMode == Mode.Bed && Bed.HaveClan)
             {
-                this.Bed.SetEmpty();
+                Bed.SetEmpty();
                 Refresh();
             }
         }
         private void Pre_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (this.CurMode == Mode.ChangeClan)
-            {
-                Index -= 1;
-            }
+            if (CurMode == Mode.ChangeClan) { Index -= 1; }
         }
         private void Post_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (this.CurMode == Mode.ChangeClan)
-            {
-                Index += 1;
-            }
+            if (CurMode == Mode.ChangeClan) { Index += 1; }
         }
 
         private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             if (CurMode == Mode.Bed)
             {
-                this.CurMode = Mode.ChangeClan;
-                index = 0;
+                CurMode = Mode.ChangeClan;
                 SortClans(true);
             }
             else if (CurMode == Mode.ChangeClan)
             {
-                if (this.CurClan != null && this.Bed.CanSetClan && (!Bed.HaveClan || Bed.Clan != CurClan))
+                if (CurClan != null && Bed.CanSetClan && (!Bed.HaveClan || Bed.Clan != CurClan))
                 {
                     if (CurClan.HasBed)
                     {
                         string text = PanelTextContent.textConfirmPrefix + CurClan.Name + PanelTextContent.textConfirmSuffix;
-                        ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance(ML.Engine.UI.UIManager.NoticeUIType.PopUpUI, new ML.Engine.UI.UIManager.PopUpUIData(text, null, null, () => { Bed.SetClan(this.CurClan);}));
+                        ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance(ML.Engine.UI.UIManager.NoticeUIType.PopUpUI, 
+                            new ML.Engine.UI.UIManager.PopUpUIData(text, null, null, () => { Bed.SetClan(CurClan);}));
                     }
                     else
                     {
-                        Bed.SetClan(this.CurClan);
+                        Bed.SetClan(CurClan);
                         SortClans(false);
                     }
                 }
@@ -194,7 +159,7 @@ namespace ProjectOC.ClanNS.UI
             else if (CurMode == Mode.ChangeClan)
             {
                 CurMode = Mode.Bed;
-                this.Clans.Clear();
+                Clans.Clear();
                 index = 0;
                 Refresh();
             }
@@ -223,10 +188,7 @@ namespace ProjectOC.ClanNS.UI
         public override void Refresh()
         {
             // 加载完成JSON数据 & 查找完所有引用
-            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
-            {
-                return;
-            }
+            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit) { return; }
 
             ChangeClan.gameObject.SetActive(CurMode == Mode.ChangeClan);
             if (CurMode == Mode.Bed)
@@ -241,21 +203,12 @@ namespace ProjectOC.ClanNS.UI
                 ChangeClan_Clan.gameObject.SetActive(Bed.HaveClan);
                 ChangeClan_Clan.Find("TopTitle").Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = Clan?.Name ?? "";
 
-                if (CurClan != null)
-                {
-                    ChangeClan.Find("Background1").gameObject.SetActive(CurClan.HasBed);
-                    ChangeClan.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = CurClan.Name ?? "";
-                    ChangeClan.Find("Background3").gameObject.SetActive(true);
-                    ChangeClan.Find("Name").gameObject.SetActive(true);
-                    ChangeClan.Find("Icon").gameObject.SetActive(true);
-                }
-                else
-                {
-                    ChangeClan.Find("Background1").gameObject.SetActive(false);
-                    ChangeClan.Find("Background3").gameObject.SetActive(false);
-                    ChangeClan.Find("Name").gameObject.SetActive(false);
-                    ChangeClan.Find("Icon").gameObject.SetActive(false);
-                }
+                bool CurClanNotNull = CurClan != null;
+                ChangeClan.Find("Background1").gameObject.SetActive(CurClanNotNull && CurClan.HasBed);
+                ChangeClan.Find("Background3").gameObject.SetActive(CurClanNotNull);
+                ChangeClan.Find("Name").gameObject.SetActive(CurClanNotNull);
+                ChangeClan.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = CurClan?.Name ?? "";
+                ChangeClan.Find("Icon").gameObject.SetActive(CurClanNotNull);
             }
 
             #region BotKeyTips
@@ -283,9 +236,9 @@ namespace ProjectOC.ClanNS.UI
         }
         protected override void InitTextContentPathData()
         {
-            this.abpath = "OCTextContent/Building";
-            this.abname = "BedPanel";
-            this.description = "BedPanel数据加载完成";
+            abpath = "OCTextContent/Building";
+            abname = "BedPanel";
+            description = "BedPanel数据加载完成";
         }
         #endregion
     }

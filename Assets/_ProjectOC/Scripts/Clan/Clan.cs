@@ -15,14 +15,13 @@ namespace ProjectOC.ClanNS
         [LabelText(" «∑Ò”µ”–¥≤"), ShowInInspector, ReadOnly]
         public bool HasBed { get { return Bed != null && !string.IsNullOrEmpty(Bed.InstanceID); } }
 
-        public Clan() { }
         public Clan(string id, string name)
         {
             ID = id;
             Name = name;
         }
 
-        public class Sort : IComparer<Clan>
+        public class SortForBed : IComparer<Clan>
         {
             public int Compare(Clan x, Clan y)
             {

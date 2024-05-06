@@ -945,6 +945,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 1
     readUnActiveButton: 1
+    scrollRect: {fileID: 0}
 --- !u!1 &2714225800377092980
 GameObject:
   m_ObjectHideFlags: 0
@@ -1825,6 +1826,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 1
     readUnActiveButton: 1
+    scrollRect: {fileID: 0}
 --- !u!1 &5057420741021801662
 GameObject:
   m_ObjectHideFlags: 0

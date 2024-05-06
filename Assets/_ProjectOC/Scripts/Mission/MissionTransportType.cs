@@ -3,7 +3,7 @@ using Sirenix.OdinInspector;
 namespace ProjectOC.MissionNS
 {
     /// <summary>
-    /// 表明了搬运的起点和终点，搬运优先级从高到低
+    /// 标明搬运的起点和终点，搬运优先级从高到低
     /// </summary>
     [LabelText("搬运类型")]
     public enum MissionTransportType
@@ -20,4 +20,3 @@ namespace ProjectOC.MissionNS
         Outside_Store,
     }
 }
-

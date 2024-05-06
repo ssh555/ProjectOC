@@ -1,6 +1,7 @@
 using ML.Engine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using ProjectOC.ManagerNS;
 using UnityEngine;
 
 namespace ML.Engine.Event
@@ -28,15 +29,18 @@ namespace ML.Engine.Event
 
         #endregion
 
-        public void SetLifeDiversionNum(int p1)
+        #region µ∫”Ï¿©’≈
+        public void SetLifeDiversionNum(int _count)
         {
-            Debug.Log($"SetLifeDiversionNum {p1} ");
+            LocalGameManager.Instance.BuildPowerIslandManager.PowerCoreMaxCount = _count;
         }
 
         public void SetSubIslandNum(int p1)
         {
             Debug.Log($"SetSubIslandNum {p1} ");
         }
+        
+        #endregion
 
         public void CanDeepSea(bool p1)
         {

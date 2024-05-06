@@ -10,8 +10,8 @@ namespace ML.Engine.InventorySystem
         public int Sort;
         public RecipeCategory Category;
         public TextContent.TextContent Name;
-        public List<CompositeSystem.Formula> Raw;
-        public CompositeSystem.Formula Product;
+        public List<Formula> Raw;
+        public Formula Product;
         public int TimeCost;
         public int ExpRecipe;
     }
@@ -59,23 +59,9 @@ namespace ML.Engine.InventorySystem
         #endregion
 
         #region Getter
-        public bool IsValidID(string id)
-        {
-            if (!string.IsNullOrEmpty(id))
-            {
-                return RecipeTableDict.ContainsKey(id);
-            }
-            return false;
-        }
+        public bool IsValidID(string id) { return !string.IsNullOrEmpty(id) ? RecipeTableDict.ContainsKey(id) : false; }
 
-        public UnityEngine.Sprite GetRecipeIcon(string id)
-        {
-            if(IsValidID(id))
-            {
-                return ItemManager.Instance.GetItemSprite(RecipeTableDict[id].Product.id);
-            }
-            return null;
-        }
+        public UnityEngine.Sprite GetRecipeIcon(string id) { return IsValidID(id) ? ItemManager.Instance.GetItemSprite(RecipeTableDict[id].Product.id) : null; }
 
         public List<string> GetRecipeIDsByCategory(RecipeCategory category)
         {
@@ -106,41 +92,17 @@ namespace ML.Engine.InventorySystem
             return resultes;
         }
         
-        public string[] GetAllID()
-        {
-            return RecipeTableDict.Keys.ToArray();
-        }
+        public string[] GetAllID() { return RecipeTableDict.Keys.ToArray(); }
 
-        public string GetRecipeName(string id)
-        {
-            if (IsValidID(id))
-            {
-                return RecipeTableDict[id].Name;
-            }
-            return null;
-        }
+        public string GetRecipeName(string id) { return IsValidID(id) ? RecipeTableDict[id].Name : null; }
 
-        public int GetSort(string id)
-        {
-            if (IsValidID(id))
-            {
-                return RecipeTableDict[id].Sort;
-            }
-            return int.MaxValue;
-        }
+        public int GetSort(string id) { return IsValidID(id) ? RecipeTableDict[id].Sort : int.MaxValue; }
 
-        public RecipeCategory GetCategory(string id)
-        {
-            if (IsValidID(id))
-            {
-                return RecipeTableDict[id].Category;
-            }
-            return RecipeCategory.None;
-        }
+        public RecipeCategory GetCategory(string id) { return IsValidID(id) ? RecipeTableDict[id].Category : RecipeCategory.None; }
 
-        public List<CompositeSystem.Formula> GetRaw(string id)
+        public List<Formula> GetRaw(string id)
         {
-            List<CompositeSystem.Formula> result = new List<CompositeSystem.Formula>();
+            List<Formula> result = new List<Formula>();
             if (IsValidID(id))
             {
                 result.AddRange(RecipeTableDict[id].Raw);
@@ -148,32 +110,12 @@ namespace ML.Engine.InventorySystem
             return result;
         }
 
-        public CompositeSystem.Formula GetProduct(string id)
-        {
-            if (IsValidID(id))
-            {
-                return RecipeTableDict[id].Product;
-            }
-            return new CompositeSystem.Formula() { id = "", num = 0 };
+        public Formula GetProduct(string id) 
+        { 
+            return IsValidID(id) ? RecipeTableDict[id].Product : new Formula() { id = "", num = 0 }; 
         }
-
-        public int GetTimeCost(string id)
-        {
-            if (IsValidID(id))
-            {
-                return RecipeTableDict[id].TimeCost;
-            }
-            return 1;
-        }
-
-        public int GetExpRecipe(string id)
-        {
-            if (IsValidID(id))
-            {
-                return RecipeTableDict[id].ExpRecipe;
-            }
-            return 0;
-        }
+        public int GetTimeCost(string id) { return IsValidID(id) ? RecipeTableDict[id].TimeCost : 0; }
+        public int GetExpRecipe(string id) { return IsValidID(id) ? RecipeTableDict[id].ExpRecipe : 0; }
         #endregion
     }
 }

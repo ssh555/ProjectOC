@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using ML.Engine.InventorySystem.CompositeSystem;
+using ML.Engine.InventorySystem;
 
 
 namespace ExcelToJson
@@ -61,49 +61,25 @@ namespace ExcelToJson
             #region EXCEL
             string excelFilePath = "./DataTable/Config_OC_数据表.xlsx";
             string rootPath = "../../../Assets/_ProjectOC/OCResources/Json/TableData/";
-
-            // 在处理前或处理后需要根据Recipe表、Build表需要合成表Binary文件，用于合成系统
-            List<CompositionTableData> compositionTableDatas = new List<CompositionTableData>();
-            // 1. 读入需要的EXCEL表
-            List<ProjectOC.WorkerEchoNS.WorkerEchoTableData> workerEchoTableDatas = DBMgr.ReadExcel<ProjectOC.WorkerEchoNS.WorkerEchoTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 7);
-            List<ML.Engine.BuildingSystem.BuildingTableData> buildingTableDatas = DBMgr.ReadExcel<ML.Engine.BuildingSystem.BuildingTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 10);
-            List<ML.Engine.InventorySystem.ItemTableData> itemTableDatas = DBMgr.ReadExcel<ML.Engine.InventorySystem.ItemTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 16);
-            List<ML.Engine.InventorySystem.RecipeTableData> recipeTableDatas = DBMgr.ReadExcel<ML.Engine.InventorySystem.RecipeTableData>(path: excelFilePath, iBeginRow: 5, iWorksheet: 18);
-            Dictionary<string, ML.Engine.BuildingSystem.BuildingTableData> buildDict = new Dictionary<string, ML.Engine.BuildingSystem.BuildingTableData>();
-            // 2. 分别解析表格并将数据暂存在内存中
-            foreach (var data in buildingTableDatas)
-            {
-                buildDict.Add(data.GetClassificationString(), data);
-                compositionTableDatas.Add(new CompositionTableData(data));
-            }
-
-            foreach (var data in recipeTableDatas)
-            {
-                compositionTableDatas.Add(new CompositionTableData(data, itemTableDatas.Find(item => item.id == data.Product.id)));
-            }
-            foreach (var data in workerEchoTableDatas)
-            {
-                compositionTableDatas.Add(new CompositionTableData(data));
-            }
-            // 3. 将解析完成的数据存为对应的二进制文件
-            DBMgr.WriteJsonFromExcel(buildingTableDatas, rootPath + "Building.json");
-            DBMgr.WriteJsonFromExcel(recipeTableDatas, rootPath + "Recipe.json");
-            DBMgr.WriteJsonFromExcel(compositionTableDatas, rootPath + "Composition.json");
-            DBMgr.WriteJsonFromExcel(workerEchoTableDatas, rootPath + "WorkerEcho.json");
-
             // 合成表二进制文件
             // 必须是.json后缀
             List<EBConfig> configs = new List<EBConfig>();
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 1, BinaryFilePath = rootPath + "ProNode.json", type = typeof(ProjectOC.ProNodeNS.ProNodeTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 2, BinaryFilePath = rootPath + "StoreIcon.json", type = typeof(ProjectOC.StoreNS.StoreIconTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 7, BinaryFilePath = rootPath + "WorkerEcho.json", type = typeof(ProjectOC.WorkerEchoNS.WorkerEchoTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 8, BinaryFilePath = rootPath + "WorkerFood.json", type = typeof(ProjectOC.RestaurantNS.WorkerFoodTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 10, BinaryFilePath = rootPath + "Building.json", type = typeof(ML.Engine.BuildingSystem.BuildingTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 11, BinaryFilePath = rootPath + "FurnitureTheme.json", type = typeof(ML.Engine.BuildingSystem.FurnitureThemeTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 12, BinaryFilePath = rootPath + "TechPoint.json", type = typeof(ProjectOC.TechTree.TechPoint) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 15, BinaryFilePath = rootPath + "Order.json", type = typeof(ProjectOC.Order.OrderTableData) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 16, BinaryFilePath = rootPath + "Item.json", type = typeof(ML.Engine.InventorySystem.ItemTableData) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 17, BinaryFilePath = rootPath + "ItemCategory.json", type = typeof(ML.Engine.InventorySystem.ItemCategoryTableData) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 20, BinaryFilePath = rootPath + "Event.json", type = typeof(ML.Engine.Event.EventTableData) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 21, BinaryFilePath = rootPath + "Condition.json", type = typeof(ML.Engine.Event.ConditionTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 16, BinaryFilePath = rootPath + "MainlandLevel.json", type = typeof(ProjectOC.LandMassExpand.MainlandLevelTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 17, BinaryFilePath = rootPath + "Item.json", type = typeof(ML.Engine.InventorySystem.ItemTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 18, BinaryFilePath = rootPath + "ItemCategory.json", type = typeof(ML.Engine.InventorySystem.ItemCategoryTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 19, BinaryFilePath = rootPath + "Recipe.json", type = typeof(ML.Engine.InventorySystem.RecipeTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 21, BinaryFilePath = rootPath + "Event.json", type = typeof(ML.Engine.Event.EventTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 22, BinaryFilePath = rootPath + "Condition.json", type = typeof(ML.Engine.Event.ConditionTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 24, BinaryFilePath = rootPath + "Dialog.json", type = typeof(ProjectOC.Dialog.DialogTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 25, BinaryFilePath = rootPath + "Option.json", type = typeof(ProjectOC.Dialog.OptionTableData) });
 
             //configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 9, BinaryFilePath = rootPath + "Feature.json", type = typeof(ProjectOC.WorkerNS.FeatureTableData) });
             //configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 17, BinaryFilePath = rootPath + "Effect.json", type = typeof(ProjectOC.WorkerNS.EffectTableData) });
@@ -289,6 +265,20 @@ namespace ExcelToJson
                 }
             }
             return result;
+        }
+
+        public static List<TextContent> ParseTextContentList(string data)
+        {
+            List<string> strings = ParseStringList(data);
+            List<TextContent> results = new List<TextContent>();
+            foreach (string s in strings)
+            {
+                if (!string.IsNullOrEmpty(s))
+                {
+                    results.Add(ParseTextContent(s));
+                }
+            }
+            return results;
         }
 
         public static List<Formula> ParseFormulaList(string data)

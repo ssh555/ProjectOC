@@ -8,8 +8,10 @@ namespace ProjectOC.MissionNS
     {
         [LabelText("搬运类型"), ReadOnly]
         public MissionTransportType Type;
-        [LabelText("搬运物品ID"), ReadOnly]
-        public string ItemID = "";
+        [LabelText("搬运发起者类型"), ReadOnly]
+        public MissionInitiatorType MissionInitiatorType;
+        [LabelText("搬运东西的ID"), ReadOnly]
+        public string ID = "";
         [LabelText("已经分配的数量"), ShowInInspector, ReadOnly]
         public int AssignNum;
         [LabelText("需要分配的数量"), ShowInInspector, ReadOnly]
@@ -39,20 +41,30 @@ namespace ProjectOC.MissionNS
         [LabelText("分配的搬运"), ShowInInspector, ReadOnly, System.NonSerialized]
         private List<Transport> Transports = new List<Transport>();
 
-        public MissionTransport(MissionTransportType type, string itemID, int missionNum, IMissionObj imission)
+        public MissionTransport(MissionTransportType type, string itemID, int missionNum, IMissionObj imission, MissionInitiatorType initiatorType)
         {
-            this.Type = type;
-            this.ItemID = itemID;
-            this.MissionNum = missionNum;
-            this.Initiator = imission;
-            this.Initiator.AddMissionTranport(this);
+            Type = type;
+            ID = itemID;
+            MissionNum = missionNum;
+            Initiator = imission;
+            MissionInitiatorType = initiatorType;
+            Initiator.AddMissionTranport(this);
+        }
+
+        public void ChangeMissionNum(int num)
+        {
+            MissionNum = num;
+            if (MissionNum <= 0 || FinishNum >= MissionNum)
+            {
+                End();
+            }
         }
 
         public bool AddTransport(Transport transport)
         {
             if (transport != null)
             {
-                this.Transports.Add(transport);
+                Transports.Add(transport);
                 AssignNum += transport.MissionNum;
                 return true;
             }
@@ -63,7 +75,7 @@ namespace ProjectOC.MissionNS
         {
             if (transport != null)
             {
-                if (this.Transports.Remove(transport))
+                if (Transports.Remove(transport))
                 {
                     AssignNum -= transport.MissionNum;
                     return true;
@@ -72,26 +84,25 @@ namespace ProjectOC.MissionNS
             return false;
         }
 
-        public string GetUID()
+        public void UpdateDestionation()
         {
-            return this.Initiator?.GetUID() ?? "";
-        }
-
-        public void UpdateTransportDestionation()
-        {
-            foreach (Transport transport in this.Transports.ToArray())
+            foreach (Transport transport in Transports.ToArray())
             {
                 transport?.UpdateDestination();
             }
         }
 
-        public void End(bool removeManager = true)
+        public void End(bool removeManager = true, bool needJudge = false)
         {
-            foreach (Transport transport in this.Transports.ToArray())
+            foreach (Transport transport in Transports.ToArray())
             {
-                transport?.End(false);
+                if (!needJudge || MissionInitiatorType == MissionInitiatorType.PutIn_Initiator 
+                    || (MissionInitiatorType == MissionInitiatorType.PutOut_Initiator && !transport.ArriveSource))
+                {
+                    transport?.End();
+                }
             }
-            this.Initiator.RemoveMissionTranport(this);
+            Initiator.RemoveMissionTranport(this);
             if (removeManager)
             {
                 ML.Engine.Manager.GameManager.Instance.GetLocalManager<MissionManager>().RemoveMissionTransport(this);
@@ -116,9 +127,8 @@ namespace ProjectOC.MissionNS
                 {
                     return priorityX.CompareTo(priorityY);
                 }
-                return x.GetUID().CompareTo(y.GetUID());
+                return x.Initiator.GetUID().CompareTo(y.Initiator.GetUID());
             }
         }
     }
 }
-

@@ -1,7 +1,4 @@
-using System;
 using System.Collections.Generic;
-using BehaviorDesigner.Runtime.Tasks.Movement;
-using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.BuildingSystem.BuildingPart;
 using ML.Engine.Manager;
 using Sirenix.OdinInspector;
@@ -11,7 +8,7 @@ namespace ProjectOC.LandMassExpand
 {
     //拷贝自BuildingPart，增加OnChangePlaceEvent，放置后更新用电数量
 
-    public class BuildPowerSub : BuildingPart, INeedPowerBpart, ISupportPowerBPart,IComposition
+    public class BuildPowerSub : BuildingPart, INeedPowerBpart, ISupportPowerBPart
     {
         [Header("供电部分"),SerializeField,LabelText("供电范围")]
         private float powerSupportRange = 5;

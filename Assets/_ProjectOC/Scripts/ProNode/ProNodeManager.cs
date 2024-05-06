@@ -27,7 +27,16 @@ namespace ProjectOC.ProNodeNS
         {
             LoadTableData();
         }
-        
+
+        #region 配置
+        [LabelText("基础生产效率"), PropertyTooltip("单位 %"), FoldoutGroup("配置"), ShowInInspector]
+        public int EffBase = 100;
+        [LabelText("最大等级"), FoldoutGroup("配置"), ShowInInspector]
+        public int LevelMax = 2;
+        [LabelText("升级提高的基础生产效率"), FoldoutGroup("配置"), ShowInInspector]
+        public List<int> LevelUpgradeEff = new List<int>() { 50, 50, 50 };
+        #endregion
+
         #region Load And Data
         private Dictionary<string, ProNodeTableData> ProNodeTableDict = new Dictionary<string, ProNodeTableData>();
         public ML.Engine.ABResources.ABJsonAssetProcessor<ProNodeTableData[]> ABJAProcessor;

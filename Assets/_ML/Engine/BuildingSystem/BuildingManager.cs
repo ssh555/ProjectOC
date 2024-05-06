@@ -1,11 +1,8 @@
 using Sirenix.OdinInspector;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ML.Engine.BuildingSystem.BuildingPart;
 using System.Linq;
-using System;
-using ML.Engine.InventorySystem.CompositeSystem;
 using UnityEngine.U2D;
 
 namespace ML.Engine.BuildingSystem
@@ -22,7 +19,7 @@ namespace ML.Engine.BuildingSystem
         public string category3;
         public string category4;
         public string actorID;
-        public List<InventorySystem.CompositeSystem.Formula> raw;
+        public List<InventorySystem.Formula> raw;
         public string upgradeID;
 
         public string GetClassificationString()
@@ -1036,7 +1033,7 @@ namespace ML.Engine.BuildingSystem
             return null;
         }
 
-        public List<InventorySystem.CompositeSystem.Formula> GetRaw(string CID)
+        public List<InventorySystem.Formula> GetRaw(string CID)
         {
             if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
             {
@@ -1047,6 +1044,26 @@ namespace ML.Engine.BuildingSystem
                 return BPartTableDictOnID[CID].raw;
             }
             return null;
+        }
+
+        public List<InventorySystem.Formula> GetRawAll(string CID)
+        {
+            List<InventorySystem.Formula> result = new List<InventorySystem.Formula>();
+            string[] cids = CID.Split('_');
+            if (cids.Length == 4)
+            {
+                int level = int.Parse(cids[3]);
+                for (int i = 1; i <= level; i++)
+                {
+                    string cid = cids[0] + "_" + cids[1] + "_" + cids[2] + "_" + i.ToString();
+                    var raws = GetRaw(cid);
+                    if (raws != null)
+                    {
+                        result.AddRange(raws);
+                    }
+                }
+            }
+            return result;
         }
 
         public string GetUpgradeID(string CID)
@@ -1085,10 +1102,10 @@ namespace ML.Engine.BuildingSystem
             return null;
         }
 
-        public List<Formula> GetUpgradeRaw(string CID)
+        public List<InventorySystem.Formula> GetUpgradeRaw(string CID)
         {
-            List<Formula> result = new List<Formula>();
-            List<Formula> formulas = GetRaw(GetUpgradeCID(CID));
+            List<InventorySystem.Formula> result = new List<InventorySystem.Formula>();
+            List<InventorySystem.Formula> formulas = GetRaw(GetUpgradeCID(CID));
             if (formulas != null)
             {
                 result.AddRange(formulas);
@@ -1134,7 +1151,43 @@ namespace ML.Engine.BuildingSystem
         
         #endregion
 
+        #region 已建造建筑存储
 
+        [ShowInInspector]
+        private Dictionary<BuildingCategory2, List<IBuildingPart>> buildingInstanceDic = new Dictionary<BuildingCategory2, List<IBuildingPart>>();
+
+        public void AddBuildingInstance(ML.Engine.BuildingSystem.BuildingPart.BuildingPart buildingInstance)
+        {
+            BuildingCategory2 buildingType = buildingInstance.Classification.Category2;
+            if (!buildingInstanceDic.ContainsKey(buildingType))
+            {
+                buildingInstanceDic.Add(buildingType,new List<IBuildingPart>());
+            }
+            buildingInstanceDic[buildingType].Add(buildingInstance);
+        }
+
+        public void RemoveBuildingInstance(ML.Engine.BuildingSystem.BuildingPart.BuildingPart buildingInstance)
+        {
+            BuildingCategory2 buildingType = buildingInstance.Classification.Category2;
+            buildingInstanceDic[buildingType].Remove(buildingInstance);
+            if (buildingInstanceDic[buildingType].Count == 0)
+            {
+                buildingInstanceDic.Remove(buildingType);
+            }
+        }
+
+        public int GetBuildingCount(BuildingCategory2 _buildingType)
+        {
+            if (!buildingInstanceDic.ContainsKey(_buildingType))
+            {
+                return 0;
+            }
+            else
+            {
+                return buildingInstanceDic[_buildingType].Count;
+            }
+        }
+        #endregion
 
         #region Gizmos
         [System.Serializable]

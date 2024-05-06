@@ -1,15 +1,11 @@
-using ML.Engine.InventorySystem.CompositeSystem;
-using ProjectOC.Order;
 using Sirenix.OdinInspector;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace ML.Engine.BuildingSystem.BuildingPart
 {
-    public class BuildingPart : MonoBehaviour, IBuildingPart, IComposition
+    public class BuildingPart : MonoBehaviour, IBuildingPart
     {
         #region IBuildingPart
         public string ID { get => BuildingManager.Instance.BPartTableDictOnClass[this.classification.ToString()].id; set => throw new Exception("不允许设置建筑物的ID"); }
@@ -64,8 +60,12 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
         public virtual void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
-            if(isFirstBuild)
+            if (isFirstBuild)
+            {
                 isFirstBuild = false;
+                BuildingManager.Instance.AddBuildingInstance(this);
+            }
+                
         }
 
         public bool CanEnterEditMode()
@@ -379,7 +379,11 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
         public virtual void OnBPartDestroy()
         {
-
+            //排除建造模式时手上拿的那一个
+            if (!isFirstBuild)
+            {
+                BuildingManager.Instance.RemoveBuildingInstance(this);
+            }
         }
 
         public virtual void OnEnterEdit()
