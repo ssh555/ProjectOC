@@ -1,21 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using ML.Engine.FSM;
 using Sirenix.OdinInspector;
 using ProjectOC.Player.Terrain;
-using UnityEngine.InputSystem;
 using ML.Engine.InteractSystem;
-using ML.Engine.UI;
 using ML.PlayerCharacterNS;
-using UnityEngine.InputSystem.Controls;
-using UnityEngine.InputSystem.Layouts;
-using UnityEngine.InputSystem.Utilities;
-using ML.Engine.InventorySystem.CompositeSystem;
-using ProjectOC.StoreNS;
-using ProjectOC.ManagerNS;
-using static ML.Engine.UI.UIBtnListContainerInitor;
 
 //ML.PlayerCharacterNS
 namespace ProjectOC.Player

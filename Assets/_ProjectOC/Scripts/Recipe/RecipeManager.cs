@@ -10,8 +10,8 @@ namespace ML.Engine.InventorySystem
         public int Sort;
         public RecipeCategory Category;
         public TextContent.TextContent Name;
-        public List<CompositeSystem.Formula> Raw;
-        public CompositeSystem.Formula Product;
+        public List<Formula> Raw;
+        public Formula Product;
         public int TimeCost;
         public int ExpRecipe;
     }
@@ -100,9 +100,9 @@ namespace ML.Engine.InventorySystem
 
         public RecipeCategory GetCategory(string id) { return IsValidID(id) ? RecipeTableDict[id].Category : RecipeCategory.None; }
 
-        public List<CompositeSystem.Formula> GetRaw(string id)
+        public List<Formula> GetRaw(string id)
         {
-            List<CompositeSystem.Formula> result = new List<CompositeSystem.Formula>();
+            List<Formula> result = new List<Formula>();
             if (IsValidID(id))
             {
                 result.AddRange(RecipeTableDict[id].Raw);
@@ -110,9 +110,9 @@ namespace ML.Engine.InventorySystem
             return result;
         }
 
-        public CompositeSystem.Formula GetProduct(string id) 
+        public Formula GetProduct(string id) 
         { 
-            return IsValidID(id) ? RecipeTableDict[id].Product : new CompositeSystem.Formula() { id = "", num = 0 }; 
+            return IsValidID(id) ? RecipeTableDict[id].Product : new Formula() { id = "", num = 0 }; 
         }
         public int GetTimeCost(string id) { return IsValidID(id) ? RecipeTableDict[id].TimeCost : 0; }
         public int GetExpRecipe(string id) { return IsValidID(id) ? RecipeTableDict[id].ExpRecipe : 0; }

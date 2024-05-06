@@ -83,7 +83,7 @@ namespace ProjectOC.Player
             return false;
         }
 
-        public bool InventoryHaveItems(List<ML.Engine.InventorySystem.CompositeSystem.Formula> formulas, bool containStore = true)
+        public bool InventoryHaveItems(List<ML.Engine.InventorySystem.Formula> formulas, bool containStore = true)
         {
             if (formulas == null) { return false; }
             Dictionary<string, int> needs = new Dictionary<string, int>();
@@ -197,7 +197,7 @@ namespace ProjectOC.Player
             return 0;
         }
 
-        public Dictionary<string, int> InventoryCostItems(List<ML.Engine.InventorySystem.CompositeSystem.Formula> formulas, bool containStore = true, bool needJudgeNum = false, int priority = 0)
+        public Dictionary<string, int> InventoryCostItems(List<ML.Engine.InventorySystem.Formula> formulas, bool containStore = true, bool needJudgeNum = false, int priority = 0)
         {
             if (formulas == null)
             {

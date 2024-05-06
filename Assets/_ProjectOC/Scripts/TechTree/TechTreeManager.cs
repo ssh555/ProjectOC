@@ -165,7 +165,7 @@ namespace ProjectOC.TechTree
             return false;
         }
 
-        public ML.Engine.InventorySystem.CompositeSystem.Formula[] GetTPItemCost(string ID)
+        public ML.Engine.InventorySystem.Formula[] GetTPItemCost(string ID)
         {
             if (string.IsNullOrEmpty(ID)) return null;
             return this.registerTechPoints.ContainsKey(ID) ? this.registerTechPoints[ID].ItemCost : null;

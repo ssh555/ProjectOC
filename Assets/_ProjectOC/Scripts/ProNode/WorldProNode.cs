@@ -1,10 +1,9 @@
-using ML.Engine.BuildingSystem;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace ProjectOC.ProNodeNS
 {
-    public class WorldProNode : LandMassExpand.ElectAppliance, ML.Engine.InteractSystem.IInteraction, IBuildingUpgrade
+    public class WorldProNode : LandMassExpand.ElectAppliance, ML.Engine.InteractSystem.IInteraction, ML.Engine.BuildingSystem.IBuildingUpgrade
     {
         [LabelText("生产节点"), ShowInInspector, ReadOnly, SerializeField]
         public ProNode ProNode;
@@ -16,7 +15,7 @@ namespace ProjectOC.ProNodeNS
         {
             if (isFirstBuild)
             {
-                string actorID = BuildingManager.Instance.GetActorID(Classification.ToString());
+                string actorID = ML.Engine.BuildingSystem.BuildingManager.Instance.GetActorID(Classification.ToString());
                 if (!string.IsNullOrEmpty(actorID))
                 {
                     ManagerNS.LocalGameManager.Instance.ProNodeManager.WorldNodeSetData(this, actorID);
@@ -48,29 +47,24 @@ namespace ProjectOC.ProNodeNS
             {
                 UI.UIProNode uiPanel = handle.Result.GetComponent<UI.UIProNode>();
                 uiPanel.ProNode = ProNode;
-                uiPanel.HasUpgrade = (this as IBuildingUpgrade).HasUpgrade() || ProNode.Level > 0;
+                uiPanel.HasUpgrade = (this as ML.Engine.BuildingSystem.IBuildingUpgrade).HasUpgrade() || ProNode.Level > 0;
                 ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(uiPanel);
             };
         }
 
         public bool CanUpgrade()
         {
-            if ((this as IBuildingUpgrade).HasUpgrade())
+            if ((this as ML.Engine.BuildingSystem.IBuildingUpgrade).HasUpgrade())
             {
-                var formulas = BuildingManager.Instance.GetUpgradeRaw(Classification.ToString());
+                var formulas = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(Classification.ToString());
                 return (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).InventoryHaveItems(formulas);
             }
             return false;
         }
 
-        public void OnUpgrade(IBuildingUpgrade lastLevelBuild)
+        public void OnUpgrade(ML.Engine.BuildingSystem.IBuildingUpgrade lastLevelBuild)
         {
-            string lastLevelID = BuildingManager.Instance.GetID(lastLevelBuild.Classification.ToString());
-            string upgradeID = BuildingManager.Instance.GetID(Classification.ToString());
-            var inventorys = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).GetInventorys(true, -1);
-            ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.OnlyCostResource(inventorys, upgradeID);
-            var inventory = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory;
-            ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.OnlyReturnResource(inventory, lastLevelID);
+            ManagerNS.LocalGameManager.Instance.Player.InventoryCostItems(ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(Classification.ToString()), needJudgeNum:true, priority:-1);
             transform.SetParent(lastLevelBuild.transform.parent);
             InstanceID = lastLevelBuild.InstanceID;
             transform.position = lastLevelBuild.transform.position;

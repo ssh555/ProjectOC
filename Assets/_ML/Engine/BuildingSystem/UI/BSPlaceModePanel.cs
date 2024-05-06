@@ -1,16 +1,12 @@
 using ML.Engine.BuildingSystem.BuildingPart;
-using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.TextContent;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using static ML.Engine.BuildingSystem.UI.BSPlaceModePanel;
-using ML.Engine.Manager;
-using ML.Engine.InventorySystem;
 
 namespace ML.Engine.BuildingSystem.UI
 {
@@ -374,21 +370,12 @@ namespace ML.Engine.BuildingSystem.UI
         #region Event
         private bool CheckCostResources(IBuildingPart bpart)
         {
-            List<IInventory> inventorys = (GameManager.Instance.CharacterManager.GetLocalController() as ProjectOC.Player.OCPlayerController).GetInventorys();
-            if (CompositeManager.Instance.CanComposite(inventorys, BuildingManager.Instance.GetID(bpart.Classification.ToString())))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return ProjectOC.ManagerNS.LocalGameManager.Instance.Player.InventoryHaveItems(BuildingManager.Instance.GetRawAll(bpart.Classification.ToString()));
         }
 
         private void OnPlaceModeSuccess(IBuildingPart bpart)
         {
-            List<IInventory> inventorys = (GameManager.Instance.CharacterManager.GetLocalController() as ProjectOC.Player.OCPlayerController).GetInventorys(true, -1);
-            CompositeManager.Instance.OnlyCostResource(inventorys, BuildingManager.Instance.GetID(bpart.Classification.ToString()));
+            ProjectOC.ManagerNS.LocalGameManager.Instance.Player.InventoryCostItems(BuildingManager.Instance.GetRawAll(bpart.Classification.ToString()), needJudgeNum:true, priority:-1);
             BM.Placer.SelectedPartInstance.CheckCanInPlaceMode -= CheckCostResources;
         }
 

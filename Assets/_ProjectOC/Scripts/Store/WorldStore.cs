@@ -48,12 +48,7 @@ namespace ProjectOC.StoreNS
 
         public void OnUpgrade(ML.Engine.BuildingSystem.IBuildingUpgrade lastLevelBuild)
         {
-            string lastLevelID = ML.Engine.BuildingSystem.BuildingManager.Instance.GetID(lastLevelBuild.Classification.ToString());
-            string upgradeID = ML.Engine.BuildingSystem.BuildingManager.Instance.GetID(Classification.ToString());
-            List<ML.Engine.InventorySystem.IInventory> inventorys = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).GetInventorys(true, -1);
-            ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.OnlyCostResource(inventorys, upgradeID);
-            ML.Engine.InventorySystem.IInventory inventory = (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).OCState.Inventory;
-            ML.Engine.InventorySystem.CompositeSystem.CompositeManager.Instance.OnlyReturnResource(inventory, lastLevelID);
+            ManagerNS.LocalGameManager.Instance.Player.InventoryCostItems(ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(Classification.ToString()), needJudgeNum: true, priority: -1);
             transform.SetParent(lastLevelBuild.transform.parent);
             InstanceID = lastLevelBuild.InstanceID;
             transform.position = lastLevelBuild.transform.position;
