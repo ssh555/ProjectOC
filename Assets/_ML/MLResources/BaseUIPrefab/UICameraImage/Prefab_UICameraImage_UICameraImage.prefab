@@ -52,6 +52,9 @@ MonoBehaviour:
   cameraSpawnPoint: {x: 1000, y: 1000, z: 1000}
   distanceFromObject: 3
   speed: 2
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 2048
 --- !u!1 &6261937035367398393
 GameObject:
   m_ObjectHideFlags: 0

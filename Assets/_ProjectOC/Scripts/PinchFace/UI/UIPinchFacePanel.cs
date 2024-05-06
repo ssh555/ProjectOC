@@ -6,6 +6,9 @@ using ProjectOC.ManagerNS;
 using ProjectOC.PinchFace.Config;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.Serialization;
 using UnityEngine.U2D;
 
 namespace ProjectOC.PinchFace
@@ -17,17 +20,23 @@ namespace ProjectOC.PinchFace
         {
             base.Awake();
             pinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
+
+            CommonType2.Add(PinchPartType2.Body);
+            CommonType2.Add(PinchPartType2.HairFront);
+            CommonType2.Add(PinchPartType2.Eye);
+            CommonType2.Add(PinchPartType2.FaceDress);
             
-            uICameraImage = transform.Find("UICameraImage").GetComponentInChildren<UICameraImage>();
-            uICameraImage.Init();
-            GameObject characterModel = null;
+            #region 初始生成读取模型 Config 图集
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefabs_PinchPart/PinchPart/Model_AnMiXiu.prefab").Completed+=(handle) =>
             {
-                characterModel = handle.Result;
-                //uICameraImage.LookAtGameObject(characterModel); //自动移动位置
-                CharacterModelPinch _modelPinch = characterModel.GetComponentInChildren<CharacterModelPinch>();
-                // Debug.Log($"{_modelPinch != null}  {characterModel.GetComponent<CharacterModelPinch>() != null}");
-                pinchFaceManager.ModelPinch = _modelPinch;
+                uICameraImage = transform.Find("UICameraImage").GetComponentInChildren<UICameraImage>();
+                RectTransform _rtTransform = uICameraImage.transform as RectTransform;
+                
+                RenderTexture _rt = new RenderTexture((int)_rtTransform.rect.width,(int)_rtTransform.rect.height,0);
+                uICameraImage.Init(_rt);
+                pinchFaceManager.ModelPinch = handle.Result.GetComponentInChildren<CharacterModelPinch>();
+                uICameraImage.LookAtGameObject(handle.Result);
+                CurType2 = PinchPartType2.Body;
             };
             
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<PinchDataConfig>("PinchAsset_PinchFaceSetting/PinchDataConfig.asset").Completed+=(handle) =>
@@ -39,6 +48,8 @@ namespace ProjectOC.PinchFace
             {
                 SA_PinchPart = handle.Result;
             };
+            #endregion
+
         }
 
         public override void OnExit()
@@ -96,6 +107,24 @@ namespace ProjectOC.PinchFace
             {
                 _btnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm,UIBtnListContainer.BindType.started);
             }
+            UIBtnListContainer.AddOnSelectButtonChangedAction(() =>
+            {
+                //右侧种族描述更新，中英文切换直接换RacePinchData
+                int _curPos = UIBtnListContainer.UIBtnLists[1].GetCurSelectedPos1();
+                if (_curPos != -1)
+                {
+                    CurType2 = pinchFaceManager.pinchPartType3Dic[raceData.pinchPartType3s[_curPos]];
+                }
+                else
+                {
+                    _curPos = UIBtnListContainer.UIBtnLists[2].GetCurSelectedPos1();
+                    if (_curPos != -1)
+                    {
+                        CurType2 = CommonType2[_curPos];
+                    }
+                }
+                
+            });
         }
         
         //返回右侧BtnList，重新生成
@@ -155,6 +184,7 @@ namespace ProjectOC.PinchFace
         #region FacePanel
 
         private PinchFaceManager pinchFaceManager;
+        private CharacterModelPinch modelPinch => pinchFaceManager.ModelPinch;
         [ShowInInspector]
         private UIBtnListContainer UIBtnListContainer;
         public Transform containerTransf;
@@ -166,15 +196,32 @@ namespace ProjectOC.PinchFace
         
         public PinchDataConfig Config;
         public SpriteAtlas SA_PinchPart;
-
+        public AssetReference rtRefrence;
         public UICameraImage uICameraImage;
+
+        private PinchPartType2 curType2;
+        public PinchPartType2 CurType2
+        {
+            get
+            {
+                return curType2;
+            }
+            set
+            {
+                curType2 = value;
+                modelPinch.CameraView.CameraLookAtSwitch(uICameraImage,curType2);
+            }
+        }
+        
+        
         enum CurrentMouseState
         {
             Left,
             Right
         }
 
-        private CurrentMouseState CurrentState = CurrentMouseState.Left; 
+        private CurrentMouseState CurrentState = CurrentMouseState.Left;
+        private List<PinchPartType2> CommonType2 = new List<PinchPartType2>();
         
         public void InitRaceData(RacePinchData _racePinchData)
         {
@@ -188,7 +235,6 @@ namespace ProjectOC.PinchFace
             
             
             //生成左侧List<PinchPartType3>
-
             for(int i = 0;i<raceData.pinchPartType3s.Count;i++)
             {
                 int _buttonIndex = i;
@@ -237,7 +283,7 @@ namespace ProjectOC.PinchFace
             //加载Type3，是否有com
         }
 
-
+    
         public void ReturnBtnList(int _index)
         {
             UIBtnListContainer.MoveToBtnList(UIBtnListContainer.UIBtnLists[_index]);

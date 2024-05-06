@@ -5,7 +5,6 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using System;
 using System.Reflection;
-using ProjectOC.Player;
 using Random = UnityEngine.Random;
 
 namespace ML.PlayerCharacterNS
@@ -37,7 +36,6 @@ namespace ML.PlayerCharacterNS
         {
             LocalPlayerControllerIndex = 0;
             AddPlayerController(playerController);
-            //AddPlayerController(new OCPlayerController());
         }
 
         public PlayerController GetLocalController()
