@@ -1,5 +1,4 @@
 ﻿using ExcelToJson;
-using System;
 using System.Collections.Generic;
 
 namespace ProjectOC.WorkerEchoNS
@@ -9,7 +8,7 @@ namespace ProjectOC.WorkerEchoNS
     {
         public string ID;
         public Category Category;
-        public List<ML.Engine.InventorySystem.CompositeSystem.Formula> Raw;
+        public List<ML.Engine.InventorySystem.Formula> Raw;
         public int TimeCost;
 
         public bool GenData(string[] row)

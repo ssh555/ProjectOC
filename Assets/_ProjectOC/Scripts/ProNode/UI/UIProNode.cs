@@ -850,10 +850,10 @@ namespace ProjectOC.ProNodeNS.UI
                 ProNode_Product.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>().text = ProNode.GetItemAllNum(ProNode.Recipe.ProductID).ToString();
                 for (int i = 0; i < ProNode.Recipe.Raw.Count; ++i)
                 {
-                    Transform item = RecipeRawBtnList.GetBtn(i).transform;
+                    if (i >= RawBtnList.BtnCnt) { break; }
+                    Transform item = RawBtnList.GetBtn(i).transform;
                     var amount = item.Find("Amount").GetComponent<TMPro.TextMeshProUGUI>();
                     amount.text = ProNode.GetItemAllNum(ProNode.Recipe.Raw[i].id).ToString();
-
                     // NeedAmount
                     var needAmount = item.Find("NeedAmount").GetComponent<TMPro.TextMeshProUGUI>();
                     needAmount.text = ProNode.Recipe.GetRawNum(ProNode.Recipe.Raw[i].id).ToString();

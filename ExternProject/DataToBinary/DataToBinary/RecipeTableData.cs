@@ -1,7 +1,5 @@
 ﻿using ExcelToJson;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace ML.Engine.InventorySystem
 {
@@ -12,8 +10,8 @@ namespace ML.Engine.InventorySystem
         public int Sort;
         public RecipeCategory Category;
         public TextContent.TextContent Name;
-        public List<CompositeSystem.Formula> Raw;
-        public CompositeSystem.Formula Product;
+        public List<Formula> Raw;
+        public Formula Product;
         public int TimeCost;
         public int ExpRecipe;
         public bool GenData(string[] row)

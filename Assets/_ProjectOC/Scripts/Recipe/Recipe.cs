@@ -17,9 +17,9 @@ namespace ML.Engine.InventorySystem
         [LabelText("类目"), ShowInInspector, ReadOnly]
         public RecipeCategory Category => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetCategory(ID) : RecipeCategory.None;
         [LabelText("原料"), ShowInInspector, ReadOnly]
-        public List<CompositeSystem.Formula> Raw => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetRaw(ID) : new List<CompositeSystem.Formula>();
+        public List<Formula> Raw => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetRaw(ID) : new List<Formula>();
         [LabelText("成品"), ShowInInspector, ReadOnly]
-        public CompositeSystem.Formula Product => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetProduct(ID) : default(CompositeSystem.Formula);
+        public Formula Product => LocalGameManager.Instance != null ? LocalGameManager.Instance.RecipeManager.GetProduct(ID) : default(Formula);
         [LabelText("成品ID"), ShowInInspector, ReadOnly]
         public string ProductID => Product.id;
         [LabelText("成品数量"), ShowInInspector, ReadOnly]
@@ -57,7 +57,7 @@ namespace ML.Engine.InventorySystem
 
         public Item Composite(IInventory inventory)
         {
-            List<CompositeSystem.Formula> adds = new List<CompositeSystem.Formula>();
+            List<Formula> adds = new List<Formula>();
             foreach (var formula in Raw)
             {
                 if(inventory.RemoveItem(formula.id, formula.num))

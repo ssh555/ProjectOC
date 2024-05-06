@@ -23,7 +23,6 @@ namespace ProjectOC.ManagerNS
         public ML.Engine.BuildingSystem.MonoBuildingManager MonoBuildingManager;
         public TechTree.TechTreeManager TechTreeManager;
         public ML.Engine.InventorySystem.ItemManager ItemManager;
-        public ML.Engine.InventorySystem.CompositeSystem.CompositeManager CompositeManager;
         public LandMassExpand.IslandModelManager IslandManager;
         public LandMassExpand.BuildPowerIslandManager BuildPowerIslandManager;
         public RestaurantNS.RestaurantManager RestaurantManager;
@@ -61,7 +60,6 @@ namespace ProjectOC.ManagerNS
             GM.RegisterLocalManager(MonoBuildingManager);
             GM.RegisterLocalManager(TechTreeManager);
             GM.RegisterLocalManager(ItemManager);
-            GM.RegisterLocalManager(CompositeManager);
             GM.RegisterLocalManager(IslandManager);
             GM.RegisterLocalManager(BuildPowerIslandManager);
             GM.RegisterLocalManager(RestaurantManager);
@@ -97,7 +95,6 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<ML.Engine.BuildingSystem.MonoBuildingManager>();
                 GM?.UnregisterLocalManager<TechTree.TechTreeManager>();
                 GM?.UnregisterLocalManager<ML.Engine.InventorySystem.ItemManager>();
-                GM?.UnregisterLocalManager<ML.Engine.InventorySystem.CompositeSystem.CompositeManager>();
                 GM?.UnregisterLocalManager<LandMassExpand.IslandModelManager>();
                 GM?.UnregisterLocalManager<LandMassExpand.BuildPowerIslandManager>();
                 GM?.UnregisterLocalManager<RestaurantNS.RestaurantManager>();
