@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace ML.Engine.UI
 {
@@ -24,6 +25,9 @@ namespace ML.Engine.UI
 
             [LabelText("BtnList之间是否为横向排列 默认为竖向排列"), ShowIf("ShowHorizontalOption")]
             public bool isHorizontal;
+
+            [LabelText("滑动窗口")]
+            public ScrollRect scrollRect;
 
             public static BtnListContainerInitData defaultTemplate = new BtnListContainerInitData()
             {

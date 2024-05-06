@@ -54,13 +54,25 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region Override
-
         protected override void Exit()
         {
             base.Exit();
             ClearTemp();
         }
 
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            this.BeastList.EnableBtnList();
+            this.ScheduleList.EnableBtnList();
+        }
+
+        public override void OnExit()
+        {
+            base.OnExit();
+            this.BeastList.DisableBtnList();
+            this.ScheduleList.DisableBtnList();
+        }
         #endregion
 
         #region Internal
@@ -68,81 +80,33 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Disable();
 
-            ProjectOC.Input.InputManager.PlayerInput.BeastPanel.SwitchBeast.started -= SwitchBeast_started;
-            ProjectOC.Input.InputManager.PlayerInput.BeastPanel.SwitchBeast.canceled -= SwitchBeast_canceled;
             //驱逐
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Expel.performed -= Expel_performed;
 
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
-        }
 
+            this.BeastList.RemoveAllListener();
+            this.BeastList.DeBindInputAction();
+        }
         protected override void RegisterInput()
         {
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Enable();
-
-            ProjectOC.Input.InputManager.PlayerInput.BeastPanel.SwitchBeast.started += SwitchBeast_started;
-            ProjectOC.Input.InputManager.PlayerInput.BeastPanel.SwitchBeast.canceled += SwitchBeast_canceled;
 
             // 驱逐
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Expel.performed += Expel_performed;
 
             // 返回
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
+
+            this.BeastList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
         }
-
-        #region SwitchBeast_performed
-        private float TimeInterval = 0.2f;
-        CounterDownTimer timer = null;
-        private int curIndex=-1, lastIndex=-1;
-
-        #endregion
-        private void SwitchBeast_started(InputAction.CallbackContext obj)
-        {
-            if(timer == null)
-            {
-                timer = new CounterDownTimer(TimeInterval, true, true, 1, 2);
-                timer.OnEndEvent += () =>
-                {
-                    Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
-                    if (Workers.Count == 0) return;
-
-
-                    if (obj.ReadValue<float>() > 0)//上
-                    {
-                        CurrentBeastIndex = (CurrentBeastIndex + Workers.Count - 1) % Workers.Count;
-                    }
-                    else//下
-                    {
-                        CurrentBeastIndex = (CurrentBeastIndex + 1) % Workers.Count;
-                    }
-                    lastIndex = curIndex;
-                    curIndex = CurrentBeastIndex;
-
-                    this.Refresh();
-
-                };
-            }
-            
-        }
-
-        private void SwitchBeast_canceled(InputAction.CallbackContext obj)
-        {
-            ML.Engine.Manager.GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
-            timer = null;
-        }
-
 
         private void Expel_performed(InputAction.CallbackContext obj)
         {
-            Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
-
-            if (Workers.Count == 0) return;
             LocalGameManager.Instance.WorkerManager.DeleteWorker(Workers[CurrentBeastIndex]);
-            Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
-            if (Workers.Count != 0) 
-                CurrentBeastIndex = (CurrentBeastIndex + Workers.Count - 1) % Workers.Count;
-            this.Refresh();
+            this.BeastList.DeleteButton(CurrentBeastIndex, () => { this.Refresh(); });
+            
         }
 
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -164,7 +128,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region UI对象引用
-        private int CurrentBeastIndex = 0;
+        [ShowInInspector]
+        private int CurrentBeastIndex { get { return this.BeastList.GetCurSelectedPos1(); } }
 
         [ShowInInspector]
         List<Worker> Workers = new List<Worker>();
@@ -185,42 +150,17 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         //需要调接口显示的隐兽信息
         private TMPro.TextMeshProUGUI BeastName;
 
-
         #endregion
 
         public override void Refresh()
         {
-
             if (this.ABJAProcessorJson == null || !this.ABJAProcessorJson.IsLoaded || !IsInit)
             {
                 return;
             }
-
             var Content = this.transform.Find("HiddenBeastInfo1").Find("Info").Find("Scroll View").Find("Viewport").Find("Content");
 
             Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
-            
-            if (Workers.Count == 0) CurrentBeastIndex = -1;
-
-
-            this.objectPool.ResetAllObject();
-
-            for (int i = 0; i < Workers.Count; i++)
-            {
- 
-                var tPrefab = this.objectPool.GetNextObject("BeastBioPool", Content);
-                //worker.TimeArrangement[10] = TimeStatus.Relax;
-                if (i == CurrentBeastIndex)
-                {
-                    tPrefab.transform.Find("Bio").Find("Selected").gameObject.SetActive(true);
-                }
-                else
-                {
-                    tPrefab.transform.Find("Bio").Find("Selected").gameObject.SetActive(false);
-                }
-
-                tPrefab.transform.Find("Bio").Find("mask").GetComponent<Image>().fillAmount = (float)Workers[i].APCurrent / Workers[i].APMax;
-            }
 
             if(CurrentBeastIndex != -1)
             {
@@ -240,18 +180,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 Worker worker = Workers[CurrentBeastIndex];
                 List<float> datas = new List<float>();
 
-
                 Dictionary<WorkType,Skill> skillDic = worker.Skill;
                 foreach (var skill in skillDic)
                 {
                     datas.Add(skillDic[skill.Key].Level / 10f);
                 }
 
-
                 var radar = this.transform.Find("HiddenBeastInfo2").Find("Info").Find("SkillGraph").Find("Viewport").Find("Content").Find("Radar").GetComponent<UIPolygon>();
                 radar.DrawPolygon(datas);
-
-                
                 
                 //性别
                 if (worker.Gender == Gender.Male)
@@ -265,10 +201,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                 this.transform.Find("HiddenBeastInfo2").Find("Info").Find("Icon").Find("mask").GetComponent<Image>().fillAmount = (float)worker.APCurrent / worker.APMax; ;
                 BeastName.text = worker.Name;
-
-
-
-
                 SpeedNumText.text = worker.WalkSpeed.ToString();
 
                 var Info = this.transform.Find("HiddenBeastInfo3").Find("Info").Find("Scroll View").Find("Viewport").Find("Content");
@@ -283,10 +215,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>" + feature.EffectsDescription + "</b></color>";
                     
                 }
-
-
                 //更新日程表
-
                 var schedule = this.transform.Find("BeastDuty").Find("Part1").Find("Info").Find("Schedule").Find("Time");
                 TimeStatus[] workerTimeStatus = worker.TimeArrangement.Status;
                 
@@ -309,7 +238,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                             img.color = UnityEngine.Color.yellow;
                             break;
                     }
-
                 }
             }
             else
@@ -362,12 +290,50 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "DescriptionPool", 5, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_Description.prefab");
             base.InitObjectPool();
         }
+        [ShowInInspector]
         private UIBtnList BeastList;
+        [ShowInInspector]
+        private UIBtnList ScheduleList;
         protected override void InitBtnInfo()
         {
             BeastList = new UIBtnList(this.transform.Find("HiddenBeastInfo1").Find("Info").Find("Scroll View").GetComponentInChildren<UIBtnListInitor>());
+            ScheduleList = new UIBtnList(this.transform.Find("BeastDuty").Find("Part1").Find("Info").Find("Schedule").Find("Time").GetComponentInChildren<UIBtnListInitor>());
         }
+        protected override void InitBtnInfoAfterInitObjectPool()
+        {
+            Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
 
+            this.objectPool.ResetAllObject();
+
+            for (int i = 0; i < Workers.Count; i++)
+            {
+                var tPrefab = this.objectPool.GetNextObject("BeastBioPool");
+
+                tPrefab.transform.Find("Bio").Find("mask").GetComponent<Image>().fillAmount = (float)Workers[i].APCurrent / Workers[i].APMax;
+                BeastList.AddBtn(tPrefab);
+            }
+            this.BeastList.OnSelectButtonChanged += () => { this.Refresh(); };
+            this.ScheduleList.SetAllBtnAction(() => {
+
+                if (CurrentBeastIndex == -1) return;
+                Worker worker = Workers[CurrentBeastIndex];
+                int time = ScheduleList.GetCurSelectedPos1();
+                if (worker != null && time != -1) 
+                {
+                    if (worker.TimeArrangement.Status[time] == TimeStatus.Relax)
+                    {
+                        worker.SetTimeStatus(time, TimeStatus.Work_Transport);
+                    }
+                    else if (worker.TimeArrangement.Status[time] == TimeStatus.Work_Transport)
+                    {
+                        worker.SetTimeStatus(time, TimeStatus.Relax);
+                    }
+                    this.Refresh();
+                }
+                
+            });
+            
+        }
         #endregion
     }
 
