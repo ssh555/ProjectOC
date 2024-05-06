@@ -91,18 +91,18 @@ namespace ProjectOC.Dialog
             optionMode = true;
             //处理Option数据为List
             List<OnePieceOption> _options = new List<OnePieceOption>();
-            if (_optionDatas.Optiontext1 != "")
-            {
-                _options.Add(new OnePieceOption(_optionDatas.Optiontext1,_optionDatas.OptionNextID1));
-            }
-            if (_optionDatas.Optiontext2 != "")
-            {
-                _options.Add(new OnePieceOption(_optionDatas.Optiontext2,_optionDatas.OptionNextID2));
-            }
-            if (_optionDatas.Optiontext3 != "")
-            {
-                _options.Add(new OnePieceOption(_optionDatas.Optiontext3,_optionDatas.OptionNextID3));
-            }
+            // if (_optionDatas.Optiontext1 != "")
+            // {
+            //     _options.Add(new OnePieceOption(_optionDatas.Optiontext1,_optionDatas.OptionNextID1));
+            // }
+            // if (_optionDatas.Optiontext2 != "")
+            // {
+            //     _options.Add(new OnePieceOption(_optionDatas.Optiontext2,_optionDatas.OptionNextID2));
+            // }
+            // if (_optionDatas.Optiontext3 != "")
+            // {
+            //     _options.Add(new OnePieceOption(_optionDatas.Optiontext3,_optionDatas.OptionNextID3));
+            // }
 
             
             //生成设置Option

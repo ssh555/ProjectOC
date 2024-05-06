@@ -1,14 +1,17 @@
-﻿namespace ProjectOC.Dialog
+﻿using System.Collections.Generic;
+
+namespace ProjectOC.Dialog
 {
     [System.Serializable]
     public struct OptionTableData
     {
         public string ID;
-        public ML.Engine.TextContent.TextContent Optiontext1;
-        public string OptionNextID1;
-        public ML.Engine.TextContent.TextContent Optiontext2;
-        public string OptionNextID2;
-        public ML.Engine.TextContent.TextContent Optiontext3;
-        public string OptionNextID3;
+        public List<OnePieceOption> Options;
+        public struct OnePieceOption
+        {
+            public ML.Engine.TextContent.TextContent OptionText;
+            public string NextID;
+
+        }
     }
 }

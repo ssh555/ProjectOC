@@ -1,6 +1,10 @@
+using System;
 using ML.Engine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using ML.Engine.BuildingSystem;
+using ML.Engine.BuildingSystem.BuildingPart;
+using Sirenix.Utilities;
 using UnityEngine;
 
 namespace ML.Engine.Event
@@ -70,17 +74,19 @@ namespace ML.Engine.Event
             return true;
         }
 
-        public bool Condition_CheckBuild_Bed_1()
+        public bool CheckBuild(List<string> p1, List<int> p2, List<float> p3)
         {
-            return true;
-        }
-        public bool Condition_CheckBuild_SeedPlot_1()
-        {
-            return true;
-        }
-        public bool Condition_CheckBuild_LifeDiversion_1()
-        {
-            return true;
+            if (p1.IsNullOrEmpty() || p2.IsNullOrEmpty() || p3.IsNullOrEmpty())
+            {
+                Debug.LogError("[TabelData Error]CheckBuild");
+            }
+            //Build_Interact_LifeDiversion_1
+            string buildingTypeStr = p1[0].Split("_")[2];
+            BuildingCategory2 buildingType =  (BuildingCategory2)Enum.Parse(typeof(Color), buildingTypeStr);
+            int currentCount = BuildingManager.Instance.GetBuildingCount(buildingType);
+
+            return currentCount >= p2[0];
+
         }
     }
 }

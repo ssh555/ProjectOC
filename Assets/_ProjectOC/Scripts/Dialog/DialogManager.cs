@@ -74,6 +74,7 @@ namespace ProjectOC.Dialog
                     .Completed +=(handle) =>
                 {
                     DialogPanel = handle.Result.GetComponent<UIDialogPanel>();
+                    DialogPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(DialogPanel);
                 };
             }
@@ -85,7 +86,7 @@ namespace ProjectOC.Dialog
         /// 加载一条
         /// </summary>
         /// <param name="_ID">对话ID，如果为空则触发下一条</param>
-        public void LoadDialogue(string _ID = "")
+        public void LoadDialogue(string _ID)
         {
             if (nextDialogID == "")
             {
@@ -107,12 +108,13 @@ namespace ProjectOC.Dialog
             {
                 ShowOption(_currentDialog.OptionID);
             }
-            
-                
-            
             //更新Dialog
         }
-        
+
+        public void LoadDialogue()
+        {
+            
+        }
         
         
         
