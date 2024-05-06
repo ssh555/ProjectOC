@@ -81,6 +81,17 @@ namespace ProjectOC.ProNodeNS.UI
                 if (curMode == Mode.ChangeRecipe)
                 {
                     RecipeBtnList.EnableBtnList();
+                    if (ProNode.HasRecipe)
+                    {
+                        for (int i = 0; i < RecipeBtnList.BtnCnt; ++i)
+                        {
+                            if (Recipes[i] == ProNode.Recipe.ID)
+                            {
+                                RecipeBtnList.MoveIndexIUISelected(i);
+                                break;
+                            }
+                        }
+                    }
                 }
                 else if (curMode == Mode.ChangeWorker)
                 {
@@ -127,16 +138,16 @@ namespace ProjectOC.ProNodeNS.UI
 
             RawBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ProNode").Find("Recipe").Find("Raw").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             int num = ProNode.HasRecipe ? ProNode.Recipe.Raw.Count : 0;
-            RawBtnList.ChangBtnNum(num, "Prefab_ProNode_UI/Prefab_ProNode_UI_RawTemplate.prefab", () => { synchronizer.Check(); });
+            RawBtnList.ChangBtnNum(num, "Prefab_ProNode_UI/Prefab_ProNode_UI_RawTemplate.prefab", () => { Debug.Log("1"); synchronizer.Check(); });
 
             Recipes = new List<string>() { "" };
             Recipes.AddRange(ProNode.GetCanProduceRecipe());
             RecipeBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ChangeRecipe").Find("Select").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
-            RecipeBtnList.OnSelectButtonChanged += () => { Refresh(); };
             RecipeBtnList.ChangBtnNum(Recipes.Count, "Prefab_ProNode_UI/Prefab_ProNode_UI_RecipeTemplate.prefab", () => { synchronizer.Check(); });
 
             RecipeRawBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ChangeRecipe").Find("Recipe").Find("Raw").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
-            RecipeRawBtnList.ChangBtnNum(0, "Prefab_ProNode_UI/Prefab_ProNode_UI_RecipeRawTemplate.prefab", () => { synchronizer.Check(); });
+            RecipeRawBtnList.ChangBtnNum(0, "Prefab_ProNode_UI/Prefab_ProNode_UI_RecipeRawTemplate.prefab",
+                () => { synchronizer.Check(); RecipeBtnList.OnSelectButtonChanged += () => { UpdateBtnInfo(); Refresh(); }; });
 
             WorkerBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ChangeWorker").Find("Select").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             WorkerBtnList.OnSelectButtonChanged += () => { Refresh(); };
@@ -145,13 +156,15 @@ namespace ProjectOC.ProNodeNS.UI
             num = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(ProNode.WorldProNode.Classification.ToString()).Count;
             UpgradeBtnList = new ML.Engine.UI.UIBtnList(transform.Find("Upgrade").Find("Raw").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             UpgradeBtnList.ChangBtnNum(num, "Prefab_ProNode_UI/Prefab_ProNode_UI_UpgradeRawTemplate.prefab", () => { synchronizer.Check(); });
+
         }
         protected void UpdateBtnInfo()
         {
+            if (!IsInitBtnList) return;
             IsInitBtnList = false;
             ML.Engine.UI.UIBtnList.Synchronizer synchronizer = new ML.Engine.UI.UIBtnList.Synchronizer(4, () => { IsInitBtnList = true; Refresh(); });
             int num = ProNode.HasRecipe ? ProNode.Recipe.Raw.Count : 0;
-            if (RawBtnList.BtnCnt != num)
+            if (RawBtnList != null && RawBtnList.BtnCnt != num)
             {
                 RawBtnList.ChangBtnNum(num, "Prefab_ProNode_UI/Prefab_ProNode_UI_RawTemplate.prefab", () => { synchronizer.Check(); });
             }
@@ -160,7 +173,7 @@ namespace ProjectOC.ProNodeNS.UI
                 synchronizer.Check();
             }
             num = ManagerNS.LocalGameManager.Instance.RecipeManager.GetRaw(Recipes[RecipeIndex]).Count;
-            if (RecipeRawBtnList.BtnCnt != num)
+            if (RecipeRawBtnList != null && RecipeRawBtnList.BtnCnt != num)
             {
                 RecipeRawBtnList.ChangBtnNum(num, "Prefab_ProNode_UI/Prefab_ProNode_UI_RecipeRawTemplate.prefab", () => { synchronizer.Check(); });
             }
@@ -169,7 +182,7 @@ namespace ProjectOC.ProNodeNS.UI
                 synchronizer.Check();
             }
             num = Workers.Count > 0 ? Workers.Count : 0;
-            if (WorkerBtnList.BtnCnt != num)
+            if (WorkerBtnList != null && WorkerBtnList.BtnCnt != num)
             {
                 WorkerBtnList.ChangBtnNum(num, "Prefab_ProNode_UI/Prefab_ProNode_UI_WorkerTemplate.prefab", () => { synchronizer.Check(); });
             }
@@ -178,7 +191,7 @@ namespace ProjectOC.ProNodeNS.UI
                 synchronizer.Check();
             }
             num = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(ProNode.WorldProNode.Classification.ToString()).Count;
-            if (UpgradeBtnList.BtnCnt != num)
+            if (UpgradeBtnList != null && UpgradeBtnList.BtnCnt != num)
             {
                 UpgradeBtnList.ChangBtnNum(num, "Prefab_Store_UI/Prefab_Store_UI_UpgradeRawTemplate.prefab", () => { synchronizer.Check(); });
             }
@@ -400,6 +413,7 @@ namespace ProjectOC.ProNodeNS.UI
             else if (CurMode == Mode.ChangeRecipe)
             {
                 ProNode.ChangeRecipe(Recipes[RecipeIndex]);
+                UpdateBtnInfo();
                 CurMode = Mode.ProNode;
             }
             else if (CurMode == Mode.ChangeWorker && Workers.Count > 0)
@@ -543,6 +557,7 @@ namespace ProjectOC.ProNodeNS.UI
                     var Raws = ProNode.Recipe.Raw;
                     for (int i = 0; i < Raws.Count; ++i)
                     {
+                        if (i >= RawBtnList.BtnCnt) { break; }
                         var itemID = Raws[i].id ?? "";
                         var item = RawBtnList.GetBtn(i).transform;
                         if (!tempSprite.ContainsKey(itemID))
@@ -623,6 +638,7 @@ namespace ProjectOC.ProNodeNS.UI
                 #region Select
                 for (int i = 0; i < Recipes.Count; ++i)
                 {
+                    if (i >= RecipeBtnList.BtnCnt) { break; }
                     var recipeID = Recipes[i];
                     productID = ManagerNS.LocalGameManager.Instance.RecipeManager.GetProduct(recipeID).id ?? "";
                     var item = RecipeBtnList.GetBtn(i).transform;
@@ -656,6 +672,7 @@ namespace ProjectOC.ProNodeNS.UI
                 var recipeRaws = ManagerNS.LocalGameManager.Instance.RecipeManager.GetRaw(Recipes[RecipeIndex]);
                 for (int i = 0; i < recipeRaws.Count; ++i)
                 {
+                    if (i >= RecipeRawBtnList.BtnCnt) { break; }
                     var itemID = recipeRaws[i].id;
                     var item = RecipeRawBtnList.GetBtn(i).transform;
                     var name = item.Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
@@ -677,6 +694,7 @@ namespace ProjectOC.ProNodeNS.UI
             {
                 for (int i = 0; i < Workers.Count; ++i)
                 {
+                    if (i >= WorkerBtnList.BtnCnt) { break; }
                     var worker = Workers[i];
                     var item = WorkerBtnList.GetBtn(i).transform;
                     // Icon
@@ -753,6 +771,7 @@ namespace ProjectOC.ProNodeNS.UI
                 var raw = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(buildCID);
                 for (int i = 0; i < raw.Count; ++i)
                 {
+                    if (i >= raw.Count) { break; }
                     var uiItemData = UpgradeBtnList.GetBtn(i).transform;
                     string itemID = raw[i].id;
                     int need = raw[i].num;

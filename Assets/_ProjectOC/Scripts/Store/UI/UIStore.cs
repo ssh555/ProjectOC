@@ -550,6 +550,7 @@ namespace ProjectOC.StoreNS.UI
                 var raw = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(buildCID);
                 for (int i = 0; i < RawBtnList.BtnCnt; ++i)
                 {
+                    if (i >= raw.Count) { break; }
                     var uiItemData = RawBtnList.GetBtn(i);
                     string itemID = raw[i].id;
                     int need = raw[i].num;

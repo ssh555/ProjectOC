@@ -2198,7 +2198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btnListInitData:
     limitNum: 5
-    hasInitSelect: 1
+    hasInitSelect: 0
     isLoop: 0
     isWheel: 0
     hasBtnListContainer: 0

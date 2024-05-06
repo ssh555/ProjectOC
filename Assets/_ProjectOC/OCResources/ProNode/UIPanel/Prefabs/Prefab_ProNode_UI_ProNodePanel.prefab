@@ -1105,7 +1105,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btnListInitData:
     limitNum: 4
-    hasInitSelect: 1
+    hasInitSelect: 0
     isLoop: 0
     isWheel: 0
     hasBtnListContainer: 0
@@ -1856,7 +1856,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btnListInitData:
     limitNum: 5
-    hasInitSelect: 1
+    hasInitSelect: 0
     isLoop: 0
     isWheel: 0
     hasBtnListContainer: 0
@@ -2272,7 +2272,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btnListInitData:
     limitNum: 5
-    hasInitSelect: 1
+    hasInitSelect: 0
     isLoop: 0
     isWheel: 0
     hasBtnListContainer: 0
@@ -8876,7 +8876,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6729264801602297584, guid: 8191ae7aa7d0f154a994cd0fe250f956, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6729264801602297584, guid: 8191ae7aa7d0f154a994cd0fe250f956, type: 3}
       propertyPath: m_AnchorMin.x
@@ -8884,15 +8884,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6729264801602297584, guid: 8191ae7aa7d0f154a994cd0fe250f956, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6729264801602297584, guid: 8191ae7aa7d0f154a994cd0fe250f956, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 120
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6729264801602297584, guid: 8191ae7aa7d0f154a994cd0fe250f956, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 120
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6729264801602297584, guid: 8191ae7aa7d0f154a994cd0fe250f956, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8924,11 +8924,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6729264801602297584, guid: 8191ae7aa7d0f154a994cd0fe250f956, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 350
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6729264801602297584, guid: 8191ae7aa7d0f154a994cd0fe250f956, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -70
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6729264801602297584, guid: 8191ae7aa7d0f154a994cd0fe250f956, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
