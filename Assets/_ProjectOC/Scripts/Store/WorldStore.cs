@@ -26,7 +26,8 @@ namespace ProjectOC.StoreNS
 
         public void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Store_UI/Prefab_Store_UI_StorePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Store_UI/Prefab_Store_UI_StorePanel.prefab", 
+                ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
             {
                 UI.UIStore uiPanel = (handle.Result).GetComponent<UI.UIStore>();
                 uiPanel.Store = Store;
@@ -40,7 +41,7 @@ namespace ProjectOC.StoreNS
             if ((this as ML.Engine.BuildingSystem.IBuildingUpgrade).HasUpgrade())
             {
                 var formulas = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(Classification.ToString());
-                return (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).InventoryHasItems(formulas);
+                return (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).InventoryHaveItems(formulas);
             }
             return false;
         }
@@ -67,4 +68,3 @@ namespace ProjectOC.StoreNS
         }
     }
 }
-

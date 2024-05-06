@@ -131,6 +131,24 @@ namespace ML.Engine.BuildingSystem.BuildingArea
             BuildingManager.Instance.BuildingAreaList.Remove(this);
         }
 
+#if UNITY_EDITOR
+        [ShowInInspector]
+        private bool IsShowArea = false;
+#endif
+        private void OnDrawGizmos()
+        {
+            if (BuildingManager.Instance == null || !IsShowArea)
+            {
+                return;
+            }
+
+            var cols = this.GetComponentsInChildren<Collider>();
+            foreach (Collider col in cols)
+            {
+                Extension.GizmosExtension.DrawMeshCollider(col, BuildingManager.Instance.DrawAreaBaseGrid.color);
+            }
+        }
+
         private void OnDrawGizmosSelected()
         {
             if (BuildingManager.Instance == null)

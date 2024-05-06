@@ -7,18 +7,20 @@
         "Chinese" : "空",
         "English" : "Empty"
     },
-    "text_PriorityUrgency" : {
-        "Chinese" : "紧急",
-        "English" : "Urgency"
-    },
-    "text_PriorityNormal" : {
-        "Chinese" : "常规",
-        "English" : "Normal"
-    },
-    "text_PriorityAlternative" : {
-        "Chinese" : "备选",
-        "English" : "Alternative"
-    },
+    "TransportPriority":[
+        {
+            "Chinese" : "紧急",
+            "English" : "Urgency"
+        },
+        {
+            "Chinese" : "常规",
+            "English" : "Normal"
+        },
+        {
+            "Chinese" : "备选",
+            "English" : "Alternative"
+        }
+    ],
     "text_Add" : {
         "Chinese" : "存入",
         "English" : "Add"

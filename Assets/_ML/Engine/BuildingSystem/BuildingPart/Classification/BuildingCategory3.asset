@@ -35,10 +35,10 @@ MonoBehaviour:
     value: 101
   - name: Quagrant1
     displayName: "\u56DB\u65B9\u5706\u5F621"
-    value: 102
+    value: 103
   - name: LBase1
     displayName: "\u957F\u65B9\u5F621"
-    value: 103
+    value: 102
   - name: Base2
     displayName: "\u6B63\u65B9\u5F622"
     value: 200

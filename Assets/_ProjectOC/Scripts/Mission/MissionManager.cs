@@ -14,18 +14,18 @@ namespace ProjectOC.MissionNS
         {
             get 
             {
-                if (this.timer == null)
+                if (timer == null)
                 {
-                    this.timer = new ML.Engine.Timer.CounterDownTimer(1f, true, false);
-                    this.timer.OnEndEvent += Timer_OnEndEvent;
+                    timer = new ML.Engine.Timer.CounterDownTimer(1f, true, false);
+                    timer.OnEndEvent += Timer_OnEndEvent;
                 }
-                return this.timer;
+                return timer;
             }
         }
 
         public void OnRegister()
         {
-            this.Timer.Start();
+            Timer.Start();
         }
 
         public void OnUnregister()
@@ -41,11 +41,11 @@ namespace ProjectOC.MissionNS
         /// <summary>
         /// 创建搬运任务
         /// </summary>
-        public MissionTransport CreateTransportMission(MissionTransportType transportType, string itemID, int missionNum, IMissionObj initiator)
+        public MissionTransport CreateTransportMission(MissionTransportType transportType, string itemID, int missionNum, IMissionObj initiator, MissionInitiatorType initiatorType)
         {
             if (!string.IsNullOrEmpty(itemID) && missionNum > 0 && initiator != null)
             {
-                MissionTransport mission = new MissionTransport(transportType, itemID, missionNum, initiator);
+                MissionTransport mission = new MissionTransport(transportType, itemID, missionNum, initiator, initiatorType);
                 MissionTransports.Add(mission);
                 return mission;
             }
@@ -75,7 +75,7 @@ namespace ProjectOC.MissionNS
                 WorkerNS.Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
                 if (worker != null)
                 {
-                    int weight = ML.Engine.InventorySystem.ItemManager.Instance.GetWeight(mission.ItemID);
+                    int weight = ML.Engine.InventorySystem.ItemManager.Instance.GetWeight(mission.ID);
                     int maxBurNum = weight != 0 ? worker.WeightMax / weight : 0;
                     missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
                 }
@@ -83,15 +83,15 @@ namespace ProjectOC.MissionNS
                 switch (targetType)
                 {
                     case MissionObjType.Store:
-                        target = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutInStore(mission.ItemID, missionNum, 1, true, true);
+                        target = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutInStore(mission.ID, missionNum, 1, true, true);
                         break;
                     case MissionObjType.Restaurant:
-                        target = ManagerNS.LocalGameManager.Instance.RestaurantManager.GetPutInRestaurant(mission.ItemID, missionNum);
+                        target = ManagerNS.LocalGameManager.Instance.RestaurantManager.GetPutInRestaurant(mission.ID, missionNum);
                         break;
                 }
                 if (worker != null && target != null && missionNum > 0)
                 {
-                    Transport transport = new Transport(mission, mission.ItemID, missionNum, mission.Initiator, target, worker);
+                    Transport transport = new Transport(mission, mission.ID, missionNum, mission.Initiator, target, worker);
                 }
                 else
                 {
@@ -108,7 +108,7 @@ namespace ProjectOC.MissionNS
         {
             if (mission.NeedAssignNum > 0)
             {
-                Dictionary<StoreNS.Store, int> result = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutOutStore(mission.ItemID, mission.NeedAssignNum, 1, true, true);
+                Dictionary<StoreNS.Store, int> result = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutOutStore(mission.ID, mission.NeedAssignNum, 1, true, true);
                 foreach (var kv in result)
                 {
                     StoreNS.Store store = kv.Key;
@@ -116,13 +116,13 @@ namespace ProjectOC.MissionNS
                     WorkerNS.Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
                     if (worker != null)
                     {
-                        int weight = ML.Engine.InventorySystem.ItemManager.Instance.GetWeight(mission.ItemID);
+                        int weight = ML.Engine.InventorySystem.ItemManager.Instance.GetWeight(mission.ID);
                         int maxBurNum = weight != 0 ? worker.WeightMax / weight : 0;
                         missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
                     }
                     if (worker != null && store != null && missionNum > 0)
                     {
-                        Transport transport = new Transport(mission, mission.ItemID, missionNum, store, mission.Initiator, worker);
+                        Transport transport = new Transport(mission, mission.ID, missionNum, store, mission.Initiator, worker);
                     }
                     else
                     {

@@ -12,9 +12,9 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		[LabelText("三角形1")]
 		Triangle1 = 101,
 		[LabelText("四方圆形1")]
-		Quagrant1 = 102,
+		Quagrant1 = 103,
 		[LabelText("长方形1")]
-		LBase1 = 103,
+		LBase1 = 102,
 		[LabelText("正方形2")]
 		Base2 = 200,
 		[LabelText("三角形2")]

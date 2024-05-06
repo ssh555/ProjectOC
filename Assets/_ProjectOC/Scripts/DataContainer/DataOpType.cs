@@ -6,5 +6,7 @@ namespace ProjectOC.DataNS
         Empty,
         StorageReserve,
         EmptyReserve,
+        MaxCapacity,
+        StorageAll
     }
 }

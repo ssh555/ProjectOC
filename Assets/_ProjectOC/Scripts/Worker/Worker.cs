@@ -279,9 +279,13 @@ namespace ProjectOC.WorkerNS
             get
             {
                 int result = 0;
-                foreach (ML.Engine.InventorySystem.Item item in this.TransportItems)
+                foreach (var kv in TransportDict)
                 {
-                    result += item.Weight;
+                    if (ManagerNS.LocalGameManager.Instance != null)
+                    {
+                        int weight = ManagerNS.LocalGameManager.Instance.ItemManager?.GetWeight(kv.Key) ?? 0;
+                        result += weight * kv.Value;
+                    }
                 }
                 return result;
             }
@@ -289,10 +293,10 @@ namespace ProjectOC.WorkerNS
         [LabelText("搬运"), ReadOnly]
         public MissionNS.Transport Transport = null;
         [LabelText("是否有搬运"), ShowInInspector, ReadOnly]
-        public bool HaveTransport { get => Transport != null && !string.IsNullOrEmpty(Transport.ItemID); }
+        public bool HaveTransport { get => Transport != null && !string.IsNullOrEmpty(Transport.ID); }
 
         [LabelText("搬运物品"), ReadOnly]
-        public List<ML.Engine.InventorySystem.Item> TransportItems = new List<ML.Engine.InventorySystem.Item>();
+        public Dictionary<string, int> TransportDict = new Dictionary<string, int>();
         #endregion
 
         #region AP Mood Skill Exp
