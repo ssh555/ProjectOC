@@ -13,7 +13,7 @@ namespace ProjectOC.LandMassExpand
 {
     public class BuildPowerCore : BuildingPart,ISupportPowerBPart
     {
-        public bool CanPlaceInPlaceMode 
+        public new bool CanPlaceInPlaceMode 
         {
             get
             {

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: IslandExpand
+  m_EditorClassIdentifier: 
+  m_GroupName: IslandExpand
+  m_Data:
+    m_SerializedData: []
+  m_GUID: f6621d8fea0ae7b48b70fc6f0c4a184c
+  m_SerializeEntries:
+  - m_GUID: 5cc6a7577e1f4d54389cbb4e445416a5
+    m_Address: Prefab_IslandExpand
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 72d1a89784032c94ea3b026b42e20dcf, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: a79733ebf43110945b82774e97a1f7da, type: 2}
+    - {fileID: 11400000, guid: e7fcac50f63e5a24381d9fe5ec8c145c, type: 2}
