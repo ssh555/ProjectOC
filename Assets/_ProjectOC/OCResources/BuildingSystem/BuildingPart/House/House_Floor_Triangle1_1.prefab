@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6374129377143050426}
   - component: {fileID: 612226346999495323}
-  - component: {fileID: 2065949103174336876}
+  - component: {fileID: 4135392483002193744}
   m_Layer: 8
   m_Name: RootSoc_floorC (3)
   m_TagString: Untagged
@@ -26,13 +26,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 99834546527904051}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -2, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6102596020075268794}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!114 &612226346999495323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53,8 +53,8 @@ MonoBehaviour:
   IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
---- !u!65 &2065949103174336876
-BoxCollider:
+--- !u!135 &4135392483002193744
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -72,8 +72,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.2, y: 0.1, z: 2}
-  m_Center: {x: -0.1, y: 0, z: 0}
+  m_Radius: 0.9
+  m_Center: {x: 0, y: 0, z: -0.2}
 --- !u!1 &195154817349679210
 GameObject:
   m_ObjectHideFlags: 0
@@ -84,7 +84,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9039194504045011041}
   - component: {fileID: 6159592714065866781}
-  - component: {fileID: 3650007499424925542}
+  - component: {fileID: 5515686233539790563}
   m_Layer: 8
   m_Name: RootSoc_floorC (1)
   m_TagString: Untagged
@@ -127,8 +127,8 @@ MonoBehaviour:
   IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
---- !u!65 &3650007499424925542
-BoxCollider:
+--- !u!135 &5515686233539790563
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -146,8 +146,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.2, y: 0.1, z: 2}
-  m_Center: {x: -0.1, y: 0, z: 0}
+  m_Radius: 0.9
+  m_Center: {x: -0.2, y: 0, z: 0}
 --- !u!1 &1224734371431387849
 GameObject:
   m_ObjectHideFlags: 0
