@@ -32,7 +32,7 @@ namespace ML.Engine.Event
             return true;
         }
 
-        private string CheckBagItemGetText(string s)
+        private string CheckBagItemGetText(string s,List<string> p1, List<int> p2, List<float> p3)
         {
             Debug.Log("CheckBagItemGetText " + s);
             return s;
@@ -42,7 +42,7 @@ namespace ML.Engine.Event
         {
             if (p1.IsNullOrEmpty() || p2.IsNullOrEmpty())
             {
-                Debug.LogError("��TabelData Error�� CheckBuild");
+                Debug.LogError("[TabelData Error] CheckBuild");
             }
             //Build_Interact_LifeDiversion_1
             string buildingTypeStr = p1[0].Split("_")[2];
@@ -52,10 +52,13 @@ namespace ML.Engine.Event
             return currentCount >= p2[0];
         }
 
-        private string CheckBuildGetText(string s)
+        private string CheckBuildGetText(string s,List<string> p1, List<int> p2, List<float> p3)
         {
-            Debug.Log("CheckBuildGetText " + s);
-            return s;
+            string buildingTypeStr = (p1[0].Split("_"))[2];
+            BuildingCategory2 buildingType =  (BuildingCategory2)Enum.Parse(typeof(BuildingCategory2), buildingTypeStr);
+            int currentCount = BuildingManager.Instance.GetBuildingCount(buildingType);
+            string _conditionText = s.Replace("&S1",currentCount.ToString());
+            return _conditionText;
         }
         public bool CheckWorkerEMCurrent(List<string> p1, List<int> p2, List<float> p3)
         {
@@ -79,24 +82,12 @@ namespace ML.Engine.Event
         }
 
 
-        private string CheckWorkerEMCurrentGetText(string s)
+        private string CheckWorkerEMCurrentGetText(string s,List<string> p1, List<int> p2, List<float> p3)
         {
             Debug.Log("CheckWorkerEMCurrentGetText " + s);
             return s;
         }
 
-        public bool Condition_CheckBuild_Bed_1()
-        {
-            return true;
-        }
-        public bool Condition_CheckBuild_SeedPlot_1()
-        {
-            return true;
-        }
-        public bool Condition_CheckBuild_LifeDiversion_1()
-        {
-            return true;
-        }
     }
 }
 

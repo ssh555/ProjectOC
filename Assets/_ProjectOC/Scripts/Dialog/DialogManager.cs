@@ -2,9 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
+using ML.Engine.Manager;
 using ProjectOC.NPC;
+using ProjectOC.Player;
 using Sirenix.Utilities;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ProjectOC.Dialog
 {
@@ -34,16 +37,14 @@ namespace ProjectOC.Dialog
         private string optionPath = "Option";
 
         
-        
-        private List<DialogTableData> _dialogTableDatas;
         private DialogTableData[] DialogDatas;
-        private string nextDialogID;
-        
         private OptionTableData[] OptionDatas;
         private UIDialogPanel DialogPanel;
-       
+        private int CurDialogIndex = -1;
+        private DialogTableData CurDialog => DialogDatas[CurDialogIndex];
+        
 
-        public NPCCharacter CurrentChatNpc;
+        public NPCCharacter CurrentChatNpcModel;
 
 
         private void LoadTableData()
@@ -54,7 +55,7 @@ namespace ProjectOC.Dialog
                     {
                         DialogDatas = new DialogTableData[datas.Length];
                         datas.CopyTo(DialogDatas,0);
-                        //异步加载表，顺序不对
+                        //异步加载表，顺序不对需要重新排序
                         Array.Sort(DialogDatas, (a, b) 
                             => DialogIDToIndex(a.ID).CompareTo (DialogIDToIndex(b.ID)));
                     }, "对话项");
@@ -70,7 +71,7 @@ namespace ProjectOC.Dialog
                         
                         Array.Sort(OptionDatas, (a, b) 
                             => DialogIDToIndex(a.ID).CompareTo (DialogIDToIndex(b.ID)));
-                    }, "对话项");
+                    }, "对话选项");
             
             ABJAProcessorDialog.StartLoadJsonAssetData();
 
@@ -108,51 +109,63 @@ namespace ProjectOC.Dialog
         {
             string[] dialogDatas = _ID.Split('_');
             int _dialogIndex = int.Parse(dialogDatas[2]);
-            DialogTableData _currentDialog = DialogDatas[_dialogIndex];
-            nextDialogID = _currentDialog.NextID;
+            CurDialogIndex = _dialogIndex;
             
-            DialogPanel.ShowDialogText(_currentDialog.Content.GetText(),_currentDialog.Name.GetText());
+            DialogPanel.ShowDialogText(CurDialog.Content.GetText(),CurDialog.Name.GetText());
             //播放Action、Mood、Audio todo
-            CurrentChatNpc.PlayAction(_currentDialog.ActionID);
-            CurrentChatNpc.PlayMood(_currentDialog.MoodID);
-                    
-            Debug.Log($"Content:{_currentDialog.Content.GetText()}  Name:{_currentDialog.Name.GetText()}");
-            Debug.Log($"ID:{_ID}  Option:{_currentDialog.OptionID}");
-            if (_currentDialog.OptionID != "")
+            CurrentChatNpcModel.PlayAction(CurDialog.ActionID);
+            CurrentChatNpcModel.PlayMood(CurDialog.MoodID);
+            
+            if (CurDialog.OptionID != "")
             {
-                ShowOption(_currentDialog.OptionID);
+                DialogPanel.ShowOption(StringToOption(CurDialog.OptionID));
             }
         }
-        public void LoadDialogue()
+
+        public void LoadDialogue(int _optionIndex)
         {
-            if (nextDialogID == "")
+            string nextDialogID = CurDialog.NextID;
+            
+            if (_optionIndex == -1)
             {
-                EndDialogMode();
-                return;
+                if (nextDialogID == "")
+                {
+                    EndDialogMode();
+                    return;
+                }
+                else
+                {
+                    LoadDialogue(nextDialogID);   
+                }
             }
-            LoadDialogue(nextDialogID);
+            else
+            {
+                LoadDialogue(StringToOption(CurDialog.OptionID).Options[_optionIndex].NextID);
+            }
         }
         
-        
-        
-        private void ShowOption(string _OptionID)
+
+
+        private OptionTableData StringToOption(string _OptionID)
         {
             string[] _opetionDatas = _OptionID.Split('_');
             int _dialogIndex = int.Parse(_opetionDatas[2]);
-            OptionTableData _currentDialog = OptionDatas[_dialogIndex];
-            
-            DialogPanel.ShowOption(_currentDialog);
+            OptionTableData _option = OptionDatas[_dialogIndex];
+            return _option;
         }
+        
+        
+
         
         private void EndDialogMode()
         {
             DialogPanel.PopPanel();
             //CurrentChatNpc.EndDialogMode();
-            GameObject.Destroy(CurrentChatNpc.gameObject);
+            GameObject.Destroy(CurrentChatNpcModel.gameObject);
             
             DialogPanel = null;
-            CurrentChatNpc = null;
-            nextDialogID = "";
+            CurrentChatNpcModel = null;
+            CurDialogIndex = -1;
         }
 
         #endregion

@@ -29,6 +29,7 @@ namespace ProjectOC.NPC
         {
             GameManager.Instance.TickManager.RegisterTick(0, this);
             DialogManager = LocalGameManager.Instance.DialogManager;
+            this.enabled = false;
         }
 
         private void OnDestroy()
@@ -73,8 +74,7 @@ namespace ProjectOC.NPC
             //动作 面部表情复原
             modelAnimator.Play("Calm");
             
-            smr.SetBlendShapeWeight(0,0f);
-            smr.SetBlendShapeWeight(1,0f);
+            ResetMood();
         }
 
         public void PlayAction(string _animID)
@@ -85,8 +85,10 @@ namespace ProjectOC.NPC
                 modelAnimator.Play(_animID);   
             }
         }
+
         public void PlayMood(string _moodID)
         {
+            ResetMood();
             if (_moodID == "Mood_Smile")
             {
                 smr.SetBlendShapeWeight(0,100f);
@@ -96,7 +98,13 @@ namespace ProjectOC.NPC
                 smr.SetBlendShapeWeight(0,100f);
             }
         }
-        
+
+        private void ResetMood()
+        {
+            smr.SetBlendShapeWeight(0,0f);
+            smr.SetBlendShapeWeight(1,0f);
+        }
+
         #endregion
         #region Character
         

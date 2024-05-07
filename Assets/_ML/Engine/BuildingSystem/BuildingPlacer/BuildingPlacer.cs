@@ -551,7 +551,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     this.SelectedPartInstance.transform.position = pos + this.Camera.transform.rotation * posOffset;
                 }
             }
-            else
+            else if(this.SelectedPartInstance != null)
             {
                 Vector3 euler = (this.SelectedPartInstance.BaseRotation * this.SelectedPartInstance.RotOffset).eulerAngles;
 

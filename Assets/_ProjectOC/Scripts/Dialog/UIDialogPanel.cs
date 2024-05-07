@@ -6,6 +6,7 @@ using ProjectOC.ManagerNS;
 using ProjectOC.NPC;
 using Sirenix.OdinInspector;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace ProjectOC.Dialog
@@ -24,7 +25,7 @@ namespace ProjectOC.Dialog
             string ChatCharacterNpcPath = "Prefab_Dialog/Prefab_ChatNpc.prefab";
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(ChatCharacterNpcPath).Completed+=(handle) =>
             {
-                _dialogManager.CurrentChatNpc = handle.Result.GetComponent<NPCCharacter>();
+                _dialogManager.CurrentChatNpcModel = handle.Result.GetComponent<NPCCharacter>();
                 _dialogManager.LoadDialogue(FirstDialogueID);
                 
                 uICameraImage = transform.Find("Dialogue/UICameraImage").GetComponentInChildren<UICameraImage>();
@@ -58,11 +59,11 @@ namespace ProjectOC.Dialog
         }
         private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            Debug.Log($"交互触发  {optionMode}");
-            if (!optionMode)
+            if (currentOptionIndex != -1)
             {
-                _dialogManager.LoadDialogue();
+                ClearOptionBtn();
             }
+            _dialogManager.LoadDialogue(currentOptionIndex);
         }
 
         public void PopPanel()
@@ -109,8 +110,22 @@ namespace ProjectOC.Dialog
         private UIBtnListInitor btnList;
         private UIBtnList UIBtnList;
         public string FirstDialogueID;
-        [ShowInInspector,ReadOnly]
-        private bool optionMode = false;
+
+        private int currentOptionIndex
+        {
+            get
+            {
+                if (UIBtnList == null)
+                {
+                    return -1;   
+                }
+                else
+                {
+                    return UIBtnList.GetCurSelectedPos1();   
+                }
+            }
+        }
+
         public void ShowDialogText(string _text,string _npcName)
         {
             dialogText.text = _text;
@@ -119,24 +134,15 @@ namespace ProjectOC.Dialog
         
         public void ShowOption(OptionTableData _optionDatas)
         {
-            optionMode = true;
-            //处理Option数据为List
             List<OptionTableData.OnePieceOption> _options = _optionDatas.Options;
 
             //生成设置Option
             for (int i = 0; i < _options.Count; i++)
             {
-                int _index = i;
                 SelectedButton _btn = GameObject.Instantiate(optionTmpBtn,optionTmpBtn.transform.parent);
                 _btn.gameObject.name = $"OptionBtn{i}";
                 _btn.gameObject.SetActive(true);
                 _btn.GetComponentInChildren<TextMeshProUGUI>().text = _options[i].OptionText;
-                _btn.onClick.AddListener(() =>
-                {
-                    ClearOptionBtn();
-                    _dialogManager.LoadDialogue(_options[_index].NextID);
-                    optionMode = false;
-                });
             }
             BtnListInit();
         }

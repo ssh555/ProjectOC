@@ -8,6 +8,7 @@ using ProjectOC.PinchFace;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 using Image = UnityEngine.UI.Image;
 
@@ -27,6 +28,9 @@ namespace ProjectOC.LandMassExpand
         
         [HideInInspector]
         public IslandUpdateInteract IslandUpdateInteract;
+
+        private SpriteAtlas sa;
+        //private int currentIslandIndex = 0;
         #endregion
 
         #region Internal
@@ -63,6 +67,11 @@ namespace ProjectOC.LandMassExpand
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
+        }
+
+        private void performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            //«–ªªµ∫”Ï
         }
         #endregion
 

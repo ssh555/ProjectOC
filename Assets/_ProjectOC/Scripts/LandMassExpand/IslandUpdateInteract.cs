@@ -19,8 +19,6 @@ namespace ProjectOC.LandMassExpand
 {
     public class IslandUpdateInteract : MonoBehaviour, IInteraction
     {
-   
-
         private void Start()
         {
             BuildPowerIslandManager = LocalGameManager.Instance.BuildPowerIslandManager;
@@ -76,10 +74,8 @@ namespace ProjectOC.LandMassExpand
                     //¸üÐÂtext
                     //Condition_CheckBuild_LifeDiversion_1
                     string buildingTypeStr = _Conditions[i].Split("_")[2];
-                    BuildingCategory2 buildingType =  (BuildingCategory2)Enum.Parse(typeof(BuildingCategory2), buildingTypeStr);
-                    int currentCount = BuildingManager.Instance.GetBuildingCount(buildingType);
-                    //string _conditionText = BuildPowerIslandManager.CurrentLandLevelData.ConditionTexts[i].GetText().Replace("&P1",currentCount.ToString());
-                    string _conditionText = "";//EventManager.get
+                    
+                    string _conditionText = GameManager.Instance.EventManager.GetConditionText(_Conditions[i]);//EventManager.get
                     _islandUpdatePanel.SetTargetInfo(_conditionText,finishOneTarget);
                 
                     _isFinished &= finishOneTarget;

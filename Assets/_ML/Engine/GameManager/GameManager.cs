@@ -371,7 +371,6 @@ namespace ML.Engine.Manager
         #region Update
         private void Update()
         {
-            this.TickManager.UpdateTickComponentList();
 
             if (IsPause)
             {
@@ -384,11 +383,12 @@ namespace ML.Engine.Manager
                 this.TickManager.Tick(Time.deltaTime);
 
             }
+            this.TickManager.UpdateTickComponentList();
+
         }
 
         private void FixedUpdate()
         {
-            this.TickManager.UpdateFixedTickComponentList();
 
             if (IsPause)
             {
@@ -401,12 +401,13 @@ namespace ML.Engine.Manager
                 this.TickManager.FixedTick(Time.fixedDeltaTime);
 
             }
+            this.TickManager.UpdateFixedTickComponentList();
+
         }
 
         private void LateUpdate()
         {
             this.CounterDownTimerManager.LateUpdate(Time.deltaTime);
-            this.TickManager.UpdateLateTickComponentList();
 
             if (IsPause)
             {
@@ -415,6 +416,8 @@ namespace ML.Engine.Manager
             {
                 this.TickManager.LateTick(Time.deltaTime);
             }
+            this.TickManager.UpdateLateTickComponentList();
+
         }
         #endregion
         
