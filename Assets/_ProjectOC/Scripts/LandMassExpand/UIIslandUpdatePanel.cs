@@ -95,7 +95,7 @@ namespace ProjectOC.LandMassExpand
         #region UIProcess
         public void SetTargetInfo(string _text, bool _finished)
         {
-            GameObject newTarget = GameObject.Instantiate(TargetPrefab);
+            GameObject newTarget = GameObject.Instantiate(TargetPrefab,TargetPrefab.transform.parent);
             newTarget.GetComponentInChildren<TextMeshProUGUI>().text = _text;
             newTarget.SetActive(true);
 

@@ -10,6 +10,7 @@ using ML.PlayerCharacterNS;
 using ProjectOC.Dialog;
 using ProjectOC.ManagerNS;
 using ProjectOC.Player;
+using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -24,10 +25,10 @@ namespace ProjectOC.NPC
         public int tickPriority { get; set; }
         public int fixedTickPriority { get; set; }
         public int lateTickPriority { get; set; }
-        private void Awake()
+        private void Start()
         {
             GameManager.Instance.TickManager.RegisterTick(0, this);
-
+            DialogManager = LocalGameManager.Instance.DialogManager;
         }
 
         private void OnDestroy()
@@ -51,30 +52,60 @@ namespace ProjectOC.NPC
         public string InteractType { get; set; } = "NPCCharacter";
         public Vector3 PosOffset { get; set; } = Vector3.zero;
         
-        private string currentDialogueID = "";
+        private string dialogID = "Dialog_BeginnerTutorial_0";
         
         public void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
-            LocalGameManager.Instance.DialogManager.StartDialogMode(currentDialogueID);
+            DialogManager.StartDialogMode(dialogID);
         }
         
         #endregion
 
         #region Dialog
-        
-        private void EndDialogMode()
+
+        private DialogManager DialogManager;
+        [SerializeField,FoldoutGroup("Transform引用")]
+        private SkinnedMeshRenderer smr;
+        [SerializeField,FoldoutGroup("Transform引用")]
+        private Animator modelAnimator;
+        public void EndDialogMode()
         {
+            //动作 面部表情复原
+            modelAnimator.Play("Calm");
             
+            smr.SetBlendShapeWeight(0,0f);
+            smr.SetBlendShapeWeight(1,0f);
+        }
+
+        public void PlayAction(string _animID)
+        {
+            _animID = _animID.Replace("Action_", "");
+            if (_animID != "")
+            {
+                modelAnimator.Play(_animID);   
+            }
+        }
+        public void PlayMood(string _moodID)
+        {
+            if (_moodID == "Mood_Smile")
+            {
+                smr.SetBlendShapeWeight(0,100f);
+            }
+            else if (_moodID == "Mood_Calm")
+            {
+                smr.SetBlendShapeWeight(0,100f);
+            }
         }
         
         #endregion
         #region Character
-
+        
         public int prefabIndex { get; }
         public ICharacterState State { get; set; }
         public IController Controller { get; set; }
         public void OnSpawn(IController controller)
         {
+            
         }
 
         public void OnDespose(IController controller)

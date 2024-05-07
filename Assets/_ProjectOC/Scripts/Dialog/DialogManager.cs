@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityGameObject;
+using ProjectOC.NPC;
+using Sirenix.Utilities;
 using UnityEngine;
 
 namespace ProjectOC.Dialog
@@ -30,7 +33,7 @@ namespace ProjectOC.Dialog
         private string dialogPath = "Dialog";
         private string optionPath = "Option";
 
-        private string dialogID = "Dialog_BeginnerTutorial_0";
+        
         
         private List<DialogTableData> _dialogTableDatas;
         private DialogTableData[] DialogDatas;
@@ -38,6 +41,11 @@ namespace ProjectOC.Dialog
         
         private OptionTableData[] OptionDatas;
         private UIDialogPanel DialogPanel;
+       
+
+        public NPCCharacter CurrentChatNpc;
+
+
         private void LoadTableData()
         {
             ML.Engine.ABResources.ABJsonAssetProcessor<DialogTableData[]> ABJAProcessor = new ML.Engine.ABResources.
@@ -46,6 +54,9 @@ namespace ProjectOC.Dialog
                     {
                         DialogDatas = new DialogTableData[datas.Length];
                         datas.CopyTo(DialogDatas,0);
+                        //异步加载表，顺序不对
+                        Array.Sort(DialogDatas, (a, b) 
+                            => DialogIDToIndex(a.ID).CompareTo (DialogIDToIndex(b.ID)));
                     }, "对话项");
             
             ABJAProcessor.StartLoadJsonAssetData();
@@ -56,16 +67,24 @@ namespace ProjectOC.Dialog
                     {
                         OptionDatas = new OptionTableData[datas.Length];
                         datas.CopyTo(OptionDatas,0);
+                        
+                        Array.Sort(OptionDatas, (a, b) 
+                            => DialogIDToIndex(a.ID).CompareTo (DialogIDToIndex(b.ID)));
                     }, "对话项");
             
             ABJAProcessorDialog.StartLoadJsonAssetData();
+
         }
-
-
+        //Option_BeginnerTutorial_0 -> 0
+        private int DialogIDToIndex(string str)
+        {
+            return int.Parse(str.Split("_")[2]);
+        }
         #endregion
 
-        #region ProcessDialog
         
+        #region ProcessDialog
+
         public void StartDialogMode(string _ID)
         {
             if (DialogPanel == null)
@@ -76,64 +95,63 @@ namespace ProjectOC.Dialog
                     DialogPanel = handle.Result.GetComponent<UIDialogPanel>();
                     DialogPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(DialogPanel);
+                    DialogPanel.FirstDialogueID = _ID;
                 };
             }
-            //根据ID找对应的Dialog
-            LoadDialogue(dialogID);
         }
-        
+        //todo:用CharacterManager的CharacterID，应对多人聊天场景
         /// <summary>
         /// 加载一条
         /// </summary>
         /// <param name="_ID">对话ID，如果为空则触发下一条</param>
         public void LoadDialogue(string _ID)
         {
-            if (nextDialogID == "")
-            {
-                EndDialogMode();
-                return;
-            }
-            
             string[] dialogDatas = _ID.Split('_');
             int _dialogIndex = int.Parse(dialogDatas[2]);
             DialogTableData _currentDialog = DialogDatas[_dialogIndex];
             nextDialogID = _currentDialog.NextID;
             
-            DialogPanel.ShowDialogText(_currentDialog.Content.GetText());
+            DialogPanel.ShowDialogText(_currentDialog.Content.GetText(),_currentDialog.Name.GetText());
             //播放Action、Mood、Audio todo
-            
-            
-            //跳转下一条,应该处理下空格，防止策划填错
+            CurrentChatNpc.PlayAction(_currentDialog.ActionID);
+            CurrentChatNpc.PlayMood(_currentDialog.MoodID);
+                    
+            Debug.Log($"Content:{_currentDialog.Content.GetText()}  Name:{_currentDialog.Name.GetText()}");
+            Debug.Log($"ID:{_ID}  Option:{_currentDialog.OptionID}");
             if (_currentDialog.OptionID != "")
             {
                 ShowOption(_currentDialog.OptionID);
             }
-            //更新Dialog
         }
-
         public void LoadDialogue()
         {
-            
+            if (nextDialogID == "")
+            {
+                EndDialogMode();
+                return;
+            }
+            LoadDialogue(nextDialogID);
         }
         
         
         
         private void ShowOption(string _OptionID)
         {
-            if (_OptionID == "")
-                return;
-            
             string[] _opetionDatas = _OptionID.Split('_');
             int _dialogIndex = int.Parse(_opetionDatas[2]);
             OptionTableData _currentDialog = OptionDatas[_dialogIndex];
             
-
             DialogPanel.ShowOption(_currentDialog);
         }
         
         private void EndDialogMode()
         {
+            DialogPanel.PopPanel();
+            //CurrentChatNpc.EndDialogMode();
+            GameObject.Destroy(CurrentChatNpc.gameObject);
+            
             DialogPanel = null;
+            CurrentChatNpc = null;
             nextDialogID = "";
         }
 
