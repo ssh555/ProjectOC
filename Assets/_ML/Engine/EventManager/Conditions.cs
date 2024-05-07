@@ -32,20 +32,31 @@ namespace ML.Engine.Event
             return true;
         }
 
+        private string CheckBagItemGetText(string s)
+        {
+            Debug.Log("CheckBagItemGetText " + s);
+            return s;
+        }
+
         public bool CheckBuild(List<string> p1, List<int> p2, List<float> p3)
         {
             if (p1.IsNullOrEmpty() || p2.IsNullOrEmpty())
             {
-                Debug.LogError("¡¸TabelData Error¡¹ CheckBuild");
+                Debug.LogError("ï¿½ï¿½TabelData Errorï¿½ï¿½ CheckBuild");
             }
             //Build_Interact_LifeDiversion_1
             string buildingTypeStr = p1[0].Split("_")[2];
-            BuildingCategory2 buildingType =  (BuildingCategory2)Enum.Parse(typeof(BuildingCategory2), buildingTypeStr);
+            BuildingCategory2 buildingType = (BuildingCategory2)Enum.Parse(typeof(BuildingCategory2), buildingTypeStr);
             int currentCount = BuildingManager.Instance.GetBuildingCount(buildingType);
 
             return currentCount >= p2[0];
         }
-        
+
+        private string CheckBuildGetText(string s)
+        {
+            Debug.Log("CheckBuildGetText " + s);
+            return s;
+        }
         public bool CheckWorkerEMCurrent(List<string> p1, List<int> p2, List<float> p3)
         {
             Debug.Log("CheckWorkerEMCurrent ");
@@ -68,6 +79,24 @@ namespace ML.Engine.Event
         }
 
 
+        private string CheckWorkerEMCurrentGetText(string s)
+        {
+            Debug.Log("CheckWorkerEMCurrentGetText " + s);
+            return s;
+        }
+
+        public bool Condition_CheckBuild_Bed_1()
+        {
+            return true;
+        }
+        public bool Condition_CheckBuild_SeedPlot_1()
+        {
+            return true;
+        }
+        public bool Condition_CheckBuild_LifeDiversion_1()
+        {
+            return true;
+        }
     }
 }
 
