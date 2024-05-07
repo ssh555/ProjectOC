@@ -73,6 +73,7 @@ namespace ML.Engine.UI
         public ContainerType Grid_NavagationType { set {  }  get { return gridNavagationType; } }
 
         private InputAction gridNavagationInputAction;
+        [ShowInInspector]
         public InputAction curGridNavagationInputAction { get { return gridNavagationInputAction; } }
         private BindType bindType;
         public BindType curBindType { get { return bindType; } }
@@ -148,7 +149,7 @@ namespace ML.Engine.UI
         public UIBtnList InitBtnlistInfo()
         {
             this.UIBtnListIndexDic.Clear();
-            UIBtnListInitor[] uIBtnListInitors = this.parent.GetComponentsInChildren<UIBtnListInitor>();
+            UIBtnListInitor[] uIBtnListInitors = this.parent.GetComponentsInChildren<UIBtnListInitor>(true);
             UIBtnList uIBtnList = null;
             for (int i = 0; i < uIBtnListInitors.Length; i++)
             {

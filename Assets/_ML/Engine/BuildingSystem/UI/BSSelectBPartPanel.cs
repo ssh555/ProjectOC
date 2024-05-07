@@ -154,6 +154,8 @@ namespace ML.Engine.BuildingSystem.UI
         private Transform FurnitureCategoryBtnListTransform;
         private Transform FurnitureThemeBtnListTransform;
 
+        private Transform SwitchPanel;
+
         #endregion
 
         #endregion
@@ -179,6 +181,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.SelectType = this.transform.Find("SelectType");
             this.FurnitureCategoryBtnListTransform = this.SelectType.Find("FurnitureCategoryBtnList");
             this.FurnitureThemeBtnListTransform = this.SelectType.Find("FurnitureThemeBtnList");
+            this.SwitchPanel = this.transform.Find("SwitchPanel");
 
             this.UICameraImage = transform.GetComponentInChildren<UICameraImage>(true);
             this.UICameraImage.Init();
@@ -190,7 +193,6 @@ namespace ML.Engine.BuildingSystem.UI
         public override void Refresh()
         {
             LayoutRebuilder.ForceRebuildLayoutImmediate(this.templateCategory.parent.GetComponent<RectTransform>());
-            LayoutRebuilder.ForceRebuildLayoutImmediate(this.templateType.parent.GetComponent<RectTransform>());
             if (IsInit < 1 || this.FurnitureDisplayBtnList == null || !this.objectPool.IsLoadFinish())
             {
                 return;
@@ -212,23 +214,61 @@ namespace ML.Engine.BuildingSystem.UI
 
 
             // 更换 Category2
-            foreach (var category2 in this.CanSelectCategory2)
-            {
-                var go = Instantiate<GameObject>(this.templateType.gameObject, this.typeParent, false);
-                go.GetComponentInChildren<Image>().sprite = GetTypeSprite(category2);
-                go.GetComponentInChildren<TextMeshProUGUI>().text = monoBM.Category2Dict[category2.ToString()].GetDescription();
-                go.SetActive(true);
-                this.typeInstance.Add(category2, go.transform as RectTransform);
+            /*            foreach (var category2 in this.CanSelectCategory2)
+                        {
+                            var go = Instantiate<GameObject>(this.templateType.gameObject, this.typeParent, false);
+                            go.GetComponentInChildren<Image>().sprite = GetTypeSprite(category2);
+                            go.GetComponentInChildren<TextMeshProUGUI>().text = monoBM.Category2Dict[category2.ToString()].GetDescription();
+                            go.SetActive(true);
+                            this.typeInstance.Add(category2, go.transform as RectTransform);
 
-                if(category2 == this.SelectedCategory2)
+                            if (category2 == this.SelectedCategory2)
+                            {
+                                Active(go.GetComponentInChildren<Image>());
+                            }
+                        }*/
+            this.SwitchPanel.gameObject.SetActive(this.SelectedCategory1 != BuildingCategory1.Furniture);
+            if (this.SelectedCategory1 != BuildingCategory1.Furniture)
+            {
+                this.SwitchUIBtnListContainer.SetIsEnableTrue();
+                int index = (int)this.SelectedCategory1;
+                for (int i = 0; i < SwitchPanel.childCount; i++)
                 {
-                    Active(go.GetComponentInChildren<Image>());
+                    SwitchPanel.GetChild(i).gameObject.SetActive(i == index);
                 }
+                UIBtnList uIBtnList = SwitchUIBtnListContainer.UIBtnLists[index];
+
+                UIBtnList.Synchronizer synchronizer = new UIBtnList.Synchronizer(this.CanSelectCategory2.Length, () =>
+                {
+                    SwitchUIBtnListContainer.MoveToBtnList(uIBtnList);
+                });
+
+                uIBtnList.DeleteAllButton(() =>
+                {
+                    foreach (var category2 in this.CanSelectCategory2)
+                    {
+                        uIBtnList.AddBtn("Prefab_BuildingSystem/Prefab_BS_FurnitureBtn.prefab", BtnAction: () =>
+                        {
+                            this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(this.SelectedCategory1, category2);
+                            monoBM.PopAndPushPanel<BSPlaceModePanel>();
+                        }, BtnSettingAction:
+                        (btn) =>
+                        {
+                            btn.transform.Find("Image2").GetComponent<Image>().sprite = GetTypeSprite(category2);
+                            //btn.name =;
+                        },
+                        OnFinishAdd: () => { synchronizer.Check(); },
+                        BtnText: monoBM.Category2Dict[category2.ToString()].GetDescription());
+                    }
+                });
+                
             }
 
+
             //家具特殊处理
-            if(this.SelectedCategory1 == BuildingCategory1.Furniture)
+            if (this.SelectedCategory1 == BuildingCategory1.Furniture)
             {
+                this.SwitchUIBtnListContainer.SetIsEnableFalse();
                 this.SelectType.Find("Content").gameObject.SetActive(false);
                 //默认先用类别排序
                 this.FurnitureCategoryBtnListTransform.gameObject.SetActive(true);
@@ -356,6 +396,8 @@ namespace ML.Engine.BuildingSystem.UI
 
             this.Placer.BInput.BuildSelection.AlternativeType.started -= Placer_AlterCategory2;
             this.Placer.BInput.BuildSelection.ChangeFurnitureDisplay.performed -= ChangeFurnitureSortWay;
+
+            this.SwitchUIBtnListContainer.DeBindNavigationInputAction();
         }
 
         protected override void RegisterInput()
@@ -368,6 +410,8 @@ namespace ML.Engine.BuildingSystem.UI
 
             this.Placer.BInput.BuildSelection.AlternativeType.started += Placer_AlterCategory2;
             this.Placer.BInput.BuildSelection.ChangeFurnitureDisplay.performed += ChangeFurnitureSortWay;
+
+            this.SwitchUIBtnListContainer.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
         }
 
         private void Placer_AlterCategory2(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -445,7 +489,6 @@ namespace ML.Engine.BuildingSystem.UI
                         foreach (var item in furnitureList)
                         {
                             string BuildingName = BuildingManager.Instance.GetName(item.Item2.Classification.ToString());
-                            Debug.Log(this.FurnitureDisplayBtnList);
                             this.FurnitureDisplayBtnList.AddBtn("Prefab_BuildingSystem/Prefab_BS_FurnitureBtn.prefab", BtnAction: () =>
                             {
                                 this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(item.Item2.Classification);
@@ -453,9 +496,6 @@ namespace ML.Engine.BuildingSystem.UI
                             },BtnSettingAction:
                             (btn) =>
                             {
-                                Debug.Log(btn);
-                                Debug.Log(btn.transform.Find("Image2"));
-                                Debug.Log(btn.transform.Find("Image2").GetComponent<Image>());
                                 btn.transform.Find("Image2").GetComponent<Image>().sprite = FurnitureSpriteAtlas.GetSprite(BuildingManager.Instance.GetFurtureBuildingIcon(item.Item2.Classification.ToString()));
                                 btn.name = item.Item2.Classification.ToString();
                             }
@@ -601,7 +641,7 @@ namespace ML.Engine.BuildingSystem.UI
             Array.Sort(CanSelectCategory2);
 
             this.SelectedCategory2Index = 0;
-
+            this.SwitchUIBtnListContainer.CurSelectUIBtnList?.DeleteAllButton();
             this.Refresh();
         }
         #endregion
@@ -632,11 +672,14 @@ namespace ML.Engine.BuildingSystem.UI
         private UIBtnList FurnitureCategoryBtnList = null;
         [ShowInInspector]
         private UIBtnList FurnitureThemeBtnList = null;
+        [ShowInInspector]
+        private UIBtnListContainer SwitchUIBtnListContainer = null;
         protected override void InitBtnInfo()
         {
             this.FurnitureDisplayBtnList = new UIBtnList(this.FurniturePanel.Find("ButtonList").GetComponent<UIBtnListInitor>());
             this.FurnitureCategoryBtnList = new UIBtnList(this.FurnitureCategoryBtnListTransform.GetComponent<UIBtnListInitor>());
             this.FurnitureThemeBtnList = new UIBtnList(this.FurnitureThemeBtnListTransform.GetComponent<UIBtnListInitor>());
+            this.SwitchUIBtnListContainer = new UIBtnListContainer(this.transform.Find("SwitchPanel").GetComponent<UIBtnListContainerInitor>());
             this.Refresh();
         }
         protected override void OnLoadJsonAssetComplete(BSSelectBPartPanelStruct datas)

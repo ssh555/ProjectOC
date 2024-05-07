@@ -388,7 +388,6 @@ namespace ML.Engine.UI
             ++OneDimCnt;
             this.UIBtnListContainer?.RefreshEdge();*/
             var tprefabpath = VarPrefabpath == null ? this.prefabPath : VarPrefabpath;
-            Debug.Log(tprefabpath);
             Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(tprefabpath).Completed += (handle) =>
             {
                 // สตภýปฏ
