@@ -54,32 +54,23 @@ namespace ML.Engine.InventorySystem
         }
         private string collectUIPath = "InteractSystem/Prefab_InteractSystem_Outline.prefab";
         private GameObject collectUIPrefab;
-        private InteractComponent interactComponent;
         private GameObject OutlineGameObejct;
-
+        private float animFadeTime = 0f;
+        private float interactStorageTime = 0.8f;
         private void Awake()
         {
             GameManager.Instance.TickManager.RegisterTick(0, this);
-            Input.InputManager.Instance.Common.Common.ConfirmHold.performed += OnLongPressStarted;
             this.enabled = false;
         }
 
         private void OnDestroy()
         {
-            Input.InputManager.Instance.Common.Common.ConfirmHold.performed -= OnLongPressStarted;
             if (GameManager.Instance != null)
             {
                 GameManager.Instance.TickManager.UnregisterTick(this);   
             }
         }
-        void OnLongPressStarted(InputAction.CallbackContext context)
-        {
-            if (inCollective)
-            {
-                interactStorage = true;   
-            }
-        }
-        
+
         
         public void Tick(float deltatime)
         {
@@ -99,6 +90,15 @@ namespace ML.Engine.InventorySystem
                 {
                     AfterAnimLoop();
                 }
+                else if(stateInfo.normalizedTime < interactStorageTime)
+                {
+                    interactStorage = false;
+                }
+                
+                if (Input.InputManager.Instance.Common.Common.Confirm.IsPressed())
+                {
+                    interactStorage = true;
+                }
             }
         }
 
@@ -106,9 +106,9 @@ namespace ML.Engine.InventorySystem
         {
             //开始采集
             inCollective = true;
-            Character.playerModelStateController.modelAnimator.Play("Pick");
+            //Character.playerModelStateController.modelAnimator.Play("Pick");
+            Character.playerModelStateController.modelAnimator.CrossFade("Pick",animFadeTime);
 
-            interactComponent = component;
             GameManager.Instance.ABResourceManager
                 .InstantiateAsync(collectUIPath).Completed += (handle) =>
             {
@@ -125,9 +125,9 @@ namespace ML.Engine.InventorySystem
         {
             //修改UI
             inCollective = false;
-            Character.playerModelStateController.modelAnimator.Play("Idle_0");
+            //Character.playerModelStateController.modelAnimator.Play("Idle_0");
+            Character.playerModelStateController.modelAnimator.CrossFade("Idle_0",animFadeTime);
 
-            interactComponent = null;
 
             Destroy(OutlineGameObejct);
             ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
@@ -151,13 +151,11 @@ namespace ML.Engine.InventorySystem
             else
             {
                 Character.playerModelStateController.modelAnimator.Play("Pick", 0, 0f);
+                //Character.playerModelStateController.modelAnimator.CrossFade("Pick", animFadeTime);
                 OutlineGameObejct.transform.GetChild(0).GetComponent<Image>().fillAmount =
                     (float)currentCollectCount / collectCount;
             }
-
-
-            interactStorage = false;
-
+            
         }
 
 
@@ -176,7 +174,7 @@ namespace ML.Engine.InventorySystem
                 }
                 else
                 {
-                    throw new System.Exception(this.gameObject.name + " Item == null !!!");
+                    throw new System.Exception(this.gameObject.name + $" Item{dropItem.dropItem} == null !!!");
                 }
             }
         }
@@ -195,7 +193,7 @@ namespace ML.Engine.InventorySystem
 
         #region Interact
 
-        public string InteractType { get; set; } = "CollectiveActor";
+        public string InteractType { get; set; } = "Collective";
         public Vector3 PosOffset { get; set; } = Vector3.zero;
 
         #endregion
