@@ -9,7 +9,6 @@ namespace ProjectOC.LandMassExpand
         public ML.Engine.TextContent.TextContent LevelText;
         public bool IsMax;
         public string[] Conditions;
-        public ML.Engine.TextContent.TextContent[] ConditionTexts;
         public string[] Events;
         public ML.Engine.TextContent.TextContent[] EventTexts;
     }

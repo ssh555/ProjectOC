@@ -2263,6 +2263,7 @@ MonoBehaviour:
       linktype: 1
     isLoop: 0
     isHorizontal: 0
+    scrollRect: {fileID: 0}
 --- !u!1 &5845974883045366218
 GameObject:
   m_ObjectHideFlags: 0

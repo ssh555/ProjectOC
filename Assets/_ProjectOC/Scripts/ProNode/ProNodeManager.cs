@@ -87,12 +87,20 @@ namespace ProjectOC.ProNodeNS
                 {
                     WorldProNodeDict.Add(worldNode.InstanceID, worldNode);
                 }
-                if (worldNode.ProNode != null)
+                if (worldNode.ProNode != node)
                 {
-                    worldNode.ProNode.WorldProNode = null;
+                    if (worldNode.ProNode != null)
+                    {
+                        worldNode.ProNode.Destroy();
+                        worldNode.ProNode.WorldProNode = null;
+                    }
+                    if (node.WorldProNode != null)
+                    {
+                        node.WorldProNode.ProNode = null;
+                    }
+                    worldNode.ProNode = node;
+                    node.WorldProNode = worldNode;
                 }
-                worldNode.ProNode = node;
-                node.WorldProNode = worldNode;
             }
         }
         #endregion

@@ -136,6 +136,7 @@ namespace ML.Engine.UI
         {
             this.objectPool.GetFunctionExecutor().SetOnAllFunctionsCompleted(() =>
             {
+                this.InitBtnInfoAfterInitObjectPool();
                 this.Refresh();
             });
             StartCoroutine(this.objectPool.GetFunctionExecutor().Execute());
@@ -147,7 +148,11 @@ namespace ML.Engine.UI
         {
 
         }
+        //该函数为objectpool异步加载完资源后调用
+        protected virtual void InitBtnInfoAfterInitObjectPool()
+        {
 
+        }
 
 
     }
