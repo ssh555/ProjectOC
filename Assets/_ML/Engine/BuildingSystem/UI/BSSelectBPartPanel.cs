@@ -34,7 +34,9 @@ namespace ML.Engine.BuildingSystem.UI
         public const string FurnitureThemeSpriteAtlasPath = "SA_UI_FurnitureTheme";
         private SpriteAtlas FurnitureSpriteAtlas = null, FurnitureThemeSpriteAtlas = null;
 
-        private UICameraImage UICameraImage = null;
+        private UICameraImage FurnitureUICameraImage = null;
+        private UICameraImage ProNodeUICameraImage = null;
+        private UICameraImage InteractUICameraImage = null;
         public Sprite GetCategorySprite(BuildingCategory1 category)
         {
             Sprite sprite = categoryAtlas.GetSprite(category.ToString());;
@@ -183,8 +185,12 @@ namespace ML.Engine.BuildingSystem.UI
             this.FurnitureThemeBtnListTransform = this.SelectType.Find("FurnitureThemeBtnList");
             this.SwitchPanel = this.transform.Find("SwitchPanel");
 
-            this.UICameraImage = transform.GetComponentInChildren<UICameraImage>(true);
-            this.UICameraImage.Init();
+            this.FurnitureUICameraImage = this.transform.Find("FurniturePanel").GetComponentInChildren<UICameraImage>(true);
+            this.FurnitureUICameraImage.Init();
+            this.ProNodeUICameraImage = this.transform.Find("SwitchPanel").Find("ProNodePanel").GetComponentInChildren<UICameraImage>(true);
+            this.ProNodeUICameraImage.Init();
+            this.InteractUICameraImage = this.transform.Find("SwitchPanel").Find("InteractPanel").GetComponentInChildren<UICameraImage>(true);
+            this.InteractUICameraImage.Init();
         }
 
         #endregion
@@ -236,6 +242,10 @@ namespace ML.Engine.BuildingSystem.UI
                 {
                     SwitchPanel.GetChild(i).gameObject.SetActive(i == index);
                 }
+
+                this.ProNodeUICameraImage.CameraParent.SetActive(this.SelectedCategory1 == BuildingCategory1.ProNode);
+                this.InteractUICameraImage.CameraParent.SetActive(this.SelectedCategory1 == BuildingCategory1.Interact);
+
                 UIBtnList uIBtnList = SwitchUIBtnListContainer.UIBtnLists[index];
 
                 UIBtnList.Synchronizer synchronizer = new UIBtnList.Synchronizer(this.CanSelectCategory2.Length, () =>
@@ -247,15 +257,17 @@ namespace ML.Engine.BuildingSystem.UI
                 {
                     foreach (var category2 in this.CanSelectCategory2)
                     {
+                        string classificationString = BuildingManager.Instance.GetOneBPartBuildingPartClassificationString(this.SelectedCategory1, category2);
+
                         uIBtnList.AddBtn("Prefab_BuildingSystem/Prefab_BS_FurnitureBtn.prefab", BtnAction: () =>
                         {
-                            this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(this.SelectedCategory1, category2);
+                            this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(classificationString);
                             monoBM.PopAndPushPanel<BSPlaceModePanel>();
                         }, BtnSettingAction:
                         (btn) =>
                         {
                             btn.transform.Find("Image2").GetComponent<Image>().sprite = GetTypeSprite(category2);
-                            //btn.name =;
+                            btn.name = classificationString;
                         },
                         OnFinishAdd: () => { synchronizer.Check(); },
                         BtnText: monoBM.Category2Dict[category2.ToString()].GetDescription());
@@ -269,6 +281,9 @@ namespace ML.Engine.BuildingSystem.UI
             if (this.SelectedCategory1 == BuildingCategory1.Furniture)
             {
                 this.SwitchUIBtnListContainer.SetIsEnableFalse();
+                this.ProNodeUICameraImage.CameraParent.SetActive(false);
+                this.InteractUICameraImage.CameraParent.SetActive(false);
+
                 this.SelectType.Find("Content").gameObject.SetActive(false);
                 //默认先用类别排序
                 this.FurnitureCategoryBtnListTransform.gameObject.SetActive(true);
@@ -367,7 +382,9 @@ namespace ML.Engine.BuildingSystem.UI
             base.OnExit();
             this.ClearInstance();
             this.UnloadAsset();
-            this.UICameraImage.DisableUICameraImage();
+            this.FurnitureUICameraImage.DisableUICameraImage();
+            this.ProNodeUICameraImage.DisableUICameraImage();
+            this.InteractUICameraImage.DisableUICameraImage();
         }
 
         protected override void Exit()
@@ -433,6 +450,7 @@ namespace ML.Engine.BuildingSystem.UI
                 int offset = obj.ReadValue<float>() > 0 ? 1 : -1;
                 this.SelectedCategory1Index = (this.SelectedCategory1Index + this.CanSelectCategory1.Length + offset) % this.CanSelectCategory1.Length;
                 this.UpdatePlaceBuildingType(this.CanSelectCategory1[this.SelectedCategory1Index]);
+                
             }
 
         }
@@ -538,11 +556,11 @@ namespace ML.Engine.BuildingSystem.UI
                     //this.FurnitureDisplayBtnList.GetCurSelected()?.Interact();
                 }
             }
-            else
+            /*else
             {
                 this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(this.CanSelectCategory1[this.SelectedCategory1Index], this.CanSelectCategory2[this.SelectedCategory2Index]);
                 monoBM.PopAndPushPanel<BSPlaceModePanel>();
-            }
+            }*/
             
         }
 
@@ -641,8 +659,14 @@ namespace ML.Engine.BuildingSystem.UI
             Array.Sort(CanSelectCategory2);
 
             this.SelectedCategory2Index = 0;
-            this.SwitchUIBtnListContainer.CurSelectUIBtnList?.DeleteAllButton();
-            this.Refresh();
+            if (this.SwitchUIBtnListContainer != null && this.SwitchUIBtnListContainer.CurSelectUIBtnList != null)
+            {
+                this.SwitchUIBtnListContainer.CurSelectUIBtnList.DeleteAllButton(() => { this.Refresh(); });
+            }
+            else
+            {
+                this.Refresh();
+            }
         }
         #endregion
 
@@ -698,10 +722,35 @@ namespace ML.Engine.BuildingSystem.UI
 
                 var btn = this.FurnitureDisplayBtnList.GetCurSelected();
                 string curSelectedBuilding = btn != null ? btn.name : "";
+                if (curSelectedBuilding == "") return;
                 GameObject buildingPart = BuildingManager.Instance.GetOneBPartInstanceGO(curSelectedBuilding);
-                this.UICameraImage.LookAtGameObject(buildingPart);
+                this.FurnitureUICameraImage.LookAtGameObject(buildingPart);
             };
-            
+
+            //ProNode
+            this.SwitchUIBtnListContainer.UIBtnLists[0].OnSelectButtonChanged += () => {
+
+                var btn = this.SwitchUIBtnListContainer.CurSelectUIBtnList?.GetCurSelected();
+                string curSelectedBuilding = btn != null ? btn.name : "";
+                if (curSelectedBuilding == "") return;
+                GameObject buildingPart = BuildingManager.Instance.GetOneBPartInstanceGO(curSelectedBuilding);
+                this.ProNodeUICameraImage.LookAtGameObject(buildingPart);
+            };
+            //Interact
+            this.SwitchUIBtnListContainer.UIBtnLists[1].OnSelectButtonChanged += () => {
+
+                var btn = this.SwitchUIBtnListContainer.CurSelectUIBtnList?.GetCurSelected();
+                string curSelectedBuilding = btn != null ? btn.name : "";
+                if (curSelectedBuilding == "") return;
+                GameObject buildingPart = BuildingManager.Instance.GetOneBPartInstanceGO(curSelectedBuilding);
+                this.InteractUICameraImage.LookAtGameObject(buildingPart);
+            };
+
+            foreach (var uIBtnList in this.SwitchUIBtnListContainer.UIBtnLists)
+            {
+                uIBtnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm, UIBtnListContainer.BindType.performed);
+            }
+
         }
         #endregion
     }

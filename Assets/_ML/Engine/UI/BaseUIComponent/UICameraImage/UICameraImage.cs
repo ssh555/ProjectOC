@@ -24,6 +24,8 @@ namespace ML.Engine.UI
         private RenderTexture texture;
         [ShowInInspector]
         private GameObject cameraParent;
+        public GameObject CameraParent { get { return cameraParent; } }
+
         [ShowInInspector]
         private GameObject currentObjectBeingObserved;
         [ShowInInspector]
@@ -45,7 +47,7 @@ namespace ML.Engine.UI
         public void Init(RenderTexture _rt)
         {
             this.texture = _rt;
-            cameraParent = new GameObject("UICameraImageRoot");
+            cameraParent = new GameObject(this.gameObject.name);
             cameraParent.transform.position = cameraSpawnPoint;
 
             GameObject cameraObject = new GameObject("UICamera");
