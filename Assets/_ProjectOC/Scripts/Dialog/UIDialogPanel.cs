@@ -20,25 +20,6 @@ namespace ProjectOC.Dialog
             base.Awake();
             _dialogManager = LocalGameManager.Instance.DialogManager;
             btnList = optionTmpBtn.transform.GetComponentInParent<UIBtnListInitor>();
-            
-            //生成Character
-            string ChatCharacterNpcPath = "Prefab_Dialog/Prefab_ChatNpc.prefab";
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(ChatCharacterNpcPath).Completed+=(handle) =>
-            {
-                _dialogManager.CurrentChatNpcModel = handle.Result.GetComponent<NPCCharacter>();
-                _dialogManager.LoadDialogue(FirstDialogueID);
-                
-                uICameraImage = transform.Find("Dialogue/UICameraImage").GetComponentInChildren<UICameraImage>();
-                RectTransform _rtTransform = uICameraImage.transform as RectTransform;
-                RenderTexture _rt = new RenderTexture((int)_rtTransform.rect.width,(int)_rtTransform.rect.height,0);
-                
-                //todo 临时用这种方法来看向Character
-                uICameraImage.Init(_rt);
-                //Transform lookAtTransform = handle.Result.transform.Find("CameraLookPos");
-                handle.Result.transform.Find("Model").rotation = Quaternion.Euler(0,180,0);
-                handle.Result.transform.Find("Model").position = handle.Result.transform.Find("Model").position + Vector3.down * 1.2f;
-                uICameraImage.LookAtGameObject(handle.Result);
-            };
         }
         #endregion
 
@@ -109,7 +90,6 @@ namespace ProjectOC.Dialog
         private UICameraImage uICameraImage;
         private UIBtnListInitor btnList;
         private UIBtnList UIBtnList;
-        public string FirstDialogueID;
 
         private int currentOptionIndex
         {

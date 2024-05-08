@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using Cysharp.Threading.Tasks.Triggers;
 using ML.Engine.InteractSystem;
 using ML.Engine.InventorySystem;
@@ -57,6 +58,7 @@ namespace ProjectOC.NPC
         
         public void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
+            DialogManager.CurrentChatNpcModel = this;
             DialogManager.StartDialogMode(dialogID);
         }
         
@@ -69,14 +71,20 @@ namespace ProjectOC.NPC
         private SkinnedMeshRenderer smr;
         [SerializeField,FoldoutGroup("Transform引用")]
         private Animator modelAnimator;
+        [FoldoutGroup("Transform引用")]
+        public CinemachineVirtualCamera NpcCMCamera;
         public void EndDialogMode()
         {
             //动作 面部表情复原
-            modelAnimator.Play("Calm");
             
+            modelAnimator.Play("Idle");
             ResetMood();
         }
 
+        /// <summary>
+        /// 播放人物动作
+        /// </summary>
+        /// <param name="_animID"></param>
         public void PlayAction(string _animID)
         {
             _animID = _animID.Replace("Action_", "");
@@ -86,16 +94,21 @@ namespace ProjectOC.NPC
             }
         }
 
+        /// <summary>
+        /// 播放人物表情
+        /// </summary>
+        /// <param name="_moodID"></param>
         public void PlayMood(string _moodID)
         {
             ResetMood();
+            //todo后续改成BlendShape <string,int>字典
             if (_moodID == "Mood_Smile")
             {
                 smr.SetBlendShapeWeight(0,100f);
             }
             else if (_moodID == "Mood_Calm")
             {
-                smr.SetBlendShapeWeight(0,100f);
+                smr.SetBlendShapeWeight(1,100f);
             }
         }
 
