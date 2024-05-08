@@ -62,6 +62,7 @@ namespace ProjectOC.LandMassExpand
             if (BuildPowerIslandManager.CurrentLandLevelData.IsMax)
             {
                 CouldUpdate = false;
+                
                 _islandUpdatePanel.SetTargetInfo(maxConditionInfo, false);
             }
             else
@@ -82,6 +83,7 @@ namespace ProjectOC.LandMassExpand
                 }
                 CouldUpdate = _isFinished;
             }
+            _islandUpdatePanel.SetCouldUpdate(CouldUpdate);
 
         }
         
