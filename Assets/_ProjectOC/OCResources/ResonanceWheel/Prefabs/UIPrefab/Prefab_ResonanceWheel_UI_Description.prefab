@@ -215,8 +215,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>+10%\u91D1\u5E01\u6389\u843D\n<sprite
-    name=\"Triangle\" index=0 tint=1>+10%\u653B\u51FB\u529B\u6301\u7EED300s</b></color>\n"
+  m_text: "<color=#6FB502><b><sprite name=\"Tex2D_TMP_Triangle\" tint=1>ddd+10%\u91D1\u5E01\u6389\u843D\n<sprite
+    name=\"Tex2D_TMP_Triangle\" tint=1>+10%\u653B\u51FB\u529B\u6301\u7EED300s</b></color>\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d13a2a5ff0d170d45a80f5d9f8a31edf, type: 2}
   m_sharedMaterial: {fileID: 1958496136511095935, guid: d13a2a5ff0d170d45a80f5d9f8a31edf, type: 2}

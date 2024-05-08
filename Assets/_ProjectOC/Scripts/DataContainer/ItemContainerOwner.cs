@@ -14,10 +14,6 @@ namespace ProjectOC.DataNS
         {
             DataContainer = new DataContainer(capacity, dataCapacity);
         }
-        public void InitData(List<string> ids, List<int> dataCapacitys)
-        {
-            DataContainer = new DataContainer(ids, dataCapacitys);
-        }
         public void ClearData()
         {
             (this as MissionNS.IMissionObj).Clear();
@@ -29,7 +25,7 @@ namespace ProjectOC.DataNS
         public void ResetData(List<string> ids, List<int> dataCapacity)
         {
             ClearData();
-            InitData(ids, dataCapacity);
+            DataContainer.Reset(ids, dataCapacity);
         }
         #endregion
 
