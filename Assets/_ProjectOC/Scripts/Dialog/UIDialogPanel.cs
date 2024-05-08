@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
 using ProjectOC.ManagerNS;
+using ProjectOC.NPC;
 using Sirenix.OdinInspector;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace ProjectOC.Dialog
@@ -17,6 +19,7 @@ namespace ProjectOC.Dialog
         {
             base.Awake();
             _dialogManager = LocalGameManager.Instance.DialogManager;
+            btnList = optionTmpBtn.transform.GetComponentInParent<UIBtnListInitor>();
         }
         #endregion
 
@@ -27,7 +30,6 @@ namespace ProjectOC.Dialog
             base.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Enable();
             ML.Engine.Input.InputManager.Instance.Common.Common.Confirm.performed += Confirm_performed;
-
         }
 
         protected override void UnregisterInput()
@@ -38,11 +40,17 @@ namespace ProjectOC.Dialog
         }
         private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (!optionMode)
+            if (currentOptionIndex != -1)
             {
-                //选项跳转
-                _dialogManager.LoadDialogue();
+                ClearOptionBtn();
             }
+            _dialogManager.LoadDialogue(currentOptionIndex);
+        }
+
+        public void PopPanel()
+        {
+            BtnListDisable();
+            ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
         }
         #endregion
         
@@ -79,60 +87,76 @@ namespace ProjectOC.Dialog
         private SelectedButton optionTmpBtn;
         [SerializeField, FoldoutGroup("UI")] 
         private TextMeshProUGUI dialogText, npcNameText;
+        private UICameraImage uICameraImage;
+        private UIBtnListInitor btnList;
+        private UIBtnList UIBtnList;
 
-        private bool optionMode = false;
-        public void ShowDialogText(string _text)
+        private int currentOptionIndex
         {
-            dialogText.text = _text;
+            get
+            {
+                if (UIBtnList == null)
+                {
+                    return -1;   
+                }
+                else
+                {
+                    return UIBtnList.GetCurSelectedPos1();   
+                }
+            }
         }
 
+        public void ShowDialogText(string _text,string _npcName)
+        {
+            dialogText.text = _text;
+            npcNameText.text = _npcName;
+        }
+        
         public void ShowOption(OptionTableData _optionDatas)
         {
-            optionMode = true;
-            //处理Option数据为List
-            List<OnePieceOption> _options = new List<OnePieceOption>();
-            if (_optionDatas.Optiontext1 != "")
-            {
-                _options.Add(new OnePieceOption(_optionDatas.Optiontext1,_optionDatas.OptionNextID1));
-            }
-            if (_optionDatas.Optiontext2 != "")
-            {
-                _options.Add(new OnePieceOption(_optionDatas.Optiontext2,_optionDatas.OptionNextID2));
-            }
-            if (_optionDatas.Optiontext3 != "")
-            {
-                _options.Add(new OnePieceOption(_optionDatas.Optiontext3,_optionDatas.OptionNextID3));
-            }
+            List<OptionTableData.OnePieceOption> _options = _optionDatas.Options;
 
-            
             //生成设置Option
             for (int i = 0; i < _options.Count; i++)
             {
-                int _index = i;
-                SelectedButton _btn = GameObject.Instantiate(optionTmpBtn);
+                SelectedButton _btn = GameObject.Instantiate(optionTmpBtn,optionTmpBtn.transform.parent);
+                _btn.gameObject.name = $"OptionBtn{i}";
+                _btn.gameObject.SetActive(true);
                 _btn.GetComponentInChildren<TextMeshProUGUI>().text = _options[i].OptionText;
-                _btn.onClick.AddListener(() =>
-                {
-                    _dialogManager.LoadDialogue(_options[_index].NextID);
-                });
             }
-            
-            //btnList
-            
+            BtnListInit();
         }
-        
 
-        public struct OnePieceOption
+        public void ClearOptionBtn()
         {
-            public TextContent OptionText;
-            public string NextID;
-
-            public OnePieceOption(TextContent _optionText, string _nextID)
+            BtnListDisable();
+            foreach (Transform _btn in optionTmpBtn.transform.parent)
             {
-                OptionText = _optionText;
-                NextID = _nextID;
+                if (_btn.gameObject != optionTmpBtn.gameObject)
+                {
+                    Destroy(_btn.gameObject);
+                }
             }
         }
+
+        private void BtnListDisable()
+        {
+            if (UIBtnList == null)
+                return;
+            this.UIBtnList.DisableBtnList();
+            this.UIBtnList.RemoveAllListener();
+            this.UIBtnList.DeBindInputAction();
+        }
+        private void BtnListInit()
+        {
+            UIBtnList = new UIBtnList(btnList);
+            this.UIBtnList.EnableBtnList();
+            this.UIBtnList.BindNavigationInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUI.AlterSelected, UIBtnListContainer.BindType.started);
+            this.UIBtnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm, UIBtnListContainer.BindType.started);
+
+        }
+
+
         #endregion
     }
 }

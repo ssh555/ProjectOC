@@ -1,6 +1,10 @@
+using System;
 using ML.Engine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using ML.Engine.BuildingSystem;
+using ML.Engine.BuildingSystem.BuildingPart;
+using Sirenix.Utilities;
 using UnityEngine;
 
 namespace ML.Engine.Event
@@ -28,7 +32,7 @@ namespace ML.Engine.Event
             return true;
         }
 
-        private string CheckBagItemGetText(string s)
+        private string CheckBagItemGetText(string s,List<string> p1, List<int> p2, List<float> p3)
         {
             Debug.Log("CheckBagItemGetText " + s);
             return s;
@@ -36,29 +40,25 @@ namespace ML.Engine.Event
 
         public bool CheckBuild(List<string> p1, List<int> p2, List<float> p3)
         {
-            Debug.Log("CheckBuild ");
-            Debug.Log("p1 ");
-            foreach (var item in p1)
+            if (p1.IsNullOrEmpty() || p2.IsNullOrEmpty())
             {
-                Debug.Log($"{item} ");
+                Debug.LogError("[TabelData Error] CheckBuild");
             }
-            Debug.Log("p2 ");
-            foreach (var item in p2)
-            {
-                Debug.Log($"{item} ");
-            }
-            Debug.Log("p3 ");
-            foreach (var item in p3)
-            {
-                Debug.Log($"{item} ");
-            }
-            return true;
+            //Build_Interact_LifeDiversion_1
+            string buildingTypeStr = p1[0].Split("_")[2];
+            BuildingCategory2 buildingType = (BuildingCategory2)Enum.Parse(typeof(BuildingCategory2), buildingTypeStr);
+            int currentCount = BuildingManager.Instance.GetBuildingCount(buildingType);
+
+            return currentCount >= p2[0];
         }
 
-        private string CheckBuildGetText(string s)
+        private string CheckBuildGetText(string s,List<string> p1, List<int> p2, List<float> p3)
         {
-            Debug.Log("CheckBuildGetText " + s);
-            return s;
+            string buildingTypeStr = (p1[0].Split("_"))[2];
+            BuildingCategory2 buildingType =  (BuildingCategory2)Enum.Parse(typeof(BuildingCategory2), buildingTypeStr);
+            int currentCount = BuildingManager.Instance.GetBuildingCount(buildingType);
+            string _conditionText = s.Replace("&S1",currentCount.ToString());
+            return _conditionText;
         }
         public bool CheckWorkerEMCurrent(List<string> p1, List<int> p2, List<float> p3)
         {
@@ -81,24 +81,13 @@ namespace ML.Engine.Event
             return true;
         }
 
-        private string CheckWorkerEMCurrentGetText(string s)
+
+        private string CheckWorkerEMCurrentGetText(string s,List<string> p1, List<int> p2, List<float> p3)
         {
             Debug.Log("CheckWorkerEMCurrentGetText " + s);
             return s;
         }
 
-        public bool Condition_CheckBuild_Bed_1()
-        {
-            return true;
-        }
-        public bool Condition_CheckBuild_SeedPlot_1()
-        {
-            return true;
-        }
-        public bool Condition_CheckBuild_LifeDiversion_1()
-        {
-            return true;
-        }
     }
 }
 

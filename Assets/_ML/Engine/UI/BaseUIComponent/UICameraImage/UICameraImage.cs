@@ -12,7 +12,6 @@ namespace ML.Engine.UI
 {
     public class UICameraImage : UIBehaviour,IDragHandler
     {
-        
         [LabelText("摄像机生成位置")]
         public Vector3 cameraSpawnPoint = new Vector3(1000, 1000, 1000);
         [LabelText("摄像机与模型之间的距离")]
@@ -58,7 +57,7 @@ namespace ML.Engine.UI
             uiCamera = cameraObject.AddComponent<Camera>();
             uiCamera.cullingMask = 1 << (LayerMask.NameToLayer(LayerName));
             uiCamera.clearFlags = CameraClearFlags.Color;
-            uiCamera.backgroundColor = Color.black;
+            uiCamera.backgroundColor = Color.grey;
             uiCamera.targetTexture = texture;
             uiCamera.orthographic = false;
 

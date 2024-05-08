@@ -1,3 +1,4 @@
+using ML.Engine.BuildingSystem.BuildingPart;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -75,8 +76,11 @@ namespace ProjectOC.ProNodeNS
                 ManagerNS.LocalGameManager.Instance.ProNodeManager.WorldNodeSetData(this, worldProNode.ProNode);
                 ProNode.SetLevel(Classification.Category4 - 1);
                 ManagerNS.LocalGameManager.Instance.BuildPowerIslandManager.electAppliances.Add(this);
+                
                 PowerCount = worldProNode.PowerCount;
             }
+            ML.Engine.BuildingSystem.BuildingManager.Instance.AddBuildingInstance(this);
+            ML.Engine.BuildingSystem.BuildingManager.Instance.RemoveBuildingInstance(lastLevelBuild as BuildingPart);
             ML.Engine.Manager.GameManager.DestroyObj(lastLevelBuild.gameObject);
         }
     }

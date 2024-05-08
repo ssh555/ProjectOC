@@ -110,7 +110,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4765781657409720512}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.7120531, y: -0, z: -0, w: 0.7021256}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -119,7 +119,7 @@ Transform:
   - {fileID: 2274645573624168988}
   - {fileID: 7368830884288940886}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90.804, y: 0, z: 0}
 --- !u!205 &5354033950386531483
 LODGroup:
   m_ObjectHideFlags: 0
@@ -184,9 +184,9 @@ MonoBehaviour:
   DropItems:
   - dropItem: Item_Mission_1
     num: 5
-  - dropItem: Item_Stone_2
-    num: 10
-  collectCount: 4
+  - dropItem: Item_Stone_9
+    num: 5
+  collectCount: 8
 --- !u!1 &5291829185939788795
 GameObject:
   m_ObjectHideFlags: 0
