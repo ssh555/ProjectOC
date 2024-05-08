@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
+using ML.Engine.BuildingSystem.BuildingPart;
 using UnityEngine;
 
 namespace ProjectOC.StoreNS
@@ -59,6 +60,8 @@ namespace ProjectOC.StoreNS
                 ManagerNS.LocalGameManager.Instance.StoreManager.WorldStoreSetData(this, worldStore.Store);
             }
             Store.SetLevel(Classification.Category4 - 1);
+            ML.Engine.BuildingSystem.BuildingManager.Instance.AddBuildingInstance(this);
+            ML.Engine.BuildingSystem.BuildingManager.Instance.RemoveBuildingInstance(lastLevelBuild as BuildingPart);
             ML.Engine.Manager.GameManager.DestroyObj(lastLevelBuild.gameObject);
         }
     }

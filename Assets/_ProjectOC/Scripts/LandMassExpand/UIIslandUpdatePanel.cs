@@ -25,6 +25,8 @@ namespace ProjectOC.LandMassExpand
         private UnityEngine.UI.Image IslandImage,IslandStateImage;
         [SerializeField,FoldoutGroup("UI")] 
         private Transform emoijTransform;
+        [SerializeField, FoldoutGroup("UI")] 
+        private SelectedButton _updateBtn;
         
         [HideInInspector]
         public IslandUpdateInteract IslandUpdateInteract;
@@ -69,7 +71,7 @@ namespace ProjectOC.LandMassExpand
             ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
         }
 
-        private void performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        private void LBRB_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             //«–ªªµ∫”Ï
         }
@@ -107,7 +109,12 @@ namespace ProjectOC.LandMassExpand
             GameObject newTarget = GameObject.Instantiate(TargetPrefab,TargetPrefab.transform.parent);
             newTarget.GetComponentInChildren<TextMeshProUGUI>().text = _text;
             newTarget.SetActive(true);
-
+            if (LocalGameManager.Instance.BuildPowerIslandManager.CurrentLandLevelData.IsMax)
+            {
+                newTarget.transform.Find("Image").gameObject.SetActive(false);
+            }
+            
+            
             if (_finished)
             {
                 Transform _imageTrans = newTarget.transform.Find("Image");
@@ -118,6 +125,19 @@ namespace ProjectOC.LandMassExpand
             
         }
 
+        public void SetCouldUpdate(bool _couldUpdate)
+        {
+            if (_couldUpdate)
+            {
+                _updateBtn.GetComponent<Image>().color = new Color(0.274758f,0.759f,0.3485978f);
+            }
+            else
+            {
+                _updateBtn.GetComponent<Image>().color = Color.gray;
+            }
+            
+        }
+        
         private void DeleteTargetPrefabs()
         {
             foreach (Transform _childTransf in TargetPrefab.transform.parent)

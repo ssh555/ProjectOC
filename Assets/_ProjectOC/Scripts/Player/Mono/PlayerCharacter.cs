@@ -1,3 +1,4 @@
+using Cinemachine;
 using UnityEngine;
 using ML.Engine.FSM;
 using Sirenix.OdinInspector;
@@ -26,7 +27,7 @@ namespace ProjectOC.Player
         protected Transform playerTerrainDetect;
         [LabelText("视角旋转"), SerializeField, FoldoutGroup("物体|脚本引用")]
         protected ThirdPersonRotateComp thirdPersonRotateComp;
-
+        
         /// <summary>
         /// PlayerInputActions
         /// </summary>
@@ -242,5 +243,15 @@ namespace ProjectOC.Player
 
         #endregion
 
+        #region 其他:相机
+        //todo CameraManager？
+        public CinemachineVirtualCamera GetPlayerCamera()
+        {
+            return thirdPersonRotateComp.VCamera;
+        }
+        
+        
+
+        #endregion
     }
 }

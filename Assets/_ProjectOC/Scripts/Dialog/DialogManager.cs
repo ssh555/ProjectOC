@@ -46,6 +46,9 @@ namespace ProjectOC.Dialog
 
         public NPCCharacter CurrentChatNpcModel;
 
+        
+        private PlayerCharacter playerCharacter=> (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController)
+            .currentCharacter;
 
         private void LoadTableData()
         {
@@ -94,9 +97,12 @@ namespace ProjectOC.Dialog
                     .Completed +=(handle) =>
                 {
                     DialogPanel = handle.Result.GetComponent<UIDialogPanel>();
-                    DialogPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    DialogPanel.transform.SetParent(GameManager.Instance.UIManager.GetCanvas.transform, false);
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(DialogPanel);
-                    DialogPanel.FirstDialogueID = _ID;
+                    LoadDialogue(_ID);
+
+                    CurrentChatNpcModel.NpcCMCamera.enabled = true;
+                    playerCharacter.GetPlayerCamera().enabled = false;
                 };
             }
         }
@@ -160,9 +166,11 @@ namespace ProjectOC.Dialog
         private void EndDialogMode()
         {
             DialogPanel.PopPanel();
-            //CurrentChatNpc.EndDialogMode();
-            GameObject.Destroy(CurrentChatNpcModel.gameObject);
+            CurrentChatNpcModel.NpcCMCamera.enabled = false;
+            playerCharacter.GetPlayerCamera().enabled = true;
+            CurrentChatNpcModel.EndDialogMode();
             
+            //สýพÝน้ฮป
             DialogPanel = null;
             CurrentChatNpcModel = null;
             CurDialogIndex = -1;
