@@ -13,24 +13,11 @@ namespace ProjectOC.StoreNS
     [LabelText("仓库管理器"), System.Serializable]
     public sealed class StoreManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
-        public void OnRegister()
-        {
-            LoadTableData();
-        }
-
-        #region 配置
-        [LabelText("仓库最大等级"), FoldoutGroup("配置")]
-        public int LevelMax = 2;
-        [LabelText("每个级别的仓库容量"), FoldoutGroup("配置")]
-        public List<int> LevelCapacity = new List<int>() { 2, 4, 8 };
-        [LabelText("每个级别的仓库数据容量"), FoldoutGroup("配置")]
-        public List<int> LevelDataCapacity = new List<int>() { 50, 100, 200 };
-        #endregion
-
-        #region Load And Data
+        #region ILocalManager
         private Dictionary<string, StoreIconTableData> StoreIconTableDict = new Dictionary<string, StoreIconTableData>();
         public ML.Engine.ABResources.ABJsonAssetProcessor<StoreIconTableData[]> ABJAProcessor;
-        public void LoadTableData()
+        public StoreConfig Config;
+        public void OnRegister()
         {
             ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StoreIconTableData[]>("OCTableData", "StoreIcon", (datas) =>
             {
@@ -40,6 +27,11 @@ namespace ProjectOC.StoreNS
                 }
             }, "仓库图标表数据");
             ABJAProcessor.StartLoadJsonAssetData();
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<StoreConfigAsset>("Config_Store").Completed += (handle) =>
+            {
+                StoreConfigAsset data = handle.Result;
+                Config = data.Config;
+            };
         }
         #endregion
 

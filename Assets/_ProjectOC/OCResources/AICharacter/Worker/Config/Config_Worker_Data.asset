@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e122418ab6ff93449a306c5e1bb03b51, type: 3}
+  m_Name: Config_Worker_Data
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  Config:
+    APMax: 0
+    APWorkThreshold: 0
+    APRelaxThreshold: 0
+    APCost_Transport: 0
+    EatTime: 1
+    EMMax: 0
+    EMLowThreshold: 0
+    EMHighThreshold: 0
+    EMLowEffect: 0
+    EMHighEffect: 0
+    EMCost: 0
+    EMRecover: 0
+    WalkSpeed: 0
+    BURMax: 0
+    ExpTransport: 0
+    SkillEff: 0
+    ExpToLevel: 
+    LevelToEff_Duty: 
+    LevelToEff_Transport: 
+    DestroyTimeForNoHome: 0
+    SkillStdMean: 0
+    SkillStdDev: 0
+    SkillStdHighBound: 0
+    SkillStdLowBound: 0

@@ -1,9 +1,6 @@
 using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace ProjectOC.WorkerNS
 {
@@ -33,15 +30,11 @@ namespace ProjectOC.WorkerNS
 
         public Feature(FeatureTableData config)
         {
-            this.ID = config.ID;
-            this.Effects = new List<Effect>();
+            ID = config.ID;
+            Effects = new List<Effect>();
             foreach (var tuple in config.Effects)
             {
-                Effect effect = LocalGameManager.Instance.EffectManager.SpawnEffect(tuple.Item1, tuple.Item2);
-                if (effect != null)
-                {
-                    this.Effects.Add(effect);
-                }
+                Effects.Add(LocalGameManager.Instance.EffectManager.SpawnEffect(tuple.Item1, tuple.Item2));
             }
         }
 
@@ -49,9 +42,9 @@ namespace ProjectOC.WorkerNS
         {
             if (worker != null)
             {
-                foreach (Effect effect in this.Effects)
+                foreach (Effect effect in Effects)
                 {
-                    effect.ApplyEffect(worker);
+                    worker.ApplyEffect(effect);
                 }
             }
         }

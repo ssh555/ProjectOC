@@ -92,7 +92,7 @@ namespace ProjectOC.MissionNS
         {
             int putOutNum = SoureceReserveNum > 0 ? SoureceReserveNum : MissionNum;
             int weight = ML.Engine.InventorySystem.ItemManager.Instance.GetWeight(ID);
-            int burMaxNum = weight != 0 ? (Worker.WeightMax - Worker.WeightCurrent) / weight : putOutNum;
+            int burMaxNum = weight != 0 ? (Worker.RealBURMax - Worker.WeightCurrent) / weight : putOutNum;
             putOutNum = putOutNum <= burMaxNum ? putOutNum : burMaxNum;
             int sourceNum = Source.PutOut(ID, putOutNum);
             if (!Worker.TransportDict.ContainsKey(ID))
