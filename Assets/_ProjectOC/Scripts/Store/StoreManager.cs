@@ -30,7 +30,7 @@ namespace ProjectOC.StoreNS
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<StoreConfigAsset>("Config_Store").Completed += (handle) =>
             {
                 StoreConfigAsset data = handle.Result;
-                Config = data.Config;
+                Config = new StoreConfig(data.Config);
             };
         }
         #endregion

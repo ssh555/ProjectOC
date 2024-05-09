@@ -48,7 +48,7 @@ namespace ProjectOC.WorkerNS
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<WorkerConfigAsset>("Config_Worker").Completed += (handle) =>
             {
                 WorkerConfigAsset data = handle.Result;
-                Config = data.Config;
+                Config = new WorkerConfig(data.Config);
             };
         }
 

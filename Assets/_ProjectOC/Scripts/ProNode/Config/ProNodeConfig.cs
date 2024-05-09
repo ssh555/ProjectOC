@@ -14,5 +14,13 @@ namespace ProjectOC.ProNodeNS
         public List<int> LevelUpgradeEff;
         [LabelText("体力消耗_值班")]
         public int InitAPCost_Duty;
+        public ProNodeConfig(ProNodeConfig config)
+        {
+            EffBase = config.EffBase;
+            LevelMax = config.LevelMax;
+            LevelUpgradeEff = new List<int>();
+            LevelUpgradeEff.AddRange(config.LevelUpgradeEff);
+            InitAPCost_Duty = config.InitAPCost_Duty;
+        }
     }
 }

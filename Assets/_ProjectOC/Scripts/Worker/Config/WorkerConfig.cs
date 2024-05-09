@@ -54,5 +54,36 @@ namespace ProjectOC.WorkerNS
         public int SkillStdHighBound;
         [LabelText("技能等级分布下界")]
         public int SkillStdLowBound;
+
+        public WorkerConfig(WorkerConfig config)
+        {
+            APMax = config.APMax;
+            APWorkThreshold = config.APWorkThreshold;
+            APRelaxThreshold = config.APRelaxThreshold;
+            APCost_Transport = config.APCost_Transport;
+            EatTime = config.EatTime;
+            EMMax = config.EMMax;
+            EMLowThreshold = config.EMLowThreshold;
+            EMHighThreshold = config.EMHighThreshold;
+            EMLowEffect = config.EMLowEffect;
+            EMHighEffect = config.EMHighEffect;
+            EMCost = config.EMCost;
+            EMRecover = config.EMRecover;
+            WalkSpeed = config.WalkSpeed;
+            BURMax = config.BURMax;
+            ExpTransport = config.ExpTransport;
+            SkillEff = config.SkillEff;
+            ExpToLevel = new List<int>();
+            ExpToLevel.AddRange(config.ExpToLevel);
+            LevelToEff_Duty = new List<int>();
+            LevelToEff_Duty.AddRange(config.LevelToEff_Duty);
+            LevelToEff_Transport = new List<int>();
+            LevelToEff_Transport.AddRange(config.LevelToEff_Transport);
+            DestroyTimeForNoHome = config.DestroyTimeForNoHome;
+            SkillStdMean = config.SkillStdMean;
+            SkillStdDev = config.SkillStdDev;
+            SkillStdHighBound = config.SkillStdHighBound;
+            SkillStdLowBound = config.SkillStdLowBound;
+        }
     }
 }

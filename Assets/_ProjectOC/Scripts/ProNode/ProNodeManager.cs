@@ -40,7 +40,7 @@ namespace ProjectOC.ProNodeNS
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<ProNodeConfigAsset>("Config_ProNode").Completed += (handle) =>
             {
                 ProNodeConfigAsset data = handle.Result;
-                Config = data.Config;
+                Config = new ProNodeConfig(data.Config);
             };
         }
         #endregion

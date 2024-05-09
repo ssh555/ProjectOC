@@ -12,5 +12,14 @@ namespace ProjectOC.StoreNS
         public List<int> LevelCapacity;
         [LabelText("每个级别的仓库数据容量")]
         public List<int> LevelDataCapacity;
+
+        public StoreConfig(StoreConfig config)
+        {
+            LevelMax = config.LevelMax;
+            LevelCapacity = new List<int>();
+            LevelCapacity.AddRange(config.LevelCapacity);
+            LevelDataCapacity = new List<int>();
+            LevelDataCapacity.AddRange(config.LevelDataCapacity);
+        }
     }
 }
