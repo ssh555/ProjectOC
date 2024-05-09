@@ -12,7 +12,6 @@ namespace ML.Engine.Event
     [System.Serializable]
     public sealed partial class FunctionLiabrary : ML.Engine.Manager.GlobalManager.IGlobalManager
     {
-
         private Dictionary<string, string> EventTableDataDic = new Dictionary<string, string>();
         private Dictionary<string, ConditionTableData> ConditionTableDataDic = new Dictionary<string, ConditionTableData>();
 

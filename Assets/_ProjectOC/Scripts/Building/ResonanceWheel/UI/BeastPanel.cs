@@ -158,7 +158,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             {
                 return;
             }
-            var Content = this.transform.Find("HiddenBeastInfo1").Find("Info").Find("Scroll View").Find("Viewport").Find("Content");
 
             Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
 
