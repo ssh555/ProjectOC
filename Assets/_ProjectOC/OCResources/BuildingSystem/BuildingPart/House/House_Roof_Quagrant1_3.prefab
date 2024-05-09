@@ -158,7 +158,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6002597371006712553}
   - component: {fileID: 6803084028972616439}
-  - component: {fileID: 8353351016869619675}
+  - component: {fileID: 7869194967469930399}
   m_Layer: 7
   m_Name: House_Roof_Quagrant1_3
   m_TagString: Untagged
@@ -208,7 +208,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.1, y: 1.8, z: 1.1}
   m_Center: {x: -0.3, y: 1, z: -0.3}
---- !u!114 &8353351016869619675
+--- !u!114 &7869194967469930399
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -226,7 +226,7 @@ MonoBehaviour:
     Category3: 102
     Category4: 3
   instanceID: 
-  canPlaceInPlaceMode: 0
+  canPlaceInPlaceMode: 1
   mode: 0
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 0, z: 0, w: 1}

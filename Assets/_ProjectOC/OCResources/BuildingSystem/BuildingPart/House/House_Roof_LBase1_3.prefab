@@ -454,7 +454,7 @@ GameObject:
   m_Component:
   - component: {fileID: 866506675923108902}
   - component: {fileID: 6181684095671698557}
-  - component: {fileID: 7138675361498633435}
+  - component: {fileID: 2105355480834639405}
   m_Layer: 7
   m_Name: House_Roof_LBase1_3
   m_TagString: Untagged
@@ -505,7 +505,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1.8, z: 1}
   m_Center: {x: -0.4, y: 1, z: -0.4}
---- !u!114 &7138675361498633435
+--- !u!114 &2105355480834639405
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -523,7 +523,7 @@ MonoBehaviour:
     Category3: 103
     Category4: 3
   instanceID: 
-  canPlaceInPlaceMode: 0
+  canPlaceInPlaceMode: 1
   mode: 0
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 0, z: 0, w: 1}
