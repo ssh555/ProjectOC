@@ -229,8 +229,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   classification:
     Category1: 2
-    Category2: 202
-    Category3: 103
+    Category2: 203
+    Category3: 102
     Category4: 1
   instanceID: 
   canPlaceInPlaceMode: 1
