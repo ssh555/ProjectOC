@@ -113,26 +113,27 @@ namespace ProjectOC.WorkerNS
         public void Init()
         {
             #region Init Data
+            var config = ManagerNS.LocalGameManager.Instance.WorkerManager.Config;
             ID = ManagerNS.LocalGameManager.Instance.WorkerManager.GetOneNewWorkerID();
             Name = ManagerNS.LocalGameManager.Instance.WorkerManager.GetOneNewWorkerName();
             Gender = ManagerNS.LocalGameManager.Instance.WorkerManager.GetOneNewWorkerGender();
-            APMax = ManagerNS.LocalGameManager.Instance.WorkerManager.Config.APMax;
-            APWorkThreshold = ManagerNS.LocalGameManager.Instance.WorkerManager.Config.APWorkThreshold;
-            APRelaxThreshold = ManagerNS.LocalGameManager.Instance.WorkerManager.Config.APRelaxThreshold;
-            APCost_Transport = ManagerNS.LocalGameManager.Instance.WorkerManager.Config.APCost_Transport;
+            APMax = config.APMax;
+            APWorkThreshold = config.APWorkThreshold;
+            APRelaxThreshold = config.APRelaxThreshold;
+            APCost_Transport = config.APCost_Transport;
             AlterAP(APMax);
-            EatTime = ManagerNS.LocalGameManager.Instance.WorkerManager.Config.EatTime;
-            EMMax = ManagerNS.LocalGameManager.Instance.WorkerManager.Config.EMMax;
-            EMLowThreshold = ManagerNS.LocalGameManager.Instance.WorkerManager.Config.EMLowThreshold;
-            EMHighThreshold = ManagerNS.LocalGameManager.Instance.WorkerManager.Config.EMHighThreshold;
-            EMLowEffect = ManagerNS.LocalGameManager.Instance.WorkerManager.Config.EMLowEffect;
-            EMHighEffect = ManagerNS.LocalGameManager.Instance.WorkerManager.Config.EMHighEffect;
-            EMCost = ManagerNS.LocalGameManager.Instance.WorkerManager.Config.EMCost;
-            EMRecover = ManagerNS.LocalGameManager.Instance.WorkerManager.Config.EMRecover;
+            EatTime = config.EatTime;
+            EMMax = config.EMMax;
+            EMLowThreshold = config.EMLowThreshold;
+            EMHighThreshold = config.EMHighThreshold;
+            EMLowEffect = config.EMLowEffect;
+            EMHighEffect = config.EMHighEffect;
+            EMCost = config.EMCost;
+            EMRecover = config.EMRecover;
             AlterMood(EMMax);
-            WalkSpeed = ManagerNS.LocalGameManager.Instance.WorkerManager.Config.WalkSpeed;
-            BURMax = ManagerNS.LocalGameManager.Instance.WorkerManager.Config.BURMax;
-            ExpTransport = ManagerNS.LocalGameManager.Instance.WorkerManager.Config.ExpTransport;
+            WalkSpeed = config.WalkSpeed;
+            BURMax = config.BURMax;
+            ExpTransport = config.ExpTransport;
             List<int> levels = ManagerNS.LocalGameManager.Instance.WorkerManager.GetSkillLevel();
             foreach (SkillType skillType in Enum.GetValues(typeof(SkillType)))
             {
@@ -145,7 +146,7 @@ namespace ProjectOC.WorkerNS
                 feature.ApplyFeature(this);
             }
             CanArrange = true;
-            CanReverse = true;
+            CanReverse = false;
             #endregion
 
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
