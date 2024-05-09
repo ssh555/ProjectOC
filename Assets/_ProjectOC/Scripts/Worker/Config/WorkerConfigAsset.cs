@@ -6,7 +6,7 @@ namespace ProjectOC.WorkerNS
     [CreateAssetMenu(fileName = "WorkerConfigAsset", menuName = "OC/Worker/WorkerConfigAsset", order = 1)]
     public class WorkerConfigAsset : SerializedScriptableObject
     {
-        [LabelText("配置数据")]
+        [LabelText("配置数据"), ShowInInspector]
         public WorkerConfig Config;
     }
 }

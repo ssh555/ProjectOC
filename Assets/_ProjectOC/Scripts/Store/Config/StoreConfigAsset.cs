@@ -6,7 +6,7 @@ namespace ProjectOC.StoreNS
     [CreateAssetMenu(fileName = "StoreConfigAsset", menuName = "OC/Store/StoreConfigAsset", order = 1)]
     public class StoreConfigAsset : SerializedScriptableObject
     {
-        [LabelText("配置数据")]
+        [LabelText("配置数据"), ShowInInspector]
         public StoreConfig Config;
     }
 }

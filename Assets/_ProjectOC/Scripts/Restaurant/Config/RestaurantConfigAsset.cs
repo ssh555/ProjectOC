@@ -6,7 +6,7 @@ namespace ProjectOC.RestaurantNS
     [CreateAssetMenu(fileName = "RestaurantConfigAsset", menuName = "OC/Restaurant/RestaurantConfigAsset", order = 1)]
     public class RestaurantConfigAsset : SerializedScriptableObject
     {
-        [LabelText("配置数据")]
+        [LabelText("配置数据"), ShowInInspector]
         public RestaurantConfig Config;
     }
 }

@@ -6,7 +6,7 @@ namespace ProjectOC.ProNodeNS
     [CreateAssetMenu(fileName = "ProNodeConfigAsset", menuName = "OC/ProNode/ProNodeConfigAsset", order = 1)]
     public class ProNodeConfigAsset : SerializedScriptableObject
     {
-        [LabelText("配置数据")]
+        [LabelText("配置数据"), ShowInInspector]
         public ProNodeConfig Config;
     }
 }
