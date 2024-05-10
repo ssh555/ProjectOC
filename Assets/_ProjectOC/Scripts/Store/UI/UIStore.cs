@@ -587,20 +587,20 @@ namespace ProjectOC.StoreNS.UI
 
                 #region Level
                 Upgrade_LvOld.Find("Lv").GetComponent<TMPro.TextMeshProUGUI>().text = "Lv: " + Store.Level.ToString();
-                int capacity = ManagerNS.LocalGameManager.Instance.StoreManager.LevelCapacity[Store.Level];
-                int dataCapacity = ManagerNS.LocalGameManager.Instance.StoreManager.LevelDataCapacity[Store.Level];
+                int capacity = ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelCapacity[Store.Level];
+                int dataCapacity = ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelDataCapacity[Store.Level];
                 Upgrade_LvOld.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc1 + capacity;
                 Upgrade_LvOld.Find("Desc1").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc2 + dataCapacity;
 
-                if (Store.Level + 1 <= ManagerNS.LocalGameManager.Instance.StoreManager.LevelMax)
+                if (Store.Level + 1 <= ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelMax)
                 {
                     Upgrade.Find("BtnBackground").gameObject.SetActive(true);
                     Upgrade.Find("KT_UpgradeConfirm").gameObject.SetActive(true);
 
                     Upgrade_Build.Find("Image").gameObject.SetActive(true);
                     Upgrade_LvNew.Find("Lv").GetComponent<TMPro.TextMeshProUGUI>().text = "Lv: " + (Store.Level + 1).ToString();
-                    capacity = ManagerNS.LocalGameManager.Instance.StoreManager.LevelCapacity[Store.Level + 1];
-                    dataCapacity = ManagerNS.LocalGameManager.Instance.StoreManager.LevelDataCapacity[Store.Level + 1];
+                    capacity = ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelCapacity[Store.Level + 1];
+                    dataCapacity = ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelDataCapacity[Store.Level + 1];
                     Upgrade_LvNew.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc1 + capacity;
                     Upgrade_LvNew.Find("Desc1").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.text_LvDesc2 + dataCapacity;
                 }

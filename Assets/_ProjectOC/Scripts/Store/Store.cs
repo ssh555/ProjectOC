@@ -30,10 +30,10 @@ namespace ProjectOC.StoreNS
         {
             StoreType = storeType;
             Name = storeType.ToString();
-            if (0 <= Level && Level <= ManagerNS.LocalGameManager.Instance.StoreManager.LevelMax)
+            if (0 <= Level && Level <= ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelMax)
             {
-                InitData(ManagerNS.LocalGameManager.Instance.StoreManager.LevelCapacity[Level],
-                ManagerNS.LocalGameManager.Instance.StoreManager.LevelDataCapacity[Level]);
+                InitData(ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelCapacity[Level],
+                ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelDataCapacity[Level]);
             }
         }
 
@@ -49,10 +49,10 @@ namespace ProjectOC.StoreNS
 
         public bool SetLevel(int newLevel)
         {
-            if (WorldStore.transform != null && 0 <= newLevel && newLevel <= ManagerNS.LocalGameManager.Instance.StoreManager.LevelMax)
+            if (WorldStore.transform != null && 0 <= newLevel && newLevel <= ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelMax)
             {
-                ChangeCapacity(ManagerNS.LocalGameManager.Instance.StoreManager.LevelCapacity[newLevel], 
-                    ManagerNS.LocalGameManager.Instance.StoreManager.LevelDataCapacity[newLevel]);
+                ChangeCapacity(ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelCapacity[newLevel], 
+                    ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelDataCapacity[newLevel]);
                 Level = newLevel;
                 (this as MissionNS.IMissionObj).UpdateTransport();
                 return true;

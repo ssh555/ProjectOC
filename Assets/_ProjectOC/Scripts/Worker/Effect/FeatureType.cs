@@ -8,14 +8,15 @@ namespace ProjectOC.WorkerNS
     /// </summary>
     public enum FeatureType
     {
-        [LabelText("种族特性")]
-        Race,
-        [LabelText("增益特性")]
-        Buff,
+        None,
+        [LabelText("反转特性")]
+        Reverse,
         [LabelText("减益特性")]
         DeBuff,
-        [LabelText("整活特性")]
-        None,
+        [LabelText("增益特性")]
+        Buff,
+        [LabelText("种族特性")]
+        Race,
     }
 }
 

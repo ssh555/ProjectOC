@@ -7,7 +7,7 @@ using ProjectOC.ManagerNS;
 namespace ProjectOC.ProNodeNS
 {
     [LabelText("生产节点"), Serializable]
-    public class ProNode: DataNS.ItemContainerOwner, WorkerNS.IWorkerContainer
+    public class ProNode: DataNS.ItemContainerOwner, WorkerNS.IWorkerContainer, WorkerNS.IEffectObj
     {
         #region Data
         [LabelText("生产节点建筑"), ReadOnly]
@@ -24,6 +24,15 @@ namespace ProjectOC.ProNodeNS
         public int EffBase;
         [LabelText("堆积预留量"), ReadOnly]
         public int StackReserve = 0;
+
+        [LabelText("体力消耗_值班"), ReadOnly, ShowInInspector]
+        private int InitAPCost_Duty;
+        [LabelText("额外值班体力消耗"), ReadOnly, ShowInInspector]
+        private int ModifyAPCost_Duty;
+        [LabelText("值班体力消耗倍率"), ReadOnly, ShowInInspector]
+        private float FactorAPCost_Duty;
+        [LabelText("最终值班体力消耗"), ReadOnly, ShowInInspector]
+        public int RealAPCost_Duty => (int)(InitAPCost_Duty * FactorAPCost_Duty + ModifyAPCost_Duty);
         #endregion
 
         #region Timer
@@ -80,7 +89,7 @@ namespace ProjectOC.ProNodeNS
         [LabelText("生产节点状态"), ShowInInspector, ReadOnly]
         public ProNodeState State => HasRecipe ? (IsOnProduce ? ProNodeState.Production : ProNodeState.Stagnation) : ProNodeState.Vacancy;
         [LabelText("生产效率"), PropertyTooltip("单位%"), ShowInInspector, ReadOnly]
-        public int Eff => HaveWorker ? EffBase + Worker.Eff[ExpType] : EffBase;
+        public int Eff => HaveWorker ? EffBase + Worker.GetEff(ExpType) : EffBase;
         [LabelText("生产一次所需要的时间"), ShowInInspector, ReadOnly]
         public int TimeCost => HasRecipe && Eff > 0 ? (int)Math.Ceiling((double)100 * Recipe.TimeCost / Eff) : 0;
         #endregion
@@ -93,7 +102,7 @@ namespace ProjectOC.ProNodeNS
         [LabelText("生产节点可执行配方类目"), ShowInInspector, ReadOnly]
         public List<ML.Engine.InventorySystem.RecipeCategory> RecipeCategoryFilter => LocalGameManager.Instance != null ? LocalGameManager.Instance.ProNodeManager.GetRecipeCategoryFilterd(ID) : new List<ML.Engine.InventorySystem.RecipeCategory>();
         [LabelText("经验类型"), ShowInInspector, ReadOnly]
-        public WorkerNS.WorkType ExpType => LocalGameManager.Instance != null ? LocalGameManager.Instance.ProNodeManager.GetExpType(ID) : WorkerNS.WorkType.None;
+        public WorkerNS.SkillType ExpType => LocalGameManager.Instance != null ? LocalGameManager.Instance.ProNodeManager.GetExpType(ID) : WorkerNS.SkillType.None;
         [LabelText("堆放上限数"), ShowInInspector, ReadOnly]
         public int StackMax => LocalGameManager.Instance != null ? LocalGameManager.Instance.ProNodeManager.GetMaxStack(ID) : 0;
         [LabelText("堆放阈值数"), ShowInInspector, ReadOnly]
@@ -108,8 +117,9 @@ namespace ProjectOC.ProNodeNS
         public ProNode(ProNodeTableData config)
         {
             ID = config.ID ?? "";
-            EffBase = LocalGameManager.Instance.ProNodeManager.EffBase;
             InitData(0 , 0);
+            EffBase = LocalGameManager.Instance.ProNodeManager.Config.EffBase;
+            InitAPCost_Duty = LocalGameManager.Instance.ProNodeManager.Config.InitAPCost_Duty;
             DataContainer.OnDataChangeEvent += OnContainerDataChangeEvent;
         }
 
@@ -205,20 +215,20 @@ namespace ProjectOC.ProNodeNS
 
         public bool SetLevel(int level)
         {
-            if (0 <= level && level <= LocalGameManager.Instance.ProNodeManager.LevelMax)
+            if (0 <= level && level <= LocalGameManager.Instance.ProNodeManager.Config.LevelMax)
             {
                 if (level > Level)
                 {
                     for (int i = Level; i < level; i++)
                     {
-                        EffBase += LocalGameManager.Instance.ProNodeManager.LevelUpgradeEff[i];
+                        EffBase += LocalGameManager.Instance.ProNodeManager.Config.LevelUpgradeEff[i];
                     }
                 }
                 else if (level < Level)
                 {
                     for (int i = Level; i > level; i--)
                     {
-                        EffBase -= LocalGameManager.Instance.ProNodeManager.LevelUpgradeEff[i - 1];
+                        EffBase -= LocalGameManager.Instance.ProNodeManager.Config.LevelUpgradeEff[i - 1];
                     }
                 }
                 Level = level;
@@ -302,9 +312,7 @@ namespace ProjectOC.ProNodeNS
             }
             if (ProNodeType == ProNodeType.Mannul)
             {
-                Worker.AlterExp(ExpType, Recipe.ExpRecipe);
-                Worker.AlterAP(-1 * Worker.APCost);
-                Worker.AlterMood(-1 * Worker.MoodCost);
+                Worker.SettleDuty(ExpType, Recipe.ExpRecipe, RealAPCost_Duty);
             }
             // 下一次生产
             if (!StartProduce())
@@ -372,7 +380,7 @@ namespace ProjectOC.ProNodeNS
         public Action<bool, WorkerNS.Worker> OnRemoveWorkerEvent { get; set; }
         public WorkerNS.Worker Worker { get; set; }
         public bool IsArrive { get; set; }
-        public bool HaveWorker => ProNodeType == ProNodeType.Mannul && Worker != null && !string.IsNullOrEmpty(Worker.InstanceID);
+        public bool HaveWorker => ProNodeType == ProNodeType.Mannul && Worker != null && !string.IsNullOrEmpty(Worker.ID);
 
         public WorkerNS.WorkerContainerType GetContainerType() { return WorkerNS.WorkerContainerType.Work; }
 
@@ -431,6 +439,48 @@ namespace ProjectOC.ProNodeNS
                 return true;
             }
             return false;
+        }
+        #endregion
+
+        #region IEffectObj
+        public List<WorkerNS.Effect> Effects { get; set; } = new List<WorkerNS.Effect>();
+        public void ApplyEffect(WorkerNS.Effect effect)
+        {
+            if (effect.EffectType != WorkerNS.EffectType.AlterProNodeVariable) { Debug.Log("type != AlterProNodeVariable"); return; }
+            bool flag = true;
+            if (effect.ParamStr == "EffBase")
+            {
+                EffBase += effect.ParamInt;
+            }
+            else if (effect.ParamStr == "FactorAPCostDuty")
+            {
+                FactorAPCost_Duty += effect.ParamFloat;
+            }
+            else
+            {
+                flag = false;
+            }
+            if (flag)
+            {
+                Effects.Add(effect);
+            }
+            else
+            {
+                Debug.Log($"ParamStr Error {effect.ParamStr}");
+            }
+        }
+        public void RemoveEffect(WorkerNS.Effect effect)
+        {
+            if (effect.EffectType != WorkerNS.EffectType.AlterProNodeVariable) { Debug.Log("type != AlterProNodeVariable"); return; }
+            Effects.Remove(effect);
+            if (effect.ParamStr == "EffBase")
+            {
+                EffBase -= effect.ParamInt;
+            }
+            else if (effect.ParamStr == "FactorAPCostDuty")
+            {
+                FactorAPCost_Duty -= effect.ParamFloat;
+            }
         }
         #endregion
     }

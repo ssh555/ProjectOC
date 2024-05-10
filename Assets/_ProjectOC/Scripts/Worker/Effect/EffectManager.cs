@@ -1,9 +1,5 @@
 using ML.Engine.TextContent;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-
 
 namespace ProjectOC.WorkerNS
 {
@@ -13,30 +9,19 @@ namespace ProjectOC.WorkerNS
         public string ID;
         public TextContent Name;
         public EffectType Type;
+        public string Param1;
+        public int Param2;
+        public float Param3;
+        public bool Param4;
     }
 
     [System.Serializable]
     public sealed class EffectManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
-        public void OnRegister()
-        {
-            LoadTableData();
-        }
-
-        #region Load And Data
-        /// <summary>
-        /// 是否已加载完数据
-        /// </summary>
-        public bool IsLoadOvered => ABJAProcessor != null && ABJAProcessor.IsLoaded;
-
-        /// <summary>
-        /// 基础数据表
-        /// </summary>
+        #region ILocalManager
         private Dictionary<string, EffectTableData> EffectTableDict = new Dictionary<string, EffectTableData>();
-        
         public ML.Engine.ABResources.ABJsonAssetProcessor<EffectTableData[]> ABJAProcessor;
-
-        public void LoadTableData()
+        public void OnRegister()
         {
             ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<EffectTableData[]>("OCTableData", "Effect", (datas) =>
             {
@@ -54,40 +39,28 @@ namespace ProjectOC.WorkerNS
         {
             if (IsValidID(id) && !string.IsNullOrEmpty(value))
             {
-                return new Effect(EffectTableDict[id], value);
+                return new Effect(EffectTableDict[id]);
             }
-            return null;
+            return default(Effect);
         }
         #endregion
 
         #region Getter
-        public string[] GetAllID()
-        {
-            return EffectTableDict.Keys.ToArray();
-        }
         public bool IsValidID(string id)
         {
-            if (!string.IsNullOrEmpty(id))
-            {
-                return EffectTableDict.ContainsKey(id);
-            }
-            return false;
+            return !string.IsNullOrEmpty(id) ? EffectTableDict.ContainsKey(id) : false;
         }
         public string GetName(string id)
         {
-            if (IsValidID(id))
-            {
-                return EffectTableDict[id].Name;
-            }
-            return "";
+            return IsValidID(id) ? EffectTableDict[id].Name : "";
         }
         public EffectType GetEffectType(string id)
         {
-            if (IsValidID(id))
-            {
-                return EffectTableDict[id].Type;
-            }
-            return EffectType.None;
+            return IsValidID(id) ? EffectTableDict[id].Type : EffectType.None;
+        }
+        public string GetParam1(string id)
+        {
+            return IsValidID(id) ? EffectTableDict[id].Param1 : "";
         }
         #endregion
     }

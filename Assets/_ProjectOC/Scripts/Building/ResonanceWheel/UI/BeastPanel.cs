@@ -180,10 +180,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 Worker worker = Workers[CurrentBeastIndex];
                 List<float> datas = new List<float>();
 
-                Dictionary<WorkType,Skill> skillDic = worker.Skill;
+                Dictionary<SkillType,Skill> skillDic = worker.Skill;
                 foreach (var skill in skillDic)
                 {
-                    datas.Add(skillDic[skill.Key].Level / 10f);
+                    datas.Add(skillDic[skill.Key].LevelCurrent / 10f);
                 }
 
                 var radar = this.transform.Find("HiddenBeastInfo2").Find("Info").Find("SkillGraph").Find("Viewport").Find("Content").Find("Radar").GetComponent<UIPolygon>();
@@ -201,7 +201,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                 this.transform.Find("HiddenBeastInfo2").Find("Info").Find("Icon").Find("mask").GetComponent<Image>().fillAmount = (float)worker.APCurrent / worker.APMax; ;
                 BeastName.text = worker.Name;
-                SpeedNumText.text = worker.WalkSpeed.ToString();
+                SpeedNumText.text = worker.RealWalkSpeed.ToString();
 
                 var Info = this.transform.Find("HiddenBeastInfo3").Find("Info").Find("Scroll View").Find("Viewport").Find("Content");
 
