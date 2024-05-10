@@ -77,7 +77,7 @@ namespace ML.Engine.UI
         public void CopyInstance<D>(D data)
         {
             //PopUPUI UIBtnList初始化放在这，因为下面需要使用它初始化数据
-            UIBtnList = new UIBtnList(parent: this.transform, hasInitSelect: false);
+            UIBtnList = new UIBtnList(this.transform.Find("ButtonList").GetComponent<UIBtnListInitor>());
             this.gameObject.SetActive(true);
             if (data is UIManager.PopUpUIData popUpUIData)
             {

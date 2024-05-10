@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using ML.Engine.InventorySystem;
-
 
 namespace ExcelToJson
 {
@@ -66,8 +64,10 @@ namespace ExcelToJson
             List<EBConfig> configs = new List<EBConfig>();
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 1, BinaryFilePath = rootPath + "ProNode.json", type = typeof(ProjectOC.ProNodeNS.ProNodeTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 2, BinaryFilePath = rootPath + "StoreIcon.json", type = typeof(ProjectOC.StoreNS.StoreIconTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 6, BinaryFilePath = rootPath + "WorkerName.json", type = typeof(ProjectOC.WorkerNS.WorkerNameTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 7, BinaryFilePath = rootPath + "WorkerEcho.json", type = typeof(ProjectOC.WorkerEchoNS.WorkerEchoTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 8, BinaryFilePath = rootPath + "WorkerFood.json", type = typeof(ProjectOC.RestaurantNS.WorkerFoodTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 9, BinaryFilePath = rootPath + "Feature.json", type = typeof(ProjectOC.WorkerNS.FeatureTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 10, BinaryFilePath = rootPath + "Building.json", type = typeof(ML.Engine.BuildingSystem.BuildingTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 11, BinaryFilePath = rootPath + "FurnitureTheme.json", type = typeof(ML.Engine.BuildingSystem.FurnitureThemeTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 12, BinaryFilePath = rootPath + "TechPoint.json", type = typeof(ProjectOC.TechTree.TechPoint) });
@@ -76,14 +76,11 @@ namespace ExcelToJson
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 17, BinaryFilePath = rootPath + "Item.json", type = typeof(ML.Engine.InventorySystem.ItemTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 18, BinaryFilePath = rootPath + "ItemCategory.json", type = typeof(ML.Engine.InventorySystem.ItemCategoryTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 19, BinaryFilePath = rootPath + "Recipe.json", type = typeof(ML.Engine.InventorySystem.RecipeTableData) });
+            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 20, BinaryFilePath = rootPath + "Effect.json", type = typeof(ProjectOC.WorkerNS.EffectTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 21, BinaryFilePath = rootPath + "Event.json", type = typeof(ML.Engine.Event.EventTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 22, BinaryFilePath = rootPath + "Condition.json", type = typeof(ML.Engine.Event.ConditionTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 24, BinaryFilePath = rootPath + "Dialog.json", type = typeof(ProjectOC.Dialog.DialogTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 25, BinaryFilePath = rootPath + "Option.json", type = typeof(ProjectOC.Dialog.OptionTableData) });
-
-            //configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 9, BinaryFilePath = rootPath + "Feature.json", type = typeof(ProjectOC.WorkerNS.FeatureTableData) });
-            //configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 17, BinaryFilePath = rootPath + "Effect.json", type = typeof(ProjectOC.WorkerNS.EffectTableData) });
-            //configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 11, BinaryFilePath = rootPath + "Skill.json", type = typeof(ProjectOC.WorkerNS.SkillTableData) });
 
             System.Threading.Tasks.Parallel.ForEach(configs, (config) =>
             {
@@ -233,14 +230,14 @@ namespace ExcelToJson
             return defaultValue;
         }
 
-        public static Formula ParseFormula(string data, Formula defaultValue=new Formula())
+        public static ML.Engine.InventorySystem.Formula ParseFormula(string data, ML.Engine.InventorySystem.Formula defaultValue=new ML.Engine.InventorySystem.Formula())
         {
             if (!string.IsNullOrEmpty(data) && !string.IsNullOrEmpty(data.Trim()))
             {
                 string[] s = data.Trim().Split(':', '：');
                 if (s.Length == 2 && !string.IsNullOrEmpty(s[0].Trim()) && !string.IsNullOrEmpty(s[1].Trim()))
                 {
-                    Formula f = new Formula();
+                    ML.Engine.InventorySystem.Formula f = new ML.Engine.InventorySystem.Formula();
                     if (int.TryParse(s[1].Trim(), out f.num))
                     {
                         f.id = s[0].Trim();
@@ -281,13 +278,13 @@ namespace ExcelToJson
             return results;
         }
 
-        public static List<Formula> ParseFormulaList(string data)
+        public static List<ML.Engine.InventorySystem.Formula> ParseFormulaList(string data)
         {
             List<string> strings = ParseStringList(data);
-            List<Formula> results = new List<Formula>();
+            List<ML.Engine.InventorySystem.Formula> results = new List<ML.Engine.InventorySystem.Formula>();
             foreach (string s in strings)
             {
-                Formula result = ParseFormula(s);
+                ML.Engine.InventorySystem.Formula result = ParseFormula(s);
                 if (!string.IsNullOrEmpty(result.id))
                 {
                     results.Add(result);

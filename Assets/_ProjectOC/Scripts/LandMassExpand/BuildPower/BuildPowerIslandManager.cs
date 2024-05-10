@@ -66,6 +66,8 @@ namespace ProjectOC.LandMassExpand
 
         private string abPath = "OCTableData";
         private string islandLevelPath = "MainlandLevel";
+
+        
         private void LoadTableData()
         {
             ML.Engine.ABResources.ABJsonAssetProcessor<MainlandLevelTableData[]> ABJAProcessor = new ML.Engine.ABResources.

@@ -13,7 +13,7 @@ namespace ProjectOC.DataNS
         private Data[] Datas = new Data[0];
         [NonSerialized]
         private Dictionary<string, HashSet<int>> IndexDict;
-        public Action OnDataChangeEvent;
+        public event Action OnDataChangeEvent;
         public DataContainer(int capacity, int dataCapacity)
         {
             if(capacity < 0  || dataCapacity < 0) { return; }
@@ -26,6 +26,20 @@ namespace ProjectOC.DataNS
             OnDataChangeEvent?.Invoke();
         }
         public DataContainer(List<string> ids, List<int> dataCapacitys)
+        {
+            Datas = new Data[ids.Count];
+            if (dataCapacitys.Count >= ids.Count)
+            {
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    Datas[i] = new Data(ids[i], dataCapacitys[i]);
+                }
+            }
+            IndexDict = new Dictionary<string, HashSet<int>>();
+            UpdateIndexDict();
+            OnDataChangeEvent?.Invoke();
+        }
+        public void Reset(List<string> ids, List<int> dataCapacitys)
         {
             Datas = new Data[ids.Count];
             if (dataCapacitys.Count >= ids.Count)
@@ -157,18 +171,21 @@ namespace ProjectOC.DataNS
         public Dictionary<string, int> GetAmount(DataOpType type, bool needCanIn = false, bool needCanOut = false)
         {
             Dictionary<string, int> result = new Dictionary<string, int>();
-            foreach (Data data in Datas.ToArray())
+            if (Datas != null)
             {
-                if (data.HaveSetData && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
+                foreach (Data data in Datas.ToArray())
                 {
-                    int amount = data.GetAmount(type);
-                    if (amount > 0)
+                    if (data.HaveSetData && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
                     {
-                        if (!result.ContainsKey(data.ID))
+                        int amount = data.GetAmount(type);
+                        if (amount > 0)
                         {
-                            result[data.ID] = 0;
+                            if (!result.ContainsKey(data.ID))
+                            {
+                                result[data.ID] = 0;
+                            }
+                            result[data.ID] += amount;
                         }
-                        result[data.ID] += amount;
                     }
                 }
             }
