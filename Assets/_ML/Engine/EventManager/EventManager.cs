@@ -144,8 +144,11 @@ namespace ML.Engine.Event
 
             MethodInfo method = PrivateFunctions[conditionTableData.CheckType.ToString()];
 
-            object[] parameters = new object[1];
+            object[] parameters = new object[4];
             parameters[0] = ConditionText;
+            parameters[1] = conditionTableData.Param1;
+            parameters[2] = conditionTableData.Param2;
+            parameters[3] = conditionTableData.Param3;
             return (string)method.Invoke(this, parameters);
         }
 

@@ -31,5 +31,16 @@
             "Chinese": "采集",
             "English": "Collect"
         }
+    },
+    {
+        "keyname": "NPCCharacter",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+        },
+        "description": {
+            "Chinese": "对话",
+            "English": "Chat"
+        }
     }
 ]

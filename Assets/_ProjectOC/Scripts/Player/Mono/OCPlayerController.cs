@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ML.PlayerCharacterNS;
+using UnityEngine;
 
 namespace ProjectOC.Player
 {
@@ -21,6 +22,10 @@ namespace ProjectOC.Player
 
         public override ICharacter SpawnCharacter(int _index = 0, IStartPoint _startPoint = null)
         {
+            //todo
+            Camera mainCamera = Camera.main;
+            mainCamera.enabled = false;
+            
             IPlayerCharacter playerCharacter = null;
             ML.Engine.Manager.GameManager.Instance.ABResourceManager
                 .InstantiateAsync(ICharacterABResourcePath[_index], isGlobal: true).Completed += (handle) =>
@@ -30,6 +35,8 @@ namespace ProjectOC.Player
                 currentCharacter = playerCharacter;
                 SpawnedCharacters.Add(playerCharacter);
                 playerCharacter.OnSpawn(this);
+
+                mainCamera.enabled = true;
             };
             return playerCharacter as ICharacter;
         }
