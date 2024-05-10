@@ -40,11 +40,11 @@ namespace ProjectOC.PinchFace
                 //生成随机的组件 头发
                 foreach (var _type3 in raceData.pinchPartType3s)
                 {
-                    int prefabCount = Config.typesDatas[(int)_type3 - 1].typeCount;
-                    if (prefabCount != 0)
-                    {
-                        
-                    }
+                    // int prefabCount = Config.typesDatas[(int)_type3 - 1].typeCount;
+                    // if (prefabCount != 0)
+                    // {
+                    //     
+                    // }
                 }
             };
             
@@ -114,21 +114,21 @@ namespace ProjectOC.PinchFace
             UIBtnListContainer.AddOnSelectButtonChangedAction(() =>
             {
                 //右侧种族描述更新，中英文切换直接换RacePinchData
-                int _curPos = UIBtnListContainer.UIBtnLists[1].GetCurSelectedPos1();
-                if (_curPos != -1)
+                int curListIndex = UIBtnListContainer.CurSelectUIBtnListIndex;
+                int _curPos = UIBtnListContainer.UIBtnLists[curListIndex].GetCurSelectedPos1();
+                if (curListIndex == 1)
                 {
                     CurType2 = pinchFaceManager.pinchPartType3Dic[raceData.pinchPartType3s[_curPos]];
-                    Debug.Log($"curBtnPos:{_curPos}  CurType:{CurType2.ToString()}");
                 }
-                else
+                else if (curListIndex == 2)
                 {
                     _curPos = UIBtnListContainer.UIBtnLists[2].GetCurSelectedPos1();
                     if (_curPos != -1)
                     {
                         CurType2 = CommonType2[_curPos];
-                        Debug.Log($"Common curBtnPos:{_curPos}  CurType:{CurType2.ToString()}");
                     }
                 }
+
                 
             });
         }
@@ -140,18 +140,23 @@ namespace ProjectOC.PinchFace
             UIBtnListContainer.DisableUIBtnListContainer();
             rightBtnLists = _btnLists;
             
-            UIBtnListContainerInitor newBtnListContainers = this.transform.GetComponentInChildren<UIBtnListContainerInitor>();
+            UIBtnListContainerInitor newBtnListContainers =  this.transform.GetComponentInChildren<UIBtnListContainerInitor>();
+            int defaultIndex = 4;
+            int newLinkDataCount = _btnLists.Count - 1;
             
             //从4连到倒数第一个
             //最后一个不需要加连接线
-            for (int i = 0; i < _btnLists.Count-1; i++)
+            for (int i = 0; i < newLinkDataCount; i++)
             {
                 // _listContainer.LinkTwoEdge();
                 UIBtnListContainerInitor.LinkData _linkData = new UIBtnListContainerInitor
-                    .LinkData(i+4,i+5,UIBtnListContainerInitor.EdgeType.下侧顺时针,UIBtnListContainerInitor.EdgeType.上侧逆时针,UIBtnListContainerInitor.LinkType.上下相连);
+                    .LinkData(i+defaultIndex,i+defaultIndex+1,UIBtnListContainerInitor.EdgeType.下侧顺时针,UIBtnListContainerInitor.EdgeType.上侧逆时针,UIBtnListContainerInitor.LinkType.上下相连);
                 newBtnListContainers.btnListContainerInitData.AddLinkData(_linkData);
             }
             this.UIBtnListContainer = new UIBtnListContainer(newBtnListContainers);
+            //btnListContainerInitor 删除复原
+            newBtnListContainers.btnListContainerInitData.RemoveLinkData(defaultIndex-1,newLinkDataCount);
+            
             
             //绑定函数
             InitBtnInfo();

@@ -37,7 +37,7 @@ namespace ProjectOC.PinchFace
         
         public void SortUIAfterGenerate(Transform _transf,Transform _parent,UIPinchFacePanel _pinchFacePanel,int returnBtnListCount = 4)
         {
-            Debug.LogWarning("SortUI AfterGenerate");
+            //Debug.LogWarning("SortUI AfterGenerate");
             //右侧的各种捏脸组件
             Transform[] childTransforms = new Transform[_parent.childCount];
             for (int i = 0; i < _parent.childCount; i++)
