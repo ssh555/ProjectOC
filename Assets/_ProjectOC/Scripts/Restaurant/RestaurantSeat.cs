@@ -25,7 +25,7 @@ namespace ProjectOC.RestaurantNS
             {
                 if (timer == null && HaveWorker && IsArrive && !string.IsNullOrEmpty(FoodID))
                 {
-                    timer = new ML.Engine.Timer.CounterDownTimer(ManagerNS.LocalGameManager.Instance.RestaurantManager.WorkerFood_EatTime(FoodID), false, false);
+                    timer = new ML.Engine.Timer.CounterDownTimer(Worker.RealEatTime, false, false);
                     timer.OnEndEvent += EndActionForTimer;
                 }
                 return timer; 
@@ -41,7 +41,7 @@ namespace ProjectOC.RestaurantNS
         public void SetFood(string foodID)
         {
             FoodID = foodID;
-            Timer?.Reset(ManagerNS.LocalGameManager.Instance.RestaurantManager.WorkerFood_EatTime(FoodID));
+            Timer?.Reset(Worker.RealEatTime);
         }
 
         private void EndActionForTimer()
@@ -78,7 +78,7 @@ namespace ProjectOC.RestaurantNS
         #region IWorkerContainer
         public Worker Worker { get; set; }
         public bool IsArrive { get; set; }
-        public bool HaveWorker => Worker != null && !string.IsNullOrEmpty(Worker.InstanceID);
+        public bool HaveWorker => Worker != null && !string.IsNullOrEmpty(Worker.ID);
         public Action<Worker> OnSetWorkerEvent { get; set; }
         public Action<bool, Worker> OnRemoveWorkerEvent { get; set; }
 

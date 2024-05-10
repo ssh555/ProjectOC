@@ -3,7 +3,7 @@ using Sirenix.OdinInspector;
 namespace ProjectOC.WorkerNS
 {
     [LabelText("职业类型")]
-    public enum WorkType
+    public enum SkillType
     {
         [LabelText("None")]
         None,
