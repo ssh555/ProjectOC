@@ -2222,6 +2222,7 @@ MonoBehaviour:
   abname: 
   description: 
   containerTransf: {fileID: 3093917591534881776}
+  commonBtnList: {fileID: 9029512531005402911}
   rightBtnLists: []
   Config: {fileID: 0}
   SA_PinchPart: {fileID: 0}
@@ -4546,6 +4547,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1698784749488645277}
     m_Modifications:
+    - target: {fileID: 2025955920737315449, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
+      propertyPath: m_Name
+      value: CommonContainer
+      objectReference: {fileID: 0}
     - target: {fileID: 4009954757469313008, guid: 6e8e353341ad72a4b8256462a247bac8, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1

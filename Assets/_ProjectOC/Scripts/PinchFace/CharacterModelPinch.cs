@@ -10,6 +10,7 @@ using UnityEngine.UI;
 using ML.MathExtension;
 using ML.PlayerCharacterNS;
 using ProjectOC.ManagerNS;
+using UnityEngine.Rendering.VirtualTexturing;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace ProjectOC.PinchFace
@@ -208,9 +209,32 @@ namespace ProjectOC.PinchFace
             }
         }
         
-        public void ChangeTexture(PinchPartType2 boneType2, int textureIndex)
+        public void ChangeTexture(PinchPartType2 _type2,PinchPartType3 _type3 , int textureIndex)
         {
             //更换Mat 的 _MainTex 参数
+            //后续也通过
+            //string texABPath = "SA_UI_PinchFace/PinchPart/5_Common_PinchType1/19_Eye_PinchType2/44_O_Orbit_PinchType3/O_Orbit_0.jpg";
+            string prePath = "Prefabs_PinchPart/PinchPart";
+            string typePath = pinchFaceManager.pinchFaceHelper.GetType3PrefabPath(_type3);
+            string texturePath = $"{_type3.ToString()}_{textureIndex}.png";
+            string totalPath = $"{prePath}/{typePath}/{texturePath}";
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<Texture>(totalPath)
+                .Completed += (handle) =>
+            {
+                //todo 后续改成 MainTex
+                if (_type2 == PinchPartType2.Eye)
+                {
+                    foreach (Material _material in avatar.GetComponentInChildren<SkinnedMeshRenderer>().materials)
+                    {
+                        if (_material.name == "Mat_Eye")
+                        {
+                            _material.SetTexture("_MainTex",handle.Result);   
+                        }
+                    }
+                }
+            };
+
+
         }
 
         

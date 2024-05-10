@@ -72,6 +72,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 1
     readUnActiveButton: 1
+    scrollRect: {fileID: 0}
 --- !u!114 &5815807723316230883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,7 +343,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8379378438614032342, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
       propertyPath: m_Name
-      value: Pinch_Slider
+      value: Pinch_SliderTemplate
       objectReference: {fileID: 0}
     - target: {fileID: 8529997377023190369, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
       propertyPath: m_AnchorMax.y

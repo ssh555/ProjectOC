@@ -2,15 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Animancer;
 using BehaviorDesigner.Runtime.Tasks.Unity.UnityLight;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace ML.Engine.UI
 {
-    public class ColorSettingController : MonoBehaviour
+    public class HSVColorSettingController : MonoBehaviour
     {
-        public Action<Color> colorChange;
+        public Action<Color> ColorChangeAction;
 
         //0-2 RGB
         //3-5 hsv
@@ -19,10 +21,16 @@ namespace ML.Engine.UI
         private void Awake()
         {
             sliders = GetComponentsInChildren<CustomSelectedSlider>();
+            BindColorAction();
             this.enabled = false;
         }
 
-        public void BindColorAction()
+        private void OnDestroy()
+        {
+            //UnBind，但好像也不用写
+        }
+
+        private void BindColorAction()
         {
             for (int i = 0; i < 3; i++)
             {
@@ -30,7 +38,7 @@ namespace ML.Engine.UI
                 {
                     Color _color = ReadColor(true);
                     SetColorValue(_color,false);
-                    colorChange(_color);
+                    ColorChangeAction(_color);
                 }); 
                 
             }
@@ -41,7 +49,7 @@ namespace ML.Engine.UI
                 {
                     Color _color = ReadColor(false);
                     SetColorValue(_color,true);
-                    colorChange(_color);
+                    ColorChangeAction(_color);
                 }); 
             }
             

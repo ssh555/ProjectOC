@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pinchPartType1: 6
   pinchPartType2: 15
-  pinchPartType3: 40
+  pinchPartType3s: 28000000
   couldNaked: 0
+  ViewPointEnum: 0

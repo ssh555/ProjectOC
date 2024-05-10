@@ -15,14 +15,15 @@ namespace ProjectOC.PinchFace
             Face,
             Leg,
             Arm,
+            Side
         }
 
         [System.Serializable]
         public struct ViewPointStruct
         {
             public ViewPointEnum viewPointEnum;
-            public float distance;
             public Transform lookAtTransform;
+            public Transform cameraTransform;
         }
         
         public List<ViewPointStruct> viewPoints;
@@ -31,6 +32,7 @@ namespace ProjectOC.PinchFace
         public void Init(PinchFaceManager _pinchFaceManager)
         {
             pinchFaceManager = _pinchFaceManager;
+            // Transform viewTrans = _pinchFaceManager.ModelPinch.CameraView.;
             // for (int i = 0; i < viewPoints.Count; i++)
             // {
             //     viewPoints[i].lookAtTransform = viewTrans.GetChild(i);
@@ -42,8 +44,8 @@ namespace ProjectOC.PinchFace
             ViewPointEnum _viewPointEnum = pinchFaceManager.pinchPartType2Dic[_type2].ViewPointEnum;
             ViewPointStruct _viewPointStruct = viewPoints[(int)_viewPointEnum];
             Debug.Log(_viewPointStruct.lookAtTransform.gameObject.name);
-            _uiCameraImage.LookAtGameObject(_viewPointStruct.lookAtTransform.gameObject);
-            _uiCameraImage.distanceFromObject = _viewPointStruct.distance;
+            _uiCameraImage.LookAtGameObjectMultCamera(_viewPointStruct.lookAtTransform.gameObject,_viewPointStruct.cameraTransform);
+            //_uiCameraImage.distanceFromObject = _viewPointStruct.distance;
         }
     }   
 }

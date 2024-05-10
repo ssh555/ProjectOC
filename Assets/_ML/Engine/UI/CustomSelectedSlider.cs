@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -44,9 +45,10 @@ namespace ML.Engine.UI
             numText.text = _value.ToString();
         }
 
-        public void ChangeText(string _str)
+        public void SetSliderConfig(string _str,UnityAction<float> sliderAction)
         {
             headText.text = _str;
+            slider.onValueChanged.AddListener(sliderAction);
         }
 
         public void SetValueWithoutNotify(float _value)
