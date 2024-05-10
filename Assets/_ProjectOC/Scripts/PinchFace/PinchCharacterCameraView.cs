@@ -43,7 +43,6 @@ namespace ProjectOC.PinchFace
         {
             ViewPointEnum _viewPointEnum = pinchFaceManager.pinchPartType2Dic[_type2].ViewPointEnum;
             ViewPointStruct _viewPointStruct = viewPoints[(int)_viewPointEnum];
-            Debug.Log(_viewPointStruct.lookAtTransform.gameObject.name);
             _uiCameraImage.LookAtGameObjectMultCamera(_viewPointStruct.lookAtTransform.gameObject,_viewPointStruct.cameraTransform);
             //_uiCameraImage.distanceFromObject = _viewPointStruct.distance;
         }

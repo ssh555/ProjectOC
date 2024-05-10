@@ -55,7 +55,7 @@ namespace ML.Engine.UI
             uiCamera = cameraObject.AddComponent<Camera>();
             uiCamera.cullingMask = 1 << (LayerMask.NameToLayer(LayerName));
             uiCamera.clearFlags = CameraClearFlags.Color;
-            uiCamera.backgroundColor = Color.grey;
+            uiCamera.backgroundColor = Color.clear;
             uiCamera.targetTexture = texture;
             uiCamera.orthographic = false;
 

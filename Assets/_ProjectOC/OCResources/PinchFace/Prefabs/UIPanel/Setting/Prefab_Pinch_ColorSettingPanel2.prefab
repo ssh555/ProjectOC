@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5195874090649456811}
   - component: {fileID: 8731962435216127852}
   m_Layer: 5
-  m_Name: Container
+  m_Name: Container1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -415,7 +415,7 @@ GameObject:
   - component: {fileID: 5114556398848767751}
   - component: {fileID: 1839016843837629268}
   m_Layer: 5
-  m_Name: Container
+  m_Name: Container2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -488,7 +488,7 @@ GameObject:
   - component: {fileID: 512604091285455462}
   - component: {fileID: 3920383832528465009}
   m_Layer: 5
-  m_Name: Pinch_ColorGridButtonTemplate
+  m_Name: ColorView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

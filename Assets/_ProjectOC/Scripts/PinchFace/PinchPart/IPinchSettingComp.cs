@@ -6,14 +6,8 @@ namespace ProjectOC.PinchFace
 {
     public interface IPinchSettingComp 
     {
-        public int Index { get; }
         //PinchPartType2
-        public void LoadData(){}
+        public void LoadData(CharacterModelPinch _modelPinch){}
 
-        //生成UI时顺便加入ButtonAction，读取相关Data
-        public void GenerateUI()
-        {
-            
-        }
     }
 }

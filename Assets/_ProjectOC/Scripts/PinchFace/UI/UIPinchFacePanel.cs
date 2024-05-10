@@ -6,9 +6,6 @@ using ProjectOC.ManagerNS;
 using ProjectOC.PinchFace.Config;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.Serialization;
 using UnityEngine.U2D;
 
 namespace ProjectOC.PinchFace
@@ -26,6 +23,8 @@ namespace ProjectOC.PinchFace
             CommonType2.Add(PinchPartType2.Eye);
             CommonType2.Add(PinchPartType2.FaceDress);
             
+            this.UIBtnListContainer =
+                new UIBtnListContainer(this.transform.GetComponentInChildren<UIBtnListContainerInitor>());
             #region 初始生成读取模型 Config 图集
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(playerModelPrefabPath).Completed+=(handle) =>
             {
@@ -37,6 +36,16 @@ namespace ProjectOC.PinchFace
                 pinchFaceManager.ModelPinch = handle.Result.GetComponentInChildren<CharacterModelPinch>();
                 UICameraImage.ModeGameObjectLayer(handle.Result.transform);
                 CurType2 = PinchPartType2.Body;
+                
+                //生成随机的组件 头发
+                foreach (var _type3 in raceData.pinchPartType3s)
+                {
+                    int prefabCount = Config.typesDatas[(int)_type3 - 1].typeCount;
+                    if (prefabCount != 0)
+                    {
+                        
+                    }
+                }
             };
             
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<PinchDataConfig>(pinchDataConfigPath).Completed+=(handle) =>
@@ -66,7 +75,6 @@ namespace ProjectOC.PinchFace
         {
             base.RegisterInput();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Enable();
-            UIBtnListContainer.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
         }
         protected override void UnregisterInput()
@@ -98,8 +106,7 @@ namespace ProjectOC.PinchFace
         //btnList4--？  样式、颜色
         protected override void InitBtnInfo()
         {
-            this.UIBtnListContainer =
-                new UIBtnListContainer(this.transform.GetComponentInChildren<UIBtnListContainerInitor>());
+            UIBtnListContainer.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
             foreach (var _btnList in UIBtnListContainer.UIBtnLists)
             {
                 _btnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm,UIBtnListContainer.BindType.started);
@@ -111,6 +118,7 @@ namespace ProjectOC.PinchFace
                 if (_curPos != -1)
                 {
                     CurType2 = pinchFaceManager.pinchPartType3Dic[raceData.pinchPartType3s[_curPos]];
+                    Debug.Log($"curBtnPos:{_curPos}  CurType:{CurType2.ToString()}");
                 }
                 else
                 {
@@ -118,6 +126,7 @@ namespace ProjectOC.PinchFace
                     if (_curPos != -1)
                     {
                         CurType2 = CommonType2[_curPos];
+                        Debug.Log($"Common curBtnPos:{_curPos}  CurType:{CurType2.ToString()}");
                     }
                 }
                 
@@ -127,8 +136,10 @@ namespace ProjectOC.PinchFace
         //返回右侧BtnList，重新生成
         public void ReGenerateBtnListContainer(List<UIBtnListInitor> _btnLists)
         {
+            //先获取前面静态的分布
             UIBtnListContainer.DisableUIBtnListContainer();
             rightBtnLists = _btnLists;
+            
             UIBtnListContainerInitor newBtnListContainers = this.transform.GetComponentInChildren<UIBtnListContainerInitor>();
             
             //从4连到倒数第一个
@@ -141,13 +152,9 @@ namespace ProjectOC.PinchFace
                 newBtnListContainers.btnListContainerInitData.AddLinkData(_linkData);
             }
             this.UIBtnListContainer = new UIBtnListContainer(newBtnListContainers);
-            UIBtnListContainer.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
-
-            foreach (var _btnList in UIBtnListContainer.UIBtnLists)
-            {
-                _btnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm,UIBtnListContainer.BindType.started);
-            }
             
+            //绑定函数
+            InitBtnInfo();
         }
         #endregion
 
@@ -193,7 +200,6 @@ namespace ProjectOC.PinchFace
         
         public PinchDataConfig Config;
         public SpriteAtlas SA_PinchPart;
-        public AssetReference rtRefrence;
         public UICameraImage uICameraImage;
 
         

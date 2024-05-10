@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ef6d1b3feb8f2f40bb799741b7a0c05, type: 3}
-  m_Name: Common-HairFront-HF_HairFront-1
+  m_Name: TrunkPart-Back-1
   m_EditorClassIdentifier: 
-  pinchPartType1: 6
-  pinchPartType2: 16
-  pinchPartType3s: 29000000
+  pinchPartType1: 3
+  pinchPartType2: 9
+  pinchPartType3s: 1e000000
   couldNaked: 1
-  ViewPointEnum: 1
+  ViewPointEnum: 0

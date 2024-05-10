@@ -7,7 +7,7 @@ namespace ProjectOC.PinchFace
 {
     public class ChangeTypePinchSetting : MonoBehaviour,IPinchSettingComp
     {
-        public int Index { get; }
+        public int typeIndex;
 
         public enum SingleOrDouble
         {
