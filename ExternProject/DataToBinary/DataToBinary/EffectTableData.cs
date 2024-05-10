@@ -1,5 +1,4 @@
 ﻿using ExcelToJson;
-using System;
 
 namespace ProjectOC.WorkerNS
 {
@@ -9,20 +8,21 @@ namespace ProjectOC.WorkerNS
         public string ID;
         public ML.Engine.TextContent.TextContent Name;
         public EffectType Type;
+        public string Param1;
+        public int Param2;
+        public float Param3;
+        public bool Param4;
+
         public bool GenData(string[] row)
         {
-            if (string.IsNullOrEmpty(row[0]))
-            {
-                return false;
-            }
-            // 0 -> ID
-            this.ID = row[0];
-            // 1 -> Name
-            this.Name = new ML.Engine.TextContent.TextContent();
-            this.Name.Chinese = row[1];
-            this.Name.English = row[1];
-            // 2 -> Type
-            this.Type = (EffectType)Enum.Parse(typeof(EffectType), row[2]);
+            if (string.IsNullOrEmpty(row[0])) { return false; }
+            ID = Program.ParseString(row[0]);
+            Name = Program.ParseTextContent(row[1]);
+            Type = Program.ParseEnum<EffectType>(row[2]);
+            Param1 = Program.ParseString(row[3]);
+            Param2 = Program.ParseInt(row[4]);
+            Param3 = Program.ParseFloat(row[5]);
+            Param4 = Program.ParseBool(row[6]);
             return true;
         }
     }
@@ -30,26 +30,8 @@ namespace ProjectOC.WorkerNS
     public enum EffectType
     {
         None,
-        #region Set Int
-        AlterAPMax,
-        AlterExpRate_Cook,
-        AlterExpRate_HandCraft,
-        AlterExpRate_Industry,
-        AlterExpRate_Magic,
-        AlterExpRate_Transport,
-        AlterExpRate_Collect,
-        #endregion
-        #region Offset Int
-        AlterBURMax,
-        AlterEff_Cook,
-        AlterEff_HandCraft,
-        AlterEff_Industry,
-        AlterEff_Magic,
-        AlterEff_Transport,
-        AlterEff_Collect,
-        #endregion
-        #region Offset Float
-        AlterWalkSpeed,
-        #endregion
+        AlterWorkerVariable,
+        AlterProNodeVariable,
+        AlterEchoVariable
     }
 }
