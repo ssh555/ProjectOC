@@ -11,8 +11,8 @@ namespace ProjectOC.WorkerNS
         public List<Effect> Effects = new List<Effect>();
 
         #region 读表属性
-        [LabelText("互斥键"), ShowInInspector, ReadOnly]
-        public string IDExclude { get => LocalGameManager.Instance != null ? LocalGameManager.Instance.FeatureManager.GetIDExclude(ID) : ""; }
+        //[LabelText("互斥键"), ShowInInspector, ReadOnly]
+        //public string IDExclude { get => LocalGameManager.Instance != null ? LocalGameManager.Instance.FeatureManager.GetIDExclude(ID) : ""; }
         /// <summary>
         /// 序号，用于排序，从上到下的顺序为种族、增益、减益、整活特性
         /// </summary>
@@ -31,11 +31,11 @@ namespace ProjectOC.WorkerNS
         public Feature(FeatureTableData config)
         {
             ID = config.ID;
-            Effects = new List<Effect>();
-            foreach (var tuple in config.Effects)
-            {
-                Effects.Add(LocalGameManager.Instance.EffectManager.SpawnEffect(tuple.Item1, tuple.Item2));
-            }
+            //Effects = new List<Effect>();
+            //foreach (var tuple in config.Effects)
+            //{
+            //    Effects.Add(LocalGameManager.Instance.EffectManager.SpawnEffect(tuple.Item1, tuple.Item2));
+            //}
         }
 
         public void ApplyFeature(Worker worker)
