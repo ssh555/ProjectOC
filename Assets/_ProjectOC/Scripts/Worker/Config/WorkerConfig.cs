@@ -14,7 +14,7 @@ namespace ProjectOC.WorkerNS
         public int APRelaxThreshold;
         [LabelText("体力消耗_搬运")]
         public int APCost_Transport;
-        [LabelText("进食时间")]
+        [LabelText("进食时间(s)")]
         public float EatTime;
         [LabelText("心情值上限")]
         public int EMMax;
@@ -30,13 +30,13 @@ namespace ProjectOC.WorkerNS
         public int EMCost;
         [LabelText("心情恢复量")]
         public int EMRecover;
-        [LabelText("移动速度")]
+        [LabelText("移动速度(m/s)")]
         public float WalkSpeed;
         [LabelText("负重上限")]
         public int BURMax;
         [LabelText("搬运经验值")]
         public int ExpTransport;
-        [LabelText("技能初始工作效率")]
+        [LabelText("技能初始工作效率(%)")]
         public int SkillEff;
         [LabelText("经验等级映射关系")]
         public List<int> ExpToLevel;
@@ -44,7 +44,7 @@ namespace ProjectOC.WorkerNS
         public List<int> LevelToEff_Duty;
         [LabelText("等级效率映射_搬运")]
         public List<int> LevelToEff_Transport;
-        [LabelText("未绑定窝销毁时间")]
+        [LabelText("未绑定窝销毁时间(s)")]
         public float DestroyTimeForNoHome;
         [LabelText("技能等级分布均值")]
         public float SkillStdMean;

@@ -115,17 +115,25 @@ namespace ProjectOC.WorkerNS
         public List<int> GetSkillLevel()
         {
             List<int> result = new List<int>(6);
-            double u1 = 1.0 - Random.NextDouble();
-            double u2 = 1.0 - Random.NextDouble();
-            double randStdNormal = System.Math.Sqrt(-2.0 * System.Math.Log(u1)) * System.Math.Sin(2.0 * System.Math.PI * u2);
-            double random = Config.SkillStdMean + randStdNormal * Config.SkillStdDev;
-            int k = Config.SkillStdLowBound + (int)((Config.SkillStdHighBound - Config.SkillStdLowBound) * random);
-            int min = System.Math.Max(k - 5 * 10, 0);
+            double mean = Config.SkillStdMean;
+            double standardDeviation = System.Math.Sqrt(Config.SkillStdDev);
+            double beta = (mean - Config.SkillStdLowBound) / standardDeviation;
+            double alpha = (Config.SkillStdHighBound - mean) / standardDeviation;
+            double u = Random.NextDouble();
+            int k;
+            if (u < alpha / (alpha + beta))
+            {
+                k = (int)(Config.SkillStdHighBound - standardDeviation * System.Math.Log((1 - u) * alpha / alpha + u * (alpha / beta)));
+            }
+            else
+            {
+                k = (int)(Config.SkillStdLowBound + standardDeviation * System.Math.Log(u * beta / (1 - u) * beta + (1 - u) * (beta / alpha)));
+            }
             for (int i = 0; i < 6; i++)
             {
+                int min = System.Math.Max(k - (5 - i) * 10, 0);
                 int randomInt = Random.Next(min, System.Math.Min(k, 10) + 1);
                 k -= randomInt;
-                min = System.Math.Max(k - (5 - i) * 10, 0);
                 result.Add(randomInt);
             }
             return result;
