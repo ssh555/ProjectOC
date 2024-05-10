@@ -22,6 +22,6 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   Config:
-    LevelMax: 0
-    LevelCapacity: 
-    LevelDataCapacity: 
+    LevelMax: 2
+    LevelCapacity: 020000000400000008000000
+    LevelDataCapacity: 3200000064000000c8000000

@@ -22,7 +22,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   Config:
-    BroadcastTime: 0
-    SeatNum: 0
-    DataNum: 0
-    MaxCapacity: 0
+    BroadcastTime: 60
+    SeatNum: 4
+    DataNum: 5
+    MaxCapacity: 100

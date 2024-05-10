@@ -22,7 +22,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   Config:
-    EffBase: 0
-    LevelMax: 0
-    LevelUpgradeEff: 
-    InitAPCost_Duty: 0
+    EffBase: 100
+    LevelMax: 2
+    LevelUpgradeEff: 3200000032000000
+    InitAPCost_Duty: 10
