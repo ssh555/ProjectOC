@@ -30,7 +30,7 @@ namespace ML.Engine.UI
         [ShowInInspector]
         private bool isInit = false;
 
-        private string LayerName = "UICamera";
+        private static string LayerName = "UICamera";
         //public LayerMask layerMask; 
 
         public void Init()
@@ -55,7 +55,7 @@ namespace ML.Engine.UI
             uiCamera = cameraObject.AddComponent<Camera>();
             uiCamera.cullingMask = 1 << (LayerMask.NameToLayer(LayerName));
             uiCamera.clearFlags = CameraClearFlags.Color;
-            uiCamera.backgroundColor = Color.grey;
+            uiCamera.backgroundColor = Color.clear;
             uiCamera.targetTexture = texture;
             uiCamera.orthographic = false;
 
@@ -70,41 +70,59 @@ namespace ML.Engine.UI
             this.isInit = true;
         }
         
-        public void LookAtGameObject(GameObject go,bool modeLayer = true)
+        public void LookAtGameObject(GameObject _targetGo,bool modeLayer = true)
         {
-            if (go == null) return;
+            if (_targetGo == null) return;
 
             if(currentObjectBeingObserved != null)
             {
                 GameManager.DestroyObj(currentObjectBeingObserved);
             }
 
-            currentObjectBeingObserved = go;
+            currentObjectBeingObserved = _targetGo;
             currentObjectBeingObserved.transform.SetParent(cameraParent.transform);
             if (modeLayer)
             {
-                ModeLayer(currentObjectBeingObserved.transform,LayerName);
+                ModeGameObjectLayer(currentObjectBeingObserved.transform);
             }
 
             currentObjectBeingObserved.transform.localPosition = Vector3.zero;
             currentObjectBeingObserved.transform.localRotation = Quaternion.identity;
-            cameraParent.transform.position = go.transform.position;
+            cameraParent.transform.position = _targetGo.transform.position;
             
             Vector3 direction = currentObjectBeingObserved.transform.position - uiCamera.transform.position;
             uiCamera.transform.rotation = Quaternion.LookRotation(-direction, Vector3.up);
 
             uiCamera.transform.position = currentObjectBeingObserved.transform.position - uiCamera.transform.forward * distanceFromObject;
-
-            void ModeLayer(Transform _transform, string _layerValue)
-            {
-                _transform.gameObject.layer = LayerMask.NameToLayer(_layerValue);
-                foreach (Transform _transf in _transform)
-                {
-                    ModeLayer(_transf, _layerValue);
-                }
-            }
         }
 
+        /// <summary>
+        /// 环绕目标点，不会摧毁原物体，可能多个机位
+        /// </summary>
+        public void LookAtGameObjectMultCamera(GameObject go,Transform cameraPos,bool modeLayer = true)
+        {
+            if (go == null) return;
+            
+            uiCamera.transform.position = cameraPos.position;
+            uiCamera.transform.LookAt(go.transform);
+            
+            if (modeLayer)
+            {
+                ModeGameObjectLayer(currentObjectBeingObserved.transform);
+            }
+        }
+        
+        
+        
+        public static void ModeGameObjectLayer(Transform _transform)
+        {
+            _transform.gameObject.layer = LayerMask.NameToLayer(LayerName);
+            foreach (Transform _transf in _transform)
+            {
+                ModeGameObjectLayer(_transf);
+            }
+        }
+        
         public void OnDrag(PointerEventData eventData)
         {
             if (this.currentObjectBeingObserved == null) return;

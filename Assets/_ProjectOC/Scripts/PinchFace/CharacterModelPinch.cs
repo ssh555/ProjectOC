@@ -10,6 +10,7 @@ using UnityEngine.UI;
 using ML.MathExtension;
 using ML.PlayerCharacterNS;
 using ProjectOC.ManagerNS;
+using UnityEngine.Rendering.VirtualTexturing;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace ProjectOC.PinchFace
@@ -30,19 +31,27 @@ namespace ProjectOC.PinchFace
                 ABResourceManager.InstantiateAsync(totalPath);
             return handle;
         }
+
+        private int Type2ToTypeReplaceGoIndex(PinchPartType2 _type2)
+        {
+            return (int)_type2 - 1;
+        }
         
-        public void ChangeType(PinchPartType3 _type3, int typeIndex)
+        
+        public AsyncOperationHandle<GameObject> ChangeType(PinchPartType3 _type3, int typeIndex)
         {
             PinchPartType2 _type2 = pinchFaceManager.pinchPartType3Dic[_type3];
-            if (replaceGo[(int)_type2] != null)
+            if (replaceGo[Type2ToTypeReplaceGoIndex(_type2)] != null)
             {
-                UnEquipItem(_type2,replaceGo[(int)_type2]);
+                UnEquipItem(_type2,replaceGo[Type2ToTypeReplaceGoIndex(_type2)]);
             }
 
-            GeneratePinchTypePrefab(_type3, typeIndex).Completed += (handle)=>
+            AsyncOperationHandle<GameObject> _handle = GeneratePinchTypePrefab(_type3, typeIndex);
+            _handle.Completed += (handle)=>
             {
                 EquipItem(_type2,handle.Result);
             };
+            return _handle;
         }
         
         public void TempChangeType(int index)
@@ -67,10 +76,10 @@ namespace ProjectOC.PinchFace
             //     topEar.Release();
             // }
         }
-        public void EquipItem(PinchPartType2 boneType2, GameObject _PinchGo)
+        public void EquipItem(PinchPartType2 _type2, GameObject _PinchGo)
         {
             // sourceClothing衣服 targetAvatar 角色
-            replaceGo[(int)boneType2] = Stitch(_PinchGo, avatar.gameObject);
+            replaceGo[Type2ToTypeReplaceGoIndex(_type2)] = Stitch(_PinchGo, avatar.gameObject);
             
             //to-do: 更新骨骼解算目录
             Destroy(_PinchGo);
@@ -208,9 +217,34 @@ namespace ProjectOC.PinchFace
             }
         }
         
-        public void ChangeTexture(PinchPartType2 boneType2, int textureIndex)
+        public void ChangeTexture(PinchPartType3 _type3 , int textureIndex)
         {
             //更换Mat 的 _MainTex 参数
+            //后续也通过
+            //string texABPath = "SA_UI_PinchFace/PinchPart/5_Common_PinchType1/19_Eye_PinchType2/44_O_Orbit_PinchType3/O_Orbit_0.jpg";
+            string prePath = "Prefabs_PinchPart/PinchPart";
+            string typePath = pinchFaceManager.pinchFaceHelper.GetType3PrefabPath(_type3);
+            string texturePath = $"{_type3.ToString()}_{textureIndex}.png";
+            string totalPath = $"{prePath}/{typePath}/{texturePath}";
+            
+            PinchPartType2 _type2 = pinchFaceManager.pinchPartType3Dic[_type3];
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<Texture>(totalPath)
+                .Completed += (handle) =>
+            {
+                //todo 后续改成 MainTex
+                if (_type2 == PinchPartType2.Eye)
+                {
+                    foreach (Material _material in avatar.GetComponentInChildren<SkinnedMeshRenderer>().materials)
+                    {
+                        if (_material.name == "Mat_Eye")
+                        {
+                            _material.SetTexture("_MainTex",handle.Result);   
+                        }
+                    }
+                }
+            };
+
+
         }
 
         
@@ -250,30 +284,61 @@ namespace ProjectOC.PinchFace
             }
         }
 
-        public void ChangeColor(PinchPartType2 boneType2, Color _color)
+        private Material GetMaterial(PinchPartType2 _type2)
         {
-            //从boneType找到对应的两个 Mat，更改Mat的_Color 属性
-            List<Material> mats = new List<Material>();
+            string matColorName = "Mat_ColorChange1";
+            //头发双色用
+            //string matColorName2 = "Mat_ColorChange2";
             
-            SkinnedMeshRenderer smr = replaceGo[(int)boneType2].GetComponent<SkinnedMeshRenderer>();
-            mats.AddRange(smr.materials);
-            if (mats.Count == 0)
+            GameObject _replaceGo = replaceGo[Type2ToTypeReplaceGoIndex(_type2)];
+            if (_replaceGo == null)
+                return null;
+            
+            Material[] mats = _replaceGo.GetComponentInChildren<SkinnedMeshRenderer>().materials;
+            if (mats == null)
             {
-                MeshRenderer meshRender =  replaceGo[(int)boneType2].GetComponent<MeshRenderer>();
-                mats.AddRange(meshRender.materials);
+                mats = _replaceGo.GetComponentInChildren<MeshRenderer>().materials;
+            }
+            foreach (var _mat in mats)
+            {
+                if (_mat.name.Contains(matColorName))
+                    return _mat;
             }
             
-            // mats.Find(_mat =>()
-            // {
-            //     
-            // })
             
+            return null;
+        }
+
+        private string changeColorShaderKey = "_BaseColor";
+        public void ChangeColor(PinchPartType2 boneType2, Color _color)
+        {
+            Material _targetMat = GetMaterial(boneType2);
+            if (_targetMat != null)
+            {
+                _targetMat.SetColor(changeColorShaderKey,_color);   
+            }
         }
 
 
         #endregion
+
+        #region public函数
+
+        //
+
+        public Color GetType2Color(PinchPartType2 _type2)
+        {
+            Material _targetMat = GetMaterial(_type2);
+            if (_targetMat == null)
+                return Color.clear;
+            else
+                return _targetMat.GetColor(changeColorShaderKey);
+        }
         
-        #region TransformCatalog
+
+        #endregion
+        
+        #region 骨骼数据处理
             string AddStr = "Add_";
             string WeightStr = "Weight_";
             private Transform avatar;

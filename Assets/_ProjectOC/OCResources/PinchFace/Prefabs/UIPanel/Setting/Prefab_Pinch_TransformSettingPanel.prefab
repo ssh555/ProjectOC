@@ -108,6 +108,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 1
     readUnActiveButton: 1
+    scrollRect: {fileID: 0}
 --- !u!114 &7905453208754053215
 MonoBehaviour:
   m_ObjectHideFlags: 0
