@@ -320,7 +320,7 @@ namespace ProjectOC.Order
             }
             else if(orderTableData.OrderType == OrderType.Normal)
             {
-                Debug.Log("常规订单有刷新！" + orderTableData.ID);
+                //Debug.Log("常规订单有刷新！" + orderTableData.ID);
                 OrderNormal orderNormal = new OrderNormal(orderTableData);
                 OrderNormalDelegationMap[ClanID].Add(orderNormal);
                 OrderDelegationListDic.Add(orderNormal.OrderInstanceID, orderNormal);

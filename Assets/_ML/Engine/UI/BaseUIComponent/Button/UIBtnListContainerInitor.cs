@@ -28,12 +28,15 @@ namespace ML.Engine.UI
 
             [LabelText("滑动窗口")]
             public ScrollRect scrollRect;
+            [LabelText("静态初始化UIBtnList")]
+            public List<UIBtnListInitor> UIBtnListInitors;
 
             public static BtnListContainerInitData defaultTemplate = new BtnListContainerInitData()
             {
                 containerType = ContainerType.A,
                 isLoop = false,
-                isHorizontal = false
+                isHorizontal = false,
+               
             };
 
             public void AddLinkData(LinkData linkData)

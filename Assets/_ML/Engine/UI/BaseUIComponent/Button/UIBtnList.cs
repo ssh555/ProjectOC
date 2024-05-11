@@ -18,6 +18,7 @@ using System.IO.Pipes;
 using UnityEngine.InputSystem.iOS;
 using UnityEditor;
 using Unity.VisualScripting;
+using ML.Engine.Timer;
 
 namespace ML.Engine.UI
 {
@@ -80,7 +81,7 @@ namespace ML.Engine.UI
         private string prefabPath = null;
 
         [ShowInInspector]
-        private bool isEmpty;
+        private bool isEmpty = true;
         public bool IsEmpty { get { return isEmpty; } }
 
         /// <summary>
@@ -493,14 +494,18 @@ namespace ML.Engine.UI
             }
 
             bool needMoveToBtnList = this.uiBtnListContainer.IsEmpty;
+            Debug.Log("this.uiBtnListContainer.IsEmpty before " + this.uiBtnListContainer.IsEmpty);
             if (NeedRefreshBtnInfo)
                 InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
+            Debug.Log("this.uiBtnListContainer.IsEmpty after " + this.uiBtnListContainer.IsEmpty);
             if (needMoveToBtnList)
             {
+                Debug.Log("needMoveToBtnList");
                 this.UIBtnListContainer?.FindEnterableUIBtnList();
             }
             else
             {
+                Debug.Log("RefreshEdge");
                 this.UIBtnListContainer?.RefreshEdge();
             }
             OnFinishAdd?.Invoke();
@@ -955,18 +960,22 @@ namespace ML.Engine.UI
 
             if (angle < 45 || angle > 315)
             {
+                //Debug.Log("MoveUPIUISelected " + this.isEnable);
                 this.MoveUPIUISelected();
             }
             else if (angle > 45 && angle < 135)
             {
+                //Debug.Log("MoveRightIUISelected " + this.isEnable);
                 this.MoveRightIUISelected();
             }
             else if (angle > 135 && angle < 225)
             {
+                //Debug.Log("MoveDownIUISelected " + this.isEnable);
                 this.MoveDownIUISelected();
             }
             else if (angle > 225 && angle < 315)
             {
+                //Debug.Log("MoveLeftIUISelected " + this.isEnable);
                 this.MoveLeftIUISelected();
             }
 
@@ -1047,6 +1056,8 @@ namespace ML.Engine.UI
                 case BindType.canceled:
                     this.NavigationInputAction.canceled += isWheel ? this.RingNavigation : this.GridNavigation;
                     break;
+                
+
             }
         }
 

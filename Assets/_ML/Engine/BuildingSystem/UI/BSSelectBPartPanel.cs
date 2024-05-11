@@ -433,14 +433,14 @@ namespace ML.Engine.BuildingSystem.UI
 
         private void Placer_AlterCategory2(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (this.SelectedCategory1 == BuildingCategory1.Furniture)
+            /*if (this.SelectedCategory1 == BuildingCategory1.Furniture)
             {
                 return;
             }
             int offset = obj.ReadValue<float>() > 0 ? 1 : -1;
             this.SelectedCategory2Index = (this.SelectedCategory2Index + offset + this.CanSelectCategory2.Length) % this.CanSelectCategory2.Length;
 
-            this.Refresh();
+            this.Refresh();*/
         }
 
         private void Placer_AlterCategory1(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -452,7 +452,6 @@ namespace ML.Engine.BuildingSystem.UI
                 this.UpdatePlaceBuildingType(this.CanSelectCategory1[this.SelectedCategory1Index]);
                 
             }
-
         }
 
         private void Placer_CancelSelection(UnityEngine.InputSystem.InputAction.CallbackContext obj)

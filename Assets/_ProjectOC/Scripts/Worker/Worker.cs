@@ -41,7 +41,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("移动速度"), FoldoutGroup("配置")]
         public float WalkSpeed = 10;
         [LabelText("超过DestroyTime分钟，未绑定窝的刁民会被销毁"), FoldoutGroup("配置")]
-        public float DestroyTimeForNoHome = 1f;
+        public float DestroyTimeForNoHome = 1;
         #endregion
 
         #region Data Property
