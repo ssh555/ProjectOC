@@ -663,5 +663,26 @@ namespace ProjectOC.WorkerNS
         public void OnSpawn(ML.PlayerCharacterNS.IController controller) { }
         public void OnDespose(ML.PlayerCharacterNS.IController controller) { }
         #endregion
+
+        #region External
+        /// <summary>
+        /// 0 1 2 分别代表低中高
+        /// </summary>
+        public int GetMoodStatu()
+        {
+            if(HaveSetEMLowEffect) return 0;
+            if (HaveSetEMHighEffect) return 2;
+            return 1;
+        }
+        /// <summary>
+        /// 0 1 2 分别代表低中高
+        /// </summary>
+        public int GetAPStatu()
+        {
+            if (APCurrent < APWorkThreshold) return 0;
+            if (APCurrent >APRelaxThreshold) return 2;
+            return 1;
+        }
+        #endregion
     }
 }
