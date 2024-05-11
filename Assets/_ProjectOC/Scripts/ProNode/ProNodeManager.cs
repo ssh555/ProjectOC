@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using ML.Engine.InventorySystem;
 using ML.Engine.TextContent;
 using Sirenix.OdinInspector;
-
+using UnityEngine;
+using Debug = UnityEngine.Debug;
 namespace ProjectOC.ProNodeNS
 {
     [System.Serializable]
@@ -24,6 +26,7 @@ namespace ProjectOC.ProNodeNS
     public sealed class ProNodeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
         #region ILocalManager
+        [ShowInInspector]
         private Dictionary<string, ProNodeTableData> ProNodeTableDict = new Dictionary<string, ProNodeTableData>();
         public ML.Engine.ABResources.ABJsonAssetProcessor<ProNodeTableData[]> ABJAProcessor;
         public ProNodeConfig Config;

@@ -12,6 +12,9 @@ using UnityEngine.U2D;
 using UnityEngine.UI;
 using static ML.Engine.BuildingSystem.UI.BSSelectBPartPanel;
 using ML.Engine.UI;
+using static ProjectOC.ProNodeNS.UI.UIProNode;
+using ProjectOC.ProNodeNS;
+using ProjectOC.ManagerNS;
 
 namespace ML.Engine.BuildingSystem.UI
 {
@@ -258,7 +261,6 @@ namespace ML.Engine.BuildingSystem.UI
                     foreach (var category2 in this.CanSelectCategory2)
                     {
                         string classificationString = BuildingManager.Instance.GetOneBPartBuildingPartClassificationString(this.SelectedCategory1, category2);
-
                         uIBtnList.AddBtn("Prefab_BuildingSystem/Prefab_BS_FurnitureBtn.prefab", BtnAction: () =>
                         {
                             this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(classificationString);
@@ -270,6 +272,10 @@ namespace ML.Engine.BuildingSystem.UI
                             btn.name = classificationString;
                         },
                         OnFinishAdd: () => { synchronizer.Check(); },
+                        OnSelectEnter: () => {
+
+                            this.RefreshBuildingInfo(classificationString);
+                        },
                         BtnText: monoBM.Category2Dict[category2.ToString()].GetDescription());
                     }
                 });
@@ -317,6 +323,30 @@ namespace ML.Engine.BuildingSystem.UI
                 this.FurnitureDisplayBtnList.DeleteAllButton();
                 this.FurnitureDisplayBtnList.DeBindInputAction();
                 this.FurnitureDisplayBtnList.RemoveAllListener();
+            }
+        }
+
+        private void RefreshBuildingInfo(string CID)
+        {
+            Transform Content = null;
+            if (this.SelectedCategory1 == BuildingCategory1.ProNode)
+            {
+                var ProNodePanel = this.SwitchPanel.Find("ProNodePanel");
+                Content = ProNodePanel.Find("Info").Find("Content");
+                Content.Find("Name").GetComponent<TextMeshProUGUI>().text = BuildingManager.Instance.GetName(CID);
+                Content.Find("Description").GetComponent<TextMeshProUGUI>().text = BuildingManager.Instance.GetItemDescription(CID);
+                Content.Find("Effect").GetComponent<TextMeshProUGUI>().text = BuildingManager.Instance.GetEffectDescription(CID);
+                string ProNodeID = BuildingManager.Instance.GetActorID(CID);
+                bool canCharge = LocalGameManager.Instance.ProNodeManager.GetCanCharge(ProNodeID);
+                ProNodePanel.Find("Info").Find("PowerSupply").gameObject.SetActive(canCharge);
+            }
+            else if(this.SelectedCategory1 == BuildingCategory1.Interact)
+            {
+                var InteractPanel = this.SwitchPanel.Find("InteractPanel");
+                Content = InteractPanel.Find("Info").Find("Content");
+                Content.Find("Name").GetComponent<TextMeshProUGUI>().text = BuildingManager.Instance.GetName(CID);
+                Content.Find("Description").GetComponent<TextMeshProUGUI>().text = BuildingManager.Instance.GetItemDescription(CID);
+                Content.Find("Effect").GetComponent<TextMeshProUGUI>().text = BuildingManager.Instance.GetEffectDescription(CID);
             }
         }
 

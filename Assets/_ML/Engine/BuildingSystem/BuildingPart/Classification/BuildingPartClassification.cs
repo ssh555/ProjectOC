@@ -25,7 +25,6 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         public BuildingPartClassification(string id)
         {
             string[] classification = id.Split('_');
-            Debug.Log(id);
             Category1 = (BuildingCategory1)Enum.Parse(typeof(BuildingCategory1), classification[0]);
             Category2 = (BuildingCategory2)Enum.Parse(typeof(BuildingCategory2), classification[1]);
             Category3 = (BuildingCategory3)Enum.Parse(typeof(BuildingCategory3), classification[2]);

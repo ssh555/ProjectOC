@@ -285,25 +285,25 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 {
                     SwitchInfo.GetChild(i).gameObject.SetActive(i == SwitchInfoIndex);
                 }
-                Dictionary<WorkType, Skill> skillDic = worker.Skill;
+                Dictionary<SkillType, Skill> skillDic = worker.Skill;
                 if (SwitchInfoIndex == 0)
                 {
                     List<float> datas = new List<float>();
                     
                     foreach (var skill in skillDic)
                     {
-                        datas.Add(skillDic[skill.Key].Level / 10f);
+                        datas.Add(skillDic[skill.Key].LevelCurrent / 10f);
                     }
                     var radar = SwitchInfo.Find("SkillGraph").Find("Viewport").Find("Content").Find("Radar").GetComponent<UIPolygon>();
                     radar.DrawPolygon(datas);
                 }
                 else if(SwitchInfoIndex == 1)
                 {
-                    this.CookEfficiencyNumText.text = skillDic[WorkType.Cook].Level.ToString();
-                    this.CollectEfficiencyNumText.text = skillDic[WorkType.Cook].Level.ToString();
-                    this.MagicEfficiencyNumText.text = skillDic[WorkType.Cook].Level.ToString();
-                    this.IndustryEfficiencyNumText.text = skillDic[WorkType.Cook].Level.ToString();
-                    this.WeightMaxNumText.text = skillDic[WorkType.Cook].Level.ToString();
+                    this.CookEfficiencyNumText.text = skillDic[SkillType.Cook].LevelCurrent.ToString();
+                    this.CollectEfficiencyNumText.text = skillDic[SkillType.Collect].LevelCurrent.ToString();
+                    this.MagicEfficiencyNumText.text = skillDic[SkillType.Magic].LevelCurrent.ToString();
+                    this.IndustryEfficiencyNumText.text = skillDic[SkillType.Industry].LevelCurrent.ToString();
+                    this.WeightMaxNumText.text = worker.RealBURMax.ToString();
                 }
                 
                 
@@ -319,8 +319,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 BeastName.text = worker.Name;
 
                 APMaxNumText.text = worker.APMax.ToString();
-                MoodMax.text = worker.MoodMax.ToString();
-                WalkSpeedNumText.text = worker.WalkSpeed.ToString();
+                MoodMax.text = worker.EMMax.ToString();
+                WalkSpeedNumText.text = worker.RealWalkSpeed.ToString();
 
                 var Info = this.Info2.Find("Scroll View").Find("Viewport").Find("Content");
                 this.objectPool.ResetPool("SimpleDescriptionPool");

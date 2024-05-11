@@ -22,7 +22,8 @@ namespace ML.Engine.BuildingSystem
         public string actorID;
         public List<InventorySystem.Formula> raw;
         public string upgradeID;
-
+        public TextContent.TextContent ItemDescription;
+        public TextContent.TextContent EffectDescription;
         public string GetClassificationString()
         {
             return $"{category1}_{category2}_{category3}_{category4}";
@@ -1046,6 +1047,8 @@ namespace ML.Engine.BuildingSystem
             return null;
         }
 
+        
+
         public List<InventorySystem.Formula> GetRaw(string CID)
         {
             if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
@@ -1161,7 +1164,27 @@ namespace ML.Engine.BuildingSystem
             }
             return null;
         }
-        
+
+        public string GetItemDescription(string CID)
+        {
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
+            {
+                return BPartTableDictOnClass[CID].ItemDescription;
+            }
+            return "";
+        }
+
+        public string GetEffectDescription(string CID)
+        {
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
+            {
+                return BPartTableDictOnClass[CID].EffectDescription;
+            }
+            return "";
+        }
+
+
+
         #endregion
 
         #region 已建造建筑存储
