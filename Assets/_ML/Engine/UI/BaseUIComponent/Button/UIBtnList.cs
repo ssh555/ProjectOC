@@ -44,10 +44,28 @@ namespace ML.Engine.UI
         protected int TwoDimH = 0;
         protected int TwoDimW = 0;
         [ShowInInspector]
-        private SelectedButton CurSelected;
+        private SelectedButton _CurSelected;
 
+        private SelectedButton CurSelected
+        {
+            get
+            {
+                return _CurSelected;
+            }
+            set
+            {
+                _CurSelected = value;
+                if (_CurSelected != null && SBPosDic.ContainsKey(_CurSelected)) 
+                {
+                    TwoDimI = SBPosDic[_CurSelected].Item1;
+                    TwoDimJ = SBPosDic[_CurSelected].Item2;
+                }
+            }
+        }
         //Index
+        [ShowInInspector]
         protected int TwoDimI = 0;
+        [ShowInInspector]
         protected int TwoDimJ = 0;
 
         private InputAction NavigationInputAction = null;

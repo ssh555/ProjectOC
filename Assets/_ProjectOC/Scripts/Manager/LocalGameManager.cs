@@ -1,5 +1,4 @@
 using System.Collections;
-using ProjectOC.Dialog;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
@@ -18,7 +17,6 @@ namespace ProjectOC.ManagerNS
         public WorkerNS.WorkerManager WorkerManager;
         public WorkerNS.EffectManager EffectManager;
         public WorkerNS.FeatureManager FeatureManager;
-        public WorkerNS.SkillManager SkillManager;
         public WorkerEchoNS.WorkerEchoManager WorkerEchoManager;
         public ClanNS.ClanManager ClanManager;
         public ML.Engine.BuildingSystem.MonoBuildingManager MonoBuildingManager;
@@ -56,7 +54,6 @@ namespace ProjectOC.ManagerNS
             GM.RegisterLocalManager(WorkerManager);
             GM.RegisterLocalManager(EffectManager);
             GM.RegisterLocalManager(FeatureManager);
-            GM.RegisterLocalManager(SkillManager);
             GM.RegisterLocalManager(WorkerEchoManager);
             GM.RegisterLocalManager(ClanManager);
             GM.RegisterLocalManager(MonoBuildingManager);
@@ -92,7 +89,6 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<WorkerNS.WorkerManager>();
                 GM?.UnregisterLocalManager<WorkerNS.EffectManager>();
                 GM?.UnregisterLocalManager<WorkerNS.FeatureManager>();
-                GM?.UnregisterLocalManager<WorkerNS.SkillManager>();
                 GM?.UnregisterLocalManager<WorkerEchoNS.WorkerEchoManager>();
                 GM?.UnregisterLocalManager<ClanNS.ClanManager>();
                 GM?.UnregisterLocalManager<ML.Engine.BuildingSystem.MonoBuildingManager>();

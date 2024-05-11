@@ -44,6 +44,16 @@ namespace ML.Engine.UI
                 this.LinkDatas.Add(linkData);
             }
 
+            /// <summary>
+            /// List.RemoveRange()
+            /// </summary>
+            /// <param name="_index"></param>
+            /// <param name="_count"></param>
+            public void RemoveLinkData(int _index,int _count)
+            {
+                this.LinkDatas.RemoveRange(_index,_count);
+            }
+            
             // ¸ù¾Ý containerType ÏÔÊ¾ LinkDatas ×Ö¶Î
             private bool ShowLinkDatas()
             {

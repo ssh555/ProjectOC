@@ -9,7 +9,6 @@ namespace ProjectOC.RestaurantNS
     {
         public string ID;
         public string ItemID;
-        public int EatTime;
         public int AlterAP;
         public float AlterMoodOddsProb;
         public int AlterMoodOddsValue;
@@ -24,11 +23,9 @@ namespace ProjectOC.RestaurantNS
             this.ID = Program.ParseString(row[0]);
             // 1 -> ItemID
             this.ItemID = Program.ParseString(row[1]);
-            // 2 -> EatTime
-            this.EatTime = Program.ParseInt(row[2]);
-            // 3 -> AlterAP
+            // 2 -> AlterAP
             this.AlterAP = Program.ParseInt(row[3]);
-            // 4 5 -> AlterMoodOdds
+            // 3 4 -> AlterMoodOdds
             var alterMoodOdds = Program.ParseStringList(row[4]);
             if (alterMoodOdds.Count == 2)
             {

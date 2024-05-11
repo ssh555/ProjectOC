@@ -42,12 +42,12 @@ namespace ProjectOC.RestaurantNS
 
         public void Init()
         {
-            Seats = new RestaurantSeat[ManagerNS.LocalGameManager.Instance.RestaurantManager.SeatNum];
+            Seats = new RestaurantSeat[ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.SeatNum];
             for (int i = 0; i < Seats.Length; i++)
             {
                 Seats[i] = new RestaurantSeat(this, WorldRestaurant.transform.Find($"seat{i + 1}"));
             }
-            InitData(ManagerNS.LocalGameManager.Instance.RestaurantManager.DataNum, ManagerNS.LocalGameManager.Instance.RestaurantManager.MaxCapacity);
+            InitData(ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.DataNum, ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.MaxCapacity);
         }
 
         public void Destroy()
