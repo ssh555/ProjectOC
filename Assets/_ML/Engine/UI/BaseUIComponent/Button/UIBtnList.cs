@@ -18,6 +18,7 @@ using System.IO.Pipes;
 using UnityEngine.InputSystem.iOS;
 using UnityEditor;
 using Unity.VisualScripting;
+using ML.Engine.Timer;
 
 namespace ML.Engine.UI
 {
@@ -98,7 +99,7 @@ namespace ML.Engine.UI
         private string prefabPath = null;
 
         [ShowInInspector]
-        private bool isEmpty;
+        private bool isEmpty = true;
         public bool IsEmpty { get { return isEmpty; } }
 
         /// <summary>
@@ -406,7 +407,6 @@ namespace ML.Engine.UI
             ++OneDimCnt;
             this.UIBtnListContainer?.RefreshEdge();*/
             var tprefabpath = VarPrefabpath == null ? this.prefabPath : VarPrefabpath;
-            Debug.Log(tprefabpath);
             Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(tprefabpath).Completed += (handle) =>
             {
                 // สตภýปฏ
@@ -974,18 +974,22 @@ namespace ML.Engine.UI
 
             if (angle < 45 || angle > 315)
             {
+                //Debug.Log("MoveUPIUISelected " + this.isEnable);
                 this.MoveUPIUISelected();
             }
             else if (angle > 45 && angle < 135)
             {
+                //Debug.Log("MoveRightIUISelected " + this.isEnable);
                 this.MoveRightIUISelected();
             }
             else if (angle > 135 && angle < 225)
             {
+                //Debug.Log("MoveDownIUISelected " + this.isEnable);
                 this.MoveDownIUISelected();
             }
             else if (angle > 225 && angle < 315)
             {
+                //Debug.Log("MoveLeftIUISelected " + this.isEnable);
                 this.MoveLeftIUISelected();
             }
 
@@ -1066,6 +1070,8 @@ namespace ML.Engine.UI
                 case BindType.canceled:
                     this.NavigationInputAction.canceled += isWheel ? this.RingNavigation : this.GridNavigation;
                     break;
+                
+
             }
         }
 
@@ -1384,7 +1390,6 @@ namespace ML.Engine.UI
                 this.TwoDimI = 0;
                 this.TwoDimJ = 0;
                 this.CurSelected = TwoDimSelectedButtons[TwoDimI][TwoDimJ];
-                Debug.Log("this.CurSelected "+this.CurSelected.name);
                 this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
             }
             this.CurSelected?.OnSelect(null);

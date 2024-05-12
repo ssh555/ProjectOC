@@ -79,11 +79,6 @@ namespace ProjectOC.MainInteract.UI
         protected override void InitBtnInfo()
         {
             this.UIBtnListContainer = new UIBtnListContainer(this.transform.GetComponentInChildren<UIBtnListContainerInitor>());
-
-
-            this.UIBtnListContainer.AddOnSelectButtonChangedAction(() => { Debug.Log("SelectButtonChanged!"); });
-            this.UIBtnListContainer.AddOnSelectButtonListChangedAction(() => { Debug.Log("SelectButtonListChanged!"); });
-
             this.UIBtnListContainer.UIBtnLists[0].SetAllBtnAction(() => { 
                 GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("ÇÐ»»¿ª¹Ø£¡"));
                 GameManager.Instance.EventManager.ExecuteEvent("InteractUpgrade(asd,5)");

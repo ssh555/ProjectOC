@@ -143,7 +143,8 @@ namespace ML.Engine.Timer
             {
                 foreach (var tick in tickkv.Value)
                 {
-                    tick.Tick(deltatime);
+                    if(!removeTick.Contains(tick))
+                        tick.Tick(deltatime);
                 }
             }
         }
@@ -155,7 +156,8 @@ namespace ML.Engine.Timer
             {
                 foreach (var tick in tickkv.Value)
                 {
-                    tick.FixedTick(deltatime);
+                    if(!removeFixedTick.Contains(tick))
+                        tick.FixedTick(deltatime);
                 }
             }
         }
@@ -167,7 +169,8 @@ namespace ML.Engine.Timer
             {
                 foreach (var tick in tickkv.Value)
                 {
-                    tick.LateTick(deltatime);
+                    if(!removeLateTick.Contains(tick))
+                        tick.LateTick(deltatime);
                 }
             }
         }

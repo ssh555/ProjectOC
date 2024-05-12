@@ -37,7 +37,6 @@ namespace ProjectOC.Order
         }
         private void OnDayChangedAction(int day)
         {
-            Debug.Log("OnDayChangedAction");
             //刷新常规订单 并生成新的实例化ID
             this.orderInstanceID = OrderManager.Instance.GenerateOrderInstanceID(this.OrderID);
             LocalGameManager.Instance.OrderManager.AddOrderToOrderDelegationMap(this.OrderID);

@@ -98,7 +98,6 @@ namespace ML.Engine.UI
         }
         private void SlideWindowBtnList()
         {
-            Debug.Log("SlideWindowBtnList");
             if (this.scrollRect == null || this.uIBtnListContainer == null) return;
 
             if (curSelect != null && lastSelect != null)
@@ -107,8 +106,6 @@ namespace ML.Engine.UI
                 RectTransform uiRectTransform = curSelect.GetComponent<RectTransform>();
                 RectTransform scrollRectTransform = this.scrollRect.GetComponent<RectTransform>();
 
-                Debug.Log(scrollRect);
-                Debug.Log(scrollRect.content);
                 RectTransform contentRect = this.scrollRect.content;
 
                 // 获取 UI 元素的四个角点

@@ -4765,8 +4765,6 @@ MonoBehaviour:
   IsInit: 0
   workerEcho:
     Level: 2
-  resonanceWheel_Sub1: {fileID: 4346256780039477983, guid: 14063b2a06011cf4db5a1177bd684494, type: 3}
-  resonanceWheel_Sub2: {fileID: 8740659704077288989, guid: 7b7b8f15c588fb84d88ad150f98d0912, type: 3}
   exclusivePart: {fileID: 0}
   isQuit: 0
   CurrentGridIndex: 0

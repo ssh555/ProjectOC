@@ -10,7 +10,6 @@ namespace ML.Engine.InventorySystem
         private SpriteRenderer Renderer;
         private bool IsShow;
 
-
         #region ITickComponent
         public int tickPriority { get; set; }
         public int fixedTickPriority { get; set; }

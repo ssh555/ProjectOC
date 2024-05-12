@@ -176,6 +176,18 @@ namespace ML.Engine.Utility
             }
         }
 
+        public void ResetPool(string poolName)
+        {
+            if(goPoolDic.ContainsKey(poolName))
+            {
+                var pool = goPoolDic[poolName];
+                foreach (var go in pool.Pool)
+                {
+                    go.transform.SetParent(RootGameObject.transform, false);
+                }
+            }
+        }
+
         public bool IsLoadFinish()
         {
             return this.functionExecutor.IsFinished;

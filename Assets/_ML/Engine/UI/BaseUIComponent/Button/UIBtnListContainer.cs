@@ -27,7 +27,7 @@ namespace ML.Engine.UI
         private List<UIBtnList> uIBtnLists = new List<UIBtnList>();
         public List<UIBtnList> UIBtnLists { get { return uIBtnLists; } }
         [ShowInInspector]
-        public int UIBtnListNum { get { return uIBtnLists.Count; } }
+        public int UIBtnListNum { get { return uIBtnLists != null ? uIBtnLists.Count : -1; } }
         [ShowInInspector]
         private UIBtnList curSelectUIBtnList = null;
         public UIBtnList CurSelectUIBtnList { 
@@ -65,7 +65,7 @@ namespace ML.Engine.UI
         {
             started = 0,
             performed,
-            canceled
+            canceled,
         }
         [ShowInInspector]
         private ContainerType gridNavagationType;
@@ -73,6 +73,7 @@ namespace ML.Engine.UI
         public ContainerType Grid_NavagationType { set {  }  get { return gridNavagationType; } }
 
         private InputAction gridNavagationInputAction;
+        [ShowInInspector]
         public InputAction curGridNavagationInputAction { get { return gridNavagationInputAction; } }
         private BindType bindType;
         public BindType curBindType { get { return bindType; } }
@@ -81,13 +82,14 @@ namespace ML.Engine.UI
         private BtnListContainerInitData btnListContainerInitData;
 
         [ShowInInspector]
-        private bool isEmpty;
+        private bool isEmpty = true;
 
         public bool IsEmpty { get { return isEmpty; } }
 
         private Transform parent;
         public void RefreshIsEmpty()
         {
+            
             foreach (var btnlist in this.uIBtnLists)
             {
                 if(btnlist.IsEmpty == false)
@@ -148,7 +150,16 @@ namespace ML.Engine.UI
         public UIBtnList InitBtnlistInfo()
         {
             this.UIBtnListIndexDic.Clear();
-            UIBtnListInitor[] uIBtnListInitors = this.parent.GetComponentsInChildren<UIBtnListInitor>();
+            UIBtnListInitor[] uIBtnListInitors = null;
+            if (this.btnListContainerInitData.UIBtnListInitors.Count == 0)
+            {
+                uIBtnListInitors = this.parent.GetComponentsInChildren<UIBtnListInitor>(true);
+            }
+            else if(this.btnListContainerInitData.UIBtnListInitors.Count > 0)
+            {
+                uIBtnListInitors = this.btnListContainerInitData.UIBtnListInitors.ToArray();
+            }
+            
             UIBtnList uIBtnList = null;
             for (int i = 0; i < uIBtnListInitors.Length; i++)
             {
@@ -161,7 +172,6 @@ namespace ML.Engine.UI
                     uIBtnLists.Add(uIBtnList);
                     UIBtnListDic.Add(uIBtnListInitors[i], uIBtnList);
                 }
-                
             }
 
             for (int i = 0; i < uIBtnListInitors.Length; i++)
