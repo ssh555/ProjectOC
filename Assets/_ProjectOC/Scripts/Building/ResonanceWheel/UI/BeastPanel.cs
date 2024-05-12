@@ -205,7 +205,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                 var Info = this.transform.Find("HiddenBeastInfo3").Find("Info").Find("Scroll View").Find("Viewport").Find("Content");
 
-                foreach (var feature in worker.Feature.Values)
+                foreach (var feature in worker.GetSortFeature())
                 {
 
                     var tPrefab = this.objectPool.GetNextObject("DescriptionPool", Info);

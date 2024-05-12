@@ -221,7 +221,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     ML.Engine.Manager.GameManager.DestroyObj(Info.GetChild(i).gameObject);
                 }
 
-                foreach (var feature in worker.Feature.Values)
+                foreach (var feature in worker.GetSortFeature())
                 {
                     GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_Description.prefab", Info).Completed += (handle) =>
                         {

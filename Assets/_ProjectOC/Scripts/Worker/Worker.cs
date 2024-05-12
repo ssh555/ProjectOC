@@ -100,6 +100,12 @@ namespace ProjectOC.WorkerNS
         public Dictionary<SkillType, Skill> Skill = new Dictionary<SkillType, Skill>();
         [LabelText("特性"), ReadOnly]
         public Dictionary<string, Feature> Feature = new Dictionary<string, Feature>();
+        public List<Feature> GetSortFeature()
+        {
+            var result = Feature.Values.ToList();
+            result.Sort(new Feature());
+            return result;
+        }
         #endregion
         #region Time
         [LabelText("是否可以安排时段"), ReadOnly, ShowInInspector]

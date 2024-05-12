@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b85e8f4450767143821b991ef64ece1, type: 3}
+  m_Name: Config_Feature_Data
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  Config:
+    FeatTransCostItemID: Item_Juice_1
+    FeatTransCostItemNum: 2
+    FeatTransTime: 60
+    FeatUpCostItemID: Item_Juice_3
+    FeatUpCostItemNum: 1
+    FeatUpTime: 60
+    FeatDownCostItemID: Item_Juice_4
+    FeatDownCostItemNum: 1
+    FeatDownTime: 60
+    FeatReverseCostItemID: Item_Juice_5
+    FeatReverseCostItemNum: 1
+    FeatReverseTime: 60
+    FeatDelCostItemID: Item_Juice_2
+    FeatDelCostItemNum: 1
+    FeatDelTime: 60
