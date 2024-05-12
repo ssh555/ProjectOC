@@ -1,3 +1,4 @@
+using ML.Engine.Timer;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -506,6 +507,8 @@ namespace ProjectOC.WorkerNS
             }
         }
 
+        public (int, int) MinSec => timerForNoHome != null ? timerForNoHome.ConvertToMinAndSec() : (-1, -1);
+
         #region Property
         [LabelText("是否有生产节点"), ShowInInspector, ReadOnly]
         public bool HaveProNode => HasContainer(WorkerContainerType.Work);
@@ -676,6 +679,27 @@ namespace ProjectOC.WorkerNS
         public ML.PlayerCharacterNS.IController Controller { get; set; }
         public void OnSpawn(ML.PlayerCharacterNS.IController controller) { }
         public void OnDespose(ML.PlayerCharacterNS.IController controller) { }
+        #endregion
+
+        #region External
+        /// <summary>
+        /// 0 1 2 分别代表低中高
+        /// </summary>
+        public int GetMoodStatu()
+        {
+            if(HaveSetEMLowEffect) return 0;
+            if (HaveSetEMHighEffect) return 2;
+            return 1;
+        }
+        /// <summary>
+        /// 0 1 2 分别代表低中高
+        /// </summary>
+        public int GetAPStatu()
+        {
+            if (APCurrent < APWorkThreshold) return 0;
+            if (APCurrent >APRelaxThreshold) return 2;
+            return 1;
+        }
         #endregion
     }
 }

@@ -80,7 +80,7 @@ namespace ML.Engine.ABResources
                 this.onLoadOver?.Invoke(Datas);
 
 #if UNITY_EDITOR
-                Debug.Log(this.description + " JSONText已加载完成");
+                //Debug.Log(this.description + " JSONText已加载完成");
 #endif
             };
 
