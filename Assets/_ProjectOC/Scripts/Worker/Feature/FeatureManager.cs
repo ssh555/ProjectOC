@@ -171,6 +171,48 @@ namespace ProjectOC.WorkerNS
         {
             return IsValidID(id) ? FeatureTableDict[id].Event : "";
         }
+        public int GetFeatureCorrectTime(FeatureCorrectType type)
+        {
+            switch (type)
+            {
+                case FeatureCorrectType.Upgrade: 
+                    return Config.FeatUpTime;
+                case FeatureCorrectType.Downgrade : 
+                    return Config.FeatDownTime;
+                case FeatureCorrectType.Reverse:
+                    return Config.FeatReverseTime;
+                default:
+                    return Config.FeatDelTime;
+            }
+        }
+        public string GetFeatureCorrectItemID(FeatureCorrectType type)
+        {
+            switch (type)
+            {
+                case FeatureCorrectType.Upgrade:
+                    return Config.FeatUpCostItemID;
+                case FeatureCorrectType.Downgrade:
+                    return Config.FeatDownCostItemID;
+                case FeatureCorrectType.Reverse:
+                    return Config.FeatReverseCostItemID;
+                default:
+                    return Config.FeatDelCostItemID;
+            }
+        }
+        public int GetFeatureCorrectItemNum(FeatureCorrectType type)
+        {
+            switch (type)
+            {
+                case FeatureCorrectType.Upgrade:
+                    return Config.FeatUpCostItemNum;
+                case FeatureCorrectType.Downgrade:
+                    return Config.FeatDownCostItemNum;
+                case FeatureCorrectType.Reverse:
+                    return Config.FeatReverseCostItemNum;
+                default:
+                    return Config.FeatDelCostItemNum;
+            }
+        }
         #endregion
     }
 }

@@ -43,6 +43,7 @@ namespace ProjectOC.WorkerNS
                 }
             }
             var newSet = FeatureIDs.ToHashSet();
+            newSet.Remove("");
             newSet.SymmetricExceptWith(set);
             foreach (var id in set)
             {
@@ -52,8 +53,12 @@ namespace ProjectOC.WorkerNS
             foreach (string id in newSet)
             {
                 var feature = ManagerNS.LocalGameManager.Instance.FeatureManager.SpawnFeature(id);
-                feature.SetOwner(Worker);
-                Worker.Feature.Add(feature.ID, feature);
+                if (!string.IsNullOrEmpty(feature.ID) && 
+                    ManagerNS.LocalGameManager.Instance.FeatureManager.IsValidID(feature.ID))
+                {
+                    feature.SetOwner(Worker);
+                    Worker.Feature.Add(feature.ID, feature);
+                }
             }
         }
 
