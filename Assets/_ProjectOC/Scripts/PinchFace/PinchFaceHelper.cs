@@ -49,6 +49,10 @@ namespace ProjectOC.PinchFace
             List<UIBtnListInitor> btnListInitors = new List<UIBtnListInitor>();
             for (int i = 0; i < childTransforms.Length; i++)
             {
+                if (!childTransforms[i].gameObject.activeSelf)
+                {
+                    continue;
+                }
                 childTransforms[i].transform.SetSiblingIndex(i);
                 UIBtnListInitor[] btnLists = childTransforms[i].transform.GetComponentsInChildren<UIBtnListInitor>();
                 btnListInitors.AddRange(btnLists);

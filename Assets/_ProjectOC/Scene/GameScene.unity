@@ -57538,13 +57538,42 @@ MonoBehaviour:
     CurrentHour: 23
     CurrentDay: 0
   ProNodeManager:
-    EffBase: 100
-    LevelMax: 2
-    LevelUpgradeEff: 320000003200000032000000
+    Config:
+      EffBase: 0
+      LevelMax: 0
+      LevelUpgradeEff: 
+      InitAPCost_Duty: 0
   StoreManager:
-    LevelMax: 2
-    LevelCapacity: 020000000400000008000000
-    LevelDataCapacity: 3200000064000000c8000000
+    Config:
+      LevelMax: 0
+      LevelCapacity: 
+      LevelDataCapacity: 
+  WorkerManager:
+    Config:
+      APMax: 0
+      APWorkThreshold: 0
+      APRelaxThreshold: 0
+      APCost_Transport: 0
+      EatTime: 0
+      EMMax: 0
+      EMLowThreshold: 0
+      EMHighThreshold: 0
+      EMLowEffect: 0
+      EMHighEffect: 0
+      EMCost: 0
+      EMRecover: 0
+      WalkSpeed: 0
+      BURMax: 0
+      ExpTransport: 0
+      SkillEff: 0
+      ExpToLevel: 
+      LevelToEff_Duty: 
+      LevelToEff_Transport: 
+      DestroyTimeForNoHome: 0
+      SkillStdMean: 0
+      SkillStdDev: 0
+      SkillStdHighBound: 0
+      SkillStdLowBound: 0
   ClanManager:
     Clans: []
   MonoBuildingManager:
@@ -57585,6 +57614,11 @@ MonoBehaviour:
     powerSubs: []
     PowerCoreMaxCount: 1
   RestaurantManager:
+    Config:
+      BroadcastTime: 0
+      SeatNum: 0
+      DataNum: 0
+      MaxCapacity: 0
     Workers: []
   IslandAreaManager:
     updatedFieldTransforms: []
@@ -57595,7 +57629,7 @@ MonoBehaviour:
     RacePinchDatas:
     - raceName: OCCCCCC
       raceDescription: "OC\u4EBA"
-      pinchPartType3s: 01000000020000000600000022000000
+      pinchPartType3s: 01000000020000000f00000022000000
       isDefault: 1
     - raceName: Cooo
       raceDescription: "CO\u602A"
