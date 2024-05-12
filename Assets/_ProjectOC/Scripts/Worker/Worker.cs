@@ -99,7 +99,7 @@ namespace ProjectOC.WorkerNS
         public int ExpTransport;
         [LabelText("技能"), ShowInInspector, ReadOnly]
         public Dictionary<SkillType, Skill> Skill = new Dictionary<SkillType, Skill>();
-        [LabelText("特性"), ReadOnly]
+        [LabelText("特性"), ReadOnly, ShowInInspector]
         public Dictionary<string, Feature> Feature = new Dictionary<string, Feature>();
         public List<Feature> GetSortFeature()
         {

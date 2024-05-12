@@ -27,7 +27,6 @@ namespace ProjectOC.WorkerNS
     [System.Serializable]
     public class WorkerEcho
     {
-        public int Level = 2;
         public ExternWorker[] Workers = new ExternWorker[5];
         public WorkerEchoBuilding WorkerEchoBuilding = null;
         public List<int> FeatureMax = new List<int>() { 100, 100, 100, 100};
@@ -42,7 +41,7 @@ namespace ProjectOC.WorkerNS
         {
             if (!ManagerNS.LocalGameManager.Instance.WorkerManager.OnlyCostResource(inventory, id)) return null;
 
-            if (Level == 1)
+            if (ManagerNS.LocalGameManager.Instance.WorkerEchoManager.Level == 1)
             {
                 id = ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRandomID();
             }
@@ -69,11 +68,7 @@ namespace ProjectOC.WorkerNS
             Workers[index] = null;
         }
 
-        public void LevelUp()
-        {
-            if (Level == 2) return;
-            Level = 2;
-        }
+
 
         public EchoStatusType GetStatus()
         {
