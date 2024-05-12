@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using static Cinemachine.DocumentationSortingAttribute;
 
 namespace ProjectOC.WorkerNS
 {
@@ -18,6 +19,8 @@ namespace ProjectOC.WorkerNS
         private Dictionary<string, WorkerEchoTableData> WorkerEchoTableDict = new Dictionary<string, WorkerEchoTableData>();
         private ML.Engine.ABResources.ABJsonAssetProcessor<WorkerEchoTableData[]> ABJAProcessor;
         private System.Random Random;
+        private int level = 1;
+        public int Level { get { return level; } }
         public void OnRegister()
         {
             Random = new System.Random();
@@ -50,6 +53,12 @@ namespace ProjectOC.WorkerNS
         public int GetTimeCost(string id)
         {
             return IsValidID(id) ? WorkerEchoTableDict[id].TimeCost : 0;
+        }
+
+        public void LevelUp()
+        {
+            if (level == 2) return;
+            level = 2;
         }
     }
 }

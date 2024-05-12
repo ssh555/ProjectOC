@@ -277,7 +277,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public void Tick(float deltatime)
         {
             Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
-            if(Workers.Count>0)
+            if (Workers.Count >= 0 && CurrentBeastIndex != -1) 
             {
                 Worker worker = Workers[CurrentBeastIndex];
                 TimerUI.text = worker.MinSec.Item1.ToString() + "Min" + worker.MinSec.Item2.ToString() + "s";

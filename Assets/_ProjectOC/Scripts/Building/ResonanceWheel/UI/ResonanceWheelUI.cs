@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheelUI;
+using ProjectOC.ManagerNS;
 
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
@@ -112,7 +113,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
             else if (Grids[CurrentGridIndex].isTiming)//刷新计时时间
             {
-                var (min, sec) = Grids[CurrentGridIndex].worker.timer.ConvertToMinAndSec();
+                var (min, sec) = Grids[CurrentGridIndex].worker.Timer.ConvertToMinAndSec();
                 TimerUI.GetComponentInChildren<TextMeshProUGUI>().text = min.ToString() + "min" + sec.ToString() + "s";
             }
 
