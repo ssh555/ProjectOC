@@ -4763,8 +4763,6 @@ MonoBehaviour:
   abname: 
   description: 
   IsInit: 0
-  workerEcho:
-    Level: 2
   exclusivePart: {fileID: 0}
   isQuit: 0
   CurrentGridIndex: 0

@@ -32,13 +32,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         protected override void Awake()
         {
             base.Awake();
-            /*Debug.Log(GameObject.Find("PlayerCharacter(Clone)"));
-            Debug.Log(GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>());
-            Debug.Log(GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent);
-            Debug.Log(GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction);
-            Debug.Log(GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding);
-            Debug.Log((GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho);*/
-            //workerEcho = (GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
             workerEcho = ((GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).currentCharacter
                 .interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
             //exclusivePart
@@ -85,6 +78,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             RCInfo = ResonanceConsumpion.Find("Info");
             TimerUI = RCInfo.Find("Timer");
             ResonanceConsumpionTitle = RCInfo.Find("Name").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
+
+            BotKeyTips = this.transform.Find("BotKeyTips");
         }
         protected override void Start()
         {
@@ -239,9 +234,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
 
         }
-
-
-
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
 
@@ -249,15 +241,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             {
                 isQuit = true;
                 UIMgr.PopPanel();
-                
             }
 
             UIMgr.PopPanel();
         }
-
-
-
-
 
         private void LastTerm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
@@ -305,22 +292,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void StartResonance_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-
-
             if (Grids[CurrentGridIndex].isNull == false) return;
-
-
             //检查背包
-
             string cb = currentBeastType.ToString();
-
-            
             ExternWorker worker = null;
             if (LocalGameManager.Instance.WorkerEchoManager.Level == 1) //GameManager.Instance.Level == 1
             {
                 //能否成功合成 判空
                 worker = workerEcho.SummonWorker(cb,CurrentGridIndex,inventory);
-
             }
             else
             {
@@ -328,7 +307,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 {
                     worker = workerEcho.SummonWorker(cb, CurrentGridIndex, inventory);
                 }
-                   
             }
 
             if (worker != null)
@@ -336,15 +314,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 Grids[CurrentGridIndex].worker = worker;
                 Grids[CurrentGridIndex].isNull = false;
                 Grids[CurrentGridIndex].isResonating = true;
-
                 Grids[CurrentGridIndex].beastType = currentBeastType;
-
             }
             else
             {
             }
-
-
             //给格子计时器加回调并刷新
             foreach (var grid in Grids)  
             {
@@ -374,10 +348,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     };
                 }
             }
-
             this.Refresh();
-
-
         }
 
         private void StopResonance_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -385,25 +356,18 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             if (Grids[CurrentGridIndex].isNull)
             {
                 //当前无共鸣
-
                 return;
             }
             if(!Grids[CurrentGridIndex].isTiming)
             {
                 //当前无共鸣
-
                 return;
             }
-
-
             workerEcho.StopEcho(Grids[CurrentGridIndex].beastType.ToString(), CurrentGridIndex, inventory);
-
-
             Grids[CurrentGridIndex].isNull = true;
             Grids[CurrentGridIndex].isTiming = false;
             Grids[CurrentGridIndex].worker.timer.End();
             this.Refresh();
-
         }
         #endregion
 
@@ -425,12 +389,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             exclusivePart = this.transform.Find("ExclusivePart");
             var ReasonanceTarget = exclusivePart.Find("ResonanceTarget");
             var ResonanceConsumption = exclusivePart.Find("ResonanceConsumption");
-            
 
             ReasonanceTarget.gameObject.SetActive(false);
             ResonanceConsumption.gameObject.SetActive(false);
-            
-
+            BotKeyTips.gameObject.SetActive(false);
             // 切换类目
 
             //切换隐兽
@@ -457,11 +419,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             
             ReasonanceTarget.gameObject.SetActive(true);
             ResonanceConsumption.gameObject.SetActive(true);
-            
+            BotKeyTips.gameObject.SetActive(true);
             // 切换类目
-            
+
             //切换隐兽
-            
+
             //切换对象
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed += SwitchTarget_performed;
 
@@ -483,10 +445,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             
             //setfalse 主ui的独有部分
             exclusivePart?.gameObject.SetActive(false);
-
+            BotKeyTips.gameObject.SetActive(false);
 
             // 切换类目
-            
+
 
             //切换隐兽
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.NextGrid.performed -= NextGrid_performed;
@@ -510,9 +472,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //setfalse 主ui的独有部分
             if (exclusivePart != null)
                 exclusivePart.gameObject.SetActive(true);
-
+            BotKeyTips.gameObject.SetActive(true);
             // 切换类目
-            
 
             //切换隐兽
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.NextGrid.performed += NextGrid_performed;
@@ -587,13 +548,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             WorkerEcho_CollectWorker,
         }
 
-
         public BeastType currentBeastType;
-
         private Transform RCInfo;
         private Transform TimerUI;
         private TMPro.TextMeshProUGUI ResonanceConsumpionTitle;
 
+        private Transform BotKeyTips;
         #endregion
 
         #region temp
@@ -619,18 +579,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             #region FunctionType
             GameObject HBR = HiddenBeastResonanceTemplate.Find("Selected").gameObject;
             GameObject SSB = SongofSeaBeastsTemplate.Find("Selected").gameObject;
-
-            if (CurrentFuctionTypeIndex == 0)
-            {
-                HBR.SetActive(false);
-                SSB.SetActive(true);
-            }
-            else if (CurrentFuctionTypeIndex == 1)
-            {
-                HBR.SetActive(true);
-                SSB.SetActive(false);
-            }
-
+            HBR.SetActive(CurrentFuctionTypeIndex == 0);
+            SSB.SetActive(CurrentFuctionTypeIndex == 1);
 
             HiddenBeastResonanceText.text = PanelTextContent.HiddenBeastResonanceText;
             SongofSeaBeastsText.text= PanelTextContent.SongofSeaBeastsText;
