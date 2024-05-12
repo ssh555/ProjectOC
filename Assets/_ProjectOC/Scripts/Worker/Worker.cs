@@ -1,3 +1,4 @@
+using ML.Engine.Timer;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -495,6 +496,8 @@ namespace ProjectOC.WorkerNS
                 return timerForNoHome;
             }
         }
+
+        public (int, int) MinSec => timerForNoHome != null ? timerForNoHome.ConvertToMinAndSec() : (-1, -1);
 
         #region Property
         [LabelText("是否有生产节点"), ShowInInspector, ReadOnly]

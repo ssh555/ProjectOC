@@ -117,7 +117,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
             else if (Grids[CurrentGridIndex].isTiming)//刷新计时时间
             {
-                TimerUI.GetComponentInChildren<TextMeshProUGUI>().text = Grids[CurrentGridIndex].worker.timer.ConvertToMinAndSec();
+                var (min, sec) = Grids[CurrentGridIndex].worker.timer.ConvertToMinAndSec();
+                TimerUI.GetComponentInChildren<TextMeshProUGUI>().text = min.ToString() + "min" + sec.ToString() + "s";
             }
 
         }
@@ -199,7 +200,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.NextGrid.performed -= NextGrid_performed;
 
             //切换对象
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed -= SwitchTarget_performed;
+            //ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed -= SwitchTarget_performed;
 
             //开始共鸣
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.StartResonance.performed -= StartResonance_performed;
@@ -226,7 +227,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
             //切换对象
-            ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed += SwitchTarget_performed;
+            //ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed += SwitchTarget_performed;
 
             //开始共鸣
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.StartResonance.performed += StartResonance_performed;
@@ -315,7 +316,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             
             ExternWorker worker = null;
-            if (workerEcho.Level == 1) //GameManager.Instance.Level == 1
+            if (LocalGameManager.Instance.WorkerEchoManager.Level == 1) //GameManager.Instance.Level == 1
             {
                 //能否成功合成 判空
                 worker = workerEcho.SummonWorker(cb,CurrentGridIndex,inventory);
@@ -666,7 +667,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 var SwitchTarget = exclusivePart.Find("ResonanceTarget").Find("Info").Find("SwitchTarget");
                 SwitchTarget.gameObject.SetActive(true);
 
-                if (workerEcho.Level == 1)
+                if (LocalGameManager.Instance.WorkerEchoManager.Level == 1)
                 {
                     SwitchTarget.gameObject.SetActive(false);
                     //切换对象
@@ -688,7 +689,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 }
 
                 //切换对象
-                ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed += SwitchTarget_performed;
+                //ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed += SwitchTarget_performed;
             }
             else if (Grids[CurrentGridIndex].isTiming)//计时格子
             {

@@ -440,7 +440,6 @@ namespace ML.Engine.BuildingSystem
 
         public IBuildingPart GetOneBPartInstance(string classification)
         {
-            Debug.Log("GetOneBPartInstance "+classification);
             return GetOneBPartInstance(new BuildingPartClassification(classification));
         }
 

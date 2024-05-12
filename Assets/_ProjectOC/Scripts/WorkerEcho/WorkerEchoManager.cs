@@ -47,6 +47,14 @@ namespace ProjectOC.WorkerEchoNS
         
         private Dictionary<string, WorkerEchoTableData> WorkerEchoTableDict = new Dictionary<string, WorkerEchoTableData>();
 
+        /// <summary>
+        /// ¹²ÃùÂÖµÈ¼¶
+        /// </summary>
+        private int level = 1;
+
+        [ShowInInspector]
+        public int Level { get { return level; } }
+
         private ML.Engine.ABResources.ABJsonAssetProcessor<WorkerEchoTableData[]> ABJAProcessor;
         public void LoadTableData()
         {
@@ -91,6 +99,12 @@ namespace ProjectOC.WorkerEchoNS
                 return 0;
             }
             return this.WorkerEchoTableDict[id].TimeCost;
+        }
+
+        public void LevelUp()
+        {
+            if (level == 2) return;
+            level = 2;
         }
 
     }

@@ -146,7 +146,6 @@ namespace ProjectOC.Order
 
             //初始化背包
             this.PlayerInventory = (GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).OCState.Inventory;
-            Debug.Log($"初始化背包 {PlayerInventory!= null}");
             // 载入表格数据 
             LoadTableData();
 
@@ -190,7 +189,6 @@ namespace ProjectOC.Order
             if(emptyList.Count == 0)
             {
                 //重新开始计时
-                Debug.Log("没有空位，重新开始计时");
                 this.UrgentOrderRefreshTimer.Start();
                 return;
             }
@@ -211,7 +209,6 @@ namespace ProjectOC.Order
             if (strings == null || strings.Count == 0)
             {
                 //重新开始计时
-                Debug.Log("对应氏族没有可解锁订单，重新开始计时");
                 this.UrgentOrderRefreshTimer.Start();
                 return;
             }
@@ -247,7 +244,6 @@ namespace ProjectOC.Order
                     bool isFinish = order.ChangeRequireItemDic(kv.Key, kv.Value);
                     if(isFinish)
                     {
-                        Debug.Log("isFinish");
                         AcceptedOrderList[i].canBeCommit = true;
                     }
                 }
@@ -351,7 +347,7 @@ namespace ProjectOC.Order
             {
                 if (olist[i]?.OrderInstanceID == order.OrderInstanceID)
                 {
-                    Debug.Log("订单超时 " + olist[i].OrderID+" "+ LocalGameManager.Instance.DispatchTimeManager.CurrentHour.ToString() + " : " + LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString());
+                    //Debug.Log("订单超时 " + olist[i].OrderID+" "+ LocalGameManager.Instance.DispatchTimeManager.CurrentHour.ToString() + " : " + LocalGameManager.Instance.DispatchTimeManager.CurrentMinute.ToString());
                     OrderDelegationListDic.Remove(olist[i].OrderInstanceID);
                     olist[i] = null;
                     break;
@@ -447,7 +443,6 @@ namespace ProjectOC.Order
                         
             }
             //TODO 受到惩罚
-            Debug.Log("受到惩罚");
 
 
             if(acceptedOrder is OrderNormal)
@@ -477,7 +472,7 @@ namespace ProjectOC.Order
         /// </summary>
         public bool CommitOrder(string OrderInstanceID,bool needRefresh = true)
         {
-            Debug.Log("提交订单 " + OrderInstanceID);
+            //Debug.Log("提交订单 " + OrderInstanceID);
             if (OrderInstanceID == null || !AcceptedOrderListDic.ContainsKey(OrderInstanceID)) return false;
             Order acceptedOrder = AcceptedOrderListDic[OrderInstanceID];
             if (acceptedOrder.canBeCommit == false) return false;
@@ -513,9 +508,6 @@ namespace ProjectOC.Order
                 OrderUrgent orderUrgent = (OrderUrgent)acceptedOrder;
                 orderUrgent.Reset();
             }
-            Debug.Log("1提交订单 " + acceptedOrder.OrderInstanceID);
-
-            
                 
             if(needRefresh)
             {

@@ -512,18 +512,14 @@ namespace ML.Engine.UI
             }
 
             bool needMoveToBtnList = this.uiBtnListContainer.IsEmpty;
-            Debug.Log("this.uiBtnListContainer.IsEmpty before " + this.uiBtnListContainer.IsEmpty);
             if (NeedRefreshBtnInfo)
                 InitBtnInfo(this.parent, this.limitNum, this.hasInitSelect, this.isLoop, this.isWheel);
-            Debug.Log("this.uiBtnListContainer.IsEmpty after " + this.uiBtnListContainer.IsEmpty);
             if (needMoveToBtnList)
             {
-                Debug.Log("needMoveToBtnList");
                 this.UIBtnListContainer?.FindEnterableUIBtnList();
             }
             else
             {
-                Debug.Log("RefreshEdge");
                 this.UIBtnListContainer?.RefreshEdge();
             }
             OnFinishAdd?.Invoke();
@@ -1394,7 +1390,6 @@ namespace ML.Engine.UI
                 this.TwoDimI = 0;
                 this.TwoDimJ = 0;
                 this.CurSelected = TwoDimSelectedButtons[TwoDimI][TwoDimJ];
-                Debug.Log("this.CurSelected "+this.CurSelected.name);
                 this.UIBtnListContainer?.InvokeOnSelectButtonChanged();
             }
             this.CurSelected?.OnSelect(null);

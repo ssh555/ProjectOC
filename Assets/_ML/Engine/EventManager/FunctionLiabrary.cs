@@ -59,24 +59,74 @@ namespace ML.Engine.Event
                 }
             }
         }
+        public void ExecuteEvent<T>(string executeString,T target)
+        {
+            string[] stringFunctions = executeString.Split(";");
+            foreach (var item in stringFunctions)
+            {
+                string[] split = item.Split('(');
+                string functionName = split[0];
+                string parametersString = split[1].Substring(0, split[1].Length - 1); // 去除最后的括号
 
+                if (!PublicFunctions.ContainsKey(functionName))
+                {
+                    Debug.LogWarning("Function '" + functionName + "' does not exist.");
+                    return;
+                }
+
+                MethodInfo method = PublicFunctions[functionName];
+                ParameterInfo[] parameterInfos = method.GetParameters();
+                object[] parameters = ConvertParameters(parametersString, parameterInfos);
+                List<object> args = new List<object>(parameters);
+                args.Add(target);
+                method.Invoke(this, args.ToArray());
+            }
+        }
+
+        public void ExecuteEvent<T>(string executeString, List<T> target)
+        {
+            string[] stringFunctions = executeString.Split(";");
+            foreach (var item in stringFunctions)
+            {
+                string[] split = item.Split('(');
+                string functionName = split[0];
+                string parametersString = split[1].Substring(0, split[1].Length - 1); // 去除最后的括号
+
+                if (!PublicFunctions.ContainsKey(functionName))
+                {
+                    Debug.LogWarning("Function '" + functionName + "' does not exist.");
+                    return;
+                }
+
+                MethodInfo method = PublicFunctions[functionName];
+                ParameterInfo[] parameterInfos = method.GetParameters();
+                object[] parameters = ConvertParameters(parametersString, parameterInfos);
+                List<object> args = new List<object>(parameters);
+                args.Add(target);
+                method.Invoke(this, args.ToArray());
+            }
+        }
         public void ExecuteEvent(string executeString)
         {
-            string[] split = executeString.Split('(');
-            string functionName = split[0];
-            string parametersString = split[1].Substring(0, split[1].Length - 1); // 去除最后的括号
-
-            if (!PublicFunctions.ContainsKey(functionName))
+            string[] stringFunctions = executeString.Split(";");
+            foreach (var item in stringFunctions)
             {
-                Debug.LogError("Function '" + functionName + "' does not exist.");
-                return;
+                string[] split = item.Split('(');
+                string functionName = split[0];
+                string parametersString = split[1].Substring(0, split[1].Length - 1); // 去除最后的括号
+
+                if (!PublicFunctions.ContainsKey(functionName))
+                {
+                    Debug.LogWarning("Function '" + functionName + "' does not exist.");
+                    return;
+                }
+
+                MethodInfo method = PublicFunctions[functionName];
+                ParameterInfo[] parameterInfos = method.GetParameters();
+                object[] parameters = ConvertParameters(parametersString, parameterInfos);
+
+                method.Invoke(this, parameters);
             }
-
-            MethodInfo method = PublicFunctions[functionName];
-            ParameterInfo[] parameterInfos = method.GetParameters();
-            object[] parameters = ConvertParameters(parametersString, parameterInfos);
-
-            method.Invoke(this, parameters);
         }
 
         public bool ExecuteCondition(string ConditionID)

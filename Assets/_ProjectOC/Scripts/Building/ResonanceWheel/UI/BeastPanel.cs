@@ -23,9 +23,10 @@ using Unity.Burst.CompilerServices;
 using UnityEngine.Purchasing;
 using Sirenix.Utilities;
 using TMPro;
+using UnityEditor;
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
-    public class BeastPanel : ML.Engine.UI.UIBasePanel<BeastPanelStruct>
+    public class BeastPanel : ML.Engine.UI.UIBasePanel<BeastPanelStruct>, ITickComponent
     {
         #region Unity
         public bool IsInit = false;
@@ -71,7 +72,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             this.Info2 = this.transform.Find("HiddenBeastInfo2").Find("Content").Find("Info2");
             DescriptionScrollView = Info2.Find("Scroll View").GetComponent<ScrollRect>();
-
+            this.TimerUI = Info2.Find("Timer").Find("CountNumber").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             var KetTips = this.transform.Find("BotKeyTips").Find("KeyTips");
             this.KT_ViewMoreInformation = KetTips.Find("KT_ViewMoreInformation");
             this.KT_CancelMoreInformation = KetTips.Find("KT_CancelMoreInformation");
@@ -89,8 +90,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region Override
+        protected override void Enter()
+        {
+            ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
+            base.Enter();
+        }
         protected override void Exit()
         {
+            ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
             base.Exit();
             ClearTemp();
         }
@@ -108,6 +115,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             this.BeastList.DisableBtnList();
             this.ScheduleList.DisableBtnList();
         }
+
+        
         #endregion
 
         #region Internal
@@ -237,6 +246,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private Transform Info1;
         private Transform Info2;
         private Transform SwitchInfo;
+        private TMPro.TextMeshProUGUI TimerUI;
 
         private TMPro.TextMeshProUGUI Cook;
         private TMPro.TextMeshProUGUI HandCraft;
@@ -256,6 +266,28 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
         private int SwitchInfoIndex = 0;
+
+        #endregion
+
+        #region Tick
+        public int tickPriority { get; set; }
+        public int fixedTickPriority { get; set; }
+        public int lateTickPriority { get; set; }
+
+        public void Tick(float deltatime)
+        {
+            Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
+            if(Workers.Count>0)
+            {
+                Worker worker = Workers[CurrentBeastIndex];
+                TimerUI.text = worker.MinSec.Item1.ToString() + "Min" + worker.MinSec.Item2.ToString() + "s";
+            }
+        }
+
+        protected override void OnDestroy()
+        {
+            (this as ITickComponent).DisposeTick();
+        }
 
         #endregion
 
@@ -345,6 +377,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                         DescriptionList.AddBtn(tPrefab);
                     }
                 }
+
+                //倒计时
+                Info2.Find("Timer").gameObject.SetActive(worker.HaveHome);
+
                 //更新日程表
                 var schedule = this.transform.Find("BeastDuty").Find("Part1").Find("Info").Find("Schedule").Find("Time");
                 TimeStatus[] workerTimeStatus = worker.TimeArrangement.Status;
@@ -462,8 +498,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     Mood.GetChild(j).gameObject.SetActive(MoodStatus == j);
                 }
 
-                AP.Find("Number").GetComponent<TextMeshProUGUI>().text = Workers[i].APCurrent.ToString();
-                Mood.Find("Number").GetComponent <TextMeshProUGUI>().text = Workers[i].EMCurrent.ToString();
+                AP.Find("Number").Find("Text").GetComponent<TextMeshProUGUI>().text = Workers[i].APCurrent.ToString();
+                Mood.Find("Number").Find("Text").GetComponent <TextMeshProUGUI>().text = Workers[i].EMCurrent.ToString();
+                tPrefab.transform.Find("Bio").Find("IconImage").Find("Image").gameObject.SetActive(Workers[i].HaveHome);
                 BeastList.AddBtn(tPrefab);
             }
             this.BeastList.OnSelectButtonChanged += () => { this.Refresh(); };
