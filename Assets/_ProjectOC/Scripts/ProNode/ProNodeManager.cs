@@ -195,11 +195,22 @@ namespace ProjectOC.ProNodeNS
             }
             return 0;
         }
+
+        //仅限生产节点建筑 检查是否需要供电
         public bool GetCanCharge(string id)
         {
             if (IsValidID(id))
             {
                 return ProNodeTableDict[id].CanCharge;
+            }
+            return false;
+        }
+        //仅限生产节点建筑 检查是为自动
+        public bool GetIsAuto(string id)
+        {
+            if (IsValidID(id))
+            {
+                return ProNodeTableDict[id].Type == ProNodeType.Auto;
             }
             return false;
         }

@@ -338,7 +338,9 @@ namespace ML.Engine.BuildingSystem.UI
                 Content.Find("Effect").GetComponent<TextMeshProUGUI>().text = BuildingManager.Instance.GetEffectDescription(CID);
                 string ProNodeID = BuildingManager.Instance.GetActorID(CID);
                 bool canCharge = LocalGameManager.Instance.ProNodeManager.GetCanCharge(ProNodeID);
+                bool isAuto = LocalGameManager.Instance.ProNodeManager.GetIsAuto(ProNodeID);
                 ProNodePanel.Find("Info").Find("PowerSupply").gameObject.SetActive(canCharge);
+                ProNodePanel.Find("Info").Find("Auto").gameObject.SetActive(isAuto);
             }
             else if(this.SelectedCategory1 == BuildingCategory1.Interact)
             {

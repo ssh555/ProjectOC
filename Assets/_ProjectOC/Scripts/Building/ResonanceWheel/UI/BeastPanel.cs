@@ -22,6 +22,7 @@ using System.Drawing;
 using Unity.Burst.CompilerServices;
 using UnityEngine.Purchasing;
 using Sirenix.Utilities;
+using TMPro;
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
     public class BeastPanel : ML.Engine.UI.UIBasePanel<BeastPanelStruct>
@@ -450,16 +451,19 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 var tPrefab = this.objectPool.GetNextObject("BeastBioPool");
                 int APStatus = Workers[i].GetAPStatu();
                 var AP = tPrefab.transform.Find("Bio").Find("AP");
-                for (int j = 0; j < AP.childCount; j++)
+                for (int j = 0; j < AP.childCount - 1; j++)
                 {
                     AP.GetChild(j).gameObject.SetActive(APStatus == j);
                 }
                 int MoodStatus = Workers[i].GetMoodStatu();
                 var Mood = tPrefab.transform.Find("Bio").Find("Mood");
-                for (int j = 0; j < AP.childCount; j++)
+                for (int j = 0; j < AP.childCount - 1; j++)
                 {
                     Mood.GetChild(j).gameObject.SetActive(MoodStatus == j);
                 }
+
+                AP.Find("Number").GetComponent<TextMeshProUGUI>().text = Workers[i].APCurrent.ToString();
+                Mood.Find("Number").GetComponent <TextMeshProUGUI>().text = Workers[i].EMCurrent.ToString();
                 BeastList.AddBtn(tPrefab);
             }
             this.BeastList.OnSelectButtonChanged += () => { this.Refresh(); };
