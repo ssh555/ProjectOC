@@ -17,7 +17,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("名称"), ReadOnly, ShowInInspector]
         public string Name { get; private set; }
         [LabelText("类目"), ReadOnly]
-        public WorkerEchoNS.Category Category;
+        public WorkerCategory Category;
         [LabelText("性别"), ReadOnly, ShowInInspector]
         public Gender Gender { get; private set; }
         #endregion
@@ -99,7 +99,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("技能"), ShowInInspector, ReadOnly]
         public Dictionary<SkillType, Skill> Skill = new Dictionary<SkillType, Skill>();
         [LabelText("特性"), ReadOnly]
-        public List<Feature> Features = new List<Feature>();
+        public Dictionary<string, Feature> Feature = new Dictionary<string, Feature>();
         #endregion
         #region Time
         [LabelText("是否可以安排时段"), ReadOnly, ShowInInspector]
@@ -110,7 +110,7 @@ namespace ProjectOC.WorkerNS
         #endregion
 
         #region Init OnDestroy
-        public void Init()
+        public void Init(WorkerEcho workerEcho = null)
         {
             #region Init Data
             var config = ManagerNS.LocalGameManager.Instance.WorkerManager.Config;
@@ -140,10 +140,14 @@ namespace ProjectOC.WorkerNS
                 int level = skillType != SkillType.None ? levels[(int)skillType - 1] : 0;
                 Skill.Add(skillType, new Skill(skillType, level));
             }
-            Features = ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature();
-            foreach (Feature feature in Features)
+            if (workerEcho != null)
             {
-                feature.ApplyFeature(this);
+                var features = ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature(workerEcho.FeatureMax, workerEcho.FeatureOdds);
+                foreach (Feature feature in features)
+                {
+                    feature.SetOwner(this);
+                    Feature.Add(feature.ID, feature);
+                }
             }
             CanArrange = true;
             CanReverse = false;
@@ -486,7 +490,7 @@ namespace ProjectOC.WorkerNS
             {
                 if (timerForNoHome == null)
                 {
-                    timerForNoHome = new ML.Engine.Timer.CounterDownTimer(60 * ManagerNS.LocalGameManager.Instance.WorkerManager.Config.DestroyTimeForNoHome, false, false);
+                    timerForNoHome = new ML.Engine.Timer.CounterDownTimer(ManagerNS.LocalGameManager.Instance.WorkerManager.Config.DestroyTimeForNoHome, false, false);
                     timerForNoHome.OnEndEvent += () =>
                     {
                         ManagerNS.LocalGameManager.Instance.WorkerManager.DeleteWorker(this);
@@ -624,7 +628,11 @@ namespace ProjectOC.WorkerNS
             string icon = HaveSetEMLowEffect ? "Tex2D_Worker_UI_LowMood" : "";
             icon = inSeq ? "Tex2D_Worker_UI_LowAP" : icon;
             icon = HaveSetEMLowEffect && inSeq ? "Tex2D_Worker_UI_LowAPMood" : icon;
-            GetComponentInChildren<ML.Engine.InventorySystem.ItemIcon>()?.SetSprite(ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite(icon));
+            var itemIcon = GetComponentInChildren<ML.Engine.InventorySystem.ItemIcon>();
+            if (itemIcon != null)
+            {
+                itemIcon.SetSprite(ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite(icon));
+            }
         }
         #endregion
 

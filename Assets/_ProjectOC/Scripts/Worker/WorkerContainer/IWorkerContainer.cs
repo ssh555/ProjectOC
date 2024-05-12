@@ -96,6 +96,7 @@ namespace ProjectOC.WorkerNS
         None,
         Work,
         Relax,
-        Home
+        Home,
+        Feature
     }
 }
