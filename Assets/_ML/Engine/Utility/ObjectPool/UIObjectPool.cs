@@ -1,4 +1,5 @@
 using ML.Engine.Manager;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace ML.Engine.Utility
     /// <summary>
     /// 管理整个UI的资源，包括TextContent,Texture2D,Prefabs
     /// </summary>
+    [Serializable]
     public class UIObjectPool
     {
 
@@ -21,6 +23,7 @@ namespace ML.Engine.Utility
         /// <summary>
         /// Prefabs对象池字典
         /// </summary>
+        [ShowInInspector]
         private Dictionary<string, PoolStruct<GameObject>> goPoolDic;
         /// <summary>
         /// Texture2D对象池字典
@@ -50,14 +53,14 @@ namespace ML.Engine.Utility
         }
 
 
-        public UIObjectPool()
+        public UIObjectPool(string UIObjectPoolName)
         {
             functionExecutor = new FunctionExecutor<List<AsyncOperationHandle>>();
             goPoolDic = new Dictionary<string, PoolStruct<GameObject>>();
             saPoolDic = new Dictionary<string, PoolStruct<SpriteAtlas>>();
             goHandle = new List<AsyncOperationHandle<GameObject>>();
             saHandle = new List<AsyncOperationHandle<SpriteAtlas>>();
-            RootGameObject = new GameObject("RootGameObject");
+            RootGameObject = new GameObject(UIObjectPoolName+"|RootGameObject");
             RootGameObject.transform.position = Vector3.zero;
         }
 
@@ -145,7 +148,6 @@ namespace ML.Engine.Utility
         /// </summary>
         public GameObject GetNextObject(string poolName, Transform parent = null)
         {
-            //Debug.Log("GetNextObject "+goPoolDic.Count);
             if (this.goPoolDic.ContainsKey(poolName))
             {
                 PoolStruct<GameObject> poolStruct = this.goPoolDic[poolName];
@@ -170,6 +172,18 @@ namespace ML.Engine.Utility
             foreach(var pool in goPoolDic)
             {
                 foreach (var go in pool.Value.Pool)
+                {
+                    go.transform.SetParent(RootGameObject.transform, false);
+                }
+            }
+        }
+
+        public void ResetPool(string poolName)
+        {
+            if(goPoolDic.ContainsKey(poolName))
+            {
+                var pool = goPoolDic[poolName];
+                foreach (var go in pool.Pool)
                 {
                     go.transform.SetParent(RootGameObject.transform, false);
                 }

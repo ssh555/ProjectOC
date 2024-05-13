@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 7630763442670888554}
   - component: {fileID: 3149934897086292576}
   - component: {fileID: 5195874090649456811}
+  - component: {fileID: 8731962435216127852}
   m_Layer: 5
-  m_Name: Container
+  m_Name: Container1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -102,6 +103,18 @@ MonoBehaviour:
     hasBtnListContainer: 1
     readUnActiveButton: 1
     scrollRect: {fileID: 0}
+--- !u!114 &8731962435216127852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1037704581413539746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57a226c2e9bcd2041b1caff3ffff050b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3699200448493933676
 GameObject:
   m_ObjectHideFlags: 0
@@ -402,7 +415,7 @@ GameObject:
   - component: {fileID: 5114556398848767751}
   - component: {fileID: 1839016843837629268}
   m_Layer: 5
-  m_Name: Container
+  m_Name: Container2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -475,7 +488,7 @@ GameObject:
   - component: {fileID: 512604091285455462}
   - component: {fileID: 3920383832528465009}
   m_Layer: 5
-  m_Name: Pinch_ColorGridButtonTemplate
+  m_Name: ColorView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -868,6 +881,10 @@ PrefabInstance:
       propertyPath: m_text
       value: G
       objectReference: {fileID: 0}
+    - target: {fileID: 8193081380550505476, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
+      propertyPath: m_Name
+      value: Button1
+      objectReference: {fileID: 0}
     - target: {fileID: 8379378438614032342, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
       propertyPath: m_Name
       value: Pinch_Slider (1)
@@ -1129,6 +1146,10 @@ PrefabInstance:
     - target: {fileID: 6646548592307236795, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
       propertyPath: m_text
       value: H
+      objectReference: {fileID: 0}
+    - target: {fileID: 8193081380550505476, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
+      propertyPath: m_Name
+      value: Button3
       objectReference: {fileID: 0}
     - target: {fileID: 8379378438614032342, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
       propertyPath: m_Name
@@ -1392,6 +1413,10 @@ PrefabInstance:
       propertyPath: m_text
       value: B
       objectReference: {fileID: 0}
+    - target: {fileID: 8193081380550505476, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
+      propertyPath: m_Name
+      value: Button2
+      objectReference: {fileID: 0}
     - target: {fileID: 8379378438614032342, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
       propertyPath: m_Name
       value: Pinch_Slider (2)
@@ -1653,6 +1678,10 @@ PrefabInstance:
     - target: {fileID: 6646548592307236795, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
       propertyPath: m_text
       value: V
+      objectReference: {fileID: 0}
+    - target: {fileID: 8193081380550505476, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
+      propertyPath: m_Name
+      value: Button5
       objectReference: {fileID: 0}
     - target: {fileID: 8379378438614032342, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
       propertyPath: m_Name
@@ -1916,6 +1945,10 @@ PrefabInstance:
       propertyPath: m_text
       value: S
       objectReference: {fileID: 0}
+    - target: {fileID: 8193081380550505476, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
+      propertyPath: m_Name
+      value: Button4
+      objectReference: {fileID: 0}
     - target: {fileID: 8379378438614032342, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
       propertyPath: m_Name
       value: Pinch_Slider (4)
@@ -2177,6 +2210,10 @@ PrefabInstance:
     - target: {fileID: 6646548592307236795, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
       propertyPath: m_text
       value: R
+      objectReference: {fileID: 0}
+    - target: {fileID: 8193081380550505476, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
+      propertyPath: m_Name
+      value: Button0
       objectReference: {fileID: 0}
     - target: {fileID: 8379378438614032342, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
       propertyPath: m_Name

@@ -27,17 +27,7 @@ namespace ProjectOC.DataNS
         }
         public DataContainer(List<string> ids, List<int> dataCapacitys)
         {
-            Datas = new Data[ids.Count];
-            if (dataCapacitys.Count >= ids.Count)
-            {
-                for (int i = 0; i < ids.Count; i++)
-                {
-                    Datas[i] = new Data(ids[i], dataCapacitys[i]);
-                }
-            }
-            IndexDict = new Dictionary<string, HashSet<int>>();
-            UpdateIndexDict();
-            OnDataChangeEvent?.Invoke();
+            Reset(ids, dataCapacitys);
         }
         public void Reset(List<string> ids, List<int> dataCapacitys)
         {

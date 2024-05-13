@@ -11,7 +11,7 @@ namespace ProjectOC.WorkerNS
         public Action<bool, Worker> OnRemoveWorkerEvent { get; set; }
         public Worker Worker { get; set; }
         public bool IsArrive { get; set; }
-        public bool HaveWorker => Worker != null && !string.IsNullOrEmpty(Worker.InstanceID);
+        public bool HaveWorker => Worker != null && !string.IsNullOrEmpty(Worker.ID);
         #endregion
 
         public string GetUID();
@@ -96,6 +96,7 @@ namespace ProjectOC.WorkerNS
         None,
         Work,
         Relax,
-        Home
+        Home,
+        Feature
     }
 }

@@ -189,6 +189,7 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 worldRestaurant.Restaurant.Destroy();
             }
+
             foreach (var formula in BuildingManager.Instance.GetRawAll(bpart.Classification.ToString()))
             {
                 if (ItemManager.Instance.IsValidItemID(formula.id) && formula.num > 0)

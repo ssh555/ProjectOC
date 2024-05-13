@@ -65,7 +65,8 @@ namespace ProjectOC.RestaurantNS.UI
             ML.Engine.UI.UIBtnList.Synchronizer synchronizer = new ML.Engine.UI.UIBtnList.Synchronizer(2, () => { IsInitBtnList = true; Refresh(); });
             DataBtnList = new ML.Engine.UI.UIBtnList(transform.Find("Restaurant").Find("Food").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             DataBtnList.OnSelectButtonChanged += () => { Refresh(); };
-            DataBtnList.ChangBtnNum(ManagerNS.LocalGameManager.Instance.RestaurantManager.DataNum, "Prefab_Restaurant_UI/Prefab_Restaurant_UI_DataTemplate.prefab", () => { synchronizer.Check(); });
+            DataBtnList.ChangBtnNum(ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.DataNum, 
+                "Prefab_Restaurant_UI/Prefab_Restaurant_UI_DataTemplate.prefab", () => { synchronizer.Check(); });
 
             FoodBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ChangeFood").Find("Select").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             FoodBtnList.OnSelectButtonChanged += () => { Refresh(); };
@@ -242,8 +243,8 @@ namespace ProjectOC.RestaurantNS.UI
             SetUIActive();
             if (CurMode == Mode.Restaurant)
             {
-                int maxCapacity = ManagerNS.LocalGameManager.Instance.RestaurantManager.MaxCapacity;
-                for (int i = 0; i < ManagerNS.LocalGameManager.Instance.RestaurantManager.DataNum; i++)
+                int maxCapacity = ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.MaxCapacity;
+                for (int i = 0; i < ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.DataNum; i++)
                 {
                     var uidata = DataBtnList.GetBtn(i).transform;
                     string itemID = Restaurant.DataContainer.GetID(i);

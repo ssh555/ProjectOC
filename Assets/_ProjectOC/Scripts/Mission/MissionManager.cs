@@ -76,7 +76,7 @@ namespace ProjectOC.MissionNS
                 if (worker != null)
                 {
                     int weight = ML.Engine.InventorySystem.ItemManager.Instance.GetWeight(mission.ID);
-                    int maxBurNum = weight != 0 ? worker.WeightMax / weight : 0;
+                    int maxBurNum = weight != 0 ? worker.RealBURMax / weight : 0;
                     missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
                 }
                 IMissionObj target = null;
@@ -117,7 +117,7 @@ namespace ProjectOC.MissionNS
                     if (worker != null)
                     {
                         int weight = ML.Engine.InventorySystem.ItemManager.Instance.GetWeight(mission.ID);
-                        int maxBurNum = weight != 0 ? worker.WeightMax / weight : 0;
+                        int maxBurNum = weight != 0 ? worker.RealBURMax / weight : 0;
                         missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
                     }
                     if (worker != null && store != null && missionNum > 0)

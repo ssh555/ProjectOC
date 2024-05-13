@@ -1,5 +1,4 @@
 using System.Collections;
-using ProjectOC.Dialog;
 using UnityEngine;
 using Sirenix.OdinInspector;
 
@@ -18,8 +17,7 @@ namespace ProjectOC.ManagerNS
         public WorkerNS.WorkerManager WorkerManager;
         public WorkerNS.EffectManager EffectManager;
         public WorkerNS.FeatureManager FeatureManager;
-        public WorkerNS.SkillManager SkillManager;
-        public WorkerEchoNS.WorkerEchoManager WorkerEchoManager;
+        public WorkerNS.WorkerEchoManager WorkerEchoManager;
         public ClanNS.ClanManager ClanManager;
         public ML.Engine.BuildingSystem.MonoBuildingManager MonoBuildingManager;
         public TechTree.TechTreeManager TechTreeManager;
@@ -34,9 +32,7 @@ namespace ProjectOC.ManagerNS
         public Dialog.DialogManager DialogManager;
         public Player.OCPlayerController Player => (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController);
 
-        /// <summary>
-        /// ��������
-        /// </summary>
+
         private void Awake()
         {
             if (Instance != null)
@@ -56,7 +52,6 @@ namespace ProjectOC.ManagerNS
             GM.RegisterLocalManager(WorkerManager);
             GM.RegisterLocalManager(EffectManager);
             GM.RegisterLocalManager(FeatureManager);
-            GM.RegisterLocalManager(SkillManager);
             GM.RegisterLocalManager(WorkerEchoManager);
             GM.RegisterLocalManager(ClanManager);
             GM.RegisterLocalManager(MonoBuildingManager);
@@ -66,7 +61,6 @@ namespace ProjectOC.ManagerNS
             GM.RegisterLocalManager(BuildPowerIslandManager);
             GM.RegisterLocalManager(RestaurantManager);
             GM.RegisterLocalManager(DialogManager);
-            //����Character
             ML.Engine.Manager.GameManager.Instance.CharacterManager.SceneInit();
             StartCoroutine(AfterPlayerCharacter());
         }
@@ -92,8 +86,7 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<WorkerNS.WorkerManager>();
                 GM?.UnregisterLocalManager<WorkerNS.EffectManager>();
                 GM?.UnregisterLocalManager<WorkerNS.FeatureManager>();
-                GM?.UnregisterLocalManager<WorkerNS.SkillManager>();
-                GM?.UnregisterLocalManager<WorkerEchoNS.WorkerEchoManager>();
+                GM?.UnregisterLocalManager<WorkerNS.WorkerEchoManager>();
                 GM?.UnregisterLocalManager<ClanNS.ClanManager>();
                 GM?.UnregisterLocalManager<ML.Engine.BuildingSystem.MonoBuildingManager>();
                 GM?.UnregisterLocalManager<TechTree.TechTreeManager>();
@@ -104,7 +97,7 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<LocalGameManager>();
 
                 GM?.UnregisterLocalManager<IslandAreaManager>();
-                GM?.UnregisterLocalManager<Order.OrderManager>();
+                //GM?.UnregisterLocalManager<Order.OrderManager>();
                 //���ܻ���ǰע�����ر���������ʱ��
                 GM?.UnregisterLocalManager<PinchFace.PinchFaceManager>();
                 GM?.UnregisterLocalManager<Dialog.DialogManager>();
@@ -126,7 +119,7 @@ namespace ProjectOC.ManagerNS
             //Ҫ��ȡ���ģ�ͣ����ں���
             GM.RegisterLocalManager(IslandAreaManager);
             GM.RegisterLocalManager(PinchFaceManager);
-            GM.RegisterLocalManager(OrderManager);
+            //GM.RegisterLocalManager(OrderManager);
         }
     
         #region Gizmos����

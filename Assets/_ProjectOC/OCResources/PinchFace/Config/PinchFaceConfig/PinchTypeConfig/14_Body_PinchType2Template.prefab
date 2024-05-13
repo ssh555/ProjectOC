@@ -48,24 +48,30 @@ MonoBehaviour:
   - boneWeightChangeType: 1
     boneWeightType: 8
     scaleValueRange: {x: 0.5, y: 1.5}
-    currentScaleValue: 1
+    currentScaleValue: {x: 0, y: 0, z: 0}
     offsetValueRange: {x: 0.5, y: 1.5}
-    currentOffsetValue: 1
+    currentOffsetValue: {x: 0, y: 0, z: 0}
   - boneWeightChangeType: 1
     boneWeightType: 1
     scaleValueRange: {x: 0.5, y: 1.5}
-    currentScaleValue: 1
+    currentScaleValue: {x: 0, y: 0, z: 0}
     offsetValueRange: {x: 0.5, y: 1.5}
-    currentOffsetValue: 1
+    currentOffsetValue: {x: 0, y: 0, z: 0}
   - boneWeightChangeType: 1
     boneWeightType: 5
     scaleValueRange: {x: 0.5, y: 1.5}
-    currentScaleValue: 1
+    currentScaleValue: {x: 0, y: 0, z: 0}
     offsetValueRange: {x: 0.5, y: 1.5}
-    currentOffsetValue: 1
+    currentOffsetValue: {x: 0, y: 0, z: 0}
   - boneWeightChangeType: 1
     boneWeightType: 3
     scaleValueRange: {x: 0.5, y: 1.5}
-    currentScaleValue: 1
+    currentScaleValue: {x: 0, y: 0, z: 0}
     offsetValueRange: {x: 0.5, y: 1.5}
-    currentOffsetValue: 1
+    currentOffsetValue: {x: 0, y: 0, z: 0}
+  - boneWeightChangeType: 1
+    boneWeightType: 4
+    scaleValueRange: {x: 0.5, y: 1.5}
+    currentScaleValue: {x: 0, y: 0, z: 0}
+    offsetValueRange: {x: 0, y: 0}
+    currentOffsetValue: {x: 0, y: 0, z: 0}

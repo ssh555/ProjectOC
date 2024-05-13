@@ -239,7 +239,7 @@ namespace ProjectOC.WorkerNS.UI
             {
                 Workers = new List<Worker>() {};
                 Workers.AddRange(LocalGameManager.Instance.WorkerManager.GetWorkers());
-                Workers = Workers.OrderBy(worker => worker.HaveHome).ThenBy(worker => worker != null).ThenBy(worker => worker.InstanceID).ToList();
+                Workers = Workers.OrderBy(worker => worker.HaveHome).ThenBy(worker => worker != null).ThenBy(worker => worker.ID).ToList();
                 if (Worker != null)
                 {
                     Workers.Remove(Worker);
@@ -348,10 +348,10 @@ namespace ProjectOC.WorkerNS.UI
             if (hasHome)
             {
                 var bar = HomeMain.Find("Bar").Find("Cur").GetComponent<RectTransform>();
-                float sizeDeltaX = HomeMain.Find("Bar").GetComponent<RectTransform>().sizeDelta.x * Worker.Mood / Worker.MoodMax;
+                float sizeDeltaX = HomeMain.Find("Bar").GetComponent<RectTransform>().sizeDelta.x * Worker.EMCurrent / Worker.EMMax;
                 bar.sizeDelta = new Vector2(sizeDeltaX, bar.sizeDelta.y);
                 HomeMain.Find("Mood").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textMood;
-                HomeMain.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = Worker.Mood.ToString();
+                HomeMain.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = Worker.EMCurrent.ToString();
             }
         }
 
@@ -371,10 +371,10 @@ namespace ProjectOC.WorkerNS.UI
             if (hasWorker)
             {
                 var bar = HomeMain.Find("Bar").Find("Cur").GetComponent<RectTransform>();
-                float sizeDeltaX = HomeMain.Find("Bar").GetComponent<RectTransform>().sizeDelta.x * Worker.Mood / Worker.MoodMax;
+                float sizeDeltaX = HomeMain.Find("Bar").GetComponent<RectTransform>().sizeDelta.x * Worker.EMCurrent / Worker.EMMax;
                 bar.sizeDelta = new Vector2(sizeDeltaX, bar.sizeDelta.y);
                 HomeMain.Find("Mood").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textMood;
-                HomeMain.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = Worker.Mood.ToString();
+                HomeMain.Find("Value").GetComponent<TMPro.TextMeshProUGUI>().text = Worker.EMCurrent.ToString();
             }
         }
         #endregion
