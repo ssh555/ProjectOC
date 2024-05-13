@@ -37,10 +37,12 @@ namespace ProjectOC.WorkerNS
         {
             return !string.IsNullOrEmpty(id) ? WorkerEchoTableDict.ContainsKey(id) : false;
         }
-        public string GetRandomID()
+        public string GetRandomCategoryString()
         {
             List<string> list = WorkerEchoTableDict.Keys.ToList();
-            return list[Random.Next(list.Count - 1)];
+            string t = list[Random.Next(list.Count - 1)];
+            t = t.Replace("WorkerEcho_", "");
+            return t;
         }
         public WorkerCategory GetCategory(string id)
         {

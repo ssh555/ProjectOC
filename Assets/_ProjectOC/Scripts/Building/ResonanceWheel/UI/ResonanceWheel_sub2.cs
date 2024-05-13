@@ -3,6 +3,7 @@ using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
 using ProjectOC.ManagerNS;
+using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -54,10 +55,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private struct GridBeastType
         {
             public Transform transform;
-            public ResonanceWheelUI.BeastType beastType;
+            public WorkerCategory beastType;
             public Image image;
 
-            public GridBeastType(Transform transform, ResonanceWheelUI.BeastType beastType,Image image)
+            public GridBeastType(Transform transform, WorkerCategory beastType,Image image)
             {
                 this.transform = transform;
                 this.beastType = beastType;
@@ -185,7 +186,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 for (int i = 0; i < ring.childCount; i++)
                 {
                     Grids[i].transform = ring.GetChild(i);
-                    Grids[i].beastType = (BeastType)Enum.Parse(typeof(BeastType), ring.GetChild(i).name);
+                    Grids[i].beastType = (WorkerCategory)Enum.Parse(typeof(WorkerCategory), ring.GetChild(i).name);
                     Grids[i].image = Grids[i].transform.Find("Image").GetComponent<Image>();
                     Grids[i].image.sprite = parentUI.beastTypeDic[Grids[i].beastType];
                 }
