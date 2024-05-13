@@ -188,7 +188,7 @@ namespace ProjectOC.ProNodeNS
                 }
                 if (ProNodeType == ProNodeType.Mannul && !(HaveWorker && Worker.IsOnProNodeDuty)) { return false; }
                 if (StackAll >= StackMax * ProductNum) { return false; }
-                if (RequirePower && WorldProNode.PowerCount <= 0) { return false; }
+                if (RequirePower && WorldProNode != null && WorldProNode.PowerCount <= 0) { return false; }
                 return true;
             }
             else
