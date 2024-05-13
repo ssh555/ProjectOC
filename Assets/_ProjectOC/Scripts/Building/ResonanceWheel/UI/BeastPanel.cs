@@ -277,7 +277,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public void Tick(float deltatime)
         {
             Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
-            if(Workers.Count>0)
+            if (Workers.Count >= 0 && CurrentBeastIndex != -1) 
             {
                 Worker worker = Workers[CurrentBeastIndex];
                 TimerUI.text = worker.MinSec.Item1.ToString() + "Min" + worker.MinSec.Item2.ToString() + "s";
@@ -359,9 +359,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 var Info = this.Info2.Find("Scroll View").Find("Viewport").Find("Content");
                 this.objectPool.ResetPool("SimpleDescriptionPool");
                 this.objectPool.ResetPool("FullDescriptionPool");
-                foreach (var feature in worker.Features)
+                foreach (var feature in worker.GetSortFeature())
                 {
-                    if(SwitchInfoIndex == 0)
+                    if (SwitchInfoIndex == 0)
                     {
                         var tPrefab = this.objectPool.GetNextObject("SimpleDescriptionPool");
                         tPrefab.transform.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;

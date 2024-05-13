@@ -1,9 +1,6 @@
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
-using ML.Engine.UI;
 using ML.Engine.Utility;
-using ProjectOC.ManagerNS;
-using ProjectOC.WorkerEchoNS;
 using ProjectOC.WorkerNS;
 using System;
 using System.Collections.Generic;
@@ -188,7 +185,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 /*            Stamina.text = (ResonanceWheelUI.PanelTextContent_sub1.SkillType.Where(tag => tag.name == "Stamina") as TextTip).GetDescription();
             Speed.text = (ResonanceWheelUI.PanelTextContent_sub1.SkillType.Where(tag => tag.name == "Speed") as TextTip).GetDescription();*/
 
-            Worker worker = workerEcho.GetExternWorkers()[parentUI.CurrentGridIndex]?.worker;
+            Worker worker = workerEcho.GetExternWorkers()[parentUI.CurrentGridIndex]?.Worker;
             if (worker != null)
             {
                 StaminaNum.text = worker.APMax.ToString();
@@ -224,7 +221,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     ML.Engine.Manager.GameManager.DestroyObj(Info.GetChild(i).gameObject);
                 }
 
-                foreach (var feature in worker.Features)
+                foreach (var feature in worker.GetSortFeature())
                 {
                     GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_Description.prefab", Info).Completed += (handle) =>
                         {

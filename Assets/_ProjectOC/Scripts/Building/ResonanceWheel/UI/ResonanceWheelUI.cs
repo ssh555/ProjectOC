@@ -2,21 +2,17 @@ using ML.Engine.InventorySystem;
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
 using ML.Engine.Timer;
-using ML.Engine.UI;
 using ML.Engine.Utility;
-using ProjectOC.ManagerNS;
 using ProjectOC.Player;
-using ProjectOC.WorkerEchoNS;
 using Sirenix.OdinInspector;
-using System;
+using ProjectOC.WorkerNS;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheelUI;
-using static UnityEngine.Rendering.DebugUI;
+using ProjectOC.ManagerNS;
 
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
@@ -40,7 +36,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             Debug.Log((GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho);*/
             //workerEcho = (GameObject.Find("PlayerCharacter(Clone)").GetComponent<PlayerCharacter>().interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
             workerEcho = ((GameManager.Instance.CharacterManager.GetLocalController() as OCPlayerController).currentCharacter
-                .interactComponent.CurrentInteraction as WorkerEchoBuilding).workerEcho;
+                .interactComponent.CurrentInteraction as WorkerEchoBuilding).WorkerEcho;
             //exclusivePart
             exclusivePart = this.transform.Find("ExclusivePart");
             exclusivePart.gameObject.SetActive(true);
@@ -117,7 +113,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
             else if (Grids[CurrentGridIndex].isTiming)//刷新计时时间
             {
-                var (min, sec) = Grids[CurrentGridIndex].worker.timer.ConvertToMinAndSec();
+                var (min, sec) = Grids[CurrentGridIndex].worker.Timer.ConvertToMinAndSec();
                 TimerUI.GetComponentInChildren<TextMeshProUGUI>().text = min.ToString() + "min" + sec.ToString() + "s";
             }
 
@@ -354,14 +350,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 }
                 else
                 {
-                    if(!grid.worker.timer.IsTimeUp)//计时未结束
+                    if(!grid.worker.Timer.IsTimeUp)//计时未结束
                     {
                         //刷新计时中素材
                         grid.transform.Find("Image").GetComponent<Image>().sprite = sprite2;
                         grid.isTiming = true;
                     }
 
-                    grid.worker.timer.OnEndEvent += () =>
+                    grid.worker.Timer.OnEndEvent += () =>
                     {
                         //刷新素材
                         grid.transform.Find("Image").GetComponent<Image>().sprite = sprite1;
@@ -401,7 +397,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             Grids[CurrentGridIndex].isNull = true;
             Grids[CurrentGridIndex].isTiming = false;
-            Grids[CurrentGridIndex].worker.timer.End();
+            Grids[CurrentGridIndex].worker.Timer.End();
             this.Refresh();
 
         }
