@@ -48,7 +48,6 @@ namespace ProjectOC.WorkerNS
             foreach (var id in set)
             {
                 Worker.Feature[id].ClearOwner();
-                Worker.Feature.Remove(id);
             }
             foreach (string id in newSet)
             {
@@ -57,7 +56,6 @@ namespace ProjectOC.WorkerNS
                     ManagerNS.LocalGameManager.Instance.FeatureManager.IsValidID(feature.ID))
                 {
                     feature.SetOwner(Worker);
-                    Worker.Feature.Add(feature.ID, feature);
                 }
             }
         }

@@ -140,7 +140,7 @@ namespace ProjectOC.MissionNS
         /// </summary>
         public void End()
         {
-            if (Worker != null && Worker.TransportDict.ContainsKey(ID) &&  CurNum > 0)
+            if (Worker != null && Worker.TransportDict.ContainsKey(ID) && CurNum > 0)
             {
                 CurNum = CurNum <= Worker.TransportDict[ID] ? CurNum : Worker.TransportDict[ID];
                 Worker.TransportDict[ID] -= CurNum;

@@ -48,6 +48,9 @@ namespace ProjectOC.WorkerNS
                 if (Exp >= ExpToLevel[i])
                 {
                     cur = i + 1;
+                }
+                else
+                {
                     break;
                 }
             }
