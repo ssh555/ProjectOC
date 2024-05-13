@@ -71,7 +71,7 @@ MonoBehaviour:
   IsCanRotate: 1
   m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
-  IsRotateOnArea: 1
+  IsRotateOnArea: 0
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &1803113905736741797
@@ -325,7 +325,7 @@ MonoBehaviour:
   IsCanRotate: 1
   m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
-  IsRotateOnArea: 1
+  IsRotateOnArea: 0
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &5510177862611218329
@@ -551,8 +551,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   classification:
     Category1: 2
-    Category2: 203
-    Category3: 103
+    Category2: 202
+    Category3: 102
     Category4: 2
   instanceID: 
   canPlaceInPlaceMode: 1
@@ -631,6 +631,6 @@ MonoBehaviour:
   IsCanRotate: 1
   m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
-  IsRotateOnArea: 1
+  IsRotateOnArea: 0
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}

@@ -85,6 +85,11 @@ MonoBehaviour:
   spriteInfoList: []
   fallbackSpriteAssets:
   - {fileID: 11400000, guid: a0de8851919ab42488581eafce98a11d, type: 2}
+  - {fileID: 11400000, guid: 3c16a4d6c0192514b8fc94122165ca53, type: 2}
+  - {fileID: 11400000, guid: 6ece258e60ab2d349af3ad543c8ec547, type: 2}
+  - {fileID: 11400000, guid: a40a967f61602964695d05094be0fdd7, type: 2}
+  - {fileID: 11400000, guid: faf48f619e3a7624bbb4e360853159b8, type: 2}
+  - {fileID: 11400000, guid: b6563fc5e637ea744a1263628484a283, type: 2}
 --- !u!21 &2722832227156629208
 Material:
   serializedVersion: 8

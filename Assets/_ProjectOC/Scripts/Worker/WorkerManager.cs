@@ -170,6 +170,7 @@ namespace ProjectOC.WorkerNS
                     if (isAdd)
                     {
                         Workers.Add(worker);
+                        worker.CheckHome();
                         OnAddWokerEvent?.Invoke(worker);
                     }
                 }
@@ -181,6 +182,7 @@ namespace ProjectOC.WorkerNS
             if (worker != null && !Workers.Contains(worker))
             {
                 Workers.Add(worker);
+                worker.CheckHome();
                 OnAddWokerEvent?.Invoke(worker);
                 return true;
             }
