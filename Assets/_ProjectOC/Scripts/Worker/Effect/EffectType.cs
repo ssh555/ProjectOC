@@ -11,6 +11,8 @@ namespace ProjectOC.WorkerNS
         [LabelText("生产节点")]
         AlterProNodeVariable,
         [LabelText("共鸣轮")]
-        AlterEchoVariable
+        AlterEchoVariable,
+        [LabelText("玩家")]
+        AlterPlayerVariable
     }
 }

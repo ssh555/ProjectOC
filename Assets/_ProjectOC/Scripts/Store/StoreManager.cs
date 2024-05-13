@@ -41,7 +41,7 @@ namespace ProjectOC.StoreNS
         public List<Store> GetStores(int priorityType = 0)
         {
             List<Store> stores = new List<Store>();
-            foreach (WorldStore worldStore in this.WorldStoreDict.Values)
+            foreach (WorldStore worldStore in WorldStoreDict.Values)
             {
                 if (worldStore != null)
                 {
@@ -137,7 +137,7 @@ namespace ProjectOC.StoreNS
         public List<string> GetStoreIconItems()
         {
             List<string> result = new List<string>();
-            foreach (var data in this.StoreIconTableDict.Values)
+            foreach (var data in StoreIconTableDict.Values)
             {
                 result.Add(data.ID);
             }
@@ -150,8 +150,7 @@ namespace ProjectOC.StoreNS
         {
             if (worldStore != null && level >= 0)
             {
-                Store store = SpawnStore(storeType);
-                WorldStoreSetData(worldStore, store);
+                WorldStoreSetData(worldStore, SpawnStore(storeType));
             }
         }
 

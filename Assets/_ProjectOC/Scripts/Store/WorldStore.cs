@@ -1,6 +1,4 @@
 using Sirenix.OdinInspector;
-using System.Collections.Generic;
-using ML.Engine.BuildingSystem.BuildingPart;
 using UnityEngine;
 
 namespace ProjectOC.StoreNS
@@ -37,32 +35,14 @@ namespace ProjectOC.StoreNS
             };
         }
 
-        public bool CanUpgrade()
+        public void OnUpgradeSetData(ML.Engine.BuildingSystem.IBuildingUpgrade lastLevelBuild)
         {
-            if ((this as ML.Engine.BuildingSystem.IBuildingUpgrade).HasUpgrade())
-            {
-                var formulas = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(Classification.ToString());
-                return (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).InventoryHaveItems(formulas);
-            }
-            return false;
-        }
-
-        public void OnUpgrade(ML.Engine.BuildingSystem.IBuildingUpgrade lastLevelBuild)
-        {
-            ManagerNS.LocalGameManager.Instance.Player.InventoryCostItems(ML.Engine.BuildingSystem.BuildingManager.Instance.GetRaw(Classification.ToString()), needJudgeNum: true, priority: -1);
-            transform.SetParent(lastLevelBuild.transform.parent);
-            InstanceID = lastLevelBuild.InstanceID;
-            transform.position = lastLevelBuild.transform.position;
-            transform.rotation = lastLevelBuild.transform.rotation;
             isFirstBuild = lastLevelBuild.isFirstBuild;
             if (lastLevelBuild is WorldStore worldStore)
             {
                 ManagerNS.LocalGameManager.Instance.StoreManager.WorldStoreSetData(this, worldStore.Store);
+                Store.SetLevel(Classification.Category4 - 1);
             }
-            Store.SetLevel(Classification.Category4 - 1);
-            ML.Engine.BuildingSystem.BuildingManager.Instance.AddBuildingInstance(this);
-            ML.Engine.BuildingSystem.BuildingManager.Instance.RemoveBuildingInstance(lastLevelBuild as BuildingPart);
-            ML.Engine.Manager.GameManager.DestroyObj(lastLevelBuild.gameObject);
         }
     }
 }
