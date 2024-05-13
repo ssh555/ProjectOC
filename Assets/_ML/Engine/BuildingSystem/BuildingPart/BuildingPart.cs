@@ -101,7 +101,10 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 {
                     foreach (var kv in this.rowMat)
                     {
-                        kv.Key.sharedMaterial = mat;
+                        var mats = new List<Material>(kv.Value);
+                        mats.Add(mat);
+                        kv.Key.SetSharedMaterials(mats);
+                        //kv.Key.sharedMaterial = mat;
                     }
                 }
                 else
@@ -237,13 +240,15 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         {
             if (mat.ParentMat != null)
             {
-                this.GetComponent<Renderer>().sharedMaterials = mat.ParentMat;
+                if(this.GetComponent<Renderer>())
+                    this.GetComponent<Renderer>().sharedMaterials = mat.ParentMat;
             }
             if(mat.ChildrenMat != null)
             {
                 foreach (var kv in mat.ChildrenMat)
                 {
-                    this.transform.GetChild(kv.Key).GetComponent<Renderer>().sharedMaterials = kv.Value;
+                    if(this.transform.GetChild(kv.Key).GetComponent<Renderer>())
+                        this.transform.GetChild(kv.Key).GetComponent<Renderer>().sharedMaterials = kv.Value;
                 }
             }
 
