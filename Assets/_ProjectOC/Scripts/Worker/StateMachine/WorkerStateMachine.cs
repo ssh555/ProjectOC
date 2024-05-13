@@ -30,26 +30,26 @@ namespace ProjectOC.WorkerNS
         private WorkerStateRelaxing StateRelaxing;
         public WorkerStateMachine(Worker worker)
         {
-            this.Worker = worker;
-            this.StateFishing = new WorkerStateFishing("StateFishing");
-            this.StateWorkingDuty = new WorkerStateWorkingDuty("StateWorkingDuty");
-            this.StateWorkingTransport = new WorkerStateWorkingTransport("StateWorkingTransport");
-            this.StateRelaxing = new WorkerStateRelaxing("StateRelaxing");
+            Worker = worker;
+            StateFishing = new WorkerStateFishing("StateFishing");
+            StateWorkingDuty = new WorkerStateWorkingDuty("StateWorkingDuty");
+            StateWorkingTransport = new WorkerStateWorkingTransport("StateWorkingTransport");
+            StateRelaxing = new WorkerStateRelaxing("StateRelaxing");
             // 设置初始状态
-            this.AddState(StateFishing);
-            this.AddState(StateWorkingDuty);
-            this.AddState(StateWorkingTransport);
-            this.AddState(StateRelaxing);
+            AddState(StateFishing);
+            AddState(StateWorkingDuty);
+            AddState(StateWorkingTransport);
+            AddState(StateRelaxing);
             // 连接边
-            this.ConnectState(StateFishing.Name, StateWorkingDuty.Name, EdgeFishingToWorkingDuty);
-            this.ConnectState(StateFishing.Name, StateWorkingTransport.Name, EdgeFishingToWorkingTransport);
-            this.ConnectState(StateFishing.Name, StateRelaxing.Name, EdgeFishingToRelaxing);
+            ConnectState(StateFishing.Name, StateWorkingDuty.Name, EdgeFishingToWorkingDuty);
+            ConnectState(StateFishing.Name, StateWorkingTransport.Name, EdgeFishingToWorkingTransport);
+            ConnectState(StateFishing.Name, StateRelaxing.Name, EdgeFishingToRelaxing);
 
-            this.ConnectState(StateWorkingDuty.Name, StateFishing.Name, EdgeWorkingDutyToFishing);
-            this.ConnectState(StateWorkingTransport.Name, StateFishing.Name, EdgeWorkingTransportToFishing);
-            this.ConnectState(StateRelaxing.Name, StateFishing.Name, EdgeRelaxingToFishing);
+            ConnectState(StateWorkingDuty.Name, StateFishing.Name, EdgeWorkingDutyToFishing);
+            ConnectState(StateWorkingTransport.Name, StateFishing.Name, EdgeWorkingTransportToFishing);
+            ConnectState(StateRelaxing.Name, StateFishing.Name, EdgeRelaxingToFishing);
 
-            this.SetInitState("StateFishing");
+            SetInitState("StateFishing");
         }
         /// <summary>
         /// 摸鱼到生产节点工作
@@ -115,7 +115,7 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         private bool EdgeRelaxingToFishing(StateMachine stateMachine, State curState)
         {
-            if (curState == null || curState.Name != this.StateRelaxing.Name)
+            if (curState == null || curState.Name != StateRelaxing.Name)
             {
                 return false;
             }
