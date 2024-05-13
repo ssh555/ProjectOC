@@ -330,9 +330,16 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 area.enabled = !isTrigger;
             }
 
-            if (isTrigger == true && this.GetComponent<Rigidbody>() == null)
+            if (isTrigger == true)
             {
-                this.gameObject.AddComponent<Rigidbody>().isKinematic = true;
+                if(this.GetComponent<Rigidbody>() == null)
+                {
+                    this.gameObject.AddComponent<Rigidbody>().isKinematic = true;
+                }
+                else
+                {
+                    this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+                }
             }
             else if(isTrigger == false)
             {
