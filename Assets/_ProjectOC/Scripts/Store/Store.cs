@@ -53,7 +53,6 @@ namespace ProjectOC.StoreNS
                 ChangeCapacity(ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelCapacity[newLevel], 
                     ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelDataCapacity[newLevel]);
                 Level = newLevel;
-                (this as MissionNS.IMissionObj).UpdateTransport();
                 return true;
             }
             return false;
