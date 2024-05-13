@@ -4,6 +4,7 @@ using UnityEngine;
 using ML.Engine.BuildingSystem.BuildingPart;
 using System.Linq;
 using UnityEngine.U2D;
+using ML.Engine.Manager;
 
 namespace ML.Engine.BuildingSystem
 {
@@ -21,7 +22,8 @@ namespace ML.Engine.BuildingSystem
         public string actorID;
         public List<InventorySystem.Formula> raw;
         public string upgradeID;
-
+        public TextContent.TextContent ItemDescription;
+        public TextContent.TextContent EffectDescription;
         public string GetClassificationString()
         {
             return $"{category1}_{category2}_{category3}_{category4}";
@@ -415,6 +417,18 @@ namespace ML.Engine.BuildingSystem
             return null;
         }
 
+        public string GetOneBPartBuildingPartClassificationString(BuildingCategory1 Category, BuildingCategory2 Type)
+        {
+            if (this.BPartClassificationOnStyle.ContainsKey(Category) && this.BPartClassificationOnStyle[Category].ContainsKey(Type) && this.BPartClassificationOnStyle[Category][Type].Count > 0)
+            {
+                IBuildingPart buildingPart = GameObject.Instantiate<GameObject>(BPartClassificationOnStyle[Category][Type].First().Value.PeekFront().gameObject).GetComponent<IBuildingPart>();
+                string ts = buildingPart.Classification.ToString();
+                GameManager.DestroyObj(buildingPart.gameObject);
+                return ts;
+            }
+            return "";
+        }
+
         public IBuildingPart GetOneBPartInstance(BuildingPartClassification classification)
         {
             if(this.registeredBPart.ContainsKey(classification))
@@ -426,7 +440,6 @@ namespace ML.Engine.BuildingSystem
 
         public IBuildingPart GetOneBPartInstance(string classification)
         {
-            //Debug.Log("GetOneBPartInstance "+classification);
             return GetOneBPartInstance(new BuildingPartClassification(classification));
         }
 
@@ -1033,6 +1046,8 @@ namespace ML.Engine.BuildingSystem
             return null;
         }
 
+        
+
         public List<InventorySystem.Formula> GetRaw(string CID)
         {
             if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
@@ -1148,7 +1163,27 @@ namespace ML.Engine.BuildingSystem
             }
             return null;
         }
-        
+
+        public string GetItemDescription(string CID)
+        {
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
+            {
+                return BPartTableDictOnClass[CID].ItemDescription;
+            }
+            return "";
+        }
+
+        public string GetEffectDescription(string CID)
+        {
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
+            {
+                return BPartTableDictOnClass[CID].EffectDescription;
+            }
+            return "";
+        }
+
+
+
         #endregion
 
         #region 已建造建筑存储

@@ -1,9 +1,6 @@
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
-using ML.Engine.UI;
 using ML.Engine.Utility;
-using ProjectOC.ManagerNS;
-using ProjectOC.WorkerEchoNS;
 using ProjectOC.WorkerNS;
 using System;
 using System.Collections.Generic;
@@ -41,7 +38,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             for (int i = 0; i < GInfo.childCount; i++)
             {
                 beastSkills[i].skillText = GInfo.GetChild(i).Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
-                beastSkills[i].workType = (WorkType)Enum.Parse(typeof(WorkType), GInfo.GetChild(i).name);
+                beastSkills[i].workType = (SkillType)Enum.Parse(typeof(SkillType), GInfo.GetChild(i).name);
             }
 
             //需要调接口显示的隐兽信息
@@ -88,7 +85,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #region Internal
         private struct BeastSkill
         {
-            public WorkType workType;
+            public SkillType workType;
             public TMPro.TextMeshProUGUI skillText;
         }
 
@@ -188,18 +185,18 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 /*            Stamina.text = (ResonanceWheelUI.PanelTextContent_sub1.SkillType.Where(tag => tag.name == "Stamina") as TextTip).GetDescription();
             Speed.text = (ResonanceWheelUI.PanelTextContent_sub1.SkillType.Where(tag => tag.name == "Speed") as TextTip).GetDescription();*/
 
-            Worker worker = workerEcho.GetExternWorkers()[parentUI.CurrentGridIndex]?.worker;
+            Worker worker = workerEcho.GetExternWorkers()[parentUI.CurrentGridIndex]?.Worker;
             if (worker != null)
             {
                 StaminaNum.text = worker.APMax.ToString();
-                SpeedNum.text = worker.WalkSpeed.ToString();
+                SpeedNum.text = worker.RealWalkSpeed.ToString();
 
                 List<float> datas = new List<float>();
 
-                Dictionary<WorkType, Skill> skillDic = worker.Skill;
+                Dictionary<SkillType, Skill> skillDic = worker.Skill;
                 foreach (var skill in skillDic)
                 {
-                    datas.Add(skillDic[skill.Key].Level / 10f);
+                    datas.Add(skillDic[skill.Key].LevelCurrent / 10f);
                 }
 
                 var radar = this.transform.Find("HiddenBeastInfo1").Find("Info").Find("SkillGraph").Find("Viewport").Find("Content").Find("Radar").GetComponent<UIPolygon>();
@@ -224,7 +221,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     ML.Engine.Manager.GameManager.DestroyObj(Info.GetChild(i).gameObject);
                 }
 
-                foreach (var feature in worker.Features)
+                foreach (var feature in worker.GetSortFeature())
                 {
                     GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_Description.prefab", Info).Completed += (handle) =>
                         {

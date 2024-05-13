@@ -28,12 +28,15 @@ namespace ML.Engine.UI
 
             [LabelText("滑动窗口")]
             public ScrollRect scrollRect;
+            [LabelText("静态初始化UIBtnList")]
+            public List<UIBtnListInitor> UIBtnListInitors;
 
             public static BtnListContainerInitData defaultTemplate = new BtnListContainerInitData()
             {
                 containerType = ContainerType.A,
                 isLoop = false,
-                isHorizontal = false
+                isHorizontal = false,
+               
             };
 
             public void AddLinkData(LinkData linkData)
@@ -41,6 +44,16 @@ namespace ML.Engine.UI
                 this.LinkDatas.Add(linkData);
             }
 
+            /// <summary>
+            /// List.RemoveRange()
+            /// </summary>
+            /// <param name="_index"></param>
+            /// <param name="_count"></param>
+            public void RemoveLinkData(int _index,int _count)
+            {
+                this.LinkDatas.RemoveRange(_index,_count);
+            }
+            
             // 根据 containerType 显示 LinkDatas 字段
             private bool ShowLinkDatas()
             {

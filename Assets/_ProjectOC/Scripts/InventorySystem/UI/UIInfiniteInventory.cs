@@ -250,10 +250,7 @@ namespace ProjectOC.InventorySystem.UI
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
 
             // Ïú»Ù
-
             ProjectOC.Input.InputManager.PlayerInput.UIInventory.Destroy.performed += Destroy_performed;
-
-
         }
 
         private void Destroy_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)

@@ -1,36 +1,54 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using System;
-using UnityEngine.U2D;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using Sirenix.OdinInspector;
 
 namespace ProjectOC.WorkerNS
 {
     [System.Serializable]
+    public struct WorkerNameTableData
+    {
+        public string ID;
+        public ML.Engine.TextContent.TextContent Name;
+    }
+
+    [LabelText("隐兽管理器"), System.Serializable, ShowInInspector]
     public sealed class WorkerManager: ML.Engine.Manager.LocalManager.ILocalManager
     {
-        [LabelText("刁民"), ShowInInspector, ReadOnly]
-        private HashSet<Worker> Workers = new HashSet<Worker>();
-        [LabelText("刁民数量"), ShowInInspector, ReadOnly]
-        public int WorkerNum { get { return Workers.Count; } }
-        public Action<Worker> OnAddWokerEvent;
-        public Action<Worker> OnDeleteWokerEvent;
-
+        #region ILocalManager
+        private const string SpriteAtlasPath = "SA_Worker_UI";
+        private const string WorldObjPath = "Prefab_AICharacter";
+        private UnityEngine.U2D.SpriteAtlas workerAtlas = null;
+        private UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle spriteAtalsHandle;
+        private ML.Engine.ABResources.ABJsonAssetProcessor<WorkerNameTableData[]> ABJAProcessor;
         public void OnRegister()
         {
-            spriteAtalsHandle = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>(SpriteAtlasPath);
+            spriteAtalsHandle = ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<UnityEngine.U2D.SpriteAtlas>(SpriteAtlasPath);
             spriteAtalsHandle.Completed += (handle) =>
             {
-                if (handle.Status == AsyncOperationStatus.Succeeded)
+                if (handle.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
                 {
-                    workerAtlas = handle.Result as SpriteAtlas;
+                    workerAtlas = handle.Result as UnityEngine.U2D.SpriteAtlas;
                 }
                 else
                 {
-                    throw new Exception($"WorkerSpriteAtlas 不存在，Addressable Path为: {SpriteAtlasPath}");
+                    throw new System.Exception($"WorkerSpriteAtlas 不存在，Addressable Path为: {SpriteAtlasPath}");
                 }
+            };
+
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<WorkerNameTableData[]>("OCTableData", "WorkerName", (datas) =>
+            {
+                foreach (var data in datas.ToList().OrderBy(x => x.ID))
+                {
+                    WorkerNames.Add(data.Name);
+                }
+            }, "隐兽名字表数据");
+            ABJAProcessor.StartLoadJsonAssetData();
+
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<WorkerConfigAsset>("Config_Worker").Completed += (handle) =>
+            {
+                WorkerConfigAsset data = handle.Result;
+                Config = new WorkerConfig(data.Config);
             };
         }
 
@@ -39,45 +57,25 @@ namespace ProjectOC.WorkerNS
             DeleteAllWorker();
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.Release(spriteAtalsHandle);
         }
-        public void DeleteAllWorker()
-        {
-            foreach (Worker worker in Workers.ToArray())
-            {
-                if (worker != null)
-                {
-                    ML.Engine.Manager.GameManager.DestroyObj(worker.gameObject);
-                    ML.Engine.Manager.GameManager.Instance.ABResourceManager.ReleaseInstance(worker.gameObject);
-                }
-            }
-            Workers.Clear();
-        }
-        public bool DeleteWorker(Worker worker)
-        {
-            OnDeleteWokerEvent?.Invoke(worker);
-            ML.Engine.Manager.GameManager.DestroyObj(worker.gameObject);
-            // 通过ManagerSpawn的Worker都是这个流程产生的，所以必须Release
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.ReleaseInstance(worker.gameObject);
-            return Workers.Remove(worker);
-        }
+        #endregion
 
-        public string GetOneNewWorkerInstanceID()
-        {
-            return ML.Engine.Utility.OSTime.OSCurMilliSeconedTime.ToString();
-        }
+        #region Data
+        public WorkerConfig Config;
+        [LabelText("隐兽名字"), ShowInInspector, ReadOnly]
+        private List<string> WorkerNames = new List<string>();
+        [LabelText("刁民"), ShowInInspector, ReadOnly]
+        private HashSet<Worker> Workers = new HashSet<Worker>();
+        public System.Action<Worker> OnAddWokerEvent;
+        public System.Action<Worker> OnDeleteWokerEvent;
+        private System.Random Random = new System.Random();
+        #endregion
 
-        public List<Worker> GetWorkers(bool needSort=true)
+        #region Get
+        public List<Worker> GetWorkers(bool needSort = true)
         {
             Workers.RemoveWhere(item => item == null);
-            if (needSort)
-            {
-                return Workers.OrderBy(worker => worker.InstanceID).ToList();
-            }
-            else
-            {
-                return Workers.ToList();
-            }
+            return needSort ? Workers.OrderBy(worker => worker.ID).ToList() : Workers.ToList();
         }
-
         /// <summary>
         /// 获取能执行搬运任务的刁民
         /// </summary>
@@ -94,48 +92,73 @@ namespace ProjectOC.WorkerNS
             }
             return result;
         }
-
-        public bool CanComposite(ML.Engine.InventorySystem.IInventory inventory, string workerID)
+        public string GetOneNewWorkerID()
         {
-            if (!string.IsNullOrEmpty(workerID))
+            return ML.Engine.Utility.OSTime.OSCurMilliSeconedTime.ToString();
+        }
+        public string GetOneNewWorkerName()
+        {
+            return WorkerNames[Random.Next(0, WorkerNames.Count)];
+        }
+        public Gender GetOneNewWorkerGender()
+        {
+            return Random.Next(0, 2) == 0 ? Gender.Male : Gender.Female;
+        }
+        public Sprite GetWorkerIcon(Worker worker)
+        {
+            if (worker != null)
             {
-                var raw = ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRaw(workerID);
-                if (raw != null)
-                {
-                    foreach (var formula in raw)
-                    {
-                        if (inventory.GetItemAllNum(formula.id) < formula.num)
-                        {
-                            return false;
-                        }
-                    }
-                    return true;
-                }
+                return GetSprite($"{worker.Category}");
             }
-            return false;
+            return null;
+        }
+        public List<int> GetSkillLevel()
+        {
+            List<int> result = new List<int>(6);
+            double mean = Config.SkillStdMean;
+            double standardDeviation = System.Math.Sqrt(Config.SkillStdDev);
+            double beta = (mean - Config.SkillStdLowBound) / standardDeviation;
+            double alpha = (Config.SkillStdHighBound - mean) / standardDeviation;
+            double u = Random.NextDouble();
+            int k;
+            if (u < alpha / (alpha + beta))
+            {
+                k = (int)(Config.SkillStdHighBound - standardDeviation * System.Math.Log((1 - u) * alpha / alpha + u * (alpha / beta)));
+            }
+            else
+            {
+                k = (int)(Config.SkillStdLowBound + standardDeviation * System.Math.Log(u * beta / (1 - u) * beta + (1 - u) * (beta / alpha)));
+            }
+            for (int i = 0; i < 6; i++)
+            {
+                int min = System.Math.Max(k - (5 - i) * 10, 0);
+                int randomInt = Random.Next(min, System.Math.Min(k, 10) + 1);
+                k -= randomInt;
+                result.Add(randomInt);
+            }
+            return result;
         }
 
-        public bool OnlyCostResource(ML.Engine.InventorySystem.IInventory inventory, string workerID)
+        public Sprite GetSprite(string name)
         {
-            if (!CanComposite(inventory, workerID))
-            {
-                return false;
-            }
-            foreach (var formula in ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRaw(workerID))
-            {
-                inventory.RemoveItem(formula.id, formula.num);
-            }
-            return true;
+            return workerAtlas.GetSprite(name);
         }
-
-        public AsyncOperationHandle<GameObject> SpawnWorker(Vector3 pos, Quaternion rot, string name = "Prefab_Worker_Worker", bool isAdd=true)
+        /// <summary>
+        /// 所有调用的地方，都必须维护好GameObject或者Handle，在不使用GameObejct的时候，除了destroy之外还需要Release(handle)
+        /// </summary>
+        public UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<GameObject> GetObject(string name, Vector3 pos, Quaternion rot)
         {
-            //TODO 
-            name = "Prefab_Worker_Worker";
+            return ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjPath + "/" + name + ".prefab", pos, rot);
+        }
+        #endregion
+
+        #region Spawn Delete
+        public UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle<GameObject> SpawnWorker(Vector3 pos, Quaternion rot, bool isAdd = true, WorkerEcho workerEcho = null, string name = "Prefab_Worker_Worker")
+        {
             var handle = GetObject(name, pos, rot);
             handle.Completed += (asHandle) =>
             {
-                if(asHandle.Status == AsyncOperationStatus.Succeeded)
+                if (asHandle.Status == UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationStatus.Succeeded)
                 {
                     GameObject obj = asHandle.Result;
                     Worker worker = obj.GetComponent<Worker>();
@@ -143,17 +166,12 @@ namespace ProjectOC.WorkerNS
                     {
                         worker = obj.AddComponent<Worker>();
                     }
-                    worker.InstanceID = GetOneNewWorkerInstanceID();
-                    worker.Init();
+                    worker.Init(workerEcho);
                     if (isAdd)
                     {
                         Workers.Add(worker);
                         OnAddWokerEvent?.Invoke(worker);
                     }
-                }
-                else
-                {
-                    Debug.Log($"实例化隐兽 {name} 失败");
                 }
             };
             return handle;
@@ -168,34 +186,55 @@ namespace ProjectOC.WorkerNS
             }
             return false;
         }
-
-        public AsyncOperationHandle<GameObject> SpawnWorker(Vector3 pos, Quaternion rot, ML.Engine.InventorySystem.IInventory inventory, string workerID, string name = "Worker")
+        public bool CanComposite(ML.Engine.InventorySystem.IInventory inventory, string workerID)
         {
-            if (OnlyCostResource(inventory, workerID))
+            if (!string.IsNullOrEmpty(workerID))
             {
-                return SpawnWorker(pos, rot, name);
+                foreach (var formula in ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRaw(workerID))
+                {
+                    if (inventory.GetItemAllNum(formula.id) < formula.num)
+                    {
+                        return false;
+                    }
+                }
+                return true;
             }
-            else
+            return false;
+        }
+        public bool OnlyCostResource(ML.Engine.InventorySystem.IInventory inventory, string workerID)
+        {
+            if (!CanComposite(inventory, workerID))
             {
-                return default(AsyncOperationHandle<GameObject>);
+                return false;
             }
+            foreach (var formula in ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRaw(workerID))
+            {
+                inventory.RemoveItem(formula.id, formula.num);
+            }
+            return true;
         }
 
-        public const string SpriteAtlasPath = "SA_Worker_UI";
-        public const string WorldObjPath = "Prefab_AICharacter";
-        private SpriteAtlas workerAtlas = null;
-        private AsyncOperationHandle spriteAtalsHandle;
-
-        public Sprite GetSprite(string name)
+        public void DeleteAllWorker()
         {
-            return workerAtlas.GetSprite(name);
+            foreach (Worker worker in Workers.ToArray())
+            {
+                if (worker != null)
+                {
+                    OnDeleteWokerEvent?.Invoke(worker);
+                    ML.Engine.Manager.GameManager.DestroyObj(worker.gameObject);
+                    ML.Engine.Manager.GameManager.Instance.ABResourceManager.ReleaseInstance(worker.gameObject);
+                }
+            }
+            Workers.Clear();
         }
-        /// <summary>
-        /// 所有调用的地方，都必须维护好GameObject或者Handle，在不使用GameObejct的时候，除了destroy之外还需要Release(handle)
-        /// </summary>
-        public AsyncOperationHandle<GameObject> GetObject(string name, Vector3 pos, Quaternion rot)
+        public bool DeleteWorker(Worker worker)
         {
-            return ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(WorldObjPath + "/" + name +".prefab", pos, rot);
+            OnDeleteWokerEvent?.Invoke(worker);
+            ML.Engine.Manager.GameManager.DestroyObj(worker.gameObject);
+            // 通过ManagerSpawn的Worker都是这个流程产生的，所以必须Release
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.ReleaseInstance(worker.gameObject);
+            return Workers.Remove(worker);
         }
+        #endregion
     }
 }

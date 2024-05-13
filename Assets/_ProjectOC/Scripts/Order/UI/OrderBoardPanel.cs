@@ -163,8 +163,6 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                 {
                     this.OrderDelegationUIBtnListContainer.UIBtnLists[1].DeleteButton(curSelectedOrderInstanceIDInOrderDelegation);
                 }
-                
-                Debug.Log("承接订单");
             }
         }
         else if(FunctionIndex == 0)
@@ -197,14 +195,14 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             if (OrderDelegationIndex == 1)
             {
                 //拒绝订单
-                Debug.Log("拒绝订单 "+ curSelectedOrderInstanceIDInOrderDelegation);
+                //Debug.Log("拒绝订单 "+ curSelectedOrderInstanceIDInOrderDelegation);
                 OrderManager.Instance.RefuseOrder(curSelectedOrderInstanceIDInOrderDelegation);
             }
         }
         else if (FunctionIndex == 0)
         {
             //取消订单
-            Debug.Log("取消订单 "+ curSelectedOrderInstanceIDInAcceptedOrder);
+            //Debug.Log("取消订单 "+ curSelectedOrderInstanceIDInAcceptedOrder);
             var AcceptedOrder = OrderManager.Instance.GetAcceptedOrder(curSelectedOrderInstanceIDInAcceptedOrder);
             if (AcceptedOrder != null && AcceptedOrder.canBeCancled)
             {
