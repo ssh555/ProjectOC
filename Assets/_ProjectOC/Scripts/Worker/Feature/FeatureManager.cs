@@ -84,7 +84,7 @@ namespace ProjectOC.WorkerNS
                 return result;
             }
             int maxFeatureNum = GetRandomIndex(featureMax);
-            string featureID = FeatureTypeDict[FeatureType.Race][Random.Next(0, FeatureTypeDict[FeatureType.Race].Count + 1)];
+            string featureID = FeatureTypeDict[FeatureType.Race][Random.Next(0, FeatureTypeDict[FeatureType.Race].Count)];
             result.Add(SpawnFeature(featureID));
             HashSet<string> buffs = FeatureTypeDict[FeatureType.Buff].ToHashSet();
             HashSet<string> debuffs = FeatureTypeDict[FeatureType.DeBuff].ToHashSet();
@@ -101,7 +101,7 @@ namespace ProjectOC.WorkerNS
                 {
                     sets = buffs.Count > 0 ? buffs : debuffs;
                 }
-                featureID = sets.ToList()[Random.Next(0, sets.Count + 1)];
+                featureID = sets.ToList()[Random.Next(0, sets.Count)];
                 sets.Remove(featureID);
                 result.Add(SpawnFeature(featureID));
             }
