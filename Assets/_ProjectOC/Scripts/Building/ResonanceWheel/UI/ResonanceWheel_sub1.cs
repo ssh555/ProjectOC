@@ -23,9 +23,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         protected override void Awake()
         {
             base.Awake();
-
-            //BeastInfo
-
             //BeastInfo
             this.Info1 = this.transform.Find("HiddenBeastInfo2").Find("Content").Find("Info1");
             var Content = Info1.Find("Content");
@@ -152,7 +149,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             //ui
             ResonanceWheelUI.RingGrid.Reset(parentUI.Grids[parentUI.CurrentGridIndex]);
-            
+
+            this.objectPool.ResetPool("SimpleDescriptionPool");
+            this.objectPool.ResetPool("FullDescriptionPool");
+
             UIMgr.PopPanel();
         }
 
@@ -243,12 +243,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         public override void Refresh()
         {
-            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
+            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit || !isInitObjectPool)
             {
                 return;
             }
             WorkerEcho workerEcho = parentUI.workerEcho;
-            Worker worker = workerEcho.GetExternWorkers()[parentUI.CurrentGridIndex]?.worker;
+            Worker worker = workerEcho.GetExternWorkers()[parentUI.CurrentGridIndex]?.Worker;
 
             if(worker != null)
             {
@@ -295,6 +295,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 MoodMax.text = worker.EMMax.ToString();
                 WalkSpeedNumText.text = worker.RealWalkSpeed.ToString();
 
+
+                this.objectPool.ResetPool("SimpleDescriptionPool");
+                this.objectPool.ResetPool("FullDescriptionPool");
                 foreach (var feature in worker.GetSortFeature())
                 {
                     if (SwitchInfoIndex == 0)
@@ -343,6 +346,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
 
         #endregion
+        private bool isInitObjectPool = false;
         protected override void InitObjectPool()
         {
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
@@ -354,9 +358,15 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 icon_gendermaleSprite = resonanceWheelAtlas.GetSprite(Pre + "icon_gendermale");
             }
             );
-            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SimpleDescriptionPool", 5, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_SimpleDescription.prefab");
-            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "FullDescriptionPool", 5, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_FullDescription.prefab");
+
+            UIBtnList.Synchronizer synchronizer = new UIBtnList.Synchronizer(2, () => { isInitObjectPool = true; });
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SimpleDescriptionPool", 5, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_SimpleDescription.prefab",(handle) => { synchronizer.Check(); });
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "FullDescriptionPool", 5, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_FullDescription.prefab", (handle) => { synchronizer.Check(); });
+
+            
+
             base.InitObjectPool();
+            
         }
         [ShowInInspector]
         private UIBtnList DescriptionList;

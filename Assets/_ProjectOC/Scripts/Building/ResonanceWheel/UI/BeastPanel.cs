@@ -24,6 +24,8 @@ using UnityEngine.Purchasing;
 using Sirenix.Utilities;
 using TMPro;
 using UnityEditor;
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
     public class BeastPanel : ML.Engine.UI.UIBasePanel<BeastPanelStruct>, ITickComponent
@@ -349,10 +351,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 MoodMax.text = worker.EMMax.ToString();
                 WalkSpeedNumText.text = worker.RealWalkSpeed.ToString();
 
-                var Info = this.Info2.Find("Scroll View").Find("Viewport").Find("Content");
                 this.objectPool.ResetPool("SimpleDescriptionPool");
                 this.objectPool.ResetPool("FullDescriptionPool");
-                foreach (var feature in worker.Features)
+                foreach (var feature in worker.GetSortFeature())
                 {
                     if(SwitchInfoIndex == 0)
                     {
@@ -365,6 +366,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                         var tPrefab = this.objectPool.GetNextObject("FullDescriptionPool");
                         tPrefab.transform.Find("Content").Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;
                         tPrefab.transform.Find("Content").Find("Text2").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Description;
+                        Debug.Log(feature.Name + " "+ feature.Description+" " + feature.EffectsDescription);
                         tPrefab.transform.Find("Content").Find("Text3").GetComponent<TMPro.TextMeshProUGUI>().text =
                     "<color=#6FB502><b><sprite name=\"Tex2D_TMP_Triangle\" tint=1>" + feature.EffectsDescription + "</b></color>";
                         DescriptionList.AddBtn(tPrefab);
