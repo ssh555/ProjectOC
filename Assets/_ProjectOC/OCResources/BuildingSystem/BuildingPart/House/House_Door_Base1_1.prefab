@@ -157,7 +157,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 268439428454282678}
-  - component: {fileID: 6866716092074149857}
+  - component: {fileID: 3634606469951172917}
   m_Layer: 7
   m_Name: House_Door_Base1_1
   m_TagString: Untagged
@@ -185,7 +185,7 @@ Transform:
   - {fileID: 2095432147657772420}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6866716092074149857
+--- !u!114 &3634606469951172917
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -203,7 +203,7 @@ MonoBehaviour:
     Category3: 100
     Category4: 1
   instanceID: 
-  canPlaceInPlaceMode: 0
+  canPlaceInPlaceMode: 1
   mode: 0
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 0, z: 0, w: 1}
