@@ -856,8 +856,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1348703235799162173}
-  - component: {fileID: 6616234245262981761}
   - component: {fileID: 5604303782423614312}
+  - component: {fileID: 4224824090646912793}
   m_Layer: 7
   m_Name: House_Beam_Base1_1
   m_TagString: Untagged
@@ -897,29 +897,6 @@ Transform:
   - {fileID: 286629366359239962}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6616234245262981761
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7194679272631097831}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84b45a722afc9f748bdef2e991e7ddaf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  classification:
-    Category1: 2
-    Category2: 205
-    Category3: 100
-    Category4: 1
-  instanceID: 
-  canPlaceInPlaceMode: 0
-  mode: 0
-  baseRotation: {x: 0, y: 0, z: 0, w: 1}
-  rotOffset: {x: 0, y: 0, z: 0, w: 1}
-  activeSocketIndex: 0
 --- !u!136 &5604303782423614312
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -943,6 +920,29 @@ CapsuleCollider:
   m_Height: 1.95
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 1}
+--- !u!114 &4224824090646912793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7194679272631097831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84b45a722afc9f748bdef2e991e7ddaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  classification:
+    Category1: 2
+    Category2: 205
+    Category3: 100
+    Category4: 1
+  instanceID: 
+  canPlaceInPlaceMode: 1
+  mode: 0
+  baseRotation: {x: 0, y: 0, z: 0, w: 1}
+  rotOffset: {x: 0, y: 0, z: 0, w: 1}
+  activeSocketIndex: 0
 --- !u!1 &7752693417579796064
 GameObject:
   m_ObjectHideFlags: 0

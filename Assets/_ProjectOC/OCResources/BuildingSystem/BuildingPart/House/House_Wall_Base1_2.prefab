@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5431763154143636523}
   - component: {fileID: 2299057339270791394}
-  - component: {fileID: 6458754525101263918}
+  - component: {fileID: 2492910794570754157}
   m_Layer: 8
   m_Name: RootSoc_floorC (3)
   m_TagString: Untagged
@@ -53,8 +53,8 @@ MonoBehaviour:
   IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
---- !u!65 &6458754525101263918
-BoxCollider:
+--- !u!135 &2492910794570754157
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -72,7 +72,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.2, y: 0.1, z: 2}
+  m_Radius: 1
   m_Center: {x: -0.1, y: 0, z: 0}
 --- !u!1 &1820866026672464381
 GameObject:
@@ -147,7 +147,7 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 0.7
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: -0.05, y: 0, z: 0}
 --- !u!1 &2127298422055165379
 GameObject:
   m_ObjectHideFlags: 0
@@ -219,7 +219,7 @@ MonoBehaviour:
   IsCanRotate: 1
   m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
-  IsRotateOnArea: 1
+  IsRotateOnArea: 0
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &2198728908219356886
@@ -441,7 +441,7 @@ MonoBehaviour:
   IsCanRotate: 1
   m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
-  IsRotateOnArea: 1
+  IsRotateOnArea: 0
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &3288652033438190683
@@ -454,7 +454,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6827163442493081588}
   - component: {fileID: 1538691396576329864}
-  - component: {fileID: 1608342152569709939}
+  - component: {fileID: 2124300811989363457}
   m_Layer: 8
   m_Name: RootSoc_floorC (2)
   m_TagString: Untagged
@@ -497,8 +497,8 @@ MonoBehaviour:
   IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
---- !u!65 &1608342152569709939
-BoxCollider:
+--- !u!135 &2124300811989363457
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -516,7 +516,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.2, y: 0.1, z: 2}
+  m_Radius: 1
   m_Center: {x: -0.1, y: 0, z: 0}
 --- !u!1 &4050216133910660758
 GameObject:
@@ -660,7 +660,7 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 0.7
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: -0.05, y: 0, z: 0}
 --- !u!1 &4380902899962090286
 GameObject:
   m_ObjectHideFlags: 0
@@ -745,7 +745,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   classification:
     Category1: 2
-    Category2: 203
+    Category2: 202
     Category3: 100
     Category4: 2
   instanceID: 
@@ -896,7 +896,7 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 0.7
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: -0.05, y: 0, z: 0}
 --- !u!1 &6535755121825273514
 GameObject:
   m_ObjectHideFlags: 0
@@ -1116,7 +1116,7 @@ MonoBehaviour:
   IsCanRotate: 1
   m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
-  IsRotateOnArea: 1
+  IsRotateOnArea: 0
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
 --- !u!1 &7826383352504305998

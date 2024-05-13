@@ -158,7 +158,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6298022968642921696}
   - component: {fileID: 7661997173154872156}
-  - component: {fileID: 1219839009204132484}
+  - component: {fileID: 1792798922682602484}
   m_Layer: 8
   m_Name: RootSoc_floorC
   m_TagString: Untagged
@@ -201,8 +201,8 @@ MonoBehaviour:
   IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
---- !u!65 &1219839009204132484
-BoxCollider:
+--- !u!135 &1792798922682602484
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -220,8 +220,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.2, y: 0.1, z: 2}
-  m_Center: {x: -0.1, y: 0, z: 0}
+  m_Radius: 0.9
+  m_Center: {x: -0.2, y: 0, z: 0}
 --- !u!1 &1185095030953531064
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,7 +380,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2228320613438366926}
   - component: {fileID: 6398110719366123494}
-  - component: {fileID: 1105447085127834036}
+  - component: {fileID: 5853463057716717763}
   m_Layer: 8
   m_Name: RootSoc_floorC (2)
   m_TagString: Untagged
@@ -423,8 +423,8 @@ MonoBehaviour:
   IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
---- !u!65 &1105447085127834036
-BoxCollider:
+--- !u!135 &5853463057716717763
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -442,8 +442,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.2, y: 0.1, z: 2}
-  m_Center: {x: -0.1, y: 0, z: 0}
+  m_Radius: 0.9
+  m_Center: {x: -0.2, y: 0, z: 0}
 --- !u!1 &2259967769890210581
 GameObject:
   m_ObjectHideFlags: 0
@@ -995,7 +995,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7510680944058842252}
   - component: {fileID: 3226157323614244595}
-  - component: {fileID: 2116807241497718660}
+  - component: {fileID: 3668407457258197476}
   m_Layer: 8
   m_Name: RootSoc_floorC (3)
   m_TagString: Untagged
@@ -1038,8 +1038,8 @@ MonoBehaviour:
   IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
---- !u!65 &2116807241497718660
-BoxCollider:
+--- !u!135 &3668407457258197476
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1057,8 +1057,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.2, y: 0.1, z: 2}
-  m_Center: {x: -0.1, y: 0, z: 0}
+  m_Radius: 0.9
+  m_Center: {x: -0.2, y: 0, z: 0}
 --- !u!1 &7481002623794835581
 GameObject:
   m_ObjectHideFlags: 0
@@ -1069,7 +1069,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7995615934536013812}
   - component: {fileID: 1955184731441012902}
-  - component: {fileID: 2626804788083817732}
+  - component: {fileID: 7908685671116609901}
   m_Layer: 8
   m_Name: RootSoc_floorC (1)
   m_TagString: Untagged
@@ -1112,8 +1112,8 @@ MonoBehaviour:
   IsRotateOnArea: 1
   PositionOffset: {x: 2, y: 0.05, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
---- !u!65 &2626804788083817732
-BoxCollider:
+--- !u!135 &7908685671116609901
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1131,8 +1131,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.2, y: 0.1, z: 2}
-  m_Center: {x: -0.1, y: 0, z: 0}
+  m_Radius: 0.9
+  m_Center: {x: -0.2, y: 0, z: 0}
 --- !u!1 &7596450450536327387
 GameObject:
   m_ObjectHideFlags: 0
