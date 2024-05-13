@@ -187,7 +187,6 @@ namespace ProjectOC.ClanNS.UI
         #endregion
         public override void Refresh()
         {
-            // 加载完成JSON数据 & 查找完所有引用
             if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit) { return; }
 
             ChangeClan.gameObject.SetActive(CurMode == Mode.ChangeClan);

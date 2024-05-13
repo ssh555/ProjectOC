@@ -118,6 +118,11 @@ namespace ProjectOC.WorkerNS
         #region Init OnDestroy
         public void Init(WorkerEcho workerEcho = null)
         {
+            #region Event
+            ManagerNS.LocalGameManager.Instance.DispatchTimeManager.OnHourChangedAction += OnHourChangeEvent_AddWorkerEff_AllSkill;
+            OnStatusChangeEvent += OnStateChangeEvent_RelaxExtraSpeed;
+            #endregion
+
             #region Init Data
             var config = ManagerNS.LocalGameManager.Instance.WorkerManager.Config;
             ID = ManagerNS.LocalGameManager.Instance.WorkerManager.GetOneNewWorkerID();
@@ -146,14 +151,13 @@ namespace ProjectOC.WorkerNS
                 int level = skillType != SkillType.None ? levels[(int)skillType - 1] : 0;
                 Skill.Add(skillType, new Skill(skillType, level));
             }
-            if (workerEcho != null)
+            var features = workerEcho != null ? 
+                ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature(workerEcho.FeatureMax, workerEcho.FeatureOdds) :
+                ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature(new List<int>() { 100, 100, 100, 100}, new List<int>() { 50, 50 });
+            foreach (Feature feature in features)
             {
-                var features = ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature(workerEcho.FeatureMax, workerEcho.FeatureOdds);
-                foreach (Feature feature in features)
-                {
-                    feature.SetOwner(this);
-                    Feature.Add(feature.ID, feature);
-                }
+                feature.SetOwner(this);
+                Feature.Add(feature.ID, feature);
             }
             CanArrange = true;
             CanReverse = false;
@@ -178,6 +182,10 @@ namespace ProjectOC.WorkerNS
 
         public void OnDestroy()
         {
+            ManagerNS.LocalGameManager.Instance.DispatchTimeManager.OnHourChangedAction -= OnHourChangeEvent_AddWorkerEff_AllSkill;
+            OnStatusChangeEvent -= OnStateChangeEvent_RelaxExtraSpeed;
+            OnStatusChangeEvent -= OnStateChangeEvent_FishInNest;
+
             (this as ML.Engine.Timer.ITickComponent).DisposeTick();
             Transport?.End();
             foreach (IWorkerContainer container in ContainerDict.Values.ToArray())
@@ -245,7 +253,6 @@ namespace ProjectOC.WorkerNS
             {
                 flag = false;
             }
-
             if (!flag && effect.ParamStr.Contains('_') && Enum.TryParse(effect.ParamStr.Split('_')[1], out SkillType skillType))
             {
                 flag = true;
@@ -344,6 +351,151 @@ namespace ProjectOC.WorkerNS
                 }
             }
         }
+        #endregion
+
+        #region Event
+        #region AddWorkerEff_AllSkill
+        public void OnHourChangeEvent_AddWorkerEff_AllSkill(int hour)
+        {
+            for (int i = 0; i < AddWorkerEff_AllSkillList.Count; i++)
+            {
+                var tup = AddWorkerEff_AllSkillList[i];
+                if (tup.Item1 <= hour && hour <= tup.Item2 && !tup.Item4)
+                {
+                    Eff_AllSkill += tup.Item3;
+                    AddWorkerEff_AllSkillList[i] = Tuple.Create(tup.Item1, tup.Item2, tup.Item3, true);
+                }
+                else if (tup.Item4 && (tup.Item1 > hour || hour > tup.Item2))
+                {
+                    Eff_AllSkill -= tup.Item3;
+                    AddWorkerEff_AllSkillList[i] = Tuple.Create(tup.Item1, tup.Item2, tup.Item3, false);
+                }
+            }
+        }
+        public List<Tuple<int, int, int, bool>> AddWorkerEff_AllSkillList = new List<Tuple<int, int, int, bool>>();
+        public void AddWorkerEff_AllSkill(int time1, int time2, int eff)
+        {
+            AddWorkerEff_AllSkillList.Add(Tuple.Create(time1, time2, eff, false));
+        }
+        public void RemoveAddWorkerEff_AllSkill(int time1, int time2, int eff)
+        {
+            int index = -1;
+            for (int i = 0; i < AddWorkerEff_AllSkillList.Count; i++)
+            {
+                var tup = AddWorkerEff_AllSkillList[i];
+                if (tup.Item1 == time1 && tup.Item2 == time2 && tup.Item3 == eff)
+                {
+                    index = i;
+                    break;
+                }
+            }
+            if (index >= 0)
+            {
+                var tup = AddWorkerEff_AllSkillList[index];
+                if (tup.Item4 == true)
+                {
+                    Eff_AllSkill -= tup.Item3;
+                }
+                AddWorkerEff_AllSkillList.RemoveAt(index);
+            }
+        }
+        #endregion
+
+        #region RelaxExtraSpeed
+        public void OnStateChangeEvent_RelaxExtraSpeed(Status status)
+        {
+            for (int i = 0; i < RelaxExtraSpeedList.Count; i++)
+            {
+                var tup = RelaxExtraSpeedList[i];
+                if (status == Status.Relaxing && !tup.Item2)
+                {
+                    ModifyWalkSpeed += tup.Item1;
+                    RelaxExtraSpeedList[i] = Tuple.Create(tup.Item1, true);
+                }
+                else if (status != Status.Relaxing && tup.Item2)
+                {
+                    ModifyWalkSpeed -= tup.Item1;
+                    RelaxExtraSpeedList[i] = Tuple.Create(tup.Item1, false);
+                }
+            }
+        }
+        public List<Tuple<int, bool>> RelaxExtraSpeedList = new List<Tuple<int, bool>>();
+        public void RelaxExtraSpeed(int speed)
+        {
+            RelaxExtraSpeedList.Add(Tuple.Create(speed, false));
+        }
+        public void RemoveRelaxExtraSpeed(int speed)
+        {
+            int index = -1;
+            for (int i = 0; i < RelaxExtraSpeedList.Count; i++)
+            {
+                var tup = RelaxExtraSpeedList[i];
+                if (tup.Item1 == speed)
+                {
+                    index = i;
+                    break;
+                }
+            }
+            if (index >= 0)
+            {
+                var tup = RelaxExtraSpeedList[index];
+                if (tup.Item2 == true)
+                {
+                    ModifyWalkSpeed -= tup.Item1;
+                }
+                RelaxExtraSpeedList.RemoveAt(index);
+            }
+        }
+        #endregion
+
+        #region FishInNest
+        private ML.Engine.Timer.CounterDownTimer timerFishInNest;
+        private ML.Engine.Timer.CounterDownTimer TimerFishInNest
+        {
+            get
+            {
+                if (timerFishInNest == null)
+                {
+                    timerFishInNest = new ML.Engine.Timer.CounterDownTimer
+                        (ManagerNS.LocalGameManager.Instance.WorkerManager.Config.WorkerHomeAddMoodTime, true, false);
+                    timerFishInNest.OnEndEvent += EndActionForTimerFishInNest;
+                }
+                return timerFishInNest;
+            }
+        }
+        private void EndActionForTimerFishInNest()
+        {
+            AlterMood(EMRecover);
+        }
+        public void OnStateChangeEvent_FishInNest(Status status)
+        {
+            if (status == Status.Fishing && FishInNest && (timerFishInNest == null || timerFishInNest.IsStoped))
+            {
+                TimerFishInNest?.Start();
+            }
+            else
+            {
+                timerFishInNest?.End();
+            }
+        }
+        public bool FishInNest;
+        public void AddFishInNest()
+        {
+            if (!FishInNest)
+            {
+                FishInNest = true;
+                OnStatusChangeEvent += OnStateChangeEvent_FishInNest;
+            }
+        }
+        public void RemoveFishInNest()
+        {
+            if (FishInNest)
+            {
+                FishInNest = false;
+                OnStatusChangeEvent -= OnStateChangeEvent_FishInNest;
+            }
+        }
+        #endregion
         #endregion
 
         #region AP Mood Skill

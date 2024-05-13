@@ -11,5 +11,7 @@ namespace ProjectOC.WorkerNS
         Relaxing = 1,
         [LabelText("¹¤×÷")]
         Working = 2,
+        [LabelText("½ûÖ¹")]
+        Ban = 3
     }
 }

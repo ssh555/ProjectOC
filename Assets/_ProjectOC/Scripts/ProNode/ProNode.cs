@@ -12,8 +12,6 @@ namespace ProjectOC.ProNodeNS
         #region Data
         [LabelText("生产节点建筑"), ReadOnly]
         public WorldProNode WorldProNode;
-        [LabelText("建筑实例ID"), ShowInInspector, ReadOnly]
-        public string UID { get { return WorldProNode?.InstanceID ?? ""; } }
         [ReadOnly]
         public string ID = "";
         [LabelText("等级"), ReadOnly]
@@ -117,7 +115,7 @@ namespace ProjectOC.ProNodeNS
         public ProNode(ProNodeTableData config)
         {
             ID = config.ID ?? "";
-            InitData(0 , 0);
+            InitData(0, 0);
             EffBase = LocalGameManager.Instance.ProNodeManager.Config.EffBase;
             InitAPCost_Duty = LocalGameManager.Instance.ProNodeManager.Config.InitAPCost_Duty;
             DataContainer.OnDataChangeEvent += OnContainerDataChangeEvent;
@@ -125,7 +123,6 @@ namespace ProjectOC.ProNodeNS
 
         public void Destroy()
         {
-            DataContainer.OnDataChangeEvent -= OnContainerDataChangeEvent;
             RemoveRecipe();
             (this as WorkerNS.IWorkerContainer).RemoveWorker();
         }
@@ -190,8 +187,8 @@ namespace ProjectOC.ProNodeNS
                     if (DataContainer.GetAmount(kv.id, DataNS.DataOpType.Storage) < kv.num) { return false; }
                 }
                 if (ProNodeType == ProNodeType.Mannul && !(HaveWorker && Worker.IsOnProNodeDuty)) { return false; }
-                if (DataContainer.GetAmount(ProductID, DataNS.DataOpType.StorageAll) >= StackMax * ProductNum) { return false; }
-                if (RequirePower && WorldProNode.PowerCount <= 0) { return false; }
+                if (StackAll >= StackMax * ProductNum) { return false; }
+                if (RequirePower && WorldProNode != null && WorldProNode.PowerCount <= 0) { return false; }
                 return true;
             }
             else
@@ -215,20 +212,21 @@ namespace ProjectOC.ProNodeNS
 
         public bool SetLevel(int level)
         {
-            if (0 <= level && level <= LocalGameManager.Instance.ProNodeManager.Config.LevelMax)
+            var config = LocalGameManager.Instance.ProNodeManager.Config;
+            if (0 <= level && level <= config.LevelMax)
             {
                 if (level > Level)
                 {
                     for (int i = Level; i < level; i++)
                     {
-                        EffBase += LocalGameManager.Instance.ProNodeManager.Config.LevelUpgradeEff[i];
+                        EffBase += config.LevelUpgradeEff[i];
                     }
                 }
                 else if (level < Level)
                 {
                     for (int i = Level; i > level; i--)
                     {
-                        EffBase -= LocalGameManager.Instance.ProNodeManager.Config.LevelUpgradeEff[i - 1];
+                        EffBase -= config.LevelUpgradeEff[i - 1];
                     }
                 }
                 Level = level;
@@ -287,7 +285,8 @@ namespace ProjectOC.ProNodeNS
                 if (missionNum > 0)
                 {
                     missionNum += kv.num * (StackMax - RawThreshold);
-                    LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionNS.MissionTransportType.Store_ProNode, kv.id, missionNum, this, MissionNS.MissionInitiatorType.PutIn_Initiator);
+                    LocalGameManager.Instance.MissionManager.CreateTransportMission
+                        (MissionNS.MissionTransportType.Store_ProNode, kv.id, missionNum, this, MissionNS.MissionInitiatorType.PutIn_Initiator);
                 }
             }
             if (StackReserve > 0)
@@ -403,7 +402,7 @@ namespace ProjectOC.ProNodeNS
                     Worker.SetDestination(GetTransform().position, OnArriveEvent, GetContainerType());
                 }
             }
-            (this as MissionNS.IMissionObj).UpdateTransport();
+            (this as MissionNS.IMissionObj).OnPositionChangeTransport();
         }
 
         public void SetWorkerRelateData()
