@@ -514,7 +514,6 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 if(this.FurniturePanel.gameObject.activeInHierarchy == false)
                 {
-                    this.FurniturePanel.gameObject.SetActive(true);
                     if (this.FurnitureCategoryBtnListTransform.gameObject.activeInHierarchy == true)
                     {
                         this.FurnitureCategoryBtnList.DisableBtnList();
@@ -535,6 +534,14 @@ namespace ML.Engine.BuildingSystem.UI
                         
                         furnitureList.Sort((x, y) => x.Item1.CompareTo(y.Item1));
 
+                        UIBtnList.Synchronizer synchronizer = new UIBtnList.Synchronizer(furnitureList.Count, () => 
+                        { 
+                            this.FurniturePanel.gameObject.SetActive(true);
+                            this.FurnitureDisplayBtnList.OnSelectEnter();
+                            this.FurnitureDisplayBtnList.BindNavigationInputAction(this.Placer.BInput.BuildSelection.SwichBtn, UIBtnListContainer.BindType.started);
+                            this.FurnitureDisplayBtnList.BindButtonInteractInputAction(this.Placer.comfirmInputAction, UIBtnListContainer.BindType.started);
+                        });
+
                         foreach (var item in furnitureList)
                         {
                             string BuildingName = BuildingManager.Instance.GetName(item.Item2.Classification.ToString());
@@ -542,13 +549,13 @@ namespace ML.Engine.BuildingSystem.UI
                             {
                                 this.Placer.SelectedPartInstance = BuildingManager.Instance.GetOneBPartInstance(item.Item2.Classification);
                                 monoBM.PopAndPushPanel<BSPlaceModePanel>();
-                            },BtnSettingAction:
+                            }, BtnSettingAction:
                             (btn) =>
                             {
                                 btn.transform.Find("Image2").GetComponent<Image>().sprite = FurnitureSpriteAtlas.GetSprite(BuildingManager.Instance.GetFurtureBuildingIcon(item.Item2.Classification.ToString()));
                                 btn.name = item.Item2.Classification.ToString();
                             }
-                            ,BtnText: BuildingName);
+                            , BtnText: BuildingName, OnFinishAdd: () => { synchronizer.Check(); });
                         }
                     }
                     else
@@ -559,6 +566,13 @@ namespace ML.Engine.BuildingSystem.UI
                         //当前选中的主题ID
                         var curSelectedThemeID = this.FurnitureThemeBtnList.GetCurSelected().gameObject.name;
                         List<string> Buildings = BuildingManager.Instance.GetThemeContainBuildings(curSelectedThemeID);
+                        UIBtnList.Synchronizer synchronizer = new UIBtnList.Synchronizer(Buildings.Count, () => 
+                        { 
+                            this.FurniturePanel.gameObject.SetActive(true);
+                            this.FurnitureDisplayBtnList.OnSelectEnter();
+                            this.FurnitureDisplayBtnList.BindNavigationInputAction(this.Placer.BInput.BuildSelection.SwichBtn, UIBtnListContainer.BindType.started);
+                            this.FurnitureDisplayBtnList.BindButtonInteractInputAction(this.Placer.comfirmInputAction, UIBtnListContainer.BindType.started);
+                        });
                         foreach (var buildingID in Buildings)
                         {
                             
@@ -574,13 +588,11 @@ namespace ML.Engine.BuildingSystem.UI
                                 btn.transform.Find("Image2").GetComponent<Image>().sprite = FurnitureSpriteAtlas.GetSprite(BuildingManager.Instance.GetFurtureBuildingIcon(classification));
                                 btn.name = classification;
                             }
-                            , BtnText: BuildingName);
+                            , BtnText: BuildingName, OnFinishAdd: () => { synchronizer.Check(); });
                         }
                     }
 
-                    this.FurnitureDisplayBtnList.OnSelectEnter();
-                    this.FurnitureDisplayBtnList.BindNavigationInputAction(this.Placer.BInput.BuildSelection.SwichBtn, UIBtnListContainer.BindType.started);
-                    this.FurnitureDisplayBtnList.BindButtonInteractInputAction(this.Placer.comfirmInputAction, UIBtnListContainer.BindType.started);
+                    
                 }
                 else
                 {
@@ -606,8 +618,8 @@ namespace ML.Engine.BuildingSystem.UI
 
             if (this.FurniturePanel.gameObject.activeInHierarchy == true)
             {
-                this.FurniturePanel.gameObject.SetActive(false);
-                this.FurnitureDisplayBtnList.DeleteAllButton();
+                this.FurnitureDisplayBtnList.DeleteAllButton(() => { this.FurniturePanel.gameObject.SetActive(false); });
+                this.FurnitureDisplayBtnList.DisableBtnList();
             }
 
             if(this.FurnitureCategoryBtnListTransform.gameObject.activeInHierarchy == true)
@@ -615,10 +627,12 @@ namespace ML.Engine.BuildingSystem.UI
                 this.TipText.text = this.PanelTextContent.ChangeFurnitureDisplay[1].GetText();
                 this.FurnitureCategoryBtnListTransform.gameObject.SetActive(false);
                 this.FurnitureCategoryBtnList.DisableBtnList();
-                this.FurnitureThemeBtnListTransform.gameObject.SetActive(true);
                 this.FurnitureThemeBtnList.EnableBtnList();
-                if(isFirstAddThemeBtn)
+                if (isFirstAddThemeBtn)
                 {
+                    UIBtnList.Synchronizer synchronizer = new UIBtnList.Synchronizer(BuildingManager.Instance.FurnitureThemeTableDataDic.Count, () => {
+                        this.FurnitureThemeBtnListTransform.gameObject.SetActive(true);
+                    });
                     //给主题btnlist加入按钮
                     foreach (var (id, data) in BuildingManager.Instance.FurnitureThemeTableDataDic)
                     {
@@ -626,9 +640,13 @@ namespace ML.Engine.BuildingSystem.UI
                         {
                             btn.gameObject.name = data.ID;
                             btn.transform.Find("Image").Find("Image1").GetComponent<Image>().sprite = FurnitureThemeSpriteAtlas.GetSprite(data.Icon);
-                        }, BtnText: data.Name);
+                        }, BtnText: data.Name,OnFinishAdd: () => { synchronizer.Check(); });
                     }
                     isFirstAddThemeBtn = false;
+                }
+                else
+                {
+                    this.FurnitureThemeBtnListTransform.gameObject.SetActive(true);
                 }
             }
             else
