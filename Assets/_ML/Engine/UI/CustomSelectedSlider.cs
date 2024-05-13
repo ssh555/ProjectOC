@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -26,12 +27,11 @@ namespace ML.Engine.UI
         {
             if(headText!=null)
                 headText.text = _str;
-            // slider.value = _value;
+            slider.value = _value;
         }
         
         protected void Awake()
         {
-            slider = GetComponent<Slider>();
             headText = transform.parent.Find("Text").GetComponentInChildren<TextMeshProUGUI>();
             numText = transform.parent.Find("Num").GetComponentInChildren<TextMeshProUGUI>();
             slider.onValueChanged.AddListener(HandleSliderValueChange);
@@ -44,9 +44,10 @@ namespace ML.Engine.UI
             numText.text = _value.ToString();
         }
 
-        public void ChangeText(string _str)
+        public void SetSliderConfig(string _str,UnityAction<float> sliderAction)
         {
             headText.text = _str;
+            slider.onValueChanged.AddListener(sliderAction);
         }
 
         public void SetValueWithoutNotify(float _value)

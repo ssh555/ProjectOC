@@ -6,18 +6,10 @@ namespace ProjectOC.PinchFace
 {
     public class ChangeTransformPinchSetting : MonoBehaviour, IPinchSettingComp
     {
-        public int Index { get; }
+        //±´Èû¶û¡¢Çò
         public PinchTransfType.TransformType TransformType;
-        
-        public void LoadData()
-        {
-            throw new System.NotImplementedException();
-        }
-        
-        public void GenerateUI()
-        {
-            throw new System.NotImplementedException();
-        }
+
+        //Êý¾Ý
         private void Awake()
         {
             this.enabled = false;

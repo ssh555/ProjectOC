@@ -25,21 +25,12 @@ namespace ProjectOC.PinchFace
             GradientColorDynamic = 1 << 3
         }
         public ColorChangeType colorChangeType = ColorChangeType.PureColor;
-        public int Index { get; } = -1;
+        public ColorChangeType CurColorChangeType;
         //需要存储
         public float param1,param2; //渐变程度，渐变高度
         public Color color1, color2;
 
-        public void LoadData()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void GenerateUI()
-        {
-            throw new System.NotImplementedException();
-        }
-
+        
         private void Awake()
         {
             this.enabled = false;

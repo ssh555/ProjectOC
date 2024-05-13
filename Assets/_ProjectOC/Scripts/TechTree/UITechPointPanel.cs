@@ -351,7 +351,7 @@ namespace ProjectOC.TechTree.UI
         {
             base.OnEnter();
             ProjectOC.Input.InputManager.PlayerInput.TechTree.Enable();
-            this.cursorNavigation.EnableGraphCursorNavigation(ProjectOC.Input.InputManager.PlayerInput.TechTree.AlterTP);
+            this.cursorNavigation.EnableGraphCursorNavigation(ProjectOC.Input.InputManager.PlayerInput.TechTree.AlterTP, ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm, ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm);
             InitData();
         }
 

@@ -708,24 +708,21 @@ namespace ProjectOC.ProNodeNS.UI
                     // Gender
                     item.Find("Gender").GetComponent<Image>().sprite = worker.Gender == Gender.Male ? WorkerMaleIcon : WorkerFemalIcon;
                     // Eff
-                    if (worker.Eff.ContainsKey(ProNode.ExpType))
+                    bool effEnable = worker.GetEff(ProNode.ExpType) > 0;
+                    item.Find("Eff").gameObject.SetActive(effEnable);
+                    item.Find("EffZero").gameObject.SetActive(!effEnable);
+                    item.Find("Eff").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + worker.GetEff(ProNode.ExpType).ToString() + '%';
+                    string workType = ProNode.ExpType.ToString();
+                    if (!tempSprite.ContainsKey(workType))
                     {
-                        bool effEnable = worker.Eff[ProNode.ExpType] > 0;
-                        item.Find("Eff").gameObject.SetActive(effEnable);
-                        item.Find("EffZero").gameObject.SetActive(!effEnable);
-                        item.Find("Eff").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + worker.Eff[ProNode.ExpType].ToString() + '%';
-                        string workType = ProNode.ExpType.ToString();
-                        if (!tempSprite.ContainsKey(workType))
-                        {
-                            tempSprite[workType] = ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite(workType);
-                        }
-                        item.transform.Find("IconWorkType").GetComponent<Image>().sprite = tempSprite[workType] ?? tempSprite[""];
+                        tempSprite[workType] = ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite(workType);
                     }
+                    item.transform.Find("IconWorkType").GetComponent<Image>().sprite = tempSprite[workType] ?? tempSprite[""];
                     if (worker.Skill.ContainsKey(ProNode.ExpType))
                     {
                         GridLayoutGroup gridLayout = item.transform.Find("Level").GetComponent<GridLayoutGroup>();
                         Transform template = item.transform.Find("Level").Find("Icon");
-                        int num = GetExpRateIconNum(worker.SkillExpRate[ProNode.ExpType]);
+                        int num = GetExpRateIconNum(worker.GetEff(ProNode.ExpType));
                         Image[] images = item.transform.Find("Level").GetComponentsInChildren<Image>();
                         int cnt = 0;
                         foreach (var image in images)
@@ -810,7 +807,7 @@ namespace ProjectOC.ProNodeNS.UI
                 Upgrade_LvOld.Find("Lv").GetComponent<TMPro.TextMeshProUGUI>().text = "Lv: " + ProNode.Level.ToString();
                 Upgrade_LvOld.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textLvDesc + ProNode.EffBase + "%";
 
-                if (ProNode.Level + 1 <= ManagerNS.LocalGameManager.Instance.ProNodeManager.LevelMax)
+                if (ProNode.Level + 1 <= ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.LevelMax)
                 {
                     Upgrade_UI.Find("BtnBackground").gameObject.SetActive(true);
                     Upgrade_UI.Find("KT_UpgradeConfirm").gameObject.SetActive(true);
@@ -818,7 +815,7 @@ namespace ProjectOC.ProNodeNS.UI
                     Upgrade_Build.Find("Image").gameObject.SetActive(true);
                     Upgrade_LvNew.Find("Lv").GetComponent<TMPro.TextMeshProUGUI>().text = "Lv: " + (ProNode.Level + 1).ToString();
                     Upgrade_LvNew.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textLvDesc + 
-                        (ProNode.EffBase + ManagerNS.LocalGameManager.Instance.ProNodeManager.LevelUpgradeEff[ProNode.Level + 1]) + "%";
+                        (ProNode.EffBase + ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.LevelUpgradeEff[ProNode.Level + 1]) + "%";
                 }
                 else
                 {

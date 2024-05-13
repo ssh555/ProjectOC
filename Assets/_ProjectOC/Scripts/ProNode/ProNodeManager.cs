@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using ML.Engine.InventorySystem;
 using ML.Engine.TextContent;
 using Sirenix.OdinInspector;
-
+using UnityEngine;
+using Debug = UnityEngine.Debug;
 namespace ProjectOC.ProNodeNS
 {
     [System.Serializable]
@@ -13,7 +15,7 @@ namespace ProjectOC.ProNodeNS
         public ProNodeType Type;
         public RecipeCategory Category;
         public List<RecipeCategory> RecipeCategoryFiltered;
-        public WorkerNS.WorkType ExpType;
+        public WorkerNS.SkillType ExpType;
         public int MaxStack;
         public int StackThreshold;
         public int RawThreshold;
@@ -23,25 +25,12 @@ namespace ProjectOC.ProNodeNS
     [LabelText("生产节点管理器"), System.Serializable]
     public sealed class ProNodeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
-        public void OnRegister()
-        {
-            LoadTableData();
-        }
-
-        #region 配置
-        [LabelText("基础生产效率"), PropertyTooltip("单位 %"), FoldoutGroup("配置"), ShowInInspector]
-        public int EffBase = 100;
-        [LabelText("最大等级"), FoldoutGroup("配置"), ShowInInspector]
-        public int LevelMax = 2;
-        [LabelText("升级提高的基础生产效率"), FoldoutGroup("配置"), ShowInInspector]
-        public List<int> LevelUpgradeEff = new List<int>() { 50, 50, 50 };
-        #endregion
-
-        #region Load And Data
+        #region ILocalManager
+        [ShowInInspector]
         private Dictionary<string, ProNodeTableData> ProNodeTableDict = new Dictionary<string, ProNodeTableData>();
         public ML.Engine.ABResources.ABJsonAssetProcessor<ProNodeTableData[]> ABJAProcessor;
-
-        public void LoadTableData()
+        public ProNodeConfig Config;
+        public void OnRegister()
         {
             ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ProNodeTableData[]>("OCTableData", "ProNode", (datas) =>
             {
@@ -51,12 +40,16 @@ namespace ProjectOC.ProNodeNS
                 }
             }, "生产节点表数据");
             ABJAProcessor.StartLoadJsonAssetData();
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<ProNodeConfigAsset>("Config_ProNode").Completed += (handle) =>
+            {
+                ProNodeConfigAsset data = handle.Result;
+                Config = new ProNodeConfig(data.Config);
+            };
         }
         #endregion
 
         #region Spawn
         private Dictionary<string, WorldProNode> WorldProNodeDict = new Dictionary<string, WorldProNode>();
-
         public ProNode SpawnProNode(string id)
         {
             if (IsValidID(id))
@@ -167,13 +160,13 @@ namespace ProjectOC.ProNodeNS
             return new List<RecipeCategory>();
         }
 
-        public WorkerNS.WorkType GetExpType(string id)
+        public WorkerNS.SkillType GetExpType(string id)
         {
             if (IsValidID(id))
             {
                 return ProNodeTableDict[id].ExpType;
             }
-            return WorkerNS.WorkType.None;
+            return WorkerNS.SkillType.None;
         }
 
         public int GetMaxStack(string id)
@@ -202,11 +195,22 @@ namespace ProjectOC.ProNodeNS
             }
             return 0;
         }
+
+        //仅限生产节点建筑 检查是否需要供电
         public bool GetCanCharge(string id)
         {
             if (IsValidID(id))
             {
                 return ProNodeTableDict[id].CanCharge;
+            }
+            return false;
+        }
+        //仅限生产节点建筑 检查是为自动
+        public bool GetIsAuto(string id)
+        {
+            if (IsValidID(id))
+            {
+                return ProNodeTableDict[id].Type == ProNodeType.Auto;
             }
             return false;
         }
