@@ -1,4 +1,3 @@
-using ML.Engine.TextContent;
 using System.Collections.Generic;
 
 namespace ProjectOC.WorkerNS
@@ -7,7 +6,7 @@ namespace ProjectOC.WorkerNS
     public struct EffectTableData
     {
         public string ID;
-        public TextContent Name;
+        public ML.Engine.TextContent.TextContent Name;
         public EffectType Type;
         public string Param1;
         public int Param2;
@@ -35,13 +34,9 @@ namespace ProjectOC.WorkerNS
         #endregion
 
         #region Spawn
-        public Effect SpawnEffect(string id, string value)
+        public Effect SpawnEffect(string id)
         {
-            if (IsValidID(id) && !string.IsNullOrEmpty(value))
-            {
-                return new Effect(EffectTableDict[id]);
-            }
-            return default(Effect);
+            return IsValidID(id) ? new Effect(EffectTableDict[id]) : default(Effect);
         }
         #endregion
 

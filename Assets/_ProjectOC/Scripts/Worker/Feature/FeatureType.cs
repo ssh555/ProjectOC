@@ -2,10 +2,7 @@ using Sirenix.OdinInspector;
 
 namespace ProjectOC.WorkerNS
 {
-    /// <summary>
-    /// 特性类型
-    /// 从上到下的顺序为种族、增益、减益、整活特性
-    /// </summary>
+    [LabelText("特性类型")]
     public enum FeatureType
     {
         None,

@@ -3,8 +3,6 @@ using ML.Engine.TextContent;
 using ML.Engine.Timer;
 using ML.Engine.UI;
 using ML.Engine.Utility;
-using ProjectOC.ManagerNS;
-using ProjectOC.WorkerEchoNS;
 using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System;
@@ -297,10 +295,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 MoodMax.text = worker.EMMax.ToString();
                 WalkSpeedNumText.text = worker.RealWalkSpeed.ToString();
 
-                var Info = this.Info2.Find("Scroll View").Find("Viewport").Find("Content");
-                this.objectPool.ResetPool("SimpleDescriptionPool");
-                this.objectPool.ResetPool("FullDescriptionPool");
-                foreach (var feature in worker.Features)
+                foreach (var feature in worker.GetSortFeature())
                 {
                     if (SwitchInfoIndex == 0)
                     {
