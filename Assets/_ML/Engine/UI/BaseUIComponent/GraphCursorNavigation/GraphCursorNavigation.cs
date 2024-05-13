@@ -161,8 +161,6 @@ namespace ML.Engine.UI
         private bool canControlCenteryUP;
         private bool canControlCenteryDown;
         #endregion
-
-
         private void NavagateMap_started(InputAction.CallbackContext obj)
         {
             if (NavagateMapTimer == null)

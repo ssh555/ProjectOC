@@ -195,12 +195,19 @@ namespace ProjectOC.Player.UI
         {
             this.UIBtnList.BindNavigationInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid, UIBtnListContainer.BindType.performed);
             this.UIBtnList.BindButtonInteractInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid, UIBtnListContainer.BindType.canceled,
-                () => { this.UIBtnList.DisableBtnList(); }, () => { 
+                preAction: 
+                () => 
+                { this.UIBtnList.DisableBtnList();
                     Ring.gameObject.SetActive(false);
                     ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
                     this.UIBtnList.SetCurSelectedNull();
                     this.UIBtnList.DeBindInputAction();
                     this.UIBtnList.EnableBtnList();
+                },
+                postAction:
+                () => 
+                { 
+                    
                 });
             this.Ring.gameObject.SetActive(true);
             this.UIKeyTipList?.RefreshKetTip();
