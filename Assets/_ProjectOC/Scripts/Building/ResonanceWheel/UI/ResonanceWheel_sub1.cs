@@ -19,7 +19,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
     {
         #region Unity
         public bool IsInit = false;
-
         protected override void Awake()
         {
             base.Awake();
@@ -247,6 +246,18 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             {
                 return;
             }
+
+            foreach (TextTip tp in PanelTextContent.SkillType)
+            {
+                for (int i = 0; i < beastSkills.Length; i++)
+                {
+                    if (tp.name == beastSkills[i].workType.ToString())
+                    {
+                        beastSkills[i].skillText.text = tp.GetDescription();
+                    }
+                }
+            }
+
             WorkerEcho workerEcho = parentUI.workerEcho;
             Worker worker = workerEcho.GetExternWorkers()[parentUI.CurrentGridIndex]?.Worker;
 

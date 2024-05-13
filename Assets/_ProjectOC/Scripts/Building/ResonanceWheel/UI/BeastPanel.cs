@@ -366,7 +366,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                         var tPrefab = this.objectPool.GetNextObject("FullDescriptionPool");
                         tPrefab.transform.Find("Content").Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;
                         tPrefab.transform.Find("Content").Find("Text2").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Description;
-                        Debug.Log(feature.Name + " "+ feature.Description+" " + feature.EffectsDescription);
                         tPrefab.transform.Find("Content").Find("Text3").GetComponent<TMPro.TextMeshProUGUI>().text =
                     "<color=#6FB502><b><sprite name=\"Tex2D_TMP_Triangle\" tint=1>" + feature.EffectsDescription + "</b></color>";
                         DescriptionList.AddBtn(tPrefab);

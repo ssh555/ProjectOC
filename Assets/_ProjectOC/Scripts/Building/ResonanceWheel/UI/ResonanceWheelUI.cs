@@ -69,7 +69,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             RandomText = RTInfo.Find("Random").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
 
             //ResonanceConsumpion
-            currentBeastType = BeastType.WorkerEcho_Random;//初始化为Random
+            currentBeastType = WorkerCategory.Random;//初始化为Random
             var ResonanceConsumpion = exclusivePart.Find("ResonanceConsumption");
             RCInfo = ResonanceConsumpion.Find("Info");
             TimerUI = RCInfo.Find("Timer");
@@ -170,7 +170,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             public ExternWorker worker;//对应的隐兽
             public Transform transform;
             public string id;
-            public BeastType beastType;
+            public WorkerCategory beastType;
 
             internal static void Reset(RingGrid ringGrid)
             {
@@ -299,7 +299,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
             else
             {
-                if(currentBeastType!=BeastType.WorkerEcho_Null)
+                if(currentBeastType!= WorkerCategory.None)
                 {
                     worker = workerEcho.SummonWorker(cb, CurrentGridIndex, inventory);
                 }
@@ -532,19 +532,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         //ResonanceConsumpion
 
-        public enum BeastType
-        {
-            WorkerEcho_Null=0,
-            WorkerEcho_Random,
-            WorkerEcho_CookWorker,
-            WorkerEcho_HandCraftWorker,
-            WorkerEcho_IndustryWorker,
-            WorkerEcho_MagicWorker,
-            WorkerEcho_TransportWorker,
-            WorkerEcho_CollectWorker,
-        }
 
-        public BeastType currentBeastType;
+
+        public WorkerCategory currentBeastType;
         private Transform RCInfo;
         private Transform TimerUI;
         private TMPro.TextMeshProUGUI ResonanceConsumpionTitle;
@@ -555,7 +545,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #region temp
         public Sprite sprite1,sprite2,sprite3;
         [ShowInInspector]
-        public Dictionary<BeastType,Sprite> beastTypeDic = new Dictionary<BeastType, Sprite>();
+        public Dictionary<WorkerCategory, Sprite> beastTypeDic = new Dictionary<WorkerCategory, Sprite>();
         #endregion
 
         public override void Refresh()
@@ -727,7 +717,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
 
 
-                if (currentBeastType != BeastType.WorkerEcho_Null) 
+                if (currentBeastType != WorkerCategory.None) 
                 {
                     string cb = currentBeastType.ToString();
 
@@ -817,13 +807,13 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 sprite2 = resonanceAtlas.GetSprite(Pre + "icon_timing");
                 sprite3 = resonanceAtlas.GetSprite(Pre + "gray_background");
 
-                beastTypeDic.Add(BeastType.WorkerEcho_CookWorker, resonanceAtlas.GetSprite(Pre + "Cat"));
-                beastTypeDic.Add(BeastType.WorkerEcho_HandCraftWorker, resonanceAtlas.GetSprite(Pre + "Deer"));
-                beastTypeDic.Add(BeastType.WorkerEcho_IndustryWorker, resonanceAtlas.GetSprite(Pre + "Dog"));
-                beastTypeDic.Add(BeastType.WorkerEcho_MagicWorker, resonanceAtlas.GetSprite(Pre + "Fox"));
-                beastTypeDic.Add(BeastType.WorkerEcho_TransportWorker, resonanceAtlas.GetSprite(Pre + "Rabbit"));
-                beastTypeDic.Add(BeastType.WorkerEcho_CollectWorker, resonanceAtlas.GetSprite(Pre + "Seal"));
-                beastTypeDic.Add(BeastType.WorkerEcho_Random, resonanceAtlas.GetSprite(Pre + "Random"));
+                beastTypeDic.Add(WorkerCategory.CookWorker, resonanceAtlas.GetSprite(Pre + "Cat"));
+                beastTypeDic.Add(WorkerCategory.HandCraftWorker, resonanceAtlas.GetSprite(Pre + "Deer"));
+                beastTypeDic.Add(WorkerCategory.IndustryWorker, resonanceAtlas.GetSprite(Pre + "Dog"));
+                beastTypeDic.Add(WorkerCategory.MagicWorker, resonanceAtlas.GetSprite(Pre + "Fox"));
+                beastTypeDic.Add(WorkerCategory.TransportWorker, resonanceAtlas.GetSprite(Pre + "Rabbit"));
+                beastTypeDic.Add(WorkerCategory.CollectWorker, resonanceAtlas.GetSprite(Pre + "Seal"));
+                beastTypeDic.Add(WorkerCategory.Random, resonanceAtlas.GetSprite(Pre + "Random"));
             }
             );
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SlotPrefabPool", 1, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_Slot.prefab", (handle) =>

@@ -12,13 +12,17 @@ namespace ProjectOC.WorkerNS
         public Worker Worker;
         public ExternWorker(string workerID, float time, WorkerEchoBuilding workerEchoBuilding, int index)
         {
+            workerID = 
             WorkerID = workerID;
+
+            
             Timer = new CounterDownTimer(time);
             Timer.OnEndEvent += () =>
             {
                 ManagerNS.LocalGameManager.Instance.WorkerManager.SpawnWorker(workerEchoBuilding.transform.position, Quaternion.identity, false, workerEchoBuilding.WorkerEcho).Completed += (handle) =>
                 {
                     Worker = handle.Result.GetComponent<Worker>();
+                    Worker.Category = (WorkerCategory)Enum.Parse(typeof(WorkerCategory), workerID);
                     Worker.gameObject.transform.position += new Vector3((float)(3 * Math.Cos(2 * 3.1415926 * index / 5)), 0, (float)(3 * Math.Sin(2 * 3.1415926 * index / 5)));
                 };
             };
@@ -39,16 +43,17 @@ namespace ProjectOC.WorkerNS
 
         public ExternWorker SummonWorker(string id,int index, ML.Engine.InventorySystem.IInventory inventory)
         {
+            string cid = "";
+            string workerid = "";
             if (!ManagerNS.LocalGameManager.Instance.WorkerManager.OnlyCostResource(inventory, id)) return null;
 
             if (ManagerNS.LocalGameManager.Instance.WorkerEchoManager.Level == 1)
             {
-                id = ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRandomID();
+                cid = ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRandomCategoryString();
+                workerid = "WorkerEcho_" + cid;
             }
-            
-            ExternWorker externWorker = new ExternWorker(id, ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetTimeCost(id), WorkerEchoBuilding, index);
+            ExternWorker externWorker = new ExternWorker(cid, ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetTimeCost(workerid), WorkerEchoBuilding, index);
             Workers[index] = externWorker;
-           
             return externWorker;
         }
 
