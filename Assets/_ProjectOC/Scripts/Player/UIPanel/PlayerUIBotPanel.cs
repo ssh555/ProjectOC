@@ -83,7 +83,8 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.RemoveAllListener();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.Disable();
             ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMenu.started -= OpenMenu_started;
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.started -= SelectGrid_started;
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.canceled -= SelectGrid_canceled;
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMap.started -= OpenMap_started;
 
             // 返回
@@ -182,7 +183,8 @@ namespace ProjectOC.Player.UI
             );
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.Enable();
             ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
-            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMenu.started += OpenMenu_started;
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.started += SelectGrid_started;
+            ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid.canceled += SelectGrid_canceled;
             ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.OpenMap.started += OpenMap_started;
 
 
@@ -195,13 +197,25 @@ namespace ProjectOC.Player.UI
         {
             this.UIBtnList.BindNavigationInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid, UIBtnListContainer.BindType.performed);
             this.UIBtnList.BindButtonInteractInputAction(ProjectOC.Input.InputManager.PlayerInput.PlayerUIBot.SelectGrid, UIBtnListContainer.BindType.canceled,
-                () => { this.UIBtnList.DisableBtnList(); }, () => { 
+                preAction: 
+                () => 
+                { this.UIBtnList.DisableBtnList(); 
+                },
+                postAction:
+                () => 
+                { 
                     Ring.gameObject.SetActive(false);
                     ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
                     this.UIBtnList.SetCurSelectedNull();
                     this.UIBtnList.DeBindInputAction();
                     this.UIBtnList.EnableBtnList();
-                });
+                },inputCondition: (obj) =>
+                {
+                    var vector2 = obj.ReadValue<UnityEngine.Vector2>();
+                    if (vector2.x < 0.8 && vector2.y < 0.8) return true;
+                    return false;
+                }
+                );
             this.Ring.gameObject.SetActive(true);
             this.UIKeyTipList?.RefreshKetTip();
             ProjectOC.Input.InputManager.PlayerInput.Player.Disable();
@@ -211,6 +225,19 @@ namespace ProjectOC.Player.UI
         private void OpenMap_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("打开地图"));
+        }
+        #region SelectGrid_performed
+        private float SelectGridTimeInterval = 0.01f;
+        CounterDownTimer SelectGridTimer = null;
+        #endregion
+        private void SelectGrid_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+
+        }
+
+        private void SelectGrid_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+
         }
 
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
