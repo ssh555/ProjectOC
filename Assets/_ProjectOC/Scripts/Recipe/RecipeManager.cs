@@ -19,28 +19,22 @@ namespace ML.Engine.InventorySystem
     [System.Serializable]
     public sealed class RecipeManager : Manager.LocalManager.ILocalManager
     {
-        public void OnRegister()
-        {
-            LoadTableData();
-        }
-
         #region Load And Data
         public Dictionary<RecipeCategory, List<string>> RecipeCategorys = new Dictionary<RecipeCategory, List<string>>();
         private Dictionary<string, RecipeTableData> RecipeTableDict = new Dictionary<string, RecipeTableData>();
         public ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]> ABJAProcessor;
-        public void LoadTableData()
+        public void OnRegister()
         {
             ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<RecipeTableData[]>("OCTableData", "Recipe", (datas) =>
             {
                 foreach (var data in datas)
                 {
-                    this.RecipeTableDict.Add(data.ID, data);
-
-                    if (!this.RecipeCategorys.ContainsKey(data.Category))
+                    RecipeTableDict.Add(data.ID, data);
+                    if (!RecipeCategorys.ContainsKey(data.Category))
                     {
-                        this.RecipeCategorys[data.Category] = new List<string>();
+                        RecipeCategorys[data.Category] = new List<string>();
                     }
-                    this.RecipeCategorys[data.Category].Add(data.ID);
+                    RecipeCategorys[data.Category].Add(data.ID);
                 }
             }, "配方表数据");
             ABJAProcessor.StartLoadJsonAssetData();
@@ -94,7 +88,7 @@ namespace ML.Engine.InventorySystem
         
         public string[] GetAllID() { return RecipeTableDict.Keys.ToArray(); }
 
-        public string GetRecipeName(string id) { return IsValidID(id) ? RecipeTableDict[id].Name : null; }
+        public string GetRecipeName(string id) { return IsValidID(id) ? RecipeTableDict[id].Name : ""; }
 
         public int GetSort(string id) { return IsValidID(id) ? RecipeTableDict[id].Sort : int.MaxValue; }
 

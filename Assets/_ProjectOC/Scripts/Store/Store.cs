@@ -25,7 +25,6 @@ namespace ProjectOC.StoreNS
         public string WorldIconItemID;
         #endregion
 
-
         public Store(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType)
         {
             StoreType = storeType;
