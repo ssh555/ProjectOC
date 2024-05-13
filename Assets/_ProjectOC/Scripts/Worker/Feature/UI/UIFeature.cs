@@ -238,7 +238,7 @@ namespace ProjectOC.WorkerNS.UI
             if (!IsInitWorkers)
             {
                 Workers = new List<Worker>() { };
-                Workers.AddRange(LocalGameManager.Instance.WorkerManager.GetWorkers());
+                Workers.AddRange(LocalGameManager.Instance.WorkerManager.GetNotBanWorkers());
                 Workers = Workers.OrderBy(worker => worker.HaveHome).ThenBy(worker => worker != null).ThenBy(worker => worker.ID).ToList();
                 if (Worker != null)
                 {

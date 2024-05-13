@@ -28,6 +28,8 @@ namespace ProjectOC.WorkerNS
         private WorkerStateWorkingDuty StateWorkingDuty;
         private WorkerStateWorkingTransport StateWorkingTransport;
         private WorkerStateRelaxing StateRelaxing;
+        private WorkerStateBan StateBan;
+
         public WorkerStateMachine(Worker worker)
         {
             Worker = worker;
@@ -35,11 +37,13 @@ namespace ProjectOC.WorkerNS
             StateWorkingDuty = new WorkerStateWorkingDuty("StateWorkingDuty");
             StateWorkingTransport = new WorkerStateWorkingTransport("StateWorkingTransport");
             StateRelaxing = new WorkerStateRelaxing("StateRelaxing");
+            StateBan = new WorkerStateBan("StateBan");
             // 设置初始状态
             AddState(StateFishing);
             AddState(StateWorkingDuty);
             AddState(StateWorkingTransport);
             AddState(StateRelaxing);
+            AddState(StateBan);
             // 连接边
             ConnectState(StateFishing.Name, StateWorkingDuty.Name, EdgeFishingToWorkingDuty);
             ConnectState(StateFishing.Name, StateWorkingTransport.Name, EdgeFishingToWorkingTransport);
@@ -49,6 +53,10 @@ namespace ProjectOC.WorkerNS
             ConnectState(StateWorkingTransport.Name, StateFishing.Name, EdgeWorkingTransportToFishing);
             ConnectState(StateRelaxing.Name, StateFishing.Name, EdgeRelaxingToFishing);
 
+            ConnectState(StateRelaxing.Name, StateBan.Name, EdgeRelaxingToBan);
+            ConnectState(StateFishing.Name, StateBan.Name, EdgeFishingToBan);
+            ConnectState(StateBan.Name, StateFishing.Name, EdgeBanToFishing);
+
             SetInitState("StateFishing");
         }
         /// <summary>
@@ -56,10 +64,7 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         private bool EdgeFishingToWorkingDuty(StateMachine stateMachine, State curState)
         {
-            if (curState == null || curState.Name != StateFishing.Name)
-            {
-                return false;
-            }
+            if (curState == null || curState.Name != StateFishing.Name) { return false; }
             // 体力高于工作阈值 && 在生产节点 && 生产节点在生产
             return IsAPAboveWorkThreshold && Worker.IsOnProNodeDuty && Worker.ProNode.State == ProNodeState.Production;
         }
@@ -68,10 +73,7 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         private bool EdgeWorkingDutyToFishing(StateMachine stateMachine, State curState)
         {
-            if (curState == null || curState.Name != StateWorkingDuty.Name)
-            {
-                return false;
-            }
+            if (curState == null || curState.Name != StateWorkingDuty.Name) { return false; }
             // 体力低于工作阈值 || 没在生产节点 || 生产节点未在生产
             return !IsAPAboveWorkThreshold || !Worker.IsOnProNodeDuty || Worker.ProNode.State != ProNodeState.Production;
         }
@@ -80,10 +82,7 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         private bool EdgeFishingToWorkingTransport(StateMachine stateMachine, State curState)
         {
-            if (curState == null || curState.Name != StateFishing.Name)
-            {
-                return false;
-            }
+            if (curState == null || curState.Name != StateFishing.Name) { return false; }
             // 体力高于工作阈值 && 有任务
             return IsAPAboveWorkThreshold && Worker.HaveTransport;
         }
@@ -92,10 +91,7 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         private bool EdgeWorkingTransportToFishing(StateMachine stateMachine, State curState)
         {
-            if (curState == null || curState.Name != StateWorkingTransport.Name)
-            {
-                return false;
-            }
+            if (curState == null || curState.Name != StateWorkingTransport.Name) { return false; }
             // 体力低于工作阈值 || 没有任务
             return !IsAPAboveWorkThreshold || !Worker.HaveTransport;
         }
@@ -104,10 +100,7 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         private bool EdgeFishingToRelaxing(StateMachine stateMachine, State curState)
         {
-            if (curState == null || curState.Name != StateFishing.Name)
-            {
-                return false;
-            }
+            if (curState == null || curState.Name != StateFishing.Name) { return false; }
             return Worker.CurTimeStatus == TimeStatus.Relax || !IsAPAboveWorkThreshold;
         }
         /// <summary>
@@ -115,11 +108,24 @@ namespace ProjectOC.WorkerNS
         /// </summary>
         private bool EdgeRelaxingToFishing(StateMachine stateMachine, State curState)
         {
-            if (curState == null || curState.Name != StateRelaxing.Name)
-            {
-                return false;
-            }
+            if (curState == null || curState.Name != StateRelaxing.Name) { return false; }
             return Worker.CurTimeStatus != TimeStatus.Relax && IsAPAboveRelaxThreshold;
+        }
+
+        private bool EdgeFishingToBan(StateMachine stateMachine, State curState)
+        {
+            if (curState == null || curState.Name != StateFishing.Name) { return false; }
+            return Worker.HaveFeatSeat;
+        }
+        private bool EdgeBanToFishing(StateMachine stateMachine, State curState)
+        {
+            if (curState == null || curState.Name != StateBan.Name) { return false; }
+            return !Worker.HaveFeatSeat;
+        }
+        private bool EdgeRelaxingToBan(StateMachine stateMachine, State curState)
+        {
+            if (curState == null || curState.Name != StateRelaxing.Name) { return false; }
+            return Worker.HaveFeatSeat;
         }
     }
 }

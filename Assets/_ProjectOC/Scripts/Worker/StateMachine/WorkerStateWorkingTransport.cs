@@ -4,10 +4,7 @@ namespace ProjectOC.WorkerNS
 {
     public class WorkerStateWorkingTransport : State
     {
-        public WorkerStateWorkingTransport(string name) : base(name)
-        {
-        }
-
+        public WorkerStateWorkingTransport(string name) : base(name) { }
         public override void ConfigState()
         {
             this.BindEnterAction

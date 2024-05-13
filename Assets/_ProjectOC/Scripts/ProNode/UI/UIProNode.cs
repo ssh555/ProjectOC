@@ -96,7 +96,7 @@ namespace ProjectOC.ProNodeNS.UI
                 else if (curMode == Mode.ChangeWorker)
                 {
                     Workers = new List<WorkerNS.Worker>() { };
-                    Workers.AddRange(ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkers());
+                    Workers.AddRange(ManagerNS.LocalGameManager.Instance.WorkerManager.GetNotBanWorkers());
                     Workers.Sort(new WorkerNS.Worker.SortForProNodeUI() { WorkType = ProNode.ExpType });
                     if (Worker != null)
                     {

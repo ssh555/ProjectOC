@@ -100,12 +100,6 @@ namespace ProjectOC.WorkerNS
         public Dictionary<SkillType, Skill> Skill = new Dictionary<SkillType, Skill>();
         [LabelText("特性"), ReadOnly, ShowInInspector]
         public Dictionary<string, Feature> Feature = new Dictionary<string, Feature>();
-        public List<Feature> GetSortFeature()
-        {
-            var result = Feature.Values.ToList();
-            result.Sort(new Feature());
-            return result;
-        }
         #endregion
         #region Time
         [LabelText("是否可以安排时段"), ReadOnly, ShowInInspector]
@@ -113,6 +107,33 @@ namespace ProjectOC.WorkerNS
         [LabelText("是否可以反转时段"), ReadOnly, ShowInInspector]
         public bool CanReverse { get; private set; }
         #endregion
+        #endregion
+
+        #region GetData
+        public List<Feature> GetSortFeature()
+        {
+            var result = Feature.Values.ToList();
+            result.Sort(new Feature());
+            return result;
+        }
+        /// <summary>
+        /// 0 1 2 分别代表低中高
+        /// </summary>
+        public int GetMoodStatu()
+        {
+            if (HaveSetEMLowEffect) return 0;
+            if (HaveSetEMHighEffect) return 2;
+            return 1;
+        }
+        /// <summary>
+        /// 0 1 2 分别代表低中高
+        /// </summary>
+        public int GetAPStatu()
+        {
+            if (APCurrent < APWorkThreshold) return 0;
+            if (APCurrent > APRelaxThreshold) return 2;
+            return 1;
+        }
         #endregion
 
         #region Init OnDestroy
@@ -157,7 +178,6 @@ namespace ProjectOC.WorkerNS
             foreach (Feature feature in features)
             {
                 feature.SetOwner(this);
-                Feature.Add(feature.ID, feature);
             }
             CanArrange = true;
             CanReverse = false;
@@ -169,7 +189,8 @@ namespace ProjectOC.WorkerNS
             {
                 { WorkerContainerType.Work, null },
                 { WorkerContainerType.Relax, null },
-                { WorkerContainerType.Home, null }
+                { WorkerContainerType.Home, null },
+                { WorkerContainerType.Feature, null }
             };
             StateController = new ML.Engine.FSM.StateController(0);
             StateMachine = new WorkerStateMachine(this);
@@ -663,6 +684,8 @@ namespace ProjectOC.WorkerNS
         public (int, int) MinSec => timerForNoHome != null ? timerForNoHome.ConvertToMinAndSec() : (-1, -1);
 
         #region Property
+        [LabelText("是否有喵喵窝"), ShowInInspector, ReadOnly]
+        public bool HaveFeatSeat => HasContainer(WorkerContainerType.Feature);
         [LabelText("是否有生产节点"), ShowInInspector, ReadOnly]
         public bool HaveProNode => HasContainer(WorkerContainerType.Work);
         [LabelText("是否有餐厅"), ShowInInspector, ReadOnly]
@@ -673,6 +696,8 @@ namespace ProjectOC.WorkerNS
         public bool IsOnProNodeDuty { get { return HaveProNode && Status != Status.Relaxing && GetContainer(WorkerContainerType.Work).IsArrive; } }
         [LabelText("生产节点"), ShowInInspector, ReadOnly]
         public ProNodeNS.ProNode ProNode => HasContainer(WorkerContainerType.Work) ? GetContainer(WorkerContainerType.Work) as ProNodeNS.ProNode : null;
+        [LabelText("喵喵窝"), ShowInInspector, ReadOnly]
+        public FeatureSeat FeatSeat => HasContainer(WorkerContainerType.Feature) ? GetContainer(WorkerContainerType.Feature) as FeatureSeat : null;
         #endregion
 
         public IWorkerContainer GetContainer(WorkerContainerType type)
@@ -832,27 +857,6 @@ namespace ProjectOC.WorkerNS
         public ML.PlayerCharacterNS.IController Controller { get; set; }
         public void OnSpawn(ML.PlayerCharacterNS.IController controller) { }
         public void OnDespose(ML.PlayerCharacterNS.IController controller) { }
-        #endregion
-
-        #region External
-        /// <summary>
-        /// 0 1 2 分别代表低中高
-        /// </summary>
-        public int GetMoodStatu()
-        {
-            if(HaveSetEMLowEffect) return 0;
-            if (HaveSetEMHighEffect) return 2;
-            return 1;
-        }
-        /// <summary>
-        /// 0 1 2 分别代表低中高
-        /// </summary>
-        public int GetAPStatu()
-        {
-            if (APCurrent < APWorkThreshold) return 0;
-            if (APCurrent >APRelaxThreshold) return 2;
-            return 1;
-        }
         #endregion
     }
 }
