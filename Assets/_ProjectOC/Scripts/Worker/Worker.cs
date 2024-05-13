@@ -1,4 +1,3 @@
-using ML.Engine.Timer;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -168,10 +167,6 @@ namespace ProjectOC.WorkerNS
                 { WorkerContainerType.Relax, null },
                 { WorkerContainerType.Home, null }
             };
-            if (!HasContainer(WorkerContainerType.Home))
-            {
-                TimerForNoHome.Start();
-            }
             StateController = new ML.Engine.FSM.StateController(0);
             StateMachine = new WorkerStateMachine(this);
             StateController.SetStateMachine(StateMachine);
@@ -506,7 +501,13 @@ namespace ProjectOC.WorkerNS
                 return timerForNoHome;
             }
         }
-
+        public void CheckHome()
+        {
+            if (!HasContainer(WorkerContainerType.Home))
+            {
+                TimerForNoHome.Start();
+            }
+        }
         public (int, int) MinSec => timerForNoHome != null ? timerForNoHome.ConvertToMinAndSec() : (-1, -1);
 
         #region Property
