@@ -515,7 +515,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         }
 
         [SerializeField]Vector3 posOffset;
-        /// <summary>p
+        /// <summary>
         /// 应用位置和旋转于SelectedPartInstance
         /// </summary>
         public void TransformSelectedPartInstance()

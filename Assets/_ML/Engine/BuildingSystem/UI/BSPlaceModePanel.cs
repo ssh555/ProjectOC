@@ -324,7 +324,7 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 if (obj.started)
                 {
-                    if(this.Placer.SelectedPartInstance.AttachedSocket == null)
+                    if (this.Placer.SelectedPartInstance.AttachedSocket == null)
                     {
                         this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, Vector3.up);
                     }

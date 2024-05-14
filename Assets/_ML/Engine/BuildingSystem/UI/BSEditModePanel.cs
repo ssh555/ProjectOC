@@ -78,7 +78,8 @@ namespace ML.Engine.BuildingSystem.UI
 
             this.Placer.BInput.BuildPlaceMode.KeyCom.performed -= Placer_EnterKeyCom;
             this.Placer.backInputAction.performed -= Placer_CancelEdit;
-            this.Placer.BInput.BuildPlaceMode.Rotate.performed -= Placer_RotateBPart;
+            this.Placer.BInput.BuildPlaceMode.Rotate.started -= Placer_RotateBPart;
+            this.Placer.BInput.BuildPlaceMode.Rotate.canceled -= Placer_RotateBPart;
             this.Placer.BInput.BuildPlaceMode.ChangeActiveSocket.performed -= Placer_ChangeActiveSocket;
             this.Placer.comfirmInputAction.performed -= Placer_ComfirmEdit;
         }
@@ -98,7 +99,8 @@ namespace ML.Engine.BuildingSystem.UI
 
             this.Placer.BInput.BuildPlaceMode.KeyCom.performed += Placer_EnterKeyCom;
             this.Placer.backInputAction.performed += Placer_CancelEdit;
-            this.Placer.BInput.BuildPlaceMode.Rotate.performed += Placer_RotateBPart;
+            this.Placer.BInput.BuildPlaceMode.Rotate.started += Placer_RotateBPart;
+            this.Placer.BInput.BuildPlaceMode.Rotate.canceled += Placer_RotateBPart;
             this.Placer.BInput.BuildPlaceMode.ChangeActiveSocket.performed += Placer_ChangeActiveSocket;
             this.Placer.comfirmInputAction.performed += Placer_ComfirmEdit;
         }

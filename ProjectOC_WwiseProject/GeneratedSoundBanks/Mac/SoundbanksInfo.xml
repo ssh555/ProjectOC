@@ -9,7 +9,7 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{D326F752-7CA2-0A14-FDB1-63ECE89D0199}">
+		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{1F8A1F08-89E9-BBC2-6578-BE870F5B874B}">
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
 			<Plugins>
@@ -19,9 +19,14 @@
 				</AudioDevices>
 			</Plugins>
 			<Busses>
+				<Bus Id="77978275" Name="Ambient"/>
+				<Bus Id="393239870" Name="SFX"/>
+				<Bus Id="1551306167" Name="UI"/>
+				<Bus Id="3055412916" Name="Object"/>
+				<Bus Id="3138142872" Name="Vocal"/>
 				<Bus Id="3803692087" Name="Master Audio Bus"/>
 			</Busses>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{6C0CB101-D74B-DE5C-AD81-F4CF05FD2B8E}</FileHash>
+	<FileHash>{7FE33A7B-5663-4BEB-AE41-E131C8C9EAA8}</FileHash>
 </SoundBanksInfo>
