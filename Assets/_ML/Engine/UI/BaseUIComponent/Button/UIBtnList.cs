@@ -542,6 +542,7 @@ namespace ML.Engine.UI
                 this.OnAllFinish = OnAllFinish;
                 this.isTrigger = false;
             }
+
             public void Check()
             {
                 lock(lockObject)
@@ -1209,7 +1210,7 @@ namespace ML.Engine.UI
         /// </summary>
         public void RemoveAllListener()
         {
-
+            if (this.isEmpty) return;
             for (int i = 0; i < TwoDimI; i++)
             {
                 for (int j = 0; j < TwoDimJ; j++)
