@@ -85,16 +85,16 @@ MonoBehaviour:
     m_Unicode: 65534
     m_GlyphIndex: 0
     m_Scale: 1
-    m_Name: Tex2D_TMP_Triangle
-    m_HashCode: 29884536
+    m_Name: Tex2D_TMP_Cook
+    m_HashCode: -479708386
   m_SpriteGlyphTable:
   - m_Index: 0
     m_Metrics:
-      m_Width: 68
-      m_Height: 68
-      m_HorizontalBearingX: -2
-      m_HorizontalBearingY: 58
-      m_HorizontalAdvance: 68
+      m_Width: 72
+      m_Height: 72
+      m_HorizontalBearingX: 0
+      m_HorizontalBearingY: 60
+      m_HorizontalAdvance: 80
     m_GlyphRect:
       m_X: 0
       m_Y: 0

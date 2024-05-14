@@ -140,7 +140,7 @@ namespace ProjectOC.WorkerNS.UI
             tempSprite["NoHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_NoHome");
             tempSprite["Worker"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_Worker");
             tempSprite["WorkerHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_WorkerHome");
-            LocalGameManager.Instance.WorkerManager.OnDeleteWokerEvent += OnDeleteWokerEvent;
+            LocalGameManager.Instance.WorkerManager.OnDeleteWorkerEvent += OnDeleteWokerEvent;
             IsInitWorkers = false;
             base.Enter();
         }
@@ -152,7 +152,7 @@ namespace ProjectOC.WorkerNS.UI
 
         protected override void Exit()
         {
-            LocalGameManager.Instance.WorkerManager.OnDeleteWokerEvent -= OnDeleteWokerEvent;
+            LocalGameManager.Instance.WorkerManager.OnDeleteWorkerEvent -= OnDeleteWokerEvent;
             foreach (var s in tempSprite)
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s.Value);
@@ -238,7 +238,7 @@ namespace ProjectOC.WorkerNS.UI
             if (!IsInitWorkers)
             {
                 Workers = new List<Worker>() { };
-                Workers.AddRange(LocalGameManager.Instance.WorkerManager.GetWorkers());
+                Workers.AddRange(LocalGameManager.Instance.WorkerManager.GetNotBanWorkers());
                 Workers = Workers.OrderBy(worker => worker.HaveHome).ThenBy(worker => worker != null).ThenBy(worker => worker.ID).ToList();
                 if (Worker != null)
                 {

@@ -66,7 +66,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("刁民"), ShowInInspector, ReadOnly]
         private Dictionary<string, Worker> Workers = new Dictionary<string, Worker>();
         public System.Action<Worker> OnAddWokerEvent;
-        public System.Action<Worker> OnDeleteWokerEvent;
+        public System.Action<Worker> OnDeleteWorkerEvent;
         private System.Random Random = new System.Random();
         #endregion
 
@@ -88,6 +88,13 @@ namespace ProjectOC.WorkerNS
             }
             return needSort ? set.OrderBy(worker => worker.ID).ToList() : set.ToList();
         }
+        public List<Worker> GetNotBanWorkers(bool needSort = true)
+        {
+            var result = GetWorkers(needSort);
+            result.RemoveAll(worker => worker.Status == Status.Ban);
+            return result;
+        }
+
         /// <summary>
         /// 获取能执行搬运任务的刁民
         /// </summary>
@@ -234,7 +241,7 @@ namespace ProjectOC.WorkerNS
             {
                 if (worker != null)
                 {
-                    OnDeleteWokerEvent?.Invoke(worker);
+                    OnDeleteWorkerEvent?.Invoke(worker);
                     ML.Engine.Manager.GameManager.DestroyObj(worker.gameObject);
                     ML.Engine.Manager.GameManager.Instance.ABResourceManager.ReleaseInstance(worker.gameObject);
                 }
@@ -243,7 +250,7 @@ namespace ProjectOC.WorkerNS
         }
         public bool DeleteWorker(Worker worker)
         {
-            OnDeleteWokerEvent?.Invoke(worker);
+            OnDeleteWorkerEvent?.Invoke(worker);
             ML.Engine.Manager.GameManager.DestroyObj(worker.gameObject);
             // 通过ManagerSpawn的Worker都是这个流程产生的，所以必须Release
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.ReleaseInstance(worker.gameObject);

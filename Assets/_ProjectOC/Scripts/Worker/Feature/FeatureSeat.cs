@@ -72,6 +72,7 @@ namespace ProjectOC.WorkerNS
         public void OnArriveEvent(Worker worker)
         {
             (this as IWorkerContainer).OnArriveSetPosition(worker, Socket.transform.position);
+            worker.LastPosition = Socket.transform.position;
         }
         public void SetWorkerRelateData() { SetFeatureID(); }
         public void RemoveWorkerRelateData() { FeatureIDs.Clear(); }

@@ -186,7 +186,7 @@ namespace ProjectOC.ProNodeNS
                 {
                     if (DataContainer.GetAmount(kv.id, DataNS.DataOpType.Storage) < kv.num) { return false; }
                 }
-                if (ProNodeType == ProNodeType.Mannul && !(HaveWorker && Worker.IsOnProNodeDuty)) { return false; }
+                if (ProNodeType == ProNodeType.Mannul && !(HaveWorker && Worker.IsOnProNodeDuty && !Worker.HaveFeatSeat)) { return false; }
                 if (StackAll >= StackMax * ProductNum) { return false; }
                 if (RequirePower && WorldProNode != null && WorldProNode.PowerCount <= 0) { return false; }
                 return true;

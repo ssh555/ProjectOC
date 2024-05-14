@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{071AEA51-BD5A-4037-9EC2-F333EDF48AB5}" SchemaVersion="119">
 	<Events>
-		<WorkUnit Name="Default Work Unit" ID="{071AEA51-BD5A-4037-9EC2-F333EDF48AB5}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{071AEA51-BD5A-4037-9EC2-F333EDF48AB5}" PersistMode="Standalone">
+			<ChildrenList>
+				<Folder Name="Ambient" ID="{17BBB227-557D-4C69-B696-66CEA093F505}" ShortID="421165558"/>
+				<Folder Name="Object" ID="{16517027-F739-4426-9B08-F79819FE06E8}" ShortID="755936677">
+					<ChildrenList>
+						<Folder Name="Player" ID="{3040CBA0-A39F-4909-B6F9-D3C90B21046B}" ShortID="197490952">
+							<ChildrenList>
+								<Event Name="Run" ID="{95FBE6BD-BB8F-4755-B854-269E2D960F86}"/>
+								<Event Name="Sprint" ID="{FD19B785-9368-4C07-AC39-F6B4F9F33097}"/>
+								<Event Name="Jump" ID="{0A442B71-B64C-4C08-BA83-4D55C05DC377}"/>
+								<Event Name="Collect" ID="{5B9D7343-F8BC-4318-8A7E-524BDB6693F1}"/>
+							</ChildrenList>
+						</Folder>
+					</ChildrenList>
+				</Folder>
+			</ChildrenList>
+		</WorkUnit>
 	</Events>
 </WwiseDocument>
