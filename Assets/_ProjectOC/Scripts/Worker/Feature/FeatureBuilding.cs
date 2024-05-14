@@ -19,10 +19,7 @@ namespace ProjectOC.WorkerNS
             }
             if (!isFirstBuild && oldPos != newPos)
             {
-                foreach (var seat in Seats)
-                {
-                    (seat as IWorkerContainer).RemoveWorker();
-                }
+                Clear();
             }
             base.OnChangePlaceEvent(oldPos, newPos);
         }
@@ -46,11 +43,17 @@ namespace ProjectOC.WorkerNS
             Seats[1] = new FeatureSeat(this, transform.Find($"seat2"));
             Seat = new FeatureSeat(this, transform.Find($"seat3"));
         }
-        public void OnDestroy()
+        public void Clear()
         {
+            CancleExchange();
+            CanCorrect();
             (Seats[0] as IWorkerContainer).RemoveWorker();
             (Seats[1] as IWorkerContainer).RemoveWorker();
             (Seat as IWorkerContainer).RemoveWorker();
+        }
+        public void OnDestroy()
+        {
+            Clear();
         }
         #endregion
 

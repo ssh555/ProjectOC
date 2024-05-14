@@ -317,6 +317,7 @@ namespace ProjectOC.ProNodeNS.UI
             ProNode.OnDataChangeEvent += RefreshDynamic;
             ProNode.OnProduceUpdateEvent += OnProduceTimerUpdateAction;
             ProNode.OnProduceEndEvent += Refresh;
+            ManagerNS.LocalGameManager.Instance.WorkerManager.OnDeleteWorkerEvent += OnDeleteWorkerEvent;
             WorkerIcon = ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_Beast");
             WorkerMaleIcon = ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_GenderMale");
             WorkerFemalIcon = ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_GenderFemale");
@@ -328,6 +329,7 @@ namespace ProjectOC.ProNodeNS.UI
             ProNode.OnDataChangeEvent -= RefreshDynamic;
             ProNode.OnProduceUpdateEvent -= OnProduceTimerUpdateAction;
             ProNode.OnProduceEndEvent -= Refresh;
+            ManagerNS.LocalGameManager.Instance.WorkerManager.OnDeleteWorkerEvent -= OnDeleteWorkerEvent;
             tempSprite.Remove("");
             foreach (var s in tempSprite.Values.ToArray())
             {
@@ -877,6 +879,16 @@ namespace ProjectOC.ProNodeNS.UI
                 bar1.fillAmount = (float)Worker.APCurrent / Worker.APMax;
                 bar1.color = GetAPBarColor(Worker.APCurrent);
             }
+        }
+
+        public void OnDeleteWorkerEvent(WorkerNS.Worker worker)
+        {
+            if (CurMode == Mode.ChangeWorker)
+            {
+                Workers.Remove(worker);
+                UpdateBtnInfo();
+            }
+            Refresh();
         }
         #endregion
     }

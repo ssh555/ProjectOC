@@ -109,7 +109,11 @@ namespace ProjectOC.WorkerNS
         #endregion
         #endregion
 
-        #region GetData
+        #region Get
+        public int GetEff(SkillType type)
+        {
+            return Skill[type].GetEff() + (type != SkillType.Transport ? Eff_AllSkill : Eff_AllSkill / 10);
+        }
         public List<Feature> GetSortFeature()
         {
             var result = Feature.Values.ToList();
@@ -200,12 +204,14 @@ namespace ProjectOC.WorkerNS
                 Quaternion.Euler(Vector3.zero), Vector3.one,
                 ManagerNS.LocalGameManager.Instance.Player.currentCharacter.transform);
         }
-
         public void OnDestroy()
         {
             ManagerNS.LocalGameManager.Instance.DispatchTimeManager.OnHourChangedAction -= OnHourChangeEvent_AddWorkerEff_AllSkill;
             OnStatusChangeEvent -= OnStateChangeEvent_RelaxExtraSpeed;
             OnStatusChangeEvent -= OnStateChangeEvent_FishInNest;
+
+            timerFishInNest?.End();
+            timerForNoHome?.End();
 
             (this as ML.Engine.Timer.ITickComponent).DisposeTick();
             Transport?.End();
@@ -592,10 +598,6 @@ namespace ProjectOC.WorkerNS
             AlterAP(-1 * realAPCost_Duty);
             AlterMood(-1 * EMCost);
         }
-        public int GetEff(SkillType type)
-        {
-            return Skill[type].GetEff() + (type != SkillType.Transport ? Eff_AllSkill : Eff_AllSkill / 10);
-        }
         #endregion
 
         #region State Status
@@ -743,7 +745,7 @@ namespace ProjectOC.WorkerNS
 
         #region NavMesh
         public NavMeshAgent Agent = null;
-        public float Threshold = 3f;
+        public float Threshold = 1f;
         [LabelText("寻路目的地"), ShowInInspector, ReadOnly]
         public Vector3 Target { get; private set; }
         [LabelText("是否在寻路"), ShowInInspector, ReadOnly]
@@ -752,8 +754,17 @@ namespace ProjectOC.WorkerNS
         public Vector3 LastPosition;
         public event Action<Worker> OnArriveEvent;
         private event Action<Worker> OnArriveDisposableEvent;
+        private bool IsArrive;
 
-        public bool SetDestination(Vector3 target, Action<Worker> action = null, WorkerContainerType arriveType = WorkerContainerType.None, float threshold = 3f)
+        public void OnCollisionEnter(Collision collision)
+        {
+            if (HaveDestination && collision.transform.position == Target)
+            {
+                IsArrive = true;
+            }
+        }
+
+        public bool SetDestination(Vector3 target, Action<Worker> action = null, WorkerContainerType arriveType = WorkerContainerType.None, float threshold = 1f)
         {
             ClearDestination();
             foreach (var key in ContainerDict.Keys.ToArray())
@@ -769,6 +780,7 @@ namespace ProjectOC.WorkerNS
             if (Agent.SetDestination(target))
             {
                 Target = target;
+                IsArrive = false;
                 HaveDestination = true;
                 OnArriveDisposableEvent = action;
                 return true;
@@ -781,6 +793,7 @@ namespace ProjectOC.WorkerNS
 
         public void ClearDestination()
         {
+            IsArrive = false;
             HaveDestination = false;
             if (Agent != null && Agent.enabled)
             {
@@ -805,7 +818,7 @@ namespace ProjectOC.WorkerNS
         public void Tick(float deltatime)
         {
             // NavMesh
-            if (HaveDestination && Vector3.Distance(transform.position, Target) < Threshold)
+            if (HaveDestination && (Vector3.Distance(transform.position, Target) < Threshold || IsArrive))
             {
                 ClearDestination();
                 OnArriveDisposableEvent?.Invoke(this);
