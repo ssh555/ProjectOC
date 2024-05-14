@@ -138,6 +138,14 @@ namespace ML.Engine.UI
             base.OnDestroy();
             GameManager.DestroyObj(this.cameraParent);
         }
+
+        protected override void OnDisable()
+        {
+            if (currentObjectBeingObserved != null)
+            {
+                GameManager.DestroyObj(currentObjectBeingObserved);
+            }
+        }
     }
 }
 

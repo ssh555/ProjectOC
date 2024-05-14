@@ -221,21 +221,6 @@ namespace ML.Engine.BuildingSystem.UI
                 }
             }
 
-
-            // 更换 Category2
-            /*            foreach (var category2 in this.CanSelectCategory2)
-                        {
-                            var go = Instantiate<GameObject>(this.templateType.gameObject, this.typeParent, false);
-                            go.GetComponentInChildren<Image>().sprite = GetTypeSprite(category2);
-                            go.GetComponentInChildren<TextMeshProUGUI>().text = monoBM.Category2Dict[category2.ToString()].GetDescription();
-                            go.SetActive(true);
-                            this.typeInstance.Add(category2, go.transform as RectTransform);
-
-                            if (category2 == this.SelectedCategory2)
-                            {
-                                Active(go.GetComponentInChildren<Image>());
-                            }
-                        }*/
             this.SwitchPanel.gameObject.SetActive(this.SelectedCategory1 != BuildingCategory1.Furniture);
             if (this.SelectedCategory1 != BuildingCategory1.Furniture)
             {
@@ -281,8 +266,6 @@ namespace ML.Engine.BuildingSystem.UI
                 });
                 
             }
-
-
             //家具特殊处理
             if (this.SelectedCategory1 == BuildingCategory1.Furniture)
             {
@@ -302,9 +285,6 @@ namespace ML.Engine.BuildingSystem.UI
 
                 this.FurnitureThemeBtnList.BindNavigationInputAction(this.Placer.BInput.BuildSelection.SwichBtn, UIBtnListContainer.BindType.started);
                 this.FurnitureThemeBtnList.BindButtonInteractInputAction(this.Placer.comfirmInputAction, UIBtnListContainer.BindType.started);
-                
-
-
             }
             else if(this.SelectedCategory1 != BuildingCategory1.Furniture)
             {
@@ -313,14 +293,12 @@ namespace ML.Engine.BuildingSystem.UI
                 this.FurnitureThemeBtnListTransform.gameObject.SetActive(false);
 
                 this.ChangeFurnitureDisplay.gameObject.SetActive(false);
-
-                this.FurniturePanel.gameObject.SetActive(false);
                 
                 this.FurnitureCategoryBtnList.OnSelectExit();
                 this.FurnitureCategoryBtnList.DeBindInputAction();
                 this.FurnitureCategoryBtnList.RemoveAllListener();
                 this.FurnitureDisplayBtnList.OnSelectExit();
-                this.FurnitureDisplayBtnList.DeleteAllButton();
+                this.FurnitureDisplayBtnList.DeleteAllButton(() => { this.FurniturePanel.gameObject.SetActive(false); });
                 this.FurnitureDisplayBtnList.DeBindInputAction();
                 this.FurnitureDisplayBtnList.RemoveAllListener();
             }
