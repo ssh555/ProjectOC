@@ -633,7 +633,7 @@ MonoBehaviour:
   checkLayer:
     serializedVersion: 2
     m_Bits: 256
-  posOffset: {x: 0, y: 0.2, z: 4}
+  posOffset: {x: 0.2, y: 0.2, z: 0}
   interactRadius: 10
   interactLayer:
     serializedVersion: 2

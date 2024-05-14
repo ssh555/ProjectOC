@@ -132,7 +132,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         {
             if (this.ParentBPart.AttachedArea != null)
             {
-                bool b = this.ParentBPart.AttachedArea.GetMatchPointOnArea(TargetPos, AreaCheckRadius, out pos, out rot);
+                bool b = this.ParentBPart.AttachedArea.GetMatchPointOnArea(TargetPos, out pos, out rot);
                 if(b == false)
                 {
                     pos = Vector3.negativeInfinity;
@@ -167,8 +167,8 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         /// <summary>
         /// 用于area检测时的判断半径，即Socket与Area使用两套判定逻辑
         /// </summary>
-        [LabelText("Area 检测半径"), ShowInInspector, FoldoutGroup("Area"), PropertyTooltip("单位 m")]
-        public static float AreaCheckRadius = 0.1f;
+        //[LabelText("Area 检测半径"), ShowInInspector, FoldoutGroup("Area"), PropertyTooltip("单位 m")]
+        //public static float AreaCheckRadius = 0.1f;
 
         #endregion
 

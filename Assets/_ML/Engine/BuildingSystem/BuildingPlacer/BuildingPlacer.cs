@@ -348,6 +348,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// <returns></returns>
         protected Ray GetCameraRay()
         {
+
             return new Ray(Camera.transform.position, Camera.transform.forward);
         }
 
@@ -506,7 +507,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     return false;
                 }
 
-                return true;
+                return false;
             }
 
             pos = Vector3.negativeInfinity;
@@ -520,6 +521,11 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// </summary>
         public void TransformSelectedPartInstance()
         {
+            // TODO
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Tab))
+            {
+                EditorApplication.isPaused = true;
+            }
             if (this.GetPlacePosAndRot(out Vector3 pos, out Quaternion rot))
             {
                 //if(pos == Vector3.negativeInfinity || float.IsNaN(rot.x))
@@ -567,7 +573,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
                 if (this.SelectedPartInstance.AttachedArea == null && this.SelectedPartInstance.AttachedSocket == null)
                 {
-                    this.SelectedPartInstance.transform.position = pos + this.Camera.transform.rotation * posOffset;
+                    this.SelectedPartInstance.transform.position = this.transform.position + this.Camera.transform.rotation * posOffset;
                 }
             }
         }

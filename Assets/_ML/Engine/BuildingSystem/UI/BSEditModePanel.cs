@@ -86,7 +86,7 @@ namespace ML.Engine.BuildingSystem.UI
 
         protected override void RegisterInput()
         {
-            Manager.GameManager.Instance.TickManager.RegisterFixedTick(0, this);
+            Manager.GameManager.Instance.TickManager.RegisterFixedTick(-1, this);
 
             this.Placer.EnablePlayerInput();
 
