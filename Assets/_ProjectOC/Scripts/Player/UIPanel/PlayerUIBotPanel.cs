@@ -199,15 +199,15 @@ namespace ProjectOC.Player.UI
                 () => 
                 { this.UIBtnList.DisableBtnList();
                     Ring.gameObject.SetActive(false);
+                    
+                },
+                postAction:
+                () => 
+                {
                     ProjectOC.Input.InputManager.PlayerInput.Player.Enable();
                     this.UIBtnList.SetCurSelectedNull();
                     this.UIBtnList.DeBindInputAction();
                     this.UIBtnList.EnableBtnList();
-                },
-                postAction:
-                () => 
-                { 
-                    
                 });
             this.Ring.gameObject.SetActive(true);
             this.UIKeyTipList?.RefreshKetTip();
