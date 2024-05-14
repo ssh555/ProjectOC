@@ -90,11 +90,11 @@ MonoBehaviour:
   m_SpriteGlyphTable:
   - m_Index: 0
     m_Metrics:
-      m_Width: 65
-      m_Height: 65
-      m_HorizontalBearingX: 1
-      m_HorizontalBearingY: 1
-      m_HorizontalAdvance: 1
+      m_Width: 72
+      m_Height: 72
+      m_HorizontalBearingX: 0
+      m_HorizontalBearingY: 60
+      m_HorizontalAdvance: 80
     m_GlyphRect:
       m_X: 0
       m_Y: 0
