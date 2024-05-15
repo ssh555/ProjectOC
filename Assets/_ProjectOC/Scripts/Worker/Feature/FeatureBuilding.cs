@@ -46,7 +46,7 @@ namespace ProjectOC.WorkerNS
         public void Clear()
         {
             CancleExchange();
-            CanCorrect();
+            CancleCorrect();
             (Seats[0] as IWorkerContainer).RemoveWorker();
             (Seats[1] as IWorkerContainer).RemoveWorker();
             (Seat as IWorkerContainer).RemoveWorker();
@@ -57,11 +57,12 @@ namespace ProjectOC.WorkerNS
         }
         #endregion
 
-        #region 词条传授
         private System.Random Random = new System.Random();
+        #region 词条传授
         [LabelText("喵喵窝座位"), ShowInInspector, ReadOnly]
-        private FeatureSeat[] Seats = new FeatureSeat[2];
+        public FeatureSeat[] Seats = new FeatureSeat[2];
         public bool IsExchange => timer != null && !timer.IsStoped;
+        public bool IsExchangeEnd;
         [NonSerialized]
         private ML.Engine.Timer.CounterDownTimer timer;
         [LabelText("传授计时器"), ShowInInspector]
@@ -90,11 +91,14 @@ namespace ProjectOC.WorkerNS
         public void ChangeWorker(int index, Worker worker)
         {
             if (0 > index && index > 1) { return; }
-            (Seats[index] as IWorkerContainer).SetWorker(worker);
+            if (Seats[index].Worker != worker && !IsExchange && !IsExchangeEnd)
+            {
+                (Seats[index] as IWorkerContainer).SetWorker(worker);
+            }
         }
         public void ExchangeFeature()
         {
-            if (CanExhcange() && !IsExchange)
+            if (CanExhcange() && !IsExchange && !IsExchangeEnd)
             {
                 var Config = ManagerNS.LocalGameManager.Instance.FeatureManager.Config;
                 ManagerNS.LocalGameManager.Instance.Player.InventoryCostItems(Config.FeatTransCostItemID, Config.FeatTransCostItemNum, priority: -1);
@@ -103,19 +107,28 @@ namespace ProjectOC.WorkerNS
         }
         public void ConfirmExchange()
         {
-            Seats[0].ChangerWorkerFeature();
-            Seats[1].ChangerWorkerFeature();
+            if (IsExchangeEnd)
+            {
+                Seats[0].ChangerWorkerFeature();
+                Seats[1].ChangerWorkerFeature();
+                IsExchangeEnd = false;
+            }
         }
         public void CancleExchange()
         {
-            if (IsExchange)
+            bool isExchange = IsExchange;
+            if (isExchange || IsExchangeEnd)
             {
                 Seats[0].SetFeatureID();
                 Seats[1].SetFeatureID();
+            }
+            if (isExchange)
+            {
                 Timer.End();
                 var config = ManagerNS.LocalGameManager.Instance.FeatureManager.Config;
                 ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(config.FeatTransCostItemID, config.FeatTransCostItemNum);
             }
+            IsExchangeEnd = false;
         }
         private void EndActionForTimer()
         {
@@ -132,14 +145,16 @@ namespace ProjectOC.WorkerNS
             {
                 Seats[1].FeatureIDs.Add(set1.ToList()[Random.Next(0, set1.Count + 1)]);
             }
+            IsExchangeEnd = true;
         }
         #endregion
 
         #region 词条修正
         [LabelText("词条修正座位"), ShowInInspector, ReadOnly]
-        private FeatureSeat Seat;
+        public FeatureSeat Seat;
         [ShowInInspector, ReadOnly]
         public bool IsCorrect => correctTimer != null && !correctTimer.IsStoped;
+        public bool IsCorrectEnd;
         public int CorrectTime => ManagerNS.LocalGameManager.Instance != null ?
             ManagerNS.LocalGameManager.Instance.FeatureManager.GetFeatureCorrectTime(CorrectType) : 0;
         public string CorrectCostItemID => ManagerNS.LocalGameManager.Instance != null ?
@@ -165,7 +180,7 @@ namespace ProjectOC.WorkerNS
         }
         public void ChangeCorrectType(FeatureCorrectType type)
         {
-            if (CorrectType != type && !IsCorrect)
+            if (CorrectType != type && !IsCorrect && !IsCorrectEnd)
             {
                 CorrectType = type;
             }
@@ -179,11 +194,14 @@ namespace ProjectOC.WorkerNS
         }
         public void ChangeCorrectWorker(Worker worker)
         {
-            (Seat as IWorkerContainer).SetWorker(worker);
+            if (Seat.Worker != worker && !IsCorrect && !IsCorrectEnd)
+            {
+                (Seat as IWorkerContainer).SetWorker(worker);
+            }
         }
         public void CorrectFeature()
         {
-            if (CanCorrect() && !IsCorrect)
+            if (CanCorrect() && !IsCorrect && !IsCorrectEnd)
             {
                 ManagerNS.LocalGameManager.Instance.Player.InventoryCostItems(CorrectCostItemID, CorrectCostItemNum, priority: -1);
                 CorrectTimer.Start();
@@ -191,16 +209,25 @@ namespace ProjectOC.WorkerNS
         }
         public void ConfirmCorrect()
         {
-            Seat.ChangerWorkerFeature();
+            if (IsCorrectEnd)
+            {
+                Seat.ChangerWorkerFeature();
+                IsCorrectEnd = false;
+            }
         }
         public void CancleCorrect()
         {
-            if (IsCorrect)
+            bool isCorrect = IsCorrect;
+            if (isCorrect || IsCorrectEnd)
             {
                 Seat.SetFeatureID();
+            }
+            if (isCorrect)
+            {
                 CorrectTimer.End();
                 ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(CorrectCostItemID, CorrectCostItemNum);
             }
+            IsCorrectEnd = false;
         }
         private void EndActionForCorrectTimer()
         {
@@ -237,6 +264,7 @@ namespace ProjectOC.WorkerNS
                     }
                 }
             }
+            IsCorrectEnd = true;
         }
         #endregion
     }

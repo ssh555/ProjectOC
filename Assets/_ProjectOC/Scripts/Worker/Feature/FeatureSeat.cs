@@ -24,23 +24,17 @@ namespace ProjectOC.WorkerNS
         public void SetFeatureID()
         {
             FeatureIDs.Clear();
-            foreach (Feature feature in Worker.Feature.Values)
+            foreach (Feature feature in Worker.GetFeatures(true))
             {
-                if (feature.Type != FeatureType.Race)
-                {
-                    FeatureIDs.Add(feature.ID);
-                }
+                FeatureIDs.Add(feature.ID);
             }
         }
         public void ChangerWorkerFeature()
         {
             HashSet<string> set = new HashSet<string>();
-            foreach(Feature feature in Worker.Feature.Values)
+            foreach(Feature feature in Worker.GetFeatures(true, false))
             {
-                if (feature.Type != FeatureType.Race)
-                {
-                    set.Add(feature.ID);
-                }
+                set.Add(feature.ID);
             }
             var newSet = FeatureIDs.ToHashSet();
             newSet.Remove("");
@@ -74,8 +68,16 @@ namespace ProjectOC.WorkerNS
             (this as IWorkerContainer).OnArriveSetPosition(worker, Socket.transform.position);
             worker.LastPosition = Socket.transform.position;
         }
-        public void SetWorkerRelateData() { SetFeatureID(); }
-        public void RemoveWorkerRelateData() { FeatureIDs.Clear(); }
+        public void SetWorkerRelateData() 
+        { 
+            SetFeatureID();
+            Worker.StopHomeTimer();
+        }
+        public void RemoveWorkerRelateData() 
+        { 
+            FeatureIDs.Clear();
+            Worker.CheckHome();
+        }
         #endregion
     }
 }

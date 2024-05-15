@@ -171,6 +171,29 @@ namespace ProjectOC.WorkerNS
         {
             return IsValidID(id) ? FeatureTableDict[id].Event : "";
         }
+        public bool GetCanCorrect(string id, FeatureCorrectType type)
+        {
+            bool flag = false;
+            if (IsValidID(id))
+            {
+                switch (type)
+                {
+                    case FeatureCorrectType.Upgrade: 
+                        flag = !string.IsNullOrEmpty(GetUpgradeID(id));
+                        break;
+                    case FeatureCorrectType.Downgrade:
+                        flag = !string.IsNullOrEmpty(GetReduceID(id));
+                        break;
+                    case FeatureCorrectType.Reverse:
+                        flag = !string.IsNullOrEmpty(GetReverseID(id));
+                        break;
+                    case FeatureCorrectType.Delete:
+                        flag = true;
+                        break;
+                }
+            }
+            return flag;
+        }
         public int GetFeatureCorrectTime(FeatureCorrectType type)
         {
             switch (type)

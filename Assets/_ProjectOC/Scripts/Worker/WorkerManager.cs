@@ -91,7 +91,7 @@ namespace ProjectOC.WorkerNS
         public List<Worker> GetNotBanWorkers(bool needSort = true)
         {
             var result = GetWorkers(needSort);
-            result.RemoveAll(worker => worker.Status == Status.Ban);
+            result.RemoveAll(worker => !worker.HaveFeatSeat);
             return result;
         }
 
@@ -103,7 +103,7 @@ namespace ProjectOC.WorkerNS
             Worker result = null;
             foreach (Worker worker in Workers.Values.ToArray())
             {
-                if (worker != null && worker.Status == Status.Fishing && !worker.HaveProNode && !worker.HaveTransport)
+                if (worker != null && worker.Status == Status.Fishing && !worker.HaveProNode && !worker.HaveTransport && !worker.HaveFeatSeat)
                 {
                     result = worker;
                     break;
