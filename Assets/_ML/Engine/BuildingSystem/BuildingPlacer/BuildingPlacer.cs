@@ -361,7 +361,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             return new Ray(GetCameraRay().GetPoint(this.checkRadius), Vector3.down);
         }
 
-
         /// <summary>
         /// 获取BPart当前落点的位置和旋转
         /// 位置 => SelectedPartInstance.Pos = pos
@@ -373,6 +372,8 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         {
             if (this.SelectedPartInstance != null)
             {
+                Vector3 nearestpos = new Vector3(float.PositiveInfinity, float.PositiveInfinity, float.PositiveInfinity);
+                bool isdown = false;
                 Vector3 oldP = this.SelectedPartInstance.transform.position;
                 var oldR = this.SelectedPartInstance.transform.rotation;
 
@@ -390,6 +391,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                 {
                     ray = this.GetCameraRayEndPointDownRay();
                     hits = Physics.RaycastAll(ray, this.checkRadius, this.checkLayer);
+                    isdown = true;
                 }
                 // 命中 || 未命中 => 在终点处向下检测
                 if (hits != null && hits.Length > 0)
@@ -402,6 +404,11 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     for(int i = 0; i < hits.Length; ++i)
                     {
                         hitInfo = hits[i];
+                        float dis = Vector3.Distance(hitInfo.point, this.Camera.transform.position);
+                        if(dis * dis < nearestpos.sqrMagnitude)
+                        {
+                            nearestpos = hitInfo.point;
+                        }
                         var socket = hitInfo.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
                         if (socket != null && this.SelectedPartInstance.ActiveSocket.CheckMatch(socket))
                         {
@@ -426,6 +433,11 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                         for (int i = tmp + 1; i < hits.Length; ++i)
                         {
                             var h = hits[i];
+                            float dis = Vector3.Distance(h.point, this.Camera.transform.position);
+                            if (dis * dis < nearestpos.sqrMagnitude)
+                            {
+                                nearestpos = h.point;
+                            }
                             var socket = h.collider.GetComponentInParent<BuildingSocket.BuildingSocket>();
                             if (socket != null && this.SelectedPartInstance.ActiveSocket.CheckMatch(socket))
                             {
@@ -477,7 +489,6 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
                 // 旋转 -> 自身
                 rot = this.SelectedPartInstance.BaseRotation * this.SelectedPartInstance.RotOffset;
-
                 Vector3 tmpP;
                 Quaternion tmpR;
                 // 位置&旋转 -> AttachedArea
@@ -506,7 +517,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     this.SelectedPartInstance.transform.rotation = oldR;
                     return false;
                 }
-
+                pos = isdown ? Vector3.negativeInfinity : nearestpos;
                 return false;
             }
 
@@ -554,7 +565,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
                 if (this.SelectedPartInstance.AttachedArea == null && this.SelectedPartInstance.AttachedSocket == null)
                 {
-                    this.SelectedPartInstance.transform.position = pos + this.Camera.transform.rotation * posOffset;
+                    this.SelectedPartInstance.transform.position = pos;
                 }
             }
             else if(this.SelectedPartInstance != null)
@@ -573,9 +584,24 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
                 if (this.SelectedPartInstance.AttachedArea == null && this.SelectedPartInstance.AttachedSocket == null)
                 {
-                    this.SelectedPartInstance.transform.rotation = this.Camera.transform.rotation;
+                    //this.SelectedPartInstance.transform.rotation = this.Camera.transform.rotation;
 
-                    this.SelectedPartInstance.transform.position = this.transform.position + this.Camera.transform.rotation * posOffset - (this.SelectedPartInstance.ActiveSocket.transform.position - this.SelectedPartInstance.transform.position);
+
+                    if(float.IsInfinity(pos.x) || float.IsInfinity(pos.y) || float.IsInfinity(pos.z))
+                    {
+                        var ray = GetCameraRay();
+                        this.SelectedPartInstance.transform.position = ray.GetPoint(this.checkRadius);
+                    }
+                    else
+                    {
+                        this.SelectedPartInstance.transform.position = pos;
+                        var bound = this.SelectedPartInstance.transform.GetComponentInChildren<Renderer>().bounds;
+                        float y = (this.SelectedPartInstance.ActiveSocket.transform.position - this.SelectedPartInstance.transform.position).y;
+                        pos.y += pos.y + y - (bound.center.y - bound.extents.y);
+                        pos.y -= y;
+                        this.SelectedPartInstance.transform.position = pos;
+
+                    }
                 }
             }
         }
