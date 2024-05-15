@@ -157,8 +157,36 @@ MonoBehaviour:
     ParentPath: SoundBanks\Default Work Unit
     guid: 0d540ac6f53cba4eb228e525c00e9584
     GuidInternal: 
-    m_lastTime: -8584860029812194743
-    List: []
+    m_lastTime: -8584858456798928127
+    List:
+    - name: Object
+      guid: 7096dde26e5c094f80011d497d9fd165
+      id: 3055412916
+      PathAndIcons:
+      - ElementName: SoundBanks
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 0d540ac6f53cba4eb228e525c00e9584
+      - ElementName: Object
+        ObjectType: 7
+        guid: 7096dde26e5c094f80011d497d9fd165
+      Path: SoundBanks\Default Work Unit\Object
+    - name: Universal
+      guid: 0f14b52f7326624d9f0258daea65f820
+      id: 3883048296
+      PathAndIcons:
+      - ElementName: SoundBanks
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 0d540ac6f53cba4eb228e525c00e9584
+      - ElementName: Universal
+        ObjectType: 7
+        guid: 0f14b52f7326624d9f0258daea65f820
+      Path: SoundBanks\Default Work Unit\Universal
   EventWwu:
   - PhysicalPath: Events\Default Work Unit.wwu
     PathAndIcons:
@@ -171,7 +199,7 @@ MonoBehaviour:
     ParentPath: Events\Default Work Unit
     guid: 51ea1a075abd37409ec2f333edf48ab5
     GuidInternal: 
-    m_lastTime: -8584860016595193434
+    m_lastTime: -8584858456799028217
     List:
     - name: Ambient
       guid: 27b2bb177d55694cb69666cea093f505
@@ -211,8 +239,31 @@ MonoBehaviour:
         guid: 43739d5bbcf818438a7e524bdb6693f1
       Path: Events\Default Work Unit\Object\Player\Collect
       maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxDuration: 0
+      minDuration: 0
+    - name: CollectComplete
+      guid: cdc12aad3254e840b10ad87d44f7bb94
+      id: 3752461480
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 51ea1a075abd37409ec2f333edf48ab5
+      - ElementName: Object
+        ObjectType: 4
+        guid: 2770511639f726449b08f79819fe06e8
+      - ElementName: Other
+        ObjectType: 4
+        guid: 9a01c4fb02db7948b83a9af7f795132f
+      - ElementName: CollectComplete
+        ObjectType: 3
+        guid: cdc12aad3254e840b10ad87d44f7bb94
+      Path: Events\Default Work Unit\Object\Other\CollectComplete
+      maxAttenuation: 0
+      maxDuration: 1.0416327
+      minDuration: 0.70659864
     - name: Jump
       guid: 712b440a4cb6084cba834d55c05dc377
       id: 3833651337
@@ -234,8 +285,8 @@ MonoBehaviour:
         guid: 712b440a4cb6084cba834d55c05dc377
       Path: Events\Default Work Unit\Object\Player\Jump
       maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxDuration: 0
+      minDuration: 0
     - name: Object
       guid: 2770511639f726449b08f79819fe06e8
       id: 3055412916
@@ -250,6 +301,26 @@ MonoBehaviour:
         ObjectType: 4
         guid: 2770511639f726449b08f79819fe06e8
       Path: Events\Default Work Unit\Object
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Other
+      guid: 9a01c4fb02db7948b83a9af7f795132f
+      id: 2376466361
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 51ea1a075abd37409ec2f333edf48ab5
+      - ElementName: Object
+        ObjectType: 4
+        guid: 2770511639f726449b08f79819fe06e8
+      - ElementName: Other
+        ObjectType: 4
+        guid: 9a01c4fb02db7948b83a9af7f795132f
+      Path: Events\Default Work Unit\Object\Other
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -294,8 +365,8 @@ MonoBehaviour:
         guid: bde6fb958fbb5547b854269e2d960f86
       Path: Events\Default Work Unit\Object\Player\Run
       maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxDuration: 0
+      minDuration: 0
     - name: Sprint
       guid: 85b719fd6893074cac39f6b4f9f33097
       id: 1296465089
@@ -317,8 +388,8 @@ MonoBehaviour:
         guid: 85b719fd6893074cac39f6b4f9f33097
       Path: Events\Default Work Unit\Object\Player\Sprint
       maxAttenuation: 0
-      maxDuration: -1
-      minDuration: -1
+      maxDuration: 0
+      minDuration: 0
   RtpcWwu:
   - PhysicalPath: Game Parameters\Default Work Unit.wwu
     PathAndIcons:
@@ -376,7 +447,7 @@ MonoBehaviour:
     m_lastTime: -8584860029812174724
     List: []
   ExpandedFileSystemItemIds: 
-  ExpandedWaapiItemIds: 
+  ExpandedWaapiItemIds: 0500000006000000080000000b0000000c0000000d0000006cd60200
   AutoSyncSelection: 0
   autoPopulateEnabled: 1
   currentDataSource: 0

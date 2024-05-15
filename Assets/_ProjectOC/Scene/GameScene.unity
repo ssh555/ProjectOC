@@ -50590,6 +50590,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1137265739}
   - component: {fileID: 1137265738}
+  - component: {fileID: 1137265740}
   m_Layer: 0
   m_Name: WwiseGlobal
   m_TagString: Untagged
@@ -50637,6 +50638,31 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1137265740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1137265737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8c6566b587253c48ad8e17e18a8149f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerList: f7e1664c
+  useOtherObject: 0
+  data:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: ab55a0e06fbbd38488df6e2f37a5571c, type: 2}
+  decodeBank: 0
+  overrideLoadSetting: 0
+  loadAsynchronous: 0
+  saveDecodedBank: 0
+  unloadTriggerList: 958ca0ea
+  bankNameInternal: 
+  valueGuidInternal: 
 --- !u!43 &1138767005
 Mesh:
   m_ObjectHideFlags: 0
@@ -57595,13 +57621,60 @@ MonoBehaviour:
     CurrentHour: 23
     CurrentDay: 0
   ProNodeManager:
-    EffBase: 100
-    LevelMax: 2
-    LevelUpgradeEff: 320000003200000032000000
+    Config:
+      EffBase: 0
+      LevelMax: 0
+      LevelUpgradeEff: 
+      InitAPCost_Duty: 0
   StoreManager:
-    LevelMax: 2
-    LevelCapacity: 020000000400000008000000
-    LevelDataCapacity: 3200000064000000c8000000
+    Config:
+      LevelMax: 0
+      LevelCapacity: 
+      LevelDataCapacity: 
+  WorkerManager:
+    Config:
+      APMax: 0
+      APWorkThreshold: 0
+      APRelaxThreshold: 0
+      APCost_Transport: 0
+      EatTime: 0
+      EMMax: 0
+      EMLowThreshold: 0
+      EMHighThreshold: 0
+      EMLowEffect: 0
+      EMHighEffect: 0
+      EMCost: 0
+      EMRecover: 0
+      WalkSpeed: 0
+      BURMax: 0
+      ExpTransport: 0
+      SkillEff: 0
+      ExpToLevel: 
+      LevelToEff_Duty: 
+      LevelToEff_Transport: 
+      DestroyTimeForNoHome: 0
+      SkillStdMean: 0
+      SkillStdDev: 0
+      SkillStdHighBound: 0
+      SkillStdLowBound: 0
+      WorkerHomeAddMoodTime: 0
+  FeatureManager:
+    Config:
+      FeatTransCostItemID: 
+      FeatTransCostItemNum: 0
+      FeatTransTime: 0
+      FeatUpCostItemID: 
+      FeatUpCostItemNum: 0
+      FeatUpTime: 0
+      FeatDownCostItemID: 
+      FeatDownCostItemNum: 0
+      FeatDownTime: 0
+      FeatReverseCostItemID: 
+      FeatReverseCostItemNum: 0
+      FeatReverseTime: 0
+      FeatDelCostItemID: 
+      FeatDelCostItemNum: 0
+      FeatDelTime: 0
   ClanManager:
     Clans: []
   MonoBuildingManager:
@@ -57642,6 +57715,11 @@ MonoBehaviour:
     powerSubs: []
     PowerCoreMaxCount: 1
   RestaurantManager:
+    Config:
+      BroadcastTime: 0
+      SeatNum: 0
+      DataNum: 0
+      MaxCapacity: 0
     Workers: []
   IslandAreaManager:
     updatedFieldTransforms: []

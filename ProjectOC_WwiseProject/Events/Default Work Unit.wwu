@@ -14,6 +14,21 @@
 								<Event Name="Collect" ID="{5B9D7343-F8BC-4318-8A7E-524BDB6693F1}"/>
 							</ChildrenList>
 						</Folder>
+						<Folder Name="Other" ID="{FBC4019A-DB02-4879-B83A-9AF7F795132F}" ShortID="448002632">
+							<ChildrenList>
+								<Event Name="CollectComplete" ID="{AD2AC1CD-5432-40E8-B10A-D87D44F7BB94}">
+									<ChildrenList>
+										<Action Name="" ID="{A1C79582-E250-4A5C-9262-BD3A67429061}" ShortID="247366489">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="CollectComplete" ID="{241070D9-3990-469E-93E3-3F9F26ED3F68}" WorkUnitID="{4FF73FB8-9682-4A5D-A538-E65F1E289D50}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+							</ChildrenList>
+						</Folder>
 					</ChildrenList>
 				</Folder>
 			</ChildrenList>

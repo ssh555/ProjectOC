@@ -27,6 +27,36 @@
 				<Bus Id="3803692087" Name="Master Audio Bus"/>
 			</Busses>
 		</SoundBank>
+		<SoundBank Id="3055412916" Type="User" Language="SFX" Hash="{546BBA08-FDB8-90F9-D5E8-59283A1D05AB}">
+			<ShortName>Object</ShortName>
+			<Path>Object.bnk</Path>
+			<Media>
+				<File Id="431605116" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>采集完毕0.wav</ShortName>
+					<CachePath>SFX/采集完毕0_818F3B66.wem</CachePath>
+				</File>
+				<File Id="891491632" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>采集完毕1.wav</ShortName>
+					<CachePath>SFX/采集完毕1_818F3B66.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="2756333705" Name="Collect" MaxAttenuation="0" DurationType="OneShot" DurationMin="0" DurationMax="0"/>
+				<Event Id="3752461480" Name="CollectComplete" DurationType="OneShot" DurationMin="0.70659864" DurationMax="1.0416327">
+					<MediaRefs>
+						<MediaRef Id="431605116"/>
+						<MediaRef Id="891491632"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3833651337" Name="Jump" MaxAttenuation="0" DurationType="OneShot" DurationMin="0" DurationMax="0"/>
+				<Event Id="712161704" Name="Run" MaxAttenuation="0" DurationType="OneShot" DurationMin="0" DurationMax="0"/>
+				<Event Id="1296465089" Name="Sprint" MaxAttenuation="0" DurationType="OneShot" DurationMin="0" DurationMax="0"/>
+			</Events>
+		</SoundBank>
+		<SoundBank Id="3883048296" Type="User" Language="SFX" Hash="{01D772B8-46AC-BB62-7D52-81BADE3A64C2}">
+			<ShortName>Universal</ShortName>
+			<Path>Universal.bnk</Path>
+		</SoundBank>
 	</SoundBanks>
-	<FileHash>{7FE33A7B-5663-4BEB-AE41-E131C8C9EAA8}</FileHash>
+	<FileHash>{7DFCF9FD-98A6-81FA-85F0-5302890CCB1C}</FileHash>
 </SoundBanksInfo>

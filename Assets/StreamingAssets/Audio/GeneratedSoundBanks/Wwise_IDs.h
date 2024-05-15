@@ -11,6 +11,22 @@
 
 namespace AK
 {
+    namespace EVENTS
+    {
+        static const AkUniqueID COLLECT = 2756333705U;
+        static const AkUniqueID COLLECTCOMPLETE = 3752461480U;
+        static const AkUniqueID JUMP = 3833651337U;
+        static const AkUniqueID RUN = 712161704U;
+        static const AkUniqueID SPRINT = 1296465089U;
+    } // namespace EVENTS
+
+    namespace BANKS
+    {
+        static const AkUniqueID INIT = 1355168291U;
+        static const AkUniqueID OBJECT = 3055412916U;
+        static const AkUniqueID UNIVERSAL = 3883048296U;
+    } // namespace BANKS
+
     namespace BUSSES
     {
         static const AkUniqueID AMBIENT = 77978275U;

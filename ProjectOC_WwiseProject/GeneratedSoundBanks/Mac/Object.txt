@@ -1,0 +1,11 @@
+Event	ID	Name			Wwise Object Path	Notes
+	712161704	Run			\Default Work Unit\Object\Player\Run	
+	1296465089	Sprint			\Default Work Unit\Object\Player\Sprint	
+	2756333705	Collect			\Default Work Unit\Object\Player\Collect	
+	3752461480	CollectComplete			\Default Work Unit\Object\Other\CollectComplete	
+	3833651337	Jump			\Default Work Unit\Object\Player\Jump	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	431605116	采集完毕0	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Mac\SFX\采集完毕0_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Other\CollectComplete\采集完毕0		124740
+	891491632	采集完毕1	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Mac\SFX\采集完毕1_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Other\CollectComplete\采集完毕1		183840
+
