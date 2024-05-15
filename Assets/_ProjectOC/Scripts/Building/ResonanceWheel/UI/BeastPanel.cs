@@ -200,8 +200,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #endregion
 
-            #region UI
-            #region temp
+        #region UI
+        #region temp
         private Sprite icon_genderfemaleSprite, icon_gendermaleSprite;
 
         private void ClearTemp()
@@ -213,7 +213,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region UI对象引用
-        [ShowInInspector]
+        //[ShowInInspector]
         private int CurrentBeastIndex { get { return this.BeastList.GetCurSelectedPos1(); } }
 
         [ShowInInspector]
