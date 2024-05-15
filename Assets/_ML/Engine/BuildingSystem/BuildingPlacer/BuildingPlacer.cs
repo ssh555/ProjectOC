@@ -517,6 +517,8 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
                     this.SelectedPartInstance.transform.rotation = oldR;
                     return false;
                 }
+                //this.SelectedPartInstance.transform.position = oldP;
+                //this.SelectedPartInstance.transform.rotation = oldR;
                 pos = isdown ? Vector3.negativeInfinity : nearestpos;
                 return false;
             }
@@ -584,21 +586,18 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
                 if (this.SelectedPartInstance.AttachedArea == null && this.SelectedPartInstance.AttachedSocket == null)
                 {
-                    //this.SelectedPartInstance.transform.rotation = this.Camera.transform.rotation;
-
-
                     if(float.IsInfinity(pos.x) || float.IsInfinity(pos.y) || float.IsInfinity(pos.z))
                     {
                         var ray = GetCameraRay();
-                        this.SelectedPartInstance.transform.position = ray.GetPoint(this.checkRadius);
+                        this.SelectedPartInstance.transform.position = ray.GetPoint(this.checkRadius) - (this.SelectedPartInstance.ActiveSocket.transform.position - this.SelectedPartInstance.transform.position);
                     }
                     else
                     {
+                        Vector3 offset = (this.SelectedPartInstance.ActiveSocket.transform.position - this.SelectedPartInstance.transform.position);
+                        pos -= offset;
                         this.SelectedPartInstance.transform.position = pos;
                         var bound = this.SelectedPartInstance.transform.GetComponentInChildren<Renderer>().bounds;
-                        float y = (this.SelectedPartInstance.ActiveSocket.transform.position - this.SelectedPartInstance.transform.position).y;
-                        pos.y += pos.y + y - (bound.center.y - bound.extents.y);
-                        pos.y -= y;
+                        pos.y += pos.y - bound.min.y + offset.y;
                         this.SelectedPartInstance.transform.position = pos;
 
                     }
