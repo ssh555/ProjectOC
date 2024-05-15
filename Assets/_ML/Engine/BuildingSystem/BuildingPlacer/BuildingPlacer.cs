@@ -521,11 +521,11 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         /// </summary>
         public void TransformSelectedPartInstance()
         {
-            // TODO
-            if (UnityEngine.Input.GetKeyDown(KeyCode.Tab))
-            {
-                EditorApplication.isPaused = true;
-            }
+            //// TODO
+            //if (UnityEngine.Input.GetKeyDown(KeyCode.Tab))
+            //{
+            //    EditorApplication.isPaused = true;
+            //}
             if (this.GetPlacePosAndRot(out Vector3 pos, out Quaternion rot))
             {
                 //if(pos == Vector3.negativeInfinity || float.IsNaN(rot.x))
@@ -573,7 +573,9 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
 
                 if (this.SelectedPartInstance.AttachedArea == null && this.SelectedPartInstance.AttachedSocket == null)
                 {
-                    this.SelectedPartInstance.transform.position = this.transform.position + this.Camera.transform.rotation * posOffset;
+                    this.SelectedPartInstance.transform.rotation = this.Camera.transform.rotation;
+
+                    this.SelectedPartInstance.transform.position = this.transform.position + this.Camera.transform.rotation * posOffset - (this.SelectedPartInstance.ActiveSocket.transform.position - this.SelectedPartInstance.transform.position);
                 }
             }
         }
