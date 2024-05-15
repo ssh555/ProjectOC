@@ -629,7 +629,7 @@ MonoBehaviour:
   DisableGridRotRate: 90
   EnableGridRotRate: 15
   camera: {fileID: 0}
-  checkRadius: 20
+  checkRadius: 10
   checkLayer:
     serializedVersion: 2
     m_Bits: 256
