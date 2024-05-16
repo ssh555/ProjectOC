@@ -74,18 +74,21 @@ namespace ProjectOC.WorkerNS
                 {
                     timer = new ML.Engine.Timer.CounterDownTimer
                         (ManagerNS.LocalGameManager.Instance.FeatureManager.Config.FeatTransTime, false, false);
+                    timer.OnUpdateEvent += UpdateActionForTimer;
                     timer.OnEndEvent += EndActionForTimer;
                 }
                 return timer;
             }
         }
+        public event Action<double> OnExchangeUpdateEvent;
+        public event Action OnExchangeEndEvent;
         public bool CanExhcange()
         {
             bool flag1 = Seats[0].IsArrive && Seats[1].IsArrive;
             var Config = ManagerNS.LocalGameManager.Instance.FeatureManager.Config;
             bool flag2 = ManagerNS.LocalGameManager.Instance.Player.InventoryHaveItem(Config.FeatTransCostItemID, Config.FeatTransCostItemNum);
-            bool flag3 = Seats[0].FeatureIDs.Count != 0 || Seats[1].FeatureIDs.Count != 0;
-            bool flag4 = Seats[0].FeatureIDs.Count != 3 || Seats[1].FeatureIDs.Count != 3;
+            bool flag3 = Seats[0].WorkerFeatureIDs.Count != 0 || Seats[1].WorkerFeatureIDs.Count != 0;
+            bool flag4 = Seats[0].WorkerFeatureIDs.Count != 3 || Seats[1].WorkerFeatureIDs.Count != 3;
             return flag1 && flag2 && flag3 && flag4;
         }
         public void ChangeWorker(int index, Worker worker)
@@ -130,6 +133,10 @@ namespace ProjectOC.WorkerNS
             }
             IsExchangeEnd = false;
         }
+        private void UpdateActionForTimer(double time)
+        {
+            OnExchangeUpdateEvent?.Invoke(time);
+        }
         private void EndActionForTimer()
         {
             var set1 = Seats[0].FeatureIDs.ToHashSet();
@@ -139,13 +146,16 @@ namespace ProjectOC.WorkerNS
             set1.SymmetricExceptWith(set2);
             if (cnt1 < 3 && set2.Count > 0)
             {
+                Seats[0].WorkerFeatureIDs.Add("");
                 Seats[0].FeatureIDs.Add(set2.ToList()[Random.Next(0, set2.Count + 1)]);
             }
             if (cnt2 < 3 && set1.Count > 0)
             {
+                Seats[1].WorkerFeatureIDs.Add("");
                 Seats[1].FeatureIDs.Add(set1.ToList()[Random.Next(0, set1.Count + 1)]);
             }
             IsExchangeEnd = true;
+            OnExchangeEndEvent?.Invoke();
         }
         #endregion
 
@@ -173,11 +183,14 @@ namespace ProjectOC.WorkerNS
                 if (correctTimer == null && ManagerNS.LocalGameManager.Instance != null)
                 {
                     correctTimer = new ML.Engine.Timer.CounterDownTimer(CorrectTime, false, false);
+                    correctTimer.OnUpdateEvent += UpdateActionForCorrectTimer;
                     correctTimer.OnEndEvent += EndActionForCorrectTimer;
                 }
                 return correctTimer;
             }
         }
+        public event Action<double> OnCorrectUpdateEvent;
+        public event Action OnCorrectEndEvent;
         public void ChangeCorrectType(FeatureCorrectType type)
         {
             if (CorrectType != type && !IsCorrect && !IsCorrectEnd)
@@ -189,7 +202,7 @@ namespace ProjectOC.WorkerNS
         {
             bool flag1 = Seat.IsArrive;
             bool flag2 = ManagerNS.LocalGameManager.Instance.Player.InventoryHaveItem(CorrectCostItemID, CorrectCostItemNum);
-            bool flag3 = Seat.FeatureIDs.Count > 0;
+            bool flag3 = Seat.WorkerFeatureIDs.Count > 0;
             return flag1 && flag2 && flag3;
         }
         public void ChangeCorrectWorker(Worker worker)
@@ -229,6 +242,10 @@ namespace ProjectOC.WorkerNS
             }
             IsCorrectEnd = false;
         }
+        private void UpdateActionForCorrectTimer(double time)
+        {
+            OnCorrectUpdateEvent?.Invoke(time);
+        }
         private void EndActionForCorrectTimer()
         {
             if (CorrectType != FeatureCorrectType.Reverse)
@@ -248,7 +265,7 @@ namespace ProjectOC.WorkerNS
                         Seat.FeatureIDs[index] = "";
                         break;
                 }
-                if (newFeatID != "")
+                if (!string.IsNullOrEmpty(newFeatID))
                 {
                     Seat.FeatureIDs[index] = newFeatID;
                 }
@@ -258,13 +275,14 @@ namespace ProjectOC.WorkerNS
                 for (int i = 0; i < Seat.FeatureIDs.Count; i++)
                 {
                     string reverseID = ManagerNS.LocalGameManager.Instance.FeatureManager.GetReverseID(Seat.FeatureIDs[i]);
-                    if (reverseID != "")
+                    if (!string.IsNullOrEmpty(reverseID))
                     {
                         Seat.FeatureIDs[i] = reverseID;
                     }
                 }
             }
             IsCorrectEnd = true;
+            OnCorrectEndEvent?.Invoke();
         }
         #endregion
     }

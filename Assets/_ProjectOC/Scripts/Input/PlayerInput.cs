@@ -2016,7 +2016,7 @@ namespace ProjectOC.Input
                 {
                     ""name"": """",
                     ""id"": ""bfa2495f-668b-4977-a665-a2d496e2a890"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Keyboard>/3"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

@@ -236,6 +236,22 @@ namespace ProjectOC.WorkerNS
                     return Config.FeatDelCostItemNum;
             }
         }
+        public Color GetColorForUI(string id)
+        {
+            if (IsValidID(id))
+            {
+                FeatureType type = GetFeatureType(id);
+                if (type == FeatureType.Buff) { return Color.green; }
+                else if (type == FeatureType.DeBuff) { return Color.red; }
+                else if (type == FeatureType.Reverse)
+                {
+                    FeatureType reverseType = GetFeatureType(GetReverseID(id));
+                    if (reverseType == FeatureType.Buff) { return new Color(1f, 0.843f, 0f); }
+                    if (reverseType == FeatureType.DeBuff) { return new Color(0.5f, 0f, 0.5f); }
+                }
+            }
+            return default(Color);
+        }
         #endregion
     }
 }

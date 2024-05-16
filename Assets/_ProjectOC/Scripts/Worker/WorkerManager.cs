@@ -75,6 +75,10 @@ namespace ProjectOC.WorkerNS
         {
             return Workers.ContainsKey(ID) ? Workers[ID] : null;
         }
+        public string GetWorkerName(string ID)
+        {
+            return Workers.ContainsKey(ID) ? Workers[ID].Name : "";
+        }
         public List<Worker> GetWorkers(bool needSort = true)
         {
             var set = Workers.Values.ToHashSet();
@@ -93,6 +97,10 @@ namespace ProjectOC.WorkerNS
             var result = GetWorkers(needSort);
             result.RemoveAll(worker => !worker.HaveFeatSeat);
             return result;
+        }
+        public List<string> GetNotBanWorkerIDs(bool needSort = true)
+        {
+            return GetNotBanWorkerIDs(needSort).ToList();
         }
 
         /// <summary>

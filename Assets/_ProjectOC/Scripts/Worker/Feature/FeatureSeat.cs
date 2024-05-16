@@ -1,7 +1,6 @@
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace ProjectOC.WorkerNS
@@ -13,43 +12,38 @@ namespace ProjectOC.WorkerNS
         public FeatureBuilding FeatBuild;
         [LabelText("¶ÔÓ¦µÄSocket"), ReadOnly, NonSerialized]
         public Transform Socket;
-        public List<string> FeatureIDs;
+        public List<string> WorkerFeatureIDs = new List<string>();
+        public List<string> FeatureIDs = new List<string>();
 
         public FeatureSeat(FeatureBuilding featBuild, Transform socket)
         {
             FeatBuild = featBuild;
             Socket = socket;
-            FeatureIDs = new List<string>();
         }
         public void SetFeatureID()
         {
             FeatureIDs.Clear();
-            foreach (Feature feature in Worker.GetFeatures(true))
-            {
-                FeatureIDs.Add(feature.ID);
-            }
+            WorkerFeatureIDs.Clear();
+            FeatureIDs.AddRange(Worker.GetFeatureIDs(true));
+            WorkerFeatureIDs.AddRange(FeatureIDs);
         }
         public void ChangerWorkerFeature()
         {
-            HashSet<string> set = new HashSet<string>();
-            foreach(Feature feature in Worker.GetFeatures(true, false))
+            for (int i = 0; i < FeatureIDs.Count; i++)
             {
-                set.Add(feature.ID);
-            }
-            var newSet = FeatureIDs.ToHashSet();
-            newSet.Remove("");
-            newSet.SymmetricExceptWith(set);
-            foreach (var id in set)
-            {
-                Worker.Feature[id].ClearOwner();
-            }
-            foreach (string id in newSet)
-            {
-                var feature = ManagerNS.LocalGameManager.Instance.FeatureManager.SpawnFeature(id);
-                if (!string.IsNullOrEmpty(feature.ID) && 
-                    ManagerNS.LocalGameManager.Instance.FeatureManager.IsValidID(feature.ID))
+                string oldID = WorkerFeatureIDs[i];
+                string newID = FeatureIDs[i];
+                if (oldID != newID)
                 {
-                    feature.SetOwner(Worker);
+                    if (Worker.Feature.ContainsKey(oldID))
+                    {
+                        Worker.Feature[oldID].ClearOwner();
+                    }
+                    if (ManagerNS.LocalGameManager.Instance.FeatureManager.IsValidID(newID))
+                    {
+                        var feature = ManagerNS.LocalGameManager.Instance.FeatureManager.SpawnFeature(newID);
+                        feature.SetOwner(Worker);
+                    }
                 }
             }
         }
@@ -74,8 +68,9 @@ namespace ProjectOC.WorkerNS
             Worker.StopHomeTimer();
         }
         public void RemoveWorkerRelateData() 
-        { 
+        {
             FeatureIDs.Clear();
+            WorkerFeatureIDs.Clear();
             Worker.CheckHome();
         }
         #endregion

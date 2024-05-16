@@ -127,6 +127,10 @@ namespace ProjectOC.WorkerNS
             }
             return result;
         }
+        public List<string> GetFeatureIDs(bool nonRace = false, bool needSort = true)
+        {
+            return GetFeatures(nonRace, needSort).Select(x => x.ID).ToList();
+        }
         /// <summary>
         /// 0 1 2 分别代表低中高
         /// </summary>
