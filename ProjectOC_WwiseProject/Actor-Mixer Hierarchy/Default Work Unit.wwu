@@ -13,8 +13,21 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
-						<Sound Name="Wave" ID="{BFB459BC-B28D-4A47-8AB9-CD6C2A9F807B}" ShortID="755486964">
+						<Sound Name="Wave" ID="{077BBC68-8DF6-4FAE-B4AD-B4BD7A45BF76}" ShortID="896126538">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="1"/>
+								<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+								<Property Name="OverridePositioning" Type="bool" Value="True"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-5</Value>
+									</ValueList>
+								</Property>
+							</PropertyList>
 							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="Wave" ID="{E121DAFE-44DF-49A1-A2D4-75FA958DD376}" WorkUnitID="{3E1F40D9-20D5-4351-A552-99AACE140946}"/>
+								</Reference>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{9E041035-5E5F-4377-A3C6-19837008FE68}"/>
 								</Reference>
@@ -22,7 +35,93 @@
 									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{ED914FEB-7EF6-463A-8EF2-8FD1C93B4368}"/>
 								</Reference>
 							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="wave" ID="{8839FADA-A1A1-4FFA-87D5-A5C4950ADFAB}">
+									<Language>SFX</Language>
+									<AudioFile>wave.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="158127460"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="wave" ID="{8839FADA-A1A1-4FFA-87D5-A5C4950ADFAB}" Platform="Linked"/>
+							</ActiveSourceList>
 						</Sound>
+						<RandomSequenceContainer Name="Noise" ID="{E51D71E6-4AB5-4538-8ABF-D2230D8A9EE4}" ShortID="923303209">
+							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="1"/>
+								<Property Name="NormalOrShuffle" Type="int16" Value="0"/>
+								<Property Name="OverridePositioning" Type="bool" Value="True"/>
+								<Property Name="PlayMechanismLoop" Type="bool" Value="True"/>
+								<Property Name="PlayMechanismStepOrContinuous" Type="int16" Value="0"/>
+								<Property Name="RandomAvoidRepeating" Type="bool" Value="False"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="creature" ID="{8688D9E2-4057-444A-BE61-A53933D4F22E}" WorkUnitID="{3E1F40D9-20D5-4351-A552-99AACE140946}"/>
+								</Reference>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{9E041035-5E5F-4377-A3C6-19837008FE68}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{ED914FEB-7EF6-463A-8EF2-8FD1C93B4368}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="BGNoise" ID="{48465451-4C36-45EA-A7AC-478A04F71D72}" ShortID="276243840">
+									<PropertyList>
+										<Property Name="3DSpatialization" Type="int16" Value="1"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Attenuation">
+											<ObjectRef Name="creature" ID="{8688D9E2-4057-444A-BE61-A53933D4F22E}" WorkUnitID="{3E1F40D9-20D5-4351-A552-99AACE140946}"/>
+										</Reference>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{9E041035-5E5F-4377-A3C6-19837008FE68}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Ambient" ID="{3722997D-6945-43EB-9E0A-61A108ACF5FE}" WorkUnitID="{ED914FEB-7EF6-463A-8EF2-8FD1C93B4368}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SFX_Noice_YouELin" ID="{6488F9D7-8DA8-4DED-8488-88988C193B16}">
+											<Language>SFX</Language>
+											<AudioFile>SFX_Noice_YouELin.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="63926730"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SFX_Noice_YouELin" ID="{6488F9D7-8DA8-4DED-8488-88988C193B16}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Silence1" ID="{CBE90179-4CC7-4D95-A50A-7AFCAE45327A}" ShortID="728145549">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{9E041035-5E5F-4377-A3C6-19837008FE68}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{ED914FEB-7EF6-463A-8EF2-8FD1C93B4368}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<SourcePlugin Name="Silence" ID="{95C0625A-7AD0-4A3A-87E2-89153B6A1EEC}" ShortID="368468223" PluginName="Wwise Silence" CompanyID="0" PluginID="101">
+											<PropertyList>
+												<Property Name="Length" Type="Real32" Value="5"/>
+												<Property Name="LengthMax" Type="Real32" Value="2"/>
+												<Property Name="LengthMin" Type="Real32" Value="-2"/>
+											</PropertyList>
+											<Language>SFX</Language>
+										</SourcePlugin>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Silence" ID="{95C0625A-7AD0-4A3A-87E2-89153B6A1EEC}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
 					</ChildrenList>
 				</ActorMixer>
 				<ActorMixer Name="Object" ID="{5826FB69-BA9C-47AD-9CDD-B1C9701C35D0}" ShortID="673193384">
@@ -74,6 +173,14 @@
 											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{ED914FEB-7EF6-463A-8EF2-8FD1C93B4368}"/>
 										</Reference>
 									</ReferenceList>
+									<ChildrenList>
+										<SourcePlugin Name="Silence" ID="{86B054FD-EE97-4E2A-8F2F-3E803B36C086}" ShortID="975196566" PluginName="Wwise Silence" CompanyID="0" PluginID="101">
+											<Language>SFX</Language>
+										</SourcePlugin>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Silence" ID="{86B054FD-EE97-4E2A-8F2F-3E803B36C086}" Platform="Linked"/>
+									</ActiveSourceList>
 								</Sound>
 								<Sound Name="Collect" ID="{6CF77F8D-BE47-47E4-BD67-EBA5417E1422}" ShortID="81705212">
 									<ReferenceList>

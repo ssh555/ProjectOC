@@ -3,7 +3,32 @@
 	<Events>
 		<WorkUnit Name="Default Work Unit" ID="{071AEA51-BD5A-4037-9EC2-F333EDF48AB5}" PersistMode="Standalone">
 			<ChildrenList>
-				<Folder Name="Ambient" ID="{17BBB227-557D-4C69-B696-66CEA093F505}" ShortID="421165558"/>
+				<Folder Name="Ambient" ID="{17BBB227-557D-4C69-B696-66CEA093F505}" ShortID="421165558">
+					<ChildrenList>
+						<Event Name="Play_BGNoise" ID="{60EBAEFA-F461-4AEB-8E9C-881D7BE507B2}">
+							<ChildrenList>
+								<Action Name="" ID="{ABD1009D-D988-45C5-9FD8-19A37B21F623}" ShortID="284727709">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Noise" ID="{E51D71E6-4AB5-4538-8ABF-D2230D8A9EE4}" WorkUnitID="{4FF73FB8-9682-4A5D-A538-E65F1E289D50}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Ocean_Wave" ID="{B4827F36-F753-4E67-BC1E-5F55C8800B1A}">
+							<ChildrenList>
+								<Action Name="" ID="{B3F092C6-20B6-4E53-8E9B-F695E0C03919}" ShortID="1036988667">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Wave" ID="{077BBC68-8DF6-4FAE-B4AD-B4BD7A45BF76}" WorkUnitID="{4FF73FB8-9682-4A5D-A538-E65F1E289D50}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
 				<Folder Name="Object" ID="{16517027-F739-4426-9B08-F79819FE06E8}" ShortID="755936677">
 					<ChildrenList>
 						<Folder Name="Player" ID="{3040CBA0-A39F-4909-B6F9-D3C90B21046B}" ShortID="197490952">

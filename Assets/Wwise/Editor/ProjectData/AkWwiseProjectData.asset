@@ -157,11 +157,11 @@ MonoBehaviour:
     ParentPath: SoundBanks\Default Work Unit
     guid: 0d540ac6f53cba4eb228e525c00e9584
     GuidInternal: 
-    m_lastTime: -8584858456798928127
+    m_lastTime: -8584857767469283721
     List:
-    - name: Object
-      guid: 7096dde26e5c094f80011d497d9fd165
-      id: 3055412916
+    - name: Temp
+      guid: 025b80eb44ad914989d6a814da3052e8
+      id: 3190558387
       PathAndIcons:
       - ElementName: SoundBanks
         ObjectType: 5
@@ -169,24 +169,10 @@ MonoBehaviour:
       - ElementName: Default Work Unit
         ObjectType: 12
         guid: 0d540ac6f53cba4eb228e525c00e9584
-      - ElementName: Object
+      - ElementName: Temp
         ObjectType: 7
-        guid: 7096dde26e5c094f80011d497d9fd165
-      Path: SoundBanks\Default Work Unit\Object
-    - name: Universal
-      guid: 0f14b52f7326624d9f0258daea65f820
-      id: 3883048296
-      PathAndIcons:
-      - ElementName: SoundBanks
-        ObjectType: 5
-        guid: 00000000000000000000000000000000
-      - ElementName: Default Work Unit
-        ObjectType: 12
-        guid: 0d540ac6f53cba4eb228e525c00e9584
-      - ElementName: Universal
-        ObjectType: 7
-        guid: 0f14b52f7326624d9f0258daea65f820
-      Path: SoundBanks\Default Work Unit\Universal
+        guid: 025b80eb44ad914989d6a814da3052e8
+      Path: SoundBanks\Default Work Unit\Temp
   EventWwu:
   - PhysicalPath: Events\Default Work Unit.wwu
     PathAndIcons:
@@ -199,7 +185,7 @@ MonoBehaviour:
     ParentPath: Events\Default Work Unit
     guid: 51ea1a075abd37409ec2f333edf48ab5
     GuidInternal: 
-    m_lastTime: -8584858456799028217
+    m_lastTime: -8584857767469453876
     List:
     - name: Ambient
       guid: 27b2bb177d55694cb69666cea093f505
@@ -304,6 +290,26 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
+    - name: Ocean_Wave
+      guid: 367f82b453f7674ebc1e5f55c8800b1a
+      id: 1444674271
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 51ea1a075abd37409ec2f333edf48ab5
+      - ElementName: Ambient
+        ObjectType: 4
+        guid: 27b2bb177d55694cb69666cea093f505
+      - ElementName: Ocean_Wave
+        ObjectType: 3
+        guid: 367f82b453f7674ebc1e5f55c8800b1a
+      Path: Events\Default Work Unit\Ambient\Ocean_Wave
+      maxAttenuation: 60
+      maxDuration: -1
+      minDuration: -1
     - name: Other
       guid: 9a01c4fb02db7948b83a9af7f795132f
       id: 2376466361
@@ -322,6 +328,26 @@ MonoBehaviour:
         guid: 9a01c4fb02db7948b83a9af7f795132f
       Path: Events\Default Work Unit\Object\Other
       maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_BGNoise
+      guid: faaeeb6061f4eb4a8e9c881d7be507b2
+      id: 1361265631
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 51ea1a075abd37409ec2f333edf48ab5
+      - ElementName: Ambient
+        ObjectType: 4
+        guid: 27b2bb177d55694cb69666cea093f505
+      - ElementName: Play_BGNoise
+        ObjectType: 3
+        guid: faaeeb6061f4eb4a8e9c881d7be507b2
+      Path: Events\Default Work Unit\Ambient\Play_BGNoise
+      maxAttenuation: 20
       maxDuration: -1
       minDuration: -1
     - name: Player
@@ -447,7 +473,7 @@ MonoBehaviour:
     m_lastTime: -8584860029812174724
     List: []
   ExpandedFileSystemItemIds: 
-  ExpandedWaapiItemIds: 0500000006000000080000000b0000000c0000000d0000006cd60200
+  ExpandedWaapiItemIds: 0600000007000000080000000c0000000d0000006cd60200
   AutoSyncSelection: 0
   autoPopulateEnabled: 1
   currentDataSource: 0

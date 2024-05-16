@@ -16,6 +16,8 @@ namespace AK
         static const AkUniqueID COLLECT = 2756333705U;
         static const AkUniqueID COLLECTCOMPLETE = 3752461480U;
         static const AkUniqueID JUMP = 3833651337U;
+        static const AkUniqueID OCEAN_WAVE = 1444674271U;
+        static const AkUniqueID PLAY_BGNOISE = 1361265631U;
         static const AkUniqueID RUN = 712161704U;
         static const AkUniqueID SPRINT = 1296465089U;
     } // namespace EVENTS
@@ -23,8 +25,7 @@ namespace AK
     namespace BANKS
     {
         static const AkUniqueID INIT = 1355168291U;
-        static const AkUniqueID OBJECT = 3055412916U;
-        static const AkUniqueID UNIVERSAL = 3883048296U;
+        static const AkUniqueID TEMP = 3190558387U;
     } // namespace BANKS
 
     namespace BUSSES

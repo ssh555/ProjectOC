@@ -1,0 +1,18 @@
+Event	ID	Name			Wwise Object Path	Notes
+	712161704	Run			\Default Work Unit\Object\Player\Run	
+	1296465089	Sprint			\Default Work Unit\Object\Player\Sprint	
+	1361265631	Play_BGNoise			\Default Work Unit\Ambient\Play_BGNoise	
+	1444674271	Ocean_Wave			\Default Work Unit\Ambient\Ocean_Wave	
+	2756333705	Collect			\Default Work Unit\Object\Player\Collect	
+	3752461480	CollectComplete			\Default Work Unit\Object\Other\CollectComplete	
+	3833651337	Jump			\Default Work Unit\Object\Player\Jump	
+
+Source plug-ins	ID	Name	Type		Wwise Object Path	Notes
+	368468223	Silence	Wwise Silence		\Actor-Mixer Hierarchy\Default Work Unit\Ambient\Noise\Silence1\Silence	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	63926730	BGNoise	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\SFX_Noice_YouELin_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Ambient\Noise\BGNoise		8866388
+	158127460	Wave	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\wave_FBC78EF0.wem		\Actor-Mixer Hierarchy\Default Work Unit\Ambient\Wave		11885936
+	431605116	采集完毕0	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\采集完毕0_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Other\CollectComplete\采集完毕0		124740
+	891491632	采集完毕1	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\采集完毕1_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Other\CollectComplete\采集完毕1		183840
+
