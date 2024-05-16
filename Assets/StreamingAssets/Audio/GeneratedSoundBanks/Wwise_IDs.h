@@ -13,6 +13,7 @@ namespace AK
 {
     namespace EVENTS
     {
+        static const AkUniqueID BGM = 412724365U;
         static const AkUniqueID COLLECT = 2756333705U;
         static const AkUniqueID COLLECTCOMPLETE = 3752461480U;
         static const AkUniqueID JUMP = 3833651337U;
@@ -32,6 +33,7 @@ namespace AK
     {
         static const AkUniqueID AMBIENT = 77978275U;
         static const AkUniqueID MASTER_AUDIO_BUS = 3803692087U;
+        static const AkUniqueID MUSIC = 3991942870U;
         static const AkUniqueID OBJECT = 3055412916U;
         static const AkUniqueID SFX = 393239870U;
         static const AkUniqueID UI = 1551306167U;
