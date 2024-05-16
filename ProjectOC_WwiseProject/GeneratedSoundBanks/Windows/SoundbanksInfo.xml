@@ -27,25 +27,73 @@
 				<Bus Id="3803692087" Name="Master Audio Bus"/>
 			</Busses>
 		</SoundBank>
-		<SoundBank Id="3190558387" Type="User" Language="SFX" Hash="{62459F3B-B0E7-00E5-AEBF-1E967DCFF649}">
+		<SoundBank Id="3190558387" Type="User" Language="SFX" Hash="{20B10A87-A514-0CD5-4B24-E51967A3A3A0}">
 			<ShortName>Temp</ShortName>
 			<Path>Temp.bnk</Path>
 			<Media>
 				<File Id="63926730" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>SFX_Noice_YouELin.wav</ShortName>
-					<CachePath>SFX/SFX_Noice_YouELin_818F3B66.wem</CachePath>
+					<CachePath>SFX/SFX_Noice_YouELin_C797EE82.wem</CachePath>
 				</File>
 				<File Id="158127460" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>wave.wav</ShortName>
 					<CachePath>SFX/wave_FBC78EF0.wem</CachePath>
 				</File>
+				<File Id="230924643" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Sprint.wav</ShortName>
+					<CachePath>SFX/Sprint_23267F85.wem</CachePath>
+				</File>
+				<File Id="299161394" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>SFX_Noice_YouELin.wav</ShortName>
+					<CachePath>SFX/SFX_Noice_YouELin_A676FA6D.wem</CachePath>
+				</File>
+				<File Id="386136567" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>jump.wav</ShortName>
+					<CachePath>SFX/jump_4E48A5CF.wem</CachePath>
+				</File>
 				<File Id="431605116" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>采集完毕0.wav</ShortName>
 					<CachePath>SFX/采集完毕0_818F3B66.wem</CachePath>
 				</File>
+				<File Id="473888039" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Sprint.wav</ShortName>
+					<CachePath>SFX/Sprint_2F7FD417.wem</CachePath>
+				</File>
+				<File Id="552213126" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>collect.wav</ShortName>
+					<CachePath>SFX/collect_818F3B66.wem</CachePath>
+				</File>
+				<File Id="666970874" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Sprint.wav</ShortName>
+					<CachePath>SFX/Sprint_97FD0D27.wem</CachePath>
+				</File>
+				<File Id="676272004" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Run.wav</ShortName>
+					<CachePath>SFX/Run_EBDDDB51.wem</CachePath>
+				</File>
+				<File Id="734542745" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>jump.wav</ShortName>
+					<CachePath>SFX/jump_7A23717E.wem</CachePath>
+				</File>
+				<File Id="788751720" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Run.wav</ShortName>
+					<CachePath>SFX/Run_F23347B0.wem</CachePath>
+				</File>
+				<File Id="835563755" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Run.wav</ShortName>
+					<CachePath>SFX/Run_D3D42B43.wem</CachePath>
+				</File>
+				<File Id="872536999" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Sprint.wav</ShortName>
+					<CachePath>SFX/Sprint_3830295C.wem</CachePath>
+				</File>
 				<File Id="891491632" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>采集完毕1.wav</ShortName>
 					<CachePath>SFX/采集完毕1_818F3B66.wem</CachePath>
+				</File>
+				<File Id="985401193" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Run.wav</ShortName>
+					<CachePath>SFX/Run_EE496FCF.wem</CachePath>
 				</File>
 			</Media>
 			<Plugins>
@@ -54,14 +102,23 @@
 				</Custom>
 			</Plugins>
 			<Events>
-				<Event Id="2756333705" Name="Collect" MaxAttenuation="0" DurationType="OneShot" DurationMin="0" DurationMax="0"/>
+				<Event Id="2756333705" Name="Collect" DurationType="OneShot" DurationMin="0.52707356" DurationMax="0.9391383">
+					<MediaRefs>
+						<MediaRef Id="552213126"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="3752461480" Name="CollectComplete" DurationType="OneShot" DurationMin="0.70659864" DurationMax="1.0416327">
 					<MediaRefs>
 						<MediaRef Id="431605116"/>
 						<MediaRef Id="891491632"/>
 					</MediaRefs>
 				</Event>
-				<Event Id="3833651337" Name="Jump" MaxAttenuation="0" DurationType="OneShot" DurationMin="0" DurationMax="0"/>
+				<Event Id="3833651337" Name="Jump" DurationType="OneShot" DurationMin="0.6409531" DurationMax="0.80815834">
+					<MediaRefs>
+						<MediaRef Id="386136567"/>
+						<MediaRef Id="734542745"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="1444674271" Name="Ocean_Wave" MaxAttenuation="60" DurationType="Infinite">
 					<MediaRefs>
 						<MediaRef Id="158127460"/>
@@ -70,6 +127,7 @@
 				<Event Id="1361265631" Name="Play_BGNoise" MaxAttenuation="20" DurationType="Infinite">
 					<MediaRefs>
 						<MediaRef Id="63926730"/>
+						<MediaRef Id="299161394"/>
 					</MediaRefs>
 					<PluginRefs>
 						<Custom>
@@ -77,10 +135,24 @@
 						</Custom>
 					</PluginRefs>
 				</Event>
-				<Event Id="712161704" Name="Run" MaxAttenuation="0" DurationType="OneShot" DurationMin="0" DurationMax="0"/>
-				<Event Id="1296465089" Name="Sprint" MaxAttenuation="0" DurationType="OneShot" DurationMin="0" DurationMax="0"/>
+				<Event Id="712161704" Name="Run" DurationType="OneShot" DurationMin="0.1233321" DurationMax="0.3271875">
+					<MediaRefs>
+						<MediaRef Id="676272004"/>
+						<MediaRef Id="788751720"/>
+						<MediaRef Id="835563755"/>
+						<MediaRef Id="985401193"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1296465089" Name="Sprint" DurationType="OneShot" DurationMin="0.11685329" DurationMax="0.27254307">
+					<MediaRefs>
+						<MediaRef Id="230924643"/>
+						<MediaRef Id="473888039"/>
+						<MediaRef Id="666970874"/>
+						<MediaRef Id="872536999"/>
+					</MediaRefs>
+				</Event>
 			</Events>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{A653A243-19A8-5C9C-FE93-37FC49A746C4}</FileHash>
+	<FileHash>{6F5E05F9-C710-E9BE-AA63-5453AC7EAA71}</FileHash>
 </SoundBanksInfo>

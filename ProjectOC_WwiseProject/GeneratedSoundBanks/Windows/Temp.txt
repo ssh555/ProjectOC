@@ -11,8 +11,20 @@ Source plug-ins	ID	Name	Type		Wwise Object Path	Notes
 	368468223	Silence	Wwise Silence		\Actor-Mixer Hierarchy\Default Work Unit\Ambient\Noise\Silence1\Silence	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	63926730	BGNoise	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\SFX_Noice_YouELin_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Ambient\Noise\BGNoise		8866388
+	63926730	BGNoise_01	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\SFX_Noice_YouELin_C797EE82.wem		\Actor-Mixer Hierarchy\Default Work Unit\Ambient\Noise\BGNoise_01		4010708
 	158127460	Wave	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\wave_FBC78EF0.wem		\Actor-Mixer Hierarchy\Default Work Unit\Ambient\Wave		11885936
+	230924643	Sprint1	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\Sprint_23267F85.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Sprint\Sprint1		36112
+	299161394	BGNoise	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\SFX_Noice_YouELin_A676FA6D.wem		\Actor-Mixer Hierarchy\Default Work Unit\Ambient\Noise\BGNoise		4855788
+	386136567	jump_03	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\jump_4E48A5CF.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Jump\jump_03		142652
 	431605116	采集完毕0	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\采集完毕0_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Other\CollectComplete\采集完毕0		124740
+	473888039	Sprint1_02	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\Sprint_2F7FD417.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Sprint\Sprint1_02		27612
+	552213126	collect	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\collect_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\collect		82928
+	666970874	Sprint1_03	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\Sprint_97FD0D27.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Sprint\Sprint1_03		30240
+	676272004	Run1	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\Run_EBDDDB51.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Run\Run1		35808
+	734542745	jump_02	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\jump_7A23717E.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Jump\jump_02		113160
+	788751720	Run1_01	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\Run_F23347B0.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Run\Run1_01		31720
+	835563755	Run1_02	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\Run_D3D42B43.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Run\Run1_02		29136
+	872536999	Sprint1_01	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\Sprint_3830295C.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Sprint\Sprint1_01		30240
 	891491632	采集完毕1	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\采集完毕1_818F3B66.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Other\CollectComplete\采集完毕1		183840
+	985401193	Run1_03	C:\Users\xmm\Documents\GitHub\projectoc\ProjectOC_WwiseProject\.cache\Windows\SFX\Run_EE496FCF.wem		\Actor-Mixer Hierarchy\Default Work Unit\Object\Player\Run\Run1_03		43336
 
