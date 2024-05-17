@@ -14,8 +14,8 @@ namespace ProjectOC.ManagerNS
             {
                 if (value > 0)
                 {
-                    this.timeScale = value;
-                    this.Timer?.Reset(timeScale);
+                    timeScale = value;
+                    Timer?.Reset(timeScale);
                 }
             }
         }
@@ -40,27 +40,27 @@ namespace ProjectOC.ManagerNS
 
         public void OnRegister()
         {
-            this.Timer = new ML.Engine.Timer.CounterDownTimer(TimeScale, true, false);
-            this.Timer.OnEndEvent += EndActionForTimer;
-            this.Timer.Start();
+            Timer = new ML.Engine.Timer.CounterDownTimer(TimeScale, true, false);
+            Timer.OnEndEvent += EndActionForTimer;
+            Timer.Start();
         }
 
         public void OnUnregister()
         {
-            this.Timer?.End();
+            Timer?.End();
         }
 
         private void EndActionForTimer()
         {
-            this.CurrentMinute = (this.CurrentMinute + 1) % 60;
-            if (this.CurrentMinute == 0)
+            CurrentMinute = (CurrentMinute + 1) % 60;
+            if (CurrentMinute == 0)
             {
-                this.CurrentHour = (this.CurrentHour + 1) % 24;
-                this.OnHourChangedAction?.Invoke(this.CurrentHour);
-                if (this.CurrentHour == 0)
+                CurrentHour = (CurrentHour + 1) % 24;
+                OnHourChangedAction?.Invoke(CurrentHour);
+                if (CurrentHour == 0)
                 {
-                    this.CurrentDay += 1;
-                    this.OnDayChangedAction?.Invoke(this.CurrentDay);
+                    CurrentDay += 1;
+                    OnDayChangedAction?.Invoke(CurrentDay);
                 }
             }
         }

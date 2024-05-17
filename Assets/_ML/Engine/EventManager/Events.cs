@@ -1,8 +1,6 @@
-using ML.Engine.UI;
-using System.Collections;
-using System.Collections.Generic;
 using ProjectOC.ManagerNS;
 using UnityEngine;
+using ProjectOC.WorkerNS;
 
 namespace ML.Engine.Event
 {
@@ -54,7 +52,11 @@ namespace ML.Engine.Event
 
         public void CanDirectEcho(bool p1)
         {
-            Debug.Log($"CanDirectEcho {p1} ");
+            Debug.Log($"CanDirectEcho {p1} "); 
+            if(p1)
+            {
+                LocalGameManager.Instance.WorkerEchoManager.LevelUp();
+            }
         }
 
         public void AddProNodeEffBase(int p1,int p2)
@@ -62,19 +64,29 @@ namespace ML.Engine.Event
             Debug.Log($"AddProNodeEffBase {p1} {p2}");
         }
 
-        public void AddWorkerEff_AllSkill(int p1, int p2,int p3)
+        public void AddWorkerEff_AllSkill(int p1, int p2, int p3, Worker worker) 
         {
-            Debug.Log($"AddWorkerEff_AllSkill {p1} {p2} {p3}");
+            worker.AddWorkerEff_AllSkill(p1, p2, p3);
         }
-
-        public void RelaxExtraSpeed(int p1)
+        public void RemoveAddWorkerEff_AllSkill(int p1, int p2, int p3, Worker worker)
         {
-            Debug.Log($"RelaxExtraSpeed {p1}");
+            worker.RemoveAddWorkerEff_AllSkill(p1, p2, p3);
         }
-
-        public void FishInNest()
+        public void RelaxExtraSpeed(int p1, Worker worker)
         {
-            Debug.Log($"FishInNest ");
+            worker.RelaxExtraSpeed(p1);
+        }
+        public void RemoveRelaxExtraSpeed(int p1, Worker worker)
+        {
+            worker.RemoveRelaxExtraSpeed(p1);
+        }
+        public void FishInNest(Worker worker)
+        {
+            worker.AddFishInNest();
+        }
+        public void RemoveFishInNest(Worker worker)
+        {
+            worker.RemoveFishInNest();
         }
 
         public void AddRandomSkill(int p1)
@@ -113,8 +125,3 @@ namespace ML.Engine.Event
         }
     }
 }
-
-
-
-
-

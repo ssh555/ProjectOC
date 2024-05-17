@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   classification:
     Category1: 2
-    Category2: 202
+    Category2: 203
     Category3: 100
     Category4: 1
   instanceID: 

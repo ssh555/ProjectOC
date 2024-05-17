@@ -9,7 +9,6 @@ namespace ML.Engine.InventorySystem
     {
         [LabelText("ID"), ReadOnly]
         public string ID;
-
         public bool IsValidRecipe => !string.IsNullOrEmpty(ID) && (LocalGameManager.Instance == null || LocalGameManager.Instance.RecipeManager.IsValidID(ID));
         #region ¶Á±íÊý¾Ý
         [LabelText("ÅÅÐò"), ShowInInspector, ReadOnly]
@@ -32,12 +31,12 @@ namespace ML.Engine.InventorySystem
 
         public Recipe(RecipeTableData config)
         {
-            this.ID = config.ID;
+            ID = config.ID;
         }
 
         public void ClearData()
         {
-            this.ID = "";
+            ID = "";
         }
 
         public int GetRawNum(string itemID)

@@ -82,7 +82,7 @@ MonoBehaviour:
     displayName: "L\u5899\u89D2\u70B9"
     value: 18
   - name: other
-    displayName: "\u5176\u4ED6"
+    displayName: "B\u9876\u89D2\u70B9"
     value: 19
   - name: Pillar_Down
     displayName: "\u67F1\u5E95"

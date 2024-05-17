@@ -9,7 +9,6 @@ using ML.Engine.Manager;
 using static ProjectOC.WorkerNS.UI.UIWorkerHome;
 using System.Linq;
 
-
 namespace ProjectOC.WorkerNS.UI
 {
     public class UIWorkerHome : ML.Engine.UI.UIBasePanel<WorkerHomePanel>
@@ -140,11 +139,11 @@ namespace ProjectOC.WorkerNS.UI
             tempSprite["NoHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_NoHome");
             tempSprite["Worker"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_Worker");
             tempSprite["WorkerHome"] = LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_WorkerHome");
-            LocalGameManager.Instance.WorkerManager.OnDeleteWokerEvent += OnDeleteWokerEvent;
+            LocalGameManager.Instance.WorkerManager.OnDeleteWorkerEvent += OnDeleteWorkerEvent;
             IsInitWorkers = false;
             base.Enter();
         }
-        public void OnDeleteWokerEvent(Worker worker)
+        public void OnDeleteWorkerEvent(Worker worker)
         {
             IsInitWorkers = false;
             Refresh();
@@ -152,7 +151,7 @@ namespace ProjectOC.WorkerNS.UI
 
         protected override void Exit()
         {
-            LocalGameManager.Instance.WorkerManager.OnDeleteWokerEvent -= OnDeleteWokerEvent;
+            LocalGameManager.Instance.WorkerManager.OnDeleteWorkerEvent -= OnDeleteWorkerEvent;
             foreach (var s in tempSprite)
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s.Value);
@@ -229,12 +228,8 @@ namespace ProjectOC.WorkerNS.UI
         #region UI
         public override void Refresh()
         {
-            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
-            {
-                return;
-            }
+            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit) { return; }
             Text_Title.text = PanelTextContent.textHome;
-
             if (!IsInitWorkers)
             {
                 Workers = new List<Worker>() {};

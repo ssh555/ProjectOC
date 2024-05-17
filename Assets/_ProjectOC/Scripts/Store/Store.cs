@@ -25,7 +25,6 @@ namespace ProjectOC.StoreNS
         public string WorldIconItemID;
         #endregion
 
-
         public Store(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType)
         {
             StoreType = storeType;
@@ -54,7 +53,6 @@ namespace ProjectOC.StoreNS
                 ChangeCapacity(ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelCapacity[newLevel], 
                     ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelDataCapacity[newLevel]);
                 Level = newLevel;
-                (this as MissionNS.IMissionObj).UpdateTransport();
                 return true;
             }
             return false;

@@ -46,3 +46,4 @@ MonoBehaviour:
     SkillStdDev: 50
     SkillStdHighBound: 60
     SkillStdLowBound: 0
+    WorkerHomeAddMoodTime: 60

@@ -250,20 +250,18 @@ namespace ML.Engine.Timer
         {
             this.Speed = speed;
         }
-
-
-        public string ConvertToMinAndSec()
+        public (int,int) ConvertToMinAndSec()
         {
             int min = (int)(this.currentTime) / 60;
             int sec = (int)(this.currentTime) - min * 60;
-            return min.ToString() + "min" + sec.ToString() + "s";
+            return (min,sec);
         }
-        public string ConvertToMin()
+        public int ConvertToMin()
         {
             int min = (int)(this.currentTime) / 60;
             int sec = (int)(this.currentTime) - min * 60;
             min = sec > 0 ? min + 1 : min;
-            return min.ToString();
+            return min;
         }
     }
 }

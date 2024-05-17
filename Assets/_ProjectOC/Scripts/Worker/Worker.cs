@@ -17,7 +17,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("名称"), ReadOnly, ShowInInspector]
         public string Name { get; private set; }
         [LabelText("类目"), ReadOnly]
-        public WorkerEchoNS.Category Category;
+        public WorkerCategory Category;
         [LabelText("性别"), ReadOnly, ShowInInspector]
         public Gender Gender { get; private set; }
         #endregion
@@ -98,8 +98,8 @@ namespace ProjectOC.WorkerNS
         public int ExpTransport;
         [LabelText("技能"), ShowInInspector, ReadOnly]
         public Dictionary<SkillType, Skill> Skill = new Dictionary<SkillType, Skill>();
-        [LabelText("特性"), ReadOnly]
-        public List<Feature> Features = new List<Feature>();
+        [LabelText("特性"), ReadOnly, ShowInInspector]
+        public Dictionary<string, Feature> Feature = new Dictionary<string, Feature>();
         #endregion
         #region Time
         [LabelText("是否可以安排时段"), ReadOnly, ShowInInspector]
@@ -109,9 +109,45 @@ namespace ProjectOC.WorkerNS
         #endregion
         #endregion
 
-        #region Init OnDestroy
-        public void Init()
+        #region Get
+        public int GetEff(SkillType type)
         {
+            return Skill[type].GetEff() + (type != SkillType.Transport ? Eff_AllSkill : Eff_AllSkill / 10);
+        }
+        public List<Feature> GetSortFeature()
+        {
+            var result = Feature.Values.ToList();
+            result.Sort(new Feature());
+            return result;
+        }
+        /// <summary>
+        /// 0 1 2 分别代表低中高
+        /// </summary>
+        public int GetMoodStatu()
+        {
+            if (HaveSetEMLowEffect) return 0;
+            if (HaveSetEMHighEffect) return 2;
+            return 1;
+        }
+        /// <summary>
+        /// 0 1 2 分别代表低中高
+        /// </summary>
+        public int GetAPStatu()
+        {
+            if (APCurrent < APWorkThreshold) return 0;
+            if (APCurrent > APRelaxThreshold) return 2;
+            return 1;
+        }
+        #endregion
+
+        #region Init OnDestroy
+        public void Init(WorkerEcho workerEcho = null)
+        {
+            #region Event
+            ManagerNS.LocalGameManager.Instance.DispatchTimeManager.OnHourChangedAction += OnHourChangeEvent_AddWorkerEff_AllSkill;
+            OnStatusChangeEvent += OnStateChangeEvent_RelaxExtraSpeed;
+            #endregion
+
             #region Init Data
             var config = ManagerNS.LocalGameManager.Instance.WorkerManager.Config;
             ID = ManagerNS.LocalGameManager.Instance.WorkerManager.GetOneNewWorkerID();
@@ -140,10 +176,12 @@ namespace ProjectOC.WorkerNS
                 int level = skillType != SkillType.None ? levels[(int)skillType - 1] : 0;
                 Skill.Add(skillType, new Skill(skillType, level));
             }
-            Features = ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature();
-            foreach (Feature feature in Features)
+            var features = workerEcho != null ? 
+                ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature(workerEcho.FeatureMax, workerEcho.FeatureOdds) :
+                ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature(new List<int>() { 100, 100, 100, 100}, new List<int>() { 50, 50 });
+            foreach (Feature feature in features)
             {
-                feature.ApplyFeature(this);
+                feature.SetOwner(this);
             }
             CanArrange = true;
             CanReverse = false;
@@ -155,12 +193,9 @@ namespace ProjectOC.WorkerNS
             {
                 { WorkerContainerType.Work, null },
                 { WorkerContainerType.Relax, null },
-                { WorkerContainerType.Home, null }
+                { WorkerContainerType.Home, null },
+                { WorkerContainerType.Feature, null }
             };
-            if (!HasContainer(WorkerContainerType.Home))
-            {
-                TimerForNoHome.Start();
-            }
             StateController = new ML.Engine.FSM.StateController(0);
             StateMachine = new WorkerStateMachine(this);
             StateController.SetStateMachine(StateMachine);
@@ -169,9 +204,15 @@ namespace ProjectOC.WorkerNS
                 Quaternion.Euler(Vector3.zero), Vector3.one,
                 ManagerNS.LocalGameManager.Instance.Player.currentCharacter.transform);
         }
-
         public void OnDestroy()
         {
+            ManagerNS.LocalGameManager.Instance.DispatchTimeManager.OnHourChangedAction -= OnHourChangeEvent_AddWorkerEff_AllSkill;
+            OnStatusChangeEvent -= OnStateChangeEvent_RelaxExtraSpeed;
+            OnStatusChangeEvent -= OnStateChangeEvent_FishInNest;
+
+            timerFishInNest?.End();
+            timerForNoHome?.End();
+
             (this as ML.Engine.Timer.ITickComponent).DisposeTick();
             Transport?.End();
             foreach (IWorkerContainer container in ContainerDict.Values.ToArray())
@@ -239,7 +280,6 @@ namespace ProjectOC.WorkerNS
             {
                 flag = false;
             }
-
             if (!flag && effect.ParamStr.Contains('_') && Enum.TryParse(effect.ParamStr.Split('_')[1], out SkillType skillType))
             {
                 flag = true;
@@ -340,6 +380,151 @@ namespace ProjectOC.WorkerNS
         }
         #endregion
 
+        #region Event
+        #region AddWorkerEff_AllSkill
+        public void OnHourChangeEvent_AddWorkerEff_AllSkill(int hour)
+        {
+            for (int i = 0; i < AddWorkerEff_AllSkillList.Count; i++)
+            {
+                var tup = AddWorkerEff_AllSkillList[i];
+                if (tup.Item1 <= hour && hour <= tup.Item2 && !tup.Item4)
+                {
+                    Eff_AllSkill += tup.Item3;
+                    AddWorkerEff_AllSkillList[i] = Tuple.Create(tup.Item1, tup.Item2, tup.Item3, true);
+                }
+                else if (tup.Item4 && (tup.Item1 > hour || hour > tup.Item2))
+                {
+                    Eff_AllSkill -= tup.Item3;
+                    AddWorkerEff_AllSkillList[i] = Tuple.Create(tup.Item1, tup.Item2, tup.Item3, false);
+                }
+            }
+        }
+        public List<Tuple<int, int, int, bool>> AddWorkerEff_AllSkillList = new List<Tuple<int, int, int, bool>>();
+        public void AddWorkerEff_AllSkill(int time1, int time2, int eff)
+        {
+            AddWorkerEff_AllSkillList.Add(Tuple.Create(time1, time2, eff, false));
+        }
+        public void RemoveAddWorkerEff_AllSkill(int time1, int time2, int eff)
+        {
+            int index = -1;
+            for (int i = 0; i < AddWorkerEff_AllSkillList.Count; i++)
+            {
+                var tup = AddWorkerEff_AllSkillList[i];
+                if (tup.Item1 == time1 && tup.Item2 == time2 && tup.Item3 == eff)
+                {
+                    index = i;
+                    break;
+                }
+            }
+            if (index >= 0)
+            {
+                var tup = AddWorkerEff_AllSkillList[index];
+                if (tup.Item4 == true)
+                {
+                    Eff_AllSkill -= tup.Item3;
+                }
+                AddWorkerEff_AllSkillList.RemoveAt(index);
+            }
+        }
+        #endregion
+
+        #region RelaxExtraSpeed
+        public void OnStateChangeEvent_RelaxExtraSpeed(Status status)
+        {
+            for (int i = 0; i < RelaxExtraSpeedList.Count; i++)
+            {
+                var tup = RelaxExtraSpeedList[i];
+                if (status == Status.Relaxing && !tup.Item2)
+                {
+                    ModifyWalkSpeed += tup.Item1;
+                    RelaxExtraSpeedList[i] = Tuple.Create(tup.Item1, true);
+                }
+                else if (status != Status.Relaxing && tup.Item2)
+                {
+                    ModifyWalkSpeed -= tup.Item1;
+                    RelaxExtraSpeedList[i] = Tuple.Create(tup.Item1, false);
+                }
+            }
+        }
+        public List<Tuple<int, bool>> RelaxExtraSpeedList = new List<Tuple<int, bool>>();
+        public void RelaxExtraSpeed(int speed)
+        {
+            RelaxExtraSpeedList.Add(Tuple.Create(speed, false));
+        }
+        public void RemoveRelaxExtraSpeed(int speed)
+        {
+            int index = -1;
+            for (int i = 0; i < RelaxExtraSpeedList.Count; i++)
+            {
+                var tup = RelaxExtraSpeedList[i];
+                if (tup.Item1 == speed)
+                {
+                    index = i;
+                    break;
+                }
+            }
+            if (index >= 0)
+            {
+                var tup = RelaxExtraSpeedList[index];
+                if (tup.Item2 == true)
+                {
+                    ModifyWalkSpeed -= tup.Item1;
+                }
+                RelaxExtraSpeedList.RemoveAt(index);
+            }
+        }
+        #endregion
+
+        #region FishInNest
+        private ML.Engine.Timer.CounterDownTimer timerFishInNest;
+        private ML.Engine.Timer.CounterDownTimer TimerFishInNest
+        {
+            get
+            {
+                if (timerFishInNest == null)
+                {
+                    timerFishInNest = new ML.Engine.Timer.CounterDownTimer
+                        (ManagerNS.LocalGameManager.Instance.WorkerManager.Config.WorkerHomeAddMoodTime, true, false);
+                    timerFishInNest.OnEndEvent += EndActionForTimerFishInNest;
+                }
+                return timerFishInNest;
+            }
+        }
+        private void EndActionForTimerFishInNest()
+        {
+            AlterMood(EMRecover);
+        }
+        public void OnStateChangeEvent_FishInNest(Status status)
+        {
+            if (status == Status.Fishing && FishInNest && (timerFishInNest == null || timerFishInNest.IsStoped))
+            {
+                TimerFishInNest?.Start();
+            }
+            else
+            {
+                timerFishInNest?.End();
+            }
+        }
+        public bool FishInNest;
+        public void AddFishInNest()
+        {
+            if (!FishInNest)
+            {
+                FishInNest = true;
+                OnStatusChangeEvent += OnStateChangeEvent_FishInNest;
+            }
+        }
+        public void RemoveFishInNest()
+        {
+            if (FishInNest)
+            {
+                FishInNest = false;
+                OnStatusChangeEvent -= OnStateChangeEvent_FishInNest;
+            }
+        }
+        #endregion
+        #endregion
+
         #region AP Mood Skill
         public Action<int> OnAPChangeEvent;
         public Action<int> OnMoodChangeEvent;
@@ -413,10 +598,6 @@ namespace ProjectOC.WorkerNS
             AlterAP(-1 * realAPCost_Duty);
             AlterMood(-1 * EMCost);
         }
-        public int GetEff(SkillType type)
-        {
-            return Skill[type].GetEff() + (type != SkillType.Transport ? Eff_AllSkill : Eff_AllSkill / 10);
-        }
         #endregion
 
         #region State Status
@@ -486,7 +667,7 @@ namespace ProjectOC.WorkerNS
             {
                 if (timerForNoHome == null)
                 {
-                    timerForNoHome = new ML.Engine.Timer.CounterDownTimer(60 * ManagerNS.LocalGameManager.Instance.WorkerManager.Config.DestroyTimeForNoHome, false, false);
+                    timerForNoHome = new ML.Engine.Timer.CounterDownTimer(ManagerNS.LocalGameManager.Instance.WorkerManager.Config.DestroyTimeForNoHome, false, false);
                     timerForNoHome.OnEndEvent += () =>
                     {
                         ManagerNS.LocalGameManager.Instance.WorkerManager.DeleteWorker(this);
@@ -495,8 +676,18 @@ namespace ProjectOC.WorkerNS
                 return timerForNoHome;
             }
         }
+        public void CheckHome()
+        {
+            if (!HasContainer(WorkerContainerType.Home))
+            {
+                TimerForNoHome.Start();
+            }
+        }
+        public (int, int) MinSec => timerForNoHome != null ? timerForNoHome.ConvertToMinAndSec() : (-1, -1);
 
         #region Property
+        [LabelText("是否有喵喵窝"), ShowInInspector, ReadOnly]
+        public bool HaveFeatSeat => HasContainer(WorkerContainerType.Feature);
         [LabelText("是否有生产节点"), ShowInInspector, ReadOnly]
         public bool HaveProNode => HasContainer(WorkerContainerType.Work);
         [LabelText("是否有餐厅"), ShowInInspector, ReadOnly]
@@ -507,6 +698,8 @@ namespace ProjectOC.WorkerNS
         public bool IsOnProNodeDuty { get { return HaveProNode && Status != Status.Relaxing && GetContainer(WorkerContainerType.Work).IsArrive; } }
         [LabelText("生产节点"), ShowInInspector, ReadOnly]
         public ProNodeNS.ProNode ProNode => HasContainer(WorkerContainerType.Work) ? GetContainer(WorkerContainerType.Work) as ProNodeNS.ProNode : null;
+        [LabelText("喵喵窝"), ShowInInspector, ReadOnly]
+        public FeatureSeat FeatSeat => HasContainer(WorkerContainerType.Feature) ? GetContainer(WorkerContainerType.Feature) as FeatureSeat : null;
         #endregion
 
         public IWorkerContainer GetContainer(WorkerContainerType type)
@@ -552,7 +745,7 @@ namespace ProjectOC.WorkerNS
 
         #region NavMesh
         public NavMeshAgent Agent = null;
-        public float Threshold = 3f;
+        public float Threshold = 1f;
         [LabelText("寻路目的地"), ShowInInspector, ReadOnly]
         public Vector3 Target { get; private set; }
         [LabelText("是否在寻路"), ShowInInspector, ReadOnly]
@@ -561,8 +754,17 @@ namespace ProjectOC.WorkerNS
         public Vector3 LastPosition;
         public event Action<Worker> OnArriveEvent;
         private event Action<Worker> OnArriveDisposableEvent;
+        private bool IsArrive;
 
-        public bool SetDestination(Vector3 target, Action<Worker> action = null, WorkerContainerType arriveType = WorkerContainerType.None, float threshold = 3f)
+        public void OnCollisionEnter(Collision collision)
+        {
+            if (HaveDestination && collision.transform.position == Target)
+            {
+                IsArrive = true;
+            }
+        }
+
+        public bool SetDestination(Vector3 target, Action<Worker> action = null, WorkerContainerType arriveType = WorkerContainerType.None, float threshold = 1f)
         {
             ClearDestination();
             foreach (var key in ContainerDict.Keys.ToArray())
@@ -578,6 +780,7 @@ namespace ProjectOC.WorkerNS
             if (Agent.SetDestination(target))
             {
                 Target = target;
+                IsArrive = false;
                 HaveDestination = true;
                 OnArriveDisposableEvent = action;
                 return true;
@@ -590,6 +793,7 @@ namespace ProjectOC.WorkerNS
 
         public void ClearDestination()
         {
+            IsArrive = false;
             HaveDestination = false;
             if (Agent != null && Agent.enabled)
             {
@@ -614,7 +818,7 @@ namespace ProjectOC.WorkerNS
         public void Tick(float deltatime)
         {
             // NavMesh
-            if (HaveDestination && Vector3.Distance(transform.position, Target) < Threshold)
+            if (HaveDestination && (Vector3.Distance(transform.position, Target) < Threshold || IsArrive))
             {
                 ClearDestination();
                 OnArriveDisposableEvent?.Invoke(this);
@@ -624,7 +828,11 @@ namespace ProjectOC.WorkerNS
             string icon = HaveSetEMLowEffect ? "Tex2D_Worker_UI_LowMood" : "";
             icon = inSeq ? "Tex2D_Worker_UI_LowAP" : icon;
             icon = HaveSetEMLowEffect && inSeq ? "Tex2D_Worker_UI_LowAPMood" : icon;
-            GetComponentInChildren<ML.Engine.InventorySystem.ItemIcon>()?.SetSprite(ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite(icon));
+            var itemIcon = GetComponentInChildren<ML.Engine.InventorySystem.ItemIcon>();
+            if (itemIcon != null)
+            {
+                itemIcon.SetSprite(ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite(icon));
+            }
         }
         #endregion
 
