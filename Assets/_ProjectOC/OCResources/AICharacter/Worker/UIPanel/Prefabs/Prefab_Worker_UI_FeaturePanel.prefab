@@ -5483,7 +5483,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1047093728779744075}
   - component: {fileID: 257790905731768433}
-  - component: {fileID: 6914656973707519788}
+  - component: {fileID: -1904463705647620145}
   m_Layer: 0
   m_Name: Prefab_Worker_UI_FeaturePanel
   m_TagString: Untagged
@@ -5527,7 +5527,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5374525249118679032}
   m_CullTransparentMesh: 1
---- !u!114 &6914656973707519788
+--- !u!114 &-1904463705647620145
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5536,13 +5536,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 5374525249118679032}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff5517d13e8a46c4d898a138d4d68cdd, type: 3}
+  m_Script: {fileID: 11500000, guid: d5805a6dedaa07543a8bb13619d98e6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   abpath: 
   abname: 
   description: 
-  Home: {fileID: 0}
+  CurExchangeMode: 0
+  CurCorrectMode: 0
+  ChangeCorrectSelectIndex: 0
+  FeatBuild: {fileID: 0}
+  IsSeeInfo: 0
   IsInit: 0
 --- !u!1 &5385934632227052676
 GameObject:
