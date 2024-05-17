@@ -217,7 +217,10 @@ namespace ProjectOC.WorkerNS
         }
         public void OnDestroy()
         {
-            ManagerNS.LocalGameManager.Instance.DispatchTimeManager.OnHourChangedAction -= OnHourChangeEvent_AddWorkerEff_AllSkill;
+            if (ManagerNS.LocalGameManager.Instance != null)
+            {
+                ManagerNS.LocalGameManager.Instance.DispatchTimeManager.OnHourChangedAction -= OnHourChangeEvent_AddWorkerEff_AllSkill;
+            }
             OnStatusChangeEvent -= OnStateChangeEvent_RelaxExtraSpeed;
             OnStatusChangeEvent -= OnStateChangeEvent_FishInNest;
 
