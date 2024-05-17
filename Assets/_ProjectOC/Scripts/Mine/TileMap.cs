@@ -3,44 +3,27 @@ using UnityEngine;
 
 public class TileMap : MonoBehaviour
 {
+    
     public int Width = 10;
     public int Height = 10;
-    public GameObject[,] tiles = new GameObject[10,10];
-    [ShowInInspector]
-    public bool[,] gridData = new bool[10,10];  //true 有实体
-    public GameObject TilePrefab;
-    public Transform gridParentTransf,blockParentTransf;
     
-    #region EditorProperty
-    public GameObject selectOutline;
-    private GameObject selectGo;
-    public GameObject SelectGo
-    {
-        get
-        {
-            return selectGo;
-        }
-        set
-        {
-            selectGo = value;
-            if (selectGo == null)
-            {
-                selectOutline.SetActive(false);
-            }
-            else
-            {
-                selectOutline.SetActive(true);
-                selectOutline.transform.position = selectGo.transform.position;
-            }
-        }
-    }
-
-    #endregion
-    public void Awake()
-    {
-        //tiles = new GameObject[Width, Height];
-    }
-
+    public float mineScale = 1;
+    [HideInInspector]
+    public GameObject[,] tiles;
+    [HideInInspector]
+    public bool[,] gridData;  //true 有实体
+    [HideInInspector]
+    public GameObject TilePrefab,MinePrefab,selectOutline,brushIcon;
+    [HideInInspector]
+    public Transform gridParentTransf,mineParentTransf;
+    
+    
+    public int selectedOption = 0;
+    [Tooltip("0点 1 圈")]
+    public int brushType = 0;
+    public bool isShiftPressed = false;
+    
+    public float brushSizeScale = 0.1f;  //sprite.scale 为1时，范围是2,半径是1
     public void SetTileSprite(int x, int y,bool pen)
     {
         
@@ -56,6 +39,8 @@ public class TileMap : MonoBehaviour
                     tile = Instantiate(TilePrefab, new Vector3(x + _offset, y + _offset, 0), Quaternion.identity);
                     tile.name = $"{x}_{y}";
                     tile.transform.parent = gridParentTransf;
+                    tile.SetActive(true);
+                    tiles[x, y] = tile;
                 }
                 
                 if (pen)

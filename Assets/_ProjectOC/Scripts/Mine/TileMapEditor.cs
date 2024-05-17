@@ -1,95 +1,140 @@
 using System;
+using Sirenix.OdinInspector.Editor.Drawers;
 using Sirenix.Reflection.Editor;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEditor;
+using Random = UnityEngine.Random;
 
 [CustomEditor(typeof(TileMap))]
 //CustomEditor 部分的数据，当跳转到其他Inspect面板后
-public class TileMapEditor : Editor
+public class TileMapEditor : OCCustomEditor
 {
     private TileMap tileMap;
-    private int brushSize = 1;
-    private GUIStyle labelStyle;
-    
-    public enum InputType
-    {
-        MouseLeft,
-        MouseRight,
-        None
-    }
-    private InputType curInputType;
     private Event e;
     private GameObject startSelectGo,lastSelectGo,curGo;
-    public void OnEnable()
+    
+    
+    public override void OnEnable()
     {
-        SceneView.duringSceneGui += DrawScale;
-        
         tileMap = target as TileMap;
         tileMap.gridParentTransf = GameObject.Find("Editor/GridTransform").transform;
-        tileMap.blockParentTransf = GameObject.Find("Editor/MineTransform").transform;
-        tileMap.selectOutline = GameObject.Find("Editor").transform.GetChild(2).gameObject;
+        tileMap.mineParentTransf = GameObject.Find("Editor/MineTransform").transform;
+        tileMap.selectOutline = GameObject.Find("Editor/Others").transform.GetChild(0).gameObject;
+        tileMap.TilePrefab = GameObject.Find("Editor/Others").transform.GetChild(1).gameObject;
+        tileMap.MinePrefab = GameObject.Find("Editor/Others").transform.GetChild(2).gameObject;
+        tileMap.brushIcon = GameObject.Find("Editor/Others").transform.GetChild(3).gameObject;
         
-        labelStyle = new GUIStyle();
-        labelStyle.normal.textColor = Color.red; // 设置文本颜色为红色
-        labelStyle.fontSize = 20; // 设置字体大小为20
-    }
-
-    public void OnDisable()
-    {
-        SceneView.duringSceneGui -= DrawScale;
-    }
-
-
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-        serializedObject.UpdateIfRequiredOrScript();
-        //serializedObject.Update();
+        scaleWidth = tileMap.Width;
+        scaleHeight = tileMap.Height;
+        ChangeCurSelectdOption(tileMap.selectedOption);
+        //Scene部分
+        base.OnEnable();
+        RegenerateMap();
         
-        GUILayout.Space(10);
-        GUILayout.Label("Brush Settings", EditorStyles.boldLabel);
-        brushSize = EditorGUILayout.IntSlider("Brush Size", brushSize, 1, 10);
-
-        GUILayout.Space(10);
-        GUILayout.Label("Tile Selection", EditorStyles.boldLabel);
-
-        if (GUILayout.Button("重新生成地图"))
-        {
-            RegenerateMap();
-        }
+        //Inspector 窗口
     }
 
+
+
+
+    
+
+    #region Scene Override
+
+    #region Unity
     private void OnSceneGUI()
     {
         ProcessInput();
-        DrawInspect();
+        tileMap.mineParentTransf.localScale = Vector3.one * tileMap.mineScale;
+        
+        
+        if (tileMap.selectedOption == 0)
+        {
+            DrawTileInspect();
+        }
+        else
+        {
+            DrawMine();
+        }
     }
 
     private void ProcessInput()
     {
         HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
         e = Event.current;
-        if (e.button == 0)
+
+        if (e.type == EventType.KeyDown)
         {
-            curInputType = InputType.MouseLeft;
+            if (e.keyCode == KeyCode.Alpha1)
+                ChangeCurSelectdOption(0);
+            else if(e.keyCode == KeyCode.Alpha2)
+                ChangeCurSelectdOption(1);
+            else if(e.keyCode == KeyCode.Alpha3)
+                ChangeCurSelectdOption(2);
+            else if (e.keyCode == KeyCode.Alpha4)
+                ChangeCurSelectdOption(3);
+            else if(e.keyCode == KeyCode.LeftShift)
+            {
+                tileMap.isShiftPressed = true;
+            }
+            e.Use();
         }
-        else if(e.button == 1)
+        else if (e.type == EventType.KeyUp)
         {
-            curInputType = InputType.MouseRight;
-        }//考虑键盘
-        else
+            tileMap.isShiftPressed = false;
+        }
+
+        if (tileMap.isShiftPressed && e.type == EventType.ScrollWheel)
         {
-            curInputType = InputType.None;
+            float scrollDelta = e.delta.x;
+            curBrush.brushSize += Mathf.Sign(scrollDelta) * tileMap.brushSizeScale;
+            //todo
+            e.Use();
         }
     }
 
-    private void DrawInspect()
+    void ChangeCurSelectdOption(int _index)
+    {
+        tileMap.selectedOption = _index;
+        //画块块
+        if (_index == 0)
+        {
+            foreach (Transform _transf in tileMap.gridParentTransf)
+            {
+                _transf.GetComponent<Collider2D>().enabled = true;
+            }
+            foreach (Transform _transf in tileMap.mineParentTransf)
+            {
+                _transf.GetComponent<Collider2D>().enabled = false;
+            }
+            tileMap.brushIcon.SetActive(false);
+        }
+        //画矿
+        else
+        {
+            foreach (Transform _transf in tileMap.gridParentTransf)
+            {
+                _transf.GetComponent<Collider2D>().enabled = false;
+            }
+            foreach (Transform _transf in tileMap.mineParentTransf)
+            {
+                _transf.GetComponent<Collider2D>().enabled = true;
+            }
+            tileMap.brushIcon.SetActive(true);
+        }
+    }
+    #endregion
+    
+    #region DrawTile
+
+    private void DrawTileInspect()
     {
         bool pen = false;
         int _x, _y;
         
         //MouseDrag 不算 MouseMove
+        //处理鼠标移动和拖拽的选中
         if (e.type == EventType.MouseMove || e.type == EventType.MouseDrag)
         {
             Ray ray = HandleUtility.GUIPointToWorldRay(e.mousePosition);
@@ -101,15 +146,18 @@ public class TileMapEditor : Editor
                 {
                     curGo = hit.collider.gameObject;
                     string[] _pos = curGo.name.Split("_");
+      
                     _x = int.Parse(_pos[0]);
                     _y = int.Parse(_pos[1]);
+         
+    
+                    
                     tileMap.selectOutline.SetActive(true);
                     tileMap.selectOutline.transform.position = curGo.transform.position;
 
                     Vector3 debugLabel = new Vector3(_x + 0.5f, _y + 0.5f, 0);
-                    Debug.Log($"{debugLabel} text:{_x},{_y}");
-                    Handles.Label( debugLabel, $"{_x},{_y}",labelStyle);
-                    
+                    //Debug.Log($"{debugLabel} text:{_x},{_y}");
+                    Handles.Label( debugLabel, $"{_x},{_y}",scalelabelStyle);
                 }
                 else
                 {
@@ -121,16 +169,18 @@ public class TileMapEditor : Editor
                 tileMap.selectOutline.SetActive(false);
             }
         }
+
+ 
         
-        if(curInputType == InputType.None 
-           || (e.type != EventType.MouseDown&&e.type != EventType.MouseUp&&e.type != EventType.MouseDrag))
+        // (e.type != EventType.MouseDown&&e.type != EventType.MouseUp&& !(e.type == EventType.MouseDrag && e.button == 0 || e.button == 1)))
+        //不是鼠标或者是中间拖拽
+        if(!e.isMouse || e.type == EventType.MouseMove || (e.button == 2))
             return;
-        
-        if (curInputType == InputType.MouseLeft)
+        if (e.button == 0)
         {
             pen = true;
         }
-        else if(curInputType == InputType.MouseRight)
+        else if(e.button == 1)
         {
             pen = false;
         }
@@ -163,11 +213,10 @@ public class TileMapEditor : Editor
             
     }
     
+    
     /// <summary>
-    /// 
+    /// 修改数据 + 修改可视化画板颜色
     /// </summary>
-    /// <param name="startGo"></param>
-    /// <param name="endGo"></param>
     /// <param name="pen">true 绘制，false 擦除</param>
     void SetData(GameObject startGo,GameObject endGo,bool pen)
     {
@@ -256,32 +305,35 @@ public class TileMapEditor : Editor
         bool[,] oldData = tileMap.gridData;
         tileMap.gridData = new bool[tileMap.Width, tileMap.Height];
         tileMap.tiles = new GameObject[tileMap.Width,tileMap.Height];
-
-        int rows = Mathf.Min(oldData.GetLength(0), tileMap.gridData.GetLength(0));
-        int cols = Mathf.Min(oldData.GetLength(1), tileMap.gridData.GetLength(1));
-        
         // 默认设为false
-        for (int i = 0; i < tileMap.gridData.GetLength(0); i++)
+        for (int i = 0; i < tileMap.Width; i++)
         {
-            for (int j = 0; j < tileMap.gridData.GetLength(1); j++)
+            for (int j = 0; j < tileMap.Height; j++)
             {
                 tileMap.gridData[i, j] = false;
             }
         }
-        for (int i = 0; i < rows; i++)
+        
+        
+        int oldRows = tileMap.Width, oldCols = tileMap.Height;
+        if (oldData != null)
         {
-            for (int j = 0; j < cols; j++)
+            oldRows = Mathf.Min(oldData.GetLength(0), oldRows);
+            oldCols = Mathf.Min(oldData.GetLength(1), oldCols);
+            
+            for (int i = 0; i < oldRows; i++)
             {
-                tileMap.gridData[i, j] = oldData[i, j];
+                for (int j = 0; j < oldCols; j++)
+                {
+                    tileMap.gridData[i, j] = oldData[i, j];
+                }
             }
         }
         
         
+        
         //生成可视化方块
-        for (int i = tileMap.gridParentTransf.childCount - 1; i >= 0; i--)
-        {
-            DestroyImmediate(tileMap.gridParentTransf.GetChild(i).gameObject);
-        }
+        DestroyTransformChild(tileMap.gridParentTransf);
         
         for (int x = 0; x < tileMap.Width; x++)
         {
@@ -292,56 +344,200 @@ public class TileMapEditor : Editor
         }
     }
 
-    void DrawScale(SceneView sceneView)
+    void DestroyTransformChild(Transform _transf)
     {
-        Handles.Label( new Vector3(0.5f,0.5f,0f), $"0,0",labelStyle);
-        float scaleLineLength = 0.5f;
-        float scaleLineThickness = 0.05f; // 设置线条的粗细
-        Color rectangleColor = Color.red;
-        Vector3 originPos = Vector3.zero;
-        float stepSize = 1.0f;
-        
-        
-        // Draw 水平 scale
-        for (int i = 0; i < tileMap.Width; i++)
+        for (int i = _transf.childCount - 1; i >= 0; i--)
         {
-            Vector3 start = originPos + new Vector3(i * stepSize, 0, 0);
-            Vector3 end = start + new Vector3(0, scaleLineLength, 0);
-
-            Vector3 thinkBuffer = Vector3.right * scaleLineThickness;
-            Handles.DrawSolidRectangleWithOutline(
-                new Vector3[] { start + thinkBuffer, start - thinkBuffer, end - thinkBuffer, end + thinkBuffer}, 
-                rectangleColor, rectangleColor);
-            // Label the row index
-            Handles.Label(start + new Vector3(scaleLineLength, 0, 0), i.ToString());
-        }
-
-        // Draw 垂直 scale
-        for (int j = 0; j < tileMap.Height; j++)
-        {
-            Vector3 start = originPos + new Vector3(0, j * stepSize, 0);
-            Vector3 end = start + new Vector3(scaleLineLength, 0, 0);
-            //Handles.DrawLine(start, end);
-            Vector3 thinkBuffer = Vector3.up * scaleLineThickness;
-            Handles.DrawSolidRectangleWithOutline(
-                new Vector3[] { start + thinkBuffer, start - thinkBuffer, end - thinkBuffer, end + thinkBuffer}, 
-                rectangleColor, rectangleColor);
-            Handles.Label(start + new Vector3(0, scaleLineLength, 0), j.ToString());
+            DestroyImmediate(_transf.GetChild(i).gameObject);
         }
     }
     
-    //不考虑z轴
-    private void DrawThickLine(Vector3 start, Vector3 end,bool isHorizontal , float thickness)
-    {
-        Vector3 direction = (end - start).normalized;
-        Vector3 perpendicular = new Vector3(-direction.z, 0, direction.x);
-        
-        
-        Vector3 p1 = start + perpendicular * (thickness / 2);
-        Vector3 p2 = start - perpendicular * (thickness / 2);
-        Vector3 p3 = end - perpendicular * (thickness / 2);
-        Vector3 p4 = end + perpendicular * (thickness / 2);
+    
+    #endregion
 
-        Handles.DrawSolidRectangleWithOutline(new Vector3[] { p1, p2, p3, p4 }, Color.red, Color.red);
+    #region DrawMine
+    private BrushData curBrush = new BrushData();
+    
+    private void DrawMine()
+    {
+        Vector2 mouseWorldPos = Vector2.zero;
+        if (e.isMouse)
+        {
+            Ray worldRay = HandleUtility.GUIPointToWorldRay(e.mousePosition);
+            mouseWorldPos = worldRay.origin + worldRay.direction * 10;
+            tileMap.brushIcon.transform.position = mouseWorldPos;
+        }
+        //Update
+        tileMap.brushIcon.transform.localScale = Vector3.one * curBrush.brushSize * 0.5f;
+        
+        if (e.button == 0 && e.type == EventType.MouseDown)
+        {
+            SingleDrawer(mouseWorldPos, curBrush);
+        }
+        else if(e.button == 1 && e.type == EventType.MouseDown)
+        {
+            DestroyTransformChild(tileMap.mineParentTransf);
+        }
     }
+
+    private void SingleDrawer(Vector2 _mousePos,BrushData _brush)
+    {
+        //点
+        if (tileMap.brushType == 0)
+        {
+            Vector3 minePos = new Vector3(_mousePos.x , _mousePos.y , 0); 
+            // _mine.name = "";
+            GameObject _mine = Instantiate(tileMap.MinePrefab,minePos,Quaternion.identity, tileMap.mineParentTransf);
+            _mine.SetActive(true);
+        }
+        //圈
+        else
+        {
+            for (int i = 0; i < _brush.brushDensity;i++)
+            {
+                float _angle = Random.Range(0f, 2*Mathf.PI);
+                float _randomDistance = Random.Range(0f, 1f);
+                _randomDistance = Mathf.Pow(_randomDistance, _brush.brushHard+1);
+                float distance = _randomDistance * _brush.brushSize *0.5f;
+                float offsetX = Mathf.Cos(_angle) * distance;
+                float offsetY = Mathf.Sin(_angle) * distance;
+            
+            
+                Vector3 minePos = new Vector3(_mousePos.x + offsetX, _mousePos.y + offsetY, 0); 
+            
+                //Check 范围外
+                //if(minePos )
+            
+                GameObject _mine = Instantiate(tileMap.MinePrefab,minePos,Quaternion.identity, tileMap.mineParentTransf);
+                // _mine.name = "";
+                _mine.SetActive(true);
+            }
+        }
+        
+    }
+
+    public class BrushData
+    {
+        public float brushSize;
+        public float brushHard;
+        public int brushDensity;
+
+        public float brushSizeMin = 0f, brushSizeMax = 10f;
+        public float brushHardMin = 0f, brushHardMax = 10f;
+        public int brushDensityMin = 0, brushDensityMax = 20;
+        public BrushData()
+        {
+            brushSize = 3f;
+            brushHard = 0f;
+            brushDensity = 5;
+        }
+    }
+    #endregion
+    #endregion
+
+    #region Inspect Override
+    
+    
+    
+    int btnSize = 100;
+    int selectBordSize = 3;
+    public override void OnInspectorGUI()
+    {
+        serializedObject.UpdateIfRequiredOrScript();
+        StyleCheck();
+        
+        GUILayout.Label("索引: 0",defaultTextStyle);
+        tileMap.mineScale = EditorGUILayout.Slider("矿物与地块比例:", tileMap.mineScale, 0.01f, 1);
+        
+        GUILayout.Label("绘制工具", blackLabelStyle);
+        
+
+        ToggleButton("地形绘制",(() => ChangeCurSelectdOption(0)),tileMap.selectedOption == 0);
+        
+        
+        GUILayout.BeginHorizontal();
+        ToggleButton("项选择",(() => ChangeCurSelectdOption(1)),tileMap.selectedOption == 1);
+        ToggleButton("项绘制",(() => ChangeCurSelectdOption(2)),tileMap.selectedOption == 2);
+        ToggleButton("项擦除",(() => ChangeCurSelectdOption(3)),tileMap.selectedOption == 3);
+        GUILayout.EndHorizontal();
+
+        if (tileMap.selectedOption != 0)
+        {
+            GUILayout.Space(10);
+            GUILayout.Label("笔刷类型", blackLabelStyle);    
+            
+            GUILayout.BeginHorizontal();
+            ToggleButton("点",(() => tileMap.brushType = 0),tileMap.brushType == 0,30);
+            ToggleButton("圈",(() => tileMap.brushType = 1),tileMap.brushType == 1,30);
+            GUILayout.EndHorizontal();
+            
+            curBrush.brushSize = EditorGUILayout.Slider("画笔大小:", curBrush.brushSize, curBrush.brushSizeMin, curBrush.brushSizeMax);
+            
+            
+            curBrush.brushHard = EditorGUILayout.Slider("画笔分散度:", curBrush.brushHard, curBrush.brushHardMin, curBrush.brushHardMax);
+            curBrush.brushDensity = EditorGUILayout.IntSlider("项密度:", curBrush.brushDensity, curBrush.brushDensityMin, curBrush.brushDensityMax);
+
+            DrawMineData();
+        }
+        
+        GUILayout.Space(10);
+        GUILayout.Label("Tile Selection", EditorStyles.boldLabel);
+
+        if (GUILayout.Button("重新生成地图"))
+        {
+            RegenerateMap();
+        }
+        
+        if (GUILayout.Button("检查合法性"))
+        {
+            CheckConfig();
+        }
+        
+        
+        //DrawDefault
+        DrawDefaultInspector();
+    }
+
+    
+
+
+    void ToggleButton(string labelText, Action buttonAction,bool SelectCondition,int _buttonSize = -1)
+    {
+        if (_buttonSize ==  -1)
+        {
+            _buttonSize = btnSize;
+        }
+        
+        if (GUILayout.Button(labelText, GUILayout.Height(_buttonSize), GUILayout.Width(_buttonSize)))
+        {
+            buttonAction();
+        }
+        if (SelectCondition)
+        {
+            DrawBorder(selectBordSize, new Color(1, 0, 0, 0.25f));
+        }
+        GUILayout.Space(20);
+    }
+    private void DrawBorder(float size, Color color)
+    {
+        Rect rect = GUILayoutUtility.GetLastRect();
+        rect.width += size * 2;
+        rect.height += size * 2;
+        rect.x -= size;
+        rect.y -= size;
+
+        EditorGUI.DrawRect(rect, color);
+    }
+
+    void DrawMineData()
+    {
+        //Draw
+    }
+
+    void CheckConfig()
+    {
+        //矿物距离太近，错误的位置
+    }
+    
+    #endregion
 }
