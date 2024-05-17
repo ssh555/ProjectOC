@@ -83,6 +83,17 @@ namespace ExcelToJson
                 writer.Flush();
             }
         }
+        public void WriteJsonFromExcelForSingleData<T>(T data, string path)
+        {
+            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(path));
+            using (FileStream fs = new FileStream(path, FileMode.Create))
+            {
+                string jsonData = JsonConvert.SerializeObject(data);
+                StreamWriter writer = new StreamWriter(fs);
+                writer.Write(jsonData);
+                writer.Flush();
+            }
+        }
 
         ///// <summary>
         ///// 将数据写进指定的JSON文件中
