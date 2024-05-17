@@ -95,12 +95,12 @@ namespace ProjectOC.WorkerNS
         public List<Worker> GetNotBanWorkers(bool needSort = true)
         {
             var result = GetWorkers(needSort);
-            result.RemoveAll(worker => !worker.HaveFeatSeat);
+            result.RemoveAll(worker => worker.HaveFeatSeat);
             return result;
         }
         public List<string> GetNotBanWorkerIDs(bool needSort = true)
         {
-            return GetNotBanWorkerIDs(needSort).ToList();
+            return GetNotBanWorkers(needSort).Select(x => x.ID).ToList();
         }
 
         /// <summary>

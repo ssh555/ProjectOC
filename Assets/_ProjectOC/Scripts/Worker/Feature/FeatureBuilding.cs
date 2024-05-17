@@ -13,17 +13,10 @@ namespace ProjectOC.WorkerNS
         public Vector3 PosOffset { get; set; } = Vector3.zero;
         public override void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
-            if (isFirstBuild)
-            {
-                Init();
-            }
-            if (!isFirstBuild && oldPos != newPos)
-            {
-                Clear();
-            }
+            if (isFirstBuild) { Init(); }
+            if (!isFirstBuild && oldPos != newPos) { Clear(); }
             base.OnChangePlaceEvent(oldPos, newPos);
         }
-
         public void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Worker_UI/Prefab_Worker_UI_FeaturePanel.prefab",
@@ -61,8 +54,10 @@ namespace ProjectOC.WorkerNS
         #region 词条传授
         [LabelText("喵喵窝座位"), ShowInInspector, ReadOnly]
         public FeatureSeat[] Seats = new FeatureSeat[2];
+        public bool IsExchangeStart => !IsExchange && !IsExchangeEnd;
         public bool IsExchange => timer != null && !timer.IsStoped;
         public bool IsExchangeEnd;
+        public bool CanExchangeReal => CanExchange() && IsExchangeStart;
         [NonSerialized]
         private ML.Engine.Timer.CounterDownTimer timer;
         [LabelText("传授计时器"), ShowInInspector]
@@ -82,29 +77,29 @@ namespace ProjectOC.WorkerNS
         }
         public event Action<double> OnExchangeUpdateEvent;
         public event Action OnExchangeEndEvent;
-        public bool CanExhcange()
+        public bool CanExchange()
         {
             bool flag1 = Seats[0].IsArrive && Seats[1].IsArrive;
             var Config = ManagerNS.LocalGameManager.Instance.FeatureManager.Config;
             bool flag2 = ManagerNS.LocalGameManager.Instance.Player.InventoryHaveItem(Config.FeatTransCostItemID, Config.FeatTransCostItemNum);
-            bool flag3 = Seats[0].WorkerFeatureIDs.Count != 0 || Seats[1].WorkerFeatureIDs.Count != 0;
-            bool flag4 = Seats[0].WorkerFeatureIDs.Count != 3 || Seats[1].WorkerFeatureIDs.Count != 3;
+            bool flag3 = Seats[0].WorkerFeatureIDs.Count != 0 && Seats[1].WorkerFeatureIDs.Count != 0;
+            bool flag4 = Seats[0].WorkerFeatureIDs.Count != 3 && Seats[1].WorkerFeatureIDs.Count != 3;
             return flag1 && flag2 && flag3 && flag4;
         }
         public void ChangeWorker(int index, Worker worker)
         {
-            if (0 > index && index > 1) { return; }
-            if (Seats[index].Worker != worker && !IsExchange && !IsExchangeEnd)
+            if (index < 0 && index > 1) { return; }
+            if (Seats[index].Worker != worker && IsExchangeStart)
             {
                 (Seats[index] as IWorkerContainer).SetWorker(worker);
             }
         }
         public void ExchangeFeature()
         {
-            if (CanExhcange() && !IsExchange && !IsExchangeEnd)
+            if (CanExchangeReal)
             {
-                var Config = ManagerNS.LocalGameManager.Instance.FeatureManager.Config;
-                ManagerNS.LocalGameManager.Instance.Player.InventoryCostItems(Config.FeatTransCostItemID, Config.FeatTransCostItemNum, priority: -1);
+                var config = ManagerNS.LocalGameManager.Instance.FeatureManager.Config;
+                ManagerNS.LocalGameManager.Instance.Player.InventoryCostItems(config.FeatTransCostItemID, config.FeatTransCostItemNum, priority: -1);
                 Timer.Start();
             }
         }
@@ -119,13 +114,12 @@ namespace ProjectOC.WorkerNS
         }
         public void CancleExchange()
         {
-            bool isExchange = IsExchange;
-            if (isExchange || IsExchangeEnd)
+            if (!IsExchangeStart)
             {
                 Seats[0].SetFeatureID();
                 Seats[1].SetFeatureID();
             }
-            if (isExchange)
+            if (IsExchange)
             {
                 Timer.End();
                 var config = ManagerNS.LocalGameManager.Instance.FeatureManager.Config;
@@ -162,9 +156,10 @@ namespace ProjectOC.WorkerNS
         #region 词条修正
         [LabelText("词条修正座位"), ShowInInspector, ReadOnly]
         public FeatureSeat Seat;
-        [ShowInInspector, ReadOnly]
+        public bool IsCorrectStart => !IsCorrect && !IsCorrectEnd;
         public bool IsCorrect => correctTimer != null && !correctTimer.IsStoped;
         public bool IsCorrectEnd;
+        public bool CanCorrectReal => CanCorrect() && IsCorrectStart;
         public int CorrectTime => ManagerNS.LocalGameManager.Instance != null ?
             ManagerNS.LocalGameManager.Instance.FeatureManager.GetFeatureCorrectTime(CorrectType) : 0;
         public string CorrectCostItemID => ManagerNS.LocalGameManager.Instance != null ?
@@ -193,10 +188,7 @@ namespace ProjectOC.WorkerNS
         public event Action OnCorrectEndEvent;
         public void ChangeCorrectType(FeatureCorrectType type)
         {
-            if (CorrectType != type && !IsCorrect && !IsCorrectEnd)
-            {
-                CorrectType = type;
-            }
+            if (CorrectType != type && IsCorrectStart) { CorrectType = type; }
         }
         public bool CanCorrect()
         {
@@ -207,14 +199,14 @@ namespace ProjectOC.WorkerNS
         }
         public void ChangeCorrectWorker(Worker worker)
         {
-            if (Seat.Worker != worker && !IsCorrect && !IsCorrectEnd)
+            if (Seat.Worker != worker && IsCorrectStart)
             {
                 (Seat as IWorkerContainer).SetWorker(worker);
             }
         }
         public void CorrectFeature()
         {
-            if (CanCorrect() && !IsCorrect && !IsCorrectEnd)
+            if (CanCorrect() && IsCorrectStart)
             {
                 ManagerNS.LocalGameManager.Instance.Player.InventoryCostItems(CorrectCostItemID, CorrectCostItemNum, priority: -1);
                 CorrectTimer.Start();
@@ -230,12 +222,11 @@ namespace ProjectOC.WorkerNS
         }
         public void CancleCorrect()
         {
-            bool isCorrect = IsCorrect;
-            if (isCorrect || IsCorrectEnd)
+            if (!IsCorrectStart)
             {
                 Seat.SetFeatureID();
             }
-            if (isCorrect)
+            if (IsCorrect)
             {
                 CorrectTimer.End();
                 ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(CorrectCostItemID, CorrectCostItemNum);

@@ -20,10 +20,14 @@ namespace ProjectOC.WorkerNS
             FeatBuild = featBuild;
             Socket = socket;
         }
-        public void SetFeatureID()
+        public void ClearFeatureID()
         {
             FeatureIDs.Clear();
             WorkerFeatureIDs.Clear();
+        }
+        public void SetFeatureID()
+        {
+            ClearFeatureID();
             FeatureIDs.AddRange(Worker.GetFeatureIDs(true));
             WorkerFeatureIDs.AddRange(FeatureIDs);
         }
@@ -59,19 +63,18 @@ namespace ProjectOC.WorkerNS
         public Transform GetTransform() { return Socket; }
         public void OnArriveEvent(Worker worker)
         {
-            (this as IWorkerContainer).OnArriveSetPosition(worker, Socket.transform.position);
-            worker.LastPosition = Socket.transform.position;
+            (this as IWorkerContainer).OnArriveSetPosition(worker, Socket.position);
+            worker.LastPosition = Socket.position;
         }
         public void SetWorkerRelateData() 
         { 
             SetFeatureID();
-            Worker.StopHomeTimer();
+            Worker?.StopHomeTimer();
         }
         public void RemoveWorkerRelateData() 
         {
-            FeatureIDs.Clear();
-            WorkerFeatureIDs.Clear();
-            Worker.CheckHome();
+            ClearFeatureID();
+            Worker?.CheckHome();
         }
         #endregion
     }
