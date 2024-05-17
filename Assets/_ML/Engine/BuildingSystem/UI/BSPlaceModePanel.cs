@@ -275,7 +275,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.BInput.BuildPlaceMode.ChangeHeight.Enable();
             this.Placer.BInput.BuildPlaceMode.KeyCom.Enable();
 
-            Manager.GameManager.Instance.TickManager.RegisterFixedTick(0, this);
+            Manager.GameManager.Instance.TickManager.RegisterFixedTick(-1, this);
             this.Placer.BInput.BuildPlaceMode.KeyCom.performed += Placer_EnterKeyCom;
             this.Placer.backInputAction.performed += Placer_CancelPlace;
 
@@ -324,7 +324,7 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 if (obj.started)
                 {
-                    if(this.Placer.SelectedPartInstance.AttachedSocket == null)
+                    if (this.Placer.SelectedPartInstance.AttachedSocket == null)
                     {
                         this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, Vector3.up);
                     }

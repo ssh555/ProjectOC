@@ -125,7 +125,6 @@ namespace ProjectOC.Player
             this.VCamRotX.localRotation = this.ClampRotationAroundXAxis(this.VCamRotX.localRotation);
             //this.ConstrainCamera();
             #endregion
-            
 
         }
         #endregion
