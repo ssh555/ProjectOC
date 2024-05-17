@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -82,8 +83,8 @@ namespace ProjectOC.WorkerNS
             bool flag1 = Seats[0].IsArrive && Seats[1].IsArrive;
             var Config = ManagerNS.LocalGameManager.Instance.FeatureManager.Config;
             bool flag2 = ManagerNS.LocalGameManager.Instance.Player.InventoryHaveItem(Config.FeatTransCostItemID, Config.FeatTransCostItemNum);
-            bool flag3 = Seats[0].WorkerFeatureIDs.Count != 0 && Seats[1].WorkerFeatureIDs.Count != 0;
-            bool flag4 = Seats[0].WorkerFeatureIDs.Count != 3 && Seats[1].WorkerFeatureIDs.Count != 3;
+            bool flag3 = Seats[0].WorkerFeatureIDs.Count != 0 || Seats[1].WorkerFeatureIDs.Count != 0;
+            bool flag4 = Seats[0].WorkerFeatureIDs.Count != 3 || Seats[1].WorkerFeatureIDs.Count != 3;
             return flag1 && flag2 && flag3 && flag4;
         }
         public void ChangeWorker(int index, Worker worker)
@@ -137,7 +138,10 @@ namespace ProjectOC.WorkerNS
             var set2 = Seats[1].FeatureIDs.ToHashSet();
             int cnt1 = set1.Count;
             int cnt2 = set2.Count;
-            set1.SymmetricExceptWith(set2);
+            HashSet<string> common = new HashSet<string>(set1);
+            common.IntersectWith(set2);
+            set1.ExceptWith(common);
+            set2.ExceptWith(common);
             if (cnt1 < 3 && set2.Count > 0)
             {
                 Seats[0].WorkerFeatureIDs.Add("");
@@ -241,7 +245,7 @@ namespace ProjectOC.WorkerNS
         {
             if (CorrectType != FeatureCorrectType.Reverse)
             {
-                int index = Random.Next(0, Seat.FeatureIDs.Count + 1);
+                int index = Random.Next(0, Seat.FeatureIDs.Count);
                 string featID = Seat.FeatureIDs[index];
                 string newFeatID = "";
                 switch (CorrectType)

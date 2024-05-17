@@ -246,11 +246,27 @@ namespace ProjectOC.WorkerNS
                 else if (type == FeatureType.Reverse)
                 {
                     FeatureType reverseType = GetFeatureType(GetReverseID(id));
-                    if (reverseType == FeatureType.Buff) { return new Color(1f, 0.843f, 0f); }
-                    if (reverseType == FeatureType.DeBuff) { return new Color(0.5f, 0f, 0.5f); }
+                    if (reverseType == FeatureType.Buff) { return new Color(0.5f, 0f, 0.5f); }
+                    if (reverseType == FeatureType.DeBuff) { return new Color(1.0f, 0.8431f, 0.0f); }
                 }
             }
-            return default(Color);
+            return Color.black;
+        }
+        public string GetColorStrForUI(string id)
+        {
+            if (IsValidID(id))
+            {
+                FeatureType type = GetFeatureType(id);
+                if (type == FeatureType.Buff) { return "green"; }
+                else if (type == FeatureType.DeBuff) { return "red"; }
+                else if (type == FeatureType.Reverse)
+                {
+                    FeatureType reverseType = GetFeatureType(GetReverseID(id));
+                    if (reverseType == FeatureType.Buff) { return "#800080"; }
+                    if (reverseType == FeatureType.DeBuff) { return "#FFD700"; }
+                }
+            }
+            return "black";
         }
         #endregion
     }

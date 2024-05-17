@@ -14,6 +14,7 @@ namespace ProjectOC.WorkerNS
         public Transform Socket;
         public List<string> WorkerFeatureIDs = new List<string>();
         public List<string> FeatureIDs = new List<string>();
+        public event Action OnArriveInvokeEvent;
 
         public FeatureSeat(FeatureBuilding featBuild, Transform socket)
         {
@@ -28,8 +29,11 @@ namespace ProjectOC.WorkerNS
         public void SetFeatureID()
         {
             ClearFeatureID();
-            FeatureIDs.AddRange(Worker.GetFeatureIDs(true));
-            WorkerFeatureIDs.AddRange(FeatureIDs);
+            if (Worker != null)
+            {
+                FeatureIDs.AddRange(Worker.GetFeatureIDs(true));
+                WorkerFeatureIDs.AddRange(FeatureIDs);
+            }
         }
         public void ChangerWorkerFeature()
         {
@@ -65,6 +69,7 @@ namespace ProjectOC.WorkerNS
         {
             (this as IWorkerContainer).OnArriveSetPosition(worker, Socket.position);
             worker.LastPosition = Socket.position;
+            OnArriveInvokeEvent?.Invoke();
         }
         public void SetWorkerRelateData() 
         { 

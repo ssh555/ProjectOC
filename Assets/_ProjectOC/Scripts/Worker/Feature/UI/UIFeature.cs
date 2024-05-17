@@ -24,7 +24,7 @@ namespace ProjectOC.WorkerNS.UI
             get => curMode;
             set
             {
-                if (curMode != value)
+                if ((curMode == Mode.Exchange && value == Mode.Correct) || (curMode == Mode.Correct && value == Mode.Exchange))
                 {
                     IsSeeInfo = false;
                     CurChangeMode = ChangeMode.Index1;
@@ -87,8 +87,8 @@ namespace ProjectOC.WorkerNS.UI
         }
         private bool CanConfirm()
         {
-            if (CurMode == Mode.Exchange) { return FeatBuild.IsExchangeStart; }
-            else if (CurMode == Mode.Correct) { return FeatBuild.IsCorrectStart; }
+            if (CurMode == Mode.Exchange) { return !FeatBuild.IsExchange; }
+            else if (CurMode == Mode.Correct) { return !FeatBuild.IsCorrect; }
             return true;
         }
         private bool CanBack()
@@ -180,6 +180,9 @@ namespace ProjectOC.WorkerNS.UI
         #region Override
         protected override void Enter()
         {
+            FeatBuild.Seats[0].OnArriveInvokeEvent += Refresh;
+            FeatBuild.Seats[1].OnArriveInvokeEvent += Refresh;
+            FeatBuild.Seat.OnArriveInvokeEvent += Refresh;
             FeatBuild.OnExchangeUpdateEvent += RefreshBarForExchange;
             FeatBuild.OnCorrectUpdateEvent += RefreshBarForCorrect;
             FeatBuild.OnExchangeEndEvent += Refresh;
@@ -197,6 +200,9 @@ namespace ProjectOC.WorkerNS.UI
         }
         protected override void Exit()
         {
+            FeatBuild.Seats[0].OnArriveInvokeEvent -= Refresh;
+            FeatBuild.Seats[1].OnArriveInvokeEvent -= Refresh;
+            FeatBuild.Seat.OnArriveInvokeEvent -= Refresh;
             FeatBuild.OnExchangeUpdateEvent -= RefreshBarForExchange;
             FeatBuild.OnCorrectUpdateEvent -= RefreshBarForCorrect;
             FeatBuild.OnExchangeEndEvent -= Refresh;
@@ -297,7 +303,24 @@ namespace ProjectOC.WorkerNS.UI
             if (!CanBack()) { return; }
             if (IsOnMain)
             {
-                UIMgr.PopPanel();
+                if (CurMode == Mode.Exchange && FeatBuild.IsExchangeEnd)
+                {
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance
+                        (ML.Engine.UI.UIManager.NoticeUIType.PopUpUI,
+                        new ML.Engine.UI.UIManager.PopUpUIData(PanelTextContent.textCancleResult + PanelTextContent.textCancleResultDesc, null, null,
+                            () => { FeatBuild.CancleExchange(); }));
+                }
+                else if (CurMode == Mode.Correct && FeatBuild.IsCorrectEnd)
+                {
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance
+                        (ML.Engine.UI.UIManager.NoticeUIType.PopUpUI,
+                        new ML.Engine.UI.UIManager.PopUpUIData(PanelTextContent.textCancleResult + PanelTextContent.textCancleResultDesc, null, null,
+                            () => { FeatBuild.CancleCorrect(); }));
+                }
+                else
+                {
+                    UIMgr.PopPanel();
+                }
             }
             else
             {
@@ -363,20 +386,15 @@ namespace ProjectOC.WorkerNS.UI
         }
         private void FeatCancle_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (CurMode == Mode.Exchange && FeatBuild.IsExchangeEnd)
+            if (CurMode == Mode.Exchange && FeatBuild.IsExchange)
             {
-                ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance
-                    (ML.Engine.UI.UIManager.NoticeUIType.PopUpUI, 
-                    new ML.Engine.UI.UIManager.PopUpUIData(PanelTextContent.textCancleResult + PanelTextContent.textCancleResultDesc, null, null,
-                        () => { FeatBuild.CancleExchange(); } ));
+                FeatBuild.CancleExchange();
             }
-            else if (CurMode == Mode.Correct && FeatBuild.IsCorrectEnd)
+            else if (CurMode == Mode.Correct && FeatBuild.IsCorrect)
             {
-                ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance
-                    (ML.Engine.UI.UIManager.NoticeUIType.PopUpUI,
-                    new ML.Engine.UI.UIManager.PopUpUIData(PanelTextContent.textCancleResult + PanelTextContent.textCancleResultDesc, null, null,
-                        () => { FeatBuild.CancleCorrect(); }));
+                FeatBuild.CancleCorrect();
             }
+            Refresh();
         }
         #endregion
 
@@ -417,6 +435,7 @@ namespace ProjectOC.WorkerNS.UI
                 feat.Find("IconCorrect").gameObject.SetActive(false);
                 if (IsSeeInfo)
                 {
+                    feat.Find("DescIcon").gameObject.SetActive(false);
                     feat.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = "";
                     feat.Find("EffectDesc").GetComponent<TMPro.TextMeshProUGUI>().text = "";
                 }
@@ -464,9 +483,10 @@ namespace ProjectOC.WorkerNS.UI
                         if (IsSeeInfo)
                         {
                             feat.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = featManager.GetItemDescription(featID);
-                            Color color = featManager.GetColorForUI(featID);
-                            feat.Find("DescIcon").GetComponent<Image>().color = color;
-                            feat.Find("EffectDesc").GetComponent<TMPro.TextMeshProUGUI>().text = $"<color={color}>" + featManager.GetEffectsDescription(featID) + "</color>";
+                            feat.Find("DescIcon").gameObject.SetActive(true);
+                            feat.Find("DescIcon").GetComponent<Image>().color = featManager.GetColorForUI(featID);
+                            feat.Find("EffectDesc").GetComponent<TMPro.TextMeshProUGUI>().text = 
+                                $"<color={featManager.GetColorStrForUI(featID)}>" + featManager.GetEffectsDescription(featID) + "</color>";
                         }
                     }
                 }
@@ -508,7 +528,7 @@ namespace ProjectOC.WorkerNS.UI
                 FeatureSeat seat = isExchange ? FeatBuild.Seats[1] : FeatBuild.Seat;
                 bool checkCanCorrect = !isExchange && !isEnd;
                 RefreshFeatureBtnList(CommonFeatureBtnList, seat, isEnd, checkCanCorrect);
-                RefreshWorker(Common.Find("Worker"), seat.Worker, CurChangeMode == ChangeMode.Index2);
+                RefreshWorker(Common.Find("Worker"), seat.Worker, (CurChangeMode == ChangeMode.Index2 && isStart));
                 Common.Find("Bar").gameObject.SetActive(isRun);
                 bool canRun = isExchange ? FeatBuild.CanExchangeReal : FeatBuild.CanCorrectReal;
                 Common.Find("BtnConfirm").gameObject.SetActive(isStart);
@@ -533,6 +553,7 @@ namespace ProjectOC.WorkerNS.UI
                 Common.Find("Warn").Find("Warn2").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = 
                     isExchange ? PanelTextContent.textWarnLackExchangeItem : PanelTextContent.textWarnLackCorrectItem;
                 LayoutRebuilder.ForceRebuildLayoutImmediate(Common.Find("Warn").GetComponent<GridLayoutGroup>().GetComponent<RectTransform>());
+                Common.Find("Time").gameObject.SetActive(!isEnd);
                 if (isStart)
                 {
                     int time = isExchange ? config.FeatTransTime : featManager.GetFeatureCorrectTime(FeatBuild.CorrectType);
@@ -544,12 +565,12 @@ namespace ProjectOC.WorkerNS.UI
                 if (CurMode == Mode.Exchange)
                 {
                     RefreshFeatureBtnList(ExchangeFeatureBtnList, FeatBuild.Seats[0], FeatBuild.IsExchangeEnd);
-                    RefreshWorker(Exchange.Find("Worker"), FeatBuild.Seats[0].Worker, CurChangeMode == ChangeMode.Index1);
+                    RefreshWorker(Exchange.Find("Worker"), FeatBuild.Seats[0].Worker, (CurChangeMode == ChangeMode.Index1 && FeatBuild.IsExchangeStart));
                     RefreshItem(Exchange.Find("Item"), itemID, cur, need);
                 }
                 else if (CurMode == Mode.Correct)
                 {
-                    RefreshItem(Correct.Find("Item"), itemID, cur, need, CurChangeMode == ChangeMode.Index1);
+                    RefreshItem(Correct.Find("Item"), itemID, cur, need, (CurChangeMode == ChangeMode.Index1 && FeatBuild.IsCorrectStart));
                     Correct.Find("ItemDesc").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = ManagerNS.LocalGameManager.Instance.ItemManager.GetItemName(itemID);
                     Correct.Find("ItemDesc").Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = ManagerNS.LocalGameManager.Instance.ItemManager.GetItemDescription(itemID);
                     Correct.Find("ItemDesc").Find("EffectDesc").GetComponent<TMPro.TextMeshProUGUI>().text = ManagerNS.LocalGameManager.Instance.ItemManager.GetEffectDescription(itemID);
