@@ -64,7 +64,6 @@ namespace ExcelToJson
             List<EBConfig> configs = new List<EBConfig>();
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 1, BinaryFilePath = rootPath + "ProNode.json", type = typeof(ProjectOC.ProNodeNS.ProNodeTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 2, BinaryFilePath = rootPath + "StoreIcon.json", type = typeof(ProjectOC.StoreNS.StoreIconTableData) });
-            configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 1, IWorksheet = 4, BinaryFilePath = rootPath + "WorldMap.json", type = typeof(WorldMapTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 6, BinaryFilePath = rootPath + "WorkerName.json", type = typeof(ProjectOC.WorkerNS.WorkerNameTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 7, BinaryFilePath = rootPath + "WorkerEcho.json", type = typeof(ProjectOC.WorkerNS.WorkerEchoTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 8, BinaryFilePath = rootPath + "WorkerFood.json", type = typeof(ProjectOC.RestaurantNS.WorkerFoodTableData) });
@@ -82,6 +81,14 @@ namespace ExcelToJson
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 22, BinaryFilePath = rootPath + "Condition.json", type = typeof(ML.Engine.Event.ConditionTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 24, BinaryFilePath = rootPath + "Dialog.json", type = typeof(ProjectOC.Dialog.DialogTableData) });
             configs.Add(new EBConfig { ExcelFilePath = excelFilePath, IBeginRow = 5, IWorksheet = 25, BinaryFilePath = rootPath + "Option.json", type = typeof(ProjectOC.Dialog.OptionTableData) });
+
+            List<WorldMapTableData> worldmap = DBMgr.ReadExcel<WorldMapTableData>(excelFilePath, 1, 4);
+            int[][] worldmapReal = new int[101][];
+            foreach (var row in worldmap)
+            {
+                worldmapReal[row.index] = row.mapRow;
+            }
+            DBMgr.WriteJsonFromExcelForSingleData(worldmapReal, rootPath + "WorldMap.json");
 
             System.Threading.Tasks.Parallel.ForEach(configs, (config) =>
             {
