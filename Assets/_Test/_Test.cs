@@ -9,7 +9,7 @@ using UnityEngine.Playables;
 public class _Test : MonoBehaviour
 {
     [SerializeField]
-    public AnimancerTransitionAssetBase _clip;
+    public ML.Engine.Animation.ClipTransitionAsset.UnShared _clip;
 
     public AnimancerComponent _animancer;
 
@@ -24,6 +24,11 @@ public class _Test : MonoBehaviour
         //var state = _clip.CreateState();
 
         // Actually play the animation.
-        _animancer.Play(_clip).NormalizedTime = 0;
+        var state = _animancer.Play(_clip);
+        state.NormalizedTime = 0;
+        state.Events.OnEnd += () =>
+        {
+            _animancer.Playable.DestroyGraph();
+        };
     }
 }
