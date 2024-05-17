@@ -18,6 +18,7 @@
 							</ChildrenList>
 						</Bus>
 						<Bus Name="Vocal" ID="{9913CAF3-D48E-451B-B487-F91FF0DF4C05}"/>
+						<Bus Name="Music" ID="{0DD4A277-E689-4129-A752-E2B43A5DBD72}"/>
 					</ChildrenList>
 				</Bus>
 			</ChildrenList>

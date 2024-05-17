@@ -75,5 +75,9 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 		Edge_L = 33,
 		[LabelText("Q外延")]
 		Edge_Q = 34,
+		[LabelText("地板边心")]
+		floor_edge = 35,
+		[LabelText("柱顶")]
+		Pillar_up = 36,
 	}
 }
