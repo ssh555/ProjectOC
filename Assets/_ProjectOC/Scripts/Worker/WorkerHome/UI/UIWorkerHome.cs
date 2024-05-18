@@ -156,6 +156,7 @@ namespace ProjectOC.WorkerNS.UI
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s.Value);
             }
+            tempSprite.Clear();
             base.Exit();
         }
 
