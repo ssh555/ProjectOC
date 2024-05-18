@@ -29,17 +29,37 @@ namespace MineSystem
             tileMap.MinePrefab = GameObject.Find("Editor/Others").transform.GetChild(2).gameObject;
             tileMap.brushIcon = GameObject.Find("Editor/Others").transform.GetChild(3).gameObject;
             bigMap = tileMap.transform.GetComponentInParent<BigMap>();
-            
-            scaleWidth = tileMap.Width;
-            scaleHeight = tileMap.Height;
-            ChangeCurSelectdOption(tileMap.selectedOption);
+
+            CheckEditData();
+            ChangeCurSelectdOption(tileMap.EditOption);
             //Scene部分
             base.OnEnable();
-            RegenerateMap();
-
-            //Inspector 窗口
+            
+            ReGenerateSceneObject();
         }
 
+        void CheckEditData()
+        {
+            if (tileMap.SmallMapEditData == null)
+            {
+                string[] nameStr = tileMap.gameObject.name.Split("_");
+                int _index = int.Parse(nameStr[1]);
+                tileMap.SmallMapEditData = bigMap.SmallMapEditDatas[_index];
+            }
+
+            tileMap.curMineBrush = bigMap.BigMapEditDatas.MineBrushDatas[0];
+            foreach (var _mineBrush in bigMap.BigMapEditDatas.MineBrushDatas)
+            {
+                if ( !tileMap.SmallMapEditData.smallMapMineData.ContainsKey(_mineBrush))
+                {
+                    tileMap.SmallMapEditData.smallMapMineData[_mineBrush] = new List<Vector2>();  
+                }
+            }
+            
+            scaleWidth = tileMap.TileWidth;
+            scaleHeight = tileMap.TileHeight;
+        }
+        
 
 
 
@@ -49,13 +69,14 @@ namespace MineSystem
 
         #region Unity
 
+        /// <summary>
+        /// Scene面板的Update
+        /// </summary>
         private void OnSceneGUI()
         {
             ProcessInput();
-            tileMap.mineParentTransf.localScale = Vector3.one * tileMap.mineScale;
-
-
-            if (tileMap.selectedOption == 0)
+            //tileMap.mineParentTransf.localScale = Vector3.one * tileMap.mineScale;
+            if (tileMap.EditOption == 0)
             {
                 DrawTileInspect();
             }
@@ -83,7 +104,7 @@ namespace MineSystem
                     tileMap.isShiftPressed = true;
                 }
 
-                if (tileMap.selectedOption != 0 && e.keyCode == KeyCode.Tab)
+                if (tileMap.EditOption != 0 && e.keyCode == KeyCode.Tab)
                 {
                     SwitchBrushIcon();
                 }
@@ -106,7 +127,7 @@ namespace MineSystem
 
         void ChangeCurSelectdOption(int _index)
         {
-            tileMap.selectedOption = _index;
+            tileMap.EditOption = _index;
             //画块块
             if (_index == 0)
             {
@@ -125,7 +146,6 @@ namespace MineSystem
                 {
                     _mine.GetComponent<SpriteRenderer>().color = Color.white;
                 }
-
                 selectMine.Clear();
             }
             //画矿
@@ -252,7 +272,7 @@ namespace MineSystem
             {
                 for (int j = startPos.y; j <= endPos.y; j++)
                 {
-                    tileMap.gridData[i, j] = pen;
+                    tileMap.SmallMapEditData.gridData[i, j] = pen;
                     tileMap.SetTileSprite(i, j, pen);
                 }
             }
@@ -275,7 +295,7 @@ namespace MineSystem
                 {
                     try
                     {
-                        tileMap.SetTileSprite(i, j, tileMap.gridData[i, j]);
+                        tileMap.SetTileSprite(i, j, tileMap.SmallMapEditData.gridData[i, j]);
                     }
                     catch (Exception exception)
                     {
@@ -318,7 +338,7 @@ namespace MineSystem
             return new Vector2Int(_x, _y);
         }
 
-
+        
         private void RegenerateMap()
         {
             if (tileMap.TilePrefab == null)
@@ -328,20 +348,20 @@ namespace MineSystem
             }
 
             //复制旧数据
-            bool[,] oldData = tileMap.gridData;
-            tileMap.gridData = new bool[tileMap.Width, tileMap.Height];
-            tileMap.tiles = new GameObject[tileMap.Width, tileMap.Height];
+            bool[,] oldData = tileMap.SmallMapEditData.gridData;
+            tileMap.SmallMapEditData.gridData = new bool[tileMap.TileWidth, tileMap.TileHeight];
+            tileMap.tiles = new GameObject[tileMap.TileWidth, tileMap.TileHeight];
             // 默认设为false
-            for (int i = 0; i < tileMap.Width; i++)
+            for (int i = 0; i < tileMap.TileWidth; i++)
             {
-                for (int j = 0; j < tileMap.Height; j++)
+                for (int j = 0; j < tileMap.TileHeight; j++)
                 {
-                    tileMap.gridData[i, j] = false;
+                    tileMap.SmallMapEditData.gridData[i, j] = false;
                 }
             }
 
 
-            int oldRows = tileMap.Width, oldCols = tileMap.Height;
+            int oldRows = tileMap.TileWidth, oldCols = tileMap.TileHeight;
             if (oldData != null)
             {
                 oldRows = Mathf.Min(oldData.GetLength(0), oldRows);
@@ -351,7 +371,7 @@ namespace MineSystem
                 {
                     for (int j = 0; j < oldCols; j++)
                     {
-                        tileMap.gridData[i, j] = oldData[i, j];
+                        tileMap.SmallMapEditData.gridData[i, j] = oldData[i, j];
                     }
                 }
             }
@@ -361,11 +381,11 @@ namespace MineSystem
             //生成可视化方块
             DestroyTransformChild(tileMap.gridParentTransf);
 
-            for (int x = 0; x < tileMap.Width; x++)
+            for (int x = 0; x < tileMap.TileWidth; x++)
             {
-                for (int y = 0; y < tileMap.Height; y++)
+                for (int y = 0; y < tileMap.TileHeight; y++)
                 {
-                    tileMap.SetTileSprite(x, y, tileMap.gridData[x, y]);
+                    tileMap.SetTileSprite(x, y, tileMap.SmallMapEditData.gridData[x, y]);
                 }
             }
         }
@@ -383,7 +403,7 @@ namespace MineSystem
 
         #region DrawMine
 
-        private BrushData curBrush = new BrushData();
+        private MineBigMapEditData.BrushData curBrush =>tileMap.curMineBrush.brushData;
 
         private void DrawMine()
         {
@@ -403,18 +423,14 @@ namespace MineSystem
             tileMap.brushIcon.SetActive(tileMap.brushTypeIsCircle);
             tileMap.brushIcon.transform.localScale = Vector3.one * curBrush.brushSize * 0.5f;
 
-            if (tileMap.selectedOption == 1)
+            if (tileMap.EditOption == 1)
             {
                 if (e.button == 0 && e.type == EventType.MouseDown)
                 {
                     SingleDrawer(mouseWorldPos, curBrush);
                 }
-                else if (e.button == 1 && e.type == EventType.MouseDown)
-                {
-                    DestroyTransformChild(tileMap.mineParentTransf);
-                }
             }
-            else if (tileMap.selectedOption == 2)
+            else if (tileMap.EditOption == 2)
             {
 
                 if (e.type == EventType.MouseMove)
@@ -441,10 +457,6 @@ namespace MineSystem
                                     selectMine.Add(_hit.collider.gameObject);
                                 }
                             }
-                            else
-                            {
-                                Debug.Log("Hit Collider 为空");
-                            }
                         }
                        
                     }
@@ -465,21 +477,43 @@ namespace MineSystem
                         _mine.GetComponent<SpriteRenderer>().color = Color.cyan;
                     }
                 }
-
+                //删除矿物
                 if (e.type == EventType.MouseDown)
                 {
                     for (int i = selectMine.Count - 1; i >= 0; i--)
                     {
                         DestroyImmediate(selectMine[i]);
                     }
-
                     selectMine.Clear();
+
+                    
+                    //重新排列数据
+                    Dictionary<string, MineBigMapEditData.MineBrushData> tempNameToBrush =
+                        new Dictionary<string, MineBigMapEditData.MineBrushData>();
+                    foreach (var _dic in tileMap.SmallMapEditData.smallMapMineData)
+                    {
+                        _dic.Value.Clear();
+                        tempNameToBrush[_dic.Key.mineID]= _dic.Key;
+                    }
+                    
+                    
+                    for (int i = 0; i < tileMap.mineParentTransf.childCount; i++)
+                    {
+                        GameObject _mine = tileMap.mineParentTransf.GetChild(i).gameObject;
+                        string _mineID =  _mine.name.Split("|")[0];
+                        MineBigMapEditData.MineBrushData _mineData = tempNameToBrush[_mineID];
+                        
+                        tileMap.SmallMapEditData.smallMapMineData[_mineData].Add(new Vector2(_mine.transform.position.x,_mine.transform.position.y));
+                        tileMap.mineParentTransf.GetChild(i).name = $"{_mineID}|{tileMap.SmallMapEditData.smallMapMineData[_mineData].Count}";
+                    }
+                    
                 }
+                
 
             }
         }
 
-        private void SingleDrawer(Vector2 _mousePos, BrushData _brush)
+        private void SingleDrawer(Vector2 _mousePos, MineBigMapEditData.BrushData _brush)
         {
             //点
             if (!tileMap.brushTypeIsCircle)
@@ -488,7 +522,8 @@ namespace MineSystem
                 // _mine.name = "";
                 GameObject _mine = Instantiate(tileMap.MinePrefab, minePos, Quaternion.identity,
                     tileMap.mineParentTransf);
-                _mine.SetActive(true);
+                ProcessMine(_mine, tileMap.curMineBrush,tileMap.SmallMapEditData.smallMapMineData[tileMap.curMineBrush].Count);
+                tileMap.SmallMapEditData.smallMapMineData[tileMap.curMineBrush].Add(_mousePos);
             }
             //圈
             else
@@ -502,37 +537,47 @@ namespace MineSystem
                     float offsetX = Mathf.Cos(_angle) * distance;
                     float offsetY = Mathf.Sin(_angle) * distance;
 
+                    Vector2 minePos2D = new Vector2(_mousePos.x + offsetX,_mousePos.y + offsetY);
+                    Vector3 minePos = new Vector3(minePos2D.x,minePos2D.y , 0);
 
-                    Vector3 minePos = new Vector3(_mousePos.x + offsetX, _mousePos.y + offsetY, 0);
-
-                    //Check 范围外
+                    //Check在范围外
                     //if(minePos )
 
                     GameObject _mine = Instantiate(tileMap.MinePrefab, minePos, Quaternion.identity,
                         tileMap.mineParentTransf);
-                    // _mine.name = "";
-                    _mine.SetActive(true);
+
+                    ProcessMine(_mine, tileMap.curMineBrush,tileMap.SmallMapEditData.smallMapMineData[tileMap.curMineBrush].Count);
+                    tileMap.SmallMapEditData.smallMapMineData[tileMap.curMineBrush].Add(minePos2D);
                 }
             }
-
         }
-
-        public class BrushData
+        void ProcessMine(GameObject _mineGo,MineBigMapEditData.MineBrushData _mineBrushData,int _index)
+        {                
+            _mineGo.SetActive(true);
+            _mineGo.GetComponent<SpriteRenderer>().sprite = _mineBrushData.mineIcon;
+            _mineGo.transform.localScale = Vector3.one * tileMap.mineScale;
+            _mineGo.name = $"{_mineBrushData.mineID}|{_index}";
+        }
+        private void ReGenerateMine()
         {
-            public float brushSize;
-            public float brushHard;
-            public int brushDensity;
-
-            public float brushSizeMin = 0f, brushSizeMax = 10f;
-            public float brushHardMin = 0f, brushHardMax = 10f;
-            public int brushDensityMin = 0, brushDensityMax = 20;
-
-            public BrushData()
+            DestroyTransformChild(tileMap.mineParentTransf);
+            foreach (var _singleMineData in tileMap.SmallMapEditData.smallMapMineData)
             {
-                brushSize = 3f;
-                brushHard = 0f;
-                brushDensity = 5;
+                for (int i = 0; i < _singleMineData.Value.Count; i++)
+                {
+                    GameObject _mine = Instantiate(tileMap.MinePrefab, 
+                        new Vector3(_singleMineData.Value[i].x,_singleMineData.Value[i].y,0), Quaternion.identity,
+                        tileMap.mineParentTransf);
+                    
+                    ProcessMine(_mine, _singleMineData.Key,i);
+                }
             }
+            
+        }
+        private void ReGenerateSceneObject()
+        {
+            RegenerateMap();
+            ReGenerateMine();
         }
 
         #endregion
@@ -563,16 +608,16 @@ namespace MineSystem
                 GUILayout.Label("长按Shift+鼠标滚轮 更改笔刷大小");
             }
 
-            ToggleButton("地形绘制", (() => ChangeCurSelectdOption(0)), tileMap.selectedOption == 0);
+            ToggleButton("地形绘制", (() => ChangeCurSelectdOption(0)), tileMap.EditOption == 0);
 
 
             GUILayout.BeginHorizontal();
-            ToggleButton("项绘制", (() => ChangeCurSelectdOption(1)), tileMap.selectedOption == 1);
-            ToggleButton("项擦除", (() => ChangeCurSelectdOption(2)), tileMap.selectedOption == 2);
-            // ToggleButton("项擦除",(() => ChangeCurSelectdOption(3)),tileMap.selectedOption == 3);
+            ToggleButton("项绘制", (() => ChangeCurSelectdOption(1)), tileMap.EditOption == 1);
+            ToggleButton("项擦除", (() => ChangeCurSelectdOption(2)), tileMap.EditOption == 2);
+            // ToggleButton("项擦除",(() => ChangeCurSelectdOption(3)),tileMap.EditOption == 3);
             GUILayout.EndHorizontal();
 
-            if (tileMap.selectedOption != 0)
+            if (tileMap.EditOption != 0)
             {
                 GUILayout.Space(10);
                 GUILayout.Label("笔刷类型", blackLabelStyle);
@@ -595,20 +640,23 @@ namespace MineSystem
             }
 
             GUILayout.Space(10);
-            //笔刷
+            
+            //设置矿物笔刷
             EditorGUILayout.BeginHorizontal();
             GUIStyle buttonStyle = new GUIStyle(GUI.skin.button);
+            int _buttonSize = 50;
             
-            foreach (var _brush in bigMap.BigMapEditDatas.MineBrushDatas)
+            foreach (var _singleMineData in tileMap.SmallMapEditData.smallMapMineData)
             {
-                buttonStyle.normal.background = (Texture2D)_brush.mineIcon;
+                MineBigMapEditData.MineBrushData _mineBrush = _singleMineData.Key;
+                buttonStyle.normal.background = (Texture2D)_mineBrush.mineIcon.texture;
                 //选中后切换CurBrush
                 EditorGUILayout.BeginVertical();
-                if (GUILayout.Button("", buttonStyle, GUILayout.Width(100), GUILayout.Height(50)))
+                if (GUILayout.Button("", buttonStyle, GUILayout.Width(_buttonSize), GUILayout.Height(_buttonSize)))
                 {
-                    Debug.Log("Button clicked!");
+                    tileMap.curMineBrush = _mineBrush;
                 }
-                EditorGUILayout.LabelField("1");
+                EditorGUILayout.LabelField($"    {_singleMineData.Value.Count}");
                 EditorGUILayout.EndVertical();
             }
             EditorGUILayout.EndHorizontal();

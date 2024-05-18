@@ -5,17 +5,37 @@ namespace MineSystem
 {
     public class TileMap : MonoBehaviour
     {
-        public int Width = 10;
-        public int Height = 10;
+        public int TileWidth
+        {
+            get
+            {
+                return SmallMapEditData.width;
+            }
+            set
+            {
+                SmallMapEditData.width = value;
+            }
+        }
+        public int TileHeight
+        {
+            get
+            {
+                return SmallMapEditData.height;
+            }
+            set
+            {
+                SmallMapEditData.height = value;
+            }
+        }
 
         public float mineScale = 1;
         [HideInInspector] public GameObject[,] tiles;
-        [HideInInspector] public bool[,] gridData; //true 有实体
         [HideInInspector] public GameObject TilePrefab, MinePrefab, selectOutline, brushIcon;
         [HideInInspector] public Transform gridParentTransf, mineParentTransf;
+        public MineSmallMapEditData SmallMapEditData;
 
-
-        public int selectedOption = 0;
+        public int EditOption = 0;
+        public MineBigMapEditData.MineBrushData curMineBrush = null;
         [Tooltip("0点 1 圈")] public bool brushTypeIsCircle = false;
         public bool isShiftPressed = false;
 
@@ -24,7 +44,7 @@ namespace MineSystem
         public void SetTileSprite(int x, int y, bool pen)
         {
             float _offset = 0.5f;
-            if (x >= 0 && x < Width && y >= 0 && y < Height)
+            if (x >= 0 && x < TileWidth && y >= 0 && y < TileHeight)
             {
                 // 在指定位置实例化新的瓦片
                 if (TilePrefab != null)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using OpenCover.Framework.Model;
@@ -13,15 +14,9 @@ namespace MineSystem
         public int width, height;
         public bool[,] gridData;
         public Texture smallMapTex;
-        public List<SingleTypeMineData> mineDatas = new List<SingleTypeMineData>();
-        
-        
+        //Dictionart更好一点
+        public Dictionary<MineBigMapEditData.MineBrushData,List<Vector2>>  smallMapMineData = new Dictionary<MineBigMapEditData.MineBrushData, List<Vector2>>();
 
-        public class SingleTypeMineData
-        {
-            public string MineralMapID;
-            public List<Vector2> position = new List<Vector2>();
-        }
         public MineSmallMapEditData()
         {
             index = -1;

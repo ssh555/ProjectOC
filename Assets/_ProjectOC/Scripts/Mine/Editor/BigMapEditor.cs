@@ -26,7 +26,7 @@ namespace MineSystem
             //读取大地图和小地图所有资产
             bigMap.BigMapEditDatas = AssetDatabase.LoadAssetAtPath<MineBigMapEditData>(bigMapPath);
             string[] assetGUIDs = AssetDatabase.FindAssets("t:" + typeof(MineSmallMapEditData).Name, new[] { smallMapFoldPath });
-            Debug.Log($"小地图GUID{assetGUIDs.Length}");
+
             foreach (string guid in assetGUIDs)
             {
                 string assetPath = AssetDatabase.GUIDToAssetPath(guid);
@@ -58,10 +58,15 @@ namespace MineSystem
             //todo 选中的时候生成Tile 或者图片
             if (GUILayout.Button("+新建小地图"))
             {
-                int _index = 0;
+                int _index = bigMap.SmallMapEditDatas.Count;
                 MineSmallMapEditData _smallMapData = ScriptableObject.CreateInstance<MineSmallMapEditData>();
                 CreateScriptableObjectAsset(_smallMapData, smallMapFoldPath, $"{smallMapDataNamePre}{_index}");
-                //生成GameObject 并命名
+                bigMap.SmallMapEditDatas.Add(_smallMapData);
+                
+                GameObject _go = new GameObject($"MapSmart_{_index}");
+                _go.transform.SetParent(bigMap.transform);
+                TileMap _tileMap = _go.AddComponent<TileMap>();
+                _tileMap.SmallMapEditData = _smallMapData;
             }
 
             GUILayout.Space(20);
@@ -69,7 +74,7 @@ namespace MineSystem
             //选择表资产
             controlRect = EditorGUILayout.GetControlRect(true, 20);
             bigMap.mineID = EditorGUI.TextField(controlRect, "ID:", bigMap.mineID);
-            bigMap.mineTex = EditorGUILayout.ObjectField("笔刷图标:", bigMap.mineTex, typeof(Texture), false) as Texture;
+            bigMap.mineTex = EditorGUILayout.ObjectField("笔刷图标:", bigMap.mineTex, typeof(Sprite), false) as Sprite;
 
 
             if (GUILayout.Button("+新建笔刷项"))
@@ -84,6 +89,7 @@ namespace MineSystem
                         Debug.LogError("新笔刷矿物ID重复");
                         break;
                     }
+                    
                 }
 
                 if (valid)
@@ -92,6 +98,7 @@ namespace MineSystem
                     bigMap.BigMapEditDatas.MineBrushDatas.Add(mineBrush);
                 }
             }
+            DrawDefaultInspector();
         }
 
         #region ScriptObject数据处理
@@ -105,7 +112,7 @@ namespace MineSystem
             {
                 Directory.CreateDirectory(_path);
             }
-            string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(_path + "_assetName "+ ".asset");
+            string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(_path + "/"+ _assetName+ ".asset");
 
             AssetDatabase.CreateAsset(asset, assetPathAndName);
 

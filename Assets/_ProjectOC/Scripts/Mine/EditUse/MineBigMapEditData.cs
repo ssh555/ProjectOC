@@ -14,10 +14,10 @@ public class MineBigMapEditData : ScriptableObject
     public class MineBrushData
     {
         public string mineID;
-        public Texture mineIcon;
+        public Sprite mineIcon;
             
         public BrushData brushData;
-        public MineBrushData(string _mineID,Texture _tex)
+        public MineBrushData(string _mineID,Sprite _tex)
         {
             mineID = _mineID;
             mineIcon = _tex;

@@ -14,7 +14,7 @@ namespace MineSystem
 
         //新建笔刷项 数据
         public string mineID = "Mineral_Ti_1";
-        public Texture mineTex;
+        public Sprite mineTex;
 
     }
 }
