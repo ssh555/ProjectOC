@@ -193,8 +193,14 @@ namespace ProjectOC.DataNS
                 Data[] newDatas = new Data[capacity];
                 for (int i = 0; i < capacity; i++)
                 {
-                    if (!IsValidIndex(i)) { break; }
-                    newDatas[i] = Datas[i];
+                    if (IsValidIndex(i)) 
+                    {
+                        newDatas[i] = Datas[i];
+                    }
+                    else
+                    {
+                        newDatas[i] = new Data("", dataCapacity);
+                    }
                 }
                 for (int i = capacity; i < Datas.Length; i++)
                 {
@@ -248,8 +254,14 @@ namespace ProjectOC.DataNS
                 Data[] newDatas = new Data[capacity];
                 for (int i = 0; i < capacity; i++)
                 {
-                    if (!IsValidIndex(i)) { break; }
-                    newDatas[i] = Datas[i];
+                    if (IsValidIndex(i))
+                    {
+                        newDatas[i] = Datas[i];
+                    }
+                    else
+                    {
+                        newDatas[i] = new Data("", dataCapacitys[i]);
+                    }
                 }
                 for (int i = capacity; i < Datas.Length; i++)
                 {

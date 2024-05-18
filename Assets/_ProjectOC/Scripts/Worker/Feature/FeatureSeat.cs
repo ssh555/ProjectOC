@@ -54,6 +54,7 @@ namespace ProjectOC.WorkerNS
                     }
                 }
             }
+            SetFeatureID();
         }
 
         #region IWorkerContainer

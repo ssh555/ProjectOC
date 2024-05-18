@@ -91,7 +91,13 @@ namespace ProjectOC.WorkerNS.UI
             else if (CurMode == Mode.Correct) { return !FeatBuild.IsCorrect; }
             return true;
         }
-        private bool CanBack()
+        private bool CanBtnConfirm()
+        {
+            if (CurMode == Mode.Exchange) { return FeatBuild.IsExchangeStart; }
+            else if (CurMode == Mode.Correct) { return FeatBuild.IsCorrectStart; }
+            return true;
+        }
+        private bool CanBtnBack()
         {
             if (CurMode == Mode.Exchange) { return !FeatBuild.IsExchangeEnd; }
             else if (CurMode == Mode.Correct) { return !FeatBuild.IsCorrectEnd; }
@@ -188,7 +194,7 @@ namespace ProjectOC.WorkerNS.UI
             FeatBuild.OnExchangeEndEvent += Refresh;
             FeatBuild.OnCorrectEndEvent += Refresh;
             ManagerNS.LocalGameManager.Instance.WorkerManager.OnDeleteWorkerEvent += OnDeleteWorkerEvent;
-            tempSprite.Add("", transform.Find("Exchange").Find("Worker").Find("Icon").GetComponent<Image>().sprite);
+            tempSprite.Add("", ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_Empty"));
             tempSprite.Add("WorkerIcon", ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite("Tex2D_Worker_UI_Beast"));
             var config = ManagerNS.LocalGameManager.Instance.FeatureManager.Config;
             tempSprite.Add(config.FeatTransCostItemID, ManagerNS.LocalGameManager.Instance.ItemManager.GetItemSprite(config.FeatTransCostItemID));
@@ -208,11 +214,11 @@ namespace ProjectOC.WorkerNS.UI
             FeatBuild.OnExchangeEndEvent -= Refresh;
             FeatBuild.OnCorrectEndEvent -= Refresh;
             ManagerNS.LocalGameManager.Instance.WorkerManager.OnDeleteWorkerEvent -= OnDeleteWorkerEvent;
-            tempSprite.Remove("");
             foreach (var s in tempSprite)
             {
                 ML.Engine.Manager.GameManager.DestroyObj(s.Value);
             }
+            tempSprite.Clear();
             base.Exit();
         }
         private void OnDeleteWorkerEvent(Worker worker)
@@ -300,21 +306,20 @@ namespace ProjectOC.WorkerNS.UI
         }
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (!CanBack()) { return; }
             if (IsOnMain)
             {
                 if (CurMode == Mode.Exchange && FeatBuild.IsExchangeEnd)
                 {
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance
                         (ML.Engine.UI.UIManager.NoticeUIType.PopUpUI,
-                        new ML.Engine.UI.UIManager.PopUpUIData(PanelTextContent.textCancleResult + PanelTextContent.textCancleResultDesc, null, null,
+                        new ML.Engine.UI.UIManager.PopUpUIData(PanelTextContent.textCancleResult + "\n" + PanelTextContent.textCancleResultDesc, null, null,
                             () => { FeatBuild.CancleExchange(); }));
                 }
                 else if (CurMode == Mode.Correct && FeatBuild.IsCorrectEnd)
                 {
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance
                         (ML.Engine.UI.UIManager.NoticeUIType.PopUpUI,
-                        new ML.Engine.UI.UIManager.PopUpUIData(PanelTextContent.textCancleResult + PanelTextContent.textCancleResultDesc, null, null,
+                        new ML.Engine.UI.UIManager.PopUpUIData(PanelTextContent.textCancleResult + "\n" + PanelTextContent.textCancleResultDesc, null, null,
                             () => { FeatBuild.CancleCorrect(); }));
                 }
                 else
@@ -411,8 +416,8 @@ namespace ProjectOC.WorkerNS.UI
             Select.Find("Correct").gameObject.SetActive(isExchange);
             Select.Find("CorrectBig").gameObject.SetActive(!isExchange);
             bool canSee = CanSee();
-            bool canConfirm = CanConfirm();
-            bool canBack = CanBack();
+            bool canConfirm = CanBtnConfirm();
+            bool canBack = CanBtnBack();
             KeyTips.Find("KT_See").gameObject.SetActive(canSee && !IsSeeInfo);
             KeyTips.Find("KT_NoSee").gameObject.SetActive(canSee && IsSeeInfo);
             KeyTips.Find("Sub").gameObject.SetActive(canConfirm || canBack);

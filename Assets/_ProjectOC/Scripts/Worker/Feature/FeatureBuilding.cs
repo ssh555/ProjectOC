@@ -145,12 +145,12 @@ namespace ProjectOC.WorkerNS
             if (cnt1 < 3 && set2.Count > 0)
             {
                 Seats[0].WorkerFeatureIDs.Add("");
-                Seats[0].FeatureIDs.Add(set2.ToList()[Random.Next(0, set2.Count + 1)]);
+                Seats[0].FeatureIDs.Add(set2.ToList()[Random.Next(0, set2.Count)]);
             }
             if (cnt2 < 3 && set1.Count > 0)
             {
                 Seats[1].WorkerFeatureIDs.Add("");
-                Seats[1].FeatureIDs.Add(set1.ToList()[Random.Next(0, set1.Count + 1)]);
+                Seats[1].FeatureIDs.Add(set1.ToList()[Random.Next(0, set1.Count)]);
             }
             IsExchangeEnd = true;
             OnExchangeEndEvent?.Invoke();
