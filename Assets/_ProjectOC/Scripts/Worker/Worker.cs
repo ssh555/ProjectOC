@@ -114,11 +114,22 @@ namespace ProjectOC.WorkerNS
         {
             return Skill[type].GetEff() + (type != SkillType.Transport ? Eff_AllSkill : Eff_AllSkill / 10);
         }
-        public List<Feature> GetSortFeature()
+        public List<Feature> GetFeatures(bool nonRace = false, bool needSort=true)
         {
             var result = Feature.Values.ToList();
-            result.Sort(new Feature());
+            if (nonRace)
+            {
+                result.RemoveAll(f => f.Type == FeatureType.Race);
+            }
+            if (needSort)
+            {
+                result.Sort(new Feature());
+            }
             return result;
+        }
+        public List<string> GetFeatureIDs(bool nonRace = false, bool needSort = true)
+        {
+            return GetFeatures(nonRace, needSort).Select(x => x.ID).ToList();
         }
         /// <summary>
         /// 0 1 2 分别代表低中高
@@ -206,7 +217,10 @@ namespace ProjectOC.WorkerNS
         }
         public void OnDestroy()
         {
-            ManagerNS.LocalGameManager.Instance.DispatchTimeManager.OnHourChangedAction -= OnHourChangeEvent_AddWorkerEff_AllSkill;
+            if (ManagerNS.LocalGameManager.Instance != null)
+            {
+                ManagerNS.LocalGameManager.Instance.DispatchTimeManager.OnHourChangedAction -= OnHourChangeEvent_AddWorkerEff_AllSkill;
+            }
             OnStatusChangeEvent -= OnStateChangeEvent_RelaxExtraSpeed;
             OnStatusChangeEvent -= OnStateChangeEvent_FishInNest;
 
@@ -676,6 +690,10 @@ namespace ProjectOC.WorkerNS
                 return timerForNoHome;
             }
         }
+        public void StopHomeTimer()
+        {
+            timerForNoHome?.End();
+        }
         public void CheckHome()
         {
             if (!HasContainer(WorkerContainerType.Home))
@@ -858,6 +876,21 @@ namespace ProjectOC.WorkerNS
                 if (levelX != levelY)
                 {
                     return levelY.CompareTo(levelX);
+                }
+                return x.ID.CompareTo(y.ID);
+            }
+        }
+        public class SortForFeatureUI : IComparer<Worker>
+        {
+            public int Compare(Worker x, Worker y)
+            {
+                if (x == null || y == null)
+                {
+                    return (x == null).CompareTo((y == null));
+                }
+                if (x.Category != y.Category)
+                {
+                    return x.Category.CompareTo(y.Category);
                 }
                 return x.ID.CompareTo(y.ID);
             }

@@ -1,7 +1,6 @@
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace ProjectOC.WorkerNS
@@ -13,49 +12,46 @@ namespace ProjectOC.WorkerNS
         public FeatureBuilding FeatBuild;
         [LabelText("¶ÔÓ¦µÄSocket"), ReadOnly, NonSerialized]
         public Transform Socket;
-        public List<string> FeatureIDs;
+        public List<string> WorkerFeatureIDs = new List<string>();
+        public List<string> FeatureIDs = new List<string>();
+        public event Action OnArriveInvokeEvent;
 
         public FeatureSeat(FeatureBuilding featBuild, Transform socket)
         {
             FeatBuild = featBuild;
             Socket = socket;
-            FeatureIDs = new List<string>();
+        }
+        public void ClearFeatureID()
+        {
+            FeatureIDs.Clear();
+            WorkerFeatureIDs.Clear();
         }
         public void SetFeatureID()
         {
-            FeatureIDs.Clear();
-            foreach (Feature feature in Worker.Feature.Values)
+            ClearFeatureID();
+            if (Worker != null)
             {
-                if (feature.Type != FeatureType.Race)
-                {
-                    FeatureIDs.Add(feature.ID);
-                }
+                FeatureIDs.AddRange(Worker.GetFeatureIDs(true));
+                WorkerFeatureIDs.AddRange(FeatureIDs);
             }
         }
         public void ChangerWorkerFeature()
         {
-            HashSet<string> set = new HashSet<string>();
-            foreach(Feature feature in Worker.Feature.Values)
+            for (int i = 0; i < FeatureIDs.Count; i++)
             {
-                if (feature.Type != FeatureType.Race)
+                string oldID = WorkerFeatureIDs[i];
+                string newID = FeatureIDs[i];
+                if (oldID != newID)
                 {
-                    set.Add(feature.ID);
-                }
-            }
-            var newSet = FeatureIDs.ToHashSet();
-            newSet.Remove("");
-            newSet.SymmetricExceptWith(set);
-            foreach (var id in set)
-            {
-                Worker.Feature[id].ClearOwner();
-            }
-            foreach (string id in newSet)
-            {
-                var feature = ManagerNS.LocalGameManager.Instance.FeatureManager.SpawnFeature(id);
-                if (!string.IsNullOrEmpty(feature.ID) && 
-                    ManagerNS.LocalGameManager.Instance.FeatureManager.IsValidID(feature.ID))
-                {
-                    feature.SetOwner(Worker);
+                    if (Worker.Feature.ContainsKey(oldID))
+                    {
+                        Worker.Feature[oldID].ClearOwner();
+                    }
+                    if (ManagerNS.LocalGameManager.Instance.FeatureManager.IsValidID(newID))
+                    {
+                        var feature = ManagerNS.LocalGameManager.Instance.FeatureManager.SpawnFeature(newID);
+                        feature.SetOwner(Worker);
+                    }
                 }
             }
         }
@@ -71,11 +67,20 @@ namespace ProjectOC.WorkerNS
         public Transform GetTransform() { return Socket; }
         public void OnArriveEvent(Worker worker)
         {
-            (this as IWorkerContainer).OnArriveSetPosition(worker, Socket.transform.position);
-            worker.LastPosition = Socket.transform.position;
+            (this as IWorkerContainer).OnArriveSetPosition(worker, Socket.position);
+            worker.LastPosition = Socket.position;
+            OnArriveInvokeEvent?.Invoke();
         }
-        public void SetWorkerRelateData() { SetFeatureID(); }
-        public void RemoveWorkerRelateData() { FeatureIDs.Clear(); }
+        public void SetWorkerRelateData() 
+        { 
+            SetFeatureID();
+            Worker?.StopHomeTimer();
+        }
+        public void RemoveWorkerRelateData() 
+        {
+            ClearFeatureID();
+            Worker?.CheckHome();
+        }
         #endregion
     }
 }

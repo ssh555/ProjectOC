@@ -353,7 +353,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                 this.objectPool.ResetPool("SimpleDescriptionPool");
                 this.objectPool.ResetPool("FullDescriptionPool");
-                foreach (var feature in worker.GetSortFeature())
+                foreach (var feature in worker.GetFeatures())
                 {
                     if(SwitchInfoIndex == 0)
                     {
