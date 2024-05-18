@@ -312,7 +312,7 @@ namespace ProjectOC.WorkerNS.UI
                 {
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushNoticeUIInstance
                         (ML.Engine.UI.UIManager.NoticeUIType.PopUpUI,
-                        new ML.Engine.UI.UIManager.PopUpUIData(PanelTextContent.textCancleResult + PanelTextContent.textCancleResultDesc, null, null,
+                        new ML.Engine.UI.UIManager.PopUpUIData(PanelTextContent.textCancleResult + "\n" + PanelTextContent.textCancleResultDesc, null, null,
                             () => { FeatBuild.CancleExchange(); }));
                 }
                 else if (CurMode == Mode.Correct && FeatBuild.IsCorrectEnd)
