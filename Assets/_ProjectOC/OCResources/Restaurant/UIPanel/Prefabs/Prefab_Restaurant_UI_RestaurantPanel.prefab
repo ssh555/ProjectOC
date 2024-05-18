@@ -1539,12 +1539,7 @@ MonoBehaviour:
   abpath: 
   abname: 
   description: 
-  CurMode: 0
   Restaurant: {}
-  RestaurantUITransform: {fileID: 0}
-  ChangeFoodUITransform: {fileID: 0}
-  IsBtnAllInit1: 1
-  IsBtnAllInit2: 1
   IsInit: 0
 --- !u!1 &5857351733357598392
 GameObject:
@@ -1882,7 +1877,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 0
     readUnActiveButton: 1
-    scrollRect: {fileID: 0}
+    scrollRect: {fileID: 9035235934313614062}
 --- !u!1 &8178513148372258169
 GameObject:
   m_ObjectHideFlags: 0

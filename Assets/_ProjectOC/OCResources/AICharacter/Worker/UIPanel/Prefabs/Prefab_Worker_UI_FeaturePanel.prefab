@@ -9162,7 +9162,7 @@ MonoBehaviour:
     isWheel: 0
     hasBtnListContainer: 0
     readUnActiveButton: 1
-    scrollRect: {fileID: 0}
+    scrollRect: {fileID: 3032918169799785410}
 --- !u!1 &9147420196999332059
 GameObject:
   m_ObjectHideFlags: 0
