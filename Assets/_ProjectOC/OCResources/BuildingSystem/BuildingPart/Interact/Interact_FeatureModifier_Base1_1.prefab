@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 534486751900086038}
   - component: {fileID: 7470661331233116771}
   - component: {fileID: 1538513640434445091}
-  - component: {fileID: 2586572988589159160}
+  - component: {fileID: 7446744262639055140}
   m_Layer: 7
   m_Name: Interact_FeatureModifier_Base1_1
   m_TagString: Untagged
@@ -247,7 +247,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7, y: 0.5, z: 0.7}
   m_Center: {x: 0, y: 0.3, z: 0}
---- !u!114 &2586572988589159160
+--- !u!114 &7446744262639055140
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -256,7 +256,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5756722887124536023}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84b45a722afc9f748bdef2e991e7ddaf, type: 3}
+  m_Script: {fileID: 11500000, guid: 8bfb00a6b79dbce47aadd9988dc1ff6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
@@ -268,8 +268,18 @@ MonoBehaviour:
   canPlaceInPlaceMode: 1
   mode: 0
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
-  rotOffset: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+  rotOffset: {x: 0, y: 0, z: 0, w: 1}
   activeSocketIndex: 0
+  Seats:
+  - WorkerFeatureIDs: []
+    FeatureIDs: []
+  - WorkerFeatureIDs: []
+    FeatureIDs: []
+  IsExchangeEnd: 0
+  Seat:
+    WorkerFeatureIDs: []
+    FeatureIDs: []
+  IsCorrectEnd: 0
 --- !u!1 &7182643072931718320
 GameObject:
   m_ObjectHideFlags: 0

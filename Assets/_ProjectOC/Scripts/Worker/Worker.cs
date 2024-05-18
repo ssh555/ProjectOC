@@ -100,12 +100,6 @@ namespace ProjectOC.WorkerNS
         public Dictionary<SkillType, Skill> Skill = new Dictionary<SkillType, Skill>();
         [LabelText("特性"), ReadOnly, ShowInInspector]
         public Dictionary<string, Feature> Feature = new Dictionary<string, Feature>();
-        public List<Feature> GetSortFeature()
-        {
-            var result = Feature.Values.ToList();
-            result.Sort(new Feature());
-            return result;
-        }
         #endregion
         #region Time
         [LabelText("是否可以安排时段"), ReadOnly, ShowInInspector]
@@ -113,6 +107,48 @@ namespace ProjectOC.WorkerNS
         [LabelText("是否可以反转时段"), ReadOnly, ShowInInspector]
         public bool CanReverse { get; private set; }
         #endregion
+        #endregion
+
+        #region Get
+        public int GetEff(SkillType type)
+        {
+            return Skill[type].GetEff() + (type != SkillType.Transport ? Eff_AllSkill : Eff_AllSkill / 10);
+        }
+        public List<Feature> GetFeatures(bool nonRace = false, bool needSort=true)
+        {
+            var result = Feature.Values.ToList();
+            if (nonRace)
+            {
+                result.RemoveAll(f => f.Type == FeatureType.Race);
+            }
+            if (needSort)
+            {
+                result.Sort(new Feature());
+            }
+            return result;
+        }
+        public List<string> GetFeatureIDs(bool nonRace = false, bool needSort = true)
+        {
+            return GetFeatures(nonRace, needSort).Select(x => x.ID).ToList();
+        }
+        /// <summary>
+        /// 0 1 2 分别代表低中高
+        /// </summary>
+        public int GetMoodStatu()
+        {
+            if (HaveSetEMLowEffect) return 0;
+            if (HaveSetEMHighEffect) return 2;
+            return 1;
+        }
+        /// <summary>
+        /// 0 1 2 分别代表低中高
+        /// </summary>
+        public int GetAPStatu()
+        {
+            if (APCurrent < APWorkThreshold) return 0;
+            if (APCurrent > APRelaxThreshold) return 2;
+            return 1;
+        }
         #endregion
 
         #region Init OnDestroy
@@ -157,7 +193,6 @@ namespace ProjectOC.WorkerNS
             foreach (Feature feature in features)
             {
                 feature.SetOwner(this);
-                Feature.Add(feature.ID, feature);
             }
             CanArrange = true;
             CanReverse = false;
@@ -169,7 +204,8 @@ namespace ProjectOC.WorkerNS
             {
                 { WorkerContainerType.Work, null },
                 { WorkerContainerType.Relax, null },
-                { WorkerContainerType.Home, null }
+                { WorkerContainerType.Home, null },
+                { WorkerContainerType.Feature, null }
             };
             StateController = new ML.Engine.FSM.StateController(0);
             StateMachine = new WorkerStateMachine(this);
@@ -179,12 +215,17 @@ namespace ProjectOC.WorkerNS
                 Quaternion.Euler(Vector3.zero), Vector3.one,
                 ManagerNS.LocalGameManager.Instance.Player.currentCharacter.transform);
         }
-
         public void OnDestroy()
         {
-            ManagerNS.LocalGameManager.Instance.DispatchTimeManager.OnHourChangedAction -= OnHourChangeEvent_AddWorkerEff_AllSkill;
+            if (ManagerNS.LocalGameManager.Instance != null)
+            {
+                ManagerNS.LocalGameManager.Instance.DispatchTimeManager.OnHourChangedAction -= OnHourChangeEvent_AddWorkerEff_AllSkill;
+            }
             OnStatusChangeEvent -= OnStateChangeEvent_RelaxExtraSpeed;
             OnStatusChangeEvent -= OnStateChangeEvent_FishInNest;
+
+            timerFishInNest?.End();
+            timerForNoHome?.End();
 
             (this as ML.Engine.Timer.ITickComponent).DisposeTick();
             Transport?.End();
@@ -571,10 +612,6 @@ namespace ProjectOC.WorkerNS
             AlterAP(-1 * realAPCost_Duty);
             AlterMood(-1 * EMCost);
         }
-        public int GetEff(SkillType type)
-        {
-            return Skill[type].GetEff() + (type != SkillType.Transport ? Eff_AllSkill : Eff_AllSkill / 10);
-        }
         #endregion
 
         #region State Status
@@ -653,6 +690,10 @@ namespace ProjectOC.WorkerNS
                 return timerForNoHome;
             }
         }
+        public void StopHomeTimer()
+        {
+            timerForNoHome?.End();
+        }
         public void CheckHome()
         {
             if (!HasContainer(WorkerContainerType.Home))
@@ -663,6 +704,8 @@ namespace ProjectOC.WorkerNS
         public (int, int) MinSec => timerForNoHome != null ? timerForNoHome.ConvertToMinAndSec() : (-1, -1);
 
         #region Property
+        [LabelText("是否有喵喵窝"), ShowInInspector, ReadOnly]
+        public bool HaveFeatSeat => HasContainer(WorkerContainerType.Feature);
         [LabelText("是否有生产节点"), ShowInInspector, ReadOnly]
         public bool HaveProNode => HasContainer(WorkerContainerType.Work);
         [LabelText("是否有餐厅"), ShowInInspector, ReadOnly]
@@ -673,6 +716,8 @@ namespace ProjectOC.WorkerNS
         public bool IsOnProNodeDuty { get { return HaveProNode && Status != Status.Relaxing && GetContainer(WorkerContainerType.Work).IsArrive; } }
         [LabelText("生产节点"), ShowInInspector, ReadOnly]
         public ProNodeNS.ProNode ProNode => HasContainer(WorkerContainerType.Work) ? GetContainer(WorkerContainerType.Work) as ProNodeNS.ProNode : null;
+        [LabelText("喵喵窝"), ShowInInspector, ReadOnly]
+        public FeatureSeat FeatSeat => HasContainer(WorkerContainerType.Feature) ? GetContainer(WorkerContainerType.Feature) as FeatureSeat : null;
         #endregion
 
         public IWorkerContainer GetContainer(WorkerContainerType type)
@@ -718,7 +763,7 @@ namespace ProjectOC.WorkerNS
 
         #region NavMesh
         public NavMeshAgent Agent = null;
-        public float Threshold = 3f;
+        public float Threshold = 1f;
         [LabelText("寻路目的地"), ShowInInspector, ReadOnly]
         public Vector3 Target { get; private set; }
         [LabelText("是否在寻路"), ShowInInspector, ReadOnly]
@@ -727,8 +772,17 @@ namespace ProjectOC.WorkerNS
         public Vector3 LastPosition;
         public event Action<Worker> OnArriveEvent;
         private event Action<Worker> OnArriveDisposableEvent;
+        private bool IsArrive;
 
-        public bool SetDestination(Vector3 target, Action<Worker> action = null, WorkerContainerType arriveType = WorkerContainerType.None, float threshold = 3f)
+        public void OnCollisionEnter(Collision collision)
+        {
+            if (HaveDestination && collision.transform.position == Target)
+            {
+                IsArrive = true;
+            }
+        }
+
+        public bool SetDestination(Vector3 target, Action<Worker> action = null, WorkerContainerType arriveType = WorkerContainerType.None, float threshold = 1f)
         {
             ClearDestination();
             foreach (var key in ContainerDict.Keys.ToArray())
@@ -744,6 +798,7 @@ namespace ProjectOC.WorkerNS
             if (Agent.SetDestination(target))
             {
                 Target = target;
+                IsArrive = false;
                 HaveDestination = true;
                 OnArriveDisposableEvent = action;
                 return true;
@@ -756,6 +811,7 @@ namespace ProjectOC.WorkerNS
 
         public void ClearDestination()
         {
+            IsArrive = false;
             HaveDestination = false;
             if (Agent != null && Agent.enabled)
             {
@@ -780,7 +836,7 @@ namespace ProjectOC.WorkerNS
         public void Tick(float deltatime)
         {
             // NavMesh
-            if (HaveDestination && Vector3.Distance(transform.position, Target) < Threshold)
+            if (HaveDestination && (Vector3.Distance(transform.position, Target) < Threshold || IsArrive))
             {
                 ClearDestination();
                 OnArriveDisposableEvent?.Invoke(this);
@@ -824,6 +880,21 @@ namespace ProjectOC.WorkerNS
                 return x.ID.CompareTo(y.ID);
             }
         }
+        public class SortForFeatureUI : IComparer<Worker>
+        {
+            public int Compare(Worker x, Worker y)
+            {
+                if (x == null || y == null)
+                {
+                    return (x == null).CompareTo((y == null));
+                }
+                if (x.Category != y.Category)
+                {
+                    return x.Category.CompareTo(y.Category);
+                }
+                return x.ID.CompareTo(y.ID);
+            }
+        }
         #endregion
 
         #region IAICharacter
@@ -832,27 +903,6 @@ namespace ProjectOC.WorkerNS
         public ML.PlayerCharacterNS.IController Controller { get; set; }
         public void OnSpawn(ML.PlayerCharacterNS.IController controller) { }
         public void OnDespose(ML.PlayerCharacterNS.IController controller) { }
-        #endregion
-
-        #region External
-        /// <summary>
-        /// 0 1 2 分别代表低中高
-        /// </summary>
-        public int GetMoodStatu()
-        {
-            if(HaveSetEMLowEffect) return 0;
-            if (HaveSetEMHighEffect) return 2;
-            return 1;
-        }
-        /// <summary>
-        /// 0 1 2 分别代表低中高
-        /// </summary>
-        public int GetAPStatu()
-        {
-            if (APCurrent < APWorkThreshold) return 0;
-            if (APCurrent >APRelaxThreshold) return 2;
-            return 1;
-        }
         #endregion
     }
 }
