@@ -1943,6 +1943,288 @@ namespace ProjectOC.Input
             ]
         },
         {
+            ""name"": ""UIFeature"",
+            ""id"": ""c07d872f-8e40-4be2-91f8-f15f9654ed9a"",
+            ""actions"": [
+                {
+                    ""name"": ""SeeInfo"",
+                    ""type"": ""Button"",
+                    ""id"": ""8ab8ebf5-84b0-4ae4-bd37-de9425f8808e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectPre"",
+                    ""type"": ""Button"",
+                    ""id"": ""d8d6df37-b040-4b16-acea-17537ce4a88f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SelectPost"",
+                    ""type"": ""Button"",
+                    ""id"": ""033ec7bf-9bd6-4b55-8838-c38380a9df2d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Alter"",
+                    ""type"": ""Value"",
+                    ""id"": ""b84303ca-e348-44de-a2cf-b3491ab40f9f"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Cancle"",
+                    ""type"": ""Button"",
+                    ""id"": ""7702596b-5dd8-4886-b7bc-1392814a6eb6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Confirm"",
+                    ""type"": ""Button"",
+                    ""id"": ""4649008c-d2ab-41e1-bd7e-6805e7d5c600"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""5f513426-c875-473f-a7bd-551f5e76eb8a"",
+                    ""path"": ""<XInputController>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SeeInfo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bfa2495f-668b-4977-a665-a2d496e2a890"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SeeInfo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7ef194c3-3553-476b-9a1a-cae4493b9fac"",
+                    ""path"": ""<XInputController>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectPre"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5fe76108-16c7-4a69-9efa-9fd0a513a5db"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectPre"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ae8a1a81-b466-4b68-b2ea-3deff1ae3dc5"",
+                    ""path"": ""<XInputController>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectPost"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a21c33bf-90fb-48a3-86f1-77e2371e01dc"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SelectPost"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""KeyBoard"",
+                    ""id"": ""a85c495f-e2c2-4870-a200-a65acc62398b"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""ca531504-395b-415d-9113-f75021a520bf"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""5e66d21e-646e-40c1-ab64-7cf955177dbc"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""219bf1d4-8668-401b-9795-e1312cc456b3"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""c0cbef40-6dc9-4f6b-b6bf-50a124b5bdc4"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""0d405575-542d-4bff-a98c-248b664abfe9"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""e1027d47-16fd-40c8-b5d4-45868e366c8b"",
+                    ""path"": ""<XInputController>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""fcbb6b2b-18ed-4758-88fb-26d5bf1181b4"",
+                    ""path"": ""<XInputController>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""80bc616c-6595-4fbd-832a-9ce79fc3a76b"",
+                    ""path"": ""<XInputController>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""746323a9-1d7f-4344-9574-9ee286426486"",
+                    ""path"": ""<XInputController>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Alter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f618345e-eebe-4072-929c-4c713d5ac43f"",
+                    ""path"": ""<XInputController>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cancle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6231da3f-1fa7-4228-baa2-bf51570a8d41"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cancle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4f3c5a44-ca15-4443-9958-273d10e479e0"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bec57745-4c78-4329-8806-3e83f0090800"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Confirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""ResonanceWheelUI"",
             ""id"": ""6e5ac5f4-d9f7-4c39-85c5-aecfe95acd57"",
             ""actions"": [
@@ -3067,6 +3349,14 @@ namespace ProjectOC.Input
             m_UIBed_SetEmpty = m_UIBed.FindAction("SetEmpty", throwIfNotFound: true);
             m_UIBed_Pre = m_UIBed.FindAction("Pre", throwIfNotFound: true);
             m_UIBed_Post = m_UIBed.FindAction("Post", throwIfNotFound: true);
+            // UIFeature
+            m_UIFeature = asset.FindActionMap("UIFeature", throwIfNotFound: true);
+            m_UIFeature_SeeInfo = m_UIFeature.FindAction("SeeInfo", throwIfNotFound: true);
+            m_UIFeature_SelectPre = m_UIFeature.FindAction("SelectPre", throwIfNotFound: true);
+            m_UIFeature_SelectPost = m_UIFeature.FindAction("SelectPost", throwIfNotFound: true);
+            m_UIFeature_Alter = m_UIFeature.FindAction("Alter", throwIfNotFound: true);
+            m_UIFeature_Cancle = m_UIFeature.FindAction("Cancle", throwIfNotFound: true);
+            m_UIFeature_Confirm = m_UIFeature.FindAction("Confirm", throwIfNotFound: true);
             // ResonanceWheelUI
             m_ResonanceWheelUI = asset.FindActionMap("ResonanceWheelUI", throwIfNotFound: true);
             m_ResonanceWheelUI_NextTerm = m_ResonanceWheelUI.FindAction("NextTerm", throwIfNotFound: true);
@@ -3752,6 +4042,92 @@ namespace ProjectOC.Input
         }
         public UIBedActions @UIBed => new UIBedActions(this);
 
+        // UIFeature
+        private readonly InputActionMap m_UIFeature;
+        private List<IUIFeatureActions> m_UIFeatureActionsCallbackInterfaces = new List<IUIFeatureActions>();
+        private readonly InputAction m_UIFeature_SeeInfo;
+        private readonly InputAction m_UIFeature_SelectPre;
+        private readonly InputAction m_UIFeature_SelectPost;
+        private readonly InputAction m_UIFeature_Alter;
+        private readonly InputAction m_UIFeature_Cancle;
+        private readonly InputAction m_UIFeature_Confirm;
+        public struct UIFeatureActions
+        {
+            private @PlayerInput m_Wrapper;
+            public UIFeatureActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @SeeInfo => m_Wrapper.m_UIFeature_SeeInfo;
+            public InputAction @SelectPre => m_Wrapper.m_UIFeature_SelectPre;
+            public InputAction @SelectPost => m_Wrapper.m_UIFeature_SelectPost;
+            public InputAction @Alter => m_Wrapper.m_UIFeature_Alter;
+            public InputAction @Cancle => m_Wrapper.m_UIFeature_Cancle;
+            public InputAction @Confirm => m_Wrapper.m_UIFeature_Confirm;
+            public InputActionMap Get() { return m_Wrapper.m_UIFeature; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(UIFeatureActions set) { return set.Get(); }
+            public void AddCallbacks(IUIFeatureActions instance)
+            {
+                if (instance == null || m_Wrapper.m_UIFeatureActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_UIFeatureActionsCallbackInterfaces.Add(instance);
+                @SeeInfo.started += instance.OnSeeInfo;
+                @SeeInfo.performed += instance.OnSeeInfo;
+                @SeeInfo.canceled += instance.OnSeeInfo;
+                @SelectPre.started += instance.OnSelectPre;
+                @SelectPre.performed += instance.OnSelectPre;
+                @SelectPre.canceled += instance.OnSelectPre;
+                @SelectPost.started += instance.OnSelectPost;
+                @SelectPost.performed += instance.OnSelectPost;
+                @SelectPost.canceled += instance.OnSelectPost;
+                @Alter.started += instance.OnAlter;
+                @Alter.performed += instance.OnAlter;
+                @Alter.canceled += instance.OnAlter;
+                @Cancle.started += instance.OnCancle;
+                @Cancle.performed += instance.OnCancle;
+                @Cancle.canceled += instance.OnCancle;
+                @Confirm.started += instance.OnConfirm;
+                @Confirm.performed += instance.OnConfirm;
+                @Confirm.canceled += instance.OnConfirm;
+            }
+
+            private void UnregisterCallbacks(IUIFeatureActions instance)
+            {
+                @SeeInfo.started -= instance.OnSeeInfo;
+                @SeeInfo.performed -= instance.OnSeeInfo;
+                @SeeInfo.canceled -= instance.OnSeeInfo;
+                @SelectPre.started -= instance.OnSelectPre;
+                @SelectPre.performed -= instance.OnSelectPre;
+                @SelectPre.canceled -= instance.OnSelectPre;
+                @SelectPost.started -= instance.OnSelectPost;
+                @SelectPost.performed -= instance.OnSelectPost;
+                @SelectPost.canceled -= instance.OnSelectPost;
+                @Alter.started -= instance.OnAlter;
+                @Alter.performed -= instance.OnAlter;
+                @Alter.canceled -= instance.OnAlter;
+                @Cancle.started -= instance.OnCancle;
+                @Cancle.performed -= instance.OnCancle;
+                @Cancle.canceled -= instance.OnCancle;
+                @Confirm.started -= instance.OnConfirm;
+                @Confirm.performed -= instance.OnConfirm;
+                @Confirm.canceled -= instance.OnConfirm;
+            }
+
+            public void RemoveCallbacks(IUIFeatureActions instance)
+            {
+                if (m_Wrapper.m_UIFeatureActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
+
+            public void SetCallbacks(IUIFeatureActions instance)
+            {
+                foreach (var item in m_Wrapper.m_UIFeatureActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_UIFeatureActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
+        }
+        public UIFeatureActions @UIFeature => new UIFeatureActions(this);
+
         // ResonanceWheelUI
         private readonly InputActionMap m_ResonanceWheelUI;
         private List<IResonanceWheelUIActions> m_ResonanceWheelUIActionsCallbackInterfaces = new List<IResonanceWheelUIActions>();
@@ -4244,6 +4620,15 @@ namespace ProjectOC.Input
             void OnSetEmpty(InputAction.CallbackContext context);
             void OnPre(InputAction.CallbackContext context);
             void OnPost(InputAction.CallbackContext context);
+        }
+        public interface IUIFeatureActions
+        {
+            void OnSeeInfo(InputAction.CallbackContext context);
+            void OnSelectPre(InputAction.CallbackContext context);
+            void OnSelectPost(InputAction.CallbackContext context);
+            void OnAlter(InputAction.CallbackContext context);
+            void OnCancle(InputAction.CallbackContext context);
+            void OnConfirm(InputAction.CallbackContext context);
         }
         public interface IResonanceWheelUIActions
         {

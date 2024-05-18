@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-
 namespace ProjectOC.WorkerNS
 {
     public class WorkerHome : ML.Engine.BuildingSystem.BuildingPart.BuildingPart, ML.Engine.InteractSystem.IInteraction, IWorkerContainer
@@ -25,7 +24,7 @@ namespace ProjectOC.WorkerNS
             {
                 if (timer == null)
                 {
-                    timer = new ML.Engine.Timer.CounterDownTimer(1, true, false);
+                    timer = new ML.Engine.Timer.CounterDownTimer(ManagerNS.LocalGameManager.Instance.WorkerManager.Config.WorkerHomeAddMoodTime, true, false);
                     timer.OnEndEvent += EndActionForTimer;
                 }
                 return timer;
@@ -72,7 +71,8 @@ namespace ProjectOC.WorkerNS
 
         public void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Worker_UI/Prefab_Worker_UI_WorkerHomePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Worker_UI/Prefab_Worker_UI_WorkerHomePanel.prefab", 
+                ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
             {
                 UI.UIWorkerHome uiPanel = (handle.Result).GetComponent<UI.UIWorkerHome>();
                 uiPanel.Home = this;

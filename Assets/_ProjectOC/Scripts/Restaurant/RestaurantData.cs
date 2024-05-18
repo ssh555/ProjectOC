@@ -15,7 +15,7 @@ namespace ProjectOC.RestaurantNS
             Priority = index == 0 ? FoodPriority.No1 : FoodPriority.None;
             Priority = index == 1 ? FoodPriority.No2 : FoodPriority.None;
             HaveFood = amount > 0;
-            AlterAP = ManagerNS.LocalGameManager.Instance.RestaurantManager.WorkerFood_AlterAP(ID);
+            AlterAP = ManagerNS.LocalGameManager.Instance.RestaurantManager.Food_AlterAP(ID);
         }
 
         public int Compare(RestaurantData x, RestaurantData y)

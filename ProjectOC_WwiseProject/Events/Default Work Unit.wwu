@@ -1,6 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{071AEA51-BD5A-4037-9EC2-F333EDF48AB5}" SchemaVersion="119">
 	<Events>
-		<WorkUnit Name="Default Work Unit" ID="{071AEA51-BD5A-4037-9EC2-F333EDF48AB5}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{071AEA51-BD5A-4037-9EC2-F333EDF48AB5}" PersistMode="Standalone">
+			<ChildrenList>
+				<Folder Name="Ambient" ID="{17BBB227-557D-4C69-B696-66CEA093F505}" ShortID="421165558">
+					<ChildrenList>
+						<Event Name="Play_BGNoise" ID="{60EBAEFA-F461-4AEB-8E9C-881D7BE507B2}">
+							<ChildrenList>
+								<Action Name="" ID="{ABD1009D-D988-45C5-9FD8-19A37B21F623}" ShortID="284727709">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Noise" ID="{E51D71E6-4AB5-4538-8ABF-D2230D8A9EE4}" WorkUnitID="{4FF73FB8-9682-4A5D-A538-E65F1E289D50}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="Ocean_Wave" ID="{B4827F36-F753-4E67-BC1E-5F55C8800B1A}">
+							<ChildrenList>
+								<Action Name="" ID="{B3F092C6-20B6-4E53-8E9B-F695E0C03919}" ShortID="1036988667">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Wave" ID="{077BBC68-8DF6-4FAE-B4AD-B4BD7A45BF76}" WorkUnitID="{4FF73FB8-9682-4A5D-A538-E65F1E289D50}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
+				<Folder Name="Object" ID="{16517027-F739-4426-9B08-F79819FE06E8}" ShortID="755936677">
+					<ChildrenList>
+						<Folder Name="Player" ID="{3040CBA0-A39F-4909-B6F9-D3C90B21046B}" ShortID="197490952">
+							<ChildrenList>
+								<Event Name="Run" ID="{95FBE6BD-BB8F-4755-B854-269E2D960F86}">
+									<ChildrenList>
+										<Action Name="" ID="{9B58B2F7-083B-4804-A7FD-80CBE4F0329F}" ShortID="257031527">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="Run" ID="{E524C5B9-779A-4FFB-8294-FEC875403623}" WorkUnitID="{4FF73FB8-9682-4A5D-A538-E65F1E289D50}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="Sprint" ID="{FD19B785-9368-4C07-AC39-F6B4F9F33097}">
+									<ChildrenList>
+										<Action Name="" ID="{F30FF12F-23A4-45D8-91CD-F7F5AB8192BA}" ShortID="629225895">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="Sprint" ID="{E1BA26A7-110A-4A86-AF98-378FBD4FEEA3}" WorkUnitID="{4FF73FB8-9682-4A5D-A538-E65F1E289D50}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="Jump" ID="{0A442B71-B64C-4C08-BA83-4D55C05DC377}">
+									<ChildrenList>
+										<Action Name="" ID="{511163F6-F156-49EC-8A64-6F02BEB9CA54}" ShortID="810033665">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="Jump" ID="{0FA7CAE4-AAC4-4A34-9445-C0AA188EAEA1}" WorkUnitID="{4FF73FB8-9682-4A5D-A538-E65F1E289D50}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="Collect" ID="{5B9D7343-F8BC-4318-8A7E-524BDB6693F1}">
+									<ChildrenList>
+										<Action Name="" ID="{643F7E7A-8E9C-4699-B35D-F0A0D86E3AD2}" ShortID="4750590">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="collect" ID="{4DDFEAD5-8752-4BB7-9DE0-0E063C250A8D}" WorkUnitID="{4FF73FB8-9682-4A5D-A538-E65F1E289D50}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+							</ChildrenList>
+						</Folder>
+						<Folder Name="Other" ID="{FBC4019A-DB02-4879-B83A-9AF7F795132F}" ShortID="448002632">
+							<ChildrenList>
+								<Event Name="CollectComplete" ID="{AD2AC1CD-5432-40E8-B10A-D87D44F7BB94}">
+									<ChildrenList>
+										<Action Name="" ID="{A1C79582-E250-4A5C-9262-BD3A67429061}" ShortID="247366489">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="CollectComplete" ID="{241070D9-3990-469E-93E3-3F9F26ED3F68}" WorkUnitID="{4FF73FB8-9682-4A5D-A538-E65F1E289D50}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+							</ChildrenList>
+						</Folder>
+					</ChildrenList>
+				</Folder>
+				<Event Name="BGM" ID="{179BB06B-0318-4BDB-8EFD-A96EFA16A9F9}">
+					<ChildrenList>
+						<Action Name="" ID="{8B8D0C2C-FD2C-4DFE-804D-846AF239AC38}" ShortID="480861763">
+							<PropertyList>
+								<Property Name="Delay" Type="Real64" Value="5"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="BGM" ID="{F5B05ACE-D501-4E85-9679-6AD8EF709E6D}" WorkUnitID="{5FF7D5CA-FB42-4443-AA25-7BBB254DE27D}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+			</ChildrenList>
+		</WorkUnit>
 	</Events>
 </WwiseDocument>
