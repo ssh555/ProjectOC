@@ -7,8 +7,10 @@ using UnityEngine;
 public class MineBigMapEditData : ScriptableObject
 {
     //± À¢≤ø∑÷
-    public List<MineBrushData> MineBrushDatas = new List<MineBrushData>();
+    public List<MineBrushData> MineBrushDatas;
     public Texture bigMapTex;
+    
+    
     
     [Serializable]
     public class MineBrushData

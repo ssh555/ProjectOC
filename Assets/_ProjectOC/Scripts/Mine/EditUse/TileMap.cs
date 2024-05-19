@@ -28,7 +28,7 @@ namespace MineSystem
             }
         }
 
-        public float mineScale = 1;
+        public float mineScale = 0.5f;
         [HideInInspector] public GameObject[,] tiles;
         [HideInInspector] public GameObject TilePrefab, MinePrefab, selectOutline, brushIcon;
         [HideInInspector] public Transform gridParentTransf, mineParentTransf;

@@ -19,6 +19,8 @@ namespace MineSystem
         private List<GameObject> selectMine = new List<GameObject>();
         private BigMap bigMap;
         private bool showShortCut = false;
+        private float tempMineScale;
+        
         public override void OnEnable()
         {
             tileMap = target as TileMap;
@@ -30,6 +32,7 @@ namespace MineSystem
             tileMap.brushIcon = GameObject.Find("Editor/Others").transform.GetChild(3).gameObject;
             bigMap = tileMap.transform.GetComponentInParent<BigMap>();
 
+            
             CheckEditData();
             ChangeCurSelectdOption(tileMap.EditOption);
             //Scene部分
@@ -40,6 +43,8 @@ namespace MineSystem
 
         void CheckEditData()
         {
+            tempMineScale = tileMap.mineScale;
+            
             if (tileMap.SmallMapEditData == null)
             {
                 string[] nameStr = tileMap.gameObject.name.Split("_");
@@ -75,7 +80,16 @@ namespace MineSystem
         private void OnSceneGUI()
         {
             ProcessInput();
-            //tileMap.mineParentTransf.localScale = Vector3.one * tileMap.mineScale;
+
+            if (tempMineScale != tileMap.mineScale)
+            {
+                tileMap.mineScale = tempMineScale;
+                foreach (Transform _mine in tileMap.mineParentTransf)
+                {
+                    _mine.localScale = Vector3.one * tileMap.mineScale;
+                }
+            }
+            
             if (tileMap.EditOption == 0)
             {
                 DrawTileInspect();
@@ -128,6 +142,7 @@ namespace MineSystem
         void ChangeCurSelectdOption(int _index)
         {
             tileMap.EditOption = _index;
+            
             //画块块
             if (_index == 0)
             {
@@ -142,11 +157,6 @@ namespace MineSystem
                 }
 
                 tileMap.brushIcon.SetActive(false);
-                foreach (var _mine in selectMine)
-                {
-                    _mine.GetComponent<SpriteRenderer>().color = Color.white;
-                }
-                selectMine.Clear();
             }
             //画矿
             else
@@ -163,6 +173,15 @@ namespace MineSystem
 
                 tileMap.brushIcon.SetActive(tileMap.brushTypeIsCircle);
                 tileMap.selectOutline.SetActive(false);
+            }
+
+            if (_index != 2)
+            {
+                foreach (var _mine in selectMine)
+                {
+                    _mine.GetComponent<SpriteRenderer>().color = Color.white;
+                }
+                selectMine.Clear();
             }
         }
 
@@ -519,7 +538,11 @@ namespace MineSystem
             if (!tileMap.brushTypeIsCircle)
             {
                 Vector3 minePos = new Vector3(_mousePos.x, _mousePos.y, 0);
-                // _mine.name = "";
+                // 判断有没有在格子上
+                Vector2Int _grid = new Vector2Int(Mathf.FloorToInt(minePos.x),Mathf.FloorToInt(minePos.y));
+                if (!tileMap.SmallMapEditData.gridData[_grid.x, _grid.y])
+                    return;
+                
                 GameObject _mine = Instantiate(tileMap.MinePrefab, minePos, Quaternion.identity,
                     tileMap.mineParentTransf);
                 ProcessMine(_mine, tileMap.curMineBrush,tileMap.SmallMapEditData.smallMapMineData[tileMap.curMineBrush].Count);
@@ -538,6 +561,12 @@ namespace MineSystem
                     float offsetY = Mathf.Sin(_angle) * distance;
 
                     Vector2 minePos2D = new Vector2(_mousePos.x + offsetX,_mousePos.y + offsetY);
+                    // 判断有没有在格子上
+                    Vector2Int _grid = new Vector2Int(Mathf.FloorToInt(minePos2D.x),Mathf.FloorToInt(minePos2D.y));
+                    if (!tileMap.SmallMapEditData.gridData[_grid.x, _grid.y])
+                        continue;
+                    
+                    
                     Vector3 minePos = new Vector3(minePos2D.x,minePos2D.y , 0);
 
                     //Check在范围外
@@ -590,14 +619,14 @@ namespace MineSystem
 
         int btnSize = 100;
         int selectBordSize = 3;
-
+        private int brushIndex = 0;
         public override void OnInspectorGUI()
         {
             serializedObject.UpdateIfRequiredOrScript();
             StyleCheck();
 
             GUILayout.Label("索引: 0", defaultTextStyle);
-            tileMap.mineScale = EditorGUILayout.Slider("矿物与地块比例:", tileMap.mineScale, 0.01f, 1);
+            tempMineScale = EditorGUILayout.Slider("矿物与地块比例:", tempMineScale, 0.01f, 1);
 
             GUILayout.Label("绘制工具", blackLabelStyle);
             
@@ -629,8 +658,6 @@ namespace MineSystem
 
                 curBrush.brushSize = EditorGUILayout.Slider("画笔大小:", curBrush.brushSize, curBrush.brushSizeMin,
                     curBrush.brushSizeMax);
-
-
                 curBrush.brushHard = EditorGUILayout.Slider("画笔分散度:", curBrush.brushHard, curBrush.brushHardMin,
                     curBrush.brushHardMax);
                 curBrush.brushDensity = EditorGUILayout.IntSlider("项密度:", curBrush.brushDensity,
@@ -645,24 +672,38 @@ namespace MineSystem
             EditorGUILayout.BeginHorizontal();
             GUIStyle buttonStyle = new GUIStyle(GUI.skin.button);
             int _buttonSize = 50;
-            
+
+            int iCounter = 0;
             foreach (var _singleMineData in tileMap.SmallMapEditData.smallMapMineData)
             {
                 MineBigMapEditData.MineBrushData _mineBrush = _singleMineData.Key;
-                buttonStyle.normal.background = (Texture2D)_mineBrush.mineIcon.texture;
+                //从Sprite获取Texture，直接Sprite.tex 获取的是图集
+                string spritePath = AssetDatabase.GetAssetPath(_mineBrush.mineIcon);
+                TextureImporter textureImporter = AssetImporter.GetAtPath(spritePath) as TextureImporter;
+                if (textureImporter != null)
+                {
+                    Texture2D originalTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(textureImporter.assetPath);
+                    buttonStyle.normal.background = originalTexture;
+                }
+                
                 //选中后切换CurBrush
                 EditorGUILayout.BeginVertical();
-                if (GUILayout.Button("", buttonStyle, GUILayout.Width(_buttonSize), GUILayout.Height(_buttonSize)))
+                int _index = iCounter++;
+                ToggleButton("", () =>
                 {
+                    brushIndex = _index;
                     tileMap.curMineBrush = _mineBrush;
-                }
-                EditorGUILayout.LabelField($"    {_singleMineData.Value.Count}");
+                }, brushIndex == _index ,_buttonSize,buttonStyle);
+
+                EditorGUILayout.LabelField($"    {_singleMineData.Value.Count}",GUILayout.Width(_buttonSize));
                 EditorGUILayout.EndVertical();
             }
             EditorGUILayout.EndHorizontal();
             
-            GUILayout.Label("Tile Selection", EditorStyles.boldLabel);
-
+            GUILayout.Label("地图大小", blackLabelStyle);
+            
+            tileMap.TileWidth = EditorGUILayout.IntField("地图长", tileMap.TileWidth);
+            tileMap.TileHeight = EditorGUILayout.IntField("地图宽", tileMap.TileHeight);
             if (GUILayout.Button("重新生成地图"))
             {
                 RegenerateMap();
@@ -672,9 +713,16 @@ namespace MineSystem
             {
                 CheckConfig();
             }
-            
-            //DrawDefault
+
             DrawDefaultInspector();
+            serializedObject.ApplyModifiedProperties();
+            if (GUI.changed)
+            {
+                EditorUtility.SetDirty(target);
+                // EditorUtility.SetDirty(tileMap.SmallMapEditData);
+                EditorUtility.SetDirty(bigMap.SmallMapEditDatas[tileMap.SmallMapEditData.index]);
+                AssetDatabase.SaveAssets();
+            }
         }
 
 
@@ -693,17 +741,28 @@ namespace MineSystem
             tileMap.brushIcon.SetActive(tileMap.brushTypeIsCircle);
         }
 
-        void ToggleButton(string labelText, Action buttonAction, bool SelectCondition, int _buttonSize = -1)
+        void ToggleButton(string labelText, Action buttonAction, bool SelectCondition, int _buttonSize = -1,GUIStyle style = null)
         {
             if (_buttonSize == -1)
             {
                 _buttonSize = btnSize;
             }
 
-            if (GUILayout.Button(labelText, GUILayout.Height(_buttonSize), GUILayout.Width(_buttonSize)))
+            if (style == null)
             {
-                buttonAction();
+                if (GUILayout.Button(labelText, GUILayout.Height(_buttonSize), GUILayout.Width(_buttonSize)))
+                {
+                    buttonAction();
+                }
             }
+            else
+            {
+                if (GUILayout.Button(labelText, style,GUILayout.Height(_buttonSize), GUILayout.Width(_buttonSize)))
+                {
+                    buttonAction();
+                }
+            }
+            
 
             if (SelectCondition)
             {

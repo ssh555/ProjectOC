@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b73e2c1f5691f6244b7c6f7221ef25c1, type: 3}
   m_Name: SmallMapEditData_1
   m_EditorClassIdentifier: 
-  index: -1
+  index: 1
   width: 16
   height: 9
   smallMapTex: {fileID: 0}
-  mineDatas: []

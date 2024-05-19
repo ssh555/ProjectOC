@@ -7,6 +7,7 @@ namespace MineSystem
 {
     public class BigMap : MonoBehaviour
     {
+        [HideInInspector]
         public List<TileMap> tileMaps;
         public MineBigMapEditData BigMapEditDatas;
         public List<MineSmallMapEditData> SmallMapEditDatas = new List<MineSmallMapEditData>();

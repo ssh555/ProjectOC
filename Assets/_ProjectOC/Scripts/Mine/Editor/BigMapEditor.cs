@@ -6,6 +6,7 @@ using Animancer.Editor;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using Serialization = Unity.VisualScripting.Serialization;
 
 namespace MineSystem
 {
@@ -14,7 +15,7 @@ namespace MineSystem
     {
         private BigMap bigMap;
         private Rect controlRect;
-        
+        private SerializedProperty smallMapList;
         
         
         public override void OnEnable()
@@ -22,7 +23,7 @@ namespace MineSystem
             base.OnEnable();
             bigMap = target as BigMap;
             bigMap.tileMaps = target.GetComponentsInChildren<TileMap>().ToList();
-            
+            smallMapList = serializedObject.FindProperty("tileMaps");
             //读取大地图和小地图所有资产
             bigMap.BigMapEditDatas = AssetDatabase.LoadAssetAtPath<MineBigMapEditData>(bigMapPath);
             string[] assetGUIDs = AssetDatabase.FindAssets("t:" + typeof(MineSmallMapEditData).Name, new[] { smallMapFoldPath });
@@ -54,7 +55,26 @@ namespace MineSystem
 
             GUILayout.Space(20);
             GUILayout.Label("MapSmart项", blackLabelStyle);
-            //todo List<TileMap>
+            // EditorGUILayout.PropertyField(smallMapList, new GUIContent("小地图"), true);
+            for (int i = 0; i < smallMapList.arraySize; i++)
+            {
+                SerializedProperty gameObjectProperty = smallMapList.GetArrayElementAtIndex(i);
+                EditorGUILayout.PropertyField(gameObjectProperty, new GUIContent($"小地图 {i}"));
+
+                if (GUILayout.Button($"Select Element {i}"))
+                {
+                    TileMap selectedGameObject = gameObjectProperty.objectReferenceValue as TileMap;
+                    if (selectedGameObject != null)
+                    {
+                        Debug.Log($"{selectedGameObject.gameObject.name}");
+                    }
+                }
+            }
+            
+            
+            
+            
+            
             //todo 选中的时候生成Tile 或者图片
             if (GUILayout.Button("+新建小地图"))
             {
@@ -62,7 +82,7 @@ namespace MineSystem
                 MineSmallMapEditData _smallMapData = ScriptableObject.CreateInstance<MineSmallMapEditData>();
                 CreateScriptableObjectAsset(_smallMapData, smallMapFoldPath, $"{smallMapDataNamePre}{_index}");
                 bigMap.SmallMapEditDatas.Add(_smallMapData);
-                
+                _smallMapData.index = _index;
                 GameObject _go = new GameObject($"MapSmart_{_index}");
                 _go.transform.SetParent(bigMap.transform);
                 TileMap _tileMap = _go.AddComponent<TileMap>();
@@ -89,7 +109,6 @@ namespace MineSystem
                         Debug.LogError("新笔刷矿物ID重复");
                         break;
                     }
-                    
                 }
 
                 if (valid)
@@ -98,7 +117,15 @@ namespace MineSystem
                     bigMap.BigMapEditDatas.MineBrushDatas.Add(mineBrush);
                 }
             }
+            
             DrawDefaultInspector();
+            serializedObject.ApplyModifiedProperties();
+            if (GUI.changed)
+            {
+                EditorUtility.SetDirty(target);
+                EditorUtility.SetDirty(bigMap.BigMapEditDatas);
+                AssetDatabase.SaveAssets();
+            }
         }
 
         #region ScriptObject数据处理
