@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b73e2c1f5691f6244b7c6f7221ef25c1, type: 3}
-  m_Name: SmallMapEditData_28
+  m_Name: SmallMapEditData_29
   m_EditorClassIdentifier: 
-  index: 9
+  index: 29
   width: 19
   height: 25
   smallMapTex: {fileID: 0}

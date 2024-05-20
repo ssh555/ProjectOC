@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b73e2c1f5691f6244b7c6f7221ef25c1, type: 3}
   m_Name: SmallMapEditData_4
   m_EditorClassIdentifier: 
-  index: 0
+  index: 12
   width: 13
   height: 20
   smallMapTex: {fileID: 0}
