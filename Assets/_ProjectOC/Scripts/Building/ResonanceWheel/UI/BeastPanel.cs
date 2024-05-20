@@ -67,6 +67,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             this.CollectEfficiencyNumText = GContent.Find("CollectEfficiency").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
             this.MagicEfficiency = GContent.Find("MagicEfficiency").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             this.MagicEfficiencyNumText = GContent.Find("MagicEfficiency").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
+            this.HandCraftEfficiency = GContent.Find("HandCraftEfficiency").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
+            this.HandCraftEfficiencyNumText = GContent.Find("HandCraftEfficiency").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
             this.IndustryEfficiency = GContent.Find("IndustryEfficiency").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             this.IndustryEfficiencyNumText = GContent.Find("IndustryEfficiency").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
             this.WeightMax = GContent.Find("WeightMax").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
@@ -106,6 +108,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             base.OnEnter();
             this.BeastList.EnableBtnList();
             this.ScheduleList.EnableBtnList();
+            LocalGameManager.Instance.WorkerManager.OnDeleteWorkerEvent += RefreshOnDeleteWorker;
         }
 
         public override void OnExit()
@@ -113,12 +116,19 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             base.OnExit();
             this.BeastList.DisableBtnList();
             this.ScheduleList.DisableBtnList();
+            LocalGameManager.Instance.WorkerManager.OnDeleteWorkerEvent -= RefreshOnDeleteWorker;
         }
-
-        
         #endregion
 
         #region Internal
+        private void RefreshOnDeleteWorker(Worker worker)
+        {
+            Debug.Log("RefreshOnDeleteWorker");
+            int index = this.BeastList.GetBtnPos1(WorkerIndexDic[worker]);
+            WorkerIndexDic.Remove(worker);
+            this.BeastList.DeleteButton(index, () => { this.Refresh(); });
+        }
+
         protected override void UnregisterInput()
         {
             ProjectOC.Input.InputManager.PlayerInput.BeastPanel.Disable();
@@ -161,7 +171,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             LocalGameManager.Instance.WorkerManager.DeleteWorker(Workers[CurrentBeastIndex]);
             this.BeastList.DeleteButton(CurrentBeastIndex, () => { this.Refresh(); });
-            
         }
 
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -240,6 +249,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private TMPro.TextMeshProUGUI CollectEfficiencyNumText;
         private TMPro.TextMeshProUGUI MagicEfficiency;
         private TMPro.TextMeshProUGUI MagicEfficiencyNumText;
+        private TMPro.TextMeshProUGUI HandCraftEfficiency;
+        private TMPro.TextMeshProUGUI HandCraftEfficiencyNumText;
         private TMPro.TextMeshProUGUI IndustryEfficiency;
         private TMPro.TextMeshProUGUI IndustryEfficiencyNumText;
         private TMPro.TextMeshProUGUI WeightMax;
@@ -265,7 +276,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private int SwitchInfoIndex = 0;
 
-        FeatureManager featManager => ManagerNS.LocalGameManager.Instance.FeatureManager;
+        private FeatureManager featManager => ManagerNS.LocalGameManager.Instance.FeatureManager;
 
         #endregion
 
@@ -332,10 +343,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 }
                 else if(SwitchInfoIndex == 1)
                 {
-                    this.CookEfficiencyNumText.text = skillDic[SkillType.Cook].LevelCurrent.ToString();
-                    this.CollectEfficiencyNumText.text = skillDic[SkillType.Collect].LevelCurrent.ToString();
-                    this.MagicEfficiencyNumText.text = skillDic[SkillType.Magic].LevelCurrent.ToString();
-                    this.IndustryEfficiencyNumText.text = skillDic[SkillType.Industry].LevelCurrent.ToString();
+                    this.CookEfficiencyNumText.text = worker.GetEff(SkillType.Cook).ToString();
+                    this.CollectEfficiencyNumText.text = worker.GetEff(SkillType.Collect).ToString();
+                    this.MagicEfficiencyNumText.text = worker.GetEff(SkillType.Magic).ToString();
+                    this.HandCraftEfficiencyNumText.text = worker.GetEff(SkillType.HandCraft).ToString();
+                    this.IndustryEfficiencyNumText.text = worker.GetEff(SkillType.Industry).ToString();
                     this.WeightMaxNumText.text = worker.RealBURMax.ToString();
                 }
                 
@@ -359,7 +371,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 foreach (var feature in worker.GetFeatures())
                 {
                     var tPrefab = this.objectPool.GetNextObject("DescriptionPool");
+                    var Normal = tPrefab.transform.Find("Normal");
+                    var Specific = tPrefab.transform.Find("Specific");
                     string featID = feature.ID;
+                    Normal.gameObject.SetActive(SwitchInfoIndex == 0);
+                    Specific.gameObject.SetActive(SwitchInfoIndex == 1);
                     Transform feat = SwitchInfoIndex == 1? tPrefab.transform.Find("Specific") : tPrefab.transform.Find("Normal");
                     if (!string.IsNullOrEmpty(featID))
                     {
@@ -382,6 +398,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                             feat.Find("EffectDesc").GetComponent<TMPro.TextMeshProUGUI>().text =
                                 $"<color={featManager.GetColorStrForUI(featID)}>" + featManager.GetEffectsDescription(featID) + "</color>";
                         }
+                        DescriptionList.AddBtn(tPrefab);
                     }
                 }
 
@@ -471,6 +488,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
         [ShowInInspector]
         private UIBtnList BeastList;
+        private Dictionary<Worker,SelectedButton> WorkerIndexDic = new Dictionary<Worker, SelectedButton>();
+
         [ShowInInspector]
         private UIBtnList DescriptionList;
         [ShowInInspector]
@@ -509,7 +528,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 AP.Find("Number").Find("Text").GetComponent<TextMeshProUGUI>().text = Workers[i].APCurrent.ToString();
                 Mood.Find("Number").Find("Text").GetComponent <TextMeshProUGUI>().text = Workers[i].EMCurrent.ToString();
                 tPrefab.transform.Find("Bio").Find("IconImage").Find("Image").gameObject.SetActive(!Workers[i].HaveHome);
-                BeastList.AddBtn(tPrefab);
+                BeastList.AddBtn(tPrefab, BtnSettingAction: (btn) => { WorkerIndexDic.Add(Workers[i], btn); });
+                
             }
             this.BeastList.OnSelectButtonChanged += () => { this.Refresh(); };
             this.ScheduleList.SetAllBtnAction(() => {
