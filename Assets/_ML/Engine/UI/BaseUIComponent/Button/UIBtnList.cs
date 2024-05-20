@@ -476,7 +476,6 @@ namespace ML.Engine.UI
             var btn = prefab.GetComponent<SelectedButton>();
             btn.gameObject.name = btn.GetHashCode().ToString();
             btn.transform.SetParent(this.parent.Find("Container"), false);
-            Debug.Log(btn.transform.parent.name);
             btn.transform.localScale = Vector3.one;
 
             if (BtnAction != null)

@@ -199,6 +199,12 @@ namespace ML.Engine.BuildingSystem
             {
                 _buildingMaterial = handle.Result;
             };
+
+            // 创建一个可视化的球体
+            Debug.Log("create VisualSocket");
+            VisualSocket = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            VisualSocket.GetComponent<Renderer>().material.color = UnityEngine.Color.blue;
+            VisualSocket.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
         }
 
 
@@ -210,6 +216,8 @@ namespace ML.Engine.BuildingSystem
                 Manager.GameManager.Instance.ABResourceManager.Release(_buildingMaterial);
             }
             Manager.GameManager.Instance.ABResourceManager.Release(buildIconAtlas);
+            Debug.Log("DestroyObj VisualSocket");
+            GameManager.DestroyObj(VisualSocket);
         }
 
 
@@ -1239,6 +1247,16 @@ namespace ML.Engine.BuildingSystem
         public DrawGizmos DrawAreaBaseGrid;
         [LabelText("绘制Area大格子")]
         public DrawGizmos DrawAreaBoundGrid;
+
+        [ShowInInspector]
+        [SerializeField]
+        public GameObject VisualSocket;
+
+        public void ResetVisualSocket()
+        {
+            VisualSocket.transform.parent = null;
+            VisualSocket.gameObject.SetActive(false);
+        }
         #endregion
     }
 

@@ -82,10 +82,12 @@ namespace ML.Engine.Event
         }
         public void FishInNest(Worker worker)
         {
+            Debug.Log("FishInNest");
             worker.AddFishInNest();
         }
         public void RemoveFishInNest(Worker worker)
         {
+            Debug.Log("RemoveFishInNest");
             worker.RemoveFishInNest();
         }
 

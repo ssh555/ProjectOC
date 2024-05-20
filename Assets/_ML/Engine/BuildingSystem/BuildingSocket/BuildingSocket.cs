@@ -22,11 +22,6 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         public bool IsActiveSocket = true;
 
 
-        /// <summary>
-        /// 可视化socket 的物体
-        /// </summary>
-        private GameObject VisualSocket;
-
         ///// <summary>
         ///// 可以容纳的SocketType
         ///// </summary>
@@ -41,37 +36,20 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
             //#if UNITY_EDITOR
             //Gizmos_Active = true;
             //#endif
-
-            if(this.collider is SphereCollider)
-            {
-                // 绘制 SphereCollider 的球体
-                SphereCollider sphereCollider = collider as SphereCollider;
-                // 创建一个可视化的球体
-                VisualSocket = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                VisualSocket.GetComponent<Renderer>().material.color = UnityEngine.Color.blue;
-
-                // 获取 SphereCollider 的半径
-                float radius = sphereCollider.radius;
-
-                // 设置可视化球体的缩放，使其直径等于 SphereCollider 的半径
-                VisualSocket.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
-
-                // 将可视化球体放置在 SphereCollider 的中心位置
-                VisualSocket.transform.position = sphereCollider.transform.position + sphereCollider.center;
-
-                VisualSocket.transform.SetParent(this.transform);
-            }
+            BuildingManager.Instance.VisualSocket.SetActive(true);
+            BuildingManager.Instance.VisualSocket.transform.SetParent(this.transform);
+            BuildingManager.Instance.VisualSocket.transform.localPosition = Vector3.zero;
         }
 
-    /// <summary>
-    /// to-do : 不在激活，即置为Disactieve时调用
-    /// </summary>
+        /// <summary>
+        /// to-do : 不在激活，即置为Disactieve时调用
+        /// </summary>
         public virtual void OnDisactive()
         {
-//#if UNITY_EDITOR
-//            Gizmos_Active = false;
-//#endif
-            GameManager.DestroyObj(VisualSocket);
+            //#if UNITY_EDITOR
+            //            Gizmos_Active = false;
+            //#endif
+            BuildingManager.Instance.VisualSocket.SetActive(false);
         }
 
         public bool CheckMatch(BuildingSocket target)

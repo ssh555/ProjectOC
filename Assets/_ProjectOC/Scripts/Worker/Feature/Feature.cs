@@ -1,6 +1,7 @@
 using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace ProjectOC.WorkerNS
 {
@@ -63,6 +64,7 @@ namespace ProjectOC.WorkerNS
             ApplyFeature();
             if (!string.IsNullOrEmpty(Event))
             {
+                UnityEngine.Debug.Log(Event);
                 ML.Engine.Manager.GameManager.Instance.EventManager.ExecuteEvent(Event, Owner);
             }
             Owner.Feature.Add(ID, this);
