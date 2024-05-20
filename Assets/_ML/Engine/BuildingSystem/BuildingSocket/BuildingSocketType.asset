@@ -129,3 +129,9 @@ MonoBehaviour:
   - name: Edge_Q
     displayName: "Q\u5916\u5EF6"
     value: 34
+  - name: floor_edge
+    displayName: "\u5730\u677F\u8FB9\u5FC3"
+    value: 35
+  - name: Pillar_up
+    displayName: "\u67F1\u9876"
+    value: 36

@@ -133,7 +133,7 @@ MonoBehaviour:
   rotOffset: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   activeSocketIndex: 0
   powerSupportVFX: {fileID: 1559227801019406495}
-  powerSupportRange: 20
+  powerSupportRange: 10
 --- !u!1 &6816333720719296557
 GameObject:
   m_ObjectHideFlags: 0
@@ -258,11 +258,11 @@ MonoBehaviour:
   ID: 1
   IsActiveSocket: 1
   IsCanRotate: 0
+  m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
+  m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  Gizmos_Active: 0
-  Gizmos_Attached: 0
 --- !u!1 &9221427871961979008
 GameObject:
   m_ObjectHideFlags: 0
@@ -291,7 +291,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -2.5, z: 0}
-  m_LocalScale: {x: 5.506, y: 1, z: 5.506}
+  m_LocalScale: {x: 2, y: 1, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7158257889511601892}

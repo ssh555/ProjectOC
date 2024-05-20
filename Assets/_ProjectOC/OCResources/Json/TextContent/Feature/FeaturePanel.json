@@ -1,0 +1,175 @@
+{
+    "textTitle" : {
+        "Chinese" : "喵喵窝",
+        "English" : "Feature Building"
+    },
+    "textExchange" : {
+        "Chinese" : "词条传授",
+        "English" : "Feature Transmission"
+    },
+    "textCorrect" : {
+        "Chinese" : "词条修正",
+        "English" : "Feature Correction"
+    },
+    "textExchangeTimePrefix" : {
+        "Chinese" : "交流时间: ",
+        "English" : "Transmission Time: "
+    },
+    "textCorrectTimePrefix" : {
+        "Chinese" : "提升时间: ",
+        "English" : "Correction Time: "
+    },
+    "textWarnSelectWorker" : {
+        "Chinese" : "未选择隐兽",
+        "English" : "Need select worker"
+    },
+    "textWarnLackExchangeItem" : {
+        "Chinese" : "喵喵红茶数量不足",
+        "English" : "Need meow meow black tea"
+    },
+    "textWarnLackCorrectItem" : {
+        "Chinese" : "果实数量不足",
+        "English" : "Need fruits"
+    },
+    "textCancleResult" : {
+        "Chinese" : "回炉重造",
+        "English" : "Reburning and Remaking"
+    },
+    "textCancleResultDesc" : {
+        "Chinese" : "已消耗的道具不会返还",
+        "English" : "Consumed items will not be returned"
+    },
+    "KT_SelectPre" : {
+        "keyname" : "KT_SelectPre",
+        "keymap": {
+            "ActionMapName": "UIFeature",
+            "ActionName": "SelectPre"
+          },
+        "description" : {
+            "Chinese" : "",
+            "English" : ""
+        }
+    },
+    "KT_SelectPost" : {
+        "keyname" : "KT_SelectPost",
+        "keymap": {
+            "ActionMapName": "UIFeature",
+            "ActionName": "SelectPost"
+          },
+        "description" : {
+            "Chinese" : "",
+            "English" : ""
+        }
+    },
+    "KT_Confirm" : {
+        "keyname" : "KT_Confirm",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "选择",
+            "English" : "Select"
+        }
+    },
+    "KT_Back" : {
+        "keyname" : "KT_Back",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
+        "description" : {
+            "Chinese" : "返回",
+            "English" : "Back"
+        }
+    },
+    "KT_ConfirmRun" : {
+        "keyname" : "KT_ConfirmRun",
+        "keymap": {
+            "ActionMapName": "UIFeature",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "深入交流",
+            "English" : "Transmission"
+        }
+    },
+    "KT_CancleRun" : {
+        "keyname" : "KT_CancleRun",
+        "keymap": {
+            "ActionMapName": "UIFeature",
+            "ActionName": "Cancle"
+          },
+        "description" : {
+            "Chinese" : "终止交流",
+            "English" : "Cancle transmission"
+        }
+    },
+    "KT_ConfirmRunCorrect" : {
+        "keyname" : "KT_ConfirmRunCorrect",
+        "keymap": {
+            "ActionMapName": "UIFeature",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "自我提升",
+            "English" : "Correction"
+        }
+    },
+    "KT_CancleRunCorrect" : {
+        "keyname" : "KT_CancleRunCorrect",
+        "keymap": {
+            "ActionMapName": "UIFeature",
+            "ActionName": "Cancle"
+          },
+        "description" : {
+            "Chinese" : "终止提升",
+            "English" : "Cancle correction"
+        }
+    },
+    "KT_ConfirmResult" : {
+        "keyname" : "KT_ConfirmResult",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Confirm"
+          },
+        "description" : {
+            "Chinese" : "确认结果",
+            "English" : "Confirm Result"
+        }
+    },
+    "KT_CancleResult" : {
+        "keyname" : "KT_CancleResult",
+        "keymap": {
+            "ActionMapName": "Common",
+            "ActionName": "Back"
+          },
+        "description" : {
+            "Chinese" : "回炉重造",
+            "English" : "Cancle Result"
+        }
+    },
+    "KT_See" : {
+        "keyname" : "KT_See",
+        "keymap": {
+            "ActionMapName": "UIFeature",
+            "ActionName": "SeeInfo"
+          },
+        "description" : {
+            "Chinese" : "查看更多信息",
+            "English" : "Open info"
+        }
+    },
+    "KT_NoSee" : {
+        "keyname" : "KT_NoSee",
+        "keymap": {
+            "ActionMapName": "UIFeature",
+            "ActionName": "SeeInfo"
+          },
+        "description" : {
+            "Chinese" : "关闭更多信息",
+            "English" : "Clos info"
+        }
+    }
+}
+
