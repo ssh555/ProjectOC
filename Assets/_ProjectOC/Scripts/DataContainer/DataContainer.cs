@@ -115,7 +115,7 @@ namespace ProjectOC.DataNS
                 {
                     foreach (int index in indexs.ToList())
                     {
-                        if (!dataObj.DataEquals(Datas[index].GetData())) 
+                        if (Datas[index].GetData() is not IDataObj other || dataObj != other) 
                         { 
                             indexs.Remove(index); 
                         }
