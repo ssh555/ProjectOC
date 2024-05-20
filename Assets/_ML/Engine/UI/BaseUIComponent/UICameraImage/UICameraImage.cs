@@ -1,3 +1,4 @@
+using ML.Engine.BuildingSystem;
 using ML.Engine.Manager;
 using Sirenix.OdinInspector;
 using System.Collections;
@@ -78,6 +79,7 @@ namespace ML.Engine.UI
 
             if(currentObjectBeingObserved != null)
             {
+                BuildingManager.Instance.ResetVisualSocket();
                 GameManager.DestroyObj(currentObjectBeingObserved);
             }
 
@@ -131,6 +133,7 @@ namespace ML.Engine.UI
         public void DisableUICameraImage()
         {
             base.OnDestroy();
+            BuildingManager.Instance.ResetVisualSocket();
             GameManager.DestroyObj(this.cameraParent);
         }
 
@@ -138,6 +141,7 @@ namespace ML.Engine.UI
         {
             if (currentObjectBeingObserved != null)
             {
+                BuildingManager.Instance.ResetVisualSocket();
                 GameManager.DestroyObj(currentObjectBeingObserved);
             }
         }

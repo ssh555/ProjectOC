@@ -123,7 +123,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #region Internal
         private void RefreshOnDeleteWorker(Worker worker)
         {
-            Debug.Log("RefreshOnDeleteWorker");
             int index = this.BeastList.GetBtnPos1(WorkerIndexDic[worker]);
             WorkerIndexDic.Remove(worker);
             this.BeastList.DeleteButton(index, () => { this.Refresh(); });
