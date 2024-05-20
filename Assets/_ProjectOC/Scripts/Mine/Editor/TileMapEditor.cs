@@ -19,8 +19,9 @@ namespace MineSystem
         private List<GameObject> selectMine = new List<GameObject>();
         private BigMap bigMap;
         private bool showShortCut = false;
-        private float tempMineScale;
-        
+        private int tempMapWidht, tempMapHeight;
+
+        private bool ShowProgrammerData = false;
         public override void OnEnable()
         {
             tileMap = target as TileMap;
@@ -34,16 +35,20 @@ namespace MineSystem
 
             
             CheckEditData();
-            ChangeCurSelectdOption(tileMap.EditOption);
-            //Scene部分
-            base.OnEnable();
-            
+       
             ReGenerateSceneObject();
+            ChangeCurSelectdOption(tileMap.EditOption);
+            base.OnEnable();
+        }
+
+        public override void OnDisable()
+        {
+            base.OnDisable();
+            SaveAssetData();
         }
 
         void CheckEditData()
         {
-            tempMineScale = tileMap.mineScale;
             
             if (tileMap.SmallMapEditData == null)
             {
@@ -52,15 +57,27 @@ namespace MineSystem
                 tileMap.SmallMapEditData = bigMap.SmallMapEditDatas[_index];
             }
 
+            
             tileMap.curMineBrush = bigMap.BigMapEditDatas.MineBrushDatas[0];
             foreach (var _mineBrush in bigMap.BigMapEditDatas.MineBrushDatas)
             {
-                if ( !tileMap.SmallMapEditData.smallMapMineData.ContainsKey(_mineBrush))
+                bool newData = true;
+                foreach (var _mineData in tileMap.SmallMapEditData.mineData)
                 {
-                    tileMap.SmallMapEditData.smallMapMineData[_mineBrush] = new List<Vector2>();  
+                    if (_mineData.MineID == _mineBrush.mineID)
+                    {
+                        newData = false;
+                        break;
+                    }
+                }
+                if (newData)
+                {
+                    tileMap.SmallMapEditData.mineData.Add(new MineSmallMapEditData.SingleMineData(_mineBrush.mineID));
                 }
             }
-            
+
+            tempMapWidht = tileMap.TileWidth;
+            tempMapHeight = tileMap.TileHeight;
             scaleWidth = tileMap.TileWidth;
             scaleHeight = tileMap.TileHeight;
         }
@@ -81,14 +98,7 @@ namespace MineSystem
         {
             ProcessInput();
 
-            if (tempMineScale != tileMap.mineScale)
-            {
-                tileMap.mineScale = tempMineScale;
-                foreach (Transform _mine in tileMap.mineParentTransf)
-                {
-                    _mine.localScale = Vector3.one * tileMap.mineScale;
-                }
-            }
+
             
             if (tileMap.EditOption == 0)
             {
@@ -291,7 +301,7 @@ namespace MineSystem
             {
                 for (int j = startPos.y; j <= endPos.y; j++)
                 {
-                    tileMap.SmallMapEditData.gridData[i, j] = pen;
+                    tileMap.SmallMapEditData.gridData[i + j *tileMap.TileWidth] = pen;
                     tileMap.SetTileSprite(i, j, pen);
                 }
             }
@@ -314,7 +324,7 @@ namespace MineSystem
                 {
                     try
                     {
-                        tileMap.SetTileSprite(i, j, tileMap.SmallMapEditData.gridData[i, j]);
+                        tileMap.SetTileSprite(i, j, tileMap.SmallMapEditData.gridData[i + j *tileMap.TileWidth]);
                     }
                     catch (Exception exception)
                     {
@@ -367,55 +377,37 @@ namespace MineSystem
             }
 
             //复制旧数据
-            bool[,] oldData = tileMap.SmallMapEditData.gridData;
-            tileMap.SmallMapEditData.gridData = new bool[tileMap.TileWidth, tileMap.TileHeight];
-            tileMap.tiles = new GameObject[tileMap.TileWidth, tileMap.TileHeight];
+            bool[] oldData = tileMap.SmallMapEditData.gridData;
+            int oldRows = tileMap.TileWidth, oldCols = tileMap.TileHeight;
+
+            tileMap.TileWidth = tempMapWidht;
+            tileMap.TileHeight = tempMapHeight;
+            tileMap.SmallMapEditData.gridData = new bool[tileMap.TileWidth* tileMap.TileHeight];
+            
             // 默认设为false
-            for (int i = 0; i < tileMap.TileWidth; i++)
+            for (int i = 0; i < tileMap.SmallMapEditData.gridData.Length; i++)
             {
-                for (int j = 0; j < tileMap.TileHeight; j++)
-                {
-                    tileMap.SmallMapEditData.gridData[i, j] = false;
-                }
+                tileMap.SmallMapEditData.gridData[i] = false;
             }
 
-
-            int oldRows = tileMap.TileWidth, oldCols = tileMap.TileHeight;
             if (oldData != null)
             {
-                oldRows = Mathf.Min(oldData.GetLength(0), oldRows);
-                oldCols = Mathf.Min(oldData.GetLength(1), oldCols);
-
+                oldRows = Mathf.Min(tileMap.TileWidth, oldRows);
+                oldCols = Mathf.Min(tileMap.TileHeight, oldCols);
+            
                 for (int i = 0; i < oldRows; i++)
                 {
                     for (int j = 0; j < oldCols; j++)
                     {
-                        tileMap.SmallMapEditData.gridData[i, j] = oldData[i, j];
+                        tileMap.SmallMapEditData.gridData[i+j*tileMap.TileWidth] = oldData[i+j*oldRows];
                     }
                 }
             }
-
-
-
-            //生成可视化方块
-            DestroyTransformChild(tileMap.gridParentTransf);
-
-            for (int x = 0; x < tileMap.TileWidth; x++)
-            {
-                for (int y = 0; y < tileMap.TileHeight; y++)
-                {
-                    tileMap.SetTileSprite(x, y, tileMap.SmallMapEditData.gridData[x, y]);
-                }
-            }
+            
+            tileMap.ReGenerateTileGo();
         }
 
-        void DestroyTransformChild(Transform _transf)
-        {
-            for (int i = _transf.childCount - 1; i >= 0; i--)
-            {
-                DestroyImmediate(_transf.GetChild(i).gameObject);
-            }
-        }
+        
 
 
         #endregion
@@ -446,7 +438,7 @@ namespace MineSystem
             {
                 if (e.button == 0 && e.type == EventType.MouseDown)
                 {
-                    SingleDrawer(mouseWorldPos, curBrush);
+                    SingleDrawer(mouseWorldPos, tileMap.curMineBrush);
                 }
             }
             else if (tileMap.EditOption == 2)
@@ -507,12 +499,12 @@ namespace MineSystem
 
                     
                     //重新排列数据
-                    Dictionary<string, MineBigMapEditData.MineBrushData> tempNameToBrush =
-                        new Dictionary<string, MineBigMapEditData.MineBrushData>();
-                    foreach (var _dic in tileMap.SmallMapEditData.smallMapMineData)
+                    Dictionary<string, MineSmallMapEditData.SingleMineData> tempNameToBrush =
+                        new Dictionary<string, MineSmallMapEditData.SingleMineData>();
+                    foreach (var _singleMineData in tileMap.SmallMapEditData.mineData)
                     {
-                        _dic.Value.Clear();
-                        tempNameToBrush[_dic.Key.mineID]= _dic.Key;
+                        _singleMineData.MinePoses.Clear();
+                        tempNameToBrush.Add(_singleMineData.MineID,_singleMineData);
                     }
                     
                     
@@ -520,10 +512,9 @@ namespace MineSystem
                     {
                         GameObject _mine = tileMap.mineParentTransf.GetChild(i).gameObject;
                         string _mineID =  _mine.name.Split("|")[0];
-                        MineBigMapEditData.MineBrushData _mineData = tempNameToBrush[_mineID];
-                        
-                        tileMap.SmallMapEditData.smallMapMineData[_mineData].Add(new Vector2(_mine.transform.position.x,_mine.transform.position.y));
-                        tileMap.mineParentTransf.GetChild(i).name = $"{_mineID}|{tileMap.SmallMapEditData.smallMapMineData[_mineData].Count}";
+
+                        tileMap.mineParentTransf.GetChild(i).name = $"{_mineID}|{tempNameToBrush[_mineID].MinePoses.Count}";
+                        tempNameToBrush[_mineID].MinePoses.Add(new Vector2(_mine.transform.position.x,_mine.transform.position.y));
                     }
                     
                 }
@@ -532,21 +523,33 @@ namespace MineSystem
             }
         }
 
-        private void SingleDrawer(Vector2 _mousePos, MineBigMapEditData.BrushData _brush)
+        private void SingleDrawer(Vector2 _mousePos, MineBigMapEditData.MineBrushData _mineBrush)
         {
+            MineBigMapEditData.BrushData _brush = _mineBrush.brushData;
+            MineSmallMapEditData.SingleMineData _curMineData = null;
+            foreach (var _singleMineData in tileMap.SmallMapEditData.mineData)
+            {
+                if (_singleMineData.MineID == _mineBrush.mineID)
+                {
+                    _curMineData = _singleMineData;   
+                    break;
+                }
+            }
+            
             //点
             if (!tileMap.brushTypeIsCircle)
             {
                 Vector3 minePos = new Vector3(_mousePos.x, _mousePos.y, 0);
                 // 判断有没有在格子上
                 Vector2Int _grid = new Vector2Int(Mathf.FloorToInt(minePos.x),Mathf.FloorToInt(minePos.y));
-                if (!tileMap.SmallMapEditData.gridData[_grid.x, _grid.y])
+                if (!tileMap.SmallMapEditData.gridData[_grid.x + _grid.y *tileMap.TileWidth])
                     return;
                 
                 GameObject _mine = Instantiate(tileMap.MinePrefab, minePos, Quaternion.identity,
                     tileMap.mineParentTransf);
-                ProcessMine(_mine, tileMap.curMineBrush,tileMap.SmallMapEditData.smallMapMineData[tileMap.curMineBrush].Count);
-                tileMap.SmallMapEditData.smallMapMineData[tileMap.curMineBrush].Add(_mousePos);
+                tileMap.ProcessMine(_mine, tileMap.curMineBrush,_curMineData.MinePoses.Count);
+                _curMineData.MinePoses.Add(_mousePos);
+
             }
             //圈
             else
@@ -563,7 +566,7 @@ namespace MineSystem
                     Vector2 minePos2D = new Vector2(_mousePos.x + offsetX,_mousePos.y + offsetY);
                     // 判断有没有在格子上
                     Vector2Int _grid = new Vector2Int(Mathf.FloorToInt(minePos2D.x),Mathf.FloorToInt(minePos2D.y));
-                    if (!tileMap.SmallMapEditData.gridData[_grid.x, _grid.y])
+                    if (!tileMap.SmallMapEditData.gridData[_grid.x + _grid.y *tileMap.TileWidth])
                         continue;
                     
                     
@@ -574,39 +577,17 @@ namespace MineSystem
 
                     GameObject _mine = Instantiate(tileMap.MinePrefab, minePos, Quaternion.identity,
                         tileMap.mineParentTransf);
-
-                    ProcessMine(_mine, tileMap.curMineBrush,tileMap.SmallMapEditData.smallMapMineData[tileMap.curMineBrush].Count);
-                    tileMap.SmallMapEditData.smallMapMineData[tileMap.curMineBrush].Add(minePos2D);
+                    tileMap.ProcessMine(_mine, tileMap.curMineBrush,_curMineData.MinePoses.Count);
+                    _curMineData.MinePoses.Add(_mousePos);
                 }
             }
         }
-        void ProcessMine(GameObject _mineGo,MineBigMapEditData.MineBrushData _mineBrushData,int _index)
-        {                
-            _mineGo.SetActive(true);
-            _mineGo.GetComponent<SpriteRenderer>().sprite = _mineBrushData.mineIcon;
-            _mineGo.transform.localScale = Vector3.one * tileMap.mineScale;
-            _mineGo.name = $"{_mineBrushData.mineID}|{_index}";
-        }
-        private void ReGenerateMine()
-        {
-            DestroyTransformChild(tileMap.mineParentTransf);
-            foreach (var _singleMineData in tileMap.SmallMapEditData.smallMapMineData)
-            {
-                for (int i = 0; i < _singleMineData.Value.Count; i++)
-                {
-                    GameObject _mine = Instantiate(tileMap.MinePrefab, 
-                        new Vector3(_singleMineData.Value[i].x,_singleMineData.Value[i].y,0), Quaternion.identity,
-                        tileMap.mineParentTransf);
-                    
-                    ProcessMine(_mine, _singleMineData.Key,i);
-                }
-            }
-            
-        }
+        
+        
         private void ReGenerateSceneObject()
         {
             RegenerateMap();
-            ReGenerateMine();
+            tileMap.ReGenerateMine();
         }
 
         #endregion
@@ -615,18 +596,18 @@ namespace MineSystem
 
         #region Inspect Override
 
-
-
+        
         int btnSize = 100;
-        int selectBordSize = 3;
+        
         private int brushIndex = 0;
         public override void OnInspectorGUI()
         {
             serializedObject.UpdateIfRequiredOrScript();
             StyleCheck();
 
-            GUILayout.Label("索引: 0", defaultTextStyle);
-            tempMineScale = EditorGUILayout.Slider("矿物与地块比例:", tempMineScale, 0.01f, 1);
+            // GUILayout.Label($"索引: {tileMap.SmallMapEditData.index}", defaultTextStyle);
+            GUILayout.Label($"索引: {tileMap.gameObject.name.Split("_")[1]}", defaultTextStyle);
+            
 
             GUILayout.Label("绘制工具", blackLabelStyle);
             
@@ -672,11 +653,10 @@ namespace MineSystem
             EditorGUILayout.BeginHorizontal();
             GUIStyle buttonStyle = new GUIStyle(GUI.skin.button);
             int _buttonSize = 50;
-
             int iCounter = 0;
-            foreach (var _singleMineData in tileMap.SmallMapEditData.smallMapMineData)
+            foreach (var _singleMineData in tileMap.SmallMapEditData.mineData)
             {
-                MineBigMapEditData.MineBrushData _mineBrush = _singleMineData.Key;
+                MineBigMapEditData.MineBrushData _mineBrush = bigMap.BigMapEditDatas.IDToMineBrushData(_singleMineData.MineID);
                 //从Sprite获取Texture，直接Sprite.tex 获取的是图集
                 string spritePath = AssetDatabase.GetAssetPath(_mineBrush.mineIcon);
                 TextureImporter textureImporter = AssetImporter.GetAtPath(spritePath) as TextureImporter;
@@ -695,15 +675,15 @@ namespace MineSystem
                     tileMap.curMineBrush = _mineBrush;
                 }, brushIndex == _index ,_buttonSize,buttonStyle);
 
-                EditorGUILayout.LabelField($"    {_singleMineData.Value.Count}",GUILayout.Width(_buttonSize));
+                EditorGUILayout.LabelField($"    {_singleMineData.MinePoses.Count}",GUILayout.Width(_buttonSize));
                 EditorGUILayout.EndVertical();
             }
             EditorGUILayout.EndHorizontal();
             
             GUILayout.Label("地图大小", blackLabelStyle);
             
-            tileMap.TileWidth = EditorGUILayout.IntField("地图长", tileMap.TileWidth);
-            tileMap.TileHeight = EditorGUILayout.IntField("地图宽", tileMap.TileHeight);
+            tempMapWidht = EditorGUILayout.IntField("地图长", tempMapWidht);
+            tempMapHeight = EditorGUILayout.IntField("地图高", tempMapHeight);
             if (GUILayout.Button("重新生成地图"))
             {
                 RegenerateMap();
@@ -714,17 +694,23 @@ namespace MineSystem
                 CheckConfig();
             }
 
-            DrawDefaultInspector();
-            serializedObject.ApplyModifiedProperties();
-            if (GUI.changed)
+            ShowProgrammerData =GUILayout.Toggle(ShowProgrammerData,"程序Debug参数，策划勿动");
+            if (ShowProgrammerData)
             {
-                EditorUtility.SetDirty(target);
-                // EditorUtility.SetDirty(tileMap.SmallMapEditData);
-                EditorUtility.SetDirty(bigMap.SmallMapEditDatas[tileMap.SmallMapEditData.index]);
-                AssetDatabase.SaveAssets();
+                DrawDefaultInspector(); 
             }
+            
+            serializedObject.ApplyModifiedProperties();
         }
 
+        void SaveAssetData()
+        {
+            EditorUtility.SetDirty(target);
+            EditorUtility.SetDirty(tileMap.SmallMapEditData);
+            EditorUtility.SetDirty(bigMap.BigMapEditDatas); //笔刷的数据
+            //EditorUtility.SetDirty(bigMap.SmallMapEditDatas[tileMap.SmallMapEditData.index]);
+            AssetDatabase.SaveAssets();
+        }
 
         /// <summary>
         /// 0 点 1 圈
@@ -740,48 +726,9 @@ namespace MineSystem
                 tileMap.brushTypeIsCircle = !tileMap.brushTypeIsCircle;
             tileMap.brushIcon.SetActive(tileMap.brushTypeIsCircle);
         }
+        
 
-        void ToggleButton(string labelText, Action buttonAction, bool SelectCondition, int _buttonSize = -1,GUIStyle style = null)
-        {
-            if (_buttonSize == -1)
-            {
-                _buttonSize = btnSize;
-            }
-
-            if (style == null)
-            {
-                if (GUILayout.Button(labelText, GUILayout.Height(_buttonSize), GUILayout.Width(_buttonSize)))
-                {
-                    buttonAction();
-                }
-            }
-            else
-            {
-                if (GUILayout.Button(labelText, style,GUILayout.Height(_buttonSize), GUILayout.Width(_buttonSize)))
-                {
-                    buttonAction();
-                }
-            }
-            
-
-            if (SelectCondition)
-            {
-                DrawBorder(selectBordSize, new Color(1, 0, 0, 0.25f));
-            }
-
-            GUILayout.Space(20);
-        }
-
-        private void DrawBorder(float size, Color color)
-        {
-            Rect rect = GUILayoutUtility.GetLastRect();
-            rect.width += size * 2;
-            rect.height += size * 2;
-            rect.x -= size;
-            rect.y -= size;
-
-            EditorGUI.DrawRect(rect, color);
-        }
+        
 
         void DrawMineData()
         {

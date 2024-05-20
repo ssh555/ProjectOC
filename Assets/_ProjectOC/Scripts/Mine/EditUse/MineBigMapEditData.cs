@@ -9,8 +9,21 @@ public class MineBigMapEditData : ScriptableObject
     //± À¢≤ø∑÷
     public List<MineBrushData> MineBrushDatas;
     public Texture bigMapTex;
-    
-    
+
+
+    public MineBrushData IDToMineBrushData(string _id)
+    {
+        MineBrushData _res = null;
+        foreach (var _singleBrushData in MineBrushDatas)
+        {
+            if (_singleBrushData.mineID == _id)
+            {
+                return _singleBrushData;
+            }
+        }
+        Debug.LogWarning($"Can't find brush{_id}");
+        return _res;
+    }
     
     [Serializable]
     public class MineBrushData

@@ -13,13 +13,23 @@ namespace MineSystem
         public int index;
         //考虑固定成16:9
         public int width, height;
-        [ShowInInspector]
-        public bool[,] gridData;
-        public Texture smallMapTex;
-        //Dictionart更好一点
-        [ShowInInspector]
-        public Dictionary<MineBigMapEditData.MineBrushData,List<Vector2>>  smallMapMineData;
 
+
+        public Texture smallMapTex;
+        public bool[] gridData;
+        public List<SingleMineData> mineData = new List<SingleMineData>();
+        
+        [System.Serializable]
+        public class SingleMineData
+        {
+            public string MineID;
+            public List<Vector2> MinePoses;
+            public SingleMineData(string _id)
+            {
+                MineID = _id;
+                MinePoses = new List<Vector2>();
+            }
+        }
         public MineSmallMapEditData()
         {
             index = -1;
@@ -27,11 +37,14 @@ namespace MineSystem
             height = 9;
             if (gridData == null)
             {
-                Debug.Log("重新生成GridData");
-                gridData = new bool[width, height];
+                gridData = new bool[width* height];
+            }
+
+            if (mineData == null)
+            {
+                mineData = new List<SingleMineData>();
             }
             smallMapTex = null;
-            smallMapMineData = new Dictionary<MineBigMapEditData.MineBrushData, List<Vector2>>();
         }
         
     }

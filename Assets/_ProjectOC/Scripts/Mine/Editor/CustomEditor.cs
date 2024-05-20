@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
@@ -19,10 +20,9 @@ public class OCCustomEditor : Editor
         {
             SceneView.duringSceneGui += DrawScale;
         }
-        
     }
 
-    public void OnDisable()
+    public virtual void OnDisable()
     {
         if ((EditorExpand & SceneExpand.DrawScale) != 0)
         {
@@ -69,6 +69,48 @@ public class OCCustomEditor : Editor
         result.SetPixels(pix);
         result.Apply();
         return result;
+    }
+    
+    int selectBordSize = 3;
+    public void ToggleButton(string labelText, Action buttonAction, bool SelectCondition, int _buttonSize = -1,GUIStyle style = null)
+    {
+        if (_buttonSize == -1)
+        {
+            _buttonSize = 100;
+        }
+
+        if (style == null)
+        {
+            if (GUILayout.Button(labelText, GUILayout.Height(_buttonSize), GUILayout.Width(_buttonSize)))
+            {
+                buttonAction();
+            }
+        }
+        else
+        {
+            if (GUILayout.Button(labelText, style,GUILayout.Height(_buttonSize), GUILayout.Width(_buttonSize)))
+            {
+                buttonAction();
+            }
+        }
+            
+
+        if (SelectCondition)
+        {
+            DrawBorder(selectBordSize, new Color(1, 0, 0, 0.25f));
+        }
+
+        GUILayout.Space(20);
+    }
+    private void DrawBorder(float size, Color color)
+    {
+        Rect rect = GUILayoutUtility.GetLastRect();
+        rect.width += size * 2;
+        rect.height += size * 2;
+        rect.x -= size;
+        rect.y -= size;
+
+        EditorGUI.DrawRect(rect, color);
     }
     #endregion
 

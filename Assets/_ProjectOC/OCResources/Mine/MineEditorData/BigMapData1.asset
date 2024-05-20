@@ -30,6 +30,18 @@ MonoBehaviour:
     brushData:
       brushSize: 3
       brushHard: 0
+      brushDensity: 13
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_Ti_3
+    mineIcon: {fileID: 21300000, guid: 89e3d6388226f9a438682e91e47460e8, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
       brushDensity: 5
       brushSizeMin: 0
       brushSizeMax: 10
