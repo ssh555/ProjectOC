@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Linq;
 using static Cinemachine.DocumentationSortingAttribute;
@@ -16,6 +17,7 @@ namespace ProjectOC.WorkerNS
     [System.Serializable]
     public sealed class WorkerEchoManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
+        [ShowInInspector]
         private Dictionary<string, WorkerEchoTableData> WorkerEchoTableDict = new Dictionary<string, WorkerEchoTableData>();
         private ML.Engine.ABResources.ABJsonAssetProcessor<WorkerEchoTableData[]> ABJAProcessor;
         private System.Random Random;
