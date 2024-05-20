@@ -64,27 +64,54 @@ namespace ProjectOC.WorkerNS
         [LabelText("隐兽名字"), ShowInInspector, ReadOnly]
         private List<string> WorkerNames = new List<string>();
         [LabelText("刁民"), ShowInInspector, ReadOnly]
-        private HashSet<Worker> Workers = new HashSet<Worker>();
+        private Dictionary<string, Worker> Workers = new Dictionary<string, Worker>();
         public System.Action<Worker> OnAddWokerEvent;
-        public System.Action<Worker> OnDeleteWokerEvent;
+        public System.Action<Worker> OnDeleteWorkerEvent;
         private System.Random Random = new System.Random();
         #endregion
 
         #region Get
+        public Worker GetWorker(string ID)
+        {
+            return Workers.ContainsKey(ID) ? Workers[ID] : null;
+        }
+        public string GetWorkerName(string ID)
+        {
+            return Workers.ContainsKey(ID) ? Workers[ID].Name : "";
+        }
         public List<Worker> GetWorkers(bool needSort = true)
         {
-            Workers.RemoveWhere(item => item == null);
-            return needSort ? Workers.OrderBy(worker => worker.ID).ToList() : Workers.ToList();
+            var set = Workers.Values.ToHashSet();
+            set.RemoveWhere(item => item == null);
+            var setNew = set.Select(worker => worker.ID);
+            var setOld = Workers.Keys.ToHashSet();
+            setOld.ExceptWith(setNew);
+            foreach (var id in setOld)
+            {
+                Workers.Remove(id);
+            }
+            return needSort ? set.OrderBy(worker => worker.ID).ToList() : set.ToList();
         }
+        public List<Worker> GetNotBanWorkers(bool needSort = true)
+        {
+            var result = GetWorkers(needSort);
+            result.RemoveAll(worker => worker.HaveFeatSeat);
+            return result;
+        }
+        public List<string> GetNotBanWorkerIDs(bool needSort = true)
+        {
+            return GetNotBanWorkers(needSort).Select(x => x.ID).ToList();
+        }
+
         /// <summary>
         /// 获取能执行搬运任务的刁民
         /// </summary>
         public Worker GetCanTransportWorker()
         {
             Worker result = null;
-            foreach (Worker worker in Workers.ToArray())
+            foreach (Worker worker in Workers.Values.ToArray())
             {
-                if (worker != null && worker.Status == Status.Fishing && !worker.HaveProNode && !worker.HaveTransport)
+                if (worker != null && worker.Status == Status.Fishing && !worker.HaveProNode && !worker.HaveTransport && !worker.HaveFeatSeat)
                 {
                     result = worker;
                     break;
@@ -169,7 +196,8 @@ namespace ProjectOC.WorkerNS
                     worker.Init(workerEcho);
                     if (isAdd)
                     {
-                        Workers.Add(worker);
+                        Workers.Add(worker.ID, worker);
+                        worker.CheckHome();
                         OnAddWokerEvent?.Invoke(worker);
                     }
                 }
@@ -178,9 +206,10 @@ namespace ProjectOC.WorkerNS
         }
         public bool AddToWorkers(Worker worker)
         {
-            if (worker != null && !Workers.Contains(worker))
+            if (worker != null && !Workers.ContainsKey(worker.ID))
             {
-                Workers.Add(worker);
+                Workers.Add(worker.ID, worker);
+                worker.CheckHome();
                 OnAddWokerEvent?.Invoke(worker);
                 return true;
             }
@@ -216,11 +245,11 @@ namespace ProjectOC.WorkerNS
 
         public void DeleteAllWorker()
         {
-            foreach (Worker worker in Workers.ToArray())
+            foreach (Worker worker in Workers.Values.ToArray())
             {
                 if (worker != null)
                 {
-                    OnDeleteWokerEvent?.Invoke(worker);
+                    OnDeleteWorkerEvent?.Invoke(worker);
                     ML.Engine.Manager.GameManager.DestroyObj(worker.gameObject);
                     ML.Engine.Manager.GameManager.Instance.ABResourceManager.ReleaseInstance(worker.gameObject);
                 }
@@ -229,11 +258,11 @@ namespace ProjectOC.WorkerNS
         }
         public bool DeleteWorker(Worker worker)
         {
-            OnDeleteWokerEvent?.Invoke(worker);
+            OnDeleteWorkerEvent?.Invoke(worker);
             ML.Engine.Manager.GameManager.DestroyObj(worker.gameObject);
             // 通过ManagerSpawn的Worker都是这个流程产生的，所以必须Release
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.ReleaseInstance(worker.gameObject);
-            return Workers.Remove(worker);
+            return Workers.Remove(worker.ID);
         }
         #endregion
     }

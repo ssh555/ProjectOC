@@ -84,7 +84,7 @@ namespace ProjectOC.WorkerNS
                 return result;
             }
             int maxFeatureNum = GetRandomIndex(featureMax);
-            string featureID = FeatureTypeDict[FeatureType.Race][Random.Next(0, FeatureTypeDict[FeatureType.Race].Count + 1)];
+            string featureID = FeatureTypeDict[FeatureType.Race][Random.Next(0, FeatureTypeDict[FeatureType.Race].Count)];
             result.Add(SpawnFeature(featureID));
             HashSet<string> buffs = FeatureTypeDict[FeatureType.Buff].ToHashSet();
             HashSet<string> debuffs = FeatureTypeDict[FeatureType.DeBuff].ToHashSet();
@@ -101,7 +101,7 @@ namespace ProjectOC.WorkerNS
                 {
                     sets = buffs.Count > 0 ? buffs : debuffs;
                 }
-                featureID = sets.ToList()[Random.Next(0, sets.Count + 1)];
+                featureID = sets.ToList()[Random.Next(0, sets.Count)];
                 sets.Remove(featureID);
                 result.Add(SpawnFeature(featureID));
             }
@@ -171,6 +171,29 @@ namespace ProjectOC.WorkerNS
         {
             return IsValidID(id) ? FeatureTableDict[id].Event : "";
         }
+        public bool GetCanCorrect(string id, FeatureCorrectType type)
+        {
+            bool flag = false;
+            if (IsValidID(id))
+            {
+                switch (type)
+                {
+                    case FeatureCorrectType.Upgrade: 
+                        flag = !string.IsNullOrEmpty(GetUpgradeID(id));
+                        break;
+                    case FeatureCorrectType.Downgrade:
+                        flag = !string.IsNullOrEmpty(GetReduceID(id));
+                        break;
+                    case FeatureCorrectType.Reverse:
+                        flag = !string.IsNullOrEmpty(GetReverseID(id));
+                        break;
+                    case FeatureCorrectType.Delete:
+                        flag = true;
+                        break;
+                }
+            }
+            return flag;
+        }
         public int GetFeatureCorrectTime(FeatureCorrectType type)
         {
             switch (type)
@@ -212,6 +235,38 @@ namespace ProjectOC.WorkerNS
                 default:
                     return Config.FeatDelCostItemNum;
             }
+        }
+        public Color GetColorForUI(string id)
+        {
+            if (IsValidID(id))
+            {
+                FeatureType type = GetFeatureType(id);
+                if (type == FeatureType.Buff) { return Color.green; }
+                else if (type == FeatureType.DeBuff) { return Color.red; }
+                else if (type == FeatureType.Reverse)
+                {
+                    FeatureType reverseType = GetFeatureType(GetReverseID(id));
+                    if (reverseType == FeatureType.Buff) { return new Color(0.5f, 0f, 0.5f); }
+                    if (reverseType == FeatureType.DeBuff) { return new Color(1.0f, 0.8431f, 0.0f); }
+                }
+            }
+            return Color.black;
+        }
+        public string GetColorStrForUI(string id)
+        {
+            if (IsValidID(id))
+            {
+                FeatureType type = GetFeatureType(id);
+                if (type == FeatureType.Buff) { return "green"; }
+                else if (type == FeatureType.DeBuff) { return "red"; }
+                else if (type == FeatureType.Reverse)
+                {
+                    FeatureType reverseType = GetFeatureType(GetReverseID(id));
+                    if (reverseType == FeatureType.Buff) { return "#800080"; }
+                    if (reverseType == FeatureType.DeBuff) { return "#FFD700"; }
+                }
+            }
+            return "black";
         }
         #endregion
     }

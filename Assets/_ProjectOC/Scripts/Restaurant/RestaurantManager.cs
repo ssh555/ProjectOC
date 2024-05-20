@@ -247,50 +247,28 @@ namespace ProjectOC.RestaurantNS
         }
         #endregion
 
-        #region Worker Food Getter
-        public bool WorkerFood_IsValidID(string id)
+        #region Food Getter
+        public bool Food_IsValidID(string id)
         {
-            if (!string.IsNullOrEmpty(id))
-            {
-                return WorkerFoodTableDict.ContainsKey(id);
-            }
-            return false;
+            return !string.IsNullOrEmpty(id) ? WorkerFoodTableDict.ContainsKey(id) : false;
         }
-
-        public string WorkerFood_ItemID(string id)
+        public string Food_ItemID(string id)
         {
-            if (WorkerFood_IsValidID(id))
-            {
-                return WorkerFoodTableDict[id].ItemID;
-            }
-            return "";
+            return Food_IsValidID(id) ? WorkerFoodTableDict[id].ItemID : "";
         }
-
-        public int WorkerFood_AlterAP(string id)
+        public int Food_AlterAP(string id)
         {
-            if (WorkerFood_IsValidID(id))
-            {
-                return WorkerFoodTableDict[id].AlterAP;
-            }
-            return 0;
+            return Food_IsValidID(id) ? WorkerFoodTableDict[id].AlterAP : 0;
         }
-
-        public Tuple<float, int> WorkerFood_AlterMoodOdds(string id)
+        public Tuple<float, int> Food_AlterMoodOdds(string id)
         {
-            if (WorkerFood_IsValidID(id))
-            {
-                return new Tuple<float, int>(WorkerFoodTableDict[id].AlterMoodOddsProb, WorkerFoodTableDict[id].AlterMoodOddsValue);
-            }
-            return new Tuple<float, int>(0, 0);
+            return Food_IsValidID(id) ? 
+                new Tuple<float, int>(WorkerFoodTableDict[id].AlterMoodOddsProb, WorkerFoodTableDict[id].AlterMoodOddsValue) : 
+                new Tuple<float, int>(0, 0);
         }
-
         public string ItemIDToFoodID(string itemID)
         {
-            if (!string.IsNullOrEmpty(itemID) && ItemToFoodDict.ContainsKey(itemID))
-            {
-                return ItemToFoodDict[itemID];
-            }
-            return "";
+            return !string.IsNullOrEmpty(itemID) && ItemToFoodDict.ContainsKey(itemID) ? ItemToFoodDict[itemID] : "";
         }
         #endregion
     }

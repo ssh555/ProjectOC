@@ -24,6 +24,8 @@ using UnityEngine.Purchasing;
 using Sirenix.Utilities;
 using TMPro;
 using UnityEditor;
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
     public class BeastPanel : ML.Engine.UI.UIBasePanel<BeastPanelStruct>, ITickComponent
@@ -76,9 +78,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             var KetTips = this.transform.Find("BotKeyTips").Find("KeyTips");
             this.KT_ViewMoreInformation = KetTips.Find("KT_ViewMoreInformation");
             this.KT_CancelMoreInformation = KetTips.Find("KT_CancelMoreInformation");
-            this.KT_Back = KetTips.Find("KT_Back");
-
-
         }
         protected override void Start()
         {
@@ -203,11 +202,16 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #region UI
         #region temp
         private Sprite icon_genderfemaleSprite, icon_gendermaleSprite;
-
+        private Dictionary<string, Sprite> tempSprite = new Dictionary<string, Sprite>();
         private void ClearTemp()
         {
             GameManager.DestroyObj(icon_genderfemaleSprite);
             GameManager.DestroyObj(icon_gendermaleSprite);
+            // sprite
+            foreach (var s in tempSprite)
+            {
+                ML.Engine.Manager.GameManager.DestroyObj(s.Value);
+            }
         }
 
         #endregion
@@ -220,8 +224,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         List<Worker> Workers = new List<Worker>();
 
         //BeastInfo
-        
-
         private Image GenderImage;
         private TMPro.TextMeshProUGUI BeastName;
 
@@ -260,12 +262,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private Transform KT_ViewMoreInformation;
         private Transform KT_CancelMoreInformation;
-        private Transform KT_Back;
-
-
-
 
         private int SwitchInfoIndex = 0;
+
+        FeatureManager featManager => ManagerNS.LocalGameManager.Instance.FeatureManager;
 
         #endregion
 
@@ -277,7 +277,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         public void Tick(float deltatime)
         {
             Workers = LocalGameManager.Instance.WorkerManager.GetWorkers();
-            if (Workers.Count >= 0 && CurrentBeastIndex != -1) 
+            if(CurrentBeastIndex >= 0 && CurrentBeastIndex < Workers.Count)
             {
                 Worker worker = Workers[CurrentBeastIndex];
                 TimerUI.text = worker.MinSec.Item1.ToString() + "Min" + worker.MinSec.Item2.ToString() + "s";
@@ -302,11 +302,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             #region BeastInfo
             if (CurrentBeastIndex != -1)
             {
-
                 this.transform.Find("HiddenBeastInfo2").Find("Content").gameObject.SetActive(true);
-
                 WalkSpeed.text = this.PanelTextContent.Speed;
-
                 Cook.text = this.PanelTextContent.Cook;
                 HandCraft.text = this.PanelTextContent.HandCraft;
                 Industry.text = this.PanelTextContent.Industry;
@@ -323,11 +320,13 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 if (SwitchInfoIndex == 0)
                 {
                     List<float> datas = new List<float>();
-                    
-                    foreach (var skill in skillDic)
-                    {
-                        datas.Add(skillDic[skill.Key].LevelCurrent / 10f);
-                    }
+                    datas.Add(skillDic[SkillType.Collect].LevelCurrent / 10f);
+                    datas.Add(skillDic[SkillType.Transport].LevelCurrent / 10f);
+                    datas.Add(skillDic[SkillType.Magic].LevelCurrent / 10f);
+                    datas.Add(skillDic[SkillType.Industry].LevelCurrent / 10f);
+                    datas.Add(skillDic[SkillType.HandCraft].LevelCurrent / 10f);
+                    datas.Add(skillDic[SkillType.Cook].LevelCurrent / 10f);
+
                     var radar = SwitchInfo.Find("SkillGraph").Find("Viewport").Find("Content").Find("Radar").GetComponent<UIPolygon>();
                     radar.DrawPolygon(datas);
                 }
@@ -356,30 +355,38 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 MoodMax.text = worker.EMMax.ToString();
                 WalkSpeedNumText.text = worker.RealWalkSpeed.ToString();
 
-                var Info = this.Info2.Find("Scroll View").Find("Viewport").Find("Content");
-                this.objectPool.ResetPool("SimpleDescriptionPool");
-                this.objectPool.ResetPool("FullDescriptionPool");
-                foreach (var feature in worker.GetSortFeature())
+                this.objectPool.ResetPool("DescriptionPool");
+                foreach (var feature in worker.GetFeatures())
                 {
-                    if (SwitchInfoIndex == 0)
+                    var tPrefab = this.objectPool.GetNextObject("DescriptionPool");
+                    string featID = feature.ID;
+                    Transform feat = SwitchInfoIndex == 1? tPrefab.transform.Find("Specific") : tPrefab.transform.Find("Normal");
+                    if (!string.IsNullOrEmpty(featID))
                     {
-                        var tPrefab = this.objectPool.GetNextObject("SimpleDescriptionPool");
-                        tPrefab.transform.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;
-                        DescriptionList.AddBtn(tPrefab);
-                    }
-                    else if(SwitchInfoIndex == 1)
-                    {
-                        var tPrefab = this.objectPool.GetNextObject("FullDescriptionPool");
-                        tPrefab.transform.Find("Content").Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;
-                        tPrefab.transform.Find("Content").Find("Text2").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Description;
-                        tPrefab.transform.Find("Content").Find("Text3").GetComponent<TMPro.TextMeshProUGUI>().text =
-                    "<color=#6FB502><b><sprite name=\"Tex2D_TMP_Triangle\" tint=1>" + feature.EffectsDescription + "</b></color>";
-                        DescriptionList.AddBtn(tPrefab);
+                        string iconName = featManager.GetIcon(featID);
+                        feat.Find("Icon").gameObject.SetActive(!string.IsNullOrEmpty(iconName));
+                        if (!string.IsNullOrEmpty(iconName))
+                        {
+                            if (!tempSprite.ContainsKey(iconName))
+                            {
+                                tempSprite.Add(iconName, ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite(iconName));
+                            }
+                            feat.Find("Icon").GetComponent<Image>().sprite = tempSprite[iconName];
+                        }
+                        feat.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = featManager.GetName(featID);
+                        if (SwitchInfoIndex == 1)
+                        {
+                            feat.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = featManager.GetItemDescription(featID);
+                            feat.Find("DescIcon").gameObject.SetActive(true);
+                            feat.Find("DescIcon").GetComponent<Image>().color = featManager.GetColorForUI(featID);
+                            feat.Find("EffectDesc").GetComponent<TMPro.TextMeshProUGUI>().text =
+                                $"<color={featManager.GetColorStrForUI(featID)}>" + featManager.GetEffectsDescription(featID) + "</color>";
+                        }
                     }
                 }
 
                 //倒计时
-                Info2.Find("Timer").gameObject.SetActive(worker.HaveHome);
+                Info2.Find("Timer").gameObject.SetActive(!worker.HaveHome);
 
                 //更新日程表
                 var schedule = this.transform.Find("BeastDuty").Find("Part1").Find("Info").Find("Schedule").Find("Time");
@@ -459,8 +466,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
             );
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "BeastBioPool", LocalGameManager.Instance.WorkerManager.GetWorkers().Count, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_BeastBio.prefab");
-            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SimpleDescriptionPool", 5, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_SimpleDescription.prefab");
-            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "FullDescriptionPool", 5, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_FullDescription.prefab");
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "DescriptionPool", 5, "Prefab_Worker_UI/Prefab_Worker_UI_FeatureTemplate.prefab");
             base.InitObjectPool();
         }
         [ShowInInspector]
@@ -485,6 +491,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             for (int i = 0; i < Workers.Count; i++)
             {
                 var tPrefab = this.objectPool.GetNextObject("BeastBioPool");
+                var Name = tPrefab.transform.Find("Bio").Find("Name").GetComponent<TextMeshProUGUI>();
+                Name.text = Workers[i].Name;
                 int APStatus = Workers[i].GetAPStatu();
                 var AP = tPrefab.transform.Find("Bio").Find("AP");
                 for (int j = 0; j < AP.childCount - 1; j++)
@@ -500,7 +508,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                 AP.Find("Number").Find("Text").GetComponent<TextMeshProUGUI>().text = Workers[i].APCurrent.ToString();
                 Mood.Find("Number").Find("Text").GetComponent <TextMeshProUGUI>().text = Workers[i].EMCurrent.ToString();
-                tPrefab.transform.Find("Bio").Find("IconImage").Find("Image").gameObject.SetActive(Workers[i].HaveHome);
+                tPrefab.transform.Find("Bio").Find("IconImage").Find("Image").gameObject.SetActive(!Workers[i].HaveHome);
                 BeastList.AddBtn(tPrefab);
             }
             this.BeastList.OnSelectButtonChanged += () => { this.Refresh(); };

@@ -92,10 +92,10 @@ MonoBehaviour:
     value: 201
   - name: Edge
     displayName: "\u5730\u57FA\u5916\u6CBF"
-    value: 202
+    value: 203
   - name: Wall
     displayName: "\u5899"
-    value: 203
+    value: 202
   - name: Pillar
     displayName: "\u67F1"
     value: 204

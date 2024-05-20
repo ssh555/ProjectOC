@@ -1,4 +1,5 @@
 using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.Manager;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,6 +21,12 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         [LabelText("是否可切换"), FoldoutGroup("SocketProperty"), PropertyTooltip("为true时，表示这个Socket能作为切换激活点使用")]
         public bool IsActiveSocket = true;
 
+
+        /// <summary>
+        /// 可视化socket 的物体
+        /// </summary>
+        private GameObject VisualSocket;
+
         ///// <summary>
         ///// 可以容纳的SocketType
         ///// </summary>
@@ -34,6 +41,26 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
             //#if UNITY_EDITOR
             //Gizmos_Active = true;
             //#endif
+
+            if(this.collider is SphereCollider)
+            {
+                // 绘制 SphereCollider 的球体
+                SphereCollider sphereCollider = collider as SphereCollider;
+                // 创建一个可视化的球体
+                VisualSocket = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                VisualSocket.GetComponent<Renderer>().material.color = UnityEngine.Color.blue;
+
+                // 获取 SphereCollider 的半径
+                float radius = sphereCollider.radius;
+
+                // 设置可视化球体的缩放，使其直径等于 SphereCollider 的半径
+                VisualSocket.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+
+                // 将可视化球体放置在 SphereCollider 的中心位置
+                VisualSocket.transform.position = sphereCollider.transform.position + sphereCollider.center;
+
+                VisualSocket.transform.SetParent(this.transform);
+            }
         }
 
     /// <summary>
@@ -44,6 +71,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 //#if UNITY_EDITOR
 //            Gizmos_Active = false;
 //#endif
+            GameManager.DestroyObj(VisualSocket);
         }
 
         public bool CheckMatch(BuildingSocket target)
@@ -132,7 +160,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         {
             if (this.ParentBPart.AttachedArea != null)
             {
-                bool b = this.ParentBPart.AttachedArea.GetMatchPointOnArea(TargetPos, AreaCheckRadius, out pos, out rot);
+                bool b = this.ParentBPart.AttachedArea.GetMatchPointOnArea(TargetPos, out pos, out rot);
                 if(b == false)
                 {
                     pos = Vector3.negativeInfinity;
@@ -167,8 +195,8 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         /// <summary>
         /// 用于area检测时的判断半径，即Socket与Area使用两套判定逻辑
         /// </summary>
-        [LabelText("Area 检测半径"), ShowInInspector, FoldoutGroup("Area"), PropertyTooltip("单位 m")]
-        public static float AreaCheckRadius = 0.1f;
+        //[LabelText("Area 检测半径"), ShowInInspector, FoldoutGroup("Area"), PropertyTooltip("单位 m")]
+        //public static float AreaCheckRadius = 0.1f;
 
         #endregion
 

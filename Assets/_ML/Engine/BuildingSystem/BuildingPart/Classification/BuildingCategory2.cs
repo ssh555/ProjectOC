@@ -50,9 +50,9 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		[LabelText("地板")]
 		Floor = 201,
 		[LabelText("地基外沿")]
-		Edge = 202,
+		Edge = 203,
 		[LabelText("墙")]
-		Wall = 203,
+		Wall = 202,
 		[LabelText("柱")]
 		Pillar = 204,
 		[LabelText("梁")]

@@ -199,6 +199,21 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 activeSocketIndex = this.OwnedSocketList.IndexOf(value);
             }
         }
+
+        public void ResetActiveSocket()
+        {
+            if(this.ActiveSocket && this.ActiveSocket.IsActiveSocket)
+            {
+                this.ActiveSocket.OnDisactive();
+            }
+            this.activeSocketIndex = 0;
+            while (!this.ActiveSocket.IsActiveSocket)
+            {
+                this.activeSocketIndex = (this.activeSocketIndex + 1) % this.OwnedSocketList.Count;
+            }
+            this.ActiveSocket.OnActive();
+        }
+
         public List<BuildingSocket.BuildingSocket> OwnedSocketList { get; private set; }
         public int lastTriggerFrameCount { get; set; }
         public BuildingMode tmpTriggerMode { get; set; }
@@ -279,13 +294,13 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             this.OwnedSocketList = new List<BuildingSocket.BuildingSocket>();
             this.OwnedSocketList.AddRange(this.GetComponentsInChildren<BuildingSocket.BuildingSocket>());
 
-            // 指向第一个可切换的Socket
-            this.activeSocketIndex = 0;
+            //// 指向第一个可切换的Socket
+            //this.activeSocketIndex = 0;
             while (!this.ActiveSocket.IsActiveSocket)
             {
                 this.activeSocketIndex = (this.activeSocketIndex + 1) % this.OwnedSocketList.Count;
             }
-            this.ActiveSocket.OnActive();
+            
 
             CheckPladeMode();
 
@@ -296,6 +311,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
         protected virtual void Start()
         {
+            this.ActiveSocket.OnActive();
             this.enabled = false;
         }
 
@@ -400,7 +416,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
         public virtual void OnEnterEdit()
         {
-
+            this.ResetActiveSocket();
         }
 
         //private void OnDrawGizmosSelected()

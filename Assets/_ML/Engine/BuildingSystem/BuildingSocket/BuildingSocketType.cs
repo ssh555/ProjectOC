@@ -43,7 +43,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 		point_Qwall = 17,
 		[LabelText("L墙角点")]
 		point_Lwall = 18,
-		[LabelText("其他")]
+		[LabelText("B顶角点")]
 		other = 19,
 		[LabelText("柱底")]
 		Pillar_Down = 20,
@@ -75,5 +75,9 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 		Edge_L = 33,
 		[LabelText("Q外延")]
 		Edge_Q = 34,
+		[LabelText("地板边心")]
+		floor_edge = 35,
+		[LabelText("柱顶")]
+		Pillar_up = 36,
 	}
 }

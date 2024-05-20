@@ -12,25 +12,36 @@ namespace ProjectOC.WorkerNS
         public Worker Worker;
         public ExternWorker(string workerID, float time, WorkerEchoBuilding workerEchoBuilding, int index)
         {
+            workerID = 
             WorkerID = workerID;
+
+            
             Timer = new CounterDownTimer(time);
             Timer.OnEndEvent += () =>
             {
                 ManagerNS.LocalGameManager.Instance.WorkerManager.SpawnWorker(workerEchoBuilding.transform.position, Quaternion.identity, false, workerEchoBuilding.WorkerEcho).Completed += (handle) =>
                 {
                     Worker = handle.Result.GetComponent<Worker>();
+                    Worker.Category = (WorkerCategory)Enum.Parse(typeof(WorkerCategory), workerID);
                     Worker.gameObject.transform.position += new Vector3((float)(3 * Math.Cos(2 * 3.1415926 * index / 5)), 0, (float)(3 * Math.Sin(2 * 3.1415926 * index / 5)));
                 };
             };
         }
     }
     [System.Serializable]
-    public class WorkerEcho
+    public class WorkerEcho : IEffectObj
     {
         public ExternWorker[] Workers = new ExternWorker[5];
         public WorkerEchoBuilding WorkerEchoBuilding = null;
         public List<int> FeatureMax = new List<int>() { 100, 100, 100, 100};
         public List<int> FeatureOdds = new List<int>() { 100, 100 };
+        public float FactorTimeCost = 1;
+        public int ModifyTimeCost;
+        public int GetRealTimeCost(string id)
+        {
+            int timeCost = ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetTimeCost(id);
+            return (int)(timeCost * FactorTimeCost + ModifyTimeCost);
+        }
 
         public WorkerEcho(WorkerEchoBuilding workerEchoBuilding)
         {
@@ -39,16 +50,17 @@ namespace ProjectOC.WorkerNS
 
         public ExternWorker SummonWorker(string id,int index, ML.Engine.InventorySystem.IInventory inventory)
         {
+            string cid = "";
+            string workerid = "";
             if (!ManagerNS.LocalGameManager.Instance.WorkerManager.OnlyCostResource(inventory, id)) return null;
 
             if (ManagerNS.LocalGameManager.Instance.WorkerEchoManager.Level == 1)
             {
-                id = ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRandomID();
+                cid = ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRandomCategoryString();
+                workerid = "WorkerEcho_" + cid;
             }
-            
-            ExternWorker externWorker = new ExternWorker(id, ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetTimeCost(id), WorkerEchoBuilding, index);
+            ExternWorker externWorker = new ExternWorker(cid, GetRealTimeCost(workerid), WorkerEchoBuilding, index);
             Workers[index] = externWorker;
-           
             return externWorker;
         }
 
@@ -67,8 +79,6 @@ namespace ProjectOC.WorkerNS
             ML.Engine.Manager.GameManager.Instance.CounterDownTimerManager.RemoveTimer(Workers[index].Timer);
             Workers[index] = null;
         }
-
-
 
         public EchoStatusType GetStatus()
         {
@@ -115,5 +125,62 @@ namespace ProjectOC.WorkerNS
         {
             this.Workers[index].Worker = worker;
         }
+        #region IEffectObj
+        public List<Effect> Effects { get; set; } = new List<Effect>();
+        public void ApplyEffect(Effect effect)
+        {
+            if (effect.EffectType != EffectType.AlterEchoVariable) { Debug.Log("type != AlterEchoVariable"); return; }
+            bool flag = true;
+            if (effect.ParamStr == "FeatureMax[0]")
+            {
+                FeatureMax[0] += effect.ParamInt;
+            }
+            else if (effect.ParamStr == "FeatureOdds[0]")
+            {
+                FeatureOdds[0] += effect.ParamInt;
+            }
+            else if (effect.ParamStr == "FeatureOdds[1]")
+            {
+                FeatureOdds[1] += effect.ParamInt;
+            }
+            else if (effect.ParamStr == "FactorTimeCost")
+            {
+                FactorTimeCost += effect.ParamFloat;
+            }
+            else
+            {
+                flag = false;
+            }
+            if (flag)
+            {
+                Effects.Add(effect);
+            }
+            else
+            {
+                Debug.Log($"ParamStr Error {effect.ParamStr}");
+            }
+        }
+        public void RemoveEffect(Effect effect)
+        {
+            if (effect.EffectType != EffectType.AlterEchoVariable) { Debug.Log("type != AlterEchoVariable"); return; }
+            Effects.Remove(effect);
+            if (effect.ParamStr == "FeatureMax[0]")
+            {
+                FeatureMax[0] -= effect.ParamInt;
+            }
+            else if (effect.ParamStr == "FeatureOdds[0]")
+            {
+                FeatureOdds[0] -= effect.ParamInt;
+            }
+            else if (effect.ParamStr == "FeatureOdds[1]")
+            {
+                FeatureOdds[1] -= effect.ParamInt;
+            }
+            else if (effect.ParamStr == "FactorTimeCost")
+            {
+                FactorTimeCost -= effect.ParamFloat;
+            }
+        }
+        #endregion
     }
 }

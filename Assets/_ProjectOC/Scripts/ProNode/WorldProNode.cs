@@ -1,4 +1,3 @@
-using ML.Engine.BuildingSystem.BuildingPart;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -10,7 +9,6 @@ namespace ProjectOC.ProNodeNS
         public ProNode ProNode;
         public string InteractType { get; set; } = "WorldProNode";
         public Vector3 PosOffset { get; set; } = Vector3.zero;
-        
 
         public override void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
@@ -53,35 +51,16 @@ namespace ProjectOC.ProNodeNS
             };
         }
 
-        public bool CanUpgrade()
+        public void OnUpgradeSetData(ML.Engine.BuildingSystem.IBuildingUpgrade lastLevelBuild)
         {
-            if ((this as ML.Engine.BuildingSystem.IBuildingUpgrade).HasUpgrade())
-            {
-                var formulas = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(Classification.ToString());
-                return (ML.Engine.Manager.GameManager.Instance.CharacterManager.GetLocalController() as Player.OCPlayerController).InventoryHaveItems(formulas);
-            }
-            return false;
-        }
-
-        public void OnUpgrade(ML.Engine.BuildingSystem.IBuildingUpgrade lastLevelBuild)
-        {
-            ManagerNS.LocalGameManager.Instance.Player.InventoryCostItems(ML.Engine.BuildingSystem.BuildingManager.Instance.GetRaw(Classification.ToString()), needJudgeNum:true, priority:-1);
-            transform.SetParent(lastLevelBuild.transform.parent);
-            InstanceID = lastLevelBuild.InstanceID;
-            transform.position = lastLevelBuild.transform.position;
-            transform.rotation = lastLevelBuild.transform.rotation;
             isFirstBuild = lastLevelBuild.isFirstBuild;
             if (lastLevelBuild is WorldProNode worldProNode)
             {
                 ManagerNS.LocalGameManager.Instance.ProNodeManager.WorldNodeSetData(this, worldProNode.ProNode);
                 ProNode.SetLevel(Classification.Category4 - 1);
                 ManagerNS.LocalGameManager.Instance.BuildPowerIslandManager.electAppliances.Add(this);
-                
                 PowerCount = worldProNode.PowerCount;
             }
-            ML.Engine.BuildingSystem.BuildingManager.Instance.AddBuildingInstance(this);
-            ML.Engine.BuildingSystem.BuildingManager.Instance.RemoveBuildingInstance(lastLevelBuild as BuildingPart);
-            ML.Engine.Manager.GameManager.DestroyObj(lastLevelBuild.gameObject);
         }
     }
 }

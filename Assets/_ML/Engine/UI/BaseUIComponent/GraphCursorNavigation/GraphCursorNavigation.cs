@@ -16,6 +16,12 @@ namespace ML.Engine.UI
         private ScrollRect ScrollRect;
         private Scrollbar VerticalScrollbar, HorizontalScrollbar;
         private RectTransform Center;
+        private RectTransform RaycastCenter;
+        /// <summary>
+        /// Center 在Content 坐标系下的坐标
+        /// </summary>
+        [ShowInInspector]
+        public Vector3 CenterPos { get { return Center.anchoredPosition3D - Content.GetComponent<RectTransform>().anchoredPosition3D / curZoomscale; } }
 
         private Vector2 LimitBound;
         private Vector2 minBounds;
@@ -47,12 +53,18 @@ namespace ML.Engine.UI
         [ShowIf("IsZoomEnabled", true)]
         [LabelText("最小缩小倍数")]
         public float ZoomOutLimit = 0.5f;
+        #endregion
 
-        //当前组件的scale
+
+        //当前组件的scale 
         private float curZoomscale;
-        private float CurZoomscale 
+        [ShowIf("IsZoomEnabled", true), LabelText("当前的缩放率"),ShowInInspector]
+        public float curZoomRate { get { return (curZoomscale - ZoomOutLimit)/(ZoomInLimit - ZoomOutLimit); }  }
+        [ShowIf("IsZoomEnabled", true), LabelText("当前的缩放值"), ShowInInspector]
+        public float CurZoomscale 
         { 
             set {
+                Debug.Log("set CurZoomscale");
                 this.content.localScale = new Vector3(value, value, value);
                 this.Center.localScale = new Vector3(value, value, value);
                 curZoomscale = value;
@@ -62,13 +74,16 @@ namespace ML.Engine.UI
                 return curZoomscale;
             }
         }
-        #endregion
+
+        public event Action OnScaleChanged;
+
         protected override void Awake()
         {
             this.ScrollRect = this.transform.Find("Scroll View").GetComponent<ScrollRect>();
             this.VerticalScrollbar = ScrollRect.verticalScrollbar;
             this.HorizontalScrollbar = ScrollRect.horizontalScrollbar;
             this.Center = this.transform.Find("Center").GetComponent<RectTransform>();
+            this.RaycastCenter = this.Center;
             var rec = this.GetComponent<RectTransform>();
             this.LimitBound = new Vector2(rec.rect.width / 2, rec.rect.height / 2);
             this.minBounds = -LimitBound + Margin;
@@ -81,12 +96,12 @@ namespace ML.Engine.UI
         public int tickPriority { get; set; }
         public int fixedTickPriority { get; set; }
         public int lateTickPriority { get; set; }
-
+        [ShowInInspector]
         private GameObject lastSelected = null;
         public void Tick(float deltatime)
         {
             // 获取 UI 元素的屏幕坐标 ScreenOverLay即为世界坐标
-            Vector3 worldPosition = this.Center.position;
+            Vector3 worldPosition = this.RaycastCenter.position;
 
             // 构造射线
             PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
@@ -99,6 +114,7 @@ namespace ML.Engine.UI
             // 处理击中的 UI 元素
             if (results.Count > 0)
             {
+                Debug.Log(results[0].gameObject.name);
                 if (lastSelected != results[0].gameObject)
                 {
                     this.uiBtnList.RefreshSelected(results[0].gameObject.transform.GetComponent<SelectedButton>());
@@ -107,6 +123,7 @@ namespace ML.Engine.UI
             }
             else
             {
+                Debug.Log("未击中");
                 this.uiBtnList.SetCurSelectedNull();
                 lastSelected = null;
             }
@@ -161,8 +178,6 @@ namespace ML.Engine.UI
         private bool canControlCenteryUP;
         private bool canControlCenteryDown;
         #endregion
-
-
         private void NavagateMap_started(InputAction.CallbackContext obj)
         {
             if (NavagateMapTimer == null)
@@ -343,6 +358,7 @@ namespace ML.Engine.UI
             }
             Offset *= CurZoomscale / PreZoomscale;
             this.ScrollRect.content.position = this.Center.position + Offset;
+            OnScaleChanged?.Invoke();
         }
 
         /// <summary>
@@ -364,6 +380,7 @@ namespace ML.Engine.UI
 
             Offset *= CurZoomscale / PreZoomscale;
             this.ScrollRect.content.position = this.Center.position + Offset;
+            OnScaleChanged?.Invoke();
         }
 
         public void EnableGraphCursorNavigation(InputAction NavigationInputAction, InputAction ZoomInInputAction = null, InputAction ZoomOutInputAction = null)
@@ -393,6 +410,11 @@ namespace ML.Engine.UI
         public void InitUIBtnList()
         {
             this.uiBtnList = new UIBtnList(this.content.GetComponentInChildren<UIBtnListInitor>());
+        }
+
+        public void ChangeRaycastCenter(RectTransform rectTransform)
+        {
+            this.RaycastCenter = rectTransform;
         }
     }
 }

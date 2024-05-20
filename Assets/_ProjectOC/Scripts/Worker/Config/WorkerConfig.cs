@@ -54,6 +54,8 @@ namespace ProjectOC.WorkerNS
         public int SkillStdHighBound;
         [LabelText("技能等级分布下界")]
         public int SkillStdLowBound;
+        [LabelText("刁民窝每多少秒回复一次心情")]
+        public int WorkerHomeAddMoodTime;
 
         public WorkerConfig(WorkerConfig config)
         {
@@ -84,6 +86,7 @@ namespace ProjectOC.WorkerNS
             SkillStdDev = config.SkillStdDev;
             SkillStdHighBound = config.SkillStdHighBound;
             SkillStdLowBound = config.SkillStdLowBound;
+            WorkerHomeAddMoodTime = config.WorkerHomeAddMoodTime;
         }
     }
 }
