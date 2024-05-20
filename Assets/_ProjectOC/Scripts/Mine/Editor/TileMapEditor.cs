@@ -222,14 +222,20 @@ namespace MineSystem
                         _x = int.Parse(_pos[0]);
                         _y = int.Parse(_pos[1]);
 
-
-
+                        
                         tileMap.selectOutline.SetActive(true);
                         tileMap.selectOutline.transform.position = curGo.transform.position;
 
-                        Vector3 debugLabel = new Vector3(_x + 0.5f, _y + 0.5f, 0);
-                        //Debug.Log($"{debugLabel} text:{_x},{_y}");
-                        Handles.Label(debugLabel, $"{_x},{_y}", scalelabelStyle);
+                        // Vector3 _worldPosition = new Vector3(_x, _y, 0);
+                        // // //Debug.Log($"{debugLabel} text:{_x},{_y}");
+                        // // Handles.Label(debugLabel, $"{_x},{_y}", scalelabelStyle);
+                        // Handles.BeginGUI();
+                        // {
+                        //     // Debug.Log(_worldPosition);
+                        //     GUI.Label(new Rect(_worldPosition.x + 0.5f, _worldPosition.y + 0.5f, 200, 20), _worldPosition.ToString("F3"));
+                        // }
+                        // Handles.EndGUI();
+                        // SceneView.RepaintAll();
                     }
                     else
                     {
@@ -283,7 +289,6 @@ namespace MineSystem
             }
 
             e.Use();
-
         }
 
 
@@ -548,7 +553,7 @@ namespace MineSystem
                 GameObject _mine = Instantiate(tileMap.MinePrefab, minePos, Quaternion.identity,
                     tileMap.mineParentTransf);
                 tileMap.ProcessMine(_mine, tileMap.curMineBrush,_curMineData.MinePoses.Count);
-                _curMineData.MinePoses.Add(_mousePos);
+                _curMineData.MinePoses.Add(new Vector2(_mousePos.x,_mousePos.y));
 
             }
             //圈
@@ -579,19 +584,19 @@ namespace MineSystem
                     GameObject _mine = Instantiate(tileMap.MinePrefab, minePos, Quaternion.identity,
                         tileMap.mineParentTransf);
                     tileMap.ProcessMine(_mine, tileMap.curMineBrush,_curMineData.MinePoses.Count);
-                    _curMineData.MinePoses.Add(_mousePos);
+                    _curMineData.MinePoses.Add(minePos2D);
                 }
             }
 
-            bool JudgeDataValid(Vector2Int _grid)
-            {
-                bool res = (_grid.x >= 0 && _grid.x < tileMap.SmallMapEditData.width
-                    && _grid.y >= 0 && _grid.y < tileMap.SmallMapEditData.height) 
-                    &&(tileMap.SmallMapEditData.gridData[_grid.x + _grid.y * tileMap.TileWidth]);
-                    return res;
-            }
+            
         }
-        
+        bool JudgeDataValid(Vector2Int _grid)
+        {
+            bool res = (_grid.x >= 0 && _grid.x < tileMap.SmallMapEditData.width
+                                     && _grid.y >= 0 && _grid.y < tileMap.SmallMapEditData.height) 
+                       &&(tileMap.SmallMapEditData.gridData[_grid.x + _grid.y * tileMap.TileWidth]);
+            return res;
+        }
         
         private void ReGenerateSceneObject()
         {
@@ -604,9 +609,6 @@ namespace MineSystem
         #endregion
 
         #region Inspect Override
-
-        
-        int btnSize = 100;
         
         private int brushIndex = 0;
         public override void OnInspectorGUI()
@@ -652,8 +654,6 @@ namespace MineSystem
                     curBrush.brushHardMax);
                 curBrush.brushDensity = EditorGUILayout.IntSlider("项密度:", curBrush.brushDensity,
                     curBrush.brushDensityMin, curBrush.brushDensityMax);
-
-                DrawMineData();
             }
 
             GUILayout.Space(10);
@@ -700,7 +700,9 @@ namespace MineSystem
 
             if (GUILayout.Button("检查合法性"))
             {
+                // SaveAssetData();
                 CheckConfig();
+                tileMap.ReGenerateMine();
             }
 
             ShowProgrammerData =GUILayout.Toggle(ShowProgrammerData,"程序Debug参数，策划勿动");
@@ -738,15 +740,36 @@ namespace MineSystem
         
 
         
-
-        void DrawMineData()
-        {
-            //Draw
-        }
+        
 
         void CheckConfig()
         {
             //矿物距离太近，错误的位置
+            float minDistance = 0.1f;
+            // 使用双重循环检查每一对元素的距离
+            foreach (var _singleMineData in tileMap.SmallMapEditData.mineData)
+            {
+                for(int i = _singleMineData.MinePoses.Count-1; i >= 0; i--)
+                {
+                    Vector2Int _minePos = new Vector2Int(Mathf.FloorToInt(_singleMineData.MinePoses[i].x),Mathf.FloorToInt(_singleMineData.MinePoses[i].y));
+                    if(!JudgeDataValid(_minePos))
+                    {
+                        _singleMineData.MinePoses.RemoveAt(i);
+                    }
+                }
+                
+                for (int i = 0; i < _singleMineData.MinePoses.Count; i++)
+                {
+                    for (int j = i + 1; j < _singleMineData.MinePoses.Count; j++)
+                    {
+                        if (Vector2.Distance(_singleMineData.MinePoses[i], _singleMineData.MinePoses[j]) < minDistance)
+                        {
+                            _singleMineData.MinePoses.RemoveAt(j);
+                            j--; // 调整索引以检查移除后新的第 j 个元素
+                        }
+                    }
+                }
+            }
         }
 
         #endregion

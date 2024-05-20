@@ -7,8 +7,6 @@ using UnityEditor;
 
 public class OCCustomEditor : Editor
 {
-
-    
     public virtual void OnEnable()
     {
         
@@ -132,7 +130,6 @@ public class OCCustomEditor : Editor
     protected int scaleWidth = 100, scaleHeight = 100;
     void DrawScale(SceneView sceneView)
     {
-        Handles.Label( new Vector3(0.5f,0.5f,0f), $"0,0",scalelabelStyle);
         float scaleLineLength = 0.5f;
         float scaleLineThickness = 0.01f; // 设置线条的粗细
         Color rectangleColor = Color.red;
@@ -151,7 +148,7 @@ public class OCCustomEditor : Editor
                 new Vector3[] { start + thinkBuffer, start - thinkBuffer, end - thinkBuffer, end + thinkBuffer}, 
                 rectangleColor, rectangleColor);
             // Label the row index
-            Handles.Label(start + new Vector3(scaleLineLength, 0, 0), i.ToString());
+            Handles.Label(start + new Vector3(scaleLineLength, 0, 0), i.ToString(),scalelabelStyle);
         }
 
         // Draw 垂直 scale
@@ -164,7 +161,7 @@ public class OCCustomEditor : Editor
             Handles.DrawSolidRectangleWithOutline(
                 new Vector3[] { start + thinkBuffer, start - thinkBuffer, end - thinkBuffer, end + thinkBuffer}, 
                 rectangleColor, rectangleColor);
-            Handles.Label(start + new Vector3(0, scaleLineLength, 0), j.ToString());
+            Handles.Label(start + new Vector3(0, scaleLineLength, 0), j.ToString(),scalelabelStyle);
         }
     }
     #endregion

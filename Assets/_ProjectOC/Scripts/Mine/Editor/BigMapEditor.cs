@@ -120,14 +120,17 @@ namespace MineSystem
         }
         void SaveAssetData()
         {
-            EditorUtility.SetDirty(target);
-            EditorUtility.SetDirty(bigMap.BigMapEditDatas);
-            //更改小地图排序数据
-            foreach (var _data in bigMap.SmallMapEditDatas)
+            if (bigMap.BigMapEditDatas != null)
             {
-                EditorUtility.SetDirty(_data);
+                EditorUtility.SetDirty(target);
+                EditorUtility.SetDirty(bigMap.BigMapEditDatas);
+                //更改小地图排序数据
+                foreach (var _data in bigMap.SmallMapEditDatas)
+                {
+                    EditorUtility.SetDirty(_data);
+                }
+                AssetDatabase.SaveAssets();
             }
-            AssetDatabase.SaveAssets();
         }
         #endregion
 
@@ -368,7 +371,7 @@ namespace MineSystem
                 GenerateSmallMapPrefab(i);
             }
         }
-        private string bigMapPrefabPath = "Assets/_ProjectOC/OCResources/Mine/BigMapPrefab";
+        // private string bigMapPrefabPath = "Assets/_ProjectOC/OCResources/Mine/BigMapPrefab";
         private string smallMapTexPath = "Assets/_ProjectOC/OCResources/Mine/SmallMapTexture";
         
         
