@@ -17,11 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 5af621b8e13381c43ac3cb65a34c3c33
   m_SerializeEntries:
-  - m_GUID: d91ad526cf7030f4f85cd51c879b644e
-    m_Address: Prefab_Order_UIPanel
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 12ccaaabe7b1b59479900d63faf3d674
     m_Address: Prefab_Order_UIPrefab
     m_ReadOnly: 0

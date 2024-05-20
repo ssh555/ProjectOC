@@ -1724,6 +1724,7 @@ MonoBehaviour:
     isLoop: 0
     isHorizontal: 0
     scrollRect: {fileID: 0}
+    UIBtnListInitors: []
 --- !u!1 &947840115140128789
 GameObject:
   m_ObjectHideFlags: 0
@@ -4392,7 +4393,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -370.99408, y: 384.74487}
+  m_AnchoredPosition: {x: -370.99408, y: 284.2515}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &3759539099081840311
@@ -17652,7 +17653,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 3110786692263499898}
   m_Direction: 2
   m_Value: 1
-  m_Size: 1
+  m_Size: 0.8094246
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
