@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace MineSystem
+namespace ProjectOC.MineSystem
 {
     public class BigMap : MonoBehaviour
     {
