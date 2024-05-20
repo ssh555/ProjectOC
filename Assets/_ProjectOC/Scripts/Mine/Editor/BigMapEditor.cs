@@ -26,7 +26,7 @@ namespace MineSystem
         private int brushIndex;
         private string tempMineIDData;
         private Sprite tempMineTexData;
-        private bool showMineEdit;
+        private bool showMineEdit = false;
         public override void OnEnable()
         {
             base.OnEnable();
@@ -265,6 +265,7 @@ namespace MineSystem
                 }
 
                 EditorGUILayout.EndHorizontal();
+                controlRect = EditorGUILayout.GetControlRect(true, 20);
                 tempMineIDData = EditorGUI.TextField(controlRect, "ID:", tempMineIDData);
                 tempMineTexData =
                     EditorGUILayout.ObjectField("± À¢Õº±Í:", tempMineTexData, typeof(Sprite), false) as Sprite;
@@ -430,6 +431,7 @@ namespace MineSystem
             if (importer != null)
             {
                 importer.textureType = TextureImporterType.Sprite;
+                importer.filterMode = FilterMode.Point;
                 importer.SaveAndReimport();
             }
         }

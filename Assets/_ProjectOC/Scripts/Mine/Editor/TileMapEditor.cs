@@ -489,7 +489,7 @@ namespace MineSystem
                     }
                 }
                 //删除矿物
-                if (e.type == EventType.MouseDown)
+                if (e.button == 0 && e.type == EventType.MouseDown)
                 {
                     for (int i = selectMine.Count - 1; i >= 0; i--)
                     {
@@ -542,7 +542,7 @@ namespace MineSystem
                 Vector3 minePos = new Vector3(_mousePos.x, _mousePos.y, 0);
                 // 判断有没有在格子上
                 Vector2Int _grid = new Vector2Int(Mathf.FloorToInt(minePos.x),Mathf.FloorToInt(minePos.y));
-                if (!tileMap.SmallMapEditData.gridData[_grid.x + _grid.y *tileMap.TileWidth])
+                if(!JudgeDataValid(_grid))
                     return;
                 
                 GameObject _mine = Instantiate(tileMap.MinePrefab, minePos, Quaternion.identity,
@@ -566,7 +566,8 @@ namespace MineSystem
                     Vector2 minePos2D = new Vector2(_mousePos.x + offsetX,_mousePos.y + offsetY);
                     // 判断有没有在格子上
                     Vector2Int _grid = new Vector2Int(Mathf.FloorToInt(minePos2D.x),Mathf.FloorToInt(minePos2D.y));
-                    if (!tileMap.SmallMapEditData.gridData[_grid.x + _grid.y *tileMap.TileWidth])
+                    
+                    if(!JudgeDataValid(_grid))
                         continue;
                     
                     
@@ -580,6 +581,14 @@ namespace MineSystem
                     tileMap.ProcessMine(_mine, tileMap.curMineBrush,_curMineData.MinePoses.Count);
                     _curMineData.MinePoses.Add(_mousePos);
                 }
+            }
+
+            bool JudgeDataValid(Vector2Int _grid)
+            {
+                bool res = (_grid.x >= 0 && _grid.x < tileMap.SmallMapEditData.width
+                    && _grid.y >= 0 && _grid.y < tileMap.SmallMapEditData.height) 
+                    &&(tileMap.SmallMapEditData.gridData[_grid.x + _grid.y * tileMap.TileWidth]);
+                    return res;
             }
         }
         
