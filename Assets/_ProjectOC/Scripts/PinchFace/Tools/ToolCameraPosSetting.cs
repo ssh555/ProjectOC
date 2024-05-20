@@ -16,8 +16,9 @@ public class ToolCameraPosSetting : MonoBehaviour
     public void LookAtTarget()
     {
         if(TargetTransf == null)
-            TargetTransf = this.transform.parent;
-        this.transform.LookAt(TargetTransf);
+            this.transform.LookAt(transform.parent);
+        else
+            this.transform.LookAt(TargetTransf);
     }
 
     [Button("设置完成,删除组件")]

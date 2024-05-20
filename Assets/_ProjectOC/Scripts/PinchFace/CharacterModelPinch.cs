@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using AmazingAssets.TerrainToMesh;
+using ML.Engine.UI;
 using ProjectOC.PinchFace;
 using Sirenix.OdinInspector;
 using Unity.VisualScripting;
@@ -29,16 +30,22 @@ namespace ProjectOC.PinchFace
             string totalPath = $"{prePath}/{typePath}/{prefabPath}";
             AsyncOperationHandle<GameObject>  handle = ML.Engine.Manager.GameManager.Instance.
                 ABResourceManager.InstantiateAsync(totalPath);
+
             return handle;
         }
 
+        /// <summary>
+        /// 防止后面修改
+        /// </summary>
+        /// <param name="_type2"></param>
+        /// <returns></returns>
         private int Type2ToTypeReplaceGoIndex(PinchPartType2 _type2)
         {
             return (int)_type2 - 1;
         }
         
         
-        public AsyncOperationHandle<GameObject> ChangeType(PinchPartType3 _type3, int typeIndex)
+        public AsyncOperationHandle<GameObject> ChangeType(PinchPartType3 _type3, int typeIndex,bool inCamera = false)
         {
             PinchPartType2 _type2 = pinchFaceManager.pinchPartType3Dic[_type3];
             if (replaceGo[Type2ToTypeReplaceGoIndex(_type2)] != null)
@@ -49,7 +56,7 @@ namespace ProjectOC.PinchFace
             AsyncOperationHandle<GameObject> _handle = GeneratePinchTypePrefab(_type3, typeIndex);
             _handle.Completed += (handle)=>
             {
-                EquipItem(_type2,handle.Result);
+                EquipItem(_type2,handle.Result,inCamera);
             };
             return _handle;
         }
@@ -76,10 +83,10 @@ namespace ProjectOC.PinchFace
             //     topEar.Release();
             // }
         }
-        public void EquipItem(PinchPartType2 _type2, GameObject _PinchGo)
+        public void EquipItem(PinchPartType2 _type2, GameObject _PinchGo,bool inCamera)
         {
             // sourceClothing衣服 targetAvatar 角色
-            replaceGo[Type2ToTypeReplaceGoIndex(_type2)] = Stitch(_PinchGo, avatar.gameObject);
+            replaceGo[Type2ToTypeReplaceGoIndex(_type2)] = Stitch(_PinchGo, avatar.gameObject,inCamera);
             
             //to-do: 更新骨骼解算目录
             Destroy(_PinchGo);
@@ -110,7 +117,7 @@ namespace ProjectOC.PinchFace
             }
         }
 
-        public GameObject Stitch(GameObject sourceClothing, GameObject targetCharacter)
+        public GameObject Stitch(GameObject sourceClothing, GameObject targetCharacter,bool inCamera)
         {
             GameObject targetClothingBone = null;
             targetClothingBone = new GameObject(sourceClothing.name);
@@ -148,6 +155,10 @@ namespace ProjectOC.PinchFace
             foreach (var smr in smrs)
             {
                 SkinnedMeshRenderer targetRenderer = AddSkinnedMeshRenderer(smr,targetClothingBone);
+                if (inCamera)
+                {
+                    UICameraImage.ModeGameObjectLayer(targetRenderer.transform);
+                }
                 targetRenderer.bones = TranslateTransforms (smr.bones, boneDic);
             }
             return targetClothingBone;
@@ -234,11 +245,11 @@ namespace ProjectOC.PinchFace
                 //todo 后续改成 MainTex
                 if (_type2 == PinchPartType2.Eye)
                 {
-                    foreach (Material _material in avatar.GetComponentInChildren<SkinnedMeshRenderer>().materials)
+                    foreach (Material _material in characterSkinMeshRenderer.materials)
                     {
-                        if (_material.name == "Mat_Eye")
+                        if (_material.name.Contains("Mat_Eye"))
                         {
-                            _material.SetTexture("_MainTex",handle.Result);   
+                            _material.SetTexture("_BaseMap",handle.Result);   
                         }
                     }
                 }
@@ -284,11 +295,11 @@ namespace ProjectOC.PinchFace
             }
         }
 
-        private Material GetMaterial(PinchPartType2 _type2)
+        private Material GetMaterial(PinchPartType2 _type2,int _index = 0)
         {
             string matColorName = "Mat_ColorChange1";
             //头发双色用
-            //string matColorName2 = "Mat_ColorChange2";
+            string matColorName2 = "Mat_ColorChange2";
             
             GameObject _replaceGo = replaceGo[Type2ToTypeReplaceGoIndex(_type2)];
             if (_replaceGo == null)
@@ -301,8 +312,17 @@ namespace ProjectOC.PinchFace
             }
             foreach (var _mat in mats)
             {
-                if (_mat.name.Contains(matColorName))
-                    return _mat;
+                if (_index == 0)
+                {
+                    if (_mat.name.Contains(matColorName))
+                        return _mat;
+                }
+                else if(_index == 1)
+                {
+                    if (_mat.name.Contains(matColorName2))
+                        return _mat;
+                }
+                
             }
             
             
@@ -310,9 +330,9 @@ namespace ProjectOC.PinchFace
         }
 
         private string changeColorShaderKey = "_BaseColor";
-        public void ChangeColor(PinchPartType2 boneType2, Color _color)
+        public void ChangeColor(PinchPartType2 _type2, Color _color,int _index)
         {
-            Material _targetMat = GetMaterial(boneType2);
+            Material _targetMat = GetMaterial(_type2,_index);
             if (_targetMat != null)
             {
                 _targetMat.SetColor(changeColorShaderKey,_color);   
@@ -342,6 +362,7 @@ namespace ProjectOC.PinchFace
             string AddStr = "Add_";
             string WeightStr = "Weight_";
             private Transform avatar;
+            private SkinnedMeshRenderer characterSkinMeshRenderer;
             [SerializeField, ReadOnly, FoldoutGroup("骨骼字典")]
             List<GameObject> replaceGo = new List<GameObject>();
             
@@ -382,6 +403,7 @@ namespace ProjectOC.PinchFace
                     replaceGo.Add(null);
                 
                 avatar = transform.Find("AnMiXiuBone");
+                characterSkinMeshRenderer = transform.Find("AnMiXiu_Mesh").GetComponent<SkinnedMeshRenderer>();
                 CataBonelog(boneDic,avatar);
                 
                 //骨骼字典初始化

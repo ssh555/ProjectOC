@@ -101,17 +101,12 @@ namespace ML.Engine.UI
         /// <summary>
         /// 环绕目标点，不会摧毁原物体，可能多个机位
         /// </summary>
-        public void LookAtGameObjectMultCamera(GameObject go,Transform cameraPos,bool modeLayer = true)
+        public void LookAtGameObjectMultCamera(GameObject go,Transform cameraPos)
         {
             if (go == null) return;
             
             uiCamera.transform.position = cameraPos.position;
             uiCamera.transform.LookAt(go.transform);
-            
-            if (modeLayer)
-            {
-                ModeGameObjectLayer(currentObjectBeingObserved.transform);
-            }
         }
         
         
