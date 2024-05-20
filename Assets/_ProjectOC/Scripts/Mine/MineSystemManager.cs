@@ -87,7 +87,7 @@ namespace ProjectOC.MineSystem
 
                 this.mapRegionDatas = new List<MapRegionData>();
 
-                var Layer = this.BigMapPrefab.transform.Find("Layer");
+                var Layer = this.BigMapPrefab.transform.Find("NormalRegion");
 
                 for(int i =0;i< Layer.childCount; i++)
                 {
