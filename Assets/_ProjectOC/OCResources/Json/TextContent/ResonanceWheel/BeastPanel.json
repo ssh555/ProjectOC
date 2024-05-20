@@ -9,7 +9,7 @@
     "English": "Cook"
   },
   "HandCraft": {
-    "Chinese": "轻工",
+    "Chinese": "手工",
     "English": "HandCraft"
   },
   "Industry": {
@@ -25,7 +25,7 @@
     "English": "Transport"
   },
   "Collect": {
-    "Chinese": "采集",
+    "Chinese": "收集",
     "English": "Collect"
   },
 
@@ -40,7 +40,6 @@
       "English": "Deport"
     }
   },
-
   "Back": {
     "keyname": "KT_Back",
     "keymap": {
