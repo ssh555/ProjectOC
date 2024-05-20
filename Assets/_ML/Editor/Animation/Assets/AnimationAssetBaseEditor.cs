@@ -20,21 +20,22 @@ namespace ML.Editor.Animation
                 return false;
             }
 
-            AnimancerTransitionAssetBaseWindow.OpenWithAsset(asset);
+            AnimationWindow.OpenWithAsset(asset);
 
             return true;
         }
 
         public virtual void DrawInEditorWindow()
         {
-            Debug.LogWarning($"{this.target.GetType()} 没有实现Editor");
-            OnInspectorGUI();
+            //Debug.LogWarning($"{this.target.GetType()} 没有实现Editor");
+            DrawDefaultInspector();
         }
 
-        public override void OnInspectorGUI()
+        public virtual void DrawTrack()
         {
-            base.OnInspectorGUI();
+
         }
+
     }
 
 }

@@ -42,7 +42,14 @@ namespace ML.Editor
             MethodInfo mInfo = DockAreaType.GetMethod("AddTab", BindingFlags.Instance | BindingFlags.Public, null,
                  new Type[] { typeof(EditorWindow), typeof(bool) }, null);
             if (mInfo == null) return;
-            mInfo.Invoke(instance, new object[] { window, sendPaneEvents });
+            try
+            {
+                mInfo.Invoke(instance, new object[] { window, sendPaneEvents });
+            }
+            catch (System.Reflection.TargetInvocationException e)
+            {
+                Debug.LogError(e.InnerException);
+            }
         }
 
         /// <summary>
@@ -69,5 +76,7 @@ namespace ML.Editor
             return (Rect)pInfo.GetValue(instance);
         }
     }
+
+
 
 }

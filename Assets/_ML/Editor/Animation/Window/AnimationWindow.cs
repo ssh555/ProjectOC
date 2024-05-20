@@ -4,34 +4,42 @@ using UnityEditor.Callbacks;
 using UnityEngine;
 using ML.Editor;
 using ML.Engine.Animation;
+using UnityEditor.SceneManagement;
+using UnityEngine.Analytics;
+using UnityEngine.SceneManagement;
+using Animancer.Editor;
+using System;
 
 namespace ML.Editor.Animation
 {
-    public class AnimancerTransitionAssetBaseWindow : EditorWindow, IHasCustomMenu
+    public class AnimationWindow : EditorWindow, IHasCustomMenu
     {
-        private static AnimancerTransitionAssetBaseWindow _instance;
-        public static AnimancerTransitionAssetBaseWindow Instance => _instance;
+        private static AnimationWindow _instance;
+        public static AnimationWindow Instance => _instance;
 
         private static object _container;
 
-        public PreviewWindow previewWindow;
-        public TrackWindow trackWindow;
-        public DetailWindow detailWindow;
+        public PreviewWindow previewWindow => PreviewWindow.Instance;
+        public TrackWindow trackWindow => TrackWindow.Instance;
+        public DetailWindow detailWindow => DetailWindow.Instance;
 
 
         private AnimationAssetBase selectedAsset;
-        private AnimationAssetBase SelectedAsset
+        public event Action<AnimationAssetBase> OnSelectedChanged;
+        public AnimationAssetBase SelectedAsset
         {
             get => selectedAsset;
-            set
+            private set
             {
-                if(!locked)
+                if (!locked && selectedAsset != value)
                 {
                     selectedAsset = value;
+                    OnSelectedChanged?.Invoke(selectedAsset);
                 }
             }
         }
         private AnimationAssetBaseEditor assetEditor;
+        public AnimationAssetBaseEditor AssetEditor => assetEditor;
 
         [MenuItem("Window/ML/AnimancerAssetEditor", priority = 0)]
         public static object ShowWindow()
@@ -50,9 +58,9 @@ namespace ML.Editor.Animation
             // 创建window容器
             object windowDockAreaInstance = EditorDockArea.CreateInstance();
             EditorDockArea.SetPosition(windowDockAreaInstance, new Rect(0, 0, 200, 800));
-            _instance = (AnimancerTransitionAssetBaseWindow)ScriptableObject.CreateInstance(typeof(AnimancerTransitionAssetBaseWindow));
+            _instance = (AnimationWindow)ScriptableObject.CreateInstance(typeof(AnimationWindow));
             EditorWindow window = _instance;
-            window.titleContent = new GUIContent("AnimancerAsset");
+            window.titleContent = new GUIContent("动画资产");
             EditorDockArea.AddTab(windowDockAreaInstance, window);
             // 加入Window容器
             EditorSplitView.AddChild(splitViewInstance, windowDockAreaInstance);
@@ -64,8 +72,8 @@ namespace ML.Editor.Animation
             // 创建Preview
             object previewDockAreaInstance = EditorDockArea.CreateInstance();
             EditorDockArea.SetPosition(previewDockAreaInstance, new Rect(200, 0, 800, 600));
-            _instance.previewWindow = (PreviewWindow)ScriptableObject.CreateInstance(typeof(PreviewWindow));
-            _instance.previewWindow.titleContent = new GUIContent("Preview");
+            ScriptableObject.CreateInstance(typeof(PreviewWindow));
+            _instance.previewWindow.titleContent = new GUIContent("预览");
             EditorDockArea.AddTab(previewDockAreaInstance, _instance.previewWindow);
             // 加入Window容器
             EditorSplitView.AddChild(previewtrackSplitViewInstance, previewDockAreaInstance);
@@ -73,8 +81,8 @@ namespace ML.Editor.Animation
             // 创建Track
             object trackDockAreaInstance = EditorDockArea.CreateInstance();
             EditorDockArea.SetPosition(trackDockAreaInstance, new Rect(200, 600, 800, 200));
-            _instance.trackWindow = (TrackWindow)ScriptableObject.CreateInstance(typeof(TrackWindow));
-            _instance.trackWindow.titleContent = new GUIContent("Track");
+            ScriptableObject.CreateInstance(typeof(TrackWindow));
+            _instance.trackWindow.titleContent = new GUIContent("轨道");
             EditorDockArea.AddTab(trackDockAreaInstance, _instance.trackWindow);
             // 加入Window容器
             EditorSplitView.AddChild(previewtrackSplitViewInstance, trackDockAreaInstance);
@@ -84,8 +92,8 @@ namespace ML.Editor.Animation
             // 创建Detail
             object detailDockAreaInstance = EditorDockArea.CreateInstance();
             EditorDockArea.SetPosition(detailDockAreaInstance, new Rect(1000, 600, 200, 800));
-            _instance.detailWindow = (DetailWindow)ScriptableObject.CreateInstance(typeof(DetailWindow));
-            _instance.detailWindow.titleContent = new GUIContent("Detail");
+            ScriptableObject.CreateInstance(typeof(DetailWindow));
+            _instance.detailWindow.titleContent = new GUIContent("细节");
             EditorDockArea.AddTab(detailDockAreaInstance, _instance.detailWindow);
             // 加入Window容器
             EditorSplitView.AddChild(splitViewInstance, detailDockAreaInstance);
@@ -103,7 +111,7 @@ namespace ML.Editor.Animation
             return _container;
         }
 
-        public static AnimancerTransitionAssetBaseWindow OpenWithAsset(AnimationAssetBase asset)
+        public static AnimationWindow OpenWithAsset(AnimationAssetBase asset)
         {
             ShowWindow();
             if (locked == false)
@@ -125,26 +133,30 @@ namespace ML.Editor.Animation
             if (SelectedAsset != null && (assetEditor == null || assetEditor.target != SelectedAsset))
             {
                 assetEditor = UnityEditor.Editor.CreateEditor(SelectedAsset) as AnimationAssetBaseEditor;
-                Debug.Log(UnityEditor.Editor.CreateEditor(SelectedAsset).GetType() + " " + SelectedAsset.GetType());
             }
             if (assetEditor != null)
             {
                 assetEditor.DrawInEditorWindow();
             }
-            else
+            else if (SelectedAsset)
             {
                 Debug.LogWarning($"{SelectedAsset.GetType()} 没有对应的Editor");
             }
 
 
         }
+
         public void OnSelectionChange()
         {
-            SelectedAsset = Selection.activeObject as AnimationAssetBase;
-            Repaint();
+            var tmp = Selection.activeObject as AnimationAssetBase;
+            if (tmp != null)
+            {
+                SelectedAsset = tmp;
+                Repaint();
+            }
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             _container = null;
             if (_instance == this)
@@ -210,83 +222,5 @@ namespace ML.Editor.Animation
         }
         #endregion
     }
-
-    public class PreviewWindow : EditorWindow
-    {
-        public static PreviewWindow Instance
-        {
-            get => AnimancerTransitionAssetBaseWindow.Instance != null ? AnimancerTransitionAssetBaseWindow.Instance.previewWindow : null;
-            set
-            {
-                if (AnimancerTransitionAssetBaseWindow.Instance != null)
-                {
-                    AnimancerTransitionAssetBaseWindow.Instance.previewWindow = value;
-                }
-            }
-        }
-
-        public static void GetWindow()
-        {
-            GetWindow<PreviewWindow>("Window1");
-        }
-
-        private void OnDestroy()
-        {
-            if (Instance == this)
-                Instance = null;
-        }
-    }
-
-    public class TrackWindow : EditorWindow
-    {
-        public static TrackWindow Instance
-        {
-            get => AnimancerTransitionAssetBaseWindow.Instance != null ? AnimancerTransitionAssetBaseWindow.Instance.trackWindow : null;
-            set
-            {
-                if (AnimancerTransitionAssetBaseWindow.Instance != null)
-                {
-                    AnimancerTransitionAssetBaseWindow.Instance.trackWindow = value;
-                }
-            }
-        }
-
-        public static void GetWindow()
-        {
-            GetWindow<TrackWindow>("Window2");
-        }
-        private void OnDestroy()
-        {
-            if (Instance == this)
-                Instance = null;
-        }
-    }
-
-    public class DetailWindow : EditorWindow
-    {
-        public static DetailWindow Instance
-        {
-            get => AnimancerTransitionAssetBaseWindow.Instance != null ? AnimancerTransitionAssetBaseWindow.Instance.detailWindow : null;
-            set
-            {
-                if (AnimancerTransitionAssetBaseWindow.Instance != null)
-                {
-                    AnimancerTransitionAssetBaseWindow.Instance.detailWindow = value;
-                }
-            }
-        }
-
-        public static void GetWindow()
-        {
-            GetWindow<DetailWindow>("Window3");
-        }
-        private void OnDestroy()
-        {
-            if (Instance == this)
-                Instance = null;
-        }
-    }
-
-
 }
 
