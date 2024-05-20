@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ProjectOC.DataNS
 {
-    public abstract class ItemContainerOwner : MissionNS.IMissionObj, ML.Engine.InventorySystem.IInventory
+    public abstract class ItemContainerOwner : IContainerOwner
     {
         [LabelText("´æ´¢Êý¾Ý"), ReadOnly]
         public DataContainer<string> DataContainer;
@@ -46,10 +46,9 @@ namespace ProjectOC.DataNS
 
         public void ChangeData(int index, string itemID)
         {
-            string oldID = DataContainer.GetID(index);
             var t = DataContainer.ChangeData(index, itemID);
             ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(t.Item1, t.Item2);
-            (this as MissionNS.IMissionObj).UpdateTransport(oldID);
+            (this as MissionNS.IMissionObj).UpdateTransport(t.Item1);
         }
 
         public void Remove(int index, int amount)
@@ -77,7 +76,6 @@ namespace ProjectOC.DataNS
         public abstract Transform GetTransform();
         public abstract string GetUID();
         public abstract MissionNS.MissionObjType GetMissionObjType();
-        public MissionNS.MissionObjType MissionObjType { get; set; }
         public List<MissionNS.Transport> Transports { get; set; } = new List<MissionNS.Transport>();
         public List<MissionNS.MissionTransport> Missions { get; set; } = new List<MissionNS.MissionTransport>();
         public MissionNS.TransportPriority TransportPriority { get; set; } = MissionNS.TransportPriority.Normal;
