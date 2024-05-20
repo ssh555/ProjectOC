@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MineBrushDatas:
   - mineID: Mineral_Tmm_1
-    mineIcon: {fileID: 21300000, guid: d56afa4d3d80c5a4aa76bc8bf033835a, type: 3}
+    mineIcon: {fileID: 21300000, guid: 4fe8310594812204bbaca01c5670f3f4, type: 3}
     brushData:
       brushSize: 6.999996
-      brushHard: 4.55
+      brushHard: 0
       brushDensity: 5
       brushSizeMin: 0
       brushSizeMax: 10
