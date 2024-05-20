@@ -72,14 +72,14 @@ namespace ProjectOC.MineSystem
         }
         
         int selectBordSize = 3;
-        public void ToggleButton(string labelText, Action buttonAction, bool SelectCondition, int _buttonSize = -1,GUIStyle style = null)
+        public void ToggleButton(string labelText, Action buttonAction, bool SelectCondition, int _buttonSize = -1,Texture2D _tex = null)
         {
             if (_buttonSize == -1)
             {
                 _buttonSize = 100;
             }
 
-            if (style == null)
+            if (_tex == null)
             {
                 if (GUILayout.Button(labelText, GUILayout.Height(_buttonSize), GUILayout.Width(_buttonSize)))
                 {
@@ -88,10 +88,12 @@ namespace ProjectOC.MineSystem
             }
             else
             {
-                if (GUILayout.Button(labelText, style,GUILayout.Height(_buttonSize), GUILayout.Width(_buttonSize)))
+                if (GUILayout.Button(labelText, GUILayout.Height(_buttonSize), GUILayout.Width(_buttonSize)))
                 {
                     buttonAction();
                 }
+                Rect rect = GUILayoutUtility.GetLastRect();
+                EditorGUI.DrawTextureTransparent(rect, _tex, ScaleMode.ScaleToFit);
             }
                 
 
