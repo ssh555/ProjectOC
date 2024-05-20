@@ -7,6 +7,7 @@ using UnityEngine.U2D;
 using UnityEngine.UI;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using static ML.Engine.BuildingSystem.UI.BSPlaceModePanel;
+using Sirenix.OdinInspector;
 
 namespace ML.Engine.BuildingSystem.UI
 {
@@ -89,21 +90,22 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region Refresh
+        private bool isChangeStyle = true;
+        private bool isChangeHeight = false;
         public override void Refresh()
         {
             if (!IsInit)
             {
                 return;
             }
-
+            if(!isChangeStyle && !isChangeHeight)
+            {
+                isChangeStyle = true;
+            }
             var styles = BM.GetAllStyleByBPartHeight(this.Placer.SelectedPartInstance);
             var heights = BM.GetAllHeightByBPartStyle(this.Placer.SelectedPartInstance);
-            int sIndex = Array.IndexOf(styles, this.Placer.SelectedPartInstance.Classification.Category3);
-            int hIndex = Array.IndexOf(heights, this.Placer.SelectedPartInstance.Classification.Category4);
             this.ClearInstance();
-
-            var s = styles[sIndex];
-            var h = heights[hIndex];
+            var s = styles[0];
 
             Array.Sort(styles);
             Array.Sort(heights);
@@ -121,15 +123,31 @@ namespace ML.Engine.BuildingSystem.UI
             foreach (var instance in this.styleInstance)
             {
                 var img = instance.Value.GetComponentInChildren<Image>();
-                if (instance.Key != s)
+                if (isChangeStyle)
                 {
-                    Disactive(img);
+                    if (instance.Key != s)
+                    {
+                        Disactive(img);
+                    }
+                    else
+                    {
+                        Active(img);
+                    }
                 }
-                else
+                else if(isChangeHeight)
                 {
-                    Active(img);
+                    if (instance.Key != this.Placer.SelectedPartInstance.Classification.Category3)
+                    {
+                        Disactive(img);
+                    }
+                    else
+                    {
+                        Active(img);
+                    }
                 }
             }
+            isChangeStyle = false;
+            isChangeHeight = false;
 
             // ¸ü»» Height
 
@@ -300,13 +318,15 @@ namespace ML.Engine.BuildingSystem.UI
 
         private void Placer_ChangeBPartStyle(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
+            isChangeStyle = true;
             this.Placer.AlternateBPartOnHeight(obj.ReadValue<float>() < 0);
-           this.Refresh();
+            this.Refresh();
         }
 
         private void Placer_ChangeBPartHeight(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            this.Placer.AlternateBPartOnStyle(obj.ReadValue<float>() < 0);
+            isChangeHeight = true;
+            this.Placer.AlternateBPartOnStyle(obj.ReadValue<float>() > 0);
             this.Refresh();
         }
 

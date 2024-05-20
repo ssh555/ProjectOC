@@ -295,7 +295,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             {
                 this.activeSocketIndex = (this.activeSocketIndex + 1) % this.OwnedSocketList.Count;
             }
-            this.ActiveSocket.OnActive();
+            
 
             CheckPladeMode();
 
@@ -306,6 +306,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
         protected virtual void Start()
         {
+            this.ActiveSocket.OnActive();
             this.enabled = false;
         }
 

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6701810045096502506}
   - component: {fileID: 5149175071535902403}
   m_Layer: 0
-  m_Name: 20_Eye_PinchType2Template
+  m_Name: 20_FaceDress_PinchType2Template
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

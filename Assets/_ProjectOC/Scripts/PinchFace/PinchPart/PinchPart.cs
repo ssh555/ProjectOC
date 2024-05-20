@@ -44,10 +44,11 @@ namespace  ProjectOC.PinchFace
         private Transform containerTransf;
         private List<string> uiPrefabPaths = new List<string>();
         private int isInit = 0;
-        private PinchPartType2 PinchPartType2;
-        private PinchPartType3 PinchPartType3;
+        public PinchPartType2 PinchPartType2 { get; private set; }
+        public PinchPartType3 PinchPartType3 { get; private set; }
         Dictionary<BoneWeightType, string> boneWeightDic = new Dictionary<BoneWeightType, string>();
-        
+
+        private Transform colorTypeTransf;
         private int sortCount = 0;
         #endregion
         //外部引用
@@ -86,8 +87,12 @@ namespace  ProjectOC.PinchFace
             pinchSettingComps = _settingComps.ToList();
             containerTransf = _containerTransf;
             PinchFacePanel = _PinchFacePanel;
-            
-            foreach (var _comp in _settingComps)
+        }
+
+        public void GeneratePinchPartSetting()
+        {
+            sortCount = 0;
+            foreach (var _comp in pinchSettingComps)
             {
                 ProcessSetttingComp(_comp);
             }
@@ -97,7 +102,7 @@ namespace  ProjectOC.PinchFace
         /// 负责根据SettingComp生成对应UI
         /// </summary>
         /// <param name="SettingComp"></param>
-        public void ProcessSetttingComp(IPinchSettingComp _comp)
+        private void ProcessSetttingComp(IPinchSettingComp _comp)
         {
             if(_comp.GetType()== typeof(ChangeTypePinchSetting))
             {
@@ -113,15 +118,21 @@ namespace  ProjectOC.PinchFace
             else if (_comp.GetType()== typeof(ChangeColorPinchSetting))
             {
                 ChangeColorPinchSetting _colorComp = _comp as ChangeColorPinchSetting;
-                //如果不止有纯色
-                if ((_colorComp.colorChangeType & ChangeColorPinchSetting.ColorChangeType.PureColor) != ChangeColorPinchSetting.ColorChangeType.PureColor)
+                //如果是头发，不止有纯色
+                if (PinchPartType3 == PinchPartType3.HF_HairFront)
                 {
                     GenerateHeadUI("分色样式");
                     GenerateColorTypeUI(_colorComp);
+                    GenerateHeadUI("颜色1");
+                    GenerateColorUI1(_comp as ChangeColorPinchSetting,0);
+                    GenerateHeadUI("颜色2");
+                    GenerateColorUI1(_comp as ChangeColorPinchSetting,1);
                 }
-                GenerateHeadUI("颜色");
-                GenerateColorUI1(_comp as ChangeColorPinchSetting);
-
+                else
+                {
+                    GenerateHeadUI("颜色");
+                    GenerateColorUI1(_comp as ChangeColorPinchSetting);
+                }
             }
             else if (_comp.GetType()== typeof(ChangeTexturePinchSetting))
             {
@@ -194,20 +205,20 @@ namespace  ProjectOC.PinchFace
         /// </summary>
         /// <param name="_typeSetting"></param>
         /// <param name="_index"></param>
-        private void Action_TypeBtn(ChangeTypePinchSetting _typeSetting,int _index)
+        public void Action_TypeBtn(ChangeTypePinchSetting _typeSetting,int _index,bool inCamera = true)
         {
             _typeSetting.typeIndex = _index;
             if (PinchPartType3 == PinchPartType3.HF_HairFront)
             {
-                ProcessChangeTypeHandle(ModelPinch.ChangeType(PinchPartType3.HF_HairFront,_index));    
-                ProcessChangeTypeHandle(ModelPinch.ChangeType(PinchPartType3.HD_Dai,_index));    
-                ProcessChangeTypeHandle(ModelPinch.ChangeType(PinchPartType3.HB_HairBack,_index));
+                ProcessChangeTypeHandle(ModelPinch.ChangeType(PinchPartType3.HF_HairFront,_index,inCamera));    
+                ProcessChangeTypeHandle(ModelPinch.ChangeType(PinchPartType3.HD_Dai,_index,inCamera));    
+                ProcessChangeTypeHandle(ModelPinch.ChangeType(PinchPartType3.HB_HairBack,_index,inCamera));
                 //ModelPinch.ChangeType(PinchPartType3.HB_HairBraid,_index);
                 //根据头发的组件增加颜色类型和UI
             }
             else
             {
-                ProcessChangeTypeHandle(ModelPinch.ChangeType(PinchPartType3,_index));    
+                ProcessChangeTypeHandle(ModelPinch.ChangeType(PinchPartType3,_index,inCamera));    
             }
 
             void ProcessChangeTypeHandle(AsyncOperationHandle<GameObject> _handle)
@@ -215,11 +226,13 @@ namespace  ProjectOC.PinchFace
                 _handle.Completed += (handle) =>
                 {
                     //刷新骨骼权重
+                    
                     //刷新颜色板块
-                    
-                    
                     //如果是头发，删除原来的分色方式，加入新的分色方式UI
-                    
+                    if (PinchPartType3 == PinchPartType3.HF_HairFront)
+                    {
+                        
+                    }
                 };
             }
         }
@@ -321,18 +334,15 @@ namespace  ProjectOC.PinchFace
         /// <param name="_type3"></param>
         /// <param name="_color"></param>
         /// <param name="count">如果是-1,说明是从一种替换成另一种，不是新增</param>
-        public void GenerateColorUI1(ChangeColorPinchSetting _colorSetting,int count = -1)
+        public void GenerateColorUI1(ChangeColorPinchSetting _colorSetting,int colorPanelIndex = 0,int count = -1)
         {
-            int _counter;
-            if (count == -1)
+            if (count != -1)
             {
-                _counter = sortCount;    
-                GenerateUIPre();
+                sortCount = count - 1;   
             }
-            else
-            {
-                _counter = count;
-            }
+            int _counter = sortCount;
+            GenerateUIPre();
+
             
             
             
@@ -350,7 +360,8 @@ namespace  ProjectOC.PinchFace
                     Color _gridColor = _curBtn.transform.GetComponent<Image>().color;
                     _colorGrid.onClick.AddListener(() =>
                     {
-                        ModelPinch.ChangeColor(PinchPartType2,_gridColor);
+                        _colorSetting.colors[colorPanelIndex] = _gridColor;
+                        ModelPinch.ChangeColor(PinchPartType2,_gridColor,colorPanelIndex);
                         _container2.Find("ColorView").GetComponent<Image>().color = _gridColor;
                     });
                 }
@@ -358,7 +369,7 @@ namespace  ProjectOC.PinchFace
                 //切换为第二种编辑模式
                 _container2.GetComponentInChildren<SelectedButton>().onClick.AddListener(() =>
                 {
-                    GenerateColorUI2(_colorSetting,_counter);
+                    GenerateColorUI2(_colorSetting,colorPanelIndex,_counter);
                     
                     //删除并解绑这个
                     GameObject.Destroy(_trans.gameObject);
@@ -380,7 +391,7 @@ namespace  ProjectOC.PinchFace
         /// </summary>
         /// <param name="_type3"></param>
         /// <param name="_color"></param>
-        public void GenerateColorUI2(ChangeColorPinchSetting _colorSetting,int _counter)
+        public void GenerateColorUI2(ChangeColorPinchSetting _colorSetting,int colorPanelIndex = 0,int _counter = -1)
         {
 
             //to-do color2 的counter应该是继承删除的_counter
@@ -398,7 +409,8 @@ namespace  ProjectOC.PinchFace
                 _hsvColorSetting.SetColorValue(_curColor,false);
                 _hsvColorSetting.ColorChangeAction +=((_color)=>
                 {
-                    ModelPinch.ChangeColor(PinchPartType2,_color);
+                    _colorSetting.colors[colorPanelIndex] = _color;
+                    ModelPinch.ChangeColor(PinchPartType2,_color,colorPanelIndex);
                     _colorView.color = _color;
                 });
                 
@@ -407,7 +419,7 @@ namespace  ProjectOC.PinchFace
                 _container2.GetComponentInChildren<SelectedButton>().onClick.AddListener(() =>
                 {
                     //切换为第二种编辑模式
-                    GenerateColorUI1(_colorSetting,_counter);
+                    GenerateColorUI1(_colorSetting,colorPanelIndex,_counter);
                     //删除并解绑这个
                     GameObject.Destroy(_trans.gameObject);
                 });
@@ -425,15 +437,59 @@ namespace  ProjectOC.PinchFace
         {
             int _counter = sortCount;
             GenerateUIPre();
+            RefreshColorType();
             
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(uiPrefabPaths[5])
                 .Completed += (handle) =>
             {
                 //加入 type3的btn
-                Transform _trans = handle.Result.transform;
+                colorTypeTransf = handle.Result.transform;
+
+                //设置btn text，Action
+                //选中btn后更改 ChangeColorSetting的分色模式设置
                 
-                GenerateUICallBack(_trans,_counter);
+                GenerateUICallBack(colorTypeTransf,_counter);
             };
+        }
+        /// <summary>
+        /// 删除原来的Btn
+        /// </summary>
+        private void RefreshColorType()
+        {
+            SelectedButton btnTemplate = colorTypeTransf.Find("TemplateBtn").GetComponent<SelectedButton>();
+            //删除
+            foreach (Transform _btn in btnTemplate.transform.parent)
+            {
+                if (_btn != btnTemplate.transform)
+                {
+                    GameObject.Destroy(_btn.gameObject);   
+                }
+            }
+
+            string[] colorTypeString =
+            {
+                "纯色",
+                "分色",
+                "渐变1",
+                "渐变2"
+            }; 
+            
+            //前发、后发、呆毛、辫子的ColorSetting
+            void GenerateSingleColorType(ChangeColorPinchSetting _colorSetting)
+            {
+                if ((_colorSetting.colorChangeType & ChangeColorPinchSetting.ColorChangeType.DoubelMatColor) != 0)
+                {
+                    
+                }
+                else if ((_colorSetting.colorChangeType & ChangeColorPinchSetting.ColorChangeType.GradientColorDynamic) != 0)
+                {
+                    
+                } 
+                else if ((_colorSetting.colorChangeType & ChangeColorPinchSetting.ColorChangeType.GradientColorStatic) != 0)
+                {
+                    
+                } 
+            }
         }
         
         public void GenerateTextureUI(ChangeTexturePinchSetting _texSetting)
@@ -503,7 +559,6 @@ namespace  ProjectOC.PinchFace
             _uiTransf.SetParent(containerTransf);
             _uiTransf.localScale = Vector3.one;
             _uiTransf.name = _counter.ToString();
-            
             //排序
             isInit--;
             if (isInit <= 0)
