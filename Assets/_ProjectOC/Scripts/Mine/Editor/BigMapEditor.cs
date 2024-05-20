@@ -10,7 +10,7 @@ using UnityEditorInternal;
 using UnityEngine;
 using Serialization = Unity.VisualScripting.Serialization;
 
-namespace MineSystem
+namespace ProjectOC.MineSystem
 {
     [CustomEditor(typeof(BigMap))]
     public class BigMapEditor : OCCustomEditor
@@ -32,12 +32,11 @@ namespace MineSystem
             base.OnEnable();
             bigMap = target as BigMap;
             mapPreview = GameObject.Find("Editor/Others").transform.GetChild(4); 
-            bigMap.tileMaps = target.GetComponentsInChildren<TileMap>().ToList();
             tempMineScale = bigMap.mineToTileScale;
             brushIndex = 0;
-            
-            ReorderableListInit();
+
             CheckAssetAndData();
+            ReorderableListInit();
         }
 
         void ReorderableListInit()
@@ -83,7 +82,21 @@ namespace MineSystem
             //读取大地图和小地图所有资产
             bigMap.BigMapEditDatas = AssetDatabase.LoadAssetAtPath<MineBigMapEditData>(bigMapPath);
             ReloadSmallMapAsset();
+            if (bigMap.transform.childCount != bigMap.SmallMapEditDatas.Count)
+            {
+                TileMap.DestroyTransformChild(bigMap.transform);
 
+                for (int i = 0; i < bigMap.SmallMapEditDatas.Count; i++)
+                {
+                    GameObject _go = new GameObject($"MapSmart_{i}");
+                    _go.transform.SetParent(bigMap.transform);
+                    TileMap _tileMap = _go.AddComponent<TileMap>();
+                    _tileMap.SceneInit();
+                }
+                bigMap.tileMaps = target.GetComponentsInChildren<TileMap>().ToList();
+            }
+            
+            
             for (int i = 0; i < bigMap.tileMaps.Count; i++)
             {
                 if (bigMap.tileMaps[i].SmallMapEditData == null)
@@ -207,8 +220,11 @@ namespace MineSystem
                 _smallMapData.index = _index;
                 GameObject _go = new GameObject($"MapSmart_{_index}");
                 _go.transform.SetParent(bigMap.transform);
+                
+                //TileMap处理
                 TileMap _tileMap = _go.AddComponent<TileMap>();
-                _tileMap.SmallMapEditData = _smallMapData;
+                _tileMap.SceneInit();
+                bigMap.tileMaps.Add(_tileMap);
             }
 
             GUILayout.Space(20);
@@ -335,8 +351,8 @@ namespace MineSystem
         #region ScriptObject数据处理
         
         
-        private string bigMapPath = "Assets/_ProjectOC/OCResources/Mine/MineEditorData/BigMapData1.asset";
-        private string smallMapFoldPath = "Assets/_ProjectOC/OCResources/Mine/MineEditorData";
+        private string bigMapPath = "Assets/_ProjectOC/OCResources/MineSystem/MineEditorData/BigMapData1.asset";
+        private string smallMapFoldPath = "Assets/_ProjectOC/OCResources/MineSystem/MineEditorData";
         private string smallMapDataNamePre = "SmallMapEditData_";
         
         void CreateScriptableObjectAsset<T>(T asset,string _path,string _assetName) where T : ScriptableObject
@@ -366,13 +382,15 @@ namespace MineSystem
         void ReGenerateAsset()
         {
             GenerateBigMapPrefab();
+            
             for (int i = 0; i < bigMap.SmallMapEditDatas.Count; i++)
             {
                 GenerateSmallMapPrefab(i);
             }
         }
-        // private string bigMapPrefabPath = "Assets/_ProjectOC/OCResources/Mine/BigMapPrefab";
-        private string smallMapTexPath = "Assets/_ProjectOC/OCResources/Mine/SmallMapTexture";
+        
+        // private string bigMapPrefabPath = "Assets/_ProjectOC/OCResources/MineSystem/Prefabs/UIPrefab/Prefab_MineSystem_UI_BigMap_copy.prefab";
+        private string smallMapTexPath = "Assets/_ProjectOC/OCResources/MineSystem/Texture2D/SmallMapTex";
         
         
         void GenerateBigMapPrefab()
