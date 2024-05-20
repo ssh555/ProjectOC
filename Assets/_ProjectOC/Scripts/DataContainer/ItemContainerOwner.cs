@@ -94,6 +94,9 @@ namespace ProjectOC.DataNS
         {
             return DataContainer.GetAmount(type, needCanIn, needCanOut);
         }
+        public int GetAmount(ML.Engine.InventorySystem.Item item, DataOpType type, bool needCanIn = false, bool needCanOut = false) { return 0; }
+        public HashSet<ML.Engine.InventorySystem.Item> GetAmountForItem(DataOpType type, bool needCanIn = false, bool needCanOut = false) { return new HashSet<ML.Engine.InventorySystem.Item>(); }
+        public int ChangeAmount(ML.Engine.InventorySystem.Item item, DataOpType addType, DataOpType removeType, bool needCanIn = false, bool needCanOut = false) { return 0; }
         #endregion
 
         #region IInventory

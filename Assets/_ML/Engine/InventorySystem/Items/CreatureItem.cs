@@ -19,5 +19,9 @@ namespace ML.Engine.InventorySystem
             Activity = ProjectOC.ManagerNS.LocalGameManager.Instance.CreatureManager.GetActivity(config.id);
         }
         public string GetDataID() { return ID; }
+        public override WorldItem.IWorldItemData GetItemWorldData()
+        {
+            return new WorldItem.WorldCreatureItemData(Amount, Gender, Activity, Output);
+        }
     }
 }

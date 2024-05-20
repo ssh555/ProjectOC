@@ -98,7 +98,10 @@ namespace ProjectOC.StoreNS
             }
             return result;
         }
-
+        public Store GetPutOutStore(ML.Engine.InventorySystem.Item item, int priorityType = 0, bool judgeInteracting = false, bool judgeCanOut = false)
+        {
+            return null;
+        }
         /// <summary>
         /// 获取满足存入条件的仓库
         /// </summary>
@@ -133,7 +136,10 @@ namespace ProjectOC.StoreNS
             }
             return result;
         }
-
+        public Store GetPutInStore(ML.Engine.InventorySystem.Item item, int priorityType = 0, bool judgeInteracting = false, bool judgeCanIn = false)
+        {
+            return null;
+        }
         public List<string> GetStoreIconItems()
         {
             List<string> result = new List<string>();

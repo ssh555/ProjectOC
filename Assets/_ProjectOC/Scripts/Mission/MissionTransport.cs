@@ -6,17 +6,18 @@ namespace ProjectOC.MissionNS
     [LabelText("搬运任务"), System.Serializable]
     public class MissionTransport
     {
+        #region Data
         [LabelText("搬运类型"), ReadOnly]
         public MissionTransportType Type;
         [LabelText("搬运发起者类型"), ReadOnly]
         public MissionInitiatorType MissionInitiatorType;
         [LabelText("搬运东西的ID"), ReadOnly]
         public string ID = "";
+        public ML.Engine.InventorySystem.Item Item;
         [LabelText("已经分配的数量"), ShowInInspector, ReadOnly]
         public int AssignNum;
         [LabelText("需要分配的数量"), ShowInInspector, ReadOnly]
         public int NeedAssignNum{ get{ return MissionNum - FinishNum - AssignNum; } }
-
         private int finishNum = 0;
         [LabelText("完成的数量"), ShowInInspector, ReadOnly]
         public int FinishNum 
@@ -31,17 +32,15 @@ namespace ProjectOC.MissionNS
                 }
             }
         }
-
         [LabelText("需要搬运的数量"), ShowInInspector, ReadOnly]
         public int MissionNum;
-
         [LabelText("任务发起者"), ShowInInspector, ReadOnly]
         public IMissionObj Initiator;
-
         [LabelText("分配的搬运"), ShowInInspector, ReadOnly, System.NonSerialized]
         private List<Transport> Transports = new List<Transport>();
+        #endregion
 
-        public MissionTransport(MissionTransportType type, string itemID, int missionNum, IMissionObj imission, MissionInitiatorType initiatorType)
+        public void Init(MissionTransportType type, string itemID, int missionNum, IMissionObj imission, MissionInitiatorType initiatorType)
         {
             Type = type;
             ID = itemID;
@@ -49,6 +48,21 @@ namespace ProjectOC.MissionNS
             Initiator = imission;
             MissionInitiatorType = initiatorType;
             Initiator.AddMissionTranport(this);
+        }
+        public MissionTransport(MissionTransportType type, string itemID, int missionNum, IMissionObj imission, MissionInitiatorType initiatorType)
+        {
+            Init(type, itemID, missionNum, imission, initiatorType);
+        }
+        public MissionTransport(MissionTransportType type, ML.Engine.InventorySystem.Item item, IMissionObj imission, MissionInitiatorType initiatorType)
+        {
+            if (item != null && !string.IsNullOrEmpty(item.ID))
+            {
+                if (!ManagerNS.LocalGameManager.Instance.ItemManager.GetCanStack(item.ID) && item.Amount == 1)
+                {
+                    Item = item;
+                }
+                Init(type, item.ID, item.Amount, imission, initiatorType);
+            }
         }
 
         public void ChangeMissionNum(int num)

@@ -648,6 +648,10 @@ namespace ProjectOC.WorkerNS
                         result += weight * kv.Value;
                     }
                 }
+                foreach (var item in TransportItems)
+                {
+                    result += item.Weight;
+                }
                 return result;
             }
         }
@@ -658,6 +662,7 @@ namespace ProjectOC.WorkerNS
 
         [LabelText("∞·‘ÀŒÔ∆∑"), ReadOnly]
         public Dictionary<string, int> TransportDict = new Dictionary<string, int>();
+        public HashSet<ML.Engine.InventorySystem.Item> TransportItems = new HashSet<ML.Engine.InventorySystem.Item>();
         #endregion
 
         #region TimeStatus

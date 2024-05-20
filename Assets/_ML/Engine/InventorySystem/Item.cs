@@ -105,6 +105,11 @@ namespace ML.Engine.InventorySystem
             return new WorldItem.WorldItemData(amount);
         }
 
+        public object Clone()
+        {
+            return MemberwiseClone();
+        }
+
         #region °´ID±È½Ï
         public class SortByID : IComparer<Item>
         {

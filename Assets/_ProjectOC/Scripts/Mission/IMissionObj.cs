@@ -6,12 +6,14 @@ namespace ProjectOC.MissionNS
 {
     public interface IMissionObj
     {
+        #region Data
         [LabelText("搬运优先级"), ShowInInspector, ReadOnly]
         public TransportPriority TransportPriority { get; set; }
         [LabelText("对应的搬运"), ShowInInspector, ReadOnly]
         public List<Transport> Transports { get; set; }
         [LabelText("对应的搬运任务"), ShowInInspector, ReadOnly]
         public List<MissionTransport> Missions { get; set; }
+        #endregion
 
         #region Get
         public Transform GetTransform();
@@ -84,6 +86,13 @@ namespace ProjectOC.MissionNS
             }
             return result;
         }
+
+        public int GetAmount(ML.Engine.InventorySystem.Item item, DataNS.DataOpType type, bool needCanIn = false, bool needCanOut = false);
+        public HashSet<ML.Engine.InventorySystem.Item> GetAmountForItem(DataNS.DataOpType type, bool needCanIn = false, bool needCanOut = false);
+        public int GetReservePutIn(ML.Engine.InventorySystem.Item item) { return GetAmount(item, DataNS.DataOpType.EmptyReserve); }
+        public int GetReservePutOut(ML.Engine.InventorySystem.Item item) { return GetAmount(item, DataNS.DataOpType.StorageReserve); }
+        public HashSet<ML.Engine.InventorySystem.Item> GetReservePutInItem() { return GetAmountForItem(DataNS.DataOpType.EmptyReserve); }
+        public HashSet<ML.Engine.InventorySystem.Item> GetReservePutOutItem() { return GetAmountForItem(DataNS.DataOpType.StorageReserve); }
         #endregion
 
         #region Set
@@ -111,6 +120,32 @@ namespace ProjectOC.MissionNS
         public int RemoveReservePutOut(string itemID, int amount)
         {
             return ChangeAmount(itemID, amount, DataNS.DataOpType.Storage, DataNS.DataOpType.StorageReserve);
+        }
+
+        public int ChangeAmount(ML.Engine.InventorySystem.Item item, DataNS.DataOpType addType, DataNS.DataOpType removeType, bool needCanIn = false, bool needCanOut = false);
+        public bool PutIn(ML.Engine.InventorySystem.Item item)
+        {
+            return ChangeAmount(item, DataNS.DataOpType.Storage, DataNS.DataOpType.EmptyReserve) == 1;
+        }
+        public int PutOut(ML.Engine.InventorySystem.Item item)
+        {
+            return ChangeAmount(item, DataNS.DataOpType.Empty, DataNS.DataOpType.StorageReserve);
+        }
+        public int ReservePutIn(ML.Engine.InventorySystem.Item item)
+        {
+            return ChangeAmount(item, DataNS.DataOpType.EmptyReserve, DataNS.DataOpType.Empty, needCanIn: true);
+        }
+        public int ReservePutOut(ML.Engine.InventorySystem.Item item)
+        {
+            return ChangeAmount(item, DataNS.DataOpType.StorageReserve, DataNS.DataOpType.Storage, needCanOut: true);
+        }
+        public int RemoveReservePutIn(ML.Engine.InventorySystem.Item item)
+        {
+            return ChangeAmount(item, DataNS.DataOpType.Empty, DataNS.DataOpType.EmptyReserve);
+        }
+        public int RemoveReservePutOut(ML.Engine.InventorySystem.Item item)
+        {
+            return ChangeAmount(item, DataNS.DataOpType.Storage, DataNS.DataOpType.StorageReserve);
         }
         #endregion
 
@@ -161,6 +196,35 @@ namespace ProjectOC.MissionNS
                 }
             }
         }
+        public void UpdateTransport(ML.Engine.InventorySystem.Item item)
+        {
+            if (item != null && !string.IsNullOrEmpty(item.ID))
+            {
+                int storageReserve = GetReservePutOut(item);
+                int emptyReserve = GetReservePutIn(item);
+                foreach (Transport transport in Transports.ToArray())
+                {
+                    if (transport != null && transport.Item == item)
+                    {
+                        if (transport.Source == this && !transport.ArriveSource)
+                        {
+                            if (storageReserve <= 0)
+                            {
+                                transport.End();
+                            }
+                            else
+                            {
+                                storageReserve -= transport.SoureceReserveNum;
+                            }
+                        }
+                        else if (transport.Target == this && emptyReserve <= 0)
+                        {
+                            transport.End();
+                        }
+                    }
+                }
+            }
+        }
 
         public void UpdateTransport()
         {
@@ -168,27 +232,47 @@ namespace ProjectOC.MissionNS
             Dictionary<string, int> emptyReserve = GetReservePutIn();
             foreach (Transport transport in Transports.ToArray())
             {
-                if (transport != null && storageReserve.ContainsKey(transport.ID))
+                if (transport == null) { continue; }
+                if (transport.Source == this && !transport.ArriveSource)
                 {
-                    if (transport.Source == this && !transport.ArriveSource)
+                    if (storageReserve.ContainsKey(transport.ID) && storageReserve[transport.ID] > 0)
                     {
-                        if (storageReserve[transport.ID] <= 0)
-                        {
-                            transport.End();
-                        }
-                        else
-                        {
-                            storageReserve[transport.ID] -= transport.SoureceReserveNum;
-                        }
+                        storageReserve[transport.ID] -= transport.SoureceReserveNum;
                     }
-                    else if (transport.Target == this && emptyReserve[transport.ID] <= 0)
+                    else
                     {
                         transport.End();
                     }
                 }
-                else
+                else if (transport.Target == this && !transport.ArriveTarget)
                 {
-                    transport?.End();
+                    if (!emptyReserve.ContainsKey(transport.ID) || emptyReserve[transport.ID] <= 0)
+                    {
+                        transport.End();
+                    }
+                }
+            }
+        }
+        public void UpdateItemTransport()
+        {
+            HashSet<ML.Engine.InventorySystem.Item> storageReserve = GetReservePutOutItem();
+            HashSet<ML.Engine.InventorySystem.Item> emptyReserve = GetReservePutInItem();
+            foreach (Transport transport in Transports.ToArray())
+            {
+                if (transport == null) { continue; }
+                if (transport.Source == this && !transport.ArriveSource)
+                {
+                    if (!storageReserve.Contains(transport.Item))
+                    {
+                        transport.End();
+                    }
+                }
+                else if (transport.Target == this && !transport.ArriveTarget)
+                {
+                    if (!emptyReserve.Contains(transport.Item))
+                    {
+                        transport.End();
+                    }
                 }
             }
         }
