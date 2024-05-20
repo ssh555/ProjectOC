@@ -205,9 +205,12 @@ namespace ML.Engine.Event
         //将参数字符串转换为实际参数
         private object[] ConvertParameters(string parametersString, ParameterInfo[] parameterInfos)
         {
-            
+            if(string.IsNullOrEmpty(parametersString))
+            {
+                return new object[0];
+            }
             string[] parameters = parametersString.Split(',');
-            Debug.Log(parametersString + " " + parameters.Length);
+
             object[] convertedParameters = new object[parameters.Length];
 
             for (int i = 0; i < parameters.Length; i++)
