@@ -24,16 +24,16 @@ MonoBehaviour:
   Config:
     FeatTransCostItemID: Item_Juice_1
     FeatTransCostItemNum: 2
-    FeatTransTime: 60
+    FeatTransTime: 2
     FeatUpCostItemID: Item_Juice_3
     FeatUpCostItemNum: 1
-    FeatUpTime: 60
+    FeatUpTime: 2
     FeatDownCostItemID: Item_Juice_4
     FeatDownCostItemNum: 1
-    FeatDownTime: 60
+    FeatDownTime: 2
     FeatReverseCostItemID: Item_Juice_5
     FeatReverseCostItemNum: 1
-    FeatReverseTime: 60
+    FeatReverseTime: 2
     FeatDelCostItemID: Item_Juice_2
     FeatDelCostItemNum: 1
-    FeatDelTime: 60
+    FeatDelTime: 2
