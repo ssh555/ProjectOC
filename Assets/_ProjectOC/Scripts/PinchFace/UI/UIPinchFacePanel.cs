@@ -17,36 +17,30 @@ namespace ProjectOC.PinchFace
         {
             base.Awake();
             pinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
-
-            CommonType2.Add(PinchPartType2.Body);
-            CommonType2.Add(PinchPartType2.HairFront);
-            CommonType2.Add(PinchPartType2.Eye);
-            CommonType2.Add(PinchPartType2.FaceDress);
             
             this.UIBtnListContainer =
                 new UIBtnListContainer(this.transform.GetComponentInChildren<UIBtnListContainerInitor>());
-            #region 初始生成读取模型 Config 图集
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(playerModelPrefabPath).Completed+=(handle) =>
+            #region 初始PinchParts 生成读取模型 Config 图集
+            GenerateCharacterModel();
+            
+
+            void GenerateCharacterModel()
             {
-                uICameraImage = transform.Find("UICameraImage").GetComponentInChildren<UICameraImage>();
-                RectTransform _rtTransform = uICameraImage.transform as RectTransform;
-                
-                RenderTexture _rt = new RenderTexture((int)_rtTransform.rect.width,(int)_rtTransform.rect.height,0);
-                uICameraImage.Init(_rt);
-                pinchFaceManager.ModelPinch = handle.Result.GetComponentInChildren<CharacterModelPinch>();
-                UICameraImage.ModeGameObjectLayer(handle.Result.transform);
-                CurType2 = PinchPartType2.Body;
-                
-                //生成随机的组件 头发
-                foreach (var _type3 in raceData.pinchPartType3s)
+                IsInit++;
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(playerModelPrefabPath).Completed+=(handle) =>
                 {
-                    // int prefabCount = Config.typesDatas[(int)_type3 - 1].typeCount;
-                    // if (prefabCount != 0)
-                    // {
-                    //     
-                    // }
-                }
-            };
+                    uICameraImage = transform.Find("UICameraImage").GetComponentInChildren<UICameraImage>();
+                    RectTransform _rtTransform = uICameraImage.transform as RectTransform;
+
+                    RenderTexture _rt = new RenderTexture((int)_rtTransform.rect.width,(int)_rtTransform.rect.height,0);
+                    uICameraImage.Init(_rt);
+                    pinchFaceManager.ModelPinch = handle.Result.GetComponentInChildren<CharacterModelPinch>();
+                    UICameraImage.ModeGameObjectLayer(handle.Result.transform);
+                    CurType2 = PinchPartType2.Body;
+                    
+                    Init_RedeceCheckCallBack();
+                };
+            }
             
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<PinchDataConfig>(pinchDataConfigPath).Completed+=(handle) =>
             {
@@ -60,7 +54,34 @@ namespace ProjectOC.PinchFace
             #endregion
 
         }
-
+        void Init_RedeceCheckCallBack()
+        {
+            IsInit--;
+            if (IsInit <= 0)
+            {
+                //生成随机的组件 头发
+                foreach (var _pinchPart in pinchParts)
+                {
+                    PinchPartType3 _type3 = _pinchPart.PinchPartType3;
+                    int typePrefabCount = Config.typesDatas[(int)_type3 - 1].typeCount;
+                    if (typePrefabCount != 0)
+                    {
+                        foreach (var _pinchSetting in _pinchPart.pinchSettingComps)
+                        {
+                            if (_pinchSetting.GetType() == typeof(ChangeTypePinchSetting))
+                            {
+                                /////通过PinchPart调用
+                                ChangeTypePinchSetting _typePinch = _pinchSetting as ChangeTypePinchSetting;
+                                int _typeIndex = Random.Range(0, typePrefabCount);
+                                _pinchPart.Action_TypeBtn(_typePinch,_typeIndex);
+                                break;
+                            }
+                        }
+                    } 
+                }
+            }
+        }
+        
         public override void OnExit()
         {
             base.OnExit();
@@ -125,11 +146,10 @@ namespace ProjectOC.PinchFace
                     _curPos = UIBtnListContainer.UIBtnLists[2].GetCurSelectedPos1();
                     if (_curPos != -1)
                     {
-                        CurType2 = CommonType2[_curPos];
+                        int _index = _curPos + raceData.pinchPartType3s.Count;
+                        CurType2 = pinchParts[_index].PinchPartType2;
                     }
                 }
-
-                
             });
         }
         
@@ -153,10 +173,14 @@ namespace ProjectOC.PinchFace
                     .LinkData(i+defaultIndex,i+defaultIndex+1,UIBtnListContainerInitor.EdgeType.下侧顺时针,UIBtnListContainerInitor.EdgeType.上侧逆时针,UIBtnListContainerInitor.LinkType.上下相连);
                 newBtnListContainers.btnListContainerInitData.AddLinkData(_linkData);
             }
+
+            // foreach (var _btn in _btnLists)
+            // {
+            //     Debug.LogWarning($"Btn: {_btn.name}");
+            // }
             this.UIBtnListContainer = new UIBtnListContainer(newBtnListContainers);
             //btnListContainerInitor 删除复原
             newBtnListContainers.btnListContainerInitData.RemoveLinkData(defaultIndex-1,newLinkDataCount);
-            
             
             //绑定函数
             InitBtnInfo();
@@ -208,11 +232,14 @@ namespace ProjectOC.PinchFace
         public UICameraImage uICameraImage;
 
         
-        private PinchPartType2 curType2;
+        
         private string pinchFaceSAPath = "SA_UI_PinchFace/SA_PinchFace.spriteatlasv2";
         private string playerModelPrefabPath = "Prefabs_PinchPart/PinchPart/Prefab_PinchModel.prefab";
         private string pinchDataConfigPath = "PinchAsset_PinchFaceSetting/PinchDataConfig.asset";
         private const int commonType3Count = 4;
+        private int IsInit = 0;
+        
+        private PinchPartType2 curType2;
         public PinchPartType2 CurType2
         {
             get
@@ -234,10 +261,10 @@ namespace ProjectOC.PinchFace
         }
 
         private CurrentMouseState CurrentState = CurrentMouseState.Left;
-        private List<PinchPartType2> CommonType2 = new List<PinchPartType2>();
         
         public void InitRaceData(RacePinchData _racePinchData)
         {
+            //初始化raceData
             raceData = _racePinchData;
             //体型、头发、眼睛、面妆
             int _pinchPartTypeCount = _racePinchData.pinchPartType3s.Count + commonType3Count;
@@ -247,6 +274,40 @@ namespace ProjectOC.PinchFace
             }
             
             
+            for(int i = 0;i<raceData.pinchPartType3s.Count;i++)
+            {
+                PinchPartType3 _type3 = raceData.pinchPartType3s[i];
+                PinchPartType2 _type2 = pinchFaceManager.pinchPartType3Dic[_type3];
+                SetPinchPartTypes(i,  _type2,_type3);
+            }
+
+            int _pinchPart3Count = raceData.pinchPartType3s.Count;
+            SetPinchPartTypes(_pinchPart3Count+0, PinchPartType2.Body, PinchPartType3.B_Body);
+            SetPinchPartTypes(_pinchPart3Count+1, PinchPartType2.HairFront, PinchPartType3.HF_HairFront);
+            SetPinchPartTypes(_pinchPart3Count+2, PinchPartType2.Eye, PinchPartType3.O_Orbit);
+            SetPinchPartTypes(_pinchPart3Count+3, PinchPartType2.FaceDress, PinchPartType3.FD_FaceDress);
+
+            
+                
+            void SetPinchPartTypes(int _index,PinchPartType2 _type2, PinchPartType3 _type3)
+            {
+                IsInit++;
+                string pathFore = "PinchAsset_PinchFaceSetting/PinchTypeConfig";
+                string templatePath = $"{pathFore}/{(int)_type2-1}_{_type2.ToString()}_PinchType2Template.prefab";
+
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(templatePath)
+                    .Completed += (handle) =>
+                {
+                    var _comps = handle.Result.GetComponents<IPinchSettingComp>();
+                    pinchParts[_index] = new PinchPart(this, _type3, _type2, _comps, containerTransf);
+                    Destroy(handle.Result);
+                    
+                    Init_RedeceCheckCallBack();
+                };
+            }
+            
+            
+            //UI生成
             //生成左侧List<PinchPartType3>
             for(int i = 0;i<raceData.pinchPartType3s.Count;i++)
             {
@@ -271,75 +332,35 @@ namespace ProjectOC.PinchFace
                 commonBtnList.GetChild(i).GetComponent<SelectedButton>()
                     .onClick.AddListener(() =>
                     {
-                        foreach (Transform _container in containerTransf)
-                        {
-                            _container.gameObject.SetActive(false);
-                            Destroy(_container.gameObject);
-                        }
-                        GenerateChangeSetting(_index,true);
+                        LeftButton_BtnAction(_index,true);
                     });
             }
         }
 
-        private void LeftButton_BtnAction(int _index)
+        private void LeftButton_BtnAction(int _index,bool _isCommon = false)
         {
-            //删除所有ChangeSetting
+            //删除原来的所有ChangeSetting
             foreach (Transform _container in containerTransf)
             {
                  _container.gameObject.SetActive(false);
+                 //有没有可能Destory延迟执行，在Generate生成后执行
+                 //防止影响排序
+                 _container.name = "99999";
+
                  Destroy(_container.gameObject);
             }
-            GenerateChangeSetting(_index);
+            GenerateChangeSetting(_index, _isCommon);
         }
 
-        private void GenerateChangeSetting(int _Dataindex,PinchPartType2 _type2,PinchPartType3 _type3)
-        {
-            
-            string pathFore = "PinchAsset_PinchFaceSetting/PinchTypeConfig";
-            string templatePath = $"{pathFore}/{(int)_type2-1}_{_type2.ToString()}_PinchType2Template.prefab";
 
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(templatePath)
-                .Completed += (handle) =>
-            {
-                var _comps = handle.Result.GetComponents<IPinchSettingComp>();
-                pinchParts[_Dataindex] = new PinchPart(this, _type3, _type2, _comps, containerTransf);
-                Destroy(handle.Result);
-            };
-            //加载Type3，是否有com
-        }
         private void GenerateChangeSetting(int _index,bool isCommon = false)
         {
             //todo 临时粗暴处理，Common后面的分类和处理可能会变
             if (isCommon)
             {
-                int realIndex = raceData.pinchPartType3s.Count + _index;
-                //体型、头发、眼睛、面妆
-                switch (_index)
-                {
-                    case 0:
-                        GenerateChangeSetting(realIndex,PinchPartType2.Body, PinchPartType3.B_Body);
-                        break;
-                    case 1:
-                        GenerateChangeSetting(realIndex,PinchPartType2.HairFront, PinchPartType3.HF_HairFront);
-                        break;
-                    
-                    case 2:
-                        GenerateChangeSetting(realIndex,PinchPartType2.Eye, PinchPartType3.O_Orbit);
-                        break;
-                    
-                    case 3:
-                        GenerateChangeSetting(realIndex,PinchPartType2.FaceDress, PinchPartType3.FD_FaceDress);
-                        break;
-                }
-                
+                _index += raceData.pinchPartType3s.Count;
             }
-            else
-            {
-                PinchPartType3 _type3 = raceData.pinchPartType3s[_index];
-                //根据Type寻找对应文件，根据上面的Component生成Prefab
-                PinchPartType2 _type2 = type3Type2Dic[_type3];
-                GenerateChangeSetting(_index,_type2, _type3);
-            }
+            pinchParts[_index].GeneratePinchPartSetting();
         }
 
     

@@ -25,6 +25,7 @@ namespace ProjectOC.ManagerNS
         public LandMassExpand.IslandModelManager IslandManager;
         public LandMassExpand.BuildPowerIslandManager BuildPowerIslandManager;
         public RestaurantNS.RestaurantManager RestaurantManager;
+        public MineSystem.MineSystemManager MineSystemManager;
 
         public IslandAreaManager IslandAreaManager;
         public Order.OrderManager OrderManager;
@@ -60,6 +61,7 @@ namespace ProjectOC.ManagerNS
             GM.RegisterLocalManager(IslandManager);
             GM.RegisterLocalManager(BuildPowerIslandManager);
             GM.RegisterLocalManager(RestaurantManager);
+            GM.RegisterLocalManager(MineSystemManager);
             GM.RegisterLocalManager(DialogManager);
             ML.Engine.Manager.GameManager.Instance.CharacterManager.SceneInit();
             StartCoroutine(AfterPlayerCharacter());
@@ -94,10 +96,11 @@ namespace ProjectOC.ManagerNS
                 GM?.UnregisterLocalManager<LandMassExpand.IslandModelManager>();
                 GM?.UnregisterLocalManager<LandMassExpand.BuildPowerIslandManager>();
                 GM?.UnregisterLocalManager<RestaurantNS.RestaurantManager>();
+                GM?.UnregisterLocalManager<MineSystem.MineSystemManager>();
                 GM?.UnregisterLocalManager<LocalGameManager>();
 
                 GM?.UnregisterLocalManager<IslandAreaManager>();
-                GM?.UnregisterLocalManager<Order.OrderManager>();
+                //GM?.UnregisterLocalManager<Order.OrderManager>();
                 //���ܻ���ǰע�����ر���������ʱ��
                 GM?.UnregisterLocalManager<PinchFace.PinchFaceManager>();
                 GM?.UnregisterLocalManager<Dialog.DialogManager>();
@@ -119,7 +122,7 @@ namespace ProjectOC.ManagerNS
             //Ҫ��ȡ���ģ�ͣ����ں���
             GM.RegisterLocalManager(IslandAreaManager);
             GM.RegisterLocalManager(PinchFaceManager);
-            GM.RegisterLocalManager(OrderManager);
+            //GM.RegisterLocalManager(OrderManager);
         }
     
         #region Gizmos����

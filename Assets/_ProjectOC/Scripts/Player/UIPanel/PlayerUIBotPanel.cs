@@ -136,12 +136,20 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("¶©µ¥¹ÜÀí",
             () =>
             {
-                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Order_UIPanel/Prefab_OrderSystem_UI_OrderBoardPanel.prefab").Completed += (handle) =>
+/*                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Order_UIPanel/Prefab_OrderSystem_UI_OrderBoardPanel.prefab").Completed += (handle) =>
                 {
                     OrderBoardPanel orderBoardPanel = handle.Result.GetComponent<OrderBoardPanel>();
 
                     orderBoardPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
                     ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(orderBoardPanel);
+                };*/
+
+                GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPanel/Prefab_Mine_UI_IslandRudderPanel.prefab").Completed += (handle) =>
+                {
+                    IslandRudderPanel islandRudderPanel = handle.Result.GetComponent<IslandRudderPanel>();
+
+                    islandRudderPanel.transform.SetParent(ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false);
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PushPanel(islandRudderPanel);
                 };
             }
             );
