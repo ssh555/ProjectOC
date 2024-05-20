@@ -7,12 +7,12 @@ namespace ProjectOC.DataNS
     public abstract class ItemContainerOwner : MissionNS.IMissionObj, ML.Engine.InventorySystem.IInventory
     {
         [LabelText("´æ´¢Êý¾Ý"), ReadOnly]
-        public DataContainer DataContainer;
+        public DataContainer<string> DataContainer;
 
         #region Init Clear
         public void InitData(int capacity, int dataCapacity)
         {
-            DataContainer = new DataContainer(capacity, dataCapacity);
+            DataContainer = new DataContainer<string>(capacity, dataCapacity);
         }
         public void ClearData()
         {

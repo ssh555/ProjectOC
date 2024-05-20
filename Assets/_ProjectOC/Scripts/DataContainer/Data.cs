@@ -3,9 +3,10 @@ using Sirenix.OdinInspector;
 namespace ProjectOC.DataNS
 {
     [LabelText("存储数据"), System.Serializable]
-    public struct Data
+    public struct Data<T>
     {
         #region Data
+        private T data;
         [LabelText("数据ID"), ShowInInspector, ReadOnly]
         private string id;
         [LabelText("能否存入"), ShowInInspector, ReadOnly]
@@ -34,9 +35,33 @@ namespace ProjectOC.DataNS
         public bool HaveSetData => !string.IsNullOrEmpty(id);
         #endregion
 
-        public Data(string id, int maxCapacity)
+        public Data(T data, int maxCapacity)
         {
-            this.id = id;
+            if (data is string str)
+            {
+                id = str;
+            }
+            else if (data is IDataObj dataObj)
+            {
+                id = dataObj.GetDataID();
+            }
+            else
+            {
+                id = data.GetHashCode().ToString();
+            }
+            this.data = data;
+            canIn = true;
+            canOut = true;
+            MaxCapacity = maxCapacity;
+            Storage = 0;
+            Empty = maxCapacity;
+            StorageReserve = 0;
+            EmptyReserve = 0;
+        }
+        public Data(int maxCapacity)
+        {
+            id = "";
+            data = default(T);
             canIn = true;
             canOut = true;
             MaxCapacity = maxCapacity;
@@ -66,28 +91,39 @@ namespace ProjectOC.DataNS
             }
             return 0;
         }
+        public T GetData() { return data; }
         #endregion
 
         #region Set
         public void Clear()
         {
             id = "";
+            data = default(T);
             Storage = 0;
             Empty = MaxCapacity;
             StorageReserve = 0;
             EmptyReserve = 0;
         }
-
-        public void ChangeID(string id)
+        public void ChangeData(T data)
         {
             Clear();
-            this.id = id ?? "";
+            if (data is string str)
+            {
+                id = str;
+            }
+            else if (data is IDataObj dataObj)
+            {
+                id = dataObj.GetDataID();
+            }
+            else
+            {
+                id = data.GetHashCode().ToString();
+            }
+            this.data = data;
+            id = id ?? "";
         }
-
         public void ChangeCanIn(bool canIn) { this.canIn = canIn; }
-
         public void ChangeCanOut(bool canOut) { this.canOut = canOut; }
-
         public void ChangeAmount(DataOpType type, int amount)
         {
             switch (type)
