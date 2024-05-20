@@ -28,11 +28,12 @@ namespace ProjectOC.PinchFace
         public ColorChangeType CurColorChangeType;
         //需要存储
         public float param1,param2; //渐变程度，渐变高度
-        public Color color1, color2;
+        public Color[] colors = new Color[2];
 
         
         private void Awake()
         {
+            
             this.enabled = false;
         }
     }

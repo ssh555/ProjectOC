@@ -50,10 +50,36 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ed681cfa2b3e65c4ba231188dc8193b8, type: 3}
       propertyPath: m_Name
-      value: HF_HairBack_1
+      value: HB_HairBack_0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ed681cfa2b3e65c4ba231188dc8193b8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -4346702949058238624}
   m_SourcePrefab: {fileID: 100100000, guid: ed681cfa2b3e65c4ba231188dc8193b8, type: 3}
+--- !u!1 &6285904247244862136 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ed681cfa2b3e65c4ba231188dc8193b8, type: 3}
+  m_PrefabInstance: {fileID: 6628574391979151337}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-4346702949058238624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6285904247244862136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2bb0c00045473944a988c7989b1eb22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorChangeType: 3
+  CurColorChangeType: 0
+  param1: 0
+  param2: 0
+  color1: {r: 0, g: 0, b: 0, a: 0}
+  color2: {r: 0, g: 0, b: 0, a: 0}
