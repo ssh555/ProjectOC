@@ -199,14 +199,19 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #endregion
 
-            #region UI
-            #region temp
+        #region UI
+        #region temp
         private Sprite icon_genderfemaleSprite, icon_gendermaleSprite;
-
+        private Dictionary<string, Sprite> tempSprite = new Dictionary<string, Sprite>();
         private void ClearTemp()
         {
             GameManager.DestroyObj(icon_genderfemaleSprite);
             GameManager.DestroyObj(icon_gendermaleSprite);
+            // sprite
+            foreach (var s in tempSprite)
+            {
+                ML.Engine.Manager.GameManager.DestroyObj(s.Value);
+            }
         }
 
         #endregion
@@ -260,6 +265,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private int SwitchInfoIndex = 0;
 
+        FeatureManager featManager => ManagerNS.LocalGameManager.Instance.FeatureManager;
+
         #endregion
 
         #region Tick
@@ -295,11 +302,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             #region BeastInfo
             if (CurrentBeastIndex != -1)
             {
-
                 this.transform.Find("HiddenBeastInfo2").Find("Content").gameObject.SetActive(true);
-
                 WalkSpeed.text = this.PanelTextContent.Speed;
-
                 Cook.text = this.PanelTextContent.Cook;
                 HandCraft.text = this.PanelTextContent.HandCraft;
                 Industry.text = this.PanelTextContent.Industry;
@@ -351,24 +355,33 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 MoodMax.text = worker.EMMax.ToString();
                 WalkSpeedNumText.text = worker.RealWalkSpeed.ToString();
 
-                this.objectPool.ResetPool("SimpleDescriptionPool");
-                this.objectPool.ResetPool("FullDescriptionPool");
+                this.objectPool.ResetPool("DescriptionPool");
                 foreach (var feature in worker.GetFeatures())
                 {
-                    if(SwitchInfoIndex == 0)
+                    var tPrefab = this.objectPool.GetNextObject("DescriptionPool");
+                    string featID = feature.ID;
+                    Transform feat = SwitchInfoIndex == 1? tPrefab.transform.Find("Specific") : tPrefab.transform.Find("Normal");
+                    if (!string.IsNullOrEmpty(featID))
                     {
-                        var tPrefab = this.objectPool.GetNextObject("SimpleDescriptionPool");
-                        tPrefab.transform.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;
-                        DescriptionList.AddBtn(tPrefab);
-                    }
-                    else if(SwitchInfoIndex == 1)
-                    {
-                        var tPrefab = this.objectPool.GetNextObject("FullDescriptionPool");
-                        tPrefab.transform.Find("Content").Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;
-                        tPrefab.transform.Find("Content").Find("Text2").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Description;
-                        tPrefab.transform.Find("Content").Find("Text3").GetComponent<TMPro.TextMeshProUGUI>().text =
-                    "<color=#6FB502><b><sprite name=\"Tex2D_TMP_Triangle\" tint=1>" + feature.EffectsDescription + "</b></color>";
-                        DescriptionList.AddBtn(tPrefab);
+                        string iconName = featManager.GetIcon(featID);
+                        feat.Find("Icon").gameObject.SetActive(!string.IsNullOrEmpty(iconName));
+                        if (!string.IsNullOrEmpty(iconName))
+                        {
+                            if (!tempSprite.ContainsKey(iconName))
+                            {
+                                tempSprite.Add(iconName, ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite(iconName));
+                            }
+                            feat.Find("Icon").GetComponent<Image>().sprite = tempSprite[iconName];
+                        }
+                        feat.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = featManager.GetName(featID);
+                        if (SwitchInfoIndex == 1)
+                        {
+                            feat.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = featManager.GetItemDescription(featID);
+                            feat.Find("DescIcon").gameObject.SetActive(true);
+                            feat.Find("DescIcon").GetComponent<Image>().color = featManager.GetColorForUI(featID);
+                            feat.Find("EffectDesc").GetComponent<TMPro.TextMeshProUGUI>().text =
+                                $"<color={featManager.GetColorStrForUI(featID)}>" + featManager.GetEffectsDescription(featID) + "</color>";
+                        }
                     }
                 }
 
@@ -453,8 +466,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
             );
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "BeastBioPool", LocalGameManager.Instance.WorkerManager.GetWorkers().Count, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_BeastBio.prefab");
-            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SimpleDescriptionPool", 5, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_SimpleDescription.prefab");
-            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "FullDescriptionPool", 5, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_FullDescription.prefab");
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "DescriptionPool", 5, "Prefab_Worker_UI/Prefab_Worker_UI_FeatureTemplate.prefab");
             base.InitObjectPool();
         }
         [ShowInInspector]
@@ -479,6 +491,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             for (int i = 0; i < Workers.Count; i++)
             {
                 var tPrefab = this.objectPool.GetNextObject("BeastBioPool");
+                var Name = tPrefab.transform.Find("Bio").Find("Name").GetComponent<TextMeshProUGUI>();
+                Name.text = Workers[i].Name;
                 int APStatus = Workers[i].GetAPStatu();
                 var AP = tPrefab.transform.Find("Bio").Find("AP");
                 for (int j = 0; j < AP.childCount - 1; j++)

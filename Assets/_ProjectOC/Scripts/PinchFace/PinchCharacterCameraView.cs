@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using ML.Engine.UI;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace ProjectOC.PinchFace
@@ -21,8 +22,11 @@ namespace ProjectOC.PinchFace
         [System.Serializable]
         public struct ViewPointStruct
         {
+            [LabelText("机位类型")]
             public ViewPointEnum viewPointEnum;
+            [LabelText("目标位置")]
             public Transform lookAtTransform;
+            [LabelText("相机位置")]
             public Transform cameraTransform;
         }
         

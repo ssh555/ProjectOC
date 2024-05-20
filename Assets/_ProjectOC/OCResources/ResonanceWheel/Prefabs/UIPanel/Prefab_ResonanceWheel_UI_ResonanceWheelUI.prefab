@@ -4763,6 +4763,12 @@ MonoBehaviour:
   abname: 
   description: 
   IsInit: 0
+  workerEcho:
+    WorkerEchoBuilding: {fileID: 0}
+    FeatureMax: 
+    FeatureOdds: 
+    FactorTimeCost: 0
+    ModifyTimeCost: 0
   exclusivePart: {fileID: 0}
   isQuit: 0
   CurrentGridIndex: 0
