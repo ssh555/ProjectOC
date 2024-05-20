@@ -13,6 +13,7 @@ using UnityEngine.U2D;
 using UnityEngine.UI;
 using static ProjectOC.ResonanceWheelSystem.UI.ResonanceWheelUI;
 using ProjectOC.ManagerNS;
+using ML.Engine.UI;
 
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
@@ -122,6 +123,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //TODO: 共鸣轮建筑存在时只隐藏不销毁
             this.gameObject.SetActive(false);
             this.Exit();
+            this.objectPool.OnDestroy();
             ClearTemp();
         }
 
@@ -552,7 +554,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             if (!this.gameObject.activeInHierarchy) return;
 
-            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
+            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit || !isInitPool)
             {
                 return;
             }
@@ -695,36 +697,27 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             #region ResonanceTarget
             ResonanceTargetTitle.text = PanelTextContent.ResonanceTargetTitle;
-            RandomText.text=PanelTextContent.RandomText;      
+            RandomText.text=PanelTextContent.RandomText;
 
             #endregion
 
             #region ResonanceConsumpion
+            this.objectPool.ResetPool("SlotPrefabPool");
             if (Grids[CurrentGridIndex].isNull)
             {
                 ResonanceConsumpionTitle.text = PanelTextContent.ResonanceConsumpionTitle.description[0];//0 代表共鸣消耗
                 //显示消耗物品详细
 
                 var Consumables = RCInfo.Find("Consumables");
-                if (Consumables.childCount > 0)
-                {
-                    for (int i = 0; i < Consumables.childCount; i++)
-                    {
-                        ML.Engine.Manager.GameManager.DestroyObj(Consumables.GetChild(i).gameObject);
-                    }
-                }
-
 
 
 
                 if (currentBeastType != WorkerCategory.None) 
                 {
-                    string cb = currentBeastType.ToString();
-
+                    string cb = "WorkerEcho_"+currentBeastType.ToString();
                     foreach (var item in GameManager.Instance.GetLocalManager<WorkerEchoManager>().GetRaw(cb))
                     {
-
-                        var tPrefab = GameObject.Instantiate(this.SlotPrefab, Consumables);
+                        var tPrefab = this.objectPool.GetNextObject("SlotPrefabPool", Consumables);
                         int needNum = item.num;
                         // TODO
                         int haveNum = this.inventory.GetItemAllNum(item.id);
@@ -755,8 +748,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region Resource
-        private GameObject SlotPrefab;
+
         private ResonanceWheel_sub1 ResonanceWheel_sub1Instance;
+        private bool isInitPool = false;
         #region TextContent
         [System.Serializable]
         public struct ResonanceWheelPanel
@@ -807,23 +801,25 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 sprite2 = resonanceAtlas.GetSprite(Pre + "icon_timing");
                 sprite3 = resonanceAtlas.GetSprite(Pre + "gray_background");
 
-                beastTypeDic.Add(WorkerCategory.CookWorker, resonanceAtlas.GetSprite(Pre + "Cat"));
-                beastTypeDic.Add(WorkerCategory.HandCraftWorker, resonanceAtlas.GetSprite(Pre + "Deer"));
-                beastTypeDic.Add(WorkerCategory.IndustryWorker, resonanceAtlas.GetSprite(Pre + "Dog"));
-                beastTypeDic.Add(WorkerCategory.MagicWorker, resonanceAtlas.GetSprite(Pre + "Fox"));
-                beastTypeDic.Add(WorkerCategory.TransportWorker, resonanceAtlas.GetSprite(Pre + "Rabbit"));
-                beastTypeDic.Add(WorkerCategory.CollectWorker, resonanceAtlas.GetSprite(Pre + "Seal"));
-                beastTypeDic.Add(WorkerCategory.Random, resonanceAtlas.GetSprite(Pre + "Random"));
+                beastTypeDic.Add(WorkerCategory.CookWorker, resonanceAtlas.GetSprite(Pre + "CookWorker"));
+                beastTypeDic.Add(WorkerCategory.HandCraftWorker, resonanceAtlas.GetSprite(Pre + "HandCraftWorker"));
+                beastTypeDic.Add(WorkerCategory.IndustryWorker, resonanceAtlas.GetSprite(Pre + "IndustryWorker"));
+                beastTypeDic.Add(WorkerCategory.MagicWorker, resonanceAtlas.GetSprite(Pre + "MagicWorker"));
+                beastTypeDic.Add(WorkerCategory.TransportWorker, resonanceAtlas.GetSprite(Pre + "TransportWorker"));
+                beastTypeDic.Add(WorkerCategory.CollectWorker, resonanceAtlas.GetSprite(Pre + "CollectWorker"));
+                beastTypeDic.Add(WorkerCategory.Random, resonanceAtlas.GetSprite(Pre + "blue_background"));
             }
             );
-            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SlotPrefabPool", 1, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_Slot.prefab", (handle) =>
+            UIBtnList.Synchronizer synchronizer = new UIBtnList.Synchronizer(2, () => { isInitPool = true;Refresh(); });
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "SlotPrefabPool", 5, "Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_Slot.prefab", (handle) =>
             {
-                SlotPrefab = handle.Result as GameObject;
+                synchronizer.Check();
             });
 
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "ResonanceWheelUI_sub1", 1, "Prefab_ResonanceWheel_UIPanel/Prefab_ResonanceWheel_UI_ResonanceWheelUI_sub1.prefab", (handle) =>
             {
                 ResonanceWheel_sub1Instance = (handle.Result as GameObject).GetComponent<ResonanceWheel_sub1>();
+                synchronizer.Check();
             });
 
             base.InitObjectPool();

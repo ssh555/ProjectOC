@@ -245,12 +245,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         private FeatureManager featManager => ManagerNS.LocalGameManager.Instance.FeatureManager;
         public override void Refresh()
         {
-            Debug.Log("Refresh "+ (ABJAProcessorJson == null)+" "+ ABJAProcessorJson.IsLoaded+" "+ isInitObjectPool);
             if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !isInitObjectPool)
             {
                 return;
             }
-            Debug.Log("asda Refresh");
             foreach (TextTip tp in PanelTextContent.SkillType)
             {
                 for (int i = 0; i < beastSkills.Length; i++)
@@ -312,11 +310,9 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 WalkSpeedNumText.text = worker.RealWalkSpeed.ToString();
 
                 this.objectPool.ResetPool("DescriptionPool");
-                Debug.Log("asda " + worker.GetFeatures());
                 foreach (var feature in worker.GetFeatures())
                 {
                     var tPrefab = this.objectPool.GetNextObject("DescriptionPool");
-                    Debug.Log(tPrefab);
                     var Normal = tPrefab.transform.Find("Normal");
                     var Specific = tPrefab.transform.Find("Specific");
                     string featID = feature.ID;

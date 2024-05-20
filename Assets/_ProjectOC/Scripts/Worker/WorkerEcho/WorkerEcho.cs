@@ -12,9 +12,7 @@ namespace ProjectOC.WorkerNS
         public Worker Worker;
         public ExternWorker(string workerID, float time, WorkerEchoBuilding workerEchoBuilding, int index)
         {
-            workerID = 
             WorkerID = workerID;
-
             
             Timer = new CounterDownTimer(time);
             Timer.OnEndEvent += () =>
@@ -50,14 +48,14 @@ namespace ProjectOC.WorkerNS
 
         public ExternWorker SummonWorker(string id,int index, ML.Engine.InventorySystem.IInventory inventory)
         {
-            string cid = "";
-            string workerid = "";
+            string cid = id;
+            string workerid = "WorkerEcho_"+id;
             if (!ManagerNS.LocalGameManager.Instance.WorkerManager.OnlyCostResource(inventory, id)) return null;
 
             if (ManagerNS.LocalGameManager.Instance.WorkerEchoManager.Level == 1)
             {
                 cid = ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRandomCategoryString();
-                workerid = "WorkerEcho_" + cid;
+                workerid = "WorkerEcho_" + WorkerCategory.Random.ToString();
             }
             ExternWorker externWorker = new ExternWorker(cid, GetRealTimeCost(workerid), WorkerEchoBuilding, index);
             Workers[index] = externWorker;
