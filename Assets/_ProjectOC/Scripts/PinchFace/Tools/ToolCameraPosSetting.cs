@@ -6,37 +6,39 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-
-public class ToolCameraPosSetting : MonoBehaviour
+namespace ProjectOC.PinchFace
 {
-    [SerializeField,InspectorName("看向")]
-    private Transform TargetTransf;
-
-    [Button("看向目标")]
-    public void LookAtTarget()
+    public class ToolCameraPosSetting : MonoBehaviour
     {
-        if(TargetTransf == null)
-            this.transform.LookAt(transform.parent);
-        else
-            this.transform.LookAt(TargetTransf);
-    }
+        [SerializeField,InspectorName("看向")]
+        private Transform TargetTransf;
 
-    [Button("设置完成,删除组件")]
-    public void SettingOver()
-    {
-        // 首先尝试删除依赖项   UniversalAdditionalCameraData 组件
-        UniversalAdditionalCameraData additionalCameraData = GetComponent<UniversalAdditionalCameraData>();
-        if (additionalCameraData != null)
+        [Button("看向目标")]
+        public void LookAtTarget()
         {
-            DestroyImmediate(additionalCameraData);
+            if(TargetTransf == null)
+                this.transform.LookAt(transform.parent);
+            else
+                this.transform.LookAt(TargetTransf);
         }
-        
-        Component[] components = transform.GetComponents<Component>();
-        foreach (var _comp in components)
+
+        [Button("设置完成,删除组件")]
+        public void SettingOver()
         {
-            if (_comp.GetType() != typeof(Transform))
+            // 首先尝试删除依赖项   UniversalAdditionalCameraData 组件
+            UniversalAdditionalCameraData additionalCameraData = GetComponent<UniversalAdditionalCameraData>();
+            if (additionalCameraData != null)
             {
-                DestroyImmediate(_comp);
+                DestroyImmediate(additionalCameraData);
+            }
+            
+            Component[] components = transform.GetComponents<Component>();
+            foreach (var _comp in components)
+            {
+                if (_comp.GetType() != typeof(Transform))
+                {
+                    DestroyImmediate(_comp);
+                }
             }
         }
     }

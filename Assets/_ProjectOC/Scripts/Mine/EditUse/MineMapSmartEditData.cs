@@ -5,7 +5,7 @@ using OpenCover.Framework.Model;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace MineSystem
+namespace ProjectOC.MineSystem
 {
     public class MineSmallMapEditData : ScriptableObject
     {
