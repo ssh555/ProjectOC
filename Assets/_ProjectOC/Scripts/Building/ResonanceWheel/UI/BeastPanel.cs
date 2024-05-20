@@ -479,6 +479,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             for (int i = 0; i < Workers.Count; i++)
             {
                 var tPrefab = this.objectPool.GetNextObject("BeastBioPool");
+                var Name = tPrefab.transform.Find("Bio").Find("Name").GetComponent<TextMeshProUGUI>();
+                Name.text = Workers[i].Name;
                 int APStatus = Workers[i].GetAPStatu();
                 var AP = tPrefab.transform.Find("Bio").Find("AP");
                 for (int j = 0; j < AP.childCount - 1; j++)
