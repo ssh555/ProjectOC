@@ -42,7 +42,7 @@ namespace ML.Engine.BuildingSystem.BuildingArea
         /// 返回Nan为无效旋转值
         /// </summary>
         /// <returns></returns>
-        public bool GetMatchPointOnArea(Vector3 point, float radius, out Vector3 pos, out Quaternion rot)
+        public bool GetMatchPointOnArea(Vector3 point, out Vector3 pos, out Quaternion rot)
         {
             // 位于 Bound 内
             Bounds bs = new Bounds(this.collider.bounds.center, this.collider.bounds.size);
@@ -54,6 +54,7 @@ namespace ML.Engine.BuildingSystem.BuildingArea
             if(bs.Contains(point))
             {
                 Vector3 scale = this.transform.localScale;
+                Vector3 oldpos = this.transform.localPosition;
                 var parent = this.transform.parent;
                 this.transform.SetParent(null);
                 this.transform.localScale = Vector3.one;
@@ -66,12 +67,15 @@ namespace ML.Engine.BuildingSystem.BuildingArea
                 localNearestGP.y = localPoint.y;
 
                 // 不启用网格辅助 && 不在范围内 ? 返回原点 : 返回网格点
-                pos =(!BuildingManager.Instance.Placer.IsEnableGridSupport && Vector3.Distance(localPoint, localNearestGP) > radius) ? point : this.transform.TransformPoint(localNearestGP);
+                //pos =(!BuildingManager.Instance.Placer.IsEnableGridSupport && Vector3.Distance(localPoint, localNearestGP) > radius) ? point : this.transform.TransformPoint(localNearestGP);
+                // 不启用网格辅助 ? 返回原点 : 返回网格点
+                pos = !BuildingManager.Instance.Placer.IsEnableGridSupport ? point : this.transform.TransformPoint(localNearestGP);
                 // 使用Area.Rotation;
                 rot = this.transform.rotation;
 
                 this.transform.SetParent(parent);
                 this.transform.localScale = scale;
+                this.transform.localPosition = oldpos;
                 return true;
             }
 

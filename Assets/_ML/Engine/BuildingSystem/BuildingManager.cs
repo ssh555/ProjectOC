@@ -1,12 +1,10 @@
 using Sirenix.OdinInspector;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ML.Engine.BuildingSystem.BuildingPart;
 using System.Linq;
-using System;
-using ML.Engine.InventorySystem.CompositeSystem;
 using UnityEngine.U2D;
+using ML.Engine.Manager;
 
 namespace ML.Engine.BuildingSystem
 {
@@ -22,9 +20,10 @@ namespace ML.Engine.BuildingSystem
         public string category3;
         public string category4;
         public string actorID;
-        public List<InventorySystem.CompositeSystem.Formula> raw;
+        public List<InventorySystem.Formula> raw;
         public string upgradeID;
-
+        public TextContent.TextContent ItemDescription;
+        public TextContent.TextContent EffectDescription;
         public string GetClassificationString()
         {
             return $"{category1}_{category2}_{category3}_{category4}";
@@ -200,6 +199,12 @@ namespace ML.Engine.BuildingSystem
             {
                 _buildingMaterial = handle.Result;
             };
+
+            // 创建一个可视化的球体
+            Debug.Log("create VisualSocket");
+            VisualSocket = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            VisualSocket.GetComponent<Renderer>().material.color = UnityEngine.Color.blue;
+            VisualSocket.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
         }
 
 
@@ -211,6 +216,8 @@ namespace ML.Engine.BuildingSystem
                 Manager.GameManager.Instance.ABResourceManager.Release(_buildingMaterial);
             }
             Manager.GameManager.Instance.ABResourceManager.Release(buildIconAtlas);
+            Debug.Log("DestroyObj VisualSocket");
+            GameManager.DestroyObj(VisualSocket);
         }
 
 
@@ -418,6 +425,18 @@ namespace ML.Engine.BuildingSystem
             return null;
         }
 
+        public string GetOneBPartBuildingPartClassificationString(BuildingCategory1 Category, BuildingCategory2 Type)
+        {
+            if (this.BPartClassificationOnStyle.ContainsKey(Category) && this.BPartClassificationOnStyle[Category].ContainsKey(Type) && this.BPartClassificationOnStyle[Category][Type].Count > 0)
+            {
+                IBuildingPart buildingPart = GameObject.Instantiate<GameObject>(BPartClassificationOnStyle[Category][Type].First().Value.PeekFront().gameObject).GetComponent<IBuildingPart>();
+                string ts = buildingPart.Classification.ToString();
+                GameManager.DestroyObj(buildingPart.gameObject);
+                return ts;
+            }
+            return "";
+        }
+
         public IBuildingPart GetOneBPartInstance(BuildingPartClassification classification)
         {
             if(this.registeredBPart.ContainsKey(classification))
@@ -429,7 +448,6 @@ namespace ML.Engine.BuildingSystem
 
         public IBuildingPart GetOneBPartInstance(string classification)
         {
-            //Debug.Log("GetOneBPartInstance "+classification);
             return GetOneBPartInstance(new BuildingPartClassification(classification));
         }
 
@@ -1036,7 +1054,9 @@ namespace ML.Engine.BuildingSystem
             return null;
         }
 
-        public List<InventorySystem.CompositeSystem.Formula> GetRaw(string CID)
+        
+
+        public List<InventorySystem.Formula> GetRaw(string CID)
         {
             if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
             {
@@ -1047,6 +1067,26 @@ namespace ML.Engine.BuildingSystem
                 return BPartTableDictOnID[CID].raw;
             }
             return null;
+        }
+
+        public List<InventorySystem.Formula> GetRawAll(string CID)
+        {
+            List<InventorySystem.Formula> result = new List<InventorySystem.Formula>();
+            string[] cids = CID.Split('_');
+            if (cids.Length == 4)
+            {
+                int level = int.Parse(cids[3]);
+                for (int i = 1; i <= level; i++)
+                {
+                    string cid = cids[0] + "_" + cids[1] + "_" + cids[2] + "_" + i.ToString();
+                    var raws = GetRaw(cid);
+                    if (raws != null)
+                    {
+                        result.AddRange(raws);
+                    }
+                }
+            }
+            return result;
         }
 
         public string GetUpgradeID(string CID)
@@ -1085,10 +1125,10 @@ namespace ML.Engine.BuildingSystem
             return null;
         }
 
-        public List<Formula> GetUpgradeRaw(string CID)
+        public List<InventorySystem.Formula> GetUpgradeRaw(string CID)
         {
-            List<Formula> result = new List<Formula>();
-            List<Formula> formulas = GetRaw(GetUpgradeCID(CID));
+            List<InventorySystem.Formula> result = new List<InventorySystem.Formula>();
+            List<InventorySystem.Formula> formulas = GetRaw(GetUpgradeCID(CID));
             if (formulas != null)
             {
                 result.AddRange(formulas);
@@ -1131,10 +1171,66 @@ namespace ML.Engine.BuildingSystem
             }
             return null;
         }
-        
+
+        public string GetItemDescription(string CID)
+        {
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
+            {
+                return BPartTableDictOnClass[CID].ItemDescription;
+            }
+            return "";
+        }
+
+        public string GetEffectDescription(string CID)
+        {
+            if (!string.IsNullOrEmpty(CID) && BPartTableDictOnClass.ContainsKey(CID))
+            {
+                return BPartTableDictOnClass[CID].EffectDescription;
+            }
+            return "";
+        }
+
+
+
         #endregion
 
+        #region 已建造建筑存储
 
+        [ShowInInspector]
+        private Dictionary<BuildingCategory2, List<IBuildingPart>> buildingInstanceDic = new Dictionary<BuildingCategory2, List<IBuildingPart>>();
+
+        public void AddBuildingInstance(ML.Engine.BuildingSystem.BuildingPart.BuildingPart buildingInstance)
+        {
+            BuildingCategory2 buildingType = buildingInstance.Classification.Category2;
+            if (!buildingInstanceDic.ContainsKey(buildingType))
+            {
+                buildingInstanceDic.Add(buildingType,new List<IBuildingPart>());
+            }
+            buildingInstanceDic[buildingType].Add(buildingInstance);
+        }
+
+        public void RemoveBuildingInstance(ML.Engine.BuildingSystem.BuildingPart.BuildingPart buildingInstance)
+        {
+            BuildingCategory2 buildingType = buildingInstance.Classification.Category2;
+            buildingInstanceDic[buildingType].Remove(buildingInstance);
+            if (buildingInstanceDic[buildingType].Count == 0)
+            {
+                buildingInstanceDic.Remove(buildingType);
+            }
+        }
+
+        public int GetBuildingCount(BuildingCategory2 _buildingType)
+        {
+            if (!buildingInstanceDic.ContainsKey(_buildingType))
+            {
+                return 0;
+            }
+            else
+            {
+                return buildingInstanceDic[_buildingType].Count;
+            }
+        }
+        #endregion
 
         #region Gizmos
         [System.Serializable]
@@ -1151,6 +1247,16 @@ namespace ML.Engine.BuildingSystem
         public DrawGizmos DrawAreaBaseGrid;
         [LabelText("绘制Area大格子")]
         public DrawGizmos DrawAreaBoundGrid;
+
+        [ShowInInspector]
+        [SerializeField]
+        public GameObject VisualSocket;
+
+        public void ResetVisualSocket()
+        {
+            VisualSocket.transform.parent = null;
+            VisualSocket.gameObject.SetActive(false);
+        }
         #endregion
     }
 

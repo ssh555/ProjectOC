@@ -1,15 +1,11 @@
-using ML.Engine.InventorySystem.CompositeSystem;
-using ProjectOC.Order;
 using Sirenix.OdinInspector;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace ML.Engine.BuildingSystem.BuildingPart
 {
-    public class BuildingPart : MonoBehaviour, IBuildingPart, IComposition
+    public class BuildingPart : MonoBehaviour, IBuildingPart
     {
         #region IBuildingPart
         public string ID { get => BuildingManager.Instance.BPartTableDictOnClass[this.classification.ToString()].id; set => throw new Exception("不允许设置建筑物的ID"); }
@@ -64,8 +60,12 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
         public virtual void OnChangePlaceEvent(Vector3 oldPos, Vector3 newPos)
         {
-            if(isFirstBuild)
+            if (isFirstBuild)
+            {
                 isFirstBuild = false;
+                BuildingManager.Instance.AddBuildingInstance(this);
+            }
+                
         }
 
         public bool CanEnterEditMode()
@@ -196,6 +196,21 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 activeSocketIndex = this.OwnedSocketList.IndexOf(value);
             }
         }
+
+        public void ResetActiveSocket()
+        {
+            if(this.ActiveSocket && this.ActiveSocket.IsActiveSocket)
+            {
+                this.ActiveSocket.OnDisactive();
+            }
+            this.activeSocketIndex = 0;
+            while (!this.ActiveSocket.IsActiveSocket)
+            {
+                this.activeSocketIndex = (this.activeSocketIndex + 1) % this.OwnedSocketList.Count;
+            }
+            this.ActiveSocket.OnActive();
+        }
+
         public List<BuildingSocket.BuildingSocket> OwnedSocketList { get; private set; }
         public int lastTriggerFrameCount { get; set; }
         public BuildingMode tmpTriggerMode { get; set; }
@@ -274,13 +289,13 @@ namespace ML.Engine.BuildingSystem.BuildingPart
             this.OwnedSocketList = new List<BuildingSocket.BuildingSocket>();
             this.OwnedSocketList.AddRange(this.GetComponentsInChildren<BuildingSocket.BuildingSocket>());
 
-            // 指向第一个可切换的Socket
-            this.activeSocketIndex = 0;
+            //// 指向第一个可切换的Socket
+            //this.activeSocketIndex = 0;
             while (!this.ActiveSocket.IsActiveSocket)
             {
                 this.activeSocketIndex = (this.activeSocketIndex + 1) % this.OwnedSocketList.Count;
             }
-            this.ActiveSocket.OnActive();
+            
 
             CheckPladeMode();
 
@@ -291,6 +306,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
         protected virtual void Start()
         {
+            this.ActiveSocket.OnActive();
             this.enabled = false;
         }
 
@@ -330,9 +346,16 @@ namespace ML.Engine.BuildingSystem.BuildingPart
                 area.enabled = !isTrigger;
             }
 
-            if (isTrigger == true && this.GetComponent<Rigidbody>() == null)
+            if (isTrigger == true)
             {
-                this.gameObject.AddComponent<Rigidbody>().isKinematic = true;
+                if(this.GetComponent<Rigidbody>() == null)
+                {
+                    this.gameObject.AddComponent<Rigidbody>().isKinematic = true;
+                }
+                else
+                {
+                    this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+                }
             }
             else if(isTrigger == false)
             {
@@ -379,12 +402,16 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 
         public virtual void OnBPartDestroy()
         {
-
+            //排除建造模式时手上拿的那一个
+            if (!isFirstBuild)
+            {
+                BuildingManager.Instance.RemoveBuildingInstance(this);
+            }
         }
 
         public virtual void OnEnterEdit()
         {
-
+            this.ResetActiveSocket();
         }
 
         //private void OnDrawGizmosSelected()

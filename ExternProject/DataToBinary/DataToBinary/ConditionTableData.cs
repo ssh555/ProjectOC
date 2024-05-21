@@ -12,6 +12,7 @@ namespace ML.Engine.Event
         public List<string> Param1;
         public List<int> Param2;
         public List<float> Param3;
+        public TextContent.TextContent ConditionText;
         public bool GenData(string[] row)
         {
             if (string.IsNullOrEmpty(row[0]))
@@ -30,6 +31,8 @@ namespace ML.Engine.Event
             this.Param2 = Program.ParseIntList(row[4]);
             // 5 -> Param3
             this.Param3 = Program.ParseFloatList(row[5]);
+            // 6 -> ConditionText
+            this.ConditionText = Program.ParseTextContent(row[6]);
             return true;
         }
     }

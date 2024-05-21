@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3247354343581506376}
   m_Layer: 5
-  m_Name: WorkerEcho_CookWorker
+  m_Name: CookWorker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -708,7 +708,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3274874778784059977}
   m_Layer: 5
-  m_Name: WorkerEcho_TransportWorker
+  m_Name: TransportWorker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -782,7 +782,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4195171963099791549}
   m_Layer: 5
-  m_Name: WorkerEcho_Random
+  m_Name: Random
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -820,7 +820,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3519879451085486412}
   m_Layer: 5
-  m_Name: WorkerEcho_IndustryWorker
+  m_Name: IndustryWorker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1159,7 +1159,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5b292f64e3ad5544ca52d823faa1e25d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ef319767e8bcaed4294a2eeb98ee9194, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1399,8 +1399,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5b292f64e3ad5544ca52d823faa1e25d, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 83c695f77d798624f9f7cd15e2503e12, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -1456,7 +1456,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3401204204403725960}
   m_Layer: 5
-  m_Name: WorkerEcho_CollectWorker
+  m_Name: CollectWorker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2038,7 +2038,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5b292f64e3ad5544ca52d823faa1e25d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b0159f7be293d4b429017ce740df0694, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2523,7 +2523,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5b292f64e3ad5544ca52d823faa1e25d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 91b66302497b23342ad9900506fd2764, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2844,7 +2844,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5b292f64e3ad5544ca52d823faa1e25d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a01b330cfebbd7b49a5640e5af06be4f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3492,7 +3492,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5b292f64e3ad5544ca52d823faa1e25d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2588f00ccc5280043ba065ab103c393e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3779,7 +3779,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: fb69cd681c2e85d4880a1fb99cb81ac6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ae16898b9066d8d4489e33c7672fda83, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3925,7 +3925,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3203918489019517324}
   m_Layer: 5
-  m_Name: WorkerEcho_HandCraftWorker
+  m_Name: HandCraftWorker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3998,7 +3998,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6762915247062328747}
   m_Layer: 5
-  m_Name: WorkerEcho_MagicWorker
+  m_Name: MagicWorker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

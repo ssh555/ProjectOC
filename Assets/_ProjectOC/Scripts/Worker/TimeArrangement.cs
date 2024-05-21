@@ -1,42 +1,28 @@
 namespace ProjectOC.WorkerNS
 {
     [System.Serializable]
-    public class TimeArrangement
+    public struct TimeArrangement
     {
-        public TimeStatus[] Status = new TimeStatus[24];
-        public TimeArrangement()
+        public TimeStatus[] Status;
+        public TimeArrangement(int hour=24)
         {
+            Status = new TimeStatus[hour];
         }
-        public TimeArrangement(TimeArrangement arrangement)
+        public TimeStatus GetTimeStatus(int hour)
         {
-            for (int i = 0; i < 24; i++)
+            if (0 <= hour && hour < 24)
             {
-                Status[i] = arrangement[i];
+                return Status[hour];
+            }
+            return TimeStatus.Relax;
+        }
+        public void SetTimeStatus(int hour, TimeStatus status)
+        {
+            if (0 <= hour && hour < 24)
+            {
+                Status[hour] = status;
             }
         }
-
-        public TimeStatus this[int index]
-        {
-            get
-            {
-                if (0 <= index && index < 24)
-                {
-                    return Status[index];
-                }
-                else
-                {
-                    return TimeStatus.Relax;
-                }
-            }
-            set
-            {
-                if (0 <= index && index < 24)
-                {
-                    Status[index] = value;
-                }
-            }
-        }
-
         public void SetTimeStatusAll(TimeStatus newStatus)
         {
             for (int i = 0; i < 24 ; i++)
@@ -44,11 +30,11 @@ namespace ProjectOC.WorkerNS
                 Status[i] = newStatus;
             }
         }
-        public void SetTimeArrangement(TimeArrangement timeArrangement)
+        public void ReverseTimeAll()
         {
             for (int i = 0; i < 24; i++)
             {
-                Status[i] = timeArrangement[i];
+                Status[i] = Status[i] == TimeStatus.Relax ? TimeStatus.Work_OnDuty : TimeStatus.Relax;
             }
         }
     }

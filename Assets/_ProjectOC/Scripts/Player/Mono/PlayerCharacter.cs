@@ -1,21 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 using ML.Engine.FSM;
 using Sirenix.OdinInspector;
 using ProjectOC.Player.Terrain;
-using UnityEngine.InputSystem;
 using ML.Engine.InteractSystem;
-using ML.Engine.UI;
 using ML.PlayerCharacterNS;
-using UnityEngine.InputSystem.Controls;
-using UnityEngine.InputSystem.Layouts;
-using UnityEngine.InputSystem.Utilities;
-using ML.Engine.InventorySystem.CompositeSystem;
-using ProjectOC.StoreNS;
-using ProjectOC.ManagerNS;
-using static ML.Engine.UI.UIBtnListContainerInitor;
 
 //ML.PlayerCharacterNS
 namespace ProjectOC.Player
@@ -38,7 +27,7 @@ namespace ProjectOC.Player
         protected Transform playerTerrainDetect;
         [LabelText("视角旋转"), SerializeField, FoldoutGroup("物体|脚本引用")]
         protected ThirdPersonRotateComp thirdPersonRotateComp;
-
+        
         /// <summary>
         /// PlayerInputActions
         /// </summary>
@@ -254,5 +243,15 @@ namespace ProjectOC.Player
 
         #endregion
 
+        #region 其他:相机
+        //todo CameraManager？
+        public CinemachineVirtualCamera GetPlayerCamera()
+        {
+            return thirdPersonRotateComp.VCamera;
+        }
+        
+        
+
+        #endregion
     }
 }

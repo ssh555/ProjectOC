@@ -1,3 +1,4 @@
+using ML.Engine.BuildingSystem;
 using ML.Engine.Manager;
 using Sirenix.OdinInspector;
 using System.Collections;
@@ -12,7 +13,6 @@ namespace ML.Engine.UI
 {
     public class UICameraImage : UIBehaviour,IDragHandler
     {
-        
         [LabelText("摄像机生成位置")]
         public Vector3 cameraSpawnPoint = new Vector3(1000, 1000, 1000);
         [LabelText("摄像机与模型之间的距离")]
@@ -24,6 +24,8 @@ namespace ML.Engine.UI
         private RenderTexture texture;
         [ShowInInspector]
         private GameObject cameraParent;
+        public GameObject CameraParent { get { return cameraParent; } }
+
         [ShowInInspector]
         private GameObject currentObjectBeingObserved;
         [ShowInInspector]
@@ -31,51 +33,95 @@ namespace ML.Engine.UI
         [ShowInInspector]
         private bool isInit = false;
 
+        private static string LayerName = "UICamera";
+        //public LayerMask layerMask; 
+
         public void Init()
         {
             Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<RenderTexture>("BaseUIPrefab/UICameraImage/RenderTex2D_UICameraImage_RT.renderTexture").Completed += (handle) =>
             {
-                this.texture = handle.Result;
-
-                cameraParent = new GameObject("UICameraImageRoot");
-                cameraParent.transform.position = cameraSpawnPoint;
-
-                GameObject cameraObject = new GameObject("UICamera");
-                cameraObject.transform.SetParent(cameraParent.transform);
-                cameraObject.transform.localPosition = Vector3.zero;
-                cameraObject.transform.localRotation = Quaternion.identity;
-
-                uiCamera = cameraObject.AddComponent<Camera>();
-                uiCamera.clearFlags = CameraClearFlags.Color;
-                uiCamera.backgroundColor = Color.black;
-                uiCamera.targetTexture = texture;
-                uiCamera.orthographic = false;
-
-                RawImage rawImage = transform.GetComponentInChildren<RawImage>();
-                rawImage.texture = uiCamera.targetTexture;
-                this.isInit = true;
+                Init(handle.Result);
             };
         }
 
-        public void LookAtGameObject(GameObject go)
+        public void Init(RenderTexture _rt)
         {
-            if (go == null) return;
-            if (currentObjectBeingObserved != null)
-            {
-                GameManager.DestroyObj(currentObjectBeingObserved);
-            }
+            this.texture = _rt;
+            cameraParent = new GameObject(this.gameObject.name);
+            cameraParent.transform.position = cameraSpawnPoint;
 
-            currentObjectBeingObserved = go;
+            GameObject cameraObject = new GameObject("UICamera");
+            cameraObject.transform.SetParent(cameraParent.transform);
+            cameraObject.transform.localPosition = Vector3.zero;
+            cameraObject.transform.localRotation = Quaternion.identity;
+
+            uiCamera = cameraObject.AddComponent<Camera>();
+            uiCamera.cullingMask = 1 << (LayerMask.NameToLayer(LayerName));
+            uiCamera.clearFlags = CameraClearFlags.Color;
+            uiCamera.backgroundColor = Color.clear;
+            uiCamera.targetTexture = texture;
+            uiCamera.orthographic = false;
+
+            RawImage rawImage = transform.GetComponentInChildren<RawImage>();
+            rawImage.texture = uiCamera.targetTexture;
+            
+            currentObjectBeingObserved = new GameObject("FouceObject");
             currentObjectBeingObserved.transform.SetParent(cameraParent.transform);
             currentObjectBeingObserved.transform.localPosition = Vector3.zero;
             currentObjectBeingObserved.transform.localRotation = Quaternion.identity;
+            
+            this.isInit = true;
+        }
+        
+        public void LookAtGameObject(GameObject _targetGo,bool modeLayer = true)
+        {
+            if (_targetGo == null) return;
 
+            if(currentObjectBeingObserved != null)
+            {
+                BuildingManager.Instance.ResetVisualSocket();
+                GameManager.DestroyObj(currentObjectBeingObserved);
+            }
+
+            currentObjectBeingObserved = _targetGo;
+            currentObjectBeingObserved.transform.SetParent(cameraParent.transform);
+            if (modeLayer)
+            {
+                ModeGameObjectLayer(currentObjectBeingObserved.transform);
+            }
+
+            currentObjectBeingObserved.transform.localPosition = Vector3.zero;
+            currentObjectBeingObserved.transform.localRotation = Quaternion.identity;
+            cameraParent.transform.position = _targetGo.transform.position;
+            
             Vector3 direction = currentObjectBeingObserved.transform.position - uiCamera.transform.position;
             uiCamera.transform.rotation = Quaternion.LookRotation(-direction, Vector3.up);
 
             uiCamera.transform.position = currentObjectBeingObserved.transform.position - uiCamera.transform.forward * distanceFromObject;
         }
 
+        /// <summary>
+        /// 环绕目标点，不会摧毁原物体，可能多个机位
+        /// </summary>
+        public void LookAtGameObjectMultCamera(GameObject go,Transform cameraPos)
+        {
+            if (go == null) return;
+            
+            uiCamera.transform.position = cameraPos.position;
+            uiCamera.transform.LookAt(go.transform);
+        }
+        
+        
+        
+        public static void ModeGameObjectLayer(Transform _transform)
+        {
+            _transform.gameObject.layer = LayerMask.NameToLayer(LayerName);
+            foreach (Transform _transf in _transform)
+            {
+                ModeGameObjectLayer(_transf);
+            }
+        }
+        
         public void OnDrag(PointerEventData eventData)
         {
             if (this.currentObjectBeingObserved == null) return;
@@ -87,7 +133,17 @@ namespace ML.Engine.UI
         public void DisableUICameraImage()
         {
             base.OnDestroy();
+            BuildingManager.Instance.ResetVisualSocket();
             GameManager.DestroyObj(this.cameraParent);
+        }
+
+        protected override void OnDisable()
+        {
+            if (currentObjectBeingObserved != null)
+            {
+                BuildingManager.Instance.ResetVisualSocket();
+                GameManager.DestroyObj(currentObjectBeingObserved);
+            }
         }
     }
 }

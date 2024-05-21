@@ -39,9 +39,36 @@ namespace ML.Engine.Input
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""RT"",
+                    ""type"": ""Button"",
+                    ""id"": ""025a32f2-1551-4d1d-9883-0709b8ad78b4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ConfirmHold"",
+                    ""type"": ""Button"",
+                    ""id"": ""943f1d23-9cf7-4f06-9a2e-13064a30fde5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""SwichBtn"",
                     ""type"": ""Value"",
                     ""id"": ""a86454bc-c2e4-484f-8224-919690d1e274"",
+                    ""expectedControlType"": ""Stick"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""TurnPage"",
+                    ""type"": ""Value"",
+                    ""id"": ""c329d0d8-d613-4e9a-8e26-ac645f7f712b"",
                     ""expectedControlType"": ""Stick"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -397,6 +424,105 @@ namespace ML.Engine.Input
                     ""action"": ""SubInteractHold"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ab5b778b-20a8-4c4e-b254-5b58269d3858"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ConfirmHold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f85ca303-9314-4d36-8d79-fd22cf0bf766"",
+                    ""path"": ""<XInputController>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ConfirmHold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0c68dd69-c617-4614-8b08-14daf51c6e9a"",
+                    ""path"": ""<XInputController>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RT"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""48b3299d-64f3-4eba-b3ac-bcf4b7267a3c"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RT"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""XBOX"",
+                    ""id"": ""0bb1464c-9820-4360-9abf-a75409463ea9"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TurnPage"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""57ffd815-238b-45d6-b03d-cf7cb3d13628"",
+                    ""path"": ""<XInputController>/rightStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TurnPage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""2416eabe-543b-4af5-8dda-44ec64ca4c67"",
+                    ""path"": ""<XInputController>/rightStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TurnPage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""d22d5c01-ca9d-4257-acc1-d3f0bab06207"",
+                    ""path"": ""<XInputController>/rightStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TurnPage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""5d9ba7de-45d2-4138-823e-ea1ac49c600c"",
+                    ""path"": ""<XInputController>/rightStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TurnPage"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -660,7 +786,10 @@ namespace ML.Engine.Input
             // Common
             m_Common = asset.FindActionMap("Common", throwIfNotFound: true);
             m_Common_Confirm = m_Common.FindAction("Confirm", throwIfNotFound: true);
+            m_Common_RT = m_Common.FindAction("RT", throwIfNotFound: true);
+            m_Common_ConfirmHold = m_Common.FindAction("ConfirmHold", throwIfNotFound: true);
             m_Common_SwichBtn = m_Common.FindAction("SwichBtn", throwIfNotFound: true);
+            m_Common_TurnPage = m_Common.FindAction("TurnPage", throwIfNotFound: true);
             m_Common_Back = m_Common.FindAction("Back", throwIfNotFound: true);
             m_Common_NextTerm = m_Common.FindAction("NextTerm", throwIfNotFound: true);
             m_Common_LastTerm = m_Common.FindAction("LastTerm", throwIfNotFound: true);
@@ -736,7 +865,10 @@ namespace ML.Engine.Input
         private readonly InputActionMap m_Common;
         private List<ICommonActions> m_CommonActionsCallbackInterfaces = new List<ICommonActions>();
         private readonly InputAction m_Common_Confirm;
+        private readonly InputAction m_Common_RT;
+        private readonly InputAction m_Common_ConfirmHold;
         private readonly InputAction m_Common_SwichBtn;
+        private readonly InputAction m_Common_TurnPage;
         private readonly InputAction m_Common_Back;
         private readonly InputAction m_Common_NextTerm;
         private readonly InputAction m_Common_LastTerm;
@@ -749,7 +881,10 @@ namespace ML.Engine.Input
             private @CommomInput m_Wrapper;
             public CommonActions(@CommomInput wrapper) { m_Wrapper = wrapper; }
             public InputAction @Confirm => m_Wrapper.m_Common_Confirm;
+            public InputAction @RT => m_Wrapper.m_Common_RT;
+            public InputAction @ConfirmHold => m_Wrapper.m_Common_ConfirmHold;
             public InputAction @SwichBtn => m_Wrapper.m_Common_SwichBtn;
+            public InputAction @TurnPage => m_Wrapper.m_Common_TurnPage;
             public InputAction @Back => m_Wrapper.m_Common_Back;
             public InputAction @NextTerm => m_Wrapper.m_Common_NextTerm;
             public InputAction @LastTerm => m_Wrapper.m_Common_LastTerm;
@@ -769,9 +904,18 @@ namespace ML.Engine.Input
                 @Confirm.started += instance.OnConfirm;
                 @Confirm.performed += instance.OnConfirm;
                 @Confirm.canceled += instance.OnConfirm;
+                @RT.started += instance.OnRT;
+                @RT.performed += instance.OnRT;
+                @RT.canceled += instance.OnRT;
+                @ConfirmHold.started += instance.OnConfirmHold;
+                @ConfirmHold.performed += instance.OnConfirmHold;
+                @ConfirmHold.canceled += instance.OnConfirmHold;
                 @SwichBtn.started += instance.OnSwichBtn;
                 @SwichBtn.performed += instance.OnSwichBtn;
                 @SwichBtn.canceled += instance.OnSwichBtn;
+                @TurnPage.started += instance.OnTurnPage;
+                @TurnPage.performed += instance.OnTurnPage;
+                @TurnPage.canceled += instance.OnTurnPage;
                 @Back.started += instance.OnBack;
                 @Back.performed += instance.OnBack;
                 @Back.canceled += instance.OnBack;
@@ -800,9 +944,18 @@ namespace ML.Engine.Input
                 @Confirm.started -= instance.OnConfirm;
                 @Confirm.performed -= instance.OnConfirm;
                 @Confirm.canceled -= instance.OnConfirm;
+                @RT.started -= instance.OnRT;
+                @RT.performed -= instance.OnRT;
+                @RT.canceled -= instance.OnRT;
+                @ConfirmHold.started -= instance.OnConfirmHold;
+                @ConfirmHold.performed -= instance.OnConfirmHold;
+                @ConfirmHold.canceled -= instance.OnConfirmHold;
                 @SwichBtn.started -= instance.OnSwichBtn;
                 @SwichBtn.performed -= instance.OnSwichBtn;
                 @SwichBtn.canceled -= instance.OnSwichBtn;
+                @TurnPage.started -= instance.OnTurnPage;
+                @TurnPage.performed -= instance.OnTurnPage;
+                @TurnPage.canceled -= instance.OnTurnPage;
                 @Back.started -= instance.OnBack;
                 @Back.performed -= instance.OnBack;
                 @Back.canceled -= instance.OnBack;
@@ -936,7 +1089,10 @@ namespace ML.Engine.Input
         public interface ICommonActions
         {
             void OnConfirm(InputAction.CallbackContext context);
+            void OnRT(InputAction.CallbackContext context);
+            void OnConfirmHold(InputAction.CallbackContext context);
             void OnSwichBtn(InputAction.CallbackContext context);
+            void OnTurnPage(InputAction.CallbackContext context);
             void OnBack(InputAction.CallbackContext context);
             void OnNextTerm(InputAction.CallbackContext context);
             void OnLastTerm(InputAction.CallbackContext context);

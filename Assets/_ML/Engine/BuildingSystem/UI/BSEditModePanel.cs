@@ -24,8 +24,11 @@ namespace ML.Engine.BuildingSystem.UI
         {
             // 实时更新落点的位置和旋转以及是否可放置
             this.Placer.TransformSelectedPartInstance();
+            if (this.IsRotate)
+            {
+                this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.DisableGridRotRate * Time.deltaTime * rotOffset, Vector3.up);
+            }
         }
-
         #endregion
 
         #region Unity
@@ -75,14 +78,15 @@ namespace ML.Engine.BuildingSystem.UI
 
             this.Placer.BInput.BuildPlaceMode.KeyCom.performed -= Placer_EnterKeyCom;
             this.Placer.backInputAction.performed -= Placer_CancelEdit;
-            this.Placer.BInput.BuildPlaceMode.Rotate.performed -= Placer_RotateBPart;
+            this.Placer.BInput.BuildPlaceMode.Rotate.started -= Placer_RotateBPart;
+            this.Placer.BInput.BuildPlaceMode.Rotate.canceled -= Placer_RotateBPart;
             this.Placer.BInput.BuildPlaceMode.ChangeActiveSocket.performed -= Placer_ChangeActiveSocket;
             this.Placer.comfirmInputAction.performed -= Placer_ComfirmEdit;
         }
 
         protected override void RegisterInput()
         {
-            Manager.GameManager.Instance.TickManager.RegisterFixedTick(0, this);
+            Manager.GameManager.Instance.TickManager.RegisterFixedTick(-1, this);
 
             this.Placer.EnablePlayerInput();
 
@@ -95,7 +99,8 @@ namespace ML.Engine.BuildingSystem.UI
 
             this.Placer.BInput.BuildPlaceMode.KeyCom.performed += Placer_EnterKeyCom;
             this.Placer.backInputAction.performed += Placer_CancelEdit;
-            this.Placer.BInput.BuildPlaceMode.Rotate.performed += Placer_RotateBPart;
+            this.Placer.BInput.BuildPlaceMode.Rotate.started += Placer_RotateBPart;
+            this.Placer.BInput.BuildPlaceMode.Rotate.canceled += Placer_RotateBPart;
             this.Placer.BInput.BuildPlaceMode.ChangeActiveSocket.performed += Placer_ChangeActiveSocket;
             this.Placer.comfirmInputAction.performed += Placer_ComfirmEdit;
         }
@@ -113,17 +118,40 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.SelectedPartInstance.AlternativeActiveSocket();
         }
 
+        private bool IsRotate = false;
+        private float rotOffset = 0;
         private void Placer_RotateBPart(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             int offset = obj.ReadValue<float>() > 0 ? 1 : -1;
-
             if (this.Placer.IsEnableGridSupport)
             {
-                this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, this.Placer.SelectedPartInstance.transform.up);
+                if (obj.started)
+                {
+                    if (this.Placer.SelectedPartInstance.AttachedSocket == null)
+                    {
+                        this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, Vector3.up);
+                    }
+                    else
+                    {
+                        this.Placer.SelectedPartInstance.ActiveSocket.AsMatchRotOffset *= offset > 0 ? this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta : Quaternion.Inverse(this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta);
+                    }
+                }
             }
             else
             {
-                this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.DisableGridRotRate * Time.deltaTime * offset, this.Placer.SelectedPartInstance.transform.up);
+                if (this.Placer.SelectedPartInstance.AttachedSocket != null)
+                {
+                    if (obj.started)
+                    {
+                        this.Placer.SelectedPartInstance.ActiveSocket.AsMatchRotOffset *= offset > 0 ? this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta : Quaternion.Inverse(this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta);
+                    }
+                }
+                else
+                {
+                    IsRotate = !IsRotate;
+                    rotOffset = offset;
+                }
+                //this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.DisableGridRotRate * Time.deltaTime * offset, this.Placer.SelectedPartInstance.transform.up);
             }
         }
 

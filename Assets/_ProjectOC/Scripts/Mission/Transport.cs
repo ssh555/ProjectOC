@@ -6,8 +6,9 @@ namespace ProjectOC.MissionNS
     [LabelText("搬运"), System.Serializable]
     public class Transport
     {
-        [LabelText("搬运物品ID"), ReadOnly]
-        public string ItemID = "";
+        #region Data
+        [LabelText("搬运东西的ID"), ReadOnly]
+        public string ID = "";
         [LabelText("搬运所属的任务"), ReadOnly]
         public MissionTransport Mission;
         [LabelText("取货地"), ReadOnly]
@@ -31,52 +32,54 @@ namespace ProjectOC.MissionNS
         public bool ArriveSource;
         [LabelText("是否到达目的地"), ReadOnly]
         public bool ArriveTarget;
+        #endregion
 
-        public Transport(MissionTransport mission, string itemID, int missionNum, IMissionObj source, IMissionObj destination, WorkerNS.Worker worker)
+        public Transport(MissionTransport mission, string id, int missionNum, IMissionObj source, IMissionObj target, WorkerNS.Worker worker)
         {
-            this.ItemID = itemID;
-            this.Mission = mission;
-            this.Source = source;
-            this.Target = destination;
-            this.Worker = worker;
-            this.MissionNum = missionNum;
+            Mission = mission;
+            ID = id;
+            MissionNum = missionNum;
+            Source = source;
+            Target = target;
+            Worker = worker;
 
-            this.Mission.AddTransport(this);
-            this.Source.AddTransport(this);
-            this.Source.ReservePutOut(mission.ItemID, missionNum, this);
-            this.Target.ReservePutIn(mission.ItemID, missionNum, this);
+            Mission.AddTransport(this);
+            Source.AddTransport(this);
+            Target.AddTransport(this);
 
-            this.Target.AddTransport(this);
-            this.Worker.Transport = this;
-            this.Worker.SetDestination(this.Source.GetTransform().position, Transport_Source_Action);
+            SoureceReserveNum = Source.ReservePutOut(mission.ID, missionNum);
+            TargetReserveNum = Target.ReservePutIn(mission.ID, missionNum);
+
+            Worker.Transport = this;
+            Worker.SetDestination(Source.GetTransform().position, OnSourceArriveEvent);
         }
 
         public void UpdateDestination()
         {
             if (!ArriveSource)
             {
-                if (this.Source.GetTransform().position != this.Worker.Target)
+                if (Source.GetTransform().position != Worker.Target)
                 {
-                    this.Worker.SetDestination(this.Source.GetTransform().position, Transport_Source_Action);
+                    Worker.SetDestination(Source.GetTransform().position, OnSourceArriveEvent);
                 }
             }
             else
             {
-                if (this.Target.GetTransform().position != this.Worker.Target)
+                if (Target.GetTransform().position != Worker.Target)
                 {
-                    this.Worker.SetDestination(this.Target.GetTransform().position, Transport_Target_Action);
+                    Worker.SetDestination(Target.GetTransform().position, OnTargetArriveEvent);
                 }
             }
         }
 
-        private void Transport_Source_Action(WorkerNS.Worker worker)
+        private void OnSourceArriveEvent(WorkerNS.Worker worker)
         {
             worker.Transport.ArriveSource = true;
             worker.Transport.PutOutSource();
-            worker.SetDestination(worker.Transport.Target.GetTransform().position, Transport_Target_Action);
+            worker.SetDestination(worker.Transport.Target.GetTransform().position, OnTargetArriveEvent);
         }
 
-        private void Transport_Target_Action(WorkerNS.Worker worker)
+        private void OnTargetArriveEvent(WorkerNS.Worker worker)
         {
             worker.Transport.ArriveTarget = true;
             worker.Transport.PutInTarget();
@@ -87,35 +90,21 @@ namespace ProjectOC.MissionNS
         /// </summary>
         public void PutOutSource()
         {
-            bool flagBurden = false;
-            bool flagSource = false;
-            List<ML.Engine.InventorySystem.Item> items = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(ItemID, MissionNum);
-            foreach (var item in items)
+            int putOutNum = SoureceReserveNum > 0 ? SoureceReserveNum : MissionNum;
+            int weight = ML.Engine.InventorySystem.ItemManager.Instance.GetWeight(ID);
+            int burMaxNum = weight != 0 ? (Worker.RealBURMax - Worker.WeightCurrent) / weight : putOutNum;
+            putOutNum = putOutNum <= burMaxNum ? putOutNum : burMaxNum;
+            int sourceNum = Source.PutOut(ID, putOutNum);
+            if (!Worker.TransportDict.ContainsKey(ID))
             {
-                if (item.Weight + Worker.WeightCurrent >= Worker.WeightMax)
-                {
-                    int weight = ML.Engine.InventorySystem.ItemManager.Instance.GetWeight(item.ID);
-                    int num = weight != 0 ? (Worker.WeightMax - Worker.WeightCurrent) / weight : 0;
-                    item.Amount = num;
-                    flagBurden = true;
-                }
-                int sourceNum = Source.PutOut(item.ID, item.Amount);
-                if (sourceNum < item.Amount)
-                {
-                    item.Amount = sourceNum;
-                    flagSource = true;
-                }
-                Worker.TransportItems.Add(item);
-                SoureceReserveNum -= item.Amount;
-                CurNum += item.Amount;
-                if (flagBurden || flagSource)
-                {
-                    break;
-                }
+                Worker.TransportDict[ID] = 0;
             }
+            Worker.TransportDict[ID] += sourceNum;
+            SoureceReserveNum -= sourceNum;
+            CurNum += sourceNum;
             if (SoureceReserveNum > 0)
             {
-                SoureceReserveNum -= Source.RemoveReservePutOut(ItemID, SoureceReserveNum);
+                SoureceReserveNum -= Source.RemoveReservePutOut(ID, SoureceReserveNum);
             }
         }
 
@@ -124,40 +113,45 @@ namespace ProjectOC.MissionNS
         /// </summary>
         public void PutInTarget()
         {
-            foreach (var item in Worker.TransportItems)
+            if (Worker.TransportDict.ContainsKey(ID))
             {
-                if (item.ID == ItemID)
+                int remove = Worker.TransportDict[ID] <= CurNum ? Worker.TransportDict[ID] : CurNum;
+                Worker.TransportDict[ID] -= remove;
+                CurNum -= remove;
+                FinishNum += remove;
+                TargetReserveNum -= remove;
+                if (Worker.TransportDict[ID] == 0)
                 {
-                    if (item.Amount >= CurNum)
-                    {
-                        item.Amount -= CurNum;
-                        FinishNum += CurNum;
-                        CurNum = 0;
-                        break;
-                    }
-                    else
-                    {
-                        CurNum -= item.Amount;
-                        FinishNum += item.Amount;
-                        item.Amount = 0;
-                    }
+                    Worker.TransportDict.Remove(ID);
+                }
+                Target.PutIn(ID, FinishNum);
+                Worker.SettleTransport();
+                if (TargetReserveNum > 0)
+                {
+                    TargetReserveNum -= Target.RemoveReservePutIn(ID, TargetReserveNum);
                 }
             }
-            this.Worker.TransportItems.RemoveAll(item => item.Amount == 0);
-            this.Target.PutIn(this.ItemID, this.FinishNum);
-            this.Worker.SettleTransport();
-            this.End();
-            this.Mission.FinishNum += this.FinishNum;
+            End();
+            Mission.FinishNum += FinishNum;
         }
 
         /// <summary>
-        /// 强制结束搬运
+        /// 结束搬运
         /// </summary>
-        public void End(bool removeMission=true)
+        public void End()
         {
+            if (Worker != null && Worker.TransportDict.ContainsKey(ID) && CurNum > 0)
+            {
+                CurNum = CurNum <= Worker.TransportDict[ID] ? CurNum : Worker.TransportDict[ID];
+                Worker.TransportDict[ID] -= CurNum;
+                if (Worker.TransportDict[ID] == 0)
+                {
+                    Worker.TransportDict.Remove(ID);
+                }
+            }
             if (ML.Engine.InventorySystem.ItemManager.Instance != null)
             {
-                List<ML.Engine.InventorySystem.Item> items = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(ItemID, CurNum);
+                List<ML.Engine.InventorySystem.Item> items = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(ID, CurNum);
                 foreach (var item in items)
                 {
 #pragma warning disable CS4014
@@ -165,41 +159,19 @@ namespace ProjectOC.MissionNS
 #pragma warning restore CS4014
                 }
             }
-            foreach (var item in Worker.TransportItems)
-            {
-                if (item.ID == ItemID)
-                {
-                    if (item.Amount >= CurNum)
-                    {
-                        item.Amount -= CurNum;
-                        CurNum = 0;
-                        break;
-                    }
-                    else
-                    {
-                        CurNum -= item.Amount;
-                        item.Amount = 0;
-                    }
-                }
-            }
-            Worker.TransportItems.RemoveAll(item => item.Amount == 0);
             Worker.Transport = null;
             Worker.ClearDestination();
-            if (!ArriveSource || SoureceReserveNum > 0)
+            if (SoureceReserveNum > 0)
             {
-                Source?.RemoveReservePutOut(ItemID, SoureceReserveNum);
+                Source?.RemoveReservePutOut(ID, SoureceReserveNum);
             }
-            if (!ArriveTarget)
+            if (TargetReserveNum > 0)
             {
-                Target?.RemoveReservePutIn(ItemID, TargetReserveNum);
+                Target?.RemoveReservePutIn(ID, TargetReserveNum);
             }
-            if (removeMission)
-            {
-                Mission.RemoveTransport(this);
-            }
+            Mission?.RemoveTransport(this);
             Source?.RemoveTranport(this);
             Target?.RemoveTranport(this);
         }
     }
 }
-

@@ -14,6 +14,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.U2D;
@@ -162,8 +163,6 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
                 {
                     this.OrderDelegationUIBtnListContainer.UIBtnLists[1].DeleteButton(curSelectedOrderInstanceIDInOrderDelegation);
                 }
-                
-                Debug.Log("承接订单");
             }
         }
         else if(FunctionIndex == 0)
@@ -196,14 +195,14 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
             if (OrderDelegationIndex == 1)
             {
                 //拒绝订单
-                Debug.Log("拒绝订单 "+ curSelectedOrderInstanceIDInOrderDelegation);
+                //Debug.Log("拒绝订单 "+ curSelectedOrderInstanceIDInOrderDelegation);
                 OrderManager.Instance.RefuseOrder(curSelectedOrderInstanceIDInOrderDelegation);
             }
         }
         else if (FunctionIndex == 0)
         {
             //取消订单
-            Debug.Log("取消订单 "+ curSelectedOrderInstanceIDInAcceptedOrder);
+            //Debug.Log("取消订单 "+ curSelectedOrderInstanceIDInAcceptedOrder);
             var AcceptedOrder = OrderManager.Instance.GetAcceptedOrder(curSelectedOrderInstanceIDInAcceptedOrder);
             if (AcceptedOrder != null && AcceptedOrder.canBeCancled)
             {
@@ -222,7 +221,16 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 
     private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
-        UIMgr.PopPanel();
+        if (FunctionIndex == 1 && OrderDelegationIndex == 1)
+        {
+            OrderDelegationIndex = 0;
+            this.Refresh();
+        }
+        else
+        {
+            UIMgr.PopPanel();
+        }
+        
     }
     #endregion
 

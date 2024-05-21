@@ -71,7 +71,8 @@ MonoBehaviour:
     isLoop: 0
     isWheel: 0
     hasBtnListContainer: 1
-    readUnActiveButton: 1
+    readUnActiveButton: 0
+    scrollRect: {fileID: 0}
 --- !u!114 &5815807723316230883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -220,6 +221,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2500631267232634259, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
+      propertyPath: slider
+      value: 
+      objectReference: {fileID: 3440263840871502733}
     - target: {fileID: 2704436690556869163, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -246,7 +251,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3158948921646371319, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 15
+      value: 33.004997
       objectReference: {fileID: 0}
     - target: {fileID: 3158948921646371319, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -342,7 +347,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8379378438614032342, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
       propertyPath: m_Name
-      value: Pinch_Slider
+      value: Pinch_SliderTemplate
       objectReference: {fileID: 0}
     - target: {fileID: 8529997377023190369, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
       propertyPath: m_AnchorMax.y
@@ -365,6 +370,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
+--- !u!114 &3440263840871502733 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 426790827214787773, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}
+  m_PrefabInstance: {fileID: 3049506784282412848}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &8278998339822033224 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6392559930324819576, guid: b1c0a1cb471d7e14fbf93ecfa3612fbc, type: 3}

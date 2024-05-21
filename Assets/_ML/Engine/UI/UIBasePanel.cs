@@ -1,4 +1,5 @@
 using ML.Engine.Utility;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace ML.Engine.UI
         /// <summary>
         /// 对象池
         /// </summary>
+        [ShowInInspector]
         public UIObjectPool objectPool;
         /// <summary>
         /// 所属UIManager
@@ -50,7 +52,7 @@ namespace ML.Engine.UI
         public virtual void OnEnter()
         {
             this.gameObject.SetActive(true);
-            this.objectPool = new UIObjectPool();
+            this.objectPool = new UIObjectPool(this.gameObject.name);
             this.InitObjectPool();
             this.InitBtnInfo();
             this.Enter();
@@ -136,6 +138,7 @@ namespace ML.Engine.UI
         {
             this.objectPool.GetFunctionExecutor().SetOnAllFunctionsCompleted(() =>
             {
+                this.InitBtnInfoAfterInitObjectPool();
                 this.Refresh();
             });
             StartCoroutine(this.objectPool.GetFunctionExecutor().Execute());
@@ -147,7 +150,11 @@ namespace ML.Engine.UI
         {
 
         }
+        //该函数为objectpool异步加载完资源后调用
+        protected virtual void InitBtnInfoAfterInitObjectPool()
+        {
 
+        }
 
 
     }

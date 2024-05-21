@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using ML.Engine.InventorySystem.CompositeSystem;
 using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
 
@@ -10,7 +9,6 @@ namespace ML.Engine.InventorySystem
     {
         [LabelText("ID"), ReadOnly]
         public string ID;
-
         public bool IsValidRecipe => !string.IsNullOrEmpty(ID) && (LocalGameManager.Instance == null || LocalGameManager.Instance.RecipeManager.IsValidID(ID));
         #region ¶Á±íÊý¾Ý
         [LabelText("ÅÅÐò"), ShowInInspector, ReadOnly]
@@ -33,19 +31,19 @@ namespace ML.Engine.InventorySystem
 
         public Recipe(RecipeTableData config)
         {
-            this.ID = config.ID;
+            ID = config.ID;
         }
 
         public void ClearData()
         {
-            this.ID = "";
+            ID = "";
         }
 
         public int GetRawNum(string itemID)
         {
             if (!string.IsNullOrEmpty(itemID))
             {
-                foreach (Formula raw in Raw)
+                foreach (var raw in Raw)
                 {
                     if (raw.id == itemID)
                     {
@@ -58,16 +56,25 @@ namespace ML.Engine.InventorySystem
 
         public Item Composite(IInventory inventory)
         {
-            CompositeManager.CompositionObjectType compObjType = CompositeManager.Instance.Composite(inventory, ID, out var composition);
-            switch (compObjType)
+            List<Formula> adds = new List<Formula>();
+            foreach (var formula in Raw)
             {
-                case CompositeManager.CompositionObjectType.Item:
-                    Item item = composition as Item;
-                    return item;
-                default:
-                    break;
+                if(inventory.RemoveItem(formula.id, formula.num))
+                {
+                    adds.Add(formula);
+                }
+                else
+                {
+                    foreach (var add in adds)
+                    {
+                        inventory.AddItem(ItemManager.Instance.SpawnItems(add.id, add.num));
+                    }
+                    return null;
+                }
             }
-            return null;
+            Item item = ItemManager.Instance.SpawnItem(ProductID);
+            item.Amount = ProductNum;
+            return item;
         }
     }
 }

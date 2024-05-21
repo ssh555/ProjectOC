@@ -4,10 +4,7 @@ namespace ProjectOC.WorkerNS
 {
     public class WorkerStateWorkingDuty : State
     {
-        public WorkerStateWorkingDuty(string name) : base(name)
-        {
-        }
-
+        public WorkerStateWorkingDuty(string name) : base(name) { }
         public override void ConfigState()
         {
             this.BindEnterAction

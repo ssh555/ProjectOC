@@ -10,109 +10,299 @@ namespace ProjectOC.DataNS
     {
         #region Data
         [LabelText("存储数据"), ReadOnly]
-        private Data[] Datas;
+        private Data[] Datas = new Data[0];
         [NonSerialized]
-        private Dictionary<string, HashSet<int>> DataIndexDict;
-        /// <summary>
-        /// 能存多少个存储数据
-        /// </summary>
-        [LabelText("容量"), ReadOnly]
-        public int Capacity;
-        /// <summary>
-        /// 存储数据里能存多少个数据
-        /// </summary>
-        [LabelText("存储数据的容量"), ReadOnly]
-        public int DataCapacity;
-        /// <summary>
-        /// 数据变化事件
-        /// </summary>
+        private Dictionary<string, HashSet<int>> IndexDict;
         public event Action OnDataChangeEvent;
-        #endregion
-
-        #region DataContainer
         public DataContainer(int capacity, int dataCapacity)
         {
+            if(capacity < 0  || dataCapacity < 0) { return; }
             Datas = new Data[capacity];
             for (int i = 0; i < capacity; i++)
             {
                 Datas[i] = new Data("", dataCapacity);
             }
-            DataIndexDict = new Dictionary<string, HashSet<int>>();
+            IndexDict = new Dictionary<string, HashSet<int>>();
+            OnDataChangeEvent?.Invoke();
         }
-
+        public DataContainer(List<string> ids, List<int> dataCapacitys)
+        {
+            Reset(ids, dataCapacitys);
+        }
+        public void Reset(List<string> ids, List<int> dataCapacitys)
+        {
+            Datas = new Data[ids.Count];
+            if (dataCapacitys.Count >= ids.Count)
+            {
+                for (int i = 0; i < ids.Count; i++)
+                {
+                    Datas[i] = new Data(ids[i], dataCapacitys[i]);
+                }
+            }
+            IndexDict = new Dictionary<string, HashSet<int>>();
+            UpdateIndexDict();
+            OnDataChangeEvent?.Invoke();
+        }
         private void UpdateIndexDict()
         {
-            DataIndexDict.Clear();
+            IndexDict.Clear();
             for (int i = 0; i < Datas.Length; i++)
             {
                 Data data = Datas[i];
                 if (data.HaveSetData)
                 {
-                    if (!DataIndexDict.ContainsKey(data.ID))
+                    if (!IndexDict.ContainsKey(data.ID))
                     {
-                        DataIndexDict[data.ID] = new HashSet<int>();
+                        IndexDict[data.ID] = new HashSet<int>();
                     }
-                    DataIndexDict[data.ID].Add(i);
+                    IndexDict[data.ID].Add(i);
                 }
             }
         }
+        #endregion
 
+        #region Get
+        public int GetCapacity() { return Datas?.Length ?? 0; }
+        public bool IsValidIndex(int index) { return 0 <= index && index < Datas.Length; }
+        public string GetID(int index) { return IsValidIndex(index) ? Datas[index].ID : ""; }
+        public bool GetCanIn(int index) { return IsValidIndex(index) ? Datas[index].CanIn : false; }
+        public bool GetCanOut(int index) { return IsValidIndex(index) ? Datas[index].CanOut : false; }
+        public bool HaveSetData(int index) { return IsValidIndex(index) && Datas[index].HaveSetData; }
+        public int GetAmount(int index, DataOpType type) { return IsValidIndex(index) ? Datas[index].GetAmount(type) : 0; }
+        public List<Data> GetDatas() { return Datas.ToList(); }
+
+        public bool CheckDataOpType(DataOpType addType, DataOpType removeType, bool exceed = false)
+        {
+            if (exceed && removeType != DataOpType.Empty && removeType != DataOpType.EmptyReserve)
+            {
+                return false;
+            }
+            switch (addType)
+            {
+                case DataOpType.Storage:
+                    return removeType != DataOpType.Storage;
+                case DataOpType.StorageReserve:
+                    return removeType == DataOpType.Storage;
+                case DataOpType.EmptyReserve:
+                    return removeType == DataOpType.Empty;
+                case DataOpType.Empty:
+                    return removeType != DataOpType.Empty;
+                default:
+                    return false;
+            }
+        }
+
+        public List<int> GetIndexs(string id, bool needSort = false)
+        {
+            if (!string.IsNullOrEmpty(id) && IndexDict.ContainsKey(id))
+            {
+                List<int> indexs = IndexDict[id].ToList();
+                if (needSort)
+                {
+                    indexs.Sort((x, y) => x.CompareTo(y));
+                }
+                return indexs;
+            }
+            return new List<int>();
+        }
+
+        public bool HaveSetData(string id, bool needCanIn = false, bool needCanOut = false)
+        {
+            if (!string.IsNullOrEmpty(id))
+            {
+                foreach (int index in GetIndexs(id))
+                {
+                    if (Datas[index].HaveSetData && Datas[index].ID == id && (!needCanIn || Datas[index].CanIn) && (!needCanOut || Datas[index].CanOut))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public bool HaveData(string id, DataOpType type, bool needCanIn = false, bool needCanOut = false)
+        {
+            foreach (Data data in Datas.ToArray())
+            {
+                if (data.ID == id && data.GetAmount(type) > 0 && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool HaveAnyData(DataOpType type, bool needCanIn = false, bool needCanOut = false)
+        {
+            foreach (Data data in Datas.ToArray())
+            {
+                if (data.HaveSetData && data.GetAmount(type) > 0 && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public int GetAmount(string id, DataOpType type, bool needCanIn = false, bool needCanOut = false)
+        {
+            int result = 0;
+            foreach (int index in GetIndexs(id))
+            {
+                if (Datas[index].HaveSetData && Datas[index].ID == id && (!needCanIn || Datas[index].CanIn) && (!needCanOut || Datas[index].CanOut))
+                {
+                    result += Datas[index].GetAmount(type);
+                }
+            }
+            return result;
+        }
+
+        public Dictionary<string, int> GetAmount(DataOpType type, bool needCanIn = false, bool needCanOut = false)
+        {
+            Dictionary<string, int> result = new Dictionary<string, int>();
+            if (Datas != null)
+            {
+                foreach (Data data in Datas.ToArray())
+                {
+                    if (data.HaveSetData && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
+                    {
+                        int amount = data.GetAmount(type);
+                        if (amount > 0)
+                        {
+                            if (!result.ContainsKey(data.ID))
+                            {
+                                result[data.ID] = 0;
+                            }
+                            result[data.ID] += amount;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+        #endregion
+
+        #region Set
         public Dictionary<string, int> ChangeCapacity(int capacity, int dataCapacity)
         {
             lock (this)
             {
                 Dictionary<string, int> dict = new Dictionary<string, int>();
-                if (capacity > 0 && dataCapacity > 0)
+                if (capacity < 0 || dataCapacity < 0) { return dict; }
+                Data[] newDatas = new Data[capacity];
+                for (int i = 0; i < capacity; i++)
                 {
-                    Data[] newDatas = new Data[capacity];
-                    for (int i = 0; i < capacity; i++)
+                    if (IsValidIndex(i)) 
                     {
-                        if (!IsValidIndex(i))
-                        {
-                            break;
-                        }
                         newDatas[i] = Datas[i];
                     }
-                    for (int i = capacity; i < Datas.Length; i++)
+                    else
                     {
-                        if (Datas[i].StorageAll > 0)
-                        {
-                            if (!dict.ContainsKey(Datas[i].ID))
-                            {
-                                dict.Add(Datas[i].ID, 0);
-                            }
-                            dict[Datas[i].ID] += Datas[i].StorageAll;
-                        }
+                        newDatas[i] = new Data("", dataCapacity);
                     }
-
-                    for (int i = 0; i < capacity; i++)
-                    {
-                        if (newDatas[i].StorageAll > dataCapacity)
-                        {
-                            if (!dict.ContainsKey(newDatas[i].ID))
-                            {
-                                dict[newDatas[i].ID] = 0;
-                            }
-                            int remove = newDatas[i].StorageAll - dataCapacity;
-                            dict[newDatas[i].ID] += remove;
-
-                            int storage = newDatas[i].GetAmount(DataOpType.Storage);
-                            if (storage >= remove)
-                            {
-                                newDatas[i].ChangeAmount(DataOpType.Storage, -remove);
-                            }
-                            else
-                            {
-                                newDatas[i].ChangeAmount(DataOpType.Storage, -storage);
-                                newDatas[i].ChangeAmount(DataOpType.StorageReserve, storage - remove);
-                            }
-                        }
-                        newDatas[i].MaxCapacity = dataCapacity;
-                    }
-                    Datas = newDatas;
-                    UpdateIndexDict();
-                    OnDataChangeEvent?.Invoke();
                 }
+                for (int i = capacity; i < Datas.Length; i++)
+                {
+                    if (Datas[i].StorageAll > 0)
+                    {
+                        if (!dict.ContainsKey(Datas[i].ID))
+                        {
+                            dict.Add(Datas[i].ID, 0);
+                        }
+                        dict[Datas[i].ID] += Datas[i].StorageAll;
+                    }
+                }
+
+                for (int i = 0; i < capacity; i++)
+                {
+                    if (newDatas[i].StorageAll > dataCapacity)
+                    {
+                        if (!dict.ContainsKey(newDatas[i].ID))
+                        {
+                            dict[newDatas[i].ID] = 0;
+                        }
+                        int remove = newDatas[i].StorageAll - dataCapacity;
+                        dict[newDatas[i].ID] += remove;
+
+                        int storage = newDatas[i].GetAmount(DataOpType.Storage);
+                        if (storage >= remove)
+                        {
+                            newDatas[i].ChangeAmount(DataOpType.Storage, -remove);
+                        }
+                        else
+                        {
+                            newDatas[i].ChangeAmount(DataOpType.Storage, -storage);
+                            newDatas[i].ChangeAmount(DataOpType.StorageReserve, storage - remove);
+                        }
+                    }
+                    newDatas[i].ChangeAmount(DataOpType.MaxCapacity, dataCapacity);
+                }
+                Datas = newDatas;
+                UpdateIndexDict();
+                OnDataChangeEvent?.Invoke();
+                return dict;
+            }
+        }
+
+        public Dictionary<string, int> ChangeCapacity(int capacity, List<int> dataCapacitys)
+        {
+            lock (this)
+            {
+                Dictionary<string, int> dict = new Dictionary<string, int>();
+                if (capacity < 0 || dataCapacitys.Count < capacity) { return dict; }
+                Data[] newDatas = new Data[capacity];
+                for (int i = 0; i < capacity; i++)
+                {
+                    if (IsValidIndex(i))
+                    {
+                        newDatas[i] = Datas[i];
+                    }
+                    else
+                    {
+                        newDatas[i] = new Data("", dataCapacitys[i]);
+                    }
+                }
+                for (int i = capacity; i < Datas.Length; i++)
+                {
+                    if (Datas[i].StorageAll > 0)
+                    {
+                        if (!dict.ContainsKey(Datas[i].ID))
+                        {
+                            dict.Add(Datas[i].ID, 0);
+                        }
+                        dict[Datas[i].ID] += Datas[i].StorageAll;
+                    }
+                }
+
+                for (int i = 0; i < capacity; i++)
+                {
+                    if (dataCapacitys[i] < 0) { continue; }
+                    if (newDatas[i].StorageAll > dataCapacitys[i])
+                    {
+                        if (!dict.ContainsKey(newDatas[i].ID))
+                        {
+                            dict[newDatas[i].ID] = 0;
+                        }
+                        int remove = newDatas[i].StorageAll - dataCapacitys[i];
+                        dict[newDatas[i].ID] += remove;
+
+                        int storage = newDatas[i].GetAmount(DataOpType.Storage);
+                        if (storage >= remove)
+                        {
+                            newDatas[i].ChangeAmount(DataOpType.Storage, -remove);
+                        }
+                        else
+                        {
+                            newDatas[i].ChangeAmount(DataOpType.Storage, -storage);
+                            newDatas[i].ChangeAmount(DataOpType.StorageReserve, storage - remove);
+                        }
+                    }
+                    newDatas[i].ChangeAmount(DataOpType.MaxCapacity, dataCapacitys[i]);
+                }
+                Datas = newDatas;
+                UpdateIndexDict();
+                OnDataChangeEvent?.Invoke();
                 return dict;
             }
         }
@@ -124,160 +314,53 @@ namespace ProjectOC.DataNS
         /// <param name="id">新的数据ID</param>
         public Tuple<string, int> ChangeData(int index, string id)
         {
-            id = id ?? "";
-            Tuple<string, int> result = new Tuple<string, int>("", 0);
-            if (IsValidIndex(index) && Datas[index].HaveSetData)
+            lock (this)
             {
-                result = new Tuple<string, int>(Datas[index].ID, Datas[index].StorageAll);
-                DataIndexDict[Datas[index].ID].Remove(index);
-                Datas[index].Clear();
-                Datas[index].ID = id;
-                if (!DataIndexDict.ContainsKey(id))
+                id = id ?? "";
+                Tuple<string, int> result = new Tuple<string, int>("", 0);
+                if (IsValidIndex(index))
                 {
-                    DataIndexDict[id] = new HashSet<int>();
-                }
-                DataIndexDict[id].Add(index);
-                OnDataChangeEvent?.Invoke();
-            }
-            return result;
-        }
-        #endregion
-
-        #region Get
-        public bool IsValidIndex(int index)
-        {
-            return 0 <= index && index < Datas.Length;
-        }
-
-        public Data GetData(int index)
-        {
-            return IsValidIndex(index) ? Datas[index] : default(Data);
-        }
-
-        public List<Data> GetAllDatas()
-        {
-            return Datas.ToList();
-        }
-
-        public Dictionary<string, int> GetAllDatasStorage()
-        {
-            Dictionary<string, int> dict = new Dictionary<string, int>();
-            foreach (Data data in Datas)
-            {
-                if (data.StorageAll > 0)
-                {
-                    if (!dict.ContainsKey(data.ID))
+                    if (Datas[index].StorageAll > 0)
                     {
-                        dict[data.ID] = 0;
+                        result = new Tuple<string, int>(Datas[index].ID, Datas[index].StorageAll);
+                        IndexDict[Datas[index].ID].Remove(index);
                     }
-                    dict[data.ID] += data.StorageAll;
-                }
-            }
-            return dict;
-        }
-
-        public int GetDataAmount(string id, DataOpType type, bool needCanIn = false, bool needCanOut = false)
-        {
-            int result = 0;
-            if (!string.IsNullOrEmpty(id) && DataIndexDict.ContainsKey(id))
-            {
-                foreach (int index in DataIndexDict[id])
-                {
-                    Data data = Datas[index];
-                    if (data.ID == id && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
+                    Datas[index].ChangeID(id);
+                    if (!IndexDict.ContainsKey(id))
                     {
-                        result += data.GetAmount(type);
+                        IndexDict[id] = new HashSet<int>();
                     }
+                    IndexDict[id].Add(index);
+                    OnDataChangeEvent?.Invoke();
                 }
+                return result;
             }
-            return result;
         }
 
-        private List<int> GetIndexs(string id)
-        {
-            if (!string.IsNullOrEmpty(id) && DataIndexDict.ContainsKey(id))
-            {
-                List<int> indexs = DataIndexDict[id].ToList();
-                indexs.Sort((x, y) => x.CompareTo(y));
-                return indexs;
-            }
-            return new List<int>();
-        }
-        #endregion
-
-        #region Set
-        /// <summary>
-        /// 是否有该物品
-        /// </summary>
-        public bool IsStoreHaveItem(string itemID, bool needCanIn = false, bool needCanOut = false)
-        {
-            if (!string.IsNullOrEmpty(itemID))
-            {
-                foreach (Data data in Datas)
-                {
-                    if (data.ID == itemID && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-       
-        
-        public bool CheckCanChangeData(DataOpType addType, DataOpType removeType, bool exceed = false)
-        {
-            if (exceed && removeType != DataOpType.Empty && removeType != DataOpType.EmptyReserve)
-            {
-                return false;
-            }
-            switch (addType)
-            {
-                case DataOpType.Storage:
-                    return removeType == DataOpType.Empty || removeType == DataOpType.StorageReserve || removeType == DataOpType.EmptyReserve;
-                case DataOpType.StorageReserve:
-                    return removeType == DataOpType.Storage;
-                case DataOpType.EmptyReserve:
-                    return removeType == DataOpType.Empty;
-                case DataOpType.Empty:
-                    return removeType == DataOpType.Storage || removeType == DataOpType.StorageReserve || removeType == DataOpType.EmptyReserve;
-                default:
-                    return false;
-            }
-        }
         /// <summary>
         /// 返回修改成功的数量
         /// </summary>
-        public int ChangeAmount(string itemID, int amount, DataOpType addType, DataOpType removeType, bool exceed = false, bool complete = true, bool needCanIn = false, bool needCanOut = false)
+        public int ChangeAmount(string id, int amount, DataOpType addType, DataOpType removeType, bool exceed = false, bool complete = true, bool needCanIn = false, bool needCanOut = false)
         {
             lock (this)
             {
-                if (!string.IsNullOrEmpty(itemID) && amount > 0 && CheckCanChangeData(addType, removeType, exceed))
+                if (!string.IsNullOrEmpty(id) && amount > 0 && CheckDataOpType(addType, removeType, exceed))
                 {
-                    int removeNum = GetDataAmount(itemID, removeType, needCanIn, needCanOut);
-                    if (!exceed && removeNum == 0 && (!complete || removeNum < amount))
-                    {
-                        return 0;
-                    }
+                    int removeNum = GetAmount(id, removeType, needCanIn, needCanOut);
+                    if (!exceed && removeNum == 0 && (!complete || removeNum < amount)) { return 0; }
                     int num = amount;
                     int temp = -1;
-                    for (int i = 0; i < Datas.Length; i++)
+                    foreach (int index in GetIndexs(id, true))
                     {
-                        if (Datas[i].ID == itemID && (!needCanIn || Datas[i].CanIn) && (!needCanOut || Datas[i].CanOut))
+                        if (Datas[index].ID == id && (!needCanIn || Datas[index].CanIn) && (!needCanOut || Datas[index].CanOut))
                         {
-                            if (temp >= 0)
-                            {
-                                temp = i;
-                            }
-                            int cur = Datas[i].GetAmount(removeType);
+                            temp = temp == -1 ? index : temp;
+                            int cur = Datas[index].GetAmount(removeType);
                             cur = cur <= num ? cur : num;
-                            Datas[i].ChangeAmount(addType, cur);
-                            Datas[i].ChangeAmount(removeType, -cur);
+                            Datas[index].ChangeAmount(addType, cur);
+                            Datas[index].ChangeAmount(removeType, -cur);
                             num -= cur;
-                            if (num <= 0)
-                            {
-                                break;
-                            }
+                            if (num <= 0) { break; }
                         }
                     }
                     if (exceed && num > 0 && temp >= 0)
@@ -292,6 +375,28 @@ namespace ProjectOC.DataNS
                 return 0;
             }
         }
+
+        public int ChangeAmount(int index, int amount, DataOpType addType, DataOpType removeType, bool exceed = false, bool complete = true)
+        {
+            lock (this)
+            {
+                if (IsValidIndex(index) && Datas[index].HaveSetData && amount > 0 && CheckDataOpType(addType, removeType, exceed))
+                {
+                    int remove = GetAmount(index, removeType);
+                    if (!exceed && remove == 0 && (!complete || remove < amount)) { return 0; }
+                    int num = Datas[index].GetAmount(removeType);
+                    num = !exceed && num <= amount ? num : amount;
+                    Datas[index].ChangeAmount(addType, num);
+                    Datas[index].ChangeAmount(removeType, -num);
+                    OnDataChangeEvent?.Invoke();
+                    return num;
+                }
+                return 0;
+            }
+        }
+
+        public void ChangeCanIn(int index, bool canIn) { if (IsValidIndex(index)) { Datas[index].ChangeCanIn(canIn); } }
+        public void ChangeCanOut(int index, bool canOut) { if (IsValidIndex(index)) { Datas[index].ChangeCanOut(canOut); } }
         #endregion
     }
 }

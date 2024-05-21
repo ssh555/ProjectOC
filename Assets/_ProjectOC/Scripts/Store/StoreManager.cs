@@ -13,15 +13,11 @@ namespace ProjectOC.StoreNS
     [LabelText("仓库管理器"), System.Serializable]
     public sealed class StoreManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
-        public void OnRegister()
-        {
-            LoadTableData();
-        }
-
-        #region Load And Data
+        #region ILocalManager
         private Dictionary<string, StoreIconTableData> StoreIconTableDict = new Dictionary<string, StoreIconTableData>();
         public ML.Engine.ABResources.ABJsonAssetProcessor<StoreIconTableData[]> ABJAProcessor;
-        public void LoadTableData()
+        public StoreConfig Config;
+        public void OnRegister()
         {
             ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<StoreIconTableData[]>("OCTableData", "StoreIcon", (datas) =>
             {
@@ -31,19 +27,21 @@ namespace ProjectOC.StoreNS
                 }
             }, "仓库图标表数据");
             ABJAProcessor.StartLoadJsonAssetData();
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<StoreConfigAsset>("Config_Store").Completed += (handle) =>
+            {
+                StoreConfigAsset data = handle.Result;
+                Config = new StoreConfig(data.Config);
+            };
         }
         #endregion
 
         private Dictionary<string, WorldStore> WorldStoreDict = new Dictionary<string, WorldStore>();
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="priorityType">是否按照优先级获取 0表示不需要，1表示优先级从高到低，-1表示优先级从低到高</param>
         public List<Store> GetStores(int priorityType = 0)
         {
             List<Store> stores = new List<Store>();
-            foreach (WorldStore worldStore in this.WorldStoreDict.Values)
+            foreach (WorldStore worldStore in WorldStoreDict.Values)
             {
                 if (worldStore != null)
                 {
@@ -78,9 +76,9 @@ namespace ProjectOC.StoreNS
                 List<Store> stores = GetStores(priorityType);
                 foreach (Store store in stores)
                 {
-                    if ((!judgeInteracting || !store.IsInteracting) && (!judgeCanOut || store.IsStoreHaveItem(itemID, false, judgeCanOut)))
+                    if (!judgeInteracting || !store.IsInteracting)
                     {
-                        int storeAmount = store.GetDataNum(itemID, Store.DataType.Storage, false, judgeCanOut);
+                        int storeAmount = store.DataContainer.GetAmount(itemID, DataNS.DataOpType.Storage, false, judgeCanOut);
                         if (storeAmount > 0)
                         {
                             if (resultAmount + storeAmount >= amount)
@@ -110,23 +108,26 @@ namespace ProjectOC.StoreNS
         /// <returns></returns>
         public Store GetPutInStore(string itemID, int amount, int priorityType = 0, bool judgeInteracting = false, bool judgeCanIn = false)
         {
-            List<Store> stores = GetStores(priorityType);
             Store result = null;
-            foreach (Store store in stores)
+            if (!string.IsNullOrEmpty(itemID) && amount > 0)
             {
-                if ((!judgeInteracting || !store.IsInteracting) && (!judgeCanIn || store.IsStoreHaveItem(itemID, judgeCanIn)))
+                List<Store> stores = GetStores(priorityType);
+                foreach (Store store in stores)
                 {
-                    // 优先寻找第一个可以一次性存完的仓库
-                    // 若没有，则寻找第一个可以存入的，可溢出存入
-                    int empty = store.GetDataNum(itemID, Store.DataType.Empty, judgeCanIn);
-                    if (result == null && empty > 0)
+                    if (!judgeInteracting || !store.IsInteracting)
                     {
-                        result = store;
-                    }
-                    if (empty >= amount)
-                    {
-                        result = store;
-                        break;
+                        // 优先寻找第一个可以一次性存完的仓库
+                        // 若没有，则寻找第一个可以存入的，可溢出存入
+                        int empty = store.DataContainer.GetAmount(itemID, DataNS.DataOpType.Empty, judgeCanIn);
+                        if (result == null && empty > 0)
+                        {
+                            result = store;
+                        }
+                        if (empty >= amount)
+                        {
+                            result = store;
+                            break;
+                        }
                     }
                 }
             }
@@ -136,25 +137,20 @@ namespace ProjectOC.StoreNS
         public List<string> GetStoreIconItems()
         {
             List<string> result = new List<string>();
-            foreach (var data in this.StoreIconTableDict.Values)
+            foreach (var data in StoreIconTableDict.Values)
             {
                 result.Add(data.ID);
             }
             return ManagerNS.LocalGameManager.Instance.ItemManager.SortItemIDs(result);
         }
 
-        public Store SpawnStore(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType)
-        {
-            Store store = new Store(storeType);
-            return store;
-        }
+        public Store SpawnStore(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType) { return new Store(storeType); }
 
         public void WorldStoreSetData(WorldStore worldStore, ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType, int level)
         {
             if (worldStore != null && level >= 0)
             {
-                Store store = SpawnStore(storeType);
-                WorldStoreSetData(worldStore, store);
+                WorldStoreSetData(worldStore, SpawnStore(storeType));
             }
         }
 
@@ -170,12 +166,20 @@ namespace ProjectOC.StoreNS
                 {
                     WorldStoreDict[worldStore.InstanceID] = worldStore;
                 }
-                if (worldStore.Store != null)
+                if (worldStore.Store != store)
                 {
-                    worldStore.Store.WorldStore = null;
+                    if (worldStore.Store != null)
+                    {
+                        worldStore.Store.Destroy();
+                        worldStore.Store.WorldStore = null;
+                    }
+                    if (store.WorldStore != null)
+                    {
+                        store.WorldStore.Store = null;
+                    }
+                    worldStore.Store = store;
+                    store.WorldStore = worldStore;
                 }
-                worldStore.Store = store;
-                store.WorldStore = worldStore;
             }
         }
     }

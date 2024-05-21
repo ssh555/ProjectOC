@@ -4,18 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-
 namespace ProjectOC.WorkerNS
 {
     public class WorkerHome : ML.Engine.BuildingSystem.BuildingPart.BuildingPart, ML.Engine.InteractSystem.IInteraction, IWorkerContainer
     {
-        #region Config
-        [LabelText("每Time秒回复Mood心情值"), FoldoutGroup("配置")]
-        public int Time { get; private set; } = 1;
-        [LabelText("回复心情值"), FoldoutGroup("配置")]
-        public int Mood { get; private set; } = 5;
-        #endregion
-
         #region Data
         [LabelText("移动窝时，原来绑定的刁民"), ShowInInspector, ReadOnly]
         private Worker TempWorker;
@@ -32,7 +24,7 @@ namespace ProjectOC.WorkerNS
             {
                 if (timer == null)
                 {
-                    timer = new ML.Engine.Timer.CounterDownTimer(Time, true, false);
+                    timer = new ML.Engine.Timer.CounterDownTimer(ManagerNS.LocalGameManager.Instance.WorkerManager.Config.WorkerHomeAddMoodTime, true, false);
                     timer.OnEndEvent += EndActionForTimer;
                 }
                 return timer;
@@ -79,7 +71,8 @@ namespace ProjectOC.WorkerNS
 
         public void Interact(ML.Engine.InteractSystem.InteractComponent component)
         {
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Worker_UI/Prefab_Worker_UI_WorkerHomePanel.prefab", ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Worker_UI/Prefab_Worker_UI_WorkerHomePanel.prefab", 
+                ML.Engine.Manager.GameManager.Instance.UIManager.GetCanvas.transform, false).Completed += (handle) =>
             {
                 UI.UIWorkerHome uiPanel = (handle.Result).GetComponent<UI.UIWorkerHome>();
                 uiPanel.Home = this;
@@ -130,9 +123,9 @@ namespace ProjectOC.WorkerNS
         #region Method
         private void EndActionForTimer()
         {
-            if (HaveWorker && Worker.Mood < Worker.MoodMax)
+            if (HaveWorker)
             {
-                Worker.AlterMood(Mood);
+                Worker.AlterMood(Worker.EMRecover);
             }
         }
 
@@ -142,7 +135,7 @@ namespace ProjectOC.WorkerNS
             {
                 List<Worker> workers = ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkers();
                 workers.RemoveAll(x => x == null);
-                foreach (Worker worker in workers.OrderBy(worker => worker.InstanceID).ToList())
+                foreach (Worker worker in workers.OrderBy(worker => worker.ID).ToList())
                 {
                     if (!worker.HaveHome && (oldWorker== null || worker != oldWorker))
                     {
@@ -175,7 +168,7 @@ namespace ProjectOC.WorkerNS
                 }
             }
         }
-        public bool HaveWorker => Worker != null && !string.IsNullOrEmpty(Worker.InstanceID);
+        public bool HaveWorker => Worker != null && !string.IsNullOrEmpty(Worker.ID);
         public Action<Worker> OnSetWorkerEvent { get; set; }
         public Action<bool, Worker> OnRemoveWorkerEvent { get; set; }
 

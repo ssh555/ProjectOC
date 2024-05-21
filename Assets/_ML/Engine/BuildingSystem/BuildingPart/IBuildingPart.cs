@@ -214,7 +214,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
         /// </summary>
         public virtual void OnBPartDestroy()
         {
-
+            
         }
 
         /// <summary>

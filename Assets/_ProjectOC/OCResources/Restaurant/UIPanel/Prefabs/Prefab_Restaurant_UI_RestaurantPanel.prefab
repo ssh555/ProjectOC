@@ -365,61 +365,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1 &1742018417846170997
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8197179864672519152}
-  - component: {fileID: 7907327726663072780}
-  m_Layer: 0
-  m_Name: UIBtnList
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &8197179864672519152
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1742018417846170997}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 5175558963698497149}
-  m_Father: {fileID: 2976134650713045391}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7907327726663072780
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1742018417846170997}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3988da8222f461e4e9032c2c636facbe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  btnListInitData:
-    limitNum: 6
-    hasInitSelect: 1
-    isLoop: 1
-    isWheel: 0
-    hasBtnListContainer: 0
 --- !u!1 &2090555522105063850
 GameObject:
   m_ObjectHideFlags: 0
@@ -432,6 +377,7 @@ GameObject:
   - component: {fileID: 7071687810998127519}
   - component: {fileID: 3877720881442345120}
   - component: {fileID: 4851642169138546975}
+  - component: {fileID: 5547846195560979867}
   m_Layer: 0
   m_Name: Viewport
   m_TagString: Untagged
@@ -451,7 +397,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8538371180988238041}
+  - {fileID: 880653818684228242}
   m_Father: {fileID: 7739301126739095908}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -510,50 +456,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 0
---- !u!1 &2188765214005773590
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8538371180988238041}
-  - component: {fileID: 7842473174339511510}
-  m_Layer: 0
-  m_Name: UIBtnList
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &8538371180988238041
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2188765214005773590}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 880653818684228242}
-  m_Father: {fileID: 2012521062713914639}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7842473174339511510
+--- !u!114 &5547846195560979867
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2188765214005773590}
+  m_GameObject: {fileID: 2090555522105063850}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3988da8222f461e4e9032c2c636facbe, type: 3}
@@ -565,6 +474,8 @@ MonoBehaviour:
     isLoop: 1
     isWheel: 0
     hasBtnListContainer: 0
+    readUnActiveButton: 1
+    scrollRect: {fileID: 0}
 --- !u!1 &2808903496873134983
 GameObject:
   m_ObjectHideFlags: 0
@@ -888,7 +799,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1770148035179113785}
-  m_Father: {fileID: 8197179864672519152}
+  m_Father: {fileID: 2976134650713045391}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -964,7 +875,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3936567390988133630}
-  m_Father: {fileID: 8538371180988238041}
+  m_Father: {fileID: 2012521062713914639}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1628,14 +1539,7 @@ MonoBehaviour:
   abpath: 
   abname: 
   description: 
-  CurMode: 0
-  Restaurant:
-    WorldRestaurant: {fileID: 0}
-    Name: 
-    TransportPriority: 1
-    Transports: []
-  RestaurantUITransform: {fileID: 0}
-  ChangeFoodUITransform: {fileID: 0}
+  Restaurant: {}
   IsInit: 0
 --- !u!1 &5857351733357598392
 GameObject:
@@ -1875,6 +1779,7 @@ GameObject:
   - component: {fileID: 7314889553976655996}
   - component: {fileID: 6387741974058400993}
   - component: {fileID: 2939639258989275729}
+  - component: {fileID: 4347506520510476084}
   m_Layer: 0
   m_Name: Viewport
   m_TagString: Untagged
@@ -1894,7 +1799,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8197179864672519152}
+  - {fileID: 5175558963698497149}
   m_Father: {fileID: 3356904005150045641}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1953,6 +1858,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 0
+--- !u!114 &4347506520510476084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7947464263056413373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3988da8222f461e4e9032c2c636facbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  btnListInitData:
+    limitNum: 6
+    hasInitSelect: 1
+    isLoop: 1
+    isWheel: 0
+    hasBtnListContainer: 0
+    readUnActiveButton: 1
+    scrollRect: {fileID: 9035235934313614062}
 --- !u!1 &8178513148372258169
 GameObject:
   m_ObjectHideFlags: 0

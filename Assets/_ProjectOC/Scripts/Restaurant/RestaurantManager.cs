@@ -2,9 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Sirenix.OdinInspector;
-using ProjectOC.WorkerNS;
 using System.Linq;
-
 
 namespace ProjectOC.RestaurantNS
 {
@@ -13,7 +11,6 @@ namespace ProjectOC.RestaurantNS
     {
         public string ID;
         public string ItemID;
-        public int EatTime;
         public int AlterAP;
         public float AlterMoodOddsProb;
         public int AlterMoodOddsValue;
@@ -22,10 +19,28 @@ namespace ProjectOC.RestaurantNS
     [LabelText("餐厅管理器"), Serializable]
     public class RestaurantManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
+        #region ILocalManager
+        private Dictionary<string, WorkerFoodTableData> WorkerFoodTableDict = new Dictionary<string, WorkerFoodTableData>();
+        private Dictionary<string, string> ItemToFoodDict = new Dictionary<string, string>();
+        public ML.Engine.ABResources.ABJsonAssetProcessor<WorkerFoodTableData[]> ABJAProcessor;
+        public RestaurantConfig Config;
         public void OnRegister()
         {
-            LoadTableData();
-            Timer = new ML.Engine.Timer.CounterDownTimer(BroadcastTime, true, true);
+            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<WorkerFoodTableData[]>("OCTableData", "WorkerFood", (datas) =>
+            {
+                foreach (var data in datas)
+                {
+                    WorkerFoodTableDict.Add(data.ID, data);
+                    ItemToFoodDict.Add(data.ItemID, data.ID);
+                }
+            }, "隐兽食物表数据");
+            ABJAProcessor.StartLoadJsonAssetData();
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<RestaurantConfigAsset>("Config_Restaurant").Completed += (handle) =>
+            {
+                RestaurantConfigAsset data = handle.Result;
+                Config = data.Config;
+            };
+            Timer = new ML.Engine.Timer.CounterDownTimer(Config.BroadcastTime, true, true);
             Timer.OnEndEvent += EndActionForTimer;
         }
 
@@ -33,22 +48,12 @@ namespace ProjectOC.RestaurantNS
         {
             Timer?.End();
         }
-
-        #region 配置数据
-        [LabelText("分配一次的时间"), FoldoutGroup("配置")]
-        public int BroadcastTime { get; private set; } = 5;
-        [LabelText("位置数量"), FoldoutGroup("配置")]
-        public int SeatNum { get; private set; } = 4;
-        [LabelText("数据数量"), FoldoutGroup("配置")]
-        public int DataNum { get; private set; } = 5;
-        [LabelText("存储上限"), FoldoutGroup("配置")]
-        public int MaxCapacity { get; private set; } = 100;
         #endregion
 
         #region 当前数据
-        private HashSet<Worker> WorkerSets = new HashSet<Worker>();
+        private HashSet<WorkerNS.Worker> WorkerSets = new HashSet<WorkerNS.Worker>();
         [LabelText("等待去餐厅的刁民队列"), ReadOnly]
-        public List<Worker> Workers = new List<Worker>();
+        public List<WorkerNS.Worker> Workers = new List<WorkerNS.Worker>();
         [LabelText("实例化的餐厅"), ReadOnly, ShowInInspector]
         public Dictionary<string, WorldRestaurant> WorldRestaurants = new Dictionary<string, WorldRestaurant>();
         [LabelText("分配计时器"), ReadOnly]
@@ -56,7 +61,7 @@ namespace ProjectOC.RestaurantNS
         #endregion
 
         #region 方法
-        public void AddWorker(Worker worker)
+        public void AddWorker(WorkerNS.Worker worker)
         {
             if (worker != null && !ContainWorker(worker))
             {
@@ -67,7 +72,7 @@ namespace ProjectOC.RestaurantNS
             }
         }
 
-        public void RemoveWorker(Worker worker)
+        public void RemoveWorker(WorkerNS.Worker worker)
         {
             if (ContainWorker(worker))
             {
@@ -78,7 +83,7 @@ namespace ProjectOC.RestaurantNS
             }
         }
 
-        public bool ContainWorker(Worker worker)
+        public bool ContainWorker(WorkerNS.Worker worker)
         {
             return worker != null && WorkerSets.Contains(worker);
         }
@@ -99,15 +104,14 @@ namespace ProjectOC.RestaurantNS
         public Restaurant GetPutInRestaurant(string itemID, int amount)
         {
             Restaurant result = null;
-            string foodID = ItemIDToFoodID(itemID);
-            if (!string.IsNullOrEmpty(foodID) && amount > 0)
+            if (!string.IsNullOrEmpty(itemID) && amount > 0)
             {
                 List<Restaurant> restaurants = GetRestaurants();
                 foreach (var restaurant in restaurants)
                 {
-                    if (restaurant.HaveSetFood(foodID))
+                    if (restaurant.DataContainer.HaveSetData(itemID))
                     {
-                        int empty = restaurant.GetAmount(foodID, false);
+                        int empty = restaurant.DataContainer.GetAmount(itemID, DataNS.DataOpType.Empty);
                         if (result == null && empty > 0)
                         {
                             result = restaurant;
@@ -161,7 +165,7 @@ namespace ProjectOC.RestaurantNS
             List<WorldRestaurant> worldRestaurants = WorldRestaurants.Values.Where(worldRestaurant => worldRestaurant != null && worldRestaurant.Restaurant.HaveFood && worldRestaurant.Restaurant.HaveSeat).ToList();
             if (Workers.Count > 0 && worldRestaurants.Count > 0)
             {
-                List<Worker> workers = new List<Worker>();
+                List<WorkerNS.Worker> workers = new List<WorkerNS.Worker>();
                 workers.AddRange(Workers);
 
                 List<Vector3> positions = new List<Vector3>();
@@ -198,7 +202,7 @@ namespace ProjectOC.RestaurantNS
                     }
                 }
                 
-                foreach (Worker worker in workers)
+                foreach (WorkerNS.Worker worker in workers)
                 {
                     if (worker != null)
                     {
@@ -243,79 +247,28 @@ namespace ProjectOC.RestaurantNS
         }
         #endregion
 
-        #region Load And Data
-        private Dictionary<string, WorkerFoodTableData> WorkerFoodTableDict = new Dictionary<string, WorkerFoodTableData>();
-        private Dictionary<string, string> ItemToFoodDict = new Dictionary<string, string>();
-
-        public ML.Engine.ABResources.ABJsonAssetProcessor<WorkerFoodTableData[]> ABJAProcessor;
-
-        public void LoadTableData()
+        #region Food Getter
+        public bool Food_IsValidID(string id)
         {
-            ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<WorkerFoodTableData[]>("OCTableData", "WorkerFood", (datas) =>
-            {
-                foreach (var data in datas)
-                {
-                    WorkerFoodTableDict.Add(data.ID, data);
-                    ItemToFoodDict.Add(data.ItemID, data.ID);
-                }
-            }, "隐兽食物表数据");
-            ABJAProcessor.StartLoadJsonAssetData();
+            return !string.IsNullOrEmpty(id) ? WorkerFoodTableDict.ContainsKey(id) : false;
         }
-        #endregion
-
-        #region Worker Food Getter
-        public bool WorkerFood_IsValidID(string id)
+        public string Food_ItemID(string id)
         {
-            if (!string.IsNullOrEmpty(id))
-            {
-                return WorkerFoodTableDict.ContainsKey(id);
-            }
-            return false;
+            return Food_IsValidID(id) ? WorkerFoodTableDict[id].ItemID : "";
         }
-
-        public string WorkerFood_ItemID(string id)
+        public int Food_AlterAP(string id)
         {
-            if (WorkerFood_IsValidID(id))
-            {
-                return WorkerFoodTableDict[id].ItemID;
-            }
-            return "";
+            return Food_IsValidID(id) ? WorkerFoodTableDict[id].AlterAP : 0;
         }
-
-        public int WorkerFood_EatTime(string id)
+        public Tuple<float, int> Food_AlterMoodOdds(string id)
         {
-            if (WorkerFood_IsValidID(id))
-            {
-                return WorkerFoodTableDict[id].EatTime;
-            }
-            return 0;
+            return Food_IsValidID(id) ? 
+                new Tuple<float, int>(WorkerFoodTableDict[id].AlterMoodOddsProb, WorkerFoodTableDict[id].AlterMoodOddsValue) : 
+                new Tuple<float, int>(0, 0);
         }
-
-        public int WorkerFood_AlterAP(string id)
-        {
-            if (WorkerFood_IsValidID(id))
-            {
-                return WorkerFoodTableDict[id].AlterAP;
-            }
-            return 0;
-        }
-
-        public Tuple<float, int> WorkerFood_AlterMoodOdds(string id)
-        {
-            if (WorkerFood_IsValidID(id))
-            {
-                return new Tuple<float, int>(WorkerFoodTableDict[id].AlterMoodOddsProb, WorkerFoodTableDict[id].AlterMoodOddsValue);
-            }
-            return new Tuple<float, int>(0, 0);
-        }
-
         public string ItemIDToFoodID(string itemID)
         {
-            if (!string.IsNullOrEmpty(itemID) && ItemToFoodDict.ContainsKey(itemID))
-            {
-                return ItemToFoodDict[itemID];
-            }
-            return "";
+            return !string.IsNullOrEmpty(itemID) && ItemToFoodDict.ContainsKey(itemID) ? ItemToFoodDict[itemID] : "";
         }
         #endregion
     }

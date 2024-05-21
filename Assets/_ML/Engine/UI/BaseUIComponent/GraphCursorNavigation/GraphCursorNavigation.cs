@@ -2,11 +2,11 @@ using ML.Engine.Timer;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
-
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using static Animancer.Easing;
 
 namespace ML.Engine.UI
 {
@@ -16,13 +16,20 @@ namespace ML.Engine.UI
         private ScrollRect ScrollRect;
         private Scrollbar VerticalScrollbar, HorizontalScrollbar;
         private RectTransform Center;
-
+        private RectTransform RaycastCenter;
+        /// <summary>
+        /// Center 在Content 坐标系下的坐标
+        /// </summary>
+        [ShowInInspector]
+        public Vector3 CenterPos { get { return Center.anchoredPosition3D - Content.GetComponent<RectTransform>().anchoredPosition3D / curZoomscale; } }
 
         private Vector2 LimitBound;
         private Vector2 minBounds;
         private Vector2 maxBounds;
 
-        private InputAction BindInputAction = null;
+        private InputAction BindNavigationInputAction = null;
+        private InputAction BindZoomInInputAction = null;
+        private InputAction BindZoomOutInputAction = null;
 
         private Transform content;
         public Transform Content { get { return content; } }
@@ -30,33 +37,71 @@ namespace ML.Engine.UI
         private UIBtnList uiBtnList;
         public UIBtnList UIBtnList { get { return uiBtnList; } }
 
+        #region 面板配置项
         [LabelText("边距配置（左右间距，上下间距）")]
         public Vector2 Margin = new Vector2();
         [LabelText("导航速度")]
         public float NavagationSpeed = 1;
+        [LabelText("是否启用缩放功能")]
+        public bool IsZoomEnabled = false;
+        [ShowIf("IsZoomEnabled", true)]
+        [LabelText("缩放速度")]
+        public float ZoomSpeed = 1;
+        [ShowIf("IsZoomEnabled", true)]
+        [LabelText("最大放大倍数 ")]
+        public float ZoomInLimit = 2;
+        [ShowIf("IsZoomEnabled", true)]
+        [LabelText("最小缩小倍数")]
+        public float ZoomOutLimit = 0.5f;
+        #endregion
+
+
+        //当前组件的scale 
+        private float curZoomscale;
+        [ShowIf("IsZoomEnabled", true), LabelText("当前的缩放率"),ShowInInspector]
+        public float curZoomRate { get { return (curZoomscale - ZoomOutLimit)/(ZoomInLimit - ZoomOutLimit); }  }
+        [ShowIf("IsZoomEnabled", true), LabelText("当前的缩放值"), ShowInInspector]
+        public float CurZoomscale 
+        { 
+            set {
+                Debug.Log("set CurZoomscale");
+                this.content.localScale = new Vector3(value, value, value);
+                this.Center.localScale = new Vector3(value, value, value);
+                curZoomscale = value;
+                }
+            get
+            {
+                return curZoomscale;
+            }
+        }
+
+        public event Action OnScaleChanged;
+
         protected override void Awake()
         {
             this.ScrollRect = this.transform.Find("Scroll View").GetComponent<ScrollRect>();
             this.VerticalScrollbar = ScrollRect.verticalScrollbar;
             this.HorizontalScrollbar = ScrollRect.horizontalScrollbar;
             this.Center = this.transform.Find("Center").GetComponent<RectTransform>();
+            this.RaycastCenter = this.Center;
             var rec = this.GetComponent<RectTransform>();
             this.LimitBound = new Vector2(rec.rect.width / 2, rec.rect.height / 2);
             this.minBounds = -LimitBound + Margin;
             this.maxBounds = LimitBound - Margin;
             this.content = this.ScrollRect.content;
+            CurZoomscale = 1;
         }
 
         #region Tick
         public int tickPriority { get; set; }
         public int fixedTickPriority { get; set; }
         public int lateTickPriority { get; set; }
-
+        [ShowInInspector]
         private GameObject lastSelected = null;
         public void Tick(float deltatime)
         {
             // 获取 UI 元素的屏幕坐标 ScreenOverLay即为世界坐标
-            Vector3 worldPosition = this.Center.position;
+            Vector3 worldPosition = this.RaycastCenter.position;
 
             // 构造射线
             PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
@@ -86,38 +131,57 @@ namespace ML.Engine.UI
 
         public void BindNavigationInput(InputAction inputAction)
         {
-            this.BindInputAction = inputAction;
-            this.BindInputAction.started += NavagateMap_started;
-            this.BindInputAction.canceled += NavagateMap_canceled;
+            this.BindNavigationInputAction = inputAction;
+            this.BindNavigationInputAction.started += NavagateMap_started;
+            this.BindNavigationInputAction.canceled += NavagateMap_canceled;
         }
 
         public void DeBindNavigationInput()
         {
-            this.BindInputAction.started -= NavagateMap_started;
-            this.BindInputAction.canceled -= NavagateMap_canceled;
+            this.BindNavigationInputAction.started -= NavagateMap_started;
+            this.BindNavigationInputAction.canceled -= NavagateMap_canceled;
+        }
+
+        public void BindZoomInInput(InputAction inputAction)
+        {
+            this.BindZoomInInputAction = inputAction;
+            this.BindZoomInInputAction.started += ZoomIn_started;
+            this.BindZoomInInputAction.canceled += ZoomIn_canceled;
+        }
+
+        public void DeBindZoomInInput()
+        {
+            this.BindZoomInInputAction.started -= ZoomIn_started;
+            this.BindZoomInInputAction.canceled -= ZoomIn_canceled;
+        }
+
+        public void BindZoomOutInput(InputAction inputAction)
+        {
+            this.BindZoomOutInputAction = inputAction;
+            this.BindZoomOutInputAction.started += ZoomOut_started;
+            this.BindZoomOutInputAction.canceled += ZoomOut_canceled;
+        }
+
+        public void DeBindZoomOutInput()
+        {
+            this.BindZoomOutInputAction.started -= ZoomOut_started;
+            this.BindZoomOutInputAction.canceled -= ZoomOut_canceled;
         }
 
         #region NavagateMap_performed
-        private float TimeInterval = 0.01f;
-        CounterDownTimer timer = null;
-
-        [ShowInInspector]
+        private float NavagateMapTimeInterval = 0.01f;
+        CounterDownTimer NavagateMapTimer = null;
         private bool canControlCenterxLeft;
-        [ShowInInspector]
         private bool canControlCenterxRight;
-        [ShowInInspector]
         private bool canControlCenteryUP;
-        [ShowInInspector]
         private bool canControlCenteryDown;
         #endregion
-
-
         private void NavagateMap_started(InputAction.CallbackContext obj)
         {
-            if (timer == null)
+            if (NavagateMapTimer == null)
             {
-                timer = new CounterDownTimer(TimeInterval, true, true, 1, 2);
-                timer.OnEndEvent += () =>
+                NavagateMapTimer = new CounterDownTimer(NavagateMapTimeInterval, true, true, 1, 2);
+                NavagateMapTimer.OnEndEvent += () =>
                 {
                     canControlCenterxLeft = false;
                     canControlCenterxRight = false;
@@ -226,13 +290,105 @@ namespace ML.Engine.UI
 
         private void NavagateMap_canceled(InputAction.CallbackContext obj)
         {
-            ML.Engine.Manager.GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
-            timer = null;
+            ML.Engine.Manager.GameManager.Instance.CounterDownTimerManager.RemoveTimer(NavagateMapTimer);
+            NavagateMapTimer = null;
         }
 
-        public void EnableGraphCursorNavigation(InputAction inputAction)
+        #region ZoomOut_performed
+        private float ZoomOutTimeInterval = 0.01f;
+        private CounterDownTimer ZoomOutTimer = null;
+        #endregion
+        private void ZoomOut_started(InputAction.CallbackContext obj)
         {
-            this.BindNavigationInput(inputAction);
+            if (ZoomOutTimer == null)
+            {
+                ZoomOutTimer = new CounterDownTimer(ZoomOutTimeInterval, true, true, 1, 2);
+                ZoomOutTimer.OnEndEvent += () =>
+                {
+                    ZoomOut();
+                };
+            }
+        }
+
+        private void ZoomOut_canceled(InputAction.CallbackContext obj)
+        {
+            ML.Engine.Manager.GameManager.Instance.CounterDownTimerManager.RemoveTimer(ZoomOutTimer);
+            ZoomOutTimer = null;
+        }
+
+
+        #region ZoomIn_performed
+        private float ZoomInTimeInterval = 0.01f;
+        private CounterDownTimer ZoomInTimer = null;
+        #endregion
+        private void ZoomIn_started(InputAction.CallbackContext obj)
+        {
+            if (ZoomInTimer == null)
+            {
+                ZoomInTimer = new CounterDownTimer(ZoomInTimeInterval, true, true, 1, 2);
+                ZoomInTimer.OnEndEvent += () =>
+                {
+                    ZoomIn();
+                };
+            }
+        }
+
+        private void ZoomIn_canceled(InputAction.CallbackContext obj)
+        {
+            ML.Engine.Manager.GameManager.Instance.CounterDownTimerManager.RemoveTimer(ZoomInTimer);
+            ZoomInTimer = null;
+        }
+
+        /// <summary>
+        /// 放大地图
+        /// </summary>
+        public void ZoomIn()
+        {
+            Vector3 Offset = this.ScrollRect.content.position - this.Center.position;
+            float PreZoomscale = CurZoomscale;
+            if (CurZoomscale + ZoomSpeed*0.01f > ZoomInLimit) 
+            {
+                CurZoomscale = ZoomInLimit;
+            }
+            else
+            {
+                CurZoomscale += ZoomSpeed * 0.01f;
+            }
+            Offset *= CurZoomscale / PreZoomscale;
+            this.ScrollRect.content.position = this.Center.position + Offset;
+            OnScaleChanged?.Invoke();
+        }
+
+        /// <summary>
+        /// 缩小地图
+        /// </summary>
+        public void ZoomOut()
+        {
+            Vector3 Offset = this.ScrollRect.content.position - this.Center.position;
+            float PreZoomscale = CurZoomscale;
+
+            if (CurZoomscale - ZoomSpeed * 0.01f < ZoomOutLimit)
+            {
+                CurZoomscale = ZoomOutLimit;
+            }
+            else
+            {
+                CurZoomscale -= ZoomSpeed * 0.01f;
+            }
+
+            Offset *= CurZoomscale / PreZoomscale;
+            this.ScrollRect.content.position = this.Center.position + Offset;
+            OnScaleChanged?.Invoke();
+        }
+
+        public void EnableGraphCursorNavigation(InputAction NavigationInputAction, InputAction ZoomInInputAction = null, InputAction ZoomOutInputAction = null)
+        {
+            this.BindNavigationInput(NavigationInputAction);
+            if(this.IsZoomEnabled)
+            {
+                this.BindZoomInInput(ZoomInInputAction);
+                this.BindZoomOutInput(ZoomOutInputAction);
+            }
             this.uiBtnList.EnableBtnList();
             ML.Engine.Manager.GameManager.Instance.TickManager.RegisterTick(0, this);
         }
@@ -240,6 +396,11 @@ namespace ML.Engine.UI
         public void DisableGraphCursorNavigation()
         {
             this.DeBindNavigationInput();
+            if (this.IsZoomEnabled)
+            {
+                this.DeBindZoomInInput();
+                this.DeBindZoomOutInput();
+            }
             this.uiBtnList.DisableBtnList();
             ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
         }
@@ -247,6 +408,11 @@ namespace ML.Engine.UI
         public void InitUIBtnList()
         {
             this.uiBtnList = new UIBtnList(this.content.GetComponentInChildren<UIBtnListInitor>());
+        }
+
+        public void ChangeRaycastCenter(RectTransform rectTransform)
+        {
+            this.RaycastCenter = rectTransform;
         }
     }
 }

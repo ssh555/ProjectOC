@@ -6,17 +6,8 @@ namespace ProjectOC.PinchFace
 {
     public class ChangeTexturePinchSetting :MonoBehaviour, IPinchSettingComp
     {
-        public int Index { get; }
+        public int textureIndex;
 
-        public  void LoadData()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public  void GenerateUI()
-        {
-            throw new System.NotImplementedException();
-        }
         
         private void Awake()
         {

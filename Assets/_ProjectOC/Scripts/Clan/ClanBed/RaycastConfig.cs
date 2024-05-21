@@ -18,5 +18,13 @@ namespace ProjectOC.ClanNS
             Rotation = rotation;
             Scale = scale;
         }
+
+        public static RaycastConfig defaultTemplate = new RaycastConfig()
+        {
+            Offset = Vector3.zero,
+            Size = Vector3.one,
+            Rotation = Vector3.zero,
+            Scale = Vector3.one
+        };
     }
 }

@@ -1,16 +1,13 @@
 using ML.Engine.BuildingSystem.BuildingPart;
-using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.TextContent;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
 using UnityEngine.UI;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using static ML.Engine.BuildingSystem.UI.BSPlaceModePanel;
-using ML.Engine.Manager;
-using ML.Engine.InventorySystem;
+using Sirenix.OdinInspector;
 
 namespace ML.Engine.BuildingSystem.UI
 {
@@ -93,21 +90,22 @@ namespace ML.Engine.BuildingSystem.UI
         #endregion
 
         #region Refresh
+        private bool isChangeStyle = true;
+        private bool isChangeHeight = false;
         public override void Refresh()
         {
             if (!IsInit)
             {
                 return;
             }
-
+            if(!isChangeStyle && !isChangeHeight)
+            {
+                isChangeStyle = true;
+            }
             var styles = BM.GetAllStyleByBPartHeight(this.Placer.SelectedPartInstance);
             var heights = BM.GetAllHeightByBPartStyle(this.Placer.SelectedPartInstance);
-            int sIndex = Array.IndexOf(styles, this.Placer.SelectedPartInstance.Classification.Category3);
-            int hIndex = Array.IndexOf(heights, this.Placer.SelectedPartInstance.Classification.Category4);
             this.ClearInstance();
-
-            var s = styles[sIndex];
-            var h = heights[hIndex];
+            var s = styles[0];
 
             Array.Sort(styles);
             Array.Sort(heights);
@@ -125,15 +123,31 @@ namespace ML.Engine.BuildingSystem.UI
             foreach (var instance in this.styleInstance)
             {
                 var img = instance.Value.GetComponentInChildren<Image>();
-                if (instance.Key != s)
+                if (isChangeStyle)
                 {
-                    Disactive(img);
+                    if (instance.Key != s)
+                    {
+                        Disactive(img);
+                    }
+                    else
+                    {
+                        Active(img);
+                    }
                 }
-                else
+                else if(isChangeHeight)
                 {
-                    Active(img);
+                    if (instance.Key != this.Placer.SelectedPartInstance.Classification.Category3)
+                    {
+                        Disactive(img);
+                    }
+                    else
+                    {
+                        Active(img);
+                    }
                 }
             }
+            isChangeStyle = false;
+            isChangeHeight = false;
 
             // ¸ü»» Height
 
@@ -279,7 +293,7 @@ namespace ML.Engine.BuildingSystem.UI
             this.Placer.BInput.BuildPlaceMode.ChangeHeight.Enable();
             this.Placer.BInput.BuildPlaceMode.KeyCom.Enable();
 
-            Manager.GameManager.Instance.TickManager.RegisterFixedTick(0, this);
+            Manager.GameManager.Instance.TickManager.RegisterFixedTick(-1, this);
             this.Placer.BInput.BuildPlaceMode.KeyCom.performed += Placer_EnterKeyCom;
             this.Placer.backInputAction.performed += Placer_CancelPlace;
 
@@ -304,13 +318,15 @@ namespace ML.Engine.BuildingSystem.UI
 
         private void Placer_ChangeBPartStyle(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
+            isChangeStyle = true;
             this.Placer.AlternateBPartOnHeight(obj.ReadValue<float>() < 0);
-           this.Refresh();
+            this.Refresh();
         }
 
         private void Placer_ChangeBPartHeight(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            this.Placer.AlternateBPartOnStyle(obj.ReadValue<float>() < 0);
+            isChangeHeight = true;
+            this.Placer.AlternateBPartOnStyle(obj.ReadValue<float>() > 0);
             this.Refresh();
         }
 
@@ -328,13 +344,13 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 if (obj.started)
                 {
-                    if(this.Placer.SelectedPartInstance.AttachedSocket == null)
+                    if (this.Placer.SelectedPartInstance.AttachedSocket == null)
                     {
                         this.Placer.SelectedPartInstance.RotOffset *= Quaternion.AngleAxis(this.Placer.EnableGridRotRate * offset, Vector3.up);
                     }
                     else
                     {
-                        this.Placer.SelectedPartInstance.ActiveSocket.AsMatchRotOffset *= this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta;
+                        this.Placer.SelectedPartInstance.ActiveSocket.AsMatchRotOffset *= offset > 0 ? this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta : Quaternion.Inverse(this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta);
                     }
                 }
             }
@@ -342,7 +358,10 @@ namespace ML.Engine.BuildingSystem.UI
             {
                 if (this.Placer.SelectedPartInstance.AttachedSocket != null)
                 {
-                    this.Placer.SelectedPartInstance.ActiveSocket.AsMatchRotOffset *= this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta;
+                    if (obj.started)
+                    {
+                        this.Placer.SelectedPartInstance.ActiveSocket.AsMatchRotOffset *= offset > 0 ? this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta : Quaternion.Inverse(this.Placer.SelectedPartInstance.AttachedSocket.AsTargetRotDelta);
+                    }
                 }
                 else
                 {
@@ -371,21 +390,12 @@ namespace ML.Engine.BuildingSystem.UI
         #region Event
         private bool CheckCostResources(IBuildingPart bpart)
         {
-            List<IInventory> inventorys = (GameManager.Instance.CharacterManager.GetLocalController() as ProjectOC.Player.OCPlayerController).GetInventorys();
-            if (CompositeManager.Instance.CanComposite(inventorys, BuildingManager.Instance.GetID(bpart.Classification.ToString())))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return ProjectOC.ManagerNS.LocalGameManager.Instance.Player.InventoryHaveItems(BuildingManager.Instance.GetRawAll(bpart.Classification.ToString()));
         }
 
         private void OnPlaceModeSuccess(IBuildingPart bpart)
         {
-            List<IInventory> inventorys = (GameManager.Instance.CharacterManager.GetLocalController() as ProjectOC.Player.OCPlayerController).GetInventorys(true, -1);
-            CompositeManager.Instance.OnlyCostResource(inventorys, BuildingManager.Instance.GetID(bpart.Classification.ToString()));
+            ProjectOC.ManagerNS.LocalGameManager.Instance.Player.InventoryCostItems(BuildingManager.Instance.GetRawAll(bpart.Classification.ToString()), needJudgeNum:true, priority:-1);
             BM.Placer.SelectedPartInstance.CheckCanInPlaceMode -= CheckCostResources;
         }
 

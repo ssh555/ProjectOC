@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e122418ab6ff93449a306c5e1bb03b51, type: 3}
+  m_Name: Config_Worker_Data
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  Config:
+    APMax: 10
+    APWorkThreshold: 3
+    APRelaxThreshold: 4
+    APCost_Transport: 1
+    EatTime: 30
+    EMMax: 100
+    EMLowThreshold: 50
+    EMHighThreshold: 80
+    EMLowEffect: -10
+    EMHighEffect: 10
+    EMCost: 10
+    EMRecover: 5
+    WalkSpeed: 10
+    BURMax: 100
+    ExpTransport: 100
+    SkillEff: 10
+    ExpToLevel: e8030000d0070000b80b0000a00f00008813000070170000581b0000401f00002823000010270000
+    LevelToEff_Duty: 000000000a000000140000001e00000028000000320000003c00000046000000500000005a00000064000000
+    LevelToEff_Transport: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a000000
+    DestroyTimeForNoHome: 180
+    SkillStdMean: 30
+    SkillStdDev: 50
+    SkillStdHighBound: 60
+    SkillStdLowBound: 0
+    WorkerHomeAddMoodTime: 60

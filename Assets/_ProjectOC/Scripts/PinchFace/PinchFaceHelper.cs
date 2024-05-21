@@ -35,20 +35,24 @@ namespace ProjectOC.PinchFace
         }
 
         
-        public void SortUIAfterGenerate(Transform _transf,Transform _parent,UIPinchFacePanel _pinchFacePanel)
+        public void SortUIAfterGenerate(Transform _transf,Transform _parent,UIPinchFacePanel _pinchFacePanel,int returnBtnListCount = 4)
         {
+            //Debug.LogWarning("SortUI AfterGenerate");
+            //右侧的各种捏脸组件
             Transform[] childTransforms = new Transform[_parent.childCount];
             for (int i = 0; i < _parent.childCount; i++)
             {
                 childTransforms[i] = _parent.GetChild(i);
             }
-            
+            //排序
             System.Array.Sort(childTransforms,(x,y)=>string.Compare(x.name,y.name));
-
-
             List<UIBtnListInitor> btnListInitors = new List<UIBtnListInitor>();
             for (int i = 0; i < childTransforms.Length; i++)
             {
+                if (!childTransforms[i].gameObject.activeSelf)
+                {
+                    continue;
+                }
                 childTransforms[i].transform.SetSiblingIndex(i);
                 UIBtnListInitor[] btnLists = childTransforms[i].transform.GetComponentsInChildren<UIBtnListInitor>();
                 btnListInitors.AddRange(btnLists);
@@ -57,7 +61,9 @@ namespace ProjectOC.PinchFace
             _pinchFacePanel.ReGenerateBtnListContainer(btnListInitors);
             Transform _pinchFacePanelTransf = _parent.GetComponentInParent<UIPinchFacePanel>().transform;
             RefreshPanelLayout(_pinchFacePanelTransf);
-            _pinchFacePanel.ReturnBtnList(4);
+            
+            //大概率第一个，也可能 更新颜色面板模式， 返回颜色面板
+            _pinchFacePanel.ReturnBtnList(returnBtnListCount);
         }
         
         //5_Common_PinchType1/20_FaceDress_PinchType2/45_FD_FaceDress_PinchType3

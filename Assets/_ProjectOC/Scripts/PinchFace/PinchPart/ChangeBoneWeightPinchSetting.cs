@@ -28,31 +28,12 @@ namespace ProjectOC.PinchFace
             public BoneWeightChangeType boneWeightChangeType;
             public BoneWeightType boneWeightType;
             public Vector2 scaleValueRange;
-            public float currentScaleValue;
+            public Vector3 currentScaleValue;
             [Space(20)]
             public Vector2 offsetValueRange;
-            public float currentOffsetValue;
-
-            public BoneWeightData()
-            {
-                boneWeightChangeType = BoneWeightChangeType.Scale;
-                scaleValueRange = new Vector2(0.5f, 1.5f);
-                currentScaleValue = 1f;
-
-                offsetValueRange = new Vector2(0.5f, 1.5f);
-                currentOffsetValue = 1f;
-            }
-        }
-        
-        public void LoadData()
-        {
-            throw new System.NotImplementedException();
+            public Vector3 currentOffsetValue;
         }
 
-        public void GenerateUI()
-        {
-            throw new System.NotImplementedException();
-        }
         private void Awake()
         {
             this.enabled = false;

@@ -1,8 +1,6 @@
 using ML.Engine.BuildingSystem.BuildingPart;
-using ML.Engine.InventorySystem.CompositeSystem;
 using ML.Engine.InventorySystem;
 using ML.Engine.TextContent;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static ML.Engine.BuildingSystem.UI.BSInteractModePanel;
@@ -192,36 +190,16 @@ namespace ML.Engine.BuildingSystem.UI
                 worldRestaurant.Restaurant.Destroy();
             }
 
-            bool flag = false;
-            List<Item> resItems = new List<Item>();
-            foreach (InventorySystem.CompositeSystem.Formula formula in CompositeManager.Instance.GetCompositonFomula(BuildingManager.Instance.GetID(bpart.Classification.ToString())))
+            foreach (var formula in BuildingManager.Instance.GetRawAll(bpart.Classification.ToString()))
             {
                 if (ItemManager.Instance.IsValidItemID(formula.id) && formula.num > 0)
                 {
                     List<Item> items = ItemManager.Instance.SpawnItems(formula.id, formula.num);
                     foreach (var item in items)
                     {
-                        if (flag)
-                        {
-                            resItems.Add(item);
-                        }
-                        else
-                        {
-                            if (!Player.Inventory.AddItem(item))
-                            {
-                                flag = true;
-                            }
-                        }
+                        Player.Inventory.AddItem(item);
                     }
                 }
-            }
-            // 没有加到玩家背包的都变成WorldItem
-            foreach (Item item in resItems)
-            {
-                // 不需要，就异步同时执行
-#pragma warning disable CS4014
-                ItemManager.Instance.SpawnWorldItem(item, bpart.transform.position, bpart.transform.rotation);
-#pragma warning restore CS4014
             }
         }
 

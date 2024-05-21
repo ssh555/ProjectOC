@@ -139,7 +139,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1
+  m_Radius: 0.9
   m_Center: {x: 0, y: 0, z: 1}
 --- !u!114 &5090003136067608080
 MonoBehaviour:
@@ -246,7 +246,7 @@ GameObject:
   - component: {fileID: 6397895842184035100}
   - component: {fileID: 1392679737392751475}
   - component: {fileID: 4526409119941430977}
-  - component: {fileID: 6573816891524691405}
+  - component: {fileID: 1760691523811141660}
   m_Layer: 0
   m_Name: Mesh_roof
   m_TagString: Untagged
@@ -320,8 +320,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6573816891524691405
-BoxCollider:
+--- !u!64 &1760691523811141660
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -338,9 +338,10 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 3.035785, y: 2.69, z: 2.94}
-  m_Center: {x: 0.0024889119, y: -0.00985384, z: 0.116511256}
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: bee6add1030496049905612b0079c977, type: 2}
 --- !u!1 &2293682686636244799
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,7 +414,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.7
+  m_Radius: 0.71
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2375784764898922167
 GameObject:
@@ -481,8 +482,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 27
-  IsActiveSocket: 1
+  ID: 19
+  IsActiveSocket: 0
   IsCanRotate: 1
   m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
   m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
@@ -851,7 +852,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb54bf82cda66a94eb01d14f5f72a568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 27
+  ID: 19
   IsActiveSocket: 1
   IsCanRotate: 1
   m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}

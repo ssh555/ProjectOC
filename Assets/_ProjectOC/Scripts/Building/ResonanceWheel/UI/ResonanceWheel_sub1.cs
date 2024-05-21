@@ -1,12 +1,13 @@
 using ML.Engine.Manager;
 using ML.Engine.TextContent;
+using ML.Engine.Timer;
 using ML.Engine.UI;
 using ML.Engine.Utility;
-using ProjectOC.ManagerNS;
-using ProjectOC.WorkerEchoNS;
 using ProjectOC.WorkerNS;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.U2D;
@@ -18,41 +19,52 @@ namespace ProjectOC.ResonanceWheelSystem.UI
     public class ResonanceWheel_sub1 : ML.Engine.UI.UIBasePanel<ResonanceWheel_sub1Struct>
     {
         #region Unity
-        public bool IsInit = false;
-
         protected override void Awake()
         {
             base.Awake();
-
             //BeastInfo
-            var Info1 = this.transform.Find("HiddenBeastInfo1").Find("Info");
-            Stamina = Info1.Find("PhysicalStrength").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
-            Speed = Info1.Find("MovingSpeed").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
-            StaminaNum = Info1.Find("PhysicalStrength").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
-            SpeedNum = Info1.Find("MovingSpeed").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
+            this.Info1 = this.transform.Find("HiddenBeastInfo2").Find("Content").Find("Info1");
+            var Content = Info1.Find("Content");
+            APMax = Content.Find("APMax").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
+            APMaxNumText = Content.Find("APMax").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
+            MoodMax = Content.Find("MoodMax").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
+            MoodMaxNumText = Content.Find("MoodMax").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
+            WalkSpeed = Content.Find("WalkSpeed").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
+            WalkSpeedNumText = Content.Find("WalkSpeed").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
+
 
             GenderImage = Info1.Find("Icon").Find("GenderImage").GetComponent<Image>();
+            BeastName = Info1.Find("Icon").Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
 
-
-            var GInfo = Info1.Find("SkillGraph").Find("Viewport").Find("Content").Find("Ring");
+            this.SwitchInfo = this.Info1.Find("SwitchInfo");
+            var GInfo = SwitchInfo.Find("SkillGraph").Find("Viewport").Find("Content").Find("Ring");
             beastSkills = new BeastSkill[GInfo.childCount];
-
-
             for (int i = 0; i < GInfo.childCount; i++)
             {
                 beastSkills[i].skillText = GInfo.GetChild(i).Find("EmptyText").GetComponent<TMPro.TextMeshProUGUI>();
-                beastSkills[i].workType = (WorkType)Enum.Parse(typeof(WorkType), GInfo.GetChild(i).name);
+                beastSkills[i].workType = (SkillType)Enum.Parse(typeof(SkillType), GInfo.GetChild(i).name);
             }
 
-            //需要调接口显示的隐兽信息
+            var GContent = SwitchInfo.Find("Content");
+            this.CookEfficiency = GContent.Find("CookEfficiency").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
+            this.CookEfficiencyNumText = GContent.Find("CookEfficiency").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
+            this.CollectEfficiency = GContent.Find("CollectEfficiency").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
+            this.CollectEfficiencyNumText = GContent.Find("CollectEfficiency").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
+            this.MagicEfficiency = GContent.Find("MagicEfficiency").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
+            this.MagicEfficiencyNumText = GContent.Find("MagicEfficiency").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
+            this.HandCraftEfficiency = GContent.Find("HandCraftEfficiency").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
+            this.HandCraftEfficiencyNumText = GContent.Find("HandCraftEfficiency").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
+            this.IndustryEfficiency = GContent.Find("IndustryEfficiency").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
+            this.IndustryEfficiencyNumText = GContent.Find("IndustryEfficiency").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
+            this.WeightMax = GContent.Find("WeightMax").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
+            this.WeightMaxNumText = GContent.Find("WeightMax").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
 
-            BeastName = Info1.Find("Icon").Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
-        }
-        protected override void Start()
-        {
-            IsInit = true;
-            Refresh();
-            base.Start();
+            this.Info2 = this.transform.Find("HiddenBeastInfo2").Find("Content").Find("Info2");
+            DescriptionScrollView = Info2.Find("Scroll View").GetComponent<ScrollRect>();
+
+            var KetTips = this.transform.Find("BotKeyTips").Find("KeyTips");
+            this.KT_ViewMoreInformation = KetTips.Find("KT_ViewMoreInformation");
+            this.KT_CancelMoreInformation = KetTips.Find("KT_CancelMoreInformation");
         }
 
         private List<AsyncOperationHandle> descriptionHandle = new List<AsyncOperationHandle>();
@@ -88,7 +100,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #region Internal
         private struct BeastSkill
         {
-            public WorkType workType;
+            public SkillType workType;
             public TMPro.TextMeshProUGUI skillText;
         }
 
@@ -101,6 +113,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             //收留
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Receive.performed -= Receive_performed;
 
+            ML.Engine.Input.InputManager.Instance.Common.Common.RT.performed -= RT_performed;
+
+            ML.Engine.Input.InputManager.Instance.Common.Common.TurnPage.started -= TurnPage_started;
+
+            ML.Engine.Input.InputManager.Instance.Common.Common.TurnPage.canceled -= TurnPage_canceled;
+
         }
 
         protected override void RegisterInput()
@@ -111,7 +129,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             //收留
             ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI_sub1.Receive.performed += Receive_performed;
+
+            ML.Engine.Input.InputManager.Instance.Common.Common.RT.performed += RT_performed;
+
+            ML.Engine.Input.InputManager.Instance.Common.Common.TurnPage.started += TurnPage_started;
+
+            ML.Engine.Input.InputManager.Instance.Common.Common.TurnPage.canceled += TurnPage_canceled;
         }
+
 
         private void Expel_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
@@ -119,7 +144,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
             //ui
             ResonanceWheelUI.RingGrid.Reset(parentUI.Grids[parentUI.CurrentGridIndex]);
-            
+
+            this.objectPool.ResetPool("SimpleDescriptionPool");
+            this.objectPool.ResetPool("FullDescriptionPool");
+
             UIMgr.PopPanel();
         }
 
@@ -130,16 +158,47 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             ResonanceWheelUI.RingGrid.Reset(parentUI.Grids[parentUI.CurrentGridIndex]);
             UIMgr.PopPanel();
         }
+
+        private void RT_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            SwitchInfoIndex = (SwitchInfoIndex + 1) % SwitchInfo.childCount;
+            this.Refresh();
+        }
+
+        private float TimeInterval = 0.2f;
+        private CounterDownTimer timer = null;
+        private void TurnPage_started(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            if (timer == null)
+            {
+                timer = new CounterDownTimer(TimeInterval, true, true, 1, 2);
+                timer.OnEndEvent += () =>
+                {
+                    var vector2 = obj.ReadValue<UnityEngine.Vector2>();
+                    this.DescriptionScrollView.verticalScrollbar.value += vector2.y;
+                };
+            }
+        }
+        private void TurnPage_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+        {
+            ML.Engine.Manager.GameManager.Instance.CounterDownTimerManager.RemoveTimer(timer);
+            timer = null;
+        }
         #endregion
 
         #region UI
         #region Temp
         private Sprite icon_genderfemaleSprite, icon_gendermaleSprite;
-
+        private Dictionary<string, Sprite> tempSprite = new Dictionary<string, Sprite>();
         private void ClearTemp()
         {
             GameManager.DestroyObj(icon_genderfemaleSprite);
             GameManager.DestroyObj(icon_gendermaleSprite);
+            // sprite
+            foreach (var s in tempSprite)
+            {
+                ML.Engine.Manager.GameManager.DestroyObj(s.Value);
+            }
         }
 
         #endregion
@@ -147,63 +206,93 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #region UI对象引用
         public ResonanceWheelUI parentUI;
         //BeastInfo
-        private TMPro.TextMeshProUGUI Stamina;
-        private TMPro.TextMeshProUGUI Speed;
-        private TMPro.TextMeshProUGUI StaminaNum;
-        private TMPro.TextMeshProUGUI SpeedNum;
-
         private Image GenderImage;
+        private TMPro.TextMeshProUGUI BeastName;
+
+        private TMPro.TextMeshProUGUI APMax;
+        private TMPro.TextMeshProUGUI APMaxNumText;
+        private TMPro.TextMeshProUGUI MoodMax;
+        private TMPro.TextMeshProUGUI MoodMaxNumText;
+        private TMPro.TextMeshProUGUI WalkSpeed;
+        private TMPro.TextMeshProUGUI WalkSpeedNumText;
+
+        private TMPro.TextMeshProUGUI CookEfficiency;
+        private TMPro.TextMeshProUGUI CookEfficiencyNumText;
+        private TMPro.TextMeshProUGUI CollectEfficiency;
+        private TMPro.TextMeshProUGUI CollectEfficiencyNumText;
+        private TMPro.TextMeshProUGUI MagicEfficiency;
+        private TMPro.TextMeshProUGUI MagicEfficiencyNumText;
+        private TMPro.TextMeshProUGUI HandCraftEfficiency;
+        private TMPro.TextMeshProUGUI HandCraftEfficiencyNumText;
+        private TMPro.TextMeshProUGUI IndustryEfficiency;
+        private TMPro.TextMeshProUGUI IndustryEfficiencyNumText;
+        private TMPro.TextMeshProUGUI WeightMax;
+        private TMPro.TextMeshProUGUI WeightMaxNumText;
+
+        private Transform Info1;
+        private Transform Info2;
+        private Transform SwitchInfo;
+
+        private Transform KT_ViewMoreInformation;
+        private Transform KT_CancelMoreInformation;
+        private ScrollRect DescriptionScrollView;
 
 
         private BeastSkill[] beastSkills;
-
-         //需要调接口显示的隐兽信息
-        private TMPro.TextMeshProUGUI BeastName;
+        private int SwitchInfoIndex = 0;
 
         #endregion
-
+        private FeatureManager featManager => ManagerNS.LocalGameManager.Instance.FeatureManager;
         public override void Refresh()
         {
-            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !IsInit)
+            if (ABJAProcessorJson == null || !ABJAProcessorJson.IsLoaded || !isInitObjectPool)
             {
                 return;
             }
-
-            //BeastInfo
             foreach (TextTip tp in PanelTextContent.SkillType)
             {
-                for (int i = 0; i < beastSkills.Length; i++) 
+                for (int i = 0; i < beastSkills.Length; i++)
                 {
-                    if(tp.name == beastSkills[i].workType.ToString())
+                    if (tp.name == beastSkills[i].workType.ToString())
                     {
                         beastSkills[i].skillText.text = tp.GetDescription();
                     }
                 }
             }
 
-            //更新隐兽详细信息
             WorkerEcho workerEcho = parentUI.workerEcho;
+            Worker worker = workerEcho.GetExternWorkers()[parentUI.CurrentGridIndex]?.Worker;
 
-
-/*            Stamina.text = (ResonanceWheelUI.PanelTextContent_sub1.SkillType.Where(tag => tag.name == "Stamina") as TextTip).GetDescription();
-            Speed.text = (ResonanceWheelUI.PanelTextContent_sub1.SkillType.Where(tag => tag.name == "Speed") as TextTip).GetDescription();*/
-
-            Worker worker = workerEcho.GetExternWorkers()[parentUI.CurrentGridIndex]?.worker;
-            if (worker != null)
+            if(worker != null)
             {
-                StaminaNum.text = worker.APMax.ToString();
-                SpeedNum.text = worker.WalkSpeed.ToString();
-
-                List<float> datas = new List<float>();
-
-                Dictionary<WorkType, Skill> skillDic = worker.Skill;
-                foreach (var skill in skillDic)
+                for (int i = 0; i < SwitchInfo.childCount; i++)
                 {
-                    datas.Add(skillDic[skill.Key].Level / 10f);
+                    SwitchInfo.GetChild(i).gameObject.SetActive(i == SwitchInfoIndex);
+                }
+                Dictionary<SkillType, Skill> skillDic = worker.Skill;
+                if (SwitchInfoIndex == 0)
+                {
+                    List<float> datas = new List<float>();
+
+                    datas.Add(skillDic[SkillType.Collect].LevelCurrent / 10f);
+                    datas.Add(skillDic[SkillType.Transport].LevelCurrent / 10f);
+                    datas.Add(skillDic[SkillType.Magic].LevelCurrent / 10f);
+                    datas.Add(skillDic[SkillType.Industry].LevelCurrent / 10f);
+                    datas.Add(skillDic[SkillType.HandCraft].LevelCurrent / 10f);
+                    datas.Add(skillDic[SkillType.Cook].LevelCurrent / 10f);
+                    var radar = SwitchInfo.Find("SkillGraph").Find("Viewport").Find("Content").Find("Radar").GetComponent<UIPolygon>();
+                    radar.DrawPolygon(datas);
+                }
+                else if (SwitchInfoIndex == 1)
+                {
+                    this.CookEfficiencyNumText.text = skillDic[SkillType.Cook].LevelCurrent.ToString();
+                    this.CollectEfficiencyNumText.text = skillDic[SkillType.Collect].LevelCurrent.ToString();
+                    this.MagicEfficiencyNumText.text = skillDic[SkillType.Magic].LevelCurrent.ToString();
+                    this.HandCraftEfficiencyNumText.text = worker.GetEff(SkillType.HandCraft).ToString();
+                    this.IndustryEfficiencyNumText.text = skillDic[SkillType.Industry].LevelCurrent.ToString();
+                    this.WeightMaxNumText.text = worker.RealBURMax.ToString();
                 }
 
-                var radar = this.transform.Find("HiddenBeastInfo1").Find("Info").Find("SkillGraph").Find("Viewport").Find("Content").Find("Radar").GetComponent<UIPolygon>();
-                radar.DrawPolygon(datas);
 
                 //性别
                 if (worker.Gender == Gender.Male)
@@ -214,30 +303,52 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 {
                     GenderImage.sprite = icon_genderfemaleSprite;
                 }
-
-
                 BeastName.text = worker.Name;
 
-                var Info = this.transform.Find("HiddenBeastInfo2").Find("Info").Find("Scroll View").Find("Viewport").Find("Content");
-                for (int i = 0; i < Info.childCount; i++)
-                {
-                    ML.Engine.Manager.GameManager.DestroyObj(Info.GetChild(i).gameObject);
-                }
+                APMaxNumText.text = worker.APMax.ToString();
+                MoodMax.text = worker.EMMax.ToString();
+                WalkSpeedNumText.text = worker.RealWalkSpeed.ToString();
 
-                foreach (var feature in worker.Features)
+                this.objectPool.ResetPool("DescriptionPool");
+                foreach (var feature in worker.GetFeatures())
                 {
-                    GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_ResonanceWheel_UIPrefab/Prefab_ResonanceWheel_UI_Description.prefab", Info).Completed += (handle) =>
+                    var tPrefab = this.objectPool.GetNextObject("DescriptionPool");
+                    var Normal = tPrefab.transform.Find("Normal");
+                    var Specific = tPrefab.transform.Find("Specific");
+                    string featID = feature.ID;
+                    Normal.gameObject.SetActive(SwitchInfoIndex == 0);
+                    Specific.gameObject.SetActive(SwitchInfoIndex == 1);
+                    Transform feat = SwitchInfoIndex == 1 ? tPrefab.transform.Find("Specific") : tPrefab.transform.Find("Normal");
+                    if (!string.IsNullOrEmpty(featID))
+                    {
+                        string iconName = featManager.GetIcon(featID);
+                        feat.Find("Icon").gameObject.SetActive(!string.IsNullOrEmpty(iconName));
+                        if (!string.IsNullOrEmpty(iconName))
                         {
-                            this.descriptionHandle.Add(handle);
-                            var descriptionPrefab = handle.Result;
-                            descriptionPrefab.transform.Find("Text1").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Name;
-                            descriptionPrefab.transform.Find("Text2").GetComponent<TMPro.TextMeshProUGUI>().text = feature.Description;
-                            descriptionPrefab.transform.Find("Text3").GetComponent<TMPro.TextMeshProUGUI>().text =
-                            "<color=#6FB502><b><sprite name=\"Triangle\" index=0 tint=1>" + feature.EffectsDescription + "</b></color>";
-
-                        };
+                            if (!tempSprite.ContainsKey(iconName))
+                            {
+                                tempSprite.Add(iconName, ManagerNS.LocalGameManager.Instance.WorkerManager.GetSprite(iconName));
+                            }
+                            feat.Find("Icon").GetComponent<Image>().sprite = tempSprite[iconName];
+                        }
+                        feat.Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = featManager.GetName(featID);
+                        if (SwitchInfoIndex == 1)
+                        {
+                            feat.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = featManager.GetItemDescription(featID);
+                            feat.Find("DescIcon").gameObject.SetActive(true);
+                            feat.Find("DescIcon").GetComponent<Image>().color = featManager.GetColorForUI(featID);
+                            feat.Find("EffectDesc").GetComponent<TMPro.TextMeshProUGUI>().text =
+                                $"<color={featManager.GetColorStrForUI(featID)}>" + featManager.GetEffectsDescription(featID) + "</color>";
+                        }
+                        DescriptionList.AddBtn(tPrefab);
+                    }
                 }
+                #region KeyTip
+                KT_ViewMoreInformation.gameObject.SetActive(SwitchInfoIndex == 0);
+                KT_CancelMoreInformation.gameObject.SetActive(SwitchInfoIndex == 1);
+                #endregion
             }
+
         }
         #endregion
 
@@ -261,6 +372,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         }
 
         #endregion
+        private bool isInitObjectPool = false;
         protected override void InitObjectPool()
         {
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Texture2D, "Texture2DPool", 1,
@@ -269,10 +381,19 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 string Pre = "Tex2D_Resonance_UI_";
                 SpriteAtlas resonanceWheelAtlas = handle.Result as SpriteAtlas;
                 icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite(Pre + "icon_genderfemale");
-                icon_genderfemaleSprite = resonanceWheelAtlas.GetSprite(Pre + "icon_gendermale");
+                icon_gendermaleSprite = resonanceWheelAtlas.GetSprite(Pre + "icon_gendermale");
             }
             );
+
+            UIBtnList.Synchronizer synchronizer = new UIBtnList.Synchronizer(1, () => { isInitObjectPool = true; });
+            this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "DescriptionPool", 5, "Prefab_Worker_UI/Prefab_Worker_UI_FeatureTemplate.prefab", OnCompleted: (hanlde) => { synchronizer.Check(); });
             base.InitObjectPool();
+        }
+        [ShowInInspector]
+        private UIBtnList DescriptionList;
+        protected override void InitBtnInfo()
+        {
+            DescriptionList = new UIBtnList(this.Info2.GetComponentInChildren<UIBtnListInitor>());
         }
         #endregion
     }

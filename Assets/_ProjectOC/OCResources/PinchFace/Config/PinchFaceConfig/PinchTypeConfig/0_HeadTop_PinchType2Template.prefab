@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d4266ab2b90dc147a5340641698dd7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  typeIndex: 0
   distributionMode: 0
 --- !u!114 &1223636147856542266
 MonoBehaviour:
@@ -63,9 +64,9 @@ MonoBehaviour:
   - boneWeightChangeType: 3
     boneWeightType: 7
     scaleValueRange: {x: 0.5, y: 1.5}
-    currentScaleValue: 1
-    offsetValueRange: {x: -1, y: 1}
-    currentOffsetValue: 0
+    currentScaleValue: {x: 0, y: 0, z: 0}
+    offsetValueRange: {x: -0.05, y: 0.05}
+    currentOffsetValue: {x: 0, y: 0, z: 0}
 --- !u!114 &1686399163492116749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,6 +80,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colorChangeType: 1
+  CurColorChangeType: 0
   param1: 0
   param2: 0
   color1: {r: 0, g: 0, b: 0, a: 0}

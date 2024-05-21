@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using ML.Engine.InventorySystem;
-using ML.Engine.TextContent;
 using Sirenix.OdinInspector;
 
 namespace ProjectOC.ProNodeNS
@@ -9,11 +7,11 @@ namespace ProjectOC.ProNodeNS
     public struct ProNodeTableData
     {
         public string ID;
-        public TextContent Name;
+        public ML.Engine.TextContent.TextContent Name;
         public ProNodeType Type;
-        public RecipeCategory Category;
-        public List<RecipeCategory> RecipeCategoryFiltered;
-        public WorkerNS.WorkType ExpType;
+        public ML.Engine.InventorySystem.RecipeCategory Category;
+        public List<ML.Engine.InventorySystem.RecipeCategory> RecipeCategoryFiltered;
+        public WorkerNS.SkillType ExpType;
         public int MaxStack;
         public int StackThreshold;
         public int RawThreshold;
@@ -23,16 +21,12 @@ namespace ProjectOC.ProNodeNS
     [LabelText("生产节点管理器"), System.Serializable]
     public sealed class ProNodeManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
-        public void OnRegister()
-        {
-            LoadTableData();
-        }
-        
-        #region Load And Data
+        #region ILocalManager
+        [ShowInInspector]
         private Dictionary<string, ProNodeTableData> ProNodeTableDict = new Dictionary<string, ProNodeTableData>();
         public ML.Engine.ABResources.ABJsonAssetProcessor<ProNodeTableData[]> ABJAProcessor;
-
-        public void LoadTableData()
+        public ProNodeConfig Config;
+        public void OnRegister()
         {
             ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<ProNodeTableData[]>("OCTableData", "ProNode", (datas) =>
             {
@@ -42,27 +36,26 @@ namespace ProjectOC.ProNodeNS
                 }
             }, "生产节点表数据");
             ABJAProcessor.StartLoadJsonAssetData();
+            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<ProNodeConfigAsset>("Config_ProNode").Completed += (handle) =>
+            {
+                ProNodeConfigAsset data = handle.Result;
+                Config = new ProNodeConfig(data.Config);
+            };
         }
         #endregion
 
         #region Spawn
         private Dictionary<string, WorldProNode> WorldProNodeDict = new Dictionary<string, WorldProNode>();
-
         public ProNode SpawnProNode(string id)
         {
-            if (IsValidID(id))
-            {
-                return new ProNode(ProNodeTableDict[id]);
-            }
-            return null;
+            return IsValidID(id) ? new ProNode(ProNodeTableDict[id]) : null;
         }
 
         public void WorldNodeSetData(WorldProNode worldNode, string nodeID)
         {
             if (worldNode != null && IsValidID(nodeID))
             {
-                ProNode node = SpawnProNode(nodeID);
-                WorldNodeSetData(worldNode, node);
+                WorldNodeSetData(worldNode, SpawnProNode(nodeID));
             }
         }
 
@@ -78,120 +71,76 @@ namespace ProjectOC.ProNodeNS
                 {
                     WorldProNodeDict.Add(worldNode.InstanceID, worldNode);
                 }
-                if (worldNode.ProNode != null)
+                if (worldNode.ProNode != node)
                 {
-                    worldNode.ProNode.WorldProNode = null;
+                    if (worldNode.ProNode != null)
+                    {
+                        worldNode.ProNode.Destroy();
+                        worldNode.ProNode.WorldProNode = null;
+                    }
+                    if (node.WorldProNode != null)
+                    {
+                        node.WorldProNode.ProNode = null;
+                    }
+                    worldNode.ProNode = node;
+                    node.WorldProNode = worldNode;
                 }
-                worldNode.ProNode = node;
-                node.WorldProNode = worldNode;
             }
         }
         #endregion
 
-        #region Getter
+        #region Get
         public bool IsValidID(string id)
         {
-            if (!string.IsNullOrEmpty(id))
-            {
-                return ProNodeTableDict.ContainsKey(id);
-            }
-            return false;
+            return !string.IsNullOrEmpty(id) ? ProNodeTableDict.ContainsKey(id) : false;
         }
         public bool IsValidUID(string uid)
         {
-            if (!string.IsNullOrEmpty(uid))
-            {
-                return WorldProNodeDict.ContainsKey(uid);
-            }
-            return false;
+            return !string.IsNullOrEmpty(uid) ? WorldProNodeDict.ContainsKey(uid) : false;
         }
         public WorldProNode GetWorldProNode(string uid)
         {
-            if (IsValidUID(uid))
-            {
-                return this.WorldProNodeDict[uid];
-            }
-            return null;
+            return IsValidUID(uid) ? WorldProNodeDict[uid] : null;
         }
-
         public string GetName(string id)
         {
-            if (IsValidID(id))
-            {
-                return ProNodeTableDict[id].Name;
-            }
-            return "";
+            return IsValidID(id) ? ProNodeTableDict[id].Name : "";
         }
-
         public ProNodeType GetProNodeType(string id)
         {
-            if (IsValidID(id))
-            {
-                return ProNodeTableDict[id].Type;
-            }
-            return ProNodeType.None;
+            return IsValidID(id) ? ProNodeTableDict[id].Type : ProNodeType.None;
         }
-
-        public RecipeCategory GetCategory(string id)
+        public ML.Engine.InventorySystem.RecipeCategory GetCategory(string id)
         {
-            if (IsValidID(id))
-            {
-                return ProNodeTableDict[id].Category;
-            }
-            return RecipeCategory.None;
+            return IsValidID(id) ? ProNodeTableDict[id].Category : ML.Engine.InventorySystem.RecipeCategory.None;
         }
-
-        public List<RecipeCategory> GetRecipeCategoryFilterd(string id)
+        public List<ML.Engine.InventorySystem.RecipeCategory> GetRecipeCategoryFilterd(string id)
         {
-            if (IsValidID(id))
-            {
-                return ProNodeTableDict[id].RecipeCategoryFiltered;
-            }
-            return new List<RecipeCategory>();
+            return IsValidID(id) ? ProNodeTableDict[id].RecipeCategoryFiltered : new List<ML.Engine.InventorySystem.RecipeCategory>();
         }
-
-        public WorkerNS.WorkType GetExpType(string id)
+        public WorkerNS.SkillType GetExpType(string id)
         {
-            if (IsValidID(id))
-            {
-                return ProNodeTableDict[id].ExpType;
-            }
-            return WorkerNS.WorkType.None;
+            return IsValidID(id) ? ProNodeTableDict[id].ExpType : WorkerNS.SkillType.None;
         }
-
         public int GetMaxStack(string id)
         {
-            if (IsValidID(id))
-            {
-                return ProNodeTableDict[id].MaxStack;
-            }
-            return 0;
+            return IsValidID(id) ? ProNodeTableDict[id].MaxStack : 0;
         }
-
         public int GetStackThreshold(string id)
         {
-            if (IsValidID(id))
-            {
-                return ProNodeTableDict[id].StackThreshold;
-            }
-            return 0;
+            return IsValidID(id) ? ProNodeTableDict[id].StackThreshold : 0;
         }
-
         public int GetRawThreshold(string id)
         {
-            if (IsValidID(id))
-            {
-                return ProNodeTableDict[id].RawThreshold;
-            }
-            return 0;
+            return IsValidID(id) ? ProNodeTableDict[id].RawThreshold : 0;
         }
         public bool GetCanCharge(string id)
         {
-            if (IsValidID(id))
-            {
-                return ProNodeTableDict[id].CanCharge;
-            }
-            return false;
+            return IsValidID(id) ? ProNodeTableDict[id].CanCharge : false;
+        }
+        public bool GetIsAuto(string id)
+        {
+            return IsValidID(id) ? ProNodeTableDict[id].Type == ProNodeType.Auto : false;
         }
         #endregion
     }

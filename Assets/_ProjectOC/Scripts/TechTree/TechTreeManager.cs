@@ -12,6 +12,8 @@ using UnityEngine.U2D;
 using ML.Engine.Manager;
 using ML.Engine.SaveSystem;
 using Unity.VisualScripting;
+using ProjectOC.WorkerNS;
+using ProjectOC.ManagerNS;
 
 namespace ProjectOC.TechTree
 {
@@ -165,7 +167,7 @@ namespace ProjectOC.TechTree
             return false;
         }
 
-        public ML.Engine.InventorySystem.CompositeSystem.Formula[] GetTPItemCost(string ID)
+        public ML.Engine.InventorySystem.Formula[] GetTPItemCost(string ID)
         {
             if (string.IsNullOrEmpty(ID)) return null;
             return this.registerTechPoints.ContainsKey(ID) ? this.registerTechPoints[ID].ItemCost : null;
@@ -527,7 +529,9 @@ namespace ProjectOC.TechTree
             {
                 GameManager.Instance.EventManager.ExecuteEvent(ExecuteString);
             }
-            //Debug.Log(GameManager.Instance.EventManager.ExecuteCondition("Condition_CheckBagItem_Water_1"));
+            
+            //Debug.Log(GameManager.Instance.EventManager.ExecuteCondition("Condition_CheckBuild_Bed_2"));
+            //Debug.Log(GameManager.Instance.EventManager.GetConditionText("Condition_CheckBuild_Bed_2"));
         }
         #endregion
 

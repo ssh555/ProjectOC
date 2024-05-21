@@ -1,4 +1,5 @@
 using ML.Engine.BuildingSystem.BuildingPart;
+using ML.Engine.Manager;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         [LabelText("是否可切换"), FoldoutGroup("SocketProperty"), PropertyTooltip("为true时，表示这个Socket能作为切换激活点使用")]
         public bool IsActiveSocket = true;
 
+
         ///// <summary>
         ///// 可以容纳的SocketType
         ///// </summary>
@@ -34,16 +36,20 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
             //#if UNITY_EDITOR
             //Gizmos_Active = true;
             //#endif
+            BuildingManager.Instance.VisualSocket.SetActive(true);
+            BuildingManager.Instance.VisualSocket.transform.SetParent(this.transform);
+            BuildingManager.Instance.VisualSocket.transform.localPosition = Vector3.zero;
         }
 
-    /// <summary>
-    /// to-do : 不在激活，即置为Disactieve时调用
-    /// </summary>
+        /// <summary>
+        /// to-do : 不在激活，即置为Disactieve时调用
+        /// </summary>
         public virtual void OnDisactive()
         {
-//#if UNITY_EDITOR
-//            Gizmos_Active = false;
-//#endif
+            //#if UNITY_EDITOR
+            //            Gizmos_Active = false;
+            //#endif
+            BuildingManager.Instance.VisualSocket.SetActive(false);
         }
 
         public bool CheckMatch(BuildingSocket target)
@@ -132,7 +138,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         {
             if (this.ParentBPart.AttachedArea != null)
             {
-                bool b = this.ParentBPart.AttachedArea.GetMatchPointOnArea(TargetPos, AreaCheckRadius, out pos, out rot);
+                bool b = this.ParentBPart.AttachedArea.GetMatchPointOnArea(TargetPos, out pos, out rot);
                 if(b == false)
                 {
                     pos = Vector3.negativeInfinity;
@@ -167,8 +173,8 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
         /// <summary>
         /// 用于area检测时的判断半径，即Socket与Area使用两套判定逻辑
         /// </summary>
-        [LabelText("Area 检测半径"), ShowInInspector, FoldoutGroup("Area"), PropertyTooltip("单位 m")]
-        public static float AreaCheckRadius = 0.1f;
+        //[LabelText("Area 检测半径"), ShowInInspector, FoldoutGroup("Area"), PropertyTooltip("单位 m")]
+        //public static float AreaCheckRadius = 0.1f;
 
         #endregion
 
