@@ -2,8 +2,8 @@ using Sirenix.OdinInspector;
 
 namespace ProjectOC.DataNS
 {
-    public interface IContainerOwner : MissionNS.IMissionObj, ML.Engine.InventorySystem.IInventory { }
-    public interface IContainerOwner<T> : IContainerOwner
+    public interface IContainerOwner : ML.Engine.InventorySystem.IInventory { }
+    public interface IContainerOwner<T> : MissionNS.IMissionObj<T>, IContainerOwner
     {
         [LabelText("´æ´¢Êý¾Ý"), ReadOnly]
         public DataContainer<T> DataContainer { get; set; }

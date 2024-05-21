@@ -6,17 +6,14 @@ namespace ProjectOC.DataNS
 {
     public abstract class ItemContainerOwner : IContainerOwner<string>
     {
+        public bool IsUnique => false;
         [LabelText("´æ´¢Êý¾Ý"), ReadOnly]
         public DataContainer<string> DataContainer { get; set; }
 
-        #region Init Clear
-        public void InitData(int capacity, int dataCapacity)
-        {
-            DataContainer = new DataContainer<string>(capacity, dataCapacity);
-        }
+        #region Clear
         public void ClearData()
         {
-            (this as MissionNS.IMissionObj).Clear();
+            (this as MissionNS.IMissionObj<string>).Clear();
             if (DataContainer != null)
             {
                 ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(ListToDict(DataContainer.GetAmount(DataOpType.StorageAll)));
@@ -48,21 +45,21 @@ namespace ProjectOC.DataNS
         {
             var list = DataContainer.ChangeCapacity(capacity, dataCapacity);
             ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(ListToDict(list));
-            (this as MissionNS.IMissionObj).UpdateTransport();
+            (this as MissionNS.IMissionObj<string>).UpdateTransport();
         }
 
         public void ChangeCapacity(int capacity, List<int> dataCapacitys)
         {
             var list = DataContainer.ChangeCapacity(capacity, dataCapacitys);
             ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(ListToDict(list));
-            (this as MissionNS.IMissionObj).UpdateTransport();
+            (this as MissionNS.IMissionObj<string>).UpdateTransport();
         }
 
         public void ChangeData(int index, string itemID)
         {
             var t = DataContainer.ChangeData(index, itemID);
             ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(t.Item1, t.Item2);
-            (this as MissionNS.IMissionObj).UpdateTransport(t.Item1);
+            (this as MissionNS.IMissionObj<string>).UpdateTransport(t.Item1);
         }
 
         public void Remove(int index, int amount)
@@ -90,25 +87,22 @@ namespace ProjectOC.DataNS
         public abstract Transform GetTransform();
         public abstract string GetUID();
         public abstract MissionNS.MissionObjType GetMissionObjType();
-        public List<MissionNS.Transport> Transports { get; set; } = new List<MissionNS.Transport>();
-        public List<MissionNS.MissionTransport> Missions { get; set; } = new List<MissionNS.MissionTransport>();
+        public List<MissionNS.Transport<string>> Transports { get; set; } = new List<MissionNS.Transport<string>>();
+        public List<MissionNS.MissionTransport<string>> Missions { get; set; } = new List<MissionNS.MissionTransport<string>>();
         public MissionNS.TransportPriority TransportPriority { get; set; } = MissionNS.TransportPriority.Normal;
 
-        public int ChangeAmount(string id, int amount, DataOpType addType, DataOpType removeType, bool exceed = false, bool complete = true, bool needCanIn = false, bool needCanOut = false)
+        public int ChangeAmount(string data, int amount, DataOpType addType, DataOpType removeType, bool exceed = false, bool complete = true, bool needCanIn = false, bool needCanOut = false)
         {
-            return DataContainer.ChangeAmount(id, amount, addType, removeType, exceed, complete, needCanIn, needCanOut);
+            return DataContainer.ChangeAmount(data, amount, addType, removeType, exceed, complete, needCanIn, needCanOut);
         }
-        public int GetAmount(string itemID, DataOpType type, bool needCanIn = false, bool needCanOut = false)
+        public int GetAmount(string data, DataOpType type, bool needCanIn = false, bool needCanOut = false)
         {
-            return DataContainer.GetAmount(itemID, type, needCanIn, needCanOut);
+            return DataContainer.GetAmount(data, type, needCanIn, needCanOut);
         }
         public Dictionary<string, int> GetAmount(DataOpType type, bool needCanIn = false, bool needCanOut = false)
         {
             return ListToDict(DataContainer.GetAmount(type, needCanIn, needCanOut));
         }
-        public int GetAmount(ML.Engine.InventorySystem.Item item, DataOpType type, bool needCanIn = false, bool needCanOut = false) { return 0; }
-        public HashSet<ML.Engine.InventorySystem.Item> GetAmountForItem(DataOpType type, bool needCanIn = false, bool needCanOut = false) { return new HashSet<ML.Engine.InventorySystem.Item>(); }
-        public int ChangeAmount(ML.Engine.InventorySystem.Item item, DataOpType addType, DataOpType removeType, bool needCanIn = false, bool needCanOut = false) { return 0; }
         #endregion
 
         #region IInventory

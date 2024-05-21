@@ -656,9 +656,9 @@ namespace ProjectOC.WorkerNS
             }
         }
         [LabelText("搬运"), ReadOnly]
-        public MissionNS.Transport Transport = null;
+        public MissionNS.ITransport Transport = null;
         [LabelText("是否有搬运"), ShowInInspector, ReadOnly]
-        public bool HaveTransport { get => Transport != null && !string.IsNullOrEmpty(Transport.ID); }
+        public bool HaveTransport { get => Transport != null && Transport.IsValid; }
 
         [LabelText("搬运物品"), ReadOnly]
         public Dictionary<string, int> TransportDict = new Dictionary<string, int>();

@@ -115,7 +115,7 @@ namespace ProjectOC.ProNodeNS
         public ProNode(ProNodeTableData config)
         {
             ID = config.ID ?? "";
-            InitData(0, 0);
+            (this as DataNS.IContainerOwner<string>).InitData(0, 0);
             EffBase = LocalGameManager.Instance.ProNodeManager.Config.EffBase;
             InitAPCost_Duty = LocalGameManager.Instance.ProNodeManager.Config.InitAPCost_Duty;
             DataContainer.OnDataChangeEvent += OnContainerDataChangeEvent;
@@ -281,7 +281,7 @@ namespace ProjectOC.ProNodeNS
             int missionNum;
             foreach (var kv in Recipe.Raw)
             {
-                missionNum = kv.num * RawThreshold - DataContainer.GetAmount(kv.id, DataNS.DataOpType.Storage) - (this as MissionNS.IMissionObj).GetMissionNum(kv.id, true);
+                missionNum = kv.num * RawThreshold - DataContainer.GetAmount(kv.id, DataNS.DataOpType.Storage) - (this as MissionNS.IMissionObj<string>).GetMissionNum(kv.id, true);
                 if (missionNum > 0)
                 {
                     missionNum += kv.num * (StackMax - RawThreshold);
@@ -304,7 +304,7 @@ namespace ProjectOC.ProNodeNS
         {
             ML.Engine.InventorySystem.Item item = Recipe.Composite(this);
             AddItem(item);
-            int needAssignNum = (this as MissionNS.IMissionObj).GetNeedAssignNum(ProductID, false);
+            int needAssignNum = (this as MissionNS.IMissionObj<string>).GetNeedAssignNum(ProductID, false);
             if (Stack >= StackReserve + needAssignNum + StackThreshold * ProductNum)
             {
                 StackReserve = Stack - needAssignNum;
@@ -338,10 +338,10 @@ namespace ProjectOC.ProNodeNS
 
         protected void OnContainerDataChangeEvent()
         {
-            int cur = StackReserve + (this as MissionNS.IMissionObj).GetNeedAssignNum(ProductID, false) - Stack;
+            int cur = StackReserve + (this as MissionNS.IMissionObj<string>).GetNeedAssignNum(ProductID, false) - Stack;
             if (cur > 0)
             {
-                foreach (var mission in (this as MissionNS.IMissionObj).GetMissions(ProductID, false))
+                foreach (var mission in (this as MissionNS.IMissionObj<string>).GetMissions(ProductID, false))
                 {
                     int needAssignNum = mission.NeedAssignNum;
                     int missionNum = mission.MissionNum;
@@ -402,7 +402,7 @@ namespace ProjectOC.ProNodeNS
                     Worker.SetDestination(GetTransform().position, OnArriveEvent, GetContainerType());
                 }
             }
-            (this as MissionNS.IMissionObj).OnPositionChangeTransport();
+            (this as MissionNS.IMissionObj<string>).OnPositionChangeTransport();
         }
 
         public void SetWorkerRelateData()

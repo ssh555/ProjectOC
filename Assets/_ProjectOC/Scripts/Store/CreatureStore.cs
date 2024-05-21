@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ProjectOC.StoreNS
 {
     [LabelText("≤÷ø‚"), Serializable]
-    public class Store : DataNS.ItemContainerOwner
+    public class CreatureStore : DataNS.UniqueItemContainerOwner<ML.Engine.InventorySystem.CreatureItem>
     {
         #region Data
         [LabelText(" ¿ΩÁ≤÷ø‚"), ReadOnly]
@@ -25,14 +25,14 @@ namespace ProjectOC.StoreNS
         public string WorldIconItemID;
         #endregion
 
-        public Store(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType)
+        public CreatureStore(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType)
         {
             StoreType = storeType;
             Name = storeType.ToString();
             if (0 <= Level && Level <= ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelMax)
             {
-                (this as DataNS.IContainerOwner<string>).InitData(ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelCapacity[Level],
-                ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelDataCapacity[Level]);
+                (this as DataNS.IContainerOwner<ML.Engine.InventorySystem.CreatureItem>).
+                    InitData(ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelCapacity[Level], 1);
             }
         }
 
@@ -50,8 +50,7 @@ namespace ProjectOC.StoreNS
         {
             if (WorldStore.transform != null && 0 <= newLevel && newLevel <= ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelMax)
             {
-                ChangeCapacity(ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelCapacity[newLevel], 
-                    ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelDataCapacity[newLevel]);
+                ChangeCapacity(ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelCapacity[newLevel]);
                 Level = newLevel;
                 return true;
             }

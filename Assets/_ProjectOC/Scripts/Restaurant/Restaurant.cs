@@ -47,7 +47,7 @@ namespace ProjectOC.RestaurantNS
             {
                 Seats[i] = new RestaurantSeat(this, WorldRestaurant.transform.Find($"seat{i + 1}"));
             }
-            InitData(ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.DataNum, ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.MaxCapacity);
+            (this as DataNS.IContainerOwner<string>).InitData(ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.DataNum, ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.MaxCapacity);
         }
 
         public void Destroy()
@@ -61,7 +61,7 @@ namespace ProjectOC.RestaurantNS
 
         public void OnPositionChange(Vector3 differ)
         {
-            (this as MissionNS.IMissionObj).OnPositionChangeTransport();
+            (this as MissionNS.IMissionObj<string>).OnPositionChangeTransport();
             foreach (var seat in Seats)
             {
                 (seat as WorkerNS.IWorkerContainer).OnPositionChange(differ);
