@@ -20,6 +20,7 @@ namespace ProjectOC.MineSystem
         private BigMap bigMap;
         private Rect controlRect;
         private ReorderableList reorderableList;
+
         private Transform mapPreview;
         private bool ShowProgrammerData = false;
         private float tempMineScale;
@@ -198,7 +199,8 @@ namespace ProjectOC.MineSystem
                 {
                     childTransforms[i] = _tileParent.GetChild(i);
                 }
-                System.Array.Sort(childTransforms,(x,y)=>string.Compare(x.name,y.name));
+                System.Array.Sort(childTransforms, (x, y) => 
+                    (int.Parse(x.name.Split("_")[1]).CompareTo( int.Parse(y.name.Split("_")[1]))));
                 for (int i = 0; i < childTransforms.Length; i++)
                 {
                     childTransforms[i].transform.SetSiblingIndex(i);
@@ -259,7 +261,6 @@ namespace ProjectOC.MineSystem
             if (showMineEdit)
             {
                 EditorGUILayout.BeginHorizontal();
-                GUIStyle buttonStyle = new GUIStyle(GUI.skin.button);
                 int _buttonSize = 50;
                 int iCounter = 0;
                 foreach (var _singleBrush in bigMap.BigMapEditDatas.MineBrushDatas)
@@ -267,10 +268,10 @@ namespace ProjectOC.MineSystem
                     //从Sprite获取Texture，直接Sprite.tex 获取的是图集
                     string spritePath = AssetDatabase.GetAssetPath(_singleBrush.mineIcon);
                     TextureImporter textureImporter = AssetImporter.GetAtPath(spritePath) as TextureImporter;
+                    Texture2D originalTexture = null;
                     if (textureImporter != null)
                     {
-                        Texture2D originalTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(textureImporter.assetPath);
-                        buttonStyle.normal.background = originalTexture;
+                        originalTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(textureImporter.assetPath);
                     }
 
                     //选中后切换CurBrush
@@ -280,7 +281,7 @@ namespace ProjectOC.MineSystem
                         brushIndex = _index;
                         tempMineIDData = bigMap.BigMapEditDatas.MineBrushDatas[_index].mineID;
                         tempMineTexData = bigMap.BigMapEditDatas.MineBrushDatas[_index].mineIcon;
-                    }, brushIndex == _index, _buttonSize, buttonStyle);
+                    }, brushIndex == _index, _buttonSize, originalTexture);
                 }
 
                 EditorGUILayout.EndHorizontal();
