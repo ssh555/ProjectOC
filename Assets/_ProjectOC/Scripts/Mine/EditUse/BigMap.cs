@@ -18,6 +18,7 @@ namespace ProjectOC.MineSystem
         public string mineID = "Mineral_Ti_1";
         public Sprite mineTex;
 
-        public Color dataTileColor,emptyTileColor;
+        public Color dataTileColor = new Color(44, 46, 47);
+        public Color emptyTileColor = new Color(161, 162, 166);
     }
 }
