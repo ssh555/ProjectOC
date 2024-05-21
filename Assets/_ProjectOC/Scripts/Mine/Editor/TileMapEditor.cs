@@ -636,7 +636,6 @@ namespace ProjectOC.MineSystem
             
             //设置矿物笔刷
             EditorGUILayout.BeginHorizontal();
-            GUIStyle buttonStyle = new GUIStyle(GUI.skin.button);
             int _buttonSize = 50;
             int iCounter = 0;
             foreach (var _singleMineData in tileMap.SmallMapEditData.mineData)
@@ -645,12 +644,11 @@ namespace ProjectOC.MineSystem
                 //从Sprite获取Texture，直接Sprite.tex 获取的是图集
                 string spritePath = AssetDatabase.GetAssetPath(_mineBrush.mineIcon);
                 TextureImporter textureImporter = AssetImporter.GetAtPath(spritePath) as TextureImporter;
+                Texture2D originalTexture = null;
                 if (textureImporter != null)
                 {
-                    Texture2D originalTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(textureImporter.assetPath);
-                    buttonStyle.normal.background = originalTexture;
+                    originalTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(textureImporter.assetPath);
                 }
-                
                 //选中后切换CurBrush
                 EditorGUILayout.BeginVertical();
                 int _index = iCounter++;
@@ -658,13 +656,12 @@ namespace ProjectOC.MineSystem
                 {
                     brushIndex = _index;
                     tileMap.curMineBrush = _mineBrush;
-                }, brushIndex == _index ,_buttonSize,buttonStyle);
+                }, brushIndex == _index ,_buttonSize, originalTexture);
 
                 EditorGUILayout.LabelField($"    {_singleMineData.MinePoses.Count}",GUILayout.Width(_buttonSize));
                 EditorGUILayout.EndVertical();
             }
             EditorGUILayout.EndHorizontal();
-            
             GUILayout.Label("地图大小", blackLabelStyle);
             
             tempMapWidht = EditorGUILayout.IntField("地图长", tempMapWidht);
@@ -684,7 +681,7 @@ namespace ProjectOC.MineSystem
             copyMapIndex = EditorGUILayout.IntField("拷贝地图下标", copyMapIndex);
             if (GUILayout.Button("复制地图"))
             {
-                //要拷贝[1],至少要有 2哥
+                //要拷贝[1],至少要有 2个
                 if (bigMap.SmallMapEditDatas.Count > copyMapIndex && copyMapIndex >= 0)
                 {
                     MineSmallMapEditData _targetData = bigMap.SmallMapEditDatas[copyMapIndex];

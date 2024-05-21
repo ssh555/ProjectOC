@@ -41,7 +41,6 @@ namespace ProjectOC.MineSystem
 
         public float brushSizeScale = 0.1f; //sprite.scale 为1时，范围是2,半径是1
         public BigMap bigMap;
-
         public void SceneInit()
         {
             gridParentTransf = GameObject.Find("Editor/GridTransform").transform;
