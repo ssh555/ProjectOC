@@ -556,7 +556,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 return;
             }
 
-            Debug.Log("refresh " + this.objectPool.ContainPool("SlotPrefabPool"));
+            //Debug.Log("refresh " + this.objectPool.ContainPool("SlotPrefabPool"));
 
             #region TopPart
             TopTitleText.text = PanelTextContent.toptitle;
