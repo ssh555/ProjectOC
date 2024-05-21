@@ -3,6 +3,7 @@ using ML.Engine.TextContent;
 using ML.Engine.Timer;
 using ML.Engine.UI;
 using ML.Engine.Utility;
+using ProjectOC.ManagerNS;
 using ProjectOC.WorkerNS;
 using Sirenix.OdinInspector;
 using System;
@@ -32,7 +33,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             WalkSpeed = Content.Find("WalkSpeed").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             WalkSpeedNumText = Content.Find("WalkSpeed").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
 
-
+            ProfileImage = Info1.Find("Icon").Find("IconImage").GetComponent<Image>();
             GenderImage = Info1.Find("Icon").Find("GenderImage").GetComponent<Image>();
             BeastName = Info1.Find("Icon").Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
 
@@ -206,6 +207,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #region UI对象引用
         public ResonanceWheelUI parentUI;
         //BeastInfo
+        private Image ProfileImage;
         private Image GenderImage;
         private TMPro.TextMeshProUGUI BeastName;
 
@@ -285,14 +287,16 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 }
                 else if (SwitchInfoIndex == 1)
                 {
-                    this.CookEfficiencyNumText.text = skillDic[SkillType.Cook].LevelCurrent.ToString();
-                    this.CollectEfficiencyNumText.text = skillDic[SkillType.Collect].LevelCurrent.ToString();
-                    this.MagicEfficiencyNumText.text = skillDic[SkillType.Magic].LevelCurrent.ToString();
+                    this.CookEfficiencyNumText.text = worker.GetEff(SkillType.Cook).ToString();
+                    this.CollectEfficiencyNumText.text = worker.GetEff(SkillType.Collect).ToString();
+                    this.MagicEfficiencyNumText.text = worker.GetEff(SkillType.Magic).ToString();
                     this.HandCraftEfficiencyNumText.text = worker.GetEff(SkillType.HandCraft).ToString();
-                    this.IndustryEfficiencyNumText.text = skillDic[SkillType.Industry].LevelCurrent.ToString();
+                    this.IndustryEfficiencyNumText.text = worker.GetEff(SkillType.Industry).ToString();
                     this.WeightMaxNumText.text = worker.RealBURMax.ToString();
                 }
 
+                //头像
+                ProfileImage.sprite = LocalGameManager.Instance.WorkerManager.GetWorkerProfile(worker.Category);
 
                 //性别
                 if (worker.Gender == Gender.Male)

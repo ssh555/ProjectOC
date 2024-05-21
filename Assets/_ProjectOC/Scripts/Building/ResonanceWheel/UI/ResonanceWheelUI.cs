@@ -292,31 +292,28 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         {
             if (Grids[CurrentGridIndex].isNull == false) return;
             //检查背包
-            string cb = currentBeastType.ToString();
-            ExternWorker worker = null;
+            ExternWorker ExternWorker = null;
             if (LocalGameManager.Instance.WorkerEchoManager.Level == 1) //GameManager.Instance.Level == 1
             {
                 //能否成功合成 判空
-                worker = workerEcho.SummonWorker(cb,CurrentGridIndex,inventory);
+                ExternWorker = workerEcho.SummonWorker(currentBeastType, CurrentGridIndex,inventory);
             }
             else
             {
                 if(currentBeastType!= WorkerCategory.None)
                 {
-                    worker = workerEcho.SummonWorker(cb, CurrentGridIndex, inventory);
+                    ExternWorker = workerEcho.SummonWorker(currentBeastType, CurrentGridIndex, inventory);
                 }
             }
 
-            if (worker != null)
+            if (ExternWorker != null)
             {
-                Grids[CurrentGridIndex].worker = worker;
+                Grids[CurrentGridIndex].worker = ExternWorker;
                 Grids[CurrentGridIndex].isNull = false;
                 Grids[CurrentGridIndex].isResonating = true;
                 Grids[CurrentGridIndex].beastType = currentBeastType;
             }
-            else
-            {
-            }
+            
             //给格子计时器加回调并刷新
             foreach (var grid in Grids)  
             {
@@ -336,7 +333,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     grid.worker.Timer.OnEndEvent += () =>
                     {
                         //刷新素材
-                        grid.transform.Find("Image").GetComponent<Image>().sprite = sprite1;
+                        grid.transform.Find("Image").GetComponent<Image>().sprite = LocalGameManager.Instance.WorkerManager.GetWorkerProfile(grid.worker.workerCategory);
                         grid.isNull = false;
                         grid.isTiming = false;
 
@@ -559,10 +556,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 return;
             }
 
+            Debug.Log("refresh " + this.objectPool.ContainPool("SlotPrefabPool"));
+
             #region TopPart
             TopTitleText.text = PanelTextContent.toptitle;
-
-
 
             #region FunctionType
             GameObject HBR = HiddenBeastResonanceTemplate.Find("Selected").gameObject;
@@ -573,7 +570,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             HiddenBeastResonanceText.text = PanelTextContent.HiddenBeastResonanceText;
             SongofSeaBeastsText.text= PanelTextContent.SongofSeaBeastsText;
             #endregion
-
 
             #endregion
 
@@ -587,8 +583,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     UIMgr.PopPanel();
                     hasSub1Instance=false;
                 }
-
-
                 //更新为共鸣消耗
                 var Name = RCInfo.Find("Name");
                 var Consumables = RCInfo.Find("Consumables");
@@ -625,9 +619,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     }
                    
                 }
-
-                //切换对象
-                //ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed += SwitchTarget_performed;
             }
             else if (Grids[CurrentGridIndex].isTiming)//计时格子
             {
@@ -643,7 +634,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 var Consumables = RCInfo.Find("Consumables");
                 var StartBtn = RCInfo.Find("StartResonance");
                 var StopBtn = RCInfo.Find("StopResonance");
-                //Name.GetComponentInChildren<TextMeshProUGUI>().text = "共鸣中";
                 Consumables.gameObject.SetActive(false);
                 StartBtn.gameObject.SetActive(false);
                 StopBtn.gameObject.SetActive(true);
@@ -654,8 +644,6 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                 //切换对象
                 ProjectOC.Input.InputManager.PlayerInput.ResonanceWheelUI.SwitchTarget.performed -= SwitchTarget_performed;
-
-
             }
             else//计时完成格子
             {
@@ -690,10 +678,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
                 Grids[i].RingGridText.text = PanelTextContent.GridText;
             }
-
-
             #endregion
-
 
             #region ResonanceTarget
             ResonanceTargetTitle.text = PanelTextContent.ResonanceTargetTitle;
@@ -707,11 +692,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             {
                 ResonanceConsumpionTitle.text = PanelTextContent.ResonanceConsumpionTitle.description[0];//0 代表共鸣消耗
                 //显示消耗物品详细
-
                 var Consumables = RCInfo.Find("Consumables");
-
-
-
                 if (currentBeastType != WorkerCategory.None) 
                 {
                     string cb = "WorkerEcho_"+currentBeastType.ToString();
@@ -719,31 +700,21 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     {
                         var tPrefab = this.objectPool.GetNextObject("SlotPrefabPool", Consumables);
                         int needNum = item.num;
-                        // TODO
                         int haveNum = this.inventory.GetItemAllNum(item.id);
                         tPrefab.transform.Find("ItemNumber").Find("Text").GetComponent<TMPro.TextMeshProUGUI>().text = needNum.ToString() + "/" + haveNum.ToString();
                         if (needNum > haveNum)
                         {
                             tPrefab.transform.Find("ItemNumber").Find("Background").GetComponent<Image>().color = UnityEngine.Color.red;
                         }
-
                         tPrefab.transform.Find("ItemName").GetComponent<TMPro.TextMeshProUGUI>().text = ItemManager.Instance.GetItemName(item.id);
-
-
                     }
                 }
-
-                
-
-
             }
             else if (Grids[CurrentGridIndex].isTiming)
             {
                 ResonanceConsumpionTitle.text = PanelTextContent.ResonanceConsumpionTitle.description[1];//1 代表共鸣中
             }
-
             #endregion
-
         }
         #endregion
 

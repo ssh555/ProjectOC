@@ -54,6 +54,11 @@ namespace ML.Engine.UI
             }
             set
             {
+                if(value is PanelButton)
+                {
+                    //°ó¶¨PanelButton µÄ°´¼ü
+                }
+
                 _CurSelected = value;
                 if (_CurSelected != null && SBPosDic.ContainsKey(_CurSelected)) 
                 {

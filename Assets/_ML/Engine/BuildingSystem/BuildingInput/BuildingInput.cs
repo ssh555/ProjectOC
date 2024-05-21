@@ -947,7 +947,7 @@ namespace ML.Engine.BuildingSystem.Input
                     ""name"": ""ChangeHeight"",
                     ""type"": ""Value"",
                     ""id"": ""55f3e379-f28e-4ffa-bf5b-71aed9bec33f"",
-                    ""expectedControlType"": ""Stick"",
+                    ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
