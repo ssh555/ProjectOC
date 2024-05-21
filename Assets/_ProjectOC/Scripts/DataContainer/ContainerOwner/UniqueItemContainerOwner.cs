@@ -6,11 +6,14 @@ namespace ProjectOC.DataNS
 {
     public abstract class UniqueItemContainerOwner<T> : IContainerOwner<T> where T : ML.Engine.InventorySystem.Item
     {
-        public bool IsUnique => true;
         [LabelText("´æ´¢Êý¾Ý"), ReadOnly]
         public DataContainer<T> DataContainer { get; set; }
 
-        #region Clear
+        #region Init Clear
+        public void InitData(int capacity, int dataCapacity)
+        {
+            DataContainer = new DataContainer<T>(capacity, dataCapacity);
+        }
         public void ClearData()
         {
             (this as MissionNS.IMissionObj<T>).Clear();
@@ -36,7 +39,7 @@ namespace ProjectOC.DataNS
                 }
                 else
                 {
-                    Debug.Log($"UniqueItemContainerOwner Error Is HashCode Error {!result.ContainsKey(t.Item1)}");
+                    Debug.Log($"UniqueItemContainerOwner Error Is HashCode Error {result.ContainsKey(t.Item1)}");
                 }
             }
             return result;
@@ -59,6 +62,7 @@ namespace ProjectOC.DataNS
         #endregion
 
         #region IMission
+        public bool IsUnique => true;
         public abstract Transform GetTransform();
         public abstract string GetUID();
         public abstract MissionNS.MissionObjType GetMissionObjType();
@@ -84,9 +88,9 @@ namespace ProjectOC.DataNS
         #region IInventory
         public bool AddItem(ML.Engine.InventorySystem.Item item)
         {
-            if (item != null && !string.IsNullOrEmpty(item.ID) && item is T data)
+            if (item != null && !string.IsNullOrEmpty(item.ID) && item.Amount == 1 && item is T data)
             {
-                return DataContainer.ChangeAmount(data, 1, DataOpType.Storage, DataOpType.Empty) == item.Amount;
+                return DataContainer.ChangeAmount(data, 1, DataOpType.Storage, DataOpType.Empty) == 1;
             }
             return false;
         }
@@ -94,13 +98,13 @@ namespace ProjectOC.DataNS
         {
             if (item != null && !string.IsNullOrEmpty(item.ID) && item.Amount == 1 && item is T data)
             {
-                return DataContainer.ChangeAmount(data, 1, DataOpType.Empty, DataOpType.Storage) == item.Amount;
+                return DataContainer.ChangeAmount(data, 1, DataOpType.Empty, DataOpType.Storage) == 1;
             }
             return false;
         }
         public ML.Engine.InventorySystem.Item RemoveItem(ML.Engine.InventorySystem.Item item, int amount) 
         {
-            if (amount == 1)
+            if (item != null && amount == 1)
             {
                 item.Amount = 1;
                 RemoveItem(item);

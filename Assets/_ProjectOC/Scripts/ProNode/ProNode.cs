@@ -115,7 +115,7 @@ namespace ProjectOC.ProNodeNS
         public ProNode(ProNodeTableData config)
         {
             ID = config.ID ?? "";
-            (this as DataNS.IContainerOwner<string>).InitData(0, 0);
+            InitData(0, 0);
             EffBase = LocalGameManager.Instance.ProNodeManager.Config.EffBase;
             InitAPCost_Duty = LocalGameManager.Instance.ProNodeManager.Config.InitAPCost_Duty;
             DataContainer.OnDataChangeEvent += OnContainerDataChangeEvent;

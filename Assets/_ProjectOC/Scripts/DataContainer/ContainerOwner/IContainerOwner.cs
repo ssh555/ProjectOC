@@ -7,10 +7,6 @@ namespace ProjectOC.DataNS
     {
         [LabelText("´æ´¢Êý¾Ý"), ReadOnly]
         public DataContainer<T> DataContainer { get; set; }
-
-        public void InitData(int capacity, int dataCapacity)
-        {
-            DataContainer = new DataContainer<T>(capacity, dataCapacity);
-        }
+        public void InitData(int capacity, int dataCapacity);
     }
 }

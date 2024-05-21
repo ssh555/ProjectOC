@@ -47,7 +47,7 @@ namespace ProjectOC.RestaurantNS
             {
                 Seats[i] = new RestaurantSeat(this, WorldRestaurant.transform.Find($"seat{i + 1}"));
             }
-            (this as DataNS.IContainerOwner<string>).InitData(ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.DataNum, ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.MaxCapacity);
+            InitData(ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.DataNum, ManagerNS.LocalGameManager.Instance.RestaurantManager.Config.MaxCapacity);
         }
 
         public void Destroy()

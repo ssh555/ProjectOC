@@ -6,11 +6,14 @@ namespace ProjectOC.DataNS
 {
     public abstract class ItemContainerOwner : IContainerOwner<string>
     {
-        public bool IsUnique => false;
         [LabelText("´æ´¢Êý¾Ý"), ReadOnly]
         public DataContainer<string> DataContainer { get; set; }
 
-        #region Clear
+        #region Init Clear
+        public void InitData(int capacity, int dataCapacity)
+        {
+            DataContainer = new DataContainer<string>(capacity, dataCapacity);
+        }
         public void ClearData()
         {
             (this as MissionNS.IMissionObj<string>).Clear();
@@ -84,6 +87,7 @@ namespace ProjectOC.DataNS
         #endregion
 
         #region IMission
+        public bool IsUnique => false;
         public abstract Transform GetTransform();
         public abstract string GetUID();
         public abstract MissionNS.MissionObjType GetMissionObjType();

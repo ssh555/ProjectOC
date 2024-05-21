@@ -299,25 +299,28 @@ namespace ProjectOC.DataNS
         /// </summary>
         /// <param name="index">第几个存储数据</param>
         /// <param name="id">新的数据ID</param>
-        public Tuple<T, int> ChangeData(int index, T data)
+        public (T, int) ChangeData(int index, T data)
         {
             lock (this)
             {
                 string id = GetDataID(data);
-                Tuple<T, int> result = new Tuple<T, int>(default(T), 0);
+                (T, int) result = (default(T), 0);
                 if (IsValidIndex(index))
                 {
-                    if (Datas[index].StorageAll > 0)
+                    if (Datas[index].HaveSetData)
                     {
-                        result = new Tuple<T, int>(Datas[index].GetData(), Datas[index].StorageAll);
                         IndexDict[Datas[index].ID].Remove(index);
                     }
+                    result = (Datas[index].GetData(), Datas[index].StorageAll);
                     Datas[index].ChangeData(data);
-                    if (!IndexDict.ContainsKey(id))
+                    if (Datas[index].HaveSetData)
                     {
-                        IndexDict[id] = new HashSet<int>();
+                        if (!IndexDict.ContainsKey(id))
+                        {
+                            IndexDict[id] = new HashSet<int>();
+                        }
+                        IndexDict[id].Add(index);
                     }
-                    IndexDict[id].Add(index);
                     OnDataChangeEvent?.Invoke();
                 }
                 return result;

@@ -31,7 +31,7 @@ namespace ProjectOC.StoreNS
             Name = storeType.ToString();
             if (0 <= Level && Level <= ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelMax)
             {
-                (this as DataNS.IContainerOwner<string>).InitData(ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelCapacity[Level],
+                InitData(ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelCapacity[Level],
                 ManagerNS.LocalGameManager.Instance.StoreManager.Config.LevelDataCapacity[Level]);
             }
         }

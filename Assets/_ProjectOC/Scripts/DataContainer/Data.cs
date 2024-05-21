@@ -35,6 +35,7 @@ namespace ProjectOC.DataNS
         public bool HaveSetData => !string.IsNullOrEmpty(id);
         #endregion
 
+        #region Constructor
         public Data(T data, int maxCapacity)
         {
             if (data is string str)
@@ -70,6 +71,7 @@ namespace ProjectOC.DataNS
             StorageReserve = 0;
             EmptyReserve = 0;
         }
+        #endregion
 
         #region Get
         public int GetAmount(DataOpType type)
@@ -109,7 +111,6 @@ namespace ProjectOC.DataNS
             Reset();
             SetData(data);
         }
-
         private void SetData(T data)
         {
             if (data is string str)
