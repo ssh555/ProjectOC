@@ -102,7 +102,7 @@ namespace ProjectOC.RestaurantNS
             {
                 List<RestaurantData> datas = new List<RestaurantData>();
                 var items = DataContainer.GetDatas();
-                for (int i = 0; i < items.Count; i++)
+                for (int i = 0; i < items.Length; i++)
                 {
                     datas.Add(new RestaurantData(items[i].ID, i, items[i].GetAmount(DataNS.DataOpType.Storage)));
                 }

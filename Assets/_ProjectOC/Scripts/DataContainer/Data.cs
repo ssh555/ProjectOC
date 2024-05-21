@@ -95,7 +95,7 @@ namespace ProjectOC.DataNS
         #endregion
 
         #region Set
-        public void Clear()
+        public void Reset()
         {
             id = "";
             data = default(T);
@@ -106,7 +106,12 @@ namespace ProjectOC.DataNS
         }
         public void ChangeData(T data)
         {
-            Clear();
+            Reset();
+            SetData(data);
+        }
+
+        private void SetData(T data)
+        {
             if (data is string str)
             {
                 id = str;
@@ -120,8 +125,8 @@ namespace ProjectOC.DataNS
                 id = data.GetHashCode().ToString();
             }
             this.data = data;
-            id = id ?? "";
         }
+
         public void ChangeCanIn(bool canIn) { this.canIn = canIn; }
         public void ChangeCanOut(bool canOut) { this.canOut = canOut; }
         public void ChangeAmount(DataOpType type, int amount)

@@ -4,16 +4,12 @@ using UnityEngine;
 
 namespace ProjectOC.DataNS
 {
-    public abstract class UniqueItemContainerOwner<T> : IContainerOwner where T : ML.Engine.InventorySystem.Item
+    public abstract class UniqueItemContainerOwner<T> : IContainerOwner<T> where T : ML.Engine.InventorySystem.Item
     {
         [LabelText("´æ´¢Êý¾Ý"), ReadOnly]
-        public DataContainer<T> DataContainer;
+        public DataContainer<T> DataContainer { get; set; }
 
         #region Init Clear
-        public void InitData(int capacity)
-        {
-            DataContainer = new DataContainer<T>(capacity, 1);
-        }
         public void ClearData()
         {
             (this as MissionNS.IMissionObj).Clear();
@@ -21,7 +17,7 @@ namespace ProjectOC.DataNS
             {
                 foreach (var kv in DataContainer.GetAmount(DataOpType.StorageAll))
                 {
-                    if (kv.Value > 0) { ManagerNS.LocalGameManager.Instance.Player.GetInventory().AddItem(kv.Key); }
+                    if (kv.Item2 > 0) { ManagerNS.LocalGameManager.Instance.Player.GetInventory().AddItem(kv.Item1); }
                 }
             }
         }
@@ -33,7 +29,7 @@ namespace ProjectOC.DataNS
             var dict = DataContainer.ChangeCapacity(capacity, 1);
             foreach (var kv in dict)
             {
-                if (kv.Value > 0) { ManagerNS.LocalGameManager.Instance.Player.GetInventory().AddItem(kv.Key); }
+                if (kv.Item2 > 0) { ManagerNS.LocalGameManager.Instance.Player.GetInventory().AddItem(kv.Item1); }
             }
             (this as MissionNS.IMissionObj).UpdateTransport();
         }
@@ -69,10 +65,7 @@ namespace ProjectOC.DataNS
             HashSet<ML.Engine.InventorySystem.Item> result = new HashSet<ML.Engine.InventorySystem.Item>();
             foreach (var kv in DataContainer.GetAmount(type, needCanIn, needCanOut))
             {
-                if (kv.Value > 0)
-                {
-                    result.Add(kv.Key);
-                }
+                if (kv.Item2 > 0) { result.Add(kv.Item1); }
             }
             return result;
         }
@@ -103,7 +96,7 @@ namespace ProjectOC.DataNS
             var result = new List<ML.Engine.InventorySystem.Item>();
             foreach (var kv in DataContainer.GetAmount(DataOpType.Storage))
             {
-                if (kv.Value > 0) { result.Add(kv.Key); }
+                if (kv.Item2 > 0) { result.Add(kv.Item1); }
             }
             return result.ToArray();
         }

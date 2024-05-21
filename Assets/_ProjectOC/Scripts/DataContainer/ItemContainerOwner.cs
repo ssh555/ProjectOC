@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace ProjectOC.DataNS
 {
-    public abstract class ItemContainerOwner : IContainerOwner
+    public abstract class ItemContainerOwner : IContainerOwner<string>
     {
         [LabelText("´æ´¢Êý¾Ý"), ReadOnly]
-        public DataContainer<string> DataContainer;
+        public DataContainer<string> DataContainer { get; set; }
 
         #region Init Clear
         public void InitData(int capacity, int dataCapacity)
@@ -19,7 +19,7 @@ namespace ProjectOC.DataNS
             (this as MissionNS.IMissionObj).Clear();
             if (DataContainer != null)
             {
-                ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(DataContainer.GetAmount(DataOpType.StorageAll));
+                ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(ListToDict(DataContainer.GetAmount(DataOpType.StorageAll)));
             }
         }
         public void ResetData(List<string> ids, List<int> dataCapacity)
@@ -30,17 +30,31 @@ namespace ProjectOC.DataNS
         #endregion
 
         #region Set
+        public Dictionary<string, int> ListToDict(List<(string, int)> list)
+        {
+            Dictionary<string, int> result = new Dictionary<string, int>();
+            foreach (var t in list)
+            {
+                if (!result.ContainsKey(t.Item1))
+                {
+                    result.Add(t.Item1, 0);
+                }
+                result[t.Item1] += t.Item2;
+            }
+            return result;
+        }
+
         public void ChangeCapacity(int capacity, int dataCapacity)
         {
-            var dict = DataContainer.ChangeCapacity(capacity, dataCapacity);
-            ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(dict);
+            var list = DataContainer.ChangeCapacity(capacity, dataCapacity);
+            ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(ListToDict(list));
             (this as MissionNS.IMissionObj).UpdateTransport();
         }
 
         public void ChangeCapacity(int capacity, List<int> dataCapacitys)
         {
-            var dict = DataContainer.ChangeCapacity(capacity, dataCapacitys);
-            ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(dict);
+            var list = DataContainer.ChangeCapacity(capacity, dataCapacitys);
+            ManagerNS.LocalGameManager.Instance.Player.InventoryAddItems(ListToDict(list));
             (this as MissionNS.IMissionObj).UpdateTransport();
         }
 
@@ -90,7 +104,7 @@ namespace ProjectOC.DataNS
         }
         public Dictionary<string, int> GetAmount(DataOpType type, bool needCanIn = false, bool needCanOut = false)
         {
-            return DataContainer.GetAmount(type, needCanIn, needCanOut);
+            return ListToDict(DataContainer.GetAmount(type, needCanIn, needCanOut));
         }
         public int GetAmount(ML.Engine.InventorySystem.Item item, DataOpType type, bool needCanIn = false, bool needCanOut = false) { return 0; }
         public HashSet<ML.Engine.InventorySystem.Item> GetAmountForItem(DataOpType type, bool needCanIn = false, bool needCanOut = false) { return new HashSet<ML.Engine.InventorySystem.Item>(); }
@@ -146,7 +160,7 @@ namespace ProjectOC.DataNS
             var result = new List<ML.Engine.InventorySystem.Item>();
             foreach (var kv in DataContainer.GetAmount(DataOpType.Storage))
             {
-                result.AddRange(ManagerNS.LocalGameManager.Instance.ItemManager.SpawnItems(kv.Key, kv.Value));
+                result.AddRange(ManagerNS.LocalGameManager.Instance.ItemManager.SpawnItems(kv.Item1, kv.Item2));
             }
             return result.ToArray();
         }
