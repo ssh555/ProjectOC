@@ -32,7 +32,6 @@ namespace ML.Engine.UI
             this.HorizontalScrollbar = ScrollRect.horizontalScrollbar;
             this.Center = this.transform.Find("Center").GetComponent<RectTransform>();
         }
-
         #endregion
 
         #region Internal
@@ -45,7 +44,6 @@ namespace ML.Engine.UI
 
             ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn.canceled -= NavagateMap_canceled;
         }
-
         protected override void RegisterInput()
         {
             

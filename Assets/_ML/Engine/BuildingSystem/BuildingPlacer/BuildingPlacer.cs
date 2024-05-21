@@ -297,8 +297,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             this.SelectedPartInstance = null;
 
             this.OnDestroySelectedBPart?.Invoke(tmp);
-            BuildingManager.Instance.VisualSocket.transform.parent = null;
-            BuildingManager.Instance.VisualSocket.SetActive(false);
+            BuildingManager.Instance.ResetVisualSocket();
             // to-do :后续可能会更改销毁调用
             Manager.GameManager.DestroyObj(tmp.gameObject);
         }
