@@ -640,6 +640,13 @@ namespace ProjectOC.MineSystem
             int iCounter = 0;
             foreach (var _singleMineData in tileMap.SmallMapEditData.mineData)
             {
+                int _index = iCounter++;
+                if (_index % 8 == 0)  //8、16 24
+                {
+                    EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.BeginHorizontal();
+                }
+
                 MineBigMapEditData.MineBrushData _mineBrush = bigMap.BigMapEditDatas.IDToMineBrushData(_singleMineData.MineID);
                 //从Sprite获取Texture，直接Sprite.tex 获取的是图集
                 string spritePath = AssetDatabase.GetAssetPath(_mineBrush.mineIcon);
@@ -651,7 +658,6 @@ namespace ProjectOC.MineSystem
                 }
                 //选中后切换CurBrush
                 EditorGUILayout.BeginVertical();
-                int _index = iCounter++;
                 ToggleButton("", () =>
                 {
                     brushIndex = _index;
