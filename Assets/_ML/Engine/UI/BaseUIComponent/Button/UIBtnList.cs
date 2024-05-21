@@ -1000,9 +1000,11 @@ namespace ML.Engine.UI
         /// <summary>
         /// 轮盘按钮导航回调 轮转按钮规定正上方为下标0
         /// </summary>
+        private bool canPerformRingNavigation = false;
+        public bool CanPerformRingNavigation {  get { return canPerformRingNavigation; } set { canPerformRingNavigation = value; } }
         private void RingNavigation(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (this.isEnable == false) return;
+            if (this.isEnable == false || !canPerformRingNavigation) return;
             this.NavigationPreAction?.Invoke();
 
             string actionName = obj.action.name;

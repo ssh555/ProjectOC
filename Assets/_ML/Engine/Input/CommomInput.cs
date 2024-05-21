@@ -60,7 +60,7 @@ namespace ML.Engine.Input
                     ""name"": ""SwichBtn"",
                     ""type"": ""Value"",
                     ""id"": ""a86454bc-c2e4-484f-8224-919690d1e274"",
-                    ""expectedControlType"": ""Stick"",
+                    ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true

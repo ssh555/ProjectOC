@@ -216,7 +216,6 @@ namespace ML.Engine.BuildingSystem
                 Manager.GameManager.Instance.ABResourceManager.Release(_buildingMaterial);
             }
             Manager.GameManager.Instance.ABResourceManager.Release(buildIconAtlas);
-            Debug.Log("DestroyObj VisualSocket");
             GameManager.DestroyObj(VisualSocket);
         }
 
