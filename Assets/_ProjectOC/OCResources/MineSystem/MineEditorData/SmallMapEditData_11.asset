@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b73e2c1f5691f6244b7c6f7221ef25c1, type: 3}
   m_Name: SmallMapEditData_11
   m_EditorClassIdentifier: 
-  index: 19
+  index: 17
   width: 15
   height: 18
   smallMapTex: {fileID: 0}
@@ -23,4 +23,52 @@ MonoBehaviour:
   - MineID: Mineral_Ti_2
     MinePoses: []
   - MineID: Mineral_Ti_3
+    MinePoses: []
+  - MineID: Mineral_Ti_1
+    MinePoses: []
+  - MineID: Mineral_Fe_1
+    MinePoses: []
+  - MineID: Mineral_Fe_2
+    MinePoses: []
+  - MineID: Mineral_Fe_3
+    MinePoses: []
+  - MineID: Mineral_Au_1
+    MinePoses: []
+  - MineID: Mineral_Au_2
+    MinePoses: []
+  - MineID: Mineral_Au_3
+    MinePoses: []
+  - MineID: Mineral_Cu_1
+    MinePoses: []
+  - MineID: Mineral_Cu_2
+    MinePoses: []
+  - MineID: Mineral_Cu_3
+    MinePoses: []
+  - MineID: Mineral_W_1
+    MinePoses: []
+  - MineID: Mineral_W_2
+    MinePoses: []
+  - MineID: Mineral_W_3
+    MinePoses: []
+  - MineID: Mineral_F_1
+    MinePoses: []
+  - MineID: Mineral_F_2
+    MinePoses: []
+  - MineID: Mineral_F_3
+    MinePoses: []
+  - MineID: Mineral_Ag_2
+    MinePoses: []
+  - MineID: Mineral_Ag_3
+    MinePoses: []
+  - MineID: Mineral_Si_1
+    MinePoses: []
+  - MineID: Mineral_Si_2
+    MinePoses: []
+  - MineID: Mineral_Si_3
+    MinePoses: []
+  - MineID: Mineral_R_1
+    MinePoses: []
+  - MineID: Mineral_R_2
+    MinePoses: []
+  - MineID: Mineral_R_3
     MinePoses: []

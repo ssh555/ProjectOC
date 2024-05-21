@@ -12,15 +12,67 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b73e2c1f5691f6244b7c6f7221ef25c1, type: 3}
   m_Name: SmallMapEditData_9
   m_EditorClassIdentifier: 
-  index: 17
+  index: 18
   width: 15
   height: 18
   smallMapTex: {fileID: 0}
   gridData: 000001010101010101010101010100000001010101010101010101010100000001010101010101010101010100000001010101010101010101010100010101010101010101010101010100010101010101010101010101010100010101010101010101010101010100010101010101010101010101010100010101010101010101010101010100010101010101010101010101010100010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010100000000010101010101010101010100000000010101010101010101010100000000010101010101010101010100000000
   mineData:
   - MineID: Mineral_Ag_1
-    MinePoses: []
+    MinePoses:
+    - {x: 6.0593314, y: 10.557915}
+    - {x: 6.217916, y: 8.0998535}
+    - {x: 8.041638, y: 8.33773}
+    - {x: 8.913855, y: 10.399329}
   - MineID: Mineral_Ti_2
     MinePoses: []
   - MineID: Mineral_Ti_3
+    MinePoses: []
+  - MineID: Mineral_Ti_1
+    MinePoses: []
+  - MineID: Mineral_Fe_1
+    MinePoses: []
+  - MineID: Mineral_Fe_2
+    MinePoses: []
+  - MineID: Mineral_Fe_3
+    MinePoses: []
+  - MineID: Mineral_Au_1
+    MinePoses: []
+  - MineID: Mineral_Au_2
+    MinePoses: []
+  - MineID: Mineral_Au_3
+    MinePoses: []
+  - MineID: Mineral_Cu_1
+    MinePoses: []
+  - MineID: Mineral_Cu_2
+    MinePoses: []
+  - MineID: Mineral_Cu_3
+    MinePoses: []
+  - MineID: Mineral_W_1
+    MinePoses: []
+  - MineID: Mineral_W_2
+    MinePoses: []
+  - MineID: Mineral_W_3
+    MinePoses: []
+  - MineID: Mineral_F_1
+    MinePoses: []
+  - MineID: Mineral_F_2
+    MinePoses: []
+  - MineID: Mineral_F_3
+    MinePoses: []
+  - MineID: Mineral_Ag_2
+    MinePoses: []
+  - MineID: Mineral_Ag_3
+    MinePoses: []
+  - MineID: Mineral_Si_1
+    MinePoses: []
+  - MineID: Mineral_Si_2
+    MinePoses: []
+  - MineID: Mineral_Si_3
+    MinePoses: []
+  - MineID: Mineral_R_1
+    MinePoses: []
+  - MineID: Mineral_R_2
+    MinePoses: []
+  - MineID: Mineral_R_3
     MinePoses: []
