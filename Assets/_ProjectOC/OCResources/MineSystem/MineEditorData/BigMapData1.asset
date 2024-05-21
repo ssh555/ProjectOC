@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: BigMapData1
   m_EditorClassIdentifier: 
   MineBrushDatas:
-  - mineID: Mineral_Tmm_1
-    mineIcon: {fileID: 21300000, guid: 4fe8310594812204bbaca01c5670f3f4, type: 3}
+  - mineID: Mineral_Ag_1
+    mineIcon: {fileID: 21300000, guid: 017b3bd867124a54d90a9c6de9c93312, type: 3}
     brushData:
       brushSize: 6.999996
       brushHard: 0
@@ -26,7 +26,7 @@ MonoBehaviour:
       brushDensityMin: 0
       brushDensityMax: 20
   - mineID: Mineral_Ti_2
-    mineIcon: {fileID: 21300000, guid: 967f81c218f2437479a2d2ab02b4301b, type: 3}
+    mineIcon: {fileID: 21300000, guid: fb67c5afb5b7fdb408ac0a4c7f3a1c3e, type: 3}
     brushData:
       brushSize: 3
       brushHard: 7.66
@@ -38,7 +38,295 @@ MonoBehaviour:
       brushDensityMin: 0
       brushDensityMax: 20
   - mineID: Mineral_Ti_3
-    mineIcon: {fileID: 21300000, guid: d02e931caa4db934ab96bbb963cf8e0c, type: 3}
+    mineIcon: {fileID: 21300000, guid: c9dd34da451e3ee43bcfc2b1774867b0, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_Ti_1
+    mineIcon: {fileID: 21300000, guid: 44bc390751e9cb0418de119baea9cff7, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_Fe_1
+    mineIcon: {fileID: 21300000, guid: bc8d7197f1c239f4d9c93b73468543ac, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_Fe_2
+    mineIcon: {fileID: 21300000, guid: 1f1e38653d05cd84f97f575439c21833, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_Fe_3
+    mineIcon: {fileID: 21300000, guid: a186589c0c8900d428db5aaac933e2b2, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_Au_1
+    mineIcon: {fileID: 21300000, guid: 5f08beff55fb9dd47973db8b57d3aa47, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_Au_2
+    mineIcon: {fileID: 21300000, guid: 6d5e9f1b3a64fc8469103d10f6a4353f, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_Au_3
+    mineIcon: {fileID: 21300000, guid: d1ff36aa662652043a827eea10365d80, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_Cu_1
+    mineIcon: {fileID: 21300000, guid: 4be1ac23271b33a4ba04f5264d63c3d9, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_Cu_2
+    mineIcon: {fileID: 21300000, guid: 10707d31821076046a4d44634432da81, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_Cu_3
+    mineIcon: {fileID: 21300000, guid: 77192d254e61fcc4d8e8540369bb9508, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_W_1
+    mineIcon: {fileID: 21300000, guid: d98ab8eac4fcdb2438b160a27e93e4c4, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_W_2
+    mineIcon: {fileID: 21300000, guid: a52d3314baf669143913cfc36d4a5cee, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_W_3
+    mineIcon: {fileID: 21300000, guid: b15ce5add6932e14281af986843adead, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_F_1
+    mineIcon: {fileID: 21300000, guid: a217380cb26324b4eb4708b40dc8ed98, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_F_2
+    mineIcon: {fileID: 21300000, guid: 83e75ab54ac67ea4c8449e9e2b31929d, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_F_3
+    mineIcon: {fileID: 21300000, guid: 388be9ed3e5ddeb47bc3b95eddc557bd, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_Ag_2
+    mineIcon: {fileID: 21300000, guid: b9ee60cce51a54e40990bdbd1c8b3027, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_Ag_3
+    mineIcon: {fileID: 21300000, guid: b639511417f83f2459c374f4665434bd, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_Si_1
+    mineIcon: {fileID: 21300000, guid: 06e74df2180d1cd429adf8955d8fbc78, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_Si_2
+    mineIcon: {fileID: 21300000, guid: d070abc6f48926544b7d91da99d110ac, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_Si_3
+    mineIcon: {fileID: 21300000, guid: 687cde53b6bc9624b974eda9bf2feb7d, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_R_1
+    mineIcon: {fileID: 21300000, guid: 6de62f81a145f83459e0249494e0aa1e, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_R_2
+    mineIcon: {fileID: 21300000, guid: b6fa3945b8f06ff4884edb2c87ccf3fe, type: 3}
+    brushData:
+      brushSize: 3
+      brushHard: 0
+      brushDensity: 5
+      brushSizeMin: 0
+      brushSizeMax: 10
+      brushHardMin: 0
+      brushHardMax: 10
+      brushDensityMin: 0
+      brushDensityMax: 20
+  - mineID: Mineral_R_3
+    mineIcon: {fileID: 21300000, guid: 6ea10a3b46856c14cb60fdf1cc385450, type: 3}
     brushData:
       brushSize: 3
       brushHard: 0
