@@ -49,7 +49,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
             //#if UNITY_EDITOR
             //            Gizmos_Active = false;
             //#endif
-            BuildingManager.Instance.VisualSocket.SetActive(false);
+            BuildingManager.Instance.ResetVisualSocket();
         }
 
         public bool CheckMatch(BuildingSocket target)
