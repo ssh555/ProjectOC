@@ -502,113 +502,14 @@
                 {
                     "name": "SelectGrid",
                     "type": "Value",
-                    "id": "ae36565b-a263-4e67-b282-ab5c3b19fb44",
-                    "expectedControlType": "Vector2",
+                    "id": "4aa17cd2-b005-4617-9f65-3568ffd468a7",
+                    "expectedControlType": "Stick",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
                 }
             ],
             "bindings": [
-                {
-                    "name": "2D Vector",
-                    "id": "2475cd1a-209b-47f2-915f-f284bac44061",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SelectGrid",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "0f875b4f-6b2b-4773-8adc-8ae0d5b89f34",
-                    "path": "<XInputController>/leftStick/up",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SelectGrid",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "up",
-                    "id": "001aa6bf-3eef-4014-a73c-f832140e6a9e",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SelectGrid",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "78c1ee5b-ea6d-4dc8-86d6-21e65cfee659",
-                    "path": "<XInputController>/leftStick/down",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SelectGrid",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "7d3d09cf-cc4f-4568-b369-ff901c05576c",
-                    "path": "<Keyboard>/s",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SelectGrid",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "4fb86ed1-8a40-4613-bb0f-907666e31ea4",
-                    "path": "<XInputController>/leftStick/left",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SelectGrid",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "a4d29b8b-e3be-4bf4-845d-4326dff63720",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SelectGrid",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "e0d551e6-d1cf-4236-ba16-64c0b5eb7ef7",
-                    "path": "<XInputController>/leftStick/right",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SelectGrid",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "c04c303b-c884-436a-8cda-3c49601b32e0",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "SelectGrid",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
                 {
                     "name": "",
                     "id": "2cd182ea-62c8-4023-9ac9-6ef845de0dc7",
@@ -652,6 +553,116 @@
                     "action": "OpenMap",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "KeyBoard",
+                    "id": "13f3483e-45f5-4a74-bd18-f650b32f5dbc",
+                    "path": "2DVector(mode=2)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGrid",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "b0dd84c6-5c2b-434b-ad39-c66225f4dce0",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGrid",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "4b49bc36-2c3b-4033-b668-ab325d1a292e",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGrid",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "36731e88-f313-47d2-a540-e2ffa3bedb73",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGrid",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "9aa0240d-9411-4ddc-81ae-1e3abf8f5c30",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGrid",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "XBOX",
+                    "id": "57ea3385-41bf-4246-9183-2c1fc82cc1ff",
+                    "path": "2DVector(mode=2)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGrid",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "56b64330-4584-47e9-90d0-f38897a971f7",
+                    "path": "<XInputController>/leftStick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGrid",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "9347ee17-64a9-410a-b86e-03df066065cf",
+                    "path": "<XInputController>/leftStick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGrid",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "08eb8e15-e06c-41a4-a2fb-fa323096a6d3",
+                    "path": "<XInputController>/leftStick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGrid",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "7f03dbca-7f24-4147-a2b0-a2ae8bd38f1d",
+                    "path": "<XInputController>/leftStick/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SelectGrid",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         },

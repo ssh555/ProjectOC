@@ -1,9 +1,12 @@
+using ML.Engine.Manager;
+using ML.Engine.UI;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
+using static ProjectOC.Order.OrderManager;
 
 namespace ProjectOC.WorkerNS
 {
@@ -667,10 +670,22 @@ namespace ProjectOC.WorkerNS
                     timerForNoHome.OnEndEvent += () =>
                     {
                         ManagerNS.LocalGameManager.Instance.WorkerManager.DeleteWorker(this);
+                        GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("一只隐兽已经离开岛屿！", null));
                     };
+                    timerForNoHome.OnUpdateEvent += PushNoticeUI;
                 }
                 return timerForNoHome;
             }
+        }
+
+        private void PushNoticeUI(double remainTime)
+        {
+            if (Mathf.Abs((float)remainTime - 180) < 1) 
+            {
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("一只隐兽将在3分钟后离开岛屿！", null));
+                timerForNoHome.OnUpdateEvent -= PushNoticeUI;
+            }
+            
         }
         public void StopHomeTimer()
         {
