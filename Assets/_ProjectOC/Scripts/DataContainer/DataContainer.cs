@@ -6,37 +6,38 @@ using System.Linq;
 namespace ProjectOC.DataNS 
 {
     [LabelText("数据容器"), Serializable]
-    public class DataContainer<T>
+    public class DataContainer
     {
         #region Data
         [LabelText("存储数据"), ReadOnly]
-        private Data<T>[] Datas;
+        private Data[] Datas;
         private Dictionary<string, HashSet<int>> IndexDict;
         public event Action OnDataChangeEvent;
         public DataContainer(int capacity, int dataCapacity)
         {
             if(capacity < 0  || dataCapacity < 0) { return; }
-            Datas = new Data<T>[capacity];
+            Datas = new Data[capacity];
             for (int i = 0; i < capacity; i++)
             {
-                Datas[i] = new Data<T>(dataCapacity);
+                Datas[i] = new Data(dataCapacity);
             }
             IndexDict = new Dictionary<string, HashSet<int>>();
             OnDataChangeEvent?.Invoke();
         }
-        public void Reset(List<T> datas, List<int> dataCapacitys)
+        public void Reset(List<IDataObj> datas, List<int> dataCapacitys)
         {
+            if (datas == null || dataCapacitys == null || dataCapacitys.Count < datas.Count) { return; }
             Array.Resize(ref Datas, datas.Count);
-            if (dataCapacitys.Count >= datas.Count)
+            for (int i = 0; i < datas.Count; i++)
             {
-                for (int i = 0; i < datas.Count; i++)
+                if (datas[i] != null)
                 {
-                    Datas[i] = new Data<T>(datas[i], dataCapacitys[i]);
+                    Datas[i] = new Data(datas[i], dataCapacitys[i]);
                 }
-            }
-            else
-            {
-                Array.Clear(Datas, 0, Datas.Length);
+                else
+                {
+                    Datas[i] = new Data(dataCapacitys[i]);
+                }
             }
             ResetIndexDict();
             OnDataChangeEvent?.Invoke();
@@ -50,7 +51,7 @@ namespace ProjectOC.DataNS
             }
             for (int i = 0; i < Datas.Length; i++)
             {
-                Data<T> data = Datas[i];
+                Data data = Datas[i];
                 if (data.HaveSetData)
                 {
                     if (!IndexDict.ContainsKey(data.ID))
@@ -72,13 +73,12 @@ namespace ProjectOC.DataNS
         public int GetCapacity() { return Datas?.Length ?? 0; }
         public bool IsValidIndex(int index) { return 0 <= index && index < Datas.Length; }
         public string GetID(int index) { return IsValidIndex(index) ? Datas[index].ID : ""; }
-        public T GetData(int index) { return IsValidIndex(index) ? Datas[index].GetData() : default(T); }
+        public IDataObj GetData(int index) { return IsValidIndex(index) ? Datas[index].GetData() : null; }
         public bool GetCanIn(int index) { return IsValidIndex(index) && Datas[index].CanIn; }
         public bool GetCanOut(int index) { return IsValidIndex(index) && Datas[index].CanOut; }
         public bool HaveSetData(int index) { return IsValidIndex(index) && Datas[index].HaveSetData; }
         public int GetAmount(int index, DataOpType type) { return IsValidIndex(index) ? Datas[index].GetAmount(type) : 0; }
-        public Data<T>[] GetDatas() { return Datas; }
-
+        public Data[] GetDatas() { return Datas; }
         public bool CheckDataOpType(DataOpType addType, DataOpType removeType, bool exceed = false)
         {
             if (exceed && removeType != DataOpType.Empty && removeType != DataOpType.EmptyReserve)
@@ -99,29 +99,13 @@ namespace ProjectOC.DataNS
                     return false;
             }
         }
-
-        public string GetDataID(T data)
+        public List<int> GetIndexs(IDataObj data, bool needSort = false)
         {
-            string id = "";
-            if (data != null)
-            {
-                if (data is string str) { id = str; }
-                else if (data is IDataObj dataObj) { id = dataObj.GetDataID(); }
-                else { id = data.GetHashCode().ToString(); }
-            }
-            return id ?? "";
-        }
-
-        public List<int> GetIndexs(T data, bool needSort = false)
-        {
-            string id = GetDataID(data);
+            string id = data?.GetDataID() ?? "";
             if (!string.IsNullOrEmpty(id) && IndexDict.ContainsKey(id))
             {
                 HashSet<int> indexs = new HashSet<int>(IndexDict[id]);
-                if (data is IDataObj dataObj)
-                {
-                    indexs.RemoveWhere(index => (Datas[index].GetData() is not IDataObj other || dataObj != other));
-                }
+                indexs.RemoveWhere(index => !data.DataEquales(Datas[index].GetData()));
                 List<int> result = indexs.ToList();
                 if (needSort)
                 {
@@ -132,7 +116,7 @@ namespace ProjectOC.DataNS
             return new List<int>();
         }
 
-        public bool HaveSetData(T data, bool needCanIn = false, bool needCanOut = false)
+        public bool HaveSetData(IDataObj data, bool needCanIn = false, bool needCanOut = false)
         {
             foreach (int index in GetIndexs(data))
             {
@@ -146,7 +130,7 @@ namespace ProjectOC.DataNS
 
         public bool HaveAnyData(DataOpType type, bool needCanIn = false, bool needCanOut = false)
         {
-            foreach (Data<T> data in Datas.ToArray())
+            foreach (Data data in Datas.ToArray())
             {
                 if (data.HaveSetData && data.GetAmount(type) > 0 && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
                 {
@@ -156,7 +140,7 @@ namespace ProjectOC.DataNS
             return false;
         }
 
-        public int GetAmount(T data, DataOpType type, bool needCanIn = false, bool needCanOut = false)
+        public int GetAmount(IDataObj data, DataOpType type, bool needCanIn = false, bool needCanOut = false)
         {
             int result = 0;
             foreach (int index in GetIndexs(data))
@@ -169,17 +153,22 @@ namespace ProjectOC.DataNS
             return result;
         }
 
-        public List<(T, int)> GetAmount(DataOpType type, bool needCanIn = false, bool needCanOut = false)
+        public Dictionary<IDataObj, int> GetAmount(DataOpType type, bool needCanIn = false, bool needCanOut = false)
         {
-            List<(T, int)> result = new List<(T, int)>();
-            foreach (Data<T> data in Datas.ToArray())
+            Dictionary<IDataObj, int> result = new Dictionary<IDataObj, int>();
+            foreach (Data data in Datas.ToArray())
             {
                 if (data.HaveSetData && (!needCanIn || data.CanIn) && (!needCanOut || data.CanOut))
                 {
                     int amount = data.GetAmount(type);
                     if (amount > 0)
                     {
-                        result.Add((data.GetData(), amount));
+                        IDataObj key = data.GetData();
+                        if (!result.ContainsKey(key))
+                        {
+                            result.Add(key, 0);
+                        }
+                        result[key] += amount;
                     }
                 }
             }
@@ -188,13 +177,13 @@ namespace ProjectOC.DataNS
         #endregion
 
         #region Set
-        public List<(T, int)> ChangeCapacity(int capacity, int dataCapacity)
+        public Dictionary<IDataObj, int> ChangeCapacity(int capacity, int dataCapacity)
         {
             lock (this)
             {
-                List<(T, int)> result = new List<(T, int)> ();
+                Dictionary<IDataObj, int> result = new Dictionary<IDataObj, int>();
                 if (capacity < 0 || dataCapacity < 0) { return result; }
-                Data<T>[] newDatas = new Data<T>[capacity];
+                Data[] newDatas = new Data[capacity];
                 for (int i = 0; i < capacity; i++)
                 {
                     if (IsValidIndex(i)) 
@@ -203,14 +192,19 @@ namespace ProjectOC.DataNS
                     }
                     else
                     {
-                        newDatas[i] = new Data<T>(dataCapacity);
+                        newDatas[i] = new Data(dataCapacity);
                     }
                 }
                 for (int i = capacity; i < Datas.Length; i++)
                 {
                     if (Datas[i].StorageAll > 0)
                     {
-                        result.Add((Datas[i].GetData(), Datas[i].StorageAll));
+                        IDataObj key = Datas[i].GetData();
+                        if (!result.ContainsKey(key))
+                        {
+                            result[key] = 0;
+                        }
+                        result[key] += Datas[i].StorageAll;
                     }
                 }
 
@@ -219,7 +213,12 @@ namespace ProjectOC.DataNS
                     if (newDatas[i].StorageAll > dataCapacity)
                     {
                         int remove = newDatas[i].StorageAll - dataCapacity;
-                        result.Add((newDatas[i].GetData(), remove));
+                        IDataObj key = newDatas[i].GetData();
+                        if (!result.ContainsKey(key))
+                        {
+                            result[key] = 0;
+                        }
+                        result[key] += remove;
                         int storage = newDatas[i].GetAmount(DataOpType.Storage);
                         if (storage >= remove)
                         {
@@ -240,13 +239,13 @@ namespace ProjectOC.DataNS
             }
         }
 
-        public List<(T, int)> ChangeCapacity(int capacity, List<int> dataCapacitys)
+        public Dictionary<IDataObj, int> ChangeCapacity(int capacity, List<int> dataCapacitys)
         {
             lock (this)
             {
-                List<(T, int)> result = new List<(T, int)>();
+                Dictionary<IDataObj, int> result = new Dictionary<IDataObj, int>();
                 if (capacity < 0 || dataCapacitys.Count < capacity) { return result; }
-                Data<T>[] newDatas = new Data<T>[capacity];
+                Data[] newDatas = new Data[capacity];
                 for (int i = 0; i < capacity; i++)
                 {
                     if (IsValidIndex(i))
@@ -255,14 +254,19 @@ namespace ProjectOC.DataNS
                     }
                     else
                     {
-                        newDatas[i] = new Data<T>(dataCapacitys[i]);
+                        newDatas[i] = new Data(dataCapacitys[i]);
                     }
                 }
                 for (int i = capacity; i < Datas.Length; i++)
                 {
                     if (Datas[i].StorageAll > 0)
                     {
-                        result.Add((Datas[i].GetData(), Datas[i].StorageAll));
+                        IDataObj key = Datas[i].GetData();
+                        if (!result.ContainsKey(key))
+                        {
+                            result[key] = 0;
+                        }
+                        result[key] += Datas[i].StorageAll;
                     }
                 }
 
@@ -272,8 +276,12 @@ namespace ProjectOC.DataNS
                     if (newDatas[i].StorageAll > dataCapacitys[i])
                     {
                         int remove = newDatas[i].StorageAll - dataCapacitys[i];
-                        result.Add((newDatas[i].GetData(), remove));
-
+                        IDataObj key = newDatas[i].GetData();
+                        if (!result.ContainsKey(key))
+                        {
+                            result[key] = 0;
+                        }
+                        result[key] += remove;
                         int storage = newDatas[i].GetAmount(DataOpType.Storage);
                         if (storage >= remove)
                         {
@@ -299,12 +307,12 @@ namespace ProjectOC.DataNS
         /// </summary>
         /// <param name="index">第几个存储数据</param>
         /// <param name="id">新的数据ID</param>
-        public (T, int) ChangeData(int index, T data)
+        public (IDataObj, int) ChangeData(int index, IDataObj data)
         {
             lock (this)
             {
-                string id = GetDataID(data);
-                (T, int) result = (default(T), 0);
+                string id = data?.GetDataID() ?? "";
+                (IDataObj, int) result = (null, 0);
                 if (IsValidIndex(index))
                 {
                     if (Datas[index].HaveSetData)
@@ -330,11 +338,11 @@ namespace ProjectOC.DataNS
         /// <summary>
         /// 返回修改成功的数量
         /// </summary>
-        public int ChangeAmount(T data, int amount, DataOpType addType, DataOpType removeType, bool exceed = false, bool complete = true, bool needCanIn = false, bool needCanOut = false)
+        public int ChangeAmount(IDataObj data, int amount, DataOpType addType, DataOpType removeType, bool exceed = false, bool complete = true, bool needCanIn = false, bool needCanOut = false)
         {
             lock (this)
             {
-                string id = GetDataID(data);
+                string id = data.GetDataID() ?? "";
                 if (!string.IsNullOrEmpty(id) && amount > 0 && CheckDataOpType(addType, removeType, exceed))
                 {
                     int removeNum = GetAmount(data, removeType, needCanIn, needCanOut);

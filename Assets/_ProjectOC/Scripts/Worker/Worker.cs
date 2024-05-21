@@ -635,34 +635,11 @@ namespace ProjectOC.WorkerNS
 
         #region Transport
         [LabelText("当前负重"), ShowInInspector, ReadOnly]
-        public int WeightCurrent
-        {
-            get
-            {
-                int result = 0;
-                foreach (var kv in TransportDict)
-                {
-                    if (ManagerNS.LocalGameManager.Instance != null)
-                    {
-                        int weight = ManagerNS.LocalGameManager.Instance.ItemManager?.GetWeight(kv.Key) ?? 0;
-                        result += weight * kv.Value;
-                    }
-                }
-                foreach (var item in TransportItems)
-                {
-                    result += item.Weight;
-                }
-                return result;
-            }
-        }
+        public int WeightCurrent => Transport?.Weight ?? 0;
         [LabelText("搬运"), ReadOnly]
-        public MissionNS.ITransport Transport = null;
+        public MissionNS.Transport Transport = null;
         [LabelText("是否有搬运"), ShowInInspector, ReadOnly]
         public bool HaveTransport { get => Transport != null && Transport.IsValid; }
-
-        [LabelText("搬运物品"), ReadOnly]
-        public Dictionary<string, int> TransportDict = new Dictionary<string, int>();
-        public HashSet<ML.Engine.InventorySystem.Item> TransportItems = new HashSet<ML.Engine.InventorySystem.Item>();
         #endregion
 
         #region TimeStatus

@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ProjectOC.StoreNS
 {
     [LabelText("≤÷ø‚"), Serializable]
-    public class Store : DataNS.ItemContainerOwner
+    public class Store : DataNS.DataContainerOwner
     {
         #region Data
         [LabelText(" ¿ΩÁ≤÷ø‚"), ReadOnly]

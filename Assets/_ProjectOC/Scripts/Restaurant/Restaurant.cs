@@ -6,7 +6,7 @@ using System;
 namespace ProjectOC.RestaurantNS
 {
     [LabelText("²ÍÌü"), Serializable]
-    public class Restaurant : DataNS.ItemContainerOwner
+    public class Restaurant : DataNS.DataContainerOwner
     {
         #region Data
         [LabelText("ÊÀ½ç²ÍÌü"), ReadOnly, NonSerialized]

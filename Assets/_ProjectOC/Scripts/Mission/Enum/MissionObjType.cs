@@ -7,6 +7,5 @@ namespace ProjectOC.MissionNS
         Restaurant,
         ProNode,
         WorldItem,
-        CreatureStore
     }
 }

@@ -3,10 +3,11 @@ using Sirenix.OdinInspector;
 namespace ProjectOC.DataNS
 {
     [LabelText("存储数据"), System.Serializable]
-    public struct Data<T>
+    public struct Data
     {
         #region Data
-        private T data;
+        [LabelText("数据"), ShowInInspector, ReadOnly]
+        private IDataObj data;
         [LabelText("数据ID"), ShowInInspector, ReadOnly]
         private string id;
         [LabelText("能否存入"), ShowInInspector, ReadOnly]
@@ -31,25 +32,14 @@ namespace ProjectOC.DataNS
         public bool CanOut => canOut;
         [LabelText("总存放量"), ShowInInspector, ReadOnly]
         public int StorageAll => Storage + StorageReserve;
-        [LabelText("总存放量"), ShowInInspector, ReadOnly]
+        [LabelText("是否设置数据"), ShowInInspector, ReadOnly]
         public bool HaveSetData => !string.IsNullOrEmpty(id);
         #endregion
 
         #region Constructor
-        public Data(T data, int maxCapacity)
+        public Data(IDataObj data, int maxCapacity)
         {
-            if (data is string str)
-            {
-                id = str;
-            }
-            else if (data is IDataObj dataObj)
-            {
-                id = dataObj.GetDataID();
-            }
-            else
-            {
-                id = data.GetHashCode().ToString();
-            }
+            id = data.GetDataID();
             this.data = data;
             canIn = true;
             canOut = true;
@@ -62,7 +52,7 @@ namespace ProjectOC.DataNS
         public Data(int maxCapacity)
         {
             id = "";
-            data = default(T);
+            data = null;
             canIn = true;
             canOut = true;
             MaxCapacity = maxCapacity;
@@ -93,38 +83,27 @@ namespace ProjectOC.DataNS
             }
             return 0;
         }
-        public T GetData() { return data; }
+        public IDataObj GetData() { return data; }
         #endregion
 
         #region Set
         public void Reset()
         {
             id = "";
-            data = default(T);
+            data = null;
             Storage = 0;
             Empty = MaxCapacity;
             StorageReserve = 0;
             EmptyReserve = 0;
         }
-        public void ChangeData(T data)
+        public void ChangeData(IDataObj data)
         {
             Reset();
             SetData(data);
         }
-        private void SetData(T data)
+        private void SetData(IDataObj data)
         {
-            if (data is string str)
-            {
-                id = str;
-            }
-            else if (data is IDataObj dataObj)
-            {
-                id = dataObj.GetDataID();
-            }
-            else
-            {
-                id = data.GetHashCode().ToString();
-            }
+            id = data.GetDataID();
             this.data = data;
         }
 

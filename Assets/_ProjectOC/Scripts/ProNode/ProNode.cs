@@ -7,7 +7,7 @@ using ProjectOC.ManagerNS;
 namespace ProjectOC.ProNodeNS
 {
     [LabelText("生产节点"), Serializable]
-    public class ProNode: DataNS.ItemContainerOwner, WorkerNS.IWorkerContainer, WorkerNS.IEffectObj
+    public class ProNode: DataNS.DataContainerOwner, WorkerNS.IWorkerContainer, WorkerNS.IEffectObj
     {
         #region Data
         [LabelText("生产节点建筑"), ReadOnly]

@@ -1,53 +1,49 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
+using ProjectOC.DataNS;
 
 namespace ProjectOC.MissionNS
 {
     [LabelText("搬运"), System.Serializable]
-    public abstract class Transport<T> : ITransport
+    public class Transport
     {
         #region Data
-        [LabelText("搬运所属的任务"), ReadOnly, ShowInInspector]
-        public T Data;
+        [LabelText("搬运的数据"), ReadOnly, ShowInInspector]
+        public IDataObj Data;
         [LabelText("搬运所属的任务"), HideInInspector]
-        public MissionTransport<T> Mission;
+        public MissionTransport Mission;
         [LabelText("取货地"), HideInInspector]
-        public IMissionObj<T> Source;
+        public IMissionObj Source;
         [LabelText("送货地"), HideInInspector]
-        public IMissionObj<T> Target;
+        public IMissionObj Target;
         #endregion
 
         #region Property
-        [LabelText("负责该搬运的刁民"), ReadOnly, HideInInspector]
-        public WorkerNS.Worker Worker { get; set; }
-        [LabelText("需要搬运的数量"), ReadOnly, ShowInInspector]
-        public int MissionNum { get; set; }
-        [LabelText("当前拿到的数量"), ReadOnly, ShowInInspector]
-        public int CurNum { get; set; }
-        [LabelText("完成的数量"), ReadOnly, ShowInInspector]
-        public int FinishNum { get; set; }
-        [LabelText("取货地预留的数量"), ReadOnly, ShowInInspector]
-        public int SoureceReserveNum { get; set; }
-        [LabelText("送货地预留的数量"), ReadOnly, ShowInInspector]
-        public int TargetReserveNum { get; set; }
-        [LabelText("是否到达取货地"), ReadOnly, ShowInInspector]
-        public bool ArriveSource { get; set; }
-        [LabelText("是否到达目的地"), ReadOnly, ShowInInspector]
-        public bool ArriveTarget { get; set; }
-        [LabelText("是否是有效的"), ReadOnly, ShowInInspector]
+        [LabelText("负责该搬运的刁民"), ReadOnly]
+        public WorkerNS.Worker Worker;
+        [LabelText("需要搬运的数量"), ReadOnly]
+        public int MissionNum;
+        [LabelText("当前拿到的数量"), ReadOnly]
+        public int CurNum;
+        [LabelText("完成的数量"), ReadOnly]
+        public int FinishNum;
+        [LabelText("取货地预留的数量"), ReadOnly]
+        public int SoureceReserveNum;
+        [LabelText("送货地预留的数量"), ReadOnly]
+        public int TargetReserveNum;
+        [LabelText("是否到达取货地"), ReadOnly]
+        public bool ArriveSource;
+        [LabelText("是否到达目的地"), ReadOnly]
+        public bool ArriveTarget;
+        [LabelText("是否是有效的"), ReadOnly]
         public bool IsValid => Data != null;
-        #endregion
-
-        #region Abstract
-        protected abstract int GetWeight();
-        protected abstract bool WorkerAddData(int num);
-        protected abstract int WorkerRemoveData(int num);
-        protected abstract void DataToWorldItem(int num);
+        public int Weight => Data != null ? Data.GetDataWeight() * CurNum : 0;
         #endregion
 
         #region Method
-        public Transport(MissionTransport<T> mission, int missionNum, IMissionObj<T> source, IMissionObj<T> target, WorkerNS.Worker worker)
+        public Transport(MissionTransport mission, int missionNum, IMissionObj source, IMissionObj target, WorkerNS.Worker worker)
         {
+            if (mission.Data == null) { return; }
             Data = mission.Data;
             Mission = mission;
             Source = source;
@@ -61,7 +57,7 @@ namespace ProjectOC.MissionNS
             TargetReserveNum = Target.ReservePutIn(mission.Data, missionNum);
 
             Worker = worker;
-            if (Data == null || SoureceReserveNum == 0 || TargetReserveNum == 0)
+            if (SoureceReserveNum == 0 || TargetReserveNum == 0)
             {
                 End();
             }
@@ -71,8 +67,6 @@ namespace ProjectOC.MissionNS
                 Worker.SetDestination(Source.GetTransform().position, OnSourceArriveEvent);
             }
         }
-        public Transform GetSourceTransform() { return Source.GetTransform(); }
-        public Transform GetTargetTransform() { return Target.GetTransform(); }
         public void UpdateDestination()
         {
             if (!ArriveSource)
@@ -94,7 +88,7 @@ namespace ProjectOC.MissionNS
         {
             worker.Transport.ArriveSource = true;
             worker.Transport.PutOutSource();
-            worker.SetDestination(worker.Transport.GetTargetTransform().position, OnTargetArriveEvent);
+            worker.SetDestination(worker.Transport.Target.GetTransform().position, OnTargetArriveEvent);
         }
         private void OnTargetArriveEvent(WorkerNS.Worker worker)
         {
@@ -103,11 +97,11 @@ namespace ProjectOC.MissionNS
         }
         public void PutOutSource()
         {
-            int weight = GetWeight();
+            int weight = Data.GetDataWeight();
             int burMaxNum = weight != 0 ? (Worker.RealBURMax - Worker.WeightCurrent) / weight : SoureceReserveNum;
             int num = SoureceReserveNum <= burMaxNum ? SoureceReserveNum : burMaxNum;
             num = Source.PutOut(Data, num);
-            if (num > 0 && WorkerAddData(num))
+            if (num > 0)
             {
                 SoureceReserveNum -= num;
                 CurNum += num;
@@ -124,12 +118,11 @@ namespace ProjectOC.MissionNS
         }
         public void PutInTarget()
         {
-            int num = WorkerRemoveData(CurNum);
-            if (num > 0)
+            if (CurNum > 0)
             {
-                CurNum -= num;
-                FinishNum += num;
-                TargetReserveNum -= num;
+                FinishNum += CurNum;
+                TargetReserveNum -= CurNum;
+                CurNum = 0;
                 Target.PutIn(Data, FinishNum);
                 Worker.SettleTransport();
                 End();
@@ -144,8 +137,7 @@ namespace ProjectOC.MissionNS
         {
             if (CurNum > 0)
             {
-                int remove = WorkerRemoveData(CurNum);
-                DataToWorldItem(remove);
+                Data.ConvertToWorldObj(CurNum, Worker.transform);
             }
             Worker.Transport = null;
             Worker.ClearDestination();
@@ -160,7 +152,7 @@ namespace ProjectOC.MissionNS
             Mission?.RemoveTransport(this);
             Source?.RemoveTranport(this);
             Target?.RemoveTranport(this);
-            Data = default(T);
+            Data = null;
             Mission = null;
             Source = null;
             Target = null;
