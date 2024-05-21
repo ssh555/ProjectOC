@@ -18,9 +18,76 @@ MonoBehaviour:
   smallMapTex: {fileID: 0}
   gridData: 000101010101010101010101010101000000000000000101010101010101010101010101000000000000000101010101010101010101010101000000000000010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101
   mineData:
-  - MineID: Mineral_Tmm_1
-    MinePoses: []
+  - MineID: Mineral_Ag_1
+    MinePoses:
+    - {x: 16.963305, y: 6.5485835}
+    - {x: 18.830318, y: 5.7338862}
+    - {x: 13.534787, y: 5.3265376}
+    - {x: 12.346687, y: 3.6292515}
+    - {x: 5.761217, y: 1.1172676}
+    - {x: 5.2520313, y: 4.8852434}
+    - {x: 10.954912, y: 5.869669}
+    - {x: 17.302761, y: 5.190755}
   - MineID: Mineral_Ti_2
     MinePoses: []
   - MineID: Mineral_Ti_3
+    MinePoses: []
+  - MineID: Mineral_Ti_1
+    MinePoses: []
+  - MineID: Mineral_Fe_1
+    MinePoses: []
+  - MineID: Mineral_Fe_2
+    MinePoses: []
+  - MineID: Mineral_Fe_3
+    MinePoses: []
+  - MineID: Mineral_Au_1
+    MinePoses: []
+  - MineID: Mineral_Au_2
+    MinePoses: []
+  - MineID: Mineral_Au_3
+    MinePoses: []
+  - MineID: Mineral_Cu_1
+    MinePoses: []
+  - MineID: Mineral_Cu_2
+    MinePoses: []
+  - MineID: Mineral_Cu_3
+    MinePoses: []
+  - MineID: Mineral_W_1
+    MinePoses: []
+  - MineID: Mineral_W_2
+    MinePoses: []
+  - MineID: Mineral_W_3
+    MinePoses: []
+  - MineID: Mineral_F_1
+    MinePoses:
+    - {x: 2.5192165, y: 6.4262886}
+  - MineID: Mineral_F_2
+    MinePoses:
+    - {x: 0.95751286, y: 3.4887984}
+    - {x: 2.0358324, y: 4.288242}
+    - {x: 2.2217493, y: 5.162052}
+    - {x: 3.634719, y: 7.207141}
+    - {x: 4.4155707, y: 7.3000994}
+  - MineID: Mineral_F_3
+    MinePoses: []
+  - MineID: Mineral_Ag_2
+    MinePoses:
+    - {x: 3.8942022, y: 1.1512136}
+    - {x: 4.8786287, y: 2.2035308}
+    - {x: 4.6410084, y: 5.6659946}
+  - MineID: Mineral_Ag_3
+    MinePoses:
+    - {x: 11.939339, y: 4.9531345}
+    - {x: 17.811947, y: 6.9898777}
+  - MineID: Mineral_Si_1
+    MinePoses: []
+  - MineID: Mineral_Si_2
+    MinePoses: []
+  - MineID: Mineral_Si_3
+    MinePoses: []
+  - MineID: Mineral_R_1
+    MinePoses: []
+  - MineID: Mineral_R_2
+    MinePoses: []
+  - MineID: Mineral_R_3
     MinePoses: []

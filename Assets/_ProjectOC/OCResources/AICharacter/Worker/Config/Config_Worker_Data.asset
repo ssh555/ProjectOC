@@ -22,11 +22,11 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   Config:
-    APMax: 10
-    APWorkThreshold: 3
-    APRelaxThreshold: 4
-    APCost_Transport: 1
-    EatTime: 30
+    APMax: 100
+    APWorkThreshold: 30
+    APRelaxThreshold: 470
+    APCost_Transport: 5
+    EatTime: 5
     EMMax: 100
     EMLowThreshold: 50
     EMHighThreshold: 80
@@ -35,15 +35,15 @@ MonoBehaviour:
     EMCost: 10
     EMRecover: 5
     WalkSpeed: 10
-    BURMax: 100
+    BURMax: 10
     ExpTransport: 100
     SkillEff: 10
     ExpToLevel: e8030000d0070000b80b0000a00f00008813000070170000581b0000401f00002823000010270000
     LevelToEff_Duty: 000000000a000000140000001e00000028000000320000003c00000046000000500000005a00000064000000
     LevelToEff_Transport: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a000000
-    DestroyTimeForNoHome: 180
+    DestroyTimeForNoHome: 600
     SkillStdMean: 30
-    SkillStdDev: 50
-    SkillStdHighBound: 60
+    SkillStdDev: 15
+    SkillStdHighBound: 50
     SkillStdLowBound: 0
     WorkerHomeAddMoodTime: 60

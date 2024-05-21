@@ -282,3 +282,8 @@ MonoBehaviour:
     - ID: 39
       offsetPosition: {x: 0, y: 0, z: 0}
       offsetRotation: {x: 0, y: 0, z: 0, w: 0}
+  - ID: 40
+    ToSocket:
+    - ID: 40
+      offsetPosition: {x: 0, y: 0, z: 0}
+      offsetRotation: {x: 0, y: 0, z: 0, w: 0}
