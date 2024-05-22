@@ -44,8 +44,11 @@ namespace ProjectOC.MissionNS
             if (data != null && missionNum > 0 && initiator != null)
             {
                 MissionTransport mission = new MissionTransport(transportType, data, missionNum, initiator, initiatorType);
-                MissionTransports.Add(mission);
-                return mission;
+                if (mission.Data != null)
+                {
+                    MissionTransports.Add(mission);
+                    return mission;
+                }
             }
             return null;
         }
@@ -72,7 +75,6 @@ namespace ProjectOC.MissionNS
                     missionNum = missionNum <= maxBurNum ? missionNum : maxBurNum;
                 }
 
-                MissionObjType sourceType = mission.Initiator.GetMissionObjType();
                 IMissionObj target = null;
                 if (missionNum > 0)
                 {
@@ -86,16 +88,9 @@ namespace ProjectOC.MissionNS
                             break;
                     }
                 }
-                if (worker != null && target != null && missionNum > 0)
+                if (worker != null && target != null)
                 {
-                    if (sourceType == MissionObjType.CreatureStore || targetType == MissionObjType.CreatureStore)
-                    {
-                        new Transport(mission, missionNum, mission.Initiator, target, worker);
-                    }
-                    else
-                    {
-                        new Transport(mission, missionNum, mission.Initiator, target, worker);
-                    }
+                    new Transport(mission, missionNum, mission.Initiator, target, worker);
                 }
                 else
                 {
@@ -112,8 +107,7 @@ namespace ProjectOC.MissionNS
         {
             if (mission.NeedAssignNum > 0)
             {
-                Dictionary<StoreNS.Store, int> result = new Dictionary<StoreNS.Store, int>();
-                //Dictionary<StoreNS.Store, int> result = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutOutStore(mission.ID, mission.NeedAssignNum, 1, true, true);
+                Dictionary<StoreNS.Store, int> result = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutOutStore(mission.Data, mission.NeedAssignNum, 1, true, true);
                 foreach (var kv in result)
                 {
                     StoreNS.Store store = kv.Key;
@@ -144,7 +138,7 @@ namespace ProjectOC.MissionNS
         public void Timer_OnEndEvent()
         {
             List<MissionTransport> missionList = MissionTransports.ToList();
-            missionList.Sort(new MissionTransport());
+            missionList.Sort(new MissionTransport.Sort());
             foreach (var mission in missionList)
             {
                 if (mission.Type == MissionTransportType.ProNode_Store || mission.Type == MissionTransportType.Outside_Store)

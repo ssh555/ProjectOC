@@ -6,7 +6,7 @@ using ProjectOC.DataNS;
 namespace ProjectOC.MissionNS
 {
     [LabelText("搬运任务"), System.Serializable]
-    public class MissionTransport : IComparer<MissionTransport>
+    public class MissionTransport
     {
         #region Data
         [LabelText("搬运数据"), ReadOnly]
@@ -104,24 +104,27 @@ namespace ProjectOC.MissionNS
         }
         #endregion
 
-        #region Compare
-        public int Compare(MissionTransport x, MissionTransport y)
+        #region Sort
+        public class Sort : IComparer<MissionTransport>
         {
-            if (x == null || y == null)
+            public int Compare(MissionTransport x, MissionTransport y)
             {
-                return (x == null).CompareTo((y == null));
+                if (x == null || y == null)
+                {
+                    return (x == null).CompareTo((y == null));
+                }
+                if (x.Type != y.Type)
+                {
+                    return x.Type.CompareTo(y.Type);
+                }
+                int priorityX = (int)x.Initiator.GetTransportPriority();
+                int priorityY = (int)y.Initiator.GetTransportPriority();
+                if (priorityX != priorityY)
+                {
+                    return priorityX.CompareTo(priorityY);
+                }
+                return x.Initiator.GetUID().CompareTo(y.Initiator.GetUID());
             }
-            if (x.Type != y.Type)
-            {
-                return x.Type.CompareTo(y.Type);
-            }
-            int priorityX = (int)x.Initiator.GetTransportPriority();
-            int priorityY = (int)y.Initiator.GetTransportPriority();
-            if (priorityX != priorityY)
-            {
-                return priorityX.CompareTo(priorityY);
-            }
-            return x.Initiator.GetUID().CompareTo(y.Initiator.GetUID());
         }
         #endregion
     }

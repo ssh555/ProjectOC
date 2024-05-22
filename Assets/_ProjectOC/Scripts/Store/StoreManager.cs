@@ -67,7 +67,7 @@ namespace ProjectOC.StoreNS
         /// <param name="amount">数量</param>
         /// <param name="priorityType">是否按照优先级获取 0表示不需要，1表示优先级从高到低，-1表示优先级从低到高</param>
         /// <returns>取出数量和对应仓库列表</returns>
-        public Dictionary<Store, int> GetPutOutStore(string itemID, int amount, int priorityType = 0, bool judgeInteracting = false, bool judgeCanOut = false)
+        public Dictionary<Store, int> GetPutOutStore(DataNS.IDataObj data, int amount, int priorityType = 0, bool judgeInteracting = false, bool judgeCanOut = false)
         {
             Dictionary<Store, int> result = new Dictionary<Store, int>();
             if (!string.IsNullOrEmpty(itemID) && amount > 0)
@@ -98,10 +98,6 @@ namespace ProjectOC.StoreNS
             }
             return result;
         }
-        public Store GetPutOutStore(ML.Engine.InventorySystem.Item item, int priorityType = 0, bool judgeInteracting = false, bool judgeCanOut = false)
-        {
-            return null;
-        }
         /// <summary>
         /// 获取满足存入条件的仓库
         /// </summary>
@@ -109,7 +105,7 @@ namespace ProjectOC.StoreNS
         /// <param name="amount">数量</param>
         /// <param name="priorityType">是否按照优先级获取 0表示不需要，1表示优先级从高到低，-1表示优先级从低到高</param>
         /// <returns></returns>
-        public Store GetPutInStore(string itemID, int amount, int priorityType = 0, bool judgeInteracting = false, bool judgeCanIn = false)
+        public Store GetPutInStore(DataNS.IDataObj data, int amount, int priorityType = 0, bool judgeInteracting = false, bool judgeCanIn = false)
         {
             Store result = null;
             if (!string.IsNullOrEmpty(itemID) && amount > 0)
@@ -135,10 +131,6 @@ namespace ProjectOC.StoreNS
                 }
             }
             return result;
-        }
-        public Store GetPutInStore(ML.Engine.InventorySystem.Item item, int priorityType = 0, bool judgeInteracting = false, bool judgeCanIn = false)
-        {
-            return null;
         }
         public List<string> GetStoreIconItems()
         {

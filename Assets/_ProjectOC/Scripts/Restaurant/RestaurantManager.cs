@@ -101,7 +101,7 @@ namespace ProjectOC.RestaurantNS
             return restaurants;
         }
 
-        public Restaurant GetPutInRestaurant(string itemID, int amount)
+        public Restaurant GetPutInRestaurant(DataNS.IDataObj data, int amount)
         {
             Restaurant result = null;
             if (!string.IsNullOrEmpty(itemID) && amount > 0)
