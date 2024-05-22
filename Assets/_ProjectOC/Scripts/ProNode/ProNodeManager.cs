@@ -48,7 +48,18 @@ namespace ProjectOC.ProNodeNS
         private Dictionary<string, IWorldProNode> WorldProNodeDict = new Dictionary<string, IWorldProNode>();
         public IProNode SpawnProNode(string id)
         {
-            //return IsValidID(id) ? new ProNode(ProNodeTableDict[id]) : null;
+            if (IsValidID(id))
+            {
+                ProNodeType type = GetProNodeType(id);
+                if (type == ProNodeType.Auto)
+                {
+                    return new AutoProNode(ProNodeTableDict[id]);
+                }
+                else
+                {
+                    return new ManualProNode(ProNodeTableDict[id]);
+                }
+            }
             return null;
         }
 
