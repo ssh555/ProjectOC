@@ -69,11 +69,11 @@ MonoBehaviour:
   ID: 2
   IsActiveSocket: 1
   IsCanRotate: 1
+  m_AsTargetRotDelta: {x: 0, y: 0, z: 0, w: 1}
+  m_AsMatchRotOffset: {x: 0, y: 0, z: 0, w: 1}
   IsRotateOnArea: 1
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0, w: 1}
-  Gizmos_Active: 0
-  Gizmos_Attached: 0
 --- !u!1 &6016887655206798483
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,7 +249,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   classification:
     Category1: 1
-    Category2: 103
+    Category2: 104
     Category3: 100
     Category4: 1
   instanceID: 
@@ -258,7 +258,10 @@ MonoBehaviour:
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   activeSocketIndex: 0
-  uIResonanceWheel: {fileID: 8098490139189892449, guid: e3cccacf36309724291b2682109de3e0, type: 3}
+  WorkerEcho:
+    WorkerEchoBuilding: {fileID: 0}
+    FeatureMax: 
+    FeatureOdds: 
+    FactorTimeCost: 0
+    ModifyTimeCost: 0
   uIResonanceWheelInstance: {fileID: 0}
-  workerEcho:
-    Level: 0

@@ -265,6 +265,13 @@ namespace ProjectOC.MineSystem
                 int iCounter = 0;
                 foreach (var _singleBrush in bigMap.BigMapEditDatas.MineBrushDatas)
                 {
+                    int _index = iCounter++;
+                    if (_index % 8 == 0)  //8、16 24
+                    {
+                        EditorGUILayout.EndHorizontal();
+                        EditorGUILayout.BeginHorizontal();
+                    }
+
                     //从Sprite获取Texture，直接Sprite.tex 获取的是图集
                     string spritePath = AssetDatabase.GetAssetPath(_singleBrush.mineIcon);
                     TextureImporter textureImporter = AssetImporter.GetAtPath(spritePath) as TextureImporter;
@@ -275,7 +282,6 @@ namespace ProjectOC.MineSystem
                     }
 
                     //选中后切换CurBrush
-                    int _index = iCounter++;
                     ToggleButton("", () =>
                     {
                         brushIndex = _index;
