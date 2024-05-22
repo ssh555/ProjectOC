@@ -112,6 +112,39 @@ namespace ProjectOC.MineSystem
                     bigMap.tileMaps[i].bigMap = bigMap;
                 }
             }
+
+            // if (bigMap.bigMapRegionColor.Count == 0)
+            // {
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //0
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //1
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //2
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //3
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //4
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //5
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //6
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //7
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //8
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //9
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //10
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //11
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //12
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //13
+            //     bigMap.bigMapRegionColor.Add(new Color32(217,217,217,255));    //14
+            //     bigMap.bigMapRegionColor.Add(new Color32(243,84,26,255));    //15
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //16
+            //     bigMap.bigMapRegionColor.Add(new Color32(242,220,219,255));    //17
+            //     bigMap.bigMapRegionColor.Add(new Color32(243,84,26,255));    //18
+            //     bigMap.bigMapRegionColor.Add(new Color32(217,217,217,255));    //19
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //20
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //21
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //22
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //23
+            //     bigMap.bigMapRegionColor.Add(new Color32(148,138,84,255));    //24
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //25
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //26
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //27
+            //     bigMap.bigMapRegionColor.Add(new Color32(89,89,89,255));    //28
+            // }
         }
 
         void ReloadSmallMapAsset()
@@ -311,14 +344,15 @@ namespace ProjectOC.MineSystem
                 GUILayout.EndHorizontal();
             }
 
-            if (GUILayout.Button("重新生成资产"))
-            {
-                ReGenerateAsset();
-            }
+            
             
             ShowProgrammerData =GUILayout.Toggle(ShowProgrammerData,"程序Debug参数，策划勿动");
             if (ShowProgrammerData)
             {
+                if (GUILayout.Button("重新生成资产"))
+                {
+                    ReGenerateAsset();
+                }
                 DrawDefaultInspector(); 
             }
             serializedObject.ApplyModifiedProperties();
@@ -430,15 +464,19 @@ namespace ProjectOC.MineSystem
                 _height = data.GetLength(1);
                 
  
-                for (int x = 0; x < _height; x++)
+                // for (int x = 0; x < _height; x++)
+                // {
+                //     for (int y = 0; y < _width; y++)
+                for (int x = 0; x < _width; x++)
                 {
-                    for (int y = 0; y < _width; y++)
+                    for (int y = 0; y < _height; y++)
                     {
                         int label = data[x, y];
                         if (label != -1)
                         {
                             if (!_regions.ContainsKey(label))
                             {
+                                // Debug.Log($"New  {x},{y}  Label{label}");
                                 _regions[label] = new List<Vector2>();
                             }
 
@@ -448,13 +486,18 @@ namespace ProjectOC.MineSystem
                             }
 
                             _regions[label].Add(new Vector2(x, y));
+                            //图像 二维数组x,y 是Unity下的y,x ????
+                            if (IsBoundaryPixel(x, y, label))
+                            {
+                                _regionBoundaried[label].Add(new Vector2(x, y));
+                            }
                         }
                     }
                 }
 
                 foreach (var _region in _regions)
                 {
-                    CreateSpriteForRegion(_region.Key, _region.Value);
+                    CreateSpriteForRegion(_region.Key, _region.Value,_regionBoundaried[_region.Key]);
                 }
                 SortTransformByName(normalRegionTransf);
                 
@@ -480,7 +523,7 @@ namespace ProjectOC.MineSystem
             }
 
             //处理每个小区域数据
-            void CreateSpriteForRegion(int _lable, List<Vector2> _positions)
+            void CreateSpriteForRegion(int _lable, List<Vector2> _positions,List<Vector2> _boundPositions)
             {
                 if (_lable == -1)       //空白区
                 {
@@ -494,9 +537,12 @@ namespace ProjectOC.MineSystem
                     pixels[i] = Color.clear;
                 }
                 texture.SetPixels(pixels); 
+                
+                //左下角为起点，右上为终点
                 foreach (var pos in _positions)
                 {
-                    texture.SetPixel((int)pos.x, (int)pos.y, Color.white);
+                    // texture.SetPixel((int)pos.x, (int)pos.y, Color.white);
+                    texture.SetPixel((int)pos.y, _width-1-(int)pos.x, Color.white);
                 }
                 texture.Apply();
                 string PATH = $"{smallMapTexPath}/Tex_MineBigMap_{_lable}.png";
@@ -517,19 +563,21 @@ namespace ProjectOC.MineSystem
                     newPrefab = Instantiate(_regionTemplate);
                     newPrefab.name = $"MapRegion_{_lable}";
                     Image _uiImage = newPrefab.GetComponent<Image>();
-                    // _uiImage.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.up);
                     _uiImage.sprite = _sprite;
                     newPrefab.transform.SetParent(normalRegionTransf);
-                    newPrefab.transform.localPosition = Vector3.zero;
+                    (newPrefab.transform as RectTransform).anchoredPosition = Vector2.zero;
                     
-                    float _randomValue = Random.Range(0f,1f);
-                    Color randomColor = new Color(_randomValue, _randomValue, _randomValue);
+                    
+                    
+                    // float _randomValue = Random.Range(0f,1f);
+                    // Color randomColor = new Color(_randomValue, _randomValue, _randomValue);
+                    Color randomColor = Color.HSVToRGB(Random.Range(0f,1f),Random.Range(0f,0.3f),Random.Range(0.15f,0.9f));
                     _uiImage.color = randomColor;
                     
                     // 添加Collider部分
+                    
                     PolygonCollider2D polygonCollider = newPrefab.GetComponent<PolygonCollider2D>();
-                    List<Vector2> uniquePositions = GetUniquePositions(_positions);
-                    polygonCollider.points = uniquePositions.ToArray();
+                    polygonCollider.SetPath(0,_boundPositions);
                 }
                 
                 
@@ -588,7 +636,7 @@ namespace ProjectOC.MineSystem
             if (pngData != null)
             {
                 File.WriteAllBytes(path, pngData);
-                Debug.Log("Texture saved to " + path);
+                // Debug.Log("Texture saved to " + path);
             }
             else
             {
