@@ -10,7 +10,7 @@ namespace ProjectOC.MissionNS
     {
         #region Data
         [LabelText("搬运数据"), ReadOnly]
-        public IDataObj Data;
+        public IDataObj Data { get; private set; }
         [LabelText("任务发起者"), HideInInspector]
         public IMissionObj Initiator;
         [LabelText("分配的搬运"), ReadOnly, ShowInInspector]

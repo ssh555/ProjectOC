@@ -338,7 +338,6 @@ namespace ProjectOC.ProNodeNS.UI
                 BotKeyTips.Find("KT_Remove1").gameObject.SetActive(hasRecipe);
                 BotKeyTips.Find("KT_Remove10").gameObject.SetActive(hasRecipe);
                 BotKeyTips.Find("KT_FastAdd").gameObject.SetActive(hasRecipe && ProNode.Recipe.Raw.Count > 0);
-                BotKeyTips.Find("KT_Return").gameObject.SetActive(true);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(BotKeyTips.GetComponent<GridLayoutGroup>().GetComponent<RectTransform>());
             }
         }
@@ -358,7 +357,6 @@ namespace ProjectOC.ProNodeNS.UI
                     }
                 }
                 #region Product
-                ProNode_Product.Find("Selected").gameObject.SetActive(true);
                 bool hasRecipe = ProNode.HasRecipe;
                 ProNode_Product.Find("Mask").gameObject.SetActive(hasRecipe);
                 ProNode_Product.Find("Name").gameObject.SetActive(hasRecipe);
