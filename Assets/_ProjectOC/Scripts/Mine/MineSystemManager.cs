@@ -139,7 +139,6 @@ namespace ProjectOC.MineSystem
         /// </summary>
         public bool SetNewNavagatePoint(Vector3 pos,bool isCancel = false)
         {
-            Debug.Log("SetNewNavagatePoint "+ pos);
             if (isCancel)
             {
                 mainIslandData.TargetPos = pos;

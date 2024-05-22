@@ -64,7 +64,6 @@ namespace ML.Engine.UI
         public float CurZoomscale 
         { 
             set {
-                Debug.Log("set CurZoomscale");
                 this.content.localScale = new Vector3(value, value, value);
                 this.Center.localScale = new Vector3(value, value, value);
                 curZoomscale = value;

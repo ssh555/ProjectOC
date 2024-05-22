@@ -201,7 +201,6 @@ namespace ML.Engine.BuildingSystem
             };
 
             // 创建一个可视化的球体
-            Debug.Log("create VisualSocket");
             VisualSocket = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             VisualSocket.GetComponent<Renderer>().material.color = UnityEngine.Color.blue;
             VisualSocket.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
