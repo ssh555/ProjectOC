@@ -63,7 +63,7 @@ namespace ML.Engine.UI
         /// <summary>
         /// 外部调用刷新KeyTip接口
         /// </summary>
-        public void RefreshKetTip()
+        public void RefreshKeyTip()
         {
             KeyTip[] keyTips = GameManager.Instance.InputManager.ExportKeyTipValues(datas);
             foreach (var keyTip in keyTips)

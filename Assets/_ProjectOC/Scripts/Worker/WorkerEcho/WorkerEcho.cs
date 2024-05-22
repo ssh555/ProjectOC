@@ -10,17 +10,19 @@ namespace ProjectOC.WorkerNS
         public string WorkerID;
         public CounterDownTimer Timer;
         public Worker Worker;
-        public ExternWorker(string workerID, float time, WorkerEchoBuilding workerEchoBuilding, int index)
+        public WorkerCategory workerCategory;
+        public ExternWorker(WorkerCategory workerCategory, float time, WorkerEchoBuilding workerEchoBuilding, int index)
         {
-            WorkerID = workerID;
-            
+            Debug.Log("c " + workerCategory);
+            this.workerCategory = workerCategory;
             Timer = new CounterDownTimer(time);
             Timer.OnEndEvent += () =>
             {
                 ManagerNS.LocalGameManager.Instance.WorkerManager.SpawnWorker(workerEchoBuilding.transform.position, Quaternion.identity, false, workerEchoBuilding.WorkerEcho).Completed += (handle) =>
                 {
                     Worker = handle.Result.GetComponent<Worker>();
-                    Worker.Category = (WorkerCategory)Enum.Parse(typeof(WorkerCategory), workerID);
+                    
+                    Worker.Category = workerCategory;
                     Worker.gameObject.transform.position += new Vector3((float)(3 * Math.Cos(2 * 3.1415926 * index / 5)), 0, (float)(3 * Math.Sin(2 * 3.1415926 * index / 5)));
                 };
             };
@@ -46,18 +48,18 @@ namespace ProjectOC.WorkerNS
             WorkerEchoBuilding = workerEchoBuilding;
         }
 
-        public ExternWorker SummonWorker(string id,int index, ML.Engine.InventorySystem.IInventory inventory)
+        public ExternWorker SummonWorker(WorkerCategory workerCategory, int index, ML.Engine.InventorySystem.IInventory inventory)
         {
-            string cid = id;
-            string workerid = "WorkerEcho_"+id;
-            if (!ManagerNS.LocalGameManager.Instance.WorkerManager.OnlyCostResource(inventory, id)) return null;
+  
+            string workerid = "WorkerEcho_"+ workerCategory.ToString();
+            if (!ManagerNS.LocalGameManager.Instance.WorkerManager.OnlyCostResource(inventory, workerCategory.ToString())) return null;
 
-            if (ManagerNS.LocalGameManager.Instance.WorkerEchoManager.Level == 1)
+            if (workerCategory == WorkerCategory.Random)
             {
-                cid = ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRandomCategoryString();
+                workerCategory = ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRandomCategory();
                 workerid = "WorkerEcho_" + WorkerCategory.Random.ToString();
             }
-            ExternWorker externWorker = new ExternWorker(cid, GetRealTimeCost(workerid), WorkerEchoBuilding, index);
+            ExternWorker externWorker = new ExternWorker(workerCategory, GetRealTimeCost(workerid), WorkerEchoBuilding, index);
             Workers[index] = externWorker;
             return externWorker;
         }

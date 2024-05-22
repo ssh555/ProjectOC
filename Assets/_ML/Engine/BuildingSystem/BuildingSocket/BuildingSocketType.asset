@@ -135,3 +135,12 @@ MonoBehaviour:
   - name: Pillar_up
     displayName: "\u67F1\u9876"
     value: 36
+  - name: Wall_up
+    displayName: "\u5899\u9876"
+    value: 37
+  - name: QWall_up
+    displayName: "Q\u5899\u9876"
+    value: 38
+  - name: LWall_up
+    displayName: "L\u5899\u9876"
+    value: 39
