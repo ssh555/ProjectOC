@@ -54,6 +54,11 @@ namespace ML.Engine.UI
             }
             set
             {
+                if(value is PanelButton)
+                {
+                    //绑定PanelButton 的按键
+                }
+
                 _CurSelected = value;
                 if (_CurSelected != null && SBPosDic.ContainsKey(_CurSelected)) 
                 {
@@ -1000,9 +1005,11 @@ namespace ML.Engine.UI
         /// <summary>
         /// 轮盘按钮导航回调 轮转按钮规定正上方为下标0
         /// </summary>
+        private bool canPerformRingNavigation = false;
+        public bool CanPerformRingNavigation {  get { return canPerformRingNavigation; } set { canPerformRingNavigation = value; } }
         private void RingNavigation(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (this.isEnable == false) return;
+            if (this.isEnable == false || !canPerformRingNavigation) return;
             this.NavigationPreAction?.Invoke();
 
             string actionName = obj.action.name;
