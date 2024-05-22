@@ -22,7 +22,7 @@ namespace ProjectOC.MissionNS
         [LabelText("已经分配的数量"), ReadOnly]
         public int AssignNum;
         [LabelText("需要分配的数量"), ReadOnly, ShowInInspector]
-        public int NeedAssignNum => MissionNum - FinishNum - AssignNum;
+        public int NeedAssignNum => MissionNum - finishNum - AssignNum;
         private int finishNum = 0;
         [LabelText("完成的数量"), ReadOnly, ShowInInspector]
         public int FinishNum 

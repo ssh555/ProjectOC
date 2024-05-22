@@ -713,7 +713,7 @@ namespace ProjectOC.WorkerNS
         [LabelText("是否在生产节点值班"), ShowInInspector, ReadOnly]
         public bool IsOnProNodeDuty { get { return HaveProNode && Status != Status.Relaxing && GetContainer(WorkerContainerType.Work).IsArrive; } }
         [LabelText("生产节点"), ShowInInspector, ReadOnly]
-        public ProNodeNS.ProNode ProNode => HasContainer(WorkerContainerType.Work) ? GetContainer(WorkerContainerType.Work) as ProNodeNS.ProNode : null;
+        public ProNodeNS.IProNode ProNode => HasContainer(WorkerContainerType.Work) ? GetContainer(WorkerContainerType.Work) as ProNodeNS.IProNode : null;
         [LabelText("喵喵窝"), ShowInInspector, ReadOnly]
         public FeatureSeat FeatSeat => HasContainer(WorkerContainerType.Feature) ? GetContainer(WorkerContainerType.Feature) as FeatureSeat : null;
         #endregion

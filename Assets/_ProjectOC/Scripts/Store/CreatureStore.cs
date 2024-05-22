@@ -12,6 +12,12 @@ namespace ProjectOC.StoreNS
         public CreatureStore(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType) : base(storeType)
         {
             InitData(15, 1);
+            DataContainer.OnDataChangeEvent += DataChangeSort;
+        }
+
+        public void DataChangeSort()
+        {
+            DataContainer.SortDataContainer();
         }
 
         public void ChangeCreature(string itemID)

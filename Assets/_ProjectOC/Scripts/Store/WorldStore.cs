@@ -1,11 +1,10 @@
 using Sirenix.OdinInspector;
-using UnityEngine;
 
 namespace ProjectOC.StoreNS
 {
     public class WorldStore : IWorldStore, ML.Engine.BuildingSystem.IBuildingUpgrade
     {
-        [LabelText("真实仓库"), ShowInInspector, ReadOnly, SerializeField]
+        [LabelText("真实仓库"), ShowInInspector, ReadOnly]
         public Store RealStore => Store as Store;
 
         public void OnUpgradeSetData(ML.Engine.BuildingSystem.IBuildingUpgrade lastLevelBuild)

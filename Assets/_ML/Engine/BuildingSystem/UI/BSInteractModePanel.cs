@@ -177,11 +177,11 @@ namespace ML.Engine.BuildingSystem.UI
         #region OnEvent
         private void OnDestroySelectedBPart(IBuildingPart bpart)
         {
-            if (bpart is ProjectOC.StoreNS.WorldStore worldStore)
+            if (bpart is ProjectOC.StoreNS.IWorldStore worldStore)
             {
                 worldStore.Store.Destroy();
             }
-            else if (bpart is ProjectOC.ProNodeNS.WorldProNode worldProNode)
+            else if (bpart is ProjectOC.ProNodeNS.IWorldProNode worldProNode)
             {
                 worldProNode.ProNode.Destroy();
             }

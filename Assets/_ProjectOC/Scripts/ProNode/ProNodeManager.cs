@@ -45,13 +45,14 @@ namespace ProjectOC.ProNodeNS
         #endregion
 
         #region Spawn
-        private Dictionary<string, WorldProNode> WorldProNodeDict = new Dictionary<string, WorldProNode>();
-        public ProNode SpawnProNode(string id)
+        private Dictionary<string, IWorldProNode> WorldProNodeDict = new Dictionary<string, IWorldProNode>();
+        public IProNode SpawnProNode(string id)
         {
-            return IsValidID(id) ? new ProNode(ProNodeTableDict[id]) : null;
+            //return IsValidID(id) ? new ProNode(ProNodeTableDict[id]) : null;
+            return null;
         }
 
-        public void WorldNodeSetData(WorldProNode worldNode, string nodeID)
+        public void WorldNodeSetData(IWorldProNode worldNode, string nodeID)
         {
             if (worldNode != null && IsValidID(nodeID))
             {
@@ -59,7 +60,7 @@ namespace ProjectOC.ProNodeNS
             }
         }
 
-        public void WorldNodeSetData(WorldProNode worldNode, ProNode node)
+        public void WorldNodeSetData(IWorldProNode worldNode, IProNode node)
         {
             if (worldNode != null && node != null)
             {
@@ -98,7 +99,7 @@ namespace ProjectOC.ProNodeNS
         {
             return !string.IsNullOrEmpty(uid) ? WorldProNodeDict.ContainsKey(uid) : false;
         }
-        public WorldProNode GetWorldProNode(string uid)
+        public IWorldProNode GetWorldProNode(string uid)
         {
             return IsValidUID(uid) ? WorldProNodeDict[uid] : null;
         }
