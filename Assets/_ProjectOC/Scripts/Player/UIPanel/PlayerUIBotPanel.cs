@@ -160,7 +160,7 @@ namespace ProjectOC.Player.UI
             this.UIBtnList.SetBtnAction("生产管理",
             () =>
             {
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("<color=yellow>生产管理</color>  生产管理", "生产管理"));
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("<color=yellow>生产管理</color>  生产管理", "生产管理",null));
             }
             );
             this.UIBtnList.SetBtnAction("科技树",
@@ -258,7 +258,6 @@ namespace ProjectOC.Player.UI
         private void SelectGrid_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             var vector2 = obj.ReadValue<UnityEngine.Vector2>();
-            Debug.Log("SelectGrid_canceled " + vector2 + " " + vector2.magnitude);
             this.UIBtnList.CanPerformRingNavigation = false;
             if (isEnterSelect)
             {

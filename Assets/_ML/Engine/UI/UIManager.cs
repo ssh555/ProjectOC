@@ -233,12 +233,14 @@ namespace ML.Engine.UI
         {
             public string msg1;
             public string msg2;
+            public Sprite ShowSprite;
 
             // ¹¹Ôìº¯Êý
-            public SideBarUIData(string message1, string message2)
+            public SideBarUIData(string message1, string message2,Sprite sprite)
             {
                 msg1 = message1;
                 msg2 = message2;
+                ShowSprite = sprite;
             }
         }
 

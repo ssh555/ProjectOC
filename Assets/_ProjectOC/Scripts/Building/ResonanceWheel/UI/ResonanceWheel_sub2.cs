@@ -24,12 +24,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         protected override void Awake()
         {
             base.Awake();
-
             //Ring
             var ringcontent = this.transform.Find("Ring").Find("Viewport").Find("Content");
-
             ring = ringcontent.Find("Ring").Find("ring");
-
+            this.CenterImage = ringcontent.Find("Ring").Find("CenterImage").Find("Image").GetComponent<Image>();
             Grids = new GridBeastType[ring.childCount];
             IsInit = true;
             Refresh();
@@ -161,15 +159,14 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         #region UI对象引用
         public ResonanceWheelUI parentUI = null;
-
         private Transform ring;
         //ring
         [ShowInInspector]
         private GridBeastType[] Grids;
         private bool isInitGridsSprite = false;
-
+        private bool isInitCenterImage = false;
         private int CurrentGridIndex = 0;//0到5
-
+        private Image CenterImage;
         #endregion
 
         public override void Refresh()
@@ -193,6 +190,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                 isInitGridsSprite = true;
             }
 
+            if(isInitCenterImage == false)
+            {
+                this.CenterImage.sprite = parentUI.beastTypeDic[parentUI.currentBeastType];
+                isInitCenterImage = true;
+            }
 
             for (int i = 0; i < Grids.Length; i++)
             {
@@ -205,10 +207,8 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     Grids[i].transform.Find("Selected").gameObject.SetActive(false);
                 }
             }
-
         }
         #endregion
-
 
         #region Resource
         #region TextContent
@@ -219,14 +219,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             public KeyTip Confirm;
             public KeyTip Back;
         }
-
         protected override void InitTextContentPathData()
         {
             this.abpath = "OCTextContent/ResonanceWheel";
             this.abname = "ResonanceWheel_sub2";
             this.description = "ResonanceWheel_sub2数据加载完成";
         }
-
         #endregion
         #endregion
     }
