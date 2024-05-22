@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using static Cinemachine.DocumentationSortingAttribute;
@@ -39,12 +40,12 @@ namespace ProjectOC.WorkerNS
         {
             return !string.IsNullOrEmpty(id) ? WorkerEchoTableDict.ContainsKey(id) : false;
         }
-        public string GetRandomCategoryString()
+        public WorkerCategory GetRandomCategory()
         {
-            List<string> list = WorkerEchoTableDict.Keys.ToList();
-            string t = list[Random.Next(list.Count - 1)];
-            t = t.Replace("WorkerEcho_", "");
-            return t;
+            Random random = new Random();
+            int randomValue = random.Next(2, 8);
+            WorkerCategory randomWorkerCategory = (WorkerCategory)randomValue;
+            return randomWorkerCategory;
         }
         public WorkerCategory GetCategory(string id)
         {

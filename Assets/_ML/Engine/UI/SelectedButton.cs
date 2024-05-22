@@ -18,7 +18,7 @@ namespace ML.Engine.UI
 
         private Transform Selected = null;
 
-        private UIBtnList UIBtnList = null;
+        protected UIBtnList UIBtnList = null;
         protected override void Start()
         {
             
