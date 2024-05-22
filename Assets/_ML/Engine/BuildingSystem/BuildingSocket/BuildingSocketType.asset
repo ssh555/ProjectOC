@@ -144,3 +144,6 @@ MonoBehaviour:
   - name: LWall_up
     displayName: "L\u5899\u9876"
     value: 39
+  - name: Roof_up
+    displayName: "\u9876\u9876\u5FC3"
+    value: 40
