@@ -54,7 +54,7 @@ namespace ML.Engine.UI
             }
             set
             {
-                if(value is PanelButton)
+                if(value is CustomButton)
                 {
                     //绑定PanelButton 的按键
                 }
@@ -473,7 +473,6 @@ namespace ML.Engine.UI
         public void AddBtn(GameObject prefab, UnityAction BtnAction = null, Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null, Action OnFinishAdd = null, string BtnText = null, bool NeedRefreshBtnInfo = true)
         {
             // 实例化
-            
             if(prefab.GetComponent<SelectedButton>() == null)
             {
                 prefab.transform.AddComponent<SelectedButton>();
@@ -621,7 +620,6 @@ namespace ML.Engine.UI
                             this.UIBtnListContainer?.RefreshEdge();
                         }
                     }
-                    
                     Checker.Check();
                 };
             }

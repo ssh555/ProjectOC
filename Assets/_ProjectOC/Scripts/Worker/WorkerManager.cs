@@ -176,7 +176,6 @@ namespace ProjectOC.WorkerNS
         {
             return workerAtlas.GetSprite("Tex2D_Worker_UI_" + category.ToString());
         }
-
         /// <summary>
         /// 所有调用的地方，都必须维护好GameObject或者Handle，在不使用GameObejct的时候，除了destroy之外还需要Release(handle)
         /// </summary>
