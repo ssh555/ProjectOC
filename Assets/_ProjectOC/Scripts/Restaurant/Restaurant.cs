@@ -61,7 +61,7 @@ namespace ProjectOC.RestaurantNS
 
         public void OnPositionChange(Vector3 differ)
         {
-            (this as MissionNS.IMissionObj<string>).OnPositionChangeTransport();
+            (this as MissionNS.IMissionObj).OnPositionChangeTransport();
             foreach (var seat in Seats)
             {
                 (seat as WorkerNS.IWorkerContainer).OnPositionChange(differ);

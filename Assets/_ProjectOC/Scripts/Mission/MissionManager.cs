@@ -107,10 +107,12 @@ namespace ProjectOC.MissionNS
         {
             if (mission.NeedAssignNum > 0)
             {
-                Dictionary<StoreNS.Store, int> result = ManagerNS.LocalGameManager.Instance.StoreManager.GetPutOutStore(mission.Data, mission.NeedAssignNum, 1, true, true);
+                Dictionary<StoreNS.IStore, int> result = mission.Data is ItemIDDataObj ? 
+                    ManagerNS.LocalGameManager.Instance.StoreManager.GetPutOutStore(mission.Data, mission.NeedAssignNum, 1, true, true) :
+                    ManagerNS.LocalGameManager.Instance.StoreManager.GetPutOutStore(mission.Data.GetDataID(), mission.NeedAssignNum, 1, true, true);
                 foreach (var kv in result)
                 {
-                    StoreNS.Store store = kv.Key;
+                    StoreNS.IStore store = kv.Key;
                     int missionNum = kv.Value;
                     WorkerNS.Worker worker = ManagerNS.LocalGameManager.Instance.WorkerManager.GetCanTransportWorker();
                     if (worker != null)

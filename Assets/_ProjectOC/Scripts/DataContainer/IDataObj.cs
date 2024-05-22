@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ProjectOC.DataNS
 {
-    public interface IDataObj
+    public interface IDataObj : System.IComparable<IDataObj>
     {
         public string GetDataID();
         public int GetDataWeight();

@@ -43,5 +43,10 @@ namespace ProjectOC.DataNS
         { 
             return ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(ID, num); 
         }
+        public int CompareTo(IDataObj other)
+        {
+            if (other == null) { return -1; }
+            return GetDataID().CompareTo(other.GetDataID());
+        }
     }
 }

@@ -115,6 +115,19 @@ namespace ProjectOC.DataNS
             }
             return new List<int>();
         }
+        public List<int> GetIndexs(string id, bool needSort = false)
+        {
+            if (!string.IsNullOrEmpty(id) && IndexDict.ContainsKey(id))
+            {
+                List<int> result = IndexDict[id].ToList();
+                if (needSort)
+                {
+                    result.Sort((x, y) => x.CompareTo(y));
+                }
+                return result;
+            }
+            return new List<int>();
+        }
 
         public bool HaveSetData(IDataObj data, bool needCanIn = false, bool needCanOut = false)
         {
@@ -153,6 +166,19 @@ namespace ProjectOC.DataNS
             return result;
         }
 
+        public int GetAmount(string id, DataOpType type, bool needCanIn = false, bool needCanOut = false)
+        {
+            int result = 0;
+            foreach (int index in GetIndexs(id))
+            {
+                if (Datas[index].HaveSetData && (!needCanIn || Datas[index].CanIn) && (!needCanOut || Datas[index].CanOut))
+                {
+                    result += Datas[index].GetAmount(type);
+                }
+            }
+            return result;
+        }
+
         public Dictionary<IDataObj, int> GetAmount(DataOpType type, bool needCanIn = false, bool needCanOut = false)
         {
             Dictionary<IDataObj, int> result = new Dictionary<IDataObj, int>();
@@ -173,6 +199,18 @@ namespace ProjectOC.DataNS
                 }
             }
             return result;
+        }
+
+        public bool HaveAnyNotSetData(bool needCanIn = false, bool needCanOut = false)
+        {
+            for (int i = 0; i < GetCapacity(); i++)
+            {
+                if (!Datas[i].HaveSetData && (!needCanIn || Datas[i].CanIn) && (!needCanOut || Datas[i].CanOut))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
         #endregion
 
@@ -374,6 +412,41 @@ namespace ProjectOC.DataNS
                 return 0;
             }
         }
+        public int ChangeAmount(string id, int amount, DataOpType addType, DataOpType removeType, bool exceed = false, bool complete = true, bool needCanIn = false, bool needCanOut = false)
+        {
+            lock (this)
+            {
+                if (!string.IsNullOrEmpty(id) && amount > 0 && CheckDataOpType(addType, removeType, exceed))
+                {
+                    int removeNum = GetAmount(id, removeType, needCanIn, needCanOut);
+                    if (!exceed && removeNum == 0 && (!complete || removeNum < amount)) { return 0; }
+                    int num = amount;
+                    int temp = -1;
+                    foreach (int index in GetIndexs(id, true))
+                    {
+                        if ((!needCanIn || Datas[index].CanIn) && (!needCanOut || Datas[index].CanOut))
+                        {
+                            temp = temp == -1 ? index : temp;
+                            int cur = Datas[index].GetAmount(removeType);
+                            cur = cur <= num ? cur : num;
+                            Datas[index].ChangeAmount(addType, cur);
+                            Datas[index].ChangeAmount(removeType, -cur);
+                            num -= cur;
+                            if (num <= 0) { break; }
+                        }
+                    }
+                    if (exceed && num > 0 && temp >= 0)
+                    {
+                        Datas[temp].ChangeAmount(addType, num);
+                        Datas[temp].ChangeAmount(removeType, -num);
+                        num = 0;
+                    }
+                    OnDataChangeEvent?.Invoke();
+                    return amount - num;
+                }
+                return 0;
+            }
+        }
 
         public int ChangeAmount(int index, int amount, DataOpType addType, DataOpType removeType, bool exceed = false, bool complete = true)
         {
@@ -391,6 +464,15 @@ namespace ProjectOC.DataNS
                     return num;
                 }
                 return 0;
+            }
+        }
+
+        public void SortDataContainer(bool reverse = false)
+        {
+            lock (this)
+            {
+                int flag = reverse ? -1 : 1;
+                Array.Sort(Datas, (x, y) => flag * x.GetData().CompareTo(y.GetData()));
             }
         }
 

@@ -107,8 +107,14 @@ namespace ProjectOC.DataNS
         {
             if (item != null && !string.IsNullOrEmpty(item.ID) && item.Amount > 0)
             {
-                IDataObj dataObj = item is IDataObj ? (item as IDataObj) : new ItemIDDataObj(item.ID);
-                return DataContainer.ChangeAmount(dataObj, item.Amount, DataOpType.Storage, DataOpType.Empty) == item.Amount;
+                if (item is IDataObj dataObj)
+                {
+                    return DataContainer.ChangeAmount(dataObj, item.Amount, DataOpType.Storage, DataOpType.Empty) == item.Amount;
+                }
+                else
+                {
+                    return DataContainer.ChangeAmount(item.ID, item.Amount, DataOpType.Storage, DataOpType.Empty) == item.Amount;
+                }
             }
             return false;
         }
@@ -117,8 +123,14 @@ namespace ProjectOC.DataNS
         {
             if (item != null && !string.IsNullOrEmpty(item.ID) && item.Amount > 0)
             {
-                IDataObj dataObj = item is IDataObj ? (item as IDataObj) : new ItemIDDataObj(item.ID);
-                return DataContainer.ChangeAmount(dataObj, item.Amount, DataOpType.Empty, DataOpType.Storage) == item.Amount;
+                if (item is IDataObj dataObj)
+                {
+                    return DataContainer.ChangeAmount(dataObj, item.Amount, DataOpType.Empty, DataOpType.Storage) == item.Amount;
+                }
+                else
+                {
+                    return DataContainer.ChangeAmount(item.ID, item.Amount, DataOpType.Empty, DataOpType.Storage) == item.Amount;
+                }
             }
             return false;
         }
@@ -127,9 +139,15 @@ namespace ProjectOC.DataNS
         {
             if (item != null && !string.IsNullOrEmpty(item.ID) && amount > 0)
             {
-                IDataObj dataObj = item is IDataObj ? (item as IDataObj) : new ItemIDDataObj(item.ID);
                 ML.Engine.InventorySystem.Item result = ML.Engine.InventorySystem.ItemManager.Instance.SpawnItem(item.ID);
-                result.Amount = DataContainer.ChangeAmount(dataObj, amount, DataOpType.Empty, DataOpType.Storage, complete: false);
+                if (item is IDataObj dataObj)
+                {
+                    result.Amount = DataContainer.ChangeAmount(dataObj, amount, DataOpType.Empty, DataOpType.Storage, complete: false);
+                }
+                else
+                {
+                    result.Amount = DataContainer.ChangeAmount(item.ID, amount, DataOpType.Empty, DataOpType.Storage, complete: false);
+                }
                 return result;
             }
             return null;
@@ -139,16 +157,14 @@ namespace ProjectOC.DataNS
         {
             if (!string.IsNullOrEmpty(itemID) && amount > 0)
             {
-                IDataObj dataObj = new ItemIDDataObj(itemID);
-                return DataContainer.ChangeAmount(dataObj, amount, DataOpType.Empty, DataOpType.Storage) == amount;
+                return DataContainer.ChangeAmount(itemID, amount, DataOpType.Empty, DataOpType.Storage) == amount;
             }
             return false;
         }
 
         public int GetItemAllNum(string id)
         {
-            IDataObj dataObj = new ItemIDDataObj(id);
-            return DataContainer.GetAmount(dataObj, DataOpType.Storage);
+            return DataContainer.GetAmount(id, DataOpType.Storage);
         }
 
         public ML.Engine.InventorySystem.Item[] GetItemList()
