@@ -159,7 +159,9 @@ namespace ProjectOC.MineSystem
                     bigMap.SmallMapEditDatas.Add(_asset);
                 }
             }
-            bigMap.SmallMapEditDatas.Sort((a, b) => string.Compare(a.name, b.name, System.StringComparison.Ordinal));
+
+            bigMap.SmallMapEditDatas.Sort((a, b) =>
+                (int.Parse(a.name.Split("_")[1]).CompareTo(int.Parse(b.name.Split("_")[1]))));
         }
         public override void OnDisable()
         {
@@ -373,6 +375,7 @@ namespace ProjectOC.MineSystem
                 childTransforms[i].transform.SetSiblingIndex(i);
             }
         }
+
         private void OnSceneGUI()
         {
             if (tempMineScale != bigMap.mineToTileScale)
