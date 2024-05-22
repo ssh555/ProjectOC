@@ -13,7 +13,6 @@ namespace ProjectOC.WorkerNS
         public WorkerCategory workerCategory;
         public ExternWorker(WorkerCategory workerCategory, float time, WorkerEchoBuilding workerEchoBuilding, int index)
         {
-            Debug.Log("c " + workerCategory);
             this.workerCategory = workerCategory;
             Timer = new CounterDownTimer(time);
             Timer.OnEndEvent += () =>
@@ -41,6 +40,14 @@ namespace ProjectOC.WorkerNS
         {
             int timeCost = ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetTimeCost(id);
             return (int)(timeCost * FactorTimeCost + ModifyTimeCost);
+        }
+
+        public (int,int) GetRealTimeCostInMSForm(WorkerCategory workerCategory)
+        {
+            float time = GetRealTimeCost("WorkerEcho_"+workerCategory);
+            int min = (int)(time) / 60;
+            int sec = (int)(time) - min * 60;
+            return (min, sec);
         }
 
         public WorkerEcho(WorkerEchoBuilding workerEchoBuilding)
@@ -111,7 +118,7 @@ namespace ProjectOC.WorkerNS
 
         public void StopEcho(string id,int index, ML.Engine.InventorySystem.IInventory inventory)
         {
-            foreach(var pair in ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRaw(id))
+            foreach(var pair in ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRaw("WorkerEcho_"+id))
             {
                 foreach (var item in ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(pair.id, pair.num))
                 {

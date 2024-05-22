@@ -991,7 +991,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2668055560712598238}
   m_Layer: 0
-  m_Name: Random
+  m_Name: CenterImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1820,7 +1820,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1398196846018924952
 RectTransform:
   m_ObjectHideFlags: 0
