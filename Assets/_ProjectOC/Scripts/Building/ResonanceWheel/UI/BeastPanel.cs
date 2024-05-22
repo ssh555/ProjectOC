@@ -26,6 +26,7 @@ using TMPro;
 using UnityEditor;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
+using ProjectOC.Order;
 namespace ProjectOC.ResonanceWheelSystem.UI
 {
     public class BeastPanel : ML.Engine.UI.UIBasePanel<BeastPanelStruct>, ITickComponent
@@ -47,7 +48,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             WalkSpeed = Content.Find("WalkSpeed").Find("Text").GetComponent<TMPro.TextMeshProUGUI>();
             WalkSpeedNumText = Content.Find("WalkSpeed").Find("NumText").GetComponent<TMPro.TextMeshProUGUI>();
 
-
+            ProfileImage = Info1.Find("Icon").Find("IconImage").GetComponent<Image>();
             GenderImage = Info1.Find("Icon").Find("GenderImage").GetComponent<Image>();
             BeastName = Info1.Find("Icon").Find("Name").GetComponent<TMPro.TextMeshProUGUI>();
 
@@ -101,6 +102,12 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
             base.Exit();
             ClearTemp();
+        }
+
+        public override void OnRecovery()
+        {
+            //Recovery ²»ÓÃË¢ÐÂ ·ÀÖ¹É¾³ý°´Å¥Òì²½±¨´í
+            this.RegisterInput();
         }
 
         public override void OnEnter()
@@ -168,10 +175,11 @@ namespace ProjectOC.ResonanceWheelSystem.UI
 
         private void Expel_performed(InputAction.CallbackContext obj)
         {
-            LocalGameManager.Instance.WorkerManager.DeleteWorker(Workers[CurrentBeastIndex]);
-            this.BeastList.DeleteButton(CurrentBeastIndex, () => { this.Refresh(); });
+            GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.PopUpUI, new UIManager.PopUpUIData("ÇýÖðÒþÊÞ", "ÒþÊÞ½«ÓÀ¾ÃÏûÊ§£¡", null, () => {
+                LocalGameManager.Instance.WorkerManager.DeleteWorker(Workers[CurrentBeastIndex]);
+                this.BeastList.DeleteButton(CurrentBeastIndex, () => { this.Refresh(); });
+            }));
         }
-
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
             UIMgr.PopPanel();
@@ -232,6 +240,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         List<Worker> Workers = new List<Worker>();
 
         //BeastInfo
+        private Image ProfileImage;
         private Image GenderImage;
         private TMPro.TextMeshProUGUI BeastName;
 
@@ -349,8 +358,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
                     this.IndustryEfficiencyNumText.text = worker.GetEff(SkillType.Industry).ToString();
                     this.WeightMaxNumText.text = worker.RealBURMax.ToString();
                 }
-                
-                
+
+                //Í·Ïñ
+                ProfileImage.sprite = LocalGameManager.Instance.WorkerManager.GetWorkerProfile(worker.Category);
+
                 //ÐÔ±ð
                 if (worker.Gender == Gender.Male)
                 {
@@ -510,7 +521,10 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             {
                 var tPrefab = this.objectPool.GetNextObject("BeastBioPool");
                 var Name = tPrefab.transform.Find("Bio").Find("Name").GetComponent<TextMeshProUGUI>();
+                tPrefab.transform.Find("Bio").Find("IconImage").GetComponent<Image>().sprite = LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Workers[i].Category);
+
                 Name.text = Workers[i].Name;
+
                 int APStatus = Workers[i].GetAPStatu();
                 var AP = tPrefab.transform.Find("Bio").Find("AP");
                 for (int j = 0; j < AP.childCount - 1; j++)

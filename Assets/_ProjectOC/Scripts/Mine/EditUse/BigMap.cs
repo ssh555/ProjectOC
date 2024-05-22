@@ -20,5 +20,7 @@ namespace ProjectOC.MineSystem
 
         public Color dataTileColor = new Color(44, 46, 47);
         public Color emptyTileColor = new Color(161, 162, 166);
+
+        public List<Color> bigMapRegionColor = new List<Color>();
     }
 }
