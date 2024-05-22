@@ -85,5 +85,7 @@ namespace ML.Engine.BuildingSystem.BuildingSocket
 		QWall_up = 38,
 		[LabelText("L墙顶")]
 		LWall_up = 39,
+		[LabelText("顶顶心")]
+		Roof_up = 40,
 	}
 }
