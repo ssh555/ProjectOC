@@ -414,22 +414,16 @@ namespace ProjectOC.MineSystem
             // Selection.activeObject = asset;
         }
 
-        void ShowTex(Sprite _sprite)
-        {
-            mapPreview.GetComponent<SpriteRenderer>().sprite = _sprite;
-            Vector3 _pos = new Vector3(_sprite.texture.width / 2,_sprite.texture.height / 2,0);
-            mapPreview.localPosition = _pos;
-        }
 
 
         void ReGenerateAsset()
         {
             GenerateBigMapPrefab();
-            //
-            // for (int i = 0; i < bigMap.SmallMapEditDatas.Count; i++)
-            // {
-            //     GenerateSmallMapPrefab(i);
-            // }
+            
+            for (int i = 0; i < bigMap.SmallMapEditDatas.Count; i++)
+            {
+                GenerateSmallMapPrefab(i);
+            }
         }
 
         private string bigMapDataJson = "Assets/_ProjectOC/OCResources/Json/TableData/WorldMap.json";
@@ -448,9 +442,9 @@ namespace ProjectOC.MineSystem
             
             //修改部分: 生成对应的Tex和 Collider2D
             ProcessMapJsonData(_jsonData);
-            _prefabData.transform.SetParent(GameObject.Find("Canvas").transform);
+            // _prefabData.transform.SetParent(GameObject.Find("Canvas").transform);
             //PrefabUtility.ApplyPrefabInstance(_prefabData, InteractionMode.UserAction);
-            //Destory _prefabData
+            //DestroyImmediate(_prefabData);
             
             int _width = 0;
             int _height = 0;
@@ -458,7 +452,6 @@ namespace ProjectOC.MineSystem
             void ProcessMapJsonData(string _data)
             {
                 Dictionary<int, List<Vector2>> _regions = new Dictionary<int, List<Vector2>>();
-                Dictionary<int, List<Vector2>> _regionBoundaried = new Dictionary<int, List<Vector2>>();
                 int[,] data = JsonConvert.DeserializeObject<int[,]>(_data);
                 _width = data.GetLength(0);
                 _height = data.GetLength(1);
@@ -479,51 +472,22 @@ namespace ProjectOC.MineSystem
                                 // Debug.Log($"New  {x},{y}  Label{label}");
                                 _regions[label] = new List<Vector2>();
                             }
-
-                            if (!_regionBoundaried.ContainsKey(label))
-                            {
-                                _regionBoundaried[label] = new List<Vector2>();
-                            }
-
+                            
                             _regions[label].Add(new Vector2(x, y));
-                            //图像 二维数组x,y 是Unity下的y,x ????
-                            if (IsBoundaryPixel(x, y, label))
-                            {
-                                _regionBoundaried[label].Add(new Vector2(x, y));
-                            }
                         }
                     }
                 }
 
                 foreach (var _region in _regions)
                 {
-                    CreateSpriteForRegion(_region.Key, _region.Value,_regionBoundaried[_region.Key]);
+                    CreateSpriteForRegion(_region.Key, _region.Value);
                 }
                 SortTransformByName(normalRegionTransf);
-                
-                bool IsBoundaryPixel(int x, int y, int label)
-                {
-                    int[] dx = { -1, 1, 0, 0 };
-                    int[] dy = { 0, 0, -1, 1 };
 
-                    for (int i = 0; i < 4; i++)
-                    {
-                        int nx = x + dx[i];
-                        int ny = y + dy[i];
-                        if (nx >= 0 && ny >= 0 && nx < _height && ny < _width)
-                        {
-                            if (data[ny, nx] != label)
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                    return false;
-                }
             }
 
             //处理每个小区域数据
-            void CreateSpriteForRegion(int _lable, List<Vector2> _positions,List<Vector2> _boundPositions)
+            void CreateSpriteForRegion(int _lable, List<Vector2> _positions)
             {
                 if (_lable == -1)       //空白区
                 {
@@ -573,25 +537,9 @@ namespace ProjectOC.MineSystem
                     // Color randomColor = new Color(_randomValue, _randomValue, _randomValue);
                     Color randomColor = Color.HSVToRGB(Random.Range(0f,1f),Random.Range(0f,0.3f),Random.Range(0.15f,0.9f));
                     _uiImage.color = randomColor;
-                    
-                    // 添加Collider部分
-                    
-                    PolygonCollider2D polygonCollider = newPrefab.GetComponent<PolygonCollider2D>();
-                    polygonCollider.SetPath(0,_boundPositions);
+
                 }
-                
-                
             }
-            List<Vector2> GetUniquePositions(List<Vector2> positions)
-            {
-                HashSet<Vector2> uniquePositions = new HashSet<Vector2>();
-                foreach (var pos in positions)
-                {
-                    uniquePositions.Add(pos);
-                }
-                return new List<Vector2>(uniquePositions);
-            }
-            
         }
 
         
