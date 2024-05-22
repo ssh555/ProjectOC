@@ -144,7 +144,7 @@ namespace ProjectOC.MissionNS
         public void Timer_OnEndEvent()
         {
             List<MissionTransport> missionList = MissionTransports.ToList();
-            missionList.Sort(new MissionTransport.Sort());
+            missionList.Sort(new MissionTransport());
             foreach (var mission in missionList)
             {
                 if (mission.Type == MissionTransportType.ProNode_Store || mission.Type == MissionTransportType.Outside_Store)

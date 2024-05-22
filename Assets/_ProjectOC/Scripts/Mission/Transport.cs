@@ -112,7 +112,6 @@ namespace ProjectOC.MissionNS
             }
             else
             {
-                Source.PutIn(Data, num);
                 End();
             }
         }

@@ -6,7 +6,7 @@ using ProjectOC.DataNS;
 namespace ProjectOC.MissionNS
 {
     [LabelText("搬运任务"), System.Serializable]
-    public class MissionTransport
+    public class MissionTransport : IComparer<MissionTransport>
     {
         #region Data
         [LabelText("搬运数据"), ReadOnly]
@@ -41,6 +41,7 @@ namespace ProjectOC.MissionNS
         #region Method
         public MissionTransport(MissionTransportType type, IDataObj data, int missionNum, IMissionObj imission, MissionInitiatorType initiatorType)
         {
+            if (data == null) { return; }
             Data = data;
             Initiator = imission;
             Initiator.AddMissionTranport(this);
@@ -98,32 +99,29 @@ namespace ProjectOC.MissionNS
             Initiator.RemoveMissionTranport(this);
             if (removeManager)
             {
-                ML.Engine.Manager.GameManager.Instance.GetLocalManager<MissionManager>().RemoveMissionTransport(this);
+                ManagerNS.LocalGameManager.Instance.MissionManager.RemoveMissionTransport(this);
             }
         }
         #endregion
 
-        #region Sort
-        public class Sort : IComparer<MissionTransport>
+        #region Compare
+        public int Compare(MissionTransport x, MissionTransport y)
         {
-            public int Compare(MissionTransport x, MissionTransport y)
+            if (x == null || y == null)
             {
-                if (x == null || y == null)
-                {
-                    return (x == null).CompareTo((y == null));
-                }
-                if (x.Type != y.Type)
-                {
-                    return x.Type.CompareTo(y.Type);
-                }
-                int priorityX = (int)x.Initiator.GetTransportPriority();
-                int priorityY = (int)y.Initiator.GetTransportPriority();
-                if (priorityX != priorityY)
-                {
-                    return priorityX.CompareTo(priorityY);
-                }
-                return x.Initiator.GetUID().CompareTo(y.Initiator.GetUID());
+                return (x == null).CompareTo((y == null));
             }
+            if (x.Type != y.Type)
+            {
+                return x.Type.CompareTo(y.Type);
+            }
+            int priorityX = (int)x.Initiator.GetTransportPriority();
+            int priorityY = (int)y.Initiator.GetTransportPriority();
+            if (priorityX != priorityY)
+            {
+                return priorityX.CompareTo(priorityY);
+            }
+            return x.Initiator.GetUID().CompareTo(y.Initiator.GetUID());
         }
         #endregion
     }
