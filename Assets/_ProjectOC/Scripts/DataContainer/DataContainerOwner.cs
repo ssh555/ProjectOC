@@ -14,6 +14,10 @@ namespace ProjectOC.DataNS
         {
             DataContainer = new DataContainer(capacity, dataCapacity);
         }
+        public void InitData(int capacity, List<int> dataCapacitys)
+        {
+            DataContainer = new DataContainer(capacity, dataCapacitys);
+        }
         public void ClearData()
         {
             (this as MissionNS.IMissionObj).Clear();

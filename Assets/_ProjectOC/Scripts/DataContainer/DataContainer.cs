@@ -24,6 +24,17 @@ namespace ProjectOC.DataNS
             IndexDict = new Dictionary<string, HashSet<int>>();
             OnDataChangeEvent?.Invoke();
         }
+        public DataContainer(int capacity, List<int> dataCapacitys)
+        {
+            if (capacity < 0 || dataCapacitys == null || dataCapacitys.Count < capacity) { return; }
+            Datas = new Data[capacity];
+            for (int i = 0; i < capacity; i++)
+            {
+                Datas[i] = new Data(dataCapacitys[i]);
+            }
+            IndexDict = new Dictionary<string, HashSet<int>>();
+            OnDataChangeEvent?.Invoke();
+        }
         public void Reset(List<IDataObj> datas, List<int> dataCapacitys)
         {
             if (datas == null || dataCapacitys == null || dataCapacitys.Count < datas.Count) { return; }
@@ -221,19 +232,8 @@ namespace ProjectOC.DataNS
             {
                 Dictionary<IDataObj, int> result = new Dictionary<IDataObj, int>();
                 if (capacity < 0 || dataCapacity < 0) { return result; }
-                Data[] newDatas = new Data[capacity];
-                for (int i = 0; i < capacity; i++)
-                {
-                    if (IsValidIndex(i)) 
-                    {
-                        newDatas[i] = Datas[i];
-                    }
-                    else
-                    {
-                        newDatas[i] = new Data(dataCapacity);
-                    }
-                }
-                for (int i = capacity; i < Datas.Length; i++)
+                int oldCapacity = Datas.Length;
+                for (int i = capacity; i < oldCapacity; i++)
                 {
                     if (Datas[i].StorageAll > 0)
                     {
@@ -245,32 +245,35 @@ namespace ProjectOC.DataNS
                         result[key] += Datas[i].StorageAll;
                     }
                 }
-
+                Array.Resize(ref Datas, capacity);
+                for (int i=oldCapacity; i < capacity; i++)
+                {
+                    Datas[i] = new Data(dataCapacity);
+                }
                 for (int i = 0; i < capacity; i++)
                 {
-                    if (newDatas[i].StorageAll > dataCapacity)
+                    if (Datas[i].StorageAll > dataCapacity)
                     {
-                        int remove = newDatas[i].StorageAll - dataCapacity;
-                        IDataObj key = newDatas[i].GetData();
+                        int remove = Datas[i].StorageAll - dataCapacity;
+                        IDataObj key = Datas[i].GetData();
                         if (!result.ContainsKey(key))
                         {
                             result[key] = 0;
                         }
                         result[key] += remove;
-                        int storage = newDatas[i].GetAmount(DataOpType.Storage);
+                        int storage = Datas[i].GetAmount(DataOpType.Storage);
                         if (storage >= remove)
                         {
-                            newDatas[i].ChangeAmount(DataOpType.Storage, -remove);
+                            Datas[i].ChangeAmount(DataOpType.Storage, -remove);
                         }
                         else
                         {
-                            newDatas[i].ChangeAmount(DataOpType.Storage, -storage);
-                            newDatas[i].ChangeAmount(DataOpType.StorageReserve, storage - remove);
+                            Datas[i].ChangeAmount(DataOpType.Storage, -storage);
+                            Datas[i].ChangeAmount(DataOpType.StorageReserve, storage - remove);
                         }
                     }
-                    newDatas[i].ChangeAmount(DataOpType.MaxCapacity, dataCapacity);
+                    Datas[i].ChangeAmount(DataOpType.MaxCapacity, dataCapacity);
                 }
-                Datas = newDatas;
                 ResetIndexDict();
                 OnDataChangeEvent?.Invoke();
                 return result;
@@ -282,19 +285,8 @@ namespace ProjectOC.DataNS
             lock (this)
             {
                 Dictionary<IDataObj, int> result = new Dictionary<IDataObj, int>();
-                if (capacity < 0 || dataCapacitys.Count < capacity) { return result; }
-                Data[] newDatas = new Data[capacity];
-                for (int i = 0; i < capacity; i++)
-                {
-                    if (IsValidIndex(i))
-                    {
-                        newDatas[i] = Datas[i];
-                    }
-                    else
-                    {
-                        newDatas[i] = new Data(dataCapacitys[i]);
-                    }
-                }
+                if (capacity < 0 || dataCapacitys == null || dataCapacitys.Count < capacity) { return result; }
+                int oldCapacity = Datas.Length;
                 for (int i = capacity; i < Datas.Length; i++)
                 {
                     if (Datas[i].StorageAll > 0)
@@ -307,36 +299,69 @@ namespace ProjectOC.DataNS
                         result[key] += Datas[i].StorageAll;
                     }
                 }
-
+                Array.Resize(ref Datas, capacity);
+                for (int i = oldCapacity; i < capacity; i++)
+                {
+                    Datas[i] = new Data(dataCapacitys[i]);
+                }
                 for (int i = 0; i < capacity; i++)
                 {
                     if (dataCapacitys[i] < 0) { continue; }
-                    if (newDatas[i].StorageAll > dataCapacitys[i])
+                    if (Datas[i].StorageAll > dataCapacitys[i])
                     {
-                        int remove = newDatas[i].StorageAll - dataCapacitys[i];
-                        IDataObj key = newDatas[i].GetData();
+                        int remove = Datas[i].StorageAll - dataCapacitys[i];
+                        IDataObj key = Datas[i].GetData();
                         if (!result.ContainsKey(key))
                         {
                             result[key] = 0;
                         }
                         result[key] += remove;
-                        int storage = newDatas[i].GetAmount(DataOpType.Storage);
+                        int storage = Datas[i].GetAmount(DataOpType.Storage);
                         if (storage >= remove)
                         {
-                            newDatas[i].ChangeAmount(DataOpType.Storage, -remove);
+                            Datas[i].ChangeAmount(DataOpType.Storage, -remove);
                         }
                         else
                         {
-                            newDatas[i].ChangeAmount(DataOpType.Storage, -storage);
-                            newDatas[i].ChangeAmount(DataOpType.StorageReserve, storage - remove);
+                            Datas[i].ChangeAmount(DataOpType.Storage, -storage);
+                            Datas[i].ChangeAmount(DataOpType.StorageReserve, storage - remove);
                         }
                     }
-                    newDatas[i].ChangeAmount(DataOpType.MaxCapacity, dataCapacitys[i]);
+                    Datas[i].ChangeAmount(DataOpType.MaxCapacity, dataCapacitys[i]);
                 }
-                Datas = newDatas;
                 ResetIndexDict();
                 OnDataChangeEvent?.Invoke();
                 return result;
+            }
+        }
+
+        public void AddCapacity(int addCapacity, int dataCapacity)
+        {
+            lock (this)
+            {
+                if (addCapacity < 0 || dataCapacity < 0) { return; }
+                int oldCapacity = Datas.Length;
+                Array.Resize(ref Datas, oldCapacity + addCapacity);
+                for (int i = 0; i < addCapacity; i++)
+                {
+                    Datas[oldCapacity+i] = new Data(dataCapacity);
+                }
+                OnDataChangeEvent?.Invoke();
+            }
+        }
+
+        public void AddCapacity(int addCapacity, List<int> dataCapacitys)
+        {
+            lock (this)
+            {
+                if (addCapacity < 0 || dataCapacitys == null || dataCapacitys.Count < addCapacity) { return; }
+                int oldCapacity = Datas.Length;
+                Array.Resize(ref Datas, oldCapacity + addCapacity);
+                for (int i = 0; i < addCapacity; i++)
+                {
+                    Datas[oldCapacity+i] = new Data(dataCapacitys[i]);
+                }
+                OnDataChangeEvent?.Invoke();
             }
         }
 
