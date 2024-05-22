@@ -387,7 +387,7 @@ public class OrderBoardPanel : UIBasePanel<OrderBoardPanelStruct>
 
                                 timer.OnUpdateEvent = null;
                                 timer.OnUpdateEvent += (time) => {
-                                    RemainTimeText.text = timer.ConvertToMin() + " MIN";
+                                    RemainTimeText.text = timer.currentTimeInMForm.ToString() + " MIN";
                                     slider.value = (float)(timer.CurrentTime / timer.Duration);
                                 };
                                 btn.name = order.OrderInstanceID;

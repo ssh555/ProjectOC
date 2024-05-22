@@ -174,7 +174,6 @@ namespace ProjectOC.WorkerNS
 
         public Sprite GetWorkerProfile(WorkerCategory category)
         {
-            //Debug.Log("GetWorkerProfile " + "Tex2D_Worker_UI_" + category.ToString());
             return workerAtlas.GetSprite("Tex2D_Worker_UI_" + category.ToString());
         }
 
@@ -244,7 +243,7 @@ namespace ProjectOC.WorkerNS
             {
                 return false;
             }
-            foreach (var formula in ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRaw(workerID))
+            foreach (var formula in ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRaw("WorkerEcho_"+workerID))
             {
                 inventory.RemoveItem(formula.id, formula.num);
             }
