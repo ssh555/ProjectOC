@@ -1,6 +1,9 @@
+using ML.Engine.UI;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -8,6 +11,7 @@ using UnityEngine.UI;
 
 namespace ML.Engine.UI
 {
+    [System.Serializable]
     public class SelectedButton : Button
     {
         public event System.Action OnSelectedEnter;
@@ -15,9 +19,7 @@ namespace ML.Engine.UI
 
         public System.Action PreInteract;
         public System.Action PostInteract;
-
         private Transform Selected = null;
-
         protected UIBtnList UIBtnList = null;
         protected override void Start()
         {
@@ -154,3 +156,5 @@ namespace ML.Engine.UI
     }
 
 }
+
+
