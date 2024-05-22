@@ -807,7 +807,7 @@ namespace ProjectOC.WorkerNS
                     ContainerDict[key]?.TempRemoveWorker();
                 }
             }
-            Threshold = threshold;
+            Threshold = 3;
             Agent.isStopped = false;
             Agent.speed = RealWalkSpeed;
             if (Agent.SetDestination(target))
