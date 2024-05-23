@@ -44,7 +44,8 @@ namespace ProjectOC.MineSystem
         /// 当前选中的大地图层
         /// </summary>
         private int curMapLayerIndex;
-        public int CurMapLayerIndex { get { return curMapLayerIndex; } }
+        [ShowInInspector]
+        public int CurMapLayerIndex { get { return curMapLayerIndex; } set { curMapLayerIndex = value; } }
         /// <summary>
         /// 岛舵台ui refresh
         /// </summary>

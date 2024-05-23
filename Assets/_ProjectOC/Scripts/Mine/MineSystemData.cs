@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -109,7 +110,8 @@ namespace ProjectOC.MineSystem
             public Vector2 TargetPos { get { return targetPos; } set {  targetPos = value; } }
             [LabelText("是否在移动"), ReadOnly, ShowInInspector]
             private bool isMoving;
-            public bool IsMoving { get { return isMoving; } set { isMoving = value; } }
+            public bool IsMoving { get { return isMoving; } set { isMoving = value; OnisMovingChanged?.Invoke(value); } }
+            public event Action<bool> OnisMovingChanged;
             [LabelText("当前所在的地图层"), ReadOnly, ShowInInspector]
             private int curMineLayer;
             [LabelText("当前所在的大地图区块ID"), ReadOnly, ShowInInspector]
@@ -117,20 +119,24 @@ namespace ProjectOC.MineSystem
 
             private Vector2 lastPos;
             public Vector2 LastPos { get { return lastPos; } }
+            public Vector2 MovingDir { get { return (targetPos - curPos).normalized; } }
+            private bool isPause;
+            public bool IsPause { get { return isPause; } set { isPause = value; } }
             public MainIslandData()
             {
                 lastPos = curPos;
+                isPause = false;
             }
             
             public bool isReachTarget { 
             get {
+                    if(isPause) return false;
                     if (Vector2.Distance(curPos, targetPos)<1f)
                     {
-                        
-                        isMoving = false;
+                        IsMoving = false;
                         return true;
                     }
-                    if(isMoving)
+                    if(IsMoving)
                     {
                         lastPos = curPos;
                         curPos += moveSpeed * (targetPos - curPos).normalized;
@@ -144,7 +150,7 @@ namespace ProjectOC.MineSystem
             {
                 curPos = lastPos;
                 targetPos = curPos;
-                isMoving = false;
+                IsMoving = false;
             }
             
         }
