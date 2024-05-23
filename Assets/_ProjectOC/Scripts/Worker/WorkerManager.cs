@@ -18,6 +18,7 @@ namespace ProjectOC.WorkerNS
         #region ILocalManager
         private const string SpriteAtlasPath = "SA_Worker_UI";
         private const string WorldObjPath = "Prefab_AICharacter";
+        [ShowInInspector]
         private UnityEngine.U2D.SpriteAtlas workerAtlas = null;
         private UnityEngine.ResourceManagement.AsyncOperations.AsyncOperationHandle spriteAtalsHandle;
         private ML.Engine.ABResources.ABJsonAssetProcessor<WorkerNameTableData[]> ABJAProcessor;
@@ -170,6 +171,11 @@ namespace ProjectOC.WorkerNS
         {
             return workerAtlas.GetSprite(name);
         }
+
+        public Sprite GetWorkerProfile(WorkerCategory category)
+        {
+            return workerAtlas.GetSprite("Tex2D_Worker_UI_" + category.ToString());
+        }
         /// <summary>
         /// 所有调用的地方，都必须维护好GameObject或者Handle，在不使用GameObejct的时候，除了destroy之外还需要Release(handle)
         /// </summary>
@@ -236,7 +242,7 @@ namespace ProjectOC.WorkerNS
             {
                 return false;
             }
-            foreach (var formula in ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRaw(workerID))
+            foreach (var formula in ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRaw("WorkerEcho_"+workerID))
             {
                 inventory.RemoveItem(formula.id, formula.num);
             }

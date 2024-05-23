@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEditor;
 using Random = UnityEngine.Random;
 
-namespace MineSystem
+namespace ProjectOC.MineSystem
 {
     [CustomEditor(typeof(TileMap))]
 //CustomEditor 部分的数据，当跳转到其他Inspect面板后
@@ -19,20 +19,16 @@ namespace MineSystem
         private List<GameObject> selectMine = new List<GameObject>();
         private BigMap bigMap;
         private bool showShortCut = false;
-        private int tempMapWidht, tempMapHeight;
+        private int tempMapWidht, tempMapHeight,copyMapIndex = -1;
 
         private bool ShowProgrammerData = false;
         public override void OnEnable()
         {
             tileMap = target as TileMap;
-            tileMap.gridParentTransf = GameObject.Find("Editor/GridTransform").transform;
-            tileMap.mineParentTransf = GameObject.Find("Editor/MineTransform").transform;
-            tileMap.selectOutline = GameObject.Find("Editor/Others").transform.GetChild(0).gameObject;
-            tileMap.TilePrefab = GameObject.Find("Editor/Others").transform.GetChild(1).gameObject;
-            tileMap.MinePrefab = GameObject.Find("Editor/Others").transform.GetChild(2).gameObject;
-            tileMap.brushIcon = GameObject.Find("Editor/Others").transform.GetChild(3).gameObject;
-            bigMap = tileMap.transform.GetComponentInParent<BigMap>();
 
+            bigMap = tileMap.transform.GetComponentInParent<BigMap>();
+            tileMap.SceneInit();
+            tileMap.textMeshTransf.gameObject.SetActive(true);
             
             CheckEditData();
        
@@ -43,22 +39,13 @@ namespace MineSystem
 
         public override void OnDisable()
         {
+            tileMap.textMeshTransf.gameObject.SetActive(false);
             base.OnDisable();
             SaveAssetData();
         }
-
+    
         void CheckEditData()
         {
-            
-            if (tileMap.SmallMapEditData == null)
-            {
-                string[] nameStr = tileMap.gameObject.name.Split("_");
-                int _index = int.Parse(nameStr[1]);
-                tileMap.SmallMapEditData = bigMap.SmallMapEditDatas[_index];
-            }
-
-            
-            tileMap.curMineBrush = bigMap.BigMapEditDatas.MineBrushDatas[0];
             foreach (var _mineBrush in bigMap.BigMapEditDatas.MineBrushDatas)
             {
                 bool newData = true;
@@ -81,7 +68,6 @@ namespace MineSystem
             scaleWidth = tileMap.TileWidth;
             scaleHeight = tileMap.TileHeight;
         }
-        
 
 
 
@@ -142,9 +128,8 @@ namespace MineSystem
 
             if (tileMap.isShiftPressed && e.type == EventType.ScrollWheel)
             {
-                float scrollDelta = e.delta.x;
+                float scrollDelta = -e.delta.x;
                 curBrush.brushSize += Mathf.Sign(scrollDelta) * tileMap.brushSizeScale;
-                //todo
                 e.Use();
             }
         }
@@ -165,8 +150,8 @@ namespace MineSystem
                 {
                     _transf.GetComponent<Collider2D>().enabled = false;
                 }
-
                 tileMap.brushIcon.SetActive(false);
+                tileMap.textMeshTransf.gameObject.SetActive(true);
             }
             //画矿
             else
@@ -180,9 +165,9 @@ namespace MineSystem
                 {
                     _transf.GetComponent<Collider2D>().enabled = true;
                 }
-
                 tileMap.brushIcon.SetActive(tileMap.brushTypeIsCircle);
                 tileMap.selectOutline.SetActive(false);
+                tileMap.textMeshTransf.gameObject.SetActive(false);
             }
 
             if (_index != 2)
@@ -225,17 +210,8 @@ namespace MineSystem
                         
                         tileMap.selectOutline.SetActive(true);
                         tileMap.selectOutline.transform.position = curGo.transform.position;
-
-                        // Vector3 _worldPosition = new Vector3(_x, _y, 0);
-                        // // //Debug.Log($"{debugLabel} text:{_x},{_y}");
-                        // // Handles.Label(debugLabel, $"{_x},{_y}", scalelabelStyle);
-                        // Handles.BeginGUI();
-                        // {
-                        //     // Debug.Log(_worldPosition);
-                        //     GUI.Label(new Rect(_worldPosition.x + 0.5f, _worldPosition.y + 0.5f, 200, 20), _worldPosition.ToString("F3"));
-                        // }
-                        // Handles.EndGUI();
-                        // SceneView.RepaintAll();
+                        tileMap.textMeshTransf.GetComponent<TextMesh>().text = $"{_x},{_y}";
+                        tileMap.textMeshTransf.position = new Vector3(_x, _y, -50f);
                     }
                     else
                     {
@@ -474,7 +450,6 @@ namespace MineSystem
                                 }
                             }
                         }
-                       
                     }
                     else
                     {
@@ -660,35 +635,38 @@ namespace MineSystem
             
             //设置矿物笔刷
             EditorGUILayout.BeginHorizontal();
-            GUIStyle buttonStyle = new GUIStyle(GUI.skin.button);
             int _buttonSize = 50;
             int iCounter = 0;
             foreach (var _singleMineData in tileMap.SmallMapEditData.mineData)
             {
+                int _index = iCounter++;
+                if (_index % 8 == 0)  //8、16 24
+                {
+                    EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.BeginHorizontal();
+                }
+
                 MineBigMapEditData.MineBrushData _mineBrush = bigMap.BigMapEditDatas.IDToMineBrushData(_singleMineData.MineID);
                 //从Sprite获取Texture，直接Sprite.tex 获取的是图集
                 string spritePath = AssetDatabase.GetAssetPath(_mineBrush.mineIcon);
                 TextureImporter textureImporter = AssetImporter.GetAtPath(spritePath) as TextureImporter;
+                Texture2D originalTexture = null;
                 if (textureImporter != null)
                 {
-                    Texture2D originalTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(textureImporter.assetPath);
-                    buttonStyle.normal.background = originalTexture;
+                    originalTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(textureImporter.assetPath);
                 }
-                
                 //选中后切换CurBrush
                 EditorGUILayout.BeginVertical();
-                int _index = iCounter++;
                 ToggleButton("", () =>
                 {
                     brushIndex = _index;
                     tileMap.curMineBrush = _mineBrush;
-                }, brushIndex == _index ,_buttonSize,buttonStyle);
+                }, brushIndex == _index ,_buttonSize, originalTexture);
 
                 EditorGUILayout.LabelField($"    {_singleMineData.MinePoses.Count}",GUILayout.Width(_buttonSize));
                 EditorGUILayout.EndVertical();
             }
             EditorGUILayout.EndHorizontal();
-            
             GUILayout.Label("地图大小", blackLabelStyle);
             
             tempMapWidht = EditorGUILayout.IntField("地图长", tempMapWidht);
@@ -704,7 +682,29 @@ namespace MineSystem
                 CheckConfig();
                 tileMap.ReGenerateMine();
             }
-
+            GUILayout.BeginHorizontal();
+            copyMapIndex = EditorGUILayout.IntField("拷贝地图下标", copyMapIndex);
+            if (GUILayout.Button("复制地图"))
+            {
+                //要拷贝[1],至少要有 2个
+                if (bigMap.SmallMapEditDatas.Count > copyMapIndex && copyMapIndex >= 0)
+                {
+                    MineSmallMapEditData _targetData = bigMap.SmallMapEditDatas[copyMapIndex];
+                    tileMap.SmallMapEditData.width = _targetData.width;
+                    tileMap.SmallMapEditData.height = _targetData.height;
+                    tempMapWidht = _targetData.width;
+                    tempMapHeight = _targetData.height;
+                    
+                    tileMap.SmallMapEditData.gridData = _targetData.gridData;
+                    tileMap.ReGenerateTileGo();
+                }
+                else
+                {
+                    Debug.LogError("没有小地图" + copyMapIndex);
+                }
+            }
+            GUILayout.EndHorizontal();
+            
             ShowProgrammerData =GUILayout.Toggle(ShowProgrammerData,"程序Debug参数，策划勿动");
             if (ShowProgrammerData)
             {

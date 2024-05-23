@@ -10,19 +10,18 @@ namespace ProjectOC.WorkerNS
         public string WorkerID;
         public CounterDownTimer Timer;
         public Worker Worker;
-        public ExternWorker(string workerID, float time, WorkerEchoBuilding workerEchoBuilding, int index)
+        public WorkerCategory workerCategory;
+        public ExternWorker(WorkerCategory workerCategory, float time, WorkerEchoBuilding workerEchoBuilding, int index)
         {
-            workerID = 
-            WorkerID = workerID;
-
-            
+            this.workerCategory = workerCategory;
             Timer = new CounterDownTimer(time);
             Timer.OnEndEvent += () =>
             {
                 ManagerNS.LocalGameManager.Instance.WorkerManager.SpawnWorker(workerEchoBuilding.transform.position, Quaternion.identity, false, workerEchoBuilding.WorkerEcho).Completed += (handle) =>
                 {
                     Worker = handle.Result.GetComponent<Worker>();
-                    Worker.Category = (WorkerCategory)Enum.Parse(typeof(WorkerCategory), workerID);
+                    
+                    Worker.Category = workerCategory;
                     Worker.gameObject.transform.position += new Vector3((float)(3 * Math.Cos(2 * 3.1415926 * index / 5)), 0, (float)(3 * Math.Sin(2 * 3.1415926 * index / 5)));
                 };
             };
@@ -43,23 +42,31 @@ namespace ProjectOC.WorkerNS
             return (int)(timeCost * FactorTimeCost + ModifyTimeCost);
         }
 
+        public (int,int) GetRealTimeCostInMSForm(WorkerCategory workerCategory)
+        {
+            float time = GetRealTimeCost("WorkerEcho_"+workerCategory);
+            int min = (int)(time) / 60;
+            int sec = (int)(time) - min * 60;
+            return (min, sec);
+        }
+
         public WorkerEcho(WorkerEchoBuilding workerEchoBuilding)
         {
             WorkerEchoBuilding = workerEchoBuilding;
         }
 
-        public ExternWorker SummonWorker(string id,int index, ML.Engine.InventorySystem.IInventory inventory)
+        public ExternWorker SummonWorker(WorkerCategory workerCategory, int index, ML.Engine.InventorySystem.IInventory inventory)
         {
-            string cid = "";
-            string workerid = "";
-            if (!ManagerNS.LocalGameManager.Instance.WorkerManager.OnlyCostResource(inventory, id)) return null;
+  
+            string workerid = "WorkerEcho_"+ workerCategory.ToString();
+            if (!ManagerNS.LocalGameManager.Instance.WorkerManager.OnlyCostResource(inventory, workerCategory.ToString())) return null;
 
-            if (ManagerNS.LocalGameManager.Instance.WorkerEchoManager.Level == 1)
+            if (workerCategory == WorkerCategory.Random)
             {
-                cid = ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRandomCategoryString();
-                workerid = "WorkerEcho_" + cid;
+                workerCategory = ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRandomCategory();
+                workerid = "WorkerEcho_" + WorkerCategory.Random.ToString();
             }
-            ExternWorker externWorker = new ExternWorker(cid, GetRealTimeCost(workerid), WorkerEchoBuilding, index);
+            ExternWorker externWorker = new ExternWorker(workerCategory, GetRealTimeCost(workerid), WorkerEchoBuilding, index);
             Workers[index] = externWorker;
             return externWorker;
         }
@@ -111,7 +118,7 @@ namespace ProjectOC.WorkerNS
 
         public void StopEcho(string id,int index, ML.Engine.InventorySystem.IInventory inventory)
         {
-            foreach(var pair in ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRaw(id))
+            foreach(var pair in ManagerNS.LocalGameManager.Instance.WorkerEchoManager.GetRaw("WorkerEcho_"+id))
             {
                 foreach (var item in ML.Engine.InventorySystem.ItemManager.Instance.SpawnItems(pair.id, pair.num))
                 {

@@ -34,17 +34,17 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		[LabelText("演算仪")]
 		Calculus = 012,
 		[LabelText("物流转运箱")]
-		SolidStore = 100,
+		SolidStore = 101,
 		[LabelText("液体转运罐")]
-		LiquidStore = 101,
+		LiquidStore = 102,
 		[LabelText("餐厅")]
-		Canteen = 102,
+		Canteen = 103,
 		[LabelText("共鸣轮")]
-		EchoWheel = 103,
+		EchoWheel = 104,
 		[LabelText("导流节点")]
-		DiversionNode = 104,
+		DiversionNode = 105,
 		[LabelText("生命导流桩")]
-		LifeDiversion = 105,
+		LifeDiversion = 100,
 		[LabelText("生态投影装置")]
 		Projector = 106,
 		[LabelText("地板")]

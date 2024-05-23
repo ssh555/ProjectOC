@@ -1,3 +1,5 @@
+using Sirenix.OdinInspector;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using static Cinemachine.DocumentationSortingAttribute;
@@ -16,6 +18,7 @@ namespace ProjectOC.WorkerNS
     [System.Serializable]
     public sealed class WorkerEchoManager : ML.Engine.Manager.LocalManager.ILocalManager
     {
+        [ShowInInspector]
         private Dictionary<string, WorkerEchoTableData> WorkerEchoTableDict = new Dictionary<string, WorkerEchoTableData>();
         private ML.Engine.ABResources.ABJsonAssetProcessor<WorkerEchoTableData[]> ABJAProcessor;
         private System.Random Random;
@@ -37,12 +40,12 @@ namespace ProjectOC.WorkerNS
         {
             return !string.IsNullOrEmpty(id) ? WorkerEchoTableDict.ContainsKey(id) : false;
         }
-        public string GetRandomCategoryString()
+        public WorkerCategory GetRandomCategory()
         {
-            List<string> list = WorkerEchoTableDict.Keys.ToList();
-            string t = list[Random.Next(list.Count - 1)];
-            t = t.Replace("WorkerEcho_", "");
-            return t;
+            Random random = new Random();
+            int randomValue = random.Next(2, 8);
+            WorkerCategory randomWorkerCategory = (WorkerCategory)randomValue;
+            return randomWorkerCategory;
         }
         public WorkerCategory GetCategory(string id)
         {

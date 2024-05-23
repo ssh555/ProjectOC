@@ -64,7 +64,6 @@ namespace ML.Engine.UI
         public float CurZoomscale 
         { 
             set {
-                Debug.Log("set CurZoomscale");
                 this.content.localScale = new Vector3(value, value, value);
                 this.Center.localScale = new Vector3(value, value, value);
                 curZoomscale = value;
@@ -114,7 +113,6 @@ namespace ML.Engine.UI
             // 处理击中的 UI 元素
             if (results.Count > 0)
             {
-                Debug.Log(results[0].gameObject.name);
                 if (lastSelected != results[0].gameObject)
                 {
                     this.uiBtnList.RefreshSelected(results[0].gameObject.transform.GetComponent<SelectedButton>());
@@ -123,7 +121,6 @@ namespace ML.Engine.UI
             }
             else
             {
-                Debug.Log("未击中");
                 this.uiBtnList.SetCurSelectedNull();
                 lastSelected = null;
             }

@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b73e2c1f5691f6244b7c6f7221ef25c1, type: 3}
+  m_Name: SmallMapEditData_18
+  m_EditorClassIdentifier: 
+  index: 25
+  width: 12
+  height: 10
+  smallMapTex: {fileID: 0}
+  gridData: 010101010101010101010101010101010101010101010101010101010101010101010101000000000101010101010101000000000101010101010101000000000101010101010101000000000101010101010101000000000101010101010101000000000101010101010101000000000101010101010101
+  mineData:
+  - MineID: Mineral_Ag_1
+    MinePoses: []
+  - MineID: Mineral_Ti_2
+    MinePoses: []
+  - MineID: Mineral_Ti_3
+    MinePoses: []
+  - MineID: Mineral_Ti_1
+    MinePoses: []
+  - MineID: Mineral_Fe_1
+    MinePoses:
+    - {x: 6.204873, y: 1.6924858}
+    - {x: 5.1696253, y: 3.689035}
+  - MineID: Mineral_Fe_2
+    MinePoses: []
+  - MineID: Mineral_Fe_3
+    MinePoses: []
+  - MineID: Mineral_Au_1
+    MinePoses: []
+  - MineID: Mineral_Au_2
+    MinePoses: []
+  - MineID: Mineral_Au_3
+    MinePoses: []
+  - MineID: Mineral_Cu_1
+    MinePoses: []
+  - MineID: Mineral_Cu_2
+    MinePoses: []
+  - MineID: Mineral_Cu_3
+    MinePoses: []
+  - MineID: Mineral_W_1
+    MinePoses: []
+  - MineID: Mineral_W_2
+    MinePoses: []
+  - MineID: Mineral_W_3
+    MinePoses: []
+  - MineID: Mineral_F_1
+    MinePoses: []
+  - MineID: Mineral_F_2
+    MinePoses: []
+  - MineID: Mineral_F_3
+    MinePoses: []
+  - MineID: Mineral_Ag_2
+    MinePoses: []
+  - MineID: Mineral_Ag_3
+    MinePoses: []
+  - MineID: Mineral_Si_1
+    MinePoses:
+    - {x: 10.011974, y: 9.288272}
+    - {x: 6.773967, y: 3.2650928}
+    - {x: 7.951563, y: 5.690996}
+    - {x: 11.399062, y: 6.496637}
+    - {x: 4.905388, y: 2.2397969}
+    - {x: 4.282752, y: 0.41979802}
+    - {x: 10.580243, y: 5.5959053}
+    - {x: 5.10402, y: 7.2928658}
+    - {x: 4.6744905, y: 8.172751}
+    - {x: 6.2783327, y: 4.6830263}
+  - MineID: Mineral_Si_2
+    MinePoses: []
+  - MineID: Mineral_Si_3
+    MinePoses: []
+  - MineID: Mineral_R_1
+    MinePoses: []
+  - MineID: Mineral_R_2
+    MinePoses: []
+  - MineID: Mineral_R_3
+    MinePoses: []

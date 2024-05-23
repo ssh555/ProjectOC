@@ -1,7 +1,8 @@
 using Sirenix.OdinInspector;
+using Unity.VisualScripting;
 using UnityEngine;
 
-namespace MineSystem
+namespace ProjectOC.MineSystem
 {
     public class TileMap : MonoBehaviour
     {
@@ -30,7 +31,7 @@ namespace MineSystem
 
         [HideInInspector] public GameObject[,] tiles;
         [HideInInspector] public GameObject TilePrefab, MinePrefab, selectOutline, brushIcon;
-        [HideInInspector] public Transform gridParentTransf, mineParentTransf;
+        [HideInInspector] public Transform gridParentTransf, mineParentTransf,textMeshTransf;
         public MineSmallMapEditData SmallMapEditData;
 
         public int EditOption = 0;
@@ -40,6 +41,26 @@ namespace MineSystem
 
         public float brushSizeScale = 0.1f; //sprite.scale 为1时，范围是2,半径是1
         public BigMap bigMap;
+        public void SceneInit()
+        {
+            gridParentTransf = GameObject.Find("Editor/GridTransform").transform;
+            mineParentTransf = GameObject.Find("Editor/MineTransform").transform;
+            selectOutline = GameObject.Find("Editor/Others").transform.GetChild(0).gameObject;
+            TilePrefab = GameObject.Find("Editor/Others").transform.GetChild(1).gameObject;
+            MinePrefab = GameObject.Find("Editor/Others").transform.GetChild(2).gameObject;
+            brushIcon = GameObject.Find("Editor/Others").transform.GetChild(3).gameObject;
+            textMeshTransf = GameObject.Find("Editor/Others").transform.GetChild(5);
+            bigMap = transform.GetComponentInParent<BigMap>();
+            if (SmallMapEditData == null)
+            {
+                string[] nameStr = gameObject.name.Split("_");
+                int _index = int.Parse(nameStr[1]);
+                SmallMapEditData = bigMap.SmallMapEditDatas[_index];
+            }
+            
+            curMineBrush = bigMap.BigMapEditDatas.MineBrushDatas[0];
+        }
+        
         public void SetTileSprite(int x, int y, bool pen)
         {
             float _offset = 0.5f;
@@ -113,7 +134,7 @@ namespace MineSystem
             _mineGo.transform.localScale = Vector3.one * bigMap.mineToTileScale;
             _mineGo.name = $"{_mineBrushData.mineID}|{_index}";
         }
-        public void DestroyTransformChild(Transform _transf)
+        public static void DestroyTransformChild(Transform _transf)
         {
             for (int i = _transf.childCount - 1; i >= 0; i--)
             {

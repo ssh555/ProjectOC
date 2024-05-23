@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace MineSystem
+namespace ProjectOC.MineSystem
 {
     public class BigMap : MonoBehaviour
     {
@@ -18,6 +18,9 @@ namespace MineSystem
         public string mineID = "Mineral_Ti_1";
         public Sprite mineTex;
 
-        public Color dataTileColor,emptyTileColor;
+        public Color dataTileColor = new Color(44, 46, 47);
+        public Color emptyTileColor = new Color(161, 162, 166);
+
+        public List<Color> bigMapRegionColor = new List<Color>();
     }
 }

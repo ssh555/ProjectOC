@@ -197,6 +197,18 @@ namespace ProjectOC.Player.UI
         {
             UIBtnListInitor uIBtnListInitor = this.transform.GetComponentInChildren<UIBtnListInitor>(true);
             this.UIBtnList = new UIBtnList(uIBtnListInitor);
+            CustomButton panelButton1 = this.UIBtnList.GetBtn("PanelBtn") as CustomButton;
+            panelButton1.InitBindData(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, (obj) =>
+            {
+                var vector2 = obj.ReadValue<UnityEngine.Vector2>();
+                panelButton1.transform.Find("Wheel").GetComponent<Image>().fillAmount -= vector2.x/10;
+            });
+            CustomButton panelButton2 = this.UIBtnList.GetBtn("SliderBtn") as CustomButton;
+            panelButton2.InitBindData(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, (obj) =>
+            {
+                var vector2 = obj.ReadValue<UnityEngine.Vector2>();
+                panelButton2.transform.Find("Slider").GetComponent<Slider>().value += vector2.x / 10;
+            });
         }
         private void InitBtnData(PlayerUIPanelStruct datas)
         {

@@ -1,9 +1,13 @@
+using ML.Engine.Manager;
+using ML.Engine.UI;
+using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
+using static ProjectOC.Order.OrderManager;
 
 namespace ProjectOC.WorkerNS
 {
@@ -685,10 +689,22 @@ namespace ProjectOC.WorkerNS
                     timerForNoHome.OnEndEvent += () =>
                     {
                         ManagerNS.LocalGameManager.Instance.WorkerManager.DeleteWorker(this);
+                        GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("一只隐兽已经离开岛屿！", null,LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Category)));
                     };
+                    timerForNoHome.OnUpdateEvent += PushNoticeUI;
                 }
                 return timerForNoHome;
             }
+        }
+
+        private void PushNoticeUI(double remainTime)
+        {
+            if (Mathf.Abs((float)remainTime - 180) < 1) 
+            {
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("一只隐兽将在3分钟后离开岛屿！", null, LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Category)));
+                timerForNoHome.OnUpdateEvent -= PushNoticeUI;
+            }
+            
         }
         public void StopHomeTimer()
         {
@@ -701,7 +717,7 @@ namespace ProjectOC.WorkerNS
                 TimerForNoHome.Start();
             }
         }
-        public (int, int) MinSec => timerForNoHome != null ? timerForNoHome.ConvertToMinAndSec() : (-1, -1);
+        public (int, int) MinSec => timerForNoHome != null ? timerForNoHome.currentTimeInMSForm : (-1, -1);
 
         #region Property
         [LabelText("是否有喵喵窝"), ShowInInspector, ReadOnly]
@@ -792,7 +808,7 @@ namespace ProjectOC.WorkerNS
                     ContainerDict[key]?.TempRemoveWorker();
                 }
             }
-            Threshold = threshold;
+            Threshold = 3;
             Agent.isStopped = false;
             Agent.speed = RealWalkSpeed;
             if (Agent.SetDestination(target))

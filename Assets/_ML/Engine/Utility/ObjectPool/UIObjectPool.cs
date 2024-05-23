@@ -167,6 +167,11 @@ namespace ML.Engine.Utility
             return this.functionExecutor;
         }
 
+        public bool ContainPool(string poolName)
+        {
+            return this.goPoolDic.ContainsKey(poolName);
+        }
+
         public void ResetAllObject()
         {
             foreach(var pool in goPoolDic)

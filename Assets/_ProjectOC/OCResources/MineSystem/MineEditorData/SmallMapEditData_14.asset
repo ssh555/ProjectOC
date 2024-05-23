@@ -1,0 +1,101 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b73e2c1f5691f6244b7c6f7221ef25c1, type: 3}
+  m_Name: SmallMapEditData_14
+  m_EditorClassIdentifier: 
+  index: 21
+  width: 18
+  height: 15
+  smallMapTex: {fileID: 0}
+  gridData: 000000000001010101010101000000000000000000000001010101010101000000000000000000000001010101010101000000000000000000000001010101010101000000000000000101010101010101010101000000000000000101010101010101010101000000000000000101010101010101010101000000000000000101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101
+  mineData:
+  - MineID: Mineral_Ag_1
+    MinePoses: []
+  - MineID: Mineral_Ti_2
+    MinePoses: []
+  - MineID: Mineral_Ti_3
+    MinePoses: []
+  - MineID: Mineral_Ti_1
+    MinePoses: []
+  - MineID: Mineral_Fe_1
+    MinePoses:
+    - {x: 12.379386, y: 10.159333}
+    - {x: 9.3475895, y: 3.6520615}
+    - {x: 9.939159, y: 2.912599}
+    - {x: 9.902185, y: 1.2857814}
+    - {x: 7.240121, y: 2.9865456}
+    - {x: 2.1748018, y: 13.265076}
+    - {x: 3.6907005, y: 11.342473}
+  - MineID: Mineral_Fe_2
+    MinePoses:
+    - {x: 1.9159908, y: 11.490366}
+    - {x: 2.9142647, y: 10.935768}
+    - {x: 8.275369, y: 4.243632}
+    - {x: 8.719046, y: 1.6185398}
+    - {x: 11.639923, y: 8.976192}
+    - {x: 10.641649, y: 11.268527}
+    - {x: 12.416359, y: 11.268527}
+  - MineID: Mineral_Fe_3
+    MinePoses:
+    - {x: 3.3579426, y: 12.340748}
+    - {x: 9.162724, y: 2.7647061}
+    - {x: 11.676896, y: 10.307225}
+  - MineID: Mineral_Au_1
+    MinePoses: []
+  - MineID: Mineral_Au_2
+    MinePoses: []
+  - MineID: Mineral_Au_3
+    MinePoses: []
+  - MineID: Mineral_Cu_1
+    MinePoses: []
+  - MineID: Mineral_Cu_2
+    MinePoses: []
+  - MineID: Mineral_Cu_3
+    MinePoses: []
+  - MineID: Mineral_W_1
+    MinePoses: []
+  - MineID: Mineral_W_2
+    MinePoses: []
+  - MineID: Mineral_W_3
+    MinePoses: []
+  - MineID: Mineral_F_1
+    MinePoses: []
+  - MineID: Mineral_F_2
+    MinePoses: []
+  - MineID: Mineral_F_3
+    MinePoses: []
+  - MineID: Mineral_Ag_2
+    MinePoses: []
+  - MineID: Mineral_Ag_3
+    MinePoses: []
+  - MineID: Mineral_Si_1
+    MinePoses:
+    - {x: 5.7611957, y: 5.130987}
+    - {x: 5.9830346, y: 6.9056973}
+  - MineID: Mineral_Si_2
+    MinePoses:
+    - {x: 3.6907005, y: 6.018342}
+    - {x: 4.3192434, y: 4.872175}
+  - MineID: Mineral_Si_3
+    MinePoses:
+    - {x: 4.9108143, y: 6.46202}
+  - MineID: Mineral_R_1
+    MinePoses:
+    - {x: 15.374209, y: 12.821398}
+    - {x: 16.22459, y: 13.228103}
+    - {x: 16.890108, y: 13.819673}
+  - MineID: Mineral_R_2
+    MinePoses:
+    - {x: 14.708693, y: 14.078485}
+  - MineID: Mineral_R_3
+    MinePoses:
+    - {x: 16.113672, y: 14.041512}

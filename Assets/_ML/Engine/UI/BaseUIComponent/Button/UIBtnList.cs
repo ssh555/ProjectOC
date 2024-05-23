@@ -54,6 +54,11 @@ namespace ML.Engine.UI
             }
             set
             {
+                if(value is CustomButton)
+                {
+                    //绑定PanelButton 的按键
+                }
+
                 _CurSelected = value;
                 if (_CurSelected != null && SBPosDic.ContainsKey(_CurSelected)) 
                 {
@@ -468,7 +473,6 @@ namespace ML.Engine.UI
         public void AddBtn(GameObject prefab, UnityAction BtnAction = null, Action OnSelectEnter = null, Action OnSelectExit = null, UnityAction<SelectedButton> BtnSettingAction = null, Action OnFinishAdd = null, string BtnText = null, bool NeedRefreshBtnInfo = true)
         {
             // 实例化
-            
             if(prefab.GetComponent<SelectedButton>() == null)
             {
                 prefab.transform.AddComponent<SelectedButton>();
@@ -476,7 +480,6 @@ namespace ML.Engine.UI
             var btn = prefab.GetComponent<SelectedButton>();
             btn.gameObject.name = btn.GetHashCode().ToString();
             btn.transform.SetParent(this.parent.Find("Container"), false);
-            Debug.Log(btn.transform.parent.name);
             btn.transform.localScale = Vector3.one;
 
             if (BtnAction != null)
@@ -617,7 +620,6 @@ namespace ML.Engine.UI
                             this.UIBtnListContainer?.RefreshEdge();
                         }
                     }
-                    
                     Checker.Check();
                 };
             }
@@ -1001,9 +1003,11 @@ namespace ML.Engine.UI
         /// <summary>
         /// 轮盘按钮导航回调 轮转按钮规定正上方为下标0
         /// </summary>
+        private bool canPerformRingNavigation = false;
+        public bool CanPerformRingNavigation {  get { return canPerformRingNavigation; } set { canPerformRingNavigation = value; } }
         private void RingNavigation(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
-            if (this.isEnable == false) return;
+            if (this.isEnable == false || !canPerformRingNavigation) return;
             this.NavigationPreAction?.Invoke();
 
             string actionName = obj.action.name;

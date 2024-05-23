@@ -203,7 +203,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
         {
             if (this.SelectedPartInstance != null)
             {
-                Manager.GameManager.DestroyObj(this.SelectedPartInstance.gameObject);
+                DestroySelectedBPart();
                 this.SelectedPartInstance = null;
             }
         }
@@ -297,7 +297,7 @@ namespace ML.Engine.BuildingSystem.BuildingPlacer
             this.SelectedPartInstance = null;
 
             this.OnDestroySelectedBPart?.Invoke(tmp);
-
+            BuildingManager.Instance.ResetVisualSocket();
             // to-do :后续可能会更改销毁调用
             Manager.GameManager.DestroyObj(tmp.gameObject);
         }
