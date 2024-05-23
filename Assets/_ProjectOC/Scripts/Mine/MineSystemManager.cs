@@ -200,14 +200,14 @@ namespace ProjectOC.MineSystem
 
         private void LoadMineralTableData()
         {
-            /*ML.Engine.ABResources.ABJsonAssetProcessor<MineralTableData[]> ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<MineralTableData[]>("OCTableData", "Order", (datas) =>
+            ML.Engine.ABResources.ABJsonAssetProcessor<MineralTableData[]> ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<MineralTableData[]>("OCTableData", "Mineral", (datas) =>
             {
                 foreach (var data in datas)
                 {
                     this.MineralTableDataDic.Add(data.ID, data);
                 }
             }, "¿óÎïÊý¾Ý");
-            ABJAProcessor.StartLoadJsonAssetData();*/
+            ABJAProcessor.StartLoadJsonAssetData();
             synchronizerInOrder.Check(0);
         }
 
