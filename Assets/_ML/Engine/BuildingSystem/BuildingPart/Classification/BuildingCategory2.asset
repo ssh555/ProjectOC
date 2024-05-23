@@ -68,19 +68,19 @@ MonoBehaviour:
     value: 012
   - name: SolidStore
     displayName: "\u7269\u6D41\u8F6C\u8FD0\u7BB1"
-    value: 101
+    value: 102
   - name: LiquidStore
     displayName: "\u6DB2\u4F53\u8F6C\u8FD0\u7F50"
-    value: 102
+    value: 103
   - name: Canteen
     displayName: "\u9910\u5385"
-    value: 103
+    value: 104
   - name: EchoWheel
     displayName: "\u5171\u9E23\u8F6E"
-    value: 104
+    value: 105
   - name: DiversionNode
     displayName: "\u5BFC\u6D41\u8282\u70B9"
-    value: 105
+    value: 101
   - name: LifeDiversion
     displayName: "\u751F\u547D\u5BFC\u6D41\u6869"
     value: 100
@@ -150,3 +150,6 @@ MonoBehaviour:
   - name: FeatureModifier
     displayName: "\u55B5\u55B5\u7A9D"
     value: 108
+  - name: Biostore
+    displayName: "\u751F\u7269\u4ED3\u5E93"
+    value: 109
