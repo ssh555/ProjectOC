@@ -1,6 +1,7 @@
 using ML.Engine.Manager;
 using ML.Engine.Timer;
 using ML.Engine.UI;
+using ML.Engine.Utility;
 using ProjectOC.ManagerNS;
 using ProjectOC.Order;
 using ProjectOC.Player;
@@ -9,6 +10,7 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using static ProjectOC.MineSystem.MineSystemData;
@@ -67,6 +69,8 @@ namespace ProjectOC.MineSystem
         }
         #endregion
         #region Base
+        //先初始化大地图 再初始化小地图
+        Synchronizer synchronizer;
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
 
         /// <summary>
@@ -79,6 +83,17 @@ namespace ProjectOC.MineSystem
         {
             //初始化大地图缩放比例
             this.GridScale = 1;
+
+            synchronizer = new Synchronizer(2, () =>
+            {
+                for (int i = 0; i < this.mapRegionDatas.Count; i++) 
+                {
+                    for(int j = 0;j< mapRegionDatas[i].mineralDataID.Length;j++)
+                    {
+                        mapRegionDatas[i].mineralDataID[j] = SmallMapDatass[i * MineSystemData.MAPDEPTH + j].name;
+                    }
+                }
+            });
 
             //初始化区块列表
             GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_BigMap.prefab").Completed += (handle) =>
@@ -96,6 +111,7 @@ namespace ProjectOC.MineSystem
                     this.mapRegionDatas.Add(mapRegionData);
                     IDToMapRegionDic.Add(child.name, mapRegionData);
                 }
+                synchronizer.Check();
             };
 
             //初始化大地图地图层解锁数组
@@ -112,7 +128,12 @@ namespace ProjectOC.MineSystem
             //默认选中
             curMapLayerIndex = 0;
 
+            //读取小地图矿物的数据
+            LoadMineData();
+
         }
+
+
         public void OnRegister()
         {
             if (instance == null)
@@ -130,6 +151,34 @@ namespace ProjectOC.MineSystem
                 instance = null;
                 ML.Engine.Manager.GameManager.Instance.TickManager.UnregisterTick(this);
             }
+        }
+        #endregion
+
+        #region LoadData
+        [ShowInInspector]
+        private List<MineSmallMapEditData> SmallMapDatass;
+        private Dictionary<string, MineralTableData> MineralTableDataDic = new Dictionary<string, MineralTableData>();
+        private void LoadMineData()
+        {
+            GameManager.Instance.ABResourceManager.LoadAssetsAsync<MineSmallMapEditData>("Config_Mine_MineEditorData", 
+                (smd) => { 
+                    //TODO
+                    MineralMapData mineralMapData = new MineralMapData(smd.name,null);
+                    mineralMapDatas.Add(smd.name, mineralMapData); 
+                
+                }
+                ).Completed += 
+                (handle) =>
+                {
+                    SmallMapDatass = handle.Result.ToList<MineSmallMapEditData>();
+                    SmallMapDatass.Sort((MineSmallMapEditData a, MineSmallMapEditData b) => 
+                    {
+                        int t1 = Convert.ToInt32(a.name.Split('_')[1]);
+                        int t2 = Convert.ToInt32(b.name.Split('_')[1]);
+                        return t1.CompareTo(t2);
+                    });
+                    synchronizer.Check();
+                };
         }
         #endregion
 
@@ -161,10 +210,7 @@ namespace ProjectOC.MineSystem
             if (!this.IDToMapRegionDic.ContainsKey(ID)) return;
             IDToMapRegionDic[ID].isUnlockLayer[curMapLayerIndex] = true;
         }
-
-
         #endregion
-
     }
 }
 

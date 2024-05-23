@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static ProjectOC.MineSystem.MineSystemData;
+using static ProjectOC.Order.OrderManager;
 /// <summary>
 /// 采矿系统数据
 /// </summary>
@@ -64,10 +65,16 @@ namespace ProjectOC.MineSystem
         {
             [LabelText("采矿地图ID"), ReadOnly, ShowInInspector]
             public string MineralMapID;
-            [LabelText("采矿地图预制体资产路径"), ReadOnly, ShowInInspector]
-            public string PrefabPath;
+/*            [LabelText("采矿地图预制体资产路径"), ReadOnly, ShowInInspector]
+            public string PrefabPath;*/
             [LabelText("采矿地图中的矿物数据"), ReadOnly, ShowInInspector]
             public List<MineData> MineDatas;
+
+            public MineralMapData(string mineralMapID, List<MineData> mineDatas)
+            {
+                MineralMapID = mineralMapID;
+                MineDatas = mineDatas;
+            }
         }
 
         /// <summary>
@@ -81,6 +88,13 @@ namespace ProjectOC.MineSystem
             public Vector2 position;
             [LabelText("剩余开采次数"), ReadOnly, ShowInInspector]
             public int RemainMineNum;
+
+            public MineData(string mineralMapID, Vector2 position, int remainMineNum)
+            {
+                MineralMapID = mineralMapID;
+                this.position = position;
+                RemainMineNum = remainMineNum;
+            }
         }
 
         /// <summary>
@@ -118,6 +132,16 @@ namespace ProjectOC.MineSystem
                 }
             }
         }
+
+        /// <summary>
+        /// 矿物表数据
+        /// </summary>
+        [System.Serializable]
+        public struct MineralTableData
+        {
+            
+        }
+
     }
 }
 

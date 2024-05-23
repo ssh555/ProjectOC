@@ -84,7 +84,7 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     private void InitData()
     {
         var MapRegionDatas = MM.MapRegionDatas;
-        UIBtnList.Synchronizer synchronizer = new Synchronizer(MapRegionDatas.Count, () =>
+        Synchronizer synchronizer = new Synchronizer(MapRegionDatas.Count, () =>
         {
             this.cursorNavigation.CurZoomscale = MM.GridScale;
             RefreshOnZoomMap();

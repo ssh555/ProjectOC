@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using ML.Engine.Utility;
 
 namespace ProjectOC.ProNodeNS.UI
 {
@@ -134,7 +135,7 @@ namespace ProjectOC.ProNodeNS.UI
         private bool IsInitBtnList;
         protected override void InitBtnInfo()
         {
-            ML.Engine.UI.UIBtnList.Synchronizer synchronizer = new ML.Engine.UI.UIBtnList.Synchronizer(5, () => { IsInitBtnList = true; Refresh(); });
+            Synchronizer synchronizer = new Synchronizer(5, () => { IsInitBtnList = true; Refresh(); });
 
             RawBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ProNode").Find("Recipe").Find("Raw").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             int num = ProNode.HasRecipe ? ProNode.Recipe.Raw.Count : 0;
@@ -162,7 +163,7 @@ namespace ProjectOC.ProNodeNS.UI
         {
             if (!IsInitBtnList) return;
             IsInitBtnList = false;
-            ML.Engine.UI.UIBtnList.Synchronizer synchronizer = new ML.Engine.UI.UIBtnList.Synchronizer(4, () => { IsInitBtnList = true; Refresh(); });
+            Synchronizer synchronizer = new Synchronizer(4, () => { IsInitBtnList = true; Refresh(); });
             int num = ProNode.HasRecipe ? ProNode.Recipe.Raw.Count : 0;
             if (RawBtnList != null && RawBtnList.BtnCnt != num)
             {
