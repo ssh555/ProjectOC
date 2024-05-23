@@ -363,7 +363,7 @@ namespace ProjectOC.StoreNS.UI
             }
             else if (CurMode == Mode.ChangeItem)
             {
-                Store.ChangeData(DataIndex, ItemDatas[ItemIndex]);
+                Store.ChangeData(DataIndex, new DataNS.ItemIDDataObj(ItemDatas[ItemIndex]));
                 CurMode = Mode.Store;
             }
             else if (CurMode == Mode.ChangeIcon)
@@ -372,7 +372,7 @@ namespace ProjectOC.StoreNS.UI
             }
             else if (CurMode == Mode.Upgrade)
             {
-                ML.Engine.BuildingSystem.BuildingManager.Instance.Upgrade(Store.WorldStore);
+                ML.Engine.BuildingSystem.BuildingManager.Instance.Upgrade(Store.WorldStore as WorldStore);
                 UpdateBtnInfo();
             }
             Refresh();

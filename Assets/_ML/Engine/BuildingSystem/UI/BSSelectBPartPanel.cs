@@ -12,8 +12,6 @@ using UnityEngine.U2D;
 using UnityEngine.UI;
 using static ML.Engine.BuildingSystem.UI.BSSelectBPartPanel;
 using ML.Engine.UI;
-using static ProjectOC.ProNodeNS.UI.UIProNode;
-using ProjectOC.ProNodeNS;
 using ProjectOC.ManagerNS;
 using ML.Engine.Utility;
 

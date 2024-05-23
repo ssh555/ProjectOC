@@ -6,7 +6,7 @@ using System;
 namespace ProjectOC.RestaurantNS
 {
     [LabelText("²ÍÌü"), Serializable]
-    public class Restaurant : DataNS.ItemContainerOwner
+    public class Restaurant : DataNS.DataContainerOwner
     {
         #region Data
         [LabelText("ÊÀ½ç²ÍÌü"), ReadOnly, NonSerialized]
@@ -102,7 +102,7 @@ namespace ProjectOC.RestaurantNS
             {
                 List<RestaurantData> datas = new List<RestaurantData>();
                 var items = DataContainer.GetDatas();
-                for (int i = 0; i < items.Count; i++)
+                for (int i = 0; i < items.Length; i++)
                 {
                     datas.Add(new RestaurantData(items[i].ID, i, items[i].GetAmount(DataNS.DataOpType.Storage)));
                 }
@@ -138,11 +138,11 @@ namespace ProjectOC.RestaurantNS
         #region IMissionObj
         public override Transform GetTransform() { return WorldRestaurant.transform; }
         public override string GetUID() { return UID; }
-
         public override MissionNS.MissionObjType GetMissionObjType()
         {
             return MissionNS.MissionObjType.Restaurant;
         }
+        public override void PutIn(int index, DataNS.IDataObj data, int amount) { Debug.Log("Error Restaurant PutIn"); }
         #endregion
     }
 }
