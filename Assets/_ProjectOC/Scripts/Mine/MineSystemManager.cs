@@ -2,6 +2,7 @@ using ML.Engine.Manager;
 using ML.Engine.Timer;
 using ML.Engine.UI;
 using ML.Engine.Utility;
+using Newtonsoft.Json;
 using ProjectOC.ManagerNS;
 using ProjectOC.Order;
 using ProjectOC.Player;
@@ -10,6 +11,7 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -42,6 +44,7 @@ namespace ProjectOC.MineSystem
         /// 当前选中的大地图层
         /// </summary>
         private int curMapLayerIndex;
+        public int CurMapLayerIndex { get { return curMapLayerIndex; } }
         /// <summary>
         /// 岛舵台ui refresh
         /// </summary>
@@ -49,7 +52,11 @@ namespace ProjectOC.MineSystem
         /// <summary>
         /// id , mapregiondata
         /// </summary>
-        private Dictionary<string, MapRegionData> IDToMapRegionDic = new Dictionary<string, MapRegionData>(); 
+        private Dictionary<string, MapRegionData> IDToMapRegionDic = new Dictionary<string, MapRegionData>();
+        /// <summary>
+        ///  RegionNum, mapregiondata
+        /// </summary>
+        private Dictionary<int, MapRegionData> RegionNumToRegionDic = new Dictionary<int, MapRegionData>();
 
 
         #region Tick
@@ -69,7 +76,6 @@ namespace ProjectOC.MineSystem
         }
         #endregion
         #region Base
-        //先初始化大地图 再初始化小地图
         SynchronizerInOrder synchronizerInOrder;
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
 
@@ -83,7 +89,7 @@ namespace ProjectOC.MineSystem
         {
             #region 异步初始化
 
-            synchronizerInOrder = new SynchronizerInOrder(3, () => {
+            synchronizerInOrder = new SynchronizerInOrder(4, () => {
                 for (int i = 0; i < this.mapRegionDatas.Count; i++)
                 {
                     for (int j = 0; j < mapRegionDatas[i].mineralDataID.Length; j++)
@@ -98,16 +104,21 @@ namespace ProjectOC.MineSystem
                 LoadMineralTableData();
             });
 
-            //1 初始化初始化区块列表
+            //1 初始化BigMapTableData
             synchronizerInOrder.AddCheckAction(1, () => {
+                LoadBigMapTableData();
+            });
+
+            //2 初始化初始化区块列表
+            synchronizerInOrder.AddCheckAction(2, () => {
                 LoadMapRegionData();
             });
 
-            //2 读取小地图矿物的数据
-            synchronizerInOrder.AddCheckAction(2, () => {
+            //3 读取小地图矿物的数据
+            synchronizerInOrder.AddCheckAction(3, () => {
                 LoadSmallMapMineData();
             });
-
+            synchronizerInOrder.StartExecution();
             #endregion
 
             #region 同步初始化
@@ -150,6 +161,13 @@ namespace ProjectOC.MineSystem
         [ShowInInspector]
         private List<MineSmallMapEditData> SmallMapDatas;
         private Dictionary<string, MineralTableData> MineralTableDataDic = new Dictionary<string, MineralTableData>();
+
+        //策划大地图数据
+        private string bigMapDataJson = "Assets/_ProjectOC/OCResources/Json/TableData/WorldMap.json";
+        private string _jsonData;
+        private int[,] bigMapTableData;
+        [ShowInInspector]
+        public int[,] BigMapTableData { get { return bigMapTableData; } }
         private void LoadSmallMapMineData()
         {
             GameManager.Instance.ABResourceManager.LoadAssetsAsync<MineSmallMapEditData>("Config_Mine_MineEditorData", 
@@ -176,7 +194,7 @@ namespace ProjectOC.MineSystem
                         int t2 = Convert.ToInt32(b.name.Split('_')[1]);
                         return t1.CompareTo(t2);
                     });
-                    synchronizerInOrder.Check(2);
+                    synchronizerInOrder.Check(3);
                 };
         }
 
@@ -192,25 +210,40 @@ namespace ProjectOC.MineSystem
             ABJAProcessor.StartLoadJsonAssetData();*/
             synchronizerInOrder.Check(0);
         }
+
+        private void LoadBigMapTableData()
+        {
+            //策划大地图数据
+            _jsonData = File.ReadAllText(bigMapDataJson);
+            bigMapTableData = JsonConvert.DeserializeObject<int[,]>(_jsonData);
+            synchronizerInOrder.Check(1);
+        }
         private void LoadMapRegionData()
         {
             //初始化区块列表
             GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_BigMap.prefab").Completed += (handle) =>
             {
                 this.BigMapPrefab = handle.Result;
-
                 this.mapRegionDatas = new List<MapRegionData>();
-
-                var Layer = this.BigMapPrefab.transform.Find("NormalRegion");
-
-                for (int i = 0; i < Layer.childCount; i++)
+                var NormalRegion = this.BigMapPrefab.transform.Find("NormalRegion");
+                for (int i = 0; i < NormalRegion.childCount; i++)
                 {
-                    var child = Layer.GetChild(i);
-                    MapRegionData mapRegionData = new MapRegionData(child.name, false, child.GetComponent<RectTransform>().anchoredPosition);
+                    var child = NormalRegion.GetChild(i);
+                    MapRegionData mapRegionData = new MapRegionData(child.name, false);
                     this.mapRegionDatas.Add(mapRegionData);
                     IDToMapRegionDic.Add(child.name, mapRegionData);
+                    RegionNumToRegionDic.Add(i + 1, mapRegionData);
                 }
-                synchronizerInOrder.Check(1);
+                var BlockRegion = this.BigMapPrefab.transform.Find("BlockRegion");
+                for (int i = 0; i < BlockRegion.childCount; i++)
+                {
+                    var child = BlockRegion.GetChild(i);
+                    MapRegionData mapRegionData = new MapRegionData(child.name, true);
+                    this.mapRegionDatas.Add(mapRegionData);
+                    IDToMapRegionDic.Add(child.name, mapRegionData);
+                    RegionNumToRegionDic.Add(0, mapRegionData);
+                }
+                synchronizerInOrder.Check(2);
             };
         }
         
@@ -240,11 +273,18 @@ namespace ProjectOC.MineSystem
             return true;
         }
 
-        public void UnlockMapRegion(string ID)
+        public void UnlockMapRegion(int RegionNum)
         {
-            if (!this.IDToMapRegionDic.ContainsKey(ID)) return;
-            IDToMapRegionDic[ID].isUnlockLayer[curMapLayerIndex] = true;
+            if (!this.RegionNumToRegionDic.ContainsKey(RegionNum)) return;
+            RegionNumToRegionDic[RegionNum].isUnlockLayer[curMapLayerIndex] = true;
         }
+
+        public bool CheckRegionIsUnlocked(int RegionNum)
+        {
+            if (!this.RegionNumToRegionDic.ContainsKey(RegionNum)) return false;
+            return RegionNumToRegionDic[RegionNum].isUnlockLayer[curMapLayerIndex];
+        }
+
         #endregion
     }
 }

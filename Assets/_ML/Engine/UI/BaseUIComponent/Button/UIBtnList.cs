@@ -171,7 +171,7 @@ namespace ML.Engine.UI
             this.SBPosDic.Clear();
             this.TwoDimSelectedButtons.Clear();
 
-            SelectedButton[] OneDimSelectedButtons = parent.GetComponentsInChildren<SelectedButton>(true);
+            SelectedButton[] OneDimSelectedButtons = parent.GetComponentsInChildren<SelectedButton>(this.readUnActive);
             this.OneDimCnt = OneDimSelectedButtons.Length;
 
             if (this.OneDimCnt == 0 && !isBtnListContainerDeleteAll)

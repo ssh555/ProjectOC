@@ -41,18 +41,15 @@ namespace ProjectOC.MineSystem
             public string MapRegionID;
             [LabelText("是否为障碍物"), ReadOnly, ShowInInspector]
             public bool IsBlock;
-            [LabelText("区块位置"), ReadOnly, ShowInInspector]
-            public Vector2 position;
             [LabelText("区块地图层解锁数组"), ReadOnly, ShowInInspector]
             public bool[] isUnlockLayer;
             [LabelText("小地图数组"), ReadOnly, ShowInInspector]
             public string[] mineralDataID;
 
-            public MapRegionData(string mapRegionID, bool isBlock, Vector2 position)
+            public MapRegionData(string mapRegionID, bool isBlock)
             {
                 MapRegionID = mapRegionID;
                 IsBlock = isBlock;
-                this.position = position;
                 this.isUnlockLayer = new bool[MineSystemData.MAPDEPTH];
                 this.mineralDataID = new string[MineSystemData.MAPDEPTH];
             }

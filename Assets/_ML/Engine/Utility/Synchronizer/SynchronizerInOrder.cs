@@ -1,3 +1,4 @@
+using ProjectOC.Order;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,14 +36,15 @@ namespace ML.Engine.Utility
         {
             lock (lockObject)
             {
+                Debug.Log("Check " + order + " 执行完毕");
                 // 检查是否按照顺序进行
-                if (order == curCheckNum)
+                if(CheckActions.ContainsKey(++order))
                 {
                     // 执行对应顺序的操作
-                    CheckActions[order]?.Invoke();
+                    CheckActions[order].Invoke();
 
                     // 更新当前检查的序号
-                    curCheckNum++;
+                    curCheckNum = order;
 
                     // 如果所有操作完成，则触发 OnAllFinish
                     if (curCheckNum == CheckNum && !isTrigger)
@@ -53,9 +55,16 @@ namespace ML.Engine.Utility
                 }
                 else
                 {
-                    // 如果不是按照顺序进行，则抛出异常或者进行其他处理
-                    throw new Exception("Operation not in order!");
+                    Debug.LogError("不存在待执行方法顺序："+ order);
                 }
+            }
+        }
+
+        public void StartExecution()
+        {
+            if (CheckActions.ContainsKey(0))
+            {
+                CheckActions[0].Invoke();
             }
         }
 
