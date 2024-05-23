@@ -46,8 +46,6 @@ namespace ML.Engine.Utility
                     isTrigger = true;
                     return;
                 }
-
-                Debug.Log("Check " + order + " 执行完毕");
                 // 检查是否按照顺序进行
                 if(CheckActions.ContainsKey(++order))
                 {
@@ -58,8 +56,6 @@ namespace ML.Engine.Utility
                 {
                     Debug.LogError("不存在待执行函数顺序 " + order);
                 }
-
-                
             }
         }
 
