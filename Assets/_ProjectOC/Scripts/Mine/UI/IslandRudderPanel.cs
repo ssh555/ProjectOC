@@ -17,6 +17,7 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         this.cursorNavigation = this.transform.Find("GraphCursorNavigation").GetComponent<GraphCursorNavigation>();
         var Content = this.cursorNavigation.transform.Find("Scroll View").Find("Viewport").Find("Content");
         this.MainIsland = Content.Find("MainIsland").GetComponent<RectTransform>();
+        this.ColliderRadiu = MainIsland.GetComponent<CircleCollider2D>().radius;
         this.Target = Content.Find("Target").GetComponent<RectTransform>();
         this.slider = this.transform.Find("MapLayer").Find("Slider").GetComponent<Slider>();
         this.slider.onValueChanged.AddListener((value) => { this.cursorNavigation.CurZoomRate = value; });
@@ -147,6 +148,8 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     private GraphCursorNavigation cursorNavigation;
 
     private RectTransform MainIsland;
+    private float ColliderRadiu;
+
     private RectTransform Target;
 
     private Slider slider;
