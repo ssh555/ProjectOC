@@ -56,12 +56,15 @@ namespace ProjectOC.DataNS
             }
             (this as MissionNS.IMissionObj).UpdateTransport();
         }
-        public void ChangeData(int index, IDataObj data)
+        public void ChangeData(int index, IDataObj data, bool isAdd = true)
         {
             var tup = DataContainer.ChangeData(index, data);
-            if (tup.Item1 != null)
+            if (isAdd)
             {
-                tup.Item1.AddToPlayerInventory(tup.Item2);
+                if (tup.Item1 != null)
+                {
+                    tup.Item1.AddToPlayerInventory(tup.Item2);
+                }
             }
             (this as MissionNS.IMissionObj).UpdateTransport(tup.Item1);
         }
@@ -91,7 +94,12 @@ namespace ProjectOC.DataNS
         public List<MissionNS.Transport> Transports { get; set; } = new List<MissionNS.Transport>();
         public List<MissionNS.MissionTransport> Missions { get; set; } = new List<MissionNS.MissionTransport>();
         public MissionNS.TransportPriority TransportPriority { get; set; } = MissionNS.TransportPriority.Normal;
-
+        public abstract void PutIn(int index, IDataObj data, int amount);
+        public int ReservePutIn(IDataObj data, int amount, bool reserveEmpty = false)
+        {
+            if (reserveEmpty && DataContainer.AddDataToEmptyIndex(data, true) < 0) { return 0; }
+            return ChangeAmount(data, amount, DataOpType.EmptyReserve, DataOpType.Empty, exceed: true, needCanIn: true);
+        }
         public int ChangeAmount(IDataObj data, int amount, DataOpType addType, DataOpType removeType, bool exceed = false, bool complete = true, bool needCanIn = false, bool needCanOut = false)
         {
             return DataContainer.ChangeAmount(data, amount, addType, removeType, exceed, complete, needCanIn, needCanOut);
@@ -113,11 +121,11 @@ namespace ProjectOC.DataNS
             {
                 if (item is IDataObj dataObj)
                 {
-                    return DataContainer.ChangeAmount(dataObj, item.Amount, DataOpType.Storage, DataOpType.Empty) == item.Amount;
+                    return DataContainer.ChangeAmount(dataObj, item.Amount, DataOpType.Storage, DataOpType.Empty, true) == item.Amount;
                 }
                 else
                 {
-                    return DataContainer.ChangeAmount(item.ID, item.Amount, DataOpType.Storage, DataOpType.Empty) == item.Amount;
+                    return DataContainer.ChangeAmount(item.ID, item.Amount, DataOpType.Storage, DataOpType.Empty, true) == item.Amount;
                 }
             }
             return false;

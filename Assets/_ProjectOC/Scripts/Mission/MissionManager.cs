@@ -39,11 +39,12 @@ namespace ProjectOC.MissionNS
             MissionTransports.Clear();
         }
 
-        public MissionTransport CreateTransportMission(MissionTransportType transportType, IDataObj data, int missionNum, IMissionObj initiator, MissionInitiatorType initiatorType)
+        public MissionTransport CreateTransportMission(MissionTransportType transportType, IDataObj data, int missionNum, 
+            IMissionObj initiator, MissionInitiatorType initiatorType, int replaceIndex=-1, bool reserveEmpty=false)
         {
             if (data != null && missionNum > 0 && initiator != null)
             {
-                MissionTransport mission = new MissionTransport(transportType, data, missionNum, initiator, initiatorType);
+                MissionTransport mission = new MissionTransport(transportType, data, missionNum, initiator, initiatorType, replaceIndex, reserveEmpty);
                 if (mission.Data != null)
                 {
                     MissionTransports.Add(mission);

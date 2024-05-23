@@ -9,7 +9,7 @@ namespace ML.Engine.InventorySystem
         public string CreatureID => ProjectOC.ManagerNS.LocalGameManager.Instance != null ? ProjectOC.ManagerNS.LocalGameManager.Instance.CreatureManager.GetCreatureID(ID) : "";
         public string ProRecipeID => ProjectOC.ManagerNS.LocalGameManager.Instance != null ? ProjectOC.ManagerNS.LocalGameManager.Instance.CreatureManager.GetProRecipeID(ID) : "";
         public string BreRecipeID => ProjectOC.ManagerNS.LocalGameManager.Instance != null ? ProjectOC.ManagerNS.LocalGameManager.Instance.CreatureManager.GetProRecipeID(ID) : "";
-        public List<Formula> Discard => ProjectOC.ManagerNS.LocalGameManager.Instance != null ? ProjectOC.ManagerNS.LocalGameManager.Instance.CreatureManager.GetDiscard(ID) : new List<Formula>();
+        public Formula Discard => ProjectOC.ManagerNS.LocalGameManager.Instance != null ? ProjectOC.ManagerNS.LocalGameManager.Instance.CreatureManager.GetDiscard(ID) : new Formula() { id = ""};
         public Gender Gender;
         public int Activity;
         public int Output;

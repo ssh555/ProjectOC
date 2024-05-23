@@ -106,7 +106,6 @@ namespace ProjectOC.ProNodeNS
         /// 是否可以开始制作物品
         /// </summary>
         public abstract bool CanWorking();
-        public abstract bool ChangeRecipe(string recipeID);
         protected abstract void EndActionForMission();
         protected abstract void EndActionForProduce();
         public abstract void ProNodeOnPositionChange(Vector3 diff);
@@ -116,6 +115,7 @@ namespace ProjectOC.ProNodeNS
         public IProNode(ProNodeTableData config)
         {
             ID = config.ID ?? "";
+            InitData(0, 0);
             EffBase = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.EffBase;
             DataContainer.OnDataChangeEvent += OnContainerDataChangeEvent;
         }
@@ -124,7 +124,10 @@ namespace ProjectOC.ProNodeNS
         /// </summary>
         public void StartRun()
         {
-            TimerForMission.Start();
+            if (!IsOnRunning)
+            {
+                TimerForMission.Start();
+            }
             StartProduce();
         }
         /// <summary>
@@ -143,15 +146,19 @@ namespace ProjectOC.ProNodeNS
         /// </summary>
         public bool StartProduce()
         {
-            if (CanWorking() && !IsOnProduce)
+            if (CanWorking())
             {
-                TimerForProduce.Reset(GetTimeCost());
-                return true;
+                if (!IsOnProduce)
+                {
+                    TimerForProduce.Reset(GetTimeCost());
+                    return true;
+                }
             }
             else
             {
-                return false;
+                StopProduce();
             }
+            return false;
         }
         /// <summary>
         /// 停止制作物品
@@ -174,6 +181,38 @@ namespace ProjectOC.ProNodeNS
                 result.AddRange(ManagerNS.LocalGameManager.Instance.RecipeManager.GetRecipeIDsByCategory(recipeCategory));
             }
             return ManagerNS.LocalGameManager.Instance.RecipeManager.SortRecipeIDs(result);
+        }
+        public bool ChangeRecipe(string recipeID)
+        {
+            lock (this)
+            {
+                RemoveRecipe();
+                if (!string.IsNullOrEmpty(recipeID))
+                {
+                    var recipe = ManagerNS.LocalGameManager.Instance.RecipeManager.SpawnRecipe(recipeID);
+                    if (recipe.IsValidRecipe)
+                    {
+                        Recipe = recipe;
+                        List<string> itemIDs = new List<string>() { recipe.ProductID };
+                        List<int> dataCapacitys = new List<int>() { recipe.ProductNum * StackMax };
+                        foreach (var raw in recipe.Raw)
+                        {
+                            itemIDs.Add(raw.id);
+                            dataCapacitys.Add(raw.num * StackMax);
+                        }
+                        List<DataNS.IDataObj> datas = new List<DataNS.IDataObj>();
+                        foreach (string id in itemIDs)
+                        {
+                            datas.Add(new DataNS.ItemIDDataObj(id));
+                        }
+                        ResetData(datas, dataCapacitys);
+                        StartRun();
+                        return true;
+                    }
+                    return false;
+                }
+                return true;
+            }
         }
         public void RemoveRecipe()
         {
@@ -251,7 +290,7 @@ namespace ProjectOC.ProNodeNS
         }
         #endregion
 
-        #region ItemContainerOwner
+        #region DataContainerOwner
         public override Transform GetTransform() { return WorldProNode.transform; }
         public override string GetUID() { return WorldProNode.InstanceID; }
         public override MissionNS.MissionObjType GetMissionObjType() { return MissionNS.MissionObjType.ProNode; }

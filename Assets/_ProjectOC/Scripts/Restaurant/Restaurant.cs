@@ -138,11 +138,11 @@ namespace ProjectOC.RestaurantNS
         #region IMissionObj
         public override Transform GetTransform() { return WorldRestaurant.transform; }
         public override string GetUID() { return UID; }
-
         public override MissionNS.MissionObjType GetMissionObjType()
         {
             return MissionNS.MissionObjType.Restaurant;
         }
+        public override void PutIn(int index, DataNS.IDataObj data, int amount) { Debug.Log("Error Restaurant PutIn"); }
         #endregion
     }
 }

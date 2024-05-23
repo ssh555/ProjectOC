@@ -45,6 +45,8 @@ namespace ProjectOC.MissionNS
         {
             if (mission.Data == null) { return; }
             Data = mission.Data;
+            bool isReplaceData = mission.ReplaceIndex >= 0;
+            bool isReserveEmpty = mission.ReserveEmpty;
             Mission = mission;
             Source = source;
             Target = target;
@@ -54,10 +56,9 @@ namespace ProjectOC.MissionNS
 
             MissionNum = missionNum;
             SoureceReserveNum = Source.ReservePutOut(mission.Data, missionNum);
-            TargetReserveNum = Target.ReservePutIn(mission.Data, missionNum);
-
+            if (!isReplaceData) { TargetReserveNum = Target.ReservePutIn(mission.Data, missionNum, Mission.ReserveEmpty); }
             Worker = worker;
-            if (SoureceReserveNum == 0 || TargetReserveNum == 0)
+            if (SoureceReserveNum == 0 || (!isReplaceData && TargetReserveNum == 0))
             {
                 End();
             }
@@ -122,7 +123,8 @@ namespace ProjectOC.MissionNS
                 FinishNum += CurNum;
                 TargetReserveNum -= CurNum;
                 CurNum = 0;
-                Target.PutIn(Data, FinishNum);
+                if (Mission.ReplaceIndex >= 0) { Target.PutIn(Mission.ReplaceIndex, Data, FinishNum); }
+                else { Target.PutIn(Data, FinishNum); }
                 Worker.SettleTransport();
                 End();
                 Mission.FinishNum += FinishNum;

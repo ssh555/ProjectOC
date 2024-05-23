@@ -94,6 +94,8 @@ namespace ProjectOC.MissionNS
         #endregion
 
         #region Set
+        public void PutIn(int index, IDataObj data, int amount);
+        public int ReservePutIn(IDataObj data, int amount, bool reserveEmpty = false);
         public bool PutIn(IDataObj data, int amount)
         {
             return ChangeAmount(data, amount, DataOpType.Storage, DataOpType.EmptyReserve, exceed: true) == amount;
@@ -101,10 +103,6 @@ namespace ProjectOC.MissionNS
         public int PutOut(IDataObj data, int amount)
         {
             return ChangeAmount(data, amount, DataOpType.Empty, DataOpType.StorageReserve, complete: false);
-        }
-        public int ReservePutIn(IDataObj data, int amount)
-        {
-            return ChangeAmount(data, amount, DataOpType.EmptyReserve, DataOpType.Empty, exceed: true, needCanIn: true);
         }
         public int ReservePutOut(IDataObj data, int amount)
         {

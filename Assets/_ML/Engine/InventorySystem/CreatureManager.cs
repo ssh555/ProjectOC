@@ -10,7 +10,7 @@ namespace ML.Engine.InventorySystem
         public string ItemID;
         public string ProRecipeID;
         public string BreRecipeID;
-        public List<Formula> Discard;
+        public Formula Discard;
         public int Activity;
         public bool HasSex;
     }
@@ -30,7 +30,7 @@ namespace ML.Engine.InventorySystem
         public string GetCreatureID(string id) { return IsValidID(id) ? TableDict[id].ID : ""; }
         public string GetProRecipeID(string id) { return IsValidID(id) ? TableDict[id].ProRecipeID : ""; }
         public string GetBreRecipeID(string id) { return IsValidID(id) ? TableDict[id].BreRecipeID : ""; }
-        public List<Formula> GetDiscard(string id) { return IsValidID(id) ? TableDict[id].Discard : new List<Formula>(); }
+        public Formula GetDiscard(string id) { return IsValidID(id) ? TableDict[id].Discard : new Formula() { id = ""}; }
         public int GetActivity(string id) { return IsValidID(id) ? TableDict[id].Activity : 0; }
         public bool GetHasSex(string id) { return IsValidID(id) ? TableDict[id].HasSex : false; }
     }

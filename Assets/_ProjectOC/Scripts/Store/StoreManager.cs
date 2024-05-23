@@ -166,7 +166,7 @@ namespace ProjectOC.StoreNS
                         {
                             if (store is CreatureStore creatureStore &&
                             creatureStore.CreatureItemID == data.GetDataID() &&
-                            store.DataContainer.HaveAnyNotSetData(judgeCanIn))
+                            store.DataContainer.GetEmptyIndex(judgeCanIn) >= 0)
                             {
                                 result = store;
                                 break;

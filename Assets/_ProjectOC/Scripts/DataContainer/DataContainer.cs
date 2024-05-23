@@ -212,16 +212,16 @@ namespace ProjectOC.DataNS
             return result;
         }
 
-        public bool HaveAnyNotSetData(bool needCanIn = false, bool needCanOut = false)
+        public int GetEmptyIndex(bool needCanIn = false, bool needCanOut = false)
         {
             for (int i = 0; i < GetCapacity(); i++)
             {
                 if (!Datas[i].HaveSetData && (!needCanIn || Datas[i].CanIn) && (!needCanOut || Datas[i].CanOut))
                 {
-                    return true;
+                    return i;
                 }
             }
-            return false;
+            return -1;
         }
         #endregion
 
@@ -279,7 +279,6 @@ namespace ProjectOC.DataNS
                 return result;
             }
         }
-
         public Dictionary<IDataObj, int> ChangeCapacity(int capacity, List<int> dataCapacitys)
         {
             lock (this)
@@ -334,7 +333,6 @@ namespace ProjectOC.DataNS
                 return result;
             }
         }
-
         public void AddCapacity(int addCapacity, int dataCapacity)
         {
             lock (this)
@@ -349,7 +347,6 @@ namespace ProjectOC.DataNS
                 OnDataChangeEvent?.Invoke();
             }
         }
-
         public void AddCapacity(int addCapacity, List<int> dataCapacitys)
         {
             lock (this)
@@ -364,7 +361,18 @@ namespace ProjectOC.DataNS
                 OnDataChangeEvent?.Invoke();
             }
         }
-
+        public int AddDataToEmptyIndex(IDataObj data, bool needCanIn = false, bool needCanOut = false)
+        {
+            lock (this)
+            {
+                int index = GetEmptyIndex(needCanIn, needCanOut);
+                if (index >= 0 && !Datas[index].HaveSetData)
+                {
+                    ChangeData(index, data);
+                }
+                return index;
+            }
+        }
         /// <summary>
         /// 修改存储的数据
         /// </summary>
@@ -397,7 +405,6 @@ namespace ProjectOC.DataNS
                 return result;
             }
         }
-
         /// <summary>
         /// 返回修改成功的数量
         /// </summary>
@@ -472,7 +479,6 @@ namespace ProjectOC.DataNS
                 return 0;
             }
         }
-
         public int ChangeAmount(int index, int amount, DataOpType addType, DataOpType removeType, bool exceed = false, bool complete = true)
         {
             lock (this)
@@ -491,7 +497,6 @@ namespace ProjectOC.DataNS
                 return 0;
             }
         }
-
         public void SortDataContainer(bool reverse = false)
         {
             lock (this)
@@ -500,7 +505,6 @@ namespace ProjectOC.DataNS
                 Array.Sort(Datas, (x, y) => flag * x.GetData().CompareTo(y.GetData()));
             }
         }
-
         public void ChangeCanIn(int index, bool canIn) { if (IsValidIndex(index)) { Datas[index].ChangeCanIn(canIn); } }
         public void ChangeCanOut(int index, bool canOut) { if (IsValidIndex(index)) { Datas[index].ChangeCanOut(canOut); } }
         #endregion

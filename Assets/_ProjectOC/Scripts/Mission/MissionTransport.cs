@@ -19,6 +19,8 @@ namespace ProjectOC.MissionNS
         public MissionTransportType Type;
         [LabelText("搬运发起者类型"), ReadOnly]
         public MissionInitiatorType MissionInitiatorType;
+        public int ReplaceIndex;
+        public bool ReserveEmpty;
         [LabelText("已经分配的数量"), ReadOnly]
         public int AssignNum;
         [LabelText("需要分配的数量"), ReadOnly, ShowInInspector]
@@ -39,7 +41,7 @@ namespace ProjectOC.MissionNS
         #endregion
 
         #region Method
-        public MissionTransport(MissionTransportType type, IDataObj data, int missionNum, IMissionObj imission, MissionInitiatorType initiatorType)
+        public MissionTransport(MissionTransportType type, IDataObj data, int missionNum, IMissionObj imission, MissionInitiatorType initiatorType, int replaceIndex = -1, bool reserveEmpty = false)
         {
             if (data == null) { return; }
             Data = data;
@@ -48,6 +50,8 @@ namespace ProjectOC.MissionNS
             Type = type;
             MissionInitiatorType = initiatorType;
             MissionNum = missionNum;
+            ReplaceIndex = replaceIndex;
+            ReserveEmpty = reserveEmpty;
         }
         public bool AddTransport(Transport transport)
         {

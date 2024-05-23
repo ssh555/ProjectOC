@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System;
 using Sirenix.OdinInspector;
 
@@ -8,7 +7,7 @@ namespace ProjectOC.ProNodeNS
     public class AutoProNode : IProNode
     {
         #region ProNode
-        public AutoProNode(ProNodeTableData config) : base(config) { InitData(0, 0); }
+        public AutoProNode(ProNodeTableData config) : base(config) { }
         #endregion
 
         #region Override
@@ -30,50 +29,17 @@ namespace ProjectOC.ProNodeNS
             }
             return false;
         }
-        public override bool ChangeRecipe(string recipeID)
-        {
-            lock (this)
-            {
-                RemoveRecipe();
-                if (!string.IsNullOrEmpty(recipeID))
-                {
-                    var recipe = ManagerNS.LocalGameManager.Instance.RecipeManager.SpawnRecipe(recipeID);
-                    if (recipe.IsValidRecipe)
-                    {
-                        Recipe = recipe;
-                        List<string> itemIDs = new List<string>() { recipe.ProductID };
-                        List<int> dataCapacitys = new List<int>() { recipe.ProductNum * StackMax };
-                        foreach (var raw in recipe.Raw)
-                        {
-                            itemIDs.Add(raw.id);
-                            dataCapacitys.Add(raw.num * StackMax);
-                        }
-                        List<DataNS.IDataObj> datas = new List<DataNS.IDataObj>();
-                        foreach (string id in itemIDs)
-                        {
-                            datas.Add(new DataNS.ItemIDDataObj(id));
-                        }
-                        ResetData(datas, dataCapacitys);
-                        StartRun();
-                        return true;
-                    }
-                    return false;
-                }
-                return true;
-            }
-        }
         protected override void EndActionForMission()
         {
             int missionNum;
             foreach (var kv in Recipe.Raw)
             {
-                missionNum = kv.num * RawThreshold - DataContainer.GetAmount(kv.id, DataNS.DataOpType.Storage) 
-                    - (this as MissionNS.IMissionObj).GetMissionNum(new DataNS.ItemIDDataObj(kv.id), true);
+                DataNS.ItemIDDataObj data = new DataNS.ItemIDDataObj(kv.id);
+                missionNum = kv.num * RawThreshold - DataContainer.GetAmount(kv.id, DataNS.DataOpType.Storage) - (this as MissionNS.IMissionObj).GetMissionNum(data, true);
                 if (missionNum > 0)
                 {
                     missionNum += kv.num * (StackMax - RawThreshold);
-                    ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission
-                        (MissionNS.MissionTransportType.Store_ProNode, new DataNS.ItemIDDataObj(kv.id), missionNum, this, MissionNS.MissionInitiatorType.PutIn_Initiator);
+                    ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission(MissionNS.MissionTransportType.Store_ProNode, data, missionNum, this, MissionNS.MissionInitiatorType.PutIn_Initiator);
                 }
             }
             if (StackReserve > 0)
@@ -81,7 +47,7 @@ namespace ProjectOC.ProNodeNS
                 var missionType = ML.Engine.InventorySystem.ItemManager.Instance.GetItemType(ProductID) == ML.Engine.InventorySystem.ItemType.Feed ?
                     MissionNS.MissionTransportType.ProNode_Restaurant : MissionNS.MissionTransportType.ProNode_Store;
                 ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission
-                    (missionType, new DataNS.ItemIDDataObj(ProductID), StackReserve, this, MissionNS.MissionInitiatorType.PutOut_Initiator);
+                    (missionType, DataContainer.GetData(0), StackReserve, this, MissionNS.MissionInitiatorType.PutOut_Initiator);
                 StackReserve = 0;
             }
         }
@@ -89,7 +55,7 @@ namespace ProjectOC.ProNodeNS
         {
             ML.Engine.InventorySystem.Item item = Recipe.Composite(this);
             AddItem(item);
-            int needAssignNum = (this as MissionNS.IMissionObj).GetNeedAssignNum(new DataNS.ItemIDDataObj(ProductID), false);
+            int needAssignNum = (this as MissionNS.IMissionObj).GetNeedAssignNum(DataContainer.GetData(0), false);
             if (Stack >= StackReserve + needAssignNum + StackThreshold * ProductNum)
             {
                 StackReserve = Stack - needAssignNum;
@@ -105,6 +71,7 @@ namespace ProjectOC.ProNodeNS
         {
             (this as MissionNS.IMissionObj).OnPositionChangeTransport();
         }
+        public override void PutIn(int index, DataNS.IDataObj data, int amount) {}
         #endregion
     }
 }

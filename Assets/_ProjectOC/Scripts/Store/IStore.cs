@@ -36,7 +36,7 @@ namespace ProjectOC.StoreNS
         {
             (this as MissionNS.IMissionObj).OnPositionChangeTransport();
         }
-
+        public override void PutIn(int index, DataNS.IDataObj data, int amount) { }
         public override Transform GetTransform() { return WorldStore?.transform; }
         public override string GetUID() { return UID; }
 
