@@ -57,7 +57,7 @@ namespace ProjectOC.ProNodeNS.UI
         private bool IsInitBtnList;
         protected override void InitBtnInfo()
         {
-            ML.Engine.UI.UIBtnList.Synchronizer synchronizer = new ML.Engine.UI.UIBtnList.Synchronizer(4, () => { IsInitBtnList = true; Refresh(); });
+            ML.Engine.Utility.Synchronizer synchronizer = new ML.Engine.Utility.Synchronizer(4, () => { IsInitBtnList = true; Refresh(); });
 
             RawBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ProNode").Find("Recipe").Find("Raw").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             int num = ProNode.HasRecipe ? ProNode.Recipe.Raw.Count : 0;
@@ -81,7 +81,7 @@ namespace ProjectOC.ProNodeNS.UI
         {
             if (!IsInitBtnList) return;
             IsInitBtnList = false;
-            ML.Engine.UI.UIBtnList.Synchronizer synchronizer = new ML.Engine.UI.UIBtnList.Synchronizer(3, () => { IsInitBtnList = true; Refresh(); });
+            ML.Engine.Utility.Synchronizer synchronizer = new ML.Engine.Utility.Synchronizer(3, () => { IsInitBtnList = true; Refresh(); });
             int num = ProNode.HasRecipe ? ProNode.Recipe.Raw.Count : 0;
             if (RawBtnList != null && RawBtnList.BtnCnt != num)
             { RawBtnList.ChangBtnNum(num, "Prefab_ProNode_UI/Prefab_ProNode_UI_RawTemplate.prefab", () => { synchronizer.Check(); }); }

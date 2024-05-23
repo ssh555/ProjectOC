@@ -189,11 +189,12 @@ namespace ProjectOC.StoreNS
 
         public IStore SpawnStore(ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2 storeType) 
         {
-            if (storeType == ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2.LiquidStore)
+            if (storeType == ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2.LiquidStore ||
+                storeType == ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2.SolidStore)
             {
                 return new Store(storeType);
             }
-            else if (storeType == ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2.SolidStore)
+            else if (storeType == ML.Engine.BuildingSystem.BuildingPart.BuildingCategory2.Projector)
             {
                 return new CreatureStore(storeType);
             }
