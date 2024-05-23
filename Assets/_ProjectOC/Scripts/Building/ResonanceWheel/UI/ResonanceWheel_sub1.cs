@@ -389,7 +389,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
             }
             );
 
-            UIBtnList.Synchronizer synchronizer = new UIBtnList.Synchronizer(1, () => { isInitObjectPool = true; });
+            Synchronizer synchronizer = new Synchronizer(1, () => { isInitObjectPool = true; });
             this.objectPool.RegisterPool(UIObjectPool.HandleType.Prefab, "DescriptionPool", 5, "Prefab_Worker_UI/Prefab_Worker_UI_FeatureTemplate.prefab", OnCompleted: (hanlde) => { synchronizer.Check(); });
             base.InitObjectPool();
         }
