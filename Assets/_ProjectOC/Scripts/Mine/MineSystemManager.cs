@@ -70,7 +70,7 @@ namespace ProjectOC.MineSystem
         #endregion
         #region Base
         //先初始化大地图 再初始化小地图
-        Synchronizer synchronizer;
+        SynchronizerInOrder synchronizerInOrder;
         private ML.Engine.Manager.GameManager GM => ML.Engine.Manager.GameManager.Instance;
 
         /// <summary>
@@ -81,56 +81,48 @@ namespace ProjectOC.MineSystem
         private static MineSystemManager instance;
         public void Init()
         {
-            //初始化大地图缩放比例
-            this.GridScale = 1;
+            #region 异步初始化
 
-            synchronizer = new Synchronizer(2, () =>
-            {
-                for (int i = 0; i < this.mapRegionDatas.Count; i++) 
+            synchronizerInOrder = new SynchronizerInOrder(3, () => {
+                for (int i = 0; i < this.mapRegionDatas.Count; i++)
                 {
-                    for(int j = 0;j< mapRegionDatas[i].mineralDataID.Length;j++)
+                    for (int j = 0; j < mapRegionDatas[i].mineralDataID.Length; j++)
                     {
-                        mapRegionDatas[i].mineralDataID[j] = SmallMapDatass[i * MineSystemData.MAPDEPTH + j].name;
+                        mapRegionDatas[i].mineralDataID[j] = SmallMapDatas[i * MineSystemData.MAPDEPTH + j].name;
                     }
                 }
             });
 
-            //初始化区块列表
-            GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_BigMap.prefab").Completed += (handle) =>
-            {
-                this.BigMapPrefab = handle.Result;
+            //0 初始化MineralTableData
+            synchronizerInOrder.AddCheckAction(0, () => {
+                LoadMineralTableData();
+            });
 
-                this.mapRegionDatas = new List<MapRegionData>();
+            //1 初始化初始化区块列表
+            synchronizerInOrder.AddCheckAction(1, () => {
+                LoadMapRegionData();
+            });
 
-                var Layer = this.BigMapPrefab.transform.Find("NormalRegion");
+            //2 读取小地图矿物的数据
+            synchronizerInOrder.AddCheckAction(2, () => {
+                LoadSmallMapMineData();
+            });
 
-                for(int i =0;i< Layer.childCount; i++)
-                {
-                    var child = Layer.GetChild(i);
-                    MapRegionData  mapRegionData= new MapRegionData(child.name,false, child.GetComponent<RectTransform>().anchoredPosition);
-                    this.mapRegionDatas.Add(mapRegionData);
-                    IDToMapRegionDic.Add(child.name, mapRegionData);
-                }
-                synchronizer.Check();
-            };
+            #endregion
+
+            #region 同步初始化
+            //初始化大地图缩放比例
+            this.GridScale = 1;
 
             //初始化大地图地图层解锁数组
             isUnlockIslandMap = new bool[MineSystemData.MAPDEPTH];
 
-
-
             //初始化主岛数据
             mainIslandData = new MainIslandData();
 
-
-            //初始化小地图数据
-
             //默认选中
             curMapLayerIndex = 0;
-
-            //读取小地图矿物的数据
-            LoadMineData();
-
+            #endregion
         }
 
 
@@ -156,30 +148,73 @@ namespace ProjectOC.MineSystem
 
         #region LoadData
         [ShowInInspector]
-        private List<MineSmallMapEditData> SmallMapDatass;
+        private List<MineSmallMapEditData> SmallMapDatas;
         private Dictionary<string, MineralTableData> MineralTableDataDic = new Dictionary<string, MineralTableData>();
-        private void LoadMineData()
+        private void LoadSmallMapMineData()
         {
             GameManager.Instance.ABResourceManager.LoadAssetsAsync<MineSmallMapEditData>("Config_Mine_MineEditorData", 
-                (smd) => { 
-                    //TODO
-                    MineralMapData mineralMapData = new MineralMapData(smd.name,null);
+                (smd) => {
+                    List<MineData> MineDatas = new List<MineData>();
+                    foreach (var mine in smd.mineData)
+                    {
+                        foreach (var pos in mine.MinePoses)
+                        {
+                            int RemainNum = this.MineralTableDataDic[mine.MineID].MineNum;
+                            MineDatas.Add(new MineData(mine.MineID, pos, RemainNum));
+                        }
+                    }
+                    MineralMapData mineralMapData = new MineralMapData(smd.name, MineDatas);
                     mineralMapDatas.Add(smd.name, mineralMapData); 
-                
                 }
                 ).Completed += 
                 (handle) =>
                 {
-                    SmallMapDatass = handle.Result.ToList<MineSmallMapEditData>();
-                    SmallMapDatass.Sort((MineSmallMapEditData a, MineSmallMapEditData b) => 
+                    SmallMapDatas = handle.Result.ToList<MineSmallMapEditData>();
+                    SmallMapDatas.Sort((MineSmallMapEditData a, MineSmallMapEditData b) => 
                     {
                         int t1 = Convert.ToInt32(a.name.Split('_')[1]);
                         int t2 = Convert.ToInt32(b.name.Split('_')[1]);
                         return t1.CompareTo(t2);
                     });
-                    synchronizer.Check();
+                    synchronizerInOrder.Check(2);
                 };
         }
+
+        private void LoadMineralTableData()
+        {
+            /*ML.Engine.ABResources.ABJsonAssetProcessor<MineralTableData[]> ABJAProcessor = new ML.Engine.ABResources.ABJsonAssetProcessor<MineralTableData[]>("OCTableData", "Order", (datas) =>
+            {
+                foreach (var data in datas)
+                {
+                    this.MineralTableDataDic.Add(data.ID, data);
+                }
+            }, "矿物数据");
+            ABJAProcessor.StartLoadJsonAssetData();*/
+            synchronizerInOrder.Check(0);
+        }
+        private void LoadMapRegionData()
+        {
+            //初始化区块列表
+            GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_BigMap.prefab").Completed += (handle) =>
+            {
+                this.BigMapPrefab = handle.Result;
+
+                this.mapRegionDatas = new List<MapRegionData>();
+
+                var Layer = this.BigMapPrefab.transform.Find("NormalRegion");
+
+                for (int i = 0; i < Layer.childCount; i++)
+                {
+                    var child = Layer.GetChild(i);
+                    MapRegionData mapRegionData = new MapRegionData(child.name, false, child.GetComponent<RectTransform>().anchoredPosition);
+                    this.mapRegionDatas.Add(mapRegionData);
+                    IDToMapRegionDic.Add(child.name, mapRegionData);
+                }
+                synchronizerInOrder.Check(1);
+            };
+        }
+        
+
         #endregion
 
         #region External

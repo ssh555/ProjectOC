@@ -83,7 +83,7 @@ namespace ProjectOC.MineSystem
         public class MineData
         {
             [LabelText("矿物ID"), ReadOnly, ShowInInspector]
-            public string MineralMapID;
+            public string MineID;
             [LabelText("矿物位置"), ReadOnly, ShowInInspector]
             public Vector2 position;
             [LabelText("剩余开采次数"), ReadOnly, ShowInInspector]
@@ -91,7 +91,7 @@ namespace ProjectOC.MineSystem
 
             public MineData(string mineralMapID, Vector2 position, int remainMineNum)
             {
-                MineralMapID = mineralMapID;
+                MineID = mineralMapID;
                 this.position = position;
                 RemainMineNum = remainMineNum;
             }
@@ -139,9 +139,11 @@ namespace ProjectOC.MineSystem
         [System.Serializable]
         public struct MineralTableData
         {
-            
+            public string ID;
+            public string Icon;
+            public List<ML.Engine.InventorySystem.Formula> MineEff;
+            public int MineNum;
         }
-
     }
 }
 
