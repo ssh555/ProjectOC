@@ -77,6 +77,7 @@ namespace ML.Engine.UI
         }
 
         public event Action OnScaleChanged;
+        public event Action OnCenterPosChanged;
 
         protected override void Awake()
         {
@@ -284,6 +285,7 @@ namespace ML.Engine.UI
                     {
                         VerticalScrollbar.value += (vector2.y / 400) * NavagationSpeed;
                     }
+                    OnCenterPosChanged?.Invoke();
                 };
             }
 

@@ -67,6 +67,12 @@ namespace ProjectOC.MineSystem
         private int lastRegionNum = -1;
 
 
+        #region SmallMap
+        [ShowInInspector]
+        private MineralMapData mineralMapData;
+        #endregion
+
+
         #region Tick
         public int tickPriority { get; set; }
         public int fixedTickPriority { get; set; }
@@ -303,6 +309,29 @@ namespace ProjectOC.MineSystem
             return RegionNumToRegionDic[RegionNum].isUnlockLayer[curMapLayerIndex];
         }
 
+        public void ChangeCurMineralMapData(int curSelectRegion)
+        {
+            Debug.Log("GetCurMineralMapData " + RegionNumToRegionDic.ContainsKey(curSelectRegion) + " " + curSelectRegion);
+            if(!RegionNumToRegionDic.ContainsKey(curSelectRegion))
+            {
+                this.mineralMapData = null;
+                return;
+            }
+            if(!CheckRegionIsUnlocked(curSelectRegion))
+            {
+                this.mineralMapData = null;
+                return;
+            }
+
+            string MineralMapDataID = RegionNumToRegionDic[curSelectRegion].mineralDataID[CurMapLayerIndex];
+            Debug.Log(MineralMapDataID);
+            if(!mineralMapDatas.ContainsKey(MineralMapDataID) )
+            {
+                this.mineralMapData = null;
+                return;
+            }
+            this.mineralMapData =  mineralMapDatas[MineralMapDataID];
+        }
         #endregion
     }
 }

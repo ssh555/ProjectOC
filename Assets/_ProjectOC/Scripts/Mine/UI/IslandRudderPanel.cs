@@ -45,7 +45,6 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         this.cursorNavigation.DisableGraphCursorNavigation();
         this.cursorNavigation.OnScaleChanged -= RefreshOnZoomMap;
         MM.MainIslandData.OnisMovingChanged -= RefreshTarget;
-        ClearTemp();
     }
 
     protected override void Exit()
@@ -170,14 +169,6 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     #endregion
 
     #region UI
-    #region temp
-    private void ClearTemp()
-    {
-/*        GameManager.DestroyObj(icon_genderfemaleSprite);
-        GameManager.DestroyObj(icon_gendermaleSprite);*/
-    }
-
-    #endregion
 
     #region UI对象引用
     private MineSystemManager MM => LocalGameManager.Instance.MineSystemManager;
@@ -258,6 +249,7 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         MapLayerUIBtnList.OnSelectButtonChanged += () =>
         {
             MM.CurMapLayerIndex = MapLayerUIBtnList.GetCurSelectedPos1();
+            DetectMainIslandCurRegion();
             this.Refresh();
         };
     }

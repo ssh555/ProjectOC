@@ -7,6 +7,7 @@ using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static ProjectOC.MineSystem.MineSystemData;
 using static SelectMineralSourcesPanel;
 public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelStruct>
 {
@@ -28,23 +29,30 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
     public override void OnEnter()
     {
         base.OnEnter();
-        MM.RefreshUI += this.RefreshMainIsland;
         this.InitData();
         this.cursorNavigation.EnableGraphCursorNavigation(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm, ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm);
         this.cursorNavigation.OnScaleChanged += RefreshOnZoomMap;
+        this.cursorNavigation.OnCenterPosChanged += DetectMainIslandCurRegion;
     }
     public override void OnExit()
     {
         base.OnExit();
-        MM.RefreshUI -= this.RefreshMainIsland;
         this.cursorNavigation.DisableGraphCursorNavigation();
         this.cursorNavigation.OnScaleChanged -= RefreshOnZoomMap;
+        this.cursorNavigation.OnCenterPosChanged -= DetectMainIslandCurRegion;
+        ClearTemp();
     }
 
     protected override void Exit()
     {
         base.Exit();
-        ClearTemp();
+        this.MapLayerUIBtnList.DisableBtnList();
+    }
+
+    protected override void Enter()
+    {
+        base.Enter();
+        this.MapLayerUIBtnList.EnableBtnList();
     }
 
     #endregion
@@ -71,7 +79,8 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
 
         // ·µ»Ø
         ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
-
+        this.MapLayerUIBtnList.RemoveAllListener();
+        this.MapLayerUIBtnList.DeBindInputAction();
     }
 
     protected override void RegisterInput()
@@ -80,7 +89,7 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
 
         // ·µ»Ø
         ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
-
+        this.MapLayerUIBtnList.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.StartMenu.SwichBtn, UIBtnListContainer.BindType.started);
     }
 
     private void Confirm_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -121,6 +130,7 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
         if (PreSelectRegion != CurSelectRegion)
         {
             PreSelectRegion = CurSelectRegion;
+            MM.ChangeCurMineralMapData(CurSelectRegion);
             this.Refresh();
         }
     }
@@ -160,18 +170,11 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
         for (int i = 0;i< NormalRegions.childCount;i++)
         {
             var isUnlocked = MM.CheckRegionIsUnlocked(i + 1);
-            Debug.Log(isUnlocked);
             NormalRegions.GetChild(i).Find("Normal").gameObject.SetActive(isUnlocked);
             NormalRegions.GetChild(i).Find("Locked").gameObject.SetActive(!isUnlocked);
+            NormalRegions.GetChild(i).Find("Selected").gameObject.SetActive(isUnlocked && i + 1 == CurSelectRegion);
         }
         #endregion
-    }
-
-    private void RefreshMainIsland()
-    {
-        this.MainIsland.anchoredPosition = MM.MainIslandData.CurPos;
-        this.Target.anchoredPosition = MM.MainIslandData.TargetPos;
-        DetectMainIslandCurRegion();
     }
 
     private void RefreshOnZoomMap()
@@ -198,10 +201,17 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
     }
     #endregion
 
-
+    private UIBtnList MapLayerUIBtnList = null;
     protected override void InitBtnInfo()
     {
         this.cursorNavigation.InitUIBtnList();
+        MapLayerUIBtnList = new UIBtnList(this.transform.Find("MapLayer").Find("ButtonList").GetComponent<UIBtnListInitor>());
+        MapLayerUIBtnList.OnSelectButtonChanged += () =>
+        {
+            MM.CurMapLayerIndex = MapLayerUIBtnList.GetCurSelectedPos1();
+            MM.ChangeCurMineralMapData(CurSelectRegion);
+            this.Refresh();
+        };
     }
     #endregion
 }
