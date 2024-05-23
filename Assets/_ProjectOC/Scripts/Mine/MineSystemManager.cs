@@ -35,7 +35,7 @@ namespace ProjectOC.MineSystem
         private MainIslandData mainIslandData;
         public MainIslandData MainIslandData { get {  return mainIslandData; } }
         [LabelText("小地图数据"), ReadOnly, ShowInInspector]
-        private Dictionary<string, MineralMapData> mineralMapDatas;
+        private Dictionary<string, MineralMapData> mineralMapDatas = new Dictionary<string, MineralMapData>();
 
         [LabelText("大地图预制体"), ReadOnly, ShowInInspector]
         private GameObject BigMapPrefab;
@@ -52,10 +52,12 @@ namespace ProjectOC.MineSystem
         /// <summary>
         /// id , mapregiondata
         /// </summary>
+        [ShowInInspector]
         private Dictionary<string, MapRegionData> IDToMapRegionDic = new Dictionary<string, MapRegionData>();
         /// <summary>
         ///  RegionNum, mapregiondata
         /// </summary>
+        [ShowInInspector]
         private Dictionary<int, MapRegionData> RegionNumToRegionDic = new Dictionary<int, MapRegionData>();
 
 
@@ -166,7 +168,6 @@ namespace ProjectOC.MineSystem
         private string bigMapDataJson = "Assets/_ProjectOC/OCResources/Json/TableData/WorldMap.json";
         private string _jsonData;
         private int[,] bigMapTableData;
-        [ShowInInspector]
         public int[,] BigMapTableData { get { return bigMapTableData; } }
         private void LoadSmallMapMineData()
         {
@@ -177,8 +178,11 @@ namespace ProjectOC.MineSystem
                     {
                         foreach (var pos in mine.MinePoses)
                         {
-                            int RemainNum = this.MineralTableDataDic[mine.MineID].MineNum;
-                            MineDatas.Add(new MineData(mine.MineID, pos, RemainNum));
+                            if(this.MineralTableDataDic.ContainsKey(mine.MineID))
+                            {
+                                int RemainNum = this.MineralTableDataDic[mine.MineID].MineNum;
+                                MineDatas.Add(new MineData(mine.MineID, pos, RemainNum));
+                            }
                         }
                     }
                     MineralMapData mineralMapData = new MineralMapData(smd.name, MineDatas);
@@ -239,7 +243,6 @@ namespace ProjectOC.MineSystem
                 {
                     var child = BlockRegion.GetChild(i);
                     MapRegionData mapRegionData = new MapRegionData(child.name, true);
-                    this.mapRegionDatas.Add(mapRegionData);
                     IDToMapRegionDic.Add(child.name, mapRegionData);
                     RegionNumToRegionDic.Add(0, mapRegionData);
                 }

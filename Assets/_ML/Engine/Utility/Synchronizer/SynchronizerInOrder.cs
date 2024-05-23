@@ -36,27 +36,30 @@ namespace ML.Engine.Utility
         {
             lock (lockObject)
             {
+                // 更新当前检查的序号
+                curCheckNum++;
+
+                // 如果所有操作完成，则触发 OnAllFinish
+                if (curCheckNum == CheckNum && !isTrigger)
+                {
+                    OnAllFinish?.Invoke();
+                    isTrigger = true;
+                    return;
+                }
+
                 Debug.Log("Check " + order + " 执行完毕");
                 // 检查是否按照顺序进行
                 if(CheckActions.ContainsKey(++order))
                 {
                     // 执行对应顺序的操作
                     CheckActions[order].Invoke();
-
-                    // 更新当前检查的序号
-                    curCheckNum = order;
-
-                    // 如果所有操作完成，则触发 OnAllFinish
-                    if (curCheckNum == CheckNum && !isTrigger)
-                    {
-                        OnAllFinish?.Invoke();
-                        isTrigger = true;
-                    }
                 }
                 else
                 {
-                    Debug.LogError("不存在待执行方法顺序："+ order);
+                    Debug.LogError("不存在待执行函数顺序 " + order);
                 }
+
+                
             }
         }
 

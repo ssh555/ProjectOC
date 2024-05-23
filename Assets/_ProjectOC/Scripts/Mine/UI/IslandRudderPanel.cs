@@ -198,6 +198,7 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         for (int i = 0;i< NormalRegions.childCount;i++)
         {
             var isUnlocked = MM.CheckRegionIsUnlocked(i + 1);
+            Debug.Log(isUnlocked);
             NormalRegions.GetChild(i).Find("Normal").gameObject.SetActive(isUnlocked);
             NormalRegions.GetChild(i).Find("Locked").gameObject.SetActive(!isUnlocked);
         }
