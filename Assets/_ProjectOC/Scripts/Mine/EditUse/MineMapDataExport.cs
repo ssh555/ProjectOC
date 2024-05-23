@@ -18,9 +18,9 @@ namespace ProjectOC.MineSystem
             //Transform
             RectTransform referenceRectTransform;
             Transform island1, island2;
-            referenceRectTransform = GameObject.Find("Canvas2/Prefab_MineSystem_UI_BigMap_copy(Clone)/NormalRegion").transform as RectTransform;
-            island1 = GameObject.Find("Canvas2/Prefab_MineSystem_UI_BigMap_copy(Clone)/IslandPos1").transform;
-            island2 = GameObject.Find("Canvas2/Prefab_MineSystem_UI_BigMap_copy(Clone)/IslandTransf/IslandPos2").transform;
+            referenceRectTransform = GameObject.Find("Canvas2/Prefab_MineSystem_UI_BigMap/NormalRegion").transform as RectTransform;
+            island1 = GameObject.Find("Canvas2/Prefab_MineSystem_UI_BigMap/IslandPos1").transform;
+            island2 = GameObject.Find("Canvas2/Prefab_MineSystem_UI_BigMap/IslandTransf/IslandPos2").transform;
             
             //策划大地图数据
             string _jsonData = File.ReadAllText(bigMapDataJson);
@@ -58,8 +58,8 @@ namespace ProjectOC.MineSystem
 
         #region 导出数据
         List<MineSmallMapEditData> SmallMapEditDatas = new List<MineSmallMapEditData>();
-        Color dataTileColor = new Color(44, 46, 47);
-        Color emptyTileColor = new Color(161, 162, 166);
+        Color dataTileColor = new Color32(44, 46, 47,255);
+        Color emptyTileColor = new Color32(161, 162, 166,255);
         [Button("导出数据")]
         void ReGenerateAsset()
         {
@@ -102,6 +102,7 @@ namespace ProjectOC.MineSystem
             string _jsonData = File.ReadAllText(bigMapDataJson);
             GameObject _prefabData =
                 GameObject.Instantiate(AssetDatabase.LoadAssetAtPath<GameObject>(bigMapPrefabPath));
+            _prefabData.name = "Prefab_MineSystem_UI_BigMap";
             GameObject _regionTemplate = _prefabData.transform.Find("BlockRegion/MapRegion_Block").gameObject;
             Transform normalRegionTransf = _prefabData.transform.Find("NormalRegion");
             TileMap.DestroyTransformChild(normalRegionTransf);
@@ -213,10 +214,12 @@ namespace ProjectOC.MineSystem
                     newPrefab.name = $"MapRegion_{_lable}";
                     newPrefab.transform.SetParent(normalRegionTransf);
                     (newPrefab.transform as RectTransform).anchoredPosition = Vector2.zero;
+                    (newPrefab.transform as RectTransform).localScale = Vector3.one;
                     // float _randomValue = Random.Range(0f,1f);
                     // Color randomColor = new Color(_randomValue, _randomValue, _randomValue);
                 }
-                Image[] images = newPrefab.GetComponentsInChildren<Image>();
+                
+                Image[] images = newPrefab.GetComponentsInChildren<Image>(true);
                 foreach (var image in images)
                 {
                     image.sprite = _sprite;
