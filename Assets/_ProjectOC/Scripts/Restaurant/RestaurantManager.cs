@@ -101,17 +101,17 @@ namespace ProjectOC.RestaurantNS
             return restaurants;
         }
 
-        public Restaurant GetPutInRestaurant(string itemID, int amount)
+        public Restaurant GetPutInRestaurant(DataNS.IDataObj data, int amount)
         {
             Restaurant result = null;
-            if (!string.IsNullOrEmpty(itemID) && amount > 0)
+            if (data != null && amount > 0)
             {
                 List<Restaurant> restaurants = GetRestaurants();
                 foreach (var restaurant in restaurants)
                 {
-                    if (restaurant.DataContainer.HaveSetData(itemID))
+                    if (restaurant.DataContainer.HaveSetData(data))
                     {
-                        int empty = restaurant.DataContainer.GetAmount(itemID, DataNS.DataOpType.Empty);
+                        int empty = restaurant.DataContainer.GetAmount(data, DataNS.DataOpType.Empty);
                         if (result == null && empty > 0)
                         {
                             result = restaurant;

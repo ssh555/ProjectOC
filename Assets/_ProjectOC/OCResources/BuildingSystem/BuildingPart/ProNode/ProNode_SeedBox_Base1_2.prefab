@@ -65,7 +65,7 @@ GameObject:
   - component: {fileID: 1666045378480575977}
   - component: {fileID: 5718250853390407118}
   - component: {fileID: 2651911346912921980}
-  - component: {fileID: 4983831305753906148}
+  - component: {fileID: 5013586643784652437}
   m_Layer: 7
   m_Name: ProNode_SeedBox_Base1_2
   m_TagString: Untagged
@@ -161,7 +161,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.92379564, y: 0.8136058, z: 1.1716423}
   m_Center: {x: -0.0026062727, y: 0.06, z: 0.00088205934}
---- !u!114 &4983831305753906148
+--- !u!114 &5013586643784652437
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -170,7 +170,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1939576287143347534}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a66f0dd625d0f74da1f89b119491b94, type: 3}
+  m_Script: {fileID: 11500000, guid: 94ac4806da9258547bd7b8ca1c811d7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   classification:
@@ -184,15 +184,7 @@ MonoBehaviour:
   baseRotation: {x: 0, y: 0, z: 0, w: 1}
   rotOffset: {x: 0, y: 0, z: 0, w: 1}
   activeSocketIndex: 0
-  powerSupportRange: 0.78
-  ProNode:
-    WorldProNode: {fileID: 0}
-    ID: 
-    Level: 0
-    Recipe:
-      ID: 
-    EffBase: 0
-    StackReserve: 0
+  powerSupportRange: 1
 --- !u!1 &4531181393888382987
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,5 @@
-Ôªøusing ML.Engine.TextContent;
-using static ProjectOC.ProNodeNS.UI.UIProNode;
+using ML.Engine.TextContent;
+using static ProjectOC.ProNodeNS.UI.UIManualProNode;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,34 +9,34 @@ using ML.Engine.Utility;
 
 namespace ProjectOC.ProNodeNS.UI
 {
-    public class UIProNode : ML.Engine.UI.UIBasePanel<ProNodePanel>
+    public class UIManualProNode : ML.Engine.UI.UIBasePanel<ProNodePanel>
     {
         #region Data
         #region Config
         [System.Serializable]
         public struct APBarColorConfig
         {
-            [LabelText("ÂàùÂßã‰ΩìÂäõÂÄº")]
+            [LabelText("≥ı ºÃÂ¡¶÷µ")]
             public int Start;
-            [LabelText("ÁªìÊùü‰ΩìÂäõÂÄº")]
+            [LabelText("Ω· ¯ÃÂ¡¶÷µ")]
             public int End;
-            [LabelText("ÂØπÂ∫îÈ¢úËâ≤")]
+            [LabelText("∂‘”¶—’…´")]
             public Color Color;
         }
         [System.Serializable]
         public struct IconNumConfig
         {
-            [LabelText("ÂàùÂßã‰ΩìÂäõÂÄº")]
+            [LabelText("≥ı ºÃÂ¡¶÷µ")]
             public int Start;
-            [LabelText("ÁªìÊùü‰ΩìÂäõÂÄº")]
+            [LabelText("Ω· ¯ÃÂ¡¶÷µ")]
             public int End;
-            [LabelText("ÂØπÂ∫îÊï∞Èáè")]
+            [LabelText("∂‘”¶ ˝¡ø")]
             public int Num;
         }
 
-        [LabelText("‰ΩìÂäõÂØπÂ∫îÁöÑ‰ΩìÂäõÊù°È¢úËâ≤"), FoldoutGroup("ÈÖçÁΩÆÈ°π"), ShowInInspector]
+        [LabelText("ÃÂ¡¶∂‘”¶µƒÃÂ¡¶Ãı—’…´"), FoldoutGroup("≈‰÷√œÓ"), ShowInInspector]
         public List<APBarColorConfig> APBarColorConfigs = new List<APBarColorConfig>();
-        [LabelText("Â≠¶‰π†ÈÄüÂ∫¶ÂØπÂ∫îÁöÑÂõæÊ†áÊï∞Èáè"), FoldoutGroup("ÈÖçÁΩÆÈ°π"), ShowInInspector]
+        [LabelText("—ßœ∞ÀŸ∂»∂‘”¶µƒÕº±Í ˝¡ø"), FoldoutGroup("≈‰÷√œÓ"), ShowInInspector]
         public List<IconNumConfig> ExpRateIconNumConfigs = new List<IconNumConfig>();
         private Color GetAPBarColor(int ap)
         {
@@ -118,11 +118,11 @@ namespace ProjectOC.ProNodeNS.UI
         #endregion
 
         public bool HasUpgrade;
-        public ProNode ProNode;
+        public ManualProNode ProNode;
         public WorkerNS.Worker Worker => ProNode.Worker;
         private List<string> Recipes = new List<string>();
         private List<WorkerNS.Worker> Workers = new List<WorkerNS.Worker>();
-        
+
         #region BtnList
         private ML.Engine.UI.UIBtnList RawBtnList;
         private ML.Engine.UI.UIBtnList RecipeBtnList;
@@ -144,7 +144,7 @@ namespace ProjectOC.ProNodeNS.UI
             Recipes = new List<string>() { "" };
             Recipes.AddRange(ProNode.GetCanProduceRecipe());
             RecipeBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ChangeRecipe").Find("Select").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
-            RecipeBtnList.ChangBtnNum(Recipes.Count, "Prefab_ProNode_UI/Prefab_ProNode_UI_RecipeTemplate.prefab", () => {synchronizer.Check(); });
+            RecipeBtnList.ChangBtnNum(Recipes.Count, "Prefab_ProNode_UI/Prefab_ProNode_UI_RecipeTemplate.prefab", () => { synchronizer.Check(); });
 
             RecipeRawBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ChangeRecipe").Find("Recipe").Find("Raw").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             RecipeRawBtnList.ChangBtnNum(0, "Prefab_ProNode_UI/Prefab_ProNode_UI_RecipeRawTemplate.prefab",
@@ -152,11 +152,11 @@ namespace ProjectOC.ProNodeNS.UI
 
             WorkerBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ChangeWorker").Find("Select").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             WorkerBtnList.OnSelectButtonChanged += () => { Refresh(); };
-            WorkerBtnList.ChangBtnNum(0, "Prefab_ProNode_UI/Prefab_ProNode_UI_WorkerTemplate.prefab", () => {synchronizer.Check(); });
+            WorkerBtnList.ChangBtnNum(0, "Prefab_ProNode_UI/Prefab_ProNode_UI_WorkerTemplate.prefab", () => { synchronizer.Check(); });
 
             num = ML.Engine.BuildingSystem.BuildingManager.Instance.GetUpgradeRaw(ProNode.WorldProNode.Classification.ToString()).Count;
             UpgradeBtnList = new ML.Engine.UI.UIBtnList(transform.Find("Upgrade").Find("Raw").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
-            UpgradeBtnList.ChangBtnNum(num, "Prefab_ProNode_UI/Prefab_ProNode_UI_UpgradeRawTemplate.prefab", () => {synchronizer.Check(); });
+            UpgradeBtnList.ChangBtnNum(num, "Prefab_ProNode_UI/Prefab_ProNode_UI_UpgradeRawTemplate.prefab", () => { synchronizer.Check(); });
 
         }
         protected void UpdateBtnInfo()
@@ -272,8 +272,8 @@ namespace ProjectOC.ProNodeNS.UI
         protected override void InitTextContentPathData()
         {
             abpath = "OCTextContent/ProNode";
-            abname = "ProNodePanel";
-            description = "ProNodePanelÊï∞ÊçÆÂä†ËΩΩÂÆåÊàê";
+            abname = "ManualProNodePanel";
+            description = "ManualProNodePanel ˝æ›º”‘ÿÕÍ≥…";
         }
         #endregion
 
@@ -389,7 +389,7 @@ namespace ProjectOC.ProNodeNS.UI
             {
                 var f_offset = obj.ReadValue<Vector2>();
                 var offset = new Vector2Int(Mathf.RoundToInt(f_offset.x), Mathf.RoundToInt(f_offset.y));
-                if (offset.x > 0 && ProNode.ProNodeType == ProNodeType.Mannul)
+                if (offset.x > 0)
                 {
                     CurProNodeMode = ProNodeSelectMode.Worker;
                 }
@@ -404,7 +404,7 @@ namespace ProjectOC.ProNodeNS.UI
         {
             if (CurMode == Mode.ProNode)
             {
-                if (CurProNodeMode == ProNodeSelectMode.Worker && ProNode.ProNodeType == ProNodeType.Mannul)
+                if (CurProNodeMode == ProNodeSelectMode.Worker)
                 {
                     CurMode = Mode.ChangeWorker;
                 }
@@ -592,32 +592,29 @@ namespace ProjectOC.ProNodeNS.UI
 
                 #region Worker
                 ProNode_Worker.Find("Selected").gameObject.SetActive(CurProNodeMode == ProNodeSelectMode.Worker);
-                ProNode_Worker.gameObject.SetActive(ProNode.ProNodeType == ProNodeType.Mannul);
+                ProNode_Worker.gameObject.SetActive(true);
                 bool hasWorker = ProNode.HaveWorker;
-                if (ProNode.ProNodeType == ProNodeType.Mannul)
+                ProNode_Worker.Find("Bar").gameObject.SetActive(hasWorker);
+                ProNode_Worker.Find("Bar1").gameObject.SetActive(hasWorker);
+                ProNode_Worker.Find("Image").gameObject.SetActive(hasWorker);
+                ProNode_Worker.Find("Name").gameObject.SetActive(hasWorker);
+                ProNode_Worker.Find("Empty").gameObject.SetActive(!hasWorker);
+                ProNode_Worker.Find("Gender").gameObject.SetActive(hasWorker);
+                var onDuty = ProNode_Worker.Find("OnDuty").GetComponent<TMPro.TextMeshProUGUI>();
+                ProNode_Worker.Find("Icon").GetComponent<Image>().sprite = hasWorker ? WorkerIcon : tempSprite[""];
+                onDuty.text = hasWorker ? PanelTextContent.workerStatus[(int)Worker.Status] : PanelTextContent.textLack;
+                if (hasWorker)
                 {
-                    ProNode_Worker.Find("Bar").gameObject.SetActive(hasWorker);
-                    ProNode_Worker.Find("Bar1").gameObject.SetActive(hasWorker);
-                    ProNode_Worker.Find("Image").gameObject.SetActive(hasWorker);
-                    ProNode_Worker.Find("Name").gameObject.SetActive(hasWorker);
-                    ProNode_Worker.Find("Empty").gameObject.SetActive(!hasWorker);
-                    ProNode_Worker.Find("Gender").gameObject.SetActive(hasWorker);
-                    var onDuty = ProNode_Worker.Find("OnDuty").GetComponent<TMPro.TextMeshProUGUI>();
-                    ProNode_Worker.Find("Icon").GetComponent<Image>().sprite = hasWorker ? WorkerIcon : tempSprite[""];
-                    onDuty.text = hasWorker ? PanelTextContent.workerStatus[(int)Worker.Status] : PanelTextContent.textLack;
-                    if (hasWorker)
-                    {
-                        ProNode_Worker.Find("Bar1").GetComponent<Image>().fillAmount = (float)Worker.APCurrent / Worker.APMax;
-                        ProNode_Worker.Find("Bar1").GetComponent<Image>().color = GetAPBarColor(Worker.APCurrent);
-                        ProNode_Worker.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = Worker.Name;
-                        ProNode_Worker.Find("Gender").GetComponent<Image>().sprite = Worker.Gender == Gender.Male ? WorkerMaleIcon : WorkerFemalIcon ;
-                    }
+                    ProNode_Worker.Find("Bar1").GetComponent<Image>().fillAmount = (float)Worker.APCurrent / Worker.APMax;
+                    ProNode_Worker.Find("Bar1").GetComponent<Image>().color = GetAPBarColor(Worker.APCurrent);
+                    ProNode_Worker.Find("Name").GetComponent<TMPro.TextMeshProUGUI>().text = Worker.Name;
+                    ProNode_Worker.Find("Gender").GetComponent<Image>().sprite = Worker.Gender == Gender.Male ? WorkerMaleIcon : WorkerFemalIcon;
                 }
                 #endregion
 
                 #region Eff
                 ProNode_Eff.Find("EffPrefix").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textEff;
-                ProNode_Eff.Find("Eff").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + ProNode.Eff.ToString() + "%";
+                ProNode_Eff.Find("Eff").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + ProNode.GetEff().ToString() + "%";
 
                 string buildID = ML.Engine.BuildingSystem.BuildingManager.Instance.GetID(ProNode.WorldProNode.Classification.ToString());
                 if (!tempSprite.ContainsKey(buildID))
@@ -631,7 +628,7 @@ namespace ProjectOC.ProNodeNS.UI
                 if (hasWorker)
                 {
                     ProNode_Eff.Find("IconWorker").GetComponent<Image>().sprite = WorkerIcon;
-                    ProNode_Eff.Find("EffWorker").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + (ProNode.Eff - ProNode.EffBase).ToString() + "%";
+                    ProNode_Eff.Find("EffWorker").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + (ProNode.GetEff() - ProNode.EffBase).ToString() + "%";
                 }
                 #endregion
             }
@@ -817,7 +814,7 @@ namespace ProjectOC.ProNodeNS.UI
 
                     Upgrade_Build.Find("Image").gameObject.SetActive(true);
                     Upgrade_LvNew.Find("Lv").GetComponent<TMPro.TextMeshProUGUI>().text = "Lv: " + (ProNode.Level + 1).ToString();
-                    Upgrade_LvNew.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textLvDesc + 
+                    Upgrade_LvNew.Find("Desc").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textLvDesc +
                         (ProNode.EffBase + ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.LevelUpgradeEff[ProNode.Level + 1]) + "%";
                 }
                 else
@@ -836,7 +833,7 @@ namespace ProjectOC.ProNodeNS.UI
 
         private void OnProduceTimerUpdateAction(double time)
         {
-            ProNode_Product.Find("Mask").GetComponent<Image>().fillAmount = 1 - (float)(time / ProNode.TimeCost);
+            ProNode_Product.Find("Mask").GetComponent<Image>().fillAmount = 1 - (float)(time / ProNode.GetTimeCost());
         }
 
         public void RefreshDynamic()
@@ -865,7 +862,7 @@ namespace ProjectOC.ProNodeNS.UI
                 var onDuty = ProNode_Worker.transform.Find("OnDuty").GetComponent<TMPro.TextMeshProUGUI>();
                 onDuty.text = PanelTextContent.workerStatus[(int)Worker.Status];
                 ProNode_Eff.Find("EffPrefix").GetComponent<TMPro.TextMeshProUGUI>().text = PanelTextContent.textEff;
-                ProNode_Eff.Find("Eff").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + ProNode.Eff.ToString() + "%";
+                ProNode_Eff.Find("Eff").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + ProNode.GetEff().ToString() + "%";
                 string buildID = ML.Engine.BuildingSystem.BuildingManager.Instance.GetID(ProNode.WorldProNode.Classification.ToString());
                 if (!tempSprite.ContainsKey(buildID))
                 {
@@ -874,7 +871,7 @@ namespace ProjectOC.ProNodeNS.UI
                 ProNode_Eff.Find("IconProNode").GetComponent<Image>().sprite = tempSprite[buildID];
                 ProNode_Eff.Find("EffProNode").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + ProNode.EffBase.ToString() + "%";
                 ProNode_Eff.Find("IconWorker").GetComponent<Image>().sprite = WorkerIcon;
-                ProNode_Eff.Find("EffWorker").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + (ProNode.Eff - ProNode.EffBase).ToString() + "%";
+                ProNode_Eff.Find("EffWorker").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + (ProNode.GetEff() - ProNode.EffBase).ToString() + "%";
 
                 var bar1 = ProNode_Worker.Find("Bar1").GetComponent<Image>();
                 bar1.fillAmount = (float)Worker.APCurrent / Worker.APMax;

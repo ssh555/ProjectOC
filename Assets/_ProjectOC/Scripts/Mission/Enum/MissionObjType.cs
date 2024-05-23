@@ -6,6 +6,6 @@ namespace ProjectOC.MissionNS
         Store,
         Restaurant,
         ProNode,
-        WorldItem
+        WorldItem,
     }
 }

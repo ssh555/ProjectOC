@@ -173,7 +173,7 @@ namespace ProjectOC.RestaurantNS.UI
             else if (CurMode == Mode.ChangeFood)
             {
                 CurMode = Mode.Restaurant;
-                Restaurant.ChangeData(DataIndex, FoodItemIDs[FoodIndex]);
+                Restaurant.ChangeData(DataIndex, new DataNS.ItemIDDataObj(FoodItemIDs[FoodIndex]));
             }
             Refresh();
         }
