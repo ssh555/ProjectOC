@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 3280763311169690881}
   - component: {fileID: 3543087441710893899}
   m_Layer: 7
-  m_Name: Interact_SolidStore_Base1_1
+  m_Name: Interact_Biostore_Base1_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -192,7 +192,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 10de6384af0c3b54e8166f9c3f936e88, type: 2}
+  - {fileID: 2100000, guid: e305453a48fa58446882f6671dfa0d58, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -249,7 +249,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   classification:
     Category1: 1
-    Category2: 102
+    Category2: 109
     Category3: 100
     Category4: 1
   instanceID: 
