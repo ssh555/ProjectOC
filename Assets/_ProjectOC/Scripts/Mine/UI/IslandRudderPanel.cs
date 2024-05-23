@@ -34,10 +34,6 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         this.cursorNavigation.EnableGraphCursorNavigation(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm, ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm);
         this.cursorNavigation.OnScaleChanged += RefreshOnZoomMap;
         this.cursorNavigation.ChangeRaycastCenter(this.MainIsland);
-        this.cursorNavigation.UIBtnList.OnSelectButtonChanged += () =>
-        {
-
-        };
     }
     public override void OnExit()
     {
@@ -59,8 +55,6 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
     private Dictionary<SelectedButton,string> BtnToMapRegionIdDic = new Dictionary<SelectedButton,string>();
     private void InitData()
     {
-
-
         GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_BigMap.prefab").Completed += (handle) =>
         {
             BigMapInstanceTrans = handle.Result.transform;
@@ -172,7 +166,6 @@ public class IslandRudderPanel : UIBasePanel<IslandRudderPanelStruct>
         for (int i = 0;i< NormalRegions.childCount;i++)
         {
             var isUnlocked = MM.CheckRegionIsUnlocked(i + 1);
-            Debug.Log(isUnlocked);
             NormalRegions.GetChild(i).Find("Normal").gameObject.SetActive(isUnlocked);
             NormalRegions.GetChild(i).Find("Locked").gameObject.SetActive(!isUnlocked);
         }

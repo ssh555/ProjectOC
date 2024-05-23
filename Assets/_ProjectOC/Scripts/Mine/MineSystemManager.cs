@@ -62,6 +62,9 @@ namespace ProjectOC.MineSystem
         private int curRegionNum = -1;
         [ShowInInspector]
         public int CurRegionNum { get { return curRegionNum; } }
+        [ShowInInspector]
+        private int lastRegionNum = -1;
+
 
         #region Tick
         public int tickPriority { get; set; }
@@ -279,6 +282,17 @@ namespace ProjectOC.MineSystem
         public void UnlockMapRegion(int RegionNum)
         {
             if (!this.RegionNumToRegionDic.ContainsKey(RegionNum)) return;
+
+            //Åöµ½ÕÏ°­
+            if (RegionNum == 0)
+            {
+                mainIslandData.Reset();
+                curRegionNum = lastRegionNum;
+                return;
+            }
+
+            lastRegionNum = curRegionNum;
+            curRegionNum = RegionNum;
             RegionNumToRegionDic[RegionNum].isUnlockLayer[curMapLayerIndex] = true;
         }
 

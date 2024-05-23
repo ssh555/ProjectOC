@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static SelectMineralSourcesPanel;
-public class SelectMineralSourcesPanel : UIBasePanel<IslandRudderPanelStruct>
+public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelStruct>
 {
     #region Unity
     protected override void Awake()
@@ -25,7 +25,6 @@ public class SelectMineralSourcesPanel : UIBasePanel<IslandRudderPanelStruct>
     #endregion
 
     #region Override
-
     public override void OnEnter()
     {
         base.OnEnter();
@@ -33,11 +32,6 @@ public class SelectMineralSourcesPanel : UIBasePanel<IslandRudderPanelStruct>
         this.InitData();
         this.cursorNavigation.EnableGraphCursorNavigation(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, ML.Engine.Input.InputManager.Instance.Common.Common.LastTerm, ML.Engine.Input.InputManager.Instance.Common.Common.NextTerm);
         this.cursorNavigation.OnScaleChanged += RefreshOnZoomMap;
-        this.cursorNavigation.ChangeRaycastCenter(this.MainIsland);
-        this.cursorNavigation.UIBtnList.OnSelectButtonChanged += () =>
-        {
-
-        };
     }
     public override void OnExit()
     {
@@ -59,8 +53,6 @@ public class SelectMineralSourcesPanel : UIBasePanel<IslandRudderPanelStruct>
     private Dictionary<SelectedButton,string> BtnToMapRegionIdDic = new Dictionary<SelectedButton,string>();
     private void InitData()
     {
-
-
         GameManager.Instance.ABResourceManager.InstantiateAsync("Prefab_Mine_UIPrefab/Prefab_MineSystem_UI_BigMap.prefab").Completed += (handle) =>
         {
             BigMapInstanceTrans = handle.Result.transform;
@@ -99,7 +91,6 @@ public class SelectMineralSourcesPanel : UIBasePanel<IslandRudderPanelStruct>
                 MM.SetNewNavagatePoint(this.cursorNavigation.CenterPos, true);
             }));
         }
-          
     }
 
     private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -108,14 +99,15 @@ public class SelectMineralSourcesPanel : UIBasePanel<IslandRudderPanelStruct>
     }
     #endregion
 
-    #region 主岛位置检测
+    #region 光标位置检测
     private RectTransform referenceRectTransform;
-    private int PreRegion = -1;
-    private int CurRegion = -1;
+    private int PreSelectRegion = -1;
+    [ShowInInspector]
+    private int CurSelectRegion = -1;
 
     private void DetectMainIslandCurRegion()
     {
-        Vector3 worldPosition = MainIsland.transform.position;
+        Vector3 worldPosition = this.cursorNavigation.Center.position;
         Vector2 localPosition;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(referenceRectTransform, worldPosition, null, out localPosition);
         Vector2 referenceSize = referenceRectTransform.rect.size;
@@ -125,12 +117,10 @@ public class SelectMineralSourcesPanel : UIBasePanel<IslandRudderPanelStruct>
         Vector2Int gridPos = new Vector2Int(
         Mathf.Clamp((int)(anchorPosition.x * (width)), 0, width - 1),
         Mathf.Clamp((int)(anchorPosition.y * (width)), 0, width - 1));
-        CurRegion = MM.BigMapTableData[gridPos.y, gridPos.x];
-        if (PreRegion != CurRegion)
+        CurSelectRegion = MM.BigMapTableData[gridPos.y, gridPos.x];
+        if (PreSelectRegion != CurSelectRegion)
         {
-            //进入新区域
-            MM.UnlockMapRegion(CurRegion);
-            PreRegion = CurRegion;
+            PreSelectRegion = CurSelectRegion;
             this.Refresh();
         }
     }
@@ -144,7 +134,6 @@ public class SelectMineralSourcesPanel : UIBasePanel<IslandRudderPanelStruct>
 /*        GameManager.DestroyObj(icon_genderfemaleSprite);
         GameManager.DestroyObj(icon_gendermaleSprite);*/
     }
-
     #endregion
 
     #region UI对象引用
@@ -154,7 +143,6 @@ public class SelectMineralSourcesPanel : UIBasePanel<IslandRudderPanelStruct>
 
     private RectTransform MainIsland;
     private RectTransform Target;
-
     private Slider slider;
 
     private Transform BigMapInstanceTrans;
@@ -177,7 +165,6 @@ public class SelectMineralSourcesPanel : UIBasePanel<IslandRudderPanelStruct>
             NormalRegions.GetChild(i).Find("Locked").gameObject.SetActive(!isUnlocked);
         }
         #endregion
-
     }
 
     private void RefreshMainIsland()
@@ -196,10 +183,9 @@ public class SelectMineralSourcesPanel : UIBasePanel<IslandRudderPanelStruct>
 
 
     #region Resource
-
     #region TextContent
     [System.Serializable]
-    public struct IslandRudderPanelStruct
+    public struct SelectMineralSourcesPanelStruct
     {
         public KeyTip AcceptedOrderCancel;
 

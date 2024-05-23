@@ -103,7 +103,7 @@ namespace ProjectOC.MineSystem
             private float moveSpeed = 1;
             [LabelText("主岛位置"), ReadOnly, ShowInInspector]
             private Vector2 curPos;
-            public Vector2 CurPos { get { return curPos; }  }
+            public Vector2 CurPos { get { return curPos; } set { curPos = value; } }
             [LabelText("目标位置"), ReadOnly, ShowInInspector]
             private Vector2 targetPos;
             public Vector2 TargetPos { get { return targetPos; } set {  targetPos = value; } }
@@ -115,6 +115,13 @@ namespace ProjectOC.MineSystem
             [LabelText("当前所在的大地图区块ID"), ReadOnly, ShowInInspector]
             private string curMapRegionID;
 
+            private Vector2 lastPos;
+            public Vector2 LastPos { get { return lastPos; } }
+            public MainIslandData()
+            {
+                lastPos = curPos;
+            }
+            
             public bool isReachTarget { 
             get {
                     if (Vector2.Distance(curPos, targetPos)<1f)
@@ -124,10 +131,22 @@ namespace ProjectOC.MineSystem
                         return true;
                     }
                     if(isMoving)
+                    {
+                        lastPos = curPos;
                         curPos += moveSpeed * (targetPos - curPos).normalized;
+                    }
+                        
                     return false;
                 }
             }
+
+            public void Reset()
+            {
+                curPos = lastPos;
+                targetPos = curPos;
+                isMoving = false;
+            }
+            
         }
 
         /// <summary>
