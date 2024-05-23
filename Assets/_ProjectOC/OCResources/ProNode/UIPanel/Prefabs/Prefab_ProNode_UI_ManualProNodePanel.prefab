@@ -5042,8 +5042,23 @@ MonoBehaviour:
   abpath: 
   abname: 
   description: 
-  APBarColorConfigs: []
-  ExpRateIconNumConfigs: []
+  APBarColorConfigs:
+  - Start: 0
+    End: 5
+    Color: {r: 1, g: 0, b: 0, a: 1}
+  - Start: 5
+    End: 0
+    Color: {r: 0, g: 1, b: 0, a: 1}
+  ExpRateIconNumConfigs:
+  - Start: 0
+    End: 100
+    Num: 0
+  - Start: 101
+    End: 130
+    Num: 1
+  - Start: 131
+    End: 0
+    Num: 2
   CurProNodeMode: 0
   HasUpgrade: 0
   ProNode:
