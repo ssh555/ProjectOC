@@ -1,3 +1,4 @@
+using ML.Engine.Utility;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -115,7 +116,7 @@ namespace ProjectOC.WorkerNS.UI
         private bool IsInitBtnList = false;
         protected override void InitBtnInfo()
         {
-            ML.Engine.UI.UIBtnList.Synchronizer synchronizer = new ML.Engine.UI.UIBtnList.Synchronizer(4, () => { IsInitBtnList = true; Refresh(); });
+            Synchronizer synchronizer = new Synchronizer(4, () => { IsInitBtnList = true; Refresh(); });
             ExchangeFeatureBtnList = new ML.Engine.UI.UIBtnList(transform.Find("Exchange").Find("Feature").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             CommonFeatureBtnList = new ML.Engine.UI.UIBtnList(transform.Find("Common").Find("Feature").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
             ChangeWorkerFeatureBtnList = new ML.Engine.UI.UIBtnList(transform.Find("ChangeWorker").Find("Feature").Find("Viewport").GetComponentInChildren<ML.Engine.UI.UIBtnListInitor>());
