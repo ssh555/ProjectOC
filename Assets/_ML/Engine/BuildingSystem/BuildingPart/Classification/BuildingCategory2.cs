@@ -34,15 +34,15 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		[LabelText("演算仪")]
 		Calculus = 012,
 		[LabelText("物流转运箱")]
-		SolidStore = 101,
+		SolidStore = 102,
 		[LabelText("液体转运罐")]
-		LiquidStore = 102,
+		LiquidStore = 103,
 		[LabelText("餐厅")]
-		Canteen = 103,
+		Canteen = 104,
 		[LabelText("共鸣轮")]
-		EchoWheel = 104,
+		EchoWheel = 105,
 		[LabelText("导流节点")]
-		DiversionNode = 105,
+		DiversionNode = 101,
 		[LabelText("生命导流桩")]
 		LifeDiversion = 100,
 		[LabelText("生态投影装置")]
@@ -89,5 +89,7 @@ namespace ML.Engine.BuildingSystem.BuildingPart
 		Nest = 107,
 		[LabelText("喵喵窝")]
 		FeatureModifier = 108,
+		[LabelText("生物仓库")]
+		Biostore = 109,
 	}
 }
