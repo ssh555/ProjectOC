@@ -46,7 +46,6 @@ namespace ProjectOC.MissionNS
             if (mission.Data == null) { return; }
             Data = mission.Data;
             bool isReplaceData = mission.ReplaceIndex >= 0;
-            bool isReserveEmpty = mission.ReserveEmpty;
             Mission = mission;
             Source = source;
             Target = target;
@@ -101,7 +100,7 @@ namespace ProjectOC.MissionNS
             int weight = Data.GetDataWeight();
             int burMaxNum = weight != 0 ? (Worker.RealBURMax - Worker.WeightCurrent) / weight : SoureceReserveNum;
             int num = SoureceReserveNum <= burMaxNum ? SoureceReserveNum : burMaxNum;
-            num = Source.PutOut(Data, num);
+            num = Source.PutOut(Data, num, Mission.ReserveEmpty);
             if (num > 0)
             {
                 SoureceReserveNum -= num;

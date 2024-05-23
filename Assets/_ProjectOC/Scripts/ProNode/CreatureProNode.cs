@@ -21,18 +21,17 @@ namespace ProjectOC.ProNodeNS
             lock (this)
             {
                 ActivityThreshold = 0;
+                DiscardReserve = 0;
                 if (creature != null && ChangeRecipe(creature.ProRecipeID))
                 {
                     DataContainer.AddCapacity(2, new List<int> { 1, creature.Discard.num * StackMax });
                     int capacity = DataContainer.GetCapacity();
                     ChangeData(capacity-2, creature);
+                    ChangeData(capacity-1, new DataNS.ItemIDDataObj(creature.Discard.id), false);
                     DataContainer.ChangeAmount(capacity-2, 1, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty);
                     return true;
                 }
-                else
-                {
-                    ChangeRecipe("");
-                }
+                else { ChangeRecipe(""); }
                 return false;
             }
         }
@@ -87,10 +86,11 @@ namespace ProjectOC.ProNodeNS
                     ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission
                         (MissionNS.MissionTransportType.Store_ProNode, creature, 1, this, MissionNS.MissionInitiatorType.PutIn_Initiator, DataContainer.GetCapacity() - 2);
                 }
-                if (DiscardReserve >= 0)
+                if (DiscardReserve > 0)
                 {
                     ManagerNS.LocalGameManager.Instance.MissionManager.CreateTransportMission
                             (MissionNS.MissionTransportType.ProNode_Store, DataContainer.GetData(DataContainer.GetCapacity() - 1), DiscardReserve, this, MissionNS.MissionInitiatorType.PutOut_Initiator);
+                    DiscardReserve = 0;
                 }
             }
         }
@@ -110,10 +110,7 @@ namespace ProjectOC.ProNodeNS
                 }
             }
             // 下一次生产
-            if (!StartProduce())
-            {
-                StopProduce();
-            }
+            if (!StartProduce()) { StopProduce(); }
             OnProduceEndEvent?.Invoke();
         }
         public override void ProNodeOnPositionChange(UnityEngine.Vector3 differ)
@@ -127,6 +124,7 @@ namespace ProjectOC.ProNodeNS
                 var formula = Creature.Discard;
                 ChangeData(index, item, false);
                 DataContainer.ChangeAmount(index, 1, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty);
+                DataContainer.ChangeAmount(DataContainer.GetCapacity() - 1, formula.num, DataNS.DataOpType.Storage, DataNS.DataOpType.Empty, true);
                 int needAssignNum = (this as MissionNS.IMissionObj).GetNeedAssignNum(DataContainer.GetData(DataContainer.GetCapacity() - 1), false);
                 int discardStack = DiscardStack;
                 if (discardStack >= DiscardReserve + needAssignNum + StackThreshold * formula.num)

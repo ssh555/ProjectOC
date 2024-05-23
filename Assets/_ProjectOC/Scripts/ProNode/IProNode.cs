@@ -154,10 +154,6 @@ namespace ProjectOC.ProNodeNS
                     return true;
                 }
             }
-            else
-            {
-                StopProduce();
-            }
             return false;
         }
         /// <summary>
@@ -219,6 +215,7 @@ namespace ProjectOC.ProNodeNS
             StopRun();
             ClearData();
             Recipe.ClearData();
+            StackReserve = 0;
         }
         #endregion
 

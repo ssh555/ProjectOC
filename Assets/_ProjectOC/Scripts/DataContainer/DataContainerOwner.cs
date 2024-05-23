@@ -56,7 +56,7 @@ namespace ProjectOC.DataNS
             }
             (this as MissionNS.IMissionObj).UpdateTransport();
         }
-        public void ChangeData(int index, IDataObj data, bool isAdd = true)
+        public void ChangeData(int index, IDataObj data, bool isAdd = true, bool updateTransport=true)
         {
             var tup = DataContainer.ChangeData(index, data);
             if (isAdd)
@@ -66,7 +66,7 @@ namespace ProjectOC.DataNS
                     tup.Item1.AddToPlayerInventory(tup.Item2);
                 }
             }
-            (this as MissionNS.IMissionObj).UpdateTransport(tup.Item1);
+            if (updateTransport) { (this as MissionNS.IMissionObj).UpdateTransport(tup.Item1); }
         }
         public void Remove(int index, int amount)
         {
@@ -99,6 +99,20 @@ namespace ProjectOC.DataNS
         {
             if (reserveEmpty && DataContainer.AddDataToEmptyIndex(data, true) < 0) { return 0; }
             return ChangeAmount(data, amount, DataOpType.EmptyReserve, DataOpType.Empty, exceed: true, needCanIn: true);
+        }
+        public int PutOut(IDataObj data, int amount, bool removeEmpty = false)
+        {
+            amount = ChangeAmount(data, amount, DataOpType.Empty, DataOpType.StorageReserve, complete: false);
+            if (removeEmpty)
+            {
+                List<int> indexs = DataContainer.GetIndexs(data);
+                if (indexs.Count == 1 && GetAmount(data, DataOpType.StorageAll) == 0)
+                {
+                    ChangeData(indexs[0], null, updateTransport:false);
+                }
+                else { Debug.Log("PutOut removeEmpty Error"); }
+            }
+            return amount;
         }
         public int ChangeAmount(IDataObj data, int amount, DataOpType addType, DataOpType removeType, bool exceed = false, bool complete = true, bool needCanIn = false, bool needCanOut = false)
         {
