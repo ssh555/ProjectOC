@@ -58,8 +58,9 @@ namespace ML.Engine.UI
 
         //当前组件的scale 
         private float curZoomscale;
-        [ShowIf("IsZoomEnabled", true), LabelText("当前的缩放率"),ShowInInspector]
-        public float curZoomRate { get { return (curZoomscale - ZoomOutLimit)/(ZoomInLimit - ZoomOutLimit); }  }
+        [ShowIf("IsZoomEnabled", true), LabelText("当前的缩放率"), ShowInInspector]
+        private float curZoomRate;
+        public float CurZoomRate { get { return (curZoomscale - ZoomOutLimit)/(ZoomInLimit - ZoomOutLimit); }  set { curZoomRate = value; CurZoomscale = (ZoomInLimit - ZoomOutLimit) * value + ZoomOutLimit; } }
         [ShowIf("IsZoomEnabled", true), LabelText("当前的缩放值"), ShowInInspector]
         public float CurZoomscale 
         { 
@@ -379,7 +380,6 @@ namespace ML.Engine.UI
             this.ScrollRect.content.position = this.Center.position + Offset;
             OnScaleChanged?.Invoke();
         }
-
         public void EnableGraphCursorNavigation(InputAction NavigationInputAction, InputAction ZoomInInputAction = null, InputAction ZoomOutInputAction = null)
         {
             this.BindNavigationInput(NavigationInputAction);

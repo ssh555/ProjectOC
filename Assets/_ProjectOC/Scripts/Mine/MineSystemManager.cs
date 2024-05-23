@@ -59,7 +59,9 @@ namespace ProjectOC.MineSystem
         /// </summary>
         [ShowInInspector]
         private Dictionary<int, MapRegionData> RegionNumToRegionDic = new Dictionary<int, MapRegionData>();
-
+        private int curRegionNum = -1;
+        [ShowInInspector]
+        public int CurRegionNum { get { return curRegionNum; } }
 
         #region Tick
         public int tickPriority { get; set; }
@@ -249,8 +251,6 @@ namespace ProjectOC.MineSystem
                 synchronizerInOrder.Check(2);
             };
         }
-        
-
         #endregion
 
         #region External
