@@ -85,12 +85,15 @@ namespace ML.Engine.Timer
         /// 计时时间长度
         /// </summary>
         public double Duration { get; private set; }
+        public (int,int) DurationInMSForm { get { return ConvertToMinAndSec(Duration); } }
+        public int DurationInMForm { get { return DurationInMSForm.Item2 > 0 ? DurationInMSForm.Item1 + 1 : DurationInMSForm.Item1; } }
 
         /// <summary>
         /// 当前计时器剩余时间
         /// </summary>
         private double currentTime;
-
+        public (int, int) currentTimeInMSForm { get { return ConvertToMinAndSec(currentTime); } }
+        public int currentTimeInMForm { get { return currentTimeInMSForm.Item2 > 0 ? currentTimeInMSForm.Item1 + 1 : currentTimeInMSForm.Item1; } }
         /// <summary>
         /// 倒计时运行事件，参数为剩余时间
         /// </summary>
@@ -250,18 +253,11 @@ namespace ML.Engine.Timer
         {
             this.Speed = speed;
         }
-        public (int,int) ConvertToMinAndSec()
+        public (int,int) ConvertToMinAndSec(double time)
         {
-            int min = (int)(this.currentTime) / 60;
-            int sec = (int)(this.currentTime) - min * 60;
+            int min = (int)(time) / 60;
+            int sec = (int)(time) - min * 60;
             return (min,sec);
-        }
-        public int ConvertToMin()
-        {
-            int min = (int)(this.currentTime) / 60;
-            int sec = (int)(this.currentTime) - min * 60;
-            min = sec > 0 ? min + 1 : min;
-            return min;
         }
     }
 }
