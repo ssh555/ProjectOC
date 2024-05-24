@@ -16,7 +16,6 @@ using ML.Engine.Utility;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.IO.Pipes;
 using UnityEngine.InputSystem.iOS;
-using UnityEditor;
 using Unity.VisualScripting;
 using ML.Engine.Timer;
 
@@ -171,7 +170,7 @@ namespace ML.Engine.UI
             this.SBPosDic.Clear();
             this.TwoDimSelectedButtons.Clear();
 
-            SelectedButton[] OneDimSelectedButtons = parent.GetComponentsInChildren<SelectedButton>(true);
+            SelectedButton[] OneDimSelectedButtons = parent.GetComponentsInChildren<SelectedButton>(this.readUnActive);
             this.OneDimCnt = OneDimSelectedButtons.Length;
 
             if (this.OneDimCnt == 0 && !isBtnListContainerDeleteAll)

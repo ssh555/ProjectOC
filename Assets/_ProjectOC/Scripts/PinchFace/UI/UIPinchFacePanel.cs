@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using ML.Engine.TextContent;
 using ML.Engine.UI;
 using ProjectOC.ManagerNS;
-using ProjectOC.PinchFace.Config;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.U2D;
@@ -27,7 +26,7 @@ namespace ProjectOC.PinchFace
             void GenerateCharacterModel()
             {
                 IsInit++;
-                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(playerModelPrefabPath).Completed+=(handle) =>
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(pinchFaceManager.playerModelPrefabPath).Completed+=(handle) =>
                 {
                     uICameraImage = transform.Find("UICameraImage").GetComponentInChildren<UICameraImage>();
                     RectTransform _rtTransform = uICameraImage.transform as RectTransform;
@@ -42,11 +41,7 @@ namespace ProjectOC.PinchFace
                 };
             }
             
-            ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<PinchDataConfig>(pinchDataConfigPath).Completed+=(handle) =>
-            {
-                Config = handle.Result;
-            };
-
+            
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<SpriteAtlas>(pinchFaceSAPath).Completed+=(handle) =>
             {
                 SA_PinchPart = handle.Result;
@@ -63,7 +58,7 @@ namespace ProjectOC.PinchFace
                 foreach (var _pinchPart in pinchParts)
                 {
                     PinchPartType3 _type3 = _pinchPart.PinchPartType3;
-                    int typePrefabCount = Config.typesDatas[(int)_type3 - 1].typeCount;
+                    int typePrefabCount = pinchFaceManager.Config.typesDatas[(int)_type3 - 1].typeCount;
                     if (typePrefabCount != 0)
                     {
                         foreach (var _pinchSetting in _pinchPart.pinchSettingComps)
@@ -134,7 +129,6 @@ namespace ProjectOC.PinchFace
             }
             UIBtnListContainer.AddOnSelectButtonChangedAction(() =>
             {
-                //右侧种族描述更新，中英文切换直接换RacePinchData
                 int curListIndex = UIBtnListContainer.CurSelectUIBtnListIndex;
                 int _curPos = UIBtnListContainer.UIBtnLists[curListIndex].GetCurSelectedPos1();
                 if (curListIndex == 1)
@@ -151,6 +145,7 @@ namespace ProjectOC.PinchFace
                     }
                 }
             });
+            base.InitBtnInfo();
         }
         
         //返回右侧BtnList，重新生成
@@ -227,15 +222,13 @@ namespace ProjectOC.PinchFace
         private Dictionary<PinchPartType3, PinchPartType2> type3Type2Dic => pinchFaceManager.pinchPartType3Dic;
         public List<UIBtnListInitor> rightBtnLists = new List<UIBtnListInitor>();
         
-        public PinchDataConfig Config;
+        
         public SpriteAtlas SA_PinchPart;
         public UICameraImage uICameraImage;
 
         
         
         private string pinchFaceSAPath = "SA_UI_PinchFace/SA_PinchFace.spriteatlasv2";
-        private string playerModelPrefabPath = "Prefabs_PinchPart/PinchPart/Prefab_PinchModel.prefab";
-        private string pinchDataConfigPath = "PinchAsset_PinchFaceSetting/PinchDataConfig.asset";
         private const int commonType3Count = 4;
         private int IsInit = 0;
         

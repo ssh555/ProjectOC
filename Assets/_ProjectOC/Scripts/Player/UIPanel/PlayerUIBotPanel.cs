@@ -128,7 +128,7 @@ namespace ProjectOC.Player.UI
             {
                 // GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.FloatTextUI, new UIManager.FloatTextUIData("友人"));
                 // 临时用作捏脸
-                LocalGameManager.Instance.PinchFaceManager.GeneratePinchFaceUI();
+                LocalGameManager.Instance.PinchFaceManager.GeneratePinchRaceUI();
             }
             );
             this.UIBtnList.SetBtnAction("我的氏族",

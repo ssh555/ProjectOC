@@ -16,38 +16,83 @@ namespace ProjectOC.PinchFace
 
         protected override void Awake()
         {
+            base.Awake();
             raceNameText = transform.Find("RaceInfo/RaceText").GetComponent<TextMeshProUGUI>();
             raceDescription = transform.Find("RaceInfo/RaceDesciption").GetComponent<TextMeshProUGUI>();
+            raceBtnTemplate = transform
+                .Find("RaceButtonGroup/ScrollView/ButtonList/Container/Prefab_PinchRaceButtonTemplate")
+                .GetComponent<SelectedButton>();
             pinchFaceManager = LocalGameManager.Instance.PinchFaceManager;
-            base.Awake();
+            GenerateCharacterModel();
+            
+            void GenerateCharacterModel()
+            {
+                IsInit++;
+                ML.Engine.Manager.GameManager.Instance.ABResourceManager.InstantiateAsync(pinchFaceManager.playerModelPrefabPath).Completed+=(handle) =>
+                {
+                    uICameraImage = transform.Find("UICameraImage").GetComponentInChildren<UICameraImage>();
+                    RectTransform _rtTransform = uICameraImage.transform as RectTransform;
+
+                    RenderTexture _rt = new RenderTexture((int)_rtTransform.rect.width,(int)_rtTransform.rect.height,0);
+                    uICameraImage.Init(_rt);
+                    CharacterModelPinch modelPinch = handle.Result.GetComponentInChildren<CharacterModelPinch>();
+                    pinchFaceManager.ModelPinch = modelPinch;
+                    UICameraImage.ModeGameObjectLayer(handle.Result.transform);
+                    //看向
+                    // CurType2 = PinchPartType2.Body;
+                    modelPinch.CameraView.CameraLookAtSwitch(uICameraImage,PinchPartType2.Body);
+                    
+                    pinchFaceManager.RandomPinchPart(PinchPartType3.HF_HairFront, true);
+                    //随机生成皮肤
+                    int _curPos = UIBtnListContainer.UIBtnLists[0].GetCurSelectedPos1();
+                    if (_curPos != -1)
+                    {
+                        RacePinchData raceData = RacePinchDatas[_curPos];
+                        // pinchFaceManager.ModelPinch.UnEquipAllItem();
+                        foreach (var _type3 in raceData.pinchPartType3s)
+                        {
+                            pinchFaceManager.RandomPinchPart(_type3,true);
+                        }
+                    }
+                };
+            }
         }
 
-        protected override void Enter()
+        public override void OnExit()
         {
-            base.Enter();
+            base.OnExit();
+            Destroy(pinchFaceManager.ModelPinch.gameObject);
+            uICameraImage.DisableUICameraImage();
         }
 
-        protected override void Exit()
-        {
-            base.Exit();
-        }
+    
+
         #endregion
 
         #region Internal
         protected override void RegisterInput()
         {
-            
-            for(int i = 0;i<RacePinchDatas.Count;i++)
+            base.RegisterInput();
+            for(int i = RacePinchDatas.Count-1;i >= 0;i--)
             {
                 int tmpI = i;
-                this.UIBtnListContainer.AddBtn(0, "Prefabs_PinchPart/UIPanel/Prefab_PinchRaceButtonTemplate.prefab"
-                    , () =>
-                    {
-                        //创建种族
-                        // Debug.Log(RacePinchDatas[tmpI].raceName);
-                        
-                    });
+                SelectedButton _btn =  Instantiate(raceBtnTemplate,raceBtnTemplate.transform.parent);
+                _btn.gameObject.SetActive(true);
+                _btn.name = $"Race_{RacePinchDatas[tmpI].raceName}";
+                _btn.transform.GetComponentInChildren<TextMeshProUGUI>().text = RacePinchDatas[i].raceName;
+                if (RacePinchDatas[tmpI].isDefault)
+                {
+                    _btn.transform.Find("NotDefaultImage").gameObject.SetActive(false);
+                }
+                _btn.onClick.AddListener(() =>
+                {
+                    ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
+                    pinchFaceManager.GeneratePinchFaceUI(RacePinchDatas[tmpI]);
+                });
             }
+            
+            
+            UIBtnListContainer.UIBtnLists[0].InitBtnInfo();
             
             UIBtnListContainer.UIBtnLists[1].SetBtnAction(0,0,() =>
             {
@@ -59,20 +104,23 @@ namespace ProjectOC.PinchFace
  
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Enable();
             UIBtnListContainer.BindNavigationInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.SwichBtn, UIBtnListContainer.BindType.started);
-            
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed += Back_performed;
         }
         
         protected override void UnregisterInput()
         {
+            base.UnregisterInput();
             ProjectOC.Input.InputManager.PlayerInput.PlayerUI.Disable();
             ML.Engine.Input.InputManager.Instance.Common.Common.Back.performed -= Back_performed;
         }
         
         private void Back_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
         {
+            Destroy(pinchFaceManager.ModelPinch.gameObject);
             ML.Engine.Manager.GameManager.Instance.UIManager.PopPanel();
         }
+
+        
         #endregion
         
         #region TextContent
@@ -96,24 +144,43 @@ namespace ProjectOC.PinchFace
         protected override void InitBtnInfo()
         {
             this.UIBtnListContainer = new UIBtnListContainer(this.transform.GetComponentInChildren<UIBtnListContainerInitor>());
-            //
-            this.UIBtnListContainer.AddOnSelectButtonChangedAction(() =>
+            foreach (var _btnList in UIBtnListContainer.UIBtnLists)
             {
-                //右侧种族描述更新，中英文切换直接换RacePinchData
-                 Vector2Int _curPos = UIBtnListContainer.UIBtnLists[0].GetCurSelectedPos2();
-                if (_curPos == -Vector2Int.one)
-                {
-                    raceNameText.text = "";
-                    raceDescription.text = "";
-                }
-                else
-                {
-                    RacePinchData raceData = RacePinchDatas[_curPos.x];
-                    raceNameText.SetText(raceData.raceName);
-                    raceDescription.SetText(raceData.raceDescription);
-                }
-            });
+                _btnList.BindButtonInteractInputAction(ML.Engine.Input.InputManager.Instance.Common.Common.Confirm,UIBtnListContainer.BindType.started);
+            }
+            this.UIBtnListContainer.AddOnSelectButtonChangedAction(SelectButtonChangedAction);
+
+            base.InitBtnInfo();
         }
+
+        void SelectButtonChangedAction()
+        {
+            //右侧种族描述更新，中英文切换直接换RacePinchData
+            int _curPos = UIBtnListContainer.UIBtnLists[0].GetCurSelectedPos1();
+            if (_curPos == -1)
+            {
+                raceNameText.text = "";
+                raceDescription.text = "";
+            }
+            else
+            {
+                RacePinchData raceData = RacePinchDatas[_curPos];
+                raceNameText.SetText(raceData.raceName);
+                raceDescription.SetText(raceData.raceDescription);
+                //随机生成
+                if (pinchFaceManager.ModelPinch != null)
+                {
+                    pinchFaceManager.ModelPinch.UnEquipAllItem();
+                    foreach (var _type3 in raceData.pinchPartType3s)
+                    {
+                        pinchFaceManager.RandomPinchPart(_type3,true);
+                    }
+                }
+
+            }
+            
+        }
+        
         private void InitBtnData(PinchRacePanelStruct datas)
         {
             // foreach (var tt in datas.Btns)
@@ -134,7 +201,13 @@ namespace ProjectOC.PinchFace
         public List<RacePinchData> RacePinchDatas=>pinchFaceManager.RacePinchDatas;
 
         private TextMeshProUGUI raceNameText, raceDescription;
-
+        private SelectedButton raceBtnTemplate;
+        
+        
+        public UICameraImage uICameraImage;
+        private int IsInit = 0;
+    
+        
         #endregion
 
 

@@ -50,7 +50,7 @@ namespace ProjectOC.PinchFace
             PinchPartType2 _type2 = pinchFaceManager.pinchPartType3Dic[_type3];
             if (replaceGo[Type2ToTypeReplaceGoIndex(_type2)] != null)
             {
-                UnEquipItem(_type2,replaceGo[Type2ToTypeReplaceGoIndex(_type2)]);
+                UnEquipItem(_type2);
             }
 
             AsyncOperationHandle<GameObject> _handle = GeneratePinchTypePrefab(_type3, typeIndex);
@@ -92,13 +92,13 @@ namespace ProjectOC.PinchFace
             Destroy(_PinchGo);
         }
 
-        public void UnEquipItem(PinchPartType2 boneType2, GameObject _PinchGo)
+        public void UnEquipItem(PinchPartType2 _type2)
         {
-            if (boneType2 == PinchPartType2.Tail && boneWeightDictionary.ContainsKey(BoneWeightType.Tail))
+            if (_type2 == PinchPartType2.Tail && boneWeightDictionary.ContainsKey(BoneWeightType.Tail))
                 boneWeightDictionary.Remove(BoneWeightType.Tail);
             
             
-            if (boneTransfsDictionary.TryGetValue(boneType2, out var keyBone))
+            if (boneTransfsDictionary.TryGetValue(_type2, out var keyBone))
             {
                 foreach (Transform bone in keyBone)
                 {
@@ -109,14 +109,32 @@ namespace ProjectOC.PinchFace
                 }
 
             }
-            
-            if (_PinchGo != null)
+            if (replaceGo[Type2ToTypeReplaceGoIndex(_type2)] != null)
             {
+                GameObject _PinchGo = replaceGo[Type2ToTypeReplaceGoIndex(_type2)];
                 _PinchGo.transform.SetParent(this.transform.parent);
                 Destroy(_PinchGo);   
             }
         }
 
+        public void UnEquipAllItem(bool UnEquipHair = false)
+        {
+            //第一个是0
+            int maxCount = replaceGo.Count;
+            if (!UnEquipHair)
+            {
+                maxCount = (int)PinchPartType2.HairFront;
+            }
+                
+            for (int i = 1; i < maxCount; i++)
+            {
+                if(replaceGo[i] != null)
+                    continue;
+                
+                UnEquipItem((PinchPartType2)i);
+            }
+        }
+        
         public GameObject Stitch(GameObject sourceClothing, GameObject targetCharacter,bool inCamera)
         {
             GameObject targetClothingBone = null;
@@ -519,5 +537,7 @@ namespace ProjectOC.PinchFace
         public PinchCharacterCameraView CameraView;
 
         #endregion
+
+        
     }
 }

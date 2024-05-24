@@ -39,7 +39,7 @@ namespace  ProjectOC.PinchFace
         private UIPinchFacePanel PinchFacePanel;
         
         private SpriteAtlas SA_PinchPart=>PinchFacePanel.SA_PinchPart;
-        private PinchDataConfig Config => PinchFacePanel.Config;
+        private PinchDataConfig Config => PinchFaceManager.Config;
         public List<IPinchSettingComp> pinchSettingComps = new List<IPinchSettingComp>();
         private Transform containerTransf;
         private List<string> uiPrefabPaths = new List<string>();
@@ -475,21 +475,21 @@ namespace  ProjectOC.PinchFace
             }; 
             
             //前发、后发、呆毛、辫子的ColorSetting
-            void GenerateSingleColorType(ChangeColorPinchSetting _colorSetting)
-            {
-                if ((_colorSetting.colorChangeType & ChangeColorPinchSetting.ColorChangeType.DoubelMatColor) != 0)
-                {
-                    
-                }
-                else if ((_colorSetting.colorChangeType & ChangeColorPinchSetting.ColorChangeType.GradientColorDynamic) != 0)
-                {
-                    
-                } 
-                else if ((_colorSetting.colorChangeType & ChangeColorPinchSetting.ColorChangeType.GradientColorStatic) != 0)
-                {
-                    
-                } 
-            }
+            // void GenerateSingleColorType(ChangeColorPinchSetting _colorSetting)
+            // {
+            //     if ((_colorSetting.colorChangeType & ChangeColorPinchSetting.ColorChangeType.DoubelMatColor) != 0)
+            //     {
+            //         
+            //     }
+            //     else if ((_colorSetting.colorChangeType & ChangeColorPinchSetting.ColorChangeType.GradientColorDynamic) != 0)
+            //     {
+            //         
+            //     } 
+            //     else if ((_colorSetting.colorChangeType & ChangeColorPinchSetting.ColorChangeType.GradientColorStatic) != 0)
+            //     {
+            //         
+            //     } 
+            // }
         }
         
         public void GenerateTextureUI(ChangeTexturePinchSetting _texSetting)
