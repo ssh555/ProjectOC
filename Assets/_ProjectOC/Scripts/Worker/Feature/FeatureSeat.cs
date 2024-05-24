@@ -14,6 +14,7 @@ namespace ProjectOC.WorkerNS
         public Transform Socket;
         public List<string> WorkerFeatureIDs = new List<string>();
         public List<string> FeatureIDs = new List<string>();
+        public List<bool> IsChanged = new List<bool>();
         public event Action OnArriveInvokeEvent;
 
         public FeatureSeat(FeatureBuilding featBuild, Transform socket)
@@ -25,6 +26,7 @@ namespace ProjectOC.WorkerNS
         {
             FeatureIDs.Clear();
             WorkerFeatureIDs.Clear();
+            IsChanged.Clear();
         }
         public void SetFeatureID()
         {
@@ -33,6 +35,10 @@ namespace ProjectOC.WorkerNS
             {
                 FeatureIDs.AddRange(Worker.GetFeatureIDs(true));
                 WorkerFeatureIDs.AddRange(FeatureIDs);
+                for (int i = 0; i < FeatureIDs.Count; i++)
+                {
+                    IsChanged.Add(false);
+                }
             }
         }
         public void ChangerWorkerFeature()
