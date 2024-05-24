@@ -1,6 +1,5 @@
 using ML.Engine.Manager;
 using ML.Engine.UI;
-using ProjectOC.ManagerNS;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -192,7 +191,7 @@ namespace ProjectOC.WorkerNS
             }
             var features = workerEcho != null ? 
                 ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature(workerEcho.FeatureMax, workerEcho.FeatureOdds) :
-                ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature(new List<int>() { 100, 100, 100, 100}, new List<int>() { 50, 50 });
+                ManagerNS.LocalGameManager.Instance.FeatureManager.CreateFeature(null, null);
             foreach (Feature feature in features)
             {
                 feature.SetOwner(this);
@@ -670,7 +669,7 @@ namespace ProjectOC.WorkerNS
                     timerForNoHome.OnEndEvent += () =>
                     {
                         ManagerNS.LocalGameManager.Instance.WorkerManager.DeleteWorker(this);
-                        GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("一只隐兽已经离开岛屿！", null,LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Category)));
+                        GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("一只隐兽已经离开岛屿！", null,ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Category)));
                     };
                     timerForNoHome.OnUpdateEvent += PushNoticeUI;
                 }
@@ -682,7 +681,7 @@ namespace ProjectOC.WorkerNS
         {
             if (Mathf.Abs((float)remainTime - 180) < 1) 
             {
-                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("一只隐兽将在3分钟后离开岛屿！", null, LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Category)));
+                GameManager.Instance.UIManager.PushNoticeUIInstance(UIManager.NoticeUIType.SideBarUI, new UIManager.SideBarUIData("一只隐兽将在3分钟后离开岛屿！", null, ManagerNS.LocalGameManager.Instance.WorkerManager.GetWorkerProfile(Category)));
                 timerForNoHome.OnUpdateEvent -= PushNoticeUI;
             }
             

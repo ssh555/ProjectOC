@@ -26,3 +26,11 @@ MonoBehaviour:
     LevelMax: 2
     LevelUpgradeEff: 3200000032000000
     InitAPCost_Duty: 10
+    CreatureOutputAddEff: 3
+    CreatureOutputDescCount: 10
+    CreatureOutputDescValue: 1
+    OutputRanges: 01000000090000001e0000003300000064000000
+    MineTimeCost: 10
+    MineExp: 100
+    MineStackThreshold: 30
+    MineTransThreshold: 15

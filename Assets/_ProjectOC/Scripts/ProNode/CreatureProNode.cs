@@ -38,7 +38,15 @@ namespace ProjectOC.ProNodeNS
         #endregion
 
         #region Override
-        public override int GetEff() { return EffBase + (Creature?.Output ?? 0) * 3; }
+        public override int GetEff()
+        {
+            if (ManagerNS.LocalGameManager.Instance != null)
+            {
+                return EffBase + (Creature?.Output ?? 0) *
+                    ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputAddEff;
+            }
+            return EffBase;
+        }
         public override int GetTimeCost() { int eff = GetEff(); return HasRecipe && eff > 0 ? (int)Math.Ceiling((double)100 * Recipe.TimeCost / eff) : 0; }
         public override void FastAdd() { if (HasCreature) { for (int i = 1; i < DataContainer.GetCapacity() - 2; i++) { FastAdd(i); } } }
         public override void Destroy() { RemoveRecipe(); }
@@ -107,9 +115,12 @@ namespace ProjectOC.ProNodeNS
                 StackReserve = Stack - needAssignNum;
                 var creature = Creature;
                 creature.Activity -= 1;
-                if (creature.Activity < 0 && creature.Activity % 10 == 0 && creature.Output > 0)
+                int descCount = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputDescCount;
+                descCount = descCount > 0 ? descCount : 10;
+                if (creature.Activity < 0 && creature.Activity % descCount == 0 && creature.Output > 0)
                 {
-                    creature.Output -= 1;
+                    int descValue = ManagerNS.LocalGameManager.Instance.ProNodeManager.Config.CreatureOutputDescValue;
+                    creature.Output -= (descValue <= creature.Output) ? descValue : creature.Output;
                 }
             }
             // 下一次生产

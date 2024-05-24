@@ -48,8 +48,7 @@ namespace ProjectOC.WorkerNS
             ABJAProcessor.StartLoadJsonAssetData();
             ML.Engine.Manager.GameManager.Instance.ABResourceManager.LoadAssetAsync<FeatureConfigAsset>("Config_Feature").Completed += (handle) =>
             {
-                FeatureConfigAsset data = handle.Result;
-                Config = data.Config;
+                Config = new FeatureConfig(handle.Result.Config);
             };
         }
         #endregion
@@ -77,6 +76,8 @@ namespace ProjectOC.WorkerNS
         }
         public List<Feature> CreateFeature(List<int> featureMax, List<int> featureOdds)
         {
+            if (featureMax == null) { featureMax = Config.FeatureMax; }
+            if (featureOdds == null) { featureOdds = Config.FeatureOdds; }
             List<Feature> result = new List<Feature>();
             if (featureMax.Count != 4 || featureOdds.Count != 2) 
             { 

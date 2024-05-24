@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using System.Collections.Generic;
+using ML.Engine.InventorySystem;
 
 namespace ProjectOC.ProNodeNS
 {
@@ -8,16 +10,51 @@ namespace ProjectOC.ProNodeNS
     public class MineProNode : IProNode, WorkerNS.IWorkerContainer
     {
         #region ProNode
+        [LabelText("堆积预留量"), ReadOnly]
+        public List<int> StackReserves = new List<int>();
+
         [LabelText("经验类型"), ShowInInspector, ReadOnly]
         public WorkerNS.SkillType ExpType => ManagerNS.LocalGameManager.Instance != null ?
             ManagerNS.LocalGameManager.Instance.ProNodeManager.GetExpType(ID) : WorkerNS.SkillType.None;
         public MineProNode(ProNodeTableData config) : base(config) { }
+        public void ChangeMine(List<string> mines)
+        {
+            lock (this)
+            {
+                //RemoveMine();
+                //if (mines != null && mines.Count > 0)
+                //{
+                //    Recipe = recipe;
+                //    List<string> itemIDs = new List<string>() { recipe.ProductID };
+                //    List<int> dataCapacitys = new List<int>() { recipe.ProductNum * StackMax };
+                //    foreach (var raw in recipe.Raw)
+                //    {
+                //        itemIDs.Add(raw.id);
+                //        dataCapacitys.Add(raw.num * StackMax);
+                //    }
+                //    List<DataNS.IDataObj> datas = new List<DataNS.IDataObj>();
+                //    foreach (string id in itemIDs)
+                //    {
+                //        datas.Add(new DataNS.ItemIDDataObj(id));
+                //    }
+                //    ResetData(datas, dataCapacitys);
+                //    StartRun();
+                //    ResetData(datas, dataCapacitys);
+                //}
+            }
+        }
+        public void RemoveMine()
+        {
+            StopRun();
+            ClearData();
+            Recipe.ClearData();
+            StackReserve = 0;
+        }
         #endregion
 
         #region Override
         public override int GetEff() { return EffBase + Worker?.GetEff(ExpType) ?? 0; }
         public override int GetTimeCost() { return HasRecipe && GetEff() > 0 ? (int)Math.Ceiling((double)100 * Recipe.TimeCost / GetEff()) : 0; }
-        public override void FastAdd() { for (int i = 1; i < DataContainer.GetCapacity(); i++) { FastAdd(i); } }
         public override void Destroy()
         {
             RemoveRecipe();
@@ -85,6 +122,7 @@ namespace ProjectOC.ProNodeNS
             OnPositionChange(differ);
             (this as MissionNS.IMissionObj).OnPositionChangeTransport();
         }
+        public override void FastAdd() { }
         public override void PutIn(int index, DataNS.IDataObj data, int amount) { }
         #endregion
 
