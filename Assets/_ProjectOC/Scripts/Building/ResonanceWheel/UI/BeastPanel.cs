@@ -233,7 +233,7 @@ namespace ProjectOC.ResonanceWheelSystem.UI
         #endregion
 
         #region UI对象引用
-        [ShowInInspector]
+        //[ShowInInspector]
         private int CurrentBeastIndex { get { return this.BeastList.GetCurSelectedPos1(); } }
 
         [ShowInInspector]

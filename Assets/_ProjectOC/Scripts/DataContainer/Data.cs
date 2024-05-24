@@ -39,7 +39,7 @@ namespace ProjectOC.DataNS
         #region Constructor
         public Data(IDataObj data, int maxCapacity)
         {
-            id = data.GetDataID();
+            id = data?.GetDataID() ?? "";
             this.data = data;
             canIn = true;
             canOut = true;

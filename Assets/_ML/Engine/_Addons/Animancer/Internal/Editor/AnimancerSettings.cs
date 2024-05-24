@@ -136,7 +136,7 @@ namespace Animancer.Editor
         /************************************************************************************************************************/
 
         /// <summary>Calls <see cref="EditorUtility.SetDirty"/> on the <see cref="Instance"/>.</summary>
-        public static new void SetDirty() => EditorUtility.SetDirty(_Instance);
+        public static new void SetDirty() => EditorUtility.SetDirty(Instance);
 
         /************************************************************************************************************************/
 
