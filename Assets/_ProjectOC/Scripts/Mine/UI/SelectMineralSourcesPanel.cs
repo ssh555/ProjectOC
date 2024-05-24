@@ -73,6 +73,9 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
             RefreshOnZoomMap();
             this.Refresh();
         };
+
+        //初始化主岛的位置
+        this.MainIsland.anchoredPosition = MM.MainIslandData.CurPos;
     }
     protected override void UnregisterInput()
     {
@@ -195,7 +198,6 @@ public class SelectMineralSourcesPanel : UIBasePanel<SelectMineralSourcesPanelSt
     public struct SelectMineralSourcesPanelStruct
     {
         public KeyTip AcceptedOrderCancel;
-
     }
     protected override void InitTextContentPathData()
     {

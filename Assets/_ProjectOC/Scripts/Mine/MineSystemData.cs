@@ -109,6 +109,7 @@ namespace ProjectOC.MineSystem
                 this.position = position;
                 this.remainMineNum = remainMineNum;
                 this.gainNum = gainNum;
+                proNodeCnt = 0;
             }
 
             /// <summary>
@@ -124,6 +125,30 @@ namespace ProjectOC.MineSystem
                         return true;
                     }
                     return false;
+                }
+            }
+            private int proNodeCnt;
+
+            public int ProNodeCnt { get { return proNodeCnt; } }
+
+            /// <summary>
+            /// ×¢²á
+            /// </summary>
+            public void RegisterProNode()
+            {
+                lock (this)
+                {
+                    proNodeCnt++;
+                }
+            }
+            /// <summary>
+            /// ×¢Ïú
+            /// </summary>
+            public void UnRegisterProNode()
+            {
+                lock (this)
+                {
+                    proNodeCnt--;
                 }
             }
         }
