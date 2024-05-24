@@ -147,9 +147,12 @@ public class SmallMapPanel : UIBasePanel<SmallMapPanelStruct>
         this.curMiningData.Clear();
         foreach (var (btn, minedata) in BtnToMineDataDic)
         {
-            bool isInCircle = Vector2.Distance(minedata.Position * EnlargeRate, (Vector2)this.cursorNavigation.CenterPos) <= CheckRange;
+            bool isInCircle = Vector2.Distance(minedata.Position * EnlargeRate + localPosition, (Vector2)this.cursorNavigation.CenterPos) <= CheckRange;
             btn.Selected.gameObject.SetActive(isInCircle);
-            this.curMiningData.Add(minedata);
+            if(isInCircle )
+            {
+                this.curMiningData.Add(minedata);
+            }
         }
     }
 
